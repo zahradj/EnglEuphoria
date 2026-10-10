@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import type { Scene } from './scenes';
-import { Hearts, MAX_HEARTS, Lep1Keyframes } from '../unit1/SceneRenderer';
+import { Hearts, MAX_HEARTS, Lep1Keyframes, SceneRenderer as PreA1SceneRenderer } from '../unit1/SceneRenderer';
 import { type ActivitySync } from '../sceneActivitySync';
 import { SpinWheelScene } from '../SpinWheelScene';
 import { PictureMatchScene } from '../PictureMatchScene';
 import { RecallWarmupScene } from '../RecallWarmupScene';
 import { FirstSoundScene } from '../FirstSoundScene';
+import { SoundBlendScene } from '../SoundBlendScene';
 import { LetterMatchScene, LetterBlocksScene } from '../LetterTilesScene';
 import { WhatsMissingScene } from '../WhatsMissingScene';
 import { SortBasketScene } from '../SortBasketScene';
@@ -38,6 +39,8 @@ import { WordBuildScene } from './scene-components/WordBuildScene';
 import { SentenceBuildScene } from './scene-components/SentenceBuildScene';
 import { TongueTwisterScene } from './scene-components/TongueTwisterScene';
 import { LetterGameScene } from './scene-components/LetterGameScene';
+import { FeelingsSurveyScene } from './scene-components/FeelingsSurveyScene';
+import { ChatChainScene } from './scene-components/ChatChainScene';
 import { JigsawPuzzleScene } from './scene-components/JigsawPuzzleScene';
 import { FinaleScene } from './scene-components/FinaleScene';
 export { GlassCard } from './scene-components/shared';
@@ -135,6 +138,7 @@ export function SceneRenderer(props: {
       case 'spin-wheel': return <SpinWheelScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
       case 'recall-warmup': return <RecallWarmupScene scene={scene} onNext={props.onNext} sync={props.activitySync} />;
       case 'picture-match': return <PictureMatchScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
+      case 'sound-blend': return <SoundBlendScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
       case 'first-sound': return <FirstSoundScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
       case 'letter-match': return <LetterMatchScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
       case 'letter-blocks': return <LetterBlocksScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
@@ -145,6 +149,9 @@ export function SceneRenderer(props: {
       case 'place-it': return <PlaceItScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'torch-hunt': return <TorchHuntScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'where-castle': return <WhereCastleScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
+      case 'chat-chain': return <ChatChainScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
+      case 'feelings-survey': return <FeelingsSurveyScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
+      case 'prea1': return <PreA1SceneRenderer scene={scene.scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} onRestart={props.onRestart} gemsCollected={props.gemsCollected} heartsRemaining={props.heartsRemaining} activitySync={props.activitySync} />;
       case 'finale': return <FinaleScene scene={scene} hearts={props.heartsRemaining} gems={props.gemsCollected} onRestart={props.onRestart} />;
       default: return null;
     }

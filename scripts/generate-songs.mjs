@@ -51,11 +51,33 @@ for (const [key, song] of Object.entries(SONGS)) {
       duration: song.durationSec,
       force_instrumental: false,
       composition_plan: {
-        positive_global_styles: song.positiveStyles,
+        positive_global_styles: song.bpm
+          ? [...song.positiveStyles, `${song.bpm} BPM`, '4/4 time', ...(song.key ? [song.key] : []), 'steady beat']
+          : song.positiveStyles,
         negative_global_styles: song.negativeStyles,
-        // ONE section carrying every line. Per-line sections inflate the length
-        // 5-8x (see memory: feedback_songs_use_elevenlabs).
-        sections: [{
+        // A song written with the kids-song-writer skill (bpm + sections, checked by
+        // scripts/check-lyrics.py): an instrumental intro, then one section per verse /
+        // chorus, each exactly (lines x barsPerLine) bars long at the song's tempo, so
+        // every line gets the same musical time and the verses share one tune.
+        // Otherwise ONE section carrying every line. Per-LINE sections inflate the
+        // length 5-8x (see memory: feedback_songs_use_elevenlabs).
+        sections: song.sections ? [
+          ...((song.introBars ?? 2) ? [{
+            section_name: 'Intro',
+            positive_local_styles: ['short instrumental intro', 'sets the beat'],
+            negative_local_styles: ['vocals', 'singing'],
+            duration_ms: Math.round((song.introBars ?? 2) * 4 * 60000 / song.bpm),
+            lines: [],
+          }] : []),
+          ...song.sections.map((s) => ({
+            section_name: s.name,
+            positive_local_styles: ['clear diction', 'one lyric line every ' + (song.barsPerLine ?? 2) + ' bars', 'every word on the beat',
+              ...(s.name.startsWith('Chorus') ? ['catchy hook', 'kids choir joins in'] : ['lead vocal'])],
+            negative_local_styles: ['mumbling', 'adding extra words', 'improvised lyrics', 'rushed words', 'instrumental only'],
+            duration_ms: Math.round(s.lines.length * (song.barsPerLine ?? 2) * 4 * 60000 / song.bpm),
+            lines: s.lines,
+          })),
+        ] : [{
           section_name: 'Sing-along',
           positive_local_styles: ['clear diction', 'children singing every word of the lyrics'],
           negative_local_styles: ['mumbling', 'adding extra words', 'improvised lyrics', 'instrumental only'],

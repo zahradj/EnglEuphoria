@@ -1,0 +1,207 @@
+{
+ "out": "public/lep1/video/animal-moves-song-u4l5",
+ "audioOut": "public/lep1/audio/animal-moves-song-video-u4l5.mp3",
+ "labelsFrom": [
+  [
+   "scripts/film-labels/u4l5-animal-moves-pages.json",
+   "scripts/film-labels/u4l5-animal-moves.json"
+  ]
+ ],
+ "verses": [
+  {
+   "audio": "public/lep1/audio/animal-moves-song3-u4l5.mp3",
+   "lines": [
+    [
+     8.76,
+     "public/lep1/video/clips/u4l5-moves/tiger-head.mp4",
+     [
+      {
+       "karaoke": [
+        "Head,",
+        "head!"
+       ],
+       "at": [
+        15,
+        24
+       ],
+       "delay": 8.76
+      }
+     ]
+    ],
+    [
+     10.51,
+     "public/lep1/video/clips/u4l5-moves/pip-head.mp4",
+     [
+      {
+       "karaoke": [
+        "Head!"
+       ],
+       "at": [
+        15,
+        24
+       ]
+      }
+     ]
+    ],
+    [
+     13.12,
+     "public/lep1/video/clips/u4l5-moves/monkey-arms.mp4",
+     [
+      {
+       "karaoke": [
+        "Arms,",
+        "arms!"
+       ],
+       "at": [
+        15,
+        24
+       ]
+      }
+     ]
+    ],
+    [
+     16.52,
+     "public/lep1/video/clips/u4l5-moves/pip-arms.mp4",
+     [
+      {
+       "karaoke": [
+        "Arms!"
+       ],
+       "at": [
+        15,
+        24
+       ]
+      }
+     ]
+    ],
+    [
+     25.0,
+     "public/lep1/video/clips/u4l5-moves/elephant-feet.mp4",
+     [
+      {
+       "karaoke": [
+        "Feet,",
+        "feet!"
+       ],
+       "at": [
+        15,
+        24
+       ]
+      }
+     ]
+    ],
+    [
+     26.34,
+     "public/lep1/video/clips/u4l5-moves/pip-feet.mp4",
+     [
+      {
+       "karaoke": [
+        "Stomp!"
+       ],
+       "at": [
+        15,
+        24
+       ]
+      }
+     ]
+    ],
+    [
+     29.2,
+     "public/lep1/video/clips/u4l5-moves/seal-hands.mp4",
+     [
+      {
+       "karaoke": [
+        "Hands,",
+        "hands!"
+       ],
+       "at": [
+        15,
+        24
+       ]
+      }
+     ]
+    ],
+    [
+     32.54,
+     "public/lep1/video/clips/u4l5-moves/pip-hands.mp4",
+     [
+      {
+       "karaoke": [
+        "Clap!"
+       ],
+       "at": [
+        15,
+        24
+       ]
+      }
+     ]
+    ],
+    [
+     40.27,
+     "public/lep1/video/clips/u4l5-moves/park-intro.mp4",
+     [
+      {
+       "karaoke": [
+        "I can",
+        "do it!"
+       ],
+       "at": [
+        50,
+        20
+       ]
+      }
+     ]
+    ],
+    [
+     42.36,
+     "public/lep1/video/clips/u4l5-moves/pip-head.mp4",
+     [
+      {
+       "karaoke": [
+        "Yes,",
+        "I can!"
+       ],
+       "at": [
+        15,
+        24
+       ]
+      }
+     ]
+    ],
+    [
+     44.27,
+     "public/lep1/video/clips/u4l5-moves/pip-feet.mp4",
+     [
+      {
+       "karaoke": [
+        "I can",
+        "do it!"
+       ],
+       "at": [
+        15,
+        24
+       ]
+      }
+     ]
+    ],
+    [
+     46.32,
+     "public/lep1/video/clips/u4l5-moves/park-end.mp4",
+     [
+      {
+       "karaoke": [
+        "Head, arms,",
+        "feet, hands!"
+       ],
+       "at": [
+        50,
+        20
+       ],
+       "step": 0.9
+      }
+     ]
+    ]
+   ]
+  }
+ ]
+}

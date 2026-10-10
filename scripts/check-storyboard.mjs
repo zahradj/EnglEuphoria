@@ -48,8 +48,12 @@ export function checkBeat(beat) {
     if (!prompt.includes(ww)) errs.push(`"${w}" is not in the prompt`);
   }
   if (beat.leader && !prompt.includes(String(beat.leader).toLowerCase())) errs.push(`the leader "${beat.leader}" is not named in the prompt`);
+  // allowedMoves: a move the owner asked to SEE although the line does not name it (owner, 2026-10-09: "everything
+  // moves" — e.g. the hug at "Welcome home!"). It must also be the row's action, and the row still needs ownerApproved.
+  const allowed = new Set((beat.allowedMoves ?? []).map((m) => String(m).toLowerCase()));
   for (const m of EXTRA_MOVES) {
     const re = new RegExp(`\\b${m}\\b`, 'i');
+    if (allowed.has(m) && re.test(action)) continue;
     if (re.test(prompt) && !re.test(line)) errs.push(`extra move "${m}" in the prompt but not in the line`);
   }
   if (SEQUENCE.test(beat.prompt ?? '')) errs.push('the prompt chains several moves ("then/next/again…"): one clip = one action');

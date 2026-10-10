@@ -173,4 +173,9 @@
 = exists public/lep1/items/item-fan.png
 = exists public/lep1/items/item-feather.png
 = exists public/lep1/scenes/bg-u4l3-bella-fingers-wide.png
+= exists public/welcome-town/sprites/pip-happy-v2.png
+= exists public/welcome-town/sprites/leo-tired-v2.png
+= exists public/welcome-town/sprites/mia-sad-v2.png
+= exists public/welcome-town/sprites/bella-angry-v2.png
+= exists public/welcome-town/sprites/willow-hungry-v2.png
 Done. made 0, failed 0

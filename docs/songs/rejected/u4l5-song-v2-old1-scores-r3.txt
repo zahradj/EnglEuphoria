@@ -1,0 +1,15 @@
+
+=== docs/songs/u4l5-song-v2-take1.mp3  length=20.1s  score=0.44  missing=14  extra=16
+heard: beep beep the help is come to speak beep beep beep i stomp my feet hands hands and steel butts are hands hands hands i've got my hands
+line starts (s): [np.float64(1.9), np.float64(5.9), 7.9, np.float64(11.3)]
+lineDurationsMs: [5880, 1980, 3420, 8782]
+
+=== docs/songs/u4l5-song-v2-take2.mp3  length=20.1s  score=0.47  missing=13  extra=16
+heard: e b d l then stomp his e e e i stomp my e hands hands hands the steel pops her hands hands hands and pry to my hands
+line starts (s): [np.float64(2.6), np.float64(5.9), np.float64(9.4), np.float64(12.0)]
+lineDurationsMs: [5900, 3480, 2580, 8102]
+
+=== docs/songs/u4l5-song-v2-take3.mp3  length=20.1s  score=0.48  missing=13  extra=15
+heard: e v e l then stomp his feet e v e i stomp my feet hand hand the seal plucks her hands hand hand i pluck my hands
+line starts (s): [np.float64(2.6), np.float64(5.8), np.float64(9.9), np.float64(13.8)]
+lineDurationsMs: [5820, 4080, 3860, 6302]

@@ -1,0 +1,13 @@
+
+=== docs/songs/u7l5-farm-song-video-take1.mp3  length=70.0s  score=0.19  missing=66  extra=110
+heard: i've got a lot of fun e i e i o i've got a lot of fun e i e i o and all this for me and i know e i e i o move here and i'll move move there and all this for me and i'll be e i e i o like a handful e i e i o to the point of gear and a noise from there and of this far me and a sheep e i e i o to the ball e i e r and a ball but there and of this far me and a f e i e i o to the track my gear and a crack but there like a handful e i e i o you
+line starts (s): [np.float64(4.8), np.float64(12.2), np.float64(17.1), np.float64(20.7), np.float64(35.7), np.float64(38.6), np.float64(44.6), np.float64(46.7), np.float64(48.2), np.float64(56.1)]
+lineDurationsMs: [12180, 4940, 3560, 15020, 2900, 6000, 2140, 1460, 7860, 13974]
+
+=== docs/songs/u7l5-farm-song-video-take2.mp3  length=70.0s  score=0.25  missing=62  extra=83
+heard: crap as r p i e i o and on his farm he had a cow p i e i o with the blue blue here and the blue blue there the tongue has farmed me had a big p i e i o brave to know i'm going here and know i'm going there tongue has farmed me had a sheep p i e i o with above our hair and above our hair none is far me out and i'm p i e i o with high flat hair and a flat flat hair grab a lot of r e i e i o you
+line starts (s): [None, np.float64(8.2), np.float64(12.6), np.float64(18.1), np.float64(22.8), np.float64(26.7), np.float64(29.2), np.float64(43.0), None, None]
+
+=== docs/songs/u7l5-farm-song-video-take3.mp3  length=70.0s  score=0.45  missing=56  extra=18
+heard: music grandpa had a farm behind the iel and on his farm he had a healthy iel with a moo moo here and a moo there music and on his farm iel black hair and a clay black hair grandpa had a farm e i e i o
+line starts (s): [np.float64(8.5), np.float64(12.5), np.float64(16.8), np.float64(24.6), None, None, np.float64(57.6), None, None, np.float64(60.0)]

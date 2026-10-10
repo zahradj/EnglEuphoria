@@ -13,12 +13,13 @@ A page may also be an approved motion clip ("public/lep1/video/clips/<story>/<be
 first frame and its last frame holds if the page lasts longer than the clip. An optional third value is the
 cross-fade (seconds) INTO that page (default 0.8) — e.g. a long fade from the start of a stir clip into the
 mixed-paint picture."""
-import json, subprocess, sys
+import json, os, subprocess, sys
 import imageio_ffmpeg
 
 FF = imageio_ffmpeg.get_ffmpeg_exe()
 out, pages = sys.argv[1], json.loads(sys.argv[2])
-FPS, X, LAST = 30, 0.8, 6  # fade seconds; how long the last page holds
+FPS, X = 30, 0.8
+LAST = float(os.environ.get("FILM_LAST", 6))  # how long the last page holds (FILM_LAST=<s> for a song video)
 starts = [p[1] for p in pages]
 fades = [p[2] if len(p) > 2 else X for p in pages]
 inputs, filt = [], []

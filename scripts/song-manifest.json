@@ -202,6 +202,116 @@
   "u7l5-old-macdonald": {
     "path": "public/lep1/audio/old-macdonald-song-u7l5.mp3",
     "bytes": 321037,
-    "sha256": "337679b42bfcbb0a0d97cc9a7c3f0a15248965e8fbab38ab370d8e777275b451"
+    "sha256": "c785f34e15c96d4e7653644b8b2575989f6c238712371495fae5ce53e588403f"
+  },
+  "u7l5-farm-song-video": {
+    "path": "public/lep1/audio/farm-song-video-u7l5.mp3",
+    "bytes": 1247651,
+    "sha256": "998da5e684d965e498efe579fdabf4e9db2044f722fbf608aeb9ae5a34e479b3"
+  },
+  "u7l5-verse-pig": {
+    "path": "public/lep1/audio/farm-verse-pig-u7l5.mp3",
+    "bytes": 321037,
+    "sha256": "fe68f1742d9415671b4f1d1e57fdeaebac9d1cc0f95a3c6984ac120a28aa7a58"
+  },
+  "u7l5-verse-sheep": {
+    "path": "public/lep1/audio/farm-verse-sheep-u7l5.mp3",
+    "bytes": 321037,
+    "sha256": "2c5b93ff14cd34522416697655cdb60cf863c5596fed0644e19946781f79e207"
+  },
+  "u7l5-verse-duck": {
+    "path": "public/lep1/audio/farm-verse-duck-u7l5.mp3",
+    "bytes": 321037,
+    "sha256": "6a758cee5e912f4c5d7bd6cfd09b4d7cb3b534c93d5e8b68137b7183a73a9601"
+  },
+  "u7l5-farm2-cow": {
+    "path": "public/lep1/audio/farm2-cow-u7l5.mp3",
+    "bytes": 321037,
+    "sha256": "ed83f8cc43d067da16749dcd92bae40dfb6b3ca05aaeda02e8b1d8739cc4d1e9"
+  },
+  "u7l5-farm2-pig": {
+    "path": "public/lep1/audio/farm2-pig-u7l5.mp3",
+    "bytes": 321037,
+    "sha256": "4d17e46b2f11fd195e5394728fe63e71644f48c957da2200bdce332fdc8e0136"
+  },
+  "u7l5-farm2-sheep": {
+    "path": "public/lep1/audio/farm2-sheep-u7l5.mp3",
+    "bytes": 321037,
+    "sha256": "91d66c79c7b4ea6669e2f6a2aa647f0a53a75a53c04d35a8ff8a0d02bafd36ae"
+  },
+  "u7l5-farm2-duck": {
+    "path": "public/lep1/audio/farm2-duck-u7l5.mp3",
+    "bytes": 384985,
+    "sha256": "2f763e5229b6ae68c0bbaf2d33533c560f384dce237bd4e1b49a9e6c6f226805"
+  },
+  "u4l5-song-v1": {
+    "path": "public/lep1/audio/animal-moves-v1-u4l5.mp3",
+    "bytes": 321037,
+    "sha256": "aa1d51411580998ae20c6526be8746afa3c92fc170c6b16725d69059ddb52d92"
+  },
+  "u4l5-song-v2": {
+    "path": "public/lep1/audio/animal-moves-v2-u4l5.mp3",
+    "bytes": 321037,
+    "sha256": "9e23123a4a0d71201b8a1a06f4ef8e05b3aea7a532ce29a3402ee43d9a8df699"
+  },
+  "u5l5-song-v1": {
+    "path": "public/lep1/audio/my-dad-v1-u5l5.mp3",
+    "bytes": 321037,
+    "sha256": "42ae56c439225ca02cbb12d20840ee497d2b67c3d70c721c096a2a4446d42ef8"
+  },
+  "u5l5-song-v2": {
+    "path": "public/lep1/audio/my-dad-v2-u5l5.mp3",
+    "bytes": 321037,
+    "sha256": "37893b363977f22830132469e847821638abb9026149e6f3a2b7009d02c1961c"
+  },
+  "u6l5-song-v1": {
+    "path": "public/lep1/audio/wheres-my-house-v1-u6l5.mp3",
+    "bytes": 321037,
+    "sha256": "64be8c7764038131e32198b5997dc5903e942689e9a1e43f630aacfeafe59f5f"
+  },
+  "u6l5-song-v2": {
+    "path": "public/lep1/audio/wheres-my-house-v2-u6l5.mp3",
+    "bytes": 321037,
+    "sha256": "2181d4ecfd41b48c3f760dacd20b81213f80809d28f7987f8cdd9849770a6efe"
+  },
+  "u4l5-song-video": {
+    "path": "public/lep1/audio/animal-moves-song-video-u4l5.mp3",
+    "bytes": 799598,
+    "sha256": "d821f69ec0e595395a015185874fc5a121a3f0eecc269251e1268c983e21a37b"
+  },
+  "u5l5-song-video": {
+    "path": "public/lep1/audio/my-dad-song-video-u5l5.mp3",
+    "bytes": 919553,
+    "sha256": "65c8138fcd9564acce7ad011fe4ceb36e483b4e8135ad66c582faa91e3380f03"
+  },
+  "u6l5-song-video": {
+    "path": "public/lep1/audio/wheres-my-house-song-video-u6l5.mp3",
+    "bytes": 941705,
+    "sha256": "1937e5e848c62d8e2a1b79ee8d724635f808ccb0ba7b43d5dcd3c494ebbbf961"
+  },
+  "u4l5-song3": {
+    "path": "public/lep1/audio/animal-moves-song3-u4l5.mp3",
+    "bytes": 833455,
+    "sha256": "ef6ca19a3c0c9ee004557e65c01f33ee0282e05ee812833c2d255d592df54219"
+  },
+  "u5l5-song3": {
+    "path": "public/lep1/audio/my-dad-song3-u5l5.mp3",
+    "bytes": 925824,
+    "sha256": "a3fb54dbb8c8b299808c31a4c0252e22a7b93006f5c62774dfc5a460334f6255"
+  },
+  "u6l5-song3": {
+    "path": "public/lep1/audio/wheres-my-house-song3-u6l5.mp3",
+    "bytes": 997713,
+    "sha256": "d4db9d7adf3c30b0d8e80b2fb55f04db881223217f17b3665a0040922686bd18"
+  },
+  "u8l1-apple-banana-milk": {
+    "path": "public/lep1/audio/apple-banana-milk-song-u8l1.mp3",
+    "bytes": 321037,
+    "sha256": "24825437d15ce74971f02e9ba268699a77ccbd46a162efd2a27771509a8bd713"
+  },
+  "u8l2-bread-water-juice": {
+    "path": "public/lep1/audio/bread-water-juice-song-u8l2.mp3",
+    "bytes": 321037,
+    "sha256": "fff4c5a6d346e487209b7d6c92917e25748c997cd2e6ace04e462ffbbb07425b"
   }
 }

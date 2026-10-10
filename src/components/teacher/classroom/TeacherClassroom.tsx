@@ -816,6 +816,30 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
   const isSceneLessonOnStage =
     hubType === 'playground' && stageMode === 'slide' && !!(displayedSlides as any)?.[0]?.sceneLessonRef;
 
+  // Student interaction is always open once the class has started; only the teacher's Pause (saved as
+  // interactionPaused) closes it. A lesson that comes onto the stage after the class started (switching
+  // lessons, a reload) mounts locked, so open it here instead of making the teacher press the button.
+  const sessionFlags = (sessionContext ?? {}) as unknown as Record<string, unknown>;
+  const interactionPaused = !!sessionFlags.interactionPaused;
+  const sceneLessonKey = isSceneLessonOnStage
+    ? JSON.stringify((displayedSlides as unknown as { sceneLessonRef?: unknown }[] | undefined)?.[0]?.sceneLessonRef ?? null)
+    : null;
+  const classIsStarted = !!sessionFlags.classStarted;
+  useEffect(() => {
+    if (!classIsStarted || !sceneLessonKey || interactionPaused) return;
+    const t = window.setTimeout(() => { mainStageRef.current?.setSceneInteractionUnlocked(true); }, 400);
+    return () => window.clearTimeout(t);
+  }, [classIsStarted, sceneLessonKey, interactionPaused]);
+
+  // Same rule for the drawing / pen / slide interaction: it is always open unless the teacher paused it. This
+  // covers every lesson type (slides, web pages, scene lessons) and a reload or late join where the saved
+  // value was lost. It waits for the saved session to load so it can't undo a pause the teacher already made.
+  useEffect(() => {
+    if (!isConnected || !sessionContext || interactionPaused || drawingEnabled) return;
+    const t = window.setTimeout(() => { void setDrawingEnabled(true); void setStudentCanDraw(true); }, 600);
+    return () => window.clearTimeout(t);
+  }, [isConnected, sessionContext, interactionPaused, drawingEnabled, setDrawingEnabled, setStudentCanDraw]);
+
   const homeworkTimelineSyncedRef = React.useRef(false);
   useEffect(() => {
     if (homeworkTimelineSyncedRef.current || !isConnected) return;
@@ -1009,7 +1033,7 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
     }
     if (startingRef.current) return;
     startingRef.current = true;
-    const saved = await updateSessionContext({ ...(sessionContext || {}), classStarted: true, startedAt: new Date().toISOString() })
+    const saved = await updateSessionContext({ ...(sessionContext || {}), classStarted: true, interactionPaused: false, startedAt: new Date().toISOString() })
       .finally(() => { startingRef.current = false; });
     if (!saved) {
       // Used to fail silently — the button looked dead until the page was refreshed.
@@ -1531,6 +1555,8 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
               await setDrawingEnabled(enabled);
               await setStudentCanDraw(enabled); // keep legacy flag in sync
               mainStageRef.current?.setSceneInteractionUnlocked(enabled);
+              // Remember an explicit pause, so a lesson switch or reload doesn't quietly reopen it.
+              void updateSessionContext({ ...(sessionContext || {}), interactionPaused: !enabled });
             }}
             activeTool={(activeTool === 'pen' || activeTool === 'eraser' || activeTool === 'highlighter' || activeTool === 'pointer') ? activeTool : 'pen'}
             onToolChange={(t) => handleToolChange(t)}

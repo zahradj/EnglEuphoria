@@ -1,0 +1,13 @@
+
+=== docs/songs/u5l5-song3-take1.mp3  length=57.9s  score=0.81  missing=18  extra=11
+heard: me and dad me and dad the park is fun i'm very glad a ball a ball he grows the ball i catch it catch it catch it all they say hi i scream i scream i scream i scream yum a book a book we read what fun dad dad i love you dad the bestie that i ever have dad dad i love you dad just me and my dad my dad
+line starts (s): [np.float64(12.9), np.float64(15.4), np.float64(17.3), np.float64(19.6), None, np.float64(30.0), np.float64(32.9), np.float64(33.0), np.float64(36.6), np.float64(41.8), np.float64(44.1), np.float64(46.3)]
+
+=== docs/songs/u5l5-song3-take2.mp3  length=57.9s  score=0.82  missing=15  extra=14
+heard: me and dad me and dad the park is fun i'm very glad a ball of ball he throws the ball i catch it catch it catch it all dogs ducks when and finally feed the ducks they say hot ice cream ice cream ice cream yum i'll book up a query but fun dad dad i love you dad the best thing that i ever had dad dad i love you dad puss me in my dad my dad
+line starts (s): [np.float64(12.9), np.float64(15.2), np.float64(17.3), np.float64(19.5), np.float64(31.7), np.float64(32.9), np.float64(35.5), np.float64(38.2), np.float64(39.7), np.float64(41.8), np.float64(44.0), np.float64(46.6)]
+lineDurationsMs: [15180, 2120, 2240, 12120, 1260, 2620, 2700, 1420, 2100, 2200, 2600, 11301]
+
+=== docs/songs/u5l5-song3-take3.mp3  length=57.9s  score=0.87  missing=9  extra=12
+heard: me and dad me and dad the park is fun i'm very glad a ball a ball he throws a ball i catch it catch it catch it all dad this dad this when they buy we feed the ducks they say hi ice cream ice cream ice cream yama book a book we make more fun dad dad i love you dad the best day that i ever had dad dad dad i love you dad just me and my dad my dad
+line starts (s): [np.float64(8.4), np.float64(10.7), np.float64(16.8), np.float64(19.8), None, np.float64(28.7), np.float64(35.3), np.float64(37.9), np.float64(44.1), np.float64(46.6), np.float64(48.5), np.float64(51.1)]

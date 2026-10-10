@@ -1,3 +1,1 @@
-ball-throw: estimate {"type":"estimate","credits":"4.760","usd":"0.298","discount":{"percentage":"15.00","credits":"0.840","usd":"0.053"}}
-start ball-throw failed: 403 {"detail":"not_enough_credits"}
-0/1 clips ready for u5l5-dad
+0/0 clips ready for u7l5-barn
