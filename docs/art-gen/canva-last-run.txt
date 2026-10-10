@@ -1,2 +1,7 @@
-+ public/lep1/scenes/bg-u9l2-hall-wide.png (1376, 768)
-1/1 saved
+cut out: public/lep1/items/item-hat-green.png (765, 795)
+cut out: public/lep1/items/item-socks-red.png (741, 617)
+cut out: public/lep1/items/item-shoes-blue.png (731, 577)
++ public/lep1/items/item-hat-green.png (1024, 1024)
++ public/lep1/items/item-socks-red.png (1024, 1024)
++ public/lep1/items/item-shoes-blue.png (1024, 1024)
+3/3 saved
