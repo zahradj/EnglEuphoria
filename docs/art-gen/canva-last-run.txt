@@ -1,5 +1,9 @@
-cut out: public/lep1/items/item-banana.png (581, 897)
-+ public/lep1/scenes/bg-u8l1-picnic-empty-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u8l1-picnic-wide.png (1376, 768)
-+ public/lep1/items/item-banana.png (1024, 1024)
-3/3 saved
+cut out: public/lep1/items/item-bread.png (939, 636)
+cut out: public/lep1/items/item-juice.png (631, 898)
+cut out: public/lep1/items/item-water-glass.png (560, 870)
++ public/lep1/scenes/bg-u8l2-cafe-empty-wide.png (1376, 768)
++ public/lep1/scenes/bg-u8l2-cafe-wide.png (1376, 768)
++ public/lep1/items/item-bread.png (1024, 1024)
++ public/lep1/items/item-juice.png (1024, 1024)
++ public/lep1/items/item-water-glass.png (1024, 1024)
+5/5 saved
