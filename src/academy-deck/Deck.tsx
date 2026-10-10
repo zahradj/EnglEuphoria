@@ -6,13 +6,14 @@ import type { ReactNode } from 'react';
 import './deck.css';
 import { DeckContext, type DeckCtx } from './ctx';
 import { Character, Plate } from './Stage';
-import { BadgeView, BriefView, TitleView } from './slides/intro';
+import { BadgeView, BriefView, DialView, TitleView } from './slides/intro';
+import { ModelView, TeachView } from './slides/teach';
 import { CardView, WrapView } from './slides/card';
 import { FindWrongView, SpellView } from './slides/letters';
 import { LockersView, NumTrainView, PadlockView } from './slides/numbers';
 import { BorderView, MemoryView } from './slides/passport';
 import { ConvoView, FadeView, PhoneChatView, SayView, WhoSaidView } from './slides/talk';
-import type { DeckScript, Slide, Stats, Vars } from './types';
+import { PARTS, type DeckScript, type Slide, type Stats, type Vars } from './types';
 
 class Guard extends Component<{ children: ReactNode; onSkip: () => void; id: string }, { err: string | null; n: number }> {
   state = { err: null as string | null, n: 0 };
@@ -42,7 +43,10 @@ function SlideView({ slide }: { slide: Slide }) {
     case 'title': return <TitleView slide={slide} />;
     case 'brief': return <BriefView slide={slide} />;
     case 'badge': return <BadgeView slide={slide} />;
+    case 'dial': return <DialView slide={slide} />;
     case 'whosaid': return <WhoSaidView slide={slide} />;
+    case 'teach': return <TeachView slide={slide} />;
+    case 'model': return <ModelView slide={slide} />;
     case 'lockers': return <LockersView slide={slide} />;
     case 'numtrain': return <NumTrainView slide={slide} />;
     case 'padlock': return <PadlockView slide={slide} />;
@@ -87,6 +91,8 @@ export function Deck({ script, artBase, teacher = false, slide: controlled, onSl
   const [minute, setMinute] = useState(false);
   const [menu, setMenu] = useState(false);
   const [burst, setBurst] = useState(0);
+  const [partCard, setPartCard] = useState<number | null>(0);
+  const shownParts = useRef<Set<number>>(new Set());
   const [calm, setCalm] = useState(() => typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches);
   const cur = script.slides[index];
   const curId = useRef(cur.id);
@@ -103,6 +109,15 @@ export function Deck({ script, artBase, teacher = false, slide: controlled, onSl
     setToast(null);
     setMenu(false);
   }, [index]);
+  // a cinematic title card when a new part of the lesson starts (once per part; tap to skip, closes by itself)
+  useEffect(() => {
+    const part = cur.part;
+    if (shownParts.current.has(part)) return;
+    shownParts.current.add(part);
+    setPartCard(part);
+    const t = window.setTimeout(() => setPartCard(null), 2200);
+    return () => window.clearTimeout(t);
+  }, [cur.part]);
   // a short sparkle burst on every correct answer (UI motion tied to success; none in Calm mode)
   useEffect(() => {
     if (stats.right > 0) setBurst((b) => b + 1);
@@ -146,10 +161,10 @@ export function Deck({ script, artBase, teacher = false, slide: controlled, onSl
           {actorsVisible.map((a) => <Character key={a.who} actor={a} artBase={artBase} small={compact} />)}
         </div>
         <header className="ad-strip" aria-label="Slides">
-          <span className="ad-lesson">{script.title}</span>
+          <span className="ad-lesson">{PARTS[cur.part]?.name}</span>
           <ol>
             {script.slides.map((s, i) => (
-              <li key={s.id}>
+              <li key={s.id} data-part-start={i > 0 && s.part !== script.slides[i - 1].part}>
                 <button type="button" className="ad-dot" data-now={i === index} data-done={!!solved[s.id]} disabled={!teacher && i > index && !solved[script.slides[i - 1]?.id]} aria-label={`Slide ${i + 1}${i === index ? ' (now)' : ''}`} aria-current={i === index} onClick={() => go(i)} />
               </li>
             ))}
@@ -178,6 +193,16 @@ export function Deck({ script, artBase, teacher = false, slide: controlled, onSl
           <div className="ad-menu" role="menu">
             <button type="button" role="menuitem" onClick={skip}>⏭ Skip this slide</button>
             <button type="button" role="menuitemcheckbox" aria-checked={calm} onClick={() => setCalm(!calm)}>{calm ? '✔ ' : ''}Calm mode (no animation)</button>
+          </div>
+        )}
+        {partCard !== null && (
+          <div className="ad-partcard" role="dialog" aria-label={`Part ${partCard + 1}: ${PARTS[partCard].name}`} onClick={() => setPartCard(null)}>
+            <span className="ad-partcard-num" aria-hidden="true">{partCard + 1}</span>
+            <span className="ad-partcard-kicker">Part {partCard + 1} of {PARTS.length} · {PARTS[partCard].minutes} min</span>
+            <span className="ad-partcard-name">{PARTS[partCard].name}</span>
+            <span className="ad-partcard-goal">{PARTS[partCard].goal}</span>
+            <span className="ad-partcard-pips" aria-hidden="true">{PARTS.map((_, k) => <i key={k} data-on={k <= partCard} />)}</span>
+            <span className="ad-partcard-tap">Tap to start</span>
           </div>
         )}
         {minute && (

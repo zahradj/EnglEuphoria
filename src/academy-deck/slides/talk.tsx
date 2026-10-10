@@ -72,7 +72,8 @@ export function WhoSaidView({ slide }: { slide: WhoSaidSlide }) {
 
 /** Dialogue wheel: the student plays `me`, chooses each reply. The conversation is PLAYED, not read. */
 export function ConvoView({ slide }: { slide: ConvoSlide }) {
-  const { right, wrong, done, seed } = useDeck();
+  const { right, wrong, done, seed, vars } = useDeck();
+  const fill = (s: string) => s.replace(/\{(\w+)\}/g, (_m, k: string) => vars[k] ?? 'friend');
   const [step, setStep] = useState(0);
   const [log, setLog] = useState<{ who: string; text: string }[]>([]);
   const [tip, setTip] = useState<string | null>(null);
@@ -87,7 +88,7 @@ export function ConvoView({ slide }: { slide: ConvoSlide }) {
   }, [finished, done, log.length]);
   const pick = (o: { text: string; ok?: boolean; hint?: string }) => {
     if (o.ok) {
-      setLog([...log, { who: other, text: slide.steps[step].ask }, { who: slide.me, text: o.text }]);
+      setLog([...log, { who: other, text: fill(slide.steps[step].ask) }, { who: slide.me, text: o.text }]);
       setStep(step + 1);
       setTip(null);
       if (firstTry) right();
@@ -102,13 +103,13 @@ export function ConvoView({ slide }: { slide: ConvoSlide }) {
     <Panel title={slide.prompt} wide>
       <div className="ad-convo-log" aria-live="polite">
         {log.map((l, i) => (
-          <p key={i} className="ad-line" data-me={l.who === slide.me} style={{ ['--who' as string]: COLOR[l.who as CastName] }}><b>{l.who}</b> {l.text}</p>
+          <p key={i} className="ad-line" data-me={l.who === slide.me} style={{ ['--who' as string]: COLOR[l.who as CastName] }}><b>{l.who === slide.me && slide.meLabel ? slide.meLabel : l.who}</b> {l.text}</p>
         ))}
         <div ref={end} />
       </div>
       {!finished ? (
         <>
-          <Bubble who={other as CastName} side="right">{slide.steps[step].ask}</Bubble>
+          <Bubble who={other as CastName} side="right">{fill(slide.steps[step].ask)}</Bubble>
           <div className="ad-options" role="group" aria-label={`${slide.me} says`}>
             {opts.map((o) => (
               <button key={o.text} type="button" className="ad-option" onClick={() => pick(o)}>{o.text}</button>
@@ -125,13 +126,15 @@ export function ConvoView({ slide }: { slide: ConvoSlide }) {
 
 /** Phone chat: Theo texts; the student builds the reply from word tiles and sends it. */
 export function PhoneChatView({ slide }: { slide: PhoneChatSlide }) {
-  const { right, wrong, done, seed } = useDeck();
+  const { right, wrong, done, seed, vars } = useDeck();
+  const fill = (s: string) => s.replace(/\{(\w+)\}/g, (_m, k: string) => vars[k] ?? '…');
   const [step, setStep] = useState(0);
   const [thread, setThread] = useState<{ me: boolean; text: string }[]>([{ me: false, text: slide.steps[0].text }]);
   const [used, setUsed] = useState<number[]>([]);
   const [bad, setBad] = useState<number | null>(null);
   const [missed, setMissed] = useState(false);
-  const cur = slide.steps[Math.min(step, slide.steps.length - 1)];
+  const raw = slide.steps[Math.min(step, slide.steps.length - 1)];
+  const cur = useMemo(() => ({ ...raw, reply: fill(raw.reply) }), [raw, vars]); // eslint-disable-line react-hooks/exhaustive-deps
   const goal = useMemo(() => cur.reply.split(/\s+/), [cur]);
   const tiles = useMemo(() => shuffled([...goal, ...(cur.extra ?? [])].map((w, i) => ({ w, i })), seed + step), [goal, cur, seed, step]);
   const finished = step >= slide.steps.length;
@@ -225,13 +228,15 @@ export function SayView({ slide }: { slide: SaySlide }) {
   const { vars, done, setVars } = useDeck();
   const [typed, setTyped] = useState('');
   const [peek, setPeek] = useState(false);
-  const model = useMemo(() => slide.model.replace(/\{(\w+)\}/g, (_m, k: string) => vars[k] ?? '___'), [slide.model, vars]);
+  const base = slide.byDial ? slide.byDial[(vars.dial as 'chill' | 'normal' | 'push') ?? 'normal'] ?? slide.model : slide.model;
+  const model = useMemo(() => base.replace(/\{(\w+)\}/g, (_m, k: string) => vars[k] ?? '___'), [base, vars]);
+  const shown = peek || !!slide.open;
   return (
     <Panel title={slide.prompt} wide>
-      <div className="ad-sayhidden" data-peek={peek}>{peek ? model : '🔒 Say it from memory. The model is hidden.'}</div>
+      <div className="ad-sayhidden" data-peek={shown}>{shown ? model : '🔒 Say it from memory. The model is hidden.'}</div>
       <textarea className="ad-input ad-textarea" rows={2} value={typed} placeholder="Or type it here…" aria-label="Type your sentence" onChange={(e) => setTyped(e.target.value)} />
       <div className="ad-row">
-        <button type="button" className="ad-btn" onClick={() => setPeek(true)} disabled={peek}>Show me</button>
+        {!slide.open && <button type="button" className="ad-btn" onClick={() => setPeek(true)} disabled={peek}>Show me</button>}
         <button type="button" className="ad-btn ad-btn-primary" onClick={() => { setVars({ exitPeeked: String(peek), exitText: typed }); done(); }}>{typed.trim() ? 'Done ▸' : 'I said it ▸'}</button>
       </div>
     </Panel>

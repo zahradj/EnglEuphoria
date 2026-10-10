@@ -6,7 +6,7 @@ import { Panel } from './shared';
 /** Sign-up card: fill it with the model beside it, then press Print and the card prints out. */
 export function CardView({ slide }: { slide: CardSlide }) {
   const { vars, setVars, done, award, stamps } = useDeck();
-  const [age, setAge] = useState('');
+  const [age, setAge] = useState(vars.age ?? '');
   const [country, setCountry] = useState('');
   const [nation, setNation] = useState('');
   const [printed, setPrinted] = useState(false);

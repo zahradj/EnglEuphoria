@@ -12,7 +12,7 @@ export function LockersView({ slide }: { slide: LockersSlide }) {
   const [open, setOpen] = useState<number[]>([]);
   const [shake, setShake] = useState<number | null>(null);
   const [slip, setSlip] = useState(false);
-  const all = useMemo(() => shuffled([...new Set([...slide.rounds, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])].slice(0, 10).sort((a, b) => a - b), seed), [slide.rounds, seed]);
+  const all = useMemo(() => shuffled(slide.grid ?? [...new Set([...slide.rounds, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])].slice(0, 10).sort((a, b) => a - b), seed), [slide.rounds, slide.grid, seed]);
   const target = slide.rounds[round];
   const finished = round >= slide.rounds.length;
   useEffect(() => {

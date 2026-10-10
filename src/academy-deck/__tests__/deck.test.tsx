@@ -4,6 +4,7 @@ import { cleanup, fireEvent, render, screen, within } from '@testing-library/rea
 import { Deck } from '../Deck';
 import { SIGN_ME_UP, CRITERIA, OBJECTIVE } from '../lessons/signMeUp';
 import { ACADEMY_LESSON_BLUEPRINTS } from '../../curriculum/academy';
+import { PARTS, type Slide } from '../types';
 
 afterEach(cleanup);
 const bp = ACADEMY_LESSON_BLUEPRINTS.find((b) => b.id === 'A1-S01-E2')!;
@@ -25,7 +26,7 @@ describe('deck data (Sign Me Up)', () => {
   });
 
   it('ALIGNMENT: every game slide trains a criterion; each criterion has >= 3 slides and the last one is production (say / fade)', () => {
-    slides.filter((s) => !['title', 'brief', 'wrap'].includes(s.kind)).forEach((s) => expect(s.trains?.length, s.id).toBeGreaterThan(0));
+    slides.filter((s) => !['title', 'brief', 'wrap', 'dial'].includes(s.kind)).forEach((s) => expect(s.trains?.length, s.id).toBeGreaterThan(0));
     for (let c = 1; c <= 5; c++) {
       const hits = slides.filter((s) => s.trains?.includes(c));
       expect(hits.length, `criterion ${c}`).toBeGreaterThanOrEqual(3);
@@ -53,6 +54,67 @@ describe('deck data (Sign Me Up)', () => {
 const next = () => fireEvent.click(screen.getByRole('button', { name: /Next|Finish/ }));
 const open = (i: number) => render(<Deck script={SIGN_ME_UP} teacher slide={i} />);
 
+/** planning estimate: minutes a typical A1 teen needs on a slide (not a measurement) */
+const minutes = (s: Slide): number => {
+  switch (s.kind) {
+    case 'title': return 0.2;
+    case 'brief': return 0.8;
+    case 'badge': return 1;
+    case 'dial': return 0.4;
+    case 'whosaid': return 0.4 + (s.replay?.length ?? 0) * 0.15 + s.items.length * 0.25;
+    case 'teach': return s.pages.length * 0.4;
+    case 'model': return s.lines.length * 0.22;
+    case 'lockers': return 0.4 + s.rounds.length * 0.25;
+    case 'numtrain': return 0.4 + s.numbers.length * 0.12;
+    case 'padlock': return 1.2;
+    case 'convo': return 0.4 + s.steps.length * 0.35;
+    case 'spell': return 0.6 + 0.12 * s.target.length;
+    case 'findwrong': return 1.3;
+    case 'border': return 0.4 + s.rounds.length * 0.3;
+    case 'memory': return 0.5 + s.pairs.length * 0.4;
+    case 'phonechat': return 0.4 + s.steps.length * 0.65;
+    case 'fade': return 0.3 + s.lines.length * 0.5;
+    case 'card': return 2.2;
+    case 'say': return s.open ? 1.6 : 2;
+    case 'wrap': return 3.2;
+  }
+};
+
+describe('blueprint structure (run of show)', () => {
+  it('follows the Academy blueprint: 8 parts in order, with the blueprint names and minutes', () => {
+    expect(PARTS.map((p) => p.name)).toEqual(bp.runOfShow.map((r) => r.name));
+    expect(PARTS.map((p) => p.minutes)).toEqual(bp.runOfShow.map((r) => r.minutes));
+    const parts = slides.map((s) => s.part);
+    expect([...parts].sort((a, b) => a - b)).toEqual(parts); // slides stay in part order
+    expect(new Set(parts)).toEqual(new Set([0, 1, 2, 3, 4, 5, 6, 7]));
+  });
+
+  it('every part fills its time (>= 60 % and <= 115 % of the blueprint minutes) and the whole lesson fits the hour', () => {
+    const per = PARTS.map((_, i) => slides.filter((s) => s.part === i).reduce((a, s) => a + minutes(s), 0));
+    per.forEach((m, i) => {
+      expect(m, `${PARTS[i].name}: ${m.toFixed(1)} min`).toBeGreaterThanOrEqual(PARTS[i].minutes * 0.6);
+      expect(m, `${PARTS[i].name}: ${m.toFixed(1)} min`).toBeLessThanOrEqual(PARTS[i].minutes * 1.15);
+    });
+    expect(per.reduce((a, b) => a + b, 0)).toBeLessThanOrEqual(60);
+  });
+
+  it('the roles of the parts: Remember? recalls lesson 1, The Drop teaches the words and models the language, the Mission has a dial + Take 1 + feedback + Take 2, the Release ends with the hidden-model exit', () => {
+    const inPart = (n: number) => slides.filter((s) => s.part === n);
+    expect(inPart(1).some((s) => s.kind === 'whosaid' || s.kind === 'phonechat')).toBe(true);
+    expect(inPart(2).some((s) => s.kind === 'teach') && inPart(2).some((s) => s.kind === 'model')).toBe(true);
+    const mission = inPart(5);
+    expect(mission[0].kind).toBe('dial');
+    expect(mission.filter((s) => s.kind === 'say').map((s) => s.id)).toEqual(['say-take1', 'say-take2']);
+    expect(mission.findIndex((s) => s.id === 'say-take1')).toBeLessThan(mission.findIndex((s) => s.kind === 'fade'));
+    expect(mission.findIndex((s) => s.kind === 'fade')).toBeLessThan(mission.findIndex((s) => s.id === 'say-take2'));
+    const exit = inPart(6).filter((s) => s.kind === 'say');
+    expect(exit).toHaveLength(1);
+    expect(exit[0].kind === 'say' && exit[0].open).toBeFalsy();
+    expect(inPart(0).some((s) => s.kind === 'brief')).toBe(true);
+    expect(inPart(7).some((s) => s.kind === 'wrap')).toBe(true);
+  });
+});
+
 describe('deck shell', () => {
   it('Next is locked until the slide is solved, and the title slide solves itself', () => {
     render(<Deck script={SIGN_ME_UP} />);
@@ -65,7 +127,7 @@ describe('deck shell', () => {
   });
 
   it('a broken game never freezes the lesson: the error card offers Try again and Skip', () => {
-    const boom = { ...SIGN_ME_UP, slides: [{ id: 'bad', kind: 'padlock' as const, bg: 'x', prompt: 'p', clue: 'c', code: undefined as unknown as string, reward: 'r' }, ...slides.slice(1)] };
+    const boom = { ...SIGN_ME_UP, slides: [{ id: 'bad', part: 0, kind: 'padlock' as const, bg: 'x', prompt: 'p', clue: 'c', code: undefined as unknown as string, reward: 'r' }, ...slides.slice(1)] };
     const spy = console.error;
     console.error = () => {};
     render(<Deck script={boom} />);
@@ -100,13 +162,51 @@ describe('games', () => {
     expect(screen.getByText(/Drag each bubble/)).toBeTruthy();
   });
 
+  it('TEACH: every word gets its own animated page (meaning, example, clue); the slide unlocks after the last page', () => {
+    open(idx('teach-nums'));
+    expect(screen.getByRole('heading', { name: 'one' })).toBeTruthy();
+    expect(screen.getByText('the number 1')).toBeTruthy();
+    expect(screen.getByRole('button', { name: /Next/ })).toBeDisabled();
+    for (let k = 0; k < 9; k++) fireEvent.click(screen.getByRole('button', { name: /Another word/ }));
+    expect(screen.getByRole('heading', { name: 'ten' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: /Next ▶/ })).toBeEnabled();
+  });
+
+  it('MODEL: the characters do the language line by line; the pattern card shows the changing part; it unlocks at the end', () => {
+    open(idx('model-signup'));
+    fireEvent.click(screen.getByRole('button', { name: /Watch next/ }));
+    expect(screen.getByLabelText('Pattern card').textContent).toMatch(/My name is/);
+    expect(screen.getByRole('button', { name: /Next ▶/ })).toBeDisabled();
+    for (let k = 0; k < 10; k++) fireEvent.click(screen.getByRole('button', { name: /Watch next/ }));
+    expect(screen.getByText(/Now YOU help Ava/)).toBeTruthy();
+    expect(screen.getByRole('button', { name: /Next ▶/ })).toBeEnabled();
+  });
+
+  it('TEACH BEFORE PLAY: every vocabulary word is taught on a teach page before the first game that uses it', () => {
+    const taught = new Set<string>();
+    for (const s of slides) {
+      if (s.kind === 'teach') s.pages.forEach((p) => taught.add(p.word.toLowerCase()));
+      if (s.kind === 'lockers') s.rounds.forEach((n) => expect(taught.has(s.words[n]), `${s.id}: ${s.words[n]} not taught yet`).toBe(true));
+      if (s.kind === 'numtrain') s.numbers.forEach((n) => expect(taught.has(s.words[n]), `${s.id}: ${s.words[n]} not taught yet`).toBe(true));
+      if (s.kind === 'border') s.rounds.forEach((r) => expect(taught.has(r.answer.toLowerCase()), `${s.id}: ${r.answer} not taught yet`).toBe(true));
+      if (s.kind === 'memory') s.pairs.forEach((p) => expect(taught.has(p.text.toLowerCase()), `${s.id}: ${p.text} not taught yet`).toBe(true));
+    }
+  });
+
+  it('MODEL BEFORE PRODUCE: the conversation is modelled before the student chooses or builds replies', () => {
+    const modelAt = slides.findIndex((s) => s.kind === 'model');
+    expect(modelAt).toBeGreaterThan(-1);
+    expect(modelAt).toBeLessThan(slides.findIndex((s) => s.id === 'convo'));
+    expect(modelAt).toBeLessThan(slides.findIndex((s) => s.id === 'phonechat'));
+  });
+
   it('LOCKERS: opening the right locker counts, a wrong one shakes with a friendly message', () => {
     open(idx('lockers'));
     expect(screen.getByText(/Open locker/).textContent).toMatch(/four/);
-    fireEvent.click(screen.getByRole('button', { name: 'Locker 9' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Locker 1' }));
     expect(screen.getByText(/Not yet/)).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: 'Locker 4' }));
-    expect(screen.getByText(/1 of 6 lockers opened/)).toBeTruthy();
+    expect(screen.getByText(/1 of 5 lockers opened/)).toBeTruthy();
   });
 
   it('SPELL: tapping the letters in order spells the name and unlocks Next; a wrong letter is not placed', () => {
