@@ -564,3 +564,8 @@
 .ad-phone-head .ad-icon { color: #fff; }
 .ad-chip[data-pic='true'] .ad-tilepic { width: 64px; }
 .ad-chip[data-pic='true'] .ad-count-digit { font-size: 1.6rem; }
+/* word tiles with a picture: compact cards, no dot grids */
+.ad-chip[data-pic='true'] { border-radius: 16px; min-width: 76px; }
+.ad-chip[data-pic='true'] .ad-count-dots { display: none; }
+.ad-chip[data-pic='true'] .ad-art-count { gap: 0; }
+.ad-chips { align-items: center; }
