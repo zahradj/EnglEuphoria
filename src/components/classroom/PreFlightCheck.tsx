@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Camera, Mic, Volume2, Play, Sparkles, CheckCircle2, Circle, Square } from 'lucide-react';
@@ -76,7 +77,7 @@ export const PreFlightCheck: React.FC<PreFlightCheckProps> = ({
   startTime,
 }) => {
   const {
-    cameraStatus, micStatus, speakerStatus, videoStream, audioLevel,
+    cameraStatus, micStatus, speakerStatus, videoStream, audioLevel, cameraError,
     micHeard, micTestPhase, micTestSeconds, runMicRecordTest, micError,
     runCameraCheck, runMicCheck, playSpeakerTest, confirmSpeaker,
     cleanup,
@@ -85,6 +86,7 @@ export const PreFlightCheck: React.FC<PreFlightCheckProps> = ({
     setSelectedVideoDevice, setSelectedAudioInput, setSelectedAudioOutput,
   } = usePreFlightCheck();
 
+  const { t } = useTranslation();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [speakerPlayed, setSpeakerPlayed] = useState(false);
   const [speakerNotHeard, setSpeakerNotHeard] = useState(false);
@@ -94,9 +96,9 @@ export const PreFlightCheck: React.FC<PreFlightCheckProps> = ({
   const speakerOk = speakerStatus === 'passed';
   const allReady = cameraOk && micOk && speakerOk;
   const checks = [
-    { key: 'camera', label: 'Camera', ok: cameraOk },
-    { key: 'mic', label: 'Microphone', ok: micOk },
-    { key: 'speaker', label: 'Speaker', ok: speakerOk },
+    { key: 'camera', label: t('wr.camera', 'Video device'), ok: cameraOk },
+    { key: 'mic', label: t('wr.mic', 'Microphone'), ok: micOk },
+    { key: 'speaker', label: t('wr.speaker', 'Speaker'), ok: speakerOk },
   ];
 
   useEffect(() => {
@@ -117,10 +119,12 @@ export const PreFlightCheck: React.FC<PreFlightCheckProps> = ({
   };
 
   const headline = lessonTitle
-    ? `Your next class "${lessonTitle}"${startTime ? ` starts at ${startTime}` : ''}`
+    ? startTime
+      ? t('wr.headlineLessonTime', { title: lessonTitle, time: startTime, defaultValue: 'Your next class “{{title}}” starts at {{time}}' })
+      : t('wr.headlineLesson', { title: lessonTitle, defaultValue: 'Your next class “{{title}}”' })
     : role === 'teacher'
-      ? 'Get ready to enter the classroom'
-      : 'Your class is about to begin';
+      ? t('wr.headlineTeacher', 'Get ready to enter the classroom')
+      : t('wr.headlineStudent', 'Your class is about to begin');
 
   const look = HUB_LOOK[hubType];
 
@@ -129,7 +133,7 @@ export const PreFlightCheck: React.FC<PreFlightCheckProps> = ({
       {/* Header pill */}
       <header className="px-6 py-4 flex items-center justify-center">
         <span className={`inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.18em] px-3 py-1.5 rounded-full ${look.pillBg}`}>
-          <Sparkles className="h-3.5 w-3.5" /> Waiting room
+          <Sparkles className="h-3.5 w-3.5" /> {t('wr.badge', 'Waiting room')}
         </span>
       </header>
 
@@ -147,7 +151,7 @@ export const PreFlightCheck: React.FC<PreFlightCheckProps> = ({
 
         <h1 className={`text-2xl md:text-3xl font-extrabold text-center mb-1 ${look.title}`}>{headline}</h1>
         <p className="text-sm text-slate-600 mb-8 text-center max-w-md">
-          Take a moment to check your camera, mic and speakers — {look.mascotName.split(' ')[0]} will be ready when you are.
+          {t('wr.intro', { name: look.mascotName.split(' ')[0], defaultValue: 'Take a moment to check your camera, mic and speakers — {{name}} will be ready when you are.' })}
         </p>
 
         {/* Glass card */}
@@ -169,26 +173,28 @@ export const PreFlightCheck: React.FC<PreFlightCheckProps> = ({
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-white/60 text-sm">
-                  {cameraStatus === 'failed' ? 'Camera unavailable' : 'Starting camera…'}
+                  {cameraStatus === 'failed'
+                    ? (cameraError === 'denied' ? t('wr.cameraDenied', 'Camera permission denied. Please allow camera access in your browser settings.') : t('wr.cameraUnavailable', 'Camera unavailable'))
+                    : t('wr.cameraStarting', 'Starting camera…')}
                 </div>
               )}
             </div>
 
             {/* Devices */}
             <div className="space-y-5">
-              <h2 className="text-base font-bold text-foreground">Choose your devices</h2>
+              <h2 className="text-base font-bold text-foreground">{t('wr.devices', 'Choose your devices')}</h2>
 
               <div className="space-y-2">
                 <label className="text-sm font-medium text-foreground flex items-center gap-2">
-                  <Camera className="h-4 w-4" /> Video device
+                  <Camera className="h-4 w-4" /> {t('wr.camera', 'Video device')}
                 </label>
                 <Select value={selectedVideoDevice} onValueChange={(v) => { setSelectedVideoDevice(v); void runCameraCheck(v); }}>
                   <SelectTrigger className="h-10 rounded-xl bg-white/80">
-                    <SelectValue placeholder="Select camera" />
+                    <SelectValue placeholder={t('wr.selectCamera', 'Select camera')} />
                   </SelectTrigger>
                   <SelectContent>
                     {videoDevices.map(d => (
-                      <SelectItem key={d.deviceId} value={d.deviceId}>{d.label || 'Camera'}</SelectItem>
+                      <SelectItem key={d.deviceId} value={d.deviceId}>{d.label || t('wr.cameraDefault', 'Camera')}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -196,32 +202,32 @@ export const PreFlightCheck: React.FC<PreFlightCheckProps> = ({
 
               <div className="space-y-2">
                 <label className="text-sm font-medium text-foreground flex items-center gap-2">
-                  <Mic className="h-4 w-4" /> Microphone
+                  <Mic className="h-4 w-4" /> {t('wr.mic', 'Microphone')}
                 </label>
                 <Select value={selectedAudioInput} onValueChange={(v) => { setSelectedAudioInput(v); void runMicCheck(v); }}>
                   <SelectTrigger className="h-10 rounded-xl bg-white/80">
-                    <SelectValue placeholder="Select microphone" />
+                    <SelectValue placeholder={t('wr.selectMic', 'Select microphone')} />
                   </SelectTrigger>
                   <SelectContent>
                     {audioInputDevices.map(d => (
-                      <SelectItem key={d.deviceId} value={d.deviceId}>{d.label || 'Microphone'}</SelectItem>
+                      <SelectItem key={d.deviceId} value={d.deviceId}>{d.label || t('wr.micDefault', 'Microphone')}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
-                <div className="h-2 w-full rounded-full bg-slate-200 overflow-hidden" aria-label="Microphone input level">
+                <div className="h-2 w-full rounded-full bg-slate-200 overflow-hidden" aria-label={t('wr.micLevel', 'Microphone input level')}>
                   <div
                     className="h-full bg-gradient-to-r from-emerald-400 to-emerald-600 transition-[width] duration-75"
                     style={{ width: `${Math.min(100, Math.max(4, audioLevel))}%` }}
                   />
                 </div>
                 {micStatus === 'failed' ? (
-                  <p className="text-xs text-red-600" role="alert">{micError}</p>
+                  <p className="text-xs text-red-600" role="alert">{micError === 'denied' ? t('wr.micDenied', 'Microphone permission denied. Please allow mic access in your browser settings.') : t('wr.micMissing', 'Microphone not found. Please check your device.')}</p>
                 ) : micHeard ? (
                   <p className="text-xs text-emerald-700 flex items-center gap-1">
-                    <CheckCircle2 className="h-3.5 w-3.5" /> We can hear you.
+                    <CheckCircle2 className="h-3.5 w-3.5" /> {t('wr.micHeard', 'We can hear you.')}
                   </p>
                 ) : (
-                  <p className="text-xs text-muted-foreground">Say “Hello!” — the bar should move.</p>
+                  <p className="text-xs text-muted-foreground">{t('wr.micSay', 'Say “Hello!” — the bar should move.')}</p>
                 )}
                 <Button
                   type="button"
@@ -231,61 +237,61 @@ export const PreFlightCheck: React.FC<PreFlightCheckProps> = ({
                   disabled={micStatus !== 'passed' || micTestPhase !== 'idle'}
                 >
                   {micTestPhase === 'recording' ? (
-                    <><Square className="h-4 w-4 mr-1 text-red-500" /> Recording… speak for {micTestSeconds} seconds</>
+                    <><Square className="h-4 w-4 me-1 text-red-500" /> {t('wr.recording', { seconds: micTestSeconds, defaultValue: 'Recording… speak for {{seconds}} seconds' })}</>
                   ) : micTestPhase === 'playing' ? (
-                    <><Volume2 className="h-4 w-4 mr-1" /> Playing it back…</>
+                    <><Volume2 className="h-4 w-4 me-1" /> {t('wr.playing', 'Playing it back…')}</>
                   ) : (
-                    <><Mic className="h-4 w-4 mr-1" /> Record {micTestSeconds} seconds and play it back</>
+                    <><Mic className="h-4 w-4 me-1" /> {t('wr.recStart', { seconds: micTestSeconds, defaultValue: 'Record {{seconds}} seconds and play it back' })}</>
                   )}
                 </Button>
-                <p className="text-xs text-muted-foreground">Use headphones if you hear an echo.</p>
+                <p className="text-xs text-muted-foreground">{t('wr.echo', 'Use headphones if you hear an echo.')}</p>
               </div>
 
               <div className="space-y-2">
                 <label className="text-sm font-medium text-foreground flex items-center gap-2">
-                  <Volume2 className="h-4 w-4" /> Speaker
+                  <Volume2 className="h-4 w-4" /> {t('wr.speaker', 'Speaker')}
                 </label>
                 <div className="flex gap-2">
                   <Select value={selectedAudioOutput} onValueChange={setSelectedAudioOutput}>
                     <SelectTrigger className="h-10 flex-1 rounded-xl bg-white/80">
-                      <SelectValue placeholder="Select speaker" />
+                      <SelectValue placeholder={t('wr.selectSpeaker', 'Select speaker')} />
                     </SelectTrigger>
                     <SelectContent>
                       {audioOutputDevices.map(d => (
-                        <SelectItem key={d.deviceId} value={d.deviceId}>{d.label || 'Speaker'}</SelectItem>
+                        <SelectItem key={d.deviceId} value={d.deviceId}>{d.label || t('wr.speakerDefault', 'Speaker')}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                   <Button type="button" variant="outline" className="h-10 shrink-0 rounded-xl" onClick={() => { playSpeakerTest(); setSpeakerPlayed(true); setSpeakerNotHeard(false); }}>
-                    <Play className="h-4 w-4 mr-1" /> Test
+                    <Play className="h-4 w-4 me-1" /> {t('wr.test', 'Test')}
                   </Button>
                 </div>
                 {speakerOk ? (
                   <p className="text-xs text-emerald-700 flex items-center gap-1">
-                    <CheckCircle2 className="h-3.5 w-3.5" /> Speaker works.
+                    <CheckCircle2 className="h-3.5 w-3.5" /> {t('wr.speakerOk', 'Speaker works.')}
                   </p>
                 ) : speakerPlayed ? (
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-xs text-foreground">Did you hear the tone?</span>
+                    <span className="text-xs text-foreground">{t('wr.speakerQ', 'Did you hear the tone?')}</span>
                     <Button type="button" size="sm" className="h-8 rounded-full" onClick={() => { confirmSpeaker(); setSpeakerNotHeard(false); }}>
-                      Yes
+                      {t('wr.yes', 'Yes')}
                     </Button>
                     <Button type="button" size="sm" variant="outline" className="h-8 rounded-full" onClick={() => setSpeakerNotHeard(true)}>
-                      No
+                      {t('wr.no', 'No')}
                     </Button>
                     {speakerNotHeard && (
                       <p className="w-full text-xs text-red-600" role="alert">
-                        Turn the volume up, check your headphones, or pick another speaker, then press Test again.
+                        {t('wr.speakerFix', 'Turn the volume up, check your headphones, or pick another speaker, then press Test again.')}
                       </p>
                     )}
                   </div>
                 ) : (
-                  <p className="text-xs text-muted-foreground">Click Test — you should hear a short tone.</p>
+                  <p className="text-xs text-muted-foreground">{t('wr.speakerHint', 'Click Test — you should hear a short tone.')}</p>
                 )}
               </div>
 
               <div className="pt-4 border-t border-slate-200/70 space-y-3">
-                <ul className="flex flex-wrap gap-x-4 gap-y-1" aria-label="Check list">
+                <ul className="flex flex-wrap gap-x-4 gap-y-1" aria-label={t('wr.checklist', 'Checklist')}>
                   {checks.map(c => (
                     <li key={c.key} className={`flex items-center gap-1.5 text-sm ${c.ok ? 'text-emerald-700 font-semibold' : 'text-muted-foreground'}`}>
                       {c.ok ? <CheckCircle2 className="h-4 w-4" /> : <Circle className="h-4 w-4" />}
@@ -294,16 +300,12 @@ export const PreFlightCheck: React.FC<PreFlightCheckProps> = ({
                   ))}
                 </ul>
                 <Button onClick={handleJoin} disabled={!allReady} className={`w-full h-11 rounded-full ${look.btn}`}>
-                  Join lesson
+                  {t('wr.join', 'Join lesson')}
                 </Button>
                 {!allReady && (
-                  <button
-                    type="button"
-                    onClick={handleJoin}
-                    className="block mx-auto text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground"
-                  >
-                    Skip the check and join anyway
-                  </button>
+                  <p className="text-xs text-center text-muted-foreground">
+                    {t('wr.joinHint', 'Test your camera, microphone and speaker to join.')}
+                  </p>
                 )}
               </div>
             </div>

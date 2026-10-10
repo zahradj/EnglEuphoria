@@ -21,6 +21,7 @@ import { navTranslations } from './nav';
 import { dashboardUITranslations } from './dashboardUI';
 import { placementTranslations } from './placement';
 import { authUiTranslations } from './authUi';
+import { waitingRoomTranslations } from './waitingRoom';
 import { lessonsPageTranslations } from './lessonsPage';
 
 export const englishTranslations = {
@@ -46,5 +47,6 @@ export const englishTranslations = {
   ...authenticationTranslations,
   ...dashboardUITranslations,
   ...authUiTranslations,
+  ...waitingRoomTranslations,
   ...lessonsPageTranslations,
 };

@@ -3,6 +3,16 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { PreFlightCheck } from '../PreFlightCheck';
 
 const hook = vi.hoisted(() => ({ state: {} as Record<string, unknown> }));
+// Return each key's English default (with {{placeholders}} filled) so the screen can be tested without i18n set up.
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (_key: string, arg?: string | { defaultValue?: string; [k: string]: unknown }) => {
+      const text = typeof arg === 'string' ? arg : arg?.defaultValue ?? _key;
+      const vars = typeof arg === 'object' ? arg : {};
+      return text.replace(/\{\{\s*(\w+)\s*\}\}/g, (_m, k) => String(vars[k] ?? ''));
+    },
+  }),
+}));
 vi.mock('@/hooks/usePreFlightCheck', () => ({ usePreFlightCheck: () => hook.state }));
 
 const base = () => ({
@@ -33,11 +43,10 @@ describe('PreFlightCheck', () => {
     expect(onComplete).toHaveBeenCalled();
   });
 
-  it('lets someone skip the check so a missing device never locks them out', () => {
-    const onComplete = vi.fn();
-    render(<PreFlightCheck onComplete={onComplete} />);
-    fireEvent.click(screen.getByText('Skip the check and join anyway'));
-    expect(onComplete).toHaveBeenCalled();
+  it('has no way to skip the check: Join stays off until every device is tested', () => {
+    render(<PreFlightCheck onComplete={vi.fn()} />);
+    expect(screen.queryByText(/skip/i)).toBeNull();
+    expect(screen.getByText('Test your camera, microphone and speaker to join.')).toBeTruthy();
   });
 
   it('starts the record-and-play-back mic test', () => {

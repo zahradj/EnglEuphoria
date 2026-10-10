@@ -31,8 +31,9 @@ interface PreFlightState {
   micTestSeconds: number;
   /** Records a few seconds from the chosen microphone, then plays it back on the chosen speaker. */
   runMicRecordTest: () => void;
-  cameraError: string | null;
-  micError: string | null;
+  /** 'denied' (permission refused) or 'missing' (no device) — the screen words it in the person's language. */
+  cameraError: 'denied' | 'missing' | null;
+  micError: 'denied' | 'missing' | null;
   runCameraCheck: (deviceIdOverride?: string) => Promise<void>;
   runMicCheck: (deviceIdOverride?: string) => Promise<void>;
   confirmSpeaker: () => void;
@@ -61,8 +62,8 @@ export const usePreFlightCheck = (): PreFlightState => {
   const [audioLevel, setAudioLevel] = useState(0);
   const [micHeard, setMicHeard] = useState(false);
   const [micTestPhase, setMicTestPhase] = useState<MicTestPhase>('idle');
-  const [cameraError, setCameraError] = useState<string | null>(null);
-  const [micError, setMicError] = useState<string | null>(null);
+  const [cameraError, setCameraError] = useState<'denied' | 'missing' | null>(null);
+  const [micError, setMicError] = useState<'denied' | 'missing' | null>(null);
 
   // Device lists
   const [videoDevices, setVideoDevices] = useState<MediaDeviceInfo[]>([]);
@@ -169,9 +170,7 @@ export const usePreFlightCheck = (): PreFlightState => {
         kind: d.kind,
       })));
     } catch (err: any) {
-      setCameraError(err.name === 'NotAllowedError'
-        ? 'Camera permission denied. Please allow camera access in your browser settings.'
-        : 'Camera not found. Please check your device.');
+      setCameraError(err.name === 'NotAllowedError' ? 'denied' : 'missing');
       setCameraStatus('failed');
     }
   }, [selectedVideoDevice]);
@@ -237,9 +236,7 @@ export const usePreFlightCheck = (): PreFlightState => {
         kind: d.kind,
       })));
     } catch (err: any) {
-      setMicError(err.name === 'NotAllowedError'
-        ? 'Microphone permission denied. Please allow mic access in your browser settings.'
-        : 'Microphone not found. Please check your device.');
+      setMicError(err.name === 'NotAllowedError' ? 'denied' : 'missing');
       setMicStatus('failed');
     }
   }, [selectedAudioInput]);
