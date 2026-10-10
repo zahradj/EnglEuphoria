@@ -57,3 +57,11 @@
 - Every Playground lesson after the very first opens (right after the title / hello song) with ONE `recall-warmup` scene: a quick "Remember?" of the lesson before, 3-5 of its words with their pictures, Pip says each word and the child finds it — no reading.
 - Vary the look: `mode: 'click'` (listen and click, three pictures) for colours and scene pictures; `mode: 'shadow'` (listen and match the shadow) only for sticker pictures with clearly different outlines.
 - `recallWarmup.test.ts` (deploy gate) fails if a lesson has none. It is a routine scene, not one of the lesson's games.
+
+## Languages — every page is translated (hard rule — owner, 2026-10-09)
+
+- **Every new or edited page a student, parent or visitor sees is built with `t()` and translated into all six languages** (en, es, fr, ar, tr, it) — never hard-coded English. Put keys in `src/translations/<lang>/<area>.ts` (see `authUi.ts` for the pattern: `au.*` keys, English text as the `t()` default) and wire them into each language's `index.ts`; the parity test (`src/translations/authUi.test.ts`, copy it for a new area) fails if a language is missing a key or a `{{placeholder}}`.
+- **English is the main language** and the fallback. A visitor sees their region's language by default (URL prefix → saved region → geo-IP → browser language, `src/lib/marketRegion.ts` + `LocaleContext`); **a language they pick themselves always wins** (`src/lib/languageChoice.ts` — call `markLanguagePicked()` wherever a language is chosen; never let the region override it).
+- Students switch language any time from the globe in the dashboard header (`LanguageSwitcher`, saved to `users.preferred_language`, applied on every device by `useStudentLanguageSync`).
+- Layout must work right-to-left (Arabic): use logical classes (`ps-/pe-/start-/end-/text-start`), flip direction arrows with `rtl:rotate-180`.
+- Lesson content stays English (it is what is being taught); the chrome, instructions, buttons and messages around it are translated.

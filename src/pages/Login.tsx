@@ -8,9 +8,11 @@ import { useAuth } from '@/contexts/AuthContext';
 import { HeroThemeProvider } from '@/contexts/HeroThemeContext';
 import { resolveHubRoute } from '@/lib/hubResolver';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 
 const Login = () => {
   const { user, loading } = useAuth();
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const redirectedRef = useRef(false);
@@ -86,8 +88,8 @@ const Login = () => {
       </Helmet>
       <HeroThemeProvider>
         <AuthPageLayout
-          title="Welcome Back"
-          subtitle="Sign in to continue your learning journey"
+          title={t('au.welcomeBack', 'Welcome Back')}
+          subtitle={t('au.signInSubtitle', 'Sign in to continue your learning journey')}
           icon={LogIn}
           variant="default"
         >

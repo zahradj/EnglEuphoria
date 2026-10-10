@@ -18,6 +18,7 @@ import {
 } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import i18n from '@/lib/i18n';
+import { clearLanguagePicked, dirFor, hasPickedLanguage, rootLang } from '@/lib/languageChoice';
 import {
   MarketRegion,
   REGION_CONFIG,
@@ -50,14 +51,17 @@ export const LocaleProvider = ({ children }: { children: React.ReactNode }) => {
   );
   const config = REGION_CONFIG[region];
 
-  // Sync i18n + <html> on every region change.
+  // Sync i18n + <html> on every region change. The region's language is the DEFAULT for a visitor —
+  // a language they picked themselves (menu / profile) always wins (see lib/languageChoice.ts).
   useEffect(() => {
-    if (i18n.language?.split('-')[0] !== config.language) {
+    const picked = hasPickedLanguage();
+    if (!picked && rootLang(i18n.language) !== config.language) {
       i18n.changeLanguage(config.language).catch(() => {});
     }
     if (typeof document !== 'undefined') {
-      document.documentElement.dir = config.dir;
-      document.documentElement.lang = config.language;
+      const lng = picked ? rootLang(i18n.language) : config.language;
+      document.documentElement.dir = dirFor(lng);
+      document.documentElement.lang = lng;
       document.documentElement.dataset.region = region;
     }
   }, [region, config.language, config.dir]);
@@ -80,12 +84,14 @@ export const LocaleProvider = ({ children }: { children: React.ReactNode }) => {
       // before the URL prefix redirect lands.
       persistRegionChoice(geo);
       const nextLang = REGION_CONFIG[geo].language;
-      if (i18n.language?.split('-')[0] !== nextLang) {
-        i18n.changeLanguage(nextLang).catch(() => {});
-      }
-      if (typeof document !== 'undefined') {
-        document.documentElement.dir = REGION_CONFIG[geo].dir;
-        document.documentElement.lang = nextLang;
+      if (!hasPickedLanguage()) {
+        if (rootLang(i18n.language) !== nextLang) {
+          i18n.changeLanguage(nextLang).catch(() => {});
+        }
+        if (typeof document !== 'undefined') {
+          document.documentElement.dir = dirFor(nextLang);
+          document.documentElement.lang = nextLang;
+        }
       }
       const cleanPath = stripLocalePrefix(location.pathname);
       navigate(withLocalePath(geo, cleanPath) + location.search, { replace: true });
@@ -100,6 +106,8 @@ export const LocaleProvider = ({ children }: { children: React.ReactNode }) => {
 
   const switchRegion = useCallback(
     (next: MarketRegion) => {
+      // Choosing a region is choosing its language too.
+      clearLanguagePicked();
       persistRegionChoice(next);
       const cleanPath = stripLocalePrefix(location.pathname);
       const target = withLocalePath(next, cleanPath) + location.search;

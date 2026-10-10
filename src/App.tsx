@@ -96,6 +96,7 @@ const MarketingAgentAutomationsPage = lazy(() => import("./pages/marketing-agent
 const TemplateMarketplace = lazy(() => import("./pages/TemplateMarketplace"));
 const StudentSignUp = lazy(() => import("./pages/StudentSignUp"));
 const ParentSignUp = lazy(() => import("./pages/ParentSignUp"));
+const ParentLessons = lazy(() => import("./pages/ParentLessons"));
 const WhoIsLearning = lazy(() => import("./pages/WhoIsLearning"));
 const StudentApplication = lazy(() => import("./pages/StudentApplication"));
 const EmailVerification = lazy(() => import("./pages/EmailVerification"));
@@ -1065,6 +1066,15 @@ const App = () => {
                         <ImprovedProtectedRoute>
                           <Suspense fallback={<LoadingFallback />}>
                             <TemplateMarketplace />
+                          </Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+
+                      {/* Family dashboard › Lessons (buy packs) - its own page */}
+                      <Route path="/parent/lessons" element={
+                        <ImprovedProtectedRoute requiredRole="parent">
+                          <Suspense fallback={<LoadingFallback />}>
+                            <ParentLessons />
                           </Suspense>
                         </ImprovedProtectedRoute>
                       } />

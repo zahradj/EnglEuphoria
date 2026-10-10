@@ -134,6 +134,7 @@ export const EnhancedCalendarTab = ({ teacherId }: EnhancedCalendarTabProps) => 
       <BookedSlotManager
         open={!!bookedSlot}
         onOpenChange={(o) => { if (!o) setBookedSlot(null); }}
+        teacherId={teacherId}
         slot={
           bookedSlot
             ? {

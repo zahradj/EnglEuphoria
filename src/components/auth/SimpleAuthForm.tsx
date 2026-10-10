@@ -2,13 +2,13 @@ import { detectMarketRegion, toDbMarketRegion } from '@/lib/marketRegion';
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { AuthButton, AuthDivider, AuthField, EyeToggle } from '@/components/auth/authUi';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Eye, EyeOff, CheckCircle, XCircle, Mail, Lock, User, GraduationCap, BookOpen, Sparkles, Shield, Calendar } from 'lucide-react';
+import { Loader2, CheckCircle, XCircle, Mail, Lock, User, Users, GraduationCap, BookOpen, Sparkles, Shield, Calendar } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { useHeroTheme } from '@/contexts/HeroThemeContext';
 
 interface SimpleAuthFormProps {
@@ -55,10 +55,10 @@ const getRedirectPath = (role: string, systemTag: string | null): string => {
 };
 
 const passwordRequirements = [
-  { test: (pwd: string) => pwd.length >= 6, text: "At least 6 characters" },
-  { test: (pwd: string) => /[A-Z]/.test(pwd), text: "One uppercase letter" },
-  { test: (pwd: string) => /[0-9]/.test(pwd), text: "One number" },
-  { test: (pwd: string) => /[!@#$%^&*]/.test(pwd), text: "One special character" }
+  { test: (pwd: string) => pwd.length >= 6, key: "au.req.len6", text: "At least 6 characters" },
+  { test: (pwd: string) => /[A-Z]/.test(pwd), key: "au.req.upper", text: "One uppercase letter" },
+  { test: (pwd: string) => /[0-9]/.test(pwd), key: "au.req.number", text: "One number" },
+  { test: (pwd: string) => /[!@#$%^&*]/.test(pwd), key: "au.req.special", text: "One special character" }
 ];
 
 const fieldVariants = {
@@ -72,6 +72,7 @@ const fieldVariants = {
 
 export const SimpleAuthForm: React.FC<SimpleAuthFormProps> = ({ mode, onModeChange }) => {
   const { theme } = useHeroTheme();
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const refCode = searchParams.get('ref') || '';
   const [formData, setFormData] = useState<FormData>({
@@ -331,30 +332,28 @@ export const SimpleAuthForm: React.FC<SimpleAuthFormProps> = ({ mode, onModeChan
   // --- Forgot Password View ---
   if (showForgotPassword) {
     return (
-      <div className="space-y-4">
-        <div className="text-center mb-4">
-          <h3 className="text-lg font-semibold text-foreground">Reset Password</h3>
-          <p className="text-sm text-muted-foreground">Enter your email to receive reset instructions</p>
+      <div className="space-y-5">
+        <div className="text-center">
+          <h3 className="text-lg font-bold text-slate-900 dark:text-white">{t('au.resetTitle', 'Reset your password')}</h3>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{t('au.resetSub', 'Enter your email and we’ll send you a reset link.')}</p>
         </div>
         <form onSubmit={handleForgotPassword} className="space-y-4">
-          <div className="relative">
-            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="email"
-              value={resetEmail}
-              onChange={e => setResetEmail(e.target.value)}
-              placeholder="your.email@example.com"
-              className="pl-10 h-11 bg-muted/50 border-border focus:ring-2 focus:ring-primary/30 transition-shadow"
-              disabled={resetLoading}
-            />
-          </div>
-          <Button type="submit" className="w-full h-11" disabled={resetLoading}>
-            {resetLoading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
-            Send Reset Link
-          </Button>
-          <Button type="button" variant="ghost" className="w-full" onClick={() => setShowForgotPassword(false)}>
-            Back to Login
-          </Button>
+          <AuthField
+            label={t('au.emailAddress', 'Email address')}
+            icon={Mail}
+            type="email"
+            value={resetEmail}
+            onChange={e => setResetEmail(e.target.value)}
+            placeholder="your.email@example.com"
+            autoComplete="email"
+            disabled={resetLoading}
+          />
+          <AuthButton type="submit" className="w-full" loading={resetLoading}>
+            {t('au.sendReset', 'Send reset link')}
+          </AuthButton>
+          <AuthButton variant="ghost" className="w-full" onClick={() => setShowForgotPassword(false)}>
+            {t('au.backToSignIn', 'Back to sign in')}
+          </AuthButton>
         </form>
       </div>
     );
@@ -362,108 +361,94 @@ export const SimpleAuthForm: React.FC<SimpleAuthFormProps> = ({ mode, onModeChan
 
   // --- Main Form ---
   let fieldIndex = 0;
+  const rise = { variants: fieldVariants, initial: 'hidden', animate: 'visible' } as const;
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-5">
       {(formError || error) && (
         <motion.div
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
-          className="p-3 bg-destructive/10 border border-destructive/20 rounded-lg"
+          className="rounded-xl border border-red-200 bg-red-50 p-3.5 dark:border-red-500/30 dark:bg-red-500/10"
           role="alert"
         >
-          <p className="text-sm text-destructive">
+          <p className="text-sm font-medium text-red-700 dark:text-red-300">
             {formError || error || 'Something went wrong. Please try again.'}
           </p>
         </motion.div>
       )}
 
       {/* Google OAuth */}
-      <motion.div variants={fieldVariants} initial="hidden" animate="visible" custom={fieldIndex++}>
-        <Button
-          type="button"
-          variant="outline"
-          className="w-full h-11 gap-3 font-medium border-border hover:bg-muted/60 transition-all hover:shadow-md"
-          onClick={handleGoogleSignIn}
-          disabled={googleLoading || loading}
-        >
+      <motion.div {...rise} custom={fieldIndex++}>
+        <AuthButton variant="ghost" className="w-full gap-3" onClick={handleGoogleSignIn} disabled={googleLoading || loading}>
           {googleLoading ? (
             <Loader2 className="h-4 w-4 animate-spin" />
           ) : (
-            <svg viewBox="0 0 24 24" className="w-5 h-5" aria-hidden>
+            <svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden>
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
               <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
               <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
               <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
             </svg>
           )}
-          Continue with Google
-        </Button>
+          {t('au.google', 'Continue with Google')}
+        </AuthButton>
       </motion.div>
 
-      {/* Divider */}
-      <motion.div
-        variants={fieldVariants} initial="hidden" animate="visible" custom={fieldIndex++}
-        className="flex items-center gap-3"
-      >
-        <div className="flex-1 h-px bg-border" />
-        <span className="text-xs text-muted-foreground font-medium">or continue with email</span>
-        <div className="flex-1 h-px bg-border" />
+      <motion.div {...rise} custom={fieldIndex++}>
+        <AuthDivider>{t('au.orEmail', 'or continue with email')}</AuthDivider>
       </motion.div>
 
       {/* Name (signup only) */}
       {mode === 'signup' && (
-        <motion.div variants={fieldVariants} initial="hidden" animate="visible" custom={fieldIndex++} className="space-y-1.5">
-          <label className="text-sm font-medium text-foreground/80">Full Name</label>
-          <div className="relative">
-            <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              value={formData.fullName}
-              onChange={e => handleInputChange('fullName', e.target.value)}
-              placeholder="Enter your full name"
-              className="pl-10 h-11 bg-muted/50 border-border focus:ring-2 focus:ring-primary/30 transition-shadow"
-              disabled={loading}
-              required
-            />
-          </div>
+        <motion.div {...rise} custom={fieldIndex++}>
+          <AuthField
+            label={t('au.fullName', 'Full name')}
+            icon={User}
+            value={formData.fullName}
+            onChange={e => handleInputChange('fullName', e.target.value)}
+            placeholder={t('au.fullNamePh', 'Enter your full name')}
+            autoComplete="name"
+            disabled={loading}
+            required
+          />
         </motion.div>
       )}
 
       {/* Email */}
-      <motion.div variants={fieldVariants} initial="hidden" animate="visible" custom={fieldIndex++} className="space-y-1.5">
-        <label className="text-sm font-medium text-foreground/80">Email Address</label>
-        <div className="relative">
-          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            type="email"
-            value={formData.email}
-            onChange={e => handleInputChange('email', e.target.value)}
-            placeholder="your.email@example.com"
-            className={`pl-10 h-11 bg-muted/50 border-border focus:ring-2 focus:ring-primary/30 transition-shadow ${emailError ? 'border-destructive' : ''}`}
-            disabled={loading}
-            required
-          />
-        </div>
-        {emailError && <p className="text-xs text-destructive">{emailError}</p>}
+      <motion.div {...rise} custom={fieldIndex++}>
+        <AuthField
+          label={t('au.emailAddress', 'Email address')}
+          icon={Mail}
+          type="email"
+          value={formData.email}
+          onChange={e => handleInputChange('email', e.target.value)}
+          placeholder="your.email@example.com"
+          autoComplete="email"
+          error={emailError || null}
+          disabled={loading}
+          required
+        />
       </motion.div>
 
       {/* Role selector (signup only) */}
       {mode === 'signup' && (
-        <motion.div variants={fieldVariants} initial="hidden" animate="visible" custom={fieldIndex++} className="space-y-1.5">
-          <label className="text-sm font-medium text-foreground/80">I am a...</label>
-          <div className="flex gap-2">
+        <motion.div {...rise} custom={fieldIndex++} className="space-y-1.5">
+          <p className="text-[13px] font-semibold tracking-wide text-slate-700 dark:text-slate-200">{t('au.iAmA', 'I am a…')}</p>
+          <div className="grid grid-cols-2 gap-2">
             {([
-              { value: 'student' as const, label: 'Student', icon: BookOpen, desc: 'Learn & Grow' },
-              { value: 'teacher' as const, label: 'Teacher', icon: GraduationCap, desc: 'Inspire & Educate' },
+              { value: 'student' as const, label: t('au.student', 'Student'), icon: BookOpen, desc: t('au.studentSub', 'Learn & Grow') },
+              { value: 'teacher' as const, label: t('au.teacher', 'Teacher'), icon: GraduationCap, desc: t('au.teacherSub', 'Inspire & Educate') },
             ]).map((opt) => (
               <button
                 key={opt.value}
                 type="button"
                 onClick={() => handleInputChange('role', opt.value)}
-                className={`flex-1 flex items-center gap-2 px-4 py-2.5 rounded-xl border-2 transition-all duration-300 text-sm font-medium ${
+                aria-pressed={formData.role === opt.value}
+                className={`flex items-center gap-2.5 rounded-xl border-2 px-3.5 py-2.5 text-start text-sm font-semibold transition-all duration-200 ${
                   formData.role === opt.value
-                    ? 'text-white shadow-lg scale-[1.02]'
-                    : 'border-border bg-muted/30 text-muted-foreground hover:bg-muted/60'
+                    ? 'text-white shadow-lg'
+                    : 'border-slate-200 bg-slate-50/70 text-slate-600 hover:border-slate-300 hover:bg-white dark:border-slate-700 dark:bg-slate-800/40 dark:text-slate-300 dark:hover:bg-slate-800'
                 }`}
                 style={formData.role === opt.value ? {
                   backgroundImage: `linear-gradient(135deg, ${theme.cssFrom}, ${theme.cssTo})`,
@@ -471,11 +456,11 @@ export const SimpleAuthForm: React.FC<SimpleAuthFormProps> = ({ mode, onModeChan
                 } : undefined}
                 disabled={loading}
               >
-                <opt.icon className="h-4 w-4" />
-                <div className="text-left">
-                  <div>{opt.label}</div>
-                  <div className={`text-[10px] ${formData.role === opt.value ? 'text-white/80' : 'text-muted-foreground/60'}`}>{opt.desc}</div>
-                </div>
+                <opt.icon className="h-4 w-4 shrink-0" />
+                <span>
+                  <span className="block">{opt.label}</span>
+                  <span className={`block text-[10px] font-medium ${formData.role === opt.value ? 'text-white/80' : 'text-slate-400'}`}>{opt.desc}</span>
+                </span>
               </button>
             ))}
           </div>
@@ -484,24 +469,21 @@ export const SimpleAuthForm: React.FC<SimpleAuthFormProps> = ({ mode, onModeChan
 
       {/* Date of birth (signup student only) */}
       {mode === 'signup' && formData.role === 'student' && (
-        <motion.div variants={fieldVariants} initial="hidden" animate="visible" custom={fieldIndex++} className="space-y-1.5">
-          <label className="text-sm font-medium text-foreground/80">Date of Birth</label>
-          <div className="relative">
-            <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="date"
-              value={formData.dateOfBirth}
-              onChange={e => handleInputChange('dateOfBirth', e.target.value)}
-              max={new Date().toISOString().split('T')[0]}
-              className="pl-10 h-11 bg-muted/50 border-border focus:ring-2 focus:ring-primary/30 transition-shadow"
-              disabled={loading}
-              required
-            />
-          </div>
+        <motion.div {...rise} custom={fieldIndex++} className="space-y-2">
+          <AuthField
+            label={t('au.dob', 'Date of birth')}
+            icon={Calendar}
+            type="date"
+            value={formData.dateOfBirth}
+            onChange={e => handleInputChange('dateOfBirth', e.target.value)}
+            max={new Date().toISOString().split('T')[0]}
+            disabled={loading}
+            required
+          />
           {formData.dateOfBirth && (
-            <p className="text-xs text-muted-foreground flex items-center gap-1.5">
-              <span>Program:</span>
-              <span className="px-2 py-0.5 rounded-full text-xs font-medium text-white"
+            <p className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
+              <span>{t('au.program', 'Program:')}</span>
+              <span className="rounded-full px-2 py-0.5 text-xs font-semibold text-white"
                 style={{
                   backgroundColor: calculateSystemTag(formData.dateOfBirth) === 'KIDS' ? '#FF9F1C' :
                     calculateSystemTag(formData.dateOfBirth) === 'TEENS' ? '#6366F1' : '#10B981'
@@ -514,39 +496,28 @@ export const SimpleAuthForm: React.FC<SimpleAuthFormProps> = ({ mode, onModeChan
       )}
 
       {/* Password */}
-      <motion.div variants={fieldVariants} initial="hidden" animate="visible" custom={fieldIndex++} className="space-y-1.5">
-        <label className="text-sm font-medium text-foreground/80">Password</label>
-        <div className="relative">
-          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            type={showPassword ? "text" : "password"}
-            value={formData.password}
-            onChange={e => handleInputChange('password', e.target.value)}
-            placeholder={mode === 'login' ? "Enter your password" : "Create a password"}
-            className="pl-10 pr-10 h-11 bg-muted/50 border-border focus:ring-2 focus:ring-primary/30 transition-shadow"
-            disabled={loading}
-            required
-          />
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 p-0 text-muted-foreground hover:text-foreground"
-            disabled={loading}
-          >
-            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-          </Button>
-        </div>
+      <motion.div {...rise} custom={fieldIndex++}>
+        <AuthField
+          label={t('au.password', 'Password')}
+          icon={Lock}
+          type={showPassword ? 'text' : 'password'}
+          value={formData.password}
+          onChange={e => handleInputChange('password', e.target.value)}
+          placeholder={mode === 'login' ? t('au.passwordPh', 'Enter your password') : t('au.createPasswordPh', 'Create a password')}
+          autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
+          disabled={loading}
+          required
+          right={<EyeToggle shown={showPassword} onToggle={() => setShowPassword(!showPassword)} disabled={loading} />}
+        />
 
         {mode === 'signup' && formData.password && (
-          <div className="mt-2 p-3 bg-muted/50 rounded-lg border border-border">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
+          <div className="mt-3 rounded-xl border border-slate-200 bg-slate-50/80 p-3 dark:border-slate-700 dark:bg-slate-800/40">
+            <div className="mb-2 flex items-center justify-between">
+              <span className="flex items-center gap-1.5 text-xs font-semibold text-slate-500 dark:text-slate-400">
                 <Shield className="h-3 w-3" />
-                Password Strength
+                {t('au.strength', 'Password strength')}
               </span>
-              <span className={`text-xs font-semibold px-1.5 py-0.5 rounded ${
+              <span className={`rounded px-1.5 py-0.5 text-xs font-bold ${
                 getPasswordStrength() >= 3 ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' :
                 getPasswordStrength() >= 2 ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' :
                 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
@@ -554,9 +525,9 @@ export const SimpleAuthForm: React.FC<SimpleAuthFormProps> = ({ mode, onModeChan
                 {getPasswordStrength()}/4
               </span>
             </div>
-            <div className="flex gap-1 mb-2">
+            <div className="mb-2 flex gap-1">
               {[1, 2, 3, 4].map(i => (
-                <div key={i} className={`flex-1 h-1 rounded-full transition-colors ${i > getPasswordStrength() ? 'bg-muted' : ''}`}
+                <div key={i} className={`h-1.5 flex-1 rounded-full transition-colors ${i > getPasswordStrength() ? 'bg-slate-200 dark:bg-slate-700' : ''}`}
                   style={i <= getPasswordStrength() ? { backgroundColor: theme.cssFrom } : undefined}
                 />
               ))}
@@ -566,132 +537,112 @@ export const SimpleAuthForm: React.FC<SimpleAuthFormProps> = ({ mode, onModeChan
                 <div key={i} className="flex items-center gap-1 text-xs">
                   {req.test(formData.password) ?
                     <CheckCircle className="h-3 w-3 text-green-500" /> :
-                    <XCircle className="h-3 w-3 text-muted-foreground/40" />
+                    <XCircle className="h-3 w-3 text-slate-300 dark:text-slate-600" />
                   }
-                  <span className={req.test(formData.password) ? 'text-green-600 dark:text-green-400' : 'text-muted-foreground/60'}>
-                    {req.text}
+                  <span className={req.test(formData.password) ? 'text-green-600 dark:text-green-400' : 'text-slate-400'}>
+                    {t(req.key, req.text)}
                   </span>
                 </div>
               ))}
             </div>
           </div>
         )}
+
+        {mode === 'login' && (
+          <div className="mt-2 text-end">
+            <button
+              type="button"
+              onClick={() => setShowForgotPassword(true)}
+              className="text-xs font-semibold text-slate-500 transition-colors hover:text-[var(--auth-accent)]"
+            >
+              {t('au.forgot', 'Forgot password?')}
+            </button>
+          </div>
+        )}
       </motion.div>
 
       {/* Confirm password (signup only) */}
       {mode === 'signup' && (
-        <motion.div variants={fieldVariants} initial="hidden" animate="visible" custom={fieldIndex++} className="space-y-1.5">
-          <label className="text-sm font-medium text-foreground/80">Confirm Password</label>
-          <div className="relative">
-            <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              type={showConfirmPassword ? "text" : "password"}
-              value={formData.confirmPassword}
-              onChange={e => handleInputChange('confirmPassword', e.target.value)}
-              placeholder="Confirm your password"
-              className="pl-10 pr-10 h-11 bg-muted/50 border-border focus:ring-2 focus:ring-primary/30 transition-shadow"
-              disabled={loading}
-              required
-            />
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 p-0 text-muted-foreground hover:text-foreground"
-              disabled={loading}
-            >
-              {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-            </Button>
-          </div>
+        <motion.div {...rise} custom={fieldIndex++}>
+          <AuthField
+            label={t('au.confirmPassword', 'Confirm password')}
+            icon={Lock}
+            type={showConfirmPassword ? 'text' : 'password'}
+            value={formData.confirmPassword}
+            onChange={e => handleInputChange('confirmPassword', e.target.value)}
+            placeholder={t('au.confirmPasswordPh', 'Confirm your password')}
+            autoComplete="new-password"
+            disabled={loading}
+            required
+            right={<EyeToggle shown={showConfirmPassword} onToggle={() => setShowConfirmPassword(!showConfirmPassword)} disabled={loading} />}
+          />
         </motion.div>
       )}
 
       {/* Submit */}
-      <motion.div variants={fieldVariants} initial="hidden" animate="visible" custom={fieldIndex++}>
-        <Button
-          type="submit"
-          className="w-full h-11 text-white font-medium shadow-lg transition-all duration-500 hover:shadow-xl hover:brightness-110"
-          style={{ backgroundImage: `linear-gradient(to right, ${theme.cssFrom}, ${theme.cssTo})` }}
-          disabled={loading || verifyingRole}
-        >
+      <motion.div {...rise} custom={fieldIndex++}>
+        <AuthButton type="submit" className="w-full" disabled={verifyingRole} loading={loading || verifyingRole}>
           {loading || verifyingRole ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              {verifyingRole ? 'Verifying role…' : (mode === 'login' ? 'Signing in...' : 'Creating account...')}
-            </>
+            verifyingRole ? t('au.verifying', 'Verifying role…') : (mode === 'login' ? t('au.signingIn', 'Signing in…') : t('au.creating', 'Creating account…'))
+          ) : mode === 'login' ? (
+            <><Shield className="h-4 w-4" /> {t('au.signIn', 'Sign in')}</>
           ) : (
-            <>
-              {mode === 'login' ? (
-                <><Shield className="mr-2 h-4 w-4" /> Sign In</>
-              ) : (
-                <><Sparkles className="mr-2 h-4 w-4" /> Create Account</>
-              )}
-            </>
+            <><Sparkles className="h-4 w-4" /> {t('au.createAccount', 'Create account')}</>
           )}
-        </Button>
+        </AuthButton>
       </motion.div>
 
       {/* Footer links */}
-      <div className="space-y-3 text-center text-sm">
-        {mode === 'login' && (
-          <button
-            type="button"
-            onClick={() => setShowForgotPassword(true)}
-            className="text-muted-foreground hover:text-primary transition-colors"
-          >
-            Forgot password?
-          </button>
-        )}
-
-        <div className="pt-2">
-          <span className="text-muted-foreground">
-            {mode === 'login' ? "Don't have an account? " : "Already have an account? "}
-          </span>
-          {onModeChange ? (
-            <button
-              type="button"
-              onClick={() => onModeChange(mode === 'login' ? 'signup' : 'login')}
-              className="font-medium text-primary hover:underline"
-            >
-              {mode === 'login' ? 'Sign up' : 'Sign in'}
-            </button>
-          ) : (
-            <Link
-              to={mode === 'login' ? '/student-signup' : '/login'}
-              className="font-medium text-primary hover:underline"
-            >
-              {mode === 'login' ? 'Sign up' : 'Sign in'}
-            </Link>
-          )}
-        </div>
-
-        {mode === 'signup' && (
-          <div className="pt-3 border-t border-border">
-            <p className="text-xs text-muted-foreground mb-2">Specialized signup</p>
-            <div className="flex gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => navigate('/for-teachers')}
-                className="flex-1 text-xs"
+      <div className="space-y-4 pt-1 text-center text-sm">
+        {mode === 'login' ? (
+          <div className="border-t border-slate-200 pt-5 dark:border-slate-700">
+            <p className="mb-3 font-medium text-slate-500 dark:text-slate-400">{t('au.newTo', 'New to EnglEuphoria? Create an account')}</p>
+            <div className="grid grid-cols-2 gap-2.5">
+              <Link
+                to="/student-signup"
+                className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm font-semibold text-slate-700 transition-all hover:-translate-y-px hover:border-[var(--auth-accent)] hover:shadow-sm dark:border-slate-700 dark:bg-slate-800/60 dark:text-slate-100"
               >
-                <GraduationCap className="mr-1 h-3 w-3" />
-                Teacher
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => navigate('/student-signup')}
-                className="flex-1 text-xs"
+                <User className="h-4 w-4 text-[var(--auth-accent)]" />
+                {t('au.individual', 'Individual')}
+              </Link>
+              <Link
+                to="/parent-signup"
+                className="flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm font-semibold text-slate-700 transition-all hover:-translate-y-px hover:border-[var(--auth-accent)] hover:shadow-sm dark:border-slate-700 dark:bg-slate-800/60 dark:text-slate-100"
               >
-                <BookOpen className="mr-1 h-3 w-3" />
-                Student
-              </Button>
+                <Users className="h-4 w-4 text-[var(--auth-accent)]" />
+                {t('au.family', 'Family')}
+              </Link>
             </div>
           </div>
+        ) : (
+          <>
+            <div>
+              <span className="text-slate-500 dark:text-slate-400">{t('au.haveAccount', 'Already have an account?')} </span>
+              {onModeChange ? (
+                <button type="button" onClick={() => onModeChange('login')} className="font-semibold text-[var(--auth-accent)] hover:underline">
+                  {t('au.signIn', 'Sign in')}
+                </button>
+              ) : (
+                <Link to="/login" className="font-semibold text-[var(--auth-accent)] hover:underline">
+                  {t('au.signIn', 'Sign in')}
+                </Link>
+              )}
+            </div>
+            <div className="border-t border-slate-200 pt-4 dark:border-slate-700">
+              <p className="mb-2 text-xs font-medium text-slate-400">{t('au.otherWays', 'Other ways to sign up')}</p>
+              <div className="grid grid-cols-3 gap-2">
+                <AuthButton variant="ghost" className="h-10 px-2 text-xs" onClick={() => navigate('/student-signup')}>
+                  <BookOpen className="h-3.5 w-3.5" /> {t('au.student', 'Student')}
+                </AuthButton>
+                <AuthButton variant="ghost" className="h-10 px-2 text-xs" onClick={() => navigate('/parent-signup')}>
+                  <Users className="h-3.5 w-3.5" /> {t('au.family', 'Family')}
+                </AuthButton>
+                <AuthButton variant="ghost" className="h-10 px-2 text-xs" onClick={() => navigate('/for-teachers')}>
+                  <GraduationCap className="h-3.5 w-3.5" /> {t('au.teacher', 'Teacher')}
+                </AuthButton>
+              </div>
+            </div>
+          </>
         )}
       </div>
     </form>

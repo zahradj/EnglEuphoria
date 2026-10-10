@@ -1,6 +1,7 @@
 import { Minus, Plus, Calendar, User as UserIcon } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { AuthField } from '@/components/auth/authUi';
 import { supabase } from '@/integrations/supabase/client';
 import { assignHubFromAge, calculateAgeFromDob, HUB_BRAND } from '@/lib/hubAssignment';
 import { getCompanionsForHub, getDefaultCompanionForHub } from '@/constants/companions';
@@ -66,6 +67,7 @@ interface Props {
 }
 
 export function FamilyChildrenForm({ value, onChange, maxCount = MAX_FAMILY_CHILDREN, disabled }: Props) {
+  const { t } = useTranslation();
   const today = new Date().toISOString().slice(0, 10);
 
   const setCount = (n: number) => {
@@ -79,8 +81,8 @@ export function FamilyChildrenForm({ value, onChange, maxCount = MAX_FAMILY_CHIL
 
   return (
     <div className="space-y-5">
-      <div className="rounded-2xl border bg-muted/30 p-4">
-        <p className="text-sm font-medium">How many people are learning? (children or adults)</p>
+      <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4 dark:border-slate-700 dark:bg-slate-800/40">
+        <p className="text-[13px] font-semibold tracking-wide text-slate-700 dark:text-slate-200">{t('au.fam.howMany', 'How many people are learning?')} <span className="font-normal text-slate-500">{t('au.fam.childrenOrAdults', '(children or adults)')}</span></p>
         <div className="mt-3 flex items-center gap-4">
           <Button
             type="button"
@@ -89,7 +91,7 @@ export function FamilyChildrenForm({ value, onChange, maxCount = MAX_FAMILY_CHIL
             className="h-11 w-11 rounded-full"
             onClick={() => setCount(value.length - 1)}
             disabled={disabled || value.length <= 1}
-            aria-label="Fewer people"
+            aria-label={t('au.fam.fewer', 'Fewer people')}
           >
             <Minus className="h-4 w-4" />
           </Button>
@@ -101,7 +103,7 @@ export function FamilyChildrenForm({ value, onChange, maxCount = MAX_FAMILY_CHIL
             className="h-11 w-11 rounded-full"
             onClick={() => setCount(value.length + 1)}
             disabled={disabled || value.length >= maxCount}
-            aria-label="More people"
+            aria-label={t('au.fam.more', 'More people')}
           >
             <Plus className="h-4 w-4" />
           </Button>
@@ -116,55 +118,45 @@ export function FamilyChildrenForm({ value, onChange, maxCount = MAX_FAMILY_CHIL
         const selectedCompanion = child.companionId ?? (hub ? getDefaultCompanionForHub(hub).id : null);
 
         return (
-          <div key={i} className="space-y-3 rounded-2xl border p-4">
-            <p className="text-sm font-semibold">Learner {i + 1}</p>
+          <div key={i} className="space-y-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-700 dark:bg-slate-900/60">
+            <p className="text-sm font-bold text-slate-900 dark:text-white">{t('au.fam.learnerN', { n: i + 1, defaultValue: 'Learner {{n}}' })}</p>
 
-            <div className="relative">
-              <UserIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                value={child.fullName}
-                onChange={(e) => patch(i, { fullName: e.target.value })}
-                placeholder="First name"
-                aria-label={`Learner ${i + 1} name`}
-                maxLength={80}
+            <AuthField
+              label={t('au.fam.firstName', 'First name')}
+              icon={UserIcon}
+              value={child.fullName}
+              onChange={(e) => patch(i, { fullName: e.target.value })}
+              placeholder={t('au.fam.firstName', 'First name')}
+              maxLength={80}
+              disabled={disabled}
+            />
+
+            <div className="space-y-1.5">
+              <AuthField
+                label={t('au.dob', 'Date of birth')}
+                icon={Calendar}
+                type="date"
+                value={child.dateOfBirth}
+                max={today}
+                onChange={(e) => patch(i, { dateOfBirth: e.target.value, companionId: null })}
                 disabled={disabled}
-                className="h-11 pl-10"
+                error={child.dateOfBirth && !inRange ? t('au.fam.ageRange', { min: MIN_CHILD_AGE, max: MAX_CHILD_AGE, defaultValue: 'Learners must be {{min}}–{{max}} years old.' }) : null}
               />
-            </div>
-
-            <div className="space-y-1">
-              <div className="relative">
-                <Calendar className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                <Input
-                  type="date"
-                  value={child.dateOfBirth}
-                  max={today}
-                  onChange={(e) => patch(i, { dateOfBirth: e.target.value, companionId: null })}
-                  aria-label={`Learner ${i + 1} date of birth`}
-                  disabled={disabled}
-                  className="h-11 pl-10"
-                />
-              </div>
-              {child.dateOfBirth && !inRange && (
-                <p className="text-xs text-destructive">
-                  Learners must be {MIN_CHILD_AGE}–{MAX_CHILD_AGE} years old.
-                </p>
-              )}
               {hub && (
-                <p className="text-xs text-muted-foreground">
-                  {HUB_BRAND[hub].emoji} Joins the {HUB_BRAND[hub].label}
+                <p className="text-xs font-medium text-slate-600 dark:text-slate-300">
+                  {HUB_BRAND[hub].emoji} {t('au.fam.joins', { hub: HUB_BRAND[hub].label, defaultValue: 'Joins the {{hub}}' })}
                 </p>
               )}
               {hub === 'professional' && (
-                <p className="text-xs text-muted-foreground">
-                  An adult learner. You manage this profile from your dashboard, so please make sure they are happy to be added.
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  {t('au.fam.adultNote', 'An adult learner. You manage this profile from your dashboard, so please make sure they are happy to be added.')}
                 </p>
               )}
             </div>
 
             {companions.length > 0 && (
               <div>
-                <p className="mb-2 text-xs font-medium text-muted-foreground">Pick a learning buddy</p>
+                <p className="mb-2 text-[13px] font-semibold tracking-wide text-slate-700 dark:text-slate-200">{t('au.fam.pickBuddy', 'Pick a learning buddy')}</p>
                 <div className="flex flex-wrap gap-2">
                   {companions.map((c) => {
                     const active = selectedCompanion === c.id;
@@ -177,7 +169,7 @@ export function FamilyChildrenForm({ value, onChange, maxCount = MAX_FAMILY_CHIL
                         onClick={() => patch(i, { companionId: c.id })}
                         aria-pressed={active}
                         className={`flex min-h-[44px] items-center gap-2 rounded-xl border-2 px-3 py-1.5 text-sm transition-colors ${
-                          active ? 'border-primary bg-primary/10' : 'border-border bg-muted/30 hover:bg-muted/60'
+                          active ? 'border-[var(--auth-accent,#6366f1)] bg-[var(--auth-accent-soft,#6366f12e)] font-semibold' : 'border-slate-200 bg-slate-50/70 hover:bg-white dark:border-slate-700 dark:bg-slate-800/40 dark:hover:bg-slate-800'
                         }`}
                       >
                         {hasArt && <img src={c.avatar_url} alt="" className="h-8 w-8" />}

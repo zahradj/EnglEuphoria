@@ -1,15 +1,15 @@
 
-=== docs/songs/u6l6-my-house-game-take1.mp3  length=20.1s  score=0.79  missing=5  extra=5
-heard: kitchen bedroom bathroom too table chair and bed for you all the dice and say it now i love my house on the rebound
-line starts (s): [np.float64(0.0), np.float64(4.1), np.float64(8.9), np.float64(12.2)]
-lineDurationsMs: [4060, 4860, 3260, 7882]
+=== docs/songs/u6l6-my-house-game-take1.mp3  length=20.1s  score=0.92  missing=2  extra=2
+heard: kitchen bedroom bathroom two table chair and bed for you roll the dice and stay it loud i love my house i'm very proud
+line starts (s): [np.float64(0.0), np.float64(3.5), np.float64(7.9), np.float64(12.2)]
+lineDurationsMs: [3540, 4340, 4280, 7902]
 
-=== docs/songs/u6l6-my-house-game-take2.mp3  length=20.1s  score=1.00  missing=0  extra=0
+=== docs/songs/u6l6-my-house-game-take2.mp3  length=20.1s  score=0.92  missing=1  extra=3
+heard: kitchen bed room bathroom too table chair and bed for you roll the dice and say it loud i love my house up i'm very proud
+line starts (s): [np.float64(0.0), 4.2, np.float64(8.3), np.float64(12.8)]
+lineDurationsMs: [4240, 4100, 4440, 7282]
+
+=== docs/songs/u6l6-my-house-game-take3.mp3  length=20.1s  score=1.00  missing=0  extra=0
 heard: kitchen bedroom bathroom too table chair and bed for you roll the dice and say it loud i love my house i'm very proud
-line starts (s): [np.float64(0.0), np.float64(3.8), np.float64(8.1), np.float64(12.1)]
-lineDurationsMs: [3850, 4280, 3960, 7972]
-
-=== docs/songs/u6l6-my-house-game-take3.mp3  length=20.1s  score=0.98  missing=1  extra=0
-heard: kitchen bedroom bathroom table chair and bed for you roll the dice and say it loud i love my house i'm very proud
-line starts (s): [np.float64(0.0), np.float64(3.6), np.float64(8.1), np.float64(12.2)]
-lineDurationsMs: [3580, 4520, 4060, 7902]
+line starts (s): [np.float64(0.0), np.float64(3.6), np.float64(8.0), np.float64(12.2)]
+lineDurationsMs: [3600, 4360, 4240, 7862]

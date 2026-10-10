@@ -7,15 +7,17 @@ import { ThemeModeToggle } from '@/components/ui/ThemeModeToggle';
 import logoBlack from '@/assets/logo-black.png';
 import logoWhite from '@/assets/logo-white.png';
 import { useThemeMode } from '@/hooks/useThemeMode';
+import { useTranslation } from 'react-i18next';
+import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
 import heroKid from '@/assets/hero-kid.png';
 import heroTeen from '@/assets/hero-teen.png';
 import heroAdult from '@/assets/hero-adult.png';
 
 const HERO_IMAGES = [heroKid, heroTeen, heroAdult];
 const TAGLINES = [
-  'Where kids discover the joy of English!',
-  'Level up your English, level up your future.',
-  'Professional English for the real world.',
+  { key: 'au.tagline.kids', text: 'Where kids discover the joy of English!' },
+  { key: 'au.tagline.teens', text: 'Level up your English, level up your future.' },
+  { key: 'au.tagline.adults', text: 'Professional English for the real world.' },
 ];
 
 interface AuthPageLayoutProps {
@@ -39,6 +41,7 @@ export function AuthPageLayout({
 }: AuthPageLayoutProps) {
   const { activeIndex, setActiveIndex, theme } = useHeroTheme();
   const { resolvedTheme } = useThemeMode();
+  const { t } = useTranslation();
 
   // Auto-rotate demographics
   useEffect(() => {
@@ -49,8 +52,19 @@ export function AuthPageLayout({
   }, [setActiveIndex]);
 
   return (
-    <div className="relative min-h-dvh flex flex-col lg:flex-row bg-white dark:bg-[#09090B] transition-colors duration-300">
+    <div
+      className="relative min-h-dvh flex flex-col lg:flex-row bg-white dark:bg-[#09090B] transition-colors duration-300"
+      style={{
+        ['--auth-accent' as string]: theme.cssFrom,
+        ['--auth-accent-2' as string]: theme.cssTo,
+        ['--auth-accent-soft' as string]: `${theme.cssFrom}2e`,
+      }}
+    >
       <CursorTrail />
+      {/* Language: always one tap away on phones (desktop has it in the top bar of the form panel) */}
+      <div className="absolute end-3 top-3 z-30 lg:hidden">
+        <LanguageSwitcher variant="outline" size="sm" compact align="end" />
+      </div>
       {/* ── Left Panel: Branding & Hero Carousel — compact on mobile ── */}
       <div className="relative lg:w-[48%] flex flex-col items-center justify-center overflow-hidden px-6 py-6 lg:p-12">
         {/* Ambient radial glows */}
@@ -147,7 +161,7 @@ export function AuthPageLayout({
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.3 }}
           >
-            {TAGLINES[activeIndex]}
+            {t(TAGLINES[activeIndex].key, TAGLINES[activeIndex].text)}
           </motion.p>
         </AnimatePresence>
 
@@ -188,7 +202,8 @@ export function AuthPageLayout({
       {/* ── Right Panel: Auth Form ── */}
       <div className="relative flex-1 flex flex-col">
         {/* Top bar — hidden on mobile (logo already visible) */}
-        <div className="hidden lg:flex items-center justify-end p-4 sm:p-6">
+        <div className="hidden lg:flex items-center justify-end gap-2 p-4 sm:p-6">
+          <LanguageSwitcher variant="ghost" size="sm" align="end" />
           <ThemeModeToggle className="text-muted-foreground hover:text-foreground hover:bg-muted" />
         </div>
 
@@ -203,7 +218,7 @@ export function AuthPageLayout({
             {showProgress && <div className="mb-4">{showProgress}</div>}
 
             {/* Card */}
-            <div className="relative bg-white/80 dark:bg-slate-900/70 backdrop-blur-xl border border-slate-200/60 dark:border-slate-700/40 rounded-2xl p-8 shadow-xl shadow-slate-200/40 dark:shadow-black/20">
+            <div className="relative rounded-3xl border border-slate-200/70 bg-white p-6 shadow-[0_24px_60px_-28px_rgba(15,23,42,0.28)] dark:border-slate-700/50 dark:bg-slate-900/80 dark:shadow-black/40 sm:p-9">
               {/* Top border glow synced with theme */}
               <motion.div
                 className="absolute top-0 left-8 right-8 h-px"
@@ -214,19 +229,19 @@ export function AuthPageLayout({
               />
 
               {/* Header */}
-              <div className="text-center mb-6">
+              <div className="mb-7 text-center">
                 {Icon && (
-                  <div className="flex justify-center mb-4">
+                  <div className="mb-4 flex justify-center">
                     <motion.div
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       transition={{ type: 'spring', duration: 0.5, delay: 0.1 }}
-                      className="w-14 h-14 rounded-xl flex items-center justify-center shadow-lg"
+                      className="flex h-12 w-12 items-center justify-center rounded-2xl shadow-lg ring-4 ring-[var(--auth-accent-soft)]"
                       style={{
                         backgroundImage: `linear-gradient(135deg, ${theme.cssFrom}, ${theme.cssTo})`,
                       }}
                     >
-                      <Icon className="h-7 w-7 text-white" />
+                      <Icon className="h-6 w-6 text-white" />
                     </motion.div>
                   </div>
                 )}
@@ -234,10 +249,7 @@ export function AuthPageLayout({
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.2 }}
-                  className="text-2xl font-bold bg-clip-text text-transparent"
-                  style={{
-                    backgroundImage: `linear-gradient(to right, ${theme.cssFrom}, ${theme.cssTo})`,
-                  }}
+                  className="text-[26px] font-extrabold leading-tight tracking-tight text-slate-900 dark:text-white"
                 >
                   {title}
                 </motion.h1>
@@ -246,7 +258,7 @@ export function AuthPageLayout({
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.3 }}
-                    className="text-muted-foreground mt-2 text-sm"
+                    className="mt-1.5 text-[15px] text-slate-500 dark:text-slate-400"
                   >
                     {subtitle}
                   </motion.p>
@@ -261,7 +273,7 @@ export function AuthPageLayout({
 
             {/* Footer */}
             <p className="text-center text-xs text-muted-foreground/60 mt-6">
-              By continuing, you agree to our Terms of Service and Privacy Policy
+              {t('au.terms', 'By continuing, you agree to our Terms of Service and Privacy Policy')}
             </p>
           </motion.div>
         </div>
