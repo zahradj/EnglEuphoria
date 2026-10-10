@@ -819,9 +819,12 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
   // Student interaction is always open once the class has started; only the teacher's Pause (saved as
   // interactionPaused) closes it. A lesson that comes onto the stage after the class started (switching
   // lessons, a reload) mounts locked, so open it here instead of making the teacher press the button.
-  const interactionPaused = !!(sessionContext as any)?.interactionPaused;
-  const sceneLessonKey = isSceneLessonOnStage ? JSON.stringify((displayedSlides as any)?.[0]?.sceneLessonRef ?? null) : null;
-  const classIsStarted = !!(sessionContext as any)?.classStarted;
+  const sessionFlags = (sessionContext ?? {}) as unknown as Record<string, unknown>;
+  const interactionPaused = !!sessionFlags.interactionPaused;
+  const sceneLessonKey = isSceneLessonOnStage
+    ? JSON.stringify((displayedSlides as unknown as { sceneLessonRef?: unknown }[] | undefined)?.[0]?.sceneLessonRef ?? null)
+    : null;
+  const classIsStarted = !!sessionFlags.classStarted;
   useEffect(() => {
     if (!classIsStarted || !sceneLessonKey || interactionPaused) return;
     const t = window.setTimeout(() => { mainStageRef.current?.setSceneInteractionUnlocked(true); }, 400);
