@@ -1,3 +1,2 @@
-cut out: public/welcome-town/sprites/bella-angry-v2.png (1024, 1024)
-+ public/welcome-town/sprites/bella-angry-v2.png (1024, 1024)
++ public/lep1/scenes/bg-u7l6-night-farm-wide.png (1376, 768)
 1/1 saved
