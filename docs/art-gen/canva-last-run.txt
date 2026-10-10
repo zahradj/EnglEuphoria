@@ -1,9 +1,2 @@
-cut out: public/lep1/items/item-shirt-red.png (966, 880)
-cut out: public/lep1/items/item-pants-blue.png (687, 965)
-cut out: public/lep1/items/item-dress-yellow.png (809, 925)
-+ public/lep1/scenes/bg-u9l1-laundry-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u9l1-laundry-empty-wide.png (1376, 768)
-+ public/lep1/items/item-shirt-red.png (1024, 1024)
-+ public/lep1/items/item-pants-blue.png (1024, 1024)
-+ public/lep1/items/item-dress-yellow.png (1024, 1024)
-5/5 saved
++ public/lep1/scenes/bg-u9l2-hall-wide.png (1376, 768)
+1/1 saved
