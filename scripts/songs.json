@@ -2798,5 +2798,40 @@
       "Snug and cozy as a mouse!"
     ],
     "writtenWith": "kids-song-writer skill: one line per story shot, in film order (park-late, street-where, street-think, blue-no, cat-wakes, red-ask, red-door-opens, mom-hug, red-door-opens, mom-hug, bedroom-love)"
+  },
+  "u8l1-apple-banana-milk": {
+    "publicPath": "public/lep1/audio/apple-banana-milk-song-u8l1.mp3",
+    "durationSec": 20,
+    "style": "Cheerful bouncy kids picnic song, 108 BPM with ukulele, glockenspiel, hand claps and a little crunchy shaker, clear happy young vocals with a kids sing-along feel, every word sung slowly and clearly, \"yum, yum\" sung happily. Definitely not a lullaby.",
+    "positiveStyles": [
+      "bouncy",
+      "ukulele",
+      "glockenspiel",
+      "hand claps",
+      "clear kids vocals",
+      "sing-along chorus",
+      "108 BPM",
+      "happy",
+      "playful"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "An apple, an apple! Crunch, crunch, crunch!",
+      "A banana, a banana! Yum, yum, yum!",
+      "Milk, milk! Gulp, gulp, gulp!",
+      "Apple, banana, milk! I like my lunch!"
+    ]
   }
 }
