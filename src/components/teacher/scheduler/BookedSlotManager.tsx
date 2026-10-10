@@ -12,7 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { AlertTriangle, ArrowLeft, CalendarClock, Clock, Loader2, Repeat2, X } from "lucide-react";
+import { AlertTriangle, ArrowLeft, CalendarClock, Check, Clock, Copy, Link2, Loader2, Repeat2, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "@/hooks/use-toast";
 import {
@@ -21,6 +21,8 @@ import {
   cancelBookedSeries,
   moveBookedLesson,
   loadMoveContext,
+  loadInviteLink,
+  type InviteLink,
   hoursUntil,
   isWithinPenaltyWindow,
   LATE_CANCELLATION_PENALTY_HOURS,
@@ -81,6 +83,8 @@ export const BookedSlotManager: React.FC<BookedSlotManagerProps> = ({
   const [ctxError, setCtxError] = useState<string | null>(null);
   const [ctxLoading, setCtxLoading] = useState(false);
   const [picked, setPicked] = useState<string | null>(null);
+  const [invite, setInvite] = useState<InviteLink | null>(null);
+  const [copied, setCopied] = useState(false);
 
   const slotId = slot?.slotId;
   const studentId = slot?.studentId;
@@ -95,7 +99,17 @@ export const BookedSlotManager: React.FC<BookedSlotManagerProps> = ({
     setPicked(null);
     setCtx(null);
     setCtxError(null);
+    setInvite(null);
+    setCopied(false);
   }, [slotId]);
+
+  // The invitation link of a lesson the teacher invited a student to (so it can be copied again).
+  useEffect(() => {
+    if (!open || !slotId) return;
+    let cancelled = false;
+    loadInviteLink(slotId).then((l) => { if (!cancelled) setInvite(l); }).catch(() => undefined);
+    return () => { cancelled = true; };
+  }, [open, slotId]);
 
   // The booking behind the slot: its true start and length, its own calendar rows
   // and the teacher's open slots - what "Move lesson" needs.
@@ -128,6 +142,17 @@ export const BookedSlotManager: React.FC<BookedSlotManagerProps> = ({
   const lessonMinutes = ctx?.minutes ?? slot.duration;
   const hoursLeft = hoursUntil(lessonStart);
   const lateNotice = isWithinPenaltyWindow(lessonStart);
+
+  const copyLink = async () => {
+    if (!invite) return;
+    try {
+      await navigator.clipboard.writeText(invite.url);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      toast({ title: "Could not copy", description: "Select the link and copy it by hand.", variant: "destructive" });
+    }
+  };
 
   const done = (cb?: () => void) => {
     cb?.();
@@ -226,6 +251,46 @@ export const BookedSlotManager: React.FC<BookedSlotManagerProps> = ({
     </div>
   );
 
+  const linkCard = invite && (
+    <div className="rounded-lg border p-3 space-y-2">
+      <div className="flex items-center justify-between gap-2">
+        <span className="flex items-center gap-1.5 text-sm font-semibold">
+          <Link2 className="h-4 w-4" /> Student's join link
+        </span>
+        <Badge
+          variant="outline"
+          className={cn(
+            "border text-[11px]",
+            invite.status === "valid" && "border-emerald-500/40 bg-emerald-500/10 text-emerald-700",
+            invite.status === "expired" && "border-amber-500/40 bg-amber-500/10 text-amber-700",
+            invite.status === "cancelled" && "border-destructive/40 bg-destructive/10 text-destructive",
+          )}
+        >
+          {invite.status === "valid" ? "Active" : invite.status === "expired" ? "Expired" : "Cancelled"}
+        </Badge>
+      </div>
+      <div className="flex gap-2">
+        <input
+          readOnly
+          value={invite.url}
+          onFocus={(e) => e.currentTarget.select()}
+          aria-label="Join link"
+          className="min-w-0 flex-1 rounded-md border bg-muted/40 px-2.5 py-1.5 text-xs font-mono"
+        />
+        <Button type="button" size="sm" variant="outline" onClick={copyLink} disabled={invite.status === "cancelled"}>
+          {copied ? <Check className="mr-1 h-3.5 w-3.5" /> : <Copy className="mr-1 h-3.5 w-3.5" />}
+          {copied ? "Copied" : "Copy"}
+        </Button>
+      </div>
+      <p className="text-xs text-muted-foreground">
+        {invite.status === "valid" ? "Works until " : invite.status === "expired" ? "Ended " : "Cancelled with the lesson · was valid until "}
+        {new Date(invite.expiresAt).toLocaleString(undefined, { weekday: "short", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}
+        {invite.lastUsedAt ? " · the student has opened it" : ""}
+        {invite.studentEmail ? ` · sent to ${invite.studentEmail}` : ""}
+      </p>
+    </div>
+  );
+
   const reasonField = (hint: string) => (
     <div className="space-y-1.5">
       <Label htmlFor="slot-reason">Reason (optional)</Label>
@@ -266,6 +331,8 @@ export const BookedSlotManager: React.FC<BookedSlotManagerProps> = ({
         </DialogHeader>
 
         {summary}
+
+        {linkCard}
 
         {view === "main" ? (
           <>
