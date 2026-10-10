@@ -23,7 +23,7 @@ type Crawl = Extract<Scene, { kind: 'caterpillar-crawl' }>;
 export const crawlWrongLine = (word: string) => `No, that's ${word}!`;
 export const crawlDoneLine = 'I am full! Now I am a butterfly!';
 
-const SEGMENT_COLORS = ['#84CC16', '#65A30D', '#A3E635', '#4D7C0F'];
+const SEGMENT_COLORS = ['#8BC34A', '#7CB342'];
 
 export function CaterpillarCrawlScene({ scene, onWin, onNext, sync }: { scene: Crawl; onWin: (gem: boolean) => void; onNext: () => void; sync?: ActivitySync }) {
   const [state, setState] = useSyncedState(sync, { round: 0, eaten: [] as number[], gemDone: false });
@@ -72,8 +72,8 @@ export function CaterpillarCrawlScene({ scene, onWin, onNext, sync }: { scene: C
     setState((s) => ({ ...s, round: next, gemDone: s.gemDone || next >= total }));
   };
 
-  const segments = 2 + eaten.length;
-  const size = 'min(7vh, 5vw)';
+  const segments = eaten.length;
+  const size = 'min(5.2vh, 3.7vw)';
 
   return (
     <motion.div className="absolute inset-0 select-none overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }} animate={shakeCtl}>
@@ -110,13 +110,13 @@ export function CaterpillarCrawlScene({ scene, onWin, onNext, sync }: { scene: C
           <motion.img src={scene.butterflyImg} alt="butterfly" className="h-[min(26vh,18vw)] w-[min(26vh,18vw)] object-contain" style={{ filter: STICKER_FILTER }}
             initial={{ scale: 0, rotate: -20 }} animate={{ scale: 1, rotate: 0, y: [0, -14, 0] }} transition={{ scale: { type: 'spring', stiffness: 200, damping: 12 }, y: { duration: 1.6, repeat: Infinity } }} />
         ) : (
-          <div className="flex flex-row-reverse items-end">
-            <motion.img src={scene.headImg} alt="caterpillar" className="relative z-10 object-contain" style={{ height: `calc(${size} * 1.9)`, width: `calc(${size} * 1.9)`, filter: STICKER_FILTER }}
+          <div className="flex flex-row-reverse items-center">
+            <motion.img src={scene.headImg} alt="caterpillar" className="relative z-10 object-contain" style={{ height: `calc(${size} * 3.6)`, width: `calc(${size} * 3.6)`, filter: STICKER_FILTER }}
               animate={{ y: [0, -4, 0] }} transition={{ duration: 0.9, repeat: Infinity }} />
             {Array.from({ length: segments }, (_, k) => (
-              <motion.span key={k} className="-me-3 block rounded-full border-[3px] border-[#3F6212] shadow-md"
+              <motion.span key={k} className={`mt-[min(2.2vh,1.6vw)] block rounded-full border-[3px] border-[#33691E] ${k === 0 ? '-me-[min(2.4vh,1.7vw)]' : '-me-[min(1.2vh,0.9vw)]'}`}
                 style={{ height: size, width: size, background: SEGMENT_COLORS[k % SEGMENT_COLORS.length] }}
-                initial={k >= 2 ? { scale: 0 } : false} animate={{ scale: 1, y: [0, -3, 0] }}
+                initial={{ scale: 0 }} animate={{ scale: 1, y: [0, -3, 0] }}
                 transition={{ scale: { type: 'spring', stiffness: 300, damping: 14 }, y: { duration: 0.9, repeat: Infinity, delay: k * 0.12 } }} />
             ))}
           </div>
