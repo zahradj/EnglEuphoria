@@ -3,6 +3,9 @@ import { useState, useRef, useCallback, useEffect } from 'react';
 type DeviceStatus = 'idle' | 'checking' | 'passed' | 'failed';
 export type MicTestPhase = 'idle' | 'recording' | 'playing';
 
+/** Chrome/Edge can send audio to a chosen speaker; other browsers don't have this. */
+type SinkTarget = { setSinkId?: (id: string) => Promise<void> };
+
 /** Input level (0-100) above which we count the microphone as having heard the person. */
 const MIC_HEARD_LEVEL = 8;
 const MIC_TEST_SECONDS = 3;
@@ -246,8 +249,9 @@ export const usePreFlightCheck = (): PreFlightState => {
       const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
       // Play on the speaker the person picked (Chrome/Edge); other browsers use the default output.
       const out = selectedOutputRef.current;
-      if (out && typeof (ctx as any).setSinkId === 'function') {
-        (ctx as any).setSinkId(out).catch(() => {});
+      const sink = ctx as unknown as SinkTarget;
+      if (out && typeof sink.setSinkId === 'function') {
+        sink.setSinkId(out).catch(() => {});
       }
       const oscillator = ctx.createOscillator();
       const gainNode = ctx.createGain();
@@ -299,8 +303,9 @@ export const usePreFlightCheck = (): PreFlightState => {
       audio.onerror = done;
       const out = selectedOutputRef.current;
       const start = () => { setMicTestPhase('playing'); audio.play().catch(done); };
-      if (out && typeof (audio as any).setSinkId === 'function') {
-        (audio as any).setSinkId(out).catch(() => {}).finally(start);
+      const sink = audio as unknown as SinkTarget;
+      if (out && typeof sink.setSinkId === 'function') {
+        sink.setSinkId(out).catch(() => {}).finally(start);
       } else {
         start();
       }
