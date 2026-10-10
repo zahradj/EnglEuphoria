@@ -3418,19 +3418,6 @@ export const LESSON_U2L2_SCENES: Scene[] = [
 
   /* 1-3 Hook + story opener */
   {
-    // Warm-up: the lesson's colours song (scripts/songs.json "u2l2-colors").
-    id: 'u2l2-song', kind: 'song', bg: bgU2L2Meadow, title: '\u{1F3B5} The Colors Song \u{1F3B5}', teacher: 'Sing and point! Point to the frog, the carrots and the grapes.',
-    durationSeconds: 20, bigWord: 'Colors', songUrl: `${A}/audio/colors-song-u2l2.mp3?v=1`,
-    lineDurationsMs: [4120, 4000, 4140, 7802],
-    songPrompt: 'Upbeat kids pop colours song',
-    lyrics: [
-      { who: 'willow', text: 'Green, green, the frog is green!', emotion: 'happy' },
-      { who: 'leo', text: 'Orange, orange, the carrot is orange!', emotion: 'happy' },
-      { who: 'mia', text: 'Purple, purple, the grapes are purple!', emotion: 'happy' },
-      { who: 'pip', text: 'What color is it? What color is it?', emotion: 'happy' },
-    ],
-  },
-  {
     // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 1 · Red, Blue, Yellow!.
     id: 'u2l2-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u2l2-studio-wide.png`, who: 'pip', mode: 'click',
     fromLabel: "Lesson 1 · Red, Blue, Yellow!",
@@ -3483,6 +3470,20 @@ export const LESSON_U2L2_SCENES: Scene[] = [
     paints: U2L2_PAINTS,
     answers: U2L2_ANSWERS,
     rounds: [{ a: 'BLUE', b: 'YELLOW', result: 'GREEN', resultHex: GREEN, who: 'willow', img: itemFrog, label: 'Frog', line: 'The frog is green!' }],
+  },
+  /* The lesson song after the words and the first game (owner, 2026-10-10). */
+  {
+    // Warm-up: the lesson's colours song (scripts/songs.json "u2l2-colors").
+    id: 'u2l2-song', kind: 'song', bg: bgU2L2Meadow, title: '\u{1F3B5} The Colors Song \u{1F3B5}', teacher: 'Sing and point! Point to the frog, the carrots and the grapes.',
+    durationSeconds: 20, bigWord: 'Colors', songUrl: `${A}/audio/colors-song-u2l2.mp3?v=1`,
+    lineDurationsMs: [4120, 4000, 4140, 7802],
+    songPrompt: 'Upbeat kids pop colours song',
+    lyrics: [
+      { who: 'willow', text: 'Green, green, the frog is green!', emotion: 'happy' },
+      { who: 'leo', text: 'Orange, orange, the carrot is orange!', emotion: 'happy' },
+      { who: 'mia', text: 'Purple, purple, the grapes are purple!', emotion: 'happy' },
+      { who: 'pip', text: 'What color is it? What color is it?', emotion: 'happy' },
+    ],
   },
 
   {
@@ -3896,19 +3897,6 @@ export const LESSON_U2L3_SCENES: Scene[] = [
 
   /* 1-3 Hook */
   {
-    // Warm-up: the lesson's shapes song (scripts/songs.json "u2l3-shapes").
-    id: 'u2l3-song', kind: 'song', bg: bgU2L3Town, title: '\u{1F3B5} The Shapes Song \u{1F3B5}', teacher: 'Sing and draw each shape in the air with your finger!',
-    durationSeconds: 20, bigWord: 'Shapes', songUrl: `${A}/audio/shapes-song-u2l3.mp3?v=1`,
-    lineDurationsMs: [3600, 4000, 4100, 8362],
-    songPrompt: 'Upbeat kids pop shapes song',
-    lyrics: [
-      { who: 'bella', text: 'Circle, circle, the clock is a circle!', emotion: 'happy' },
-      { who: 'mia', text: 'Square, square, the window is a square!', emotion: 'happy' },
-      { who: 'leo', text: 'Triangle, triangle, the pizza is a triangle!', emotion: 'happy' },
-      { who: 'pip', text: 'What shape is it? What shape is it?', emotion: 'happy' },
-    ],
-  },
-  {
     // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 2 · Green, Orange, Purple!.
     id: 'u2l3-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u2l3-town-wide.png`, who: 'pip', mode: 'click',
     fromLabel: "Lesson 2 · Green, Orange, Purple!",
@@ -3959,6 +3947,20 @@ export const LESSON_U2L3_SCENES: Scene[] = [
       { shape: 'circle', x: 76, y: 74, size: 22, color: '#22C55E', line: 'Draw a little circle!', reply: "A circle! It's a ball!", img: itemBallU2, label: 'ball' },
     ],
     doneLine: 'Look at your magic picture!',
+  },
+  /* The lesson song after the words and the first game (owner, 2026-10-10). */
+  {
+    // Warm-up: the lesson's shapes song (scripts/songs.json "u2l3-shapes").
+    id: 'u2l3-song', kind: 'song', bg: bgU2L3Town, title: '\u{1F3B5} The Shapes Song \u{1F3B5}', teacher: 'Sing and draw each shape in the air with your finger!',
+    durationSeconds: 20, bigWord: 'Shapes', songUrl: `${A}/audio/shapes-song-u2l3.mp3?v=1`,
+    lineDurationsMs: [3600, 4000, 4100, 8362],
+    songPrompt: 'Upbeat kids pop shapes song',
+    lyrics: [
+      { who: 'bella', text: 'Circle, circle, the clock is a circle!', emotion: 'happy' },
+      { who: 'mia', text: 'Square, square, the window is a square!', emotion: 'happy' },
+      { who: 'leo', text: 'Triangle, triangle, the pizza is a triangle!', emotion: 'happy' },
+      { who: 'pip', text: 'What shape is it? What shape is it?', emotion: 'happy' },
+    ],
   },
 
   /* 7-10 Practice + speaking */
@@ -4201,22 +4203,6 @@ export const LESSON_U2L4_SCENES: Scene[] = [
   { id: 'u2l4-title', kind: 'title-card', bg: bgU2L4Party, level: 'Pre-A1', unit: 'Unit 2', lessonLabel: 'Lesson 4', title: 'What Color Is This?', subtitle: 'Ask and answer' },
 
   {
-    // Warm-up: the Colors Song from Lesson 2 (it ends "What color is it?", this
-    // lesson's question). The lesson's own Question Song is in scripts/songs.json
-    // ("u2l4-what-color") but not generated yet (music credits ran out on
-    // 2026-10-03); switch songUrl/lyrics back to it once it is baked.
-    id: 'u2l4-song', kind: 'song', bg: bgU2L4Party, title: '\u{1F3B5} What Color Is This? \u{1F3B5}', teacher: 'Sing and point! Point to something red, then a circle; shake your head on "No, it isn\'t!"',
-    durationSeconds: 20, bigWord: 'Colors', songUrl: `${A}/audio/what-color-song-u2l4.mp3?v=1`,
-    lineDurationsMs: [4220, 4120, 3960, 7762],
-    songPrompt: 'Upbeat kids pop question song',
-    lyrics: [
-      { who: 'pip', text: "What color is this? It's red! It's red!", emotion: 'happy' },
-      { who: 'willow', text: "What shape is this? It's a circle, a circle!", emotion: 'happy' },
-      { who: 'leo', text: 'Is it blue? Yes, it is! Yes, it is!', emotion: 'happy' },
-      { who: 'mia', text: "Is it green? No, it isn't! No, it isn't!", emotion: 'happy' },
-    ],
-  },
-  {
     // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 3 · Circle, Square, Triangle!.
     id: 'u2l4-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u2l4-party-wide.png`, who: 'pip', mode: 'click',
     fromLabel: "Lesson 3 · Circle, Square, Triangle!",
@@ -4257,6 +4243,23 @@ export const LESSON_U2L4_SCENES: Scene[] = [
       { colorWord: 'RED CIRCLE', colorHex: C4.RED, who: 'bella', label: 'Balloon', sentence: "It's a red circle!", left: '7%', top: '22%', splashImg: itemBalloonRed },
       { colorWord: 'GREEN SQUARE', colorHex: C4.GREEN, who: 'willow', label: 'Present', sentence: "It's a green square!", left: '49%', top: '50%', splashImg: itemPresent },
       { colorWord: 'YELLOW TRIANGLE', colorHex: '#F59E0B', who: 'leo', label: 'Flag', sentence: "It's a yellow triangle!", left: '88%', top: '12%', splashImg: itemFlag },
+    ],
+  },
+  /* The lesson song after the words and the first game (owner, 2026-10-10). */
+  {
+    // Warm-up: the Colors Song from Lesson 2 (it ends "What color is it?", this
+    // lesson's question). The lesson's own Question Song is in scripts/songs.json
+    // ("u2l4-what-color") but not generated yet (music credits ran out on
+    // 2026-10-03); switch songUrl/lyrics back to it once it is baked.
+    id: 'u2l4-song', kind: 'song', bg: bgU2L4Party, title: '\u{1F3B5} What Color Is This? \u{1F3B5}', teacher: 'Sing and point! Point to something red, then a circle; shake your head on "No, it isn\'t!"',
+    durationSeconds: 20, bigWord: 'Colors', songUrl: `${A}/audio/what-color-song-u2l4.mp3?v=1`,
+    lineDurationsMs: [4220, 4120, 3960, 7762],
+    songPrompt: 'Upbeat kids pop question song',
+    lyrics: [
+      { who: 'pip', text: "What color is this? It's red! It's red!", emotion: 'happy' },
+      { who: 'willow', text: "What shape is this? It's a circle, a circle!", emotion: 'happy' },
+      { who: 'leo', text: 'Is it blue? Yes, it is! Yes, it is!', emotion: 'happy' },
+      { who: 'mia', text: "Is it green? No, it isn't! No, it isn't!", emotion: 'happy' },
     ],
   },
 
@@ -4536,19 +4539,6 @@ export const LESSON_U2L5_SCENES: Scene[] = [
   { id: 'u2l5-title', kind: 'title-card', bg: bgU2L5Sea, level: 'Pre-A1', unit: 'Unit 2', lessonLabel: 'Lesson 5', title: "The Rainbow Fish's Scales", subtitle: "Shelly's story" },
 
   {
-    // Warm-up: Shelly's song (scripts/songs.json "u2l5-shelly"; chant until the music is made).
-    id: 'u2l5-song', kind: 'song', bg: bgU2L5Sea, title: "\u{1F3B5} Shelly's Song \u{1F3B5}", teacher: 'Sing and swim like a fish! Show the shapes with your hands.',
-    durationSeconds: 28, bigWord: 'Shelly', songUrl: `${A}/audio/shelly-song-u2l5.mp3?v=1`,
-    lineDurationsMs: [7830, 4760, 4410, 11447],
-    songPrompt: 'Upbeat kids pop story song',
-    lyrics: [
-      { who: 'pip', text: 'Shelly, Shelly, little gray fish!', emotion: 'happy' },
-      { who: 'bella', text: 'A red circle, a blue square, a yellow triangle!', emotion: 'happy' },
-      { who: 'willow', text: 'Green and orange and purple too!', emotion: 'happy' },
-      { who: 'mia', text: 'Shelly is a rainbow fish!', emotion: 'happy' },
-    ],
-  },
-  {
     // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 4 · What Color Is This?.
     id: 'u2l5-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u2l5-sea-wide.png`, who: 'pip', mode: 'shadow',
     fromLabel: "Lesson 4 · What Color Is This?",
@@ -4626,6 +4616,20 @@ export const LESSON_U2L5_SCENES: Scene[] = [
       { img: bgU2L5Yellow, sentence: 'Leo gives Shelly a yellow triangle.', isTrue: true },
       { img: bgU2L5Rainbow, sentence: 'Shelly is sad.', isTrue: false },
       { img: bgU2L5Crab, sentence: 'Shelly gives the crab a purple circle.', isTrue: true },
+    ],
+  },
+  /* The lesson song after the words and the first game (owner, 2026-10-10). */
+  {
+    // Warm-up: Shelly's song (scripts/songs.json "u2l5-shelly"; chant until the music is made).
+    id: 'u2l5-song', kind: 'song', bg: bgU2L5Sea, title: "\u{1F3B5} Shelly's Song \u{1F3B5}", teacher: 'Sing and swim like a fish! Show the shapes with your hands.',
+    durationSeconds: 28, bigWord: 'Shelly', songUrl: `${A}/audio/shelly-song-u2l5.mp3?v=1`,
+    lineDurationsMs: [7830, 4760, 4410, 11447],
+    songPrompt: 'Upbeat kids pop story song',
+    lyrics: [
+      { who: 'pip', text: 'Shelly, Shelly, little gray fish!', emotion: 'happy' },
+      { who: 'bella', text: 'A red circle, a blue square, a yellow triangle!', emotion: 'happy' },
+      { who: 'willow', text: 'Green and orange and purple too!', emotion: 'happy' },
+      { who: 'mia', text: 'Shelly is a rainbow fish!', emotion: 'happy' },
     ],
   },
   {
@@ -4793,19 +4797,6 @@ export const LESSON_U2L6_OBJECTIVE = 'Review the whole unit on a treasure hunt, 
 export const LESSON_U2L6_SCENES: Scene[] = [
   { id: 'u2l6-title', kind: 'title-card', bg: bgU2L6Map, level: 'Pre-A1', unit: 'Unit 2', lessonLabel: 'Lesson 6 · Review', title: 'Color & Shape Hunt', subtitle: 'The Rainbow Treasure' },
   {
-    // Warm-up: the unit's colours song again (Lesson 2's recording).
-    id: 'u2l6-song', kind: 'song', bg: bgU2L2Meadow, title: '\u{1F3B5} The Colors Song \u{1F3B5}', teacher: 'Sing and point! Find something green, orange and purple in the room.',
-    durationSeconds: 20, bigWord: 'Colors', songUrl: `${A}/audio/colors-song-u2l2.mp3?v=1`,
-    lineDurationsMs: [4120, 4000, 4140, 7802],
-    songPrompt: 'Upbeat kids pop colours song',
-    lyrics: [
-      { who: 'willow', text: 'Green, green, the frog is green!', emotion: 'happy' },
-      { who: 'leo', text: 'Orange, orange, the carrot is orange!', emotion: 'happy' },
-      { who: 'mia', text: 'Purple, purple, the grapes are purple!', emotion: 'happy' },
-      { who: 'pip', text: 'What color is it? What color is it?', emotion: 'happy' },
-    ],
-  },
-  {
     // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 5 · The Rainbow Fish's Scales.
     id: 'u2l6-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u2l6-map-wide.png`, who: 'pip', mode: 'click',
     fromLabel: "Lesson 5 · The Rainbow Fish's Scales",
@@ -4878,6 +4869,20 @@ export const LESSON_U2L6_SCENES: Scene[] = [
       { colorWord: 'GREEN', colorHex: C4.GREEN, shape: 'circle', x: 12, y: 74, size: 7 },
     ],
     targets: [0, 2, 5, 3, 4],
+  },
+  /* The lesson song after the words and the first game (owner, 2026-10-10). */
+  {
+    // Warm-up: the unit's colours song again (Lesson 2's recording).
+    id: 'u2l6-song', kind: 'song', bg: bgU2L2Meadow, title: '\u{1F3B5} The Colors Song \u{1F3B5}', teacher: 'Sing and point! Find something green, orange and purple in the room.',
+    durationSeconds: 20, bigWord: 'Colors', songUrl: `${A}/audio/colors-song-u2l2.mp3?v=1`,
+    lineDurationsMs: [4120, 4000, 4140, 7802],
+    songPrompt: 'Upbeat kids pop colours song',
+    lyrics: [
+      { who: 'willow', text: 'Green, green, the frog is green!', emotion: 'happy' },
+      { who: 'leo', text: 'Orange, orange, the carrot is orange!', emotion: 'happy' },
+      { who: 'mia', text: 'Purple, purple, the grapes are purple!', emotion: 'happy' },
+      { who: 'pip', text: 'What color is it? What color is it?', emotion: 'happy' },
+    ],
   },
 
   /* ---- Stop 2: the beach — shapes ---- */
@@ -5790,18 +5795,6 @@ export const LESSON_U3L3_SCENES: Scene[] = [
 
   /* 1-3 Hook + story opener */
   {
-    id: 'u3l3-song', kind: 'song', bg: bgU3L3Park, title: '\u{1F3B5} Do You Like to Play? \u{1F3B5}', teacher: 'Sing and answer! Shout "Yes, I do!" or "No, I don\'t!" and act out each toy.',
-    durationSeconds: 20, bigWord: 'Play', songUrl: `${A}/audio/play-song-u3l3.mp3?v=1`,
-    lineDurationsMs: [4740, 4500, 3800, 7022],
-    songPrompt: 'Upbeat kids pop song',
-    lyrics: [
-      { who: 'pip', text: 'Do you like kites? Yes, I do! Yes, I do!', emotion: 'happy' },
-      { who: 'leo', text: 'Do you like robots? Yes, I do! Yes, I do!', emotion: 'happy' },
-      { who: 'mia', text: 'Do you like balls? No, I don\'t! No, I don\'t!', emotion: 'happy' },
-      { who: 'pip', text: 'Do you like to play? Yes, I do! Let\'s play!', emotion: 'happy' },
-    ],
-  },
-  {
     // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 2 · Teddy Bear, Blocks, Train!.
     id: 'u3l3-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u3l3-park-wide.png`, who: 'pip', mode: 'shadow',
     fromLabel: "Lesson 2 · Teddy Bear, Blocks, Train!",
@@ -5862,6 +5855,19 @@ export const LESSON_U3L3_SCENES: Scene[] = [
   {
     id: 'u3l3-build-robot', kind: 'jigsaw-puzzle', bg: bgU3L3Workshop, bgVideo: loopU3L3('workshop'), teacher: 'Build the robot! Drag each piece to its place.',
     image: itemRobot, rows: 3, cols: 3,
+  },
+  /* The lesson song after the words and the first game (owner, 2026-10-10). */
+  {
+    id: 'u3l3-song', kind: 'song', bg: bgU3L3Park, title: '\u{1F3B5} Do You Like to Play? \u{1F3B5}', teacher: 'Sing and answer! Shout "Yes, I do!" or "No, I don\'t!" and act out each toy.',
+    durationSeconds: 20, bigWord: 'Play', songUrl: `${A}/audio/play-song-u3l3.mp3?v=1`,
+    lineDurationsMs: [4740, 4500, 3800, 7022],
+    songPrompt: 'Upbeat kids pop song',
+    lyrics: [
+      { who: 'pip', text: 'Do you like kites? Yes, I do! Yes, I do!', emotion: 'happy' },
+      { who: 'leo', text: 'Do you like robots? Yes, I do! Yes, I do!', emotion: 'happy' },
+      { who: 'mia', text: 'Do you like balls? No, I don\'t! No, I don\'t!', emotion: 'happy' },
+      { who: 'pip', text: 'Do you like to play? Yes, I do! Let\'s play!', emotion: 'happy' },
+    ],
   },
 
   /* 8-11 The question: Do you like…? */
@@ -6066,18 +6072,6 @@ export const LESSON_U3L4_SCENES: Scene[] = [
 
   /* 1-3 Hook + story opener */
   {
-    id: 'u3l4-song', kind: 'song', bg: bgU3L4ShowTell, title: '\u{1F3B5} My Favorite Toy \u{1F3B5}', teacher: 'Sing and show! Arms wide on "big", tiny fingers on "small".',
-    durationSeconds: 20, bigWord: 'Toys', songUrl: `${A}/audio/favorite-toy-song-u3l4.mp3?v=1`,
-    lineDurationsMs: [4080, 3800, 3360, 8822],
-    songPrompt: 'Upbeat kids pop song',
-    lyrics: [
-      { who: 'bella', text: 'My favorite toy is my teddy bear! It is big!', emotion: 'happy' },
-      { who: 'leo', text: 'My favorite toy is my robot! It is small!', emotion: 'happy' },
-      { who: 'pip', text: 'Big, big, big! Small, small, small!', emotion: 'happy' },
-      { who: 'pip', text: 'What is your favorite toy? Show and tell!', emotion: 'happy' },
-    ],
-  },
-  {
     // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 3 · What Do You Like to Play?.
     id: 'u3l4-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u3l4-showtell-wide.png`, who: 'pip', mode: 'click',
     fromLabel: "Lesson 3 · What Do You Like to Play?",
@@ -6139,6 +6133,19 @@ export const LESSON_U3L4_SCENES: Scene[] = [
     teacher: 'The toys are in the pool! Listen: big or small? Tap the toy Pip says.',
     fish: [T_BALL_BIG, T_TEDDY_SMALL, T_CAR_BIG, T_BALL_SMALL, T_TEDDY_BIG, T_CAR_SMALL],
     targets: [0, 3, 2, 1],
+  },
+  /* The lesson song after the words and the first game (owner, 2026-10-10). */
+  {
+    id: 'u3l4-song', kind: 'song', bg: bgU3L4ShowTell, title: '\u{1F3B5} My Favorite Toy \u{1F3B5}', teacher: 'Sing and show! Arms wide on "big", tiny fingers on "small".',
+    durationSeconds: 20, bigWord: 'Toys', songUrl: `${A}/audio/favorite-toy-song-u3l4.mp3?v=1`,
+    lineDurationsMs: [4080, 3800, 3360, 8822],
+    songPrompt: 'Upbeat kids pop song',
+    lyrics: [
+      { who: 'bella', text: 'My favorite toy is my teddy bear! It is big!', emotion: 'happy' },
+      { who: 'leo', text: 'My favorite toy is my robot! It is small!', emotion: 'happy' },
+      { who: 'pip', text: 'Big, big, big! Small, small, small!', emotion: 'happy' },
+      { who: 'pip', text: 'What is your favorite toy? Show and tell!', emotion: 'happy' },
+    ],
   },
 
   /* 8-11 The question: What's your favorite toy? */
@@ -6336,18 +6343,6 @@ export const LESSON_U3L5_SCENES: Scene[] = [
 
   /* 1-3 Hook + story */
   {
-    id: 'u3l5-song', kind: 'song', bg: bgU3L5Messy, title: '\u{1F3B5} Tidy Up! \u{1F3B5}', teacher: 'Sing and point! In: hands make a box. On: hands on top. Under: hands go low.',
-    durationSeconds: 20, bigWord: 'Tidy', songUrl: `${A}/audio/tidy-up-song-u3l5.mp3?v=1`,
-    lineDurationsMs: [3120, 4100, 3960, 8882],
-    songPrompt: 'Upbeat kids pop song',
-    lyrics: [
-      { who: 'pip', text: 'Tidy up, tidy up, put the toys away!', emotion: 'happy' },
-      { who: 'bella', text: 'The ball goes in the box! In, in, in!', emotion: 'happy' },
-      { who: 'mia', text: 'The teddy goes on the bed! On, on, on!', emotion: 'happy' },
-      { who: 'leo', text: 'The car goes under the chair! Under, under!', emotion: 'happy' },
-    ],
-  },
-  {
     // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 4 · My Favorite Toy.
     id: 'u3l5-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u3l5-messy-wide.png`, who: 'pip', mode: 'shadow',
     fromLabel: "Lesson 4 · My Favorite Toy",
@@ -6418,6 +6413,19 @@ export const LESSON_U3L5_SCENES: Scene[] = [
       { toy: 1, place: 1, at: { x: 22, y: 38 }, line: 'Put the teddy bear on the bed!', reply: 'Yes! The teddy bear is on the bed!' },
       { toy: 2, place: 2, at: { x: 84, y: 60, scale: 0.55 }, line: 'Put the car under the chair!', reply: 'Yes! The car is under the chair!' },
       { toy: 3, place: 0, at: { x: 64, y: 38 }, line: 'Put the robot in the box!', reply: 'Yes! The robot is in the box! The room is tidy!' },
+    ],
+  },
+  /* The lesson song after the words and the first game (owner, 2026-10-10). */
+  {
+    id: 'u3l5-song', kind: 'song', bg: bgU3L5Messy, title: '\u{1F3B5} Tidy Up! \u{1F3B5}', teacher: 'Sing and point! In: hands make a box. On: hands on top. Under: hands go low.',
+    durationSeconds: 20, bigWord: 'Tidy', songUrl: `${A}/audio/tidy-up-song-u3l5.mp3?v=1`,
+    lineDurationsMs: [3120, 4100, 3960, 8882],
+    songPrompt: 'Upbeat kids pop song',
+    lyrics: [
+      { who: 'pip', text: 'Tidy up, tidy up, put the toys away!', emotion: 'happy' },
+      { who: 'bella', text: 'The ball goes in the box! In, in, in!', emotion: 'happy' },
+      { who: 'mia', text: 'The teddy goes on the bed! On, on, on!', emotion: 'happy' },
+      { who: 'leo', text: 'The car goes under the chair! Under, under!', emotion: 'happy' },
     ],
   },
 
@@ -6640,18 +6648,6 @@ export const LESSON_U3L6_SCENES: Scene[] = [
 
   /* 1-3 Hook + story */
   {
-    id: 'u3l6-song', kind: 'song', bg: bgU3L6Fair, title: '\u{1F3B5} The Toy Fair Song \u{1F3B5}', teacher: 'Sing and point to the prizes! Say "please" and "thank you" with Pip.',
-    durationSeconds: 20, bigWord: 'Fair', songUrl: `${A}/audio/toy-fair-song-u3l6.mp3?v=1`,
-    lineDurationsMs: [3200, 4120, 4000, 8742],
-    songPrompt: 'Upbeat kids pop song',
-    lyrics: [
-      { who: 'pip', text: 'Toy fair, toy fair, play and win!', emotion: 'happy' },
-      { who: 'leo', text: 'I want the robot, please! The robot, please!', emotion: 'happy' },
-      { who: 'bella', text: 'I want the kite, please! The kite, please!', emotion: 'happy' },
-      { who: 'pip', text: 'Play and win and say it! Thank you! Hooray!', emotion: 'happy' },
-    ],
-  },
-  {
     // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 5 · Tidy Up Time!.
     id: 'u3l6-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u3l6-fair-wide.png`, who: 'pip', mode: 'click',
     fromLabel: "Lesson 5 · Tidy Up Time!",
@@ -6721,6 +6717,19 @@ export const LESSON_U3L6_SCENES: Scene[] = [
       { target: 3, line: 'Get the blue ball!', reply: 'You got the blue ball!' },
       { target: 2, line: 'Get the teddy bear!', reply: 'You got the teddy bear!' },
       { target: 4, line: 'Get the robot!', reply: 'You got the robot!' },
+    ],
+  },
+  /* The lesson song after the words and the first game (owner, 2026-10-10). */
+  {
+    id: 'u3l6-song', kind: 'song', bg: bgU3L6Fair, title: '\u{1F3B5} The Toy Fair Song \u{1F3B5}', teacher: 'Sing and point to the prizes! Say "please" and "thank you" with Pip.',
+    durationSeconds: 20, bigWord: 'Fair', songUrl: `${A}/audio/toy-fair-song-u3l6.mp3?v=1`,
+    lineDurationsMs: [3200, 4120, 4000, 8742],
+    songPrompt: 'Upbeat kids pop song',
+    lyrics: [
+      { who: 'pip', text: 'Toy fair, toy fair, play and win!', emotion: 'happy' },
+      { who: 'leo', text: 'I want the robot, please! The robot, please!', emotion: 'happy' },
+      { who: 'bella', text: 'I want the kite, please! The kite, please!', emotion: 'happy' },
+      { who: 'pip', text: 'Play and win and say it! Thank you! Hooray!', emotion: 'happy' },
     ],
   },
 
@@ -6960,18 +6969,6 @@ export const LESSON_U4L1_SCENES: Scene[] = [
 
   /* 1-3 Hook + story */
   {
-    id: 'u4l1-song', kind: 'song', bg: bgU4L1Class, title: '\u{1F3B5} Head, Shoulders, Knees and Toes \u{1F3B5}', teacher: 'Stand up! Touch each body part as you sing it, faster and faster.',
-    durationSeconds: 20, bigWord: 'Body', songUrl: `${A}/audio/body-song-u4l1.mp3?v=1`,
-    lineDurationsMs: [3580, 3980, 3960, 8542],
-    songPrompt: 'Upbeat kids pop song',
-    lyrics: [
-      { who: 'willow', text: 'Head, shoulders, knees and toes, knees and toes!', emotion: 'happy' },
-      { who: 'willow', text: 'Head, shoulders, knees and toes, knees and toes!', emotion: 'happy' },
-      { who: 'willow', text: 'Touch your head and touch your toes!', emotion: 'happy' },
-      { who: 'willow', text: 'Head, shoulders, knees and toes, knees and toes!', emotion: 'happy' },
-    ],
-  },
-  {
     // Remember? (owner, 2026-10-07): a quick warm-up of Unit 3 · Lesson 6 · The Toy Fair.
     id: 'u4l1-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u4l1-dance-class-wide.png`, who: 'pip', mode: 'shadow',
     fromLabel: "Unit 3 · Lesson 6 · The Toy Fair",
@@ -7040,6 +7037,19 @@ export const LESSON_U4L1_SCENES: Scene[] = [
       { line: 'Touch his toes!', simon: false, part: 3 },
       { line: 'Simon says: touch his shoulders!', simon: true, part: 1 },
       { line: 'Simon says: touch his toes!', simon: true, part: 3 },
+    ],
+  },
+  /* The lesson song after the words and the first game (owner, 2026-10-10). */
+  {
+    id: 'u4l1-song', kind: 'song', bg: bgU4L1Class, title: '\u{1F3B5} Head, Shoulders, Knees and Toes \u{1F3B5}', teacher: 'Stand up! Touch each body part as you sing it, faster and faster.',
+    durationSeconds: 20, bigWord: 'Body', songUrl: `${A}/audio/body-song-u4l1.mp3?v=1`,
+    lineDurationsMs: [3580, 3980, 3960, 8542],
+    songPrompt: 'Upbeat kids pop song',
+    lyrics: [
+      { who: 'willow', text: 'Head, shoulders, knees and toes, knees and toes!', emotion: 'happy' },
+      { who: 'willow', text: 'Head, shoulders, knees and toes, knees and toes!', emotion: 'happy' },
+      { who: 'willow', text: 'Touch your head and touch your toes!', emotion: 'happy' },
+      { who: 'willow', text: 'Head, shoulders, knees and toes, knees and toes!', emotion: 'happy' },
     ],
   },
 
@@ -7255,18 +7265,6 @@ export const LESSON_U4L2_SCENES: Scene[] = [
 
   /* 1-3 Hook */
   {
-    id: 'u4l2-song', kind: 'song', bg: bgU4L2Kitchen, title: '\u{1F3B5} Eyes, Ears, Mouth and Nose \u{1F3B5}', teacher: 'Sing and point! Point to each part of your face as you sing it.',
-    durationSeconds: 20, bigWord: 'Face', songUrl: `${A}/audio/face-song-u4l2.mp3?v=1`,
-    lineDurationsMs: [7740, 4040, 3800, 4482],
-    songPrompt: 'Upbeat kids pop song',
-    lyrics: [
-      { who: 'mia', text: 'Eyes, ears, mouth and nose! Eyes, ears, mouth and nose!', emotion: 'happy' },
-      { who: 'mia', text: 'Two eyes to see! Two ears to hear!', emotion: 'happy' },
-      { who: 'pip', text: 'One little nose and one big smile!', emotion: 'happy' },
-      { who: 'pip', text: 'Eyes, ears, mouth and nose!', emotion: 'happy' },
-    ],
-  },
-  {
     // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 1 · Head, Shoulders, Knees, Toes!.
     id: 'u4l2-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u4l2-kitchen-wide.png`, who: 'pip', mode: 'click',
     fromLabel: "Lesson 1 · Head, Shoulders, Knees, Toes!",
@@ -7320,6 +7318,19 @@ export const LESSON_U4L2_SCENES: Scene[] = [
       { spot: 3, line: 'Where do the ears go?', reply: 'Yes! Two apple ears!' },
     ],
     doneLine: 'Eyes, ears, nose and mouth! A happy pancake face!',
+  },
+  /* The lesson song after the words and the first game (owner, 2026-10-10). */
+  {
+    id: 'u4l2-song', kind: 'song', bg: bgU4L2Kitchen, title: '\u{1F3B5} Eyes, Ears, Mouth and Nose \u{1F3B5}', teacher: 'Sing and point! Point to each part of your face as you sing it.',
+    durationSeconds: 20, bigWord: 'Face', songUrl: `${A}/audio/face-song-u4l2.mp3?v=1`,
+    lineDurationsMs: [7740, 4040, 3800, 4482],
+    songPrompt: 'Upbeat kids pop song',
+    lyrics: [
+      { who: 'mia', text: 'Eyes, ears, mouth and nose! Eyes, ears, mouth and nose!', emotion: 'happy' },
+      { who: 'mia', text: 'Two eyes to see! Two ears to hear!', emotion: 'happy' },
+      { who: 'pip', text: 'One little nose and one big smile!', emotion: 'happy' },
+      { who: 'pip', text: 'Eyes, ears, mouth and nose!', emotion: 'happy' },
+    ],
   },
 
   /* 6-9 Practice + speaking */
@@ -7511,18 +7522,6 @@ export const LESSON_U4L3_SCENES: Scene[] = [
 
   /* 1-3 Hook */
   {
-    id: 'u4l3-song', kind: 'song', bg: bgU4L3Beach, title: '\u{1F3B5} Hands, Fingers, Feet and Arms \u{1F3B5}', teacher: 'Sing and move! Clap, wiggle, stamp and wave with the song.',
-    durationSeconds: 20, bigWord: 'Move', songUrl: `${A}/audio/body-song-u4l3.mp3?v=1`,
-    lineDurationsMs: [4140, 4080, 3880, 7962],
-    songPrompt: 'Upbeat kids pop beach action song',
-    lyrics: [
-      { who: 'bella', text: 'Hands, fingers, feet and arms! Hands, fingers, feet and arms!', emotion: 'happy' },
-      { who: 'bella', text: 'Clap your hands! Wiggle your fingers!', emotion: 'happy' },
-      { who: 'leo', text: 'Stamp your feet! Wave your arms!', emotion: 'happy' },
-      { who: 'leo', text: 'Hands, fingers, feet and arms!', emotion: 'happy' },
-    ],
-  },
-  {
     // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 2 · Eyes, Ears, Mouth, Nose!.
     id: 'u4l3-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u4l3-beach-wide.png`, who: 'pip', mode: 'click',
     fromLabel: "Lesson 2 · Eyes, Ears, Mouth, Nose!",
@@ -7577,6 +7576,19 @@ export const LESSON_U4L3_SCENES: Scene[] = [
       { part: 2, line: 'Now the other foot!', reply: 'Two footprints!' },
     ],
     doneLine: 'Look at all our prints in the sand!',
+  },
+  /* The lesson song after the words and the first game (owner, 2026-10-10). */
+  {
+    id: 'u4l3-song', kind: 'song', bg: bgU4L3Beach, title: '\u{1F3B5} Hands, Fingers, Feet and Arms \u{1F3B5}', teacher: 'Sing and move! Clap, wiggle, stamp and wave with the song.',
+    durationSeconds: 20, bigWord: 'Move', songUrl: `${A}/audio/body-song-u4l3.mp3?v=1`,
+    lineDurationsMs: [4140, 4080, 3880, 7962],
+    songPrompt: 'Upbeat kids pop beach action song',
+    lyrics: [
+      { who: 'bella', text: 'Hands, fingers, feet and arms! Hands, fingers, feet and arms!', emotion: 'happy' },
+      { who: 'bella', text: 'Clap your hands! Wiggle your fingers!', emotion: 'happy' },
+      { who: 'leo', text: 'Stamp your feet! Wave your arms!', emotion: 'happy' },
+      { who: 'leo', text: 'Hands, fingers, feet and arms!', emotion: 'happy' },
+    ],
   },
 
   /* 6-9 Practice + speaking */
@@ -7736,18 +7748,6 @@ export const LESSON_U4L4_SCENES: Scene[] = [
 
   /* 1-3 Hook */
   {
-    id: 'u4l4-song', kind: 'song', bg: bgU4L4Garden, title: '\u{1F3B5} My Big Body \u{1F3B5}', teacher: 'Sing and point! Eyes, nose, fingers, toes — big feet and small hands!',
-    durationSeconds: 20, bigWord: 'Body', songUrl: `${A}/audio/body-song-u4l4.mp3?v=1`,
-    lineDurationsMs: [3660, 4100, 3500, 8802],
-    songPrompt: 'Upbeat kids pop garden action song',
-    lyrics: [
-      { who: 'pip', text: 'I have two eyes! I have one nose!', emotion: 'happy' },
-      { who: 'pip', text: 'I have ten fingers! I have ten toes!', emotion: 'happy' },
-      { who: 'mia', text: 'Big, big feet! Small, small hands!', emotion: 'happy' },
-      { who: 'leo', text: 'This is my body! My big, big body!', emotion: 'happy' },
-    ],
-  },
-  {
     // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 3 · Hands, Fingers, Feet, Arms!.
     id: 'u4l4-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u4l4-garden-wide.png`, who: 'pip', mode: 'shadow',
     fromLabel: "Lesson 3 · Hands, Fingers, Feet, Arms!",
@@ -7800,6 +7800,19 @@ export const LESSON_U4L4_SCENES: Scene[] = [
       { part: 'feet', answer: 'big', options: ['small', 'big'], line: 'I have big feet!', reply: 'Big feet! Stomp, stomp!' },
     ],
     doneLine: 'Look at me! I am a happy monster!',
+  },
+  /* The lesson song after the words and the first game (owner, 2026-10-10). */
+  {
+    id: 'u4l4-song', kind: 'song', bg: bgU4L4Garden, title: '\u{1F3B5} My Big Body \u{1F3B5}', teacher: 'Sing and point! Eyes, nose, fingers, toes — big feet and small hands!',
+    durationSeconds: 20, bigWord: 'Body', songUrl: `${A}/audio/body-song-u4l4.mp3?v=1`,
+    lineDurationsMs: [3660, 4100, 3500, 8802],
+    songPrompt: 'Upbeat kids pop garden action song',
+    lyrics: [
+      { who: 'pip', text: 'I have two eyes! I have one nose!', emotion: 'happy' },
+      { who: 'pip', text: 'I have ten fingers! I have ten toes!', emotion: 'happy' },
+      { who: 'mia', text: 'Big, big feet! Small, small hands!', emotion: 'happy' },
+      { who: 'leo', text: 'This is my body! My big, big body!', emotion: 'happy' },
+    ],
   },
 
   /* 7-10 Practice + speaking */
@@ -7969,29 +7982,6 @@ export const LESSON_U4L5_SCENES: Scene[] = [
 
   /* 1-4 Hook + story */
   {
-    // Song video (docs/scenarios/u4l5-moves-song-video.md, owner 2026-10-09: words that fit the music): ONE whole-song take written with the
-    // kids-song-writer skill, cut by scripts/make-song-video.py (scripts/song-videos/), one moving clip per sung line. The audio is the clock.
-    id: 'u4l5-song', kind: 'song', bg: bgU4L5Park, title: '\u{1F3B5} I Can Do It! \u{1F3B5}', teacher: 'Stand up! Do each move as you sing: turn, wave, stomp, clap!',
-    durationSeconds: 50, bigWord: 'Move', songUrl: `${A}/audio/animal-moves-song-video-u4l5.mp3?v=2`,
-    videoUrl: `${A}/video/animal-moves-song-u4l5.mp4?v=3`,
-    lineDurationsMs: [10510, 2610, 3400, 8480, 1340, 2860, 3340, 7730, 2090, 1910, 2050, 3580],
-    songPrompt: 'Upbeat kids pop song',
-    lyrics: [
-      { who: 'pip', text: 'Head, head, turn your head!', emotion: 'happy' },
-      { who: 'pip', text: 'Turn your head, the tiger said!', emotion: 'happy' },
-      { who: 'pip', text: 'Arms, arms, up so high!', emotion: 'happy' },
-      { who: 'pip', text: 'Wave your arms up to the sky!', emotion: 'happy' },
-      { who: 'pip', text: 'Feet, feet, stomp your feet!', emotion: 'happy' },
-      { who: 'pip', text: 'Stomp, stomp, stomp them to the beat!', emotion: 'happy' },
-      { who: 'pip', text: 'Hands, hands, clap your hands!', emotion: 'happy' },
-      { who: 'pip', text: 'Clap like a seal upon the sand!', emotion: 'happy' },
-      { who: 'pip', text: 'I can do it, I can do it!', emotion: 'happy' },
-      { who: 'pip', text: 'I can do it, yes, I can!', emotion: 'happy' },
-      { who: 'pip', text: 'I can do it, I can do it!', emotion: 'happy' },
-      { who: 'pip', text: 'Head and arms and feet and hands!', emotion: 'happy' },
-    ],
-  },
-  {
     // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 4 · My Big Body!.
     id: 'u4l5-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u4l5-park-wide.png`, who: 'pip', mode: 'click',
     fromLabel: "Lesson 4 · My Big Body!",
@@ -8068,6 +8058,30 @@ export const LESSON_U4L5_SCENES: Scene[] = [
       { animal: 1, question: 'Who waves his arms?', reply: 'The monkey! Wave, wave! Can you do it?' },
     ],
     doneLine: 'Wow! You can do it — from head to toe!',
+  },
+  /* The lesson song after the words and the first game (owner, 2026-10-10). */
+  {
+    // Song video (docs/scenarios/u4l5-moves-song-video.md, owner 2026-10-09: words that fit the music): ONE whole-song take written with the
+    // kids-song-writer skill, cut by scripts/make-song-video.py (scripts/song-videos/), one moving clip per sung line. The audio is the clock.
+    id: 'u4l5-song', kind: 'song', bg: bgU4L5Park, title: '\u{1F3B5} I Can Do It! \u{1F3B5}', teacher: 'Stand up! Do each move as you sing: turn, wave, stomp, clap!',
+    durationSeconds: 50, bigWord: 'Move', songUrl: `${A}/audio/animal-moves-song-video-u4l5.mp3?v=2`,
+    videoUrl: `${A}/video/animal-moves-song-u4l5.mp4?v=3`,
+    lineDurationsMs: [10510, 2610, 3400, 8480, 1340, 2860, 3340, 7730, 2090, 1910, 2050, 3580],
+    songPrompt: 'Upbeat kids pop song',
+    lyrics: [
+      { who: 'pip', text: 'Head, head, turn your head!', emotion: 'happy' },
+      { who: 'pip', text: 'Turn your head, the tiger said!', emotion: 'happy' },
+      { who: 'pip', text: 'Arms, arms, up so high!', emotion: 'happy' },
+      { who: 'pip', text: 'Wave your arms up to the sky!', emotion: 'happy' },
+      { who: 'pip', text: 'Feet, feet, stomp your feet!', emotion: 'happy' },
+      { who: 'pip', text: 'Stomp, stomp, stomp them to the beat!', emotion: 'happy' },
+      { who: 'pip', text: 'Hands, hands, clap your hands!', emotion: 'happy' },
+      { who: 'pip', text: 'Clap like a seal upon the sand!', emotion: 'happy' },
+      { who: 'pip', text: 'I can do it, I can do it!', emotion: 'happy' },
+      { who: 'pip', text: 'I can do it, yes, I can!', emotion: 'happy' },
+      { who: 'pip', text: 'I can do it, I can do it!', emotion: 'happy' },
+      { who: 'pip', text: 'Head and arms and feet and hands!', emotion: 'happy' },
+    ],
   },
 
   /* 8-11 Speaking + the second game */
@@ -8231,18 +8245,6 @@ export const LESSON_U4L6_SCENES: Scene[] = [
 
   /* 1-3 Hook */
   {
-    id: 'u4l6-song', kind: 'song', bg: bgU4L6Station, title: '\u{1F3B5} Head, Shoulders, Knees and Toes \u{1F3B5}', teacher: 'Stand up! Touch each body part as you sing — Robo dances too!',
-    durationSeconds: 20, bigWord: 'Body', songUrl: `${A}/audio/body-song-u4l1.mp3?v=1`,
-    lineDurationsMs: [3580, 3980, 3960, 8542],
-    songPrompt: 'Upbeat kids pop song',
-    lyrics: [
-      { who: 'willow', text: 'Head, shoulders, knees and toes, knees and toes!', emotion: 'happy' },
-      { who: 'willow', text: 'Head, shoulders, knees and toes, knees and toes!', emotion: 'happy' },
-      { who: 'willow', text: 'Touch your head and touch your toes!', emotion: 'happy' },
-      { who: 'willow', text: 'Head, shoulders, knees and toes, knees and toes!', emotion: 'happy' },
-    ],
-  },
-  {
     // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 5 · From Head to Toe.
     id: 'u4l6-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u4l6-station-wide.png`, who: 'pip', mode: 'click',
     fromLabel: "Lesson 5 · From Head to Toe",
@@ -8298,6 +8300,19 @@ export const LESSON_U4L6_SCENES: Scene[] = [
       { seq: ['head', 'shoulders', 'knees'], line: 'Simon says: head, shoulders, knees!', reply: 'Head, shoulders, knees! You did it!' },
     ],
     doneLine: 'Robo is so happy! Beep beep! You are a Simon Says star!',
+  },
+  /* The lesson song after the words and the first game (owner, 2026-10-10). */
+  {
+    id: 'u4l6-song', kind: 'song', bg: bgU4L6Station, title: '\u{1F3B5} Head, Shoulders, Knees and Toes \u{1F3B5}', teacher: 'Stand up! Touch each body part as you sing — Robo dances too!',
+    durationSeconds: 20, bigWord: 'Body', songUrl: `${A}/audio/body-song-u4l1.mp3?v=1`,
+    lineDurationsMs: [3580, 3980, 3960, 8542],
+    songPrompt: 'Upbeat kids pop song',
+    lyrics: [
+      { who: 'willow', text: 'Head, shoulders, knees and toes, knees and toes!', emotion: 'happy' },
+      { who: 'willow', text: 'Head, shoulders, knees and toes, knees and toes!', emotion: 'happy' },
+      { who: 'willow', text: 'Touch your head and touch your toes!', emotion: 'happy' },
+      { who: 'willow', text: 'Head, shoulders, knees and toes, knees and toes!', emotion: 'happy' },
+    ],
   },
 
   /* 7-10 Speaking + sorting */
@@ -8462,18 +8477,6 @@ export const LESSON_U5L2_SCENES: Scene[] = [
 
   /* 1-3 Hook */
   {
-    id: 'u5l2-song', kind: 'song', bg: bgU5L2Yard, title: '\u{1F3B5} This Is My Family \u{1F3B5}', teacher: 'Sing and show! Big brother: arms up high. Little sister: hands low. Baby: rock your arms.',
-    durationSeconds: 20, bigWord: 'Family', songUrl: `${A}/audio/family-song-u5l2.mp3?v=1`,
-    lineDurationsMs: [3140, 4100, 4340, 8482],
-    songPrompt: 'Upbeat kids pop song',
-    lyrics: [
-      { who: 'pip', text: 'This is my brother! He is big!', emotion: 'happy' },
-      { who: 'pip', text: 'This is my sister! She is small!', emotion: 'happy' },
-      { who: 'pip', text: 'This is my baby! Tiny, tiny baby!', emotion: 'happy' },
-      { who: 'pip', text: 'I love my family! I love you!', emotion: 'happy' },
-    ],
-  },
-  {
     // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 1 · Mom, Dad, Me!.
     id: 'u5l2-recall-warmup', kind: 'recall-warmup', bg: `${A}/scenes/bg-u5l2-yard-wide.png`, who: 'pip', mode: 'click',
     fromLabel: "Lesson 1 · Mom, Dad, Me!",
@@ -8524,6 +8527,19 @@ export const LESSON_U5L2_SCENES: Scene[] = [
       { member: 0, line: 'Take a photo of my brother!', reply: 'Click! This is my brother!' },
     ],
     doneLine: 'Three great photos! I love my family!',
+  },
+  /* The lesson song after the words and the first game (owner, 2026-10-10). */
+  {
+    id: 'u5l2-song', kind: 'song', bg: bgU5L2Yard, title: '\u{1F3B5} This Is My Family \u{1F3B5}', teacher: 'Sing and show! Big brother: arms up high. Little sister: hands low. Baby: rock your arms.',
+    durationSeconds: 20, bigWord: 'Family', songUrl: `${A}/audio/family-song-u5l2.mp3?v=1`,
+    lineDurationsMs: [3140, 4100, 4340, 8482],
+    songPrompt: 'Upbeat kids pop song',
+    lyrics: [
+      { who: 'pip', text: 'This is my brother! He is big!', emotion: 'happy' },
+      { who: 'pip', text: 'This is my sister! She is small!', emotion: 'happy' },
+      { who: 'pip', text: 'This is my baby! Tiny, tiny baby!', emotion: 'happy' },
+      { who: 'pip', text: 'I love my family! I love you!', emotion: 'happy' },
+    ],
   },
 
   /* 7-10 Speaking + games */
@@ -8914,18 +8930,6 @@ export const LESSON_U5L4_SCENES: Scene[] = [
 
   /* 1-3 Hook */
   {
-    id: 'u5l4-song', kind: 'song', bg: bgU5L4Picnic, title: '\u{1F3B5} My Family Tree \u{1F3B5}', teacher: 'Sing and point! Point up high for Grandma and Grandpa, to your tummy for Mom and Dad, low for the children.',
-    durationSeconds: 20, bigWord: 'Family', songUrl: `${A}/audio/family-tree-song-u5l4.mp3?v=1`,
-    lineDurationsMs: [3680, 3660, 4620, 8102],
-    songPrompt: 'Upbeat kids pop song',
-    lyrics: [
-      { who: 'pip', text: 'This is my grandma, this is my grandpa!', emotion: 'happy' },
-      { who: 'pip', text: 'This is my mom, and this is my dad!', emotion: 'happy' },
-      { who: 'pip', text: 'My brother, my sister, the baby and me!', emotion: 'happy' },
-      { who: 'pip', text: 'We are a family! My family tree!', emotion: 'happy' },
-    ],
-  },
-  {
     // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 3 · Grandma & Grandpa!.
     id: 'u5l4-recall-warmup', kind: 'recall-warmup', bg: bgU5L4Picnic, who: 'pip', mode: 'click',
     fromLabel: 'Lesson 3 · Grandma & Grandpa!',
@@ -8988,6 +8992,19 @@ export const LESSON_U5L4_SCENES: Scene[] = [
       { face: 7, row: 2, line: "And this is me, Pip! Where do I go?", reply: 'Yes! I go at the bottom, with my brother and sister!', say: 'This is me!' },
     ],
     doneLine: 'This is my family tree! I love my family!',
+  },
+  /* The lesson song after the words and the first game (owner, 2026-10-10). */
+  {
+    id: 'u5l4-song', kind: 'song', bg: bgU5L4Picnic, title: '\u{1F3B5} My Family Tree \u{1F3B5}', teacher: 'Sing and point! Point up high for Grandma and Grandpa, to your tummy for Mom and Dad, low for the children.',
+    durationSeconds: 20, bigWord: 'Family', songUrl: `${A}/audio/family-tree-song-u5l4.mp3?v=1`,
+    lineDurationsMs: [3680, 3660, 4620, 8102],
+    songPrompt: 'Upbeat kids pop song',
+    lyrics: [
+      { who: 'pip', text: 'This is my grandma, this is my grandpa!', emotion: 'happy' },
+      { who: 'pip', text: 'This is my mom, and this is my dad!', emotion: 'happy' },
+      { who: 'pip', text: 'My brother, my sister, the baby and me!', emotion: 'happy' },
+      { who: 'pip', text: 'We are a family! My family tree!', emotion: 'happy' },
+    ],
   },
   {
     id: 'u5l4-who-is-this', kind: 'join-stage', bg: bgU5L4Picnic, teacher: 'Pip asks. The student points and answers with the whole sentence.', cast: ['pip'],
@@ -9157,29 +9174,6 @@ export const LESSON_U5L5_SCENES: Scene[] = [
 
   /* 1-4 Hook + story */
   {
-    // Song video (docs/scenarios/u5l5-my-dad-song-video.md, owner 2026-10-09: words that fit the music): ONE whole-song take written with the
-    // kids-song-writer skill, cut by scripts/make-song-video.py (scripts/song-videos/), one moving clip per sung line. The audio is the clock.
-    id: 'u5l5-song', kind: 'song', bg: bgU5L5Gate, title: '\u{1F3B5} Just Me and My Dad \u{1F3B5}', teacher: 'Sing and do it! Throw a ball, feed the ducks, lick an ice cream, open a book — then a big hug!',
-    durationSeconds: 58, bigWord: 'Dad', songUrl: `${A}/audio/my-dad-song-video-u5l5.mp3?v=2`,
-    videoUrl: `${A}/video/my-dad-song-u5l5.mp4?v=3`,
-    lineDurationsMs: [8000, 4620, 4300, 4500, 4360, 4440, 5030, 5240, 3010, 5850, 3410, 4640],
-    songPrompt: 'Upbeat kids pop song',
-    lyrics: [
-      { who: 'pip', text: 'Me and Dad, me and Dad,', emotion: 'happy' },
-      { who: 'pip', text: "The park is fun, I'm very glad!", emotion: 'happy' },
-      { who: 'pip', text: 'A ball, a ball, he throws the ball,', emotion: 'happy' },
-      { who: 'pip', text: 'I catch it, catch it, catch it all!', emotion: 'happy' },
-      { who: 'pip', text: 'Ducks, ducks, swimming by,', emotion: 'happy' },
-      { who: 'pip', text: 'We feed the ducks, they say hi!', emotion: 'happy' },
-      { who: 'pip', text: 'Ice cream, ice cream, ice cream, yum!', emotion: 'happy' },
-      { who: 'pip', text: 'A book, a book, we read, what fun!', emotion: 'happy' },
-      { who: 'pip', text: 'Dad, Dad, I love you, Dad!', emotion: 'happy' },
-      { who: 'pip', text: 'The best day that I ever had!', emotion: 'happy' },
-      { who: 'pip', text: 'Dad, Dad, I love you, Dad!', emotion: 'happy' },
-      { who: 'pip', text: 'Just me and my dad, my dad!', emotion: 'happy' },
-    ],
-  },
-  {
     // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 4 · My Family Tree.
     id: 'u5l5-recall-warmup', kind: 'recall-warmup', bg: bgU5L5Gate, who: 'pip', mode: 'click',
     fromLabel: 'Lesson 4 · My Family Tree',
@@ -9262,6 +9256,30 @@ export const LESSON_U5L5_SCENES: Scene[] = [
       { duck: 3, line: 'We feed the ducks! Which duck has it?', reply: 'Yes! We feed the ducks! Quack, quack!' },
     ],
     doneLine: 'All the ducks are happy! Quack, quack!',
+  },
+  /* The lesson song after the words and the first game (owner, 2026-10-10). */
+  {
+    // Song video (docs/scenarios/u5l5-my-dad-song-video.md, owner 2026-10-09: words that fit the music): ONE whole-song take written with the
+    // kids-song-writer skill, cut by scripts/make-song-video.py (scripts/song-videos/), one moving clip per sung line. The audio is the clock.
+    id: 'u5l5-song', kind: 'song', bg: bgU5L5Gate, title: '\u{1F3B5} Just Me and My Dad \u{1F3B5}', teacher: 'Sing and do it! Throw a ball, feed the ducks, lick an ice cream, open a book — then a big hug!',
+    durationSeconds: 58, bigWord: 'Dad', songUrl: `${A}/audio/my-dad-song-video-u5l5.mp3?v=2`,
+    videoUrl: `${A}/video/my-dad-song-u5l5.mp4?v=3`,
+    lineDurationsMs: [8000, 4620, 4300, 4500, 4360, 4440, 5030, 5240, 3010, 5850, 3410, 4640],
+    songPrompt: 'Upbeat kids pop song',
+    lyrics: [
+      { who: 'pip', text: 'Me and Dad, me and Dad,', emotion: 'happy' },
+      { who: 'pip', text: "The park is fun, I'm very glad!", emotion: 'happy' },
+      { who: 'pip', text: 'A ball, a ball, he throws the ball,', emotion: 'happy' },
+      { who: 'pip', text: 'I catch it, catch it, catch it all!', emotion: 'happy' },
+      { who: 'pip', text: 'Ducks, ducks, swimming by,', emotion: 'happy' },
+      { who: 'pip', text: 'We feed the ducks, they say hi!', emotion: 'happy' },
+      { who: 'pip', text: 'Ice cream, ice cream, ice cream, yum!', emotion: 'happy' },
+      { who: 'pip', text: 'A book, a book, we read, what fun!', emotion: 'happy' },
+      { who: 'pip', text: 'Dad, Dad, I love you, Dad!', emotion: 'happy' },
+      { who: 'pip', text: 'The best day that I ever had!', emotion: 'happy' },
+      { who: 'pip', text: 'Dad, Dad, I love you, Dad!', emotion: 'happy' },
+      { who: 'pip', text: 'Just me and my dad, my dad!', emotion: 'happy' },
+    ],
   },
   {
     id: 'u5l5-what-do-we-do', kind: 'join-stage', bg: bgU5L5DucksC, teacher: 'Pip asks. The student answers with the whole sentence.', cast: ['pip'],
@@ -9423,18 +9441,6 @@ export const LESSON_U5L6_SCENES: Scene[] = [
 
   /* 1-3 Hook */
   {
-    id: 'u5l6-song', kind: 'song', bg: bgU5L6Host, title: '\u{1F3B5} Who Is This? \u{1F3B5}', teacher: 'Sing and point! Point to a photo or a family member for each word.',
-    durationSeconds: 20, bigWord: 'Family', songUrl: `${A}/audio/family-show-song-u5l6.mp3?v=1`,
-    lineDurationsMs: [3850, 4150, 3960, 8102],
-    songPrompt: 'Upbeat kids pop song',
-    lyrics: [
-      { who: 'pip', text: 'Who is this? This is my mom!', emotion: 'happy' },
-      { who: 'pip', text: 'Who is this? This is my dad!', emotion: 'happy' },
-      { who: 'pip', text: 'Grandma, Grandpa, sister, brother!', emotion: 'happy' },
-      { who: 'pip', text: 'The baby and me! We are a family!', emotion: 'happy' },
-    ],
-  },
-  {
     // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 5 · Just Me and My Dad.
     id: 'u5l6-recall-warmup', kind: 'recall-warmup', bg: bgU5L6Stage, who: 'pip', mode: 'click',
     fromLabel: 'Lesson 5 · Just Me and My Dad',
@@ -9491,6 +9497,19 @@ export const LESSON_U5L6_SCENES: Scene[] = [
       { faces: [0, 6, 5], answer: 2, line: "Who is Pip's little sister?", reply: 'Yes! This is his little sister!', say: 'This is my sister!' },
     ],
     doneLine: 'You are the Family Match-Up champion!',
+  },
+  /* The lesson song after the words and the first game (owner, 2026-10-10). */
+  {
+    id: 'u5l6-song', kind: 'song', bg: bgU5L6Host, title: '\u{1F3B5} Who Is This? \u{1F3B5}', teacher: 'Sing and point! Point to a photo or a family member for each word.',
+    durationSeconds: 20, bigWord: 'Family', songUrl: `${A}/audio/family-show-song-u5l6.mp3?v=1`,
+    lineDurationsMs: [3850, 4150, 3960, 8102],
+    songPrompt: 'Upbeat kids pop song',
+    lyrics: [
+      { who: 'pip', text: 'Who is this? This is my mom!', emotion: 'happy' },
+      { who: 'pip', text: 'Who is this? This is my dad!', emotion: 'happy' },
+      { who: 'pip', text: 'Grandma, Grandpa, sister, brother!', emotion: 'happy' },
+      { who: 'pip', text: 'The baby and me! We are a family!', emotion: 'happy' },
+    ],
   },
   {
     id: 'u5l6-who-is-this', kind: 'join-stage', bg: bgU5L6Stage, teacher: 'Pip asks. The student answers with the whole sentence.', cast: ['pip'],
@@ -9648,18 +9667,6 @@ export const LESSON_U6L1_SCENES: Scene[] = [
 
   /* 1-3 Hook */
   {
-    id: 'u6l1-song', kind: 'song', bg: bgU6L1House, title: '\u{1F3B5} This Is My House \u{1F3B5}', teacher: 'Sing and point to each room in the picture!',
-    durationSeconds: 20, bigWord: 'House', songUrl: `${A}/audio/my-house-song-u6l1.mp3?v=1`,
-    lineDurationsMs: [4080, 4440, 6260, 5282],
-    songPrompt: 'Upbeat kids pop song about the rooms of a house',
-    lyrics: [
-      { who: 'pip', text: 'Come in, come in! This is my house!', emotion: 'happy' },
-      { who: 'pip', text: 'This is the kitchen! This is the bedroom!', emotion: 'happy' },
-      { who: 'pip', text: 'This is the bathroom! The living room too!', emotion: 'happy' },
-      { who: 'pip', text: 'Come in, come in! I love my house!', emotion: 'happy' },
-    ],
-  },
-  {
     // Remember? (owner, 2026-10-07): a quick warm-up of Unit 5 · Lesson 6 · Family Match-Up.
     id: 'u6l1-recall-warmup', kind: 'recall-warmup', bg: bgU6L1Front, who: 'pip', mode: 'click',
     fromLabel: 'Unit 5 · Lesson 6 · Family Match-Up',
@@ -9713,6 +9720,19 @@ export const LESSON_U6L1_SCENES: Scene[] = [
       { room: 3, line: "I'm in the living room! Find me!", reply: 'Pip is in the living room!', say: 'In the living room!', at: 22 },
     ],
     doneLine: 'You found me every time! Great listening!',
+  },
+  /* The lesson song after the words and the first game (owner, 2026-10-10). */
+  {
+    id: 'u6l1-song', kind: 'song', bg: bgU6L1House, title: '\u{1F3B5} This Is My House \u{1F3B5}', teacher: 'Sing and point to each room in the picture!',
+    durationSeconds: 20, bigWord: 'House', songUrl: `${A}/audio/my-house-song-u6l1.mp3?v=1`,
+    lineDurationsMs: [4080, 4440, 6260, 5282],
+    songPrompt: 'Upbeat kids pop song about the rooms of a house',
+    lyrics: [
+      { who: 'pip', text: 'Come in, come in! This is my house!', emotion: 'happy' },
+      { who: 'pip', text: 'This is the kitchen! This is the bedroom!', emotion: 'happy' },
+      { who: 'pip', text: 'This is the bathroom! The living room too!', emotion: 'happy' },
+      { who: 'pip', text: 'Come in, come in! I love my house!', emotion: 'happy' },
+    ],
   },
 
   /* 7-11 Recall + speaking */
@@ -9886,18 +9906,6 @@ export const LESSON_U6L2_SCENES: Scene[] = [
 
   /* 1-3 Hook */
   {
-    id: 'u6l2-song', kind: 'song', bg: bgU6L2Truck, title: '\u{1F3B5} Moving Day \u{1F3B5}', teacher: 'Sing and point: table, chair, bed, sofa!',
-    durationSeconds: 20, bigWord: 'Furniture', songUrl: `${A}/audio/moving-day-song-u6l2.mp3?v=1`,
-    lineDurationsMs: [5860, 2840, 3020, 8342],
-    songPrompt: 'Upbeat kids pop song about moving into a new house',
-    lyrics: [
-      { who: 'pip', text: 'Table and chair! Table and chair!', emotion: 'happy' },
-      { who: 'pip', text: 'Bed and sofa! Over there!', emotion: 'happy' },
-      { who: 'pip', text: 'Bring it in, one, two, three!', emotion: 'happy' },
-      { who: 'pip', text: 'A new house for you and me!', emotion: 'happy' },
-    ],
-  },
-  {
     // Remember? (owner, 2026-10-07): a quick warm-up of Unit 6 · Lesson 1 · Kitchen, Bedroom, Bathroom!
     id: 'u6l2-recall-warmup', kind: 'recall-warmup', bg: bgU6L2Truck, who: 'pip', mode: 'click',
     fromLabel: 'Lesson 1 · Kitchen, Bedroom, Bathroom!',
@@ -9950,6 +9958,19 @@ export const LESSON_U6L2_SCENES: Scene[] = [
       { piece: 1, line: 'Bring the chair, please!', reply: 'The chair! Over there!', say: "It's a chair!" },
     ],
     doneLine: 'Our new room is ready! Thank you!',
+  },
+  /* The lesson song after the words and the first game (owner, 2026-10-10). */
+  {
+    id: 'u6l2-song', kind: 'song', bg: bgU6L2Truck, title: '\u{1F3B5} Moving Day \u{1F3B5}', teacher: 'Sing and point: table, chair, bed, sofa!',
+    durationSeconds: 20, bigWord: 'Furniture', songUrl: `${A}/audio/moving-day-song-u6l2.mp3?v=1`,
+    lineDurationsMs: [5860, 2840, 3020, 8342],
+    songPrompt: 'Upbeat kids pop song about moving into a new house',
+    lyrics: [
+      { who: 'pip', text: 'Table and chair! Table and chair!', emotion: 'happy' },
+      { who: 'pip', text: 'Bed and sofa! Over there!', emotion: 'happy' },
+      { who: 'pip', text: 'Bring it in, one, two, three!', emotion: 'happy' },
+      { who: 'pip', text: 'A new house for you and me!', emotion: 'happy' },
+    ],
   },
 
   /* 7-11 Recall + speaking */
@@ -10117,18 +10138,6 @@ export const LESSON_U6L3_SCENES: Scene[] = [
 
   /* 1-3 Hook */
   {
-    id: 'u6l3-song', kind: 'song', bg: bgU6L3Family, title: '\u{1F3B5} In My House \u{1F3B5}', teacher: 'Sing and point to each room and each thing!',
-    durationSeconds: 20, bigWord: 'House', songUrl: `${A}/audio/in-my-house-song-u6l3.mp3?v=1`,
-    lineDurationsMs: [4000, 3600, 5160, 7302],
-    songPrompt: 'Upbeat kids pop song about where things are in a house',
-    lyrics: [
-      { who: 'pip', text: 'The bed is in the bedroom!', emotion: 'happy' },
-      { who: 'pip', text: 'The table is in the kitchen!', emotion: 'happy' },
-      { who: 'pip', text: 'The sofa is in the living room!', emotion: 'happy' },
-      { who: 'pip', text: 'I love my house, my happy house!', emotion: 'happy' },
-    ],
-  },
-  {
     // Remember? (owner, 2026-10-07): a quick warm-up of Unit 6 · Lesson 2 · Table, Chair, Bed!
     id: 'u6l3-recall-warmup', kind: 'recall-warmup', bg: bgU6L3House, who: 'pip', mode: 'shadow',
     fromLabel: 'Lesson 2 · Table, Chair, Bed!',
@@ -10187,6 +10196,19 @@ export const LESSON_U6L3_SCENES: Scene[] = [
       { piece: 3, room: 2, x: 38, y: 83, w: 6.5, line: 'Put the chair in the kitchen!', reply: 'The chair is in the kitchen!', say: 'The chair is in the kitchen!' },
     ],
     doneLine: 'We did it! Our house is ready!',
+  },
+  /* The lesson song after the words and the first game (owner, 2026-10-10). */
+  {
+    id: 'u6l3-song', kind: 'song', bg: bgU6L3Family, title: '\u{1F3B5} In My House \u{1F3B5}', teacher: 'Sing and point to each room and each thing!',
+    durationSeconds: 20, bigWord: 'House', songUrl: `${A}/audio/in-my-house-song-u6l3.mp3?v=1`,
+    lineDurationsMs: [4000, 3600, 5160, 7302],
+    songPrompt: 'Upbeat kids pop song about where things are in a house',
+    lyrics: [
+      { who: 'pip', text: 'The bed is in the bedroom!', emotion: 'happy' },
+      { who: 'pip', text: 'The table is in the kitchen!', emotion: 'happy' },
+      { who: 'pip', text: 'The sofa is in the living room!', emotion: 'happy' },
+      { who: 'pip', text: 'I love my house, my happy house!', emotion: 'happy' },
+    ],
   },
 
   /* 7-11 Where is everybody? */
@@ -10334,18 +10356,6 @@ export const LESSON_U6L4_SCENES: Scene[] = [
 
   /* 1-3 Hook */
   {
-    id: 'u6l4-song', kind: 'song', bg: bgU6L4Street, title: '\u{1F3B5} My House \u{1F3B5}', teacher: 'Sing and point: point to your bed, your chair and your sofa when you sing the colour!',
-    durationSeconds: 20, bigWord: 'House', songUrl: `${A}/audio/my-house-song-u6l4.mp3?v=1`,
-    lineDurationsMs: [4400, 4660, 5490, 5512],
-    songPrompt: 'Cheerful swingy ukulele kids song about showing your house to friends',
-    lyrics: [
-      { who: 'pip', text: 'This is my house, my house, my house!', emotion: 'happy' },
-      { who: 'mia', text: 'My bed is red! My chair is blue!', emotion: 'happy' },
-      { who: 'bella', text: 'My sofa is green, and I love it too!', emotion: 'happy' },
-      { who: 'leo', text: 'Come and see my happy house!', emotion: 'happy' },
-    ],
-  },
-  {
     // Remember? (owner, 2026-10-07): a quick warm-up of Unit 6 · Lesson 3 · In My House (the family evening rooms).
     id: 'u6l4-recall-warmup', kind: 'recall-warmup', bg: bgU6L4Street, who: 'pip', mode: 'click',
     fromLabel: 'Lesson 3 · In My House',
@@ -10406,6 +10416,19 @@ export const LESSON_U6L4_SCENES: Scene[] = [
       { room: 1, line: 'My bed is red and my chair is yellow!', say: "It's Bella's room!" },
     ],
     doneLine: 'We found every room! Thank you, friends!',
+  },
+  /* The lesson song after the words and the first game (owner, 2026-10-10). */
+  {
+    id: 'u6l4-song', kind: 'song', bg: bgU6L4Street, title: '\u{1F3B5} My House \u{1F3B5}', teacher: 'Sing and point: point to your bed, your chair and your sofa when you sing the colour!',
+    durationSeconds: 20, bigWord: 'House', songUrl: `${A}/audio/my-house-song-u6l4.mp3?v=1`,
+    lineDurationsMs: [4400, 4660, 5490, 5512],
+    songPrompt: 'Cheerful swingy ukulele kids song about showing your house to friends',
+    lyrics: [
+      { who: 'pip', text: 'This is my house, my house, my house!', emotion: 'happy' },
+      { who: 'mia', text: 'My bed is red! My chair is blue!', emotion: 'happy' },
+      { who: 'bella', text: 'My sofa is green, and I love it too!', emotion: 'happy' },
+      { who: 'leo', text: 'Come and see my happy house!', emotion: 'happy' },
+    ],
   },
 
   /* 7-11 Ask and answer */
@@ -10562,29 +10585,6 @@ export const LESSON_U6L5_SCENES: Scene[] = [
 
   /* 1-3 Hook */
   {
-    // Song video (docs/scenarios/u6l5-house-song-video.md, owner 2026-10-09: words that fit the music): ONE whole-song take written with the
-    // kids-song-writer skill, cut by scripts/make-song-video.py (scripts/song-videos/), one moving clip per sung line. The audio is the clock.
-    id: 'u6l5-song', kind: 'song', bg: bgU6L5Street, title: "\u{1F3B5} Where's My House? \u{1F3B5}", teacher: 'Sing and act: hand over your eyes for "Where\'s my house?", shake your head for "No, it isn\'t!", nod for "Yes, it is!", knock in the air!',
-    durationSeconds: 59, bigWord: 'House', songUrl: `${A}/audio/wheres-my-house-song-video-u6l5.mp3?v=2`,
-    videoUrl: `${A}/video/wheres-my-house-song-u6l5.mp4?v=3`,
-    lineDurationsMs: [12740, 5730, 2620, 6850, 5210, 4670, 2270, 7510, 2480, 1970, 2870, 3880],
-    songPrompt: 'Gentle bouncy kids story song with a question-and-answer feel',
-    lyrics: [
-      { who: 'pip', text: "It's late, it's late, let's go home!", emotion: 'happy' },
-      { who: 'pip', text: "Where's my house? Oh no, oh no!", emotion: 'happy' },
-      { who: 'pip', text: 'My door, my door, my door is red,', emotion: 'happy' },
-      { who: 'pip', text: 'Not blue, not yellow, red, I said!', emotion: 'happy' },
-      { who: 'pip', text: "Is this my house? No, it isn't!", emotion: 'happy' },
-      { who: 'pip', text: "Is this my house? No, it isn't!", emotion: 'happy' },
-      { who: 'pip', text: 'Is this my house? Yes, it is!', emotion: 'happy' },
-      { who: 'pip', text: 'A red door! A hug and a kiss!', emotion: 'happy' },
-      { who: 'pip', text: "Knock, knock! Who is it? It's me!", emotion: 'happy' },
-      { who: 'pip', text: 'Welcome home, my house, yippee!', emotion: 'happy' },
-      { who: 'pip', text: 'My house, my house, I love my house,', emotion: 'happy' },
-      { who: 'pip', text: 'Quiet as a little mouse!', emotion: 'happy' },
-    ],
-  },
-  {
     // Remember? (owner, 2026-10-07): a quick warm-up of Unit 6 · Lesson 4 · My House (colours + furniture).
     id: 'u6l5-recall-warmup', kind: 'recall-warmup', bg: bgU6L5Street, who: 'pip', mode: 'click',
     fromLabel: 'Lesson 4 · My House',
@@ -10661,6 +10661,30 @@ export const LESSON_U6L5_SCENES: Scene[] = [
       { owner: 'leo', house: 0, tries: [1, 0], line: 'My house has a blue door!', reply: 'Yes, it is! Thank you!', say: 'Welcome home, Leo!' },
     ],
     doneLine: 'Everybody is home! Great job!',
+  },
+  /* The lesson song after the words and the first game (owner, 2026-10-10). */
+  {
+    // Song video (docs/scenarios/u6l5-house-song-video.md, owner 2026-10-09: words that fit the music): ONE whole-song take written with the
+    // kids-song-writer skill, cut by scripts/make-song-video.py (scripts/song-videos/), one moving clip per sung line. The audio is the clock.
+    id: 'u6l5-song', kind: 'song', bg: bgU6L5Street, title: "\u{1F3B5} Where's My House? \u{1F3B5}", teacher: 'Sing and act: hand over your eyes for "Where\'s my house?", shake your head for "No, it isn\'t!", nod for "Yes, it is!", knock in the air!',
+    durationSeconds: 59, bigWord: 'House', songUrl: `${A}/audio/wheres-my-house-song-video-u6l5.mp3?v=2`,
+    videoUrl: `${A}/video/wheres-my-house-song-u6l5.mp4?v=3`,
+    lineDurationsMs: [12740, 5730, 2620, 6850, 5210, 4670, 2270, 7510, 2480, 1970, 2870, 3880],
+    songPrompt: 'Gentle bouncy kids story song with a question-and-answer feel',
+    lyrics: [
+      { who: 'pip', text: "It's late, it's late, let's go home!", emotion: 'happy' },
+      { who: 'pip', text: "Where's my house? Oh no, oh no!", emotion: 'happy' },
+      { who: 'pip', text: 'My door, my door, my door is red,', emotion: 'happy' },
+      { who: 'pip', text: 'Not blue, not yellow, red, I said!', emotion: 'happy' },
+      { who: 'pip', text: "Is this my house? No, it isn't!", emotion: 'happy' },
+      { who: 'pip', text: "Is this my house? No, it isn't!", emotion: 'happy' },
+      { who: 'pip', text: 'Is this my house? Yes, it is!', emotion: 'happy' },
+      { who: 'pip', text: 'A red door! A hug and a kiss!', emotion: 'happy' },
+      { who: 'pip', text: "Knock, knock! Who is it? It's me!", emotion: 'happy' },
+      { who: 'pip', text: 'Welcome home, my house, yippee!', emotion: 'happy' },
+      { who: 'pip', text: 'My house, my house, I love my house,', emotion: 'happy' },
+      { who: 'pip', text: 'Quiet as a little mouse!', emotion: 'happy' },
+    ],
   },
 
   /* 8-11 Retell and check */
@@ -11108,18 +11132,6 @@ export const LESSON_U6L6_SCENES: Scene[] = [
 
   /* 1-3 Hook */
   {
-    id: 'u6l6-song', kind: 'song', bg: bgU6L6GameNight, title: '\u{1F3B5} My House Game \u{1F3B5}', teacher: 'Sing and point: point to a room, a table, a chair, a bed; shake your hands for "Roll the dice", hug yourself for "I love my house"!',
-    durationSeconds: 20, bigWord: 'House', songUrl: `${A}/audio/my-house-game-song-u6l6.mp3?v=1`,
-    lineDurationsMs: [3850, 4280, 3960, 7972],
-    songPrompt: 'Bouncy happy kids game song',
-    lyrics: [
-      { who: 'pip', text: 'Kitchen, bedroom, bathroom too!', emotion: 'happy' },
-      { who: 'pip', text: 'Table, chair and bed for you!', emotion: 'happy' },
-      { who: 'pip', text: 'Roll the dice and say it loud!', emotion: 'happy' },
-      { who: 'pip', text: "I love my house, I'm very proud!", emotion: 'happy' },
-    ],
-  },
-  {
     // Remember? (owner, 2026-10-07): a quick warm-up of Unit 6 · Lesson 5 · Where's My House? (the doors + the cat).
     id: 'u6l6-recall-warmup', kind: 'recall-warmup', bg: bgU6L6GameNight, who: 'pip', mode: 'click',
     fromLabel: "Lesson 5 · Where's My House?",
@@ -11179,6 +11191,19 @@ export const LESSON_U6L6_SCENES: Scene[] = [
     ],
     rolls: [1, 2, 2, 3, 1, 2],
     doneLine: 'Home! You won the My House Game!',
+  },
+  /* The lesson song after the words and the first game (owner, 2026-10-10). */
+  {
+    id: 'u6l6-song', kind: 'song', bg: bgU6L6GameNight, title: '\u{1F3B5} My House Game \u{1F3B5}', teacher: 'Sing and point: point to a room, a table, a chair, a bed; shake your hands for "Roll the dice", hug yourself for "I love my house"!',
+    durationSeconds: 20, bigWord: 'House', songUrl: `${A}/audio/my-house-game-song-u6l6.mp3?v=1`,
+    lineDurationsMs: [3850, 4280, 3960, 7972],
+    songPrompt: 'Bouncy happy kids game song',
+    lyrics: [
+      { who: 'pip', text: 'Kitchen, bedroom, bathroom too!', emotion: 'happy' },
+      { who: 'pip', text: 'Table, chair and bed for you!', emotion: 'happy' },
+      { who: 'pip', text: 'Roll the dice and say it loud!', emotion: 'happy' },
+      { who: 'pip', text: "I love my house, I'm very proud!", emotion: 'happy' },
+    ],
   },
 
   /* 7-9 Review games */
@@ -11293,18 +11318,6 @@ export const LESSON_U7L1_SCENES: Scene[] = [
 
   /* 1-3 Hook */
   {
-    id: 'u7l1-song', kind: 'song', bg: bgU7L1Shop, title: '\u{1F3B5} Dog, Cat, Bird! \u{1F3B5}', teacher: 'Sing and act: paws up for the dog, whiskers for the cat, flap your wings for the bird!',
-    durationSeconds: 20, bigWord: 'Pets', songUrl: `${A}/audio/dog-cat-bird-song-u7l1.mp3?v=1`,
-    lineDurationsMs: [3820, 4480, 4300, 7462],
-    songPrompt: 'Cheerful bouncy kids pet song',
-    lyrics: [
-      { who: 'pip', text: "It's a dog! Woof, woof, woof!", emotion: 'happy' },
-      { who: 'pip', text: "It's a cat! Meow, meow, meow!", emotion: 'happy' },
-      { who: 'pip', text: "It's a bird! Tweet, tweet, tweet!", emotion: 'happy' },
-      { who: 'pip', text: 'Dog, cat, bird! I love my pets!', emotion: 'happy' },
-    ],
-  },
-  {
     // Remember? (owner, 2026-10-07): a quick warm-up of Unit 6 · Lesson 6 · My House Game (the rooms).
     id: 'u7l1-recall-warmup', kind: 'recall-warmup', bg: bgU7L1Shop, who: 'pip', mode: 'click',
     fromLabel: 'Unit 6 · Lesson 6 · My House Game',
@@ -11369,6 +11382,19 @@ export const LESSON_U7L1_SCENES: Scene[] = [
       { target: 0, line: 'Where is the dog? Take a photo!', place: [1, 4, 2] },
     ],
     doneLine: 'Look at your photos! Dog, cat, bird!',
+  },
+  /* The lesson song after the words and the first game (owner, 2026-10-10). */
+  {
+    id: 'u7l1-song', kind: 'song', bg: bgU7L1Shop, title: '\u{1F3B5} Dog, Cat, Bird! \u{1F3B5}', teacher: 'Sing and act: paws up for the dog, whiskers for the cat, flap your wings for the bird!',
+    durationSeconds: 20, bigWord: 'Pets', songUrl: `${A}/audio/dog-cat-bird-song-u7l1.mp3?v=1`,
+    lineDurationsMs: [3820, 4480, 4300, 7462],
+    songPrompt: 'Cheerful bouncy kids pet song',
+    lyrics: [
+      { who: 'pip', text: "It's a dog! Woof, woof, woof!", emotion: 'happy' },
+      { who: 'pip', text: "It's a cat! Meow, meow, meow!", emotion: 'happy' },
+      { who: 'pip', text: "It's a bird! Tweet, tweet, tweet!", emotion: 'happy' },
+      { who: 'pip', text: 'Dog, cat, bird! I love my pets!', emotion: 'happy' },
+    ],
   },
 
   /* 7-9 More games */
@@ -11497,18 +11523,6 @@ export const LESSON_U7L2_SCENES: Scene[] = [
 
   /* 1-3 Hook */
   {
-    id: 'u7l2-song', kind: 'song', bg: bgU7L2Farm, title: '\u{1F3B5} Cow, Pig, Sheep! \u{1F3B5}', teacher: 'Sing and act: horns for the cow, a pig nose for the pig, fluffy hands for the sheep!',
-    durationSeconds: 20, bigWord: 'Farm', songUrl: `${A}/audio/cow-pig-sheep-song-u7l2.mp3?v=1`,
-    lineDurationsMs: [4560, 4320, 4900, 6282],
-    songPrompt: 'Happy bouncy kids farm song',
-    lyrics: [
-      { who: 'pip', text: "It's a cow! Moo, moo, moo!", emotion: 'happy' },
-      { who: 'pip', text: "It's a pig! Oink, oink, oink!", emotion: 'happy' },
-      { who: 'pip', text: "It's a sheep! Baa, baa, baa!", emotion: 'happy' },
-      { who: 'pip', text: 'Cow, pig, sheep! On the farm!', emotion: 'happy' },
-    ],
-  },
-  {
     // Remember? (owner, 2026-10-07): a quick warm-up of Unit 7 · Lesson 1 · Dog, Cat, Bird! (stickers with clear shapes → shadows).
     id: 'u7l2-recall-warmup', kind: 'recall-warmup', bg: bgU7L2Farm, who: 'pip', mode: 'shadow',
     fromLabel: 'Lesson 1 · Dog, Cat, Bird!',
@@ -11563,6 +11577,19 @@ export const LESSON_U7L2_SCENES: Scene[] = [
       { target: 1, line: 'Wash the sheep!' },
     ],
     doneLine: 'All clean! Cow, pig, sheep!',
+  },
+  /* The lesson song after the words and the first game (owner, 2026-10-10). */
+  {
+    id: 'u7l2-song', kind: 'song', bg: bgU7L2Farm, title: '\u{1F3B5} Cow, Pig, Sheep! \u{1F3B5}', teacher: 'Sing and act: horns for the cow, a pig nose for the pig, fluffy hands for the sheep!',
+    durationSeconds: 20, bigWord: 'Farm', songUrl: `${A}/audio/cow-pig-sheep-song-u7l2.mp3?v=1`,
+    lineDurationsMs: [4560, 4320, 4900, 6282],
+    songPrompt: 'Happy bouncy kids farm song',
+    lyrics: [
+      { who: 'pip', text: "It's a cow! Moo, moo, moo!", emotion: 'happy' },
+      { who: 'pip', text: "It's a pig! Oink, oink, oink!", emotion: 'happy' },
+      { who: 'pip', text: "It's a sheep! Baa, baa, baa!", emotion: 'happy' },
+      { who: 'pip', text: 'Cow, pig, sheep! On the farm!', emotion: 'happy' },
+    ],
   },
 
   /* 7-9 More games */
@@ -11692,18 +11719,6 @@ export const LESSON_U7L3_SCENES: Scene[] = [
 
   /* 1-3 Hook */
   {
-    id: 'u7l3-song', kind: 'song', bg: bgU7L3Pond, title: '\u{1F3B5} Horse, Chicken, Duck! \u{1F3B5}', teacher: 'Sing and march: gallop for the horse, flap your wings for the chicken, waddle for the duck!',
-    durationSeconds: 20, bigWord: 'March', songUrl: `${A}/audio/horse-chicken-duck-song-u7l3.mp3?v=1`,
-    lineDurationsMs: [4300, 3720, 6300, 5742],
-    songPrompt: 'Happy bouncy kids farm parade song',
-    lyrics: [
-      { who: 'pip', text: "It's a horse! Neigh, neigh, neigh!", emotion: 'happy' },
-      { who: 'pip', text: "It's a chicken! Cluck, cluck, cluck!", emotion: 'happy' },
-      { who: 'pip', text: "It's a duck! Quack, quack, quack!", emotion: 'happy' },
-      { who: 'pip', text: "Horse, chicken, duck! Let's march!", emotion: 'happy' },
-    ],
-  },
-  {
     // Remember? (owner, 2026-10-07): a quick warm-up of Unit 7 · Lesson 2 · Cow, Pig, Sheep!
     id: 'u7l3-recall-warmup', kind: 'recall-warmup', bg: bgU7L3Pond, who: 'pip', mode: 'click',
     fromLabel: 'Lesson 2 · Cow, Pig, Sheep!',
@@ -11759,6 +11774,19 @@ export const LESSON_U7L3_SCENES: Scene[] = [
       { order: [2, 1, 0], line: 'Duck, chicken, horse! Go!' },
     ],
     doneLine: 'What a great parade! Neigh, cluck, quack!',
+  },
+  /* The lesson song after the words and the first game (owner, 2026-10-10). */
+  {
+    id: 'u7l3-song', kind: 'song', bg: bgU7L3Pond, title: '\u{1F3B5} Horse, Chicken, Duck! \u{1F3B5}', teacher: 'Sing and march: gallop for the horse, flap your wings for the chicken, waddle for the duck!',
+    durationSeconds: 20, bigWord: 'March', songUrl: `${A}/audio/horse-chicken-duck-song-u7l3.mp3?v=1`,
+    lineDurationsMs: [4300, 3720, 6300, 5742],
+    songPrompt: 'Happy bouncy kids farm parade song',
+    lyrics: [
+      { who: 'pip', text: "It's a horse! Neigh, neigh, neigh!", emotion: 'happy' },
+      { who: 'pip', text: "It's a chicken! Cluck, cluck, cluck!", emotion: 'happy' },
+      { who: 'pip', text: "It's a duck! Quack, quack, quack!", emotion: 'happy' },
+      { who: 'pip', text: "Horse, chicken, duck! Let's march!", emotion: 'happy' },
+    ],
   },
 
   /* 7-9 More games */
@@ -11886,18 +11914,6 @@ export const LESSON_U7L4_SCENES: Scene[] = [
 
   /* 1-3 Hook */
   {
-    id: 'u7l4-song', kind: 'song', bg: bgU7L4Fair, title: '\u{1F3B5} What Animal is This? \u{1F3B5}', teacher: 'Sing and answer: the child shouts the animal before the song does!',
-    durationSeconds: 20, bigWord: 'Animal', songUrl: `${A}/audio/what-animal-song-u7l4.mp3?v=1`,
-    lineDurationsMs: [4640, 4000, 4780, 6642],
-    songPrompt: 'Playful bouncy kids question-and-answer song',
-    lyrics: [
-      { who: 'pip', text: "What animal is this? Moo, moo! It's a cow!", emotion: 'happy' },
-      { who: 'pip', text: "What animal is this? Woof, woof! It's a dog!", emotion: 'happy' },
-      { who: 'pip', text: "What animal is this? Quack, quack! It's a duck!", emotion: 'happy' },
-      { who: 'pip', text: 'Listen, look and say it! Yes!', emotion: 'happy' },
-    ],
-  },
-  {
     // Remember? (owner, 2026-10-07): a quick warm-up of Unit 7 · Lesson 3 · Horse, Chicken, Duck! (clear outlines → shadows).
     id: 'u7l4-recall-warmup', kind: 'recall-warmup', bg: bgU7L4Fair, who: 'pip', mode: 'shadow',
     fromLabel: 'Lesson 3 · Horse, Chicken, Duck!',
@@ -11949,6 +11965,19 @@ export const LESSON_U7L4_SCENES: Scene[] = [
       { answer: 1, options: [0, 6, 8, 1], clues: ['It says meow.', 'It is small.', 'It is orange.'] },
     ],
     doneLine: 'You solved every riddle! Well done!',
+  },
+  /* The lesson song after the words and the first game (owner, 2026-10-10). */
+  {
+    id: 'u7l4-song', kind: 'song', bg: bgU7L4Fair, title: '\u{1F3B5} What Animal is This? \u{1F3B5}', teacher: 'Sing and answer: the child shouts the animal before the song does!',
+    durationSeconds: 20, bigWord: 'Animal', songUrl: `${A}/audio/what-animal-song-u7l4.mp3?v=1`,
+    lineDurationsMs: [4640, 4000, 4780, 6642],
+    songPrompt: 'Playful bouncy kids question-and-answer song',
+    lyrics: [
+      { who: 'pip', text: "What animal is this? Moo, moo! It's a cow!", emotion: 'happy' },
+      { who: 'pip', text: "What animal is this? Woof, woof! It's a dog!", emotion: 'happy' },
+      { who: 'pip', text: "What animal is this? Quack, quack! It's a duck!", emotion: 'happy' },
+      { who: 'pip', text: 'Listen, look and say it! Yes!', emotion: 'happy' },
+    ],
   },
 
   /* 7-9 More games */
@@ -12079,34 +12108,6 @@ export const LESSON_U7L5_SCENES: Scene[] = [
 
   /* 1-4 Hook + the film */
   {
-    // Song video (docs/scenarios/u7l5-farm-song-video.md, owner 2026-10-09: repeat the words): verse takes joined by
-    // scripts/make-song-video.py (scripts/song-videos/). To be replaced by the whole-song take u7l5-farm-song3 (kids-song-writer). The audio is the clock.
-    id: 'u7l5-song', kind: 'song', bg: bgU7L5Yard, title: '\u{1F3B5} Farm Song \u{1F3B5}', teacher: 'Sing and act: horns for the cow, hands up for E-I-E-I-O! Make each animal sound together.',
-    durationSeconds: 78, bigWord: 'Farm', songUrl: `${A}/audio/farm-song-video-u7l5.mp3?v=2`,
-    videoUrl: `${A}/video/farm-song-u7l5.mp4?v=2`,
-    lineDurationsMs: [4700, 5200, 3100, 5300, 4700, 4100, 4100, 5000, 4300, 4400, 4300, 5400, 4000, 4200, 4500, 4300, 6300],
-    songPrompt: 'Classic happy kids farm sing-along',
-    lyrics: [
-      { who: 'pip', text: 'A farm, a farm! Grandpa had a farm!', emotion: 'happy' },
-      { who: 'pip', text: 'And on his farm he had a cow, E-I-E-I-O!', emotion: 'happy' },
-      { who: 'pip', text: "A cow, a cow! It's a cow! Moo, moo!", emotion: 'happy' },
-      { who: 'pip', text: 'With a moo, moo here and a moo, moo there!', emotion: 'happy' },
-      { who: 'pip', text: 'A farm, a farm! Grandpa had a farm!', emotion: 'happy' },
-      { who: 'pip', text: 'And on his farm he had a pig, E-I-E-I-O!', emotion: 'happy' },
-      { who: 'pip', text: "A pig, a pig! It's a pig! Oink, oink!", emotion: 'happy' },
-      { who: 'pip', text: 'With an oink, oink here and an oink, oink there!', emotion: 'happy' },
-      { who: 'pip', text: 'A farm, a farm! Grandpa had a farm!', emotion: 'happy' },
-      { who: 'pip', text: 'And on his farm he had a sheep, E-I-E-I-O!', emotion: 'happy' },
-      { who: 'pip', text: "A sheep, a sheep! It's a sheep! Baa, baa!", emotion: 'happy' },
-      { who: 'pip', text: 'With a baa, baa here and a baa, baa there!', emotion: 'happy' },
-      { who: 'pip', text: 'A farm, a farm! Grandpa had a farm!', emotion: 'happy' },
-      { who: 'pip', text: 'And on his farm he had a duck, E-I-E-I-O!', emotion: 'happy' },
-      { who: 'pip', text: "A duck, a duck! It's a duck! Quack, quack!", emotion: 'happy' },
-      { who: 'pip', text: 'With a quack, quack here and a quack, quack there!', emotion: 'happy' },
-      { who: 'pip', text: 'A farm, a farm! Grandpa had a farm!', emotion: 'happy' },
-    ],
-  },
-  {
     // Remember? (owner, 2026-10-07): a quick warm-up of Unit 7 · Lesson 4 · What Animal is This?
     id: 'u7l5-recall-warmup', kind: 'recall-warmup', bg: bgU7L5Gate, who: 'pip', mode: 'click',
     fromLabel: 'Lesson 4 · What Animal is This?',
@@ -12177,6 +12178,35 @@ export const LESSON_U7L5_SCENES: Scene[] = [
       { label: 'duck', img: itemFarmDuck, sound: 'quack', x: 81, y: 82, size: 8 },
     ],
     doneLine: 'Grandpa had a farm, E-I-E-I-O!',
+  },
+  /* The lesson song after the words and the first game (owner, 2026-10-10). */
+  {
+    // Song video (docs/scenarios/u7l5-farm-song-video.md, owner 2026-10-09: repeat the words): verse takes joined by
+    // scripts/make-song-video.py (scripts/song-videos/). To be replaced by the whole-song take u7l5-farm-song3 (kids-song-writer). The audio is the clock.
+    id: 'u7l5-song', kind: 'song', bg: bgU7L5Yard, title: '\u{1F3B5} Farm Song \u{1F3B5}', teacher: 'Sing and act: horns for the cow, hands up for E-I-E-I-O! Make each animal sound together.',
+    durationSeconds: 78, bigWord: 'Farm', songUrl: `${A}/audio/farm-song-video-u7l5.mp3?v=2`,
+    videoUrl: `${A}/video/farm-song-u7l5.mp4?v=2`,
+    lineDurationsMs: [4700, 5200, 3100, 5300, 4700, 4100, 4100, 5000, 4300, 4400, 4300, 5400, 4000, 4200, 4500, 4300, 6300],
+    songPrompt: 'Classic happy kids farm sing-along',
+    lyrics: [
+      { who: 'pip', text: 'A farm, a farm! Grandpa had a farm!', emotion: 'happy' },
+      { who: 'pip', text: 'And on his farm he had a cow, E-I-E-I-O!', emotion: 'happy' },
+      { who: 'pip', text: "A cow, a cow! It's a cow! Moo, moo!", emotion: 'happy' },
+      { who: 'pip', text: 'With a moo, moo here and a moo, moo there!', emotion: 'happy' },
+      { who: 'pip', text: 'A farm, a farm! Grandpa had a farm!', emotion: 'happy' },
+      { who: 'pip', text: 'And on his farm he had a pig, E-I-E-I-O!', emotion: 'happy' },
+      { who: 'pip', text: "A pig, a pig! It's a pig! Oink, oink!", emotion: 'happy' },
+      { who: 'pip', text: 'With an oink, oink here and an oink, oink there!', emotion: 'happy' },
+      { who: 'pip', text: 'A farm, a farm! Grandpa had a farm!', emotion: 'happy' },
+      { who: 'pip', text: 'And on his farm he had a sheep, E-I-E-I-O!', emotion: 'happy' },
+      { who: 'pip', text: "A sheep, a sheep! It's a sheep! Baa, baa!", emotion: 'happy' },
+      { who: 'pip', text: 'With a baa, baa here and a baa, baa there!', emotion: 'happy' },
+      { who: 'pip', text: 'A farm, a farm! Grandpa had a farm!', emotion: 'happy' },
+      { who: 'pip', text: 'And on his farm he had a duck, E-I-E-I-O!', emotion: 'happy' },
+      { who: 'pip', text: "A duck, a duck! It's a duck! Quack, quack!", emotion: 'happy' },
+      { who: 'pip', text: 'With a quack, quack here and a quack, quack there!', emotion: 'happy' },
+      { who: 'pip', text: 'A farm, a farm! Grandpa had a farm!', emotion: 'happy' },
+    ],
   },
 
   /* 8-11 Retell and check */
@@ -12303,18 +12333,6 @@ export const LESSON_U7L6_SCENES: Scene[] = [
 
   /* 1-3 Hook */
   {
-    id: 'u7l6-song', kind: 'song', bg: bgU7L6Night, title: '\u{1F3B5} What Animal is This? \u{1F3B5}', teacher: 'Sing and answer: the child shouts the animal before the song does!',
-    durationSeconds: 20, bigWord: 'Animal', songUrl: `${A}/audio/what-animal-song-u7l4.mp3?v=1`,
-    lineDurationsMs: [4640, 4000, 4780, 6642],
-    songPrompt: 'Playful bouncy kids question-and-answer song',
-    lyrics: [
-      { who: 'pip', text: "What animal is this? Moo, moo! It's a cow!", emotion: 'happy' },
-      { who: 'pip', text: "What animal is this? Woof, woof! It's a dog!", emotion: 'happy' },
-      { who: 'pip', text: "What animal is this? Quack, quack! It's a duck!", emotion: 'happy' },
-      { who: 'pip', text: 'Listen, look and say it! Yes!', emotion: 'happy' },
-    ],
-  },
-  {
     // Remember? (owner, 2026-10-07): a quick warm-up of Unit 7 · Lesson 5 · Grandpa's Farm (the animals behind the barn doors).
     id: 'u7l6-recall-warmup', kind: 'recall-warmup', bg: bgU7L6Night, who: 'pip', mode: 'click',
     fromLabel: "Lesson 5 · Grandpa's Farm",
@@ -12373,6 +12391,19 @@ export const LESSON_U7L6_SCENES: Scene[] = [
       { word: 'bird', img: itemBird, sound: 'Tweet!', x: 90, y: 30, size: 6 },
     ],
     order: [0, 5, 2, 7, 3, 4],
+  },
+  /* The lesson song after the words and the first game (owner, 2026-10-10). */
+  {
+    id: 'u7l6-song', kind: 'song', bg: bgU7L6Night, title: '\u{1F3B5} What Animal is This? \u{1F3B5}', teacher: 'Sing and answer: the child shouts the animal before the song does!',
+    durationSeconds: 20, bigWord: 'Animal', songUrl: `${A}/audio/what-animal-song-u7l4.mp3?v=1`,
+    lineDurationsMs: [4640, 4000, 4780, 6642],
+    songPrompt: 'Playful bouncy kids question-and-answer song',
+    lyrics: [
+      { who: 'pip', text: "What animal is this? Moo, moo! It's a cow!", emotion: 'happy' },
+      { who: 'pip', text: "What animal is this? Woof, woof! It's a dog!", emotion: 'happy' },
+      { who: 'pip', text: "What animal is this? Quack, quack! It's a duck!", emotion: 'happy' },
+      { who: 'pip', text: 'Listen, look and say it! Yes!', emotion: 'happy' },
+    ],
   },
 
   /* 7-9 Review games */
@@ -12495,18 +12526,6 @@ export const LESSON_U8L1_SCENES: Scene[] = [
 
   /* 1-3 Hook */
   {
-    id: 'u8l1-song', kind: 'song', bg: bgU8L1Picnic, title: '\u{1F3B5} Apple, Banana, Milk! \u{1F3B5}', teacher: 'Sing and act: crunch the apple, peel the banana, drink the milk!',
-    durationSeconds: 20, bigWord: 'Food', songUrl: `${A}/audio/apple-banana-milk-song-u8l1.mp3?v=1`,
-    lineDurationsMs: [3820, 4720, 4100, 7422],
-    songPrompt: 'Cheerful bouncy kids picnic song',
-    lyrics: [
-      { who: 'pip', text: 'An apple, an apple! Crunch, crunch, crunch!', emotion: 'happy' },
-      { who: 'pip', text: 'A banana, a banana! Yum, yum, yum!', emotion: 'happy' },
-      { who: 'pip', text: 'Milk, milk! Gulp, gulp, gulp!', emotion: 'happy' },
-      { who: 'pip', text: 'Apple, banana, milk! I like my lunch!', emotion: 'happy' },
-    ],
-  },
-  {
     // Remember? (owner, 2026-10-07): a quick warm-up of Unit 7 · Lesson 6 · Animal Sounds Game (clear outlines → shadows).
     id: 'u8l1-recall-warmup', kind: 'recall-warmup', bg: bgU8L1PicnicEmpty, who: 'pip', mode: 'shadow',
     fromLabel: 'Unit 7 · Lesson 6 · Animal Sounds Game',
@@ -12564,6 +12583,19 @@ export const LESSON_U8L1_SCENES: Scene[] = [
       { target: 0, line: 'One more apple, please!', reply: 'Thank you! I like apples!' },
     ],
     doneLine: 'Yum! Apple, banana, milk! My tummy is happy!',
+  },
+  /* The lesson song after the words and the first game (owner, 2026-10-10). */
+  {
+    id: 'u8l1-song', kind: 'song', bg: bgU8L1Picnic, title: '\u{1F3B5} Apple, Banana, Milk! \u{1F3B5}', teacher: 'Sing and act: crunch the apple, peel the banana, drink the milk!',
+    durationSeconds: 20, bigWord: 'Food', songUrl: `${A}/audio/apple-banana-milk-song-u8l1.mp3?v=1`,
+    lineDurationsMs: [3820, 4720, 4100, 7422],
+    songPrompt: 'Cheerful bouncy kids picnic song',
+    lyrics: [
+      { who: 'pip', text: 'An apple, an apple! Crunch, crunch, crunch!', emotion: 'happy' },
+      { who: 'pip', text: 'A banana, a banana! Yum, yum, yum!', emotion: 'happy' },
+      { who: 'pip', text: 'Milk, milk! Gulp, gulp, gulp!', emotion: 'happy' },
+      { who: 'pip', text: 'Apple, banana, milk! I like my lunch!', emotion: 'happy' },
+    ],
   },
 
   /* 7-9 More games */
@@ -12692,18 +12724,6 @@ export const LESSON_U8L2_SCENES: Scene[] = [
 
   /* 1-3 Hook */
   {
-    id: 'u8l2-song', kind: 'song', bg: bgU8L2Cafe, title: '\u{1F3B5} Bread, Water, Juice! \u{1F3B5}', teacher: 'Sing and act: hold your bread, drink your water, sip your juice — and say thank you!',
-    durationSeconds: 20, bigWord: 'Please', songUrl: `${A}/audio/bread-water-juice-song-u8l2.mp3?v=1`,
-    lineDurationsMs: [3840, 4540, 4780, 6902],
-    songPrompt: 'Cheerful bouncy kids café song',
-    lyrics: [
-      { who: 'pip', text: 'Bread, bread! Bread, please!', emotion: 'happy' },
-      { who: 'pip', text: 'Water, water! Water, please!', emotion: 'happy' },
-      { who: 'pip', text: 'Juice, juice! Orange juice, please!', emotion: 'happy' },
-      { who: 'pip', text: 'Bread and juice! Thank you! Yum!', emotion: 'happy' },
-    ],
-  },
-  {
     // Remember? (owner, 2026-10-07): a quick warm-up of Unit 8 · Lesson 1 · Apple, Banana, Milk! (the picnic food).
     id: 'u8l2-recall-warmup', kind: 'recall-warmup', bg: bgU8L2CafeEmpty, who: 'pip', mode: 'click',
     fromLabel: 'Lesson 1 · Apple, Banana, Milk!',
@@ -12760,6 +12780,19 @@ export const LESSON_U8L2_SCENES: Scene[] = [
       { customer: 'willow', order: [0, 2], line: 'Bread and juice, please!', reply: 'Thank you! Yum, yum!' },
     ],
     doneLine: 'Great job, waiter! Everybody is happy!',
+  },
+  /* The lesson song after the words and the first game (owner, 2026-10-10). */
+  {
+    id: 'u8l2-song', kind: 'song', bg: bgU8L2Cafe, title: '\u{1F3B5} Bread, Water, Juice! \u{1F3B5}', teacher: 'Sing and act: hold your bread, drink your water, sip your juice — and say thank you!',
+    durationSeconds: 20, bigWord: 'Please', songUrl: `${A}/audio/bread-water-juice-song-u8l2.mp3?v=1`,
+    lineDurationsMs: [3840, 4540, 4780, 6902],
+    songPrompt: 'Cheerful bouncy kids café song',
+    lyrics: [
+      { who: 'pip', text: 'Bread, bread! Bread, please!', emotion: 'happy' },
+      { who: 'pip', text: 'Water, water! Water, please!', emotion: 'happy' },
+      { who: 'pip', text: 'Juice, juice! Orange juice, please!', emotion: 'happy' },
+      { who: 'pip', text: 'Bread and juice! Thank you! Yum!', emotion: 'happy' },
+    ],
   },
 
   /* 7-9 More games */
