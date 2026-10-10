@@ -157,17 +157,67 @@ export const EPISODES: Record<EpisodeType, EpisodeMeta> = {
   },
 };
 
-/** Fixed run of show. Core segments are never skipped; flex segments are the teacher's call. */
+/**
+ * Fixed run of show. Core segments are never skipped; flex segments are the teacher's call.
+ * `mustHave` = what a lesson plan must contain in that part for the lesson to be effective (research-based, 2026-10-10:
+ * docs/academy-effective-lesson-plan.md; evidence logs docs/research/academy-fast-progress-evidence-A.md and -B.md).
+ * Each line is checked by lessonBlueprint.test.ts and by the academy-quality-gate skill.
+ */
 export const RUN_OF_SHOW = [
-  { name: 'Check-in', minutes: 5, core: false, technique: 'low-anxiety spontaneous speech; reads the energy dial' },
-  { name: 'Remember?', minutes: 7, core: true, technique: 'retrieval practice + spaced review, production first, feedback' },
-  { name: 'The Drop', minutes: 10, core: true, technique: 'comprehensible input; interest and surprise; student picks a skin' },
-  { name: 'Notice & Build', minutes: 10, core: true, technique: 'noticing then a short explicit rule check; deliberate vocabulary' },
-  { name: 'Energiser', minutes: 4, core: false, technique: 'attention reset; zero stakes' },
-  { name: 'Mission', minutes: 12, core: true, technique: 'pushed output + interaction; planning time; Take 1, feedback, Take 2' },
-  { name: 'Release', minutes: 7, core: true, technique: 'generation and ownership; private first, then share' },
-  { name: 'Wrap', minutes: 5, core: true, technique: 'metacognition: can-do ticks, Best Line, homework, next clue' },
+  {
+    name: 'Check-in', minutes: 5, core: false,
+    technique: 'low-anxiety spontaneous speech; energy choice; the day\'s mission and criteria',
+    mustHave: ['the student picks how they feel with pictures (never emoji), no typing needed', '2-3 quick questions the student can answer by choosing a picture or saying one short sentence', 'today\'s mission and its 3-5 success criteria are shown'],
+  },
+  {
+    name: 'Remember?', minutes: 7, core: true,
+    technique: 'retrieval practice + spaced review, errors first, production first, feedback on every item',
+    mustHave: ['starts with the student\'s OWN error list from the last lesson (Mistake Bank), then the due items', '8-12 items, at least 60 % production, feedback after every item', 'the language of the last lesson is shown again before it is asked', 'each item\'s result is logged with the date (delayed checks at about 7 and 21 days)'],
+  },
+  {
+    name: 'The Drop', minutes: 10, core: true,
+    technique: 'comprehensible input with MODELLING: meaning first, then the language in use',
+    mustHave: ['every new word is met first on its own page: a moving picture, its meaning, an example and a clue, BEFORE any game uses it', 'the cast MODEL the target language in use, line by line, with the pattern card (the frame stays, the part that changes is coloured), BEFORE the student produces it', 'nothing is asked that was not first shown or taught', 'a quick understanding check, and a student choice (skin)'],
+  },
+  {
+    name: 'Notice & Build', minutes: 10, core: true,
+    technique: 'controlled practice with immediate feedback; noticing then a short explicit rule',
+    mustHave: ['each game trains one named success criterion; no screen without a criterion', 'the rule, if any, is 3 lines or fewer and comes after examples', 'beginners (A1-A2) can choose answers by picture, not only by reading; the meaning cue fades in later retrieval', 'no two neighbouring games of the same kind'],
+  },
+  {
+    name: 'Energiser', minutes: 4, core: false,
+    technique: 'attention reset; zero stakes',
+    mustHave: ['a quick game with no ranking and no timer', 'it still uses the target language'],
+  },
+  {
+    name: 'Mission', minutes: 12, core: true,
+    technique: 'pushed output + interaction: dial, Take 1, specific feedback, Take 2 in the same lesson',
+    mustHave: ['the student chooses the help: Chill, Normal or Push', 'Take 1, then specific feedback (prompt, clue, direct fix; a direct recast at A1) also shown on screen, then Take 2 in the same lesson', 'the teacher logs up to 3 recurring errors', 'private rehearsal and type-instead-of-speak stay available'],
+  },
+  {
+    name: 'Release', minutes: 7, core: true,
+    technique: 'generation and ownership; model hidden; private first; the delayed-evidence sample',
+    mustHave: ['the exit task is done with the model hidden (shown only on "Show me", which is counted)', 'private first, then saved to the portfolio as the evidence sample of this lesson', 'uses language from all earlier lessons of the unit, not only this one'],
+  },
+  {
+    name: 'Wrap', minutes: 5, core: true,
+    technique: 'metacognition and hand-off: can-do ticks, error log, Daily 10, next clue',
+    mustHave: ['can-do ticks tied to the success criteria (yes, almost, not yet)', 'the teacher\'s error log (up to 3 recurring errors) becomes the start of the next lesson\'s Remember?', 'the Daily 10 is assigned for calendar days, and the next clue is shown'],
+  },
 ] as const;
+
+/**
+ * Recommended rhythm (research-based proposal 2026-10-10; frequency and structure are the strongest levers we control).
+ * A guideline for planning and sales copy, never a promise of a level by a date.
+ */
+export const RECOMMENDED_RHYTHM = {
+  lessonsPerWeek: 2,
+  minimumLessonsPerWeek: 1,
+  fastTrackLessonsPerWeek: 3,
+  daily10DaysPerWeek: 5,
+  /** Cambridge's guide: about 200 guided hours per CEFR level, cumulative from zero (A2 about 180-200 h, B1 about 350-400 h); independent study not counted */
+  guidedHoursPerLevelGuide: 200,
+} as const;
 
 /** Supports fade by level and the student sees them fade (Training-Wheels meter). */
 export const LEVEL_SUPPORTS: Record<AcademyLevel, { frames: string; l1Hint: string; audioSpeed: string; teacherTalkMax: number; speakingCeiling: string }> = {
@@ -238,7 +288,7 @@ export interface AcademyLessonBlueprint {
   recapFromLessonId: string | null;
   /** earlier Seasons whose language returns in Remember? */
   recycleFrom: string[];
-  runOfShow: { name: string; minutes: number; core: boolean; technique: string; job: string }[];
+  runOfShow: { name: string; minutes: number; core: boolean; technique: string; job: string; /** what the plan must contain in this part (see RUN_OF_SHOW) */ mustHave: readonly string[] }[];
   mission: { job: string; dial: ['chill', 'normal', 'push']; planningSeconds: number; take2: boolean };
   release: { job: string; privateFirst: true; seasonRelease?: string };
   clue: { no: number; of: 8; unlockedBy: string };

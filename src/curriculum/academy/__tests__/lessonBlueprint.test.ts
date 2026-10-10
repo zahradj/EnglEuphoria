@@ -1,6 +1,6 @@
 // Deploy gate for the Academy LESSON blueprints (one per 60-minute Live Session). Fix the data, never the check.
 import { describe, expect, it } from 'vitest';
-import { ACADEMY_CAST_NAMES, ACADEMY_LESSON_BLUEPRINTS, ACADEMY_SEASONS, MAX_ITEMS_PER_SESSION, allocateItems, EPISODES, RUN_OF_SHOW } from '..';
+import { ACADEMY_CAST_NAMES, ACADEMY_LESSON_BLUEPRINTS, ACADEMY_SEASONS, MAX_ITEMS_PER_SESSION, allocateItems, EPISODES, RECOMMENDED_RHYTHM, RUN_OF_SHOW } from '..';
 
 describe('Academy lesson blueprints', () => {
   it('has one blueprint per session: 560, unique ids, correct order', () => {
@@ -21,6 +21,27 @@ describe('Academy lesson blueprints', () => {
       expect(bps[6].structures).toHaveLength(0);
       expect(bps[7].structures).toHaveLength(0);
     }
+  });
+
+  it('the run of show carries the effective-lesson rules: modelling in The Drop, errors first in Remember?, evidence in Release, error-log hand-off in Wrap', () => {
+    const must = (name: string) => RUN_OF_SHOW.find((s) => s.name === name)!.mustHave.join(' | ').toLowerCase();
+    for (const s of RUN_OF_SHOW) expect(s.mustHave.length, s.name).toBeGreaterThanOrEqual(2);
+    expect(must('Remember?')).toMatch(/own error list/);
+    expect(must('Remember?')).toMatch(/at least 60 % production/);
+    expect(must('The Drop')).toMatch(/model the target language/);
+    expect(must('The Drop')).toMatch(/before any game uses it/);
+    expect(must('Notice & Build')).toMatch(/choose answers by picture/);
+    expect(must('Mission')).toMatch(/take 2 in the same lesson/);
+    expect(must('Release')).toMatch(/model hidden|model is hidden/);
+    expect(must('Wrap')).toMatch(/error log/);
+    expect(JSON.stringify(RUN_OF_SHOW)).not.toMatch(/[\u{1F300}-\u{1FAFF}]/u); // pictures, never emoji (owner rule 2026-10-10)
+    for (const b of ACADEMY_LESSON_BLUEPRINTS) b.runOfShow.forEach((s) => expect(s.mustHave.length).toBeGreaterThanOrEqual(2));
+  });
+
+  it('recommends the 2 + Daily 10 rhythm as a guideline', () => {
+    expect(RECOMMENDED_RHYTHM.lessonsPerWeek).toBe(2);
+    expect(RECOMMENDED_RHYTHM.minimumLessonsPerWeek).toBe(1);
+    expect(RECOMMENDED_RHYTHM.fastTrackLessonsPerWeek).toBe(3);
   });
 
   it('introduces structures only in Pattern Lab (E3) and Side Quest (E6)', () => {

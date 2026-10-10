@@ -17,14 +17,16 @@ Prerequisites: `academy-season-system` (rules), a `SeasonSpec`/`EpisodeSpec` fro
 
 | Min | Segment | Technique (science doc) | Teacher does | Student does |
 |---|---|---|---|---|
-| 0-5 | **Check-in** (flex) | rapport, low-anxiety spontaneous speech | reads energy dial; 3 quick-fire questions from the student's world; adapts plan | picks energy emoji; answers 3 questions |
-| 5-12 | **Remember?** (core) | retrieval + spacing + feedback | shows **Last-Time card**; runs due items production-first | recalls, types/says; sees retention score vs own past |
-| 12-22 | **The Drop** (core) | comprehensible input, interest, surprise | releases the clue/message/clip; pre-teaches nothing the gist needs | picks 1 of 2 skins; reads/listens; gist check |
-| 22-32 | **Notice & Build** (core) | noticing, explicit rule check, deliberate vocab | Socratic prompts; <= 3-line rule after discovery | finds the pattern / meets words; 2 different controlled mechanics |
-| 32-36 | **Energiser** (flex) | attention reset, enjoyment | plays along | quick game; zero stakes |
-| 36-48 | **Mission** (core) | pushed output, interaction, planning, task repetition | sets dial; 60-s planning (opt.); logs errors silently; feedback ladder; Take 2 constraint | Take 1 -> feedback -> Take 2 |
-| 48-55 | **Release** (core) | generation, ownership, portfolio | coaches; never edits for them | records privately, listens back, sends/retries |
-| 55-60 | **Wrap** (core) | metacognition, self-regulation | can-do ticks; "Best Line of the Session"; assigns homework + Daily 10 | rates can-dos; picks next skin; enjoyment emoji |
+| 0-5 | **Check-in** (flex) | rapport, low-anxiety spontaneous speech | shows the mission + criteria; 2-3 quick questions; adapts plan | picks how they feel with pictures (never emoji); answers by picture or one short sentence |
+| 5-12 | **Remember?** (core) | retrieval + spacing + feedback, **errors first** | opens the student's **own error list** from last lesson, then due items; feedback on every item | recalls, types/says (>= 60 % production); last lesson's language is shown again before it is asked |
+| 12-22 | **The Drop** (core) | comprehensible input, **meaning first, then modelling** | releases the clue/message; **teaches every new word on its own page (moving picture, meaning, example, clue) BEFORE any game; the cast MODEL the language with the pattern card BEFORE the student produces it** | meets the words, watches the model, understanding check, picks 1 of 2 skins |
+| 22-32 | **Notice & Build** (core) | noticing, <= 3-line rule after examples, controlled practice with immediate feedback | Socratic prompts; each game trains one named criterion | plays; **beginners choose by picture as well as by words**; no two neighbouring games of the same kind |
+| 32-36 | **Energiser** (flex) | attention reset, enjoyment | plays along | quick game; zero stakes, no ranking, no timer |
+| 36-48 | **Mission** (core) | pushed output, interaction, task repetition | sets the dial (Chill / Normal / Push is the student's choice); logs up to 3 recurring errors; feedback ladder (prompt, clue, direct fix; direct recast at A1; shown on screen too); Take 2 in the same lesson | Take 1 -> feedback -> Take 2 |
+| 48-55 | **Release** (core) | generation, ownership, portfolio, **delayed-evidence sample** | coaches; never edits for them; **model hidden** (shown only on "Show me", counted) | records privately, listens back, saves it as the lesson's evidence |
+| 55-60 | **Wrap** (core) | metacognition, hand-off | can-do ticks tied to the criteria; **error log (up to 3) -> next Remember?**; assigns the Daily 10 for calendar days; shows the next clue | rates can-dos (yes / almost / not yet) honestly; picks next skin |
+
+Source of truth in code: `RUN_OF_SHOW[].mustHave` in `src/curriculum/academy/lessonBlueprint.ts` (tested). Reasons and evidence: `docs/academy-effective-lesson-plan.md`. Recommended rhythm: 2 lessons + Daily 10 on 5 days a week (a guideline, not a promise).
 
 Core 51 min is never skipped (Check-in 5 and Energiser 4 are the flex). If the energy dial is low: swap Mission for the **Chill track** (same language, lower-pressure game).
 
