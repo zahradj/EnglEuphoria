@@ -228,7 +228,10 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
   const [now, setNow] = useState(() => Date.now());
   const [studentFeedback, setStudentFeedback] = useState<boolean | null>(null);
   const [resolvedName, setResolvedName] = useState<string | null>(studentName ?? null);
-  const [done, setDone] = useState<null | { lines: [string, string][] }>(null);
+  const [done, setDone] = useState<null | { lines: [string, string][]; title?: string }>(null);
+  // "A technical problem stopped the lesson": no report is written, only the incident (see handleTechProblem).
+  const [techOpen, setTechOpen] = useState(false);
+  const [techSide, setTechSide] = useState<'teacher' | 'student' | 'both' | null>(null);
   // Looked up from the booking itself so the report works the same from the
   // classroom and from the dashboard list (which doesn't pass isTrial).
   const [bookingMeta, setBookingMeta] = useState<{ isTrial: boolean; inviteEmail: string | null; language: string | null }>({ isTrial: false, inviteEmail: null, language: null });
@@ -599,6 +602,42 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
     }
   };
 
+  // A lesson that couldn't happen because of a technical problem needs no feedback report: record who
+  // had the problem (the same incident report the verdict reads) and leave. The lesson then drops out of
+  // the teacher's "No Feedback" list. A confirmed teacher-side problem is refunded to the student by the
+  // incident verdict; the student keeps their place to book a new lesson.
+  const handleTechProblem = async () => {
+    if (!teacherId || !lessonId || !techSide) return;
+    setSubmitting(true);
+    try {
+      const flags: IncidentFlag[] = techSide === 'teacher' ? ['teacher_tech_issue']
+        : techSide === 'student' ? ['student_tech_issue'] : ['teacher_tech_issue', 'student_tech_issue'];
+      const { error } = await supabase.from('lesson_incident_reports').upsert({
+        room_id: lessonId,
+        reporter_id: teacherId,
+        reporter_role: 'teacher',
+        outcome: 'not_completed',
+        flags,
+        notes: 'Technical problem stopped the lesson — no report needed',
+      }, { onConflict: 'room_id,reporter_id' });
+      if (error) throw error;
+      supabase.functions.invoke('classroom-incident-verdict', { body: { room_id: lessonId } })
+        .catch((e) => console.warn('verdict invoke failed', e));
+      const name = resolvedName || 'The student';
+      setDone({
+        title: 'Technical problem noted',
+        lines: [
+          ['🛠', 'No feedback report is needed for this lesson'],
+          ['📅', `${name} can book a new lesson${isTrialLesson ? ' — the free trial is still available' : ''}`],
+        ],
+      });
+    } catch (err) {
+      toast({ title: 'Could not save', description: (err as { message?: string })?.message ?? 'Please try again.', variant: 'destructive' });
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   const fillLater = () => {
     toast({ title: 'Saved as a draft', description: 'Your answers will be here when you come back (within 24 h to be paid).' });
     onOpenChange(false);
@@ -671,7 +710,7 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
         {done ? (
           <div className="grid justify-items-center gap-4 px-6 py-8 text-center">
             <div className="text-5xl">🎉</div>
-            <h3 className="text-xl font-extrabold">Report sent</h3>
+            <h3 className="text-xl font-extrabold">{done.title ?? 'Report sent'}</h3>
             <div className="grid w-full max-w-md gap-2 text-left">
               {done.lines.map(([icon, text], i) => (
                 <div key={i} className="flex items-center gap-3 rounded-xl bg-muted px-3 py-2.5 text-sm"><span>{icon}</span><span>{text}</span></div>
@@ -684,6 +723,29 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
             <div className="grid gap-6 px-6 py-5">
               {step === 1 && (
                 <>
+                  <section className="grid gap-2 rounded-2xl border-2 border-dashed border-border p-3">
+                    <button type="button" onClick={() => setTechOpen((v) => !v)} aria-expanded={techOpen}
+                      className="flex items-center justify-between gap-2 text-left text-sm font-extrabold">
+                      <span>🛠 A technical problem stopped the lesson?</span>
+                      <span className="text-xs font-bold text-muted-foreground">{techOpen ? 'Close' : 'No report needed'}</span>
+                    </button>
+                    {techOpen && (
+                      <div className="grid gap-2">
+                        <p className="text-xs text-muted-foreground">Tell us whose side it was. You won’t need to write a report, and {resolvedName || 'the student'} can book a new lesson.</p>
+                        <div className="flex flex-wrap gap-2">
+                          <Chip tone="issue" on={techSide === 'teacher'} onClick={() => setTechSide('teacher')}>My side</Chip>
+                          <Chip tone="issue" on={techSide === 'student'} onClick={() => setTechSide('student')}>{resolvedName ? `${resolvedName}’s side` : 'Student’s side'}</Chip>
+                          <Chip tone="issue" on={techSide === 'both'} onClick={() => setTechSide('both')}>Both sides</Chip>
+                        </div>
+                        <button type="button" onClick={handleTechProblem} disabled={!techSide || submitting || !lessonId}
+                          className={`justify-self-start inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-extrabold disabled:opacity-50 ${theme.buttonPrimary}`}>
+                          {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
+                          Save — no report needed
+                        </button>
+                      </div>
+                    )}
+                  </section>
+
                   {(classSummary || studentFeedback !== null) && (
                     <div className="grid gap-2">
                       <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground"><span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />Filled in from the classroom</div>

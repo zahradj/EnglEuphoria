@@ -581,7 +581,8 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
     // the mandatory core completed — there's no meaningful session to wrap up,
     // and asking the teacher for feedback on a partial class is noise. The
     // summary page still opens (handled below after media teardown).
-    const skipWrapUp = lessonHasStarted && timePolicy.wouldBeLeftEarly;
+    // A trial lesson always gets its report (level, goal, learning plan), even if it ended early.
+    const skipWrapUp = lessonHasStarted && timePolicy.wouldBeLeftEarly && !isTrial;
     if (!skipWrapUp) setWrapUpOpen(true);
     // Tear down media + WebRTC immediately for the teacher.
     try { await rtcDisconnect(); } catch (e) { /* noop */ }
