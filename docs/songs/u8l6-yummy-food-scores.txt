@@ -1,0 +1,15 @@
+
+=== docs/songs/u8l6-yummy-food-take1.mp3  length=20.1s  score=0.95  missing=1  extra=1
+heard: apple banana milk yummy red water juice please pizza cake and ice cream what do you like i like food
+line starts (s): [np.float64(0.0), np.float64(6.0), np.float64(10.6), np.float64(13.0)]
+lineDurationsMs: [6020, 4600, 2400, 7042]
+
+=== docs/songs/u8l6-yummy-food-take2.mp3  length=20.1s  score=1.00  missing=0  extra=0
+heard: apple banana milk yummy bread water juice please pizza cake and ice cream what do you like i like food
+line starts (s): [np.float64(0.0), np.float64(4.2), np.float64(9.0), np.float64(12.8)]
+lineDurationsMs: [4240, 4760, 3840, 7222]
+
+=== docs/songs/u8l6-yummy-food-take3.mp3  length=20.1s  score=1.00  missing=0  extra=0
+heard: apple banana milk yummy bread water juice please pizza cake and ice cream what do you like i like food
+line starts (s): [np.float64(0.0), np.float64(4.3), np.float64(9.2), np.float64(13.1)]
+lineDurationsMs: [4280, 4880, 3940, 6962]
