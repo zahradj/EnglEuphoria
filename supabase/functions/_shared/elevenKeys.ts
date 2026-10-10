@@ -28,16 +28,26 @@ export function elevenLabsKeys(): string[] {
   return [...new Set(keys)];
 }
 
-/** fetch() against the ElevenLabs API, moving to the next key on quota/auth errors. */
+/** Accounts with data residency get keys that only work on their regional API host; the global host answers
+ *  "invalid_api_key" for them. So an invalid key is also tried on the regional hosts. */
+const HOSTS = ['api.elevenlabs.io', 'api.us.elevenlabs.io', 'api.eu.residency.elevenlabs.io', 'api.in.residency.elevenlabs.io'];
+
+/** fetch() against the ElevenLabs API, moving to the next key (or regional host) on quota/auth errors. */
 export async function fetchElevenLabs(url: string, init: RequestInit & { headers?: Record<string, string> }): Promise<Response> {
   const keys = elevenLabsKeys();
   let last: Response | null = null;
-  for (const key of keys) {
-    const res = await fetch(url, { ...init, headers: { ...(init.headers ?? {}), 'xi-api-key': key } });
-    if (res.status !== 401 && res.status !== 402 && res.status !== 429) return res;
-    const body = await res.clone().text();
-    if (!/quota|credits|unauthori|invalid_api_key|payment/i.test(body)) return res;
-    last = res;
+  for (const [k, key] of keys.entries()) {
+    for (const host of HOSTS) {
+      const res = await fetch(url.replace('api.elevenlabs.io', host), { ...init, headers: { ...(init.headers ?? {}), 'xi-api-key': key } });
+      if (res.status !== 401 && res.status !== 402 && res.status !== 429) {
+        if (host !== HOSTS[0] || k > 0) console.log(`ElevenLabs: key #${k + 1} works on ${host}`);
+        return res;
+      }
+      const body = await res.clone().text();
+      if (!/quota|credits|unauthori|invalid_api_key|payment/i.test(body)) return res;
+      last = res;
+      if (!/invalid_api_key/i.test(body)) break; // quota/payment: same on every host, try the next key
+    }
   }
   return last ?? new Response(JSON.stringify({ error: 'ElevenLabs not connected' }), { status: 500 });
 }
