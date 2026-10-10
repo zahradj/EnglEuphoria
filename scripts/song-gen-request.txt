@@ -1,2 +1,2 @@
-# song takes request (2026-10-10: U8L3 party song; the workflow reads the FIRST key only)
-u8l3-pizza-cake-ice-cream
+# song takes request (2026-10-10: U8L4 song; the workflow reads the FIRST key only)
+u8l4-i-like-apples
