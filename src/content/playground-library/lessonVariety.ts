@@ -60,6 +60,7 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
   '4-4': { settings: ['flower garden'], look: 'bright flower garden with big friendly mushrooms; Pip meets Bo, a round sky-blue three-eyed monster; code-drawn monsters on an empty lawn' },
   '4-5': { settings: ['animal park'], look: 'sunny animal park with a blue pond and tall trees; a tiger, a monkey, an elephant and a seal each show one move, Pip copies; a leafy bush to peek through' },
+  '7-6': { settings: ['farm at night'], look: "Grandpa's farm at night under a big full moon and stars: the red barn with its door half open and a lantern glowing, a round haystack, a little red chicken coop, a big tree with a hollow, a blue water trough and a pond with reeds; the farm is dark and the child's torch beam finds the hiding animals, then the farm lights come on" },
   '7-5': { settings: ['barn at sunrise', 'farm gate'], look: "Grandpa's farm on a misty early morning: a big red barn with four white stall doors in a row at sunrise, Grandpa fox in a straw farmer hat and blue overalls with Pip; the doors open one by one (cow, pig, sheep, duck) and the animals gather in the golden yard" },
   '7-4': { settings: ['farm fair'], look: "the fair comes to the farm on a bright day: red-and-white striped tents, bunting flags, hay bales, prize rosettes on the fence and a big yellow-and-white striped hook-a-duck pool in the middle; Pip and the animals of the unit at the fair; a red-curtained show tent for the riddles" },
   '7-3': { settings: ['duck pond and bridge'], look: "the far side of the farm on a golden afternoon: a blue duck pond with lily pads and a little arched wooden bridge, a wooden stable and a red chicken coop, tall reeds and orange evening light; Pip with a brown horse, a white hen and a white farm duck" },
@@ -198,6 +199,19 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'the child must understand the verb AND the body part to find the animal, then PRODUCES the move and the sentence — the screen waits for the child, never a clock',
       'the clue in Whose Is It? is one of the unit\'s body words, so naming the part and the animal go together, and the reveal recalls the story move',
       'wrong picks are named back with that animal\'s own move ("No, the seal claps her hands!"), and the right one glows after two tries',
+    ],
+  },
+  '7-6': {
+    sources: ['Lingokids and Khan Academy Kids hide-and-seek / flashlight hidden-object play', '"Where\'s Spot?" lift-the-flap hide and seek (find the hiding animal)', 'Cambridge (Pre A1 Starters listening: listen and find; animal words)', 'Wordwall-style one-tap review games (claw grabber, stepping stones)'],
+    mechanics: [
+      'flashlight hidden-object → Night Sounds: a sound in the dark ("Moo! Moo! Who\'s there?"), the child says the animal, then moves the torch to find it; one tap shines, the next picks',
+      'shadow matching on the barn wall, stepping stones called by an animal sound, and the Animal Grabber called by a sound',
+      'role swap: the child makes the sound and Pip guesses',
+    ],
+    betterThan: [
+      'sound first, word second, picture last: the child must turn the sound into the word before seeing anything (apps show the picture first)',
+      'a wrong animal answers with its own sound ("That\'s a pig. Oink!"), so every mistake is more listening, never a buzzer',
+      'calm by design: no clock, the farm lights come on at the end and all nine animals of the unit are there',
     ],
   },
   '7-5': {

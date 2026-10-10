@@ -482,6 +482,13 @@ export type Scene =
       targets: number[];
     }
   | {
+      /** "Night Sounds: Who's there?" (Unit 7 Lesson 6): a sound in the dark, the child names the animal, then
+       *  finds it with the torch. `order` = indices of `animals` in round order; x/y/size are % of a 16:9 stage. */
+      id: string; kind: 'night-sounds'; bg: string; teacher: string; who: CharKey;
+      animals: { word: string; img: string; sound: string; x: number; y: number; size: number }[];
+      order: number[];
+    }
+  | {
       /** "The Mystery Bag" — a toy's silhouette peeks out of a bag; tap which
        *  toy it is, then it jumps out in colour ("It's a red ball!") and the
        *  child says it (Unit 3 Lesson 1). */
@@ -12225,4 +12232,194 @@ export const LESSON_U7L5_SCENES: Scene[] = [
     ],
   },
   { id: 'u7l5-finale', kind: 'finale', bg: bgU7L5Yard, who: 'pip', line: 'Grandpa had a farm, E-I-E-I-O! Goodbye, friend!' },
+];
+
+/* =============================================================================
+ * Pre-A1 Unit 7, Lesson 6 — "Animal Sounds Game" (unit review)
+ *
+ * Night on Grandpa's farm: the animals are hiding in the dark and only their sounds give them away.
+ * Every game starts from the SOUND ("Moo! Moo!") and the child answers with the WORD ("It's a cow!"):
+ * the new signature game Night Sounds (sound → word → find it with the torch), animal shadows on the
+ * barn wall, crossing the pond on the stepping stones the animals call from, and the Animal Grabber.
+ * Then the child makes the sounds and Pip guesses. All nine animals of the unit, no new words.
+ * ========================================================================= */
+
+const bgU7L6Night = `${A}/scenes/bg-u7l6-night-farm-wide.png`;
+
+export const LESSON_U7L6_TITLE = 'Animal Sounds Game';
+export const LESSON_U7L6_OBJECTIVE = 'Review the whole unit by its sounds: hear an animal (moo, oink, baa, neigh, cluck, quack, woof, meow, tweet) and say "It\'s a cow!", find it in the dark, match it to its shadow, and make the sounds for Pip to guess — by listening, answering aloud and playing, no reading.';
+
+export const LESSON_U7L6_SCENES: Scene[] = [
+  { id: 'u7l6-title', kind: 'title-card', bg: bgU7L6Night, level: 'Pre-A1', unit: 'Unit 7', lessonLabel: 'Lesson 6', title: 'Animal Sounds Game', subtitle: 'Who is there in the dark?' },
+
+  /* 1-3 Hook */
+  {
+    id: 'u7l6-song', kind: 'song', bg: bgU7L6Night, title: '\u{1F3B5} What Animal is This? \u{1F3B5}', teacher: 'Sing and answer: the child shouts the animal before the song does!',
+    durationSeconds: 20, bigWord: 'Animal', songUrl: `${A}/audio/what-animal-song-u7l4.mp3?v=1`,
+    lineDurationsMs: [4640, 4000, 4780, 6642],
+    songPrompt: 'Playful bouncy kids question-and-answer song',
+    lyrics: [
+      { who: 'pip', text: "What animal is this? Moo, moo! It's a cow!", emotion: 'happy' },
+      { who: 'pip', text: "What animal is this? Woof, woof! It's a dog!", emotion: 'happy' },
+      { who: 'pip', text: "What animal is this? Quack, quack! It's a duck!", emotion: 'happy' },
+      { who: 'pip', text: 'Listen, look and say it! Yes!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 7 · Lesson 5 · Grandpa's Farm (the animals behind the barn doors).
+    id: 'u7l6-recall-warmup', kind: 'recall-warmup', bg: bgU7L6Night, who: 'pip', mode: 'click',
+    fromLabel: "Lesson 5 · Grandpa's Farm",
+    teacher: "Warm-up from last lesson's story: Pip makes a sound from the barn, the child finds the animal and says it.",
+    items: [
+      { word: 'cow', say: 'Moo! Moo! Find the cow!', img: itemCow },
+      { word: 'pig', say: 'Oink! Oink! Find the pig!', img: itemPig },
+      { word: 'sheep', say: 'Baa! Baa! Find the sheep!', img: itemSheep },
+      { word: 'duck', say: 'Quack! Quack! Find the duck!', img: itemFarmDuck },
+    ],
+  },
+  {
+    id: 'u7l6-intro', kind: 'cinematic', bg: bgU7L6Night, hidePipOverlay: true, title: 'Animal Sounds Game', subtitle: 'Night on the farm', narrator: 'pip',
+    script: [
+      { who: 'pip', line: "It's night on Grandpa's farm. Shh!" },
+      { who: 'pip', line: 'Listen! The animals are hiding. Who is there?' },
+    ],
+    cta: "Let's listen!",
+  },
+
+  /* 4-5 Words back, move */
+  {
+    id: 'u7l6-sounds', kind: 'listen-repeat-cards', textSide: 'right', bg: bgU7L6Night, teacher: 'Listen to the sound, then say the animal with Pip. Make the sound too!',
+    cards: [
+      { who: 'pip', sentence: "Moo! It's a cow!", img: itemCow, imgLabel: 'cow' },
+      { who: 'pip', sentence: "Neigh! It's a horse!", img: itemHorse, imgLabel: 'horse' },
+      { who: 'pip', sentence: "Cluck! It's a chicken!", img: itemHen, imgLabel: 'chicken' },
+      { who: 'pip', sentence: "Meow! It's a cat!", img: itemCat, imgLabel: 'cat' },
+    ],
+  },
+  {
+    id: 'u7l6-move', kind: 'tpr-actions', bg: bgU7L6Night, who: 'pip',
+    teacher: 'Stand up! Be the animals with Pip, and make their sounds.',
+    rounds: [
+      { line: 'Tiptoe in the dark! Shh!', emoji: '\u{1F92B}' },
+      { line: 'Gallop like a horse! Neigh!', emoji: '\u{1F40E}' },
+      { line: 'Flap like a duck! Quack!', emoji: '\u{1F986}' },
+      { line: 'Peck like a chicken! Cluck!', emoji: '\u{1F414}' },
+      { line: 'Sleep like a cat! Meow!', emoji: '\u{1F408}' },
+    ],
+  },
+
+  /* 6 Signature game (new): Night Sounds */
+  {
+    id: 'u7l6-night-sounds', kind: 'night-sounds', bg: bgU7L6Night, who: 'pip',
+    teacher: 'Night Sounds! Listen to the sound and let the child say the animal first ("It\'s a cow!"). Then they move the torch and tap the animal (one tap shines, the next tap picks).',
+    animals: [
+      { word: 'cow', img: itemCow, sound: 'Moo!', x: 19, y: 52, size: 12 },
+      { word: 'pig', img: itemPig, sound: 'Oink!', x: 31, y: 82, size: 10 },
+      { word: 'sheep', img: itemSheep, sound: 'Baa!', x: 38, y: 60, size: 10 },
+      { word: 'horse', img: itemHorse, sound: 'Neigh!', x: 60, y: 50, size: 12 },
+      { word: 'chicken', img: itemHen, sound: 'Cluck!', x: 72, y: 60, size: 7 },
+      { word: 'duck', img: itemFarmDuck, sound: 'Quack!', x: 70, y: 86, size: 8 },
+      { word: 'dog', img: itemDog, sound: 'Woof!', x: 87, y: 66, size: 9 },
+      { word: 'cat', img: itemCat, sound: 'Meow!', x: 20, y: 22, size: 6 },
+      { word: 'bird', img: itemBird, sound: 'Tweet!', x: 90, y: 30, size: 6 },
+    ],
+    order: [0, 5, 2, 7, 3, 4],
+  },
+
+  /* 7-9 Review games */
+  {
+    id: 'u7l6-shadows', kind: 'shadow-match', bg: bgU7L6Night, who: 'mia',
+    teacher: 'Shadows on the barn! Drag each animal onto its shadow (or tap it, then the shadow). Say it and make the sound!',
+    items: [
+      { label: 'horse', img: itemHorse, line: "It's a horse! Neigh!" },
+      { label: 'sheep', img: itemSheep, line: "It's a sheep! Baa!" },
+      { label: 'pig', img: itemPig, line: "It's a pig! Oink!" },
+      { label: 'dog', img: itemDog, line: "It's a dog! Woof!" },
+      { label: 'duck', img: itemFarmDuck, line: "It's a duck! Quack!" },
+    ],
+  },
+  {
+    id: 'u7l6-stones', kind: 'stepping-stones', bg: bgU2L6River, bgVideo: loopU2L6('river'), riverPainted: true, stoneImg: itemStone, who: 'pip', walker: 'pip',
+    teacher: 'Help Pip cross to the farm! Listen to the sound and tap the animal on the stone. Say it as Pip jumps!',
+    rounds: [
+      { line: 'Moo! Moo! Jump on that animal!', answer: 1, reply: "It's a cow! Hop!", options: [{ label: 'pig', img: itemPig }, { label: 'cow', img: itemCow }, { label: 'duck', img: itemFarmDuck }] },
+      { line: 'Baa! Baa! Jump on that animal!', answer: 2, reply: "It's a sheep! Hop!", options: [{ label: 'horse', img: itemHorse }, { label: 'cat', img: itemCat }, { label: 'sheep', img: itemSheep }] },
+      { line: 'Woof! Woof! Jump on that animal!', answer: 0, reply: "It's a dog! Hop!", options: [{ label: 'dog', img: itemDog }, { label: 'chicken', img: itemHen }, { label: 'bird', img: itemBird }] },
+      { line: 'Tweet! Tweet! Jump on that animal!', answer: 1, reply: "It's a bird! Hop!", options: [{ label: 'cow', img: itemCow }, { label: 'bird', img: itemBird }, { label: 'pig', img: itemPig }] },
+    ],
+    goal: { img: itemHorse, label: 'horse', line: 'Pip is over the water! The horse says: Neigh!' },
+  },
+  {
+    id: 'u7l6-claw', kind: 'claw-machine', bg: bgU3L6Claw, who: 'pip', clawImg: itemClaw,
+    teacher: 'Animal Grabber! Listen to the sound. Tap the animal (or ◀ ▶) to move the claw, then press the big red button. Say the animal!',
+    glass: U3L6_GLASS,
+    toys: [
+      { label: 'pig', img: itemPig, x: 12, size: 9 },
+      { label: 'chicken', img: itemHen, x: 31, size: 8 },
+      { label: 'cat', img: itemCat, x: 50, size: 8 },
+      { label: 'cow', img: itemCow, x: 69, size: 10 },
+      { label: 'duck', img: itemFarmDuck, x: 88, size: 8 },
+    ],
+    rounds: [
+      { target: 1, line: 'Cluck! Cluck! Get that animal!', reply: "It's a chicken! You got the chicken!" },
+      { target: 0, line: 'Oink! Oink! Get that animal!', reply: "It's a pig! You got the pig!" },
+      { target: 2, line: 'Meow! Meow! Get that animal!', reply: "It's a cat! You got the cat!" },
+    ],
+  },
+
+  /* 10 Perform: the child makes the sounds, Pip guesses */
+  {
+    id: 'u7l6-your-sounds', kind: 'join-stage', bg: bgU7L6Night, teacher: 'Role swap! The child makes an animal sound and Pip guesses. Any animal is fine!', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Now YOU make a sound. I will guess!', bubble: 'right' },
+      { who: 'student', line: 'Moo! Moo!', bubble: 'right' },
+      { who: 'pip', line: "It's a cow! Again!", bubble: 'right' },
+      { who: 'student', line: 'Quack! Quack!', bubble: 'right' },
+      { who: 'pip', line: "It's a duck! You are a great farmer!", bubble: 'right' },
+    ],
+  },
+
+  /* 11-12 Sticker + Home Mission */
+  {
+    id: 'u7l6-sticker', kind: 'sticker-reward', bg: bgU7L6Night, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'You found every animal in the dark! Here is a cow sticker for you!', sticker: { img: itemCow, label: 'Animal sounds champion' },
+  },
+  {
+    id: 'u7l6-home-mission', kind: 'home-mission', bg: bgU7L6Night, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: play the Animal Sounds Game at home! Make a sound, and your family says the animal!',
+    parentNote: 'Play a guessing game: your child makes an animal sound (moo, oink, baa, neigh, cluck, quack, woof, meow, tweet) and you say "It\'s a cow!". Then swap: you make the sound and your child answers with a whole sentence.',
+    steps: [
+      { emoji: '\u{1F42E}', img: itemCow, say: 'Moo! Moo!' },
+      { emoji: '\u{2753}', say: 'What animal is this?' },
+      { emoji: '\u{1F44F}', say: "It's a cow!" },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u7l6-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU7L6Night, who: 'pip',
+    teacher: 'Extra time: Brain Break! Do each action with Pip.',
+    rounds: [
+      { line: 'Hop like a bird! Tweet!', emoji: '\u{1F426}' },
+      { line: 'Roll like a pig in the mud! Oink!', emoji: '\u{1F437}' },
+      { line: 'Wag your tail like a dog! Woof!', emoji: '\u{1F415}' },
+      { line: 'Shh! The farm is sleeping. Freeze!', emoji: '\u{1F976}', seconds: 3 },
+    ],
+  },
+
+  /* Goodbye */
+  {
+    id: 'u7l6-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u7l6-finale', kind: 'finale', bg: bgU7L6Night, who: 'pip', line: 'You know every animal by its sound! Moo, baa, quack! Good night, farm! Goodbye, friend!' },
 ];
