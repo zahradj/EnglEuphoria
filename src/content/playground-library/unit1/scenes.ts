@@ -509,13 +509,16 @@ export type Scene =
       doneLine: string;
     }
   | {
-      /** Put It On! (U9L2 signature): Pip asks for one piece at a time ("Put on my green hat!"); the child taps it on
-       *  the bench and it lands where it is worn. `doll` = Pip's picture (centre x/y % of the stage, h = height in vh);
-       *  `at` = centre x/y and width of the piece in % of that picture; `layer` = drawing order (shoes over socks). */
+      /** Put It On! (U9L2 signature): the friends get ready for the snow. One friend at a time asks for a piece
+       *  ("Mia: Put on my red socks, please!"); the child taps it on the bench and it lands where it is worn, on that
+       *  friend. `layer` = drawing order (shoes over socks, hat on top). */
       id: string; kind: 'put-on'; bg: string; teacher: string; who: CharKey;
-      doll: { img: string; x: number; y: number; h: number };
-      clothes: { word: string; img: string; at: { x: number; y: number; w: number }; layer?: number }[];
-      rounds: { item: number; line: string; reply: string }[];
+      /** The friends to dress (x/y = centre on the stage in %, h = height in vh); `head`/`feet` = where a piece
+       *  goes, in % of the friend's picture (w = the piece's width). */
+      dolls: { who: CharKey; img: string; x: number; y: number; h: number; head: { x: number; y: number; w: number }; feet: { x: number; y: number; w: number } }[];
+      clothes: { word: string; img: string; on: 'head' | 'feet'; layer?: number }[];
+      /** One request per round: friend `doll` asks for `clothes[item]` in their own voice. */
+      rounds: { doll: number; item: number; line: string; reply: string }[];
       doneLine: string;
     }
   | {
@@ -13918,8 +13921,8 @@ export const LESSON_U9L1_SCENES: Scene[] = [
  * Pre-A1 Unit 9, Lesson 2 — "Shoes, Hat, Socks!" (Clothes)
  *
  * From the sunny laundry day (Lesson 1) to a snowy winter morning in Pip's front hall: a glass door with
- * snow outside, coat hooks, a bench. Pip wants to play in the snow; the child dresses him in the new
- * Put It On! game (hat on his head, socks and then shoes on his feet). Then head-or-feet catch and sort,
+ * snow outside, coat hooks, a bench. Pip, Mia and Leo want to play in the snow; the child dresses them in the
+ * new Put It On! game (each friend asks for a hat, socks or shoes). Then head-or-feet catch and sort,
  * shoes in a line from big to small, and the first sounds H (hat) and S (socks).
  * ========================================================================= */
 
@@ -13928,7 +13931,6 @@ const bgU9L2HallEmpty = `${A}/scenes/bg-u9l2-hall-empty-wide.png`;
 const itemHatGreen = `${A}/items/item-hat-green.png`;
 const itemSocksRed = `${A}/items/item-socks-red.png`;
 const itemShoesBlue = `${A}/items/item-shoes-blue.png`;
-const itemPipStand = `${A}/items/item-pip-stand.png`;
 
 export const LESSON_U9L2_TITLE = 'Shoes, Hat, Socks!';
 export const LESSON_U9L2_OBJECTIVE = 'Name shoes, hat and socks with their colours, follow "Put on your hat!", say where they go (on your head, on your feet), compare big and small shoes, and hear the first sounds H (hat) and S (socks), by listening, moving and playing, no reading.';
@@ -13950,7 +13952,9 @@ export const LESSON_U9L2_SCENES: Scene[] = [
     id: 'u9l2-intro', kind: 'cinematic', bg: bgU9L2Hall, hidePipOverlay: true, title: 'Shoes, Hat, Socks!', subtitle: "It's snowing", narrator: 'pip',
     script: [
       { who: 'pip', line: "Look! It's snowing! I want to play outside!" },
+      { who: 'mia', line: 'Pip! Come and play in the snow!' },
       { who: 'pip', line: "Brrr, it's cold. I need my hat, my socks and my shoes!" },
+      { who: 'leo', line: "Me too! Let's get ready!" },
     ],
     cta: "Let's get ready!",
   },
@@ -13978,19 +13982,26 @@ export const LESSON_U9L2_SCENES: Scene[] = [
   /* 6 Signature game (new): Put It On! */
   {
     id: 'u9l2-put-on', kind: 'put-on', bg: bgU9L2HallEmpty, who: 'pip',
-    teacher: 'Put It On! Listen to Pip, then tap the piece on the bench — it goes on Pip. Socks first, then shoes! Say it: "Put on your hat!"',
-    doll: { img: itemPipStand, x: 64, y: 56, h: 66 },
+    teacher: 'Put It On! Listen: WHO asks, and for WHAT? Tap the piece on the bench and it goes on that friend. Then the child says it: "Put on your hat!"',
+    dolls: [
+      { who: 'pip', img: CAST.pip.img, x: 24, y: 46, h: 50, head: { x: 47, y: 24, w: 38 }, feet: { x: 48, y: 85, w: 34 } },
+      { who: 'mia', img: CAST.mia.img, x: 50, y: 47, h: 46, head: { x: 50, y: 25, w: 34 }, feet: { x: 52, y: 90, w: 34 } },
+      { who: 'leo', img: CAST.leo.img, x: 76, y: 44, h: 56, head: { x: 50, y: 13, w: 34 }, feet: { x: 51, y: 92, w: 36 } },
+    ],
     clothes: [
-      { word: 'hat', img: itemHatGreen, at: { x: 50, y: 14, w: 44 }, layer: 2 },
-      { word: 'socks', img: itemSocksRed, at: { x: 50, y: 88, w: 48 }, layer: 0 },
-      { word: 'shoes', img: itemShoesBlue, at: { x: 50, y: 92, w: 54 }, layer: 1 },
+      { word: 'hat', img: itemHatGreen, on: 'head', layer: 2 },
+      { word: 'socks', img: itemSocksRed, on: 'feet', layer: 0 },
+      { word: 'shoes', img: itemShoesBlue, on: 'feet', layer: 1 },
     ],
     rounds: [
-      { item: 0, line: 'Put on my green hat!', reply: 'Yes! My hat is on my head!' },
-      { item: 1, line: 'Now put on my red socks!', reply: 'Yes! My socks are on my feet!' },
-      { item: 2, line: 'And my blue shoes, please!', reply: 'Yes! My shoes are on!' },
+      { doll: 0, item: 0, line: 'Put on my green hat!', reply: 'Yes! My hat is on my head!' },
+      { doll: 1, item: 1, line: 'Put on my red socks, please!', reply: 'Thank you! My socks are on my feet!' },
+      { doll: 2, item: 0, line: 'I want a hat, too! Put on my hat!', reply: 'My hat is on my head! Roar!' },
+      { doll: 1, item: 2, line: 'Now put on my blue shoes!', reply: 'Yes! My shoes are on!' },
+      { doll: 0, item: 1, line: 'Put on my socks, please!', reply: 'My socks are on my feet!' },
+      { doll: 0, item: 2, line: 'And my shoes!', reply: 'Hat, socks, shoes! I am ready!' },
     ],
-    doneLine: "Hat, socks, shoes! Let's play in the snow!",
+    doneLine: "We are ready! Let's play in the snow!",
   },
 
   /* 7 The song — after the words and the first game (owner, 2026-10-10) */
@@ -14001,9 +14012,9 @@ export const LESSON_U9L2_SCENES: Scene[] = [
     songPrompt: 'Cheerful bouncy kids winter clothes song',
     lyrics: [
       { who: 'pip', text: 'Hat, hat! On my head!', emotion: 'happy' },
-      { who: 'pip', text: 'Socks, socks! On my feet!', emotion: 'happy' },
-      { who: 'pip', text: 'Shoes, shoes! On my feet!', emotion: 'happy' },
-      { who: 'pip', text: "Hat, socks, shoes! Let's go play!", emotion: 'happy' },
+      { who: 'mia', text: 'Socks, socks! On my feet!', emotion: 'happy' },
+      { who: 'leo', text: 'Shoes, shoes! On my feet!', emotion: 'happy' },
+      { who: 'bella', text: "Hat, socks, shoes! Let's go play!", emotion: 'happy' },
     ],
   },
 
@@ -14022,23 +14033,23 @@ export const LESSON_U9L2_SCENES: Scene[] = [
   },
   {
     id: 'u9l2-shoe-line', kind: 'size-line', bg: bgU9L2HallEmpty, who: 'pip',
-    teacher: 'Line Up! Put the shoes in a line from the biggest to the smallest. Say "big" and "small"!',
+    teacher: 'Line Up! Put the friends\' shoes in a line from the biggest (Leo) to the smallest (Mia). Say "big" and "small"!',
     members: [
-      { label: "Dad's shoes", img: itemShoesBlue, height: 100, reply: "Dad's shoes! Big shoes!" },
-      { label: "Mom's shoes", img: itemShoesBlue, height: 78, reply: "Mom's shoes!" },
+      { label: "Leo's shoes", img: itemShoesBlue, height: 100, reply: "Leo's shoes! Big shoes!" },
+      { label: "Bella's shoes", img: itemShoesBlue, height: 78, reply: "Bella's shoes!" },
       { label: "Pip's shoes", img: itemShoesBlue, height: 58, reply: "Pip's shoes!" },
-      { label: "Baby's shoes", img: itemShoesBlue, height: 36, reply: "Baby's shoes! Small shoes!" },
+      { label: "Mia's shoes", img: itemShoesBlue, height: 36, reply: "Mia's shoes! Small shoes!" },
     ],
     floorOrder: [2, 0, 3, 1],
     lastLine: 'Which shoes are the smallest?',
     doneLine: 'Big shoes, small shoes! Well done!',
   },
   {
-    id: 'u9l2-pip-asks', kind: 'join-stage', bg: bgU9L2Hall, teacher: 'Pip asks the child. Any colour is fine — answer with the colour and the word.', cast: ['pip'],
+    id: 'u9l2-pip-asks', kind: 'join-stage', bg: bgU9L2Hall, teacher: 'Pip and Mia ask the child. Any colour is fine — answer with the colour and the word.', cast: ['pip', 'mia'],
     turns: [
       { who: 'pip', line: 'Look at my hat! What colour is it?', bubble: 'right' },
       { who: 'student', line: "It's green! A green hat!", bubble: 'right' },
-      { who: 'pip', line: 'What colour are your shoes?', bubble: 'right' },
+      { who: 'mia', line: 'What colour are your shoes?', bubble: 'left' },
       { who: 'student', line: 'My shoes are blue!', bubble: 'right' },
     ],
   },
@@ -14058,7 +14069,7 @@ export const LESSON_U9L2_SCENES: Scene[] = [
   /* 12-13 Sticker + Home Mission */
   {
     id: 'u9l2-sticker', kind: 'sticker-reward', bg: bgU9L2Hall, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
-    line: 'Thank you! Now I can play in the snow! Here is a hat sticker for you!', sticker: { img: itemHatGreen, label: 'Snow helper' },
+    line: 'Thank you! Now we can all play in the snow! Here is a hat sticker for you!', sticker: { img: itemHatGreen, label: 'Snow helper' },
   },
   {
     id: 'u9l2-home-mission', kind: 'home-mission', bg: bgU9L2Hall, who: 'pip',
@@ -14074,8 +14085,8 @@ export const LESSON_U9L2_SCENES: Scene[] = [
 
   /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
   {
-    id: 'u9l2-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU9L2Hall, who: 'pip',
-    teacher: 'Extra time: Brain Break! Do each action with Pip.',
+    id: 'u9l2-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU9L2Hall, who: 'willow',
+    teacher: 'Extra time: Brain Break! Do each action with Willow.',
     rounds: [
       { line: 'Throw a snowball! Whoosh!', emoji: '\u{26C4}' },
       { line: 'Stamp your shoes in the snow!', emoji: '\u{1F45F}' },

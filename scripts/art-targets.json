@@ -1489,37 +1489,5 @@
       "public/welcome-town/sprites/willow-wave.png"
     ],
     "prompt": "A single sticker: Willow the blue bird with a green scarf, HUNGRY: holding an EMPTY yellow bowl in both wings in front of her (the whole bowl visible), looking at it with a hopeful, hungry face, mouth open a little. Cute kawaii cartoon picture-book style exactly like the reference character: same character, same face, same colours and proportions, thick closed dark-brown outline all the way around the body, soft flat colours. Full body, front view, centred, the whole character visible with empty space around it. Plain pure white background, no shadow on the ground, no floor, no text, no other objects."
-  },
-  {
-    "out": "public/lep1/items/item-hat-green.png",
-    "sticker": true,
-    "refs": [
-      "public/lep1/items/item-shirt-red.png"
-    ],
-    "prompt": "One single green knitted winter hat (a beanie) with a fluffy green pompom on top and a folded ribbed brim, drawn as a single isolated sticker object in exactly the same cartoon art style as the reference picture (thick dark outline all the way around, soft flat colours, cute children's picture-book look), front view, centred, the whole object visible with empty space around it, isolated alone on a plain pure white background, no shadow, no floor, no text, nothing else in the picture."
-  },
-  {
-    "out": "public/lep1/items/item-socks-red.png",
-    "sticker": true,
-    "refs": [
-      "public/lep1/items/item-shirt-red.png"
-    ],
-    "prompt": "One pair of bright red children's socks (two socks side by side, the same size, heels pointing the same way), drawn as a single isolated sticker object in exactly the same cartoon art style as the reference picture (thick dark outline all the way around, soft flat colours, cute children's picture-book look), front view, centred, the whole object visible with empty space around it, isolated alone on a plain pure white background, no shadow, no floor, no text, nothing else in the picture."
-  },
-  {
-    "out": "public/lep1/items/item-shoes-blue.png",
-    "sticker": true,
-    "refs": [
-      "public/lep1/items/item-shirt-red.png"
-    ],
-    "prompt": "One pair of blue children's sneakers with white soles and white laces (two shoes side by side, seen from the front at a slight angle), drawn as a single isolated sticker object in exactly the same cartoon art style as the reference picture (thick dark outline all the way around, soft flat colours, cute children's picture-book look), front view, centred, the whole object visible with empty space around it, isolated alone on a plain pure white background, no shadow, no floor, no text, nothing else in the picture."
-  },
-  {
-    "out": "public/lep1/items/item-pip-stand.png",
-    "sticker": true,
-    "refs": [
-      "public/lep1/characters/pip-hello.png"
-    ],
-    "prompt": "A single sticker: Pip the little orange fox exactly like the reference character (same face, same colours, same proportions, same white apron), standing straight and still, FRONT VIEW, both arms down at the sides, both feet flat on the ground side by side, happy smile. Pip wears NO hat, NO socks and NO shoes (bare paws), so the head and the feet are clearly visible. Full body from the ear tips to the paws, centred, empty space around. Thick closed dark outline, soft flat colours. Plain pure white background, no shadow, no floor, no text, no other objects."
   }
 ]

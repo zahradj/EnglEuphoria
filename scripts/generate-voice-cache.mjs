@@ -469,7 +469,7 @@ const UNIT1_EXTRACTORS = {
     [s.who, s.doneLine],
   ],
   // Mirror DuckFeedScene.tsx's duckFeedLines().
-  'put-on': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...(s.clothes ?? []).map((c) => [s.who, `No, not the ${c.word}! Listen again.`]), [s.who, s.doneLine]],
+  'put-on': (s) => { const w = (r) => s.dolls?.[r.doll]?.who ?? s.who; const ask = [...new Set((s.rounds ?? []).map(w))]; return [...(s.rounds ?? []).flatMap((r) => [[w(r), r.line], [w(r), r.reply]]), ...ask.flatMap((a) => (s.clothes ?? []).map((c) => [a, `No, not the ${c.word}! Listen again.`])), [s.who, s.doneLine]]; },
   'washing-line': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...(s.clothes ?? []).map((c) => [s.who, `No, not the ${c.word}! Listen again.`]), [s.who, s.doneLine]],
   'like-chart': (s) => [...(s.rounds ?? []).flatMap((r) => [[r.friend, r.line], [r.friend, r.reply], [r.friend, `No! I like ${s.columns?.[r.column]?.word ?? ''}!`]]), [s.who, s.summaryLine], [s.who, 'What do you like? Tap it!'], ...(s.columns ?? []).map((c) => [s.who, `You like ${c.word}! Yummy!`])],
   'caterpillar-crawl': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...(s.foods ?? []).map((f) => [s.who, `No, that's ${f.word}!`]), [s.who, 'I am full! Now I am a butterfly!']],
