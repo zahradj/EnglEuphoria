@@ -338,5 +338,10 @@
     "path": "public/lep1/audio/shirt-pants-dress-song-u9l1.mp3",
     "bytes": 321037,
     "sha256": "40a7a47013c307e63d8a21c0059ae13919e6ec64ef72e7e49e5f27f7802ae8d3"
+  },
+  "u9l2-shoes-hat-socks": {
+    "path": "public/lep1/audio/shoes-hat-socks-song-u9l2.mp3",
+    "bytes": 321037,
+    "sha256": "c90493db7093424c1bc9ff77300702d0e9a892e6ba178ee610688111dc84fba7"
   }
 }

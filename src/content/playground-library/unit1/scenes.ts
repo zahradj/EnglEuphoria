@@ -509,6 +509,16 @@ export type Scene =
       doneLine: string;
     }
   | {
+      /** Put It On! (U9L2 signature): Pip asks for one piece at a time ("Put on my green hat!"); the child taps it on
+       *  the bench and it lands where it is worn. `doll` = Pip's picture (centre x/y % of the stage, h = height in vh);
+       *  `at` = centre x/y and width of the piece in % of that picture; `layer` = drawing order (shoes over socks). */
+      id: string; kind: 'put-on'; bg: string; teacher: string; who: CharKey;
+      doll: { img: string; x: number; y: number; h: number };
+      clothes: { word: string; img: string; at: { x: number; y: number; w: number }; layer?: number }[];
+      rounds: { item: number; line: string; reply: string }[];
+      doneLine: string;
+    }
+  | {
       /** Washing Line (U9L1 signature): Pip asks for a piece of clothing ("Where is my red shirt?"); the child taps
        *  it in the basket and it is pegged on the line. `rope` = the painted washing line in `bg` (% of the stage:
        *  y of the rope, x0..x1 its ends); `item` = index of `clothes`. */
@@ -13902,4 +13912,190 @@ export const LESSON_U9L1_SCENES: Scene[] = [
     ],
   },
   { id: 'u9l1-finale', kind: 'finale', bg: bgU9L1Laundry, who: 'pip', line: 'Shirt, pants, dress! Thank you for helping! Goodbye, friend!' },
+];
+
+/* =============================================================================
+ * Pre-A1 Unit 9, Lesson 2 — "Shoes, Hat, Socks!" (Clothes)
+ *
+ * From the sunny laundry day (Lesson 1) to a snowy winter morning in Pip's front hall: a glass door with
+ * snow outside, coat hooks, a bench. Pip wants to play in the snow; the child dresses him in the new
+ * Put It On! game (hat on his head, socks and then shoes on his feet). Then head-or-feet catch and sort,
+ * shoes in a line from big to small, and the first sounds H (hat) and S (socks).
+ * ========================================================================= */
+
+const bgU9L2Hall = `${A}/scenes/bg-u9l2-hall-wide.png`;
+const bgU9L2HallEmpty = `${A}/scenes/bg-u9l2-hall-empty-wide.png`;
+const itemHatGreen = `${A}/items/item-hat-green.png`;
+const itemSocksRed = `${A}/items/item-socks-red.png`;
+const itemShoesBlue = `${A}/items/item-shoes-blue.png`;
+const itemPipStand = `${A}/items/item-pip-stand.png`;
+
+export const LESSON_U9L2_TITLE = 'Shoes, Hat, Socks!';
+export const LESSON_U9L2_OBJECTIVE = 'Name shoes, hat and socks with their colours, follow "Put on your hat!", say where they go (on your head, on your feet), compare big and small shoes, and hear the first sounds H (hat) and S (socks), by listening, moving and playing, no reading.';
+
+export const LESSON_U9L2_SCENES: Scene[] = [
+  { id: 'u9l2-title', kind: 'title-card', bg: bgU9L2Hall, level: 'Pre-A1', unit: 'Unit 9', lessonLabel: 'Lesson 2', title: 'Shoes, Hat, Socks!', subtitle: "It's snowing!" },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 9 · Lesson 1 · Shirt, Pants, Dress!
+    id: 'u9l2-recall-warmup', kind: 'recall-warmup', bg: bgU9L2HallEmpty, who: 'pip', mode: 'shadow',
+    fromLabel: 'Lesson 1 · Shirt, Pants, Dress!',
+    teacher: 'Warm-up from last lesson: Pip says a piece of clothing, the child matches its shadow and says it.',
+    items: [
+      { word: 'shirt', say: 'A red shirt!', img: itemShirtRed },
+      { word: 'pants', say: 'Blue pants!', img: itemPantsBlue },
+      { word: 'dress', say: 'A yellow dress!', img: itemDressYellow },
+    ],
+  },
+  {
+    id: 'u9l2-intro', kind: 'cinematic', bg: bgU9L2Hall, hidePipOverlay: true, title: 'Shoes, Hat, Socks!', subtitle: "It's snowing", narrator: 'pip',
+    script: [
+      { who: 'pip', line: "Look! It's snowing! I want to play outside!" },
+      { who: 'pip', line: "Brrr, it's cold. I need my hat, my socks and my shoes!" },
+    ],
+    cta: "Let's get ready!",
+  },
+
+  /* 4-5 The words, move */
+  {
+    id: 'u9l2-words', kind: 'listen-repeat-cards', textSide: 'right', bg: bgU9L2HallEmpty, teacher: 'Listen, then say it with Pip: "A green hat!"',
+    cards: [
+      { who: 'pip', sentence: "It's a hat! A green hat!", img: itemHatGreen, imgLabel: 'hat' },
+      { who: 'pip', sentence: 'Socks! Red socks!', img: itemSocksRed, imgLabel: 'socks' },
+      { who: 'pip', sentence: 'Shoes! Blue shoes!', img: itemShoesBlue, imgLabel: 'shoes' },
+    ],
+  },
+  {
+    id: 'u9l2-move', kind: 'tpr-actions', bg: bgU9L2Hall, who: 'pip',
+    teacher: 'Stand up! Get ready for the snow with Pip.',
+    rounds: [
+      { line: 'Put on your hat! Pat your head!', emoji: '\u{1F9E2}', img: itemHatGreen },
+      { line: 'Put on your socks! Pull, pull!', emoji: '\u{1F9E6}', img: itemSocksRed },
+      { line: 'Put on your shoes! Stamp, stamp!', emoji: '\u{1F45F}', img: itemShoesBlue },
+      { line: 'Brrr! Shiver in the snow!', emoji: '\u{2744}️' },
+    ],
+  },
+
+  /* 6 Signature game (new): Put It On! */
+  {
+    id: 'u9l2-put-on', kind: 'put-on', bg: bgU9L2HallEmpty, who: 'pip',
+    teacher: 'Put It On! Listen to Pip, then tap the piece on the bench — it goes on Pip. Socks first, then shoes! Say it: "Put on your hat!"',
+    doll: { img: itemPipStand, x: 64, y: 56, h: 66 },
+    clothes: [
+      { word: 'hat', img: itemHatGreen, at: { x: 50, y: 14, w: 44 }, layer: 2 },
+      { word: 'socks', img: itemSocksRed, at: { x: 50, y: 88, w: 48 }, layer: 0 },
+      { word: 'shoes', img: itemShoesBlue, at: { x: 50, y: 92, w: 54 }, layer: 1 },
+    ],
+    rounds: [
+      { item: 0, line: 'Put on my green hat!', reply: 'Yes! My hat is on my head!' },
+      { item: 1, line: 'Now put on my red socks!', reply: 'Yes! My socks are on my feet!' },
+      { item: 2, line: 'And my blue shoes, please!', reply: 'Yes! My shoes are on!' },
+    ],
+    doneLine: "Hat, socks, shoes! Let's play in the snow!",
+  },
+
+  /* 7 The song — after the words and the first game (owner, 2026-10-10) */
+  {
+    id: 'u9l2-song', kind: 'song', bg: bgU9L2Hall, title: '\u{1F3B5} Shoes, Hat, Socks! \u{1F3B5}', teacher: 'Sing and act: pat your head for the hat, touch your feet for socks and shoes!',
+    durationSeconds: 20, bigWord: 'Hat', songUrl: `${A}/audio/shoes-hat-socks-song-u9l2.mp3?v=1`,
+    lineDurationsMs: [4160, 4720, 4920, 6262],
+    songPrompt: 'Cheerful bouncy kids winter clothes song',
+    lyrics: [
+      { who: 'pip', text: 'Hat, hat! On my head!', emotion: 'happy' },
+      { who: 'pip', text: 'Socks, socks! On my feet!', emotion: 'happy' },
+      { who: 'pip', text: 'Shoes, shoes! On my feet!', emotion: 'happy' },
+      { who: 'pip', text: "Hat, socks, shoes! Let's go play!", emotion: 'happy' },
+    ],
+  },
+
+  /* 8-10 More games */
+  {
+    id: 'u9l2-head-feet', kind: 'catch-sort', bg: bgU9L2HallEmpty, teacher: 'Catch it! Does it go on your head or on your feet? Say it as you catch it.', goal: 8, seconds: 45,
+    left: { label: 'Head', img: itemHatGreen, emoji: '\u{1F9E2}' },
+    right: { label: 'Feet', img: itemShoesBlue, emoji: '\u{1F463}' },
+    items: [
+      { word: 'hat', img: itemHatGreen, emoji: '\u{1F9E2}', target: 'left' },
+      { word: 'hat', img: itemHat, emoji: '\u{1F3A9}', target: 'left' },
+      { word: 'socks', img: itemSocksRed, emoji: '\u{1F9E6}', target: 'right' },
+      { word: 'shoes', img: itemShoesBlue, emoji: '\u{1F45F}', target: 'right' },
+      { word: 'shoe', img: itemShoe, emoji: '\u{1F45F}', target: 'right' },
+    ],
+  },
+  {
+    id: 'u9l2-shoe-line', kind: 'size-line', bg: bgU9L2HallEmpty, who: 'pip',
+    teacher: 'Line Up! Put the shoes in a line from the biggest to the smallest. Say "big" and "small"!',
+    members: [
+      { label: "Dad's shoes", img: itemShoesBlue, height: 100, reply: "Dad's shoes! Big shoes!" },
+      { label: "Mom's shoes", img: itemShoesBlue, height: 78, reply: "Mom's shoes!" },
+      { label: "Pip's shoes", img: itemShoesBlue, height: 58, reply: "Pip's shoes!" },
+      { label: "Baby's shoes", img: itemShoesBlue, height: 36, reply: "Baby's shoes! Small shoes!" },
+    ],
+    floorOrder: [2, 0, 3, 1],
+    lastLine: 'Which shoes are the smallest?',
+    doneLine: 'Big shoes, small shoes! Well done!',
+  },
+  {
+    id: 'u9l2-pip-asks', kind: 'join-stage', bg: bgU9L2Hall, teacher: 'Pip asks the child. Any colour is fine — answer with the colour and the word.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Look at my hat! What colour is it?', bubble: 'right' },
+      { who: 'student', line: "It's green! A green hat!", bubble: 'right' },
+      { who: 'pip', line: 'What colour are your shoes?', bubble: 'right' },
+      { who: 'student', line: 'My shoes are blue!', bubble: 'right' },
+    ],
+  },
+
+  /* 11 Sounds: H and S */
+  {
+    id: 'u9l2-pick-hs', kind: 'sound-pick', bg: bgU9L2HallEmpty, who: 'pip',
+    teacher: 'Which one? Listen to the sound, then tap the picture that starts with it. Say the word too!',
+    rounds: [
+      { sound: 'h', answer: 1, options: [{ word: 'socks', img: itemSocksRed }, { word: 'hat', img: itemHatGreen }, { word: 'sun', img: itemSun }] },
+      { sound: 's', answer: 0, options: [{ word: 'socks', img: itemSocksRed }, { word: 'house', img: itemHouse }, { word: 'hat', img: itemHatGreen }] },
+      { sound: 'h', answer: 2, options: [{ word: 'sun', img: itemSun }, { word: 'snake', img: itemSnake }, { word: 'horse', img: itemHorse }] },
+      { sound: 's', answer: 1, options: [{ word: 'hen', img: itemHen }, { word: 'sun', img: itemSun }, { word: 'house', img: itemHouse }] },
+    ],
+  },
+
+  /* 12-13 Sticker + Home Mission */
+  {
+    id: 'u9l2-sticker', kind: 'sticker-reward', bg: bgU9L2Hall, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'Thank you! Now I can play in the snow! Here is a hat sticker for you!', sticker: { img: itemHatGreen, label: 'Snow helper' },
+  },
+  {
+    id: 'u9l2-home-mission', kind: 'home-mission', bg: bgU9L2Hall, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: when you get dressed, say it! "Put on my socks!" "Put on my shoes!"',
+    parentNote: 'When your child gets dressed or goes out, play "Put on…!": say "Put on your hat!", "Put on your socks!" and let them do it and say the colour. Then swap: your child tells YOU what to put on.',
+    steps: [
+      { emoji: '\u{1F9E2}', img: itemHatGreen, say: 'Put on your hat!' },
+      { emoji: '\u{1F9E6}', img: itemSocksRed, say: 'Put on your socks!' },
+      { emoji: '\u{1F45F}', img: itemShoesBlue, say: 'Put on your shoes!' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u9l2-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU9L2Hall, who: 'pip',
+    teacher: 'Extra time: Brain Break! Do each action with Pip.',
+    rounds: [
+      { line: 'Throw a snowball! Whoosh!', emoji: '\u{26C4}' },
+      { line: 'Stamp your shoes in the snow!', emoji: '\u{1F45F}' },
+      { line: 'Hold on to your hat! The wind!', emoji: '\u{1F9E2}' },
+      { line: 'Freeze!', emoji: '\u{1F976}', seconds: 3 },
+    ],
+  },
+
+  /* Goodbye */
+  {
+    id: 'u9l2-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u9l2-finale', kind: 'finale', bg: bgU9L2Hall, who: 'pip', line: 'Hat, socks, shoes! Let\'s play in the snow! Goodbye, friend!' },
 ];

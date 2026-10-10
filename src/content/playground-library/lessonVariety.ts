@@ -60,6 +60,7 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
   '4-4': { settings: ['flower garden'], look: 'bright flower garden with big friendly mushrooms; Pip meets Bo, a round sky-blue three-eyed monster; code-drawn monsters on an empty lawn' },
   '4-5': { settings: ['animal park'], look: 'sunny animal park with a blue pond and tall trees; a tiger, a monkey, an elephant and a seal each show one move, Pip copies; a leafy bush to peek through' },
+  '9-2': { settings: ['snowy front hallway'], look: "a cosy front hallway on a snowy winter morning: snow falling past the window and the glass front door, wooden coat hooks on a pale yellow wall, a little bench and a striped rug; Pip in a green knitted hat, red socks and blue shoes waves by the door; the empty hall becomes the Put It On! game where the child dresses Pip" },
   '9-1': { settings: ['backyard laundry day'], look: "laundry day in Pip's sunny backyard: green grass, a wooden fence and flowers, a long washing line between two wooden poles with a red shirt, blue pants and a yellow dress on wooden pegs, Pip holding up the shirt by a wicker basket; the empty line becomes the Washing Line game where the clothes swing in the breeze" },
   '8-6': { settings: ['school dining hall'], look: "lunchtime in a bright school dining hall: big sunny windows, the four friends at a long table with green trays of the unit's food (pizza, apples, bananas, ice cream, bread), and a big empty green chalkboard on the back wall that becomes the class food chart" },
   '8-5': { settings: ['spring flower garden', 'story places of the unit'], look: "a sunny spring flower garden with big green leaves, colourful flowers and a curvy path, where a little round green caterpillar peeks out; the story film visits the unit's places (the picnic blanket, Pip's café counter, the party table) with the caterpillar munching one food at each, then an evening orchard with a hanging cocoon and a bright morning with a green-and-yellow butterfly; Pip waves at the end" },
@@ -206,6 +207,19 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'the child must understand the verb AND the body part to find the animal, then PRODUCES the move and the sentence — the screen waits for the child, never a clock',
       'the clue in Whose Is It? is one of the unit\'s body words, so naming the part and the animal go together, and the reveal recalls the story move',
       'wrong picks are named back with that animal\'s own move ("No, the seal claps her hands!"), and the right one glows after two tries',
+    ],
+  },
+  '9-2': {
+    sources: ['Toca Boca / Lingokids / Khan Academy Kids dress-up ("dress the character for the weather")', 'Cambridge (Pre A1 Starters: listen and point; clothes)', 'TPR "Put on your hat!" classroom routine', 'Wordwall group sort (head or feet)'],
+    mechanics: [
+      'dress-up → Put It On!: Pip asks "Put on my green hat!" and the piece lands where it is worn (head, feet), socks before shoes',
+      'group sort → catch it: on your head or on your feet?; size line of shoes big → small; first sounds H and S',
+      'ask and answer about colours: "What colour is your hat?"',
+    ],
+    betterThan: [
+      'each piece goes where it is worn, so the child learns the word AND where it belongs; the order is real (socks before shoes)',
+      'the catch sort is by meaning (head or feet), not by picture match',
+      'no clock; a wrong piece is named back ("No, not the shoes! Listen again.") and the right one glows after two tries',
     ],
   },
   '9-1': {
