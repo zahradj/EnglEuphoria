@@ -93,6 +93,9 @@ export function ShadowView({ slide }: { slide: ShadowSlide }) {
           <div className="ad-portal" data-lit={lit} key={round}>
             <i className="ad-portal-ring" aria-hidden="true" />
             <i className="ad-portal-ring ad-portal-ring2" aria-hidden="true" />
+            <i className="ad-portal-base" aria-hidden="true" />
+            <span className="ad-orbit" aria-hidden="true"><i /><i /><i /><i /><i /><i /></span>
+            <i className="ad-portal-gloss" aria-hidden="true" />
             <div className="ad-shadow" data-lit={lit}>
               <div className="ad-shadow-art"><Art art={cur.art} /></div>
               <span className="ad-shadow-q" aria-hidden="true">?</span>
