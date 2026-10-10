@@ -122,3 +122,20 @@ Canva holder design DAHXiX3gn1o, pages 62-65 (1620x1080). Style references: club
 | club-stage | MAHXpHANhRE | 65 | public/academy-art/bg/club-stage.webp | small stage, purple curtain, two spotlights, mic stand stage left, bunting, empty chairs left and right |
 
 Weaknesses: locker-hall also has a bookshelf and a door at left (fine). border-control: the two blank sign boards are plain purple panels (good for overlays). detective-wall is busier than the others (side table with snacks at left, sofa, armchair overlaps the desk at lower right), so keep UI away from the far lower-right corner; the red strings are faint. club-stage: chairs sit at the far left and right edges of the lower area, centre is clear; the stage is raised and centred, so characters placed over it overlap the curtain.
+
+## Beginner cards: hello, meet, me, great, fine, tired
+
+Owner rule 2026-10-10: flat 2D hand-illustrated anime-influenced teen illustration, ink outlines, light-lavender background, never 3D or emoji. Canva holder design DAHXiX3gn1o, pages 66-71 (800x800). Style reference for all six: v-name card `MAHXiyPmEHA` (SQUARE_1_1). Common prompt: "Flat-lit 2D hand-illustrated anime-influenced teen illustration with clean black ink outlines and soft cel shading, same style, palette and background as the reference picture. ONE subject: ... waist-up, centred on a plain light lavender background. NOT 3D, not glossy, not emoji, no text, letters, numbers or logos." Canva quota: one generation then ~20 min cooldown, so each picture was generated once (v-me twice).
+
+| Picture | Canva media id | Page | Repo path | Subject |
+|---|---|---|---|---|
+| v-hello | MAHXpaCvUj8 | 66 | public/academy-art/cards/v-hello.webp | boy (brown wavy hair, lavender hoodie) waving, big smile |
+| v-meet | MAHXpc3qR1U | 67 | public/academy-art/cards/v-meet.webp | boy and girl (dark curly hair, glasses, periwinkle jacket) shaking hands |
+| v-great | MAHXpWJ2aKg | 68 | public/academy-art/cards/v-great.webp | girl, both fists up, huge smile, small purple sparkles |
+| v-fine | MAHXpUCgaPQ | 69 | public/academy-art/cards/v-fine.webp | boy, gentle smile, hand in hoodie pocket |
+| v-tired | MAHXp4rJIzg | 70 | public/academy-art/cards/v-tired.webp | girl yawning, rubbing one eye, droopy lids, no Zzz |
+| v-me | MAHXp946ZLk | 71 | public/academy-art/cards/v-me.webp | boy, thumb pressed to his own chest, proud smile |
+
+Picks: first candidate accepted for all except v-me. v-me first try `MAHXpemV41Y` read as a thumbs-up beside the chest (rejected); the redo prompt asked for the thumb pressed on the middle of the chest and `MAHXp946ZLk` was accepted.
+Weaknesses: v-me thumb is still a little thumbs-up-like (thumb points up, hand on the chest). v-tired: one eye covered by the fist, the other eye shut-ish; reads clearly as yawning. v-hello and v-fine: boy is the same cast look as v-name/v-age (consistent). v-great and v-tired use a girl with dark wavy hair (new look, same palette). v-meet is cropped at the waist and the two figures fill the frame.
+Note: a Canva edit transaction left uncommitted expired once and the first pages were lost; re-added and committed.
