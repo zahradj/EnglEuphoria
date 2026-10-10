@@ -60,6 +60,7 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
   '4-4': { settings: ['flower garden'], look: 'bright flower garden with big friendly mushrooms; Pip meets Bo, a round sky-blue three-eyed monster; code-drawn monsters on an empty lawn' },
   '4-5': { settings: ['animal park'], look: 'sunny animal park with a blue pond and tall trees; a tiger, a monkey, an elephant and a seal each show one move, Pip copies; a leafy bush to peek through' },
+  '8-6': { settings: ['school dining hall'], look: "lunchtime in a bright school dining hall: big sunny windows, the four friends at a long table with green trays of the unit's food (pizza, apples, bananas, ice cream, bread), and a big empty green chalkboard on the back wall that becomes the class food chart" },
   '8-5': { settings: ['spring flower garden', 'story places of the unit'], look: "a sunny spring flower garden with big green leaves, colourful flowers and a curvy path, where a little round green caterpillar peeks out; the story film visits the unit's places (the picnic blanket, Pip's café counter, the party table) with the caterpillar munching one food at each, then an evening orchard with a hanging cocoon and a bright morning with a green-and-yellow butterfly; Pip waves at the end" },
   '8-4': { settings: ['autumn apple orchard'], look: "a sunny autumn apple orchard: trees heavy with red apples, golden leaves on the grass, a long wooden table where the four friends each hold up the food they like (Pip an apple, Mia a banana, Leo pizza, Bella ice cream); the empty orchard with a wooden counter and a little smoothie cart becomes the Smoothie Bar with a big code-drawn blender" },
   '8-3': { settings: ['park party food truck'], look: "a summer party in a green park: a bright red-and-yellow food truck with a striped awning, a big round pizza, a pink birthday cake with candles and three ice-cream cones on its counter, Pip in a white chef hat waving from the window; bunting, balloons and a wooden picnic table; a moving grey belt carries the party food past the table" },
@@ -204,6 +205,19 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'the child must understand the verb AND the body part to find the animal, then PRODUCES the move and the sentence — the screen waits for the child, never a clock',
       'the clue in Whose Is It? is one of the unit\'s body words, so naming the part and the animal go together, and the reveal recalls the story move',
       'wrong picks are named back with that animal\'s own move ("No, the seal claps her hands!"), and the right one glows after two tries',
+    ],
+  },
+  '8-6': {
+    sources: ['early-years maths "people graphs" / favourite-food pictograph', 'Cambridge (Pre A1 Starters: listen and tick; food words review)', 'Wordwall group sort and "whack" games', 'Khan Academy Kids sorting and counting'],
+    mechanics: [
+      'people graph → Like Chart: each friend says "I like pizza!", the child puts their face in that column, Pip reads the chart ("Three friends like pizza!") and the child adds their own star',
+      'group sort → odd one out (eat or drink?), a hidden-food tile reveal, and a sound ring toss with the unit\'s first sounds P, J, M, B',
+      'review talk: "What do you like to eat? And to drink?"',
+    ],
+    betterThan: [
+      'every sort is a heard sentence from a friend, and the result is a real chart the child can read (which food most friends like)',
+      'the child\'s own choice goes on the chart last, so the review ends with them saying what THEY like',
+      'no clock; a wrong column is answered by the friend ("No! I like pizza!") and the right one glows after two tries',
     ],
   },
   '8-5': {

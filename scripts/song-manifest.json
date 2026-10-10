@@ -328,5 +328,10 @@
     "path": "public/lep1/audio/hungry-caterpillar-song-u8l5.mp3",
     "bytes": 321037,
     "sha256": "5e83804ae7457ec260f6d9a3cec0c35e483337bd6d0f87ad21c350badab756a2"
+  },
+  "u8l6-yummy-food": {
+    "path": "public/lep1/audio/yummy-food-song-u8l6.mp3",
+    "bytes": 321037,
+    "sha256": "8511e288d5a4555049ce20d770a47d88812ad45da634fee247ee20162ff18e51"
   }
 }

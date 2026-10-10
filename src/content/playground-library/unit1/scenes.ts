@@ -509,6 +509,15 @@ export type Scene =
       doneLine: string;
     }
   | {
+      /** Like Chart (U8L6 signature, unit review): a food chart on the board. Each friend says "I like pizza!";
+       *  the child taps that food's column and the friend's face stacks in it. Then Pip reads the chart
+       *  (`summaryLine`) and the child adds a star for what THEY like. `column` = index of `columns`. */
+      id: string; kind: 'like-chart'; bg: string; teacher: string; who: CharKey;
+      columns: { word: string; img: string }[];
+      rounds: { friend: CharKey; column: number; line: string; reply: string }[];
+      summaryLine: string;
+    }
+  | {
       /** Caterpillar Crawl (U8L5 signature): the story's caterpillar says "I like bananas!"; the child taps that food,
        *  the caterpillar (`headImg` + drawn segments) crawls to it, eats it and grows a segment; at the end it becomes
        *  the butterfly (`butterflyImg`). foods x/y = centre % on the stage; `start` = where the caterpillar begins. */
@@ -13503,4 +13512,191 @@ export const LESSON_U8L5_SCENES: Scene[] = [
     ],
   },
   { id: 'u8l5-finale', kind: 'finale', bg: u8l5Page(9), who: 'pip', line: 'The caterpillar is a butterfly! What do you like? Goodbye, friend!' },
+];
+
+/* =============================================================================
+ * Pre-A1 Unit 8, Lesson 6 — "Food Preference Chart" (Food & Drink, unit review)
+ *
+ * Lunchtime in the school dining hall: the four friends at a long table with trays of the unit's food,
+ * and a big empty chalkboard. The class makes a food chart together (new Like Chart game): each friend
+ * says "I like pizza!", the child puts their face in that column, Pip reads the chart, and the child
+ * adds their own star. Then odd one out (food or drink?), a hidden-food tile reveal and a sound ring
+ * toss with all the unit's first sounds. The review song comes after the words and the first game.
+ * ========================================================================= */
+
+const bgU8L6Dining = `${A}/scenes/bg-u8l6-dining-wide.png`;
+const bgU8L6Board = `${A}/scenes/bg-u8l6-board-wide.png`;
+
+export const LESSON_U8L6_TITLE = 'Food Preference Chart';
+export const LESSON_U8L6_OBJECTIVE = 'Review all the food and drink of Unit 8, understand and say what friends like ("I like pizza!"), make and read a picture chart ("Three friends like pizza!"), sort food and drink, and hear the unit\'s first sounds, by listening, moving and playing, no reading.';
+
+export const LESSON_U8L6_SCENES: Scene[] = [
+  { id: 'u8l6-title', kind: 'title-card', bg: bgU8L6Dining, level: 'Pre-A1', unit: 'Unit 8', lessonLabel: 'Lesson 6', title: 'Food Preference Chart', subtitle: 'What do we like?' },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 8 · Lesson 5 · The Very Hungry Caterpillar.
+    id: 'u8l6-recall-warmup', kind: 'recall-warmup', bg: bgU8L6Board, who: 'pip', mode: 'click',
+    fromLabel: 'Lesson 5 · The Hungry Caterpillar',
+    teacher: 'Warm-up from the story: Pip says a moment, the child finds the picture and says it.',
+    items: [
+      { word: 'apple', say: 'I like apples! Munch, munch!', img: u8l5Page(3) },
+      { word: 'cake', say: 'I like cake! Munch, munch!', img: u8l5Page(5) },
+      { word: 'butterfly', say: 'Look! I am a butterfly!', img: u8l5Page(8) },
+    ],
+  },
+  {
+    id: 'u8l6-intro', kind: 'cinematic', bg: bgU8L6Dining, hidePipOverlay: true, title: 'Food Preference Chart', subtitle: 'Lunchtime!', narrator: 'pip',
+    script: [
+      { who: 'pip', line: "It's lunchtime! Look at all the food!" },
+      { who: 'pip', line: "Let's make a food chart. What do you like?" },
+    ],
+    cta: "Let's go!",
+  },
+
+  /* 4-5 All the words, move */
+  {
+    id: 'u8l6-words', kind: 'listen-repeat-cards', textSide: 'right', bg: bgU8L6Board, teacher: 'All the food of the unit! Listen, then say it with Pip.',
+    cards: [
+      { who: 'pip', sentence: "It's an apple!", img: itemApple, imgLabel: 'apple' },
+      { who: 'pip', sentence: "It's a banana!", img: itemBanana, imgLabel: 'banana' },
+      { who: 'pip', sentence: "It's bread!", img: itemBread, imgLabel: 'bread' },
+      { who: 'pip', sentence: "It's pizza!", img: itemPizzaSlice, imgLabel: 'pizza' },
+      { who: 'pip', sentence: "It's ice cream!", img: itemIceCream, imgLabel: 'ice cream' },
+      { who: 'pip', sentence: "It's juice!", img: itemJuice, imgLabel: 'juice' },
+    ],
+  },
+  {
+    id: 'u8l6-move', kind: 'tpr-actions', bg: bgU8L6Dining, who: 'pip',
+    teacher: 'Stand up! Lunchtime moves with Pip.',
+    rounds: [
+      { line: 'Bite the apple! Crunch!', emoji: '\u{1F34E}', img: itemApple },
+      { line: 'Drink the milk! Gulp, gulp!', emoji: '\u{1F95B}', img: itemMilk },
+      { line: 'Lick the ice cream! Brrr!', emoji: '\u{1F366}', img: itemIceCream },
+      { line: 'Thumbs up! I like it!', emoji: '\u{1F44D}' },
+    ],
+  },
+
+  /* 6 Signature game (new): Like Chart */
+  {
+    id: 'u8l6-chart', kind: 'like-chart', bg: bgU8L6Board, who: 'pip',
+    teacher: 'Like Chart! Listen to each friend, then tap the food they like: their face goes up the chart. At the end, read the chart with Pip and add YOUR star!',
+    columns: [
+      { word: 'pizza', img: itemPizzaSlice },
+      { word: 'apples', img: itemApple },
+      { word: 'ice cream', img: itemIceCream },
+    ],
+    rounds: [
+      { friend: 'leo', column: 0, line: 'I like pizza!', reply: 'Yes! Pizza for me!' },
+      { friend: 'mia', column: 1, line: 'I like apples!', reply: 'Yes! Crunch, crunch!' },
+      { friend: 'bella', column: 2, line: 'I like ice cream!', reply: 'Yes! Yummy ice cream!' },
+      { friend: 'willow', column: 0, line: 'I like pizza!', reply: 'Yes! Pizza, please!' },
+      { friend: 'pip', column: 0, line: 'I like pizza too!', reply: 'Yes! Pizza party!' },
+    ],
+    summaryLine: 'Look! Pizza! Three friends like pizza!',
+  },
+
+  /* 7 The review song — now the child knows all the words (owner, 2026-10-10) */
+  {
+    id: 'u8l6-song', kind: 'song', bg: bgU8L6Dining, title: '\u{1F3B5} Yummy Food! \u{1F3B5}', teacher: 'Sing all the food of the unit! Point to each food on the table as you sing it.',
+    durationSeconds: 20, bigWord: 'Yummy', songUrl: `${A}/audio/yummy-food-song-u8l6.mp3?v=1`,
+    lineDurationsMs: [4240, 4760, 3840, 7222],
+    songPrompt: 'Cheerful bouncy kids food review song',
+    lyrics: [
+      { who: 'pip', text: 'Apple, banana, milk! Yummy!', emotion: 'happy' },
+      { who: 'pip', text: 'Bread, water, juice, please!', emotion: 'happy' },
+      { who: 'pip', text: 'Pizza, cake and ice cream!', emotion: 'happy' },
+      { who: 'pip', text: 'What do you like? I like food!', emotion: 'happy' },
+    ],
+  },
+
+  /* 8-10 More review games */
+  {
+    id: 'u8l6-odd', kind: 'odd-one-out', bg: bgU8L6Board, who: 'mia',
+    teacher: 'Which one is different? Tap it and say why: do we eat it or drink it?',
+    rounds: [
+      { items: [{ label: 'apple', img: itemApple }, { label: 'banana', img: itemBanana }, { label: 'juice', img: itemJuice }, { label: 'bread', img: itemBread }], odd: 2, line: 'The juice! We drink juice. We eat the others.' },
+      { items: [{ label: 'milk', img: itemMilk }, { label: 'water', img: itemWaterGlass }, { label: 'juice', img: itemJuice }, { label: 'pizza', img: itemPizzaSlice }], odd: 3, line: 'The pizza! We eat pizza. We drink the others.' },
+      { items: [{ label: 'cake', img: itemCake }, { label: 'ice cream', img: itemIceCream }, { label: 'water', img: itemWaterGlass }, { label: 'cookie', img: itemCookie }], odd: 2, line: 'The water! We drink water. We eat the others.' },
+    ],
+  },
+  {
+    id: 'u8l6-reveal', kind: 'tile-reveal', bg: bgU8L6Dining, who: 'pip',
+    teacher: 'Which food is hiding? Tiles pop off one by one — guess early and say "It\'s…!"',
+    rounds: [
+      { img: itemIceCream, word: 'ice cream', line: "It's ice cream!", options: [{ label: 'cake', img: itemCake }, { label: 'ice cream', img: itemIceCream }, { label: 'apple', img: itemApple }] },
+      { img: itemBanana, word: 'banana', line: "It's a banana!", options: [{ label: 'banana', img: itemBanana }, { label: 'bread', img: itemBread }, { label: 'milk', img: itemMilk }] },
+      { img: itemPizzaSlice, word: 'pizza', line: "It's pizza!", options: [{ label: 'juice', img: itemJuice }, { label: 'cake', img: itemCake }, { label: 'pizza', img: itemPizzaSlice }] },
+    ],
+  },
+  {
+    id: 'u8l6-ring-sounds', kind: 'ring-toss', bg: bgU3L6Toss, who: 'pip', ringImg: itemTossRing,
+    teacher: 'Sound Toss! Listen to the sound and throw the ring on the food that starts with it. Say the word!',
+    pegs: U3L6_PEGS,
+    prizes: [
+      { label: 'pizza', img: itemPizzaSlice },
+      { label: 'bread', img: itemBread },
+      { label: 'juice', img: itemJuice },
+      { label: 'milk', img: itemMilk },
+    ],
+    rounds: [
+      { target: 0, sound: 'p', line: 'Throw the ring on the P food!', reply: 'Yes! P, pizza!' },
+      { target: 2, sound: 'j', line: 'Throw the ring on the J drink!', reply: 'Yes! J, juice!' },
+      { target: 3, sound: 'm', line: 'Throw the ring on the M drink!', reply: 'Yes! M, milk!' },
+      { target: 1, sound: 'b', line: 'Throw the ring on the B food!', reply: 'Yes! B, bread!' },
+    ],
+  },
+
+  /* 11 What do you like? */
+  {
+    id: 'u8l6-you-like', kind: 'join-stage', bg: bgU8L6Dining, teacher: 'Pip asks the child about the whole unit. Any answer is fine — say a whole sentence!', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'What do you like to eat?', bubble: 'right' },
+      { who: 'student', line: 'I like pizza and apples!', bubble: 'right' },
+      { who: 'pip', line: 'And to drink?', bubble: 'right' },
+      { who: 'student', line: 'Juice, please! Thank you!', bubble: 'right' },
+    ],
+  },
+
+  /* 12-13 Trophy + Home Mission */
+  {
+    id: 'u8l6-sticker', kind: 'sticker-reward', bg: bgU8L6Dining, who: 'pip', teacher: 'The Unit 8 trophy! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'You finished the food unit! Here is your Unit 8 sticker!', sticker: { img: itemCake, label: 'Food champion' },
+  },
+  {
+    id: 'u8l6-home-mission', kind: 'home-mission', bg: bgU8L6Dining, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: make a food chart with your family! Ask everyone: What do you like?',
+    parentNote: 'Your child finished the food unit. Make a family food chart: draw three foods on a paper, ask each person "What do you like?", and put a sticker or a mark under their answer. Then count together: "Two people like pizza!"',
+    steps: [
+      { emoji: '\u{1F4CB}', say: 'Draw three foods.' },
+      { emoji: '\u{2753}', say: 'Ask: What do you like?' },
+      { emoji: '\u{2B50}', say: 'Put a star! Count the stars!' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u8l6-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU8L6Dining, who: 'pip',
+    teacher: 'Extra time: Brain Break! Do each action with Pip.',
+    rounds: [
+      { line: 'Carry your lunch tray! Walk, walk!', emoji: '\u{1F37D}️' },
+      { line: 'Toss the pizza! Catch!', emoji: '\u{1F355}' },
+      { line: 'Wiggle like the caterpillar!', emoji: '\u{1F41B}' },
+      { line: 'Freeze!', emoji: '\u{1F976}', seconds: 3 },
+    ],
+  },
+
+  /* Goodbye */
+  {
+    id: 'u8l6-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u8l6-finale', kind: 'finale', bg: bgU8L6Dining, who: 'pip', line: 'You know all the food! What do you like? Goodbye, friend!' },
 ];

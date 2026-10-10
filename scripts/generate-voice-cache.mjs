@@ -469,6 +469,7 @@ const UNIT1_EXTRACTORS = {
     [s.who, s.doneLine],
   ],
   // Mirror DuckFeedScene.tsx's duckFeedLines().
+  'like-chart': (s) => [...(s.rounds ?? []).flatMap((r) => [[r.friend, r.line], [r.friend, r.reply], [r.friend, `No! I like ${s.columns?.[r.column]?.word ?? ''}!`]]), [s.who, s.summaryLine], [s.who, 'What do you like? Tap it!'], ...(s.columns ?? []).map((c) => [s.who, `You like ${c.word}! Yummy!`])],
   'caterpillar-crawl': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...(s.foods ?? []).map((f) => [s.who, `No, that's ${f.word}!`]), [s.who, 'I am full! Now I am a butterfly!']],
   'smoothie-bar': (s) => [...(s.rounds ?? []).flatMap((r) => [[r.friend, r.line], [r.friend, r.reply], [r.friend, `Oops! ${r.line}`]]), ...(s.fruits ?? []).map((f) => [s.who, f.word]), [s.who, s.doneLine]],
   'party-belt': (s) => [...(s.rounds ?? []).flatMap((r) => [[r.friend, r.line], [r.friend, r.reply], ...(s.foods ?? []).filter((_, i) => i !== r.target).map((f) => [r.friend, `No, that's ${f.word}!`])]), [s.who, s.doneLine]],
