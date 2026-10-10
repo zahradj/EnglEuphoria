@@ -828,6 +828,15 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
     return () => window.clearTimeout(t);
   }, [classIsStarted, sceneLessonKey, interactionPaused]);
 
+  // Same rule for the drawing / pen / slide interaction: it is always open unless the teacher paused it. This
+  // covers every lesson type (slides, web pages, scene lessons) and a reload or late join where the saved
+  // value was lost. It waits for the saved session to load so it can't undo a pause the teacher already made.
+  useEffect(() => {
+    if (!isConnected || !sessionContext || interactionPaused || drawingEnabled) return;
+    const t = window.setTimeout(() => { void setDrawingEnabled(true); void setStudentCanDraw(true); }, 600);
+    return () => window.clearTimeout(t);
+  }, [isConnected, sessionContext, interactionPaused, drawingEnabled, setDrawingEnabled, setStudentCanDraw]);
+
   const homeworkTimelineSyncedRef = React.useRef(false);
   useEffect(() => {
     if (homeworkTimelineSyncedRef.current || !isConnected) return;
