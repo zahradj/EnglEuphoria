@@ -7,12 +7,12 @@
 .ad-plate img, .ad-plate-ph { width: 100%; height: 100%; object-fit: cover; object-position: center bottom; display: block; }
 .ad-plate::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(255, 255, 255, 0.05) 0%, rgba(245, 243, 255, 0.28) 100%); }
 .ad-actors { position: absolute; inset: 0; pointer-events: none; }
-.ad-actor { position: absolute; bottom: 64px; height: 66%; display: flex; align-items: flex-end; }
-.ad-actor[data-small='true'] { height: 52%; }
+.ad-actor { position: absolute; bottom: 58px; height: 74%; display: flex; align-items: flex-end; }
+.ad-actor[data-small='true'] { height: 60%; }
 .ad-actor[data-pos='left'] { left: 1%; }
 .ad-actor[data-pos='right'] { right: 1%; }
 .ad-actor[data-pos='center'] { left: 50%; transform: translateX(-50%); }
-.ad-actor img { height: 100%; width: auto; max-width: none; filter: drop-shadow(0 8px 14px rgba(60, 30, 140, 0.25)); }
+.ad-actor img { height: 100%; width: auto; max-width: none; filter: drop-shadow(0 8px 14px rgba(60, 30, 140, 0.25)); -webkit-mask-image: linear-gradient(to bottom, #000 84%, transparent 100%); mask-image: linear-gradient(to bottom, #000 84%, transparent 100%); }
 .ad-actor-ph { width: 120px; height: 120px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 3rem; font-weight: 900; color: #fff; }
 .ad-strip { position: absolute; top: 0; left: 0; right: 0; z-index: 5; display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0)); }
 .ad-lesson { font-weight: 800; font-size: 0.85rem; color: var(--violet-d); white-space: nowrap; }
@@ -22,8 +22,8 @@
 .ad-dot[data-now='true'] { background: var(--warn); border-color: var(--warn); transform: scale(1.25); }
 .ad-dot:disabled { opacity: 0.45; }
 .ad-count { font-size: 0.8rem; color: var(--violet-d); font-weight: 700; }
-.ad-main { position: absolute; z-index: 2; top: 40px; bottom: 64px; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 10px; padding: 10px 14px; overflow: auto; }
-.ad-slidehost { width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 10px; }
+.ad-main { position: absolute; z-index: 2; top: 40px; bottom: 64px; left: 0; right: 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 10px; padding: 10px 14px 18px; overflow: auto; }
+.ad-slidehost { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 10px; margin: auto 0; /* centred, and never clipped at the top when the panel is tall */ }
 .ad-top { width: min(900px, 100%); display: flex; justify-content: flex-start; }
 .ad-panel { width: min(860px, 100%); max-height: 100%; overflow: auto; padding: 16px; border-radius: 22px; background: rgba(255, 255, 255, 0.94); border: 2px solid var(--line); box-shadow: 0 14px 38px rgba(90, 50, 190, 0.22); backdrop-filter: blur(8px); display: flex; flex-direction: column; gap: 10px; animation: ad-in 0.28s ease-out; }
 .ad-panel[data-wide='true'] { width: min(1000px, 100%); }
@@ -225,7 +225,7 @@
   .ad-actors { display: none; }
   .ad-root[data-kind='title'] .ad-actors, .ad-root[data-kind='brief'] .ad-actors { display: block; }
   .ad-root[data-kind='brief'] .ad-actor { height: 26%; opacity: 0.9; }
-  .ad-actor { height: 40%; }
+  .ad-actor { height: 42%; }
   .ad-lesson { display: none; }
   .ad-panel { padding: 12px; border-radius: 18px; }
   .ad-lockers, .ad-train { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 5px; }
@@ -241,9 +241,9 @@
 
 /* wide screens: keep the panel between the characters so they stay visible */
 @media (min-width: 1000px) {
-  .ad-panel { width: min(860px, 100%, 56vw); }
-  .ad-panel[data-wide='true'] { width: min(940px, 100%, 58vw); }
-  .ad-top { width: min(860px, 100%, 56vw); }
+  .ad-panel { width: min(860px, 100%, 52vw); }
+  .ad-panel[data-wide='true'] { width: min(940px, 100%, 54vw); }
+  .ad-top { width: min(860px, 100%, 52vw); }
 }
 .ad-short { display: none; }
 @media (max-width: 720px) {
