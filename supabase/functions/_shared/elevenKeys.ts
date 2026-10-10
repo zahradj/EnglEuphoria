@@ -1,8 +1,8 @@
 // ElevenLabs API keys, in the order to try. A key whose monthly quota is used up (or that was revoked)
 // answers 401/402/429; the next key is tried instead, so adding a key in Supabase secrets keeps voices
 // and songs working without a code change. Newer names come first (owner 2026-10-09: "use another api
-// elevenlabs 2" - the secret is named "elevenlabs 2"), the older ones after.
-const NAMES = ['11labs', '11Labs', '11LABS', '11 labs', '11labs_api_key', '11LABS_API_KEY', 'ELEVEN_LABS', 'elevenlabs 2', 'ELEVENLABS 2', 'Elevenlabs 2', 'ElevenLabs 2', 'elevenlabs2', 'ELEVENLABS2', 'Elevenlabs2', 'ElevenLabs2',
+// elevenlabs 2" - the secret is named "elevenlabs 2"; 2026-10-10: "elevenlabshub2"), the older ones after.
+const NAMES = ['elevenlabshub2', 'ELEVENLABSHUB2', 'ElevenLabsHub2', 'elevenlabs_hub2', 'ELEVENLABS_HUB2', 'elevenlabshub', 'ELEVENLABSHUB', '11labs', '11Labs', '11LABS', '11 labs', '11labs_api_key', '11LABS_API_KEY', 'ELEVEN_LABS', 'elevenlabs 2', 'ELEVENLABS 2', 'Elevenlabs 2', 'ElevenLabs 2', 'elevenlabs2', 'ELEVENLABS2', 'Elevenlabs2', 'ElevenLabs2',
   'elevenlabs_2', 'ELEVENLABS_2', 'ELEVENLABS_API_KEY_2', 'ELEVENLABS_API_KEY2', 'ELEVEN_LABS_API_KEY_2', 'ELEVENLABS_KEY_2', 'elevenlab2',
   'elevenlabs', 'ELEVENLABS', 'ElevenLabs', 'ELEVEN_LABS_API_KEY', 'ELEVENLABS_KEY',
   'ELEVENLABS_API_KEY', 'elevenlab3', 'ELEVENLABS_API_KEY_3', 'ELEVENLABS_API_KEY_1'];

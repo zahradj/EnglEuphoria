@@ -74,3 +74,5 @@ LESSON_U7L5_SCENES
 # 2026-10-10 re-run: all regional hosts
 # 2026-10-10 re-run: 11labs secret
 # 2026-10-10 re-run #2
+LESSON_U7L6_SCENES
+# 2026-10-10 re-run: elevenlabshub2 secret
