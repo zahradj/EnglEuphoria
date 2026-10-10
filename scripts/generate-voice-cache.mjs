@@ -67,6 +67,7 @@ import { LIBRARY_GAMES } from '../src/content/playground-library/gamesCatalog.ts
 import { artFor } from '../src/content/playground-library/alphabetArt.ts';
 import { colorPlayLines } from '../src/content/playground-library/colorPlayText.ts';
 import { verbForgeLines } from '../src/academy-games/verbForge/verbData.ts';
+import { soundLabLines } from '../src/academy-games/soundLab/soundLabData.ts';
 import { VOICE_PROFILES, approvedVoiceId, isShortLine, normalizeForSpeech, SHORT_LINE_CLIP_VERSION, unresolvedSpeechRisks, voiceStatus } from '../src/lib/speechPolicy.ts';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -801,7 +802,8 @@ function gameLines() {
   }
   // Academy game: Verb Forge says every form of every verb and every answered sentence.
   verbForgeLines().forEach((l) => words.add(l));
-  return [...words].map((w) => ['teacher', w]);
+  // Academy game: Sound Lab says every word of every minimal pair in THREE voices (hearing one sound in several voices trains the ear).
+  return [...[...words].map((w) => ['teacher', w]), ...soundLabLines()];
 }
 
 function collectPairs(lessonFilter) {
