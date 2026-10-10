@@ -1,2 +1,4 @@
 # song takes request (2026-10-10: U8L2 hello song)
 u8l2-bread-water-juice
+# song takes request (2026-10-10: U8L3 party song)
+u8l3-pizza-cake-ice-cream

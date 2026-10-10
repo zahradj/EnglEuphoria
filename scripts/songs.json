@@ -2868,5 +2868,41 @@
       "Juice, juice! Orange juice, please!",
       "Bread and juice! Thank you! Yum!"
     ]
+  },
+  "u8l3-pizza-cake-ice-cream": {
+    "publicPath": "public/lep1/audio/pizza-cake-ice-cream-song-u8l3.mp3",
+    "durationSec": 20,
+    "style": "Cheerful bouncy kids party song, 112 BPM with ukulele, bright piano, hand claps and party horns, clear happy young vocals with a kids sing-along feel, every word sung slowly and clearly, \"yummy\" sung with a big smile. Definitely not a lullaby.",
+    "positiveStyles": [
+      "bouncy",
+      "ukulele",
+      "piano",
+      "hand claps",
+      "clear kids vocals",
+      "sing-along chorus",
+      "112 BPM",
+      "happy",
+      "playful",
+      "party"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "Pizza, pizza! Yummy pizza!",
+      "Cake, cake! Birthday cake!",
+      "Ice cream, ice cream! Cold ice cream!",
+      "Pizza, cake and ice cream! Yummy!"
+    ]
   }
 }
