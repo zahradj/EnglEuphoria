@@ -6,11 +6,21 @@ import type { ModelSlide, TeachArt, TeachSlide } from '../types';
 import { Traveller, WavingFlag } from './anim';
 import { Panel } from './shared';
 
-/** The animated picture for a word. `again` restarts the animation. */
-function Art({ art, again }: { art: TeachArt; again: number }) {
+/** The animated picture for a word, an option or a chat sticker. `again` restarts the animation; `size` sm = small (options, stickers). */
+export function Art({ art, again = 0, size = 'md' }: { art: TeachArt; again?: number; size?: 'sm' | 'md' }) {
+  const { artBase } = useDeck();
+  const [broken, setBroken] = useState(false);
+  if (art.type === 'emoji') return <div className={`ad-art ad-art-emoji ad-art-${size}`} key={again} role="img" aria-label={art.label}><span>{art.icon}</span></div>;
+  if (art.type === 'card') {
+    return artBase && !broken ? (
+      <div className={`ad-art ad-art-card ad-art-${size}`} key={again}><img src={`${artBase}/cards/${art.id}.webp`} alt={art.label} draggable={false} onError={() => setBroken(true)} /></div>
+    ) : (
+      <div className={`ad-art ad-art-emoji ad-art-${size}`} role="img" aria-label={art.label}><span>🖼️</span></div>
+    );
+  }
   if (art.type === 'count') {
     return (
-      <div className="ad-art ad-art-count" key={again} aria-label={`The number ${art.n}`} role="img">
+      <div className={`ad-art ad-art-count ad-art-${size}`} key={again} aria-label={`The number ${art.n}`} role="img">
         <div className="ad-count-dots">
           {Array.from({ length: art.n }, (_, i) => (
             <span key={i} className="ad-count-dot" style={{ ['--i' as string]: i }}><b>{i + 1}</b></span>
@@ -22,25 +32,25 @@ function Art({ art, again }: { art: TeachArt; again: number }) {
   }
   if (art.type === 'flag') {
     return (
-      <div className="ad-art ad-art-flag" key={again}>
+      <div className={`ad-art ad-art-flag ad-art-${size}`} key={again}>
         <div className="ad-flagpole"><WavingFlag code={art.code} label={`Flag of ${art.code}`} /></div>
         <span className="ad-pin" aria-hidden="true">📍</span>
       </div>
     );
   }
   if (art.type === 'person') {
-    return <div className="ad-art ad-art-person" key={again}><Traveller code={art.code} label="A person with the flag of their country" /></div>;
+    return <div className={`ad-art ad-art-person ad-art-${size}`} key={again}><Traveller code={art.code} label="A person with the flag of their country" /></div>;
   }
   if (art.type === 'letters') {
     return (
-      <div className="ad-art ad-art-letters" key={again} role="img" aria-label={`Letters: ${art.text.split('').join(' ')}`}>
+      <div className={`ad-art ad-art-letters ad-art-${size}`} key={again} role="img" aria-label={`Letters: ${art.text.split('').join(' ')}`}>
         {art.text.toUpperCase().split('').map((l, i) => (
           <span key={i} className="ad-wood" style={{ ['--i' as string]: i }}>{l}</span>
         ))}
       </div>
     );
   }
-  return <div className="ad-art ad-art-phrase" key={again} role="img" aria-label="Picture"><span>{art.icon}</span></div>;
+  return <div className={`ad-art ad-art-phrase ad-art-${size}`} key={again} role="img" aria-label="Picture"><span>{art.icon}</span></div>;
 }
 
 const hi = (text: string, word: string): ReactNode => {
@@ -106,7 +116,10 @@ export function ModelView({ slide }: { slide: ModelSlide }) {
           <p key={i} className="ad-line" data-me={l.who === 'Ava'} style={{ ['--who' as string]: COLOR[l.who] }}><b>{l.who}</b> {l.text}</p>
         ))}
       </div>
-      <Bubble who={line.who} side={line.who === 'Ava' ? 'left' : 'right'}>{line.text}</Bubble>
+      <div className="ad-model-say">
+        <Bubble who={line.who} side={line.who === 'Ava' ? 'left' : 'right'}>{line.text}</Bubble>
+        {line.pic && <div className="ad-sticker" key={n}><Art art={line.pic} size="sm" /></div>}
+      </div>
       {line.frame && (
         <div className="ad-pattern" key={n} aria-label="Pattern card">
           <span className="ad-pattern-tag">Pattern</span>

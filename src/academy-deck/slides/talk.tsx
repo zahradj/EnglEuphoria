@@ -2,8 +2,9 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { shuffled, useDeck } from '../ctx';
 import { useDragChip } from '../drag';
 import { COLOR, Bubble } from '../Stage';
-import type { CastName, ConvoSlide, FadeSlide, PhoneChatSlide, SaySlide, WhoSaidSlide } from '../types';
+import type { CastName, ConvoSlide, FadeSlide, PhoneChatSlide, SaySlide, TeachArt, WhoSaidSlide } from '../types';
 import { Feedback, NOT_YET, Panel } from './shared';
+import { Art } from './teach';
 
 const clean = (w: string) => w.toLowerCase().replace(/[.!?,]/g, '');
 
@@ -109,10 +110,16 @@ export function ConvoView({ slide }: { slide: ConvoSlide }) {
       </div>
       {!finished ? (
         <>
-          <Bubble who={other as CastName} side="right">{fill(slide.steps[step].ask)}</Bubble>
-          <div className="ad-options" role="group" aria-label={`${slide.me} says`}>
+          <div className="ad-model-say">
+            <Bubble who={other as CastName} side="right">{fill(slide.steps[step].ask)}</Bubble>
+            {slide.steps[step].pic && <div className="ad-sticker"><Art art={slide.steps[step].pic!} size="sm" /></div>}
+          </div>
+          <div className="ad-options" data-pics={opts.some((o) => o.pic)} role="group" aria-label={`${slide.me} says`}>
             {opts.map((o) => (
-              <button key={o.text} type="button" className="ad-option" onClick={() => pick(o)}>{o.text}</button>
+              <button key={o.text} type="button" className="ad-option" data-pic={!!o.pic} onClick={() => pick(o)}>
+                {o.pic && <span className="ad-option-art"><Art art={o.pic} size="sm" /></span>}
+                <span className="ad-option-text">{o.text}</span>
+              </button>
             ))}
           </div>
           {tip && <Feedback kind="try">{tip}</Feedback>}
@@ -129,7 +136,7 @@ export function PhoneChatView({ slide }: { slide: PhoneChatSlide }) {
   const { right, wrong, done, seed, vars } = useDeck();
   const fill = (s: string) => s.replace(/\{(\w+)\}/g, (_m, k: string) => vars[k] ?? '…');
   const [step, setStep] = useState(0);
-  const [thread, setThread] = useState<{ me: boolean; text: string }[]>([{ me: false, text: slide.steps[0].text }]);
+  const [thread, setThread] = useState<{ me: boolean; text: string; pic?: TeachArt }[]>([{ me: false, text: slide.steps[0].text, pic: slide.steps[0].pic }]);
   const [used, setUsed] = useState<number[]>([]);
   const [bad, setBad] = useState<number | null>(null);
   const [missed, setMissed] = useState(false);
@@ -149,7 +156,7 @@ export function PhoneChatView({ slide }: { slide: PhoneChatSlide }) {
       if (next.length === goal.length) {
         const sent = [...thread, { me: true, text: cur.reply }];
         const nxt = slide.steps[step + 1];
-        setThread(nxt ? [...sent, { me: false, text: nxt.text }] : sent);
+        setThread(nxt ? [...sent, { me: false, text: nxt.text, pic: nxt.pic }] : sent);
         setStep(step + 1);
         setUsed([]);
         if (!missed) right();
@@ -168,7 +175,10 @@ export function PhoneChatView({ slide }: { slide: PhoneChatSlide }) {
         <div className="ad-phone-head">📱 {slide.contact}</div>
         <div className="ad-phone-thread">
           {thread.map((m, i) => (
-            <p key={i} className="ad-msg" data-me={m.me}>{m.text}</p>
+            <div key={i} className="ad-msg-row" data-me={m.me}>
+              <p className="ad-msg" data-me={m.me}>{m.text}</p>
+              {m.pic && <span className="ad-sticker ad-sticker-chat"><Art art={m.pic} size="sm" /></span>}
+            </div>
           ))}
         </div>
         <div className="ad-phone-compose" aria-live="polite">{finished ? '✔ Sent!' : used.length ? used.map((k) => tiles[k].w).join(' ') : 'Tap the words to write your reply…'}</div>

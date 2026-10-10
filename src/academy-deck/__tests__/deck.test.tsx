@@ -200,6 +200,21 @@ describe('games', () => {
     expect(modelAt).toBeLessThan(slides.findIndex((s) => s.id === 'phonechat'));
   });
 
+  it('BEGINNERS: choices and chat messages carry pictures, so students can choose by meaning, not only by reading', () => {
+    const picOptionSteps = slides.flatMap((s) => (s.kind === 'convo' ? s.steps.filter((st) => st.options.every((o) => o.pic)) : []));
+    expect(picOptionSteps.length).toBeGreaterThanOrEqual(4);
+    const stickers = slides.flatMap((s) => (s.kind === 'phonechat' ? s.steps.filter((st) => st.pic) : []));
+    expect(stickers.length).toBeGreaterThanOrEqual(5);
+    const modelPics = slides.flatMap((s) => (s.kind === 'model' ? s.lines.filter((l) => l.pic) : []));
+    expect(modelPics.length).toBeGreaterThanOrEqual(5);
+  });
+
+  it('PICTURE OPTIONS render with their picture and their words', () => {
+    open(slides.findIndex((s) => s.id === 'checkin-chat'));
+    expect(screen.getByRole('img', { name: 'a happy face' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: /I am great/ })).toBeTruthy();
+  });
+
   it('LOCKERS: opening the right locker counts, a wrong one shakes with a friendly message', () => {
     open(idx('lockers'));
     expect(screen.getByText(/Open locker/).textContent).toMatch(/four/);

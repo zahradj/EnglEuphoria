@@ -58,7 +58,8 @@ export interface ConvoSlide extends SlideBase {
   me: CastName;
   /** what the student's lines are called in the log (default: the character's name) */
   meLabel?: string;
-  steps: { ask: string; options: { text: string; ok?: boolean; hint?: string }[] }[];
+  /** options may carry a picture so beginners can choose by meaning, not only by reading */
+  steps: { ask: string; pic?: TeachArt; options: { text: string; pic?: TeachArt; ok?: boolean; hint?: string }[] }[];
   after: string;
 }
 export interface SpellSlide extends SlideBase { kind: 'spell'; prompt: string; target: string; save?: string; stamp?: string }
@@ -69,15 +70,19 @@ export type TeachArt =
   | { type: 'flag'; code: string }
   | { type: 'person'; code: string }
   | { type: 'letters'; text: string }
-  | { type: 'phrase'; icon: string };
+  | { type: 'phrase'; icon: string }
+  /** an animated emoji picture (feelings, objects) */
+  | { type: 'emoji'; icon: string; label: string }
+  /** a Canva picture card from `cards/<id>.webp` (falls back to its label) */
+  | { type: 'card'; id: string; label: string };
 export interface TeachPage { word: string; art: TeachArt; meaning: string; example: string; clue?: string }
 export interface TeachSlide extends SlideBase { kind: 'teach'; title: string; pages: TeachPage[] }
 /** Modelling: the characters DO the language, line by line; the pattern card shows the frame and the part that changes. */
 export type ModelPart = string | { slot: string; label: string };
-export interface ModelSlide extends SlideBase { kind: 'model'; title: string; lines: { who: CastName; text: string; frame?: ModelPart[]; note?: string }[]; closing: string }
+export interface ModelSlide extends SlideBase { kind: 'model'; title: string; lines: { who: CastName; text: string; pic?: TeachArt; frame?: ModelPart[]; note?: string }[]; closing: string }
 export interface BorderSlide extends SlideBase { kind: 'border'; prompt: string; rounds: { flag: string; says: string; answer: string; options: string[] }[]; stamp?: string }
 export interface MemorySlide extends SlideBase { kind: 'memory'; prompt: string; pairs: { flag: string; text: string }[] }
-export interface PhoneChatSlide extends SlideBase { kind: 'phonechat'; prompt: string; contact: CastName; steps: { text: string; reply: string; extra?: string[] }[] }
+export interface PhoneChatSlide extends SlideBase { kind: 'phonechat'; prompt: string; contact: CastName; steps: { text: string; /** a sticker picture beside the message */ pic?: TeachArt; reply: string; extra?: string[] }[] }
 export interface FadeSlide extends SlideBase { kind: 'fade'; prompt: string; lines: { who: CastName; text: string; keys: string[] }[] }
 export interface CardSlide extends SlideBase {
   kind: 'card';

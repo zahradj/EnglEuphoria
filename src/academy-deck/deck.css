@@ -512,3 +512,35 @@
 .ad-dialopt:hover { transform: translateY(-4px); border-color: var(--violet); }
 .ad-dialopt[data-on='true'] { border-color: #22c55e; background: #ecfdf5; }
 @media (max-width: 720px) { .ad-dials-choice { grid-template-columns: 1fr; } .ad-partcard-num { font-size: 4.5rem; } }
+
+/* picture options + stickers: beginners choose by meaning, not only by reading */
+.ad-art-sm { width: 100%; }
+.ad-art-emoji span { font-size: 4rem; line-height: 1; animation: ad-pinbob 1.8s ease-in-out infinite; filter: drop-shadow(0 4px 4px rgba(60, 30, 140, 0.25)); }
+.ad-art-emoji.ad-art-sm span { font-size: 3rem; }
+.ad-art-card img { width: 100%; max-width: 170px; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 14px; box-shadow: 0 5px 12px rgba(60, 30, 140, 0.25); animation: ad-pinbob 3s ease-in-out infinite; }
+.ad-art-card.ad-art-sm img { max-width: 108px; }
+.ad-art-sm .ad-count-dots { max-width: 140px; gap: 4px; }
+.ad-art-sm .ad-count-dot { width: 20px; height: 20px; font-size: 0.65rem; border-width: 2px; }
+.ad-art-sm .ad-count-digit { font-size: 2.4rem; }
+.ad-art-sm .ad-flagpole { width: 90px; border-left-width: 5px; padding-left: 6px; }
+.ad-art-sm.ad-art-person svg { width: 96px; }
+.ad-art-sm .ad-pin { display: none; }
+.ad-art-sm.ad-art-letters .ad-wood { width: 34px; height: 40px; font-size: 1.2rem; }
+.ad-art-sm.ad-art-phrase span { font-size: 2.8rem; }
+.ad-options[data-pics='true'] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.ad-option[data-pic='true'] { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 8px; text-align: center; }
+.ad-option[data-pic='true']::before { display: none; }
+.ad-option-art { display: flex; align-items: center; justify-content: center; min-height: 92px; width: 100%; }
+.ad-option-text { font-weight: 800; }
+.ad-model-say { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.ad-sticker { flex: 0 0 auto; display: flex; align-items: center; justify-content: center; width: 96px; min-height: 80px; padding: 4px; border-radius: 16px; background: radial-gradient(circle at 50% 30%, #fff, #ece4ff); border: 3px solid var(--line); box-shadow: 0 4px 10px rgba(60, 30, 140, 0.18); animation: ad-pop 0.4s cubic-bezier(0.2, 1.6, 0.4, 1); }
+.ad-msg-row { display: flex; align-items: flex-end; gap: 6px; }
+.ad-msg-row[data-me='true'] { justify-content: flex-end; }
+.ad-sticker-chat { width: 62px; min-height: 52px; }
+@media (max-width: 720px) {
+  .ad-options[data-pics='true'] { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+  .ad-option-art { min-height: 64px; }
+  .ad-art-emoji.ad-art-sm span { font-size: 2.2rem; }
+  .ad-art-card.ad-art-sm img { max-width: 70px; }
+  .ad-sticker { width: 74px; }
+}
