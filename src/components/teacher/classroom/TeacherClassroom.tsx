@@ -816,6 +816,18 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
   const isSceneLessonOnStage =
     hubType === 'playground' && stageMode === 'slide' && !!(displayedSlides as any)?.[0]?.sceneLessonRef;
 
+  // Student interaction is always open once the class has started; only the teacher's Pause (saved as
+  // interactionPaused) closes it. A lesson that comes onto the stage after the class started (switching
+  // lessons, a reload) mounts locked, so open it here instead of making the teacher press the button.
+  const interactionPaused = !!(sessionContext as any)?.interactionPaused;
+  const sceneLessonKey = isSceneLessonOnStage ? JSON.stringify((displayedSlides as any)?.[0]?.sceneLessonRef ?? null) : null;
+  const classIsStarted = !!(sessionContext as any)?.classStarted;
+  useEffect(() => {
+    if (!classIsStarted || !sceneLessonKey || interactionPaused) return;
+    const t = window.setTimeout(() => { mainStageRef.current?.setSceneInteractionUnlocked(true); }, 400);
+    return () => window.clearTimeout(t);
+  }, [classIsStarted, sceneLessonKey, interactionPaused]);
+
   const homeworkTimelineSyncedRef = React.useRef(false);
   useEffect(() => {
     if (homeworkTimelineSyncedRef.current || !isConnected) return;
@@ -1009,7 +1021,7 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
     }
     if (startingRef.current) return;
     startingRef.current = true;
-    const saved = await updateSessionContext({ ...(sessionContext || {}), classStarted: true, startedAt: new Date().toISOString() })
+    const saved = await updateSessionContext({ ...(sessionContext || {}), classStarted: true, interactionPaused: false, startedAt: new Date().toISOString() })
       .finally(() => { startingRef.current = false; });
     if (!saved) {
       // Used to fail silently — the button looked dead until the page was refreshed.
@@ -1531,6 +1543,8 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
               await setDrawingEnabled(enabled);
               await setStudentCanDraw(enabled); // keep legacy flag in sync
               mainStageRef.current?.setSceneInteractionUnlocked(enabled);
+              // Remember an explicit pause, so a lesson switch or reload doesn't quietly reopen it.
+              void updateSessionContext({ ...(sessionContext || {}), interactionPaused: !enabled });
             }}
             activeTool={(activeTool === 'pen' || activeTool === 'eraser' || activeTool === 'highlighter' || activeTool === 'pointer') ? activeTool : 'pen'}
             onToolChange={(t) => handleToolChange(t)}
