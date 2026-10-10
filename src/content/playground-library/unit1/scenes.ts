@@ -499,6 +499,16 @@ export type Scene =
       doneLine: string;
     }
   | {
+      /** "Café Order" (Unit 8 Lesson 2): a friend orders one or two things ("Bread and water, please!"),
+       *  the child puts them on the tray and serves. `order` = indices of `menu`. `seat` = % position of the
+       *  customer on the stage. */
+      id: string; kind: 'cafe-order'; bg: string; teacher: string; who: CharKey;
+      seat: { x: number; y: number };
+      menu: { word: string; img: string }[];
+      rounds: { customer: CharKey; order: number[]; line: string; reply: string }[];
+      doneLine: string;
+    }
+  | {
       /** "The Mystery Bag" — a toy's silhouette peeks out of a bag; tap which
        *  toy it is, then it jumps out in colour ("It's a red ball!") and the
        *  child says it (Unit 3 Lesson 1). */
@@ -12627,4 +12637,201 @@ export const LESSON_U8L1_SCENES: Scene[] = [
     ],
   },
   { id: 'u8l1-finale', kind: 'finale', bg: bgU8L1Picnic, who: 'pip', line: 'Apple, banana, milk! Crunch, yum, gulp! Goodbye, friend!' },
+];
+
+/* =============================================================================
+ * Pre-A1 Unit 8, Lesson 2 — "Bread, Water, Juice!" (Food & Drink)
+ *
+ * From the picnic (Lesson 1) to Pip's little bakery café on a sunny morning: bread baskets on the
+ * counter, a jug of orange juice and a jug of water, round tables by the window. The child is the
+ * waiter in the new Café Order game: friends order one thing, then two ("Bread and water, please!"),
+ * and the child puts them on the tray and serves. Eat or drink? (catch and sort), the food train
+ * (what is missing?) and the first sounds B (bread), W (water), J (juice).
+ * ========================================================================= */
+
+const bgU8L2Cafe = `${A}/scenes/bg-u8l2-cafe-wide.png`;
+const bgU8L2CafeEmpty = `${A}/scenes/bg-u8l2-cafe-empty-wide.png`;
+const itemBread = `${A}/items/item-bread.png`;
+const itemJuice = `${A}/items/item-juice.png`;
+const itemWaterGlass = `${A}/items/item-water-glass.png`;
+
+export const LESSON_U8L2_TITLE = 'Bread, Water, Juice!';
+export const LESSON_U8L2_OBJECTIVE = 'Name bread, water and juice ("It\'s bread! It\'s juice!"), ask politely ("Juice, please!" / "Bread and water, please!"), serve a friend\'s order of one or two things, sort food and drinks, and hear the first sounds B, W and J, by listening, moving and playing, no reading.';
+
+export const LESSON_U8L2_SCENES: Scene[] = [
+  { id: 'u8l2-title', kind: 'title-card', bg: bgU8L2Cafe, level: 'Pre-A1', unit: 'Unit 8', lessonLabel: 'Lesson 2', title: 'Bread, Water, Juice!', subtitle: "Welcome to Pip's café!" },
+
+  /* 1-3 Hook */
+  {
+    id: 'u8l2-song', kind: 'song', bg: bgU8L2Cafe, title: '\u{1F3B5} Bread, Water, Juice! \u{1F3B5}', teacher: 'Sing and act: hold your bread, drink your water, sip your juice — and say thank you!',
+    durationSeconds: 20, bigWord: 'Please', songUrl: `${A}/audio/bread-water-juice-song-u8l2.mp3?v=1`,
+    lineDurationsMs: [3840, 4540, 4780, 6902],
+    songPrompt: 'Cheerful bouncy kids café song',
+    lyrics: [
+      { who: 'pip', text: 'Bread, bread! Bread, please!', emotion: 'happy' },
+      { who: 'pip', text: 'Water, water! Water, please!', emotion: 'happy' },
+      { who: 'pip', text: 'Juice, juice! Orange juice, please!', emotion: 'happy' },
+      { who: 'pip', text: 'Bread and juice! Thank you! Yum!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 8 · Lesson 1 · Apple, Banana, Milk! (the picnic food).
+    id: 'u8l2-recall-warmup', kind: 'recall-warmup', bg: bgU8L2CafeEmpty, who: 'pip', mode: 'click',
+    fromLabel: 'Lesson 1 · Apple, Banana, Milk!',
+    teacher: 'Warm-up from last lesson: Pip asks for a picnic food, the child finds it and says it.',
+    items: [
+      { word: 'apple', say: "Can I have an apple, please?", img: itemApple },
+      { word: 'banana', say: 'Can I have a banana, please?', img: itemBanana },
+      { word: 'milk', say: 'Can I have milk, please?', img: itemMilk },
+    ],
+  },
+  {
+    id: 'u8l2-intro', kind: 'cinematic', bg: bgU8L2Cafe, hidePipOverlay: true, title: 'Bread, Water, Juice!', subtitle: "Pip's café", narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'Good morning! Welcome to my café!' },
+      { who: 'pip', line: 'I have bread, water and juice. You can help me!' },
+    ],
+    cta: "Let's help!",
+  },
+
+  /* 4-5 The words, move */
+  {
+    id: 'u8l2-words', kind: 'listen-repeat-cards', textSide: 'right', bg: bgU8L2CafeEmpty, teacher: 'Listen, then say it with Pip: "It\'s bread!"',
+    cards: [
+      { who: 'pip', sentence: "It's bread!", img: itemBread, imgLabel: 'bread' },
+      { who: 'pip', sentence: "It's water!", img: itemWaterGlass, imgLabel: 'water' },
+      { who: 'pip', sentence: "It's juice!", img: itemJuice, imgLabel: 'juice' },
+    ],
+  },
+  {
+    id: 'u8l2-move', kind: 'tpr-actions', bg: bgU8L2Cafe, who: 'pip',
+    teacher: 'Stand up! Be a waiter with Pip.',
+    rounds: [
+      { line: 'Carry the tray! Walk, walk!', emoji: '\u{1F37D}️' },
+      { line: 'Pour the water! Splash!', emoji: '\u{1F4A7}', img: itemWaterGlass },
+      { line: 'Cut the bread! Chop, chop!', emoji: '\u{1F35E}', img: itemBread },
+      { line: 'Ring the bell! Ding, ding!', emoji: '\u{1F6CE}️' },
+    ],
+  },
+
+  /* 6 Signature game (new): Café Order */
+  {
+    id: 'u8l2-cafe', kind: 'cafe-order', bg: bgU8L2CafeEmpty, who: 'pip',
+    teacher: 'Café Order! A friend orders. The child taps the food and drinks to put them on the tray (tap again to take one off), then rings the bell. Say the order back: "Bread and water!"',
+    seat: { x: 78, y: 52 },
+    menu: [
+      { word: 'bread', img: itemBread },
+      { word: 'water', img: itemWaterGlass },
+      { word: 'juice', img: itemJuice },
+    ],
+    rounds: [
+      { customer: 'mia', order: [2], line: 'Juice, please!', reply: 'Thank you! Yum, juice!' },
+      { customer: 'leo', order: [0], line: 'Bread, please!', reply: 'Thank you! I like bread!' },
+      { customer: 'bella', order: [0, 1], line: 'Bread and water, please!', reply: 'Thank you! Bread and water!' },
+      { customer: 'willow', order: [0, 2], line: 'Bread and juice, please!', reply: 'Thank you! Yum, yum!' },
+    ],
+    doneLine: 'Great job, waiter! Everybody is happy!',
+  },
+
+  /* 7-9 More games */
+  {
+    id: 'u8l2-eat-drink', kind: 'catch-sort', bg: bgU8L2CafeEmpty, teacher: 'Catch it! Do we eat it or drink it? Say the word as you catch it.', goal: 8, seconds: 45,
+    left: { label: 'Eat', img: itemBread, emoji: '\u{1F37D}️' },
+    right: { label: 'Drink', img: itemWaterGlass, emoji: '\u{1F964}' },
+    items: [
+      { word: 'bread', img: itemBread, emoji: '\u{1F35E}', target: 'left' },
+      { word: 'apple', img: itemApple, emoji: '\u{1F34E}', target: 'left' },
+      { word: 'banana', img: itemBanana, emoji: '\u{1F34C}', target: 'left' },
+      { word: 'water', img: itemWaterGlass, emoji: '\u{1F4A7}', target: 'right' },
+      { word: 'juice', img: itemJuice, emoji: '\u{1F9C3}', target: 'right' },
+      { word: 'milk', img: itemMilk, emoji: '\u{1F95B}', target: 'right' },
+    ],
+  },
+  {
+    id: 'u8l2-pip-asks', kind: 'join-stage', bg: bgU8L2Cafe, teacher: 'Pip is the waiter now. The child orders politely — any food or drink is fine.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Hello! What do you want?', bubble: 'right' },
+      { who: 'student', line: 'Juice, please!', bubble: 'right' },
+      { who: 'pip', line: 'Here you are! And to eat?', bubble: 'right' },
+      { who: 'student', line: 'Bread, please! Thank you!', bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u8l2-train', kind: 'train-recall', bg: bgU8L2CafeEmpty, teacher: 'All aboard the café train! Remember the food and drinks in each car, then say what is missing.',
+    question: 'Choo choo! One car is empty. What is missing?',
+    cars: [
+      { word: 'BREAD', img: itemBread, emoji: '\u{1F35E}' },
+      { word: 'JUICE', img: itemJuice, emoji: '\u{1F9C3}' },
+      { word: 'WATER', img: itemWaterGlass, emoji: '\u{1F4A7}' },
+      { word: 'APPLE', img: itemApple, emoji: '\u{1F34E}' },
+      { word: 'MILK', img: itemMilk, emoji: '\u{1F95B}' },
+    ],
+  },
+
+  /* 10 Sounds: B, W, J */
+  {
+    id: 'u8l2-pick-bwj', kind: 'sound-pick', bg: bgU8L2CafeEmpty, who: 'pip',
+    teacher: 'Which one? Listen to the sound, then tap the picture that starts with it. Say the word too!',
+    rounds: [
+      { sound: 'j', answer: 2, options: [{ word: 'water', img: itemWaterGlass }, { word: 'apple', img: itemApple }, { word: 'juice', img: itemJuice }] },
+      { sound: 'w', answer: 0, options: [{ word: 'water', img: itemWaterGlass }, { word: 'bread', img: itemBread }, { word: 'milk', img: itemMilk }] },
+      { sound: 'b', answer: 1, options: [{ word: 'juice', img: itemJuice }, { word: 'bread', img: itemBread }, { word: 'water', img: itemWaterGlass }] },
+      { sound: 'j', answer: 0, options: [{ word: 'juice', img: itemJuice }, { word: 'milk', img: itemMilk }, { word: 'apple', img: itemApple }] },
+    ],
+  },
+
+  /* 11 My order */
+  {
+    id: 'u8l2-my-order', kind: 'join-stage', bg: bgU8L2Cafe, teacher: 'Your turn to be the waiter! Ask Pip "What do you want?" and serve him.', cast: ['pip'],
+    turns: [
+      { who: 'student', line: 'Hello! What do you want?', bubble: 'right' },
+      { who: 'pip', line: 'Water and bread, please!', bubble: 'right' },
+      { who: 'student', line: 'Here you are!', bubble: 'right' },
+      { who: 'pip', line: 'Thank you! Yum!', bubble: 'right' },
+    ],
+  },
+
+  /* 12-13 Sticker + Home Mission */
+  {
+    id: 'u8l2-sticker', kind: 'sticker-reward', bg: bgU8L2Cafe, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'You are a great waiter! Here is a juice sticker for you!', sticker: { img: itemJuice, label: 'Café waiter' },
+  },
+  {
+    id: 'u8l2-home-mission', kind: 'home-mission', bg: bgU8L2Cafe, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: play café at home! Ask your family "What do you want?" and serve bread, water or juice!',
+    parentNote: 'Play café at a meal or snack: your child asks "What do you want?", you answer "Bread and water, please!", and they bring it. Then swap: let them order with "Juice, please!" and say "Thank you!".',
+    steps: [
+      { emoji: '\u{1F35E}', img: itemBread, say: 'Bread, please!' },
+      { emoji: '\u{1F4A7}', img: itemWaterGlass, say: 'Water, please!' },
+      { emoji: '\u{1F9C3}', img: itemJuice, say: 'Juice, please!' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u8l2-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU8L2Cafe, who: 'pip',
+    teacher: 'Extra time: Brain Break! Do each action with Pip.',
+    rounds: [
+      { line: 'Knead the bread! Push, push!', emoji: '\u{1F35E}' },
+      { line: 'Squeeze an orange for juice!', emoji: '\u{1F34A}' },
+      { line: 'Wave to the friends at the table!', emoji: '\u{1F44B}' },
+      { line: 'Freeze!', emoji: '\u{1F976}', seconds: 3 },
+    ],
+  },
+
+  /* Goodbye */
+  {
+    id: 'u8l2-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u8l2-finale', kind: 'finale', bg: bgU8L2Cafe, who: 'pip', line: 'Bread, water, juice! Please and thank you! Goodbye, friend!' },
 ];

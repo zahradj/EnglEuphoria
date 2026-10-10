@@ -308,5 +308,10 @@
     "path": "public/lep1/audio/apple-banana-milk-song-u8l1.mp3",
     "bytes": 321037,
     "sha256": "24825437d15ce74971f02e9ba268699a77ccbd46a162efd2a27771509a8bd713"
+  },
+  "u8l2-bread-water-juice": {
+    "path": "public/lep1/audio/bread-water-juice-song-u8l2.mp3",
+    "bytes": 321037,
+    "sha256": "fff4c5a6d346e487209b7d6c92917e25748c997cd2e6ace04e462ffbbb07425b"
   }
 }

@@ -60,6 +60,7 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
   '4-4': { settings: ['flower garden'], look: 'bright flower garden with big friendly mushrooms; Pip meets Bo, a round sky-blue three-eyed monster; code-drawn monsters on an empty lawn' },
   '4-5': { settings: ['animal park'], look: 'sunny animal park with a blue pond and tall trees; a tiger, a monkey, an elephant and a seal each show one move, Pip copies; a leafy bush to peek through' },
+  '8-2': { settings: ['bakery café'], look: "Pip's little bakery café on a sunny morning: a wooden counter with baskets of bread loaves, a glass jug of orange juice and a jug of water, a chalkboard with a drawn loaf and cup, round wooden tables with green-cushioned chairs by a big window with flower boxes; Pip in a small white apron behind the counter, friends come to the table to order" },
   '8-1': { settings: ['picnic hill'], look: "a picnic on a sunny green spring hill: a big red-and-white checkered blanket, an open wicker basket, a shady apple tree full of red apples, a little blue stream and yellow flowers; Pip sits on the blanket with an apple, a banana and a glass of milk" },
   '7-6': { settings: ['farm at night'], look: "Grandpa's farm at night under a big full moon and stars: the red barn with its door half open and a lantern glowing, a round haystack, a little red chicken coop, a big tree with a hollow, a blue water trough and a pond with reeds; the farm is dark and the child's torch beam finds the hiding animals, then the farm lights come on" },
   '7-5': { settings: ['barn at sunrise', 'farm gate'], look: "Grandpa's farm on a misty early morning: a big red barn with four white stall doors in a row at sunrise, Grandpa fox in a straw farmer hat and blue overalls with Pip; the doors open one by one (cow, pig, sheep, duck) and the animals gather in the golden yard" },
@@ -200,6 +201,19 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'the child must understand the verb AND the body part to find the animal, then PRODUCES the move and the sentence — the screen waits for the child, never a clock',
       'the clue in Whose Is It? is one of the unit\'s body words, so naming the part and the animal go together, and the reveal recalls the story move',
       'wrong picks are named back with that animal\'s own move ("No, the seal claps her hands!"), and the right one glows after two tries',
+    ],
+  },
+  '8-2': {
+    sources: ['Lingokids and Toca-style café / shop role play (take an order and serve it)', 'Cambridge (Pre A1 Starters listening: listen and tick two things; food and drink words)', 'classroom "restaurant" role play with picture menus', 'Wordwall group sort (eat or drink)'],
+    mechanics: [
+      'café role play → Café Order: a friend orders one thing, then two ("Bread and water, please!"); the child taps them onto the tray and rings the bell to serve',
+      'group sort → Eat or drink? catch-and-sort, the café food train (what is missing?) and first sounds B, W, J',
+      'role swap: the child is the waiter and asks "What do you want?"',
+    ],
+    betterThan: [
+      'orders grow from one to two things, so the child holds a whole spoken order in mind, then builds it themself (choose, check, serve) instead of tapping one picture',
+      'a wrong tray comes back with the order said again, so the child simply listens again; the right food glows after two tries',
+      'calm by design: no clock, every friend asks politely and thanks the child, and the waiter phrases are used again in the role swap',
     ],
   },
   '8-1': {
