@@ -323,5 +323,10 @@
     "path": "public/lep1/audio/i-like-apples-song-u8l4.mp3",
     "bytes": 321037,
     "sha256": "ba0ad463ef972eeb0cef953898c9b095435afeaafebd79f131afb5257b766177"
+  },
+  "u8l5-hungry-caterpillar": {
+    "path": "public/lep1/audio/hungry-caterpillar-song-u8l5.mp3",
+    "bytes": 321037,
+    "sha256": "5e83804ae7457ec260f6d9a3cec0c35e483337bd6d0f87ad21c350badab756a2"
   }
 }

@@ -1,0 +1,11 @@
+[
+ {"word": "caterpillar", "at": [49, 58], "label": [49, 24], "from": 0.8, "to": 3.8},
+ {"word": "hungry", "at": [53, 62], "label": [74, 30], "from": 4.6, "to": 7.8},
+ {"word": "apple", "at": [49, 64], "label": [76, 26], "from": 8.8, "to": 12.8},
+ {"word": "bread", "at": [34, 52], "label": [58, 24], "from": 13.8, "to": 17.8},
+ {"word": "cake", "at": [44, 64], "label": [24, 30], "from": 18.8, "to": 22.8},
+ {"word": "apple", "at": [32, 80], "label": [14, 62], "from": 28.0, "to": 30.8},
+ {"word": "bread", "at": [49, 80], "label": [49, 95], "from": 28.0, "to": 30.8},
+ {"word": "cake", "at": [68, 80], "label": [86, 62], "from": 28.0, "to": 30.8},
+ {"word": "butterfly", "at": [52, 45], "label": [76, 18], "from": 36.8, "to": 40.8}
+]

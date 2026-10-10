@@ -55,3 +55,9 @@ title → Remember? (Lesson 4) → intro → **story film** → story words (lis
 
 ## Owner approval
 Approved: owner, 2026-10-10 — "yes".
+
+## As built (2026-10-10)
+- 9 Canva pictures (`public/lep1/scenes/bg-u8l5-story-1..9-wide.png`), each an edit of the unit's own place pictures with the caterpillar sticker as the character reference; checked against the shot list (contact sheet) before the film was made.
+- Film: `public/lep1/video/hungry-caterpillar-u8l5.mp4` (+ .webm), stills cross-faded by `scripts/make-stills-film.py` (pages: `scripts/film-labels/u8l5-hungry-caterpillar-pages.json`), labels by `scripts/label-video.py` (`scripts/film-labels/u8l5-hungry-caterpillar.json`). Shot times: 0 / 4 / 8 / 13 / 18 / 23 (question, answer at 28) / 31 / 36 / 41 s.
+- Voices: the caterpillar speaks with Mia's recorded voice, Pip asks the question and says the last line; the lesson's story page plays each line at its `atSec`.
+- The lesson song ("The Hungry Caterpillar") comes after the story, the words and Caterpillar Crawl; the best take sings "Now I'm full", so the lyric shows "Now I'm full!".

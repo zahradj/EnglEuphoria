@@ -60,6 +60,7 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
   '4-4': { settings: ['flower garden'], look: 'bright flower garden with big friendly mushrooms; Pip meets Bo, a round sky-blue three-eyed monster; code-drawn monsters on an empty lawn' },
   '4-5': { settings: ['animal park'], look: 'sunny animal park with a blue pond and tall trees; a tiger, a monkey, an elephant and a seal each show one move, Pip copies; a leafy bush to peek through' },
+  '8-5': { settings: ['spring flower garden', 'story places of the unit'], look: "a sunny spring flower garden with big green leaves, colourful flowers and a curvy path, where a little round green caterpillar peeks out; the story film visits the unit's places (the picnic blanket, Pip's café counter, the party table) with the caterpillar munching one food at each, then an evening orchard with a hanging cocoon and a bright morning with a green-and-yellow butterfly; Pip waves at the end" },
   '8-4': { settings: ['autumn apple orchard'], look: "a sunny autumn apple orchard: trees heavy with red apples, golden leaves on the grass, a long wooden table where the four friends each hold up the food they like (Pip an apple, Mia a banana, Leo pizza, Bella ice cream); the empty orchard with a wooden counter and a little smoothie cart becomes the Smoothie Bar with a big code-drawn blender" },
   '8-3': { settings: ['park party food truck'], look: "a summer party in a green park: a bright red-and-yellow food truck with a striped awning, a big round pizza, a pink birthday cake with candles and three ice-cream cones on its counter, Pip in a white chef hat waving from the window; bunting, balloons and a wooden picnic table; a moving grey belt carries the party food past the table" },
   '8-2': { settings: ['bakery café'], look: "Pip's little bakery café on a sunny morning: a wooden counter with baskets of bread loaves, a glass jug of orange juice and a jug of water, a chalkboard with a drawn loaf and cup, round wooden tables with green-cushioned chairs by a big window with flower boxes; Pip in a small white apron behind the counter, friends come to the table to order" },
@@ -203,6 +204,19 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'the child must understand the verb AND the body part to find the animal, then PRODUCES the move and the sentence — the screen waits for the child, never a clock',
       'the clue in Whose Is It? is one of the unit\'s body words, so naming the part and the animal go together, and the reveal recalls the story move',
       'wrong picks are named back with that animal\'s own move ("No, the seal claps her hands!"), and the right one glows after two tries',
+    ],
+  },
+  '8-5': {
+    sources: ['Sesame Workshop (model, repeat, then the child says it; story with a planned pause)', 'Blue\'s Clues "pause" (ask, wait, then answer)', 'Khan Academy Kids / Lingokids "feed the character" and the classic grow-longer arcade game', 'Oxford Owl / Cambridge (picture story, retell in order; true or false)'],
+    mechanics: [
+      'picture story with a planned pause → our own stills film: the caterpillar visits the unit\'s places and says "I like …!", Pip asks "What does it like?" and waits 4 s',
+      'feed the character + grow longer → Caterpillar Crawl: the caterpillar says "I like bananas!", the child taps it, the caterpillar crawls over, eats it and grows a segment, and at the end becomes the butterfly',
+      'lift the leaf ("Where is the caterpillar?"), tick or cross about the story, story order, letter blocks C and B, and the child plays the caterpillar',
+    ],
+    betterThan: [
+      'the story recycles the whole unit (picnic, café, party, orchard), so the new sentence "I like …" is heard with food the child already knows',
+      'the song comes after the story, the words and the first game (owner, 2026-10-10), so the child sings words they know',
+      'the growing caterpillar is a visible count of right answers and its ending is the story\'s own ending; no clock, a wrong food is named back',
     ],
   },
   '8-4': {

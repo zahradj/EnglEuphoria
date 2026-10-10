@@ -13257,3 +13257,217 @@ export const LESSON_U8L4_SCENES: Scene[] = [
   },
   { id: 'u8l4-finale', kind: 'finale', bg: bgU8L4Orchard, who: 'pip', line: 'I like apples! What do you like? Goodbye, friend!' },
 ];
+
+/* =============================================================================
+ * Pre-A1 Unit 8, Lesson 5 — "The Very Hungry Caterpillar" (Food & Drink, story lesson)
+ *
+ * Our own story (approved scenario: docs/scenarios/u8l5-hungry-caterpillar.md): a little caterpillar
+ * visits the places of this unit — the picnic, Pip's café, the party — eats one food at each ("I like
+ * apples! Munch, munch!"), sleeps in a cocoon in the orchard and wakes up as a butterfly. Told as a
+ * stills film (pictures hold still and cross-fade, recorded voices, word labels). Owner's order
+ * (2026-10-10): story → the words → a first practice game → THEN the song. New game: Caterpillar Crawl.
+ * The caterpillar speaks with Mia's voice (small and bright); Pip narrates the question and the end.
+ * ========================================================================= */
+
+const bgU8L5Garden = `${A}/scenes/bg-u8l5-garden-empty-wide.png`;
+const u8l5Page = (n: number) => `${A}/scenes/bg-u8l5-story-${n}-wide.png`;
+const itemCaterpillar = `${A}/items/item-caterpillar.png`;
+const itemButterflyU8 = `${A}/items/item-butterfly.png`;
+
+export const LESSON_U8L5_TITLE = 'The Very Hungry Caterpillar';
+export const LESSON_U8L5_OBJECTIVE = 'Follow a short picture story and say what the caterpillar likes ("I like apples! I like bread! I like cake!"), name caterpillar and butterfly, put the story in order, and hear the first sounds C (caterpillar) and B (butterfly), by watching, listening, moving and playing, no reading.';
+
+export const LESSON_U8L5_SCENES: Scene[] = [
+  { id: 'u8l5-title', kind: 'title-card', bg: u8l5Page(1), level: 'Pre-A1', unit: 'Unit 8', lessonLabel: 'Lesson 5', title: 'The Hungry Caterpillar', subtitle: 'A story' },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 8 · Lesson 4 · I Like Apples!
+    id: 'u8l5-recall-warmup', kind: 'recall-warmup', bg: bgU8L5Garden, who: 'pip', mode: 'click',
+    fromLabel: 'Lesson 4 · I Like Apples!',
+    teacher: 'Warm-up from last lesson: Pip says what he likes, the child finds it and says "I like …!" too.',
+    items: [
+      { word: 'apples', say: 'I like apples!', img: itemApple },
+      { word: 'bananas', say: 'I like bananas!', img: itemBanana },
+      { word: 'ice cream', say: 'I like ice cream!', img: itemIceCream },
+    ],
+  },
+  {
+    id: 'u8l5-intro', kind: 'cinematic', bg: bgU8L5Garden, hidePipOverlay: true, title: 'The Hungry Caterpillar', subtitle: 'Story time!', narrator: 'pip',
+    script: [
+      { who: 'pip', line: 'Story time! Look in the garden.' },
+      { who: 'pip', line: 'Someone small is very hungry. Who is it?' },
+    ],
+    cta: "Let's watch!",
+  },
+
+  /* 4 The story film (approved scenario) */
+  {
+    id: 'u8l5-story', kind: 'story-video', bg: u8l5Page(1), videoUrl: `${A}/video/hungry-caterpillar-u8l5.mp4?v=1`, title: 'The Hungry Little Caterpillar',
+    teacher: 'Press play and watch. When Pip asks "What does the caterpillar like?", wait, and let the child answer: "Apples, bread and cake!"',
+    pages: [
+      { img: u8l5Page(1), who: 'mia', line: 'Hello! I am a little caterpillar.', atSec: 0 },
+      { img: u8l5Page(2), who: 'mia', line: 'I am hungry! Munch, munch?', atSec: 4 },
+      { img: u8l5Page(3), who: 'mia', line: 'Look! Apples! I like apples! Munch, munch!', atSec: 8 },
+      { img: u8l5Page(4), who: 'mia', line: 'Look! Bread! I like bread! Munch, munch!', atSec: 13 },
+      { img: u8l5Page(5), who: 'mia', line: 'Look! Cake! I like cake! Munch, munch!', atSec: 18 },
+      { img: u8l5Page(6), who: 'pip', line: 'What does the caterpillar like?', atSec: 23 },
+      { img: u8l5Page(6), who: 'pip', line: 'Apples, bread and cake!', atSec: 28 },
+      { img: u8l5Page(7), who: 'mia', line: 'I am full. Good night!', atSec: 31 },
+      { img: u8l5Page(8), who: 'mia', line: 'Look! I am a butterfly!', atSec: 36 },
+      { img: u8l5Page(9), who: 'pip', line: 'Hello, butterfly! You are beautiful!', atSec: 41 },
+    ],
+    checkpoints: [],
+  },
+
+  /* 5-6 The words, move */
+  {
+    id: 'u8l5-words', kind: 'listen-repeat-cards', textSide: 'right', bg: bgU8L5Garden, teacher: 'Listen, then say it like the caterpillar: "I like apples!"',
+    cards: [
+      { who: 'mia', sentence: "It's a caterpillar!", img: itemCaterpillar, imgLabel: 'caterpillar' },
+      { who: 'mia', sentence: 'I like apples!', img: itemApple, imgLabel: 'apples' },
+      { who: 'mia', sentence: 'I like bread!', img: itemBread, imgLabel: 'bread' },
+      { who: 'mia', sentence: 'I like cake!', img: itemCake, imgLabel: 'cake' },
+      { who: 'mia', sentence: "It's a butterfly!", img: itemButterflyU8, imgLabel: 'butterfly' },
+    ],
+  },
+  {
+    id: 'u8l5-move', kind: 'tpr-actions', bg: bgU8L5Garden, who: 'pip',
+    teacher: 'Stand up! Be the caterpillar.',
+    rounds: [
+      { line: 'Wiggle like a caterpillar! Wiggle, wiggle!', emoji: '\u{1F41B}', img: itemCaterpillar },
+      { line: 'Munch, munch! Eat the apple!', emoji: '\u{1F34E}', img: itemApple },
+      { line: 'Curl up small. Good night!', emoji: '\u{1F634}' },
+      { line: 'Open your wings! Fly like a butterfly!', emoji: '\u{1F98B}', img: itemButterflyU8 },
+    ],
+  },
+
+  /* 7 Signature game (new): Caterpillar Crawl */
+  {
+    id: 'u8l5-crawl', kind: 'caterpillar-crawl', bg: bgU8L5Garden, who: 'mia',
+    teacher: 'Caterpillar Crawl! Listen to the caterpillar, then tap the food it likes. It crawls over, eats it and grows! Say it with the caterpillar: "I like apples!"',
+    headImg: itemCaterpillar, butterflyImg: itemButterflyU8, start: { x: 14, y: 74 },
+    foods: [
+      { word: 'apples', img: itemApple, x: 38, y: 56 },
+      { word: 'bread', img: itemBread, x: 62, y: 50 },
+      { word: 'cake', img: itemCake, x: 82, y: 64 },
+      { word: 'bananas', img: itemBanana, x: 44, y: 80 },
+      { word: 'pizza', img: itemPizzaSlice, x: 66, y: 80 },
+    ],
+    rounds: [
+      { target: 0, line: 'I like apples!', reply: 'Munch, munch! Yummy apples!' },
+      { target: 1, line: 'I like bread!', reply: 'Munch, munch! Yummy bread!' },
+      { target: 2, line: 'I like cake!', reply: 'Munch, munch! Yummy cake!' },
+      { target: 3, line: 'I like bananas!', reply: 'Munch, munch! Yummy bananas!' },
+    ],
+  },
+
+  /* 8 The song — now the child knows the words (owner, 2026-10-10) */
+  {
+    id: 'u8l5-song', kind: 'song', bg: u8l5Page(8), title: '\u{1F3B5} The Hungry Caterpillar \u{1F3B5}', teacher: 'Sing and act: wiggle, munch, then open your wings like a butterfly!',
+    durationSeconds: 20, bigWord: 'Munch', songUrl: `${A}/audio/hungry-caterpillar-song-u8l5.mp3?v=1`,
+    lineDurationsMs: [4080, 4500, 4700, 6782],
+    songPrompt: 'Cheerful bouncy kids song about a hungry caterpillar',
+    lyrics: [
+      { who: 'mia', text: 'Little caterpillar, munch, munch, munch!', emotion: 'happy' },
+      { who: 'mia', text: 'I like apples! I like bread!', emotion: 'happy' },
+      { who: 'mia', text: "I like cake! Now I'm full!", emotion: 'happy' },
+      { who: 'mia', text: 'Look at me! A butterfly!', emotion: 'happy' },
+    ],
+  },
+
+  /* 9-11 More games */
+  {
+    id: 'u8l5-where-caterpillar', kind: 'lift-flap', bg: bgU8L5Garden, who: 'pip',
+    teacher: 'Where is the caterpillar? The child asks at each leaf ("Is it under this leaf?") and taps to look.',
+    question: 'Where is the caterpillar?',
+    notYet: 'Not yet! Look under the other leaves first!',
+    spots: [
+      { x: 26, y: 62, size: 13, ask: 'Is it under this leaf?', reveal: "No! It's an ant!", cover: { img: itemLeaf, label: 'leaf' }, under: { img: itemAnt, label: 'ant' } },
+      { x: 48, y: 52, size: 13, ask: 'Is it under this leaf?', reveal: "No! It's a frog!", cover: { img: itemLeaf, label: 'leaf' }, under: { img: itemFrog, label: 'frog' } },
+      { x: 70, y: 62, size: 13, ask: 'Is it under this leaf?', reveal: "No! It's a bird!", cover: { img: itemLeaf, label: 'leaf' }, under: { img: itemBird, label: 'bird' } },
+      { x: 50, y: 80, size: 13, ask: 'Is it under this leaf?', reveal: "Yes! It's the caterpillar! Hello!", target: true, cover: { img: itemLeaf, label: 'leaf' }, under: { img: itemCaterpillar, label: 'caterpillar' } },
+    ],
+  },
+  {
+    id: 'u8l5-true-or-not', kind: 'tick-cross', bg: bgU8L5Garden, who: 'pip',
+    teacher: 'Look and listen. Is it right? Tap ✓ or ✗.',
+    rounds: [
+      { img: u8l5Page(3), sentence: 'The caterpillar likes apples.', isTrue: true },
+      { img: u8l5Page(4), sentence: 'The caterpillar is on a cake.', isTrue: false },
+      { img: u8l5Page(5), sentence: 'The caterpillar likes cake.', isTrue: true },
+      { img: u8l5Page(8), sentence: "It's a butterfly.", isTrue: true },
+    ],
+  },
+  {
+    id: 'u8l5-story-order', kind: 'story-order', bg: bgU8L5Garden, who: 'pip',
+    teacher: 'Put the story in order! Then tell it with Pip: first, then, then, at the end.',
+    frames: [
+      { img: u8l5Page(2), caption: 'I am hungry!', who: 'mia' },
+      { img: u8l5Page(3), caption: 'I like apples!', who: 'mia' },
+      { img: u8l5Page(7), caption: 'Good night!', who: 'mia' },
+      { img: u8l5Page(8), caption: 'I am a butterfly!', who: 'mia' },
+    ],
+  },
+  {
+    id: 'u8l5-blocks', kind: 'alphabet-blocks', bg: bgU8L5Garden, teacher: 'Letter Blocks! C for caterpillar, B for butterfly. Tap the sound, then stack the word!', letters: ['C', 'A', 'T', 'B', 'U', 'G'],
+    tapRounds: [{ letter: 'C' }, { letter: 'B' }, { letter: 'C' }, { letter: 'G' }],
+    words: [
+      { word: 'CAT', emoji: '\u{1F408}' },
+      { word: 'BUG', emoji: '\u{1F41B}' },
+    ],
+  },
+
+  /* 12 Be the caterpillar */
+  {
+    id: 'u8l5-be-caterpillar', kind: 'join-stage', bg: bgU8L5Garden, teacher: 'The child is the hungry caterpillar! Pip offers food; the child answers with "I like …!" Any food is fine.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Hello, little caterpillar! Are you hungry?', bubble: 'right' },
+      { who: 'student', line: 'Yes! I am hungry!', bubble: 'right' },
+      { who: 'pip', line: 'What do you like?', bubble: 'right' },
+      { who: 'student', line: 'I like apples! Munch, munch!', bubble: 'right' },
+    ],
+  },
+
+  /* 13-14 Sticker + Home Mission */
+  {
+    id: 'u8l5-sticker', kind: 'sticker-reward', bg: u8l5Page(9), who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'What a story! Here is a butterfly sticker for you!', sticker: { img: itemButterflyU8, label: 'Story star' },
+  },
+  {
+    id: 'u8l5-home-mission', kind: 'home-mission', bg: u8l5Page(9), who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: tell the caterpillar story at home! Wiggle, munch, and fly!',
+    parentNote: 'Today your child watched a story about a hungry caterpillar who eats an apple, bread and cake and becomes a butterfly. Ask "What does the caterpillar like?" and let your child answer "I like apples!". Act it out together: wiggle, munch, sleep, fly!',
+    steps: [
+      { emoji: '\u{1F41B}', img: itemCaterpillar, say: 'I am hungry!' },
+      { emoji: '\u{1F34E}', img: itemApple, say: 'I like apples! Munch, munch!' },
+      { emoji: '\u{1F98B}', img: itemButterflyU8, say: 'Look! I am a butterfly!' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u8l5-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU8L5Garden, who: 'pip',
+    teacher: 'Extra time: Brain Break! Do each action with Pip.',
+    rounds: [
+      { line: 'Crawl like a caterpillar!', emoji: '\u{1F41B}' },
+      { line: 'Rub your full tummy!', emoji: '\u{1F60B}' },
+      { line: 'Flap your butterfly wings!', emoji: '\u{1F98B}' },
+      { line: 'Freeze!', emoji: '\u{1F976}', seconds: 3 },
+    ],
+  },
+
+  /* Goodbye */
+  {
+    id: 'u8l5-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u8l5-finale', kind: 'finale', bg: u8l5Page(9), who: 'pip', line: 'The caterpillar is a butterfly! What do you like? Goodbye, friend!' },
+];
