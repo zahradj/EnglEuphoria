@@ -1,7 +1,17 @@
 [
   {
-    "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0006-8857973106019276592.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261010%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261010T060719Z&X-Amz-Expires=24643&X-Amz-Signature=6c56c87d16708250a4369271a3c7c54c70ff6abf011daa04082d53c880a07165&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sat%2C%2010%20Oct%202026%2012%3A58%3A02%20GMT",
-    "out": "public/lep1/scenes/bg-u7l6-night-farm-wide.png",
+    "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0007-9112426487437369819.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261010%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261010T111405Z&X-Amz-Expires=7945&X-Amz-Signature=771205084b792c70cff2f4493d91cee95dc43edb75e6ae0091f985459057abca&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sat%2C%2010%20Oct%202026%2013%3A26%3A30%20GMT",
+    "out": "public/lep1/scenes/bg-u8l1-picnic-empty-wide.png",
     "sticker": false
+  },
+  {
+    "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0008-9112426487437369819.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261010%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261010T050304Z&X-Amz-Expires=29598&X-Amz-Signature=dc128afae2529bf76bcc26e8afea80dec874a8cd13d7e104b9a6965d7fb43beb&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sat%2C%2010%20Oct%202026%2013%3A16%3A22%20GMT",
+    "out": "public/lep1/scenes/bg-u8l1-picnic-wide.png",
+    "sticker": false
+  },
+  {
+    "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0009-432864107392247671.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261009%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261009T200424Z&X-Amz-Expires=63616&X-Amz-Signature=e6c966715cc0a0138b0df81b4e17420da58d5ea7ec9aabe9054c7c6e93570722&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sat%2C%2010%20Oct%202026%2013%3A44%3A40%20GMT",
+    "out": "public/lep1/items/item-banana.png",
+    "sticker": true
   }
 ]
