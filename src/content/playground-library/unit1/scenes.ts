@@ -13984,9 +13984,9 @@ export const LESSON_U9L2_SCENES: Scene[] = [
     id: 'u9l2-put-on', kind: 'put-on', bg: bgU9L2HallEmpty, who: 'pip',
     teacher: 'Put It On! Listen: WHO asks, and for WHAT? Tap the piece on the bench and it goes on that friend. Then the child says it: "Put on your hat!"',
     dolls: [
-      { who: 'pip', img: CAST.pip.img, x: 24, y: 46, h: 50, head: { x: 47, y: 24, w: 38 }, feet: { x: 48, y: 85, w: 34 } },
-      { who: 'mia', img: CAST.mia.img, x: 50, y: 47, h: 46, head: { x: 50, y: 25, w: 34 }, feet: { x: 52, y: 90, w: 34 } },
-      { who: 'leo', img: CAST.leo.img, x: 76, y: 44, h: 56, head: { x: 50, y: 13, w: 34 }, feet: { x: 51, y: 92, w: 36 } },
+      { who: 'pip', img: CAST.pip.img, x: 22, y: 58, h: 46, head: { x: 47, y: 24, w: 38 }, feet: { x: 48, y: 85, w: 34 } },
+      { who: 'mia', img: CAST.mia.img, x: 50, y: 54, h: 42, head: { x: 50, y: 25, w: 34 }, feet: { x: 52, y: 90, w: 34 } },
+      { who: 'leo', img: CAST.leo.img, x: 78, y: 53, h: 52, head: { x: 50, y: 13, w: 34 }, feet: { x: 51, y: 92, w: 36 } },
     ],
     clothes: [
       { word: 'hat', img: itemHatGreen, on: 'head', layer: 2 },

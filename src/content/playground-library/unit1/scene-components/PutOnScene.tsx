@@ -89,7 +89,8 @@ export function PutOnScene({ scene, onWin, onNext, sync }: { scene: PutOn; onWin
       {scene.dolls.map((d, di) => {
         const talking = !!r && r.doll === di;
         return (
-          <motion.div key={di} className="pointer-events-none absolute z-20 -translate-x-1/2 -translate-y-1/2" style={{ left: `${d.x}%`, top: `${d.y}%`, height: `${d.h}vh`, aspectRatio: '1 / 1' }}
+          <div key={di} className="pointer-events-none absolute z-20 -translate-x-1/2 -translate-y-1/2" style={{ left: `${d.x}%`, top: `${d.y}%`, height: `${d.h}vh`, aspectRatio: '1 / 1' }}>
+          <motion.div className="absolute inset-0"
             animate={done ? { y: [0, -26, 0, -14, 0], scale: 1 } : talking ? { y: [0, -8, 0], scale: 1.06 } : { y: 0, scale: 0.94 }}
             transition={done ? { duration: 1, repeat: Infinity, repeatDelay: 0.5, delay: di * 0.15 } : talking ? { y: { duration: 1.2, repeat: Infinity, ease: 'easeInOut' }, scale: { duration: 0.3 } } : { duration: 0.3 }}>
             {talking && <span className="absolute inset-x-[18%] bottom-[2%] h-[8%] rounded-[50%] bg-yellow-300/70 blur-md" />}
@@ -107,6 +108,7 @@ export function PutOnScene({ scene, onWin, onNext, sync }: { scene: PutOn; onWin
               })}
             </AnimatePresence>
           </motion.div>
+          </div>
         );
       })}
 
