@@ -34,6 +34,8 @@ export interface SlideBase {
   hints?: [string, string?];
   /** one line for the teacher in a live class */
   note?: string;
+  /** the knowledge items (words/chunks) this slide practises: homework results are logged per item */
+  items?: string[];
 }
 
 export interface TitleSlide extends SlideBase { kind: 'title'; heading: string; sub: string }
@@ -77,6 +79,15 @@ export interface TeachSlide extends SlideBase { kind: 'teach'; title: string; pa
 /** Modelling: the characters DO the language, line by line; the pattern card shows the frame and the part that changes. */
 export type ModelPart = string | { slot: string; label: string };
 export interface ModelSlide extends SlideBase { kind: 'model'; title: string; lines: { who: CastName; text: string; pic?: TeachArt; frame?: ModelPart[]; note?: string }[]; closing: string }
+/** Hidden-object hunt (homework): find the numbers hidden in the scene. Drawn number cards are placed on the scene plate. */
+export interface HuntSlide extends SlideBase {
+  kind: 'hunt';
+  prompt: string;
+  targets: { word: string; n: number; x: number; y: number }[];
+  decoys: { n: number; x: number; y: number }[];
+}
+/** Shadow match (homework): a dark silhouette of a picture; pick the right word. */
+export interface ShadowSlide extends SlideBase { kind: 'shadow'; prompt: string; rounds: { art: TeachArt; answer: string; options: string[] }[] }
 export interface BorderSlide extends SlideBase { kind: 'border'; prompt: string; /** nationality word -> flag code: each passport shows its flag */ flags?: Record<string, string>; rounds: { flag: string; says: string; answer: string; options: string[] }[]; stamp?: string }
 export interface MemorySlide extends SlideBase { kind: 'memory'; prompt: string; pairs: { flag: string; text: string }[] }
 export interface PhoneChatSlide extends SlideBase { kind: 'phonechat'; prompt: string; contact: CastName; steps: { text: string; /** a sticker picture beside the message */ pic?: TeachArt; reply: string; extra?: string[]; /** pictures on the word tiles (key = the tile text) so beginners see what the word means */ tilePics?: Record<string, TeachArt> }[] }
@@ -101,7 +112,7 @@ export interface WrapSlide extends SlideBase { kind: 'wrap'; heading: string; ti
 
 export type Slide =
   | TitleSlide | BriefSlide | BadgeSlide | DialSlide | WhoSaidSlide | LockersSlide | NumTrainSlide | PadlockSlide | ConvoSlide | SpellSlide
-  | TeachSlide | ModelSlide | FindWrongSlide | BorderSlide | MemorySlide | PhoneChatSlide | FadeSlide | CardSlide | SaySlide | WrapSlide;
+  | HuntSlide | ShadowSlide | TeachSlide | ModelSlide | FindWrongSlide | BorderSlide | MemorySlide | PhoneChatSlide | FadeSlide | CardSlide | SaySlide | WrapSlide;
 
 export interface DeckScript {
   lessonId: string;

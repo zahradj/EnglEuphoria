@@ -8,6 +8,7 @@ import { DeckContext, type DeckCtx } from './ctx';
 import { Icon } from './Icon';
 import { Character, Plate } from './Stage';
 import { BadgeView, BriefView, DialView, TitleView } from './slides/intro';
+import { HuntView, ShadowView } from './slides/homework';
 import { ModelView, TeachView } from './slides/teach';
 import { CardView, WrapView } from './slides/card';
 import { FindWrongView, SpellView } from './slides/letters';
@@ -46,6 +47,8 @@ function SlideView({ slide }: { slide: Slide }) {
     case 'badge': return <BadgeView slide={slide} />;
     case 'dial': return <DialView slide={slide} />;
     case 'whosaid': return <WhoSaidView slide={slide} />;
+    case 'hunt': return <HuntView slide={slide} />;
+    case 'shadow': return <ShadowView slide={slide} />;
     case 'teach': return <TeachView slide={slide} />;
     case 'model': return <ModelView slide={slide} />;
     case 'lockers': return <LockersView slide={slide} />;
@@ -73,9 +76,12 @@ export interface DeckProps {
   slide?: number;
   onSlide?: (index: number) => void;
   onFinish?: (result: { vars: Vars; stats: Stats; stamps: string[] }) => void;
+  /** homework quest mode: no part title cards, the strip label is `label`, and every solved slide reports its wrong tries */
+  homework?: { label: string };
+  onSlideDone?: (slide: Slide, result: { wrong: number }) => void;
 }
 
-export function Deck({ script, artBase, teacher = false, slide: controlled, onSlide, onFinish }: DeckProps) {
+export function Deck({ script, artBase, teacher = false, slide: controlled, onSlide, onFinish, homework, onSlideDone }: DeckProps) {
   const [own, setOwn] = useState(0);
   const index = Math.min(controlled ?? own, script.slides.length - 1);
   const go = useCallback((i: number) => {
@@ -92,17 +98,31 @@ export function Deck({ script, artBase, teacher = false, slide: controlled, onSl
   const [minute, setMinute] = useState(false);
   const [menu, setMenu] = useState(false);
   const [burst, setBurst] = useState(0);
-  const [partCard, setPartCard] = useState<number | null>(0);
+  const [partCard, setPartCard] = useState<number | null>(homework ? null : 0);
   const shownParts = useRef<Set<number>>(new Set());
   const [calm, setCalm] = useState(() => typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches);
   const cur = script.slides[index];
   const curId = useRef(cur.id);
   curId.current = cur.id;
-  const done = useCallback(() => setSolved((s) => (s[curId.current] ? s : { ...s, [curId.current]: true })), []);
+  const wrongBySlide = useRef<Record<string, number>>({});
+  const slideRef = useRef<Slide>(cur);
+  slideRef.current = cur;
+  const cbRef = useRef(onSlideDone);
+  cbRef.current = onSlideDone;
+  const done = useCallback(() => setSolved((s) => {
+    if (s[curId.current]) return s;
+    // report once per slide, outside the state updater's purity: schedule it
+    const slideNow = slideRef.current;
+    window.setTimeout(() => cbRef.current?.(slideNow, { wrong: wrongBySlide.current[slideNow.id] ?? 0 }), 0);
+    return { ...s, [curId.current]: true };
+  }), []);
   const setVars = useCallback((p: Vars) => setVarsState((v) => ({ ...v, ...p })), []);
   const award = useCallback((id: string) => setStamps((s) => (s.includes(id) ? s : [...s, id])), []);
   const right = useCallback(() => setStats((s) => ({ ...s, right: s.right + 1 })), []);
-  const wrong = useCallback(() => setStats((s) => ({ ...s, wrong: s.wrong + 1 })), []);
+  const wrong = useCallback(() => {
+    wrongBySlide.current[curId.current] = (wrongBySlide.current[curId.current] ?? 0) + 1;
+    setStats((s) => ({ ...s, wrong: s.wrong + 1 }));
+  }, []);
   const ctx: DeckCtx = useMemo(() => ({ artBase, vars, setVars, done, right, wrong, award, stamps, reduced: calm, seed: 1000 + index * 17 }), [artBase, vars, setVars, done, right, wrong, award, stamps, calm, index]);
   const isSolved = !!solved[cur.id];
   const last = index === script.slides.length - 1;
@@ -113,6 +133,10 @@ export function Deck({ script, artBase, teacher = false, slide: controlled, onSl
   // a cinematic title card when a new part of the lesson starts (once per part; tap to skip, closes by itself)
   useEffect(() => {
     const part = cur.part;
+    if (homework) {
+      setPartCard(null);
+      return;
+    }
     if (shownParts.current.has(part)) return;
     shownParts.current.add(part);
     setPartCard(part);
@@ -162,7 +186,7 @@ export function Deck({ script, artBase, teacher = false, slide: controlled, onSl
           {actorsVisible.map((a) => <Character key={a.who} actor={a} artBase={artBase} small={compact} />)}
         </div>
         <header className="ad-strip" aria-label="Slides">
-          <span className="ad-lesson">{PARTS[cur.part]?.name}</span>
+          <span className="ad-lesson">{homework ? `${homework.label} · game ${index + 1} of ${script.slides.length}` : PARTS[cur.part]?.name}</span>
           <ol>
             {script.slides.map((s, i) => (
               <li key={s.id} data-part-start={i > 0 && s.part !== script.slides[i - 1].part}>
