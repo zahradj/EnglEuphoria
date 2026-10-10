@@ -28,7 +28,7 @@ games speak with the Pre-A1 voices (pip, mia, leo, bella, willow, teacher), not 
 1. **One goal per lesson** (curriculum engine: no orphan topics) — written as "I can …". Everything on the 22 pages serves it.
 2. **Unit arc of 7 lessons** (same as Pre-A1): L1-L3 new language, L4 put it together (conversation), **L5 story as a real video**
    (scenario first, `kids-video-scenario`), L6 extra practice games, L7 boss review + sticker.
-3. **22-page skeleton** (blueprint §3) with the A1 upgrade: the input pages use the **word page** look (character on one side,
+3. **22-page skeleton** (blueprint §3) — ONE slide per slot (one vocabulary-reveal slide, one phonics slide; slots 13 personal sentence, 17 sing-back and 18 favourite are required), extras only after slot 20 — with the A1 upgrade: the input pages use the **word page** look (character on one side,
    word big on the open side, no plate — owner 2026-10-09) and a **sentence** page after the word pages.
 4. **Remember? warm-up** on page 2 of every lesson after the first (`RecallWarmupScene`).
 5. **Games, not worksheets** (owner): every practice page is a game with a goal, instant feedback, a win state and juice
@@ -64,16 +64,15 @@ official Cambridge Starters/Movers wordlists. Each unit recycles Pre-A1 words of
 
 Format: **Title** — I can … · key language · signature game (★ = new game to build, ⇄ = port a Pre-A1 game to A1)
 
-### Unit 1 · Hello, Welcome Town!  *(L1 rebuilt to the blueprint 2026-10-09; L2-L4 built; L2 being rebuilt)*
-1. **Hello, My Name Is…** — greet and say my name · Hello, My name is…, What's your name? · Welcome Party door game (built) +
-   Pre-A1 games inside the A1 lesson: Move & Say, Name Buzzer Show, Quick fire, sticker, home mission, brain break (rebuilt 2026-10-09)
-2. **How Are You?** — say how I and others feel · How are you? I'm happy/tired/sad/angry/hungry; He/She is…, They are… · Feelings
-   spinner "He is happy!" ⇄ + Name That Feeling (Khan Kids) listen-tap
-3. **How Old Are You?** — say my age, count to 20 · How old are you? I'm 7, numbers 11-20 · Birthday Candle Cake ⇄ (candle-cake) to 20 (built 2026-10-09: Leo's birthday party, 22 pages)
-4. **This Is My Friend** — introduce a friend · This is my friend…, He's 8, Nice to meet you · Hello Doors escape (built)
-5. **Story: New Friends at the Park** — follow a story, retell 3 lines · story video with pause questions (`story-video`) ⇄
-6. **Greeting Games** — use all Unit 1 language fast · Buzzer Show quiz ⇄ + Bingo ⇄
-7. **Boss: Meet & Greet** — hold a 6-line conversation · Boss Battle ★ (each right answer = a hit on the Grumpy Cloud)
+### Unit 1 · Hello, Welcome Town!  *(titles = the curriculum slots in `curriculum_lessons`; L1-L3 rebuilt to the 22-slide blueprint 2026-10-10)*
+1. **Hello, My Name Is…** — greet and say my name · Hello/Hi, My name is…, What's your name?, Goodbye · Welcome Party door game
+2. **Saying "How Are You?"** — say how I and others feel · How are you? I'm happy/tired/sad/angry/hungry; He/She is…, They are… · Feelings Survey
+3. **Listen to the Greetings Song** — the unit's LISTENING lesson, no new words · who sings each line, build the lines, lead the song
+4. **Meet a Friend: Speak!** — the unit's SPEAKING lesson · This is my friend…, Nice to meet you · Hello Doors
+5. **Storybook: The Playground Friends** — story video with pause questions (`story-video`) ⇄
+6. **Extra Practice: Greeting Game!** — use all Unit 1 language fast · Buzzer Show quiz ⇄ + Bingo ⇄
+7. **Unit Review & Boss Test: Say Hello!** — hold a 6-line conversation · Boss Battle ★
+("How old are you?" + numbers 11-20 move to the numbers unit.)
 
 ### Unit 2 · At School
 1. **Pencil, Book, Bag!** — name school things · What's this? It's a pencil · Mystery Bag ⇄ (feel and guess)

@@ -67,3 +67,4 @@ LESSON_U7L5_SCENES
 # 2026-10-09 re-run: new 'elevenlabs 2' key
 # 2026-10-09 re-run: keys cleaned of spaces/quotes/labels
 # 2026-10-09 A1 U1 L3 rebuilt: How Old Are You?
+# 2026-10-10 A1 U1 L1-L3 redone to the 22-slide blueprint; L3 = Listen to the Greetings Song
