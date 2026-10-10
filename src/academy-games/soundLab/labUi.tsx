@@ -17,8 +17,9 @@ export function LabBackdrop() {
 }
 
 /** A teal answer button with press and hover feel. */
-export function LabButton({ children, onClick, disabled, tone = 'idle', index = 0, ariaLabel, wide, hot }: { children: ReactNode; onClick: (el: Element) => void; disabled?: boolean; tone?: 'idle' | 'right' | 'wrong'; index?: number; ariaLabel?: string; wide?: boolean; hot?: boolean }) {
-  const bg = tone === 'right' ? 'linear-gradient(180deg,#34d399,#059669)' : tone === 'wrong' ? 'rgba(255,255,255,.08)' : 'linear-gradient(180deg,#0d9488,#115e59)';
+export function LabButton({ children, onClick, disabled, tone = 'idle', index = 0, ariaLabel, wide, hot, accent = 'teal' }: { children: ReactNode; onClick: (el: Element) => void; disabled?: boolean; tone?: 'idle' | 'right' | 'wrong'; index?: number; ariaLabel?: string; wide?: boolean; hot?: boolean; accent?: 'teal' | 'rose' }) {
+  const base = accent === 'rose' ? 'linear-gradient(180deg,#e11d74,#9d174d)' : 'linear-gradient(180deg,#0d9488,#115e59)';
+  const bg = tone === 'right' ? 'linear-gradient(180deg,#34d399,#059669)' : tone === 'wrong' ? 'rgba(255,255,255,.08)' : base;
   return (
     <motion.button
       type="button"

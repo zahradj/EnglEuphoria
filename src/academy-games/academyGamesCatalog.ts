@@ -54,6 +54,23 @@ export const ACADEMY_GAMES: AcademyGame[] = [
       'Say it: record yourself and compare with the model. Your voice stays on your device and is never scored.',
     ],
   },
+  {
+    id: 'twister-lab',
+    title: 'Twister Lab',
+    tagline: 'Tongue twisters, step by step: hear them chunk by chunk, build them, spell them from memory, then record yourself three ways. Clear first, fast later.',
+    skill: 'Pronunciation · Spelling',
+    levels: ['A1', 'A2', 'B1'],
+    minutes: '15–20 min',
+    gradient: 'linear-gradient(135deg,#831843 0%,#be185d 50%,#f59e0b 100%)',
+    cover: '/academy/games/twister-lab-cover.jpg',
+    method: 'Hear it in chunks → build it → write it from memory and fix the spelling → say it slowly, normally, then faster (private, never scored).',
+    howToPlay: [
+      'Listen: hear the twister slowly, chunk by chunk, then at speed, in two voices.',
+      'Build it: tap the chunks in the right order.',
+      'Spell it: type the twister from memory. You see every word checked, with the letters to fix.',
+      'Say it: record three takes and listen to yourself. Your voice stays on your device and is never scored.',
+    ],
+  },
 ];
 
 export const getAcademyGame = (id: string | undefined) => ACADEMY_GAMES.find((g) => g.id === id);

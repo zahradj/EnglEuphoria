@@ -6,6 +6,7 @@ import { getAcademyGame } from './academyGamesCatalog';
 const PLAYERS: Record<string, ComponentType<{ onBack?: () => void }>> = {
   'verb-forge': lazy(() => import('./verbForge/VerbForgeGame')),
   'sound-lab': lazy(() => import('./soundLab/SoundLabGame')),
+  'twister-lab': lazy(() => import('./twisterLab/TwisterGame')),
 };
 
 export function AcademyGamePlayer({ gameId, onBack }: { gameId: string; onBack?: () => void }) {
