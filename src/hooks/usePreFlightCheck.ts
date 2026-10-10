@@ -1,6 +1,11 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
 
 type DeviceStatus = 'idle' | 'checking' | 'passed' | 'failed';
+export type MicTestPhase = 'idle' | 'recording' | 'playing';
+
+/** Input level (0-100) above which we count the microphone as having heard the person. */
+const MIC_HEARD_LEVEL = 8;
+const MIC_TEST_SECONDS = 3;
 
 interface MediaDeviceInfo {
   deviceId: string;
@@ -20,6 +25,12 @@ interface PreFlightState {
   speakerStatus: DeviceStatus;
   videoStream: MediaStream | null;
   audioLevel: number;
+  /** True once the microphone has picked up speech-level sound since it was last (re)started. */
+  micHeard: boolean;
+  micTestPhase: MicTestPhase;
+  micTestSeconds: number;
+  /** Records a few seconds from the chosen microphone, then plays it back on the chosen speaker. */
+  runMicRecordTest: () => void;
   cameraError: string | null;
   micError: string | null;
   runCameraCheck: (deviceIdOverride?: string) => Promise<void>;
@@ -48,6 +59,8 @@ export const usePreFlightCheck = (): PreFlightState => {
   const [speakerStatus, setSpeakerStatus] = useState<DeviceStatus>('idle');
   const [videoStream, setVideoStream] = useState<MediaStream | null>(null);
   const [audioLevel, setAudioLevel] = useState(0);
+  const [micHeard, setMicHeard] = useState(false);
+  const [micTestPhase, setMicTestPhase] = useState<MicTestPhase>('idle');
   const [cameraError, setCameraError] = useState<string | null>(null);
   const [micError, setMicError] = useState<string | null>(null);
 
@@ -67,6 +80,14 @@ export const usePreFlightCheck = (): PreFlightState => {
   const animFrameRef = useRef<number>();
   const micStreamRef = useRef<MediaStream | null>(null);
   const videoStreamRef = useRef<MediaStream | null>(null);
+  const recorderRef = useRef<MediaRecorder | null>(null);
+  const playbackRef = useRef<HTMLAudioElement | null>(null);
+  const playbackUrlRef = useRef<string | null>(null);
+  const selectedOutputRef = useRef('');
+
+  useEffect(() => {
+    selectedOutputRef.current = selectedAudioOutput;
+  }, [selectedAudioOutput]);
 
   // Enumerate devices
   useEffect(() => {
@@ -163,6 +184,7 @@ export const usePreFlightCheck = (): PreFlightState => {
   const runMicCheck = useCallback(async (deviceIdOverride?: string) => {
     setMicStatus('checking');
     setMicError(null);
+    setMicHeard(false);
     if (animFrameRef.current) {
       cancelAnimationFrame(animFrameRef.current);
       animFrameRef.current = undefined;
@@ -195,7 +217,9 @@ export const usePreFlightCheck = (): PreFlightState => {
       const update = () => {
         analyser.getByteFrequencyData(dataArray);
         const avg = dataArray.reduce((a, b) => a + b, 0) / dataArray.length;
-        setAudioLevel((avg / 255) * 100);
+        const level = (avg / 255) * 100;
+        setAudioLevel(level);
+        if (level > MIC_HEARD_LEVEL) setMicHeard(true);
         animFrameRef.current = requestAnimationFrame(update);
       };
       update();
@@ -223,6 +247,11 @@ export const usePreFlightCheck = (): PreFlightState => {
   const playSpeakerTest = useCallback(() => {
     try {
       const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      // Play on the speaker the person picked (Chrome/Edge); other browsers use the default output.
+      const out = selectedOutputRef.current;
+      if (out && typeof (ctx as any).setSinkId === 'function') {
+        (ctx as any).setSinkId(out).catch(() => {});
+      }
       const oscillator = ctx.createOscillator();
       const gainNode = ctx.createGain();
       oscillator.type = 'sine';
@@ -239,11 +268,62 @@ export const usePreFlightCheck = (): PreFlightState => {
     }
   }, []);
 
+  const stopPlayback = useCallback(() => {
+    playbackRef.current?.pause();
+    playbackRef.current = null;
+    if (playbackUrlRef.current) {
+      URL.revokeObjectURL(playbackUrlRef.current);
+      playbackUrlRef.current = null;
+    }
+  }, []);
+
+  const runMicRecordTest = useCallback(() => {
+    const stream = micStreamRef.current;
+    if (!stream || typeof MediaRecorder === 'undefined' || micTestPhase !== 'idle') return;
+    stopPlayback();
+    const chunks: Blob[] = [];
+    let recorder: MediaRecorder;
+    try {
+      recorder = new MediaRecorder(stream);
+    } catch {
+      return;
+    }
+    recorderRef.current = recorder;
+    recorder.ondataavailable = (e) => { if (e.data.size) chunks.push(e.data); };
+    recorder.onstop = () => {
+      recorderRef.current = null;
+      if (!chunks.length) { setMicTestPhase('idle'); return; }
+      const url = URL.createObjectURL(new Blob(chunks, { type: recorder.mimeType || 'audio/webm' }));
+      playbackUrlRef.current = url;
+      const audio = new Audio(url);
+      playbackRef.current = audio;
+      const done = () => { setMicTestPhase('idle'); stopPlayback(); };
+      audio.onended = done;
+      audio.onerror = done;
+      const out = selectedOutputRef.current;
+      const start = () => { setMicTestPhase('playing'); audio.play().catch(done); };
+      if (out && typeof (audio as any).setSinkId === 'function') {
+        (audio as any).setSinkId(out).catch(() => {}).finally(start);
+      } else {
+        start();
+      }
+    };
+    setMicTestPhase('recording');
+    recorder.start();
+    setTimeout(() => { if (recorder.state === 'recording') recorder.stop(); }, MIC_TEST_SECONDS * 1000);
+  }, [micTestPhase, stopPlayback]);
+
   const confirmSpeaker = useCallback(() => {
     setSpeakerStatus('passed');
   }, []);
 
   const cleanup = useCallback(() => {
+    if (recorderRef.current) {
+      recorderRef.current.onstop = null;
+      if (recorderRef.current.state === 'recording') recorderRef.current.stop();
+      recorderRef.current = null;
+    }
+    stopPlayback();
     if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
     if (audioContextRef.current) {
       audioContextRef.current.close().catch(() => {});
@@ -257,7 +337,7 @@ export const usePreFlightCheck = (): PreFlightState => {
       videoStreamRef.current.getTracks().forEach(t => t.stop());
       videoStreamRef.current = null;
     }
-  }, []);
+  }, [stopPlayback]);
 
   useEffect(() => {
     return cleanup;
@@ -271,6 +351,10 @@ export const usePreFlightCheck = (): PreFlightState => {
     speakerStatus,
     videoStream,
     audioLevel,
+    micHeard,
+    micTestPhase,
+    micTestSeconds: MIC_TEST_SECONDS,
+    runMicRecordTest,
     cameraError,
     micError,
     runCameraCheck,

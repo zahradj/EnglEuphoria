@@ -1,7 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Camera, Mic, Volume2, Play, Sparkles } from 'lucide-react';
+import { Camera, Mic, Volume2, Play, Sparkles, CheckCircle2, Circle, Square } from 'lucide-react';
 import { usePreFlightCheck } from '@/hooks/usePreFlightCheck';
 import pipMascot from '@/assets/pip-fox-mascot-v2.png';
 import ariaOwl from '@/assets/aria-owl-mascot-v2.png';
@@ -76,8 +76,9 @@ export const PreFlightCheck: React.FC<PreFlightCheckProps> = ({
   startTime,
 }) => {
   const {
-    cameraStatus, videoStream, audioLevel,
-    runCameraCheck, runMicCheck, playSpeakerTest,
+    cameraStatus, micStatus, speakerStatus, videoStream, audioLevel,
+    micHeard, micTestPhase, micTestSeconds, runMicRecordTest, micError,
+    runCameraCheck, runMicCheck, playSpeakerTest, confirmSpeaker,
     cleanup,
     videoDevices, audioInputDevices, audioOutputDevices,
     selectedVideoDevice, selectedAudioInput, selectedAudioOutput,
@@ -85,6 +86,18 @@ export const PreFlightCheck: React.FC<PreFlightCheckProps> = ({
   } = usePreFlightCheck();
 
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [speakerPlayed, setSpeakerPlayed] = useState(false);
+  const [speakerNotHeard, setSpeakerNotHeard] = useState(false);
+
+  const cameraOk = cameraStatus === 'passed';
+  const micOk = micStatus === 'passed' && micHeard;
+  const speakerOk = speakerStatus === 'passed';
+  const allReady = cameraOk && micOk && speakerOk;
+  const checks = [
+    { key: 'camera', label: 'Camera', ok: cameraOk },
+    { key: 'mic', label: 'Microphone', ok: micOk },
+    { key: 'speaker', label: 'Speaker', ok: speakerOk },
+  ];
 
   useEffect(() => {
     void runCameraCheck();
@@ -201,7 +214,31 @@ export const PreFlightCheck: React.FC<PreFlightCheckProps> = ({
                     style={{ width: `${Math.min(100, Math.max(4, audioLevel))}%` }}
                   />
                 </div>
-                <p className="text-xs text-muted-foreground">Speak — the bar should react.</p>
+                {micStatus === 'failed' ? (
+                  <p className="text-xs text-red-600" role="alert">{micError}</p>
+                ) : micHeard ? (
+                  <p className="text-xs text-emerald-700 flex items-center gap-1">
+                    <CheckCircle2 className="h-3.5 w-3.5" /> We can hear you.
+                  </p>
+                ) : (
+                  <p className="text-xs text-muted-foreground">Say “Hello!” — the bar should move.</p>
+                )}
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="h-10 w-full rounded-xl"
+                  onClick={runMicRecordTest}
+                  disabled={micStatus !== 'passed' || micTestPhase !== 'idle'}
+                >
+                  {micTestPhase === 'recording' ? (
+                    <><Square className="h-4 w-4 mr-1 text-red-500" /> Recording… speak for {micTestSeconds} seconds</>
+                  ) : micTestPhase === 'playing' ? (
+                    <><Volume2 className="h-4 w-4 mr-1" /> Playing it back…</>
+                  ) : (
+                    <><Mic className="h-4 w-4 mr-1" /> Record {micTestSeconds} seconds and play it back</>
+                  )}
+                </Button>
+                <p className="text-xs text-muted-foreground">Use headphones if you hear an echo.</p>
               </div>
 
               <div className="space-y-2">
@@ -219,17 +256,55 @@ export const PreFlightCheck: React.FC<PreFlightCheckProps> = ({
                       ))}
                     </SelectContent>
                   </Select>
-                  <Button type="button" variant="outline" className="h-10 shrink-0 rounded-xl" onClick={playSpeakerTest}>
+                  <Button type="button" variant="outline" className="h-10 shrink-0 rounded-xl" onClick={() => { playSpeakerTest(); setSpeakerPlayed(true); setSpeakerNotHeard(false); }}>
                     <Play className="h-4 w-4 mr-1" /> Test
                   </Button>
                 </div>
-                <p className="text-xs text-muted-foreground">Click Test — you should hear a short tone.</p>
+                {speakerOk ? (
+                  <p className="text-xs text-emerald-700 flex items-center gap-1">
+                    <CheckCircle2 className="h-3.5 w-3.5" /> Speaker works.
+                  </p>
+                ) : speakerPlayed ? (
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="text-xs text-foreground">Did you hear the tone?</span>
+                    <Button type="button" size="sm" className="h-8 rounded-full" onClick={() => { confirmSpeaker(); setSpeakerNotHeard(false); }}>
+                      Yes
+                    </Button>
+                    <Button type="button" size="sm" variant="outline" className="h-8 rounded-full" onClick={() => setSpeakerNotHeard(true)}>
+                      No
+                    </Button>
+                    {speakerNotHeard && (
+                      <p className="w-full text-xs text-red-600" role="alert">
+                        Turn the volume up, check your headphones, or pick another speaker, then press Test again.
+                      </p>
+                    )}
+                  </div>
+                ) : (
+                  <p className="text-xs text-muted-foreground">Click Test — you should hear a short tone.</p>
+                )}
               </div>
 
-              <div className="pt-4 border-t border-slate-200/70">
-                <Button onClick={handleJoin} className={`w-full h-11 rounded-full ${look.btn}`}>
+              <div className="pt-4 border-t border-slate-200/70 space-y-3">
+                <ul className="flex flex-wrap gap-x-4 gap-y-1" aria-label="Check list">
+                  {checks.map(c => (
+                    <li key={c.key} className={`flex items-center gap-1.5 text-sm ${c.ok ? 'text-emerald-700 font-semibold' : 'text-muted-foreground'}`}>
+                      {c.ok ? <CheckCircle2 className="h-4 w-4" /> : <Circle className="h-4 w-4" />}
+                      {c.label}
+                    </li>
+                  ))}
+                </ul>
+                <Button onClick={handleJoin} disabled={!allReady} className={`w-full h-11 rounded-full ${look.btn}`}>
                   Join lesson
                 </Button>
+                {!allReady && (
+                  <button
+                    type="button"
+                    onClick={handleJoin}
+                    className="block mx-auto text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground"
+                  >
+                    Skip the check and join anyway
+                  </button>
+                )}
               </div>
             </div>
           </div>
