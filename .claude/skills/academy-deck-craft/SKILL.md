@@ -21,6 +21,10 @@ Owner (2026-10-10): lessons "look like autopilot, repeating". Make a PPTX-style 
 
 A game is a React component `XView({slide})` using `useDeck()` (`done`, `right`, `wrong`, `award`, `vars`, `seed`), a typed slide in `types.ts`, a case in `SlideView` (Deck.tsx), CSS under `ad-`, and a test in `deck.test.tsx`. Rules: finishes with `done()` exactly when solved; wrong = "Not yet" + a hint (never a penalty, never elimination); no timers except a short animation delay; works by tap/click as well as drag; no zoom/pan of pictures; no browser TTS.
 
+## No flat pictures (owner 2026-10-10: "Don't use flat images ever again")
+
+Every picture on a slide must be alive: drawn pictures are SVG/CSS-animated (flags ripple, travellers breathe and blink, number-card dots bounce, lockers swing open, reels roll, tiles press), the cast breathes and blinks, every scene plate has a living light layer, and every correct answer sparkles. Allowed: UI motion, light and particle layers over a still, expression swaps. Forbidden (repo rules): zooming/panning a still picture, new character actions in generated video, speech or text in video. Real video loops (Higgsfield, image-to-video, silent, calm, <= 8 s) only through `.claude/skills/video-quality-gate` with owner approval per clip; they cost credits.
+
 ## Don't
 
 Put 15 read-and-repeat lines in a row; reuse a game on the next slide; hide the meaning of a word; ask for language not yet met; make the lesson depend on voices that do not exist yet (say so instead).

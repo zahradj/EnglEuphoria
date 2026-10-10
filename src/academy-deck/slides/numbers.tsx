@@ -38,8 +38,12 @@ export function LockersView({ slide }: { slide: LockersSlide }) {
       <div className="ad-lockers">
         {all.map((n) => (
           <button key={n} type="button" className="ad-locker" data-open={open.includes(n)} data-shake={shake === n} onClick={() => tap(n)} aria-label={`Locker ${n}`}>
-            <span className="ad-locker-num">{n}</span>
-            <span className="ad-locker-inside">{open.includes(n) ? '⭐' : ''}</span>
+            <span className="ad-locker-interior" aria-hidden="true"><i className="ad-shelf" /><b className="ad-prize">⭐</b></span>
+            <span className="ad-locker-door" aria-hidden="true">
+              <span className="ad-vents"><i /><i /><i /><i /></span>
+              <span className="ad-locker-num">{n}</span>
+              <span className="ad-handle" />
+            </span>
           </button>
         ))}
       </div>
@@ -78,8 +82,10 @@ export function NumTrainView({ slide }: { slide: NumTrainSlide }) {
       <div className="ad-train">
         {slide.numbers.map((n) => (
           <button key={n} type="button" className="ad-car" data-drop={n} data-done={placed.includes(n)} onClick={() => held !== null && drop(held, n)} aria-label={`Carriage ${n}${placed.includes(n) ? `: ${slide.words[n]}` : ''}`}>
-            <NumberCard n={n} label={`${n}`} />
+            <span className="ad-car-roof" aria-hidden="true" />
+            <span className="ad-car-window"><NumberCard n={n} label={`${n}`} /></span>
             <span className="ad-car-slot">{placed.includes(n) ? `✓ ${slide.words[n]}` : 'drop here'}</span>
+            <span className="ad-wheels" aria-hidden="true"><i /><i /></span>
           </button>
         ))}
       </div>
@@ -118,15 +124,17 @@ export function PadlockView({ slide }: { slide: PadlockSlide }) {
       <div className="ad-padlock" data-open={opened}>
         <div className="ad-shackle" aria-hidden="true" />
         <div className="ad-dials">
+          <span className="ad-screw ad-screw-l" aria-hidden="true" /><span className="ad-screw ad-screw-r" aria-hidden="true" />
           {dials.map((v, i) => (
             <div key={i} className="ad-dial">
               <button type="button" className="ad-dial-btn" aria-label={`Dial ${i + 1} up`} disabled={opened} onClick={() => bump(i, 1)}>▲</button>
-              <output className="ad-dial-num" aria-label={`Dial ${i + 1}: ${v}`}>{v}</output>
+              <output className="ad-dial-num" aria-label={`Dial ${i + 1}: ${v}`}><span key={v} className="ad-roll">{v}</span></output>
               <button type="button" className="ad-dial-btn" aria-label={`Dial ${i + 1} down`} disabled={opened} onClick={() => bump(i, -1)}>▼</button>
             </div>
           ))}
         </div>
       </div>
+      {opened && <div className="ad-drawer"><div className="ad-drawer-card">🪪 <b>Member card</b><span>{slide.code.split('').join('-')}</span></div></div>}
       {opened ? <Feedback kind="ok">Click! {slide.reward}</Feedback> : slip ? <Feedback kind="try">{NOT_YET} Read the clue words one by one.</Feedback> : null}
       <div className="ad-row"><button type="button" className="ad-btn ad-btn-primary" disabled={opened} onClick={tryOpen}>🔓 Open</button></div>
     </Panel>

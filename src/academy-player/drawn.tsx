@@ -27,6 +27,8 @@ const FLAGS: Record<string, ReactNode> = {
 };
 
 export const hasFlag = (code: string) => code in FLAGS;
+/** The flag's artwork (300x200 viewBox) for other drawn pictures. */
+export const flagBody = (code: string) => FLAGS[code];
 
 export function Flag({ code, label }: { code: string; label: string }) {
   return (

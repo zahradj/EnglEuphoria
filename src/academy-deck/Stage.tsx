@@ -12,6 +12,9 @@ export function Plate({ id, artBase }: { id: string; artBase?: string }) {
   return (
     <div className="ad-plate" aria-hidden="true" data-plate={id}>
       {artBase && !failed ? <img src={`${artBase}/bg/${id}.webp`} alt="" draggable={false} onError={() => setFailed(true)} /> : <div className="ad-plate-ph" style={{ background: `linear-gradient(160deg, hsl(${h} 80% 94%), hsl(${h + 20} 70% 85%))` }} />}
+      {/* living scene: a soft light shaft drifts across and dust motes float (a light layer over the picture; the picture itself never moves) */}
+      <span className="ad-ray" />
+      <span className="ad-motes">{Array.from({ length: 16 }, (_, i) => <i key={i} />)}</span>
     </div>
   );
 }
@@ -24,7 +27,10 @@ export function Character({ actor, artBase, speaking = false, small = false }: {
   return (
     <div className="ad-actor" data-pos={actor.pos} data-speaking={speaking} data-small={small} aria-label={actor.who}>
       {src ? (
-        <img key={src} src={src} alt={actor.who} draggable={false} onError={() => setI(i + 1)} />
+        <>
+          <img key={src} src={src} alt={actor.who} draggable={false} onError={() => setI(i + 1)} />
+          {i === 0 && <img className="ad-blink" src={`${artBase}/cast/${actor.who.toLowerCase()}/blink.webp`} alt="" aria-hidden="true" draggable={false} onError={(e) => ((e.target as HTMLImageElement).style.display = 'none')} />}
+        </>
       ) : (
         <span className="ad-actor-ph" style={{ background: COLOR[actor.who] }}>{actor.who[0]}</span>
       )}

@@ -86,6 +86,7 @@ export function Deck({ script, artBase, teacher = false, slide: controlled, onSl
   const [toast, setToast] = useState<string | null>(null);
   const [minute, setMinute] = useState(false);
   const [menu, setMenu] = useState(false);
+  const [burst, setBurst] = useState(0);
   const [calm, setCalm] = useState(() => typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches);
   const cur = script.slides[index];
   const curId = useRef(cur.id);
@@ -102,6 +103,10 @@ export function Deck({ script, artBase, teacher = false, slide: controlled, onSl
     setToast(null);
     setMenu(false);
   }, [index]);
+  // a short sparkle burst on every correct answer (UI motion tied to success; none in Calm mode)
+  useEffect(() => {
+    if (stats.right > 0) setBurst((b) => b + 1);
+  }, [stats.right]);
   useEffect(() => {
     const k = (e: KeyboardEvent) => {
       const t = e.target as HTMLElement | null;
@@ -157,6 +162,11 @@ export function Deck({ script, artBase, teacher = false, slide: controlled, onSl
           </Guard>
           {toast && <div className="ad-toast" role="status">💡 {toast}</div>}
         </main>
+        {burst > 0 && !calm && (
+          <div className="ad-burst" key={burst} aria-hidden="true">
+            {Array.from({ length: 12 }, (_, i) => <span key={i} style={{ ['--a' as string]: `${i * 30}deg`, ['--d' as string]: `${70 + (i % 3) * 26}px` }}>{i % 2 ? '★' : '✦'}</span>)}
+          </div>
+        )}
         <nav className="ad-dock" aria-label="Lesson controls">
           <button type="button" className="ad-dockbtn" onClick={() => go(index - 1)} disabled={index === 0}>◀ Back</button>
           <button type="button" className="ad-dockbtn" onClick={hint}>💡 Hint</button>

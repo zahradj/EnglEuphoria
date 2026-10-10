@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { shuffled, useDeck } from '../ctx';
 import { useDragChip } from '../drag';
-import { Flag, FlagPerson, hasFlag } from '../../academy-player/drawn';
+import { hasFlag } from '../../academy-player/drawn';
+import { Traveller, WavingFlag } from './anim';
 import type { BorderSlide, MemorySlide } from '../types';
 import { Feedback, NOT_YET, Panel } from './shared';
 
@@ -43,16 +44,17 @@ export function BorderView({ slide }: { slide: BorderSlide }) {
     <Panel title={slide.prompt} wide>
       {!finished ? (
         <>
-          <div className="ad-traveller" data-held={held}>
+          <div className="ad-traveller" data-held={held} key={round}>
             <button type="button" className="ad-traveller-card" aria-label={`Traveller: ${cur.says}`} {...drag.bind('traveller')}>
-              {hasFlag(cur.flag) ? <FlagPerson code={cur.flag} label={`A traveller with the flag of ${cur.flag}`} /> : null}
+              {hasFlag(cur.flag) ? <Traveller code={cur.flag} label={`A traveller with the flag of ${cur.flag}`} /> : null}
               <span className="ad-traveller-says">“{cur.says}”</span>
             </button>
           </div>
           <div className="ad-passports">
             {opts.map((o) => (
               <button key={o} type="button" className="ad-passport" data-drop={o} data-stamped={stamped === o} onClick={() => held && drop(o)} aria-label={`Passport: ${o}`}>
-                <span className="ad-passport-cover">🛂</span>
+                <svg className="ad-passport-emblem" viewBox="0 0 60 60" aria-hidden="true"><circle cx="30" cy="30" r="22" fill="none" stroke="#f6d77a" strokeWidth="2.5" /><ellipse cx="30" cy="30" rx="9" ry="22" fill="none" stroke="#f6d77a" strokeWidth="2" /><path d="M8 30h44M12 19h36M12 41h36" stroke="#f6d77a" strokeWidth="2" fill="none" /><path d="M30 4l2.2 5h5.3l-4.3 3.2 1.7 5.1-4.9-3.2-4.9 3.2 1.7-5.1L22.5 9h5.3z" fill="#f6d77a" transform="translate(0 -3) scale(.9) translate(3 0)" /></svg>
+                <span className="ad-passport-title">PASSPORT</span>
                 <b>{o}</b>
                 {stamped === o && <span className="ad-stamp-ok">APPROVED</span>}
               </button>
@@ -99,7 +101,10 @@ export function MemoryView({ slide }: { slide: MemorySlide }) {
           const up = open.includes(c.k) || matched.includes(c.pair);
           return (
             <button key={c.k} type="button" className="ad-mem" data-up={up} data-matched={matched.includes(c.pair)} disabled={up || open.length === 2} onClick={() => setOpen([...open, c.k])} aria-label={up ? (c.flag ? `Flag ${c.flag}` : c.text) : 'Hidden card'}>
-              {up ? (c.flag && hasFlag(c.flag) ? <Flag code={c.flag} label={`Flag ${c.flag}`} /> : <b>{c.text}</b>) : <span>?</span>}
+              <span className="ad-mem-inner">
+                <span className="ad-mem-face ad-mem-back" aria-hidden="true">★</span>
+                <span className="ad-mem-face ad-mem-front">{c.flag && hasFlag(c.flag) ? <WavingFlag code={c.flag} label={`Flag ${c.flag}`} /> : <b>{c.text}</b>}</span>
+              </span>
             </button>
           );
         })}
