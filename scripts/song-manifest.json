@@ -333,5 +333,10 @@
     "path": "public/lep1/audio/yummy-food-song-u8l6.mp3",
     "bytes": 321037,
     "sha256": "8511e288d5a4555049ce20d770a47d88812ad45da634fee247ee20162ff18e51"
+  },
+  "u9l1-shirt-pants-dress": {
+    "path": "public/lep1/audio/shirt-pants-dress-song-u9l1.mp3",
+    "bytes": 321037,
+    "sha256": "40a7a47013c307e63d8a21c0059ae13919e6ec64ef72e7e49e5f27f7802ae8d3"
   }
 }

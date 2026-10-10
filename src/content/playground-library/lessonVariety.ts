@@ -60,6 +60,7 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
   '4-4': { settings: ['flower garden'], look: 'bright flower garden with big friendly mushrooms; Pip meets Bo, a round sky-blue three-eyed monster; code-drawn monsters on an empty lawn' },
   '4-5': { settings: ['animal park'], look: 'sunny animal park with a blue pond and tall trees; a tiger, a monkey, an elephant and a seal each show one move, Pip copies; a leafy bush to peek through' },
+  '9-1': { settings: ['backyard laundry day'], look: "laundry day in Pip's sunny backyard: green grass, a wooden fence and flowers, a long washing line between two wooden poles with a red shirt, blue pants and a yellow dress on wooden pegs, Pip holding up the shirt by a wicker basket; the empty line becomes the Washing Line game where the clothes swing in the breeze" },
   '8-6': { settings: ['school dining hall'], look: "lunchtime in a bright school dining hall: big sunny windows, the four friends at a long table with green trays of the unit's food (pizza, apples, bananas, ice cream, bread), and a big empty green chalkboard on the back wall that becomes the class food chart" },
   '8-5': { settings: ['spring flower garden', 'story places of the unit'], look: "a sunny spring flower garden with big green leaves, colourful flowers and a curvy path, where a little round green caterpillar peeks out; the story film visits the unit's places (the picnic blanket, Pip's café counter, the party table) with the caterpillar munching one food at each, then an evening orchard with a hanging cocoon and a bright morning with a green-and-yellow butterfly; Pip waves at the end" },
   '8-4': { settings: ['autumn apple orchard'], look: "a sunny autumn apple orchard: trees heavy with red apples, golden leaves on the grass, a long wooden table where the four friends each hold up the food they like (Pip an apple, Mia a banana, Leo pizza, Bella ice cream); the empty orchard with a wooden counter and a little smoothie cart becomes the Smoothie Bar with a big code-drawn blender" },
@@ -205,6 +206,19 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'the child must understand the verb AND the body part to find the animal, then PRODUCES the move and the sentence — the screen waits for the child, never a clock',
       'the clue in Whose Is It? is one of the unit\'s body words, so naming the part and the animal go together, and the reveal recalls the story move',
       'wrong picks are named back with that animal\'s own move ("No, the seal claps her hands!"), and the right one glows after two tries',
+    ],
+  },
+  '9-1': {
+    sources: ['Lingokids / Toca Boca dress-up and "hang it up" play', 'Cambridge (Pre A1 Starters: listen and point / colour; clothes and colours)', 'classroom washing-line flashcard game', 'Khan Academy Kids memory and sorting'],
+    mechanics: [
+      'washing-line flashcards → Washing Line: Pip asks "Where is my red shirt?" and the child pegs that piece on the line, where it swings in the breeze',
+      'the Mystery Bag shape guess ("It\'s a yellow dress!"), clothes memory pairs, quick-fire recall and the sound D',
+      'ask and answer: "What is this? It\'s a red shirt!"',
+    ],
+    betterThan: [
+      'every request joins the new word to a colour the child already knows ("the red shirt"), so Unit 2 comes back in Unit 9',
+      'each right answer adds to a line of clothes that stays (permanence) and the line dances in the wind at the end',
+      'no clock, a wrong piece is named back ("No, not the dress! Listen again.") and the right one glows after two tries',
     ],
   },
   '8-6': {

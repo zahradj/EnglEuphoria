@@ -509,6 +509,16 @@ export type Scene =
       doneLine: string;
     }
   | {
+      /** Washing Line (U9L1 signature): Pip asks for a piece of clothing ("Where is my red shirt?"); the child taps
+       *  it in the basket and it is pegged on the line. `rope` = the painted washing line in `bg` (% of the stage:
+       *  y of the rope, x0..x1 its ends); `item` = index of `clothes`. */
+      id: string; kind: 'washing-line'; bg: string; teacher: string; who: CharKey;
+      rope: { y: number; x0: number; x1: number };
+      clothes: { word: string; img: string }[];
+      rounds: { item: number; line: string; reply: string }[];
+      doneLine: string;
+    }
+  | {
       /** Like Chart (U8L6 signature, unit review): a food chart on the board. Each friend says "I like pizza!";
        *  the child taps that food's column and the friend's face stacks in it. Then Pip reads the chart
        *  (`summaryLine`) and the child adds a star for what THEY like. `column` = index of `columns`. */
@@ -13699,4 +13709,197 @@ export const LESSON_U8L6_SCENES: Scene[] = [
     ],
   },
   { id: 'u8l6-finale', kind: 'finale', bg: bgU8L6Dining, who: 'pip', line: 'You know all the food! What do you like? Goodbye, friend!' },
+];
+
+/* =============================================================================
+ * Pre-A1 Unit 9, Lesson 1 — "Shirt, Pants, Dress!" (Clothes)
+ *
+ * A new unit and a new place: laundry day in Pip's sunny backyard. A red shirt, blue pants and a yellow
+ * dress hang on the washing line; Pip holds the shirt by the wicker basket. The new Washing Line game:
+ * Pip asks "Where is my red shirt?" and the child pegs it on the line. Then the Mystery Bag ("It's a
+ * yellow dress!"), clothes memory pairs, quick-fire recall, and the first sound D (dress).
+ * Colours from Unit 2 come back with every piece of clothing.
+ * ========================================================================= */
+
+const bgU9L1Laundry = `${A}/scenes/bg-u9l1-laundry-wide.png`;
+const bgU9L1LaundryEmpty = `${A}/scenes/bg-u9l1-laundry-empty-wide.png`;
+const itemShirtRed = `${A}/items/item-shirt-red.png`;
+const itemPantsBlue = `${A}/items/item-pants-blue.png`;
+const itemDressYellow = `${A}/items/item-dress-yellow.png`;
+const clothesBagOptions = [
+  { toyWord: 'SHIRT', img: itemShirtRed },
+  { toyWord: 'PANTS', img: itemPantsBlue },
+  { toyWord: 'DRESS', img: itemDressYellow },
+];
+
+export const LESSON_U9L1_TITLE = 'Shirt, Pants, Dress!';
+export const LESSON_U9L1_OBJECTIVE = 'Name shirt, pants and dress with their colours ("It\'s a red shirt!", "My blue pants!"), find the piece of clothing Pip asks for, remember where the clothes are, and hear the first sound D (dress), by listening, moving and playing, no reading.';
+
+export const LESSON_U9L1_SCENES: Scene[] = [
+  { id: 'u9l1-title', kind: 'title-card', bg: bgU9L1Laundry, level: 'Pre-A1', unit: 'Unit 9', lessonLabel: 'Lesson 1', title: 'Shirt, Pants, Dress!', subtitle: 'Laundry day!' },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 8 · Lesson 6 · Food Preference Chart.
+    id: 'u9l1-recall-warmup', kind: 'recall-warmup', bg: bgU9L1LaundryEmpty, who: 'pip', mode: 'click',
+    fromLabel: 'Unit 8 · Food Preference Chart',
+    teacher: 'Warm-up from last lesson: Pip says a food, the child finds it and says "I like …!"',
+    items: [
+      { word: 'pizza', say: 'I like pizza!', img: itemPizzaSlice },
+      { word: 'apples', say: 'I like apples!', img: itemApple },
+      { word: 'ice cream', say: 'I like ice cream!', img: itemIceCream },
+    ],
+  },
+  {
+    id: 'u9l1-intro', kind: 'cinematic', bg: bgU9L1Laundry, hidePipOverlay: true, title: 'Shirt, Pants, Dress!', subtitle: 'Laundry day', narrator: 'pip',
+    script: [
+      { who: 'pip', line: "Hello! It's laundry day!" },
+      { who: 'pip', line: 'My clothes are clean. Help me hang them up!' },
+    ],
+    cta: "Let's help!",
+  },
+
+  /* 4-5 The words, move */
+  {
+    id: 'u9l1-words', kind: 'listen-repeat-cards', textSide: 'right', bg: bgU9L1LaundryEmpty, teacher: 'Listen, then say it with Pip: "It\'s a red shirt!"',
+    cards: [
+      { who: 'pip', sentence: "It's a shirt! A red shirt!", img: itemShirtRed, imgLabel: 'shirt' },
+      { who: 'pip', sentence: 'Pants! Blue pants!', img: itemPantsBlue, imgLabel: 'pants' },
+      { who: 'pip', sentence: "It's a dress! A yellow dress!", img: itemDressYellow, imgLabel: 'dress' },
+    ],
+  },
+  {
+    id: 'u9l1-move', kind: 'tpr-actions', bg: bgU9L1Laundry, who: 'pip',
+    teacher: 'Stand up! Get dressed with Pip.',
+    rounds: [
+      { line: 'Put on your shirt! Arms in!', emoji: '\u{1F455}', img: itemShirtRed },
+      { line: 'Put on your pants! One leg, two legs!', emoji: '\u{1F456}', img: itemPantsBlue },
+      { line: 'Twirl in your dress! Spin, spin!', emoji: '\u{1F457}', img: itemDressYellow },
+      { line: 'Hang it up! Reach up high!', emoji: '\u{1F64C}' },
+    ],
+  },
+
+  /* 6 Signature game (new): Washing Line */
+  {
+    id: 'u9l1-line', kind: 'washing-line', bg: bgU9L1LaundryEmpty, who: 'pip',
+    teacher: 'Washing Line! Listen to Pip, then tap the piece of clothing in the basket — it goes up on the line. Say it: "The red shirt!"',
+    rope: { y: 20.5, x0: 12, x1: 88 },
+    clothes: [
+      { word: 'shirt', img: itemShirtRed },
+      { word: 'pants', img: itemPantsBlue },
+      { word: 'dress', img: itemDressYellow },
+    ],
+    rounds: [
+      { item: 0, line: 'Where is my red shirt?', reply: 'Yes! The red shirt! Up it goes!' },
+      { item: 2, line: 'Where is the yellow dress?', reply: 'Yes! The yellow dress!' },
+      { item: 1, line: 'Where are my blue pants?', reply: 'Yes! My blue pants!' },
+    ],
+    doneLine: 'Look! Shirt, pants, dress! Whoosh, the wind!',
+  },
+
+  /* 7 The song — after the words and the first game (owner, 2026-10-10) */
+  {
+    id: 'u9l1-song', kind: 'song', bg: bgU9L1Laundry, title: '\u{1F3B5} Shirt, Pants, Dress! \u{1F3B5}', teacher: 'Sing and point to each piece on the line: shirt, pants, dress!',
+    durationSeconds: 20, bigWord: 'Clothes', songUrl: `${A}/audio/shirt-pants-dress-song-u9l1.mp3?v=1`,
+    lineDurationsMs: [3800, 4860, 4100, 7302],
+    songPrompt: 'Cheerful bouncy kids clothes song',
+    lyrics: [
+      { who: 'pip', text: 'Shirt, shirt! My red shirt!', emotion: 'happy' },
+      { who: 'pip', text: 'Pants, pants! My blue pants!', emotion: 'happy' },
+      { who: 'pip', text: 'Dress, dress! A yellow dress!', emotion: 'happy' },
+      { who: 'pip', text: 'Shirt, pants, dress! Hooray!', emotion: 'happy' },
+    ],
+  },
+
+  /* 8-10 More games */
+  {
+    id: 'u9l1-mystery-bag', kind: 'mystery-bag', bg: bgU9L1LaundryEmpty, who: 'pip',
+    question: "What's in the laundry bag?", doneText: 'You found all the clothes!',
+    teacher: "The Mystery Bag! Look at the shape. What's in the bag? Tap it, then say it with its colour.",
+    rounds: [
+      { img: itemDressYellow, toyWord: 'DRESS', colorWord: 'YELLOW', colorHex: '#FACC15', options: clothesBagOptions },
+      { img: itemShirtRed, toyWord: 'SHIRT', colorWord: 'RED', colorHex: '#EF4444', options: clothesBagOptions },
+    ],
+  },
+  {
+    id: 'u9l1-memory', kind: 'memory', bg: bgU9L1LaundryEmpty, teacher: 'Find the clothes pairs! Say it every time you turn a card: "A red shirt!"',
+    pairs: [
+      { id: 'shirt', label: 'shirt', img: itemShirtRed, emoji: '\u{1F455}' },
+      { id: 'pants', label: 'pants', img: itemPantsBlue, emoji: '\u{1F456}' },
+      { id: 'dress', label: 'dress', img: itemDressYellow, emoji: '\u{1F457}' },
+    ],
+  },
+  {
+    id: 'u9l1-pip-asks', kind: 'join-stage', bg: bgU9L1Laundry, teacher: 'Pip asks about the clothes. The child answers with the colour and the word.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'What is this?', bubble: 'right' },
+      { who: 'student', line: "It's a red shirt!", bubble: 'right' },
+      { who: 'pip', line: 'And what are these?', bubble: 'right' },
+      { who: 'student', line: 'Blue pants!', bubble: 'right' },
+    ],
+  },
+
+  /* 11-12 Sound D, quick fire */
+  {
+    id: 'u9l1-model-d', kind: 'sound-model', bg: bgU9L1LaundryEmpty, who: 'pip', letter: 'D', phoneme: '/d/', sound: 'duh',
+    teacher: 'D says /d/ — dress, dog, doll!',
+    anchors: [
+      { word: 'dress', emoji: '\u{1F457}', img: itemDressYellow },
+      { word: 'dog', emoji: '\u{1F415}', img: itemDog },
+      { word: 'doll', emoji: '\u{1FA86}', img: itemDoll },
+    ],
+  },
+  {
+    id: 'u9l1-quick', kind: 'rapid-recall', bg: bgU9L1LaundryEmpty, who: 'pip', seconds: 4,
+    teacher: 'Quick look! A piece of clothing pops up — say it before the ring runs out: "A dress!"',
+    cards: [
+      { img: itemPantsBlue, word: 'pants', say: 'Pants!' },
+      { img: itemShirtRed, word: 'shirt', say: 'A shirt!' },
+      { img: itemDressYellow, word: 'dress', say: 'A dress!' },
+      { img: itemShirtRed, word: 'shirt', say: 'A shirt!' },
+      { img: itemPantsBlue, word: 'pants', say: 'Pants!' },
+    ],
+  },
+
+  /* 13-14 Sticker + Home Mission */
+  {
+    id: 'u9l1-sticker', kind: 'sticker-reward', bg: bgU9L1Laundry, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'Thank you for helping! Here is a dress sticker for you!', sticker: { img: itemDressYellow, label: 'Laundry helper' },
+  },
+  {
+    id: 'u9l1-home-mission', kind: 'home-mission', bg: bgU9L1Laundry, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: help with the laundry! Find a shirt, pants and a dress, and say the colour!',
+    parentNote: 'Let your child help sort the laundry: ask "Where is the shirt? Where are the pants?" and let them find it and say the colour ("A red shirt!"). Hang a few things up together and name them.',
+    steps: [
+      { emoji: '\u{1F455}', img: itemShirtRed, say: 'A red shirt!' },
+      { emoji: '\u{1F456}', img: itemPantsBlue, say: 'Blue pants!' },
+      { emoji: '\u{1F457}', img: itemDressYellow, say: 'A yellow dress!' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u9l1-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU9L1Laundry, who: 'pip',
+    teacher: 'Extra time: Brain Break! Do each action with Pip.',
+    rounds: [
+      { line: 'Shake the shirt! Flap, flap!', emoji: '\u{1F455}' },
+      { line: 'Blow like the wind! Whoosh!', emoji: '\u{1F32C}️' },
+      { line: 'Fold the pants! Fold, fold!', emoji: '\u{1F456}' },
+      { line: 'Freeze!', emoji: '\u{1F976}', seconds: 3 },
+    ],
+  },
+
+  /* Goodbye */
+  {
+    id: 'u9l1-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u9l1-finale', kind: 'finale', bg: bgU9L1Laundry, who: 'pip', line: 'Shirt, pants, dress! Thank you for helping! Goodbye, friend!' },
 ];
