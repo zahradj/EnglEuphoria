@@ -60,6 +60,7 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
   '4-4': { settings: ['flower garden'], look: 'bright flower garden with big friendly mushrooms; Pip meets Bo, a round sky-blue three-eyed monster; code-drawn monsters on an empty lawn' },
   '4-5': { settings: ['animal park'], look: 'sunny animal park with a blue pond and tall trees; a tiger, a monkey, an elephant and a seal each show one move, Pip copies; a leafy bush to peek through' },
+  '8-1': { settings: ['picnic hill'], look: "a picnic on a sunny green spring hill: a big red-and-white checkered blanket, an open wicker basket, a shady apple tree full of red apples, a little blue stream and yellow flowers; Pip sits on the blanket with an apple, a banana and a glass of milk" },
   '7-6': { settings: ['farm at night'], look: "Grandpa's farm at night under a big full moon and stars: the red barn with its door half open and a lantern glowing, a round haystack, a little red chicken coop, a big tree with a hollow, a blue water trough and a pond with reeds; the farm is dark and the child's torch beam finds the hiding animals, then the farm lights come on" },
   '7-5': { settings: ['barn at sunrise', 'farm gate'], look: "Grandpa's farm on a misty early morning: a big red barn with four white stall doors in a row at sunrise, Grandpa fox in a straw farmer hat and blue overalls with Pip; the doors open one by one (cow, pig, sheep, duck) and the animals gather in the golden yard" },
   '7-4': { settings: ['farm fair'], look: "the fair comes to the farm on a bright day: red-and-white striped tents, bunting flags, hay bales, prize rosettes on the fence and a big yellow-and-white striped hook-a-duck pool in the middle; Pip and the animals of the unit at the fair; a red-curtained show tent for the riddles" },
@@ -199,6 +200,19 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'the child must understand the verb AND the body part to find the animal, then PRODUCES the move and the sentence — the screen waits for the child, never a clock',
       'the clue in Whose Is It? is one of the unit\'s body words, so naming the part and the animal go together, and the reveal recalls the story move',
       'wrong picks are named back with that animal\'s own move ("No, the seal claps her hands!"), and the right one glows after two tries',
+    ],
+  },
+  '8-1': {
+    sources: ['Lingokids and Khan Academy Kids "feed the character" play (give the food the character asks for)', 'Cambridge (Pre A1 Starters: listen and give / point; food words)', 'classroom pretend-picnic role play (Super Simple "Do you like…?" style)', 'Sesame Workshop (model the polite request, then let the child say it)'],
+    mechanics: [
+      'feed the character → Feed Pip: Pip asks "Can I have a banana, please?", the child gives the right food from the picnic blanket and it flies to Pip, who munches and thanks them',
+      'quick-look recall of the three foods, picnic memory pairs and a letter-balloon pop for A, B, M',
+      'role swap: the child asks Pip politely for a food',
+    ],
+    betterThan: [
+      'the request is a whole polite sentence ("Can I have a banana, please?") that the child then uses themself in the role swap',
+      'a wrong food is handed back with its name ("No, thank you! That\'s an apple."), so a mistake is more listening, never a buzzer',
+      'calm by design: no clock, Pip\'s tummy fills a heart per food and the right food glows after two tries',
     ],
   },
   '7-6': {

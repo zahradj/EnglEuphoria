@@ -303,5 +303,10 @@
     "path": "public/lep1/audio/wheres-my-house-song3-u6l5.mp3",
     "bytes": 997713,
     "sha256": "d4db9d7adf3c30b0d8e80b2fb55f04db881223217f17b3665a0040922686bd18"
+  },
+  "u8l1-apple-banana-milk": {
+    "path": "public/lep1/audio/apple-banana-milk-song-u8l1.mp3",
+    "bytes": 321037,
+    "sha256": "24825437d15ce74971f02e9ba268699a77ccbd46a162efd2a27771509a8bd713"
   }
 }

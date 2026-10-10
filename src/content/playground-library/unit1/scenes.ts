@@ -489,6 +489,16 @@ export type Scene =
       order: number[];
     }
   | {
+      /** "Feed Pip" (Unit 8 Lesson 1): a friend asks "Can I have a banana, please?" and the child gives the
+       *  right food from the picnic blanket. `phrase` = the food with its article ("an apple", "milk").
+       *  x/y and `mouth` are % of the stage. `whoImg` overrides the friend's picture. */
+      id: string; kind: 'feed-pip'; bg: string; teacher: string; who: CharKey; whoImg?: string;
+      mouth: { x: number; y: number };
+      foods: { word: string; phrase: string; img: string; x: number; y: number }[];
+      rounds: { target: number; line: string; reply: string }[];
+      doneLine: string;
+    }
+  | {
       /** "The Mystery Bag" — a toy's silhouette peeks out of a bag; tap which
        *  toy it is, then it jumps out in colour ("It's a red ball!") and the
        *  child says it (Unit 3 Lesson 1). */
@@ -12422,4 +12432,199 @@ export const LESSON_U7L6_SCENES: Scene[] = [
     ],
   },
   { id: 'u7l6-finale', kind: 'finale', bg: bgU7L6Night, who: 'pip', line: 'You know every animal by its sound! Moo, baa, quack! Good night, farm! Goodbye, friend!' },
+];
+
+/* =============================================================================
+ * Pre-A1 Unit 8, Lesson 1 — "Apple, Banana, Milk!" (Food & Drink: I like / I don't like)
+ *
+ * A new unit and a new place: a picnic on a sunny green hill — a checkered blanket, a wicker basket and
+ * an apple tree. Pip has an apple, a banana and a glass of milk. The child names them ("It's an apple!",
+ * "It's milk!"), says the food sounds of the song (crunch, yum, gulp) and plays the new Feed Pip game:
+ * Pip asks politely, "Can I have a banana, please?", and the child gives him the right food. First
+ * sounds A (apple), B (banana) and M (milk). "I like …" comes in Lesson 4, so here Pip only models it.
+ * ========================================================================= */
+
+const bgU8L1Picnic = `${A}/scenes/bg-u8l1-picnic-wide.png`;
+const bgU8L1PicnicEmpty = `${A}/scenes/bg-u8l1-picnic-empty-wide.png`;
+const itemBanana = `${A}/items/item-banana.png`;
+
+export const LESSON_U8L1_TITLE = 'Apple, Banana, Milk!';
+export const LESSON_U8L1_OBJECTIVE = 'Name three foods — apple, banana, milk — with "It\'s an apple! / It\'s a banana! / It\'s milk!", give Pip the food he asks for ("Can I have a banana, please?"), and hear the first sounds A, B and M, by listening, moving and playing, no reading.';
+
+export const LESSON_U8L1_SCENES: Scene[] = [
+  { id: 'u8l1-title', kind: 'title-card', bg: bgU8L1Picnic, level: 'Pre-A1', unit: 'Unit 8', lessonLabel: 'Lesson 1', title: 'Apple, Banana, Milk!', subtitle: 'Picnic time!' },
+
+  /* 1-3 Hook */
+  {
+    id: 'u8l1-song', kind: 'song', bg: bgU8L1Picnic, title: '\u{1F3B5} Apple, Banana, Milk! \u{1F3B5}', teacher: 'Sing and act: crunch the apple, peel the banana, drink the milk!',
+    durationSeconds: 20, bigWord: 'Food', songUrl: `${A}/audio/apple-banana-milk-song-u8l1.mp3?v=1`,
+    lineDurationsMs: [3820, 4720, 4100, 7422],
+    songPrompt: 'Cheerful bouncy kids picnic song',
+    lyrics: [
+      { who: 'pip', text: 'An apple, an apple! Crunch, crunch, crunch!', emotion: 'happy' },
+      { who: 'pip', text: 'A banana, a banana! Yum, yum, yum!', emotion: 'happy' },
+      { who: 'pip', text: 'Milk, milk! Gulp, gulp, gulp!', emotion: 'happy' },
+      { who: 'pip', text: 'Apple, banana, milk! I like my lunch!', emotion: 'happy' },
+    ],
+  },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 7 · Lesson 6 · Animal Sounds Game (clear outlines → shadows).
+    id: 'u8l1-recall-warmup', kind: 'recall-warmup', bg: bgU8L1PicnicEmpty, who: 'pip', mode: 'shadow',
+    fromLabel: 'Unit 7 · Lesson 6 · Animal Sounds Game',
+    teacher: 'Warm-up from last lesson: Pip makes an animal sound, the child finds its shadow and says the animal.',
+    items: [
+      { word: 'cow', say: "Moo! Moo! It's a cow!", img: itemCow },
+      { word: 'horse', say: "Neigh! It's a horse!", img: itemHorse },
+      { word: 'duck', say: "Quack! It's a duck!", img: itemFarmDuck },
+      { word: 'cat', say: "Meow! It's a cat!", img: itemCat },
+    ],
+  },
+  {
+    id: 'u8l1-intro', kind: 'cinematic', bg: bgU8L1Picnic, hidePipOverlay: true, title: 'Apple, Banana, Milk!', subtitle: 'A picnic', narrator: 'pip',
+    script: [
+      { who: 'pip', line: "Hello! It's a sunny day. Picnic time!" },
+      { who: 'pip', line: 'Look! I have an apple, a banana and milk. Yum!' },
+    ],
+    cta: "Let's eat!",
+  },
+
+  /* 4-5 The words, move */
+  {
+    id: 'u8l1-words', kind: 'listen-repeat-cards', textSide: 'right', bg: bgU8L1PicnicEmpty, teacher: 'Listen, then say it with Pip: "It\'s an apple!"',
+    cards: [
+      { who: 'pip', sentence: "It's an apple!", img: itemApple, imgLabel: 'apple' },
+      { who: 'pip', sentence: "It's a banana!", img: itemBanana, imgLabel: 'banana' },
+      { who: 'pip', sentence: "It's milk!", img: itemMilk, imgLabel: 'milk' },
+    ],
+  },
+  {
+    id: 'u8l1-move', kind: 'tpr-actions', bg: bgU8L1Picnic, who: 'pip',
+    teacher: 'Stand up! Pretend to eat and drink with Pip.',
+    rounds: [
+      { line: 'Crunch, crunch! Eat an apple!', emoji: '\u{1F34E}', img: itemApple },
+      { line: 'Peel a banana! Yum!', emoji: '\u{1F34C}', img: itemBanana },
+      { line: 'Gulp, gulp! Drink your milk!', emoji: '\u{1F95B}', img: itemMilk },
+      { line: 'Rub your tummy! Mmm!', emoji: '\u{1F60B}' },
+    ],
+  },
+
+  /* 6 Signature game (new): Feed Pip */
+  {
+    id: 'u8l1-feed-pip', kind: 'feed-pip', bg: bgU8L1PicnicEmpty, who: 'pip',
+    teacher: 'Feed Pip! Pip asks for a food. The child taps that food on the blanket and it flies to Pip. Then the child says it: "Here you are! It\'s a banana!"',
+    mouth: { x: 76, y: 42 },
+    foods: [
+      { word: 'apple', phrase: 'an apple', img: itemApple, x: 33, y: 72 },
+      { word: 'banana', phrase: 'a banana', img: itemBanana, x: 47, y: 79 },
+      { word: 'milk', phrase: 'milk', img: itemMilk, x: 60, y: 70 },
+    ],
+    rounds: [
+      { target: 1, line: 'Can I have a banana, please?', reply: 'Thank you! Yum, a banana!' },
+      { target: 0, line: 'Can I have an apple, please?', reply: 'Thank you! Crunch, an apple!' },
+      { target: 2, line: 'Can I have milk, please?', reply: 'Thank you! Gulp, milk!' },
+      { target: 0, line: 'One more apple, please!', reply: 'Thank you! I like apples!' },
+    ],
+    doneLine: 'Yum! Apple, banana, milk! My tummy is happy!',
+  },
+
+  /* 7-9 More games */
+  {
+    id: 'u8l1-quick', kind: 'rapid-recall', bg: bgU8L1PicnicEmpty, who: 'pip', seconds: 4,
+    teacher: 'Quick look! A food pops up — say it before the ring runs out: "It\'s an apple!"',
+    cards: [
+      { img: itemBanana, word: 'banana', say: "It's a banana!" },
+      { img: itemMilk, word: 'milk', say: "It's milk!" },
+      { img: itemApple, word: 'apple', say: "It's an apple!" },
+      { img: itemMilk, word: 'milk', say: "It's milk!" },
+      { img: itemBanana, word: 'banana', say: "It's a banana!" },
+    ],
+  },
+  {
+    id: 'u8l1-pip-asks', kind: 'join-stage', bg: bgU8L1Picnic, teacher: 'Pip asks about the picnic food. Any answer is fine — help with "It\'s a…!"', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Look! What is it?', bubble: 'right' },
+      { who: 'student', line: "It's a banana!", bubble: 'right' },
+      { who: 'pip', line: 'And what is this? Gulp, gulp!', bubble: 'right' },
+      { who: 'student', line: "It's milk!", bubble: 'right' },
+    ],
+  },
+  {
+    id: 'u8l1-memory', kind: 'memory', bg: bgU8L1PicnicEmpty, teacher: 'Find the picnic pairs! Say "It\'s an apple!" every time you turn a card.',
+    pairs: [
+      { id: 'apple', label: 'apple', img: itemApple, emoji: '\u{1F34E}' },
+      { id: 'banana', label: 'banana', img: itemBanana, emoji: '\u{1F34C}' },
+      { id: 'milk', label: 'milk', img: itemMilk, emoji: '\u{1F95B}' },
+    ],
+  },
+
+  /* 10 Sounds: A, B, M */
+  {
+    id: 'u8l1-pop-abm', kind: 'sound-pop', bg: bgU8L1PicnicEmpty, teacher: 'Balloon Letter Pop! /a/ apple, /b/ banana, /m/ milk — Pip calls a letter, pop only that one!', who: 'pip', goal: 8, seconds: 45,
+    targets: [
+      { letter: 'A', phoneme: '/æ/' },
+      { letter: 'B', phoneme: '/b/' },
+      { letter: 'M', phoneme: '/m/' },
+    ],
+    items: [
+      { word: 'A', letter: 'A', emoji: 'A' },
+      { word: 'B', letter: 'B', emoji: 'B' },
+      { word: 'M', letter: 'M', emoji: 'M' },
+    ],
+  },
+
+  /* 11 My picnic */
+  {
+    id: 'u8l1-my-picnic', kind: 'join-stage', bg: bgU8L1Picnic, teacher: 'Your turn! Ask Pip for a food, politely. Any food is fine.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'You are hungry too! What do you want?', bubble: 'right' },
+      { who: 'student', line: 'Can I have an apple, please?', bubble: 'right' },
+      { who: 'pip', line: 'Here you are! An apple!', bubble: 'right' },
+      { who: 'student', line: 'Thank you! Yum!', bubble: 'right' },
+    ],
+  },
+
+  /* 12-13 Sticker + Home Mission */
+  {
+    id: 'u8l1-sticker', kind: 'sticker-reward', bg: bgU8L1Picnic, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'You fed me so well! Here is a banana sticker for you!', sticker: { img: itemBanana, label: 'Picnic helper' },
+  },
+  {
+    id: 'u8l1-home-mission', kind: 'home-mission', bg: bgU8L1Picnic, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: find an apple, a banana or milk at home! Point and say "It\'s a banana!"',
+    parentNote: 'Look in your kitchen together. Ask "What is it?" and let your child answer "It\'s an apple! / It\'s a banana! / It\'s milk!". At snack time, let them ask "Can I have a banana, please?"',
+    steps: [
+      { emoji: '\u{1F34E}', img: itemApple, say: "It's an apple!" },
+      { emoji: '\u{1F34C}', img: itemBanana, say: "It's a banana!" },
+      { emoji: '\u{1F95B}', img: itemMilk, say: "It's milk!" },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u8l1-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU8L1Picnic, who: 'pip',
+    teacher: 'Extra time: Brain Break! Do each action with Pip.',
+    rounds: [
+      { line: 'Pick an apple from the tree!', emoji: '\u{1F34E}' },
+      { line: 'Be a long banana! Stretch!', emoji: '\u{1F34C}' },
+      { line: 'Shake the milk! Shake, shake!', emoji: '\u{1F95B}' },
+      { line: 'Sit on the picnic blanket!', emoji: '\u{1F9FA}' },
+      { line: 'Freeze!', emoji: '\u{1F976}', seconds: 3 },
+    ],
+  },
+
+  /* Goodbye */
+  {
+    id: 'u8l1-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u8l1-finale', kind: 'finale', bg: bgU8L1Picnic, who: 'pip', line: 'Apple, banana, milk! Crunch, yum, gulp! Goodbye, friend!' },
 ];
