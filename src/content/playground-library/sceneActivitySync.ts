@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 /**
  * Real synced state for interactive scene kinds, shared by every scene
@@ -120,6 +120,22 @@ export function useSyncedState<T>(sync: ActivitySync | undefined, initial: T): [
     const t = window.setTimeout(() => { starting.current = false; }, 0);
     return () => window.clearTimeout(t);
   }, []);
+  // HAND-OVER. A screen that was only mirroring (its own `local` never moved off the scene's defaults)
+  // and now becomes the driver — the teacher tapping "take over" while the student is mid-activity, or
+  // the student being given the floor — must carry on from what it was showing, not restart the
+  // activity from zero. Adopt the last snapshot before the screen paints, so there is no flash either.
+  const wasMirrorRef = useRef(isRemoteMirror);
+  const latestRemoteRef = useRef<unknown>(sync?.state);
+  latestRemoteRef.current = sync?.state;
+  useLayoutEffect(() => {
+    const handedOver = wasMirrorRef.current && !isRemoteMirror;
+    wasMirrorRef.current = isRemoteMirror;
+    if (!handedOver || latestRemoteRef.current == null) return;
+    const adopted = reconcileSyncedState<T>(latestRemoteRef.current, initial);
+    localRef.current = adopted;
+    setLocal(adopted);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isRemoteMirror]);
   const remote = isRemoteMirror ? sync!.state : undefined;
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const mirrored = useMemo(() => reconcileSyncedState<T>(remote, initial), [remote]);
