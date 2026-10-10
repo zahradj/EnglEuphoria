@@ -2,7 +2,7 @@
 // answers 401/402/429; the next key is tried instead, so adding a key in Supabase secrets keeps voices
 // and songs working without a code change. Newer names come first (owner 2026-10-09: "use another api
 // elevenlabs 2" - the secret is named "elevenlabs 2"), the older ones after.
-const NAMES = ['elevenlabs 2', 'ELEVENLABS 2', 'Elevenlabs 2', 'ElevenLabs 2', 'elevenlabs2', 'ELEVENLABS2', 'Elevenlabs2', 'ElevenLabs2',
+const NAMES = ['11labs', '11Labs', '11LABS', '11 labs', '11labs_api_key', '11LABS_API_KEY', 'ELEVEN_LABS', 'elevenlabs 2', 'ELEVENLABS 2', 'Elevenlabs 2', 'ElevenLabs 2', 'elevenlabs2', 'ELEVENLABS2', 'Elevenlabs2', 'ElevenLabs2',
   'elevenlabs_2', 'ELEVENLABS_2', 'ELEVENLABS_API_KEY_2', 'ELEVENLABS_API_KEY2', 'ELEVEN_LABS_API_KEY_2', 'ELEVENLABS_KEY_2', 'elevenlab2',
   'elevenlabs', 'ELEVENLABS', 'ElevenLabs', 'ELEVEN_LABS_API_KEY', 'ELEVENLABS_KEY',
   'ELEVENLABS_API_KEY', 'elevenlab3', 'ELEVENLABS_API_KEY_3', 'ELEVENLABS_API_KEY_1'];

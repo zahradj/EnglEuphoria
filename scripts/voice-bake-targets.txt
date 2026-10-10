@@ -72,3 +72,4 @@ LESSON_U7L5_SCENES
 # 2026-10-10 re-run after key update
 # 2026-10-10 re-run: regional ElevenLabs hosts
 # 2026-10-10 re-run: all regional hosts
+# 2026-10-10 re-run: 11labs secret
