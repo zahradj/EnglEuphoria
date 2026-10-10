@@ -39,7 +39,9 @@ export async function fetchElevenLabs(url: string, init: RequestInit & { headers
   for (const [k, key] of keys.entries()) {
     for (const host of HOSTS) {
       const res = await fetch(url.replace('api.elevenlabs.io', host), { ...init, headers: { ...(init.headers ?? {}), 'xi-api-key': key } });
-      if (res.status !== 401 && res.status !== 402 && res.status !== 429) {
+      // The regional hosts answer a bad key with 400 + invalid_api_key, the global one with 401.
+      const badKey = res.status === 400 && /invalid_api_key/i.test(await res.clone().text());
+      if (res.status !== 401 && res.status !== 402 && res.status !== 429 && !badKey) {
         if (host !== HOSTS[0] || k > 0) console.log(`ElevenLabs: key #${k + 1} works on ${host}`);
         return res;
       }
