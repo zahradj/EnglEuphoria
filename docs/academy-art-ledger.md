@@ -109,3 +109,16 @@ Canva holder design DAHXiX3gn1o, pages 56-61 (page 56 = 1620x1080, 57-61 = 800x8
 | v-again | MAHXjez06c8 | public/academy-art/cards/v-again.webp | teen cupping hand behind ear, speech bubble with ?, circular repeat arrow icon |
 
 Weaknesses: v-spell bubbles read M-I-N-A and are spaced like a word, fine; the badge is blank (name is not on it). v-nationality shows two booklets (closed one held, open one with the stamp ring), stamp is an unlabelled ring. v-alphabet blocks are wooden-toy style, slightly more painterly than the flat cards. Scene: desk and board are in place, lower 40% is open floor.
+
+## Deck plates (locker-hall, border-control, detective-wall, club-stage)
+
+Canva holder design DAHXiX3gn1o, pages 62-65 (1620x1080). Style references: club-lobby `MAHXi7-_6nU` and club-signup-desk `MAHXjU4g7R8`; generated LANDSCAPE_3_2, one candidate each, all accepted (no people, text, numbers or flags seen at full size on the holder pages). Lower 40% is open floor in all four.
+
+| Picture | Canva media id | Page | Repo path | Prompt (short) |
+|---|---|---|---|---|
+| locker-hall | MAHXpI8JuhI | 62 | public/academy-art/bg/locker-hall.webp | bright club hallway, wall of 10 plain rounded lockers in blue/periwinkle/lavender/white, no numbers, bench at right, bunting, big window, open floor |
+| border-control | MAHXpBgWytU | 63 | public/academy-art/bg/border-control.webp | friendly airport passport-control hall: glass booth + counter + lamp right, rope barrier, globe on stand left, window with plane, blank signs |
+| detective-wall | MAHXpODAt5U | 64 | public/academy-art/bg/detective-wall.webp | cosy media room: corkboard with blank cards, blank notes and red string, desk with laptop, lamp and magnifying glass right, purple armchair |
+| club-stage | MAHXpHANhRE | 65 | public/academy-art/bg/club-stage.webp | small stage, purple curtain, two spotlights, mic stand stage left, bunting, empty chairs left and right |
+
+Weaknesses: locker-hall also has a bookshelf and a door at left (fine). border-control: the two blank sign boards are plain purple panels (good for overlays). detective-wall is busier than the others (side table with snacks at left, sofa, armchair overlaps the desk at lower right), so keep UI away from the far lower-right corner; the red strings are faint. club-stage: chairs sit at the far left and right edges of the lower area, centre is clear; the stage is raised and centred, so characters placed over it overlap the curtain.
