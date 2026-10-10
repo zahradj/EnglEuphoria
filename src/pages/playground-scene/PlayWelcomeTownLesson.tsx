@@ -59,7 +59,7 @@ interface PlayWelcomeTownLessonProps {
 /** Gem-eligible scene kinds — every activity kind that ever calls onWin(true)
  *  exactly once when completed. Kept in sync manually with SceneRenderer.tsx
  *  (title-card/cinematic never award a gem; finale is the end screen). */
-const GEM_KINDS = new Set<Scene['kind']>(['meet', 'echo', 'memory', 'vocab-spot', 'drag-match', 'drag-sticker', 'choice', 'listen-tap', 'true-false', 'roleplay', 'join-stage', 'hello-doors', 'flipbook', 'song', 'trace', 'word-build', 'sentence-build', 'letter-game', 'jigsaw-puzzle', 'spin-wheel', 'picture-match', 'first-sound', 'letter-match', 'letter-blocks', 'place-it', 'torch-hunt', 'where-castle', 'first-sound', 'letter-match', 'letter-blocks', 'whats-missing', 'sort-basket', 'grammar-gap', 'color-play', 'welcome-party', 'name-badge', 'prea1', 'feelings-survey', 'sound-blend']);
+const GEM_KINDS = new Set<Scene['kind']>(['meet', 'echo', 'memory', 'vocab-spot', 'drag-match', 'drag-sticker', 'choice', 'listen-tap', 'true-false', 'roleplay', 'join-stage', 'hello-doors', 'flipbook', 'song', 'trace', 'word-build', 'sentence-build', 'letter-game', 'jigsaw-puzzle', 'spin-wheel', 'picture-match', 'first-sound', 'letter-match', 'letter-blocks', 'place-it', 'torch-hunt', 'where-castle', 'first-sound', 'letter-match', 'letter-blocks', 'whats-missing', 'sort-basket', 'grammar-gap', 'color-play', 'welcome-party', 'name-badge', 'prea1', 'feelings-survey', 'sound-blend', 'chat-chain']);
 
 /** Scene kinds that own real synced state (see `activityState` below)
  *  instead of relying on the generic scene_tap DOM-click-mirror. Whoever
@@ -88,7 +88,7 @@ const REAL_SYNC_KINDS = new Set<Scene['kind']>([
   'frequency-ladder', 'roleplay', 'join-stage', 'hello-doors', 'flipbook',
   'sound-model', 'word-build', 'sentence-build', 'letter-game', 'spin-wheel', 'picture-match', 'recall-warmup',
   'first-sound', 'sound-blend', 'letter-match', 'letter-blocks', 'whats-missing', 'sort-basket', 'grammar-gap', 'color-play',
-  'tongue-twister', 'place-it', 'torch-hunt', 'where-castle', 'welcome-party', 'name-badge', 'feelings-survey',
+  'tongue-twister', 'place-it', 'torch-hunt', 'where-castle', 'welcome-party', 'name-badge', 'feelings-survey', 'chat-chain',
 ]);
 
 const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcomeTownLessonProps>(function PlayWelcomeTownLesson(

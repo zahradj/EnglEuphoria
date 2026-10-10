@@ -191,7 +191,7 @@ versa). ~23 `kind`s as of the true-false addition below:
 | **Discovery / model** | `meet`, `sound-model` |
 | **Controlled / recognition practice** | `echo`, `trace`, `vocab-spot`, `drag-match`, `frequency-ladder`, `pronoun-sort`, `true-false`, `picture-match` |
 | **Interactive game practice** | `choice`, `listen-tap`, `memory`, `word-build`, `letter-game`, `jigsaw-puzzle`, `hello-doors` |
-| **Speaking production** | `roleplay`, `join-stage`, `spin-wheel` |
+| **Speaking production** | `roleplay`, `join-stage`, `spin-wheel`, `chat-chain` (A1 U1 L4: friend speaks, child picks the reply that fits and says it; the chat replays — Duolingo complete-the-chat / Novakid speech bubbles) |
 | **Story** | `flipbook` |
 | **Structural / closing** | `title-card`, `cinematic`, `song`, `finale` |
 

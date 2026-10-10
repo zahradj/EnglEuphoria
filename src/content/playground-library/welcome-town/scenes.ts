@@ -453,6 +453,13 @@ export type Scene =
       friends: { who: CharKey; name: string; feeling: string; img: string; feelImg?: string }[];
       faces: { feeling: string; emoji: string; color: string }[];
     }
+  | {
+      /** Chat Chain (A1 U1 L4): a friend speaks, the child picks the reply that fits (the `wrong` lines answer a
+       *  different question) and says it; the turns build one whole conversation that replays at the end.
+       *  See scene-components/ChatChainScene.tsx. */
+      id: string; kind: 'chat-chain'; bg: string; teacher: string; partner: CharKey; title: string; intro: string;
+      turns: ({ who: CharKey; line: string } | { who: 'student'; line: string; wrong: string[] })[];
+    }
   | { id: string; kind: 'finale'; bg: string; who: CharKey; line: string; cast?: CharKey[]; look?: 'card' };
 
 /* =============================================================================
@@ -1441,216 +1448,301 @@ export const LESSON_3_SCENES: Scene[] = classroomLook([
 
 
 /* =============================================================================
- * A1 Unit 1, Lesson 4: "Speak & Meet!"
+ * A1 Unit 1, Lesson 4: "Meet a Friend: Speak!" (curriculum slot; rebuilt 2026-10-10)
  *
- * Per this project's own seeded curriculum blueprint (queried directly from
- * curriculum_lessons before writing a single scene, per generate-lesson's
- * §3/§4): title "Speak & Meet!", objective "Students will be able to greet
- * and introduce themselves to a partner," skill_focus "Speaking",
- * communication_goal "Have a simple greeting conversation," phonics_focus
- * "/f/ (friend)". This is the productive counterpart Lesson 3 explicitly
- * deferred to — Lesson 3 stayed receptive-only; this lesson is where all of
- * it (hello, name, how-are-you, friend/teacher) finally gets said out loud
- * in one real back-and-forth, not drilled as isolated vocabulary again.
- * Per playground-curriculum-engine's progressive-combination rule, this
- * lesson's roleplay/join-stage scenes deliberately COMBINE Lesson 1's
- * hello+name and Lesson 2's how-are-you into a single conversation, and add
- * one genuinely new grammar move on top: introducing a THIRD person
- * ("This is my friend, ___") rather than only ever talking about yourself
- * — sourced from real ESL classroom practice (a partner-interview-then-
- * introduce technique, see sources below), and a natural fit since
- * "friend" is already-known vocabulary from Lesson 1 that this lesson's
- * own phonics slot (/f/) is already anchored to.
- *
- * Two scene kinds get real use here for the first time in the Welcome Town
- * family: `echo` (declared in the Scene union with a working renderer,
- * never actually used by a shipped lesson — a genuine fit for this
- * lesson's quick single-word "hold and say it" speaking reps, a different
- * rhythm from `meet`'s longer modeled monologue) and the shared goodbye
- * song / storybook conventions stay exactly as established, EXCEPT no
- * flipbook here — the blueprint's own Lesson 5 ("Storybook: New Friends at
- * the Park") is the unit's dedicated storybook slot; adding one here too
- * would step on that lesson's own reason to exist.
- *
- * Web research consulted before designing the speaking activities (per
- * standing direction to research fresh mechanics rather than default to
- * the same shape every lesson):
- *   https://www.teach-this.com/functional-language/introductions
- *   https://games4esl.com/greetings-and-introductions-esl-games/
- * Continues the phonics-through-reading track from Lesson 2's P/I/N with
- * one new sound, F — the blueprint's own phonics_focus for this slot —
- * landing on a small delightful capstone: Pip himself is a fox, so
- * "F is for Fox" doubles as a callback to the lesson's own mascot, the
- * same trick Lesson 2's "read PIP" capstone used.
+ * Curriculum (curriculum_lessons, A1 U1 L4): the unit's SPEAKING lesson. Objective: have a short greeting
+ * conversation (greet a classmate and ask how they are). Language: hello / hi / goodbye, "What's your name?
+ * - My name is …", "How are you? - I am fine / happy / sad". No new grammar: everything from Lessons 1-3
+ * comes together in ONE conversation the child says out loud, turn by turn.
+ * Story frame (new setting after L3's concert): break time on the school playground — Pip goes round the
+ * playground and talks to his friends; then a new friend, Bella, arrives, and the child has the whole chat.
+ * Follows the 22-slide lesson blueprint slot by slot (see the slot comments); extras at the end are optional.
+ * Research (mechanics only): Duolingo "complete the chat" + Stories, Novakid / LingoAce speech-bubble replies,
+ * Cambridge Pre A1 Starters / A1 Movers speaking "ask and answer", Lingokids role-play. Signature mechanic:
+ * Chat Chain (scene-components/ChatChainScene.tsx). Phonics: Blend It! review (dog, bed, bag, fan).
  * ========================================================================= */
 
-export const LESSON_4_TITLE = 'Speak & Meet!';
-export const LESSON_4_OBJECTIVE = 'Part 1: Greet a partner and introduce yourself AND a friend, combining everything from Lessons 1-3 into one real conversation. Part 2: Learn the sound F and read three more real words.';
+export const LESSON_4_TITLE = 'Meet a Friend: Speak!';
+export const LESSON_4_OBJECTIVE = 'Have a short greeting conversation: say hello, ask and answer "What\'s your name?" and "How are you?" (I am fine / happy / sad), and say goodbye.';
+
+const bgPlay = `${W}/scenes/bg-playground-break-wide.png`;
 
 export const LESSON_4_SCENES: Scene[] = classroomLook([
-  { id: 'wt4-title', kind: 'title-card', bg: bgWideV2, level: 'A1', unit: 'Unit 1', lessonLabel: 'Lesson 4', title: 'Speak & Meet!', subtitle: 'Say hello and meet a new friend!', cta: '🗣️ LET’S TALK!' },
+  { id: 'wt4-title', kind: 'title-card', bg: bgPlay, level: 'A1', unit: 'Unit 1', lessonLabel: 'Lesson 4', title: 'Meet a Friend: Speak!', subtitle: 'Say hello and have a real chat', cta: '\u{1F5E3}\u{FE0F} LET’S TALK!' },
   {
-    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 3 · Listen & Greet!.
-    id: 'wt4-recall-warmup', kind: 'recall-warmup', bg: '/welcome-town/scenes/bg-classroom-circle-v2.png', who: 'pip', mode: 'click',
-    fromLabel: "Lesson 3 · Listen to the Greetings Song",
+    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 3 · Listen to the Greetings Song.
+    id: 'wt4-recall-warmup', kind: 'recall-warmup', bg: bgL1Circle, who: 'pip', mode: 'click',
+    fromLabel: 'Lesson 3 · Listen to the Greetings Song',
     teacher: 'Warm-up from last lesson: Pip sings a line of the Greetings Song, the student finds who sang it and sings it too.',
     items: [
-      { word: "Mia", say: "Who sings: What's your name?", img: '/welcome-town/sprites/mia-wave.png' },
-      { word: "Leo", say: "Who sings: How are you?", img: '/welcome-town/sprites/leo-wave.png' },
-      { word: "Bella", say: "Who sings: Goodbye, my new friend?", img: '/welcome-town/sprites/bella-wave.png' },
+      { word: 'Mia', say: 'Who sings: What’s your name?', img: spr('mia') },
+      { word: 'Leo', say: 'Who sings: How are you?', img: spr('leo') },
+      { word: 'Bella', say: 'Who sings: Goodbye, my new friend?', img: spr('bella') },
     ],
   },
-
+  /* 1 Warm-up song (TPR) */
   {
-    id: 'wt4-intro', kind: 'cinematic', bg: bgCircleV2, title: 'Time to Talk!', subtitle: 'Today you have a real conversation', narrator: 'marigold',
+    id: 'wt4-hello-song', kind: 'song', bg: bgPlay, title: '\u{1F3B5} The Hello Song \u{1F3B5}', teacher: 'Wave and sing! Point to you when we say “name”.',
+    durationSeconds: 20, bigWord: 'Hello',
+    songUrl: `${W}/audio/hello-song.mp3?v=1`,
+    lineDurationsMs: [3640, 4120, 4320, 7982],
+    lyrics: [
+      { who: 'marigold', text: 'Hello, hello, hello to you!' },
+      { who: 'pip', text: 'Hi, hi, hi! And hi to you!' },
+      { who: 'marigold', text: 'What’s your name? What’s your name?' },
+      { who: 'pip', text: 'Say your name! Say your name!' },
+    ],
+  },
+  /* 2 Pip greeting + question */
+  { id: 'wt4-pip-greets', kind: 'meet', focus: ['How are you'], bg: bgL1Peers, who: 'pip', cardSide: 'left', teacher: 'Tap Pip. Answer him: "I am fine, thank you!"', line: 'Hi! It is break time! How are you?', repeat: 'I am fine, thank you!' },
+  /* 3 Story opener */
+  {
+    id: 'wt4-story-open', kind: 'cinematic', bg: bgPlay, title: 'Break Time!', subtitle: 'Pip talks to his friends on the playground', narrator: 'marigold',
     script: [
-      { who: 'marigold', line: 'Welcome back, class! Today we practice something new.' },
-      { who: 'marigold', line: 'You will meet a partner and have a real conversation!' },
-      { who: 'pip', line: 'I love talking to my friends! Let’s go!' },
+      { who: 'marigold', line: 'It is break time at Welcome Town School!' },
+      { who: 'pip', line: 'Look! Mia is on the slide and Leo is on the swing.' },
+      { who: 'pip', line: 'I want to talk to my friends!' },
+      { who: 'marigold', line: 'Listen. What does Pip say?' },
     ],
-    cta: '🗣️ LET’S TALK!',
+    cta: '\u{1F442} LISTEN!',
   },
-
+  /* 4 Vocabulary reveal: the chat lines on the playground, one arrow at a time */
   {
-    id: 'wt4-meet-model', kind: 'meet', focus: ['Nice to meet you'], bg: bgExpressHelloV2, who: 'marigold',
-    teacher: 'Tap Miss Marigold to hear a full greeting!',
-    line: 'Watch me! Hello! My name is Miss Marigold. Nice to meet you!', repeat: 'Nice to meet you!',
+    id: 'wt4-chat-lines', kind: 'vocab-spot', bg: bgPlay, teacher: 'Tap each arrow. Listen to the line, then say it.',
+    items: [
+      { label: 'Hello!', sentence: 'Hello, Mia! Hello, Leo!', emoji: '\u{1F44B}', left: '43%', top: '66%', color: '#FE6A2F', who: 'pip' },
+      { label: 'How are you?', sentence: 'How are you, Mia?', emoji: '\u{2753}', left: '53%', top: '50%', color: '#FE6A2F', who: 'pip' },
+      { label: 'I am happy.', sentence: 'I am happy, thank you!', emoji: '\u{1F60A}', left: '13%', top: '34%', color: '#B85CD1', who: 'mia' },
+      { label: 'I am fine.', sentence: 'I am fine, thank you!', emoji: '\u{1F44D}', left: '85%', top: '48%', color: '#C97A2F', who: 'leo' },
+      { label: 'What’s your name?', sentence: 'What’s your name?', emoji: '\u{1F3F7}\u{FE0F}', left: '84%', top: '72%', color: '#C97A2F', who: 'leo' },
+      { label: 'Goodbye!', sentence: 'Goodbye! See you!', emoji: '\u{1F44B}', left: '64%', top: '68%', color: '#FE6A2F', who: 'pip' },
+    ],
   },
+  /* 5 Echo mimic */
+  { id: 'wt4-echo', kind: 'echo', bg: bgL1Peers, who: 'leo', textSide: 'top', teacher: 'Listen to Leo, then say it with him!', word: 'I am fine, thank you!' },
+  /* 6 Reveal game: who says it? */
   {
-    // First real use of `echo` in the Welcome Town family — see the file
-    // banner above. A quick single-word speaking rep, deliberately shorter
-    // than `meet`'s full modeled line, right after that longer model.
-    id: 'wt4-echo-hello', kind: 'echo', bg: bgExpressHelloV2, who: 'pip', textSide: 'top', teacher: 'Now you try! Hold the button and say it with Pip!', word: 'Hello!',
+    id: 'wt4-who-says', kind: 'prea1', teacher: 'Listen! Who says it? Tap the friend when they pop up.',
+    scene: {
+      id: 'wt4-who-says', kind: 'friend-pop', bg: '/lep1/scenes/bg-name-carnival-sky.jpg', teacher: 'Listen! Who says it? Tap the friend when they pop up.', cast: ['pip', 'mia', 'leo', 'bella'],
+      rounds: [
+        { target: 'leo', prompt: 'Who says: I am fine?', emotion: 'neutral', sayLine: 'I am fine, thank you!' },
+        { target: 'mia', prompt: 'Who says: I am happy?', emotion: 'happy', sayLine: 'I am happy!' },
+        { target: 'bella', prompt: 'Who says: I am sad?', emotion: 'sad', sayLine: 'I am sad.' },
+        { target: 'pip', prompt: 'Who says: Hello, my name is Pip?', emotion: 'happy', sayLine: 'Hello! My name is Pip.' },
+      ],
+    },
   },
-
+  /* 7 Drag & match: name tags on the friends */
   {
-    // Combines Lesson 1's hello+name and Lesson 2's how-are-you into ONE
-    // conversation (progressive combination, not a re-teach of either).
-    // Per lesson-quality-gate's Semantic pass: bg-classroom-circle.png (used
-    // by every other roleplay/join-stage scene in this file) only paints
-    // Pip and Miss Marigold -- RoleplayScene's bubbleLeft anchor map has a
-    // real position for those two specifically and silently defaults
-    // everyone else to dead-center, so Leo speaking on that background
-    // would float a speech bubble over empty space with no character
-    // there. Fixed with a dedicated new asset (bg-classroom-peers.png,
-    // Pip left / Leo right, facing each other) instead of reusing
-    // bg-classroom-circle -- see the matching `leo` anchor added to
-    // RoleplayScene's bubbleLeft map in SceneRenderer.tsx.
-    id: 'wt4-roleplay', kind: 'roleplay', bg: bgPeersV2, teacher: 'A real conversation! Listen to Pip and Leo, then repeat each line.', cast: ['pip', 'leo'],
+    id: 'wt4-name-tags', kind: 'drag-match', bg: bgFeelingsW, teacher: 'Read the name tag and drag it onto the friend. Then say it: "My name is Leo!"',
+    items: [
+      { label: 'My name is Pip.', color: '#FE6A2F', who: 'pip', targetLeft: '29.8%', targetTop: '54.5%' },
+      { label: 'My name is Leo.', color: '#C97A2F', who: 'leo', targetLeft: '40.4%', targetTop: '55.6%' },
+      { label: 'My name is Mia.', color: '#B85CD1', who: 'mia', targetLeft: '51.1%', targetTop: '57.9%' },
+      { label: 'My name is Bella.', color: '#E76FA5', who: 'bella', targetLeft: '61.8%', targetTop: '56.8%' },
+      { label: 'My name is Willow.', color: '#4FA9E0', who: 'willow', targetLeft: '72.5%', targetTop: '57.9%' },
+    ],
+  },
+  /* 8 Implicit grammar model: the whole conversation */
+  {
+    id: 'wt4-model-chat', kind: 'roleplay', bg: bgL1Peers, teacher: 'A whole conversation! Listen to Pip and Leo, then say each line after them.', cast: ['pip', 'leo'],
     script: [
-      { who: 'pip', line: 'Hello! My name is Pip.', repeat: true },
-      { who: 'leo', line: 'Hi Pip! My name is Leo.', repeat: true },
-      { who: 'pip', line: 'Nice to meet you, Leo!', repeat: true },
-      { who: 'leo', line: 'Nice to meet you too! How are you today?', repeat: true },
-      { who: 'pip', line: 'I am happy! How are you?', repeat: true },
-      { who: 'leo', line: 'I am fine, thank you!' },
+      { who: 'pip', line: 'Hello! What’s your name?', repeat: true },
+      { who: 'leo', line: 'Hi! My name is Leo.', repeat: true },
+      { who: 'pip', line: 'How are you, Leo?', repeat: true },
+      { who: 'leo', line: 'I am fine, thank you!', repeat: true },
+      { who: 'pip', line: 'Goodbye, Leo!', repeat: true },
+      { who: 'leo', line: 'Goodbye! See you!', repeat: true },
     ],
   },
+  /* 9 Spinner -> greet that friend */
   {
-    id: 'wt4-echo-friend', kind: 'echo', bg: bgExpressFriendV2, who: 'mia', textSide: 'top', teacher: 'Say it with Mia! Hold and say it!', word: 'Friend!',
+    id: 'wt4-spin-greet', kind: 'spin-wheel', bg: bgPlay, title: 'Spin and say hello!',
+    teacher: 'Have the student spin, then greet that friend and ask: "Hello, Mia! How are you?" If you prefer, do the activity without the spinner.',
+    items: [
+      { label: 'Hello, Mia! How are you?', left: '13%', top: '22%' },
+      { label: 'Hi, Pip! How are you?', left: '53%', top: '40%' },
+      { label: 'Hello, Leo! How are you?', left: '86%', top: '30%' },
+    ],
+    wheelAt: { left: '36%', top: '30%' },
   },
-
+  /* 10 Teacher asks, child answers */
   {
-    // Produce, same combined pattern the roleplay above just modeled.
-    id: 'wt4-join-stage-intro', kind: 'join-stage', bg: bgCircleV2, teacher: 'Your turn! Say hello, your name, and how you feel!', cast: ['marigold', 'leo'],
+    id: 'wt4-answer', kind: 'join-stage', bg: bgL1Circle, teacher: 'Miss Marigold asks; the student answers in a whole sentence.', cast: ['marigold', 'pip'],
     turns: [
-      { who: 'marigold', line: 'Hello! What is your name?' },
-      { who: 'student', line: 'Hello! My name is ______.' },
-      { who: 'leo', line: 'Nice to meet you! How are you?' },
-      { who: 'student', line: 'I am ______. Nice to meet you too!' },
-      { who: 'marigold', line: 'Wonderful! You had a real conversation!' },
+      { who: 'marigold', line: 'Hello! What’s your name?' },
+      { who: 'student', line: 'My name is … !' },
+      { who: 'marigold', line: 'How are you today?' },
+      { who: 'student', line: 'I am … , thank you!' },
+      { who: 'pip', line: 'Goodbye! See you!' },
+      { who: 'student', line: 'Goodbye!' },
     ],
   },
+  /* 11 Role swap: the child asks (grab the mic) */
   {
-    // The lesson's one genuinely new grammar move: introducing someone
-    // ELSE ("This is my friend, ___"), not only yourself — see the file
-    // banner's note on the partner-interview-then-introduce technique.
-    id: 'wt4-join-stage-partner', kind: 'join-stage', bg: bgCircleV2, teacher: 'Now introduce a FRIEND! Point to someone and say their name!', cast: ['pip', 'bella'],
+    id: 'wt4-ask', kind: 'prea1', teacher: 'Grab the mic! The student asks each friend: How are you? Then listens to the answer.',
+    scene: {
+      id: 'wt4-ask', kind: 'voice-stage', bg: '/lep1/scenes/bg-name-mic-stage.jpg', teacher: 'Grab the mic! The student asks each friend: How are you? Then listens to the answer.', question: 'How are you?',
+      rounds: [
+        { who: 'mia', cue: 'Ask Mia!', answer: 'I am happy, thank you!' },
+        { who: 'leo', cue: 'Ask Leo!', answer: 'I am fine, thank you!' },
+        { who: 'bella', cue: 'Ask Bella!', answer: 'I am sad.' },
+      ],
+    },
+  },
+  /* 12 Game break: Chat Chain — the whole conversation with a new friend */
+  {
+    id: 'wt4-chat-chain', kind: 'chat-chain', bg: bgL1Circle, partner: 'bella', title: 'Chat with Bella',
+    intro: 'Hi! Let’s talk!',
+    teacher: 'Chat Chain: Bella talks, the student picks the reply that fits and SAYS it out loud, then taps “I said it”. At the end, play the whole chat.',
     turns: [
-      { who: 'pip', line: 'This is my friend, Bella!' },
-      { who: 'student', line: 'Hello, Bella! Nice to meet you!' },
-      { who: 'bella', line: 'Hello! Nice to meet you too!' },
-      { who: 'pip', line: 'Now you try! Point to a friend and introduce them!' },
-      { who: 'student', line: 'This is my friend, ______!' },
+      { who: 'bella', line: 'Hello!' },
+      { who: 'student', line: 'Hi! What’s your name?', wrong: ['I am sad.', 'Goodbye!'] },
+      { who: 'bella', line: 'My name is Bella. What’s your name?' },
+      { who: 'student', line: 'My name is …', wrong: ['How are you?', 'See you!'] },
+      { who: 'bella', line: 'Nice to meet you! How are you?' },
+      { who: 'student', line: 'I am fine, thank you!', wrong: ['My name is Bella.', 'Hello!'] },
+      { who: 'bella', line: 'Oh, the bell! Goodbye!' },
+      { who: 'student', line: 'Goodbye, Bella! See you!', wrong: ['I am happy.', 'What’s your name?'] },
     ],
   },
-
+  /* 13 Personal production */
   {
-    id: 'wt4-memory', kind: 'memory', bg: bgCircleV2, teacher: 'Match the matching pairs! Everything you said today.',
+    id: 'wt4-how-are-you', kind: 'choice', bg: bgL1Circle, who: 'pip', teacher: 'Any answer is right! The student picks how they feel today and says it: "I am fine, thank you!"',
+    prompt: 'How are YOU today?',
+    options: [
+      { label: 'I am fine.', emoji: '\u{1F44D}', correct: true },
+      { label: 'I am happy.', emoji: '\u{1F60A}', correct: true },
+      { label: 'I am sad.', emoji: '\u{1F622}', correct: true },
+      { label: 'I am tired.', emoji: '\u{1F634}', correct: true },
+    ],
+  },
+  /* 14 Phonics micro-moment: Blend It! */
+  {
+    id: 'wt4-blend', kind: 'sound-blend', bg: bgL1Reading,
+    teacher: 'Tap each car and say the sound with the student (/d/ /o/ /g/), press Blend!, then find the picture.',
+    rounds: [
+      { word: 'dog', img: '/lep1/items/item-dog.png' },
+      { word: 'bed', img: '/lep1/items/item-bed.png' },
+      { word: 'bag', img: '/lep1/items/item-bag.png' },
+      { word: 'fan', img: '/lep1/items/item-fan.png' },
+    ],
+  },
+  /* 15 Quick-fire recall */
+  {
+    id: 'wt4-quick-fire', kind: 'prea1', teacher: 'Quick fire! Say the answer before the ring runs out.',
+    scene: {
+      id: 'wt4-quick-fire', kind: 'rapid-recall', bg: bgPlay, who: 'pip', seconds: 4,
+      teacher: 'Quick fire! Say the answer before the ring runs out.',
+      cards: [
+        { img: feelSpr('pip-happy'), word: 'I am happy.' },
+        { img: feelSpr('mia-sad'), word: 'I am sad.' },
+        { img: spr('leo'), word: 'My name is Leo.' },
+        { img: spr('bella'), word: 'Goodbye!', say: 'Goodbye! See you!' },
+      ],
+    },
+  },
+  /* 16 Story payoff */
+  {
+    id: 'wt4-story-end', kind: 'cinematic', bg: bgPlay, title: 'Ding, ding!', subtitle: 'Break time is over', narrator: 'marigold',
+    script: [
+      { who: 'marigold', line: 'Ding, ding! Break time is over!' },
+      { who: 'pip', line: 'I talked to Mia, Leo and Bella. Now Bella is my friend!' },
+      { who: 'marigold', line: 'Well done! You can have a real chat, too!' },
+    ],
+    cta: '\u{1F3A4} MY TURN!',
+  },
+  /* 17 Sing-back: the child leads */
+  {
+    id: 'wt4-sing-back', kind: 'song', bg: bgPlay, title: '\u{1F3B5} The Hello Song \u{1F3B5}', teacher: 'Sing-back: now the student leads the song and the teacher answers. Wave on hello, point on name!',
+    durationSeconds: 20, bigWord: 'Hello',
+    songUrl: `${W}/audio/hello-song.mp3?v=1`,
+    lineDurationsMs: [3640, 4120, 4320, 7982],
+    lyrics: [
+      { who: 'marigold', text: 'Hello, hello, hello to you!' },
+      { who: 'pip', text: 'Hi, hi, hi! And hi to you!' },
+      { who: 'marigold', text: 'What’s your name? What’s your name?' },
+      { who: 'pip', text: 'Say your name! Say your name!' },
+    ],
+  },
+  /* 18 Reflection */
+  {
+    id: 'wt4-favourite', kind: 'choice', bg: bgPlay, who: 'pip', teacher: 'Any answer is right! The student picks a friend and says hello to them once more.',
+    prompt: 'Who do you want to talk to next?',
+    options: [
+      { label: 'Mia', emoji: '\u{1F42D}', correct: true },
+      { label: 'Leo', emoji: '\u{1F981}', correct: true },
+      { label: 'Bella', emoji: '\u{1F430}', correct: true },
+      { label: 'Willow', emoji: '\u{1F426}', correct: true },
+    ],
+  },
+  /* 19 Sticker  20 Home Mission */
+  {
+    id: 'wt4-sticker', kind: 'prea1', teacher: 'Sticker time! The student opens the pack and puts the chat sticker in their Sticker Book.',
+    scene: {
+      id: 'wt4-sticker', kind: 'sticker-reward', bg: bgPlay, who: 'pip', teacher: 'Sticker time! The student opens the pack and puts the chat sticker in their Sticker Book.',
+      line: 'You can have a real chat with a friend! Here is your sticker.',
+      sticker: { img: spr('bella'), label: 'Hello, friend!' },
+    },
+  },
+  {
+    id: 'wt4-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
+    scene: {
+      id: 'wt4-home-mission', kind: 'home-mission', bg: bgPlay, who: 'pip',
+      teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
+      line: 'Your home mission!',
+      parentNote: 'Today your child practised a short conversation: hello, what’s your name?, how are you? (I am fine / happy / sad) and goodbye. Have the chat with them.',
+      steps: [
+        { emoji: '\u{1F44B}', say: 'Say hello to someone in your family.' },
+        { emoji: '\u{2753}', say: 'Ask: How are you?' },
+        { emoji: '\u{1F44D}', say: 'Answer: I am fine, thank you!' },
+      ],
+    },
+  },
+  /* Extra time (blueprint §3b): only if there is time left */
+  {
+    id: 'wt4-memory', kind: 'memory', bg: bgL1Circle, teacher: 'Extra time: Memory! Find the question and its answer. Say both when you find a pair.',
     pairs: [
-      { id: 'hello', label: 'Hello', emoji: '👋' },
-      { id: 'goodbye', label: 'Goodbye', emoji: '👋' },
-      { id: 'name', label: 'Name', emoji: '🏷️' },
-      { id: 'friend', label: 'Friend', emoji: '🤝' },
-      { id: 'nice', label: 'Nice to meet you', emoji: '🤗' },
+      { id: 'hello', label: 'Hello!', emoji: '\u{1F44B}' },
+      { id: 'name', label: 'My name is …', emoji: '\u{1F3F7}\u{FE0F}' },
+      { id: 'fine', label: 'I am fine.', emoji: '\u{1F44D}' },
+      { id: 'bye', label: 'Goodbye!', emoji: '\u{1F31F}' },
     ],
   },
-
   {
-    id: 'wt4-break', kind: 'title-card', bg: bgWideV2, level: 'A1', unit: 'Unit 1', lessonLabel: 'Break Time', title: 'Great Job!', subtitle: 'Stretch, get some water, then come back for Part 2!', cta: '🤸 I’m Ready!',
-  },
-
-  /* =========================== Part 2: Reading ===========================
-   * Continues straight from Lesson 2's P/I/N — one new sound, F, per the
-   * blueprint's own phonics_focus for this slot. */
-
-  { id: 'wt4-part2-title', kind: 'title-card', bg: bgReadingV2, level: 'A1', unit: 'Unit 1', lessonLabel: 'Part 2', title: 'Reading Time!', subtitle: 'One new sound — /f/ — then read real words!', cta: '📖 LET’S READ!' },
-
-  {
-    id: 'wt4-model-f', kind: 'sound-model', bg: bgReadingV2, who: 'pip', letter: 'F', phoneme: '/f/', sound: 'fff',
-    teacher: 'A brand-new sound! /f/ /f/ Fox! Just like me!',
-    anchors: [
-      { word: 'fan', emoji: '🪭' },
-      { word: 'fish', emoji: '🐟', img: '/lep1/alphabet/item-fish.png' },
-      { word: 'fox', emoji: '🦊' },
-    ],
-  },
-  { id: 'wt4-trace-f', kind: 'trace', bg: bgReadingV2, who: 'pip', letter: 'F', phoneme: '/f/', word: 'fox', teacher: 'Trace the letter F! Say /f/ /f/ /f/ as you draw.' },
-
-  {
-    id: 'wt4-word-build', kind: 'word-build', bg: bgReadingV2, teacher: 'You know a new sound! Now read three more real words!',
+    id: 'wt4-true-false', kind: 'true-false', bg: bgPlay, teacher: 'Extra time: listen. Is it true or false? Tap the right answer.',
     rounds: [
-      { word: 'FAN', blankIndex: 0, answer: 'F', choices: ['F', 'S', 'P'], emoji: '🪭' },
-      { word: 'FIN', blankIndex: 0, answer: 'F', choices: ['F', 'P', 'T'], emoji: '🐟' },
-      { word: 'SIP', blankIndex: 0, answer: 'S', choices: ['S', 'F', 'P'], emoji: '🥤' },
-    ],
-  },
-
-  {
-    id: 'wt4-letter-hunt', kind: 'letter-game', bg: bgReadingV2, who: 'marigold', mode: 'name',
-    teacher: 'Alphabet game! Find the letter I say.',
-    rounds: [
-      { letter: 'F', choices: ['F', 'P', 'T'] },
-      { letter: 'A', choices: ['A', 'O', 'E'] },
-      { letter: 'N', choices: ['N', 'M', 'H'] },
+      { who: 'leo', statement: 'Leo is on the swing.', isTrue: true },
+      { who: 'mia', statement: 'Mia is on the swing.', isTrue: false },
+      { who: 'pip', statement: 'Pip says hello to his friends.', isTrue: true },
     ],
   },
   {
-    id: 'wt4-sound-hunt', kind: 'letter-game', bg: bgReadingV2, who: 'pip', mode: 'sound',
-    teacher: 'Sound game! Listen, then tap the letter that makes that sound.',
-    rounds: [
-      { letter: 'F', phoneme: '/f/', choices: ['F', 'S', 'P'] },
-      { letter: 'A', phoneme: '/æ/', choices: ['A', 'I', 'O'] },
-      { letter: 'N', phoneme: '/n/', choices: ['N', 'M', 'D'] },
-    ],
+    id: 'wt4-move-break', kind: 'prea1', teacher: 'Extra time: brain break! Do it with Pip.',
+    scene: {
+      id: 'wt4-move-break', kind: 'tpr-actions', mode: 'break', bg: '/lep1/scenes/bg-u3l4-room-empty-wide.png', who: 'pip',
+      teacher: 'Extra time: brain break! Do it with Pip.',
+      rounds: [
+        { line: 'Wave and say hello!', emoji: '\u{1F44B}' },
+        { line: 'Shake hands with a friend!', emoji: '\u{1F91D}' },
+        { line: 'Run to the swing!', emoji: '\u{1F3C3}' },
+        { line: 'Freeze!', emoji: '\u{1F9CA}' },
+      ],
+    },
   },
+  /* 21 Closing routine goodbye  22 Celebration */
   {
-    id: 'wt4-class-puzzle', kind: 'jigsaw-puzzle', bg: bgWideV2, teacher: 'Puzzle game! Drag the pieces to put the class picture back together!',
-    image: bgWideV2, rows: 2, cols: 3,
-  },
-
-  {
-    id: 'wt4-goodbye-song', kind: 'song', bg: bgExpressGoodbyeV2, title: '🎵 Welcome Town School Goodbye Song 🎵', teacher: 'It’s time to go — wave goodbye and sing along together!',
+    id: 'wt4-goodbye-song', kind: 'song', bg: bgExpressGoodbyeW, title: '\u{1F3B5} Welcome Town School Goodbye Song \u{1F3B5}', teacher: 'It’s time to go — wave goodbye and sing along together!',
     durationSeconds: 20, bigWord: 'Goodbye',
     songUrl: `${W}/audio/goodbye-song.mp3?v=3`,
     lineDurationsMs: [3600, 4120, 4020, 8322],
     lyrics: [
-      { who: 'marigold', text: '👋 Goodbye, goodbye, my new friend' },
-      { who: 'pip', text: '👋 Goodbye, goodbye, see you again' },
-      { who: 'marigold', text: '🏫 Welcome Town School is happy today' },
-      { who: 'pip', text: '💖 Byeeee, friends! See you soon!' },
+      { who: 'marigold', text: '\u{1F44B} Goodbye, goodbye, my new friend' },
+      { who: 'pip', text: '\u{1F44B} Goodbye, goodbye, see you again' },
+      { who: 'marigold', text: '\u{1F3EB} Welcome Town School is happy today' },
+      { who: 'pip', text: '\u{1F496} Byeeee, friends! See you soon!' },
     ],
   },
-
-  { id: 'wt4-finale', kind: 'finale', bg: bgWideV2, who: 'pip', line: 'You met a partner, had a real conversation, and learned a new sound — F is for friend, and F is for Fox, just like me! ✨🗣️' },
+  { id: 'wt4-finale', kind: 'finale', bg: bgPlay, who: 'pip', line: 'You said hello, asked “What’s your name?” and “How are you?”, and had a real chat with Bella! See you!' },
 ]);

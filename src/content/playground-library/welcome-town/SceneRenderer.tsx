@@ -40,6 +40,7 @@ import { SentenceBuildScene } from './scene-components/SentenceBuildScene';
 import { TongueTwisterScene } from './scene-components/TongueTwisterScene';
 import { LetterGameScene } from './scene-components/LetterGameScene';
 import { FeelingsSurveyScene } from './scene-components/FeelingsSurveyScene';
+import { ChatChainScene } from './scene-components/ChatChainScene';
 import { JigsawPuzzleScene } from './scene-components/JigsawPuzzleScene';
 import { FinaleScene } from './scene-components/FinaleScene';
 export { GlassCard } from './scene-components/shared';
@@ -148,6 +149,7 @@ export function SceneRenderer(props: {
       case 'place-it': return <PlaceItScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'torch-hunt': return <TorchHuntScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'where-castle': return <WhereCastleScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
+      case 'chat-chain': return <ChatChainScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'feelings-survey': return <FeelingsSurveyScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'prea1': return <PreA1SceneRenderer scene={scene.scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} onRestart={props.onRestart} gemsCollected={props.gemsCollected} heartsRemaining={props.heartsRemaining} activitySync={props.activitySync} />;
       case 'finale': return <FinaleScene scene={scene} hearts={props.heartsRemaining} gems={props.gemsCollected} onRestart={props.onRestart} />;

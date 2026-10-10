@@ -704,6 +704,7 @@ const WT_EXTRACTORS = {
   'tongue-twister': (s) => [[s.who, s.line]],
   // Verified against welcome-town/SceneRenderer.tsx call sites.
   // FeelingsSurveyScene.tsx: intro, "How are you, <name>?" + "<name> is <feeling>!" (host), "I am <feeling>!" (friend).
+  'chat-chain': (s) => [[s.partner, s.intro], ...(s.turns ?? []).map((t) => [t.who === 'student' ? 'pip' : t.who, t.line])],
   'feelings-survey': (s) => [[s.who, s.intro], ...(s.friends ?? []).flatMap((f) => [[s.who, `How are you, ${f.name}?`], [f.who, `I am ${f.feeling}!`], [s.who, `${f.name} is ${f.feeling}!`]])],
   'listen-tap': (s) => (s.rounds ?? []).flatMap((r) => [[r.who ?? 'marigold', r.prompt], [r.who ?? 'marigold', `Yes! ${r.answerLabel}!`]]),
   'true-false': (s) => (s.rounds ?? []).map((r) => [r.who, r.statement]),
