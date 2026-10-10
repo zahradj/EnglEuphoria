@@ -660,6 +660,14 @@ const UNIT1_EXTRACTORS = {
  *  'marigold') and must be normalized through `voiceOf` before use — see
  *  `resolveWho` below. */
 const WT_EXTRACTORS = {
+  // Universal "Remember?" warm-up (RecallWarmupScene.tsx's recallWarmupLines()) — was missing here, so A1/A2
+  // warm-up lines were never baked and the audit could not see them.
+  'recall-warmup': (s) => [
+    [s.who, 'Do you remember? Listen and find it!'], [s.who, 'Try again!'], [s.who, 'You remember! Great job!'],
+    ...(s.items ?? []).flatMap((it) => [[s.who, it.say], [s.who, `Yes! ${it.word.charAt(0).toUpperCase() + it.word.slice(1)}!`]]),
+  ],
+  // welcome-town SentenceBuildScene: says the finished sentence in Pip's voice.
+  'sentence-build': (s) => (s.rounds ?? []).map((r) => ['pip', r.words.join(' ')]),
   'sound-blend': (s) => (s.rounds ?? []).map((r) => ['teacher', r.word]),
   cinematic: (s) => (s.script ?? []).map((l) => [l.who, l.line]),
   meet: (s) => {

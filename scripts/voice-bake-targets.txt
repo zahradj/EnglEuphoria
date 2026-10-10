@@ -78,3 +78,4 @@ LESSON_U7L6_SCENES
 # 2026-10-10 re-run: elevenlabshub2 secret
 LESSON_U8L1_SCENES
 LESSON_U8L2_SCENES
+# 2026-10-10: bake A1 warm-up + sentence-build lines (extractors were missing)
