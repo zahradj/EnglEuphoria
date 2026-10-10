@@ -3044,5 +3044,40 @@
       "Dress, dress! A yellow dress!",
       "Shirt, pants, dress! Hooray!"
     ]
+  },
+  "u9l2-shoes-hat-socks": {
+    "publicPath": "public/lep1/audio/shoes-hat-socks-song-u9l2.mp3",
+    "durationSec": 20,
+    "style": "Cheerful bouncy kids winter song, 100 BPM with ukulele, bright piano, sleigh bells and hand claps, ONE clear happy young singer, every word sung slowly and very clearly with crisp consonants: HAT with a clear 'h', SOCKS and SHOES clearly different. Definitely not a lullaby.",
+    "positiveStyles": [
+      "bouncy",
+      "ukulele",
+      "piano",
+      "sleigh bells",
+      "hand claps",
+      "clear kids vocals",
+      "100 BPM",
+      "happy",
+      "playful"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "Hat, hat! On my head!",
+      "Socks, socks! On my feet!",
+      "Shoes, shoes! On my feet!",
+      "Hat, socks, shoes! Let's go play!"
+    ]
   }
 }

@@ -1,2 +1,2 @@
-# song takes request (2026-10-10: U9L1 round 2, clearer "shirt" and "pants"; first key only)
-u9l1-shirt-pants-dress
+# song takes request (2026-10-10: U9L2 song; the workflow reads the FIRST key only)
+u9l2-shoes-hat-socks
