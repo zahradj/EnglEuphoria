@@ -2833,5 +2833,40 @@
       "Milk, milk! Gulp, gulp, gulp!",
       "Apple, banana, milk! I like my lunch!"
     ]
+  },
+  "u8l2-bread-water-juice": {
+    "publicPath": "public/lep1/audio/bread-water-juice-song-u8l2.mp3",
+    "durationSec": 20,
+    "style": "Cheerful bouncy kids café song, 108 BPM with ukulele, bright piano, hand claps and a little service bell \"ding\", clear happy young vocals with a kids sing-along feel, every word sung slowly and clearly, \"please\" and \"thank you\" sung warmly. Definitely not a lullaby.",
+    "positiveStyles": [
+      "bouncy",
+      "ukulele",
+      "piano",
+      "hand claps",
+      "clear kids vocals",
+      "sing-along chorus",
+      "108 BPM",
+      "happy",
+      "playful"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "Bread, bread! Bread, please!",
+      "Water, water! Water, please!",
+      "Juice, juice! Orange juice, please!",
+      "Bread and juice! Thank you! Yum!"
+    ]
   }
 }
