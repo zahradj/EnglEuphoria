@@ -1,3 +1,17 @@
 [
-  {"url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0046-1897659931743533419.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261010%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261010T155145Z&X-Amz-Expires=29750&X-Amz-Signature=8f1f5de470b75d14b9e90c56808fa32e499bbfc1b6d26f4a90a11c64e291543c&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2011%20Oct%202026%2000%3A07%3A35%20GMT", "out": "public/lep1/scenes/bg-u9l2-hall-wide.png", "sticker": false}
+ {
+  "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0047-1202979688435701130.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261010%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261010T083612Z&X-Amz-Expires=58864&X-Amz-Signature=022894a99262f1f2e50a3c0f6d930e91f4e07f1e59b94201a047d493098a7edf&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2011%20Oct%202026%2000%3A57%3A16%20GMT",
+  "out": "public/lep1/items/item-hat-green.png",
+  "sticker": true
+ },
+ {
+  "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0048-1202979688435701130.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261010%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261010T060710Z&X-Amz-Expires=67295&X-Amz-Signature=f97b51337455f041ac2379feeb6abc32da358e94c60bfba86d6d6ac02b24b1b3&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2011%20Oct%202026%2000%3A48%3A45%20GMT",
+  "out": "public/lep1/items/item-socks-red.png",
+  "sticker": true
+ },
+ {
+  "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0049-1202979688435701130.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261010%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261010T215458Z&X-Amz-Expires=9240&X-Amz-Signature=f6bf16b0c4f4ce762c6d7a8b5b7955e32583102cc621902b5d34ae3a4051505b&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2011%20Oct%202026%2000%3A28%3A58%20GMT",
+  "out": "public/lep1/items/item-shoes-blue.png",
+  "sticker": true
+ }
 ]
