@@ -1,0 +1,15 @@
+
+=== docs/songs/u8l3-pizza-cake-ice-cream-take1.mp3  length=20.1s  score=0.90  missing=2  extra=2
+heard: pizza pizza yummy pizza cake cake birthday cake ice cream ice cream cold as free pizza cake and ice cream yummy
+line starts (s): [np.float64(0.0), np.float64(4.6), np.float64(8.3), 12.8]
+lineDurationsMs: [4580, 3740, 4520, 7222]
+
+=== docs/songs/u8l3-pizza-cake-ice-cream-take2.mp3  length=20.1s  score=1.00  missing=0  extra=0
+heard: pizza pizza yummy pizza cake cake birthday cake ice cream ice cream cold ice cream pizza cake and ice cream yummy
+line starts (s): [np.float64(0.0), np.float64(4.0), np.float64(8.2), np.float64(12.6)]
+lineDurationsMs: [3960, 4240, 4400, 7462]
+
+=== docs/songs/u8l3-pizza-cake-ice-cream-take3.mp3  length=20.1s  score=1.00  missing=0  extra=0
+heard: pizza pizza yummy pizza cake cake birthday cake ice cream ice cream cold ice cream pizza cake and ice cream yummy
+line starts (s): [np.float64(0.0), np.float64(4.2), np.float64(8.9), np.float64(12.9)]
+lineDurationsMs: [4160, 4720, 3980, 7202]
