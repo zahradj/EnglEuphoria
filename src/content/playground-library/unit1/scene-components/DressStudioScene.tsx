@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { type CSSProperties, useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import type { Scene } from '../scenes';
 import { CAST } from '../scenes';
@@ -15,7 +15,7 @@ import { Bursts, useBursts, useShake } from './gameFx';
  * friend in that colour (anticipation, arc, hit-stop, sparkle) and the friend thanks them. FREE round: the child
  * dresses the friend any way they like, presses 📸 and the friend says what they are wearing, piece by piece —
  * the child hears their own choices in English ("I'm wearing … a purple hat! … yellow pants!").
- * Clothes are the fitted dress-up layers (/lep1/dressup/<who>/<piece>.png) recoloured with a hue shift, so they
+ * Clothes are the fitted dress-up layers (/lep1/dressup/<who>/<piece>.png) recoloured (grey + colour in their shape), so they
  * sit on the body. Boys never get a dress (CLAUDE.md, 2026-10-11): a piece without a layer for that friend is
  * not on the rail. Sources (mechanic only): Toca Boca / Lingokids dress-up, Cambridge Pre A1 Starters
  * "listen and colour", the classroom "dress the paper doll" game. Better: two things to listen for (piece +
@@ -25,10 +25,19 @@ type Studio = Extract<Scene, { kind: 'dress-studio' }>;
 type Piece = Studio['pieces'][number];
 type Color = Studio['colors'][number];
 const Z: Record<string, number> = { socks: 1, pants: 2, shoes: 3, shirt: 4, dress: 4, hat: 5 };
-/** Hue of each layer as drawn (the hue shift starts from it). */
-const BASE_HUE: Record<string, number> = { hat: 120, shirt: 5, pants: 215, socks: 5, shoes: 215, dress: 50 };
 const layer = (who: string, p: string) => `/lep1/dressup/${who}/${p}.png`;
-const filterFor = (piece: string, c: Color) => `hue-rotate(${c.hue - (BASE_HUE[piece] ?? 0)}deg) saturate(${c.sat ?? 1}) brightness(${c.bright ?? 1})`;
+/** A piece in any colour: the layer turned light grey, with the colour multiplied on top in the piece's exact
+ *  shape (CSS mask), so outlines and shading stay and yellow is really yellow (a hue shift of red gives brown). */
+/** How much to brighten each grey layer so its body is near white before the colour goes on (0.95 / its lightness). */
+const LIFT: Record<string, number> = { hat: 2.0, shirt: 2.8, pants: 3.0, socks: 2.3, shoes: 1.0, dress: 1.2 };
+function Tinted({ src, hex, lift = 1.45, className = '', style }: { src: string; hex: string; lift?: number; className?: string; style?: CSSProperties }) {
+  return (
+    <span className={`absolute inset-0 ${className}`} style={style}>
+      <img src={src} alt="" draggable={false} className="absolute inset-0 h-full w-full object-contain" style={{ filter: `grayscale(1) brightness(${lift})` }} />
+      <span className="absolute inset-0" style={{ background: hex, mixBlendMode: 'multiply', WebkitMaskImage: `url(${src})`, maskImage: `url(${src})`, WebkitMaskSize: 'contain', maskSize: 'contain', WebkitMaskRepeat: 'no-repeat', maskRepeat: 'no-repeat', WebkitMaskPosition: 'center', maskPosition: 'center' }} />
+    </span>
+  );
+}
 const HAS: Record<string, string[]> = { pip: ['hat', 'shirt', 'pants', 'socks', 'shoes'], leo: ['hat', 'shirt', 'pants', 'socks', 'shoes'], mia: ['hat', 'shirt', 'pants', 'socks', 'shoes', 'dress'] };
 export const studioWrongLine = 'Oops! Listen again.';
 export const studioWearing = "I'm wearing…";
@@ -137,9 +146,10 @@ export function DressStudioScene({ scene, onWin, onNext, sync }: { scene: Studio
           <img src={CAST[friend].img} alt={CAST[friend].name} draggable={false} className="absolute inset-0 h-full w-full object-contain drop-shadow-[0_10px_10px_rgba(0,0,0,0.3)]" />
           <AnimatePresence>
             {outfit.map((p) => (
-              <motion.img key={`${friend}-${p.id}-${worn[p.id]}`} src={layer(friend, p.id)} alt={p.word} draggable={false} className="absolute inset-0 h-full w-full object-contain"
-                style={{ filter: filterFor(p.id, scene.colors[worn[p.id]]) }}
-                initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 1.08 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }} />
+              <motion.span key={`${friend}-${p.id}-${worn[p.id]}`} className="absolute inset-0" aria-label={p.word}
+                initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 1.08 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}>
+                <Tinted src={layer(friend, p.id)} hex={scene.colors[worn[p.id]].hex} lift={LIFT[p.id]} />
+              </motion.span>
             ))}
           </AnimatePresence>
         </motion.div>
@@ -182,10 +192,10 @@ export function DressStudioScene({ scene, onWin, onNext, sync }: { scene: Studio
         {fly && (() => {
           const p = scene.pieces.find((x) => x.id === fly.piece)!;
           return (
-            <motion.img key={fly.key} src={p.img} alt="" className="pointer-events-none absolute z-40 object-contain" style={{ width: 'min(12vh, 8vw)', translate: '-50% -50%', filter: filterFor(p.id, scene.colors[fly.color]) }}
+            <motion.span key={fly.key} className="pointer-events-none absolute z-40" style={{ width: 'min(12vh, 8vw)', height: 'min(12vh, 8vw)', translate: '-50% -50%' }}
               initial={{ left: '72%', top: '30%', scale: 1, rotate: 0 }}
               animate={{ left: ['72%', '52%', `${FRIEND.x}%`], top: ['30%', '12%', `${FRIEND.y - 6}%`], scale: [1, 1.3, 0.6], rotate: [0, -20, 10] }}
-              exit={{ opacity: 0 }} transition={{ duration: 0.5, ease: 'easeIn' }} />
+              exit={{ opacity: 0 }} transition={{ duration: 0.5, ease: 'easeIn' }}><Tinted src={p.img} hex={scene.colors[fly.color].hex} /></motion.span>
           );
         })()}
       </AnimatePresence>

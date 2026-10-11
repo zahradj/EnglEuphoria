@@ -511,11 +511,11 @@ export type Scene =
   | {
       /** Dress-Up Studio (U9L6 signature): a friend asks for a piece AND a colour (`rounds`: `piece` indexes `pieces`,
        *  `color` indexes `colors`); the child taps the piece, then the paint pot, and it lands on the friend's body
-       *  (fitted layers, recoloured by `hue`). Then a free round: dress `free.friend` any way, 📸, and the friend
+       *  (fitted layers, recoloured in `hex`). Then a free round: dress `free.friend` any way, 📸, and the friend
        *  says what they are wearing. Boys never get a dress (no layer). */
       id: string; kind: 'dress-studio'; bg: string; teacher: string; who: CharKey;
       pieces: { id: 'hat' | 'shirt' | 'pants' | 'socks' | 'shoes' | 'dress'; word: string; img: string; plural?: boolean }[];
-      colors: { word: string; hex: string; hue: number; sat?: number; bright?: number }[];
+      colors: { word: string; hex: string }[];
       rounds: { friend: CharKey; piece: number; color: number; line: string; reply: string }[];
       free: { friend: CharKey; line: string };
       doneLine: string;
@@ -14850,11 +14850,11 @@ export const LESSON_U9L6_SCENES: Scene[] = [
       { id: 'dress', word: 'dress', img: itemDress },
     ],
     colors: [
-      { word: 'red', hex: '#E53935', hue: 0 },
-      { word: 'blue', hex: '#1E6FD9', hue: 218 },
-      { word: 'green', hex: '#3DAA3D', hue: 120 },
-      { word: 'yellow', hex: '#FFD31A', hue: 52, sat: 1.2, bright: 1.35 },
-      { word: 'purple', hex: '#8E44AD', hue: 280 },
+      { word: 'red', hex: '#E53935' },
+      { word: 'blue', hex: '#1E6FD9' },
+      { word: 'green', hex: '#3DAA3D' },
+      { word: 'yellow', hex: '#FFD31A' },
+      { word: 'purple', hex: '#8E44AD' },
     ],
     rounds: [
       { friend: 'leo', piece: 0, color: 1, line: 'A blue hat, please!', reply: "Thank you! I'm wearing a blue hat!" },
