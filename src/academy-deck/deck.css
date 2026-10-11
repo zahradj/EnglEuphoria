@@ -911,3 +911,8 @@
 .ad-wall-cell[data-seen='true'] { filter: brightness(1.15) saturate(1.2); outline: 2px solid #fde047; }
 .ad-wall-cell[data-now='true'] { transform: scale(1.18); z-index: 2; box-shadow: 0 0 14px 3px rgba(253, 224, 71, 0.9); border-color: #fde047; }
 @media (max-width: 700px) { .ad-wall-top { grid-template-columns: 1fr; } .ad-wall-cell { font-size: 0.8rem; border-radius: 6px; } .ad-wall-card { min-height: 170px; } }
+/* option pills: a solid colour sits behind the pill picture so the words stay readable even if the picture cannot load */
+.ad-options[data-pics='false'] .ad-option { background-color: #6d28d9; border-radius: 999px; }
+.ad-options[data-pics='false'] .ad-option:nth-child(2n) { background-color: #0284c7; }
+.ad-options[data-pics='false'] .ad-option:nth-child(3n) { background-color: #d97706; }
+.ad-options[data-pics='false'] .ad-option { text-shadow: 0 1px 0 rgba(30, 10, 90, 0.7); font-weight: 800; }
