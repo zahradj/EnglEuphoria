@@ -60,6 +60,7 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
   '4-4': { settings: ['flower garden'], look: 'bright flower garden with big friendly mushrooms; Pip meets Bo, a round sky-blue three-eyed monster; code-drawn monsters on an empty lawn' },
   '4-5': { settings: ['animal park'], look: 'sunny animal park with a blue pond and tall trees; a tiger, a monkey, an elephant and a seal each show one move, Pip copies; a leafy bush to peek through' },
+  '9-3': { settings: ['clothes shop'], look: "Bella's little clothes shop on a sunny day: clothes rails with coats, skirts and T-shirts, wooden shelves, a round mirror, a shop window with sunshine and a green door; Bella the bunny smiles behind her wooden counter with a cash register; friends hop in through the door to buy, and the bought piece flies into a paper shopping bag" },
   '9-2': { settings: ['snowy front hallway'], look: "a cosy front hallway on a snowy winter morning: snow falling past the window and the glass front door, wooden coat hooks on a pale yellow wall, a little bench and a striped rug; Pip in a green knitted hat, red socks and blue shoes waves by the door; the empty hall becomes the Put It On! game where the child dresses Pip, Mia and Leo" },
   '9-1': { settings: ['backyard laundry day'], look: "laundry day in Pip's sunny backyard: green grass, a wooden fence and flowers, a long washing line between two wooden poles with a red shirt, blue pants and a yellow dress on wooden pegs, Pip holding up the shirt by a wicker basket; the empty line becomes the Washing Line game where the clothes swing in the breeze" },
   '8-6': { settings: ['school dining hall'], look: "lunchtime in a bright school dining hall: big sunny windows, the four friends at a long table with green trays of the unit's food (pizza, apples, bananas, ice cream, bread), and a big empty green chalkboard on the back wall that becomes the class food chart" },
@@ -207,6 +208,19 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'the child must understand the verb AND the body part to find the animal, then PRODUCES the move and the sentence — the screen waits for the child, never a clock',
       'the clue in Whose Is It? is one of the unit\'s body words, so naming the part and the animal go together, and the reveal recalls the story move',
       'wrong picks are named back with that animal\'s own move ("No, the seal claps her hands!"), and the right one glows after two tries',
+    ],
+  },
+  '9-3': {
+    sources: ['Toca Boca Store / Lingokids shopping play ("customers ask, you serve")', 'Cambridge (Pre A1 Starters: listen and colour / point — colour + clothes word)', 'the classroom shop role-play ("A red coat, please!")', 'Kim\'s game / Wordwall "What is missing?"'],
+    mechanics: [
+      'pretend shop → Shop Till: a friend asks "A red coat, please!" (colour + word), the child sends the right piece into the bag, the till rings',
+      'Kim\'s game → What is missing? on the shop window (lights off, one piece gone)',
+      'jigsaw of the shop, then say what you see; first sounds T (T-shirt) and C (coat) in Brick Crush',
+    ],
+    betterThan: [
+      'every order joins two things to listen for (colour + word), and two of each piece are on the rack, so guessing the word alone is not enough',
+      'the result is visible and physical: the piece flies into the bag, coins fill up, the customer hops out happy',
+      'each customer is a friend speaking in their own voice; a wrong piece is named back ("No, not the blue coat!"), the right one glows after two tries; no clock',
     ],
   },
   '9-2': {

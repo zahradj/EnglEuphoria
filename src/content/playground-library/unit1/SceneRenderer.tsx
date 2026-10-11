@@ -99,6 +99,7 @@ import { CaterpillarCrawlScene } from './scene-components/CaterpillarCrawlScene'
 import { LikeChartScene } from './scene-components/LikeChartScene';
 import { WashingLineScene } from './scene-components/WashingLineScene';
 import { PutOnScene } from './scene-components/PutOnScene';
+import { ShopTillScene } from './scene-components/ShopTillScene';
 import { BuzzerShowScene } from './scene-components/BuzzerShowScene';
 import { HouseHideScene } from './scene-components/HouseHideScene';
 import { MovingDayScene } from './scene-components/MovingDayScene';
@@ -314,6 +315,7 @@ export function SceneRenderer(props: {
     case 'house-hide': return <HouseHideScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'buzzer-show': return <BuzzerShowScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'cafe-order': return <CafeOrderScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
+    case 'shop-till': return <ShopTillScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'put-on': return <PutOnScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'washing-line': return <WashingLineScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'like-chart': return <LikeChartScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;

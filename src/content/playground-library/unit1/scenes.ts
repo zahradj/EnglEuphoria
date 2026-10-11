@@ -509,6 +509,17 @@ export type Scene =
       doneLine: string;
     }
   | {
+      /** Shop Till (U9L3 signature): Bella's clothes shop. One customer at a time comes in and asks for a piece
+       *  of clothing with its colour ("A red coat, please!"); the child taps it on the shop rack, it flies into
+       *  the shopping bag on the counter and the till rings. `stock[i].label` = what is said ("red coat");
+       *  `bag` = where the bag stands on `bg` (% of the stage). Girls only ever ask for a skirt or dress. */
+      id: string; kind: 'shop-till'; bg: string; teacher: string; who: CharKey;
+      bag: { img: string; x: number; y: number };
+      stock: { word: string; label: string; img: string }[];
+      rounds: { customer: CharKey; item: number; line: string; reply: string }[];
+      doneLine: string;
+    }
+  | {
       /** Put It On! (U9L2 signature): the friends get ready for the snow. One friend at a time asks for a piece
        *  ("Mia: Put on my red socks, please!"); the child taps it on the bench and it lands where it is worn, on that
        *  friend. `layer` = drawing order (shoes over socks, hat on top). */
@@ -888,6 +899,8 @@ export type Scene =
       /** Who's Missing? (U5L3): a photo wall (`wall` = face indexes); the child turns the lights off,
        *  one photo (`missing`) is gone, and they pick it from `options`. Faces as in cookie-faces. */
       id: string; kind: 'whos-missing'; bg: string; teacher: string; who: CharKey;
+      /** The question after "Lights off!" (default "Who is missing?"; things: "What is missing?"). */
+      ask?: string;
       faces: { label: string; name: string; img: string; at: [number, number]; w: number; aspect?: number }[];
       rounds: { wall: number[]; missing: number; options: number[] }[];
       doneLine: string;
@@ -14109,4 +14122,199 @@ export const LESSON_U9L2_SCENES: Scene[] = [
     ],
   },
   { id: 'u9l2-finale', kind: 'finale', bg: bgU9L2Hall, who: 'pip', line: 'Hat, socks, shoes! Let\'s play in the snow! Goodbye, friend!' },
+];
+
+/* =============================================================================
+ * Pre-A1 Unit 9, Lesson 3 — "Coat, Skirt, T-shirt!" (Clothes)
+ *
+ * From the snowy hall (Lesson 2) to Bella's little clothes shop: rails of clothes, a mirror, a sunny window
+ * and Bella behind her counter. Friends come in to buy one thing each — the new Shop Till game: hear "A red
+ * coat, please!" and send the right piece into the shopping bag (colour + word). Then "What is missing?" on
+ * the rail, a shop jigsaw, and the sounds T (T-shirt) and C (coat) in Brick Crush.
+ * Only girls (Mia, Bella) ever wear or buy a skirt (owner, 2026-10-11).
+ * ========================================================================= */
+
+const bgU9L3Shop = `${A}/scenes/bg-u9l3-shop-wide.png`;
+const jigU9L3Shop = `${A}/scenes/jig-u9l3-shop.png`;
+const itemCoatBlue = `${A}/items/item-coat-blue.png`;
+const itemCoatRed = `${A}/items/item-coat-red.png`;
+const itemSkirtPink = `${A}/items/item-skirt-pink.png`;
+const itemSkirtPurple = `${A}/items/item-skirt-purple.png`;
+const itemTshirtYellow = `${A}/items/item-tshirt-yellow.png`;
+const itemTshirtGreen = `${A}/items/item-tshirt-green.png`;
+const itemShoppingBag = `${A}/items/item-shopping-bag.png`;
+const U9L3_CLOTHES = {
+  coat: { label: 'coat', name: 'the coat', img: itemCoatBlue, at: [50, 50] as [number, number], w: 100, aspect: 1 },
+  skirt: { label: 'skirt', name: 'the skirt', img: itemSkirtPink, at: [50, 50] as [number, number], w: 100, aspect: 1 },
+  tshirt: { label: 'T-shirt', name: 'the T-shirt', img: itemTshirtYellow, at: [50, 50] as [number, number], w: 100, aspect: 1 },
+  hat: { label: 'hat', name: 'the hat', img: itemHatGreen, at: [50, 50] as [number, number], w: 100, aspect: 1 },
+  shoes: { label: 'shoes', name: 'the shoes', img: itemShoesBlue, at: [50, 50] as [number, number], w: 100, aspect: 1 },
+};
+
+export const LESSON_U9L3_TITLE = 'Coat, Skirt, T-shirt!';
+export const LESSON_U9L3_OBJECTIVE = 'Name coat, skirt and T-shirt with their colours ("A red coat, please!"), find the one a friend asks for in the shop, notice which piece is missing, and hear the first sounds T (T-shirt) and C (coat), by listening, moving and playing, no reading.';
+
+export const LESSON_U9L3_SCENES: Scene[] = [
+  { id: 'u9l3-title', kind: 'title-card', bg: bgU9L3Shop, level: 'Pre-A1', unit: 'Unit 9', lessonLabel: 'Lesson 3', title: 'Coat, Skirt, T-shirt!', subtitle: "Bella's shop" },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 9 · Lesson 2 · Shoes, Hat, Socks!
+    id: 'u9l3-recall-warmup', kind: 'recall-warmup', bg: bgU9L3Shop, who: 'pip', mode: 'click',
+    fromLabel: 'Lesson 2 · Shoes, Hat, Socks!',
+    teacher: 'Warm-up from last lesson: Pip says a word, the child clicks the picture and says it.',
+    items: [
+      { word: 'hat', say: 'A green hat!', img: itemHatGreen },
+      { word: 'socks', say: 'Red socks!', img: itemSocksRed },
+      { word: 'shoes', say: 'Blue shoes!', img: itemShoesBlue },
+    ],
+  },
+  {
+    id: 'u9l3-intro', kind: 'cinematic', bg: bgU9L3Shop, hidePipOverlay: true, title: 'Coat, Skirt, T-shirt!', subtitle: "Bella's shop", narrator: 'bella',
+    script: [
+      { who: 'bella', line: 'Hello! Welcome to my shop!' },
+      { who: 'leo', line: "It's cold. I need a coat!" },
+      { who: 'mia', line: 'I want a new skirt!' },
+      { who: 'pip', line: 'And I want a T-shirt!' },
+    ],
+    cta: "Let's go shopping!",
+  },
+
+  /* 4-5 The words, move */
+  {
+    id: 'u9l3-words', kind: 'listen-repeat-cards', textSide: 'right', bg: bgU9L3Shop, teacher: 'Listen, then say it with Bella: "A blue coat!"',
+    cards: [
+      { who: 'bella', sentence: "It's a coat! A blue coat!", img: itemCoatBlue, imgLabel: 'coat' },
+      { who: 'bella', sentence: "It's a skirt! A pink skirt!", img: itemSkirtPink, imgLabel: 'skirt' },
+      { who: 'bella', sentence: "It's a T-shirt! A yellow T-shirt!", img: itemTshirtYellow, imgLabel: 'T-shirt' },
+    ],
+  },
+  {
+    id: 'u9l3-move', kind: 'tpr-actions', bg: bgU9L3Shop, who: 'leo',
+    teacher: 'Stand up! Do it with Leo.',
+    rounds: [
+      { line: 'Put on your coat! Zip it up!', emoji: '\u{1F9E5}', img: itemCoatBlue },
+      { line: 'Pull on your T-shirt! Arms in!', emoji: '\u{1F455}', img: itemTshirtYellow },
+      { line: 'Hang up the skirt! Up, up!', emoji: '\u{1F457}', img: itemSkirtPink },
+      { line: 'Brrr, cold! Hug your coat!', emoji: '\u{1F976}' },
+    ],
+  },
+
+  /* 6 Signature game (new): Shop Till */
+  {
+    id: 'u9l3-shop-till', kind: 'shop-till', bg: bgU9L3Shop, who: 'bella',
+    teacher: 'Shop Till! Listen to the customer: which COLOUR and which piece? Tap it — it goes into the bag. Then say it: "A red coat, please!"',
+    bag: { img: itemShoppingBag, x: 67, y: 72 },
+    stock: [
+      { word: 'coat', label: 'blue coat', img: itemCoatBlue },
+      { word: 'coat', label: 'red coat', img: itemCoatRed },
+      { word: 'skirt', label: 'pink skirt', img: itemSkirtPink },
+      { word: 'skirt', label: 'purple skirt', img: itemSkirtPurple },
+      { word: 'T-shirt', label: 'yellow T-shirt', img: itemTshirtYellow },
+      { word: 'T-shirt', label: 'green T-shirt', img: itemTshirtGreen },
+    ],
+    rounds: [
+      { customer: 'leo', item: 1, line: 'A red coat, please!', reply: 'Thank you! I love my red coat!' },
+      { customer: 'mia', item: 2, line: 'A pink skirt, please!', reply: 'Thank you! My pink skirt!' },
+      { customer: 'pip', item: 4, line: 'A yellow T-shirt, please!', reply: 'Yay! A yellow T-shirt!' },
+      { customer: 'willow', item: 3, line: 'A purple skirt, please!', reply: 'Thank you! Tweet tweet!' },
+      { customer: 'pip', item: 5, line: 'And a green T-shirt, please!', reply: 'Two T-shirts! Thank you!' },
+      { customer: 'leo', item: 0, line: 'A blue coat for my friend, please!', reply: 'Thank you, Bella!' },
+    ],
+    doneLine: 'My shop is empty! Thank you for helping!',
+  },
+
+  /* 7 The song — after the words and the first game (owner, 2026-10-10) */
+  {
+    id: 'u9l3-song', kind: 'song', bg: bgU9L3Shop, title: '\u{1F3B5} Coat, Skirt, T-shirt! \u{1F3B5}', teacher: 'Sing and act: zip your coat, swish the skirt (or point to it), pull on your T-shirt!',
+    durationSeconds: 20, bigWord: 'Coat', songUrl: `${A}/audio/coat-skirt-tshirt-song-u9l3.mp3?v=1`,
+    lineDurationsMs: [4200, 4600, 4800, 6400],
+    songPrompt: 'Cheerful bouncy kids clothes-shop song',
+    lyrics: [
+      { who: 'leo', text: 'Coat, coat! Zip it up!', emotion: 'happy' },
+      { who: 'mia', text: 'Skirt, skirt! Swish, swish, swish!', emotion: 'happy' },
+      { who: 'pip', text: 'T-shirt, T-shirt! Arms in!', emotion: 'happy' },
+      { who: 'bella', text: "Coat, skirt, T-shirt! Let's go shopping!", emotion: 'happy' },
+    ],
+  },
+
+  /* 8-10 More games */
+  {
+    id: 'u9l3-whats-missing', kind: 'whos-missing', bg: bgU9L3Shop, who: 'bella', ask: 'What is missing?',
+    teacher: "What's Missing? Look at the shop window, tap the lamp, then say which piece is gone.",
+    faces: [U9L3_CLOTHES.coat, U9L3_CLOTHES.skirt, U9L3_CLOTHES.tshirt, U9L3_CLOTHES.hat, U9L3_CLOTHES.shoes],
+    rounds: [
+      { wall: [0, 1, 2], missing: 1, options: [0, 1, 2] },
+      { wall: [2, 0, 3, 1], missing: 0, options: [3, 0, 2] },
+      { wall: [4, 2, 1, 0], missing: 2, options: [2, 4, 1] },
+    ],
+    doneLine: 'Everything is back in the window!',
+  },
+  {
+    id: 'u9l3-jigsaw', kind: 'jigsaw-puzzle', bg: bgU9L3Shop, teacher: "Build Bella's shop! Drag each piece to its place, then say what you see: coat, skirt, T-shirt.",
+    image: jigU9L3Shop, rows: 3, cols: 3,
+  },
+  {
+    id: 'u9l3-bella-asks', kind: 'join-stage', bg: bgU9L3Shop, teacher: 'Bella asks the child. Any colour is fine — answer with the colour and the word.', cast: ['bella', 'pip'],
+    turns: [
+      { who: 'bella', line: 'Hello! What do you want?', bubble: 'right' },
+      { who: 'student', line: 'A red coat, please!', bubble: 'right' },
+      { who: 'pip', line: 'What colour is your T-shirt?', bubble: 'left' },
+      { who: 'student', line: 'My T-shirt is blue!', bubble: 'right' },
+    ],
+  },
+
+  /* 11-12 Sounds: T and C */
+  {
+    id: 'u9l3-model-t', kind: 'sound-model', bg: bgU9L3Shop, who: 'pip', letter: 'T', phoneme: '/t/', sound: 'tuh',
+    teacher: 'T says /t/ — T-shirt, teddy, train!',
+    anchors: [
+      { word: 'T-shirt', emoji: '\u{1F455}', img: itemTshirtYellow },
+      { word: 'teddy', emoji: '\u{1F9F8}', img: itemTeddy },
+      { word: 'train', emoji: '\u{1F682}', img: itemTrain },
+    ],
+  },
+  { id: 'u9l3-bricks', kind: 'brick-crush', bg: bgU9L3Shop, teacher: 'Brick Crush! T for T-shirt, C for coat. Listen, then smash every brick with that letter!', who: 'pip', letters: ['T', 'C', 'S', 'H'], rows: 5, cols: 6, goal: 14, seconds: 60 },
+
+  /* 13-14 Sticker + Home Mission */
+  {
+    id: 'u9l3-sticker', kind: 'sticker-reward', bg: bgU9L3Shop, who: 'bella', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'You are a great shop helper! Here is a T-shirt sticker for you!', sticker: { img: itemTshirtYellow, label: 'Shop helper' },
+  },
+  {
+    id: 'u9l3-home-mission', kind: 'home-mission', bg: bgU9L3Shop, who: 'bella',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: play shop at home! Ask for clothes with the colour: "A red T-shirt, please!"',
+    parentNote: 'Play "shop" with clothes from the cupboard: put out a few, and your child asks "A blue coat, please!" with the colour. Then swap: you ask, your child finds it. Use coat, T-shirt and skirt (or the clothes your child wears).',
+    steps: [
+      { emoji: '\u{1F9E5}', img: itemCoatBlue, say: 'A blue coat, please!' },
+      { emoji: '\u{1F455}', img: itemTshirtYellow, say: 'A yellow T-shirt, please!' },
+      { emoji: '\u{1F6CD}️', img: itemShoppingBag, say: 'Thank you!' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u9l3-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU9L3Shop, who: 'mia',
+    teacher: 'Extra time: Brain Break! Do each action with Mia.',
+    rounds: [
+      { line: 'Look in the mirror! Wave!', emoji: '\u{1FA9E}' },
+      { line: 'Carry the big bag! Heavy!', emoji: '\u{1F6CD}️' },
+      { line: 'Zip your coat! Zzzip!', emoji: '\u{1F9E5}' },
+      { line: 'Freeze!', emoji: '\u{1F976}', seconds: 3 },
+    ],
+  },
+
+  /* Goodbye */
+  {
+    id: 'u9l3-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u9l3-finale', kind: 'finale', bg: bgU9L3Shop, who: 'bella', line: 'Coat, skirt, T-shirt! Thank you for shopping! Goodbye, friend!' },
 ];
