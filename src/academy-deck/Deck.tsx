@@ -79,6 +79,8 @@ export interface DeckProps {
   audioBase?: string;
   /** teacher view: every slide can be opened from the strip */
   teacher?: boolean;
+  /** review/preview: "Next" works on any slide, solved or not */
+  freeNext?: boolean;
   /** live classroom: controlled slide index (the teacher moves the class) */
   slide?: number;
   onSlide?: (index: number) => void;
@@ -88,7 +90,7 @@ export interface DeckProps {
   onSlideDone?: (slide: Slide, result: { wrong: number }) => void;
 }
 
-export function Deck({ script, artBase, audioBase, teacher = false, slide: controlled, onSlide, onFinish, homework, onSlideDone }: DeckProps) {
+export function Deck({ script, artBase, audioBase, teacher = false, freeNext = false, slide: controlled, onSlide, onFinish, homework, onSlideDone }: DeckProps) {
   const [own, setOwn] = useState(0);
   const index = Math.min(controlled ?? own, script.slides.length - 1);
   const go = useCallback((i: number) => {
@@ -301,7 +303,7 @@ export function Deck({ script, artBase, audioBase, teacher = false, slide: contr
           <button type="button" className="ad-dockbtn" onClick={hint}>{artBase ? <img className="ad-dockico" src={`${artBase}/objects/btn-hint.webp`} alt="" aria-hidden="true" /> : <Icon name="bulb" />} Hint</button>
           <button type="button" className="ad-dockbtn" onClick={() => setMinute(true)}>{artBase ? <img className="ad-dockico" src={`${artBase}/objects/btn-pause.webp`} alt="" aria-hidden="true" /> : <Icon name="pause" />} <span className="ad-long">I need a minute</span><span className="ad-short">Minute</span></button>
           <button type="button" className="ad-dockbtn" onClick={() => setMenu(!menu)} aria-expanded={menu}>{artBase ? <img className="ad-dockico" src={`${artBase}/objects/btn-gear.webp`} alt="" aria-hidden="true" /> : <Icon name="gear" />} More</button>
-          <button type="button" className="ad-dockbtn ad-dock-next" onClick={next} disabled={!isSolved && !teacher}>{last ? 'Finish ✓' : <>Next {artBase ? <img className="ad-dockico ad-nextico" src={`${artBase}/objects/btn-next.webp`} alt="" aria-hidden="true" /> : '▶'}</>}</button>
+          <button type="button" className="ad-dockbtn ad-dock-next" onClick={next} disabled={!isSolved && !freeNext}>{last ? 'Finish ✓' : <>Next {artBase ? <img className="ad-dockico ad-nextico" src={`${artBase}/objects/btn-next.webp`} alt="" aria-hidden="true" /> : '▶'}</>}</button>
         </nav>
         {menu && (
           <div className="ad-menu" role="menu">

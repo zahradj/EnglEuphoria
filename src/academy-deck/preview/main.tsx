@@ -11,7 +11,7 @@ const art = q.get('art') ?? (window as unknown as { __ACADEMY_ART__?: string }).
 
 function Preview() {
   const [mode, setMode] = useState<string | null>(q.get('mode'));
-  if (mode === 'lesson') return <Deck script={SIGN_ME_UP} artBase={art} teacher={q.get('teacher') !== '0'} />;
+  if (mode === 'lesson') return <Deck script={SIGN_ME_UP} artBase={art} teacher={q.get('teacher') !== '0'} freeNext={q.get('teacher') !== '0'} />;
   if (mode === 'homework') return <HomeworkApp artBase={art} demo={q.get('demo') !== '0'} />;
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', gap: 14, alignItems: 'center', justifyContent: 'center', padding: 16, background: 'linear-gradient(160deg,#f5f3ff,#e9e0ff)', color: '#1e1b4b', fontFamily: 'system-ui, sans-serif' }}>
