@@ -159,3 +159,16 @@ Head finding: the edit kept the identity (same face, hair, eyes, smile) but Canv
 Torso finding (made second, after a 20 min cooldown wait; first retry was still refused): the edit followed the prompt very well: hoodie with hood, deep-blue tee, zip, drawstrings, short neck stub, arms removed (it drew a sleeveless-vest look with plain armholes and a hem). Raw it is 0.96x of the neutral scale; registered at scale 0.96 (grid search, mean grey error 7/255 on the tee/zip) it lines up with the neutral's hoodie, zip, drawstrings and hood to a few px (`_check-torso-overlay.png`). Caveats: the generated vest has a ribbed hem near the bottom edge, which falls just outside the 900x1200 canvas after registration (good), and the shoulder armholes are plain (arms must cover them, which means the arm parts must have sleeve caps wider than the armhole). `_check-head-torso-no-arms.png` shows head + torso with no arms.
 
 Open issue for arms: the neutral has BOTH hands in the hoodie pockets (no hands visible), so "arm + hand hanging relaxed" is a new pose, not a cut-out of the neutral; the hoodie sleeves end at the pocket edge in the neutral.
+
+## Game-object sprite sheets (owner request 2026-10-11): objects + ui
+
+Goal: illustrated game objects for the lesson player instead of CSS widgets. Flat 2D anime-game style, thick dark-violet outline, top highlight, bottom shade, palette mostly violet/blue with gold/green/orange accents only. One generation = one grid on plain light-grey, no text; one export per sheet. References uploaded to Canva: locker-hall `MAHXuUky4kY`, Vee neutral-open `MAHXuQoUteU`. Holder design `DAHXiX3gn1o`, pages 76-77 (1620x1080, sheet filling the page).
+
+| Sheet | Canva media id | Page | Repo path (after fetch, kind `sheet`, no cut-out) | Content |
+|---|---|---|---|---|
+| A objects | MAHXuWBvrlM | 76 | public/academy-art/objects/sheet-objects.webp | 3x4: locker violet closed/open, locker blue closed/open, chest closed/open (glow + gold sparkles), padlock closed/open, key, blank ticket, blank star stamp, gold star gem |
+| B ui | MAHXuZukaCY | 77 | public/academy-art/objects/sheet-ui.webp | ribbon banner, 3 blank pills (violet, blue, orange), 4 round buttons (lamp, leaf pause, gear, green Next arrow), glass panel frame, 5 progress gems (2 empty, 3 filled), speech-bubble frame |
+
+Sheet B first try `MAHXuXoFSrI` had no pill buttons (rejected); redo `MAHXuZukaCY` accepted. Sheet A accepted first try.
+Weaknesses: items are not on a strict grid (sheet B is stacked rows; sheet A is a 3x4 grid with slightly uneven row spacing), so cut by hand-set boxes or a connected-components cut-out on the grey background (grey is plain, gaps are large). Blue locker is a mid blue rather than periwinkle; the sky-blue pill is a mid blue. Pause icon is two green leaves (reads as pause). Gold is used for chest trim, padlock, key, stamp and star (accent colour, fine for reward objects). No text, letters or numbers on any item.
+Not yet in the repo: sheets are only in Canva until exported and fetched (see below).
