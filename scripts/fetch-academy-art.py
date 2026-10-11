@@ -1,12 +1,12 @@
 """Saves Academy pictures made with Canva into the repo (run by .github/workflows/academy-art.yml).
 
 scripts/academy-art-request.json = [{"url": "<signed Canva export URL>", "out": "public/academy-art/cast/ava/neutral.webp", "kind": "cast" | "scene" | "card"}, ...]
-Academy-only (hub separation): the Playground has its own fetcher. Cast pictures are saved 900x1200 (3:4) with the plain grey background cut out (transparent WebP), scenes 1620x1080 (3:2) WebP, vocabulary cards 800x800 WebP (square, no cut-out).
+Academy-only (hub separation): the Playground has its own fetcher. Cast pictures are saved 900x1200 (3:4) with the plain grey background cut out (transparent WebP), scenes 1620x1080 (3:2) WebP, vocabulary cards 800x800 WebP (square, no cut-out), puppet parts ('part') 900x1200 with the plain background cut out (saved to cast-parts/).
 Pictures come from Canva only, never Higgsfield (CLAUDE.md "Media generators")."""
 import io, json, os, sys, urllib.request
 from PIL import Image, ImageDraw, ImageFilter
 
-SIZES = {'cast': (900, 1200), 'scene': (1620, 1080), 'card': (800, 800)}
+SIZES = {'cast': (900, 1200), 'scene': (1620, 1080), 'card': (800, 800), 'part': (900, 1200)}
 
 
 def cut_out(im):
@@ -37,7 +37,7 @@ for r in reqs:
         data = urllib.request.urlopen(urllib.request.Request(r['url'], headers={'User-Agent': 'Mozilla/5.0'}), timeout=90).read()
         im = Image.open(io.BytesIO(data)).convert('RGB')
         im = im.resize(SIZES[r.get('kind', 'cast')], Image.LANCZOS)
-        if r.get('kind', 'cast') == 'cast':
+        if r.get('kind', 'cast') in ('cast', 'part'):
             im = cut_out(im)
         os.makedirs(os.path.dirname(out), exist_ok=True)
         im.save(out, 'WEBP', quality=88, method=6)

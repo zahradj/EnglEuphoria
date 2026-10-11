@@ -1,8 +1,37 @@
 [
-{"kind": "card", "out": "public/academy-art/cards/v-hello.webp", "url": "https://export-download.canva.com/3gn1o/DAHXiX3gn1o/-1/0/0066-6090511185058887600.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261010%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261010T091821Z&X-Amz-Expires=58558&X-Amz-Signature=49480c086ac9e8df6271c60a643a1ec58a5de5ea07589fde3f46b39fc397f26a&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2011%20Oct%202026%2001%3A34%3A19%20GMT"},
-{"kind": "card", "out": "public/academy-art/cards/v-meet.webp", "url": "https://export-download.canva.com/3gn1o/DAHXiX3gn1o/-1/0/0067-4788970891376487794.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261010%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261010T102324Z&X-Amz-Expires=52421&X-Amz-Signature=f97a7825fdee8b03a21291400ac70551d66af532518db84e1e6b40e0f5064c7f&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2011%20Oct%202026%2000%3A57%3A05%20GMT"},
-{"kind": "card", "out": "public/academy-art/cards/v-me.webp", "url": "https://export-download.canva.com/3gn1o/DAHXiX3gn1o/-1/0/0071-8638422676489202996.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261010%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261010T084812Z&X-Amz-Expires=58760&X-Amz-Signature=054c11266a07b474041767acc7c8f9aa2247da21ff3296421e6890d99e62bf85&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2011%20Oct%202026%2001%3A07%3A32%20GMT"},
-{"kind": "card", "out": "public/academy-art/cards/v-great.webp", "url": "https://export-download.canva.com/3gn1o/DAHXiX3gn1o/-1/0/0068-2433588286538528091.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261010%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261010T215419Z&X-Amz-Expires=12456&X-Amz-Signature=374a0b6820c63899aa7ad79d31c0852fe5d64656150e744162a7d418f85a21f2&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2011%20Oct%202026%2001%3A21%3A55%20GMT"},
-{"kind": "card", "out": "public/academy-art/cards/v-fine.webp", "url": "https://export-download.canva.com/3gn1o/DAHXiX3gn1o/-1/0/0069-6262773870158403126.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261010%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261010T075035Z&X-Amz-Expires=62221&X-Amz-Signature=857f81cbfe520e4d6c4f1c4ac3a51cfd9845d14b3e2a135c4e66c8e37c5f45ca&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2011%20Oct%202026%2001%3A07%3A36%20GMT"},
-{"kind": "card", "out": "public/academy-art/cards/v-tired.webp", "url": "https://export-download.canva.com/3gn1o/DAHXiX3gn1o/-1/0/0070-432864153257056838.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261010%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261010T182133Z&X-Amz-Expires=23105&X-Amz-Signature=a3f4eae74fe4219d4ffe14a86e53177dd8c719dc68e0d0605533a69f5e881d97&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2011%20Oct%202026%2000%3A46%3A38%20GMT"}
+{
+"kind": "card",
+"out": "public/academy-art/cards/v-hello.webp",
+"url": "https://export-download.canva.com/3gn1o/DAHXiX3gn1o/-1/0/0066-6090511185058887600.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261010%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261010T091821Z&X-Amz-Expires=58558&X-Amz-Signature=49480c086ac9e8df6271c60a643a1ec58a5de5ea07589fde3f46b39fc397f26a&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2011%20Oct%202026%2001%3A34%3A19%20GMT"
+},
+{
+"kind": "card",
+"out": "public/academy-art/cards/v-meet.webp",
+"url": "https://export-download.canva.com/3gn1o/DAHXiX3gn1o/-1/0/0067-4788970891376487794.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261010%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261010T102324Z&X-Amz-Expires=52421&X-Amz-Signature=f97a7825fdee8b03a21291400ac70551d66af532518db84e1e6b40e0f5064c7f&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2011%20Oct%202026%2000%3A57%3A05%20GMT"
+},
+{
+"kind": "card",
+"out": "public/academy-art/cards/v-me.webp",
+"url": "https://export-download.canva.com/3gn1o/DAHXiX3gn1o/-1/0/0071-8638422676489202996.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261010%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261010T084812Z&X-Amz-Expires=58760&X-Amz-Signature=054c11266a07b474041767acc7c8f9aa2247da21ff3296421e6890d99e62bf85&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2011%20Oct%202026%2001%3A07%3A32%20GMT"
+},
+{
+"kind": "card",
+"out": "public/academy-art/cards/v-great.webp",
+"url": "https://export-download.canva.com/3gn1o/DAHXiX3gn1o/-1/0/0068-2433588286538528091.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261010%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261010T215419Z&X-Amz-Expires=12456&X-Amz-Signature=374a0b6820c63899aa7ad79d31c0852fe5d64656150e744162a7d418f85a21f2&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2011%20Oct%202026%2001%3A21%3A55%20GMT"
+},
+{
+"kind": "card",
+"out": "public/academy-art/cards/v-fine.webp",
+"url": "https://export-download.canva.com/3gn1o/DAHXiX3gn1o/-1/0/0069-6262773870158403126.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261010%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261010T075035Z&X-Amz-Expires=62221&X-Amz-Signature=857f81cbfe520e4d6c4f1c4ac3a51cfd9845d14b3e2a135c4e66c8e37c5f45ca&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2011%20Oct%202026%2001%3A07%3A36%20GMT"
+},
+{
+"kind": "card",
+"out": "public/academy-art/cards/v-tired.webp",
+"url": "https://export-download.canva.com/3gn1o/DAHXiX3gn1o/-1/0/0070-432864153257056838.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261010%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261010T182133Z&X-Amz-Expires=23105&X-Amz-Signature=a3f4eae74fe4219d4ffe14a86e53177dd8c719dc68e0d0605533a69f5e881d97&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2011%20Oct%202026%2000%3A46%3A38%20GMT"
+},
+{
+"kind": "part",
+"out": "public/academy-art/cast-parts/vee/head-raw.webp",
+"url": "https://export-download.canva.com/3gn1o/DAHXiX3gn1o/-1/0/0072-8857973158750407790.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261010%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261010T041353Z&X-Amz-Expires=78800&X-Amz-Signature=289bdf7cd1370d3078c5b4ef794209059b2248a333298fcc6fabed6733013d86&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2011%20Oct%202026%2002%3A07%3A13%20GMT"
+}
 ]
