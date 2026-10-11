@@ -101,7 +101,7 @@ export function NumTrainView({ slide }: { slide: NumTrainSlide }) {
 
 /** Padlock: the clue is in WORDS ("four, two, seven"); set the dials to the digits. */
 export function PadlockView({ slide }: { slide: PadlockSlide }) {
-  const { right, wrong, done, award } = useDeck();
+  const { right, wrong, done, award, artBase } = useDeck();
   const [dials, setDials] = useState<number[]>(() => slide.code.split('').map(() => 0));
   const [opened, setOpened] = useState(false);
   const [slip, setSlip] = useState(false);
@@ -121,7 +121,7 @@ export function PadlockView({ slide }: { slide: PadlockSlide }) {
     <Panel title={slide.prompt}>
       <div className="ad-clue"><Icon name="note" /> <b>{slide.clue}</b></div>
       <div className="ad-padlock" data-open={opened}>
-        <div className="ad-shackle" aria-hidden="true" />
+        {artBase ? <img className="ad-pl-img" src={`${artBase}/objects/padlock${opened ? '-open' : ''}.webp`} alt="" aria-hidden="true" draggable={false} /> : <div className="ad-shackle" aria-hidden="true" />}
         <div className="ad-dials">
           <span className="ad-screw ad-screw-l" aria-hidden="true" /><span className="ad-screw ad-screw-r" aria-hidden="true" />
           {dials.map((v, i) => (

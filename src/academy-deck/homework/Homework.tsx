@@ -1,3 +1,4 @@
+import type React from 'react';
 // The homework app: a hub, an adventure map of chests (one 10-minute practice each), free play and the teacher's view.
 // Design from the owner's Novakid references (mechanics only, never their content or childish style): home tiles, a chest path with 3 check marks per
 // chest, star progress, a guide character. Left out on purpose: live countdowns, leaderboards, mascots (Academy rules). Progress is saved in the browser
@@ -15,27 +16,19 @@ import { GUIDE, LESSON_ID, SIGN_ME_UP_QUEST } from './signMeUpQuest';
 type View = 'hub' | 'quest' | 'play' | 'result' | 'games' | 'free' | 'words' | 'teacher';
 const todayISO = () => new Date().toISOString().slice(0, 10);
 
-function ChestArt({ state, stars }: { state: 'done' | 'open' | 'waiting' | 'locked'; stars: number }) {
-  const body = state === 'locked' || state === 'waiting' ? '#9ca3af' : '#7c3aed';
-  const band = state === 'locked' || state === 'waiting' ? '#6b7280' : '#fbbf24';
+function ChestArt({ state, stars, artBase }: { state: 'done' | 'open' | 'waiting' | 'locked'; stars: number; artBase?: string }) {
+  if (!artBase) return <span className="hw-chest-svg" data-state={state} aria-hidden="true" />;
   return (
-    <svg className="hw-chest-svg" data-state={state} viewBox="0 0 120 100" aria-hidden="true">
-      <ellipse cx="60" cy="92" rx="46" ry="6" fill="rgba(40,20,100,0.2)" />
-      <g className="hw-lid" style={{ transformOrigin: '20px 44px' }}>
-        <path d="M14 44 Q14 14 60 14 Q106 14 106 44Z" fill={body} stroke="#2e1065" strokeWidth="3" />
-        <path d="M44 16v28M76 16v28" stroke={band} strokeWidth="6" />
-      </g>
-      <rect x="14" y="44" width="92" height="42" rx="6" fill={body} stroke="#2e1065" strokeWidth="3" />
-      <path d="M44 44v42M76 44v42" stroke={band} strokeWidth="6" />
-      {state === 'done' ? <path className="hw-sparkle" d="M60 8l3 8 8 3-8 3-3 8-3-8-8-3 8-3z" fill="#fde047" /> : <><rect x="52" y="48" width="16" height="16" rx="3" fill={band} stroke="#2e1065" strokeWidth="2" /><circle cx="60" cy="56" r="3" fill="#2e1065" /></>}
-      {stars > 0 && <text x="60" y="76" textAnchor="middle" fontSize="12" fontWeight="900" fill="#fff" fontFamily="system-ui, sans-serif">{stars}/3</text>}
-    </svg>
+    <span className="hw-chest-svg hw-chest-img" data-state={state} aria-hidden="true">
+      <img src={`${artBase}/objects/${state === 'done' ? 'chest-open' : 'chest'}.webp`} alt="" draggable={false} />
+      {stars > 0 && <b className="hw-chest-stars">{stars}/3</b>}
+    </span>
   );
 }
 
 const Stars = ({ n, big = false }: { n: number; big?: boolean }) => (
   <span className={`hw-stars ${big ? 'hw-stars-big' : ''}`} aria-label={`${n} of 3 stars`}>
-    {[1, 2, 3].map((k) => <Icon key={k} name="star" className={k <= n ? 'hw-star on' : 'hw-star'} />)}
+    {[1, 2, 3].map((k) => <i key={k} className={k <= n ? 'hw-star-img on' : 'hw-star-img'} />)}
   </span>
 );
 
@@ -73,7 +66,7 @@ export function HomeworkApp({ artBase, lessonDate = todayISO(), demo = true }: H
   const script = useMemo<DeckScript | null>(() => chest ? { lessonId: `${LESSON_ID}-hw${chest.id}`, level: 'A1', title: chest.title, objective: '', criteria: [], cast: ['Vee', 'Ava', 'Theo'], slides: chest.slides } : null, [chest]);
 
   const shell = (children: React.ReactNode, bg = 'club-lobby', title?: string, back?: View) => (
-    <div className="hw-root" data-view={view}>
+    <div className="hw-root" data-view={view} style={artBase ? ({ ['--o-star' as string]: `url(${artBase}/objects/star.webp)`, ['--o-gem-empty' as string]: `url(${artBase}/objects/gem-empty.webp)`, ['--o-gem-full' as string]: `url(${artBase}/objects/gem-full.webp)` } as React.CSSProperties) : undefined}>
       <Plate id={bg} artBase={artBase} />
       <header className="hw-top">
         {back ? <button type="button" className="hw-back" onClick={() => setView(back)} aria-label="Back">◀</button> : <span className="hw-guide"><img src={artBase ? `${artBase}/cast/vee/happy.webp` : ''} alt="Vee, your guide" onError={(e) => ((e.target as HTMLImageElement).style.display = 'none')} /></span>}
@@ -114,7 +107,7 @@ export function HomeworkApp({ artBase, lessonDate = todayISO(), demo = true }: H
       <section className="hw-result">
         <div className="hw-confetti" aria-hidden="true">{Array.from({ length: 36 }, (_, i) => <i key={i} style={{ ['--x' as string]: `${(i * 37) % 100}%`, ['--d' as string]: `${(i % 9) * 0.18}s`, ['--c' as string]: ['#fde047', '#a78bfa', '#38bdf8', '#4ade80', '#fb923c'][i % 5], ['--s' as string]: `${8 + (i % 4) * 3}px` }} />)}</div>
         <div className="hw-rays" aria-hidden="true" />
-        <div className="hw-result-chest"><ChestArt state="done" stars={last.stars} /></div>
+        <div className="hw-result-chest"><ChestArt artBase={artBase} state="done" stars={last.stars} /></div>
         <h2>{last.chest.title} complete!</h2>
         <Stars n={last.stars} big />
         <p>{last.wrong === 0 ? 'Not one mistake. Amazing!' : last.wrong <= 1 ? 'Almost perfect.' : 'Every try makes the words stronger.'}</p>
@@ -132,7 +125,7 @@ export function HomeworkApp({ artBase, lessonDate = todayISO(), demo = true }: H
               <li key={c.id} className="hw-stop" data-state={st} style={{ ['--i' as string]: i }}>
                 <span className="hw-checks" aria-hidden="true">{c.slides.map((_, k) => <i key={k} data-on={st === 'done' ? k < (progress.stars[c.id] ? 3 : 0) : false}><Icon name="check" /></i>)}</span>
                 <button type="button" className="hw-chest" disabled={st === 'locked' || st === 'waiting'} onClick={() => play(c)} aria-label={`${c.title}: ${st === 'done' ? 'done, play again' : st === 'open' ? 'ready' : st === 'waiting' ? `opens on ${on}` : 'locked'}`}>
-                  <ChestArt state={st} stars={progress.stars[c.id] ?? 0} />
+                  <ChestArt artBase={artBase} state={st} stars={progress.stars[c.id] ?? 0} />
                   <b className="hw-num">{c.id}</b>
                 </button>
                 <span className="hw-stop-title">{c.title}</span>
