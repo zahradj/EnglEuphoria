@@ -20,6 +20,9 @@ export function loadManifest(base: string): Promise<Manifest> {
   if (!p) {
     p = (async () => {
       try {
+        // sandboxed hosts (the preview artifact) block fetch(): they can inline the list as window.__ACADEMY_AUDIO_MANIFEST__
+        const inline = typeof window !== 'undefined' ? (window as unknown as { __ACADEMY_AUDIO_MANIFEST__?: Manifest }).__ACADEMY_AUDIO_MANIFEST__ : undefined;
+        if (inline && typeof inline === 'object') return inline;
         if (typeof fetch !== 'function') return {};
         const res = await fetch(`${base}/manifest.json`);
         if (!res.ok) return {};
