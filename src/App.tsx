@@ -206,6 +206,8 @@ const HomeworkQuestPage = lazy(() => import("./pages/HomeworkQuestPage"));
 const PlayA2Unit1Lesson1 = lazy(() => import("./pages/playground-scene/PlayA2Unit1Lesson1"));
 const PlayA2Unit1Lesson2 = lazy(() => import("./pages/playground-scene/PlayA2Unit1Lesson2"));
 const PlayA2Unit1Lesson3 = lazy(() => import("./pages/playground-scene/PlayA2Unit1Lesson3"));
+const AcademyLibraryPage = lazy(() => import("./academy-deck/pages/AcademyLibraryPage"));
+const AcademyDeckLessonPage = lazy(() => import("./academy-deck/pages/AcademyDeckLessonPage"));
 const PlaygroundLibraryPage = lazy(() => import("./pages/playground-library/PlaygroundLibraryPage"));
 const PlaygroundLibraryPublic = lazy(() => import("./pages/playground-library/PlaygroundLibraryPublic"));
 const PlaygroundGameRunner = lazy(() => import("./pages/PlaygroundGameRunner"));
@@ -580,6 +582,22 @@ const App = () => {
                       <Route path="/playground-scene/a2-unit-1-lesson-3" element={
                         <ImprovedProtectedRoute>
                           <Suspense fallback={<LoadingFallback />}><PlayA2Unit1Lesson3 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* Academy Library (content creator) + the Academy deck lesson player (students from My Lessons, creators from the library). */}
+                      <Route path="/academy-library" element={
+                        <ImprovedProtectedRoute requiredRole={["content_creator", "admin"]}>
+                          <Suspense fallback={<LoadingFallback />}><AcademyLibraryPage /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      <Route path="/academy-lesson/:id" element={
+                        <ImprovedProtectedRoute requiredRole={["student", "content_creator", "admin"]}>
+                          <Suspense fallback={<LoadingFallback />}><AcademyDeckLessonPage /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      <Route path="/academy-lesson/:id/homework" element={
+                        <ImprovedProtectedRoute requiredRole={["student", "content_creator", "admin"]}>
+                          <Suspense fallback={<LoadingFallback />}><AcademyDeckLessonPage homework /></Suspense>
                         </ImprovedProtectedRoute>
                       } />
                       {/* Standalone Playground Library — deliberately outside the Creator Studio

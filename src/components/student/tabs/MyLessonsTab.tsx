@@ -7,6 +7,8 @@ import { playgroundLessonKey, playgroundLessonPath } from '@/content/playground-
 import { questForLesson } from '@/content/homework-quests/registry';
 import { PlayCircle, Filter, CheckCircle2, Lock, Play, BookMarked } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useTranslation } from 'react-i18next';
+import { ACADEMY_DECK_LESSONS } from '@/academy-deck/lessonRegistry';
 import { Badge } from '@/components/ui/badge';
 import { HubBackButton } from '@/components/student/common/HubBackButton';
 
@@ -102,6 +104,46 @@ function PlaygroundLessonList() {
   );
 }
 
+/** Academy students' lessons: the deck lessons from the Academy Library, each with its homework quest. */
+function AcademyLessonList() {
+  const navigate = useNavigate();
+  const { t } = useTranslation();
+  if (ACADEMY_DECK_LESSONS.length === 0) {
+    return <div className="rounded-2xl border border-dashed bg-card/40 p-8 text-center text-muted-foreground">{t('al.empty', 'Your lessons will show up here as soon as they are ready.')}</div>;
+  }
+  return (
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {ACADEMY_DECK_LESSONS.map((l) => (
+        <article key={l.id} className="overflow-hidden rounded-3xl border border-violet-300/30 bg-card shadow-lg">
+          <div className="relative aspect-video" style={{ background: l.gradient }}>
+            <img src={l.cover} alt="" className="absolute inset-0 h-full w-full object-cover" loading="lazy" onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} />
+            <span className="absolute start-3 top-3 rounded-full bg-black/55 px-2.5 py-1 text-xs font-bold text-white">
+              {t('al.season', 'Season {{n}}', { n: l.season })} · {t('al.lesson', 'Lesson {{n}}', { n: l.lesson })} · {l.level}
+            </span>
+          </div>
+          <div className="space-y-3 p-4">
+            <div>
+              <h3 className="text-lg font-extrabold leading-tight">{l.title}</h3>
+              <p className="mt-1 text-sm text-muted-foreground">{l.blurb}</p>
+              <p className="mt-1 text-xs font-semibold text-violet-700 dark:text-violet-300">{t('al.min', '{{n}} min', { n: l.minutes })}</p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <button onClick={() => navigate(`/academy-lesson/${l.id}`)} className="inline-flex items-center gap-1.5 rounded-full bg-violet-600 px-4 py-2 text-sm font-extrabold text-white shadow active:scale-95">
+                <Play className="h-4 w-4" /> {t('al.play', 'Play')}
+              </button>
+              {l.homework && (
+                <button onClick={() => navigate(`/academy-lesson/${l.id}/homework`)} className="inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-2 text-sm font-extrabold text-violet-700 ring-2 ring-violet-200 active:scale-95">
+                  <BookMarked className="h-4 w-4" /> {t('al.homework', 'Homework quest')}
+                </button>
+              )}
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  );
+}
+
 export function MyLessonsTab() {
   const { studentLevel } = useStudentLevel();
   const theme = useStudentHubTheme();
@@ -137,6 +179,8 @@ export function MyLessonsTab() {
       </div>
       {hubKey === 'playground' ? (
         <PlaygroundLessonList />
+      ) : hubKey === 'academy' ? (
+        <AcademyLessonList />
       ) : (
         <div
           className={cn(

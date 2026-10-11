@@ -4,6 +4,7 @@ import { placementTranslations } from './placement';
 import { authUiTranslations } from './authUi';
 import { waitingRoomTranslations } from './waitingRoom';
 import { lessonsPageTranslations } from './lessonsPage';
+import { academyLessonsTranslations } from './academyLessons';
 
 export const turkishTranslations = {
   ...placementTranslations,
@@ -12,6 +13,7 @@ export const turkishTranslations = {
   ...authUiTranslations,
   ...waitingRoomTranslations,
   ...lessonsPageTranslations,
+  ...academyLessonsTranslations,
   welcome: "Hoş geldiniz",
   all: "Hepsi",
 };
