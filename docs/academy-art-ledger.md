@@ -149,9 +149,13 @@ Goal: layered puppet (torso, 2 arms, head, mouth set, eye set) from Canva-genera
 | Part | Canva media id | Page | Repo path | Status |
 |---|---|---|---|---|
 | head (hair + neck, mouth closed, eyes open) | MAHXqNNFZzU | 72 | cast-parts/vee/head.webp (raw export: head-raw.webp) | done, see below |
-| torso + legs part, no head, no arms | | | | not yet |
+| torso, no head, no arms (hoodie body + tee + short neck stub) | MAHXqFz1j4w | 73 | cast-parts/vee/torso.webp (raw: torso-raw.webp) | done, see below |
 | left arm + hand, right arm + hand | | | | not yet |
 | mouth set (closed smile, 'ah', 'oo', wide smile) | | | | not yet |
 | eye set (open, blink, happy arcs, worried) | | | | not yet |
 
 Head finding: the edit kept the identity (same face, hair, eyes, smile) but Canva re-framed the crop, so the RAW export is about 1.47x too big and about 150 px too far left/low. It does NOT overlay the neutral at the same coordinates by itself. A post step (scale 0.67 and shift, found by a grid search on the face region, mean grey error about 23/255) puts it back on the neutral: `head.webp` is that registered version, and `_check-head-overlay.png` is the 55% overlay on the neutral (eyes, brows, nose, mouth, ear and hair edge line up to a few px; hair strands differ slightly because the head is a re-draw, not a crop). The registration is a resize of a 900x1200 raw, so the registered head is a little softer than the neutral.
+
+Torso finding (made second, after a 20 min cooldown wait; first retry was still refused): the edit followed the prompt very well: hoodie with hood, deep-blue tee, zip, drawstrings, short neck stub, arms removed (it drew a sleeveless-vest look with plain armholes and a hem). Raw it is 0.96x of the neutral scale; registered at scale 0.96 (grid search, mean grey error 7/255 on the tee/zip) it lines up with the neutral's hoodie, zip, drawstrings and hood to a few px (`_check-torso-overlay.png`). Caveats: the generated vest has a ribbed hem near the bottom edge, which falls just outside the 900x1200 canvas after registration (good), and the shoulder armholes are plain (arms must cover them, which means the arm parts must have sleeve caps wider than the armhole). `_check-head-torso-no-arms.png` shows head + torso with no arms.
+
+Open issue for arms: the neutral has BOTH hands in the hoodie pockets (no hands visible), so "arm + hand hanging relaxed" is a new pose, not a cut-out of the neutral; the hoodie sleeves end at the pocket edge in the neutral.
