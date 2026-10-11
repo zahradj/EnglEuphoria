@@ -57,10 +57,10 @@ describe('quest logic', () => {
 });
 
 describe('quest data rules (homework is recall, not teaching)', () => {
-  it('4 chests of 3 games, spaced 1/2/4/14 days, ending with a "big check"', () => {
-    expect(Q.map((c) => c.slides.length)).toEqual([3, 3, 3, 3]);
-    expect(Q.map((c) => c.gapDays)).toEqual([1, 2, 4, 14]);
-    expect(Q[3].title).toMatch(/big check/);
+  it('5 chests of 3 or 4 games, spaced 1/2/4/3/11 days, ending with a "big check"', () => {
+    expect(Q.map((c) => c.slides.length)).toEqual([3, 3, 4, 3, 3]);
+    expect(Q.map((c) => c.gapDays)).toEqual([1, 2, 4, 3, 11]);
+    expect(Q[4].title).toMatch(/big check/);
   });
 
   it('only auto-marked recall games: no teaching, no modelling, no say-it, no wrap', () => {
