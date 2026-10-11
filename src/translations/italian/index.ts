@@ -3,6 +3,7 @@ import { dashboardUITranslations } from './dashboardUI';
 import { placementTranslations } from './placement';
 import { authUiTranslations } from './authUi';
 import { waitingRoomTranslations } from './waitingRoom';
+import { pushNotificationsTranslations } from './pushNotifications';
 import { lessonsPageTranslations } from './lessonsPage';
 import { academyLessonsTranslations } from './academyLessons';
 
@@ -12,6 +13,7 @@ export const italianTranslations = {
   ...dashboardUITranslations,
   ...authUiTranslations,
   ...waitingRoomTranslations,
+  ...pushNotificationsTranslations,
   ...lessonsPageTranslations,
   ...academyLessonsTranslations,
   welcome: "Benvenuto",
