@@ -66,6 +66,10 @@ import { spokenText } from '../src/content/playground-library/unit1/spokenText.t
 import { LIBRARY_GAMES } from '../src/content/playground-library/gamesCatalog.ts';
 import { artFor } from '../src/content/playground-library/alphabetArt.ts';
 import { colorPlayLines } from '../src/content/playground-library/colorPlayText.ts';
+import { verbForgeLines } from '../src/academy-games/verbForge/verbData.ts';
+import { soundLabLines } from '../src/academy-games/soundLab/soundLabData.ts';
+import { twisterLines } from '../src/academy-games/twisterLab/twisterData.ts';
+import { hopLines } from '../src/academy-games/timeHop/hopData.ts';
 import { VOICE_PROFILES, approvedVoiceId, isShortLine, normalizeForSpeech, SHORT_LINE_CLIP_VERSION, unresolvedSpeechRisks, voiceStatus } from '../src/lib/speechPolicy.ts';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -822,7 +826,12 @@ function gameLines() {
       });
     }
   }
-  return [...words].map((w) => ['teacher', w]);
+  // Academy game: Verb Forge says every form of every verb and every answered sentence.
+  verbForgeLines().forEach((l) => words.add(l));
+  // Academy game: Time Hop says every present/past word and every answered signal sentence.
+  hopLines().forEach((l) => words.add(l));
+  // Academy game: Sound Lab says every word of every minimal pair in THREE voices (hearing one sound in several voices trains the ear).
+  return [...[...words].map((w) => ['teacher', w]), ...soundLabLines(), ...twisterLines()];
 }
 
 function collectPairs(lessonFilter) {

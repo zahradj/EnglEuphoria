@@ -9,6 +9,7 @@ const svc = vi.hoisted(() => ({
   cancelAndRemoveBookedSlot: vi.fn(),
   moveBookedLesson: vi.fn(),
   loadMoveContext: vi.fn(),
+  loadInviteLink: vi.fn(),
 }));
 
 vi.mock('@/services/cancelSlotService', async () => {
@@ -29,6 +30,7 @@ const future = (days: number, h: number, m = 0) => {
 
 beforeEach(() => {
   Object.values(svc).forEach((f) => f.mockReset());
+  svc.loadInviteLink.mockResolvedValue(null); // lessons a student booked themselves have no invitation
 });
 
 describe('OpenSlotManager — remove an open slot', () => {
@@ -137,5 +139,29 @@ describe('BookedSlotManager — edit (move) and remove a booked slot', () => {
     fireEvent.click(screen.getByRole('button', { name: /tap again to cancel them all/i }));
     await waitFor(() => expect(onCancelled).toHaveBeenCalled());
     expect(svc.cancelBookedSeries).toHaveBeenCalledWith(expect.objectContaining({ slotId: 'b1' }));
+  });
+
+  it('shows the join link of an invited lesson and copies it', async () => {
+    svc.loadMoveContext.mockResolvedValue(context);
+    svc.loadInviteLink.mockResolvedValue({
+      url: 'https://engleuphoria.com/join-classroom/abc123', status: 'valid',
+      expiresAt: iso(future(4, 11)), lastUsedAt: null, studentEmail: 'mia@example.com',
+    });
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, 'clipboard', { value: { writeText }, configurable: true });
+    render(<BookedSlotManager open onOpenChange={() => {}} slot={slot()} teacherId="T" />);
+
+    const field = (await screen.findByLabelText('Join link')) as HTMLInputElement;
+    expect(field.value).toBe('https://engleuphoria.com/join-classroom/abc123');
+    expect(screen.getByText('Active')).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: /copy/i }));
+    await waitFor(() => expect(writeText).toHaveBeenCalledWith('https://engleuphoria.com/join-classroom/abc123'));
+  });
+
+  it('shows no link section for a lesson the student booked themselves', async () => {
+    svc.loadMoveContext.mockResolvedValue(context);
+    render(<BookedSlotManager open onOpenChange={() => {}} slot={slot()} teacherId="T" />);
+    await screen.findByRole('button', { name: /move to another time/i });
+    expect(screen.queryByLabelText('Join link')).toBeNull();
   });
 });

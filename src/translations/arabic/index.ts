@@ -23,6 +23,7 @@ import { placementTranslations } from './placement';
 import { authUiTranslations } from './authUi';
 import { waitingRoomTranslations } from './waitingRoom';
 import { lessonsPageTranslations } from './lessonsPage';
+import { academyLessonsTranslations } from './academyLessons';
 
 export const arabicTranslations = {
   ...placementTranslations,
@@ -49,4 +50,5 @@ export const arabicTranslations = {
   ...authUiTranslations,
   ...waitingRoomTranslations,
   ...lessonsPageTranslations,
+  ...academyLessonsTranslations,
 };

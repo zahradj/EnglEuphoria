@@ -128,9 +128,6 @@ export function resolvePlaygroundLessonRoute(
   if (fmt === 'scene-player') {
     return `/playground-scene/play/${lessonId}`;
   }
-  if (fmt === 'academy-v2' || hub === 'academy') {
-    return `/academy-scene/${lessonId}`;
-  }
   return null;
 }
 

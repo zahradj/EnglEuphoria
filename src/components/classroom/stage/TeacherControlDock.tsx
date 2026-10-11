@@ -313,15 +313,15 @@ export const TeacherControlDock: React.FC<TeacherControlDockProps> = ({
         <div className="pl-2 ml-1 border-l border-border">
           <Button
             size="sm"
-            variant={drawingEnabled ? 'default' : 'outline'}
-            className={`h-9 gap-1.5 text-sm ${drawingEnabled ? accent.primary : accent.outline}`}
+            variant={drawingEnabled ? 'outline' : 'default'}
+            className={`h-9 gap-1.5 text-sm ${drawingEnabled ? accent.outline : 'bg-amber-500 text-white hover:bg-amber-600'}`}
             onClick={() => onToggleDrawing(!drawingEnabled)}
             title={drawingEnabled ? 'Student interaction is ON — tap to pause it (pen and activities)' : 'Student interaction is PAUSED — tap to resume'}
             aria-label={drawingEnabled ? 'Pause student interaction' : 'Resume student interaction'}
             aria-pressed={drawingEnabled}
           >
             {drawingEnabled ? <Unlock className="h-3.5 w-3.5" /> : <Lock className="h-3.5 w-3.5" />}
-            {drawingEnabled ? 'Interaction On' : 'Interaction Paused'}
+            {drawingEnabled ? 'Interaction On' : 'Paused — tap to resume'}
           </Button>
         </div>
 

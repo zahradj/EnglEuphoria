@@ -341,3 +341,41 @@ export async function loadMoveContext(args: { teacherId: string; studentId: stri
     openRows: (openRows ?? []) as MoveCalendarRow[],
   };
 }
+
+/** Same address the invitation email uses (supabase/functions/classroom-invite). */
+export const INVITE_SITE_URL = "https://engleuphoria.com";
+export const inviteLinkFor = (token: string) => `${INVITE_SITE_URL}/join-classroom/${token}`;
+
+export type InviteLinkStatus = "valid" | "expired" | "cancelled";
+
+export interface InviteLink {
+  url: string;
+  status: InviteLinkStatus;
+  expiresAt: string;
+  lastUsedAt: string | null;
+  studentEmail: string | null;
+}
+
+/** Pure: is the invitation still usable at `now`? (a cancelled lesson revokes it; it ends an hour after the lesson) */
+export function inviteStatus(inv: { expires_at: string; revoked_at: string | null }, now: Date = new Date()): InviteLinkStatus {
+  if (inv.revoked_at) return "cancelled";
+  return new Date(inv.expires_at).getTime() < now.getTime() ? "expired" : "valid";
+}
+
+/**
+ * The join link of a lesson the teacher invited a student to ("Invite a Student"), read again from the schedule.
+ * null for lessons a student booked themselves (they have no invitation), or if the database function
+ * (teacher_get_invite_link) has not been installed yet.
+ */
+export async function loadInviteLink(slotId: string): Promise<InviteLink | null> {
+  const { data, error } = await (supabase as any).rpc("teacher_get_invite_link", { p_slot_id: slotId });
+  if (error || !data) return null;
+  const d = data as { token: string; expires_at: string; revoked_at: string | null; last_used_at: string | null; student_email: string | null };
+  return {
+    url: inviteLinkFor(d.token),
+    status: inviteStatus(d),
+    expiresAt: d.expires_at,
+    lastUsedAt: d.last_used_at,
+    studentEmail: d.student_email,
+  };
+}

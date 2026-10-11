@@ -131,9 +131,7 @@ export const StudioSidebar: React.FC = () => {
           )}
         </button>
 
-        {/* Academy Library — standalone, Academy-branded page (same pattern as
-            Playground Library above) for the growing catalog of Academy units,
-            built lesson by lesson. */}
+        {/* Academy Library — standalone page listing the Academy deck lessons. */}
         <button
           onClick={() => navigate('/academy-library')}
           title={collapsed ? 'Academy Library' : undefined}
@@ -147,7 +145,7 @@ export const StudioSidebar: React.FC = () => {
             <Library className="h-5 w-5" />
           ) : (
             <>
-              <span className="text-base leading-none">🏫</span>
+              <span className="text-base leading-none">🎓</span>
               <Library className="h-4 w-4" />
               <span className="truncate">Academy Library</span>
             </>
