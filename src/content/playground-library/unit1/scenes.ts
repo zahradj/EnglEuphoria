@@ -509,6 +509,24 @@ export type Scene =
       doneLine: string;
     }
   | {
+      /** Sound Moles (phonics whack-a-mole): per round a letter `letter` (its recorded sound plays) and the
+       *  `pictures` the moles hold — some start with that sound (bonk 3 of them), some don't. */
+      id: string; kind: 'sound-mole'; bg: string; teacher: string; who: CharKey;
+      rounds: { letter: string; pictures: { word: string; img: string }[] }[];
+    }
+  | {
+      /** Hungry Letter Monsters: feed each picture card to the monster whose tummy letter is its first sound. */
+      id: string; kind: 'letter-monsters'; bg: string; teacher: string; who: CharKey;
+      monsters: { letter: string; color: string }[];
+      cards: { word: string; img: string }[];
+    }
+  | {
+      /** Sound Fishing: the recorded sound of `letter` plays; catch the fish whose picture starts with it
+       *  (exactly one of `fish` does). */
+      id: string; kind: 'sound-fish'; bg: string; teacher: string; who: CharKey;
+      rounds: { letter: string; fish: { word: string; img: string }[] }[];
+    }
+  | {
       /** Obstacle Run (U10L1 signature): the coach calls a move for the obstacle ahead ("Jump over the log!");
        *  the child taps that action (`action` indexes `actions`) and the runner does it (pose pictures in `poses`). */
       id: string; kind: 'action-run'; bg: string; teacher: string; who: CharKey;
@@ -3837,6 +3855,15 @@ export const LESSON_U2L2_SCENES: Scene[] = [
     ],
   },
   {
+    // Phonics game (owner 2026-10-11): g, b, r.
+    id: 'u2l2-phonics', kind: 'sound-mole', bg: bgU2L2Meadow, who: 'pip',
+    teacher: 'Sound Moles! Listen to the sound, then bonk every mole whose picture starts with it. Say each word!',
+    rounds: [
+      { letter: 'g', pictures: [{ word: 'goat', img: `${A}/items/item-goat.png` }, { word: 'gift', img: `${A}/items/item-gift.png` }, { word: 'grapes', img: `${A}/items/item-grapes.png` }, { word: 'ball', img: `${A}/items/item-ball.png` }, { word: 'rainbow', img: `${A}/items/item-rainbow.png` }] },
+      { letter: 'b', pictures: [{ word: 'ball', img: `${A}/items/item-ball.png` }, { word: 'banana', img: `${A}/items/item-banana.png` }, { word: 'bear', img: `${A}/items/item-bear.png` }, { word: 'goat', img: `${A}/items/item-goat.png` }, { word: 'rainbow', img: `${A}/items/item-rainbow.png` }] },
+    ],
+  },
+  {
     // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
     id: 'u2l2-blend', kind: 'sound-blend', bg: bgU2L2Meadow,
     teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
@@ -4437,6 +4464,13 @@ export const LESSON_U2L4_SCENES: Scene[] = [
   },
   { id: 'u2l4-trace-w', kind: 'trace', bg: bgU2L4Whale, who: 'willow', letter: 'W', phoneme: '/w/', word: 'whale', teacher: 'Trace the big W! W and H say /w/ — whale!' },
   {
+    // Phonics game (owner 2026-10-11): wh, g, c.
+    id: 'u2l4-phonics', kind: 'letter-monsters', bg: bgU2L4Whale, who: 'pip',
+    teacher: 'Hungry Letter Monsters! Say the word, listen to its first sound, and feed it to the monster with that letter. Tap a tummy to hear its sound.',
+    monsters: [{ letter: 'wh', color: '#8BD450' }, { letter: 'g', color: '#FF9F43' }, { letter: 'c', color: '#A78BFA' }],
+    cards: [{ word: 'wheel', img: `${A}/items/item-wheel.png` }, { word: 'cow', img: `${A}/items/item-cow.png` }, { word: 'goat', img: `${A}/items/item-goat.png` }, { word: 'grapes', img: `${A}/items/item-grapes.png` }, { word: 'whale', img: `${A}/items/item-whale.png` }, { word: 'carrot', img: `${A}/items/item-carrot.png` }],
+  },
+  {
     // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
     id: 'u2l4-blend', kind: 'sound-blend', bg: bgU2L4Whale,
     teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
@@ -4829,6 +4863,16 @@ export const LESSON_U2L5_SCENES: Scene[] = [
     ],
   },
   {
+    // Phonics game (owner 2026-10-11): sh, wh, c.
+    id: 'u2l5-phonics', kind: 'sound-fish', bg: bgU2L5Sea, who: 'pip',
+    teacher: 'Sound Fishing! Listen to the sound and catch the fish whose picture starts with it. Say the word!',
+    rounds: [
+      { letter: 'sh', fish: [{ word: 'ship', img: `${A}/items/item-ship.png` }, { word: 'whale', img: `${A}/items/item-whale.png` }, { word: 'cookie', img: `${A}/items/item-cookie.png` }, { word: 'cake', img: `${A}/items/item-cake.png` }] },
+      { letter: 'wh', fish: [{ word: 'sheep', img: `${A}/items/item-sheep.png` }, { word: 'carrot', img: `${A}/items/item-carrot.png` }, { word: 'cake', img: `${A}/items/item-cake.png` }, { word: 'whale', img: `${A}/items/item-whale.png` }] },
+      { letter: 'c', fish: [{ word: 'whale', img: `${A}/items/item-whale.png` }, { word: 'whistle', img: `${A}/items/item-whistle.png` }, { word: 'cookie', img: `${A}/items/item-cookie.png` }, { word: 'shell', img: `${A}/items/item-shell.png` }] },
+    ],
+  },
+  {
     // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
     id: 'u2l5-blend', kind: 'sound-blend', bg: bgU2L5Sea,
     teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
@@ -5197,6 +5241,15 @@ export const LESSON_U2L6_SCENES: Scene[] = [
     ],
   },
   {
+    // Phonics game (owner 2026-10-11): r, g, sh.
+    id: 'u2l6-phonics', kind: 'sound-mole', bg: bgU2L6Map, who: 'pip',
+    teacher: 'Sound Moles! Listen to the sound, then bonk every mole whose picture starts with it. Say each word!',
+    rounds: [
+      { letter: 'r', pictures: [{ word: 'rocket', img: `${A}/items/item-rocket.png` }, { word: 'ring', img: `${A}/items/item-ring.png` }, { word: 'rabbit', img: `${A}/items/item-rabbit.png` }, { word: 'guitar', img: `${A}/items/item-guitar.png` }, { word: 'sheep', img: `${A}/items/item-sheep.png` }] },
+      { letter: 'g', pictures: [{ word: 'guitar', img: `${A}/items/item-guitar.png` }, { word: 'goat', img: `${A}/items/item-goat.png` }, { word: 'gift', img: `${A}/items/item-gift.png` }, { word: 'rocket', img: `${A}/items/item-rocket.png` }, { word: 'sheep', img: `${A}/items/item-sheep.png` }] },
+    ],
+  },
+  {
     // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
     id: 'u2l6-blend', kind: 'sound-blend', bg: bgU2L6Map,
     teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
@@ -5475,6 +5528,13 @@ export const LESSON_U3L1_SCENES: Scene[] = [
       { word: 'car', letter: 'C', img: itemCar, emoji: '\u{1F697}' },
       { word: 'cat', letter: 'C', img: itemCat, emoji: '\u{1F431}' },
     ],
+  },
+  {
+    // Phonics game (owner 2026-10-11): d, b, t.
+    id: 'u3l1-phonics', kind: 'letter-monsters', bg: bgU3L1DashArena, who: 'pip',
+    teacher: 'Hungry Letter Monsters! Say the word, listen to its first sound, and feed it to the monster with that letter. Tap a tummy to hear its sound.',
+    monsters: [{ letter: 'd', color: '#8BD450' }, { letter: 'b', color: '#FF9F43' }, { letter: 't', color: '#A78BFA' }],
+    cards: [{ word: 'dog', img: `${A}/items/item-dog.png` }, { word: 'train', img: `${A}/items/item-train.png` }, { word: 'ball', img: `${A}/items/item-ball.png` }, { word: 'bird', img: `${A}/items/item-bird.png` }, { word: 'door', img: `${A}/items/item-door.png` }, { word: 'teddy', img: `${A}/items/item-teddy.png` }],
   },
   {
     // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
@@ -5782,6 +5842,16 @@ export const LESSON_U3L2_SCENES: Scene[] = [
       { word: 'teddy', emoji: '\u{1F9F8}', img: itemTeddy },
       { word: 'train', emoji: '\u{1F682}', img: itemTrain },
       { word: 'ten', emoji: '\u{1F51F}', img: itemTen },
+    ],
+  },
+  {
+    // Phonics game (owner 2026-10-11): t, d, b.
+    id: 'u3l2-phonics', kind: 'sound-fish', bg: bgU3L1Room, who: 'pip',
+    teacher: 'Sound Fishing! Listen to the sound and catch the fish whose picture starts with it. Say the word!',
+    rounds: [
+      { letter: 't', fish: [{ word: 'table', img: `${A}/items/item-table.png` }, { word: 'door', img: `${A}/items/item-door.png` }, { word: 'ball', img: `${A}/items/item-ball.png` }, { word: 'bee', img: `${A}/items/item-bee.png` }] },
+      { letter: 'd', fish: [{ word: 'tree', img: `${A}/items/item-tree.png` }, { word: 'banana', img: `${A}/items/item-banana.png` }, { word: 'bee', img: `${A}/items/item-bee.png` }, { word: 'door', img: `${A}/items/item-door.png` }] },
+      { letter: 'b', fish: [{ word: 'doll', img: `${A}/items/item-doll.png` }, { word: 'duck', img: `${A}/items/item-duck-yellow.png` }, { word: 'ball', img: `${A}/items/item-ball.png` }, { word: 'teddy', img: `${A}/items/item-teddy.png` }] },
     ],
   },
   {
@@ -7034,6 +7104,16 @@ export const LESSON_U3L6_SCENES: Scene[] = [
       { who: 'student', line: 'I want the …, please!', bubble: 'right' },
       { who: 'mia', line: 'What color is it? Is it big or small?', bubble: 'right' },
       { who: 'student', line: "It's a big red … ! / It's a small blue … !", bubble: 'right' },
+    ],
+  },
+  {
+    // Phonics game (owner 2026-10-11): k, p, t.
+    id: 'u3l6-phonics', kind: 'sound-fish', bg: bgU3L6Prizes, who: 'pip',
+    teacher: 'Sound Fishing! Listen to the sound and catch the fish whose picture starts with it. Say the word!',
+    rounds: [
+      { letter: 'k', fish: [{ word: 'kangaroo', img: `${A}/items/item-kangaroo.png` }, { word: 'pen', img: `${A}/items/item-pen.png` }, { word: 'teddy', img: `${A}/items/item-teddy.png` }] },
+      { letter: 'p', fish: [{ word: 'key', img: `${A}/items/item-key.png` }, { word: 'table', img: `${A}/items/item-table.png` }, { word: 'teddy', img: `${A}/items/item-teddy.png` }, { word: 'pen', img: `${A}/items/item-pen.png` }] },
+      { letter: 't', fish: [{ word: 'pig', img: `${A}/items/item-pig.png` }, { word: 'pen', img: `${A}/items/item-pen.png` }, { word: 'teddy', img: `${A}/items/item-teddy.png` }, { word: 'kite', img: `${A}/items/item-kite.png` }] },
     ],
   },
   {
@@ -8585,6 +8665,13 @@ export const LESSON_U4L6_SCENES: Scene[] = [
   },
   { id: 'u4l6-trace-f', kind: 'trace', bg: bgU4L6Room, who: 'pip', letter: 'F', phoneme: '/f/', word: 'feet', speakWord: false, teacher: 'Trace the big F with your finger! /f/ /f/ feet!' },
   {
+    // Phonics game (owner 2026-10-11): e, n, f.
+    id: 'u4l6-phonics', kind: 'letter-monsters', bg: bgU4L6Room, who: 'pip',
+    teacher: 'Hungry Letter Monsters! Say the word, listen to its first sound, and feed it to the monster with that letter. Tap a tummy to hear its sound.',
+    monsters: [{ letter: 'e', color: '#8BD450' }, { letter: 'n', color: '#FF9F43' }, { letter: 'f', color: '#A78BFA' }],
+    cards: [{ word: 'elephant', img: `${A}/items/item-elephant.png` }, { word: 'flag', img: `${A}/items/item-flag.png` }, { word: 'nose', img: `${A}/items/item-nose.png` }, { word: 'nest', img: `${A}/items/item-nest.png` }, { word: 'elephant', img: `${A}/items/item-elephant.png` }, { word: 'fan', img: `${A}/items/item-fan.png` }],
+  },
+  {
     // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
     id: 'u4l6-blend', kind: 'sound-blend', bg: bgU4L6Room,
     teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
@@ -9815,6 +9902,15 @@ export const LESSON_U5L6_SCENES: Scene[] = [
     ],
   },
   {
+    // Phonics game (owner 2026-10-11): s, g, d.
+    id: 'u5l6-phonics', kind: 'sound-mole', bg: bgU5L6Host, who: 'pip',
+    teacher: 'Sound Moles! Listen to the sound, then bonk every mole whose picture starts with it. Say each word!',
+    rounds: [
+      { letter: 's', pictures: [{ word: 'snake', img: `${A}/items/item-snake.png` }, { word: 'sofa', img: `${A}/items/item-sofa.png` }, { word: 'star', img: `${A}/items/item-star-gold.png` }, { word: 'gift', img: `${A}/items/item-gift.png` }, { word: 'door', img: `${A}/items/item-door.png` }] },
+      { letter: 'g', pictures: [{ word: 'gift', img: `${A}/items/item-gift.png` }, { word: 'grapes', img: `${A}/items/item-grapes.png` }, { word: 'guitar', img: `${A}/items/item-guitar.png` }, { word: 'snake', img: `${A}/items/item-snake.png` }, { word: 'door', img: `${A}/items/item-door.png` }] },
+    ],
+  },
+  {
     // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
     id: 'u5l6-blend', kind: 'sound-blend', bg: bgU5L6Host,
     teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
@@ -10516,6 +10612,13 @@ export const LESSON_U6L3_SCENES: Scene[] = [
       { word: 'kitten', blankIndex: 0, answer: 'K', choices: ['B', 'K', 'S', 'T'], img: `${A}/items/item-kitten.png`, emoji: '\u{1F431}' },
     ],
   },
+  {
+    // Phonics game (owner 2026-10-11): k, ch, b.
+    id: 'u6l3-phonics', kind: 'letter-monsters', bg: bgU6L3House, who: 'pip',
+    teacher: 'Hungry Letter Monsters! Say the word, listen to its first sound, and feed it to the monster with that letter. Tap a tummy to hear its sound.',
+    monsters: [{ letter: 'k', color: '#8BD450' }, { letter: 'ch', color: '#FF9F43' }, { letter: 'b', color: '#A78BFA' }],
+    cards: [{ word: 'kangaroo', img: `${A}/items/item-kangaroo.png` }, { word: 'bird', img: `${A}/items/item-bird.png` }, { word: 'cheese', img: `${A}/items/item-cheese.png` }, { word: 'cherries', img: `${A}/items/item-cherries.png` }, { word: 'key', img: `${A}/items/item-key.png` }, { word: 'ball', img: `${A}/items/item-ball.png` }],
+  },
 
   /* 15-16 My house */
   {
@@ -10994,6 +11097,16 @@ export const LESSON_U6L5_SCENES: Scene[] = [
     ],
   },
   {
+    // Phonics game (owner 2026-10-11): ch, k, d.
+    id: 'u6l5-phonics', kind: 'sound-fish', bg: bgU6L5Street, who: 'pip',
+    teacher: 'Sound Fishing! Listen to the sound and catch the fish whose picture starts with it. Say the word!',
+    rounds: [
+      { letter: 'ch', fish: [{ word: 'cherries', img: `${A}/items/item-cherries.png` }, { word: 'key', img: `${A}/items/item-key.png` }, { word: 'doll', img: `${A}/items/item-doll.png` }] },
+      { letter: 'k', fish: [{ word: 'cheese', img: `${A}/items/item-cheese.png` }, { word: 'door', img: `${A}/items/item-door.png` }, { word: 'doll', img: `${A}/items/item-doll.png` }, { word: 'key', img: `${A}/items/item-key.png` }] },
+      { letter: 'd', fish: [{ word: 'kitten', img: `${A}/items/item-kitten.png` }, { word: 'kite', img: `${A}/items/item-kite.png` }, { word: 'doll', img: `${A}/items/item-doll.png` }, { word: 'chicken', img: `${A}/items/item-chicken.png` }] },
+    ],
+  },
+  {
     // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
     id: 'u6l5-blend', kind: 'sound-blend', bg: bgU6L5Street,
     teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
@@ -11226,6 +11339,16 @@ export const LESSON_U5L1_SCENES: Scene[] = [
       { word: 'dad', blankIndex: 0, answer: 'D', choices: ['D', 'M', 'B'], emoji: '\u{1F468}' },
       { word: 'dad', blankIndex: 1, answer: 'A', choices: ['A', 'O', 'E'], emoji: '\u{1F468}' },
       { word: 'dad', blankIndex: 2, answer: 'D', choices: ['D', 'M', 'N'], emoji: '\u{1F468}' },
+    ],
+  },
+  {
+    // Phonics game (owner 2026-10-11): m, d, b.
+    id: 'u5l1-phonics', kind: 'sound-fish', bg: bgU5L1DadSolo, who: 'pip',
+    teacher: 'Sound Fishing! Listen to the sound and catch the fish whose picture starts with it. Say the word!',
+    rounds: [
+      { letter: 'm', fish: [{ word: 'moon', img: `${A}/items/item-moon.png` }, { word: 'doll', img: `${A}/items/item-doll.png` }, { word: 'bed', img: `${A}/items/item-bed.png` }, { word: 'ball', img: `${A}/items/item-ball.png` }] },
+      { letter: 'd', fish: [{ word: 'milk', img: `${A}/items/item-milk.png` }, { word: 'bee', img: `${A}/items/item-bee.png` }, { word: 'ball', img: `${A}/items/item-ball.png` }, { word: 'doll', img: `${A}/items/item-doll.png` }] },
+      { letter: 'b', fish: [{ word: 'dog', img: `${A}/items/item-dog.png` }, { word: 'door', img: `${A}/items/item-door.png` }, { word: 'bed', img: `${A}/items/item-bed.png` }, { word: 'mop', img: `${A}/items/item-mop.png` }] },
     ],
   },
   {
@@ -11528,6 +11651,13 @@ export const LESSON_U6L6_SCENES: Scene[] = [
       { who: 'pip', line: 'Wow! What else?', bubble: 'right' },
       { who: 'student', line: 'This is my kitchen. I love my house!', bubble: 'right' },
     ],
+  },
+  {
+    // Phonics game (owner 2026-10-11): k, ch, s.
+    id: 'u6l6-phonics', kind: 'letter-monsters', bg: bgU6L6GameNight, who: 'pip',
+    teacher: 'Hungry Letter Monsters! Say the word, listen to its first sound, and feed it to the monster with that letter. Tap a tummy to hear its sound.',
+    monsters: [{ letter: 'k', color: '#8BD450' }, { letter: 'ch', color: '#FF9F43' }, { letter: 's', color: '#A78BFA' }],
+    cards: [{ word: 'key', img: `${A}/items/item-key.png` }, { word: 'sofa', img: `${A}/items/item-sofa.png` }, { word: 'cherries', img: `${A}/items/item-cherries.png` }, { word: 'cheese', img: `${A}/items/item-cheese.png` }, { word: 'kangaroo', img: `${A}/items/item-kangaroo.png` }, { word: 'sun', img: `${A}/items/item-sun.png` }],
   },
   {
     // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
@@ -12579,6 +12709,13 @@ export const LESSON_U7L5_SCENES: Scene[] = [
     ],
   },
   {
+    // Phonics game (owner 2026-10-11): c, d, p, h.
+    id: 'u7l5-phonics', kind: 'letter-monsters', bg: bgU7L5Yard, who: 'pip',
+    teacher: 'Hungry Letter Monsters! Say the word, listen to its first sound, and feed it to the monster with that letter. Tap a tummy to hear its sound.',
+    monsters: [{ letter: 'c', color: '#8BD450' }, { letter: 'd', color: '#FF9F43' }, { letter: 'p', color: '#A78BFA' }],
+    cards: [{ word: 'car', img: `${A}/items/item-car.png` }, { word: 'pig', img: `${A}/items/item-pig.png` }, { word: 'dog', img: `${A}/items/item-dog.png` }, { word: 'door', img: `${A}/items/item-door.png` }, { word: 'cow', img: `${A}/items/item-cow.png` }, { word: 'pen', img: `${A}/items/item-pen.png` }],
+  },
+  {
     // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
     id: 'u7l5-blend', kind: 'sound-blend', bg: bgU7L5Yard,
     teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
@@ -12773,6 +12910,16 @@ export const LESSON_U7L6_SCENES: Scene[] = [
       { who: 'pip', line: "It's a cow! Again!", bubble: 'right' },
       { who: 'student', line: 'Quack! Quack!', bubble: 'right' },
       { who: 'pip', line: "It's a duck! You are a great farmer!", bubble: 'right' },
+    ],
+  },
+  {
+    // Phonics game (owner 2026-10-11): d, c, h.
+    id: 'u7l6-phonics', kind: 'sound-fish', bg: bgU7L6Night, who: 'pip',
+    teacher: 'Sound Fishing! Listen to the sound and catch the fish whose picture starts with it. Say the word!',
+    rounds: [
+      { letter: 'd', fish: [{ word: 'door', img: `${A}/items/item-door.png` }, { word: 'cow', img: `${A}/items/item-cow.png` }, { word: 'hat', img: `${A}/items/item-hat.png` }] },
+      { letter: 'c', fish: [{ word: 'dog', img: `${A}/items/item-dog.png` }, { word: 'horse', img: `${A}/items/item-horse.png` }, { word: 'hat', img: `${A}/items/item-hat.png` }, { word: 'cow', img: `${A}/items/item-cow.png` }] },
+      { letter: 'h', fish: [{ word: 'cat', img: `${A}/items/item-cat.png` }, { word: 'cake', img: `${A}/items/item-cake.png` }, { word: 'hat', img: `${A}/items/item-hat.png` }, { word: 'doll', img: `${A}/items/item-doll.png` }] },
     ],
   },
   {
@@ -14000,6 +14147,15 @@ export const LESSON_U8L6_SCENES: Scene[] = [
     ],
   },
   {
+    // Phonics game (owner 2026-10-11): a, b, m.
+    id: 'u8l6-phonics', kind: 'sound-mole', bg: bgU8L6Dining, who: 'pip',
+    teacher: 'Sound Moles! Listen to the sound, then bonk every mole whose picture starts with it. Say each word!',
+    rounds: [
+      { letter: 'a', pictures: [{ word: 'apple', img: `${A}/items/item-apple.png` }, { word: 'ant', img: `${A}/items/item-ant.png` }, { word: 'alligator', img: `${A}/items/item-alligator.png` }, { word: 'banana', img: `${A}/items/item-banana.png` }, { word: 'moon', img: `${A}/items/item-moon.png` }] },
+      { letter: 'b', pictures: [{ word: 'banana', img: `${A}/items/item-banana.png` }, { word: 'bear', img: `${A}/items/item-bear.png` }, { word: 'bed', img: `${A}/items/item-bed.png` }, { word: 'apple', img: `${A}/items/item-apple.png` }, { word: 'moon', img: `${A}/items/item-moon.png` }] },
+    ],
+  },
+  {
     // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
     id: 'u8l6-blend', kind: 'sound-blend', bg: bgU8L6Dining,
     teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
@@ -14186,6 +14342,13 @@ export const LESSON_U9L1_SCENES: Scene[] = [
       { word: 'dog', emoji: '\u{1F415}', img: itemDog },
       { word: 'doll', emoji: '\u{1FA86}', img: itemDoll },
     ],
+  },
+  {
+    // Phonics game (owner 2026-10-11): d, sh, p.
+    id: 'u9l1-phonics', kind: 'letter-monsters', bg: bgU9L1LaundryEmpty, who: 'pip',
+    teacher: 'Hungry Letter Monsters! Say the word, listen to its first sound, and feed it to the monster with that letter. Tap a tummy to hear its sound.',
+    monsters: [{ letter: 'd', color: '#8BD450' }, { letter: 'sh', color: '#FF9F43' }, { letter: 'p', color: '#A78BFA' }],
+    cards: [{ word: 'dog', img: `${A}/items/item-dog.png` }, { word: 'plane', img: `${A}/items/item-plane.png` }, { word: 'shoes', img: `${A}/items/item-shoes-blue.png` }, { word: 'shell', img: `${A}/items/item-shell.png` }, { word: 'door', img: `${A}/items/item-door.png` }, { word: 'pig', img: `${A}/items/item-pig.png` }],
   },
   {
     // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.

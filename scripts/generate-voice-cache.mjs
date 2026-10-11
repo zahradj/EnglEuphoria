@@ -469,6 +469,10 @@ const UNIT1_EXTRACTORS = {
     [s.who, s.doneLine],
   ],
   // Mirror DuckFeedScene.tsx's duckFeedLines().
+  // Mirror phonicsShared.ts (Sound Moles / Letter Monsters / Sound Fishing): the sound itself is a recorded letter clip.
+  'sound-mole': (s) => [[s.who, 'Listen! Which one starts with this sound?'], ...(s.rounds ?? []).flatMap((r) => (r.pictures ?? []).flatMap((p) => [[s.who, `Yes! ${p.word.charAt(0).toUpperCase() + p.word.slice(1)}!`], [s.who, `${p.word.charAt(0).toUpperCase() + p.word.slice(1)}! Try again!`]]))],
+  'letter-monsters': (s) => [[s.who, 'Feed the hungry monsters! Who eats this one?'], ...(s.cards ?? []).flatMap((c) => [[s.who, `${c.word.charAt(0).toUpperCase() + c.word.slice(1)}!`], [s.who, `Yes! ${c.word.charAt(0).toUpperCase() + c.word.slice(1)}!`], [s.who, `${c.word.charAt(0).toUpperCase() + c.word.slice(1)}! Try again!`]])],
+  'sound-fish': (s) => [[s.who, 'Listen! Which one starts with this sound?'], ...(s.rounds ?? []).flatMap((r) => (r.fish ?? []).flatMap((f) => [[s.who, `Yes! ${f.word.charAt(0).toUpperCase() + f.word.slice(1)}!`], [s.who, `${f.word.charAt(0).toUpperCase() + f.word.slice(1)}! Try again!`]]))],
   'action-run': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...(s.actions ?? []).map((a) => [s.who, `Not ${a.word}! Listen again.`]), [s.who, s.doneLine]],
   'dress-studio': (s) => {
     const has = { pip: ['hat', 'shirt', 'pants', 'socks', 'shoes'], leo: ['hat', 'shirt', 'pants', 'socks', 'shoes'], mia: ['hat', 'shirt', 'pants', 'socks', 'shoes', 'dress'] };
