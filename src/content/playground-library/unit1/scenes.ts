@@ -14871,6 +14871,7 @@ export const LESSON_U9L6_SCENES: Scene[] = [
   {
     id: 'u9l6-song', kind: 'song', bg: bgU9L6Playroom, title: '\u{1F3B5} Dress Up! \u{1F3B5}', teacher: 'Sing and act: touch your head, stamp your feet, twirl like Mia, then strike a pose!',
     durationSeconds: 20, bigWord: 'Dress up', songUrl: `${A}/audio/dress-up-song-u9l6.mp3?v=1`,
+    lineDurationsMs: [3940, 4400, 5140, 6582],
     songPrompt: 'Cheerful bouncy kids dress-up song',
     lyrics: [
       { who: 'pip', text: 'Hat on my head! Hat, hat, hat!', emotion: 'happy' },

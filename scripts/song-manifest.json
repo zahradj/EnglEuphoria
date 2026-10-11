@@ -358,5 +358,10 @@
     "path": "public/lep1/audio/my-shoes-are-white-song-u9l5.mp3",
     "bytes": 321037,
     "sha256": "bb75d29ad7b440d376b9ff827501c8c117096149d5eeb90cfc5197c1943512f5"
+  },
+  "u9l6-dress-up": {
+    "path": "public/lep1/audio/dress-up-song-u9l6.mp3",
+    "bytes": 321037,
+    "sha256": "68573653513db3fd88ca950174c044635e0bb37a5a457ec37f55a058fec7186a"
   }
 }
