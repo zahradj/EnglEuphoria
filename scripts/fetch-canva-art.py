@@ -1,6 +1,7 @@
 """Saves pictures generated with Canva into the repo (run by .github/workflows/canva-art.yml).
 
-scripts/canva-art-request.json = [{"url": "<Canva download URL>", "out": "public/lep1/...png", "sticker": false}, ...]
+scripts/canva-art-request.json = [{"url": "<Canva download URL>", "out": "public/lep1/...png", "sticker": false, "raw": false}, ...]
+"raw": true keeps the exported size and framing untouched.
 Wide pictures are saved at 1376x768, stickers at 1024x1024 with the white background cut out
 (scripts/cutout-stickers.py). Existing files are overwritten (a request is a deliberate re-make).
 Pictures come from Canva only — never Higgsfield (CLAUDE.md "Media generators")."""
@@ -14,6 +15,10 @@ for r in reqs:
     try:
         data = urllib.request.urlopen(urllib.request.Request(r['url'], headers={'User-Agent': 'Mozilla/5.0'}), timeout=60).read()
         im = Image.open(io.BytesIO(data)).convert('RGBA' if r.get('sticker') else 'RGB')
+        if r.get('raw'):  # keep the exported size and framing (e.g. dress-up layers that must line up)
+            os.makedirs(os.path.dirname(out), exist_ok=True)
+            im.save(out, 'PNG', optimize=True); print('+', out, im.size, 'raw'); ok += 1
+            continue
         size = (1024, 1024) if r.get('sticker') else (1376, 768)
         if not r.get('sticker') and abs(im.width / im.height - 16 / 9) > 0.02:  # cover-crop to 16:9
             w, h = im.size; tw = min(w, int(h * 16 / 9)); th = int(tw * 9 / 16)
