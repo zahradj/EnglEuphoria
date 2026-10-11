@@ -1,15 +1,14 @@
 
-=== docs/songs/u10l1-run-jump-walk-take1.mp3  length=20.1s  score=0.96  missing=0  extra=2
-heard: run run run run run run run run jump jump jump jump up high walk walk walk walk so slow run jump walk and stop
-line starts (s): [np.float64(1.0), np.float64(4.6), np.float64(8.9), np.float64(13.1)]
-lineDurationsMs: [4580, 4280, 4280, 6922]
+=== docs/songs/u10l1-run-jump-walk-take1.mp3  length=20.1s  score=0.57  missing=10  extra=10
+heard: line line line line line line jump jump jump jump up high walk walk walk walk so slow turn down walk up up
+line starts (s): [None, np.float64(3.8), np.float64(8.0), np.float64(14.7)]
 
-=== docs/songs/u10l1-run-jump-walk-take2.mp3  length=20.1s  score=0.83  missing=4  extra=4
-heard: run run run run run run jump jump jump jump up high walk walk walk watch those fall run jump walk and snap
-line starts (s): [np.float64(0.0), np.float64(4.1), np.float64(8.1), np.float64(12.7)]
-lineDurationsMs: [4140, 3920, 4620, 7382]
+=== docs/songs/u10l1-run-jump-walk-take2.mp3  length=20.1s  score=0.98  missing=0  extra=1
+heard: run run run run run run run jump jump jump jump up high walk walk walk walk so slow run jump walk and stop
+line starts (s): [np.float64(0.8), np.float64(4.1), np.float64(8.0), np.float64(12.3)]
+lineDurationsMs: [4060, 3960, 4260, 7782]
 
-=== docs/songs/u10l1-run-jump-walk-take3.mp3  length=20.1s  score=1.00  missing=0  extra=0
-heard: run run run run run run jump jump jump jump up high walk walk walk walk so slow run jump walk and stop
-line starts (s): [np.float64(0.0), np.float64(3.8), np.float64(8.1), np.float64(12.4)]
-lineDurationsMs: [3780, 4300, 4300, 7682]
+=== docs/songs/u10l1-run-jump-walk-take3.mp3  length=20.1s  score=0.96  missing=1  extra=1
+heard: run run run run run run jump jump jump jump up high walk walk walk walk so slow run jump walk and slow
+line starts (s): [np.float64(0.0), np.float64(3.7), np.float64(8.2), np.float64(12.5)]
+lineDurationsMs: [3740, 4420, 4320, 7582]
