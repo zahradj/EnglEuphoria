@@ -225,7 +225,7 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
     ],
     betterThan: [
       'the action word decides the move — a log can be jumped one time and walked round another — so the child listens, not just looks',
-      'the move is visible and physical: a squash-and-stretch jump arc, a slow tiptoe past the sleeping duck, speed lines running from the bee',
+      'the move is visible and physical: a squash-and-stretch jump arc, a slow tiptoe past the little duck, speed lines running from the bee',
       'calm pace and no fail state: a wrong move is named back ("Not walk! Listen again.") and the right one glows after two tries',
     ],
   },

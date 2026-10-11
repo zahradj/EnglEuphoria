@@ -11,7 +11,7 @@ import { Bursts, useBursts, useShake } from './gameFx';
 /* ---------- Obstacle Run (Pre-A1 Unit 10 Lesson 1 "Run, Jump, Walk!" signature game) ----------
  * Sports day. The runner jogs on the track (code-drawn lane stripes stream past; the picture itself never
  * pans — CLAUDE.md). Something comes up ahead and the coach calls what to do: "Jump over the log!",
- * "Walk! Shh, the duck is sleeping!", "Run! A bee!". The child taps the action picture: the runner really
+ * "Shh! A little duck! Walk!", "Run! A bee!". The child taps the action picture: the runner really
  * does it — a squash-and-stretch JUMP arc over the log, a slow tiptoe WALK past the duck, a speed-line RUN
  * away from the bee — and gets a star. Sources (mechanic only): endless runners (Subway Surfers / Temple
  * Run: one tap = one move), the PE warm-up "Run! Jump! Walk!", Cambridge Pre A1 Starters "listen and do".
@@ -21,8 +21,8 @@ import { Bursts, useBursts, useShake } from './gameFx';
 
 type Run = Extract<Scene, { kind: 'action-run' }>;
 export const runWrongLine = (word: string) => `Not ${word}! Listen again.`;
-const RUNNER = { x: 24, y: 70 };
-const STOP_X = 58;
+const RUNNER = { x: 34, y: 72 };
+const STOP_X = 66;
 
 export function ActionRunScene({ scene, onWin, onNext, sync }: { scene: Run; onWin: (gem: boolean) => void; onNext: () => void; sync?: ActivitySync }) {
   const reduce = useReducedMotion();

@@ -15354,7 +15354,7 @@ export const LESSON_U10L1_SCENES: Scene[] = [
     ],
     rounds: [
       { action: 1, obstacle: { img: itemLog, label: 'log' }, line: 'A log! Jump!', reply: 'Great jump!' },
-      { action: 2, obstacle: { img: itemFarmDuck, label: 'duck' }, line: 'Shh! A duck is sleeping. Walk!', reply: 'Good walking! Shh!' },
+      { action: 2, obstacle: { img: itemFarmDuck, label: 'duck' }, line: 'Shh! A little duck! Walk!', reply: 'Good walking! Shh!' },
       { action: 0, obstacle: { img: itemBee, label: 'bee', buzz: true }, line: 'Bzzz! A bee! Run!', reply: 'Phew! Fast running!' },
       { action: 1, obstacle: { img: itemLog, label: 'log' }, line: 'Another log! Jump!', reply: 'Wow! A big jump!' },
       { action: 0, obstacle: { img: itemBee, label: 'bee', buzz: true }, line: 'Bzzz! Run, run!', reply: 'You are fast!' },
