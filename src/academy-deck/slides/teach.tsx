@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 import { useDeck } from '../ctx';
 import { Icon } from '../Icon';
+import { Hear } from '../Hear';
 import { COLOR, Bubble } from '../Stage';
 import type { ModelSlide, TeachArt, TeachSlide } from '../types';
 import { Traveller, WavingFlag } from './anim';
@@ -60,11 +61,16 @@ const hi = (text: string, word: string): ReactNode => {
 
 /** Vocabulary illustration: one animated page per word, with its meaning, an example and a clue. Meet every word before any game uses it. */
 export function TeachView({ slide }: { slide: TeachSlide }) {
-  const { done } = useDeck();
+  const { done, speakSeq } = useDeck();
   const [i, setI] = useState(0);
   const [seen, setSeen] = useState<number[]>([0]);
   const [again, setAgain] = useState(0);
   const page = slide.pages[i];
+  const guide = slide.actors?.[0]?.who ?? 'Vee';
+  // each word page: the word, then its example sentence
+  useEffect(() => {
+    void speakSeq([{ who: guide, text: slide.pages[i].word }, { who: guide, text: slide.pages[i].example }]);
+  }, [i, guide, slide.pages, speakSeq]);
   useEffect(() => {
     setSeen((s) => (s.includes(i) ? s : [...s, i]));
   }, [i]);
@@ -81,9 +87,9 @@ export function TeachView({ slide }: { slide: TeachSlide }) {
         <div className="ad-teach-art"><Art art={page.art} again={again + i * 1000} /></div>
         <div className="ad-teach-body" key={i}>
           <span className="ad-teach-count">{i + 1} / {slide.pages.length}</span>
-          <h3 className="ad-teach-word">{page.word}</h3>
+          <h3 className="ad-teach-word">{page.word}<Hear who={guide} text={page.word} /></h3>
           <p className="ad-teach-meaning">{page.meaning}</p>
-          <p className="ad-teach-example">{hi(page.example, page.word)}</p>
+          <p className="ad-teach-example">{hi(page.example, page.word)}<Hear who={guide} text={page.example} /></p>
           {page.clue && <p className="ad-teach-clue"><Icon name="bulb" /> {page.clue}</p>}
           <button type="button" className="ad-btn ad-btn-small" onClick={() => setAgain(again + 1)}>▶ Show again</button>
         </div>
@@ -99,9 +105,12 @@ export function TeachView({ slide }: { slide: TeachSlide }) {
 
 /** Modelling: watch the characters do it. Each line shows its pattern card: the frame stays, the coloured part changes. */
 export function ModelView({ slide }: { slide: ModelSlide }) {
-  const { done } = useDeck();
+  const { done, speak } = useDeck();
   const [n, setN] = useState(1);
   const line = slide.lines[n - 1];
+  useEffect(() => {
+    void speak(slide.lines[n - 1].who, slide.lines[n - 1].text);
+  }, [n, slide.lines, speak]);
   const finished = n >= slide.lines.length;
   useEffect(() => {
     if (finished) done();
@@ -113,7 +122,7 @@ export function ModelView({ slide }: { slide: ModelSlide }) {
     <Panel title={slide.title} wide>
       <div className="ad-model-log" aria-live="polite">
         {slide.lines.slice(0, n - 1).map((l, i) => (
-          <p key={i} className="ad-line" data-me={l.who === 'Ava'} style={{ ['--who' as string]: COLOR[l.who] }}><b>{l.who}</b> {l.text}</p>
+          <p key={i} className="ad-line" data-me={l.who === 'Ava'} style={{ ['--who' as string]: COLOR[l.who] }}><b>{l.who}</b> {l.text}<Hear who={l.who} text={l.text} /></p>
         ))}
       </div>
       <div className="ad-model-say">

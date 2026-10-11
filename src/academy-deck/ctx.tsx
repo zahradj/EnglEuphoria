@@ -14,6 +14,15 @@ export interface DeckCtx {
   stamps: string[];
   reduced: boolean;
   seed: number;
+  /** recorded voices: on/off, and true once the clip list has loaded (so buttons only appear for lines that have a clip) */
+  voice: boolean;
+  clipsReady: boolean;
+  /** true when a recorded clip exists for this line */
+  canHear: (who: string, text: string) => boolean;
+  /** speak one line (stops the previous one); resolves true if it played, false if silent */
+  speak: (who: string, text: string) => Promise<boolean>;
+  /** speak lines one after another; a newer call or leaving the slide cancels the rest */
+  speakSeq: (lines: { who: string; text: string }[]) => Promise<void>;
 }
 export const DeckContext = createContext<DeckCtx | null>(null);
 export const useDeck = (): DeckCtx => {

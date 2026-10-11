@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { CSSProperties, ReactNode } from 'react';
 import type { Actor, CastName, Expr } from './types';
+import { Hear } from './Hear';
 
 const hue = (id: string) => Array.from(id).reduce((a, c) => (a * 31 + c.charCodeAt(0)) % 360, 7);
 export const COLOR: Record<CastName, string> = { Vee: '#38bdf8', Ava: '#a78bfa', Theo: '#34d399', Mia: '#fb923c' };
@@ -126,7 +127,7 @@ export function Bubble({ who, children, side = 'left' }: { who: CastName; childr
   return (
     <div className="ad-bubble" data-side={side} style={{ ['--who' as string]: COLOR[who] }}>
       <span className="ad-bubble-who">{who}</span>
-      <div className="ad-bubble-text">{children}</div>
+      <div className="ad-bubble-text">{children}{typeof children === 'string' && <Hear who={who} text={children} />}</div>
     </div>
   );
 }

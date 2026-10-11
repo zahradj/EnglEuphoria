@@ -25,6 +25,7 @@ const P: Record<string, JSX.Element> = {
   passport: <><rect x="5" y="2.5" width="14" height="19" rx="2" className="ico-fill" /><circle cx="12" cy="10.5" r="3.6" /><path d="M8.4 10.5h7.2M12 6.9c-1.6 2-1.6 5.2 0 7.2M12 6.9c1.6 2 1.6 5.2 0 7.2M8.5 18h7" /></>,
   chat: <><path d="M4 5h16a1.5 1.5 0 0 1 1.5 1.5v8A1.5 1.5 0 0 1 20 16h-8l-5 4v-4H4A1.5 1.5 0 0 1 2.5 14.5v-8A1.5 1.5 0 0 1 4 5z" className="ico-fill" /></>,
   frame: <><rect x="3" y="4" width="18" height="16" rx="2.5" className="ico-fill" /><circle cx="9" cy="10" r="1.8" /><path d="M4 18l5-5 4 4 3-3 4 4" /></>,
+  speaker: <><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" className="ico-fill" /><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11" /></>,
   sparkle: <path d="M12 2l2 7 7 3-7 3-2 7-2-7-7-3 7-3z" className="ico-fill" />,
 };
 

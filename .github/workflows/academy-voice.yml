@@ -1,0 +1,45 @@
+name: Bake Academy voice clips
+
+# Records the Academy cast's lines (scripts/academy-voice-lines.json) with approved American voices (src/academy-deck/voices.ts)
+# through the elevenlabs-tts edge function into public/academy-audio/ and commits them. Recorded clips only, never a browser voice.
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'scripts/academy-voice-lines.json'
+      - 'scripts/bake-academy-voice.mjs'
+      - 'src/academy-deck/voices.ts'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: academy-voice-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  bake:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Refresh the line list from the decks
+        run: npx -y tsx scripts/academy-voice-lines.mjs
+      - name: Record missing clips
+        env:
+          BAKE_SERVICE_KEY: ${{ secrets.BAKE_SERVICE_KEY }}
+        run: |
+          set -e
+          if [ -z "$BAKE_SERVICE_KEY" ]; then echo "::error::Add the BAKE_SERVICE_KEY repository secret (Supabase service_role key) so new clips can be recorded."; exit 1; fi
+          npx -y tsx scripts/bake-academy-voice.mjs
+      - name: Commit new clips
+        run: |
+          git add public/academy-audio scripts/academy-voice-lines.json
+          if git diff --cached --quiet; then echo "No new clips."; exit 0; fi
+          git config user.name "voice-bake-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git commit -m "Bake Academy voice clips ($(git diff --cached --name-only | wc -l) files)"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"

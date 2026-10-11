@@ -1,7 +1,7 @@
 import type React from 'react';
 // Academy Deck player. A lesson is a deck of slides; each slide is a full scene plate with ONE game on top.
 // Reliable by design: the deck holds only the slide number, "solved" flags, the student's answers and the stamps earned. Every slide is
-// wrapped in an error boundary (a broken game offers Try again / Skip, it never freezes the lesson). No timers, no ranking, no voices yet.
+// wrapped in an error boundary (a broken game offers Try again / Skip, it never freezes the lesson). No timers, no ranking. Voices: recorded clips only (src/academy-deck/audio.ts), silent when missing.
 import { Component, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import './deck.css';
@@ -15,7 +15,10 @@ import { CardView, WrapView } from './slides/card';
 import { FindWrongView, SpellView } from './slides/letters';
 import { LockersView, NumTrainView, PadlockView } from './slides/numbers';
 import { BorderView, MemoryView } from './slides/passport';
+import { NumWallView } from './slides/numwall';
 import { ConvoView, FadeView, PhoneChatView, SayView, WhoSaidView } from './slides/talk';
+import { audioBaseFor, hasClip, loadManifest, playLine, stopLine } from './audio';
+import { openLines, slideLines } from './spoken';
 import { PARTS, type DeckScript, type Slide, type Stats, type Vars } from './types';
 
 class Guard extends Component<{ children: ReactNode; onSkip: () => void; id: string }, { err: string | null; n: number }> {
@@ -60,6 +63,7 @@ function SlideView({ slide }: { slide: Slide }) {
     case 'findwrong': return <FindWrongView slide={slide} />;
     case 'border': return <BorderView slide={slide} />;
     case 'memory': return <MemoryView slide={slide} />;
+    case 'numwall': return <NumWallView slide={slide} />;
     case 'phonechat': return <PhoneChatView slide={slide} />;
     case 'fade': return <FadeView slide={slide} />;
     case 'card': return <CardView slide={slide} />;
@@ -71,6 +75,8 @@ function SlideView({ slide }: { slide: Slide }) {
 export interface DeckProps {
   script: DeckScript;
   artBase?: string;
+  /** recorded voice clips folder (default: 'academy-audio' beside the art folder) */
+  audioBase?: string;
   /** teacher view: every slide can be opened from the strip */
   teacher?: boolean;
   /** live classroom: controlled slide index (the teacher moves the class) */
@@ -82,7 +88,7 @@ export interface DeckProps {
   onSlideDone?: (slide: Slide, result: { wrong: number }) => void;
 }
 
-export function Deck({ script, artBase, teacher = false, slide: controlled, onSlide, onFinish, homework, onSlideDone }: DeckProps) {
+export function Deck({ script, artBase, audioBase, teacher = false, slide: controlled, onSlide, onFinish, homework, onSlideDone }: DeckProps) {
   const [own, setOwn] = useState(0);
   const index = Math.min(controlled ?? own, script.slides.length - 1);
   const go = useCallback((i: number) => {
@@ -111,6 +117,69 @@ export function Deck({ script, artBase, teacher = false, slide: controlled, onSl
   const shownParts = useRef<Set<number>>(new Set());
   const [calm, setCalm] = useState(() => typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches);
   const cur = script.slides[index];
+  // ---- recorded voices (silent when a clip or the clip list is missing; never the browser voice)
+  const base = audioBaseFor(artBase, audioBase);
+  const [voiceOn, setVoiceOn] = useState(true);
+  const voiceRef = useRef(true);
+  voiceRef.current = voiceOn;
+  const [clipsReady, setClipsReady] = useState(false);
+  const [unlocked, setUnlocked] = useState(false);
+  const unlockedRef = useRef(false);
+  const [speakingWho, setSpeakingWho] = useState<string | null>(null);
+  const seq = useRef(0);
+  useEffect(() => {
+    let live = true;
+    setClipsReady(false);
+    void loadManifest(base).then(() => live && setClipsReady(true));
+    return () => {
+      live = false;
+    };
+  }, [base]);
+  // browsers only allow sound after a tap or key press: the first one unlocks the voices
+  useEffect(() => {
+    const unlock = () => {
+      unlockedRef.current = true;
+      setUnlocked(true);
+    };
+    window.addEventListener('pointerdown', unlock, true);
+    window.addEventListener('keydown', unlock, true);
+    return () => {
+      window.removeEventListener('pointerdown', unlock, true);
+      window.removeEventListener('keydown', unlock, true);
+    };
+  }, []);
+  const speak = useCallback(async (who: string, text: string) => {
+    if (!voiceRef.current || !unlockedRef.current) return false;
+    return playLine(who, text, { base, onStart: () => setSpeakingWho(who), onEnd: () => setSpeakingWho((w) => (w === who ? null : w)) });
+  }, [base]);
+  const speakSeq = useCallback(async (lines: { who: string; text: string }[]) => {
+    const mine = ++seq.current;
+    for (const l of lines) {
+      if (mine !== seq.current) return;
+      await speak(l.who, l.text);
+    }
+  }, [speak]);
+  const canHear = useCallback((who: string, text: string) => hasClip(base, who, text), [base]);
+  // a new slide, or Voice off: whatever is playing stops
+  useEffect(() => () => {
+    seq.current += 1;
+    stopLine();
+    setSpeakingWho(null);
+  }, [index]);
+  useEffect(() => {
+    if (!voiceOn) {
+      seq.current += 1;
+      stopLine();
+      setSpeakingWho(null);
+    }
+  }, [voiceOn]);
+  // the slide's own spoken lines (greeting, mission, wrap...) once the voices are unlocked
+  useEffect(() => {
+    if (!unlocked || !voiceOn || !clipsReady) return;
+    const lines = openLines(cur);
+    if (lines.length) void speakSeq(lines);
+  }, [index, unlocked, voiceOn, clipsReady]); // eslint-disable-line react-hooks/exhaustive-deps
+  const slideHasClip = clipsReady && slideLines(cur).some((l) => hasClip(base, l.who, l.text));
   const curId = useRef(cur.id);
   curId.current = cur.id;
   const wrongBySlide = useRef<Record<string, number>>({});
@@ -136,10 +205,10 @@ export function Deck({ script, artBase, teacher = false, slide: controlled, onSl
     setStats((s) => ({ ...s, wrong: s.wrong + 1 }));
     react('concerned');
   }, [react]);
-  const ctx: DeckCtx = useMemo(() => ({ artBase, vars, setVars, done, right, wrong, award, stamps, reduced: calm, seed: 1000 + index * 17 }), [artBase, vars, setVars, done, right, wrong, award, stamps, calm, index]);
+  const ctx: DeckCtx = useMemo(() => ({ artBase, vars, setVars, done, right, wrong, award, stamps, reduced: calm, seed: 1000 + index * 17, voice: voiceOn, clipsReady, canHear, speak, speakSeq }), [artBase, vars, setVars, done, right, wrong, award, stamps, calm, index, voiceOn, clipsReady, canHear, speak, speakSeq]);
   const isSolved = !!solved[cur.id];
   const last = index === script.slides.length - 1;
-  // the cast chatter for a moment when a slide opens (no recorded clips yet; real timing will come from the audio)
+  // the cast chatter for a moment when a slide opens: only for slides with NO recorded clip (a real clip drives the mouth itself)
   useEffect(() => {
     setChat(true);
     const t = window.setTimeout(() => setChat(false), 2400);
@@ -202,7 +271,7 @@ export function Deck({ script, artBase, teacher = false, slide: controlled, onSl
       <div className="ad-root" style={artBase ? ({ ['--o-gem-empty' as string]: `url(${artBase}/objects/gem-empty.webp)`, ['--o-gem-full' as string]: `url(${artBase}/objects/gem-full.webp)`, ['--o-ribbon' as string]: `url(${artBase}/objects/ribbon.webp)`, ['--o-frame' as string]: `url(${artBase}/objects/frame.webp)`, ['--o-star' as string]: `url(${artBase}/objects/star.webp)`, ['--o-stamp' as string]: `url(${artBase}/objects/stamp.webp)`, ['--o-ticket' as string]: `url(${artBase}/objects/ticket.webp)`, ['--o-pill-violet' as string]: `url(${artBase}/objects/pill-violet.webp)`, ['--o-pill-blue' as string]: `url(${artBase}/objects/pill-blue.webp)`, ['--o-pill-orange' as string]: `url(${artBase}/objects/pill-orange.webp)` } as React.CSSProperties) : undefined} data-reduced={calm} data-kind={cur.kind} data-hw={!!homework} data-mood={mood ?? undefined} data-testid="deck">
         <Plate id={cur.bg} artBase={artBase} key={cur.bg} />
         <div className="ad-actors" aria-hidden={actorsVisible.length === 0}>
-          {actorsVisible.map((a) => <Character key={`${a.who}-${mood ?? 'base'}`} actor={mood ? { ...a, expr: mood } : a} artBase={artBase} small={compact} speaking={chat && !calm && !mood && ['title', 'brief', 'whosaid', 'teach', 'model', 'convo', 'say', 'wrap'].includes(cur.kind)} />)}
+          {actorsVisible.map((a) => <Character key={`${a.who}-${mood ?? 'base'}`} actor={mood ? { ...a, expr: mood } : a} artBase={artBase} small={compact} speaking={!calm && !mood && (speakingWho === a.who || (chat && !(voiceOn && slideHasClip) && ['title', 'brief', 'whosaid', 'teach', 'model', 'convo', 'say', 'wrap'].includes(cur.kind)))} />)}
         </div>
         <header className="ad-strip" aria-label="Slides">
           <span className="ad-lesson">{homework ? `${homework.label} · game ${index + 1} of ${script.slides.length}` : PARTS[cur.part]?.name}</span>
@@ -237,6 +306,7 @@ export function Deck({ script, artBase, teacher = false, slide: controlled, onSl
         {menu && (
           <div className="ad-menu" role="menu">
             <button type="button" role="menuitem" onClick={skip}><Icon name="skip" /> Skip this slide</button>
+            <button type="button" role="menuitemcheckbox" aria-checked={voiceOn} onClick={() => setVoiceOn(!voiceOn)}>{voiceOn ? '✔ ' : ''}Voice {voiceOn ? 'on' : 'off'}</button>
             <button type="button" role="menuitemcheckbox" aria-checked={calm} onClick={() => setCalm(!calm)}>{calm ? '✔ ' : ''}Calm mode (no animation)</button>
           </div>
         )}

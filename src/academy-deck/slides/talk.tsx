@@ -5,15 +5,21 @@ import { COLOR, Bubble } from '../Stage';
 import type { CastName, ConvoSlide, FadeSlide, PhoneChatSlide, SaySlide, TeachArt, WhoSaidSlide } from '../types';
 import { Feedback, NOT_YET, Panel } from './shared';
 import { Icon } from '../Icon';
+import { Hear } from '../Hear';
 import { Art } from './teach';
 
 const clean = (w: string) => w.toLowerCase().replace(/[.!?,]/g, '');
 
 /** Who said it? Drag each speech bubble to the character who says it. */
 export function WhoSaidView({ slide }: { slide: WhoSaidSlide }) {
-  const { right, wrong, done, seed } = useDeck();
+  const { right, wrong, done, seed, speak } = useDeck();
   const [shown, setShown] = useState(slide.replay ? 1 : 0);
   const [watched, setWatched] = useState(!slide.replay);
+  // each replay line is spoken as it appears
+  useEffect(() => {
+    const l = !watched ? slide.replay?.[shown - 1] : undefined;
+    if (l) void speak(l.who, l.text);
+  }, [watched, shown, slide.replay, speak]);
   const [placed, setPlaced] = useState<Record<number, CastName>>({});
   const [held, setHeld] = useState<number | null>(null);
   const [slip, setSlip] = useState(false);
@@ -43,7 +49,7 @@ export function WhoSaidView({ slide }: { slide: WhoSaidSlide }) {
       <Panel title={slide.replayTitle ?? 'Last time, at the desk…'} wide>
         <div className="ad-convo-log" aria-live="polite">
           {lines.map((l, i) => (
-            <p key={i} className="ad-line" data-me={l.who === 'Ava'} style={{ ['--who' as string]: COLOR[l.who] }}><b>{l.who}</b> {l.text}</p>
+            <p key={i} className="ad-line" data-me={l.who === 'Ava'} style={{ ['--who' as string]: COLOR[l.who] }}><b>{l.who}</b> {l.text}<Hear who={l.who} text={l.text} /></p>
           ))}
         </div>
         <div className="ad-row">
@@ -63,8 +69,8 @@ export function WhoSaidView({ slide }: { slide: WhoSaidSlide }) {
         ))}
       </div>
       <div className="ad-chips">
-        {bank.map((i) => (
-          <button key={i} type="button" className="ad-chip ad-chip-bubble" disabled={i in placed} data-held={held === i} {...drag.bind(String(i), i in placed)}>{slide.items[i].text}</button>
+        {bank.filter((i) => !(i in placed)).map((i) => (
+          <button key={i} type="button" className="ad-chip ad-chip-bubble" data-held={held === i} {...drag.bind(String(i), false)}>{slide.items[i].text}</button>
         ))}
       </div>
       {slip && !all && <Feedback kind="try">{NOT_YET} Who asks? Who answers?</Feedback>}
@@ -74,7 +80,7 @@ export function WhoSaidView({ slide }: { slide: WhoSaidSlide }) {
 
 /** Dialogue wheel: the student plays `me`, chooses each reply. The conversation is PLAYED, not read. */
 export function ConvoView({ slide }: { slide: ConvoSlide }) {
-  const { right, wrong, done, seed, vars } = useDeck();
+  const { right, wrong, done, seed, vars, speak } = useDeck();
   const fill = (s: string) => s.replace(/\{(\w+)\}/g, (_m, k: string) => vars[k] ?? 'friend');
   const [step, setStep] = useState(0);
   const [log, setLog] = useState<{ who: string; text: string }[]>([]);
@@ -84,6 +90,10 @@ export function ConvoView({ slide }: { slide: ConvoSlide }) {
   const opts = useMemo(() => (finished ? [] : shuffled(slide.steps[step].options, seed + step)), [slide.steps, step, seed, finished]);
   const other = slide.actors?.find((a) => a.who !== slide.me)?.who ?? 'Theo';
   const end = useRef<HTMLDivElement>(null);
+  // the other character asks each question out loud as it appears
+  useEffect(() => {
+    if (!finished) void speak(other, slide.steps[step].ask);
+  }, [step, finished, other, slide.steps, speak]);
   useEffect(() => {
     if (finished) done();
     end.current?.scrollIntoView?.({ block: 'nearest' });
@@ -105,7 +115,7 @@ export function ConvoView({ slide }: { slide: ConvoSlide }) {
     <Panel title={slide.prompt} wide>
       <div className="ad-convo-log" aria-live="polite">
         {log.map((l, i) => (
-          <p key={i} className="ad-line" data-me={l.who === slide.me} style={{ ['--who' as string]: COLOR[l.who as CastName] }}><b>{l.who === slide.me && slide.meLabel ? slide.meLabel : l.who}</b> {l.text}</p>
+          <p key={i} className="ad-line" data-me={l.who === slide.me} style={{ ['--who' as string]: COLOR[l.who as CastName] }}><b>{l.who === slide.me && slide.meLabel ? slide.meLabel : l.who}</b> {l.text}{l.who !== slide.me && <Hear who={l.who} text={l.text} />}</p>
         ))}
         <div ref={end} />
       </div>
@@ -134,7 +144,7 @@ export function ConvoView({ slide }: { slide: ConvoSlide }) {
 
 /** Phone chat: Theo texts; the student builds the reply from word tiles and sends it. */
 export function PhoneChatView({ slide }: { slide: PhoneChatSlide }) {
-  const { right, wrong, done, seed, vars } = useDeck();
+  const { right, wrong, done, seed, vars, speak } = useDeck();
   const fill = (s: string) => s.replace(/\{(\w+)\}/g, (_m, k: string) => vars[k] ?? '…');
   const [step, setStep] = useState(0);
   const [thread, setThread] = useState<{ me: boolean; text: string; pic?: TeachArt }[]>([{ me: false, text: slide.steps[0].text, pic: slide.steps[0].pic }]);
@@ -150,6 +160,11 @@ export function PhoneChatView({ slide }: { slide: PhoneChatSlide }) {
   useEffect(() => {
     if (finished) done();
   }, [finished, done]);
+  // the contact's new message is spoken when it arrives
+  useEffect(() => {
+    const m = thread[thread.length - 1];
+    if (m && !m.me) void speak(slide.contact, m.text);
+  }, [thread.length, slide.contact, speak]); // eslint-disable-line react-hooks/exhaustive-deps
   const tap = (k: number) => {
     if (finished || used.includes(k)) return;
     if (clean(tiles[k].w) === clean(goal[used.length])) {
@@ -177,7 +192,7 @@ export function PhoneChatView({ slide }: { slide: PhoneChatSlide }) {
         <div className="ad-phone-thread">
           {thread.map((m, i) => (
             <div key={i} className="ad-msg-row" data-me={m.me}>
-              <p className="ad-msg" data-me={m.me}>{m.text}</p>
+              <p className="ad-msg" data-me={m.me}>{m.text}{!m.me && <Hear who={slide.contact} text={m.text} />}</p>
               {m.pic && <span className="ad-sticker ad-sticker-chat"><Art art={m.pic} size="sm" /></span>}
             </div>
           ))}
