@@ -3079,5 +3079,40 @@
       "Shoes, shoes! On my feet!",
       "Hat, socks, shoes! Let's go play!"
     ]
+  },
+  "u9l3-coat-skirt-tshirt": {
+    "publicPath": "public/lep1/audio/coat-skirt-tshirt-song-u9l3.mp3",
+    "durationSec": 20,
+    "style": "Cheerful bouncy kids clothes-shop song, 104 BPM with ukulele, bright piano, shaker and hand claps, ONE clear happy young singer, every word sung slowly and very clearly with crisp consonants: COAT with a hard 'k', SKIRT and T-SHIRT clearly different. Definitely not a lullaby.",
+    "positiveStyles": [
+      "bouncy",
+      "ukulele",
+      "piano",
+      "shaker",
+      "hand claps",
+      "clear kids vocals",
+      "104 BPM",
+      "happy",
+      "playful"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "Coat, coat! Zip it up!",
+      "Skirt, skirt! Swish, swish, swish!",
+      "T-shirt, T-shirt! Arms in!",
+      "Coat, skirt, T-shirt! Let's go shopping!"
+    ]
   }
 }
