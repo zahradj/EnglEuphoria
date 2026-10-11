@@ -2176,6 +2176,12 @@ export const LESSON_4_SCENES: Scene[] = [
       { word: 'BAG', emoji: '\u{1F392}' },
     ],
   },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u1l4-blend', kind: 'sound-blend', bg: bgMeadow,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'bat', img: `${A}/items/item-bat.png` }, { word: 'hat', img: `${A}/items/item-hat.png` }, { word: 'mat', img: `${A}/items/item-mat.png` }],
+  },
   { id: 'l4-alphabet-order', kind: 'alphabet-order', bg: bgMeadow, teacher: 'Alphabet Order! Drag the letters into ABC order!', sequences: ['OPQR', 'STUV', 'WXYZ'] },
   {
     id: 'l4-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Everyone waves goodbye! Sing together and wave on every goodbye.',
@@ -2419,6 +2425,12 @@ export const LESSON_5_SCENES: Scene[] = [
       { word: 'star', letter: 'S', img: itemStarGold, emoji: '⭐' },
       { word: 'ant', letter: 'A', img: itemAnt, emoji: '\u{1F41C}' },
     ],
+  },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u1l5-blend', kind: 'sound-blend', bg: bgL5Empty,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'man', img: `${A}/items/item-man.png` }, { word: 'ham', img: `${A}/items/item-ham.png` }, { word: 'hat', img: `${A}/items/item-hat.png` }],
   },
   {
     id: 'l5-quick-fire', kind: 'rapid-recall', bg: bgL5Empty, who: 'pip', seconds: 3,
@@ -2791,6 +2803,12 @@ export const LESSON_6_SCENES: Scene[] = [
       { word: 'MAT', emoji: '\u{1F7EB}' },
       { word: 'BAT', emoji: '\u{1F987}' },
     ],
+  },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u1l6-blend', kind: 'sound-blend', bg: bgMeadow,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'bat', img: `${A}/items/item-bat.png` }, { word: 'mat', img: `${A}/items/item-mat.png` }, { word: 'man', img: `${A}/items/item-man.png` }],
   },
   {
     // Expanded from 6 to all 8 of the unit's letters (adds B/T) — this now
@@ -3223,6 +3241,12 @@ export const LESSON_U2L1_SCENES: Scene[] = [
       { word: 'Y', letter: 'Y', emoji: 'Y' },
       { word: 'B', letter: 'B', emoji: 'B' },
     ],
+  },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u2l1-blend', kind: 'sound-blend', bg: bgU2L1CDashArena,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'rat', img: `${A}/items/item-rat.png` }, { word: 'bat', img: `${A}/items/item-bat.png` }, { word: 'ham', img: `${A}/items/item-ham.png` }],
   },
   {
     id: 'u2l1-word-build', kind: 'word-build', bg: bgU2L1CTickets, teacher: 'Listen! Tap the missing letter to make the word.',
@@ -3803,6 +3827,12 @@ export const LESSON_U2L2_SCENES: Scene[] = [
       { word: 'pumpkin', letter: 'ORANGE', img: itemPumpkin, emoji: '\u{1F383}' },
     ],
   },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u2l2-blend', kind: 'sound-blend', bg: bgU2L2Meadow,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'bag', img: `${A}/items/item-bag.png` }, { word: 'hat', img: `${A}/items/item-hat.png` }, { word: 'mat', img: `${A}/items/item-mat.png` }],
+  },
 
   /* 21-22 Closing */
   {
@@ -4129,6 +4159,12 @@ export const LESSON_U2L3_SCENES: Scene[] = [
       { word: 'pizza', emoji: '\u{1F355}', img: itemPizzaSlice, hit: false },
     ],
   },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u2l3-blend', kind: 'sound-blend', bg: bgU2L3Builder,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'cat', img: `${A}/items/item-cat.png` }, { word: 'can', img: `${A}/items/item-can.png` }, { word: 'cab', img: `${A}/items/item-cab.png` }],
+  },
 
   /* 14-15 Retell + perform */
   {
@@ -4391,6 +4427,12 @@ export const LESSON_U2L4_SCENES: Scene[] = [
     ],
   },
   { id: 'u2l4-trace-w', kind: 'trace', bg: bgU2L4Whale, who: 'willow', letter: 'W', phoneme: '/w/', word: 'whale', teacher: 'Trace the big W! W and H say /w/ — whale!' },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u2l4-blend', kind: 'sound-blend', bg: bgU2L4Whale,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'rat', img: `${A}/items/item-rat.png` }, { word: 'bag', img: `${A}/items/item-bag.png` }, { word: 'man', img: `${A}/items/item-man.png` }],
+  },
 
   /* ---- Game: build with colours and shapes ---- */
   {
@@ -4778,6 +4820,12 @@ export const LESSON_U2L5_SCENES: Scene[] = [
     ],
   },
   {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u2l5-blend', kind: 'sound-blend', bg: bgU2L5Sea,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'cat', img: `${A}/items/item-cat.png` }, { word: 'can', img: `${A}/items/item-can.png` }, { word: 'cab', img: `${A}/items/item-cab.png` }],
+  },
+  {
     id: 'u2l5-memory', kind: 'memory', bg: bgU2L5Sea, teacher: 'Find the pairs! Say each word.',
     pairs: [
       { id: 'ship', label: 'Ship', emoji: '\u{1F6A2}', img: itemShip },
@@ -5140,6 +5188,12 @@ export const LESSON_U2L6_SCENES: Scene[] = [
     ],
   },
   {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u2l6-blend', kind: 'sound-blend', bg: bgU2L6Map,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'ham', img: `${A}/items/item-ham.png` }, { word: 'rat', img: `${A}/items/item-rat.png` }, { word: 'bag', img: `${A}/items/item-bag.png` }],
+  },
+  {
     // Slide 19: the unit is finished — the champion medal goes into the Sticker Book.
     id: 'u2l6-sticker', kind: 'sticker-reward', bg: bgU2L6Rainbow, who: 'pip',
     teacher: 'Sticker time! The child opens the pack and puts the Color & Shape Champion medal in their Sticker Book.',
@@ -5412,6 +5466,12 @@ export const LESSON_U3L1_SCENES: Scene[] = [
       { word: 'car', letter: 'C', img: itemCar, emoji: '\u{1F697}' },
       { word: 'cat', letter: 'C', img: itemCat, emoji: '\u{1F431}' },
     ],
+  },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u3l1-blend', kind: 'sound-blend', bg: bgU3L1DashArena,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'cat', img: `${A}/items/item-cat.png` }, { word: 'can', img: `${A}/items/item-can.png` }, { word: 'cab', img: `${A}/items/item-cab.png` }],
   },
   {
     // Unit 2's Shape Builders as a toy workshop.
@@ -5714,6 +5774,12 @@ export const LESSON_U3L2_SCENES: Scene[] = [
       { word: 'train', emoji: '\u{1F682}', img: itemTrain },
       { word: 'ten', emoji: '\u{1F51F}', img: itemTen },
     ],
+  },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u3l2-blend', kind: 'sound-blend', bg: bgU3L1Room,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'hat', img: `${A}/items/item-hat.png` }, { word: 'bat', img: `${A}/items/item-bat.png` }, { word: 'mat', img: `${A}/items/item-mat.png` }],
   },
   {
     id: 'u3l2-quick-fire', kind: 'rapid-recall', bg: bgU3L1Room, who: 'pip', seconds: 3,
@@ -6026,6 +6092,12 @@ export const LESSON_U3L3_SCENES: Scene[] = [
     ],
   },
   { id: 'u3l3-brick-crush', kind: 'brick-crush', bg: bgU3L3ParkEmpty, teacher: 'Brick Crush! Listen to the sound, then tap every brick with that letter.', who: 'pip', letters: ['K', 'T', 'D', 'B'], rows: 3, cols: 7, goal: 10, seconds: 60 },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u3l3-blend', kind: 'sound-blend', bg: bgU3L3ParkEmpty,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'man', img: `${A}/items/item-man.png` }, { word: 'ham', img: `${A}/items/item-ham.png` }, { word: 'rat', img: `${A}/items/item-rat.png` }],
+  },
 
   /* 17-19 Story payoff, retell, personal */
   {
@@ -6302,6 +6374,12 @@ export const LESSON_U3L4_SCENES: Scene[] = [
       { word: 'teddy', emoji: '\u{1F9F8}', img: itemTeddy, letter: 'T' },
       { word: 'train', emoji: '\u{1F682}', img: itemTrain, letter: 'T' },
     ],
+  },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u3l4-blend', kind: 'sound-blend', bg: bgU3L4Room,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'cap', img: `${A}/items/item-cap.png` }, { word: 'map', img: `${A}/items/item-map.png` }, { word: 'pan', img: `${A}/items/item-pan.png` }],
   },
 
   /* 16-18 Story payoff, retell, personal */
@@ -6601,6 +6679,12 @@ export const LESSON_U3L5_SCENES: Scene[] = [
       { word: 'DOG', emoji: '\u{1F436}' },
       { word: 'POT', emoji: '\u{1F372}' },
     ],
+  },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u3l5-blend', kind: 'sound-blend', bg: bgU3L5Room,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'pot', img: `${A}/items/item-pot.png` }, { word: 'top', img: `${A}/items/item-top.png` }, { word: 'mop', img: `${A}/items/item-mop.png` }],
   },
 
   /* 16-18 Story payoff + retell */
@@ -6943,6 +7027,12 @@ export const LESSON_U3L6_SCENES: Scene[] = [
       { who: 'student', line: "It's a big red … ! / It's a small blue … !", bubble: 'right' },
     ],
   },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u3l6-blend', kind: 'sound-blend', bg: bgU3L6Prizes,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'tap', img: `${A}/items/item-tap.png` }, { word: 'dog', img: `${A}/items/item-dog.png` }, { word: 'rod', img: `${A}/items/item-rod.png` }],
+  },
 
   /* 19-20 Sticker + Home Mission */
   {
@@ -7218,6 +7308,12 @@ export const LESSON_U4L1_SCENES: Scene[] = [
       { word: 'A', letter: 'A', emoji: 'A' },
     ],
   },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u4l1-blend', kind: 'sound-blend', bg: bgU4L1Studio,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'bed', img: `${A}/items/item-bed.png` }, { word: 'hen', img: `${A}/items/item-hen.png` }, { word: 'ten', img: `${A}/items/item-ten.png` }, { word: 'net', img: `${A}/items/item-net.png` }],
+  },
 
   /* 16-18 Retell + perform */
   {
@@ -7465,6 +7561,12 @@ export const LESSON_U4L2_SCENES: Scene[] = [
     ],
   },
   { id: 'u4l2-trace-n', kind: 'trace', bg: bgU4L2Kitchen, who: 'mia', letter: 'N', phoneme: '/n/', word: 'nose', speakWord: false, teacher: 'Trace the big N with your finger! /n/ /n/ nose!' },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u4l2-blend', kind: 'sound-blend', bg: bgU4L2Kitchen,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'pen', img: `${A}/items/item-pen.png` }, { word: 'pan', img: `${A}/items/item-pan.png` }, { word: 'can', img: `${A}/items/item-can.png` }, { word: 'man', img: `${A}/items/item-man.png` }],
+  },
   {
     // Calm, untimed first-sound pick (owner: the N Dash was too fast and hard to focus on).
     id: 'u4l2-pick-n', kind: 'sound-pick', bg: bgU4L2Kitchen, who: 'pip',
@@ -7726,6 +7828,12 @@ export const LESSON_U4L3_SCENES: Scene[] = [
     ],
   },
   {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u4l3-blend', kind: 'sound-blend', bg: bgU4L3Beach,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'fan', img: `${A}/items/item-fan.png` }, { word: 'cob', img: `${A}/items/item-cob.png` }, { word: 'web', img: `${A}/items/item-web.png` }, { word: 'peg', img: `${A}/items/item-peg.png` }],
+  },
+  {
     id: 'u4l3-first-letter', kind: 'word-build', bg: bgU4L3Sand, teacher: 'Listen! Which letter does it start with? Tap F or N.',
     rounds: [
       { word: 'fish', blankIndex: 0, answer: 'F', choices: ['F', 'N'], img: itemFish, emoji: '\u{1F41F}' },
@@ -7960,6 +8068,12 @@ export const LESSON_U4L4_SCENES: Scene[] = [
       { word: 'book', img: itemBook, emoji: '\u{1F4D6}', letter: 'B' },
       { word: 'bear', img: itemBear, emoji: '\u{1F43B}', letter: 'B' },
     ],
+  },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u4l4-blend', kind: 'sound-blend', bg: bgU4L4Lawn,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'bed', img: `${A}/items/item-bed.png` }, { word: 'cab', img: `${A}/items/item-cab.png` }, { word: 'bag', img: `${A}/items/item-bag.png` }, { word: 'bat', img: `${A}/items/item-bat.png` }],
   },
 
   /* 14-15 Retell + perform */
@@ -8226,6 +8340,12 @@ export const LESSON_U4L5_SCENES: Scene[] = [
       { word: 'FAN', emoji: '\u{1FAAD}' },
     ],
   },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u4l5-blend', kind: 'sound-blend', bg: bgU4L5Lawn,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'tap', img: `${A}/items/item-tap.png` }, { word: 'pot', img: `${A}/items/item-pot.png` }, { word: 'top', img: `${A}/items/item-top.png` }, { word: 'ten', img: `${A}/items/item-ten.png` }],
+  },
 
   /* 15-16 Retell + perform */
   {
@@ -8455,6 +8575,12 @@ export const LESSON_U4L6_SCENES: Scene[] = [
     ],
   },
   { id: 'u4l6-trace-f', kind: 'trace', bg: bgU4L6Room, who: 'pip', letter: 'F', phoneme: '/f/', word: 'feet', speakWord: false, teacher: 'Trace the big F with your finger! /f/ /f/ feet!' },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u4l6-blend', kind: 'sound-blend', bg: bgU4L6Room,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'cap', img: `${A}/items/item-cap.png` }, { word: 'map', img: `${A}/items/item-map.png` }, { word: 'fan', img: `${A}/items/item-fan.png` }, { word: 'mop', img: `${A}/items/item-mop.png` }],
+  },
 
   /* 13 Perform */
   {
@@ -8679,6 +8805,12 @@ export const LESSON_U5L2_SCENES: Scene[] = [
     ],
   },
   { id: 'u5l2-trace-s', kind: 'trace', bg: bgU5L2Garden, who: 'pip', letter: 'S', phoneme: '/s/', word: 'sister', speakWord: false, teacher: 'Trace the big S with your finger! /s/ /s/ sister!' },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u5l2-blend', kind: 'sound-blend', bg: bgU5L2Garden,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'net', img: `${A}/items/item-net.png` }, { word: 'pen', img: `${A}/items/item-pen.png` }, { word: 'web', img: `${A}/items/item-web.png` }, { word: 'peg', img: `${A}/items/item-peg.png` }],
+  },
   {
     id: 'u5l2-pick-s', kind: 'sound-pick', bg: bgU5L2Garden, who: 'pip',
     teacher: 'Which one? Listen to the sound, then tap the picture that starts with it. Say the word too!',
@@ -8910,6 +9042,12 @@ export const LESSON_U5L3_SCENES: Scene[] = [
       { word: 'sun', emoji: '\u{2600}\u{FE0F}', img: itemSun, hit: false },
       { word: 'snake', emoji: '\u{1F40D}', img: itemSnake, hit: false },
     ],
+  },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u5l3-blend', kind: 'sound-blend', bg: bgU5L3Garden,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'dog', img: `${A}/items/item-dog.png` }, { word: 'bag', img: `${A}/items/item-bag.png` }, { word: 'peg', img: `${A}/items/item-peg.png` }, { word: 'cap', img: `${A}/items/item-cap.png` }],
   },
 
   /* 13 Perform */
@@ -9152,6 +9290,12 @@ export const LESSON_U5L4_SCENES: Scene[] = [
       { word: 'snake', img: itemSnake, emoji: '\u{1F40D}', letter: 'S' },
       { word: 'thread', img: itemThread, emoji: '\u{1F9F5}', letter: 'TH' },
     ],
+  },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u5l4-blend', kind: 'sound-blend', bg: bgU5L4Tree,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'map', img: `${A}/items/item-map.png` }, { word: 'pan', img: `${A}/items/item-pan.png` }, { word: 'tap', img: `${A}/items/item-tap.png` }, { word: 'fan', img: `${A}/items/item-fan.png` }],
   },
 
   /* 14 Perform */
@@ -9425,6 +9569,12 @@ export const LESSON_U5L5_SCENES: Scene[] = [
       { word: 'DUCK', emoji: '\u{1F986}' },
     ],
   },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u5l5-blend', kind: 'sound-blend', bg: bgU5L5Home,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'rod', img: `${A}/items/item-rod.png` }, { word: 'bed', img: `${A}/items/item-bed.png` }, { word: 'dog', img: `${A}/items/item-dog.png` }, { word: 'pot', img: `${A}/items/item-pot.png` }],
+  },
 
   /* 14 Perform */
   {
@@ -9655,6 +9805,12 @@ export const LESSON_U5L6_SCENES: Scene[] = [
       { who: 'student', line: 'Your brother, your sister, the baby and you!', bubble: 'right' },
     ],
   },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u5l6-blend', kind: 'sound-blend', bg: bgU5L6Host,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'top', img: `${A}/items/item-top.png` }, { word: 'mop', img: `${A}/items/item-mop.png` }, { word: 'cob', img: `${A}/items/item-cob.png` }, { word: 'hen', img: `${A}/items/item-hen.png` }],
+  },
 
   /* 12-13 Sticker + Home Mission */
   {
@@ -9881,6 +10037,12 @@ export const LESSON_U6L1_SCENES: Scene[] = [
       { word: 'T', letter: 'T', emoji: 'T' },
     ],
   },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u6l1-blend', kind: 'sound-blend', bg: bgU6L1Front,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'ten', img: `${A}/items/item-ten.png` }, { word: 'net', img: `${A}/items/item-net.png` }, { word: 'pen', img: `${A}/items/item-pen.png` }, { word: 'web', img: `${A}/items/item-web.png` }],
+  },
 
   /* 16-18 My house */
   {
@@ -10095,6 +10257,12 @@ export const LESSON_U6L2_SCENES: Scene[] = [
       { word: 'chick', emoji: '\u{1F424}', img: itemChick },
       { word: 'cherries', emoji: '\u{1F352}', img: itemCherries },
     ],
+  },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u6l2-blend', kind: 'sound-blend', bg: bgU6L2Room,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'cat', img: `${A}/items/item-cat.png` }, { word: 'cap', img: `${A}/items/item-cap.png` }, { word: 'map', img: `${A}/items/item-map.png` }, { word: 'pan', img: `${A}/items/item-pan.png` }],
   },
   {
     id: 'u6l2-pick-ch', kind: 'sound-pick', bg: bgU6L2Room, who: 'pip',
@@ -10350,6 +10518,12 @@ export const LESSON_U6L3_SCENES: Scene[] = [
       { who: 'student', line: 'Mom is in the kitchen!', bubble: 'right' },
     ],
   },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u6l3-blend', kind: 'sound-blend', bg: bgU6L3Family,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'tap', img: `${A}/items/item-tap.png` }, { word: 'fan', img: `${A}/items/item-fan.png` }, { word: 'pot', img: `${A}/items/item-pot.png` }, { word: 'top', img: `${A}/items/item-top.png` }],
+  },
 
   /* 19-20 Sticker + Home Mission */
   {
@@ -10561,6 +10735,12 @@ export const LESSON_U6L4_SCENES: Scene[] = [
       { word: 'bear', img: itemBear, emoji: '\u{1F9F8}', letter: 'B' },
       { word: 'snake', img: itemSnake, emoji: '\u{1F40D}', letter: 'S' },
     ],
+  },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u6l4-blend', kind: 'sound-blend', bg: bgU6L4Street,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'mop', img: `${A}/items/item-mop.png` }, { word: 'rod', img: `${A}/items/item-rod.png` }, { word: 'cob', img: `${A}/items/item-cob.png` }, { word: 'bed', img: `${A}/items/item-bed.png` }],
   },
 
   /* 14 Show and tell */
@@ -10803,6 +10983,12 @@ export const LESSON_U6L5_SCENES: Scene[] = [
       { who: 'pip', line: 'Is this your house?', bubble: 'right' },
       { who: 'student', line: 'Yes, it is!', bubble: 'right' },
     ],
+  },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u6l5-blend', kind: 'sound-blend', bg: bgU6L5Street,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'hen', img: `${A}/items/item-hen.png` }, { word: 'ten', img: `${A}/items/item-ten.png` }, { word: 'net', img: `${A}/items/item-net.png` }, { word: 'pen', img: `${A}/items/item-pen.png` }],
   },
 
   /* 12-13 Sticker + Home Mission */
@@ -11177,6 +11363,12 @@ export const LESSON_U5L1_SCENES: Scene[] = [
     ],
   },
   {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u5l1-blend', kind: 'sound-blend', bg: bgU5L1FamilyHome,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'dog', img: `${A}/items/item-dog.png` }, { word: 'rod', img: `${A}/items/item-rod.png` }, { word: 'cob', img: `${A}/items/item-cob.png` }, { word: 'hen', img: `${A}/items/item-hen.png` }],
+  },
+  {
     id: 'u5l1-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
     durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
     lineDurationsMs: [3580, 4020, 4980, 7482],
@@ -11327,6 +11519,12 @@ export const LESSON_U6L6_SCENES: Scene[] = [
       { who: 'pip', line: 'Wow! What else?', bubble: 'right' },
       { who: 'student', line: 'This is my kitchen. I love my house!', bubble: 'right' },
     ],
+  },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u6l6-blend', kind: 'sound-blend', bg: bgU6L6GameNight,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'web', img: `${A}/items/item-web.png` }, { word: 'peg', img: `${A}/items/item-peg.png` }, { word: 'hat', img: `${A}/items/item-hat.png` }, { word: 'mat', img: `${A}/items/item-mat.png` }],
   },
 
   /* 11-12 Sticker + Home Mission */
@@ -11519,6 +11717,12 @@ export const LESSON_U7L1_SCENES: Scene[] = [
       { word: 'C', letter: 'C', emoji: 'C' },
       { word: 'B', letter: 'B', emoji: 'B' },
     ],
+  },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u7l1-blend', kind: 'sound-blend', bg: bgU7L1ShopEmpty,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'ham', img: `${A}/items/item-ham.png` }, { word: 'rat', img: `${A}/items/item-rat.png` }, { word: 'cat', img: `${A}/items/item-cat.png` }, { word: 'can', img: `${A}/items/item-can.png` }],
   },
 
   /* 11 My pet */
@@ -11727,6 +11931,12 @@ export const LESSON_U7L2_SCENES: Scene[] = [
       { who: 'student', line: 'Moo, moo!', bubble: 'right' },
     ],
   },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u7l2-blend', kind: 'sound-blend', bg: bgU7L2Farm,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'cab', img: `${A}/items/item-cab.png` }, { word: 'cap', img: `${A}/items/item-cap.png` }, { word: 'map', img: `${A}/items/item-map.png` }, { word: 'pan', img: `${A}/items/item-pan.png` }],
+  },
 
   /* 12-13 Sticker + Home Mission */
   {
@@ -11880,6 +12090,12 @@ export const LESSON_U7L3_SCENES: Scene[] = [
       { word: 'duck', emoji: '\u{1F986}', img: itemFarmDuck, hit: false },
       { word: 'chicken', emoji: '\u{1F414}', img: itemHen, hit: false },
     ],
+  },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u7l3-blend', kind: 'sound-blend', bg: bgU7L3PondEmpty,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'tap', img: `${A}/items/item-tap.png` }, { word: 'fan', img: `${A}/items/item-fan.png` }, { word: 'pot', img: `${A}/items/item-pot.png` }, { word: 'top', img: `${A}/items/item-top.png` }],
   },
   {
     id: 'u7l3-pip-asks', kind: 'join-stage', bg: bgU7L3Pond, teacher: 'Pip asks about the animals. Any answer is fine!', cast: ['pip'],
@@ -12101,6 +12317,12 @@ export const LESSON_U7L4_SCENES: Scene[] = [
       { word: 'cow', img: itemCow, emoji: '\u{1F404}', letter: 'C' },
       { word: 'hat', img: itemHat, emoji: '\u{1F452}', letter: 'H' },
     ],
+  },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u7l4-blend', kind: 'sound-blend', bg: bgU7L4FairEmpty,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'mop', img: `${A}/items/item-mop.png` }, { word: 'dog', img: `${A}/items/item-dog.png` }, { word: 'rod', img: `${A}/items/item-rod.png` }, { word: 'cob', img: `${A}/items/item-cob.png` }],
   },
 
   /* 10 You ask */
@@ -12347,6 +12569,12 @@ export const LESSON_U7L5_SCENES: Scene[] = [
       { who: 'student', line: "It's a cow!", bubble: 'right' },
     ],
   },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u7l5-blend', kind: 'sound-blend', bg: bgU7L5Yard,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'bed', img: `${A}/items/item-bed.png` }, { word: 'hen', img: `${A}/items/item-hen.png` }, { word: 'ten', img: `${A}/items/item-ten.png` }, { word: 'net', img: `${A}/items/item-net.png` }],
+  },
 
   /* 12-13 Sticker + Home Mission */
   {
@@ -12538,6 +12766,12 @@ export const LESSON_U7L6_SCENES: Scene[] = [
       { who: 'pip', line: "It's a duck! You are a great farmer!", bubble: 'right' },
     ],
   },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u7l6-blend', kind: 'sound-blend', bg: bgU7L6Night,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'pen', img: `${A}/items/item-pen.png` }, { word: 'web', img: `${A}/items/item-web.png` }, { word: 'peg', img: `${A}/items/item-peg.png` }, { word: 'hat', img: `${A}/items/item-hat.png` }],
+  },
 
   /* 11-12 Sticker + Home Mission */
   {
@@ -12721,6 +12955,12 @@ export const LESSON_U8L1_SCENES: Scene[] = [
       { word: 'B', letter: 'B', emoji: 'B' },
       { word: 'M', letter: 'M', emoji: 'M' },
     ],
+  },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u8l1-blend', kind: 'sound-blend', bg: bgU8L1PicnicEmpty,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'bat', img: `${A}/items/item-bat.png` }, { word: 'mat', img: `${A}/items/item-mat.png` }, { word: 'man', img: `${A}/items/item-man.png` }, { word: 'ham', img: `${A}/items/item-ham.png` }],
   },
 
   /* 11 My picnic */
@@ -12932,6 +13172,12 @@ export const LESSON_U8L2_SCENES: Scene[] = [
       { who: 'pip', line: 'Thank you! Yum!', bubble: 'right' },
     ],
   },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u8l2-blend', kind: 'sound-blend', bg: bgU8L2Cafe,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'rat', img: `${A}/items/item-rat.png` }, { word: 'cat', img: `${A}/items/item-cat.png` }, { word: 'can', img: `${A}/items/item-can.png` }, { word: 'cab', img: `${A}/items/item-cab.png` }],
+  },
 
   /* 12-13 Sticker + Home Mission */
   {
@@ -13118,6 +13364,12 @@ export const LESSON_U8L3_SCENES: Scene[] = [
     ],
   },
   { id: 'u8l3-bricks', kind: 'brick-crush', bg: bgU8L3PartyEmpty, teacher: 'Brick Crush! All the food sounds of the unit. Listen, then smash every brick with that letter!', who: 'pip', letters: ['P', 'C', 'B', 'J'], rows: 5, cols: 6, goal: 14, seconds: 60 },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u8l3-blend', kind: 'sound-blend', bg: bgU8L3PartyEmpty,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'cap', img: `${A}/items/item-cap.png` }, { word: 'map', img: `${A}/items/item-map.png` }, { word: 'pan', img: `${A}/items/item-pan.png` }, { word: 'tap', img: `${A}/items/item-tap.png` }],
+  },
 
   /* 13 My party */
   {
@@ -13313,6 +13565,12 @@ export const LESSON_U8L4_SCENES: Scene[] = [
       { word: 'ball', img: itemBall, emoji: '\u{26BD}', letter: 'B' },
       { word: 'bag', img: itemBag, emoji: '\u{1F45C}', letter: 'B' },
     ],
+  },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u8l4-blend', kind: 'sound-blend', bg: bgU8L4OrchardEmpty,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'bag', img: `${A}/items/item-bag.png` }, { word: 'fan', img: `${A}/items/item-fan.png` }, { word: 'pot', img: `${A}/items/item-pot.png` }, { word: 'top', img: `${A}/items/item-top.png` }],
   },
 
   /* 12 My favourite */
@@ -13528,6 +13786,12 @@ export const LESSON_U8L5_SCENES: Scene[] = [
       { word: 'BUG', emoji: '\u{1F41B}' },
     ],
   },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u8l5-blend', kind: 'sound-blend', bg: bgU8L5Garden,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'mop', img: `${A}/items/item-mop.png` }, { word: 'dog', img: `${A}/items/item-dog.png` }, { word: 'rod', img: `${A}/items/item-rod.png` }, { word: 'cob', img: `${A}/items/item-cob.png` }],
+  },
 
   /* 12 Be the caterpillar */
   {
@@ -13726,6 +13990,12 @@ export const LESSON_U8L6_SCENES: Scene[] = [
       { who: 'student', line: 'Juice, please! Thank you!', bubble: 'right' },
     ],
   },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u8l6-blend', kind: 'sound-blend', bg: bgU8L6Dining,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'bed', img: `${A}/items/item-bed.png` }, { word: 'hen', img: `${A}/items/item-hen.png` }, { word: 'ten', img: `${A}/items/item-ten.png` }, { word: 'net', img: `${A}/items/item-net.png` }],
+  },
 
   /* 12-13 Trophy + Home Mission */
   {
@@ -13907,6 +14177,12 @@ export const LESSON_U9L1_SCENES: Scene[] = [
       { word: 'dog', emoji: '\u{1F415}', img: itemDog },
       { word: 'doll', emoji: '\u{1FA86}', img: itemDoll },
     ],
+  },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u9l1-blend', kind: 'sound-blend', bg: bgU9L1LaundryEmpty,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'dog', img: `${A}/items/item-dog.png` }, { word: 'rod', img: `${A}/items/item-rod.png` }, { word: 'bed', img: `${A}/items/item-bed.png` }, { word: 'pen', img: `${A}/items/item-pen.png` }],
   },
   {
     id: 'u9l1-quick', kind: 'rapid-recall', bg: bgU9L1LaundryEmpty, who: 'pip', seconds: 4,
@@ -14113,6 +14389,12 @@ export const LESSON_U9L2_SCENES: Scene[] = [
       { sound: 's', answer: 1, options: [{ word: 'hen', img: itemHen }, { word: 'sun', img: itemSun }, { word: 'house', img: itemHouse }] },
     ],
   },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u9l2-blend', kind: 'sound-blend', bg: bgU9L2HallEmpty,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'web', img: `${A}/items/item-web.png` }, { word: 'peg', img: `${A}/items/item-peg.png` }, { word: 'hat', img: `${A}/items/item-hat.png` }, { word: 'bat', img: `${A}/items/item-bat.png` }],
+  },
 
   /* 12-13 Sticker + Home Mission */
   {
@@ -14308,6 +14590,12 @@ export const LESSON_U9L3_SCENES: Scene[] = [
     ],
   },
   { id: 'u9l3-bricks', kind: 'brick-crush', bg: bgU9L3Shop, teacher: 'Brick Crush! T for T-shirt, C for coat. Listen, then smash every brick with that letter!', who: 'pip', letters: ['T', 'C', 'S', 'H'], rows: 5, cols: 6, goal: 14, seconds: 60 },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u9l3-blend', kind: 'sound-blend', bg: bgU9L3Shop,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'mat', img: `${A}/items/item-mat.png` }, { word: 'rat', img: `${A}/items/item-rat.png` }, { word: 'cat', img: `${A}/items/item-cat.png` }, { word: 'tap', img: `${A}/items/item-tap.png` }],
+  },
 
   /* 13-14 Sticker + Home Mission */
   {
@@ -14502,6 +14790,12 @@ export const LESSON_U9L4_SCENES: Scene[] = [
       { word: 'D', letter: 'D', emoji: 'D' },
       { word: 'T', letter: 'T', emoji: 'T' },
     ],
+  },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u9l4-blend', kind: 'sound-blend', bg: bgU9L4Stage,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'cap', img: `${A}/items/item-cap.png` }, { word: 'map', img: `${A}/items/item-map.png` }, { word: 'pan', img: `${A}/items/item-pan.png` }, { word: 'pot', img: `${A}/items/item-pot.png` }],
   },
 
   /* 13-14 Sticker + Home Mission */
@@ -14730,6 +15024,12 @@ export const LESSON_U9L5_SCENES: Scene[] = [
       { word: 'snake', img: itemSnake, emoji: '\u{1F40D}', letter: 'S' },
     ],
   },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u9l5-blend', kind: 'sound-blend', bg: bgU9L5GardenEmpty,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'web', img: `${A}/items/item-web.png` }, { word: 'man', img: `${A}/items/item-man.png` }, { word: 'ham', img: `${A}/items/item-ham.png` }, { word: 'can', img: `${A}/items/item-can.png` }],
+  },
 
   /* 14-15 Sticker + Home Mission */
   {
@@ -14914,6 +15214,12 @@ export const LESSON_U9L6_SCENES: Scene[] = [
 
   /* 11 Sounds review: D, T, P, W */
   { id: 'u9l6-bricks', kind: 'brick-crush', bg: bgU9L6PlayroomEmpty, teacher: 'Brick Crush! D for dress, T for T-shirt, P for pants, W for white. Listen, then smash every brick with that letter!', who: 'pip', letters: ['D', 'T', 'P', 'W'], rows: 5, cols: 6, goal: 14, seconds: 60 },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u9l6-blend', kind: 'sound-blend', bg: bgU9L6PlayroomEmpty,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'cab', img: `${A}/items/item-cab.png` }, { word: 'bag', img: `${A}/items/item-bag.png` }, { word: 'fan', img: `${A}/items/item-fan.png` }, { word: 'top', img: `${A}/items/item-top.png` }],
+  },
 
   /* 12-13 Sticker + Home Mission */
   {

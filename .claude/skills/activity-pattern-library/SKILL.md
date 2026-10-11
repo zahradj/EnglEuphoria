@@ -280,6 +280,14 @@ letter sound, `playLetterPhonic`, never TTS) -> Blend! (cars roll together, soun
 picture of the word out of three (the other rounds' pictures). 3-5 decodable words with pictures (`/lep1/items/item-<word>.png`);
 `sounds: ['sh','i','p']` for digraphs. Homework: the same game as the Homework Quest level `kind: 'sound-blend'`.
 
+**Pre-A1 (owner, 2026-10-11: "add blending sounds game for the student to start reading"):** every lesson from Unit 1
+Lesson 4 has a Blend It! page — the first lesson where the child knows a vowel (a, U1L3) and enough consonants (h m w n
+s b t) for real words. Words use ONLY sounds already modelled (o from U3L5, e from U4L1; no i/u yet), favour the newest
+sound, and come from pictures in `public/lep1/items` (word pictures are made nine at a time as one Canva sticker sheet,
+cut by `scripts/split-sticker-sheet.py`). Plan / insert with `scripts/plan-blend-rollout.py` (it keeps the letter
+timeline); for a NEW lesson add its letters to `TAUGHT` there and run `--apply`. The page goes right after the lesson's
+phonics page (or just before the sticker). `sound-blend` is a routine kind in `lessonVariety.ts`.
+
 ```ts
 { id: 'wt-blend', kind: 'sound-blend', bg: bgReading, teacher: 'Tap each car and say the sound, press Blend!, then find the picture.',
   rounds: [{ word: 'hat', img: '/lep1/items/item-hat.png' }, { word: 'cat', img: '/lep1/items/item-cat.png' }, { word: 'mat', img: '/lep1/items/item-mat.png' }] }

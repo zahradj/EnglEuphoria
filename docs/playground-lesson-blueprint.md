@@ -147,7 +147,7 @@ How each skeleton slide is built with the real scene kinds (see
 | 10-11 | Q→A, role swap | `join-stage` |
 | 12 | Memory match | `memory`, `train-recall` |
 | 13 | Personal choice | `join-stage` with a real object, `secret-card` |
-| 14 | Phonics micro-moment | **`sound-blend` (Blend It! / Sound Train) — universal, every Playground lesson (owner 2026-10-10)**: tap each sound (recorded letter sounds), Blend!, find the picture. Pre-A1 may add `sound-model` + `trace`/`dash` before it |
+| 14 | Phonics micro-moment | **`sound-blend` (Blend It! / Sound Train) — universal, every Playground lesson (owner 2026-10-10)**: tap each sound (recorded letter sounds), Blend!, find the picture. Pre-A1 may add `sound-model` + `trace`/`dash` before it. Pre-A1 starts blending at Unit 1 Lesson 4 with words of taught sounds only (`scripts/plan-blend-rollout.py`) |
 | 15 | Quick-fire flashcards (3 s) | `rapid-recall` |
 | 16 | Story payoff | `story-video` (part 2) |
 | 17-18 | Sing-back / show your favourite | `song`, `join-stage` |

@@ -22,6 +22,8 @@ import type { Scene } from './unit1/scenes';
 export const ROUTINE_KINDS: ReadonlySet<string> = new Set([
   'title-card', 'song', 'cinematic', 'recall-warmup', 'story-video', 'story-order', 'listen-repeat-cards', 'tpr-actions',
   'join-stage', 'spin-wheel', 'sound-model', 'trace', 'echo', 'sticker-reward', 'home-mission', 'finale',
+  // Blend It! is in every lesson on purpose (blueprint slot 14, owner 2026-10-11: start reading by blending).
+  'sound-blend',
 ]);
 
 /** Apps, schools and exam boards to research before every lesson (rotate; never only one). */
