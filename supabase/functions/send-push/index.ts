@@ -39,7 +39,7 @@ serve(async (req) => {
   }
 
   try {
-    const { user_id, title, body, url, tag } = await req.json();
+    const { user_id, title, body, url, tag, type } = await req.json();
     if (typeof user_id !== "string" || !/^[0-9a-f-]{36}$/i.test(user_id) || typeof title !== "string" || !title) {
       return json({ error: "user_id and title are required" }, 400);
     }
@@ -60,15 +60,18 @@ serve(async (req) => {
       title: title.slice(0, 120),
       body: typeof body === "string" ? body.slice(0, 300) : "",
       url: sitePath(url),
-      tag: typeof tag === "string" ? tag.slice(0, 60) : undefined,
+      tag: typeof tag === "string" ? tag.slice(0, 80) : undefined,
+      // A lesson about to start must reach a sleeping phone or tablet at once and stay on screen until seen.
+      urgent: type === "lesson_reminder",
     });
+    const urgent = type === "lesson_reminder";
 
     let sent = 0;
     const gone: string[] = [];
     await Promise.all(
       subs.map(async (s) => {
         try {
-          await webpush.sendNotification({ endpoint: s.endpoint, keys: { p256dh: s.p256dh, auth: s.auth } }, payload, { TTL: 60 * 60 * 24 });
+          await webpush.sendNotification({ endpoint: s.endpoint, keys: { p256dh: s.p256dh, auth: s.auth } }, payload, urgent ? { TTL: 60 * 20, urgency: "high" } : { TTL: 60 * 60 * 24 });
           sent++;
         } catch (e) {
           const status = (e as { statusCode?: number }).statusCode;

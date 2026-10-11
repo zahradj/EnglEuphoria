@@ -10,6 +10,10 @@ self.addEventListener('push', (event) => {
       icon: '/icons/icon-192.png',
       badge: '/favicon-48x48.png',
       tag: data.tag || undefined,
+      renotify: !!data.tag,
+      // Lesson reminders: stay on screen (phone / tablet) and buzz, so a student or teacher does not miss the start.
+      requireInteraction: !!data.urgent,
+      vibrate: data.urgent ? [250, 120, 250, 120, 250] : [120],
       data: { url: data.url || '/' },
     }),
   );

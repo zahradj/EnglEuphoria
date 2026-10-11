@@ -84,7 +84,9 @@ BEGIN
         'user_id', v_row->>'user_id',
         'title', v_row->>'title',
         'body', coalesce(v_row->>'content', v_row->>'message', ''),
-        'url', v_row->>'action_url'
+        'url', v_row->>'action_url',
+        'type', v_row->>'type',
+        'tag', coalesce(v_row->>'type', 'notification') || ':' || coalesce(v_row->>'action_url', '')
       )
     );
   EXCEPTION WHEN OTHERS THEN

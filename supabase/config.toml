@@ -159,6 +159,8 @@ project_id = "dcoxpyzoqjvmuuygvlme"
     verify_jwt = false
   [functions.send-push]
     verify_jwt = false
+  [functions.send-lesson-push-reminders]
+    verify_jwt = false
   [functions.send-teacher-emails]
     verify_jwt = true
   [functions.send-user-emails]
