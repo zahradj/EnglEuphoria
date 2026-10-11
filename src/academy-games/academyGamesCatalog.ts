@@ -71,6 +71,23 @@ export const ACADEMY_GAMES: AcademyGame[] = [
       'Say it: record three takes and listen to yourself. Your voice stays on your device and is never scored.',
     ],
   },
+  {
+    id: 'time-hop',
+    title: 'Time Hop',
+    tagline: 'Hop between present and past. Learn every verb as a pair (go – went), the four rules for regular verbs, and the time words that tell you which form to use.',
+    skill: 'Grammar · Verbs',
+    levels: ['A1', 'A2'],
+    minutes: '15–20 min',
+    gradient: 'linear-gradient(135deg,#312e81 0%,#4338ca 50%,#0891b2 100%)',
+    cover: '/academy/games/time-hop-cover.jpg',
+    method: 'Learn as pairs → learn the -ed spelling rules → read the time word → type it from memory in both directions → come back tomorrow (spaced review).',
+    howToPlay: [
+      'Twin Match: match each present word with its past twin (go – went).',
+      'Past Rules: choose the right spelling of regular verbs (walked, liked, studied, stopped).',
+      'Time Gate: "every day" or "yesterday"? Choose the form the time word asks for.',
+      'Recall: type the past from the present, and the present from the past. Slips come back in the Memory Vault.',
+    ],
+  },
 ];
 
 export const getAcademyGame = (id: string | undefined) => ACADEMY_GAMES.find((g) => g.id === id);
