@@ -353,5 +353,10 @@
     "path": "public/lep1/audio/what-are-you-wearing-song-u9l4.mp3",
     "bytes": 321037,
     "sha256": "233654dd4e98f79e503909d446a7357bb7086ad73a8f3609e3112cc09156f714"
+  },
+  "u9l5-my-shoes-are-white": {
+    "path": "public/lep1/audio/my-shoes-are-white-song-u9l5.mp3",
+    "bytes": 321037,
+    "sha256": "bb75d29ad7b440d376b9ff827501c8c117096149d5eeb90cfc5197c1943512f5"
   }
 }

@@ -14549,6 +14549,7 @@ export const LESSON_U9L4_SCENES: Scene[] = [
 
 const u9l5Page = (n: number) => `${A}/scenes/bg-u9l5-story-${n}-wide.png`;
 const bgU9L5Garden = u9l5Page(1);
+const bgU9L5GardenEmpty = `${A}/scenes/bg-u9l5-garden-empty-wide.png`;
 
 export const LESSON_U9L5_TITLE = "Pip's White Shoes";
 export const LESSON_U9L5_OBJECTIVE = 'Follow a short picture story and say the colour of the shoes ("My shoes are red! My shoes are white!"), make Pip\'s shoes the colour he asks for, put the story in order, and hear the first sound W (white, water), by watching, listening, moving and playing, no reading.';
@@ -14557,7 +14558,7 @@ export const LESSON_U9L5_SCENES: Scene[] = [
   { id: 'u9l5-title', kind: 'title-card', bg: bgU9L5Garden, level: 'Pre-A1', unit: 'Unit 9', lessonLabel: 'Lesson 5', title: "Pip's White Shoes", subtitle: 'A story' },
   {
     // Remember? (owner, 2026-10-07): a quick warm-up of Unit 9 · Lesson 4 · What Are You Wearing?
-    id: 'u9l5-recall-warmup', kind: 'recall-warmup', bg: bgU9L5Garden, who: 'mia', mode: 'click',
+    id: 'u9l5-recall-warmup', kind: 'recall-warmup', bg: bgU9L5GardenEmpty, who: 'mia', mode: 'click',
     fromLabel: 'Lesson 4 · What Are You Wearing?',
     teacher: 'Warm-up from last lesson: Mia says what she is wearing, the child clicks it and says it too.',
     items: [
@@ -14597,7 +14598,7 @@ export const LESSON_U9L5_SCENES: Scene[] = [
 
   /* 5-6 The words, move */
   {
-    id: 'u9l5-words', kind: 'listen-repeat-cards', textSide: 'right', bg: bgU9L5Garden, teacher: 'Listen, then say it like Pip: "My shoes are red!" Point to your own shoes too.',
+    id: 'u9l5-words', kind: 'listen-repeat-cards', textSide: 'right', bg: bgU9L5GardenEmpty, teacher: 'Listen, then say it like Pip: "My shoes are red!" Point to your own shoes too.',
     cards: [
       { who: 'pip', sentence: 'My shoes are white!', img: u9l5Page(1), imgLabel: 'white' },
       { who: 'pip', sentence: 'My shoes are red!', img: u9l5Page(3), imgLabel: 'red' },
@@ -14606,7 +14607,7 @@ export const LESSON_U9L5_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'u9l5-move', kind: 'tpr-actions', bg: bgU9L5Garden, who: 'pip',
+    id: 'u9l5-move', kind: 'tpr-actions', bg: bgU9L5GardenEmpty, who: 'pip',
     teacher: 'Stand up! Walk the story with Pip.',
     rounds: [
       { line: 'Walk, walk, walk! Squish!', emoji: '\u{1F34E}', img: u9l5Page(2) },
@@ -14618,7 +14619,7 @@ export const LESSON_U9L5_SCENES: Scene[] = [
 
   /* 7 Signature game (new): Shoe Painter */
   {
-    id: 'u9l5-shoe-painter', kind: 'shoe-painter', bg: bgU9L5Garden, who: 'pip',
+    id: 'u9l5-shoe-painter', kind: 'shoe-painter', bg: bgU9L5GardenEmpty, who: 'pip',
     teacher: 'Shoe Painter! Listen to Pip: which colour? Tap that paint pot — the paint flies onto his shoes. Then say it with Pip: "My shoes are red!"',
     paints: [
       { word: 'red', hex: '#E53935' },
@@ -14641,6 +14642,7 @@ export const LESSON_U9L5_SCENES: Scene[] = [
   {
     id: 'u9l5-song', kind: 'song', bg: u9l5Page(9), title: '\u{1F3B5} My Shoes Are White \u{1F3B5}', teacher: 'Sing and act: walk, squish, splat, splash — point to your shoes on every colour!',
     durationSeconds: 20, bigWord: 'Shoes', songUrl: `${A}/audio/my-shoes-are-white-song-u9l5.mp3?v=1`,
+    lineDurationsMs: [4840, 4860, 3060, 7302],
     songPrompt: 'Cheerful bouncy kids walking song about colourful shoes',
     lyrics: [
       { who: 'pip', text: 'My shoes are white! White, white, white!', emotion: 'happy' },
@@ -14652,7 +14654,7 @@ export const LESSON_U9L5_SCENES: Scene[] = [
 
   /* 9-11 More games */
   {
-    id: 'u9l5-true-or-not', kind: 'tick-cross', bg: bgU9L5Garden, who: 'bella',
+    id: 'u9l5-true-or-not', kind: 'tick-cross', bg: bgU9L5GardenEmpty, who: 'bella',
     teacher: 'Look and listen. Is it right? Tap ✓ or ✗.',
     rounds: [
       { img: u9l5Page(1), sentence: 'His shoes are white.', isTrue: true },
@@ -14662,7 +14664,7 @@ export const LESSON_U9L5_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'u9l5-story-order', kind: 'story-order', bg: bgU9L5Garden, who: 'bella',
+    id: 'u9l5-story-order', kind: 'story-order', bg: bgU9L5GardenEmpty, who: 'bella',
     teacher: 'Put the story in order! Then tell it with Bella: first white, then red, then blue, then brown.',
     frames: [
       { img: u9l5Page(1), caption: 'My shoes are white!', who: 'pip' },
@@ -14672,7 +14674,7 @@ export const LESSON_U9L5_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'u9l5-who-said-it', kind: 'who-said-it', bg: bgU9L5Garden, teacher: 'Who said it? Listen to the voice and tap the friend: Pip, Bella or Mia.',
+    id: 'u9l5-who-said-it', kind: 'who-said-it', bg: bgU9L5GardenEmpty, teacher: 'Who said it? Listen to the voice and tap the friend: Pip, Bella or Mia.',
     rounds: [
       { line: 'My shoes are red!', who: 'pip', emotion: 'happy' },
       { line: "What colour are Pip's shoes now?", who: 'bella', emotion: 'neutral' },
@@ -14681,7 +14683,7 @@ export const LESSON_U9L5_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'u9l5-ask-shoes', kind: 'join-stage', bg: bgU9L5Garden, teacher: 'Pip asks the child about their own shoes. Any colour is fine.', cast: ['pip'],
+    id: 'u9l5-ask-shoes', kind: 'join-stage', bg: bgU9L5GardenEmpty, teacher: 'Pip asks the child about their own shoes. Any colour is fine.', cast: ['pip'],
     turns: [
       { who: 'pip', line: 'Look! My shoes are white!', bubble: 'right' },
       { who: 'pip', line: 'What colour are your shoes?', bubble: 'right' },
@@ -14693,7 +14695,7 @@ export const LESSON_U9L5_SCENES: Scene[] = [
 
   /* 12-13 Sound: W (white, water) */
   {
-    id: 'u9l5-model-w', kind: 'sound-model', bg: bgU9L5Garden, who: 'pip', letter: 'W', phoneme: '/w/', sound: 'wuh',
+    id: 'u9l5-model-w', kind: 'sound-model', bg: bgU9L5GardenEmpty, who: 'pip', letter: 'W', phoneme: '/w/', sound: 'wuh',
     teacher: 'W says /w/ — white, water, window!',
     anchors: [
       { word: 'water', emoji: '\u{1F4A7}', img: itemWater },
@@ -14702,7 +14704,7 @@ export const LESSON_U9L5_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'u9l5-sort-ws', kind: 'sound-sort', bg: bgU9L5Garden, teacher: 'Listen to each word. Does it start with /w/ like water, or /s/ like socks? Drag it to W or S!',
+    id: 'u9l5-sort-ws', kind: 'sound-sort', bg: bgU9L5GardenEmpty, teacher: 'Listen to each word. Does it start with /w/ like water, or /s/ like socks? Drag it to W or S!',
     targets: [
       { letter: 'W', phoneme: '/w/', who: 'pip' },
       { letter: 'S', phoneme: '/s/', who: 'mia' },
@@ -14736,7 +14738,7 @@ export const LESSON_U9L5_SCENES: Scene[] = [
 
   /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
   {
-    id: 'u9l5-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU9L5Garden, who: 'mia',
+    id: 'u9l5-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU9L5GardenEmpty, who: 'mia',
     teacher: 'Extra time: Brain Break! Do each action with Mia.',
     rounds: [
       { line: 'Tiptoe in your shoes!', emoji: '\u{1F45F}' },

@@ -54,3 +54,9 @@ title → Remember? (Lesson 4: hat, dress, shirt) → intro → **story film** �
 
 ## Owner approval
 Approved: owner, 2026-10-11 — "Yes".
+
+## As built (2026-10-11)
+- 9 Canva pictures (`public/lep1/scenes/bg-u9l5-story-1..9-wide.png`): a Pip reference with white sneakers (edit of `pip-hello`), the picnic hill (`bg-u8l1`) and farmyard (`bg-u7l2`) as places; each pair (2/3, 4/5, 6/7) is one picture edited only at the shoes. Checked against the shot list on a contact sheet.
+- Film: `public/lep1/video/pips-white-shoes-u9l5.mp4` (+ .webm), 45 s, stills cross-faded by `scripts/make-stills-film.py` (pages: `scripts/film-labels/u9l5-pips-white-shoes-pages.json`), labels by `scripts/label-video.py` (`scripts/film-labels/u9l5-pips-white-shoes.json`): shoes, apples, red, paint, blue, mud, brown (after the pause), white.
+- Voices: Pip's lines in Pip's recorded voice, Bella asks the pause question, Mia says "Me too!"; the story page plays each line at its `atSec`.
+- Song "My Shoes Are White": take 2 (score 0.96; the scorer heard "squish" as "swish").
