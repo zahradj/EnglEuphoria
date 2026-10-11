@@ -8,7 +8,7 @@ import { Feedback, NOT_YET, Panel } from './shared';
 
 /** Locker Pop: a number WORD is shown; open the locker with that number. */
 export function LockersView({ slide }: { slide: LockersSlide }) {
-  const { right, wrong, done, seed } = useDeck();
+  const { right, wrong, done, seed, artBase } = useDeck();
   const [round, setRound] = useState(0);
   const [open, setOpen] = useState<number[]>([]);
   const [shake, setShake] = useState<number | null>(null);
@@ -38,13 +38,11 @@ export function LockersView({ slide }: { slide: LockersSlide }) {
       <div className="ad-lockers-ask" aria-live="polite">{finished ? <><Icon name="unlock" /> All open!</> : <>Open locker: <b>{slide.words[target]}</b></>}</div>
       <div className="ad-lockers">
         {all.map((n) => (
-          <button key={n} type="button" className="ad-locker" data-open={open.includes(n)} data-shake={shake === n} onClick={() => tap(n)} aria-label={`Locker ${n}`}>
-            <span className="ad-locker-interior" aria-hidden="true"><i className="ad-shelf" /><b className="ad-prize"><Icon name="star" /></b></span>
-            <span className="ad-locker-door" aria-hidden="true">
-              <span className="ad-vents"><i /><i /><i /><i /></span>
-              <span className="ad-locker-num">{n}</span>
-              <span className="ad-handle" />
-            </span>
+          <button key={n} type="button" className="ad-locker ad-locker-sprite" data-open={open.includes(n)} data-shake={shake === n} onClick={() => tap(n)} aria-label={`Locker ${n}`}>
+            <img className="ad-lk-img ad-lk-closed" src={`${artBase}/objects/locker-${n % 2 ? 'violet' : 'blue'}.webp`} alt="" aria-hidden="true" draggable={false} />
+            <img className="ad-lk-img ad-lk-open" src={`${artBase}/objects/locker-${n % 2 ? 'violet' : 'blue'}-open.webp`} alt="" aria-hidden="true" draggable={false} />
+            <span className="ad-locker-num">{n}</span>
+            <img className="ad-lk-prize" src={`${artBase}/objects/star.webp`} alt="" aria-hidden="true" draggable={false} />
           </button>
         ))}
       </div>

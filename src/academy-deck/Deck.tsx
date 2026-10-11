@@ -1,3 +1,4 @@
+import type React from 'react';
 // Academy Deck player. A lesson is a deck of slides; each slide is a full scene plate with ONE game on top.
 // Reliable by design: the deck holds only the slide number, "solved" flags, the student's answers and the stamps earned. Every slide is
 // wrapped in an error boundary (a broken game offers Try again / Skip, it never freezes the lesson). No timers, no ranking, no voices yet.
@@ -198,7 +199,7 @@ export function Deck({ script, artBase, teacher = false, slide: controlled, onSl
   const panelAt = only === 'left' ? 'right' : only === 'right' ? 'left' : 'center';
   return (
     <DeckContext.Provider value={ctx}>
-      <div className="ad-root" data-reduced={calm} data-kind={cur.kind} data-hw={!!homework} data-mood={mood ?? undefined} data-testid="deck">
+      <div className="ad-root" style={artBase ? ({ ['--o-gem-empty' as string]: `url(${artBase}/objects/gem-empty.webp)`, ['--o-gem-full' as string]: `url(${artBase}/objects/gem-full.webp)`, ['--o-ribbon' as string]: `url(${artBase}/objects/ribbon.webp)`, ['--o-frame' as string]: `url(${artBase}/objects/frame.webp)` } as React.CSSProperties) : undefined} data-reduced={calm} data-kind={cur.kind} data-hw={!!homework} data-mood={mood ?? undefined} data-testid="deck">
         <Plate id={cur.bg} artBase={artBase} key={cur.bg} />
         <div className="ad-actors" aria-hidden={actorsVisible.length === 0}>
           {actorsVisible.map((a) => <Character key={`${a.who}-${mood ?? 'base'}`} actor={mood ? { ...a, expr: mood } : a} artBase={artBase} small={compact} speaking={chat && !calm && !mood && ['title', 'brief', 'whosaid', 'teach', 'model', 'convo', 'say', 'wrap'].includes(cur.kind)} />)}
@@ -228,10 +229,10 @@ export function Deck({ script, artBase, teacher = false, slide: controlled, onSl
         )}
         <nav className="ad-dock" aria-label="Lesson controls">
           <button type="button" className="ad-dockbtn" onClick={() => go(index - 1)} disabled={index === 0}>◀ Back</button>
-          <button type="button" className="ad-dockbtn" onClick={hint}><Icon name="bulb" /> Hint</button>
-          <button type="button" className="ad-dockbtn" onClick={() => setMinute(true)}><Icon name="pause" /> <span className="ad-long">I need a minute</span><span className="ad-short">Minute</span></button>
-          <button type="button" className="ad-dockbtn" onClick={() => setMenu(!menu)} aria-expanded={menu}><Icon name="gear" /> More</button>
-          <button type="button" className="ad-dockbtn ad-dock-next" onClick={next} disabled={!isSolved}>{last ? 'Finish ✓' : 'Next ▶'}</button>
+          <button type="button" className="ad-dockbtn" onClick={hint}>{artBase ? <img className="ad-dockico" src={`${artBase}/objects/btn-hint.webp`} alt="" aria-hidden="true" /> : <Icon name="bulb" />} Hint</button>
+          <button type="button" className="ad-dockbtn" onClick={() => setMinute(true)}>{artBase ? <img className="ad-dockico" src={`${artBase}/objects/btn-pause.webp`} alt="" aria-hidden="true" /> : <Icon name="pause" />} <span className="ad-long">I need a minute</span><span className="ad-short">Minute</span></button>
+          <button type="button" className="ad-dockbtn" onClick={() => setMenu(!menu)} aria-expanded={menu}>{artBase ? <img className="ad-dockico" src={`${artBase}/objects/btn-gear.webp`} alt="" aria-hidden="true" /> : <Icon name="gear" />} More</button>
+          <button type="button" className="ad-dockbtn ad-dock-next" onClick={next} disabled={!isSolved}>{last ? 'Finish ✓' : <>Next {artBase ? <img className="ad-dockico ad-nextico" src={`${artBase}/objects/btn-next.webp`} alt="" aria-hidden="true" /> : '▶'}</>}</button>
         </nav>
         {menu && (
           <div className="ad-menu" role="menu">
