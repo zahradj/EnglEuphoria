@@ -1,0 +1,15 @@
+
+=== docs/songs/u9l6-dress-up-take1.mp3  length=20.1s  score=0.97  missing=1  extra=1
+heard: hat on my head hat hat hat shoes on my feet shoes shoes shoes a shirt a dress a coat a stir dress up dress up look at me
+line starts (s): [np.float64(0.0), np.float64(3.9), np.float64(8.3), np.float64(12.9)]
+lineDurationsMs: [3940, 4320, 4660, 7142]
+
+=== docs/songs/u9l6-dress-up-take2.mp3  length=20.1s  score=1.00  missing=0  extra=0
+heard: hat on my head hat hat hat shoes on my feet shoes shoes shoes a shirt a dress a coat a skirt dress up dress up look at me
+line starts (s): [np.float64(0.0), np.float64(3.9), np.float64(8.3), np.float64(13.5)]
+lineDurationsMs: [3940, 4400, 5140, 6582]
+
+=== docs/songs/u9l6-dress-up-take3.mp3  length=20.1s  score=1.00  missing=0  extra=0
+heard: hat on my head hat hat hat shoes on my feet shoes shoes shoes a shirt a dress a coat a skirt dress up dress up look at me
+line starts (s): [np.float64(0.0), np.float64(4.0), np.float64(8.4), np.float64(13.0)]
+lineDurationsMs: [3960, 4420, 4640, 7042]

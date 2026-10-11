@@ -437,7 +437,7 @@ const UNIT1_EXTRACTORS = {
   },
   // Mirror HouseBoardScene.tsx's houseBoardLines().
   'farm-verse': (s) => { const art = (w) => (/^[aeiou]/i.test(w) ? 'an' : 'a'); return [[s.who, 'You are the farmer! Choose an animal for your farm!'], ...(s.animals ?? []).flatMap((a) => [[s.who, `And on his farm he had ${art(a.label)} ${a.label}, E-I-E-I-O!`], [s.who, `With ${art(a.sound)} ${a.sound}, ${a.sound} here, and ${art(a.sound)} ${a.sound}, ${a.sound} there!`]]), [s.who, s.doneLine]]; },
-  'animal-riddle': (s) => { const used = [...new Set((s.rounds ?? []).flatMap((r) => r.options))]; return [[s.who, 'What animal is this?'], ...(s.rounds ?? []).flatMap((r) => r.clues.map((c) => [s.who, c])), ...used.flatMap((i) => { const a = (s.animals ?? [])[i]; return a ? [[s.who, a.say], [s.who, `No! It isn't the ${a.label}.`]] : []; }), [s.who, s.doneLine]]; },
+  'animal-riddle': (s) => { const used = [...new Set((s.rounds ?? []).flatMap((r) => r.options))]; return [[s.who, s.ask ?? 'What animal is this?'], ...(s.rounds ?? []).flatMap((r) => r.clues.map((c) => [s.who, c])), ...used.flatMap((i) => { const a = (s.animals ?? [])[i]; return a ? [[s.who, a.say], [s.who, `No! It isn't the ${a.label}.`]] : []; }), [s.who, s.doneLine]]; },
   'animal-parade': (s) => [[s.who, "Let's make an animal parade!"], [s.who, 'Listen again!'], ...(s.rounds ?? []).map((r) => [s.who, r.line]), ...(s.animals ?? []).map((a) => [s.who, a.say]), [s.who, s.doneLine]],
   'farm-wash': (s) => [[s.who, "Oh no! The animals are muddy! Let's wash them!"], ...(s.rounds ?? []).map((r) => [s.who, r.line]), ...(s.animals ?? []).flatMap((a) => [[s.who, a.say], [s.who, `Oops! That's the ${a.label}.`]]), [s.who, s.doneLine]],
   'photo-snap': (s) => [[s.who, 'Get your camera ready!'], ...(s.rounds ?? []).map((r) => [s.who, r.line]), ...(s.animals ?? []).flatMap((a) => [[s.who, a.say], [s.who, `Oops! That's the ${a.label}.`]]), [s.who, s.doneLine]],
@@ -473,6 +473,30 @@ const UNIT1_EXTRACTORS = {
     [s.who, s.doneLine],
   ],
   // Mirror DuckFeedScene.tsx's duckFeedLines().
+  // Mirror phonicsShared.ts (Sound Moles / Letter Monsters / Sound Fishing): the sound itself is a recorded letter clip.
+  'sound-mole': (s) => [[s.who, 'Listen! Which one starts with this sound?'], ...(s.rounds ?? []).flatMap((r) => (r.pictures ?? []).flatMap((p) => [[s.who, `Yes! ${p.word.charAt(0).toUpperCase() + p.word.slice(1)}!`], [s.who, `${p.word.charAt(0).toUpperCase() + p.word.slice(1)}! Try again!`]]))],
+  'letter-monsters': (s) => [[s.who, 'Feed the hungry monsters! Who eats this one?'], ...(s.cards ?? []).flatMap((c) => [[s.who, `${c.word.charAt(0).toUpperCase() + c.word.slice(1)}!`], [s.who, `Yes! ${c.word.charAt(0).toUpperCase() + c.word.slice(1)}!`], [s.who, `${c.word.charAt(0).toUpperCase() + c.word.slice(1)}! Try again!`]])],
+  'sound-fish': (s) => [[s.who, 'Listen! Which one starts with this sound?'], ...(s.rounds ?? []).flatMap((r) => (r.fish ?? []).flatMap((f) => [[s.who, `Yes! ${f.word.charAt(0).toUpperCase() + f.word.slice(1)}!`], [s.who, `${f.word.charAt(0).toUpperCase() + f.word.slice(1)}! Try again!`]]))],
+  'action-run': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...(s.actions ?? []).map((a) => [s.who, `Not ${a.word}! Listen again.`]), [s.who, s.doneLine]],
+  'dress-studio': (s) => {
+    const has = { pip: ['hat', 'shirt', 'pants', 'socks', 'shoes'], leo: ['hat', 'shirt', 'pants', 'socks', 'shoes'], mia: ['hat', 'shirt', 'pants', 'socks', 'shoes', 'dress'] };
+    const f = s.free?.friend;
+    return [
+      ...(s.rounds ?? []).flatMap((r) => [[r.friend, r.line], [r.friend, r.reply], [r.friend, 'Oops! Listen again.']]),
+      [f, s.free?.line], [f, "I'm wearing…"], [f, 'Oops! Listen again.'],
+      ...(s.pieces ?? []).filter((p) => has[f]?.includes(p.id)).flatMap((p) => (s.colors ?? []).map((c) => [f, `${p.plural ? '' : 'a '}${c.word} ${p.word}!`])),
+      [s.who, s.doneLine],
+    ];
+  },
+  'shoe-painter': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...(s.paints ?? []).map((p) => [s.who, `No, not ${p.word}! Listen again.`]), [s.who, s.doneLine]],
+  'wearing-show': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.cast[r.answer], r.line], [s.cast[r.answer], r.reply]]), ...(s.cast ?? []).map((w) => [w, 'Not me! Listen again.']), [s.who, s.doneLine]],
+  'shop-till': (s) => { const buy = [...new Set((s.rounds ?? []).map((r) => r.customer))]; return [...(s.rounds ?? []).flatMap((r) => [[r.customer, r.line], [r.customer, r.reply]]), ...buy.flatMap((b) => (s.stock ?? []).map((c) => [b, `No, not the ${c.label}! Listen again.`])), [s.who, s.doneLine]]; },
+  'put-on': (s) => { const w = (r) => s.dolls?.[r.doll]?.who ?? s.who; const ask = [...new Set((s.rounds ?? []).map(w))]; return [...(s.rounds ?? []).flatMap((r) => [[w(r), r.line], [w(r), r.reply]]), ...ask.flatMap((a) => (s.clothes ?? []).map((c) => [a, `No, not the ${c.word}! Listen again.`])), [s.who, s.doneLine]]; },
+  'washing-line': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...(s.clothes ?? []).map((c) => [s.who, `No, not the ${c.word}! Listen again.`]), [s.who, s.doneLine]],
+  'like-chart': (s) => [...(s.rounds ?? []).flatMap((r) => [[r.friend, r.line], [r.friend, r.reply], [r.friend, `No! I like ${s.columns?.[r.column]?.word ?? ''}!`]]), [s.who, s.summaryLine], [s.who, 'What do you like? Tap it!'], ...(s.columns ?? []).map((c) => [s.who, `You like ${c.word}! Yummy!`])],
+  'caterpillar-crawl': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...(s.foods ?? []).map((f) => [s.who, `No, that's ${f.word}!`]), [s.who, 'I am full! Now I am a butterfly!']],
+  'smoothie-bar': (s) => [...(s.rounds ?? []).flatMap((r) => [[r.friend, r.line], [r.friend, r.reply], [r.friend, `Oops! ${r.line}`]]), ...(s.fruits ?? []).map((f) => [s.who, f.word]), [s.who, s.doneLine]],
+  'party-belt': (s) => [...(s.rounds ?? []).flatMap((r) => [[r.friend, r.line], [r.friend, r.reply], ...(s.foods ?? []).filter((_, i) => i !== r.target).map((f) => [r.friend, `No, that's ${f.word}!`])]), [s.who, s.doneLine]],
   'cafe-order': (s) => [...(s.rounds ?? []).flatMap((r) => [[r.customer, r.line], [r.customer, r.reply], [r.customer, `Oh no! ${r.line}`]]), ...(s.menu ?? []).map((m) => [s.who, m.word]), [s.who, s.doneLine]],
   'feed-pip': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...(s.foods ?? []).map((f) => [s.who, `No, thank you! That's ${f.phrase}.`]), [s.who, s.doneLine]],
   'night-sounds': (s) => (s.animals ?? []).flatMap((a) => [[s.who, `${a.sound} ${a.sound} Who's there?`], [s.who, `Yes! It's a ${a.word}! ${a.sound}`], [s.who, `That's a ${a.word}. ${a.sound}`]]),
@@ -500,7 +524,7 @@ const UNIT1_EXTRACTORS = {
     [s.who, s.doneLine],
   ],
   'whos-missing': (s) => [
-    [s.who, 'Look at the photos!'], [s.who, 'Lights off!'], [s.who, 'Who is missing?'],
+    [s.who, s.look ?? 'Look at the photos!'], [s.who, 'Lights off!'], [s.who, s.ask ?? 'Who is missing?'],
     ...(s.faces ?? []).flatMap((f) => [[s.who, `No, ${f.name} is here! Look again!`], [s.who, `${f.name.charAt(0).toUpperCase() + f.name.slice(1)}! Here is ${f.name}!`]]),
     [s.who, s.doneLine],
   ],
@@ -600,7 +624,7 @@ const UNIT1_EXTRACTORS = {
     [s.who, 'I have a secret card. Ask me!'], [s.who, 'Yes, it is!'], [s.who, "No, it isn't!"],
     ...(s.rounds ?? []).map((r) => s.cards?.[r.secret]).filter(Boolean).map((c) => {
       if (c.person && c.word) return [s.who, `You found it! It's ${c.word}!`];
-      const parts = c.word ? [c.size, c.colorWord.toLowerCase(), c.word.toLowerCase()].filter(Boolean).join(' ') : `${c.colorWord.toLowerCase()} ${c.shape}`;
+      const parts = c.word ? [c.size, c.colorWord.toLowerCase(), /^[A-Z]-/.test(c.word) ? c.word : c.word.toLowerCase()].filter(Boolean).join(' ') : `${c.colorWord.toLowerCase()} ${c.shape}`;
       return [s.who, `You found it! It's ${/^[aeiou]/i.test(parts) ? 'an' : 'a'} ${parts}!`];
     }),
   ],

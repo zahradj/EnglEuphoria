@@ -1,7 +1,8 @@
-+ public/welcome-town/scenes/bg-wt5-story-1-wide.png (1376, 768)
-+ public/welcome-town/scenes/bg-wt5-story-2-wide.png (1376, 768)
-+ public/welcome-town/scenes/bg-wt5-story-3-wide.png (1376, 768)
-+ public/welcome-town/scenes/bg-wt5-story-4-wide.png (1376, 768)
-+ public/welcome-town/scenes/bg-wt5-story-5-wide.png (1376, 768)
-+ public/welcome-town/scenes/bg-wt5-story-6-wide.png (1376, 768)
-6/6 saved
++ public/lep1/items/tmp-sheet-gumball.png (1536, 1024) raw
++ public/lep1/items/tmp-sheet-pipslide.png (1536, 1024) raw
++ public/lep1/items/tmp-sheet-frog.png (1536, 1024) raw
++ public/lep1/items/tmp-sheet-slide.png (1920, 1080) raw
++ public/lep1/scenes/bg-game-river-wide.png (1376, 768)
++ public/lep1/scenes/bg-game-sweetshop-wide.png (1376, 768)
++ public/lep1/scenes/bg-game-playground-wide.png (1376, 768)
+7/7 saved

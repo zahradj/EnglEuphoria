@@ -22,6 +22,8 @@ import type { Scene } from './unit1/scenes';
 export const ROUTINE_KINDS: ReadonlySet<string> = new Set([
   'title-card', 'song', 'cinematic', 'recall-warmup', 'story-video', 'story-order', 'listen-repeat-cards', 'tpr-actions',
   'join-stage', 'spin-wheel', 'sound-model', 'trace', 'echo', 'sticker-reward', 'home-mission', 'finale',
+  // Blend It! is in every lesson on purpose (blueprint slot 14, owner 2026-10-11: start reading by blending).
+  'sound-blend',
 ]);
 
 /** Apps, schools and exam boards to research before every lesson (rotate; never only one). */
@@ -60,6 +62,17 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
   '4-4': { settings: ['flower garden'], look: 'bright flower garden with big friendly mushrooms; Pip meets Bo, a round sky-blue three-eyed monster; code-drawn monsters on an empty lawn' },
   '4-5': { settings: ['animal park'], look: 'sunny animal park with a blue pond and tall trees; a tiger, a monkey, an elephant and a seal each show one move, Pip copies; a leafy bush to peek through' },
+  '10-1': { settings: ['park sports-day track'], look: "sports day in a sunny green park: a curvy red running track with white lane lines, low wooden logs and a hay bale as hurdles, triangle bunting and a finish ribbon; Pip runs, Mia jumps the log and Coach Leo cheers with a whistle; the empty track becomes the Obstacle Run with code-drawn lane stripes streaming past" },
+  '9-6': { settings: ['playroom dress-up corner'], look: "a cosy playroom dress-up corner on a rainy afternoon: a big wooden-framed standing mirror, a low clothes rail with hangers, an open wooden dress-up trunk, a round purple rug, rain on the window and warm lamp light; Pip in a green hat, Mia twirling in a yellow dress and Leo pulling on a blue coat; the empty corner becomes the Dress-Up Studio with a clothes rail and paint pots" },
+  '9-5': { settings: ['sunny garden', 'picnic hill', 'farmyard after rain'], look: "a walk through the unit's places as a stills film: Pip in a red T-shirt, blue pants and brand-new white sneakers in a sunny garden, squishing red apples under the apple tree on the picnic hill, stepping into a spilled pot of blue paint on the path, stomping in a brown mud puddle in the farmyard after rain, and splashing in a clear rain puddle; the garden becomes the Shoe Painter game with paint pots and a big magnifier on his shoes" },
+  '9-4': { settings: ['garden fashion show stage'], look: "a garden fashion show on a sunny afternoon: a wooden stage with a pink curtain, a row of warm stage lights and a little catwalk, bunting and fairy lights in green trees, flower pots and colourful chairs for the audience; Pip, Mia and Leo stand in the spotlights really wearing the clothes (fitted layers), and the camera flashes when the child finds the friend" },
+  '9-3': { settings: ['clothes shop'], look: "Bella's little clothes shop on a sunny day: clothes rails with coats, skirts and T-shirts, wooden shelves, a round mirror, a shop window with sunshine and a green door; Bella the bunny smiles behind her wooden counter with a cash register; friends hop in through the door to buy, and the bought piece flies into a paper shopping bag" },
+  '9-2': { settings: ['snowy front hallway'], look: "a cosy front hallway on a snowy winter morning: snow falling past the window and the glass front door, wooden coat hooks on a pale yellow wall, a little bench and a striped rug; Pip in a green knitted hat, red socks and blue shoes waves by the door; the empty hall becomes the Put It On! game where the child dresses Pip, Mia and Leo" },
+  '9-1': { settings: ['backyard laundry day'], look: "laundry day in Pip's sunny backyard: green grass, a wooden fence and flowers, a long washing line between two wooden poles with a red shirt, blue pants and a yellow dress on wooden pegs, Pip holding up the shirt by a wicker basket; the empty line becomes the Washing Line game where the clothes swing in the breeze" },
+  '8-6': { settings: ['school dining hall'], look: "lunchtime in a bright school dining hall: big sunny windows, the four friends at a long table with green trays of the unit's food (pizza, apples, bananas, ice cream, bread), and a big empty green chalkboard on the back wall that becomes the class food chart" },
+  '8-5': { settings: ['spring flower garden', 'story places of the unit'], look: "a sunny spring flower garden with big green leaves, colourful flowers and a curvy path, where a little round green caterpillar peeks out; the story film visits the unit's places (the picnic blanket, Pip's café counter, the party table) with the caterpillar munching one food at each, then an evening orchard with a hanging cocoon and a bright morning with a green-and-yellow butterfly; Pip waves at the end" },
+  '8-4': { settings: ['autumn apple orchard'], look: "a sunny autumn apple orchard: trees heavy with red apples, golden leaves on the grass, a long wooden table where the four friends each hold up the food they like (Pip an apple, Mia a banana, Leo pizza, Bella ice cream); the empty orchard with a wooden counter and a little smoothie cart becomes the Smoothie Bar with a big code-drawn blender" },
+  '8-3': { settings: ['park party food truck'], look: "a summer party in a green park: a bright red-and-yellow food truck with a striped awning, a big round pizza, a pink birthday cake with candles and three ice-cream cones on its counter, Pip in a white chef hat waving from the window; bunting, balloons and a wooden picnic table; a moving grey belt carries the party food past the table" },
   '8-2': { settings: ['bakery café'], look: "Pip's little bakery café on a sunny morning: a wooden counter with baskets of bread loaves, a glass jug of orange juice and a jug of water, a chalkboard with a drawn loaf and cup, round wooden tables with green-cushioned chairs by a big window with flower boxes; Pip in a small white apron behind the counter, friends come to the table to order" },
   '8-1': { settings: ['picnic hill'], look: "a picnic on a sunny green spring hill: a big red-and-white checkered blanket, an open wicker basket, a shady apple tree full of red apples, a little blue stream and yellow flowers; Pip sits on the blanket with an apple, a banana and a glass of milk" },
   '7-6': { settings: ['farm at night'], look: "Grandpa's farm at night under a big full moon and stars: the red barn with its door half open and a lantern glowing, a round haystack, a little red chicken coop, a big tree with a hollow, a blue water trough and a pond with reeds; the farm is dark and the child's torch beam finds the hiding animals, then the farm lights come on" },
@@ -201,6 +214,149 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'the child must understand the verb AND the body part to find the animal, then PRODUCES the move and the sentence — the screen waits for the child, never a clock',
       'the clue in Whose Is It? is one of the unit\'s body words, so naming the part and the animal go together, and the reveal recalls the story move',
       'wrong picks are named back with that animal\'s own move ("No, the seal claps her hands!"), and the right one glows after two tries',
+    ],
+  },
+  '10-1': {
+    sources: ['endless-runner games (Subway Surfers / Temple Run: one tap = one move)', 'the PE warm-up "Run! Jump! Walk! Stop!"', 'Cambridge (Pre A1 Starters: listen and do)', 'Wordwall image quiz / Khan Academy Kids action cards'],
+    mechanics: [
+      'endless runner → Obstacle Run: the coach calls the move for the obstacle ahead ("A log! Jump!"), the child taps the action and the runner does it',
+      'TPR first: the child does every action with Coach Leo before the game; quick-fire "say it and do it" cards',
+      'image reveal (what is Pip doing?), role swap: the child is the coach; first sounds R and J in Balloon Letter Pop',
+    ],
+    betterThan: [
+      'the action word decides the move — a log can be jumped one time and walked round another — so the child listens, not just looks',
+      'the move is visible and physical: a squash-and-stretch jump arc, a slow tiptoe past the little duck, speed lines running from the bee',
+      'calm pace and no fail state: a wrong move is named back ("Not walk! Listen again.") and the right one glows after two tries',
+    ],
+  },
+  '9-6': {
+    sources: ['Toca Boca / Lingokids dress-up (pick a piece, change its colour)', 'Cambridge (Pre A1 Starters listening: "listen and colour")', 'the classroom paper-doll dress-up game', 'Khan Academy Kids "make your own" creation pages'],
+    mechanics: [
+      'dress-up + listen and colour → Dress-Up Studio: a friend asks for a piece AND a colour ("A blue hat, please!"), the child taps the piece then the paint, and it lands on the friend in that colour',
+      'free creation with language back: the child dresses Pip any way, takes a photo, and Pip says what he is wearing piece by piece',
+      'unit review: odd one out (wear or eat?), memory pairs, ask and answer "What are you wearing?", Brick Crush with D, T, P, W',
+    ],
+    betterThan: [
+      'every request has two things to listen for (piece + colour), and every piece can be any of five colours, so guessing is not enough',
+      'the clothes really sit on the friend\'s body (fitted layers, recoloured), and the child\'s own outfit is described back in full English',
+      'no clock; a wrong choice gets "Oops! Listen again." and the right piece and colour glow after two tries; boys never get a dress',
+    ],
+  },
+  '9-5': {
+    sources: ['picture-book read-alongs for young learners (repeated line + colour change on each page)', 'Cambridge (Pre A1 Starters listening: "listen and colour")', 'Toca Boca / Lingokids colouring play', 'Blue\'s Clues pause (question, wait, answer)'],
+    mechanics: [
+      'stills story film with a planned pause: "What colour are Pip\'s shoes now?" … "Brown!"',
+      'listen and colour → Shoe Painter: Pip asks "Paint my shoes red, please!", the paint flies onto his shoes in a magnifier and he says "My shoes are red!"',
+      'true or false on the story pictures, story order, who said it (voices), ask and answer "What colour are your shoes?"; first sound W in a W / S sort',
+    ],
+    betterThan: [
+      'our own story built on one repeated sentence ("My shoes are …!") that changes only by the colour, so the child predicts and joins in',
+      'the colour change is the game\'s reward: the shoes really turn the colour (close-up magnifier), then Pip says the full sentence',
+      'no clock and no reading; a wrong pot is named back ("No, not blue! Listen again."), the right one glows after two tries; the rain washes the shoes white like in the story',
+    ],
+  },
+  '9-4': {
+    sources: ['"Guess Who?" (attributes → who)', 'Cambridge (Pre A1 Starters listening: "Look at the picture, listen and point")', 'the classroom "I\'m wearing…" description game', 'Toca Boca / Lingokids dress-up shows'],
+    mechanics: [
+      'Guess Who + dress-up → Who Am I? Fashion Show: three friends really wear outfits; one says "I\'m wearing a green hat and a red shirt! Who am I?" and the child taps them',
+      'riddles behind the stage curtain ("You wear it on your head.") and Guess Who with clothes cards ("Is it a hat?")',
+      'ask and answer "What are you wearing?" about the child\'s own clothes; first sound P (pants) in Balloon Letter Pop with D and T',
+    ],
+    betterThan: [
+      'every clue joins two pieces and the friends share some of them, so the child must hold both in mind: one word alone is never enough',
+      'the friends really wear the clothes (fitted layers on their own bodies), outfits change with a twirl each round, and the found friend struts into the spotlight with a camera flash',
+      'the sentence is heard in each friend\'s own voice and then said by the child about their own clothes; a wrong friend says "Not me! Listen again.", the right one glows after two tries; no clock',
+    ],
+  },
+  '9-3': {
+    sources: ['Toca Boca Store / Lingokids shopping play ("customers ask, you serve")', 'Cambridge (Pre A1 Starters: listen and colour / point — colour + clothes word)', 'the classroom shop role-play ("A red coat, please!")', 'Kim\'s game / Wordwall "What is missing?"'],
+    mechanics: [
+      'pretend shop → Shop Till: a friend asks "A red coat, please!" (colour + word), the child sends the right piece into the bag, the till rings',
+      'Kim\'s game → What is missing? on the shop window (lights off, one piece gone)',
+      'jigsaw of the shop, then say what you see; first sounds T (T-shirt) and C (coat) in Brick Crush',
+    ],
+    betterThan: [
+      'every order joins two things to listen for (colour + word), and two of each piece are on the rack, so guessing the word alone is not enough',
+      'the result is visible and physical: the piece flies into the bag, coins fill up, the customer hops out happy',
+      'each customer is a friend speaking in their own voice; a wrong piece is named back ("No, not the blue coat!"), the right one glows after two tries; no clock',
+    ],
+  },
+  '9-2': {
+    sources: ['Toca Boca / Lingokids / Khan Academy Kids dress-up ("dress the character for the weather")', 'Cambridge (Pre A1 Starters: listen and point; clothes)', 'TPR "Put on your hat!" classroom routine', 'Wordwall group sort (head or feet)'],
+    mechanics: [
+      'dress-up → Put It On!: Pip, Mia and Leo each ask in their own voice ("Put on my red socks, please!") and the piece lands where it is worn (head, feet) on the friend who asked',
+      'group sort → catch it: on your head or on your feet?; size line of shoes big → small; first sounds H and S',
+      'ask and answer about colours: "What colour is your hat?"',
+    ],
+    betterThan: [
+      'each piece goes where it is worn on the friend who asked, so the child listens for WHO and WHAT and learns where it belongs; socks go on under the shoes',
+      'the catch sort is by meaning (head or feet), not by picture match',
+      'no clock; a wrong piece is named back ("No, not the shoes! Listen again.") and the right one glows after two tries',
+    ],
+  },
+  '9-1': {
+    sources: ['Lingokids / Toca Boca dress-up and "hang it up" play', 'Cambridge (Pre A1 Starters: listen and point / colour; clothes and colours)', 'classroom washing-line flashcard game', 'Khan Academy Kids memory and sorting'],
+    mechanics: [
+      'washing-line flashcards → Washing Line: Pip asks "Where is my red shirt?" and the child pegs that piece on the line, where it swings in the breeze',
+      'the Mystery Bag shape guess ("It\'s a yellow dress!"), clothes memory pairs, quick-fire recall and the sound D',
+      'ask and answer: "What is this? It\'s a red shirt!"',
+    ],
+    betterThan: [
+      'every request joins the new word to a colour the child already knows ("the red shirt"), so Unit 2 comes back in Unit 9',
+      'each right answer adds to a line of clothes that stays (permanence) and the line dances in the wind at the end',
+      'no clock, a wrong piece is named back ("No, not the dress! Listen again.") and the right one glows after two tries',
+    ],
+  },
+  '8-6': {
+    sources: ['early-years maths "people graphs" / favourite-food pictograph', 'Cambridge (Pre A1 Starters: listen and tick; food words review)', 'Wordwall group sort and "whack" games', 'Khan Academy Kids sorting and counting'],
+    mechanics: [
+      'people graph → Like Chart: each friend says "I like pizza!", the child puts their face in that column, Pip reads the chart ("Three friends like pizza!") and the child adds their own star',
+      'group sort → odd one out (eat or drink?), a hidden-food tile reveal, and a sound ring toss with the unit\'s first sounds P, J, M, B',
+      'review talk: "What do you like to eat? And to drink?"',
+    ],
+    betterThan: [
+      'every sort is a heard sentence from a friend, and the result is a real chart the child can read (which food most friends like)',
+      'the child\'s own choice goes on the chart last, so the review ends with them saying what THEY like',
+      'no clock; a wrong column is answered by the friend ("No! I like pizza!") and the right one glows after two tries',
+    ],
+  },
+  '8-5': {
+    sources: ['Sesame Workshop (model, repeat, then the child says it; story with a planned pause)', 'Blue\'s Clues "pause" (ask, wait, then answer)', 'Khan Academy Kids / Lingokids "feed the character" and the classic grow-longer arcade game', 'Oxford Owl / Cambridge (picture story, retell in order; true or false)'],
+    mechanics: [
+      'picture story with a planned pause → our own stills film: the caterpillar visits the unit\'s places and says "I like …!", Pip asks "What does it like?" and waits 4 s',
+      'feed the character + grow longer → Caterpillar Crawl: the caterpillar says "I like bananas!", the child taps it, the caterpillar crawls over, eats it and grows a segment, and at the end becomes the butterfly',
+      'lift the leaf ("Where is the caterpillar?"), tick or cross about the story, story order, letter blocks C and B, and the child plays the caterpillar',
+    ],
+    betterThan: [
+      'the story recycles the whole unit (picnic, café, party, orchard), so the new sentence "I like …" is heard with food the child already knows',
+      'the song comes after the story, the words and the first game (owner, 2026-10-10), so the child sings words they know',
+      'the growing caterpillar is a visible count of right answers and its ending is the story\'s own ending; no clock, a wrong food is named back',
+    ],
+  },
+  '8-4': {
+    sources: ['Toca Kitchen / Lingokids cooking play (put things in, see what you made)', 'Cambridge (Pre A1 Starters: listen and tick two things; "I like …" answers)', 'Sesame Workshop (model the sentence with every character, then the child says it)', 'Super Simple Songs "Do You Like…?" style ask-and-answer'],
+    mechanics: [
+      'cooking play → Smoothie Bar: a friend says "I like bananas and milk!", the child puts those in the blender, blends, and the smoothie takes their colour',
+      'tap-each-character model → Who likes what?: four friends at the orchard table each say "I like …", then the camera turns to the child',
+      'Guess Who with food cards ("Is it a banana?") and an A / B sound sort; ask-and-answer "Do you like …? Yes, I do!" both ways',
+    ],
+    betterThan: [
+      'the order IS the lesson sentence ("I like …"), heard first from every friend, then built by the child into something they can see (the smoothie colour)',
+      'the child picks one or two things, checks, then blends: a wrong mix is poured out with the line said again, and the right fruit glows after two tries',
+      'no clock and no reading; the child also asks Pip "Do you like pizza?", so the question goes both ways',
+    ],
+  },
+  '8-3': {
+    sources: ['conveyor-belt / food-factory play in kids\' apps (Toca Kitchen, Lingokids food games)', 'Wordwall whack-a-mole (tap the right one as it passes)', 'Cambridge (Pre A1 Starters: listen and find; food words)', 'Khan Academy Kids pattern activities (what comes next?)'],
+    mechanics: [
+      'conveyor belt + whack-a-mole → Party Belt: a friend asks "Ice cream, please!" and the child taps that food as it rides past on the food truck\'s belt',
+      'what comes next? → the party food train; letter bricks for the unit\'s first sounds P, C, B, J; the P basket',
+      'role swap at the truck window: the child offers "Pizza, cake or ice cream?" and serves Pip',
+    ],
+    betterThan: [
+      'the wanted food is only HEARD (nothing printed on the belt), and the earlier unit food rides along, so the three new words are picked out of the whole unit',
+      'the belt never stops and every food comes round again: no fail state, no clock; a wrong grab is named back ("No, that\'s cake!") and the right one glows after two tries',
+      'every friend asks politely and answers "Yummy! I like ice cream!", the language the child uses again in the role swap and the home mission',
     ],
   },
   '8-2': {

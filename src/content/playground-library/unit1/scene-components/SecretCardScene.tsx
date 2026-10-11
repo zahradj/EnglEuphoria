@@ -19,10 +19,12 @@ export const YES_LINE = 'Yes, it is!';
 export const NO_LINE = "No, it isn't!";
 type AskKind = 'color' | 'shape' | 'toy' | 'size' | 'person';
 const aAn = (w: string) => (/^[aeiou]/i.test(w) ? 'an' : 'a');
+/** Lower-case a card word but keep "T-shirt" (a letter name + hyphen) as it is written. */
+const lc = (w: string) => (/^[A-Z]-/.test(w) ? w : w.toLowerCase());
 export function askLine(kind: AskKind, word: string) {
   // People are asked by name, no article: "Is it Grandma?" (Unit 5 Lesson 4 family cards).
   if (kind === 'person') return `Is it ${word}?`;
-  const w = word.toLowerCase();
+  const w = lc(word);
   if (kind === 'color' || kind === 'size') return `Is it ${w}?`;
   return `Is it ${aAn(w)} ${w}?`;
 }
@@ -30,7 +32,7 @@ type Card = Extract<Scene, { kind: 'secret-card' }>['cards'][number];
 /** "It's a red circle!" for shapes; "It's a big red ball!" for toys. */
 export function foundLine(c: Card) {
   if (c.person && c.word) return `You found it! It's ${c.word}!`;
-  const parts = c.word ? [c.size, c.colorWord.toLowerCase(), c.word.toLowerCase()].filter(Boolean).join(' ') : `${c.colorWord.toLowerCase()} ${c.shape}`;
+  const parts = c.word ? [c.size, c.colorWord.toLowerCase(), lc(c.word)].filter(Boolean).join(' ') : `${c.colorWord.toLowerCase()} ${c.shape}`;
   return `You found it! It's ${aAn(parts)} ${parts}!`;
 }
 /** Does a card have this colour / shape / toy / size? */
@@ -143,7 +145,7 @@ export function SecretCardScene({ scene, onWin, onNext, sync }: { scene: Extract
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent to-black/20" />
 
       <div className="pointer-events-none absolute left-1/2 top-3 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-base font-black text-orange-700 shadow-xl sm:text-xl">
-        {phase === 'found' ? `🎉 ${foundLine(secret)}` : secret.person ? '👪 Who is it? Ask Pip!' : secret.word ? '🧸 Guess the secret toy. Ask!' : '🃏 Pip has a secret card. Ask Pip!'}
+        {phase === 'found' ? `🎉 ${foundLine(secret)}` : secret.person ? '👪 Who is it? Ask Pip!' : secret.word ? '🃏 Guess the secret card. Ask!' : '🃏 Pip has a secret card. Ask Pip!'}
         <span className="ml-2 rounded-full bg-orange-100 px-2 py-0.5 text-sm text-orange-600">{round + 1}/{total}</span>
       </div>
       <button onClick={() => cueSpeak(SECRET_INTRO, scene.who)} className="absolute right-3 top-3 z-30 rounded-full bg-white/95 px-3 py-2 text-sm font-black text-orange-700 shadow-lg active:scale-95">🔊 Again</button>

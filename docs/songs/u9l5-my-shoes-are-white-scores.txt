@@ -1,0 +1,15 @@
+
+=== docs/songs/u9l5-my-shoes-are-white-take1.mp3  length=20.1s  score=0.87  missing=3  extra=3
+heard: my shoes are white white white white splish my shoes are red squat my shoes are blue splash splash i love my shoes
+line starts (s): [np.float64(0.0), np.float64(6.3), np.float64(10.7), np.float64(12.9)]
+lineDurationsMs: [6320, 4400, 2140, 7202]
+
+=== docs/songs/u9l5-my-shoes-are-white-take2.mp3  length=20.1s  score=0.96  missing=1  extra=1
+heard: my shoes are white white white white swish my shoes are red splat my shoes are blue splash splash i like my shoes
+line starts (s): [np.float64(0.0), np.float64(4.8), np.float64(9.7), np.float64(12.8)]
+lineDurationsMs: [4840, 4860, 3060, 7302]
+
+=== docs/songs/u9l5-my-shoes-are-white-take3.mp3  length=20.1s  score=0.79  missing=6  extra=3
+heard: wish my shoes are red squish my shoes are red splat my shoes are blue splash splat like my shoes
+line starts (s): [np.float64(4.5), np.float64(4.5), np.float64(8.7), np.float64(13.1)]
+lineDurationsMs: [4540, 4120, 4400, 7002]

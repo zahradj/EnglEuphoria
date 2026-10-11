@@ -41,7 +41,7 @@ export function AnimalRiddleScene({ scene, onWin, onLose, onNext, sync }: { scen
     if (!r) return;
     const c = r.clues[k];
     if (c) await sayWithin(c, scene.who, 3500);
-    await sayWithin(RIDDLE_ASK, scene.who, 2500);
+    await sayWithin((scene.ask ?? RIDDLE_ASK), scene.who, 2500);
   };
 
   useEffect(() => {
@@ -110,7 +110,7 @@ export function AnimalRiddleScene({ scene, onWin, onLose, onNext, sync }: { scen
               </motion.div>
             ))}
             <div className="flex items-center gap-2">
-              <div className="rounded-full bg-orange-500 px-4 py-1 text-sm font-black text-white shadow sm:text-base">{RIDDLE_ASK}</div>
+              <div className="rounded-full bg-orange-500 px-4 py-1 text-sm font-black text-white shadow sm:text-base">{(scene.ask ?? RIDDLE_ASK)}</div>
               {!open && clue < r.clues.length - 1 && (
                 <button onClick={() => { void moreClue(); }} className="rounded-full bg-white/95 px-3 py-1 text-sm font-black text-sky-700 shadow active:scale-95 sm:text-base">{'\u{1F4A1}'} Another clue</button>
               )}
@@ -151,7 +151,7 @@ export function AnimalRiddleScene({ scene, onWin, onLose, onNext, sync }: { scen
             ) : (
               <div className="flex flex-col items-center gap-2">
                 <div className="rounded-3xl bg-white/95 px-5 py-2 text-center text-2xl font-black text-neutral-800 shadow-2xl">{answer?.say}</div>
-                <button onClick={next} className={`${CLAY_BUTTON} px-8 py-3 text-lg`}>{round + 1 < total ? 'Next animal ▶' : 'Finish ⭐'}</button>
+                <button onClick={next} className={`${CLAY_BUTTON} px-8 py-3 text-lg`}>{round + 1 < total ? (scene.ask ? 'Next ▶' : 'Next animal ▶') : 'Finish ⭐'}</button>
               </div>
             )}
           </div>
@@ -166,7 +166,7 @@ export function AnimalRiddleScene({ scene, onWin, onLose, onNext, sync }: { scen
 export function animalRiddleLines(scene: Riddle) {
   const used = new Set(scene.rounds.flatMap((r) => r.options));
   return [
-    [scene.who, RIDDLE_ASK],
+    [scene.who, (scene.ask ?? RIDDLE_ASK)],
     ...scene.rounds.flatMap((r) => r.clues.map((c) => [scene.who, c])),
     ...[...used].flatMap((i) => { const a = scene.animals[i]; return a ? [[scene.who, a.say], [scene.who, riddleNo(a.label)]] : []; }),
     [scene.who, scene.doneLine],

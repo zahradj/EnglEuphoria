@@ -2868,5 +2868,391 @@
       "Juice, juice! Orange juice, please!",
       "Bread and juice! Thank you! Yum!"
     ]
+  },
+  "u8l3-pizza-cake-ice-cream": {
+    "publicPath": "public/lep1/audio/pizza-cake-ice-cream-song-u8l3.mp3",
+    "durationSec": 20,
+    "style": "Cheerful bouncy kids party song, 112 BPM with ukulele, bright piano, hand claps and party horns, clear happy young vocals with a kids sing-along feel, every word sung slowly and clearly, \"yummy\" sung with a big smile. Definitely not a lullaby.",
+    "positiveStyles": [
+      "bouncy",
+      "ukulele",
+      "piano",
+      "hand claps",
+      "clear kids vocals",
+      "sing-along chorus",
+      "112 BPM",
+      "happy",
+      "playful",
+      "party"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "Pizza, pizza! Yummy pizza!",
+      "Cake, cake! Birthday cake!",
+      "Ice cream, ice cream! Cold ice cream!",
+      "Pizza, cake and ice cream! Yummy!"
+    ]
+  },
+  "u8l4-i-like-apples": {
+    "publicPath": "public/lep1/audio/i-like-apples-song-u8l4.mp3",
+    "durationSec": 20,
+    "style": "Cheerful bouncy kids song, 108 BPM with ukulele, bright piano, hand claps and a little shaker, clear happy young vocals with a kids sing-along feel, every word sung slowly and clearly, \"I like\" sung warmly. Definitely not a lullaby.",
+    "positiveStyles": [
+      "bouncy",
+      "ukulele",
+      "piano",
+      "hand claps",
+      "clear kids vocals",
+      "sing-along chorus",
+      "108 BPM",
+      "happy",
+      "playful"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "I like apples! Crunch, crunch, crunch!",
+      "I like bananas! Yum, yum, yum!",
+      "I like pizza! I like cake!",
+      "Do you like apples? Yes, I do!"
+    ]
+  },
+  "u8l5-hungry-caterpillar": {
+    "publicPath": "public/lep1/audio/hungry-caterpillar-song-u8l5.mp3",
+    "durationSec": 20,
+    "style": "Cheerful bouncy kids song, 104 BPM with ukulele, bright piano, hand claps and a little glockenspiel, clear happy young vocals with a kids sing-along feel, every word sung slowly and clearly, \"munch, munch\" sung playfully. Definitely not a lullaby.",
+    "positiveStyles": [
+      "bouncy",
+      "ukulele",
+      "piano",
+      "hand claps",
+      "clear kids vocals",
+      "sing-along chorus",
+      "104 BPM",
+      "happy",
+      "playful"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "Little caterpillar, munch, munch, munch!",
+      "I like apples! I like bread!",
+      "I like cake! Now I'm full!",
+      "Look at me! A butterfly!"
+    ]
+  },
+  "u8l6-yummy-food": {
+    "publicPath": "public/lep1/audio/yummy-food-song-u8l6.mp3",
+    "durationSec": 20,
+    "style": "Cheerful bouncy kids song, 110 BPM with ukulele, bright piano, hand claps and a little shaker, clear happy young vocals with a kids sing-along feel, every word sung slowly and clearly. Definitely not a lullaby.",
+    "positiveStyles": [
+      "bouncy",
+      "ukulele",
+      "piano",
+      "hand claps",
+      "clear kids vocals",
+      "sing-along chorus",
+      "110 BPM",
+      "happy",
+      "playful"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "Apple, banana, milk! Yummy!",
+      "Bread, water, juice, please!",
+      "Pizza, cake and ice cream!",
+      "What do you like? I like food!"
+    ]
+  },
+  "u9l1-shirt-pants-dress": {
+    "publicPath": "public/lep1/audio/shirt-pants-dress-song-u9l1.mp3",
+    "durationSec": 20,
+    "style": "Cheerful bouncy kids song, 100 BPM with ukulele, bright piano and hand claps, ONE clear happy young singer, every word sung slowly and very clearly with crisp consonants: SHIRT with a clear 'sh', PANTS with a clear 'p'. Definitely not a lullaby.",
+    "positiveStyles": [
+      "bouncy",
+      "ukulele",
+      "piano",
+      "hand claps",
+      "clear kids vocals",
+      "sing-along chorus",
+      "108 BPM",
+      "happy",
+      "playful"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "Shirt, shirt! My red shirt!",
+      "Pants, pants! My blue pants!",
+      "Dress, dress! A yellow dress!",
+      "Shirt, pants, dress! Hooray!"
+    ]
+  },
+  "u9l2-shoes-hat-socks": {
+    "publicPath": "public/lep1/audio/shoes-hat-socks-song-u9l2.mp3",
+    "durationSec": 20,
+    "style": "Cheerful bouncy kids winter song, 100 BPM with ukulele, bright piano, sleigh bells and hand claps, ONE clear happy young singer, every word sung slowly and very clearly with crisp consonants: HAT with a clear 'h', SOCKS and SHOES clearly different. Definitely not a lullaby.",
+    "positiveStyles": [
+      "bouncy",
+      "ukulele",
+      "piano",
+      "sleigh bells",
+      "hand claps",
+      "clear kids vocals",
+      "100 BPM",
+      "happy",
+      "playful"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "Hat, hat! On my head!",
+      "Socks, socks! On my feet!",
+      "Shoes, shoes! On my feet!",
+      "Hat, socks, shoes! Let's go play!"
+    ]
+  },
+  "u9l3-coat-skirt-tshirt": {
+    "publicPath": "public/lep1/audio/coat-skirt-tshirt-song-u9l3.mp3",
+    "durationSec": 20,
+    "style": "Cheerful bouncy kids clothes-shop song, 104 BPM with ukulele, bright piano, shaker and hand claps, ONE clear happy young singer, every word sung slowly and very clearly with crisp consonants: COAT with a hard 'k', SKIRT and T-SHIRT clearly different. Definitely not a lullaby.",
+    "positiveStyles": [
+      "bouncy",
+      "ukulele",
+      "piano",
+      "shaker",
+      "hand claps",
+      "clear kids vocals",
+      "104 BPM",
+      "happy",
+      "playful"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "Coat, coat! Zip it up!",
+      "Skirt, skirt! Swish, swish, swish!",
+      "T-shirt, T-shirt! Arms in!",
+      "Coat, skirt, T-shirt! Let's go shopping!"
+    ]
+  },
+  "u9l4-what-are-you-wearing": {
+    "publicPath": "public/lep1/audio/what-are-you-wearing-song-u9l4.mp3",
+    "durationSec": 20,
+    "style": "Cheerful bouncy kids catwalk question-and-answer song, 104 BPM with ukulele, bright piano, finger snaps and hand claps, ONE clear happy young singer, every word sung slowly and very clearly with crisp consonants: WEARING clearly said, DRESS, SHIRT and HAT clearly different. Definitely not a lullaby.",
+    "positiveStyles": [
+      "bouncy",
+      "ukulele",
+      "piano",
+      "finger snaps",
+      "hand claps",
+      "clear kids vocals",
+      "104 BPM",
+      "happy",
+      "playful"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "What are you wearing? What are you wearing?",
+      "I'm wearing a yellow dress!",
+      "I'm wearing a red shirt!",
+      "I'm wearing a green hat! Hooray!"
+    ]
+  },
+  "u9l5-my-shoes-are-white": {
+    "publicPath": "public/lep1/audio/my-shoes-are-white-song-u9l5.mp3",
+    "durationSec": 20,
+    "style": "Cheerful bouncy kids walking song, 108 BPM with ukulele, bright piano, light drums and hand claps, ONE clear happy young singer, every word sung slowly and very clearly with crisp consonants: SHOES, WHITE, RED and BLUE clearly different, playful sound words SQUISH, SPLAT, SPLASH. Definitely not a lullaby.",
+    "positiveStyles": [
+      "bouncy",
+      "ukulele",
+      "piano",
+      "light drums",
+      "hand claps",
+      "clear kids vocals",
+      "108 BPM",
+      "happy",
+      "playful"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "My shoes are white! White, white, white!",
+      "Squish! My shoes are red!",
+      "Splat! My shoes are blue!",
+      "Splash, splash! I like my shoes!"
+    ]
+  },
+  "u9l6-dress-up": {
+    "publicPath": "public/lep1/audio/dress-up-song-u9l6.mp3",
+    "durationSec": 20,
+    "style": "Cheerful bouncy kids dress-up song, 106 BPM with ukulele, bright piano, finger snaps and hand claps, ONE clear happy young singer, every word sung slowly and very clearly with crisp consonants: HAT, SHOES, SHIRT, DRESS, COAT and SKIRT clearly different. Definitely not a lullaby.",
+    "positiveStyles": [
+      "bouncy",
+      "ukulele",
+      "piano",
+      "finger snaps",
+      "hand claps",
+      "clear kids vocals",
+      "106 BPM",
+      "happy",
+      "playful"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "Hat on my head! Hat, hat, hat!",
+      "Shoes on my feet! Shoes, shoes, shoes!",
+      "A shirt, a dress, a coat, a skirt!",
+      "Dress up, dress up! Look at me!"
+    ]
+  },
+  "u10l1-run-jump-walk": {
+    "publicPath": "public/lep1/audio/run-jump-walk-song-u10l1.mp3",
+    "durationSec": 20,
+    "style": "Energetic bouncy kids action song, 112 BPM with ukulele, bright piano, light drums and hand claps, ONE clear happy young singer, every word sung slowly and very clearly with crisp consonants: RUN, JUMP and WALK clearly different, a short pause before the final STOP. Definitely not a lullaby.",
+    "positiveStyles": [
+      "bouncy",
+      "energetic",
+      "ukulele",
+      "piano",
+      "light drums",
+      "hand claps",
+      "clear kids vocals",
+      "112 BPM",
+      "happy"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "Run, run, run! Run, run, run!",
+      "Jump, jump, jump! Jump up high!",
+      "Walk, walk, walk! Walk so slow!",
+      "Run, jump, walk! And stop!"
+    ]
   }
 }
