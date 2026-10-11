@@ -315,6 +315,7 @@ export const SimplifiedTeacherCalendar = ({ teacherId }: SimplifiedTeacherCalend
       <BookedSlotManager
         open={!!bookedSlotInfo}
         onOpenChange={(o) => { if (!o) setBookedSlotInfo(null); }}
+        teacherId={teacherId}
         slot={bookedSlotInfo}
         onCancelled={() => { setBookedSlotInfo(null); reloadSlots(); }}
       />

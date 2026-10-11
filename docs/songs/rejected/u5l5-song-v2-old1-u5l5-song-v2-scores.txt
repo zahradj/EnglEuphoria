@@ -1,0 +1,5 @@
+
+=== docs/songs/u5l5-song-v2-take3.mp3  length=20.1s  score=0.79  missing=6  extra=6
+heard: dust dust one two three four dust ice cream ice cream yum yum yum a book a book we read a book yeah yeah i love you guys
+line starts (s): [np.float64(1.8), np.float64(4.9), np.float64(8.5), np.float64(14.9)]
+lineDurationsMs: [4900, 3600, 6440, 5122]

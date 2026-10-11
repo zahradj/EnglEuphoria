@@ -46,6 +46,8 @@ export const QUEST_FEELINGS_CLASS_WT_U1L2: HomeworkQuest = {
         { word: 'insect', answer: 'I', emoji: '🐞' },
         { word: 'net', answer: 'N', emoji: '🥅' },
       ] },
+    { kind: 'sound-blend', name: 'Sound Train', icon: '🚂', intro: 'Tap each sound. Then blend them and find the picture!', img: `${W}/scenes/bg-classroom-reading-wide.png`, voice: 'pip',
+      rounds: [{ word: 'pig', picture: '/lep1/items/item-pig.png' }, { word: 'nut', picture: '/lep1/items/item-nut.png' }, { word: 'ten', picture: '/lep1/items/item-ten.png' }, { word: 'fan', picture: '/lep1/items/item-fan.png' }] },
     { kind: 'treasure', name: 'Class Box', icon: '/lep1/stickers/chest-closed.png', intro: 'Tap the box to open it!', img: room, closed: '/lep1/stickers/chest-closed.png', open: '/lep1/stickers/chest-open.png', win: 'You did it! How are you? I am happy!' },
   ],
 };

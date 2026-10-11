@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import i18n from '@/lib/i18n';
+import { markLanguagePicked } from '@/lib/languageChoice';
 
 /**
  * Hydrates i18n with the language stored on the user's profile
@@ -27,6 +28,8 @@ export function useStudentLanguageSync() {
       if (cancelled || error || !data?.preferred_language) return;
 
       const stored = data.preferred_language;
+      // What a student saved on their profile is their own choice: it beats the region default on every device.
+      markLanguagePicked();
       if (i18n.language?.substring(0, 2) !== stored) {
         i18n.changeLanguage(stored);
       }

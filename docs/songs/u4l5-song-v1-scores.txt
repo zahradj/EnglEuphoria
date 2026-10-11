@@ -1,0 +1,15 @@
+
+=== docs/songs/u4l5-song-v1-take1.mp3  length=20.1s  score=0.67  missing=9  extra=8
+heard: head head the tiger jacks his head head head i turn my head art art the monkey waces' arms art art i wade my heart
+line starts (s): [np.float64(0.0), np.float64(3.3), np.float64(9.8), np.float64(13.8)]
+lineDurationsMs: [3280, 6520, 3960, 6302]
+
+=== docs/songs/u4l5-song-v1-take2.mp3  length=20.1s  score=0.81  missing=4  extra=6
+heard: head head head the tiger turns his head head head head i turn my head arms arms the monkey waves his arm arms arms the lady my heart
+line starts (s): [np.float64(0.8), np.float64(4.5), np.float64(7.7), np.float64(13.1)]
+lineDurationsMs: [4520, 3200, 5400, 6942]
+
+=== docs/songs/u4l5-song-v1-take3.mp3  length=20.1s  score=0.87  missing=3  extra=4
+heard: head head head desire turns his head head head head i turn my head arms arms the monkey waves his arms arms arms i lay my arms
+line starts (s): [np.float64(0.0), np.float64(4.7), np.float64(7.8), np.float64(11.3)]
+lineDurationsMs: [4700, 3060, 3560, 8742]

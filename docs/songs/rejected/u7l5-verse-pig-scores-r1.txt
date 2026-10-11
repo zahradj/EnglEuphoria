@@ -1,0 +1,15 @@
+
+=== docs/songs/u7l5-verse-pig-take1.mp3  length=20.1s  score=0.31  missing=18  extra=30
+heard: can't father have a farm the idea eel eel eel eel and on a spot the idea the idea eel eel with an oil oil gear and an oil on and pan can't father have a farm the idea eel eel
+line starts (s): [np.float64(1.8), np.float64(5.0), np.float64(9.1), np.float64(14.7)]
+lineDurationsMs: [5040, 4060, 5600, 5362]
+
+=== docs/songs/u7l5-verse-pig-take2.mp3  length=20.1s  score=0.39  missing=15  extra=29
+heard: grandpa had a farm e i e i o an honest army had a thing e i e i o with an e i e i o and an e i e i o grandpa had a farm e i e i o
+line starts (s): [np.float64(0.0), np.float64(5.0), np.float64(7.8), np.float64(10.9)]
+lineDurationsMs: [5000, 2840, 3100, 9122]
+
+=== docs/songs/u7l5-verse-pig-take3.mp3  length=20.1s  score=0.43  missing=14  extra=25
+heard: grandpa had a fart e i e i o and on his gummy head i've been e i e i o with an ointe point here and an ointe point there grandpa had a fart e i e i o
+line starts (s): [np.float64(0.0), np.float64(3.8), np.float64(8.0), np.float64(12.6)]
+lineDurationsMs: [3800, 4240, 4540, 7482]

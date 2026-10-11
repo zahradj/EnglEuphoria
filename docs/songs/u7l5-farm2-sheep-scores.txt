@@ -1,0 +1,15 @@
+
+=== docs/songs/u7l5-farm2-sheep-take1.mp3  length=20.1s  score=0.68  missing=10  extra=14
+heard: a farm a farm grandpa had a farm and on his farm he had a sheep e i e i o a sheep but sheep did to sheep bah bah with a bah bah here and a bah bah there
+line starts (s): [np.float64(0.0), np.float64(4.0), np.float64(8.7), np.float64(13.0)]
+lineDurationsMs: [4040, 4620, 4300, 7102]
+
+=== docs/songs/u7l5-farm2-sheep-take2.mp3  length=20.1s  score=0.62  missing=12  extra=17
+heard: a farm a farm ramp a hat a farm and on his farm he had a sheep e i e i o a sheep a sheep it's a sheep bop bop it's a bop a year and a bop a year
+line starts (s): [np.float64(0.0), np.float64(4.1), np.float64(9.2), np.float64(13.4)]
+lineDurationsMs: [4100, 5080, 4260, 6622]
+
+=== docs/songs/u7l5-farm2-sheep-take3.mp3  length=20.1s  score=0.75  missing=8  extra=11
+heard: a farm a farm grandpa had a farm and on his farm he had a sheep yaya yaya yaya a sheep a sheep it's a sheep a bah bah with a bah bah here and the bah bah there
+line starts (s): [np.float64(0.0), np.float64(4.3), np.float64(8.7), np.float64(13.0)]
+lineDurationsMs: [4340, 4320, 4300, 7102]

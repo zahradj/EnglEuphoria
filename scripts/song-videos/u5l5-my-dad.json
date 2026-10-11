@@ -1,0 +1,181 @@
+{
+ "out": "public/lep1/video/my-dad-song-u5l5",
+ "audioOut": "public/lep1/audio/my-dad-song-video-u5l5.mp3",
+ "labelsFrom": [
+  [
+   "scripts/film-labels/u5l5-my-day-pages.json",
+   "scripts/film-labels/u5l5-my-day.json"
+  ]
+ ],
+ "verses": [
+  {
+   "audio": "public/lep1/audio/my-dad-song3-u5l5.mp3",
+   "lines": [
+    [
+     4.25,
+     "public/lep1/video/clips/u5l5-dad/gate-walk.mp4",
+     [
+      {
+       "karaoke": [
+        "Dad,",
+        "Dad!"
+       ],
+       "at": [
+        18,
+        45
+       ],
+       "delay": 4.25
+      }
+     ]
+    ],
+    [
+     8.0,
+     null
+    ],
+    [
+     12.62,
+     "public/lep1/video/clips/u5l5-dad/ball-throw.mp4",
+     [
+      {
+       "karaoke": [
+        "A ball,",
+        "a ball!"
+       ],
+       "at": [
+        30,
+        18
+       ]
+      }
+     ]
+    ],
+    [
+     16.92,
+     "public/lep1/video/clips/u5l5-dad/ball-catch.mp4",
+     [
+      {
+       "karaoke": [
+        "Catch!"
+       ],
+       "at": [
+        30,
+        18
+       ]
+      }
+     ]
+    ],
+    [
+     21.42,
+     "public/lep1/video/clips/u5l5-dad/ducks-count.mp4",
+     [
+      {
+       "karaoke": [
+        "Ducks,",
+        "ducks!"
+       ],
+       "at": [
+        20,
+        16
+       ]
+      }
+     ]
+    ],
+    [
+     25.78,
+     "public/lep1/video/clips/u5l5-dad/ducks-bread.mp4",
+     [
+      {
+       "karaoke": [
+        "Ducks!"
+       ],
+       "at": [
+        22,
+        20
+       ]
+      }
+     ]
+    ],
+    [
+     30.22,
+     "public/lep1/video/clips/u5l5-dad/icecream-lick.mp4",
+     [
+      {
+       "karaoke": [
+        "Ice cream!"
+       ],
+       "at": [
+        20,
+        14
+       ]
+      }
+     ]
+    ],
+    [
+     35.25,
+     "public/lep1/video/clips/u5l5-dad/book-open.mp4",
+     [
+      {
+       "karaoke": [
+        "A book,",
+        "a book!"
+       ],
+       "at": [
+        85,
+        40
+       ]
+      }
+     ]
+    ],
+    [
+     40.49,
+     "public/lep1/video/clips/u5l5-dad/goodnight-hug.mp4",
+     [
+      {
+       "karaoke": [
+        "Dad,",
+        "Dad!"
+       ],
+       "at": [
+        82,
+        40
+       ]
+      }
+     ]
+    ],
+    [
+     43.5,
+     "public/lep1/video/clips/u5l5-dad/night-best.mp4"
+    ],
+    [
+     49.35,
+     "public/lep1/video/clips/u5l5-dad/goodnight-hug.mp4",
+     [
+      {
+       "karaoke": [
+        "Dad!"
+       ],
+       "at": [
+        82,
+        40
+       ]
+      }
+     ]
+    ],
+    [
+     52.76,
+     "public/lep1/video/clips/u5l5-dad/gate-walk.mp4",
+     [
+      {
+       "karaoke": [
+        "My dad!"
+       ],
+       "at": [
+        18,
+        45
+       ]
+      }
+     ]
+    ]
+   ]
+  }
+ ]
+}

@@ -15,6 +15,7 @@ import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
 import { FamilyAccountCard } from './FamilyAccountCard';
 import i18n from '@/lib/i18n';
+import { markLanguagePicked } from '@/lib/languageChoice';
 import { toast } from 'sonner';
 
 interface ProfileTabProps {
@@ -199,6 +200,7 @@ export const ProfileTab = ({ studentName }: ProfileTabProps) => {
 
   const handleLanguagePreview = (next: LanguageCode) => {
     setLanguage(next);
+    markLanguagePicked();
     i18n.changeLanguage(next);
   };
 

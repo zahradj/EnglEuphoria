@@ -80,6 +80,12 @@ export type QuestLevel =
       questions: { q: string; options: string[]; answer: string }[];
     })
   | (LevelBase & {
+      /** Sound Train blending (the lessons' universal phonics slide, at home): tap each sound (recorded letter
+       *  sound), press Blend! to hear the word, then pick its picture out of three. `sounds` for digraphs. */
+      kind: 'sound-blend'; img: string;
+      rounds: { word: string; sounds?: string[]; picture?: string; emoji?: string }[];
+    })
+  | (LevelBase & {
       kind: 'treasure'; img: string; closed: string; open: string; win: string;
     });
 
@@ -124,6 +130,7 @@ export function questLines(q: HomeworkQuest): [QuestVoice, string][] {
       case 'sticker-drop': l.stickers.forEach((s) => add(v, s.line)); break;
       case 'true-false': case 'sentence-builder': l.rounds.forEach((r) => add(v, r.line)); break;
       case 'sound-choice': l.rounds.forEach((r) => add(v, r.word)); break;
+      case 'sound-blend': l.rounds.forEach((r) => add(v, r.word)); break;
       case 'picture-choice': l.rounds.forEach((r) => add(v, r.line)); break;
       case 'twister': add(v, l.line); add(v, l.sayIt); break;
       case 'reading': l.sentences.forEach((s) => add(v, s)); l.questions.forEach((x) => add(v, x.q)); break;

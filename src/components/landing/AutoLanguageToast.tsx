@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Globe, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { markLanguagePicked } from '@/lib/languageChoice';
 
 const SUPPORTED = ['en', 'es', 'ar', 'fr', 'tr', 'it'] as const;
 type Lang = typeof SUPPORTED[number];
@@ -51,7 +52,7 @@ export function AutoLanguageToast() {
 
   const accept = () => {
     if (!suggested) return;
-    localStorage.setItem('i18nextLng-userpicked', '1');
+    markLanguagePicked();
     localStorage.setItem(STORAGE_KEY, '1');
     i18n.changeLanguage(suggested);
     setSuggested(null);

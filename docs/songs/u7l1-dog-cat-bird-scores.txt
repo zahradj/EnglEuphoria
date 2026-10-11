@@ -1,0 +1,15 @@
+
+=== docs/songs/u7l1-dog-cat-bird-take1.mp3  length=20.1s  score=0.71  missing=7  extra=8
+heard: it's a dog what what what it's a cat made on my own it's a bird tweet tweet tweet dog cat bird i love my cats
+line starts (s): [np.float64(0.0), np.float64(4.5), np.float64(9.0), np.float64(13.6)]
+lineDurationsMs: [4540, 4440, 4600, 6482]
+
+=== docs/songs/u7l1-dog-cat-bird-take2.mp3  length=20.1s  score=0.82  missing=4  extra=5
+heard: it's a dog woof woof woof it's a cat my owl owl owl it's a bird tweet tweet tweet dog cat bird i love my cats
+line starts (s): [np.float64(0.0), np.float64(4.6), np.float64(9.1), np.float64(12.6)]
+lineDurationsMs: [4600, 4460, 3520, 7482]
+
+=== docs/songs/u7l1-dog-cat-bird-take3.mp3  length=20.1s  score=1.00  missing=0  extra=0
+heard: it's a dog woof woof woof it's a cat meow meow meow it's a bird tweet tweet tweet dog cat bird i love my pets
+line starts (s): [np.float64(0.0), np.float64(3.8), np.float64(8.3), np.float64(12.6)]
+lineDurationsMs: [3820, 4480, 4300, 7462]

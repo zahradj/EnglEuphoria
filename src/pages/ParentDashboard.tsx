@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
@@ -21,7 +22,7 @@ import { useClaimReferral } from '@/hooks/useClaimReferral';
 import { ReferralTab } from '@/components/student/tabs/ReferralTab';
 import type { FamilyLearner } from '@/components/parent/FamilyPackList';
 import { MoveCreditsDialog } from '@/components/parent/MoveCreditsDialog';
-import { FamilyLessonsPanel } from '@/components/parent/FamilyLessonsPanel';
+import { FamilyLessonsSummary } from '@/components/parent/FamilyLessonsSummary';
 import '@/components/parent/family-dashboard.css';
 
 interface StudentRelationship {
@@ -54,7 +55,7 @@ const ParentDashboard: React.FC = () => {
   useClaimReferral(user?.id);
   const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
   const [tab, setTab] = useState<string>('students');
-  const [focusId, setFocusId] = useState<string | null>(null);
+  const navigate = useNavigate();
   const [moveFrom, setMoveFrom] = useState<string | null>(null);
   const [moveOpen, setMoveOpen] = useState(false);
 
@@ -147,10 +148,7 @@ const ParentDashboard: React.FC = () => {
       hub: hub === 'academy' || hub === 'professional' ? hub : 'playground',
     };
   });
-  const startBuy = (studentId: string) => {
-    setFocusId(studentId);
-    document.getElementById('family-lessons')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
+  const startBuy = (studentId: string) => navigate(`/parent/lessons?child=${encodeURIComponent(studentId)}`);
   const startMove = (studentId: string) => {
     setMoveFrom(studentId);
     setMoveOpen(true);
@@ -212,7 +210,7 @@ const ParentDashboard: React.FC = () => {
 
           <TabsPrimitive.Content value="students" className="focus-visible:outline-none">
             <div className="grid gap-6">
-            {learners.length > 0 && <FamilyLessonsPanel learners={learners} credits={familyCredits} focusId={focusId} />}
+            <FamilyLessonsSummary learners={learners} credits={familyCredits} />
             <ParentStudentList
               children={children}
               onViewProgress={viewProgress}

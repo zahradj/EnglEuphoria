@@ -66,6 +66,9 @@ import { spokenText } from '../src/content/playground-library/unit1/spokenText.t
 import { LIBRARY_GAMES } from '../src/content/playground-library/gamesCatalog.ts';
 import { artFor } from '../src/content/playground-library/alphabetArt.ts';
 import { colorPlayLines } from '../src/content/playground-library/colorPlayText.ts';
+import { verbForgeLines } from '../src/academy-games/verbForge/verbData.ts';
+import { soundLabLines } from '../src/academy-games/soundLab/soundLabData.ts';
+import { twisterLines } from '../src/academy-games/twisterLab/twisterData.ts';
 import { VOICE_PROFILES, approvedVoiceId, isShortLine, normalizeForSpeech, SHORT_LINE_CLIP_VERSION, unresolvedSpeechRisks, voiceStatus } from '../src/lib/speechPolicy.ts';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -191,6 +194,8 @@ const castName = (who) => CAST[who]?.name ?? who;
  *  inferred from field names). Returns an array of [character, text] pairs
  *  for one scene instance. */
 const UNIT1_EXTRACTORS = {
+  // Universal Sound Train (../SoundBlendScene.tsx): the whole word, teacher voice (single sounds are recorded files).
+  'sound-blend': (s) => (s.rounds ?? []).map((r) => ['teacher', r.word]),
   cinematic: (s) => (s.script ?? []).map((l) => [l.who, l.line]),
   meet: (s) => {
     const out = [[s.who, s.line]];
@@ -430,6 +435,11 @@ const UNIT1_EXTRACTORS = {
     ];
   },
   // Mirror HouseBoardScene.tsx's houseBoardLines().
+  'farm-verse': (s) => { const art = (w) => (/^[aeiou]/i.test(w) ? 'an' : 'a'); return [[s.who, 'You are the farmer! Choose an animal for your farm!'], ...(s.animals ?? []).flatMap((a) => [[s.who, `And on his farm he had ${art(a.label)} ${a.label}, E-I-E-I-O!`], [s.who, `With ${art(a.sound)} ${a.sound}, ${a.sound} here, and ${art(a.sound)} ${a.sound}, ${a.sound} there!`]]), [s.who, s.doneLine]]; },
+  'animal-riddle': (s) => { const used = [...new Set((s.rounds ?? []).flatMap((r) => r.options))]; return [[s.who, 'What animal is this?'], ...(s.rounds ?? []).flatMap((r) => r.clues.map((c) => [s.who, c])), ...used.flatMap((i) => { const a = (s.animals ?? [])[i]; return a ? [[s.who, a.say], [s.who, `No! It isn't the ${a.label}.`]] : []; }), [s.who, s.doneLine]]; },
+  'animal-parade': (s) => [[s.who, "Let's make an animal parade!"], [s.who, 'Listen again!'], ...(s.rounds ?? []).map((r) => [s.who, r.line]), ...(s.animals ?? []).map((a) => [s.who, a.say]), [s.who, s.doneLine]],
+  'farm-wash': (s) => [[s.who, "Oh no! The animals are muddy! Let's wash them!"], ...(s.rounds ?? []).map((r) => [s.who, r.line]), ...(s.animals ?? []).flatMap((a) => [[s.who, a.say], [s.who, `Oops! That's the ${a.label}.`]]), [s.who, s.doneLine]],
+  'photo-snap': (s) => [[s.who, 'Get your camera ready!'], ...(s.rounds ?? []).map((r) => [s.who, r.line]), ...(s.animals ?? []).flatMap((a) => [[s.who, a.say], [s.who, `Oops! That's the ${a.label}.`]]), [s.who, s.doneLine]],
   'house-board': (s) => [[s.who, 'Roll the dice!'], ...(s.squares ?? []).flatMap((q) => [[s.who, q.ask], [s.who, q.say]]), [s.who, s.doneLine]],
   // Mirror DoorKnockScene.tsx's doorKnockLines().
   'door-knock': (s) => [
@@ -462,6 +472,9 @@ const UNIT1_EXTRACTORS = {
     [s.who, s.doneLine],
   ],
   // Mirror DuckFeedScene.tsx's duckFeedLines().
+  'cafe-order': (s) => [...(s.rounds ?? []).flatMap((r) => [[r.customer, r.line], [r.customer, r.reply], [r.customer, `Oh no! ${r.line}`]]), ...(s.menu ?? []).map((m) => [s.who, m.word]), [s.who, s.doneLine]],
+  'feed-pip': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...(s.foods ?? []).map((f) => [s.who, `No, thank you! That's ${f.phrase}.`]), [s.who, s.doneLine]],
+  'night-sounds': (s) => (s.animals ?? []).flatMap((a) => [[s.who, `${a.sound} ${a.sound} Who's there?`], [s.who, `Yes! It's a ${a.word}! ${a.sound}`], [s.who, `That's a ${a.word}. ${a.sound}`]]),
   'duck-feed': (s) => [
     ...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]),
     ...(s.ducks ?? []).map((d) => [s.who, `No, that's ${d.name}! Try again!`]),
@@ -565,7 +578,7 @@ const UNIT1_EXTRACTORS = {
   // Mirrors MysteryBagScene.tsx's mysteryBagLines().
   'mystery-bag': (s) => {
     const art = (w) => (/^[aeiou]/i.test(w) ? 'an' : 'a');
-    return [[s.who, "What's in the bag?"], ...(s.rounds ?? []).flatMap((r) => [
+    return [[s.who, s.question ?? "What's in the bag?"], ...(s.rounds ?? []).flatMap((r) => [
       [s.who, `It's ${art(r.toyWord)} ${r.toyWord.toLowerCase()}!`],
       [s.who, `It's ${art(r.colorWord)} ${r.colorWord.toLowerCase()} ${r.toyWord.toLowerCase()}!`],
     ])];
@@ -650,6 +663,15 @@ const UNIT1_EXTRACTORS = {
  *  'marigold') and must be normalized through `voiceOf` before use — see
  *  `resolveWho` below. */
 const WT_EXTRACTORS = {
+  // Universal "Remember?" warm-up (RecallWarmupScene.tsx's recallWarmupLines()) — was missing here, so A1/A2
+  // warm-up lines were never baked and the audit could not see them.
+  'recall-warmup': (s) => [
+    [s.who, 'Do you remember? Listen and find it!'], [s.who, 'Try again!'], [s.who, 'You remember! Great job!'],
+    ...(s.items ?? []).flatMap((it) => [[s.who, it.say], [s.who, `Yes! ${it.word.charAt(0).toUpperCase() + it.word.slice(1)}!`]]),
+  ],
+  // welcome-town SentenceBuildScene: says the finished sentence in Pip's voice.
+  'sentence-build': (s) => (s.rounds ?? []).map((r) => ['pip', r.words.join(' ')]),
+  'sound-blend': (s) => (s.rounds ?? []).map((r) => ['teacher', r.word]),
   cinematic: (s) => (s.script ?? []).map((l) => [l.who, l.line]),
   meet: (s) => {
     const out = [[s.who, s.line]];
@@ -695,6 +717,9 @@ const WT_EXTRACTORS = {
   finale: (s) => (s.line ? [[s.who, s.line]] : []),
   'tongue-twister': (s) => [[s.who, s.line]],
   // Verified against welcome-town/SceneRenderer.tsx call sites.
+  // FeelingsSurveyScene.tsx: intro, "How are you, <name>?" + "<name> is <feeling>!" (host), "I am <feeling>!" (friend).
+  'chat-chain': (s) => [[s.partner, s.intro], ...(s.turns ?? []).map((t) => [t.who === 'student' ? 'pip' : t.who, t.line])],
+  'feelings-survey': (s) => [[s.who, s.intro], ...(s.friends ?? []).flatMap((f) => [[s.who, `How are you, ${f.name}?`], [f.who, `I am ${f.feeling}!`], [s.who, `${f.name} is ${f.feeling}!`]])],
   'listen-tap': (s) => (s.rounds ?? []).flatMap((r) => [[r.who ?? 'marigold', r.prompt], [r.who ?? 'marigold', `Yes! ${r.answerLabel}!`]]),
   'true-false': (s) => (s.rounds ?? []).map((r) => [r.who, r.statement]),
   'spin-wheel': (s) => (s.items ?? []).map((it) => ['teacher', it.label]),
@@ -776,7 +801,10 @@ function gameLines() {
       });
     }
   }
-  return [...words].map((w) => ['teacher', w]);
+  // Academy game: Verb Forge says every form of every verb and every answered sentence.
+  verbForgeLines().forEach((l) => words.add(l));
+  // Academy game: Sound Lab says every word of every minimal pair in THREE voices (hearing one sound in several voices trains the ear).
+  return [...[...words].map((w) => ['teacher', w]), ...soundLabLines(), ...twisterLines()];
 }
 
 function collectPairs(lessonFilter) {
@@ -802,6 +830,12 @@ function collectPairs(lessonFilter) {
       const scenes = scenesModule[name];
       if (!Array.isArray(scenes)) continue;
       for (const scene of scenes) {
+        // A Pre-A1 game inside an A1/A2 lesson ('prea1'): spoken by the Pre-A1 renderer, so Pre-A1 extractors and voice keys.
+        if (scene.kind === 'prea1') {
+          const inner = UNIT1_EXTRACTORS[scene.scene.kind];
+          if (inner) for (const [who, text] of inner(scene.scene)) add(who, text);
+          continue;
+        }
         const extractor = extractors[scene.kind];
         if (!extractor) continue;
         for (const [who, text] of extractor(scene)) add(resolveWho(who), text);

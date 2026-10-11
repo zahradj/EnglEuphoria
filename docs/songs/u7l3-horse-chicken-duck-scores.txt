@@ -1,0 +1,15 @@
+
+=== docs/songs/u7l3-horse-chicken-duck-take1.mp3  length=20.1s  score=0.72  missing=6  extra=7
+heard: it's a horse me me me it's a chicken clap clap clap it's a duck quack quack quack quack horse chicken duck let's march
+line starts (s): [np.float64(0.0), np.float64(3.9), np.float64(7.9), np.float64(11.8)]
+lineDurationsMs: [3940, 4000, 3860, 8262]
+
+=== docs/songs/u7l3-horse-chicken-duck-take2.mp3  length=20.1s  score=0.55  missing=10  extra=11
+heard: it's a horse nay nay nay it's a chicken clap clap clap it's a duck quap quap quap or it's chicken duck let's march
+line starts (s): [np.float64(0.0), np.float64(3.8), np.float64(8.7), np.float64(13.7)]
+lineDurationsMs: [3760, 4900, 5040, 6362]
+
+=== docs/songs/u7l3-horse-chicken-duck-take3.mp3  length=20.1s  score=0.87  missing=3  extra=3
+heard: it's a horse me me me it's a chicken cluck cluck cluck it's a duck quack quack quack horse chicken duck let's march
+line starts (s): [np.float64(0.0), np.float64(4.3), np.float64(8.0), np.float64(14.3)]
+lineDurationsMs: [4300, 3720, 6300, 5742]

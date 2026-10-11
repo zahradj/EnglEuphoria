@@ -7,7 +7,7 @@ export default function PlayWelcomeTown3() {
       scenes={LESSON_3_SCENES}
       sessionKey="wt3-scene-idx"
       pageTitle={`${LESSON_3_TITLE} — Welcome Town — EnglEuphoria Playground`}
-      pageDescription="A1 Unit 1, Lesson 3: listen carefully and identify greetings and introductions."
+      pageDescription="A1 Unit 1, Lesson 3: listen to the Greetings Song, find who sings each line, and sing it yourself."
     />
   );
 }

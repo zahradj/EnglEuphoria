@@ -71,6 +71,27 @@ export const REUSABLE_ACTIVITIES: ReusableActivity[] = [
     },
   },
   {
+    kind: 'sound-blend',
+    name: 'Blend It! (Sound Train)',
+    file: 'src/content/playground-library/SoundBlendScene.tsx',
+    purpose: 'Phonics: say each sound of a word, blend them into the word, then find its picture (the universal phonics slide, blueprint slot 14).',
+    howItWorks:
+      'Each sound rides in its own train car with a sound button under it. Tap every car: it plays the RECORDED letter sound '
+      + '(file only, no TTS) and lights up. Then press Blend!: the cars roll together, the sounds play close together and the '
+      + 'word is spoken. Last, pick the picture of the word out of three (the other pictures come from the other rounds). '
+      + 'A wrong picture costs no heart; after two misses the right one glows. Digraphs: give sounds, e.g. [\'sh\', \'i\', \'p\'].',
+    example: {
+      id: 'u1-blend',
+      kind: 'sound-blend',
+      teacher: 'Tap each car and say the sound with the student, press Blend!, then let them find the picture.',
+      rounds: [
+        { word: 'cat', img: '/lep1/items/item-cat.png' },
+        { word: 'hat', img: '/lep1/items/item-hat.png' },
+        { word: 'pig', img: '/lep1/items/item-pig.png' },
+      ],
+    },
+  },
+  {
     kind: 'first-sound',
     name: 'First Sound Fishing',
     file: 'src/content/playground-library/FirstSoundScene.tsx',

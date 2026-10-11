@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight, Loader2, RotateCcw, Lock, Repeat, CalendarDays, UserPlus } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { BookedSlotManager } from './BookedSlotManager';
+import { OpenSlotManager } from './OpenSlotManager';
 import { InviteStudentDialog } from './InviteStudentDialog';
 import type { AvailabilitySlot } from './types';
 
@@ -33,6 +34,7 @@ export const ClassScheduler: React.FC<ClassSchedulerProps> = ({
   const [busy, setBusy] = useState(false);
   const [mode, setMode] = useState<SlotMode>('single');
   const [bookedSlot, setBookedSlot] = useState<AvailabilitySlot | null>(null);
+  const [openSlot, setOpenSlot] = useState<AvailabilitySlot | null>(null);
   const [inviteOpen, setInviteOpen] = useState(false);
 
   const { hubKind, allowedDurations, loading: hubLoading, hubs, isMultiHub } = useTeacherHubRole(teacherId);
@@ -90,7 +92,7 @@ export const ClassScheduler: React.FC<ClassSchedulerProps> = ({
     return `${format(first, 'MMM d')} – ${format(last, 'MMM d, yyyy')}`;
   }, [weekDates]);
 
-  // ── Direct click-to-toggle: insert single / insert weekly / delete open ──
+  // ── Click an empty cell to open a slot (single or weekly); click an open slot to remove it ──
   const handleCellClick = useCallback(
     async (day: string, time: string) => {
       const existing = getSlotAt(day, time);
@@ -104,6 +106,12 @@ export const ClassScheduler: React.FC<ClassSchedulerProps> = ({
       if (isSlotInPast(day, time)) return;
       if (busy) return;
 
+      // An open slot: ask what to do with it (remove this one, or this and every later week).
+      if (existing?.status === 'open' && existing.id) {
+        setOpenSlot(existing);
+        return;
+      }
+
       const dayData = weekDates.find((d) => d.day === day);
       if (!dayData) return;
       const [h, m] = time.split(':').map(Number);
@@ -113,24 +121,8 @@ export const ClassScheduler: React.FC<ClassSchedulerProps> = ({
 
       setBusy(true);
       try {
-        // ── DELETE: tap an existing OPEN slot ──
-        if (existing && existing.status === 'open' && existing.id) {
-          const { error } = await supabase
-            .from('teacher_availability')
-            .delete()
-            .eq('id', existing.id)
-            .eq('teacher_id', teacherId)
-            .eq('is_booked', false); // never delete a booked row
-
-          if (error) throw error;
-
-          toast({
-            title: 'Slot removed',
-            description: `${day} · ${time} is no longer available.`,
-          });
-        }
         // ── INSERT: tap an empty cell ──
-        else if (!existing) {
+        if (!existing) {
           // Mixed 30/60-minute slots must never overlap.
           if (allowedDurations.length > 1) {
             const shift = (t: string, delta: number) => {
@@ -343,7 +335,7 @@ export const ClassScheduler: React.FC<ClassSchedulerProps> = ({
       {/* Helper hint + legend */}
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 rounded-2xl border border-border/50 bg-card/70 px-4 py-2.5 text-xs text-muted-foreground backdrop-blur">
         <span className="font-semibold text-foreground">
-          Tap a cell to {mode === 'weekly' ? 'open it every week for 12 weeks' : 'open a single slot'}.
+          Tap an empty cell to {mode === 'weekly' ? 'open it every week for 12 weeks' : 'open a single slot'} · tap a slot to move or remove it.
         </span>
         <span className="hidden h-4 w-px bg-border sm:block" />
         <span className="inline-flex items-center gap-1.5">
@@ -389,8 +381,10 @@ export const ClassScheduler: React.FC<ClassSchedulerProps> = ({
       <BookedSlotManager
         open={!!bookedSlot}
         onOpenChange={(open) => { if (!open) setBookedSlot(null); }}
+        teacherId={teacherId}
         slot={bookedSlot ? {
           slotId: bookedSlot.id,
+          studentId: bookedSlot.studentId,
           studentName: bookedSlot.studentName,
           studentShortId: bookedSlot.studentShortId,
           lessonTitle: bookedSlot.lessonTitle,
@@ -401,6 +395,30 @@ export const ClassScheduler: React.FC<ClassSchedulerProps> = ({
         } : null}
         onCancelled={() => {
           setBookedSlot(null);
+          window.dispatchEvent(new Event('availability-changed'));
+          refresh();
+        }}
+        onMoved={() => {
+          setBookedSlot(null);
+          window.dispatchEvent(new Event('availability-changed'));
+          refresh();
+        }}
+      />
+
+      <OpenSlotManager
+        open={!!openSlot}
+        onOpenChange={(open) => { if (!open) setOpenSlot(null); }}
+        teacherId={teacherId}
+        slot={openSlot ? {
+          slotId: openSlot.id,
+          startTime: openSlot.startTime ? new Date(openSlot.startTime) : new Date(),
+          duration: openSlot.duration,
+          hub: openSlot.hub ?? null,
+          isRecurring: !!openSlot.recurringPattern,
+        } : null}
+        onChanged={() => {
+          setOpenSlot(null);
+          window.dispatchEvent(new Event('availability-changed'));
           refresh();
         }}
       />

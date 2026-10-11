@@ -1,0 +1,136 @@
+/* Family dashboard › Lessons page. Scoped to .fp-page (inside .family-dash, see components/parent/family-dashboard.css).
+   Each child's hub colour arrives as --hub / --hub-tint / --hub-glow (hubStyle()). Logical properties throughout (RTL). */
+
+.fp-page { --hub: #6b21a8; --hub-tint: #f1e6fd; --hub-glow: #9b5ce0; }
+
+/* ---------- Hero ---------- */
+.fp-hero {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.25rem;
+  border-radius: 28px;
+  padding: clamp(1.4rem, 3.5vw, 2.2rem);
+  color: #fff;
+  background:
+    radial-gradient(460px 240px at 100% 120%, rgba(254, 106, 47, 0.5), transparent 70%),
+    radial-gradient(380px 200px at 0% -20%, rgba(155, 92, 224, 0.45), transparent 70%),
+    linear-gradient(135deg, #232659 0%, #3d2a8a 58%, #6b21a8 100%);
+  box-shadow: 0 24px 48px -28px rgba(35, 38, 89, 0.7);
+}
+.fp-hero .fd-hero__eyebrow { margin: 0; }
+.fp-facts { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0; padding: 0; list-style: none; }
+.fp-facts li {
+  display: inline-flex; align-items: center; gap: 0.45rem;
+  padding: 0.45rem 0.9rem; border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.14); border: 1px solid rgba(255, 255, 255, 0.28);
+  font-family: var(--fd-display); font-size: 0.85rem; font-weight: 600;
+}
+
+/* ---------- Who are the lessons for ---------- */
+.fp-kids { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 0.75rem; }
+.fp-kid {
+  display: flex; align-items: center; gap: 0.8rem;
+  padding: 0.7rem 0.9rem; border-radius: 22px; min-height: 76px;
+  background: var(--fd-card); border: 2px solid var(--fd-line); box-shadow: var(--fd-shadow);
+  cursor: pointer; text-align: start;
+  transition: border-color 0.15s ease, background-color 0.15s ease, transform 0.15s ease;
+}
+.fp-kid:hover { border-color: var(--hub); }
+.fp-kid[aria-pressed='true'] {
+  border-color: var(--hub);
+  background: color-mix(in srgb, var(--hub) 9%, var(--fd-card));
+  box-shadow: 0 12px 26px -16px var(--hub);
+}
+.fp-kid:focus-visible { outline: 3px solid #6b21a8; outline-offset: 2px; }
+.fp-kid__name { display: block; font-family: var(--fd-display); font-weight: 700; font-size: 1.05rem; overflow-wrap: anywhere; }
+.fp-kid__left { display: block; font-size: 0.8rem; color: var(--fd-ink-soft); margin-top: 0.1rem; }
+.fp-kid__num { font-size: 1.15rem; font-weight: 700; color: var(--hub); }
+.fp-face {
+  flex: none; width: 52px; height: 52px; border-radius: 9999px; overflow: hidden;
+  display: grid; place-items: center;
+  background: var(--hub); color: #fff; font-family: var(--fd-display); font-weight: 700; font-size: 1.4rem;
+  border: 3px solid var(--fd-card); box-shadow: 0 6px 14px -8px rgba(35, 38, 89, 0.6);
+}
+.fp-face img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 14%; transform: scale(1.9); transform-origin: 50% 14%; background: var(--hub-tint); }
+
+.fp-now {
+  display: inline-flex; align-items: baseline; gap: 0.4rem; margin: 0;
+  padding: 0.4rem 0.95rem; border-radius: 9999px;
+  background: color-mix(in srgb, var(--hub) 10%, var(--fd-card)); color: var(--fd-ink);
+  border: 1px solid color-mix(in srgb, var(--hub) 25%, var(--fd-line));
+  font-size: 0.85rem; font-weight: 600;
+}
+.fp-now .fd-num { font-size: 1.25rem; font-weight: 700; color: var(--hub); }
+
+/* ---------- Pack cards ---------- */
+.fp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin: 0; padding: 0; list-style: none; }
+.fp-card {
+  position: relative; display: flex; flex-direction: column; gap: 0.35rem;
+  padding: 1.25rem 1.3rem 1.3rem; border-radius: 26px; overflow: hidden;
+  background: var(--fd-card); border: 1px solid var(--fd-line); box-shadow: var(--fd-shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.fp-card::before {
+  content: ''; position: absolute; inset-inline: 0; top: 0; height: 5px;
+  background: linear-gradient(90deg, var(--hub-glow), var(--hub));
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .fp-card:hover { transform: translateY(-4px); border-color: var(--hub); box-shadow: 0 22px 36px -22px var(--hub); }
+}
+.fp-card__top { display: flex; align-items: center; gap: 0.6rem; margin-top: 0.2rem; }
+.fp-card__icon {
+  flex: none; width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center;
+  background: var(--hub-tint); color: var(--hub);
+}
+.dark .fp-card__icon { background: color-mix(in srgb, var(--hub) 28%, var(--fd-card)); color: #fff; }
+.fp-card__name { font-family: var(--fd-display); font-weight: 700; font-size: 1.05rem; min-width: 0; overflow-wrap: anywhere; }
+.fp-badge {
+  margin-inline-start: auto; display: inline-flex; align-items: center; gap: 0.25rem; white-space: nowrap;
+  padding: 0.15rem 0.55rem; border-radius: 9999px;
+  background: #ede9fe; color: #5b21b6; font-size: 0.7rem; font-weight: 800; letter-spacing: 0.03em;
+}
+.dark .fp-badge { background: rgba(139, 92, 246, 0.25); color: #ddd6fe; }
+.fp-card__count { display: flex; align-items: baseline; gap: 0.5rem; margin: 0.7rem 0 0; }
+.fp-card__count .fd-num { font-size: clamp(3rem, 5vw, 3.6rem); font-weight: 800; line-height: 1; color: var(--fd-ink); }
+.fp-card__unit { font-family: var(--fd-display); font-weight: 600; font-size: 1.05rem; color: var(--fd-ink-soft); }
+.fp-card__meta { margin: 0; font-size: 0.85rem; color: var(--fd-ink-soft); }
+.fp-card__foot {
+  margin-top: auto; padding-top: 1.1rem;
+  display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap;
+}
+.fp-card__price { font-size: 1.9rem; font-weight: 800; line-height: 1; color: var(--fd-ink); }
+
+.fp-buy {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;
+  min-height: 46px; padding: 0.5rem 1.15rem; border-radius: 9999px; border: 0; cursor: pointer;
+  background: var(--hub); color: #fff; font-family: var(--fd-display); font-weight: 700; font-size: 0.95rem; text-align: center;
+  transition: box-shadow 0.15s ease, transform 0.15s ease, opacity 0.15s ease;
+}
+.fp-buy:hover { box-shadow: 0 12px 22px -12px var(--hub); transform: translateY(-1px); }
+.fp-buy:disabled { opacity: 0.55; cursor: not-allowed; transform: none; box-shadow: none; }
+.fp-buy:focus-visible { outline: 3px solid var(--fd-ink); outline-offset: 2px; }
+
+.fp-ghost {
+  display: inline-flex; align-items: center; gap: 0.5rem; min-height: 44px; padding: 0.4rem 1rem;
+  border-radius: 9999px; background: var(--fd-card); color: var(--fd-ink); cursor: pointer;
+  border: 1.5px solid var(--fd-line); font-family: var(--fd-display); font-weight: 600; font-size: 0.9rem;
+}
+.fp-ghost:hover { border-color: var(--hub); color: var(--hub); }
+
+/* ---------- Family packs ---------- */
+.fp-family {
+  padding: clamp(1rem, 2.5vw, 1.6rem); border-radius: 32px;
+  background:
+    radial-gradient(420px 220px at 100% 0%, color-mix(in srgb, var(--hub-glow) 14%, transparent), transparent 70%),
+    color-mix(in srgb, var(--hub) 5%, var(--fd-paper));
+  border: 1.5px dashed color-mix(in srgb, var(--hub) 40%, var(--fd-line));
+}
+.fp-card--family { background: var(--fd-card); }
+
+@media (prefers-reduced-motion: reduce) {
+  .fp-card, .fp-kid, .fp-buy { transition: none; }
+}

@@ -11,6 +11,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { supabase } from '@/integrations/supabase/client';
+import { markLanguagePicked } from '@/lib/languageChoice';
 
 const languages = [
   { code: 'en', name: 'English', flag: '🇺🇸' },
@@ -60,6 +62,15 @@ export function LanguageSwitcher({
   const changeLanguage = (lng: string) => {
     void i18n.changeLanguage(lng);
     applyDirection(lng);
+    // An explicit choice beats the location guess from now on, on this device...
+    markLanguagePicked();
+    // ...and, when signed in, on every device (users.preferred_language, read by useStudentLanguageSync).
+    void supabase.auth.getUser().then(({ data }) => {
+      if (!data?.user) return;
+      return supabase.from('users').update({ preferred_language: lng }).eq('id', data.user.id).then(({ error }) => {
+        if (error) console.warn('[LanguageSwitcher] could not save preferred_language', error.message);
+      });
+    }).catch(() => undefined);
   };
 
   const currentLanguage =

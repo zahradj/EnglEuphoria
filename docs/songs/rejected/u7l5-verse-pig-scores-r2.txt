@@ -1,0 +1,4 @@
+
+=== docs/songs/u7l5-verse-pig-take3.mp3  length=20.1s  score=0.30  missing=19  extra=28
+heard: grandpa had to find me i i o and momma's found me at a big e i e i o with an oint going here and like on there grandpa had to find me i e i o
+line starts (s): [np.float64(0.0), None, np.float64(8.4), np.float64(12.7)]

@@ -103,6 +103,10 @@ export const QUEST_CSS = `
 .hq-orb.o0 { background:radial-gradient(circle at 35% 30%,#a78bfa,#6d28d9 70%)!important; box-shadow:0 8px 0 #3b0f8c,0 0 26px rgba(167,139,250,.6); }
 .hq-orb.o1 { background:radial-gradient(circle at 35% 30%,#7dd3fc,#0369a1 70%)!important; box-shadow:0 8px 0 #0c4a6e,0 0 26px rgba(125,211,252,.55); }
 .hq-orb.o2 { background:radial-gradient(circle at 35% 30%,#fcd34d,#d97706 70%)!important; box-shadow:0 8px 0 #92400e,0 0 26px rgba(252,211,77,.5); }
+.hq-orb.hq-dim { filter:grayscale(.7) brightness(.9); }
+.hq-orb.hq-lit { filter:none; transform:translateY(-4px); }
+.hq-orb.hq-blend { background:radial-gradient(circle at 35% 30%,#fb923c,#db2777 70%)!important; box-shadow:0 8px 0 #9d174d,0 0 26px rgba(251,146,60,.6); font-size:clamp(14px,2.4cqw,22px); line-height:1.1; }
+.hq-orb.hq-blend:disabled { opacity:.4; }
 .hq-cards { flex:none; display:flex; justify-content:center; gap:clamp(10px,2vw,22px); flex-wrap:wrap; }
 .hq-card { width:clamp(84px,min(22vw,21vh),190px); background:linear-gradient(180deg,#fffaf0,#f6e7c4)!important; border-radius:22px; padding:10px; aspect-ratio:1; transition:transform .15s; display:grid; place-items:center; box-shadow:0 10px 0 #b98a2e; }
 .hq-card:hover { transform:translateY(-6px) rotate(-2deg); } .hq-card img { width:85%; height:85%; object-fit:contain; } .hq-card .em { font-size:clamp(40px,9vh,72px); }

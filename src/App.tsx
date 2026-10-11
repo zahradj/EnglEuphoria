@@ -96,6 +96,7 @@ const MarketingAgentAutomationsPage = lazy(() => import("./pages/marketing-agent
 const TemplateMarketplace = lazy(() => import("./pages/TemplateMarketplace"));
 const StudentSignUp = lazy(() => import("./pages/StudentSignUp"));
 const ParentSignUp = lazy(() => import("./pages/ParentSignUp"));
+const ParentLessons = lazy(() => import("./pages/ParentLessons"));
 const WhoIsLearning = lazy(() => import("./pages/WhoIsLearning"));
 const StudentApplication = lazy(() => import("./pages/StudentApplication"));
 const EmailVerification = lazy(() => import("./pages/EmailVerification"));
@@ -185,6 +186,14 @@ const PlayUnit6Lesson3 = lazy(() => import("./pages/playground-scene/PlayUnit6Le
 const PlayUnit6Lesson4 = lazy(() => import("./pages/playground-scene/PlayUnit6Lesson4"));
 const PlayUnit6Lesson5 = lazy(() => import("./pages/playground-scene/PlayUnit6Lesson5"));
 const PlayUnit6Lesson6 = lazy(() => import("./pages/playground-scene/PlayUnit6Lesson6"));
+const PlayUnit7Lesson1 = lazy(() => import("./pages/playground-scene/PlayUnit7Lesson1"));
+const PlayUnit7Lesson2 = lazy(() => import("./pages/playground-scene/PlayUnit7Lesson2"));
+const PlayUnit7Lesson3 = lazy(() => import("./pages/playground-scene/PlayUnit7Lesson3"));
+const PlayUnit7Lesson4 = lazy(() => import("./pages/playground-scene/PlayUnit7Lesson4"));
+const PlayUnit7Lesson5 = lazy(() => import("./pages/playground-scene/PlayUnit7Lesson5"));
+const PlayUnit7Lesson6 = lazy(() => import("./pages/playground-scene/PlayUnit7Lesson6"));
+const PlayUnit8Lesson1 = lazy(() => import("./pages/playground-scene/PlayUnit8Lesson1"));
+const PlayUnit8Lesson2 = lazy(() => import("./pages/playground-scene/PlayUnit8Lesson2"));
 const PlayWelcomeTown1 = lazy(() => import("./pages/playground-scene/PlayWelcomeTown1"));
 const PlayWelcomeTown2 = lazy(() => import("./pages/playground-scene/PlayWelcomeTown2"));
 const PlayWelcomeTown3 = lazy(() => import("./pages/playground-scene/PlayWelcomeTown3"));
@@ -465,6 +474,46 @@ const App = () => {
                       <Route path="/playground-scene/unit-6-lesson-6" element={
                         <ImprovedProtectedRoute>
                           <Suspense fallback={<LoadingFallback />}><PlayUnit6Lesson6 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      <Route path="/playground-scene/unit-7-lesson-1" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayUnit7Lesson1 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      <Route path="/playground-scene/unit-7-lesson-2" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayUnit7Lesson2 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      <Route path="/playground-scene/unit-7-lesson-3" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayUnit7Lesson3 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      <Route path="/playground-scene/unit-7-lesson-4" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayUnit7Lesson4 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      <Route path="/playground-scene/unit-7-lesson-5" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayUnit7Lesson5 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      <Route path="/playground-scene/unit-7-lesson-6" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayUnit7Lesson6 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      <Route path="/playground-scene/unit-8-lesson-1" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayUnit8Lesson1 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      <Route path="/playground-scene/unit-8-lesson-2" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayUnit8Lesson2 /></Suspense>
                         </ImprovedProtectedRoute>
                       } />
                       {/* A1 tier — Welcome Town, Unit 1 Lesson 1 ("Hello, Class!"). */}
@@ -986,6 +1035,15 @@ const App = () => {
                         <ImprovedProtectedRoute>
                           <Suspense fallback={<LoadingFallback />}>
                             <TemplateMarketplace />
+                          </Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+
+                      {/* Family dashboard › Lessons (buy packs) - its own page */}
+                      <Route path="/parent/lessons" element={
+                        <ImprovedProtectedRoute requiredRole="parent">
+                          <Suspense fallback={<LoadingFallback />}>
+                            <ParentLessons />
                           </Suspense>
                         </ImprovedProtectedRoute>
                       } />

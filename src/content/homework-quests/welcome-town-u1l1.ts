@@ -52,6 +52,8 @@ export const QUEST_WELCOME_TOWN_U1L1: HomeworkQuest = {
         { word: 'sock', answer: 'S', emoji: '🧦' },
         { word: 'ant', answer: 'A', emoji: '🐜' },
       ] },
+    { kind: 'sound-blend', name: 'Sound Train', icon: '🚂', intro: 'Tap each sound. Then blend them and find the picture!', img: `${W}/scenes/bg-classroom-reading-wide.png`, voice: 'pip',
+      rounds: [{ word: 'hat', picture: '/lep1/items/item-hat.png' }, { word: 'cat', picture: '/lep1/items/item-cat.png' }, { word: 'mat', picture: '/lep1/items/item-mat.png' }, { word: 'bat', picture: '/lep1/items/item-bat.png' }] },
     { kind: 'treasure', name: 'Party Box', icon: '/lep1/stickers/chest-closed.png', intro: 'Tap the party box to open it!', img: party, closed: '/lep1/stickers/chest-closed.png', open: '/lep1/stickers/chest-open.png', win: 'You did it! Hello, party star! Bye-bye!' },
   ],
 };

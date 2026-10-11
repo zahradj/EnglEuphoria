@@ -17,7 +17,7 @@ const meetScenes = allScenes.filter((s): s is MeetScene & { kind: 'meet' } => s.
 
 describe('vocabulary highlighted on the character-speaking (meet) scenes', () => {
   it('finds the meet scenes (guards against the test silently checking nothing)', () => {
-    expect(meetScenes.length).toBeGreaterThan(30);
+    expect(meetScenes.length).toBeGreaterThan(20) // A1 U1 L1-L3 now reveal vocabulary on one page (22-slide blueprint), fewer meet pages;
   });
 
   it('every meet scene names the vocabulary to highlight', () => {

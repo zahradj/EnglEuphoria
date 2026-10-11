@@ -5,6 +5,7 @@ import { Card } from '@/components/ui/card';
 import { Check, Globe, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import i18n from '@/lib/i18n';
+import { markLanguagePicked } from '@/lib/languageChoice';
 import { useTranslation } from 'react-i18next';
 
 export type LanguageCode = 'en' | 'es' | 'ar' | 'fr' | 'tr' | 'it';
@@ -32,7 +33,8 @@ export const LanguageStep: React.FC<LanguageStepProps> = ({ initial, onComplete,
 
   const handleSelect = (code: LanguageCode) => {
     setSelected(code);
-    // Live preview — switch the UI immediately
+    // Live preview — switch the UI immediately (and remember it's their choice, not the region's)
+    markLanguagePicked();
     i18n.changeLanguage(code);
   };
 

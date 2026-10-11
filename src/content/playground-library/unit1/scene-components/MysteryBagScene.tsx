@@ -58,10 +58,11 @@ export function MysteryBagScene({ scene, onWin, onLose, onNext, sync }: { scene:
   const total = scene.rounds.length;
   const r = round < total ? scene.rounds[round] : undefined;
   const revealed = phase === 'reveal';
+  const question = scene.question ?? BAG_QUESTION;
 
   useEffect(() => {
     if (!r) return;
-    const t = window.setTimeout(() => cueSpeak(BAG_QUESTION, scene.who), 600);
+    const t = window.setTimeout(() => cueSpeak(question, scene.who), 600);
     return () => window.clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [round, scene.id]);
@@ -94,7 +95,7 @@ export function MysteryBagScene({ scene, onWin, onLose, onNext, sync }: { scene:
       <div className="absolute inset-0 flex items-center justify-center bg-cover bg-center pb-24" style={{ backgroundImage: `url(${scene.bg})` }}>
         <div className="absolute inset-0 bg-black/20" />
         <div className="relative z-10 flex flex-col items-center gap-4 px-4">
-          <div className="rounded-3xl bg-white px-8 py-3 text-center text-2xl font-black text-orange-600 shadow-2xl">🎒 The bag is empty! You found every toy!</div>
+          <div className="rounded-3xl bg-white px-8 py-3 text-center text-2xl font-black text-orange-600 shadow-2xl">🎒 {scene.doneText ?? 'The bag is empty! You found every toy!'}</div>
           <button onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">Next ⭐</button>
         </div>
       </div>
@@ -104,10 +105,10 @@ export function MysteryBagScene({ scene, onWin, onLose, onNext, sync }: { scene:
   return (
     <div className="absolute inset-0 overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
       <div className="pointer-events-none absolute left-1/2 top-3 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-base font-black text-orange-700 shadow-xl sm:text-xl">
-        {revealed ? `🎉 ${colorToyLine(r.colorWord, r.toyWord)}` : `🎒 ${BAG_QUESTION}`}
+        {revealed ? `🎉 ${colorToyLine(r.colorWord, r.toyWord)}` : `🎒 ${question}`}
         <span className="ml-2 rounded-full bg-orange-100 px-2 py-0.5 text-sm text-orange-600">{round + 1}/{total}</span>
       </div>
-      <button onClick={() => cueSpeak(revealed ? colorToyLine(r.colorWord, r.toyWord) : BAG_QUESTION, scene.who)} className="absolute right-3 top-3 z-30 rounded-full bg-white/95 px-3 py-2 text-sm font-black text-orange-700 shadow-lg active:scale-95">🔊 Again</button>
+      <button onClick={() => cueSpeak(revealed ? colorToyLine(r.colorWord, r.toyWord) : question, scene.who)} className="absolute right-3 top-3 z-30 rounded-full bg-white/95 px-3 py-2 text-sm font-black text-orange-700 shadow-lg active:scale-95">🔊 Again</button>
 
       {/* The bag, on the open right side of the picture */}
       <div key={round} className="absolute right-[8%] top-[16%] z-20 aspect-square h-[52vh] max-h-[420px]" style={{ animation: revealed ? undefined : 'lep1-bag-wiggle 1.6s ease-in-out infinite' }}>
@@ -158,7 +159,7 @@ export function MysteryBagScene({ scene, onWin, onLose, onNext, sync }: { scene:
 /** Every voiced line, for the clip baker (scripts/generate-voice-cache.mjs mirrors this). */
 export function mysteryBagLines(scene: Bag) {
   return [
-    [scene.who, BAG_QUESTION] as [string, string],
+    [scene.who, scene.question ?? BAG_QUESTION] as [string, string],
     ...scene.rounds.flatMap((r) => [[scene.who, toyLine(r.toyWord)], [scene.who, colorToyLine(r.colorWord, r.toyWord)]] as [string, string][]),
   ];
 }

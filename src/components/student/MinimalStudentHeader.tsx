@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Flame } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeModeToggle } from "@/components/ui/ThemeModeToggle";
+import { LanguageSwitcher } from "@/components/common/LanguageSwitcher";
 import { NotificationBell } from "@/components/notifications/NotificationBell";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { HubLogo } from "@/components/student/HubLogo";
@@ -84,6 +85,7 @@ export const MinimalStudentHeader: React.FC<MinimalStudentHeaderProps> = ({
         </div>
         <div className="flex items-center gap-1.5 shrink-0">
           <StreakBadge isDark={isDark} />
+          <LanguageSwitcher variant="ghost" size="sm" compact align="end" />
           {user && <NotificationBell />}
         </div>
       </div>
@@ -132,6 +134,7 @@ export const MinimalStudentHeader: React.FC<MinimalStudentHeaderProps> = ({
 
         <div className="flex items-center gap-2">
           <StreakBadge isDark={isDark} />
+          <LanguageSwitcher variant="ghost" size="sm" align="end" className={isDark ? 'text-white/70 hover:text-white hover:bg-white/10' : 'text-muted-foreground hover:text-foreground hover:bg-black/5'} />
           {user && <NotificationBell />}
           <ThemeModeToggle className={`${isDark ? 'text-white/60 hover:text-white hover:bg-white/10' : 'text-muted-foreground hover:text-foreground hover:bg-black/5'}`} />
         </div>

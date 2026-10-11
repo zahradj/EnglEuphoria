@@ -1,0 +1,15 @@
+
+=== docs/songs/u8l2-bread-water-juice-take1.mp3  length=20.1s  score=0.95  missing=1  extra=1
+heard: bread bread bread please water water water please juice juice or juice please bread and juice thank you yum
+line starts (s): [np.float64(0.0), np.float64(3.8), np.float64(8.3), np.float64(12.7)]
+lineDurationsMs: [3840, 4480, 4360, 7382]
+
+=== docs/songs/u8l2-bread-water-juice-take2.mp3  length=20.1s  score=1.00  missing=0  extra=0
+heard: bread bread bread please water water water please juice juice orange juice please bread and juice thank you yum
+line starts (s): [np.float64(0.0), np.float64(3.9), np.float64(8.4), np.float64(12.7)]
+lineDurationsMs: [3880, 4480, 4320, 7382]
+
+=== docs/songs/u8l2-bread-water-juice-take3.mp3  length=20.1s  score=0.95  missing=1  extra=1
+heard: bread bread bread cheese water water water please juice juice orange juice please bread and juice thank you yum
+line starts (s): [np.float64(0.0), np.float64(3.8), np.float64(8.3), np.float64(12.6)]
+lineDurationsMs: [3760, 4520, 4360, 7422]

@@ -315,6 +315,51 @@ function SoundChoice({ level, quest, say, miss, star, done, setDots }: LevelProp
   );
 }
 
+function SoundBlend({ level, quest, say, praise, tryAgain, miss, star, done, setDots }: LevelProps<'sound-blend'>) {
+  const voice = level.voice ?? quest.voice;
+  const [r, setR] = useState(0);
+  const [lit, setLit] = useState<number[]>([]);
+  const [blended, setBlended] = useState(false);
+  const [ok, setOk] = useState(false);
+  const misses = useRef(0);
+  const R = level.rounds[r];
+  const sounds = R ? (R.sounds ?? R.word.toLowerCase().split('')) : [];
+  // Three pictures: this word + two others from the level, shuffled once per round.
+  const opts = useMemo(() => (R ? shuffle([R, ...shuffle(level.rounds.filter((x) => x.word !== R.word)).slice(0, 2)]) : []), [R, level.rounds]);
+  useEffect(() => { setDots(level.rounds.length, r); setLit([]); setBlended(false); setOk(false); if (r === 0) void say(level.intro); }, [r]); // eslint-disable-line react-hooks/exhaustive-deps
+  if (!R) return null;
+  const tapSound = (i: number) => { if (blended) return; void playLetterPhonic(sounds[i]); sfx.right(); setLit((l) => (l.includes(i) ? l : [...l, i])); };
+  const blend = async () => {
+    if (blended || lit.length < sounds.length) return;
+    setBlended(true); sfx.magic();
+    for (const s of sounds) { await playLetterPhonic(s); await new Promise((res) => window.setTimeout(res, 60)); }
+    await say(R.word, voice);
+  };
+  const pick = (w: string, el: HTMLElement) => {
+    if (!blended || ok) return;
+    if (w === R.word) { setOk(true); sfx.right(); star(el); praise(); window.setTimeout(() => { if (r + 1 >= level.rounds.length) done(misses.current); else setR(r + 1); }, 1400); }
+    else { shake(el); misses.current++; miss(); tryAgain(); void say(R.word, voice); }
+  };
+  return (
+    <Stage img={level.img} night={quest.theme.night}>
+      {blended && <HearBtn onClick={() => void say(R.word, voice)} />}
+      <div className="hq-caption">{blended ? <b style={{ fontSize: '1.6em', letterSpacing: '.06em' }}>{R.word}</b> : lit.length < sounds.length ? 'Tap each sound!' : 'Now blend them!'}</div>
+      <div className="hq-dock">
+        {!blended ? (
+          <>
+            {sounds.map((s, i) => <button key={`${r}-${i}`} className={`hq-orb o${i % 3} ${lit.includes(i) ? 'hq-lit' : 'hq-dim'}`} onClick={() => tapSound(i)} aria-label={`Sound ${s}`}>{s}</button>)}
+            <button className="hq-orb hq-blend" disabled={lit.length < sounds.length} onClick={() => void blend()}>🚂<br />Blend!</button>
+          </>
+        ) : opts.map((o) => (
+          <button key={o.word} aria-label={o.word} className={`hq-card ${ok && o.word === R.word ? 'ok' : ''}`} onClick={(e) => pick(o.word, e.currentTarget)}>
+            {o.picture ? <img src={o.picture} alt="" draggable={false} /> : <span className="em">{o.emoji}</span>}
+          </button>
+        ))}
+      </div>
+    </Stage>
+  );
+}
+
 function PictureChoice({ level, say, praise, tryAgain, miss, star, done, setDots }: LevelProps<'picture-choice'>) {
   const [r, setR] = useState(0);
   const [ok, setOk] = useState<string | null>(null);
@@ -627,6 +672,7 @@ function LevelSwitch({ level, common, stars }: { level: QuestLevel; common: Omit
     case 'true-false': return <TrueFalse level={level} {...common} />;
     case 'sentence-builder': return <SentenceBuilder level={level} {...common} />;
     case 'sound-choice': return <SoundChoice level={level} {...common} />;
+    case 'sound-blend': return <SoundBlend level={level} {...common} />;
     case 'picture-choice': return <PictureChoice level={level} {...common} />;
     case 'twister': return <Twister level={level} {...common} />;
     case 'reading': return <Reading level={level} {...common} />;
