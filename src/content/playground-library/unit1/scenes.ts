@@ -509,6 +509,18 @@ export type Scene =
       doneLine: string;
     }
   | {
+      /** Dress-Up Studio (U9L6 signature): a friend asks for a piece AND a colour (`rounds`: `piece` indexes `pieces`,
+       *  `color` indexes `colors`); the child taps the piece, then the paint pot, and it lands on the friend's body
+       *  (fitted layers, recoloured by `hue`). Then a free round: dress `free.friend` any way, 📸, and the friend
+       *  says what they are wearing. Boys never get a dress (no layer). */
+      id: string; kind: 'dress-studio'; bg: string; teacher: string; who: CharKey;
+      pieces: { id: 'hat' | 'shirt' | 'pants' | 'socks' | 'shoes' | 'dress'; word: string; img: string; plural?: boolean }[];
+      colors: { word: string; hex: string; hue: number; sat?: number; bright?: number }[];
+      rounds: { friend: CharKey; piece: number; color: number; line: string; reply: string }[];
+      free: { friend: CharKey; line: string };
+      doneLine: string;
+    }
+  | {
       /** Shoe Painter (U9L5 game after the story film): Pip asks "Paint my shoes red, please!", the child taps
        *  that paint pot, the paint flies onto his shoes (a magnifier shows them close up) and Pip says `reply`
        *  ("My shoes are red!"). `paint` indexes `paints`; the shoes are washed white by the rain at the end. */
@@ -14762,4 +14774,187 @@ export const LESSON_U9L5_SCENES: Scene[] = [
     ],
   },
   { id: 'u9l5-finale', kind: 'finale', bg: u9l5Page(9), who: 'pip', line: 'My shoes are white! I like my shoes! Goodbye, friend!' },
+];
+
+/* =============================================================================
+ * Pre-A1 Unit 9, Lesson 6 — "Dress Up Game" (Clothes, unit review)
+ *
+ * A rainy afternoon in the playroom dress-up corner. Reviews the whole unit (shirt, pants, dress, shoes, hat,
+ * socks, coat, skirt, T-shirt, colours, "I'm wearing …") with a new signature game: Dress-Up Studio (piece +
+ * colour on request, then free dressing described back). Boys never wear a dress (CLAUDE.md, 2026-10-11).
+ * ========================================================================= */
+
+const bgU9L6Playroom = `${A}/scenes/bg-u9l6-playroom-wide.png`;
+const bgU9L6PlayroomEmpty = `${A}/scenes/bg-u9l6-playroom-empty-wide.png`;
+
+export const LESSON_U9L6_TITLE = 'Dress Up Game';
+export const LESSON_U9L6_OBJECTIVE = 'Review the clothes of the unit (hat, shirt, pants, dress, socks, shoes, coat, skirt, T-shirt) with colours: give a friend the piece and colour they ask for, dress a friend your way and hear what they are wearing, say "I\'m wearing …", and review the sounds D, T, P and W, by listening, moving and playing, no reading.';
+
+export const LESSON_U9L6_SCENES: Scene[] = [
+  { id: 'u9l6-title', kind: 'title-card', bg: bgU9L6Playroom, level: 'Pre-A1', unit: 'Unit 9', lessonLabel: 'Lesson 6', title: 'Dress Up Game', subtitle: 'A rainy day in the playroom' },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 9 · Lesson 5 · Pip's White Shoes
+    id: 'u9l6-recall-warmup', kind: 'recall-warmup', bg: bgU9L6PlayroomEmpty, who: 'pip', mode: 'click',
+    fromLabel: "Lesson 5 · Pip's White Shoes",
+    teacher: 'Warm-up from last lesson: Pip says the colour of his shoes, the child clicks the picture and says it too.',
+    items: [
+      { word: 'red', say: 'My shoes are red!', img: u9l5Page(3) },
+      { word: 'blue', say: 'My shoes are blue!', img: u9l5Page(5) },
+      { word: 'brown', say: 'My shoes are brown!', img: u9l5Page(7) },
+    ],
+  },
+  {
+    id: 'u9l6-intro', kind: 'cinematic', bg: bgU9L6Playroom, hidePipOverlay: true, title: 'Dress Up Game', subtitle: 'A rainy day in the playroom', narrator: 'mia',
+    script: [
+      { who: 'mia', line: "It's raining. Let's play dress up!" },
+      { who: 'pip', line: "I'm wearing a green hat!" },
+      { who: 'mia', line: "I'm wearing a yellow dress!" },
+      { who: 'leo', line: "And I'm wearing a blue coat!" },
+    ],
+    cta: "Let's dress up!",
+  },
+
+  /* 4-5 The words of the unit, move */
+  {
+    id: 'u9l6-words', kind: 'listen-repeat-cards', textSide: 'right', bg: bgU9L6PlayroomEmpty, teacher: 'Listen, then say it with each friend. Point to the same clothes on yourself if you are wearing them!',
+    cards: [
+      { who: 'pip', sentence: "It's a hat!", img: itemHatGreen, imgLabel: 'hat' },
+      { who: 'leo', sentence: "It's a coat!", img: itemCoatBlue, imgLabel: 'coat' },
+      { who: 'mia', sentence: "It's a dress!", img: itemDress, imgLabel: 'dress' },
+      { who: 'mia', sentence: "It's a skirt!", img: itemSkirtPink, imgLabel: 'skirt' },
+      { who: 'pip', sentence: 'They are shoes!', img: itemShoesBlue, imgLabel: 'shoes' },
+      { who: 'leo', sentence: 'They are socks!', img: itemSocksRed, imgLabel: 'socks' },
+    ],
+  },
+  {
+    id: 'u9l6-move', kind: 'tpr-actions', bg: bgU9L6PlayroomEmpty, who: 'leo',
+    teacher: 'Stand up! Pretend to dress with Leo.',
+    rounds: [
+      { line: 'Put on your hat! On your head!', emoji: '\u{1F9E2}', img: itemHatGreen },
+      { line: 'Pull on your socks! One, two!', emoji: '\u{1F9E6}', img: itemSocksRed },
+      { line: 'Put on your shoes! Stamp, stamp!', emoji: '\u{1F45F}', img: itemShoesBlue },
+      { line: 'Zip up your coat! Zzzip!', emoji: '\u{1F9E5}', img: itemCoatBlue },
+    ],
+  },
+
+  /* 6 Signature game (new): Dress-Up Studio */
+  {
+    id: 'u9l6-studio', kind: 'dress-studio', bg: bgU9L6PlayroomEmpty, who: 'mia',
+    teacher: 'Dress-Up Studio! Listen for TWO things: which piece and which colour. Tap the piece, then the paint pot. At the end, dress Pip your way, press 📸 and listen: he says what he is wearing. The child can say it too!',
+    pieces: [
+      { id: 'hat', word: 'hat', img: itemHatGreen },
+      { id: 'shirt', word: 'shirt', img: itemShirt },
+      { id: 'pants', word: 'pants', img: itemPants, plural: true },
+      { id: 'socks', word: 'socks', img: itemSocksRed, plural: true },
+      { id: 'shoes', word: 'shoes', img: itemShoesBlue, plural: true },
+      { id: 'dress', word: 'dress', img: itemDress },
+    ],
+    colors: [
+      { word: 'red', hex: '#E53935', hue: 0 },
+      { word: 'blue', hex: '#1E6FD9', hue: 218 },
+      { word: 'green', hex: '#3DAA3D', hue: 120 },
+      { word: 'yellow', hex: '#FFD31A', hue: 52, sat: 1.2, bright: 1.35 },
+      { word: 'purple', hex: '#8E44AD', hue: 280 },
+    ],
+    rounds: [
+      { friend: 'leo', piece: 0, color: 1, line: 'A blue hat, please!', reply: "Thank you! I'm wearing a blue hat!" },
+      { friend: 'leo', piece: 1, color: 3, line: 'Now a yellow shirt, please!', reply: 'Yes! A yellow shirt!' },
+      { friend: 'leo', piece: 2, color: 2, line: 'Green pants, please!', reply: 'Ha ha! Green pants!' },
+      { friend: 'mia', piece: 5, color: 4, line: 'A purple dress, please!', reply: 'I love my purple dress!' },
+      { friend: 'mia', piece: 4, color: 0, line: 'And red shoes, please!', reply: 'Red shoes! Thank you!' },
+    ],
+    free: { friend: 'pip', line: 'Now dress me your way! Then take a photo!' },
+    doneLine: 'What a great dress-up game!',
+  },
+
+  /* 7 The song — after the words and the first game (owner, 2026-10-10) */
+  {
+    id: 'u9l6-song', kind: 'song', bg: bgU9L6Playroom, title: '\u{1F3B5} Dress Up! \u{1F3B5}', teacher: 'Sing and act: touch your head, stamp your feet, twirl like Mia, then strike a pose!',
+    durationSeconds: 20, bigWord: 'Dress up', songUrl: `${A}/audio/dress-up-song-u9l6.mp3?v=1`,
+    songPrompt: 'Cheerful bouncy kids dress-up song',
+    lyrics: [
+      { who: 'pip', text: 'Hat on my head! Hat, hat, hat!', emotion: 'happy' },
+      { who: 'leo', text: 'Shoes on my feet! Shoes, shoes, shoes!', emotion: 'happy' },
+      { who: 'mia', text: 'A shirt, a dress, a coat, a skirt!', emotion: 'happy' },
+      { who: 'mia', text: 'Dress up, dress up! Look at me!', emotion: 'happy' },
+    ],
+  },
+
+  /* 8-10 More games */
+  {
+    id: 'u9l6-odd', kind: 'odd-one-out', bg: bgU9L6PlayroomEmpty, who: 'leo',
+    teacher: 'Which one is different? Tap it and say why: do we wear it or eat it?',
+    rounds: [
+      { items: [{ label: 'hat', img: itemHatGreen }, { label: 'dress', img: itemDress }, { label: 'apple', img: itemApple }, { label: 'shirt', img: itemShirt }], odd: 2, line: 'The apple! We eat apples. We wear the others.' },
+      { items: [{ label: 'banana', img: itemBanana }, { label: 'skirt', img: itemSkirtPink }, { label: 'T-shirt', img: itemTshirtYellow }, { label: 'socks', img: itemSocksRed }], odd: 0, line: 'The banana! We eat bananas. We wear the others.' },
+      { items: [{ label: 'coat', img: itemCoatBlue }, { label: 'shoes', img: itemShoesBlue }, { label: 'pants', img: itemPants }, { label: 'cake', img: itemCake }], odd: 3, line: 'The cake! We eat cake. We wear the others.' },
+    ],
+  },
+  {
+    id: 'u9l6-memory', kind: 'memory', bg: bgU9L6PlayroomEmpty, teacher: 'Find the clothes pairs in the dress-up trunk! Say it every time you turn a card: "A coat!"',
+    pairs: [
+      { id: 'hat', label: 'hat', emoji: '\u{1F9E2}', img: itemHatGreen },
+      { id: 'coat', label: 'coat', emoji: '\u{1F9E5}', img: itemCoatBlue },
+      { id: 'dress', label: 'dress', emoji: '\u{1F457}', img: itemDress },
+      { id: 'skirt', label: 'skirt', emoji: '\u{1FA73}', img: itemSkirtPink },
+      { id: 'shoes', label: 'shoes', emoji: '\u{1F45F}', img: itemShoesBlue },
+      { id: 'socks', label: 'socks', emoji: '\u{1F9E6}', img: itemSocksRed },
+    ],
+  },
+  {
+    id: 'u9l6-what-wearing', kind: 'join-stage', bg: bgU9L6PlayroomEmpty, teacher: 'Mia and Leo ask the child about their own clothes. Any piece and colour is fine.', cast: ['mia', 'leo'],
+    turns: [
+      { who: 'mia', line: 'What are you wearing today?', bubble: 'left' },
+      { who: 'student', line: "I'm wearing a red T-shirt!", bubble: 'right' },
+      { who: 'leo', line: 'What colour are your socks?', bubble: 'left' },
+      { who: 'student', line: 'My socks are white!', bubble: 'right' },
+    ],
+  },
+
+  /* 11 Sounds review: D, T, P, W */
+  { id: 'u9l6-bricks', kind: 'brick-crush', bg: bgU9L6PlayroomEmpty, teacher: 'Brick Crush! D for dress, T for T-shirt, P for pants, W for white. Listen, then smash every brick with that letter!', who: 'pip', letters: ['D', 'T', 'P', 'W'], rows: 5, cols: 6, goal: 14, seconds: 60 },
+
+  /* 12-13 Sticker + Home Mission */
+  {
+    id: 'u9l6-sticker', kind: 'sticker-reward', bg: bgU9L6Playroom, who: 'mia', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'You finished the clothes unit! Here is a coat sticker for you!', sticker: { img: itemCoatBlue, label: 'Dress-up star' },
+  },
+  {
+    id: 'u9l6-home-mission', kind: 'home-mission', bg: bgU9L6Playroom, who: 'mia',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: play dress up at home! Say what you are wearing: "I\'m wearing a big hat!"',
+    parentNote: 'Play dress up at home with real clothes (big ones are the most fun!). Ask "What are you wearing?" and let your child answer "I\'m wearing a red hat!". Then swap: your child asks you. Use the words of the unit: hat, coat, shirt, pants, dress, skirt, socks, shoes, T-shirt.',
+    steps: [
+      { emoji: '\u{1F9E2}', img: itemHatGreen, say: "I'm wearing a hat!" },
+      { emoji: '\u{1F9E5}', img: itemCoatBlue, say: "I'm wearing a coat!" },
+      { emoji: '\u{1F4F8}', say: 'Take a photo! Click!' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u9l6-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU9L6PlayroomEmpty, who: 'pip',
+    teacher: 'Extra time: Brain Break! Do each action with Pip.',
+    rounds: [
+      { line: 'Look in the mirror! Smile!', emoji: '\u{1FA9E}' },
+      { line: 'Shake your hands! Shake, shake!', emoji: '\u{1F44B}' },
+      { line: 'Strike a pose! Click!', emoji: '\u{1F4F8}' },
+      { line: 'Freeze!', emoji: '\u{1F976}', seconds: 3 },
+    ],
+  },
+
+  /* Goodbye */
+  {
+    id: 'u9l6-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u9l6-finale', kind: 'finale', bg: bgU9L6Playroom, who: 'mia', line: 'Hat, coat, shoes, dress! What a great dress-up day! Goodbye, friend!' },
 ];

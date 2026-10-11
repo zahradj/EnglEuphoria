@@ -60,6 +60,7 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
   '4-4': { settings: ['flower garden'], look: 'bright flower garden with big friendly mushrooms; Pip meets Bo, a round sky-blue three-eyed monster; code-drawn monsters on an empty lawn' },
   '4-5': { settings: ['animal park'], look: 'sunny animal park with a blue pond and tall trees; a tiger, a monkey, an elephant and a seal each show one move, Pip copies; a leafy bush to peek through' },
+  '9-6': { settings: ['playroom dress-up corner'], look: "a cosy playroom dress-up corner on a rainy afternoon: a big wooden-framed standing mirror, a low clothes rail with hangers, an open wooden dress-up trunk, a round purple rug, rain on the window and warm lamp light; Pip in a green hat, Mia twirling in a yellow dress and Leo pulling on a blue coat; the empty corner becomes the Dress-Up Studio with a clothes rail and paint pots" },
   '9-5': { settings: ['sunny garden', 'picnic hill', 'farmyard after rain'], look: "a walk through the unit's places as a stills film: Pip in a red T-shirt, blue pants and brand-new white sneakers in a sunny garden, squishing red apples under the apple tree on the picnic hill, stepping into a spilled pot of blue paint on the path, stomping in a brown mud puddle in the farmyard after rain, and splashing in a clear rain puddle; the garden becomes the Shoe Painter game with paint pots and a big magnifier on his shoes" },
   '9-4': { settings: ['garden fashion show stage'], look: "a garden fashion show on a sunny afternoon: a wooden stage with a pink curtain, a row of warm stage lights and a little catwalk, bunting and fairy lights in green trees, flower pots and colourful chairs for the audience; Pip, Mia and Leo stand in the spotlights really wearing the clothes (fitted layers), and the camera flashes when the child finds the friend" },
   '9-3': { settings: ['clothes shop'], look: "Bella's little clothes shop on a sunny day: clothes rails with coats, skirts and T-shirts, wooden shelves, a round mirror, a shop window with sunshine and a green door; Bella the bunny smiles behind her wooden counter with a cash register; friends hop in through the door to buy, and the bought piece flies into a paper shopping bag" },
@@ -210,6 +211,19 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'the child must understand the verb AND the body part to find the animal, then PRODUCES the move and the sentence — the screen waits for the child, never a clock',
       'the clue in Whose Is It? is one of the unit\'s body words, so naming the part and the animal go together, and the reveal recalls the story move',
       'wrong picks are named back with that animal\'s own move ("No, the seal claps her hands!"), and the right one glows after two tries',
+    ],
+  },
+  '9-6': {
+    sources: ['Toca Boca / Lingokids dress-up (pick a piece, change its colour)', 'Cambridge (Pre A1 Starters listening: "listen and colour")', 'the classroom paper-doll dress-up game', 'Khan Academy Kids "make your own" creation pages'],
+    mechanics: [
+      'dress-up + listen and colour → Dress-Up Studio: a friend asks for a piece AND a colour ("A blue hat, please!"), the child taps the piece then the paint, and it lands on the friend in that colour',
+      'free creation with language back: the child dresses Pip any way, takes a photo, and Pip says what he is wearing piece by piece',
+      'unit review: odd one out (wear or eat?), memory pairs, ask and answer "What are you wearing?", Brick Crush with D, T, P, W',
+    ],
+    betterThan: [
+      'every request has two things to listen for (piece + colour), and every piece can be any of five colours, so guessing is not enough',
+      'the clothes really sit on the friend\'s body (fitted layers, recoloured), and the child\'s own outfit is described back in full English',
+      'no clock; a wrong choice gets "Oops! Listen again." and the right piece and colour glow after two tries; boys never get a dress',
     ],
   },
   '9-5': {

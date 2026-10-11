@@ -18,6 +18,18 @@ describe('boys never wear girls’ clothes', () => {
       });
     }
   });
+  it('lesson dress-up studios never ask a boy for a dress or skirt', () => {
+    for (const [name, v] of Object.entries(unit1)) {
+      if (!name.endsWith('_SCENES') || !Array.isArray(v)) continue;
+      for (const s of v as { kind: string }[]) {
+        if (s.kind !== 'dress-studio') continue;
+        const sc = s as unknown as { pieces: { id: string }[]; rounds: { friend: string; piece: number }[] };
+        sc.rounds.forEach((r, ri) => {
+          if (BOYS.includes(r.friend)) expect(GIRL_ONLY, `${name} round ${ri + 1}: ${r.friend} asks for a ${sc.pieces[r.piece].id}`).not.toContain(sc.pieces[r.piece].id);
+        });
+      }
+    }
+  });
   it('lesson fashion shows never put a dress or skirt on a boy', () => {
     for (const [name, v] of Object.entries(unit1)) {
       if (!name.endsWith('_SCENES') || !Array.isArray(v)) continue;
