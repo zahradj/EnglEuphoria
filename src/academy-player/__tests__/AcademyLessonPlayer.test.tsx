@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createRef } from 'react';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { act, cleanup, render } from '@testing-library/react';

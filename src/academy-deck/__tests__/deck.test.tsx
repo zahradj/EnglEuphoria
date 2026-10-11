@@ -43,6 +43,7 @@ describe('deck data (Sign Me Up)', () => {
   it('NEVER emoji and never 3D-looking pictures (owner 2026-10-10): no emoji in the deck sources, pictures are Canva cards, drawn art or animated SVG', async () => {
     const fs = await import('node:fs');
     const path = await import('node:path');
+    // eslint-disable-next-line no-misleading-character-class -- FE0F is meant as a stand-alone code point
     const emoji = /[\u{1F000}-\u{1FFFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}\u{23E9}-\u{23FF}\u{FE0F}]/u;
     const allowed = new Set('✦★✓✔➤▶◀▸◂→←·…–—‘’“”▦'.split(''));
     const walk = (d: string): string[] => fs.readdirSync(d, { withFileTypes: true }).flatMap((e) => (e.isDirectory() && e.name !== '__tests__' ? walk(path.join(d, e.name)) : /\.(ts|tsx|css)$/.test(e.name) ? [path.join(d, e.name)] : []));
