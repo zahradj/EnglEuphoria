@@ -1,4 +1,7 @@
-+ public/lep1/gifs/u10l1-run.gif 273644 bytes, copied
-+ public/lep1/gifs/u10l1-jump.gif 241205 bytes, copied
-+ public/lep1/gifs/u10l1-walk.gif 247102 bytes, copied
-3/3 saved
++ public/lep1/items/tmp-sheet-mole.png (1536, 1024) raw
++ public/lep1/items/tmp-sheet-monster.png (1536, 1024) raw
++ public/lep1/items/tmp-sheet-fish.png (1536, 1024) raw
++ public/lep1/scenes/bg-game-meadow-wide.png (1376, 768)
++ public/lep1/scenes/bg-game-pond-wide.png (1376, 768)
++ public/lep1/scenes/bg-game-monsterland-wide.png (1376, 768)
+6/6 saved
