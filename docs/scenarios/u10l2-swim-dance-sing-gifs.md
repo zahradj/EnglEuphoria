@@ -1,6 +1,6 @@
 # Scenario — Pre-A1 Unit 10 Lesson 2 "Swim, Dance, Sing!" · three Canva GIF loops
 
-**Status: waiting for the owner's approval** (preview GIF attached in the chat). Made with Canva (owner, 2026-10-11:
+**Status: approved by the owner (2026-10-11).** Made with Canva (owner, 2026-10-11:
 Canva GIF/MP4 allowed; GIFs follow the scenario rule, shown as a preview GIF first).
 
 | | |
@@ -24,4 +24,4 @@ Rules checked: the two frames differ ONLY in the action (nothing else appears or
 full body; front view; Pip and Leo are boys in boys' clothes, Mia is a girl; calm speed (0.45 s per frame).
 
 ## Owner approval
-Approved: _(waiting)_
+Approved: owner, 2026-10-11 — "Okay, you can update the previous lesson using the gif videos."
