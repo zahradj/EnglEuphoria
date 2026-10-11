@@ -27,6 +27,18 @@ export const SIGN_ME_UP: DeckScript = {
       say: 'Welcome back! Today you win three stamps at the club desk.', heading: 'Your mission card',
       stamps: [{ id: 'spell', icon: 'abc', label: 'Spell your name' }, { id: 'number', icon: 'numbers', label: 'Say your number' }, { id: 'passport', icon: 'passport', label: 'Say your nationality' }],
     },
+    {
+      id: 'teach-words', kind: 'teach', part: 0, bg: 'club-signup-desk', actors: [{ who: 'Vee', pos: 'left', expr: 'happy' }], trains: [1], title: 'Words your teacher says',
+      pages: [
+        { word: 'Listen', art: { type: 'action' as const, id: 'listen' as const }, meaning: 'use your ears: someone is speaking', example: 'Listen to Theo.', clue: 'Listen, then answer.' },
+        { word: 'Look', art: { type: 'action' as const, id: 'look' as const }, meaning: 'use your eyes: see the picture', example: 'Look at the picture.', clue: 'Look first. Then click.' },
+        { word: 'Repeat', art: { type: 'action' as const, id: 'repeat' as const }, meaning: 'say it again after the teacher', example: 'Listen and repeat: My name is Vee.', clue: 'Listen and repeat = hear it, then say it.' },
+        { word: 'Click', art: { type: 'action' as const, id: 'click' as const }, meaning: 'press the button or the picture', example: 'Click the answer.', clue: 'On a phone you tap.' },
+        { word: 'Read', art: { type: 'action' as const, id: 'read' as const }, meaning: 'look at the words and understand them', example: 'Read the clue.', clue: 'Read slowly. Use the pictures.' },
+        { word: 'Point', art: { type: 'action' as const, id: 'point' as const }, meaning: 'show with your finger', example: 'Point to the flag.', clue: 'Point = show.' },
+      ],
+      hints: ['These are the words you will hear in every lesson.'],
+    },
 { id: 'badge', kind: 'badge', part: 0, bg: 'club-signup-desk', actors: [{ who: 'Theo', pos: 'right', expr: 'wave' }], trains: [4], prompt: 'Theo gives you a badge. Put your name on it.', starter: 'My name is', ages: [11, 12, 13, 14, 15, 16, 17, 18], hints: ['Type only your name, and tap your age.'] },
 {
       id: 'checkin-chat', part: 0, kind: 'convo', bg: 'club-signup-desk', actors: [{ who: 'Theo', pos: 'right', expr: 'happy' }], trains: [4],
@@ -46,6 +58,16 @@ export const SIGN_ME_UP: DeckScript = {
       hints: ['Questions come from Theo at the desk. Answers come from Ava.'],
     },
     {
+      id: 'teach-help', kind: 'teach', part: 1, bg: 'club-signup-desk', actors: [{ who: 'Vee', pos: 'right', expr: 'happy' }], trains: [5], title: 'When you do not understand, say…',
+      pages: [
+        { word: 'Sorry?', art: { type: 'action' as const, id: 'sorry' as const }, meaning: 'I did not hear. Please say it again.', example: 'Sorry? … Oh, I see!', clue: 'A small word with a question tone.' },
+        { word: 'Slowly, please.', art: { type: 'action' as const, id: 'slow' as const }, meaning: 'please speak more slowly', example: 'Slowly, please. Thank you!', clue: 'Slowly = not fast.' },
+        { word: 'I don’t understand.', art: { type: 'action' as const, id: 'confused' as const }, meaning: 'I do not know what it means', example: 'I don’t understand. Can you help?', clue: 'It is OK. Say it and your teacher helps.' },
+        { word: 'What does it mean?', art: { type: 'action' as const, id: 'meaning' as const }, meaning: 'ask about a word', example: 'What does “nationality” mean?', clue: 'Point to the word and ask.' },
+      ],
+      hints: ['Teachers love this question. Asking is how you learn.'],
+    },
+    {
       id: 'recall-chat', part: 1, kind: 'phonechat', bg: 'club-lobby', actors: [{ who: 'Ava', pos: 'left', expr: 'happy' }], trains: [4],
       prompt: 'Remember last time? Theo texts you. Build your replies.', contact: 'Theo',
       steps: [
@@ -62,14 +84,15 @@ export const SIGN_ME_UP: DeckScript = {
     },
 { id: 'lockers', kind: 'lockers', part: 2, bg: 'locker-hall', actors: [{ who: 'Vee', pos: 'right', expr: 'happy' }], trains: [2], prompt: 'Locker Pop! Read the number word and open that locker.', rounds: [4, 2, 5, 1, 3], grid: [1, 2, 3, 4, 5], words: WORDS, hints: ['Count the numbers on the doors. Four is 4.'] },
     {
-      id: 'teach-nations', kind: 'teach', part: 2, bg: 'border-control', actors: [{ who: 'Vee', pos: 'left', expr: 'happy' }], trains: [3], title: 'Countries and nationalities',
+      id: 'teach-nations', kind: 'teach', part: 2, bg: 'border-control', actors: [{ who: 'Vee', pos: 'left', expr: 'happy' }], trains: [3], title: 'Countries and nationalities (country · nationality)',
       pages: [
-        { word: 'Spain', art: { type: 'flag', code: 'es' }, meaning: 'a country', example: 'I am from Spain.', clue: 'The flag is red and yellow.' },
-        { word: 'Spanish', art: { type: 'person', code: 'es' }, meaning: 'a person from Spain', example: 'I am Spanish.', clue: 'Spain → Spanish.' },
-        { word: 'Italy', art: { type: 'flag', code: 'it' }, meaning: 'a country', example: 'I am from Italy.', clue: 'The flag is green, white and red.' },
-        { word: 'Italian', art: { type: 'person', code: 'it' }, meaning: 'a person from Italy', example: 'I am Italian.', clue: 'Italy → Italian.' },
-        { word: 'Brazil', art: { type: 'flag', code: 'br' }, meaning: 'a country (you know it!)', example: 'I am from Brazil.', clue: 'Green, with a yellow diamond.' },
-        { word: 'Brazilian', art: { type: 'person', code: 'br' }, meaning: 'a person from Brazil', example: 'I am Brazilian.', clue: 'Brazil → Brazilian. See the pattern?' },
+        { word: 'Spain · Spanish', art: { type: 'pair' as const, code: 'es' }, meaning: 'a country and its people', example: 'I am from Spain. I am Spanish.', clue: 'The flag is red, yellow, red. Spain → Spanish.' },
+        { word: 'Italy · Italian', art: { type: 'pair' as const, code: 'it' }, meaning: 'a country and its people', example: 'I am from Italy. I am Italian.', clue: 'Green, white and red. Italy → Italian.' },
+        { word: 'Brazil · Brazilian', art: { type: 'pair' as const, code: 'br' }, meaning: 'a country and its people', example: 'I am from Brazil. I am Brazilian.', clue: 'Green with a yellow diamond. Brazil → Brazilian. See the pattern?' },
+        { word: 'France · French', art: { type: 'pair' as const, code: 'fr' }, meaning: 'a country and its people', example: 'I am from France. I am French.', clue: 'Blue, white, red. France → French.' },
+        { word: 'Germany · German', art: { type: 'pair' as const, code: 'de' }, meaning: 'a country and its people', example: 'I am from Germany. I am German.', clue: 'Black, red, gold. Germany → German.' },
+        { word: 'Japan · Japanese', art: { type: 'pair' as const, code: 'jp' }, meaning: 'a country and its people', example: 'I am from Japan. I am Japanese.', clue: 'A red circle. Japan → Japanese.' },
+        { word: 'America · American', art: { type: 'pair' as const, code: 'us' }, meaning: 'a country and its people', example: 'I am from America. I am American.', clue: 'Stars and stripes. America → American.' },
       ],
       hints: ['Country: where you are from. Nationality: what you are.'],
     },
@@ -93,6 +116,7 @@ export const SIGN_ME_UP: DeckScript = {
       closing: 'Now YOU help Ava sign up!',
     },
 { id: 'numtrain', kind: 'numtrain', part: 3, bg: 'locker-hall', actors: [{ who: 'Theo', pos: 'left', expr: 'happy' }], trains: [2], prompt: 'Number Train! Put each number word on its carriage.', numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], words: WORDS, hints: ['Look at the dots on the carriage. Count them.'] },
+{ id: 'numwall', kind: 'numwall', part: 3, bg: 'locker-hall', actors: [{ who: 'Vee', pos: 'left', expr: 'happy' }], trains: [2], title: 'More numbers: 11 to 100', need: 8, hints: ['Tap 20, then 21, then 30. Look at the pattern: twenty, twenty-one, thirty.'] },
 {
       id: 'padlock', kind: 'padlock', part: 3, bg: 'locker-hall', actors: [{ who: 'Theo', pos: 'right', expr: 'wave' }], trains: [2],
       prompt: 'Theo says your member number. Open the drawer with the code!', clue: 'four, two, seven', code: '427', reward: 'Your member number is 4-2-7.', stamp: 'number',
@@ -113,13 +137,13 @@ export const SIGN_ME_UP: DeckScript = {
       id: 'border', kind: 'border', part: 3, bg: 'border-control', actors: [{ who: 'Theo', pos: 'right', expr: 'happy' }], trains: [3],
       prompt: 'Border control! Drag each traveller onto the right passport.',
       rounds: [
-        { flag: 'es', says: 'I am from Spain.', answer: 'Spanish', options: ['Spanish', 'Italian', 'Brazilian'] },
-        { flag: 'it', says: 'I am from Italy.', answer: 'Italian', options: ['Spanish', 'Italian', 'Brazilian'] },
-        { flag: 'br', says: 'I am from Brazil.', answer: 'Brazilian', options: ['Spanish', 'Italian', 'Brazilian'] },
-        { flag: 'it', says: 'I am from Italy.', answer: 'Italian', options: ['Italian', 'Spanish', 'Brazilian'] },
-        { flag: 'es', says: 'I am from Spain.', answer: 'Spanish', options: ['Brazilian', 'Italian', 'Spanish'] },
+        { flag: 'es', says: 'I am from Spain.', answer: 'Spanish', options: ['Spanish', 'Italian', 'French'] },
+        { flag: 'fr', says: 'I am from France.', answer: 'French', options: ['German', 'French', 'Brazilian'] },
+        { flag: 'br', says: 'I am from Brazil.', answer: 'Brazilian', options: ['Spanish', 'Japanese', 'Brazilian'] },
+        { flag: 'de', says: 'I am from Germany.', answer: 'German', options: ['German', 'Italian', 'American'] },
+        { flag: 'jp', says: 'I am from Japan.', answer: 'Japanese', options: ['French', 'Japanese', 'Spanish'] },
       ],
-      flags: { Spanish: 'es', Italian: 'it', Brazilian: 'br' }, stamp: 'passport', hints: ['Spain → Spanish. Italy → Italian. Brazil → Brazilian.'],
+      flags: { Spanish: 'es', Italian: 'it', Brazilian: 'br', French: 'fr', German: 'de', Japanese: 'jp', American: 'us' }, stamp: 'passport', hints: ['Spain → Spanish. France → French. Germany → German. Japan → Japanese.'],
     },
 {
       id: 'convo', kind: 'convo', part: 3, bg: 'club-signup-desk', actors: [{ who: 'Ava', pos: 'left', expr: 'happy' }, { who: 'Theo', pos: 'right', expr: 'happy' }], trains: [1, 2, 3, 4, 5],
@@ -134,7 +158,7 @@ export const SIGN_ME_UP: DeckScript = {
       ],
       hints: ['Read the three choices. Which one sounds right and answers the question?'],
     },
-{ id: 'memory', kind: 'memory', part: 4, bg: 'border-control', actors: [{ who: 'Vee', pos: 'left', expr: 'happy' }], trains: [3], prompt: 'Memory! Find each flag and its nationality word.', pairs: [{ flag: 'es', text: 'Spanish' }, { flag: 'it', text: 'Italian' }, { flag: 'br', text: 'Brazilian' }], hints: ['Remember where the flags are. Spain is red and yellow.'] },
+{ id: 'memory', kind: 'memory', part: 4, bg: 'border-control', actors: [{ who: 'Vee', pos: 'left', expr: 'happy' }], trains: [3], prompt: 'Memory! Find each flag and its nationality word.', pairs: [{ flag: 'es', text: 'Spanish' }, { flag: 'it', text: 'Italian' }, { flag: 'br', text: 'Brazilian' }, { flag: 'fr', text: 'French' }, { flag: 'de', text: 'German' }, { flag: 'jp', text: 'Japanese' }], hints: ['Remember where the flags are. Spain is red and yellow.'] },
 {
       id: 'detective', kind: 'findwrong', part: 4, bg: 'detective-wall', actors: [{ who: 'Vee', pos: 'left', expr: 'thinking' }], trains: [1],
       prompt: 'Detective time! The fake profile of Sam has 2 spelling mistakes. Tap them.',

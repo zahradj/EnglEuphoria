@@ -1,8 +1,10 @@
-import { useEffect, useState } from 'react';
+import { ActionArt } from './actions';
+import { useEffect, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import { useDeck } from '../ctx';
 import { Icon } from '../Icon';
 import { Hear } from '../Hear';
+import { sayable } from '../spoken';
 import { COLOR, Bubble } from '../Stage';
 import type { ModelSlide, TeachArt, TeachSlide } from '../types';
 import { Traveller, WavingFlag } from './anim';
@@ -20,6 +22,22 @@ export function Art({ art, again = 0, size = 'md' }: { art: TeachArt; again?: nu
     );
   }
   if (art.type === 'count') {
+    if (art.n > 10) {
+      // tens mode: rows of ten dots (a ten-frame per rod), so 100 is a tidy hundred-square
+      const rods = Math.floor(art.n / 10);
+      const rest = art.n % 10;
+      return (
+        <div className={`ad-art ad-art-count ad-art-tens ad-art-${size}`} key={again} aria-label={`The number ${art.n}`} role="img">
+          <div className="ad-rods">
+            {Array.from({ length: rods }, (_, r) => (
+              <span key={r} className="ad-rod" style={{ ['--i' as string]: r }}>{Array.from({ length: 10 }, (_, d) => <i key={d} />)}</span>
+            ))}
+            {rest > 0 && <span className="ad-rod ad-rod-rest" style={{ ['--i' as string]: rods }}>{Array.from({ length: rest }, (_, d) => <i key={d} />)}</span>}
+          </div>
+          <div className="ad-count-digit" style={{ ['--n' as string]: Math.min(rods + 1, 6) * 2 }}>{art.n}</div>
+        </div>
+      );
+    }
     return (
       <div className={`ad-art ad-art-count ad-art-${size}`} key={again} aria-label={`The number ${art.n}`} role="img">
         <div className="ad-count-dots">
@@ -28,6 +46,15 @@ export function Art({ art, again = 0, size = 'md' }: { art: TeachArt; again?: nu
           ))}
         </div>
         <div className="ad-count-digit" style={{ ['--n' as string]: art.n }}>{art.n}</div>
+      </div>
+    );
+  }
+  if (art.type === 'action') return <div className={`ad-art ad-art-action ad-art-${size}`} key={again}><ActionArt id={art.id} label={art.id} /></div>;
+  if (art.type === 'pair') {
+    return (
+      <div className={`ad-art ad-art-pair ad-art-${size}`} key={again}>
+        <div className="ad-flagpole"><WavingFlag code={art.code} label={`Flag of ${art.code}`} /></div>
+        <Traveller code={art.code} label="A person with the flag of their country" />
       </div>
     );
   }
@@ -69,7 +96,7 @@ export function TeachView({ slide }: { slide: TeachSlide }) {
   const guide = slide.actors?.[0]?.who ?? 'Vee';
   // each word page: the word, then its example sentence
   useEffect(() => {
-    void speakSeq([{ who: guide, text: slide.pages[i].word }, { who: guide, text: slide.pages[i].example }]);
+    void speakSeq([{ who: guide, text: sayable(slide.pages[i].word) }, { who: guide, text: slide.pages[i].example }]);
   }, [i, guide, slide.pages, speakSeq]);
   useEffect(() => {
     setSeen((s) => (s.includes(i) ? s : [...s, i]));
@@ -87,7 +114,7 @@ export function TeachView({ slide }: { slide: TeachSlide }) {
         <div className="ad-teach-art"><Art art={page.art} again={again + i * 1000} /></div>
         <div className="ad-teach-body" key={i}>
           <span className="ad-teach-count">{i + 1} / {slide.pages.length}</span>
-          <h3 className="ad-teach-word">{page.word}<Hear who={guide} text={page.word} /></h3>
+          <h3 className="ad-teach-word">{page.word}<Hear who={guide} text={sayable(page.word)} /></h3>
           <p className="ad-teach-meaning">{page.meaning}</p>
           <p className="ad-teach-example">{hi(page.example, page.word)}<Hear who={guide} text={page.example} /></p>
           {page.clue && <p className="ad-teach-clue"><Icon name="bulb" /> {page.clue}</p>}
@@ -104,8 +131,23 @@ export function TeachView({ slide }: { slide: TeachSlide }) {
 }
 
 /** Modelling: watch the characters do it. Each line shows its pattern card: the frame stays, the coloured part changes. */
+function ChatAvatar({ who }: { who: string }) {
+  const { artBase } = useDeck();
+  const [bad, setBad] = useState(false);
+  return (
+    <span className="ad-avatar" style={{ ['--who' as string]: COLOR[who as keyof typeof COLOR] }} aria-hidden="true">
+      {artBase && !bad ? <img src={`${artBase}/cast/${who.toLowerCase()}/neutral-open.webp`} alt="" draggable={false} onError={() => setBad(true)} /> : who[0]}
+    </span>
+  );
+}
+
 export function ModelView({ slide }: { slide: ModelSlide }) {
   const { done, speak } = useDeck();
+  const bodyRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = bodyRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
+  });
   const [n, setN] = useState(1);
   const line = slide.lines[n - 1];
   useEffect(() => {
@@ -120,14 +162,22 @@ export function ModelView({ slide }: { slide: ModelSlide }) {
   slide.lines.forEach((l) => l.frame?.forEach((p) => typeof p !== 'string' && !(p.label in slotIndex) && (slotIndex[p.label] = Object.keys(slotIndex).length)));
   return (
     <Panel title={slide.title} wide>
-      <div className="ad-model-log" aria-live="polite">
-        {slide.lines.slice(0, n - 1).map((l, i) => (
-          <p key={i} className="ad-line" data-me={l.who === 'Ava'} style={{ ['--who' as string]: COLOR[l.who] }}><b>{l.who}</b> {l.text}<Hear who={l.who} text={l.text} /></p>
-        ))}
-      </div>
-      <div className="ad-model-say">
-        <Bubble who={line.who} side={line.who === 'Ava' ? 'left' : 'right'}>{line.text}</Bubble>
-        {line.pic && <div className="ad-sticker" key={n}><Art art={line.pic} size="sm" /></div>}
+      <div className="ad-chatwin" aria-live="polite">
+        <header className="ad-chat-head">
+          <span className="ad-chat-avatars">{[...new Set(slide.lines.map((l) => l.who))].slice(0, 3).map((w) => <ChatAvatar key={w} who={w} />)}</span>
+          <span className="ad-chat-title"><b>Club chat</b><i><span className="ad-online" /> {[...new Set(slide.lines.map((l) => l.who))].join(' · ')}</i></span>
+        </header>
+        <div className="ad-chat-body" ref={bodyRef}>
+          {slide.lines.slice(0, n).map((l, i) => (
+            <div key={i} className="ad-cm" data-me={l.who === 'Ava'} data-new={i === n - 1} style={{ ['--who' as string]: COLOR[l.who] }}>
+              <ChatAvatar who={l.who} />
+              <div className="ad-cm-col">
+                <span className="ad-cm-name">{l.who}</span>
+                <div className="ad-cm-bubble"><span>{l.text}</span><Hear who={l.who} text={l.text} />{l.pic && <span className="ad-cm-pic"><Art art={l.pic} size="sm" /></span>}</div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
       {line.frame && (
         <div className="ad-pattern" key={n} aria-label="Pattern card">

@@ -88,6 +88,7 @@ const minutes = (s: Slide): number => {
     case 'findwrong': return 1.3;
     case 'border': return 0.4 + s.rounds.length * 0.3;
     case 'memory': return 0.5 + s.pairs.length * 0.4;
+    case 'numwall': return 1.6;
     case 'phonechat': return 0.4 + s.steps.length * 0.65;
     case 'fade': return 0.3 + s.lines.length * 0.5;
     case 'card': return 2.2;
@@ -201,7 +202,7 @@ describe('games', () => {
   it('TEACH BEFORE PLAY: every vocabulary word is taught on a teach page before the first game that uses it', () => {
     const taught = new Set<string>();
     for (const s of slides) {
-      if (s.kind === 'teach') s.pages.forEach((p) => taught.add(p.word.toLowerCase()));
+      if (s.kind === 'teach') s.pages.forEach((p) => p.word.split(' · ').forEach((w) => taught.add(w.toLowerCase())));
       if (s.kind === 'lockers') s.rounds.forEach((n) => expect(taught.has(s.words[n]), `${s.id}: ${s.words[n]} not taught yet`).toBe(true));
       if (s.kind === 'numtrain') s.numbers.forEach((n) => expect(taught.has(s.words[n]), `${s.id}: ${s.words[n]} not taught yet`).toBe(true));
       if (s.kind === 'border') s.rounds.forEach((r) => expect(taught.has(r.answer.toLowerCase()), `${s.id}: ${r.answer} not taught yet`).toBe(true));
@@ -233,7 +234,7 @@ describe('games', () => {
 
   it('PASSPORTS and WORD TILES carry pictures: each passport shows its flag, the content-word tiles show what they mean', () => {
     const border = slides.find((s) => s.kind === 'border');
-    expect(border && border.kind === 'border' && Object.keys(border.flags ?? {}).sort()).toEqual(['Brazilian', 'Italian', 'Spanish']);
+    expect(border && border.kind === 'border' && Object.keys(border.flags ?? {}).sort()).toEqual(expect.arrayContaining(['Brazilian', 'Italian', 'Spanish']));
     const chat = slides.find((s) => s.id === 'phonechat');
     expect(chat && chat.kind === 'phonechat' && chat.steps.every((st) => Object.keys(st.tilePics ?? {}).length >= 2)).toBe(true);
     open(slides.findIndex((s) => s.kind === 'border'));
@@ -291,7 +292,7 @@ describe('games', () => {
   it('MEMORY: matching pairs stay open; a miss closes again without penalty', async () => {
     open(idx('memory'));
     const cards = () => screen.getAllByRole('button', { name: 'Hidden card' });
-    expect(cards()).toHaveLength(6);
+    expect(cards()).toHaveLength(12);
     fireEvent.click(cards()[0]);
     fireEvent.click(cards()[0]);
     expect(screen.getByText(/pairs found/)).toBeTruthy();

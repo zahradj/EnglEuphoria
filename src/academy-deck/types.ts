@@ -67,11 +67,16 @@ export interface ConvoSlide extends SlideBase {
 export interface SpellSlide extends SlideBase { kind: 'spell'; prompt: string; target: string; save?: string; stamp?: string }
 export interface FindWrongSlide extends SlideBase { kind: 'findwrong'; prompt: string; rows: { label: string; text: string; wrong?: boolean; fix?: string }[]; reveal: string }
 /** Vocabulary illustration: one animated page per word (picture that moves, meaning, example, clue). */
+export type ActionId = 'listen' | 'look' | 'repeat' | 'click' | 'read' | 'point' | 'sorry' | 'slow' | 'confused' | 'meaning';
 export type TeachArt =
   | { type: 'count'; n: number }
   | { type: 'flag'; code: string }
   | { type: 'person'; code: string }
   | { type: 'letters'; text: string }
+  /** flag + traveller side by side (a country and its nationality) */
+  | { type: 'pair'; code: string }
+  /** an animated drawn classroom picture (slides/actions.tsx): the instruction words and the help phrases */
+  | { type: 'action'; id: ActionId }
   /** a Canva picture card from `cards/<id>.webp` (flat 2D illustration; never 3D, never emoji) */
   | { type: 'card'; id: string; label: string };
 export interface TeachPage { word: string; art: TeachArt; meaning: string; example: string; clue?: string }
@@ -89,6 +94,7 @@ export interface HuntSlide extends SlideBase {
 /** Shadow match (homework): a dark silhouette of a picture; pick the right word. */
 export interface ShadowSlide extends SlideBase { kind: 'shadow'; prompt: string; rounds: { art: TeachArt; answer: string; options: string[] }[] }
 export interface BorderSlide extends SlideBase { kind: 'border'; prompt: string; /** nationality word -> flag code: each passport shows its flag */ flags?: Record<string, string>; rounds: { flag: string; says: string; answer: string; options: string[] }[]; stamp?: string }
+export interface NumWallSlide extends SlideBase { kind: 'numwall'; title: string; /** how many different numbers the student must tap (default 8) */ need?: number }
 export interface MemorySlide extends SlideBase { kind: 'memory'; prompt: string; pairs: { flag: string; text: string }[] }
 export interface PhoneChatSlide extends SlideBase { kind: 'phonechat'; prompt: string; contact: CastName; steps: { text: string; /** a sticker picture beside the message */ pic?: TeachArt; reply: string; extra?: string[]; /** pictures on the word tiles (key = the tile text) so beginners see what the word means */ tilePics?: Record<string, TeachArt> }[] }
 export interface FadeSlide extends SlideBase { kind: 'fade'; prompt: string; lines: { who: CastName; text: string; keys: string[] }[] }
@@ -112,7 +118,7 @@ export interface WrapSlide extends SlideBase { kind: 'wrap'; heading: string; ti
 
 export type Slide =
   | TitleSlide | BriefSlide | BadgeSlide | DialSlide | WhoSaidSlide | LockersSlide | NumTrainSlide | PadlockSlide | ConvoSlide | SpellSlide
-  | HuntSlide | ShadowSlide | TeachSlide | ModelSlide | FindWrongSlide | BorderSlide | MemorySlide | PhoneChatSlide | FadeSlide | CardSlide | SaySlide | WrapSlide;
+  | HuntSlide | ShadowSlide | TeachSlide | ModelSlide | FindWrongSlide | BorderSlide | MemorySlide | NumWallSlide | PhoneChatSlide | FadeSlide | CardSlide | SaySlide | WrapSlide;
 
 export interface DeckScript {
   lessonId: string;

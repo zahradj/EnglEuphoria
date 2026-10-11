@@ -8,6 +8,54 @@
     "text": "Welcome back! Today you win three stamps at the club desk."
   },
   {
+    "who": "Vee",
+    "text": "Listen"
+  },
+  {
+    "who": "Vee",
+    "text": "Listen to Theo."
+  },
+  {
+    "who": "Vee",
+    "text": "Look"
+  },
+  {
+    "who": "Vee",
+    "text": "Look at the picture."
+  },
+  {
+    "who": "Vee",
+    "text": "Repeat"
+  },
+  {
+    "who": "Vee",
+    "text": "Listen and repeat: My name is Vee."
+  },
+  {
+    "who": "Vee",
+    "text": "Click"
+  },
+  {
+    "who": "Vee",
+    "text": "Click the answer."
+  },
+  {
+    "who": "Vee",
+    "text": "Read"
+  },
+  {
+    "who": "Vee",
+    "text": "Read the clue."
+  },
+  {
+    "who": "Vee",
+    "text": "Point"
+  },
+  {
+    "who": "Vee",
+    "text": "Point to the flag."
+  },
+  {
     "who": "Theo",
     "text": "What do you like?"
   },
@@ -26,6 +74,38 @@
   {
     "who": "Ava",
     "text": "I am 13."
+  },
+  {
+    "who": "Vee",
+    "text": "Sorry?"
+  },
+  {
+    "who": "Vee",
+    "text": "Sorry? … Oh, I see!"
+  },
+  {
+    "who": "Vee",
+    "text": "Slowly, please."
+  },
+  {
+    "who": "Vee",
+    "text": "Slowly, please. Thank you!"
+  },
+  {
+    "who": "Vee",
+    "text": "I don’t understand."
+  },
+  {
+    "who": "Vee",
+    "text": "I don’t understand. Can you help?"
+  },
+  {
+    "who": "Vee",
+    "text": "What does it mean?"
+  },
+  {
+    "who": "Vee",
+    "text": "What does “nationality” mean?"
   },
   {
     "who": "Theo",
@@ -117,51 +197,59 @@
   },
   {
     "who": "Vee",
-    "text": "Spain"
+    "text": "Spain, Spanish"
   },
   {
     "who": "Vee",
-    "text": "I am from Spain."
+    "text": "I am from Spain. I am Spanish."
   },
   {
     "who": "Vee",
-    "text": "Spanish"
+    "text": "Italy, Italian"
   },
   {
     "who": "Vee",
-    "text": "I am Spanish."
+    "text": "I am from Italy. I am Italian."
   },
   {
     "who": "Vee",
-    "text": "Italy"
+    "text": "Brazil, Brazilian"
   },
   {
     "who": "Vee",
-    "text": "I am from Italy."
+    "text": "I am from Brazil. I am Brazilian."
   },
   {
     "who": "Vee",
-    "text": "Italian"
+    "text": "France, French"
   },
   {
     "who": "Vee",
-    "text": "I am Italian."
+    "text": "I am from France. I am French."
   },
   {
     "who": "Vee",
-    "text": "Brazil"
+    "text": "Germany, German"
   },
   {
     "who": "Vee",
-    "text": "I am from Brazil."
+    "text": "I am from Germany. I am German."
   },
   {
     "who": "Vee",
-    "text": "Brazilian"
+    "text": "Japan, Japanese"
   },
   {
     "who": "Vee",
-    "text": "I am Brazilian."
+    "text": "I am from Japan. I am Japanese."
+  },
+  {
+    "who": "Vee",
+    "text": "America, American"
+  },
+  {
+    "who": "Vee",
+    "text": "I am from America. I am American."
   },
   {
     "who": "Theo",
@@ -194,6 +282,366 @@
   {
     "who": "Ava",
     "text": "My number is four, two, seven."
+  },
+  {
+    "who": "Vee",
+    "text": "eleven"
+  },
+  {
+    "who": "Vee",
+    "text": "twelve"
+  },
+  {
+    "who": "Vee",
+    "text": "thirteen"
+  },
+  {
+    "who": "Vee",
+    "text": "fourteen"
+  },
+  {
+    "who": "Vee",
+    "text": "fifteen"
+  },
+  {
+    "who": "Vee",
+    "text": "sixteen"
+  },
+  {
+    "who": "Vee",
+    "text": "seventeen"
+  },
+  {
+    "who": "Vee",
+    "text": "eighteen"
+  },
+  {
+    "who": "Vee",
+    "text": "nineteen"
+  },
+  {
+    "who": "Vee",
+    "text": "twenty"
+  },
+  {
+    "who": "Vee",
+    "text": "twenty-one"
+  },
+  {
+    "who": "Vee",
+    "text": "twenty-two"
+  },
+  {
+    "who": "Vee",
+    "text": "twenty-three"
+  },
+  {
+    "who": "Vee",
+    "text": "twenty-four"
+  },
+  {
+    "who": "Vee",
+    "text": "twenty-five"
+  },
+  {
+    "who": "Vee",
+    "text": "twenty-six"
+  },
+  {
+    "who": "Vee",
+    "text": "twenty-seven"
+  },
+  {
+    "who": "Vee",
+    "text": "twenty-eight"
+  },
+  {
+    "who": "Vee",
+    "text": "twenty-nine"
+  },
+  {
+    "who": "Vee",
+    "text": "thirty"
+  },
+  {
+    "who": "Vee",
+    "text": "thirty-one"
+  },
+  {
+    "who": "Vee",
+    "text": "thirty-two"
+  },
+  {
+    "who": "Vee",
+    "text": "thirty-three"
+  },
+  {
+    "who": "Vee",
+    "text": "thirty-four"
+  },
+  {
+    "who": "Vee",
+    "text": "thirty-five"
+  },
+  {
+    "who": "Vee",
+    "text": "thirty-six"
+  },
+  {
+    "who": "Vee",
+    "text": "thirty-seven"
+  },
+  {
+    "who": "Vee",
+    "text": "thirty-eight"
+  },
+  {
+    "who": "Vee",
+    "text": "thirty-nine"
+  },
+  {
+    "who": "Vee",
+    "text": "forty"
+  },
+  {
+    "who": "Vee",
+    "text": "forty-one"
+  },
+  {
+    "who": "Vee",
+    "text": "forty-two"
+  },
+  {
+    "who": "Vee",
+    "text": "forty-three"
+  },
+  {
+    "who": "Vee",
+    "text": "forty-four"
+  },
+  {
+    "who": "Vee",
+    "text": "forty-five"
+  },
+  {
+    "who": "Vee",
+    "text": "forty-six"
+  },
+  {
+    "who": "Vee",
+    "text": "forty-seven"
+  },
+  {
+    "who": "Vee",
+    "text": "forty-eight"
+  },
+  {
+    "who": "Vee",
+    "text": "forty-nine"
+  },
+  {
+    "who": "Vee",
+    "text": "fifty"
+  },
+  {
+    "who": "Vee",
+    "text": "fifty-one"
+  },
+  {
+    "who": "Vee",
+    "text": "fifty-two"
+  },
+  {
+    "who": "Vee",
+    "text": "fifty-three"
+  },
+  {
+    "who": "Vee",
+    "text": "fifty-four"
+  },
+  {
+    "who": "Vee",
+    "text": "fifty-five"
+  },
+  {
+    "who": "Vee",
+    "text": "fifty-six"
+  },
+  {
+    "who": "Vee",
+    "text": "fifty-seven"
+  },
+  {
+    "who": "Vee",
+    "text": "fifty-eight"
+  },
+  {
+    "who": "Vee",
+    "text": "fifty-nine"
+  },
+  {
+    "who": "Vee",
+    "text": "sixty"
+  },
+  {
+    "who": "Vee",
+    "text": "sixty-one"
+  },
+  {
+    "who": "Vee",
+    "text": "sixty-two"
+  },
+  {
+    "who": "Vee",
+    "text": "sixty-three"
+  },
+  {
+    "who": "Vee",
+    "text": "sixty-four"
+  },
+  {
+    "who": "Vee",
+    "text": "sixty-five"
+  },
+  {
+    "who": "Vee",
+    "text": "sixty-six"
+  },
+  {
+    "who": "Vee",
+    "text": "sixty-seven"
+  },
+  {
+    "who": "Vee",
+    "text": "sixty-eight"
+  },
+  {
+    "who": "Vee",
+    "text": "sixty-nine"
+  },
+  {
+    "who": "Vee",
+    "text": "seventy"
+  },
+  {
+    "who": "Vee",
+    "text": "seventy-one"
+  },
+  {
+    "who": "Vee",
+    "text": "seventy-two"
+  },
+  {
+    "who": "Vee",
+    "text": "seventy-three"
+  },
+  {
+    "who": "Vee",
+    "text": "seventy-four"
+  },
+  {
+    "who": "Vee",
+    "text": "seventy-five"
+  },
+  {
+    "who": "Vee",
+    "text": "seventy-six"
+  },
+  {
+    "who": "Vee",
+    "text": "seventy-seven"
+  },
+  {
+    "who": "Vee",
+    "text": "seventy-eight"
+  },
+  {
+    "who": "Vee",
+    "text": "seventy-nine"
+  },
+  {
+    "who": "Vee",
+    "text": "eighty"
+  },
+  {
+    "who": "Vee",
+    "text": "eighty-one"
+  },
+  {
+    "who": "Vee",
+    "text": "eighty-two"
+  },
+  {
+    "who": "Vee",
+    "text": "eighty-three"
+  },
+  {
+    "who": "Vee",
+    "text": "eighty-four"
+  },
+  {
+    "who": "Vee",
+    "text": "eighty-five"
+  },
+  {
+    "who": "Vee",
+    "text": "eighty-six"
+  },
+  {
+    "who": "Vee",
+    "text": "eighty-seven"
+  },
+  {
+    "who": "Vee",
+    "text": "eighty-eight"
+  },
+  {
+    "who": "Vee",
+    "text": "eighty-nine"
+  },
+  {
+    "who": "Vee",
+    "text": "ninety"
+  },
+  {
+    "who": "Vee",
+    "text": "ninety-one"
+  },
+  {
+    "who": "Vee",
+    "text": "ninety-two"
+  },
+  {
+    "who": "Vee",
+    "text": "ninety-three"
+  },
+  {
+    "who": "Vee",
+    "text": "ninety-four"
+  },
+  {
+    "who": "Vee",
+    "text": "ninety-five"
+  },
+  {
+    "who": "Vee",
+    "text": "ninety-six"
+  },
+  {
+    "who": "Vee",
+    "text": "ninety-seven"
+  },
+  {
+    "who": "Vee",
+    "text": "ninety-eight"
+  },
+  {
+    "who": "Vee",
+    "text": "ninety-nine"
+  },
+  {
+    "who": "Vee",
+    "text": "one hundred"
   },
   {
     "who": "Vee",

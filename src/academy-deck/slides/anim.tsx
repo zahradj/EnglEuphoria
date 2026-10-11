@@ -44,6 +44,15 @@ const LOOK: Record<string, { skin: string; hair: string; shirt: string; style: '
   es: { skin: '#f3cfae', hair: '#3b2416', shirt: '#7c5cf0', style: 'short' },
   it: { skin: '#e9b98f', hair: '#6b3a1c', shirt: '#2f9e8f', style: 'wavy' },
   br: { skin: '#c88b5e', hair: '#1c1410', shirt: '#f59e0b', style: 'curly' },
+  fr: { skin: '#f1cba7', hair: '#8a5a2b', shirt: '#4f7cf0', style: 'wavy' },
+  de: { skin: '#f4d2b5', hair: '#d9a441', shirt: '#475569', style: 'short' },
+  jp: { skin: '#f3d3b0', hair: '#14110f', shirt: '#e11d48', style: 'short' },
+  pl: { skin: '#f6d6bd', hair: '#b9722e', shirt: '#7c5cf0', style: 'wavy' },
+  ie: { skin: '#f7d9c4', hair: '#b4532a', shirt: '#2f9e6f', style: 'curly' },
+  tr: { skin: '#e8b88c', hair: '#2a1a12', shirt: '#dc2626', style: 'short' },
+  cn: { skin: '#f2cfa8', hair: '#0f0d0c', shirt: '#f59e0b', style: 'wavy' },
+  us: { skin: '#e2ac84', hair: '#3b2a1c', shirt: '#3b82f6', style: 'curly' },
+  gb: { skin: '#f4d0b4', hair: '#5a3a22', shirt: '#1e3a8a', style: 'short' },
 };
 
 /** A traveller: breathes, blinks and waves the flag of their country. */

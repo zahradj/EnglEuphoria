@@ -89,9 +89,10 @@ export function NumTrainView({ slide }: { slide: NumTrainSlide }) {
         ))}
       </div>
       <div className="ad-chips">
-        {bank.map((n) => (
-          <button key={n} type="button" className="ad-chip" disabled={placed.includes(n)} data-held={held === n} {...drag.bind(String(n), placed.includes(n))}>{slide.words[n]}</button>
+        {bank.filter((n) => !placed.includes(n)).map((n) => (
+          <button key={n} type="button" className="ad-chip" data-held={held === n} {...drag.bind(String(n), false)}>{slide.words[n]}</button>
         ))}
+        {placed.length === slide.numbers.length && <span className="ad-chips-empty"><Icon name="check" /> All words used!</span>}
       </div>
       {slip && !all && <Feedback kind="try">{NOT_YET}</Feedback>}
       <p className="ad-hint-line">{placed.length} of {slide.numbers.length} carriages filled. Drag a word to its number (or tap a word, then a carriage).</p>
