@@ -62,6 +62,7 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
   '4-4': { settings: ['flower garden'], look: 'bright flower garden with big friendly mushrooms; Pip meets Bo, a round sky-blue three-eyed monster; code-drawn monsters on an empty lawn' },
   '4-5': { settings: ['animal park'], look: 'sunny animal park with a blue pond and tall trees; a tiger, a monkey, an elephant and a seal each show one move, Pip copies; a leafy bush to peek through' },
+  '10-1': { settings: ['park sports-day track'], look: "sports day in a sunny green park: a curvy red running track with white lane lines, low wooden logs and a hay bale as hurdles, triangle bunting and a finish ribbon; Pip runs, Mia jumps the log and Coach Leo cheers with a whistle; the empty track becomes the Obstacle Run with code-drawn lane stripes streaming past" },
   '9-6': { settings: ['playroom dress-up corner'], look: "a cosy playroom dress-up corner on a rainy afternoon: a big wooden-framed standing mirror, a low clothes rail with hangers, an open wooden dress-up trunk, a round purple rug, rain on the window and warm lamp light; Pip in a green hat, Mia twirling in a yellow dress and Leo pulling on a blue coat; the empty corner becomes the Dress-Up Studio with a clothes rail and paint pots" },
   '9-5': { settings: ['sunny garden', 'picnic hill', 'farmyard after rain'], look: "a walk through the unit's places as a stills film: Pip in a red T-shirt, blue pants and brand-new white sneakers in a sunny garden, squishing red apples under the apple tree on the picnic hill, stepping into a spilled pot of blue paint on the path, stomping in a brown mud puddle in the farmyard after rain, and splashing in a clear rain puddle; the garden becomes the Shoe Painter game with paint pots and a big magnifier on his shoes" },
   '9-4': { settings: ['garden fashion show stage'], look: "a garden fashion show on a sunny afternoon: a wooden stage with a pink curtain, a row of warm stage lights and a little catwalk, bunting and fairy lights in green trees, flower pots and colourful chairs for the audience; Pip, Mia and Leo stand in the spotlights really wearing the clothes (fitted layers), and the camera flashes when the child finds the friend" },
@@ -213,6 +214,19 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'the child must understand the verb AND the body part to find the animal, then PRODUCES the move and the sentence — the screen waits for the child, never a clock',
       'the clue in Whose Is It? is one of the unit\'s body words, so naming the part and the animal go together, and the reveal recalls the story move',
       'wrong picks are named back with that animal\'s own move ("No, the seal claps her hands!"), and the right one glows after two tries',
+    ],
+  },
+  '10-1': {
+    sources: ['endless-runner games (Subway Surfers / Temple Run: one tap = one move)', 'the PE warm-up "Run! Jump! Walk! Stop!"', 'Cambridge (Pre A1 Starters: listen and do)', 'Wordwall image quiz / Khan Academy Kids action cards'],
+    mechanics: [
+      'endless runner → Obstacle Run: the coach calls the move for the obstacle ahead ("A log! Jump!"), the child taps the action and the runner does it',
+      'TPR first: the child does every action with Coach Leo before the game; quick-fire "say it and do it" cards',
+      'image reveal (what is Pip doing?), role swap: the child is the coach; first sounds R and J in Balloon Letter Pop',
+    ],
+    betterThan: [
+      'the action word decides the move — a log can be jumped one time and walked round another — so the child listens, not just looks',
+      'the move is visible and physical: a squash-and-stretch jump arc, a slow tiptoe past the sleeping duck, speed lines running from the bee',
+      'calm pace and no fail state: a wrong move is named back ("Not walk! Listen again.") and the right one glows after two tries',
     ],
   },
   '9-6': {

@@ -469,6 +469,7 @@ const UNIT1_EXTRACTORS = {
     [s.who, s.doneLine],
   ],
   // Mirror DuckFeedScene.tsx's duckFeedLines().
+  'action-run': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...(s.actions ?? []).map((a) => [s.who, `Not ${a.word}! Listen again.`]), [s.who, s.doneLine]],
   'dress-studio': (s) => {
     const has = { pip: ['hat', 'shirt', 'pants', 'socks', 'shoes'], leo: ['hat', 'shirt', 'pants', 'socks', 'shoes'], mia: ['hat', 'shirt', 'pants', 'socks', 'shoes', 'dress'] };
     const f = s.free?.friend;

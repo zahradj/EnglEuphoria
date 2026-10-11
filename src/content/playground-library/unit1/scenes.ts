@@ -509,6 +509,15 @@ export type Scene =
       doneLine: string;
     }
   | {
+      /** Obstacle Run (U10L1 signature): the coach calls a move for the obstacle ahead ("Jump over the log!");
+       *  the child taps that action (`action` indexes `actions`) and the runner does it (pose pictures in `poses`). */
+      id: string; kind: 'action-run'; bg: string; teacher: string; who: CharKey;
+      poses: { run: string; jump: string; walk: string };
+      actions: { id: 'run' | 'jump' | 'walk'; word: string; img: string }[];
+      rounds: { action: number; obstacle: { img: string; label: string; w?: string; buzz?: boolean }; line: string; reply: string }[];
+      doneLine: string;
+    }
+  | {
       /** Dress-Up Studio (U9L6 signature): a friend asks for a piece AND a colour (`rounds`: `piece` indexes `pieces`,
        *  `color` indexes `colors`); the child taps the piece, then the paint pot, and it lands on the friend's body
        *  (fitted layers, recoloured in `hex`). Then a free round: dress `free.friend` any way, 📸, and the friend
@@ -15264,4 +15273,212 @@ export const LESSON_U9L6_SCENES: Scene[] = [
     ],
   },
   { id: 'u9l6-finale', kind: 'finale', bg: bgU9L6Playroom, who: 'mia', line: 'Hat, coat, shoes, dress! What a great dress-up day! Goodbye, friend!' },
+];
+
+/* =============================================================================
+ * Pre-A1 Unit 10, Lesson 1 — "Run, Jump, Walk!" (Action Verbs; sounds R and J)
+ *
+ * Sports day in the park. New action words run, jump, walk (TPR first, then the words), a new signature game
+ * (Obstacle Run: the coach calls the move, the child picks it, the runner really does it), the lesson song
+ * after the first game, and the first sounds R (run) and J (jump).
+ * ========================================================================= */
+
+const bgU10L1Track = `${A}/scenes/bg-u10l1-track-wide.png`;
+const bgU10L1TrackEmpty = `${A}/scenes/bg-u10l1-track-empty-wide.png`;
+const itemPipRun = `${A}/items/item-pip-run.png`;
+const itemPipJump = `${A}/items/item-pip-jump.png`;
+const itemPipWalk = `${A}/items/item-pip-walk.png`;
+const itemLog = `${A}/items/item-log.png`;
+const itemBee = `${A}/items/item-bee.png`;
+const itemJam = `${A}/items/item-jam.png`;
+const itemJet = `${A}/items/item-jet.png`;
+const itemRabbit = `${A}/items/item-rabbit.png`;
+const itemRocket = `${A}/items/item-rocket.png`;
+
+export const LESSON_U10L1_TITLE = 'Run, Jump, Walk!';
+export const LESSON_U10L1_OBJECTIVE = 'Understand and do the actions run, jump and walk, say them ("Jump!"), pick the right move when the coach calls it, and hear the first sounds R (run) and J (jump), by moving, listening and playing, no reading.';
+
+export const LESSON_U10L1_SCENES: Scene[] = [
+  { id: 'u10l1-title', kind: 'title-card', bg: bgU10L1Track, level: 'Pre-A1', unit: 'Unit 10', lessonLabel: 'Lesson 1', title: 'Run, Jump, Walk!', subtitle: 'Sports day in the park' },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 9 · Lesson 6 · Dress Up Game
+    id: 'u10l1-recall-warmup', kind: 'recall-warmup', bg: bgU10L1TrackEmpty, who: 'mia', mode: 'shadow',
+    fromLabel: 'Lesson 6 · Dress Up Game',
+    teacher: 'Warm-up from last lesson: Mia says a piece of clothing, the child finds its shadow and says it.',
+    items: [
+      { word: 'coat', say: 'A coat!', img: itemCoatBlue },
+      { word: 'dress', say: 'A dress!', img: itemDress },
+      { word: 'hat', say: 'A hat!', img: itemHatGreen },
+    ],
+  },
+  {
+    id: 'u10l1-intro', kind: 'cinematic', bg: bgU10L1Track, hidePipOverlay: true, title: 'Run, Jump, Walk!', subtitle: 'Sports day in the park', narrator: 'leo',
+    script: [
+      { who: 'leo', line: "It's sports day! Are you ready?" },
+      { who: 'pip', line: 'Look at me! I run!' },
+      { who: 'mia', line: 'And I jump! Hop!' },
+      { who: 'leo', line: "Let's run, jump and walk!" },
+    ],
+    cta: "Let's move!",
+  },
+
+  /* 4-5 The words, then move */
+  {
+    id: 'u10l1-words', kind: 'listen-repeat-cards', textSide: 'right', bg: bgU10L1TrackEmpty, teacher: 'Listen, then say it and do it: "Run!"',
+    cards: [
+      { who: 'pip', sentence: 'Run! I run fast!', img: itemPipRun, imgLabel: 'run' },
+      { who: 'pip', sentence: 'Jump! I jump high!', img: itemPipJump, imgLabel: 'jump' },
+      { who: 'pip', sentence: 'Walk! I walk slowly.', img: itemPipWalk, imgLabel: 'walk' },
+    ],
+  },
+
+  {
+    id: 'u10l1-move', kind: 'tpr-actions', bg: bgU10L1TrackEmpty, who: 'leo',
+    teacher: 'Stand up! Do each action with Coach Leo and say the word.',
+    rounds: [
+      { line: 'Run! Run, run, run on the spot!', emoji: '\u{1F3C3}', img: itemPipRun },
+      { line: 'Jump! Jump, jump, jump!', emoji: '\u{1F998}', img: itemPipJump },
+      { line: 'Walk! Walk slowly. Walk, walk.', emoji: '\u{1F6B6}', img: itemPipWalk },
+      { line: 'Stop! Freeze!', emoji: '\u{1F6D1}', seconds: 3 },
+    ],
+  },
+  /* 6 Signature game (new): Obstacle Run */
+  {
+    id: 'u10l1-obstacle-run', kind: 'action-run', bg: bgU10L1TrackEmpty, who: 'leo',
+    teacher: 'Obstacle Run! Listen to Coach Leo: run, jump or walk? Tap the move — Pip does it. The child can do the move too!',
+    poses: { run: itemPipRun, jump: itemPipJump, walk: itemPipWalk },
+    actions: [
+      { id: 'run', word: 'run', img: itemPipRun },
+      { id: 'jump', word: 'jump', img: itemPipJump },
+      { id: 'walk', word: 'walk', img: itemPipWalk },
+    ],
+    rounds: [
+      { action: 1, obstacle: { img: itemLog, label: 'log' }, line: 'A log! Jump!', reply: 'Great jump!' },
+      { action: 2, obstacle: { img: itemFarmDuck, label: 'duck' }, line: 'Shh! A duck is sleeping. Walk!', reply: 'Good walking! Shh!' },
+      { action: 0, obstacle: { img: itemBee, label: 'bee', buzz: true }, line: 'Bzzz! A bee! Run!', reply: 'Phew! Fast running!' },
+      { action: 1, obstacle: { img: itemLog, label: 'log' }, line: 'Another log! Jump!', reply: 'Wow! A big jump!' },
+      { action: 0, obstacle: { img: itemBee, label: 'bee', buzz: true }, line: 'Bzzz! Run, run!', reply: 'You are fast!' },
+      { action: 2, obstacle: { img: itemFarmDuck, label: 'duck' }, line: 'Walk, walk. Shh!', reply: 'Quiet walking! Well done!' },
+    ],
+    doneLine: 'The finish line! You did it!',
+  },
+
+  /* 7 The song — after the words and the first game (owner, 2026-10-10) */
+  {
+    id: 'u10l1-song', kind: 'song', bg: bgU10L1Track, title: '\u{1F3B5} Run, Jump, Walk! \u{1F3B5}', teacher: 'Sing and do it: run on the spot, jump, walk slowly, then freeze!',
+    durationSeconds: 20, bigWord: 'Jump', songUrl: `${A}/audio/run-jump-walk-song-u10l1.mp3?v=1`,
+    songPrompt: 'Energetic bouncy kids action song',
+    lyrics: [
+      { who: 'leo', text: 'Run, run, run! Run, run, run!', emotion: 'happy' },
+      { who: 'mia', text: 'Jump, jump, jump! Jump up high!', emotion: 'happy' },
+      { who: 'pip', text: 'Walk, walk, walk! Walk so slow!', emotion: 'happy' },
+      { who: 'leo', text: 'Run, jump, walk! And stop!', emotion: 'happy' },
+    ],
+  },
+
+  /* 8-10 More games */
+  {
+    id: 'u10l1-reveal', kind: 'tile-reveal', bg: bgU10L1TrackEmpty, who: 'leo',
+    teacher: 'What is Pip doing? Tiles pop off one by one — guess early and say it: "Jump!"',
+    rounds: [
+      { img: itemPipJump, word: 'jump', line: 'Jump!', options: [{ label: 'run', img: itemPipRun }, { label: 'jump', img: itemPipJump }, { label: 'walk', img: itemPipWalk }] },
+      { img: itemPipWalk, word: 'walk', line: 'Walk!', options: [{ label: 'walk', img: itemPipWalk }, { label: 'jump', img: itemPipJump }, { label: 'run', img: itemPipRun }] },
+      { img: itemPipRun, word: 'run', line: 'Run!', options: [{ label: 'jump', img: itemPipJump }, { label: 'walk', img: itemPipWalk }, { label: 'run', img: itemPipRun }] },
+    ],
+  },
+  {
+    id: 'u10l1-quick', kind: 'rapid-recall', bg: bgU10L1TrackEmpty, who: 'mia', seconds: 4,
+    teacher: 'Quick! A picture pops up — say it AND do it before the ring runs out: "Jump!"',
+    cards: [
+      { img: itemPipRun, word: 'run', say: 'Run!' },
+      { img: itemPipJump, word: 'jump', say: 'Jump!' },
+      { img: itemPipWalk, word: 'walk', say: 'Walk!' },
+      { img: itemPipJump, word: 'jump', say: 'Jump!' },
+      { img: itemPipRun, word: 'run', say: 'Run!' },
+    ],
+  },
+  {
+    id: 'u10l1-coach', kind: 'join-stage', bg: bgU10L1TrackEmpty, teacher: 'Role swap: Leo gives a move, then the child is the coach and gives Leo a move. Any move is fine.', cast: ['leo'],
+    turns: [
+      { who: 'leo', line: 'Jump! Can you jump?', bubble: 'right' },
+      { who: 'student', line: 'Jump, jump, jump!', bubble: 'right' },
+      { who: 'leo', line: 'Now you are the coach! Tell me!', bubble: 'right' },
+      { who: 'student', line: 'Run, Leo! Run!', bubble: 'right' },
+    ],
+  },
+
+  /* 11-12 Sounds: R and J */
+  {
+    id: 'u10l1-model-r', kind: 'sound-model', bg: bgU10L1TrackEmpty, who: 'leo', letter: 'R', phoneme: '/r/', sound: 'rrr',
+    teacher: 'R says /r/ — run, rabbit, rocket!',
+    anchors: [
+      { word: 'run', emoji: '\u{1F3C3}', img: itemPipRun },
+      { word: 'rabbit', emoji: '\u{1F430}', img: itemRabbit },
+      { word: 'rocket', emoji: '\u{1F680}', img: itemRocket },
+    ],
+  },
+  {
+    id: 'u10l1-model-j', kind: 'sound-model', bg: bgU10L1TrackEmpty, who: 'mia', letter: 'J', phoneme: '/dʒ/', sound: 'juh',
+    teacher: 'J says /dʒ/ — jump, jam, jet!',
+    anchors: [
+      { word: 'jump', emoji: '\u{1F998}', img: itemPipJump },
+      { word: 'jam', emoji: '\u{1F353}', img: itemJam },
+      { word: 'jet', emoji: '✈️', img: itemJet },
+    ],
+  },
+  {
+    id: 'u10l1-pop-rj', kind: 'sound-pop', bg: bgU10L1TrackEmpty, teacher: 'Balloon Letter Pop! /r/ run, /dʒ/ jump — Leo calls a letter, pop only that one!', who: 'leo', goal: 8, seconds: 45,
+    targets: [
+      { letter: 'R', phoneme: '/r/' },
+      { letter: 'J', phoneme: '/dʒ/' },
+    ],
+    items: [
+      { word: 'R', letter: 'R', emoji: 'R' },
+      { word: 'J', letter: 'J', emoji: 'J' },
+    ],
+  },
+
+  /* 13-14 Sticker + Home Mission */
+  {
+    id: 'u10l1-sticker', kind: 'sticker-reward', bg: bgU10L1Track, who: 'leo', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'You are a sports day star! Here is a jumping sticker for you!', sticker: { img: itemPipJump, label: 'Sports star' },
+  },
+  {
+    id: 'u10l1-home-mission', kind: 'home-mission', bg: bgU10L1Track, who: 'leo',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: be the coach at home! Say "Run!", "Jump!", "Walk!" and your family does it!',
+    parentNote: 'Play "Coach" at home (in a safe space or outside): your child calls "Run!", "Jump!" or "Walk!" and you do it, then swap. Add "Stop!" to freeze. Walk slowly, run on the spot, jump like a frog!',
+    steps: [
+      { emoji: '\u{1F3C3}', img: itemPipRun, say: 'Run!' },
+      { emoji: '\u{1F998}', img: itemPipJump, say: 'Jump!' },
+      { emoji: '\u{1F6B6}', img: itemPipWalk, say: 'Walk!' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u10l1-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU10L1TrackEmpty, who: 'mia',
+    teacher: 'Extra time: Brain Break! Do each action with Mia.',
+    rounds: [
+      { line: 'Jump like a frog! Ribbit!', emoji: '\u{1F438}' },
+      { line: 'Walk like a robot! Beep!', emoji: '\u{1F916}' },
+      { line: 'Run on the spot! Fast!', emoji: '\u{1F3C3}' },
+      { line: 'Freeze!', emoji: '\u{1F976}', seconds: 3 },
+    ],
+  },
+
+  /* Goodbye */
+  {
+    id: 'u10l1-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u10l1-finale', kind: 'finale', bg: bgU10L1Track, who: 'leo', line: 'Run, jump, walk! Great sports day! Goodbye, friend!' },
 ];
