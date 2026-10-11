@@ -19,7 +19,11 @@ export const QUEST_SNOW_DAY_U9L2: HomeworkQuest = {
   subtitle: 'Shoes, Hat, Socks! · Pre-A1 Unit 9 · Lesson 2',
   level: 'Pre-A1',
   lessonKey: 'lep1-rich-9-2',
-  theme: { accent: '#0EA5E9', accent2: '#22C55E', night: false, mapImg: hall, guide: `${C}/pip-happy.png`, walker: `${C}/pip-hello.png` },
+  theme: { accent: '#0EA5E9', accent2: '#22C55E', night: false, mapImg: hall, guide: `${C}/pip-happy.png`, walker: `${C}/pip-hello.png`,
+    // The snowy village: Pip's cottage (Dress Up), the snowman (Head or Feet?), the sled hill (H or S?), the chest under the big pine.
+    map: { img: `${S}/map-u9l2-snow-village-wide.png`, ambient: 'snow',
+      stops: [[21, 77], [47, 79], [57, 41], [79, 31]],
+      trail: [[21, 77], [29, 84], [38, 87], [47, 79], [56, 67], [63, 57], [67, 48], [62, 43], [57, 41], [66, 43], [74, 41], [81, 34], [79, 31]] } },
   voice: 'teacher',
   praise: { voice: 'pip', lines: ['Yes! Well done!', 'Great job!', 'Wow, perfect!'], tryAgain: 'Try again!' },
   levels: [

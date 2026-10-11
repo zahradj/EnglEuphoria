@@ -122,6 +122,12 @@ export interface HomeworkQuest {
     guide: string;
     /** Sticker that walks along the map path. */
     walker: string;
+    /** An illustrated quest map (a painted board with one landmark per level). `stops` = where each level's
+     *  stop sits on the picture (% x, % y), in level order; `ambient` = falling snow / leaves over it.
+     *  Without it the map uses `mapImg` with an automatic zig-zag trail. */
+    map?: { img: string; stops: [number, number][]; ambient?: 'snow' | 'leaves';
+      /** Points along the painted trail (must include every stop) so the gold progress line follows it. */
+      trail?: [number, number][] };
   };
   /** Default voice for level lines. */
   voice: QuestVoice;

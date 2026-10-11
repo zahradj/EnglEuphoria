@@ -210,4 +210,26 @@ export const QUEST_CSS = `
 .hq-du-flake { position:absolute; top:0; z-index:10; color:#fff; font-size:2.6cqw; text-shadow:0 0 6px rgba(120,170,255,.8); pointer-events:none; }
 .hq-du-ask { max-width:46%; }
 
+/* Quest map motion */
+.hq-stage.hq-mapstage { max-width:100%; } /* the map keeps the picture's shape: stops stay on their landmarks */
+.hq-char.walker.hq-walk { animation:none; transition:none; translate:-50% -88%; }
+.hq-pop { display:flex; flex-direction:column; align-items:center; gap:4px; position:relative; }
+.hq-trail-lit { stroke:#ffd65a; stroke-width:7px; filter:drop-shadow(0 0 4px rgba(255,214,90,.9)); }
+.hq-trail-soft { stroke-width:6px; }
+.hq-ping { position:absolute; left:50%; top:clamp(27px,min(4.5vw,6.5vh),48px); width:clamp(54px,min(9vw,13vh),96px); height:clamp(54px,min(9vw,13vh),96px); translate:-50% -50%; border-radius:50%; border:4px solid #ffd65a; animation:hq-ping 1.6s ease-out infinite; pointer-events:none; }
+@keyframes hq-ping { from { scale:.9; opacity:.95; } to { scale:1.9; opacity:0; } }
+.hq-ambient { position:absolute; inset:0; overflow:hidden; pointer-events:none; z-index:2; }
+.hq-ambient i { position:absolute; top:-6%; font-style:normal; color:#fff; text-shadow:0 0 6px rgba(120,170,255,.8); opacity:.9; animation:hq-fall linear infinite; }
+@keyframes hq-fall { 0% { transform:translate(0,0) rotate(0); } 50% { transform:translate(14px,31cqw) rotate(120deg); } 100% { transform:translate(-8px,64cqw) rotate(240deg); } }
+@media (prefers-reduced-motion: reduce) { .hq-ping, .hq-ambient i { animation:none; } }
+
+@media (max-width:560px) {
+  .hq-mapstage .hq-node .lbl, .hq-mapstage .hq-node .got { display:none; }
+  .hq-mapstage .hq-node .gem { width:42px; height:42px; font-size:19px; border-width:3px; }
+  .hq-mapstage .hq-node .num { width:18px; height:18px; font-size:10px; top:-4px; left:-4px; }
+  .hq-mapstage .hq-ping { width:42px; height:42px; top:21px; }
+  .hq-mapstage .hq-node .play { font-size:10px; padding:2px 7px; }
+  .hq-mapstage .hq-char.walker { width:38px; }
+}
+
 `;

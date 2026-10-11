@@ -80,7 +80,7 @@ function DragItem({ handlers, className, style, label, children }: { handlers: D
 /** The game screen's picture. It fills the free space without ever making the
  *  page scroll, and keeps the picture's shape so % hotspots stay exact.
  *  The picture holds still (CLAUDE.md: never zoom or pan a still picture). */
-function Stage({ img, aspect = 1376 / 768, night, children, stageRef }: { img: string; aspect?: number; night?: boolean; still?: boolean; children?: ReactNode; stageRef?: React.Ref<HTMLDivElement> }) {
+function Stage({ img, aspect = 1376 / 768, night, children, stageRef, className = '' }: { img: string; aspect?: number; night?: boolean; still?: boolean; children?: ReactNode; stageRef?: React.Ref<HTMLDivElement>; className?: string }) {
   const box = useRef<HTMLDivElement | null>(null);
   const [size, setSize] = useState<{ w: number; h: number } | null>(null);
   useLayoutEffect(() => {
@@ -100,7 +100,7 @@ function Stage({ img, aspect = 1376 / 768, night, children, stageRef }: { img: s
   }, [aspect]);
   return (
     <div ref={box} className="hq-stagebox">
-    <div ref={stageRef} className="hq-stage" style={size ? { width: size.w, height: size.h, ['--ar' as string]: String(aspect) } : { width: '100%', aspectRatio: String(aspect), ['--ar' as string]: String(aspect) }}>
+    <div ref={stageRef} className={`hq-stage ${className}`} style={size ? { width: size.w, height: size.h, ['--ar' as string]: String(aspect) } : { width: '100%', aspectRatio: String(aspect), ['--ar' as string]: String(aspect) }}>
       <div className="hq-art" style={{ backgroundImage: `url('${img}')` }} />
       {night && <div className="hq-night">{Array.from({ length: 16 }, (_, i) => <span key={i} className="hq-twinkle" style={{ left: `${(i * 37 + 5) % 100}%`, top: `${(i * 53 + 9) % 90}%`, animationDelay: `${(i * 170) % 2000}ms` }} />)}</div>}
       {children}
@@ -673,6 +673,82 @@ function mapPath(n: number): number[][] {
   return Array.from({ length: n }, (_, i) => [10 + (i * 80) / (n - 1), i % 2 ? 40 : 70]);
 }
 
+/* ---------- The quest map ----------
+ * A living board-game map: the trail draws itself in and glows gold up to where the child has got, the stops
+ * pop in one by one, the next stop pulses, and the walker hops along the trail in an arc and lands with a
+ * squash. An illustrated map (`theme.map`: painted landmarks, one per level) can add falling snow / leaves.
+ * Stills hold still (no pan or zoom); all motion is UI and particles (.claude/skills/game-animation). */
+function smoothPath(pts: number[][]): string {
+  if (pts.length < 2) return '';
+  let d = `M ${pts[0][0]} ${pts[0][1]}`;
+  for (let i = 0; i < pts.length - 1; i++) { // Catmull-Rom → cubic Bézier
+    const p0 = pts[Math.max(0, i - 1)], p1 = pts[i], p2 = pts[i + 1], p3 = pts[Math.min(pts.length - 1, i + 2)];
+    const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6], c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
+    d += ` C ${c1[0]} ${c1[1]}, ${c2[0]} ${c2[1]}, ${p2[0]} ${p2[1]}`;
+  }
+  return d;
+}
+
+function QuestMap({ quest, done, nextIdx, walkerIdx, unlocked, onOpen, onLocked }: {
+  quest: Quest; done: Record<number, number>; nextIdx: number; walkerIdx: number;
+  unlocked: (i: number) => boolean; onOpen: (i: number) => void; onLocked: () => void;
+}) {
+  const reduce = useReducedMotion();
+  const map = quest.theme.map;
+  const n = quest.levels.length;
+  const path = useMemo(() => (map && map.stops.length >= n ? map.stops.slice(0, n).map((p) => [...p]) : mapPath(n)), [map, n]);
+  const reached = Math.max(0, Math.min(walkerIdx, n - 1));
+  // an illustrated map follows its painted trail; otherwise the trail runs stop to stop
+  const trail = map?.trail && map.trail.length >= 2 ? map.trail.map((p) => [...p]) : path;
+  const upTo = (i: number) => { const [x, y] = path[i]; let best = 0, bd = Infinity; trail.forEach(([tx, ty], k) => { const dd = (tx - x) ** 2 + (ty - y) ** 2; if (dd < bd) { bd = dd; best = k; } }); return best; };
+  const full = smoothPath(trail), lit = smoothPath(trail.slice(0, upTo(reached) + 1));
+  // the walker hops from where it stood to the new stop
+  const prev = useRef(reached);
+  const from = path[prev.current] ?? path[0], to = path[reached] ?? path[0];
+  useEffect(() => { prev.current = reached; }, [reached]);
+  const hop = from !== to;
+  return (
+    <Stage img={map?.img ?? quest.theme.mapImg} night={quest.theme.night} className="hq-mapstage">
+      {map?.ambient && !reduce && (
+        <div className={`hq-ambient ${map.ambient}`} aria-hidden>
+          {Array.from({ length: 26 }, (_, i) => <i key={i} style={{ left: `${(i * 37 + 3) % 100}%`, animationDelay: `${-((i * 0.53) % 7)}s`, animationDuration: `${6 + (i % 5)}s`, fontSize: `${10 + (i % 4) * 5}px` }}>{map.ambient === 'snow' ? '❄' : '🍂'}</i>)}
+        </div>
+      )}
+      <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="hq-path" aria-hidden="true">
+        {!map && <motion.path d={full} fill="none" className={map ? 'hq-trail-soft' : 'hq-trail'} stroke="#fff" strokeOpacity={map ? 0.55 : 0.95} strokeLinecap="round" strokeDasharray={map ? '1 2.2' : undefined}
+          vectorEffect="non-scaling-stroke" initial={reduce ? false : { pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.2, ease: 'easeInOut' }} />}
+        {reached > 0 && <motion.path d={lit} fill="none" className="hq-trail-lit" strokeLinecap="round" vectorEffect="non-scaling-stroke"
+          initial={reduce ? false : { pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.1, delay: 0.5, ease: 'easeInOut' }} />}
+      </svg>
+      {quest.levels.map((l, i) => {
+        const [x, y] = path[i];
+        const state = done[i] !== undefined ? 'done' : !unlocked(i) ? 'locked' : i === nextIdx ? 'next' : '';
+        return (
+          <button key={i} className={`hq-node ${state}`} style={{ left: `${x}%`, top: `${y}%` }} aria-label={l.name}
+            onClick={() => { if (state === 'locked') { onLocked(); return; } onOpen(i); }}>
+            <motion.span className="hq-pop" initial={reduce ? false : { scale: 0, y: 24, opacity: 0 }} animate={{ scale: 1, y: 0, opacity: 1 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 15, delay: 0.25 + i * 0.13 }} whileHover={reduce ? undefined : { scale: 1.08 }} whileTap={reduce ? undefined : { scale: 0.92 }}>
+              {state === 'next' && <span className="hq-ping" aria-hidden />}
+              <span className="gem">{state === 'locked' ? '🔒' : <Icon s={l.icon} />}<i className="num">{i + 1}</i></span>
+              {state === 'next' && <span className="play">▶ PLAY</span>}
+              <span className="lbl">{l.name}</span>
+              <span className="got">{[0, 1, 2].map((k) => <b key={k} className={k < (done[i] ?? 0) ? 'on' : ''}>★</b>)}</span>
+            </motion.span>
+          </button>
+        );
+      })}
+      <motion.img key={`w${reached}`} className="hq-char walker hq-walk" src={quest.theme.walker} alt="" style={{ transformOrigin: '50% 100%' }}
+        initial={hop && !reduce ? { left: `${from[0]}%`, top: `${from[1] - 7}%` } : { left: `${to[0]}%`, top: `${to[1] - 7}%` }}
+        animate={hop && !reduce
+          ? { left: [`${from[0]}%`, `${(from[0] + to[0]) / 2}%`, `${to[0]}%`], top: [`${from[1] - 7}%`, `${Math.min(from[1], to[1]) - 22}%`, `${to[1] - 7}%`], scaleY: [1, 1.08, 0.8, 1.1, 1], scaleX: [1, 0.94, 1.2, 0.94, 1] }
+          : { left: `${to[0]}%`, top: `${to[1] - 7}%`, y: [0, -6, 0] }}
+        transition={hop && !reduce
+          ? { left: { duration: 0.75, times: [0, 0.5, 1], ease: 'easeInOut' }, top: { duration: 0.75, times: [0, 0.5, 1], ease: ['easeOut', 'easeIn'] }, scaleY: { duration: 1.05, times: [0, 0.3, 0.72, 0.86, 1] }, scaleX: { duration: 1.05, times: [0, 0.3, 0.72, 0.86, 1] } }
+          : { y: { duration: 2.2, repeat: Infinity, ease: 'easeInOut' } }} />
+    </Stage>
+  );
+}
+
 export interface QuestResult { questId: string; stars: number; levels: Record<string, number> }
 
 export default function HomeworkQuest({ quest, onComplete, onExit }: { quest: Quest; onComplete?: (r: QuestResult) => void; onExit?: () => void }) {
@@ -735,7 +811,6 @@ export default function HomeworkQuest({ quest, onComplete, onExit }: { quest: Qu
     window.setTimeout(() => { setWin((w) => (w && w.idx === idx ? null : w)); stopSpeaking(); setView('map'); }, 2800);
   }, [quest, onComplete]);
 
-  const path = useMemo(() => mapPath(quest.levels.length), [quest.levels.length]);
   const level = typeof view === 'number' ? quest.levels[view] : null;
   const common = level && typeof view === 'number' ? { quest, say, praise, tryAgain, miss, star, done: finishLevel(view), setDots } : null;
 
@@ -758,25 +833,8 @@ export default function HomeworkQuest({ quest, onComplete, onExit }: { quest: Qu
           <>
             <div className="hq-bar"><h2>🗺 The quest map</h2><span className="hq-pill">{Object.keys(S.done).length} / {quest.levels.length}</span></div>
             <div className="hq-play">
-            <Stage img={quest.theme.mapImg} night={quest.theme.night}>
-              <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="hq-path" aria-hidden="true">
-                <polyline points={quest.levels.map((_, i) => path[i].join(',')).join(' ')} fill="none" className="hq-trail" stroke="#fff" strokeOpacity=".95" strokeLinecap="round" strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
-              </svg>
-              {quest.levels.map((l, i) => {
-                const [x, y] = path[i];
-                const state = S.done[i] !== undefined ? 'done' : !unlocked(i) ? 'locked' : i === nextIdx ? 'next' : '';
-                return (
-                  <button key={i} className={`hq-node ${state}`} style={{ left: `${x}%`, top: `${y}%` }} aria-label={l.name}
-                    onClick={() => { if (state === 'locked') { sfx.wrong(); setToast('Finish the level before this one first.'); window.setTimeout(() => setToast(null), 1700); return; } openLevel(i); }}>
-                    <span className="gem">{state === 'locked' ? '🔒' : <Icon s={l.icon} />}<i className="num">{i + 1}</i></span>
-                    {state === 'next' && <span className="play">▶ PLAY</span>}
-                    <span className="lbl">{l.name}</span>
-                    <span className="got">{[0, 1, 2].map((k) => <b key={k} className={k < (S.done[i] ?? 0) ? 'on' : ''}>★</b>)}</span>
-                  </button>
-                );
-              })}
-              {(() => { const [x, y] = path[Math.min(walkerIdx, path.length - 1)] ?? [50, 50]; return <img className="hq-char walker" src={quest.theme.walker} alt="" style={{ left: `${x}%`, top: `${y - 7}%` }} />; })()}
-            </Stage>
+            <QuestMap quest={quest} done={S.done} nextIdx={nextIdx} walkerIdx={walkerIdx} unlocked={unlocked}
+              onOpen={openLevel} onLocked={() => { sfx.wrong(); setToast('Finish the level before this one first.'); window.setTimeout(() => setToast(null), 1700); }} />
             </div>
             <div className="hq-bar center">
               {nextIdx !== -1 && <button className="hq-btn hq-go" onClick={() => openLevel(nextIdx)}>▶ Play level {nextIdx + 1}: {quest.levels[nextIdx].name}</button>}
