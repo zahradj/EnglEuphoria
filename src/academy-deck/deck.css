@@ -760,3 +760,24 @@
 .ad-root[data-mood='concerned'] .ad-actor .ad-pup { animation: ad-wince 0.5s ease; }
 .ad-root[data-mood] .ad-actor { animation: none; }
 .ad-root[data-reduced='true'] .ad-pup-head, .ad-root[data-reduced='true'] .ad-pup-body { animation: none !important; }
+
+/* ---- Rigged character (Canva parts): torso breathes, arms swing from the shoulder, head nods, eyes blink, mouth talks ---- */
+.ad-actor .ad-rig { position: relative; height: 100%; aspect-ratio: 3 / 4; display: block; -webkit-mask-image: linear-gradient(to bottom, #000 84%, transparent 100%); mask-image: linear-gradient(to bottom, #000 84%, transparent 100%); filter: drop-shadow(0 8px 14px rgba(60, 30, 140, 0.3)); }
+.ad-actor .ad-rig img { position: absolute; left: 0; top: 0; height: 100%; width: 100%; max-width: none; animation: none; filter: none; -webkit-mask-image: none; mask-image: none; }
+.ad-actor .ad-rig-torso { transform-origin: 50% 100%; animation: ad-bodybreathe 4.4s ease-in-out infinite !important; }
+.ad-actor .ad-rig-armR { animation: ad-armR 4.4s ease-in-out infinite !important; }
+.ad-actor .ad-rig-armL { animation: ad-armL 4.4s ease-in-out infinite !important; animation-delay: -1.1s !important; }
+.ad-rig-head { position: absolute; inset: 0; animation: ad-headnod 5.2s ease-in-out infinite; }
+.ad-actor .ad-rig-blink { opacity: 0; animation: ad-blinkk 5s infinite !important; }
+@keyframes ad-armR { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(1.6deg); } }
+@keyframes ad-armL { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(-1.6deg); } }
+@keyframes ad-gestR { 0%, 100% { transform: rotate(0deg); } 35% { transform: rotate(16deg); } 70% { transform: rotate(7deg); } }
+@keyframes ad-cheerR { 0%, 100% { transform: rotate(0deg); } 40% { transform: rotate(32deg); } }
+@keyframes ad-cheerL { 0%, 100% { transform: rotate(0deg); } 40% { transform: rotate(-32deg); } }
+.ad-rig[data-state='speaking'] .ad-rig-head { animation: ad-headtalk 0.6s ease-in-out infinite; }
+.ad-rig[data-state='speaking'] .ad-rig-armR { animation: ad-gestR 1.6s ease-in-out infinite !important; }
+.ad-rig[data-state='happy'] .ad-rig-head { animation: ad-headhappy 0.5s ease-in-out 2; }
+.ad-rig[data-state='happy'] .ad-rig-armR { animation: ad-cheerR 0.7s ease-in-out 1 !important; }
+.ad-rig[data-state='happy'] .ad-rig-armL { animation: ad-cheerL 0.7s ease-in-out 1 !important; }
+.ad-rig[data-state='concerned'] .ad-rig-head { animation: ad-headdown 1.2s ease-in-out both; }
+.ad-root[data-reduced='true'] .ad-rig * { animation: none !important; }

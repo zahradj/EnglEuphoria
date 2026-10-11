@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import type { Actor, CastName, Expr } from './types';
 
 const hue = (id: string) => Array.from(id).reduce((a, c) => (a * 31 + c.charCodeAt(0)) % 360, 7);
@@ -15,6 +15,42 @@ export function Plate({ id, artBase }: { id: string; artBase?: string }) {
       {/* living scene: a soft light shaft drifts across and dust motes float (a light layer over the picture; the picture itself never moves) */}
       <span className="ad-ray" />
       <span className="ad-motes">{Array.from({ length: 16 }, (_, i) => <i key={i} />)}</span>
+    </div>
+  );
+}
+
+/** Characters with Canva-made parts (public/academy-art/cast-parts/<who>/): head, torso, two arms, mouth/eye/face crops. Pivots in 900x1200 px. */
+const RIGS: Partial<Record<CastName, { armR: [number, number]; armL: [number, number]; neck: [number, number] }>> = {
+  Vee: { armR: [160, 557], armL: [762, 557], neck: [460, 490] },
+};
+const pct = ([x, y]: [number, number]) => `${(x / 9).toFixed(2)}% ${(y / 12).toFixed(2)}%`;
+
+function Rig({ who, base, state, speaking, onFail }: { who: CastName; base: string; state: string; speaking: boolean; onFail: () => void }) {
+  const rig = RIGS[who]!;
+  const [mouth, setMouth] = useState(false);
+  useEffect(() => {
+    if (!speaking) {
+      setMouth(false);
+      return;
+    }
+    const t = window.setInterval(() => setMouth((m) => !m), 170);
+    return () => window.clearInterval(t);
+  }, [speaking]);
+  const img = (name: string, cls: string, style?: CSSProperties, fail = false) => (
+    <img className={cls} src={`${base}/${name}.webp`} alt="" aria-hidden="true" draggable={false} style={style} onError={fail ? onFail : (e) => ((e.target as HTMLImageElement).style.display = 'none')} />
+  );
+  return (
+    <div className="ad-rig" data-state={state} role="img" aria-label={who}>
+      {img('torso', 'ad-rig-torso', undefined, true)}
+      {img('arm-left', 'ad-rig-arm ad-rig-armL', { transformOrigin: pct(rig.armL) })}
+      {img('arm-right', 'ad-rig-arm ad-rig-armR', { transformOrigin: pct(rig.armR) })}
+      <div className="ad-rig-head" style={{ transformOrigin: pct(rig.neck) }}>
+        {img('head', 'ad-rig-part', undefined, true)}
+        {state === 'happy' && img('face-happy', 'ad-rig-part')}
+        {state === 'concerned' && img('face-concerned', 'ad-rig-part')}
+        {state !== 'happy' && state !== 'concerned' && img('eyes-blink', 'ad-rig-part ad-rig-blink')}
+        {mouth && img('mouth-open', 'ad-rig-part')}
+      </div>
     </div>
   );
 }
@@ -40,10 +76,16 @@ export function Character({ actor, artBase, speaking = false, small = false }: {
     const t = window.setInterval(() => setMouth((m) => !m), 170);
     return () => window.clearInterval(t);
   }, [talkable]);
+  const [rigOk, setRigOk] = useState(true);
   const state = actor.expr === 'happy' ? 'happy' : actor.expr === 'concerned' ? 'concerned' : speaking ? 'speaking' : 'idle';
   return (
     <div className="ad-actor" data-pos={actor.pos} data-speaking={speaking} data-state={state} data-small={small} aria-label={actor.who}>
-      {src && base ? (
+      {RIGS[actor.who] && base && rigOk && (actor.expr === undefined || ['neutral', 'happy', 'concerned', 'talk'].includes(actor.expr)) ? (
+        <>
+          <i className="ad-spot" aria-hidden="true" />
+          <Rig who={actor.who} base={`${artBase}/cast-parts/${actor.who.toLowerCase()}`} state={state} speaking={speaking} onFail={() => setRigOk(false)} />
+        </>
+      ) : src && base ? (
         <>
           <i className="ad-spot" aria-hidden="true" />
           <div className="ad-pup">
