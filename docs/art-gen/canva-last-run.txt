@@ -1,2 +1,2 @@
-+ docs/art-gen/dressup/pip-outfit-a-raw.png (1024, 1024) raw
++ docs/art-gen/dressup/pip-outfit-b-raw.png (1024, 1024) raw
 1/1 saved
