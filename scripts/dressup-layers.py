@@ -70,7 +70,8 @@ for k, name in enumerate(names, 1):
         sizes = ndimage.sum(m, lab, range(1, n + 1))
         m = np.isin(lab, [i + 1 for i, s in enumerate(sizes) if s >= max(300, sizes.max() * .02)])
     a = ndimage.gaussian_filter(m.astype(float), .6)  # soft 1px edge
-    rgba = np.dstack([D.astype(np.uint8), (np.clip(a * 1.6, 0, 1) * 255).astype(np.uint8)])
+    al = (np.clip(a * 1.6, 0, 1) * 255).astype(np.uint8)
+    rgba = np.dstack([D.astype(np.uint8) * (al[..., None] > 0), al])  # blank hidden pixels: small files
     Image.fromarray(rgba, 'RGBA').save(os.path.join(out_dir, f'{name}.png'), optimize=True)
     ys, xs = np.where(m)
     print(name, 'px', int(m.sum()), 'bbox', (xs.min(), ys.min(), xs.max(), ys.max()) if len(xs) else None)
