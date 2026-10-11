@@ -23,6 +23,7 @@ export function Plate({ id, artBase }: { id: string; artBase?: string }) {
 // Vee's arm parts were rejected by the owner (2026-10-11: arms look pasted on, sticking out of the body). Rig switched off until a
 // hands-out full picture replaces the parts; Vee falls back to the two-layer puppet below.
 const RIGS: Partial<Record<CastName, { armR: [number, number]; armL: [number, number]; neck: [number, number] }>> = {};
+const OPEN: Partial<Record<CastName, true>> = { Vee: true };
 const pct = ([x, y]: [number, number]) => `${(x / 9).toFixed(2)}% ${(y / 12).toFixed(2)}%`;
 
 function Rig({ who, base, state, speaking, onFail }: { who: CastName; base: string; state: string; speaking: boolean; onFail: () => void }) {
@@ -67,7 +68,11 @@ export function Character({ actor, artBase, speaking = false, small = false }: {
   const [mouth, setMouth] = useState(false);
   const base = artBase ? `${artBase}/cast/${actor.who.toLowerCase()}` : null;
   const src = base && i < chain.length ? `${base}/${chain[i]}.webp` : null;
-  const talkable = speaking && i === 0 && (actor.expr === undefined || actor.expr === 'neutral' || actor.expr === 'happy');
+  // characters with a 'hands-out' full picture (cast/<who>/neutral-open.webp) use it for neutral/happy/concerned, with face crops from cast-parts/
+  const [openOk, setOpenOk] = useState(true);
+  const parts = base ? `${base.replace('/cast/', '/cast-parts/')}` : '';
+  const hasOpen = !!OPEN[actor.who] && (actor.expr === undefined || ['neutral', 'happy', 'concerned'].includes(actor.expr));
+  const talkable = speaking && (i === 0 || hasOpen) && (actor.expr === undefined || actor.expr === 'neutral' || actor.expr === 'happy');
   useEffect(() => {
     if (!talkable) {
       setMouth(false);
@@ -77,6 +82,7 @@ export function Character({ actor, artBase, speaking = false, small = false }: {
     return () => window.clearInterval(t);
   }, [talkable]);
   const [rigOk, setRigOk] = useState(true);
+  const bodySrc = hasOpen && openOk && base ? `${base}/neutral-open.webp` : src;
   const state = actor.expr === 'happy' ? 'happy' : actor.expr === 'concerned' ? 'concerned' : speaking ? 'speaking' : 'idle';
   return (
     <div className="ad-actor" data-pos={actor.pos} data-speaking={speaking} data-state={state} data-small={small} aria-label={actor.who}>
@@ -89,10 +95,22 @@ export function Character({ actor, artBase, speaking = false, small = false }: {
         <>
           <i className="ad-spot" aria-hidden="true" />
           <div className="ad-pup">
-            <img className="ad-pup-body" key={src} src={src} alt={actor.who} draggable={false} onError={() => setI(i + 1)} />
+            <img className="ad-pup-body" key={bodySrc} src={bodySrc!} alt={actor.who} draggable={false} onError={() => (hasOpen && openOk ? setOpenOk(false) : setI(i + 1))} />
             <div className="ad-pup-head">
-              <img className="ad-pup-face" src={mouth ? `${base}/talk.webp` : src} alt="" aria-hidden="true" draggable={false} />
-              {i === 0 && <img className="ad-pup-face ad-blink" src={`${base}/blink.webp`} alt="" aria-hidden="true" draggable={false} onError={(e) => ((e.target as HTMLImageElement).style.display = 'none')} />}
+              {hasOpen && openOk ? (
+                <>
+                  <img className="ad-pup-face" src={bodySrc!} alt="" aria-hidden="true" draggable={false} />
+                  {state === 'happy' && <img className="ad-pup-face" src={`${parts}/face-happy.webp`} alt="" aria-hidden="true" draggable={false} />}
+                  {state === 'concerned' && <img className="ad-pup-face" src={`${parts}/face-concerned.webp`} alt="" aria-hidden="true" draggable={false} />}
+                  {state !== 'happy' && state !== 'concerned' && <img className="ad-pup-face ad-blink" src={`${parts}/eyes-blink.webp`} alt="" aria-hidden="true" draggable={false} />}
+                  {mouth && <img className="ad-pup-face" src={`${parts}/mouth-open.webp`} alt="" aria-hidden="true" draggable={false} />}
+                </>
+              ) : (
+                <>
+                  <img className="ad-pup-face" src={mouth ? `${base}/talk.webp` : src} alt="" aria-hidden="true" draggable={false} />
+                  {i === 0 && <img className="ad-pup-face ad-blink" src={`${base}/blink.webp`} alt="" aria-hidden="true" draggable={false} onError={(e) => ((e.target as HTMLImageElement).style.display = 'none')} />}
+                </>
+              )}
             </div>
           </div>
         </>
