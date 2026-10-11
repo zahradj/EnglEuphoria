@@ -6,7 +6,7 @@ Same method as the approved U10L2 GIFs (`u10l2-swim-dance-sing-gifs.md`); the pr
 | | |
 |---|---|
 | What | Three looping GIFs of Pip (a boy) — run, jump, walk — on the lesson's "listen and say" cards, the "move with Coach Leo" page and the home mission |
-| How | flip-book of two Canva drawings of the same action (frame A ↔ frame B), cut from ONE Canva picture, exported from Canva as `gif`, re-timed to 0.45 s per frame (jump: 0.35 s crouch → 0.55 s in the air) by `scripts/retime-gif.py`. No zoom, no pan, no on-picture text |
+| How | flip-book of two Canva drawings of the same action (frame A ↔ frame B), cut from ONE Canva picture, exported from Canva as `gif`, re-timed (run 0.3 s, jump 0.45 s, walk 0.5 s per frame — the speed shows the meaning) by `scripts/retime-gif.py`. No zoom, no pan, no on-picture text |
 | ONE learning goal | the child sees each action word as a moving picture and does it: "Run!", "Jump!", "Walk!" |
 | Cost | Canva only |
 

@@ -15294,6 +15294,10 @@ const itemJam = `${A}/items/item-jam.png`;
 const itemJet = `${A}/items/item-jet.png`;
 const itemRabbit = `${A}/items/item-rabbit.png`;
 const itemRocket = `${A}/items/item-rocket.png`;
+// Canva GIF loops (owner-approved, docs/scenarios/u10l1-run-jump-walk-gifs.md): the action words move.
+const gifRun = `${A}/gifs/u10l1-run.gif`;
+const gifJump = `${A}/gifs/u10l1-jump.gif`;
+const gifWalk = `${A}/gifs/u10l1-walk.gif`;
 
 export const LESSON_U10L1_TITLE = 'Run, Jump, Walk!';
 export const LESSON_U10L1_OBJECTIVE = 'Understand and do the actions run, jump and walk, say them ("Jump!"), pick the right move when the coach calls it, and hear the first sounds R (run) and J (jump), by moving, listening and playing, no reading.';
@@ -15326,9 +15330,9 @@ export const LESSON_U10L1_SCENES: Scene[] = [
   {
     id: 'u10l1-words', kind: 'listen-repeat-cards', textSide: 'right', bg: bgU10L1TrackEmpty, teacher: 'Listen, then say it and do it: "Run!"',
     cards: [
-      { who: 'pip', sentence: 'Run! I run fast!', img: itemPipRun, imgLabel: 'run' },
-      { who: 'pip', sentence: 'Jump! I jump high!', img: itemPipJump, imgLabel: 'jump' },
-      { who: 'pip', sentence: 'Walk! I walk slowly.', img: itemPipWalk, imgLabel: 'walk' },
+      { who: 'pip', sentence: 'Run! I run fast!', img: gifRun, imgLabel: 'run' },
+      { who: 'pip', sentence: 'Jump! I jump high!', img: gifJump, imgLabel: 'jump' },
+      { who: 'pip', sentence: 'Walk! I walk slowly.', img: gifWalk, imgLabel: 'walk' },
     ],
   },
 
@@ -15336,9 +15340,9 @@ export const LESSON_U10L1_SCENES: Scene[] = [
     id: 'u10l1-move', kind: 'tpr-actions', bg: bgU10L1TrackEmpty, who: 'leo',
     teacher: 'Stand up! Do each action with Coach Leo and say the word.',
     rounds: [
-      { line: 'Run! Run, run, run on the spot!', emoji: '\u{1F3C3}', img: itemPipRun },
-      { line: 'Jump! Jump, jump, jump!', emoji: '\u{1F998}', img: itemPipJump },
-      { line: 'Walk! Walk slowly. Walk, walk.', emoji: '\u{1F6B6}', img: itemPipWalk },
+      { line: 'Run! Run, run, run on the spot!', emoji: '\u{1F3C3}', img: gifRun },
+      { line: 'Jump! Jump, jump, jump!', emoji: '\u{1F998}', img: gifJump },
+      { line: 'Walk! Walk slowly. Walk, walk.', emoji: '\u{1F6B6}', img: gifWalk },
       { line: 'Stop! Freeze!', emoji: '\u{1F6D1}', seconds: 3 },
     ],
   },
@@ -15456,9 +15460,9 @@ export const LESSON_U10L1_SCENES: Scene[] = [
     line: 'Your mission: be the coach at home! Say "Run!", "Jump!", "Walk!" and your family does it!',
     parentNote: 'Play "Coach" at home (in a safe space or outside): your child calls "Run!", "Jump!" or "Walk!" and you do it, then swap. Add "Stop!" to freeze. Walk slowly, run on the spot, jump like a frog!',
     steps: [
-      { emoji: '\u{1F3C3}', img: itemPipRun, say: 'Run!' },
-      { emoji: '\u{1F998}', img: itemPipJump, say: 'Jump!' },
-      { emoji: '\u{1F6B6}', img: itemPipWalk, say: 'Walk!' },
+      { emoji: '\u{1F3C3}', img: gifRun, say: 'Run!' },
+      { emoji: '\u{1F998}', img: gifJump, say: 'Jump!' },
+      { emoji: '\u{1F6B6}', img: gifWalk, say: 'Walk!' },
     ],
   },
 
