@@ -1,7 +1,17 @@
 [
  {
-  "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0080-6850493703409301323.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261011%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261011T160258Z&X-Amz-Expires=14747&X-Amz-Signature=4e455e13c574309ff90bc5a80e77ef192b638c983f00dcd518b3f00af1cde134&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2011%20Oct%202026%2020%3A08%3A45%20GMT",
-  "out": "public/lep1/scenes/bg-u10l1-track-empty-wide.png",
-  "sticker": false
+  "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0-2421203474328163571.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261011%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261011T102657Z&X-Amz-Expires=37420&X-Amz-Signature=ba5e32da6a964ae394dad149c8c0369341c689057fd7e1a74b82f110de0fac9f&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2011%20Oct%202026%2020%3A50%3A37%20GMT",
+  "out": "public/lep1/gifs/u10l2-swim.gif",
+  "copy": true
+ },
+ {
+  "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0-7911091422505038345.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261011%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261011T075921Z&X-Amz-Expires=46585&X-Amz-Signature=2f8ce8fe0aaae24809ac755da1383cf07189f32ac73fdf50b1f4204812fc32dd&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2011%20Oct%202026%2020%3A55%3A46%20GMT",
+  "out": "public/lep1/gifs/u10l2-dance.gif",
+  "copy": true
+ },
+ {
+  "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0-4745060881920432323.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261011%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261011T013235Z&X-Amz-Expires=69933&X-Amz-Signature=0918480f547e194a96505c3aec826cd07093a5404cdc612ab7fd1d4bf76fa532&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2011%20Oct%202026%2020%3A58%3A08%20GMT",
+  "out": "public/lep1/gifs/u10l2-sing.gif",
+  "copy": true
  }
 ]
