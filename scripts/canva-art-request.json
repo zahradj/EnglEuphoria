@@ -1,17 +1,8 @@
 [
- {
-  "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0-3353448599329836055.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261011%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261011T055836Z&X-Amz-Expires=53634&X-Amz-Signature=d7db35696b49c1e10005ac653d170de5ce6b1ac66615c4c6e2780aea75e61bfc&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2011%20Oct%202026%2020%3A52%3A30%20GMT",
-  "out": "public/lep1/gifs/u10l1-run.gif",
-  "copy": true
- },
- {
-  "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0-490285134687220630.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261011%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261011T021202Z&X-Amz-Expires=67871&X-Amz-Signature=7f66456ba2d86bb6fd8730572af7b9a9aaff1cbce1c1a983b6185608933a15cd&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2011%20Oct%202026%2021%3A03%3A13%20GMT",
-  "out": "public/lep1/gifs/u10l1-jump.gif",
-  "copy": true
- },
- {
-  "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0-8952548836578246911.gif?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261011%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261011T162100Z&X-Amz-Expires=17916&X-Amz-Signature=0bb5472025ce4ae1424b3d794f7dbf2be686c99f386358c01a879a6e4df7704b&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2011%20Oct%202026%2021%3A19%3A36%20GMT",
-  "out": "public/lep1/gifs/u10l1-walk.gif",
-  "copy": true
- }
+ {"url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0093-6713133923278048389.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261011%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261011T194812Z&X-Amz-Expires=5613&X-Amz-Signature=aaf21122bfbccc65281b5a3893622e58455bf6a1e9640e4c60a07c3c2fba3c86&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2011%20Oct%202026%2021%3A21%3A45%20GMT", "out": "public/lep1/items/tmp-sheet-mole.png", "raw": true},
+ {"url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0094-6128791874630400967.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261011%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261011T023955Z&X-Amz-Expires=68297&X-Amz-Signature=b7aad8b2626fd839be0ac46b064fe245c994c4b0b2e93f16633ebfb604e0a5f7&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2011%20Oct%202026%2021%3A38%3A12%20GMT", "out": "public/lep1/items/tmp-sheet-monster.png", "raw": true},
+ {"url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0095-7648756746193422772.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261011%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261011T113908Z&X-Amz-Expires=34181&X-Amz-Signature=e9c490dc63d82e299802083052ce1ef736d3f17e40fe528800fb0db9b933575c&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2011%20Oct%202026%2021%3A08%3A49%20GMT", "out": "public/lep1/items/tmp-sheet-fish.png", "raw": true},
+ {"url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0096-8884994843115657214.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261011%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261011T010511Z&X-Amz-Expires=74168&X-Amz-Signature=0177dde0ff7a29acc8aee3e2d3659ccfaece023ce0357db80c4ed0cb25c6d372&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2011%20Oct%202026%2021%3A41%3A19%20GMT", "out": "public/lep1/scenes/bg-game-meadow-wide.png"},
+ {"url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0097-204306564480702947.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261010%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261010T220543Z&X-Amz-Expires=85119&X-Amz-Signature=e351ebcd4c5ae9d59eab8d85255bed56e6b6c0877f0a874dd0cca472c2e0c032&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2011%20Oct%202026%2021%3A44%3A22%20GMT", "out": "public/lep1/scenes/bg-game-pond-wide.png"},
+ {"url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0098-6341586955262197715.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261011%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261011T063929Z&X-Amz-Expires=53839&X-Amz-Signature=1feafd49ae84b2e684a316ebd11d6d7c9346239727ad495d033e58395b5c7a7f&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2011%20Oct%202026%2021%3A36%3A48%20GMT", "out": "public/lep1/scenes/bg-game-monsterland-wide.png"}
 ]
