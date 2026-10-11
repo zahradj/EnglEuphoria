@@ -42,7 +42,8 @@
 
 - **Pictures: Canva only** (Canva `generate-image`, reference images uploaded to Canva for character consistency; `remove-background` for stickers). **Never generate pictures with Higgsfield** — not backgrounds, not stickers, not "just this once".
 - **Gemini is allowed for pictures too** (owner, 2026-10-06: "yes, enable Gemini for picture"): the platform's `ai-image-generation` function through `scripts/art-targets.json` + `.github/workflows/bake-art.yml`, with an approved picture as the reference for character consistency. Still never Higgsfield for pictures.
-- **Videos: Higgsfield only** (story clips, game background loops — image-to-video from a Canva/approved picture).
+- **Videos: Higgsfield (AI image-to-video) or Canva (owner, 2026-10-11: "yes" — Canva GIF and MP4).** Higgsfield for AI motion clips (story clips, game background loops — image-to-video from a Canva/approved picture). Canva for animated GIF/MP4 made from our own approved Canva pictures (flip-book of poses, word cards popping in, picture-to-picture sequences): build the frames as pages of a Canva design and export `gif` or `mp4` (`export-design`), then fetch through the art bot like any picture.
+- **Canva GIFs/videos follow the scenario rule too** (owner, 2026-10-11): write the scenario (`docs/scenarios/`), and where possible show it to the owner as a quick preview GIF (the animatic) before it goes into a lesson; nothing ships without the owner's OK. No zoom/pan on stills, no on-picture text except our labels.
 - `scripts/generate-art.mjs` refuses the Higgsfield image path; the `higgsfield-video` edge function only allows video endpoints.
 - How to get a Canva picture into the repo (holder design, export, fetch bot): `docs/canva-art-pipeline.md`.
 
