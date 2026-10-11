@@ -97,7 +97,7 @@ export function ShoePainterScene({ scene, onWin, onNext, sync }: { scene: Painte
     // impact: hit-stop, splat, colour on
     setSplat(p.hex); sfx.pop();
     await new Promise((res) => window.setTimeout(res, reduce ? 0 : 90));
-    sfx.match(); fire(LENS.x, LENS.y, 'splash'); fire(LENS.x, LENS.y, 'stars'); setHop((h) => h + 1);
+    sfx.match(); fire(LENS.x, LENS.y, 'sparkle'); fire(LENS.x, LENS.y, 'stars'); setHop((h) => h + 1);
     await sayWithin(r.reply, scene.who, 3600);
     const next = round + 1;
     if (next >= total && !gemDone) { fire(50, 40, 'confetti'); sfx.gem(); onWin(true); }
