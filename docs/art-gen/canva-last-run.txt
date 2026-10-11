@@ -1,4 +1,4 @@
-+ public/lep1/gifs/u10l2-swim.gif 348501 bytes, copied
-+ public/lep1/gifs/u10l2-dance.gif 311185 bytes, copied
-+ public/lep1/gifs/u10l2-sing.gif 407912 bytes, copied
++ public/lep1/gifs/u10l1-run.gif 273644 bytes, copied
++ public/lep1/gifs/u10l1-jump.gif 241205 bytes, copied
++ public/lep1/gifs/u10l1-walk.gif 247102 bytes, copied
 3/3 saved
