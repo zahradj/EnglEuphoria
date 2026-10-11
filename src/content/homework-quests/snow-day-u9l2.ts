@@ -8,7 +8,8 @@ const hall = `${S}/bg-u9l2-hall-wide.png`;
 const it = (n: string) => `${I}/item-${n}.png`;
 const hallEmpty = `${S}/bg-u9l2-hall-empty-wide.png`;
 /** The friend's fitted clothes (scripts/dressup-layers.py), one full-size layer per piece. */
-const fitted = (who: string) => Object.fromEntries(['hat', 'socks', 'shoes', 'shirt', 'pants', 'dress'].map((k) => [k, `/lep1/dressup/${who}/${k}.png`]));
+// Boys (Pip, Leo) never wear a dress (owner, 2026-10-11): they have no dress piece, so the dress isn't on their rail.
+const fitted = (who: string, pieces = ['hat', 'socks', 'shoes', 'shirt', 'pants']) => Object.fromEntries(pieces.map((k) => [k, `/lep1/dressup/${who}/${k}.png`]));
 
 /** Pre-A1 Unit 9 Lesson 2 "Shoes, Hat, Socks!" — Snow Day Quest.
  *  Practises hat, socks, shoes, "on my head / on my feet" and the sounds H and S. Level 1 is the Dress Up
@@ -38,7 +39,7 @@ export const QUEST_SNOW_DAY_U9L2: HomeworkQuest = {
       ],
       friends: [
         { who: 'pip', name: 'Pip', img: `${C}/pip-hello.png`, layers: fitted('pip') },
-        { who: 'mia', name: 'Mia', img: `${C}/mia-hello.png`, layers: fitted('mia') },
+        { who: 'mia', name: 'Mia', img: `${C}/mia-hello.png`, layers: fitted('mia', ['hat', 'socks', 'shoes', 'shirt', 'pants', 'dress']) },
         { who: 'leo', name: 'Leo', img: `${C}/leo-hello.png`, layers: fitted('leo') },
       ],
       rounds: [

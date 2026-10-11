@@ -418,6 +418,8 @@ function DressUp({ level, say, miss, star, done, setDots }: LevelProps<'dress-up
   const fi = R ? R.friend : level.rounds[level.rounds.length - 1].friend;
   const F = level.friends[fi];
   const wait = (ms: number) => new Promise((res) => window.setTimeout(res, ms));
+  // only what this friend can wear is on the rail (a boy has no dress piece, so no dress)
+  const rail = level.wardrobe.filter((c) => c.id in F.layers);
 
   useEffect(() => {
     setDots(level.rounds.length, r); setTries(0); setMood('idle');
@@ -431,7 +433,7 @@ function DressUp({ level, say, miss, star, done, setDots }: LevelProps<'dress-up
 
   const pick = async (id: string, i: number) => {
     if (!R || busy.current) return;
-    const c = level.wardrobe.find((w) => w.id === id);
+    const c = rail.find((w) => w.id === id);
     if (!c) return;
     if (id !== R.item) {
       misses.current++; miss(); setTries((t) => t + 1);
@@ -494,7 +496,7 @@ function DressUp({ level, say, miss, star, done, setDots }: LevelProps<'dress-up
 
       {/* the wardrobe rail: pieces bob on their hangers */}
       <div className={`hq-du-rail ${R && !busy.current ? 'ready' : ''}`}><span className="hq-du-rod" /></div>
-      {level.wardrobe.map((c, i) => {
+      {rail.map((c, i) => {
           const p = railPos(i);
           const glow = R && tries >= 2 && c.id === R.item;
           const flying = fly?.id === c.id;

@@ -90,7 +90,8 @@ export type QuestLevel =
        *  please!"); the child taps it on the wardrobe rail (or drags it onto the friend) and it flies onto them.
        *  Every piece is drawn to fit that friend's body (scripts/dressup-layers.py: a full-size transparent layer
        *  that lines up with the friend's picture), so the friend really wears it. `z` = drawing order
-       *  (socks under shoes, shirt over pants). Pieces the friend never asks for are listening traps. */
+       *  (socks under shoes, shirt over pants). Pieces the friend never asks for are listening traps; a piece the
+       *  friend has no layer for is not on their rail (boys never get a dress — owner, 2026-10-11). */
       kind: 'dress-up'; img: string;
       wardrobe: { id: string; label: string; src: string; z: number }[];
       friends: { who: QuestVoice; name: string; img: string; layers: Record<string, string> }[];
@@ -159,8 +160,8 @@ export function questLines(q: HomeworkQuest): [QuestVoice, string][] {
       case 'reading': l.sentences.forEach((s) => add(v, s)); l.questions.forEach((x) => add(v, x.q)); break;
       case 'dress-up': {
         l.rounds.forEach((r) => { const w = l.friends[r.friend]?.who ?? v; add(w, r.line); add(w, r.reply); });
-        const askers = [...new Set(l.rounds.map((r) => l.friends[r.friend]?.who ?? v))];
-        askers.forEach((w) => l.wardrobe.forEach((c) => add(w, dressUpWrongLine(l.wrongLine, c.label))));
+        const askers = [...new Set(l.rounds.map((r) => r.friend))];
+        askers.forEach((fi) => { const f = l.friends[fi]; if (f) l.wardrobe.filter((c) => c.id in f.layers).forEach((c) => add(f.who, dressUpWrongLine(l.wrongLine, c.label))); });
         add(v, l.doneLine); break;
       }
       case 'treasure': add(v, l.win); break;

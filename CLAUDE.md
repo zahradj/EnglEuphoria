@@ -69,3 +69,7 @@
 - Students switch language any time from the globe in the dashboard header (`LanguageSwitcher`, saved to `users.preferred_language`, applied on every device by `useStudentLanguageSync`).
 - Layout must work right-to-left (Arabic): use logical classes (`ps-/pe-/start-/end-/text-start`), flip direction arrows with `rtl:rotate-180`.
 - Lesson content stays English (it is what is being taught); the chrome, instructions, buttons and messages around it are translated.
+
+## Clothes and characters (hard rule — owner, 2026-10-11)
+
+- **Don't dress male characters in girls' clothes.** Pip and Leo are boys: never a dress or a skirt on them — not in a lesson game, a homework level, a picture, a mock-up or a song line. Dress-up games give a boy no dress piece (it isn't on his rail); a dress is worn only by a girl (Mia, Bella, Willow) or shown as a thing (laundry, a shop). Lines to the child stay neutral (no "twirl in your dress"). `src/content/homework-quests/noDressForBoys.test.ts` fails otherwise.

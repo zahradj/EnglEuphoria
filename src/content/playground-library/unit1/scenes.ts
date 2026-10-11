@@ -13785,7 +13785,7 @@ export const LESSON_U9L1_SCENES: Scene[] = [
     rounds: [
       { line: 'Put on your shirt! Arms in!', emoji: '\u{1F455}', img: itemShirtRed },
       { line: 'Put on your pants! One leg, two legs!', emoji: '\u{1F456}', img: itemPantsBlue },
-      { line: 'Twirl in your dress! Spin, spin!', emoji: '\u{1F457}', img: itemDressYellow },
+      { line: 'Hang up the dress! Up, up!', emoji: '\u{1F457}', img: itemDressYellow },
       { line: 'Hang it up! Reach up high!', emoji: '\u{1F64C}' },
     ],
   },
