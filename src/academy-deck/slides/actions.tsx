@@ -78,8 +78,17 @@ export function ActionArt({ id, label }: { id: ActionId; label: string }) {
     case 'point':
       body = (
         <g>
-          <circle cx="196" cy="100" r="22" fill="#fbbf24" stroke={OUT} strokeWidth="4" /><circle cx="196" cy="100" r="9" fill="#fff" />
-          <g className="ad-point"><path d="M52 112 Q52 98 66 98 H112 L124 92 Q132 90 134 98 L134 104 L150 104 Q158 106 156 114 Q158 122 150 124 Q154 132 146 136 Q146 144 138 146 H92 Q52 148 52 112Z" fill={SKIN} stroke={OUT} strokeWidth="4" strokeLinejoin="round" /></g>
+          <circle cx="214" cy="104" r="26" fill="#fbbf24" stroke={OUT} strokeWidth="4" /><circle cx="214" cy="104" r="14" fill="#fff" stroke={OUT} strokeWidth="3" /><circle cx="214" cy="104" r="5" fill="#8b5cf6" />
+          <g className="ad-point">
+            <rect x="26" y="88" width="30" height="64" rx="8" fill="#8b5cf6" stroke={OUT} strokeWidth="4" />
+            <rect x="52" y="92" width="64" height="58" rx="16" fill={SKIN} stroke={OUT} strokeWidth="4" />
+            <rect x="104" y="120" width="34" height="13" rx="6.5" fill={SKIN} stroke={OUT} strokeWidth="3.5" />
+            <rect x="104" y="133" width="30" height="13" rx="6.5" fill={SKIN} stroke={OUT} strokeWidth="3.5" />
+            <rect x="104" y="146" width="26" height="12" rx="6" fill={SKIN} stroke={OUT} strokeWidth="3.5" />
+            <path d="M70 94 Q78 72 102 78 Q112 82 106 94Z" fill={SKIN} stroke={OUT} strokeWidth="3.5" strokeLinejoin="round" />
+            <rect x="104" y="98" width="70" height="20" rx="10" fill={SKIN} stroke={OUT} strokeWidth="4" />
+            <path d="M114 106 H160" stroke="#d8a97f" strokeWidth="3" strokeLinecap="round" />
+          </g>
         </g>
       );
       break;

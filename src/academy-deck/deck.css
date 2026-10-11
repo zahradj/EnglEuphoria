@@ -863,7 +863,7 @@
 .ad-readline { transform-origin: left center; animation: ad-read 3.2s ease-in-out infinite; animation-delay: calc(var(--i) * 0.5s); }
 @keyframes ad-read { 0%, 100% { opacity: 0.35; } 20%, 45% { opacity: 1; } }
 .ad-point { animation: ad-pointer 1.4s ease-in-out infinite; }
-@keyframes ad-pointer { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(16px); } }
+@keyframes ad-pointer { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(12px); } }
 .ad-qmark { transform-origin: 196px 74px; animation: ad-qpop 1.8s ease-in-out infinite; }
 @keyframes ad-qpop { 0%, 100% { transform: scale(0.9) rotate(-6deg); } 50% { transform: scale(1.12) rotate(6deg); } }
 .ad-hand-slow { animation: ad-twirl 12s linear infinite; }
