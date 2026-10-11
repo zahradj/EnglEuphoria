@@ -80,6 +80,23 @@ serve(async (req) => {
             .eq('id', reminder.reminder_id);
           successCount++;
         }
+        // Also an in-app notification: the database turns it into a phone/browser push for anyone who turned
+        // notifications on. Best effort - a failure here never affects the email.
+        try {
+          const { data: person } = await supabase.from('users').select('id').eq('email', reminder.recipient_email).maybeSingle();
+          if (person?.id) {
+            await supabase.from('notifications').insert({
+              user_id: person.id,
+              title: reminder.reminder_type === '1_hour' || reminder.reminder_type === '1h' ? 'Your lesson starts in 1 hour' : 'Lesson reminder',
+              content: `${reminder.lesson_title} - ${new Date(reminder.lesson_date).toUTCString()}`,
+              type: 'lesson_reminder',
+              is_read: false,
+              action_url: '/dashboard',
+            });
+          }
+        } catch (pushErr) {
+          console.warn('reminder notification skipped', pushErr);
+        }
       } catch (error) {
         console.error(`Error processing reminder ${reminder.reminder_id}:`, error);
         failCount++;
