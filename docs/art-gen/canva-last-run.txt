@@ -1,2 +1,10 @@
-+ public/lep1/scenes/map-u9l2-snow-village-wide.png (1376, 768)
-1/1 saved
+cut out: public/lep1/items/item-coat-blue.png (722, 807)
+cut out: public/lep1/items/item-skirt-pink.png (733, 530)
+cut out: public/lep1/items/item-tshirt-yellow.png (862, 676)
+cut out: public/lep1/items/item-shopping-bag.png (536, 719)
++ public/lep1/scenes/bg-u9l3-shop-wide.png (1376, 768)
++ public/lep1/items/item-coat-blue.png (1024, 1024)
++ public/lep1/items/item-skirt-pink.png (1024, 1024)
++ public/lep1/items/item-tshirt-yellow.png (1024, 1024)
++ public/lep1/items/item-shopping-bag.png (1024, 1024)
+5/5 saved
