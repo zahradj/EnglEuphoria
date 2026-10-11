@@ -190,4 +190,24 @@ export const QUEST_CSS = `
   .hq-btn { padding:8px 16px; font-size:14px; } .hq-go { font-size:15px!important; padding:9px 18px!important; }
   .hq-node .lbl { display:none; }
 }
+/* Dress Up level */
+.hq-du-friend { position:absolute; aspect-ratio:1/1; translate:-50% 0; z-index:3; }
+.hq-du-body { position:absolute; inset:0; }
+.hq-du-body img { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; pointer-events:none; filter:drop-shadow(0 10px 10px rgba(0,0,0,.25)); }
+.hq-du-body img.hq-du-layer { filter:none; }
+.hq-du-shadow { position:absolute; left:28%; right:28%; bottom:3%; height:5%; border-radius:50%; background:rgba(40,20,0,.28); filter:blur(4px); }
+.hq-du-rail { position:absolute; left:66%; top:7%; width:32%; height:86%; z-index:4; border-radius:3cqw; background:linear-gradient(180deg,rgba(255,244,214,.88),rgba(233,196,138,.9)); border:.5cqw solid #8b5a2b; box-shadow:0 1.2cqw 0 rgba(0,0,0,.18); }
+.hq-du-rail.ready { animation:hq-du-ready 1.6s ease-in-out infinite; }
+@keyframes hq-du-ready { 50% { box-shadow:0 1.2cqw 0 rgba(0,0,0,.18), 0 0 0 .8cqw rgba(255,214,90,.55); } }
+.hq-du-rod { position:absolute; left:6%; right:6%; top:7%; height:1.1cqw; border-radius:1cqw; background:#8b5a2b; }
+.hq-du-piece { position:absolute; z-index:5; width:12cqw; height:12cqw; min-width:64px; min-height:64px; translate:-50% -50%; padding:.6cqw; border-radius:2cqw; background:#fffaf0; border:.35cqw solid #e9c48a; display:grid; place-items:center; cursor:pointer; }
+.hq-du-piece img { width:100%; height:100%; object-fit:contain; pointer-events:none; }
+.hq-du-piece.glow { box-shadow:0 0 0 .7cqw rgba(255,214,90,.9), 0 0 3cqw rgba(255,214,90,.9); }
+.hq-du-fly { position:absolute; width:11cqw; translate:-50% -50%; z-index:8; pointer-events:none; filter:drop-shadow(0 8px 8px rgba(0,0,0,.3)); }
+.hq-du-burst { position:absolute; z-index:9; pointer-events:none; }
+.hq-du-ring { position:absolute; left:-4cqw; top:-4cqw; width:8cqw; height:8cqw; border-radius:50%; border:.6cqw solid #ffd65a; }
+.hq-du-spark { position:absolute; left:-1cqw; top:-1cqw; font-size:2.4cqw; }
+.hq-du-flake { position:absolute; top:0; z-index:10; color:#fff; font-size:2.6cqw; text-shadow:0 0 6px rgba(120,170,255,.8); pointer-events:none; }
+.hq-du-ask { max-width:46%; }
+
 `;

@@ -1,8 +1,7 @@
 [
  {
-  "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0055-9112426545754613256.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261010%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261010T095836Z&X-Amz-Expires=60424&X-Amz-Signature=334b08103fb69ab7ec7de2ba52a8eaa2ff4de0edf0ba6b806a8dcd6ca2abfbc3&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2011%20Oct%202026%2002%3A45%3A40%20GMT",
-  "out": "docs/art-gen/dressup/leo-outfit-b-raw.png",
-  "sticker": false,
-  "raw": true
+  "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0056-7572195471739464204.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261010%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261010T050339Z&X-Amz-Expires=77225&X-Amz-Signature=08b71ff0e4271ee1235329f75f9f07aefe20e5a5ec5c4cd82d0859677de39b3f&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2011%20Oct%202026%2002%3A30%3A44%20GMT",
+  "out": "public/lep1/scenes/bg-u9l2-hall-empty-wide.png",
+  "sticker": false
  }
 ]

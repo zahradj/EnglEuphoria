@@ -86,6 +86,20 @@ export type QuestLevel =
       rounds: { word: string; sounds?: string[]; picture?: string; emoji?: string }[];
     })
   | (LevelBase & {
+      /** Dress Up (Unit 9): a friend asks for a piece of clothing in their own voice ("Put on my red socks,
+       *  please!"); the child taps it on the wardrobe rail (or drags it onto the friend) and it flies onto them.
+       *  Every piece is drawn to fit that friend's body (scripts/dressup-layers.py: a full-size transparent layer
+       *  that lines up with the friend's picture), so the friend really wears it. `z` = drawing order
+       *  (socks under shoes, shirt over pants). Pieces the friend never asks for are listening traps. */
+      kind: 'dress-up'; img: string;
+      wardrobe: { id: string; label: string; src: string; z: number }[];
+      friends: { who: QuestVoice; name: string; img: string; layers: Record<string, string> }[];
+      rounds: { friend: number; item: string; line: string; reply: string }[];
+      /** Said by the friend after a wrong pick; {item} = the piece the child picked. */
+      wrongLine: string;
+      doneLine: string;
+    })
+  | (LevelBase & {
       kind: 'treasure'; img: string; closed: string; open: string; win: string;
     });
 
@@ -115,6 +129,9 @@ export interface HomeworkQuest {
   levels: QuestLevel[];
 }
 
+/** The friend's line after a wrong pick in a dress-up level. */
+export const dressUpWrongLine = (template: string, item: string) => template.replace('{item}', item);
+
 /** Every (voice, text) the quest can say — for the voice baker. */
 export function questLines(q: HomeworkQuest): [QuestVoice, string][] {
   const out: [QuestVoice, string][] = [];
@@ -134,6 +151,12 @@ export function questLines(q: HomeworkQuest): [QuestVoice, string][] {
       case 'picture-choice': l.rounds.forEach((r) => add(v, r.line)); break;
       case 'twister': add(v, l.line); add(v, l.sayIt); break;
       case 'reading': l.sentences.forEach((s) => add(v, s)); l.questions.forEach((x) => add(v, x.q)); break;
+      case 'dress-up': {
+        l.rounds.forEach((r) => { const w = l.friends[r.friend]?.who ?? v; add(w, r.line); add(w, r.reply); });
+        const askers = [...new Set(l.rounds.map((r) => l.friends[r.friend]?.who ?? v))];
+        askers.forEach((w) => l.wardrobe.forEach((c) => add(w, dressUpWrongLine(l.wrongLine, c.label))));
+        add(v, l.doneLine); break;
+      }
       case 'treasure': add(v, l.win); break;
     }
   }

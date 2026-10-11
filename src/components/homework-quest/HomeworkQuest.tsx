@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import type { HomeworkQuest as Quest, QuestLevel, QuestVoice, Box } from '@/content/homework-quests/types';
+import { dressUpWrongLine } from '@/content/homework-quests/types';
 import { speak, stopSpeaking, playLetterPhonic, unlockAudio } from '@/content/playground-library/unit1/audio';
 import { QUEST_CSS } from './questStyles';
 import { JungleTheme } from '@/components/student/kids/JungleTheme';
@@ -387,6 +389,160 @@ function PictureChoice({ level, say, praise, tryAgain, miss, star, done, setDots
   );
 }
 
+/* ---------- Dress Up (Unit 9 clothes) ----------
+ * A friend stands in the hall and asks for one piece at a time, in their own recorded voice ("Put on my red
+ * socks, please!"). The child taps it on the wardrobe rail: it lifts (anticipation), flies in an arc onto the
+ * friend, the friend squashes under it, a short hit-stop, then a star burst + ring and the friend's happy hop
+ * and reply. Each piece is a layer drawn for that friend's body, so they really wear it. A wrong piece wobbles
+ * on its hanger and the friend tilts their head: "No, not the shoes! Listen again." (glow on the right one after
+ * two tries). Between friends the dressed friend hops out and the next hops in; at the end it snows.
+ * Game feel per .claude/skills/game-animation + the game-designer / game-development skills (12 principles). */
+const DRESS_SPOT: Record<string, number> = { hat: 0.2, shirt: 0.6, dress: 0.62, pants: 0.78, socks: 0.9, shoes: 0.9 };
+const railPos = (i: number) => ({ x: 75 + (i % 2) * 15, y: 24 + Math.floor(i / 2) * 25 });
+const FRIEND = { x: 38, top: 14, h: 80 }; // friend box: centre x, top, height (% of the stage); square picture
+
+function DressUp({ level, say, miss, star, done, setDots }: LevelProps<'dress-up'>) {
+  const reduce = useReducedMotion();
+  const [r, setR] = useState(0);
+  const [worn, setWorn] = useState<string[][]>(() => level.friends.map(() => []));
+  const [fly, setFly] = useState<{ id: string; src: string; from: { x: number; y: number }; to: { x: number; y: number } } | null>(null);
+  const [mood, setMood] = useState<'idle' | 'happy' | 'hmm' | 'cheer'>('idle');
+  const [wobble, setWobble] = useState<string | null>(null);
+  const [tries, setTries] = useState(0);
+  const [bursts, setBursts] = useState<{ k: number; x: number; y: number }[]>([]);
+  const busy = useRef(false);
+  const misses = useRef(0);
+  const friendRef = useRef<HTMLDivElement | null>(null);
+  const R = level.rounds[r];
+  const finished = !R;
+  const fi = R ? R.friend : level.rounds[level.rounds.length - 1].friend;
+  const F = level.friends[fi];
+  const wait = (ms: number) => new Promise((res) => window.setTimeout(res, ms));
+
+  useEffect(() => {
+    setDots(level.rounds.length, r); setTries(0); setMood('idle');
+    if (!R) return;
+    busy.current = false;
+    const ask = () => say(R.line, F.who);
+    void (r === 0 ? say(level.intro).then(ask) : wait(450).then(ask));
+  }, [r]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const burst = (x: number, y: number) => { const k = Date.now(); setBursts((b) => [...b.slice(-2), { k, x, y }]); window.setTimeout(() => setBursts((b) => b.filter((q) => q.k !== k)), 1200); };
+
+  const pick = async (id: string, i: number) => {
+    if (!R || busy.current) return;
+    const c = level.wardrobe.find((w) => w.id === id);
+    if (!c) return;
+    if (id !== R.item) {
+      misses.current++; miss(); setTries((t) => t + 1);
+      setWobble(id); setMood('hmm');
+      window.setTimeout(() => { setWobble(null); setMood('idle'); }, 700);
+      void say(dressUpWrongLine(level.wrongLine, c.label), F.who);
+      return;
+    }
+    busy.current = true; sfx.pop();
+    const to = { x: FRIEND.x, y: FRIEND.top + (DRESS_SPOT[id] ?? 0.6) * FRIEND.h };
+    if (!reduce) { setFly({ id, src: c.src, from: railPos(i), to }); await wait(560); setFly(null); }
+    const clash = id === 'dress' ? ['shirt', 'pants'] : id === 'shirt' || id === 'pants' ? ['dress'] : []; // a dress replaces shirt + pants
+    setWorn((w) => w.map((list, k) => (k === fi ? [...list.filter((x) => !clash.includes(x)), id] : list)));
+    await wait(reduce ? 0 : 80); // hit-stop: the piece lands, the world holds for a beat
+    sfx.right(); burst(to.x, to.y); star(friendRef.current); setMood('happy');
+    await say(R.reply, F.who);
+    const next = level.rounds[r + 1];
+    if (!next) {
+      setMood('cheer'); sfx.magic();
+      await say(level.doneLine);
+      await wait(600); done(misses.current); return;
+    }
+    if (next.friend !== fi) { setMood('cheer'); await wait(900); }
+    setR(r + 1);
+  };
+
+  const layers = [...(worn[fi] ?? [])].sort((a, b) => (level.wardrobe.find((w) => w.id === a)?.z ?? 0) - (level.wardrobe.find((w) => w.id === b)?.z ?? 0));
+  const moodAnim = reduce ? {} : mood === 'happy' ? { y: [0, -34, 0, -10, 0], scaleY: [1, 0.86, 1.08, 0.96, 1], scaleX: [1, 1.1, 0.95, 1.03, 1] }
+    : mood === 'cheer' ? { y: [0, -40, 0, -40, 0], rotate: [0, -6, 0, 6, 0] }
+    : mood === 'hmm' ? { rotate: [0, -7, 5, -3, 0] }
+    : { scaleY: [1, 1.035, 1], scaleX: [1, 0.985, 1] };
+  const moodTr = mood === 'idle' ? { duration: 2.4, repeat: Infinity, ease: 'easeInOut' as const } : { duration: mood === 'cheer' ? 1.1 : 0.7, ease: 'easeOut' as const };
+
+  return (
+    <Stage img={level.img}>
+      {R && <HearBtn onClick={() => void say(R.line, F.who)} />}
+      {R && <div className="hq-caption hq-corner hq-du-ask"><b>{F.name}:</b> “{R.line}”</div>}
+
+      {/* the friend (hops out / in between friends), with a ground shadow */}
+      <AnimatePresence mode="wait">
+        <motion.div key={fi} className="hq-du-friend" style={{ left: `${FRIEND.x}%`, top: `${FRIEND.top}%`, height: `${FRIEND.h}%` }}
+          initial={reduce ? { opacity: 0 } : { x: '70%', y: -30, opacity: 0 }} animate={{ x: 0, y: 0, opacity: 1 }}
+          exit={reduce ? { opacity: 0 } : { x: '-80%', y: [0, -40, 0], opacity: 0, transition: { duration: 0.55, ease: 'easeIn' } }}
+          transition={{ type: 'spring', stiffness: 220, damping: 18 }}>
+          <motion.div className="hq-du-shadow" animate={mood === 'happy' || mood === 'cheer' ? { scaleX: [1, 0.7, 1] } : { scaleX: 1 }} transition={{ duration: 0.7 }} />
+          <motion.div ref={friendRef} className="hq-du-body" animate={moodAnim} transition={moodTr} style={{ transformOrigin: '50% 95%' }}>
+            <img src={F.img} alt={F.name} draggable={false} />
+            <AnimatePresence>
+              {layers.map((id) => F.layers[id] && (
+                <motion.img key={id} src={F.layers[id]} alt={id} draggable={false} className="hq-du-layer"
+                  style={{ zIndex: level.wardrobe.find((w) => w.id === id)?.z ?? 1 }}
+                  initial={reduce ? { opacity: 0 } : { scale: 1.08, opacity: 0, filter: 'brightness(1.6)' }}
+                  animate={{ scale: 1, opacity: 1, filter: 'brightness(1)' }} exit={{ opacity: 0 }}
+                  transition={{ type: 'spring', stiffness: 320, damping: 16 }} />
+              ))}
+            </AnimatePresence>
+          </motion.div>
+        </motion.div>
+      </AnimatePresence>
+
+      {/* the wardrobe rail: pieces bob on their hangers */}
+      <div className={`hq-du-rail ${R && !busy.current ? 'ready' : ''}`}><span className="hq-du-rod" /></div>
+      {level.wardrobe.map((c, i) => {
+          const p = railPos(i);
+          const glow = R && tries >= 2 && c.id === R.item;
+          const flying = fly?.id === c.id;
+          return (
+            <motion.button key={c.id} aria-label={c.label} className={`hq-du-piece ${glow ? 'glow' : ''}`}
+              style={{ left: `${p.x}%`, top: `${p.y}%`, opacity: flying ? 0 : 1 }}
+              onClick={() => { void pick(c.id, i); }}
+              whileHover={reduce ? undefined : { scale: 1.08, rotate: -3 }} whileTap={reduce ? undefined : { scale: 0.88 }}
+              animate={wobble === c.id ? { rotate: [0, -14, 12, -8, 5, 0] } : reduce ? {} : { y: [0, -6, 0], rotate: [0, 2, 0, -2, 0] }}
+              transition={wobble === c.id ? { duration: 0.6 } : { duration: 2.4 + (i % 3) * 0.35, repeat: Infinity, ease: 'easeInOut', delay: i * 0.15 }}>
+              <img src={c.src} alt="" draggable={false} />
+            </motion.button>
+          );
+        })}
+
+      {/* the piece in flight: lift (anticipation) → arc → shrink onto the friend */}
+      {fly && (
+        <motion.img src={fly.src} alt="" className="hq-du-fly"
+          initial={{ left: `${fly.from.x}%`, top: `${fly.from.y}%`, scale: 1, rotate: 0 }}
+          animate={{ left: [`${fly.from.x}%`, `${fly.from.x + 1}%`, `${(fly.from.x + fly.to.x) / 2}%`, `${fly.to.x}%`],
+            top: [`${fly.from.y}%`, `${fly.from.y + 3}%`, `${Math.max(20, Math.min(fly.from.y, fly.to.y) - 10)}%`, `${fly.to.y}%`],
+            scale: [1, 0.9, 1.25, 0.7], rotate: [0, 6, -12, 0] }}
+          transition={{ duration: 0.56, times: [0, 0.18, 0.6, 1], ease: ['easeOut', 'easeOut', 'easeIn'] }} />
+      )}
+
+      {/* star burst + ring on every right piece */}
+      {bursts.map((b) => (
+        <div key={b.k} className="hq-du-burst" style={{ left: `${b.x}%`, top: `${b.y}%` }}>
+          <motion.span className="hq-du-ring" initial={{ scale: 0.2, opacity: 0.9 }} animate={{ scale: 2.6, opacity: 0 }} transition={{ duration: 0.7, ease: 'easeOut' }} />
+          {!reduce && Array.from({ length: 14 }, (_, k) => {
+            const a = (k / 14) * Math.PI * 2, d = 60 + (k % 3) * 22;
+            return <motion.span key={k} className="hq-du-spark" initial={{ x: 0, y: 0, scale: 1, opacity: 1 }}
+              animate={{ x: Math.cos(a) * d, y: [0, Math.sin(a) * d, Math.sin(a) * d + 40], scale: 0.4, opacity: 0 }}
+              transition={{ duration: 0.95, ease: 'easeOut' }}>{k % 2 ? '⭐' : '✨'}</motion.span>;
+          })}
+        </div>
+      ))}
+
+      {/* the end: it snows and the friend cheers */}
+      {finished && !reduce && Array.from({ length: 28 }, (_, k) => (
+        <motion.span key={k} className="hq-du-flake" style={{ left: `${(k * 37) % 100}%` }}
+          initial={{ y: '-10%', opacity: 0 }} animate={{ y: '110%', x: [0, 14, -10, 0], opacity: [0, 1, 1, 0] }}
+          transition={{ duration: 3 + (k % 5) * 0.5, delay: (k % 7) * 0.2, ease: 'linear' }}>❄</motion.span>
+      ))}
+    </Stage>
+  );
+}
+
 function Twister({ level, quest, say, miss, star, done, setDots }: LevelProps<'twister'>) {
   const words = useMemo(() => level.line.split(' '), [level.line]);
   const bank = useMemo(() => shuffle(words.map((w, i) => ({ w, i }))), [words]);
@@ -676,6 +832,7 @@ function LevelSwitch({ level, common, stars }: { level: QuestLevel; common: Omit
     case 'picture-choice': return <PictureChoice level={level} {...common} />;
     case 'twister': return <Twister level={level} {...common} />;
     case 'reading': return <Reading level={level} {...common} />;
+    case 'dress-up': return <DressUp level={level} {...common} />;
     case 'treasure': return <Treasure level={level} {...common} stars={stars} />;
   }
 }

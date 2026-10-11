@@ -10,6 +10,7 @@ transparent PNG the size of the base, so the game just stacks them on the charac
 
 pieces json: {"hat": {"colour": "green"}, "pants": {"colour": "blue", "y1": 857}, "shoes": {"colour": ["blue", "white"], "y0": 857}}
 colours: red, orange, yellow, green, blue, purple, pink, white, brown. y0/y1 limit the seed band (pixels).
+DRESSUP_REACH (default 14 px): how far from a piece's colour a changed pixel may be to belong to it.
 """
 import json, os, sys
 import numpy as np
@@ -59,8 +60,11 @@ for k, name in enumerate(names, 1):
     m = ndimage.binary_opening(m, iterations=1)
     seed[m & (seed == 0)] = k
     print(name, 'seed px', int(m.sum()))
-_, (iy, ix) = ndimage.distance_transform_edt(seed == 0, return_indices=True)
-owner = seed[iy, ix] * diff
+dist, (iy, ix) = ndimage.distance_transform_edt(seed == 0, return_indices=True)
+# a changed pixel joins its nearest piece only if it is close to that piece's colour (its outline, shading);
+# changes far from any piece are the character drifting a little in the redraw, not clothing
+reach = float(os.environ.get('DRESSUP_REACH', '14'))
+owner = seed[iy, ix] * (diff & (dist <= reach))
 
 os.makedirs(out_dir, exist_ok=True)
 for k, name in enumerate(names, 1):
