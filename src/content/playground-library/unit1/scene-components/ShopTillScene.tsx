@@ -41,16 +41,18 @@ export function ShopTillScene({ scene, onWin, onNext, sync }: { scene: Till; onW
   const [mood, setMood] = useState<'idle' | 'happy' | 'hmm'>('idle');
   const [fly, setFly] = useState<{ item: number; from: { x: number; y: number } } | null>(null);
   const [leaving, setLeaving] = useState(false);
+  const [arrived, setArrived] = useState(false);
   const [bursts, fire] = useBursts();
   const [shakeCtl, shake] = useShake();
   const bag = useAnimationControls();
   const wait = (ms: number) => new Promise((res) => window.setTimeout(res, ms));
 
   useEffect(() => {
-    busy.current = false; setMisses(0); setMood('idle'); setLeaving(false);
+    busy.current = false; setMisses(0); setMood('idle'); setLeaving(false); setArrived(false);
     if (!r) return;
+    const a = window.setTimeout(() => setArrived(true), 950);
     const t = window.setTimeout(() => cueSpeak(r.line, r.customer), 1100); // after the hop-in
-    return () => window.clearTimeout(t);
+    return () => { window.clearTimeout(a); window.clearTimeout(t); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [round, scene.id]);
 
@@ -83,11 +85,16 @@ export function ShopTillScene({ scene, onWin, onNext, sync }: { scene: Till; onW
   };
 
   const customer = r ? CAST[r.customer] : null;
-  const custAnim = reduce ? {} : leaving
-    ? { left: [`${SPOT.x}%`, `${(SPOT.x + DOOR.x) / 2}%`, `${DOOR.x}%`], top: [`${SPOT.y}%`, `${SPOT.y - 12}%`, `${DOOR.y}%`], opacity: [1, 1, 0], scaleX: -1 }
-    : mood === 'happy' ? { top: [`${SPOT.y}%`, `${SPOT.y - 8}%`, `${SPOT.y}%`, `${SPOT.y - 3}%`, `${SPOT.y}%`], scaleY: [1, 0.86, 1.1, 0.96, 1] }
-    : mood === 'hmm' ? { rotate: [0, -8, 6, -3, 0] }
-    : { scaleY: [1, 1.035, 1], left: `${SPOT.x}%`, top: `${SPOT.y}%` };
+  // every state names left/top/opacity: a value missing from `animate` would spring back to `initial` (the door)
+  const at = { left: `${SPOT.x}%`, top: `${SPOT.y}%`, opacity: 1 };
+  const custAnim = reduce ? at : leaving
+    ? { left: [`${SPOT.x}%`, `${(SPOT.x + DOOR.x) / 2}%`, `${DOOR.x}%`], top: [`${SPOT.y}%`, `${SPOT.y - 12}%`, `${DOOR.y}%`], opacity: [1, 1, 0], scaleX: -1, rotate: 0 }
+    : mood === 'happy' ? { ...at, top: [`${SPOT.y}%`, `${SPOT.y - 8}%`, `${SPOT.y}%`, `${SPOT.y - 3}%`, `${SPOT.y}%`], scaleY: [1, 0.86, 1.1, 0.96, 1], rotate: 0 }
+    : mood === 'hmm' ? { ...at, rotate: [0, -8, 6, -3, 0], scaleY: 1 }
+    : arrived ? { ...at, rotate: 0, scaleY: [1, 1.035, 1] }
+    : { left: [`${DOOR.x}%`, `${(DOOR.x + SPOT.x) / 2}%`, `${SPOT.x}%`], top: [`${DOOR.y}%`, `${DOOR.y - 14}%`, `${SPOT.y}%`], opacity: [0, 1, 1], scaleY: [1, 1.06, 0.82, 1.08, 1] };
+  const custTr = leaving ? { duration: 0.7, ease: 'easeIn' as const } : mood !== 'idle' ? { duration: 0.7 }
+    : arrived ? { scaleY: { duration: 2.4, repeat: Infinity, ease: 'easeInOut' as const }, default: { duration: 0.3 } } : { duration: 0.9, ease: 'easeOut' as const };
 
   return (
     <motion.div className="absolute inset-0 select-none overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }} animate={shakeCtl}>
@@ -131,9 +138,7 @@ export function ShopTillScene({ scene, onWin, onNext, sync }: { scene: Till; onW
         {r && customer && (
           <motion.div key={round} className="pointer-events-none absolute z-20 -translate-x-1/2 -translate-y-1/2" style={{ height: '46vh', aspectRatio: '1 / 1', transformOrigin: '50% 95%' }}
             initial={reduce ? { left: `${SPOT.x}%`, top: `${SPOT.y}%`, opacity: 0 } : { left: `${DOOR.x}%`, top: `${DOOR.y}%`, opacity: 0 }}
-            animate={reduce ? { left: `${SPOT.x}%`, top: `${SPOT.y}%`, opacity: 1 } : leaving || mood !== 'idle' ? custAnim
-              : { left: [`${DOOR.x}%`, `${(DOOR.x + SPOT.x) / 2}%`, `${SPOT.x}%`], top: [`${DOOR.y}%`, `${DOOR.y - 14}%`, `${SPOT.y}%`], opacity: [0, 1, 1], scaleY: [1, 1.06, 0.82, 1.08, 1] }}
-            transition={leaving ? { duration: 0.7, ease: 'easeIn' } : mood === 'idle' ? { duration: 0.9, ease: 'easeOut' } : { duration: 0.7 }}>
+            animate={custAnim} transition={custTr}>
             <img src={customer.img} alt={customer.name} draggable={false} className="h-full w-full object-contain drop-shadow-[0_10px_10px_rgba(0,0,0,0.3)]" />
             {leaving && <img src={scene.bag.img} alt="" className="absolute bottom-[18%] left-[62%] h-[28%] w-[28%] object-contain" style={{ filter: STICKER_FILTER }} />}
           </motion.div>

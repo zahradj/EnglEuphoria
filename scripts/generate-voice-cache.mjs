@@ -503,7 +503,7 @@ const UNIT1_EXTRACTORS = {
     [s.who, s.doneLine],
   ],
   'whos-missing': (s) => [
-    [s.who, 'Look at the photos!'], [s.who, 'Lights off!'], [s.who, s.ask ?? 'Who is missing?'],
+    [s.who, s.look ?? 'Look at the photos!'], [s.who, 'Lights off!'], [s.who, s.ask ?? 'Who is missing?'],
     ...(s.faces ?? []).flatMap((f) => [[s.who, `No, ${f.name} is here! Look again!`], [s.who, `${f.name.charAt(0).toUpperCase() + f.name.slice(1)}! Here is ${f.name}!`]]),
     [s.who, s.doneLine],
   ],

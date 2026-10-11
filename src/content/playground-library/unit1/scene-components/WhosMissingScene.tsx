@@ -46,7 +46,7 @@ export function WhosMissingScene({ scene, onWin, onNext, sync }: { scene: Missin
     busy.current = false;
     setMisses(0);
     if (!r) return;
-    const t = window.setTimeout(() => cueSpeak(MISSING_LOOK, scene.who), 700);
+    const t = window.setTimeout(() => cueSpeak((scene.look ?? MISSING_LOOK), scene.who), 700);
     return () => window.clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [round, scene.id]);
@@ -85,7 +85,7 @@ export function WhosMissingScene({ scene, onWin, onNext, sync }: { scene: Missin
     if (next >= total) void sayWithin(scene.doneLine, scene.who, 4000);
   };
 
-  const prompt = !r ? scene.doneLine : phase === 'look' ? MISSING_LOOK : phase === 'dark' ? MISSING_DARK : phase === 'ask' ? (scene.ask ?? MISSING_ASK) : missingRightLine(scene.faces[r.missing].name);
+  const prompt = !r ? scene.doneLine : phase === 'look' ? (scene.look ?? MISSING_LOOK) : phase === 'dark' ? MISSING_DARK : phase === 'ask' ? (scene.ask ?? MISSING_ASK) : missingRightLine(scene.faces[r.missing].name);
   const choices = r ? r.options : [];
 
   return (
@@ -174,7 +174,7 @@ export function WhosMissingScene({ scene, onWin, onNext, sync }: { scene: Missin
 /** Every voiced line, for the clip baker (scripts/generate-voice-cache.mjs mirrors this). */
 export function whosMissingLines(scene: Missing) {
   return [
-    [scene.who, MISSING_LOOK], [scene.who, MISSING_DARK], [scene.who, scene.ask ?? MISSING_ASK],
+    [scene.who, (scene.look ?? MISSING_LOOK)], [scene.who, MISSING_DARK], [scene.who, scene.ask ?? MISSING_ASK],
     ...scene.faces.flatMap((f) => [[scene.who, missingWrongLine(f.name)], [scene.who, missingRightLine(f.name)]]),
     [scene.who, scene.doneLine],
   ] as [string, string][];

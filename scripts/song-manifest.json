@@ -343,5 +343,10 @@
     "path": "public/lep1/audio/shoes-hat-socks-song-u9l2.mp3",
     "bytes": 321037,
     "sha256": "c90493db7093424c1bc9ff77300702d0e9a892e6ba178ee610688111dc84fba7"
+  },
+  "u9l3-coat-skirt-tshirt": {
+    "path": "public/lep1/audio/coat-skirt-tshirt-song-u9l3.mp3",
+    "bytes": 321037,
+    "sha256": "48cd76510e46b3735c85057cb21679b8e2d40d00638882a9ff016d763ef18f5a"
   }
 }

@@ -899,8 +899,9 @@ export type Scene =
       /** Who's Missing? (U5L3): a photo wall (`wall` = face indexes); the child turns the lights off,
        *  one photo (`missing`) is gone, and they pick it from `options`. Faces as in cookie-faces. */
       id: string; kind: 'whos-missing'; bg: string; teacher: string; who: CharKey;
-      /** The question after "Lights off!" (default "Who is missing?"; things: "What is missing?"). */
-      ask?: string;
+      /** The first line (default "Look at the photos!") and the question after "Lights off!" (default "Who is missing?";
+       *  things: "What is missing?"). */
+      look?: string; ask?: string;
       faces: { label: string; name: string; img: string; at: [number, number]; w: number; aspect?: number }[];
       rounds: { wall: number[]; missing: number; options: number[] }[];
       doneLine: string;
@@ -14226,7 +14227,7 @@ export const LESSON_U9L3_SCENES: Scene[] = [
   {
     id: 'u9l3-song', kind: 'song', bg: bgU9L3Shop, title: '\u{1F3B5} Coat, Skirt, T-shirt! \u{1F3B5}', teacher: 'Sing and act: zip your coat, swish the skirt (or point to it), pull on your T-shirt!',
     durationSeconds: 20, bigWord: 'Coat', songUrl: `${A}/audio/coat-skirt-tshirt-song-u9l3.mp3?v=1`,
-    lineDurationsMs: [4200, 4600, 4800, 6400],
+    lineDurationsMs: [4040, 4920, 4360, 6782],
     songPrompt: 'Cheerful bouncy kids clothes-shop song',
     lyrics: [
       { who: 'leo', text: 'Coat, coat! Zip it up!', emotion: 'happy' },
@@ -14238,7 +14239,7 @@ export const LESSON_U9L3_SCENES: Scene[] = [
 
   /* 8-10 More games */
   {
-    id: 'u9l3-whats-missing', kind: 'whos-missing', bg: bgU9L3Shop, who: 'bella', ask: 'What is missing?',
+    id: 'u9l3-whats-missing', kind: 'whos-missing', bg: bgU9L3Shop, who: 'bella', look: 'Look at the clothes!', ask: 'What is missing?',
     teacher: "What's Missing? Look at the shop window, tap the lamp, then say which piece is gone.",
     faces: [U9L3_CLOTHES.coat, U9L3_CLOTHES.skirt, U9L3_CLOTHES.tshirt, U9L3_CLOTHES.hat, U9L3_CLOTHES.shoes],
     rounds: [
