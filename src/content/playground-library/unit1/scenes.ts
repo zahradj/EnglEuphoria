@@ -15367,6 +15367,7 @@ export const LESSON_U10L1_SCENES: Scene[] = [
   {
     id: 'u10l1-song', kind: 'song', bg: bgU10L1Track, title: '\u{1F3B5} Run, Jump, Walk! \u{1F3B5}', teacher: 'Sing and do it: run on the spot, jump, walk slowly, then freeze!',
     durationSeconds: 20, bigWord: 'Jump', songUrl: `${A}/audio/run-jump-walk-song-u10l1.mp3?v=1`,
+    lineDurationsMs: [3780, 4300, 4300, 7682],
     songPrompt: 'Energetic bouncy kids action song',
     lyrics: [
       { who: 'leo', text: 'Run, run, run! Run, run, run!', emotion: 'happy' },
@@ -15436,6 +15437,12 @@ export const LESSON_U10L1_SCENES: Scene[] = [
       { word: 'R', letter: 'R', emoji: 'R' },
       { word: 'J', letter: 'J', emoji: 'J' },
     ],
+  },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u10l1-blend', kind: 'sound-blend', bg: bgU10L1TrackEmpty,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'jam', img: `${A}/items/item-jam.png` }, { word: 'jet', img: `${A}/items/item-jet.png` }, { word: 'rat', img: `${A}/items/item-rat.png` }, { word: 'rod', img: `${A}/items/item-rod.png` }],
   },
 
   /* 13-14 Sticker + Home Mission */

@@ -363,5 +363,10 @@
     "path": "public/lep1/audio/dress-up-song-u9l6.mp3",
     "bytes": 321037,
     "sha256": "68573653513db3fd88ca950174c044635e0bb37a5a457ec37f55a058fec7186a"
+  },
+  "u10l1-run-jump-walk": {
+    "path": "public/lep1/audio/run-jump-walk-song-u10l1.mp3",
+    "bytes": 321037,
+    "sha256": "0db0951dae8666d614c05866051d6e5c86f80f9a92676bf75421620a350b96e2"
   }
 }
