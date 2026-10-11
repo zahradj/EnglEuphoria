@@ -1,0 +1,18 @@
+{
+  "vee-idle": {
+    "out": "public/academy-art/cast-video/vee",
+    "model": "kling-video/v2.5-turbo/pro/image-to-video",
+    "style": "Same 2D anime-style illustration, exactly the same character, face, hoodie and colours as the start image. Calm, slow, gentle motion. Steady camera. Silent: no sound, no speech, no text.",
+    "negative": "text, letters, subtitles, watermark, extra people, extra limbs, extra fingers, morphing face, changing clothes, camera zoom, camera pan, speech, sound",
+    "beats": [
+      {
+        "id": "idle",
+        "loop": true,
+        "image": "public/academy-art/cast/vee/neutral.webp",
+        "prompt": "Vee stands relaxed and breathes slowly, tilts his head very slightly, then returns to the starting pose. The camera stays steady.",
+        "seconds": 5,
+        "ownerApproved": false
+      }
+    ]
+  }
+}
