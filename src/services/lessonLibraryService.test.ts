@@ -41,12 +41,6 @@ describe('resolvePlaygroundLessonRoute', () => {
     ).toBe('/playground-scene/play/the-lesson-id');
   });
 
-  test('academy-v2 (new Academy engine) is keyed by lesson id, routes to PlayAcademyLesson', () => {
-    expect(
-      resolvePlaygroundLessonRoute('the-lesson-id', { contentFormat: 'academy-v2' }),
-    ).toBe('/academy-scene/the-lesson-id');
-  });
-
   test('missing unit_number/lesson_number default to 1', () => {
     expect(resolvePlaygroundLessonRoute('id-5', { contentFormat: 'lep1-rich' })).toBe('/playground-scene/lesson-1');
   });
@@ -57,9 +51,9 @@ describe('resolvePlaygroundLessonRoute', () => {
     expect(resolvePlaygroundLessonRoute('id-8', null)).toBeNull();
   });
 
-  test('hub: academy routes to PlayAcademyLesson even with old-format/missing contentFormat', () => {
-    expect(resolvePlaygroundLessonRoute('id-9', { contentFormat: undefined }, 'academy')).toBe('/academy-scene/id-9');
-    expect(resolvePlaygroundLessonRoute('id-10', null, 'academy')).toBe('/academy-scene/id-10');
+  test('hub: academy no longer has a player route here (the old Academy player was removed)', () => {
+    expect(resolvePlaygroundLessonRoute('id-9', { contentFormat: 'academy-v2' }, 'academy')).toBeNull();
+    expect(resolvePlaygroundLessonRoute('id-10', null, 'academy')).toBeNull();
   });
 
   test('hub: playground does not fall into the academy branch — unrecognized Playground content still returns null', () => {

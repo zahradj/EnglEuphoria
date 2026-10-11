@@ -1,5 +1,10 @@
 # EnglEuphoria — project rules
 
+## Hub separation (hard rule — owner, 2026-10-08)
+
+- The **Playground, Academy and Success each own their own curriculum blueprint, lesson blueprint, skills and docs.** Never edit, import or reuse another hub's.
+- Academy work lives only in `src/curriculum/academy/`, `.claude/skills/academy-*`, `docs/academy-*` (see `docs/hub-separation.md`). Do not touch the Playground, and do not read or change the legacy Academy rows in the database.
+
 ## Voice (hard rule)
 
 - **Never use the browser's built-in text-to-speech** (`window.speechSynthesis`, `SpeechSynthesisUtterance`) for anything a student or teacher hears — not in the app, not in prototypes or mock-ups, not as a fallback. Device voices have the wrong accent and were rejected by the product owner.
@@ -57,6 +62,17 @@
 - Every Playground lesson after the very first opens (right after the title / hello song) with ONE `recall-warmup` scene: a quick "Remember?" of the lesson before, 3-5 of its words with their pictures, Pip says each word and the child finds it — no reading.
 - Vary the look: `mode: 'click'` (listen and click, three pictures) for colours and scene pictures; `mode: 'shadow'` (listen and match the shadow) only for sticker pictures with clearly different outlines.
 - `recallWarmup.test.ts` (deploy gate) fails if a lesson has none. It is a routine scene, not one of the lesson's games.
+
+## Academy lessons — how every one is created (hard rule — owner, 2026-10-09)
+
+Whenever the owner says "create a lesson" / "proceed with creating the lesson", or whenever you create or rebuild an Academy lesson:
+
+1. **Start from the Academy blueprints**, never from memory: the roadmap/curriculum blueprint (`src/curriculum/academy/levels/`, `types.ts`) and the lesson blueprint (`buildLessonBlueprint` / `ACADEMY_LESSON_BLUEPRINTS`: objective, cast, run of show, Mission, Release, clue, supports). The lesson's tests must read the blueprint.
+2. **Use the Academy skills and lists**: `academy-season-system`, `academy-session-builder`, `academy-activity-selector` (+ the 148-game catalogue `docs/academy-games-catalog.md`), `academy-assessment-designer` where there is a check, and run `academy-quality-gate` before reporting done.
+3. **Research the internet again for every lesson** (it is a one-to-one live lesson for teens): Oxford, Cambridge, British Council, Duolingo, Busuu and other English apps and one-to-one platforms. Take mechanics, never content; log sources, quality and limits in `docs/research/academy-<lesson>-research.md`.
+4. **Be creative and visual, not dry.** The player must look like a game or a film, not a worksheet: full-bleed scenes and pictures on every screen, large characters, cinematic transitions between parts, rich reactions. A lesson that is plain text on a flat background is not done.
+5. **Design like an education UX/UI designer and game designer** (skill `.claude/skills/academy-game-ui`, research `docs/research/academy-game-ui.md`): every page and activity is built like a video game or story game — illustrated, animated, with motion where it helps — and must pass its "dullness test". Motion rules still hold: UI motion, sparkles, card flips, expression swaps and approved silent background loops are fine; never zoom/pan/loop-scale a story picture, never browser voices.
+6. Fill the hour (the blueprint's run of show), keep the cast to the blueprint's cast, and keep all other Academy rules (hub separation, voice, comfort).
 
 ## Languages — every page is translated (hard rule — owner, 2026-10-09)
 
