@@ -20,9 +20,9 @@ export function Plate({ id, artBase }: { id: string; artBase?: string }) {
 }
 
 /** Characters with Canva-made parts (public/academy-art/cast-parts/<who>/): head, torso, two arms, mouth/eye/face crops. Pivots in 900x1200 px. */
-const RIGS: Partial<Record<CastName, { armR: [number, number]; armL: [number, number]; neck: [number, number] }>> = {
-  Vee: { armR: [160, 557], armL: [762, 557], neck: [460, 490] },
-};
+// Vee's arm parts were rejected by the owner (2026-10-11: arms look pasted on, sticking out of the body). Rig switched off until a
+// hands-out full picture replaces the parts; Vee falls back to the two-layer puppet below.
+const RIGS: Partial<Record<CastName, { armR: [number, number]; armL: [number, number]; neck: [number, number] }>> = {};
 const pct = ([x, y]: [number, number]) => `${(x / 9).toFixed(2)}% ${(y / 12).toFixed(2)}%`;
 
 function Rig({ who, base, state, speaking, onFail }: { who: CastName; base: string; state: string; speaking: boolean; onFail: () => void }) {
