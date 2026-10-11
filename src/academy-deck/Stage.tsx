@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
 import type { Actor, CastName, Expr } from './types';
 
@@ -19,17 +19,40 @@ export function Plate({ id, artBase }: { id: string; artBase?: string }) {
   );
 }
 
-/** A cast member. Falls back expr -> happy -> neutral -> a coloured initial, so a missing picture never breaks a slide. */
+/**
+ * A cast member as a small puppet driven by one state machine (idle | speaking | happy | concerned; happy/concerned come in through
+ * `actor.expr`). Two layers cut from the same expression picture: the body breathes, the head (with the shoulders' top) nods and
+ * tilts on its own beat, blinks, and swaps to the "talk" mouth picture while speaking. Falls back expr -> happy -> neutral -> initial,
+ * so a missing picture never breaks a slide. (Real lip-sync/arms need layered art or an approved video loop; see academy-game-ui §7.)
+ */
 export function Character({ actor, artBase, speaking = false, small = false }: { actor: Actor; artBase?: string; speaking?: boolean; small?: boolean }) {
   const chain: Expr[] = actor.expr === 'concerned' ? ['concerned', 'neutral'] : [actor.expr ?? 'neutral', 'happy', 'neutral'];
   const [i, setI] = useState(0);
-  const src = artBase && i < chain.length ? `${artBase}/cast/${actor.who.toLowerCase()}/${chain[i]}.webp` : null;
+  const [mouth, setMouth] = useState(false);
+  const base = artBase ? `${artBase}/cast/${actor.who.toLowerCase()}` : null;
+  const src = base && i < chain.length ? `${base}/${chain[i]}.webp` : null;
+  const talkable = speaking && i === 0 && (actor.expr === undefined || actor.expr === 'neutral' || actor.expr === 'happy');
+  useEffect(() => {
+    if (!talkable) {
+      setMouth(false);
+      return;
+    }
+    const t = window.setInterval(() => setMouth((m) => !m), 170);
+    return () => window.clearInterval(t);
+  }, [talkable]);
+  const state = actor.expr === 'happy' ? 'happy' : actor.expr === 'concerned' ? 'concerned' : speaking ? 'speaking' : 'idle';
   return (
-    <div className="ad-actor" data-pos={actor.pos} data-speaking={speaking} data-small={small} aria-label={actor.who}>
-      {src ? (
+    <div className="ad-actor" data-pos={actor.pos} data-speaking={speaking} data-state={state} data-small={small} aria-label={actor.who}>
+      {src && base ? (
         <>
-          <img key={src} src={src} alt={actor.who} draggable={false} onError={() => setI(i + 1)} />
-          {i === 0 && <img className="ad-blink" src={`${artBase}/cast/${actor.who.toLowerCase()}/blink.webp`} alt="" aria-hidden="true" draggable={false} onError={(e) => ((e.target as HTMLImageElement).style.display = 'none')} />}
+          <i className="ad-spot" aria-hidden="true" />
+          <div className="ad-pup">
+            <img className="ad-pup-body" key={src} src={src} alt={actor.who} draggable={false} onError={() => setI(i + 1)} />
+            <div className="ad-pup-head">
+              <img className="ad-pup-face" src={mouth ? `${base}/talk.webp` : src} alt="" aria-hidden="true" draggable={false} />
+              {i === 0 && <img className="ad-pup-face ad-blink" src={`${base}/blink.webp`} alt="" aria-hidden="true" draggable={false} onError={(e) => ((e.target as HTMLImageElement).style.display = 'none')} />}
+            </div>
+          </div>
         </>
       ) : (
         <span className="ad-actor-ph" style={{ background: COLOR[actor.who] }}>{actor.who[0]}</span>

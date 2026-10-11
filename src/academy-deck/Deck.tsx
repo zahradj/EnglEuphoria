@@ -98,6 +98,7 @@ export function Deck({ script, artBase, teacher = false, slide: controlled, onSl
   const [minute, setMinute] = useState(false);
   const [menu, setMenu] = useState(false);
   const [burst, setBurst] = useState(0);
+  const [chat, setChat] = useState(false);
   const [mood, setMood] = useState<'happy' | 'concerned' | null>(null);
   const moodTimer = useRef<number>();
   const react = useCallback((m: 'happy' | 'concerned') => {
@@ -137,6 +138,12 @@ export function Deck({ script, artBase, teacher = false, slide: controlled, onSl
   const ctx: DeckCtx = useMemo(() => ({ artBase, vars, setVars, done, right, wrong, award, stamps, reduced: calm, seed: 1000 + index * 17 }), [artBase, vars, setVars, done, right, wrong, award, stamps, calm, index]);
   const isSolved = !!solved[cur.id];
   const last = index === script.slides.length - 1;
+  // the cast chatter for a moment when a slide opens (no recorded clips yet; real timing will come from the audio)
+  useEffect(() => {
+    setChat(true);
+    const t = window.setTimeout(() => setChat(false), 2400);
+    return () => window.clearTimeout(t);
+  }, [index]);
   useEffect(() => {
     setToast(null);
     setMenu(false);
@@ -194,7 +201,7 @@ export function Deck({ script, artBase, teacher = false, slide: controlled, onSl
       <div className="ad-root" data-reduced={calm} data-kind={cur.kind} data-hw={!!homework} data-mood={mood ?? undefined} data-testid="deck">
         <Plate id={cur.bg} artBase={artBase} key={cur.bg} />
         <div className="ad-actors" aria-hidden={actorsVisible.length === 0}>
-          {actorsVisible.map((a) => <Character key={`${a.who}-${mood ?? 'base'}`} actor={mood ? { ...a, expr: mood } : a} artBase={artBase} small={compact} />)}
+          {actorsVisible.map((a) => <Character key={`${a.who}-${mood ?? 'base'}`} actor={mood ? { ...a, expr: mood } : a} artBase={artBase} small={compact} speaking={chat && !calm && !mood && ['title', 'brief', 'whosaid', 'teach', 'model', 'convo', 'say', 'wrap'].includes(cur.kind)} />)}
         </div>
         <header className="ad-strip" aria-label="Slides">
           <span className="ad-lesson">{homework ? `${homework.label} · game ${index + 1} of ${script.slides.length}` : PARTS[cur.part]?.name}</span>

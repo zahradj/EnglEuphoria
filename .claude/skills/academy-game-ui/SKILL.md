@@ -88,3 +88,16 @@ games: **illustrated, animated, sometimes with motion, full-bleed.** "Dull and d
 2. Build it in `src/academy-player/` with the scene/art slots filled (drawn scene first, real pictures queued in the art ledger).
 3. Play it in a real browser, screenshot at 390 and 1280, run §5.
 4. Log the research (sources, quality, limits) in the lesson's research file; run `academy-quality-gate`.
+
+## 7. Alive characters and game-screen anatomy (added 2026-10-10 after owner: "not a well designed animated video game")
+
+A game screen is **layers, each with its own motion, driven by one state**, not a picture with a card on it.
+
+1. **Character state machine** (`Character` in `src/academy-deck/Stage.tsx`): states `idle | speaking | happy | concerned`. Idle = body breathe + head nod/tilt on a separate beat + blink. Speaking = mouth swap (neutral <-> talk picture) plus a small head bob, only while a line plays. Happy = jump, glad face. Concerned = flinch, worried face (falls back to neutral, never to happy). One component owns all of it; slides only send the state.
+2. **Spotlight and ground**: every character stands on a soft contact shadow and a coloured rim/spot light so they sit *in* the scene.
+3. **HUD corners**: top-left task banner, top-right counters (stars/found), bottom controls; world objects stay tappable and glow like pickups.
+4. **Buttons**: chunky, bevelled, glossy, with squash on press and a stretch-pop on success (anticipation, overshoot, settle).
+5. **Reward stack on success only**: +1 pop, sparkles, character cheer, edge glow. Wrong = flinch + soft hint, no fanfare.
+6. **Scene lights**: moving god-rays, drifting bokeh, window shimmer on top of the still (never zoom or pan the still itself).
+7. **Entrances**: panels spring in, options stagger, characters walk in from their side; a slide change is a small transition, not a cut.
+8. **Honest limit**: flat expression pictures cannot do real lip-sync or arm movement. Real animated characters need either layered art (Canva `separate-image-layers`, a Rive/Spine rig) or approved Higgsfield loops through the video gate. Ask the owner before ordering either.
