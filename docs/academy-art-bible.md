@@ -29,18 +29,18 @@ Supporting principles:
 - **UI:** the same grammar as objects — chunky pills and tickets, never thin outlined boxes.
 - **Hero vs support:** the play object is 2× larger than anything around it and is the only thing with a glow.
 
-## 4. Colour system
+## 4. Colour system (owner, 2026-10-11)
 
-| Role | Colour | Meaning |
+**Rule:** a mix of shades from **blue to purple**; **60–70% of everything on screen is purple**. White and black are allowed, and small touches of other colours (gold for reward, green for correct, orange for "not yet") are accents only, never more than a few percent.
+
+| Role | Share | Colours |
 |---|---|---|
-| Brand base | violet `#6d28d9` / deep `#2e1065` | club, magic, interactive |
-| Secondary | sky blue `#38bdf8` | information, calm |
-| Reward | gold `#fbbf24` | stars, success, "you did it" |
-| Success | green `#4ade80` | correct |
-| Try again | orange `#fb923c` | "not yet" (never red) |
-| Scene | lilac / cream plates from Canva | the world |
+| Purple (dominant) | 60–70% | lilac `#ede9fe`, violet `#8b5cf6`, royal `#6d28d9`, deep `#2e1065` |
+| Blue (supporting) | 15–25% | sky `#7dd3fc`, azure `#38bdf8`, indigo `#4f46e5`, navy `#1e1b4b` |
+| White / black | 5–10% | white for highlights and text on dark; near-black `#0b0720` for outlines and shadows |
+| Accents | 3–5% total | gold `#fbbf24` reward, green `#4ade80` correct, orange `#fb923c` not-yet (never red) |
 
-Colour is never the only signal: right = tick + glow, not-yet = arrow + soft shake of the object, locked = padlock.
+Applies to scenes, objects, UI, and clothes of the cast (the pending brand-colour pass). Skin and hair keep natural colours. Colour is never the only signal: right = tick + glow, not-yet = arrow + soft shake of the object, locked = padlock.
 
 ## 5. Character direction
 
@@ -72,6 +72,6 @@ One slice, one lesson part, done properly: **"Locker Pop" + "Find the numbers" +
 
 ## Open decisions for the owner
 
-1. Approve / change the identity statement and palette (§1, §4).
+1. Identity statement approved? (palette decided 2026-10-11, §4).
 2. Character route A (parts) or B (extra poses) (§5).
 3. Approve the asset list so Canva orders can start (one at a time, ledger entry each).
