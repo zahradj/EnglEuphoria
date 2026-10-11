@@ -3149,5 +3149,40 @@
       "I'm wearing a red shirt!",
       "I'm wearing a green hat! Hooray!"
     ]
+  },
+  "u9l5-my-shoes-are-white": {
+    "publicPath": "public/lep1/audio/my-shoes-are-white-song-u9l5.mp3",
+    "durationSec": 20,
+    "style": "Cheerful bouncy kids walking song, 108 BPM with ukulele, bright piano, light drums and hand claps, ONE clear happy young singer, every word sung slowly and very clearly with crisp consonants: SHOES, WHITE, RED and BLUE clearly different, playful sound words SQUISH, SPLAT, SPLASH. Definitely not a lullaby.",
+    "positiveStyles": [
+      "bouncy",
+      "ukulele",
+      "piano",
+      "light drums",
+      "hand claps",
+      "clear kids vocals",
+      "108 BPM",
+      "happy",
+      "playful"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "My shoes are white! White, white, white!",
+      "Squish! My shoes are red!",
+      "Splat! My shoes are blue!",
+      "Splash, splash! I like my shoes!"
+    ]
   }
 }

@@ -469,6 +469,7 @@ const UNIT1_EXTRACTORS = {
     [s.who, s.doneLine],
   ],
   // Mirror DuckFeedScene.tsx's duckFeedLines().
+  'shoe-painter': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...(s.paints ?? []).map((p) => [s.who, `No, not ${p.word}! Listen again.`]), [s.who, s.doneLine]],
   'wearing-show': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.cast[r.answer], r.line], [s.cast[r.answer], r.reply]]), ...(s.cast ?? []).map((w) => [w, 'Not me! Listen again.']), [s.who, s.doneLine]],
   'shop-till': (s) => { const buy = [...new Set((s.rounds ?? []).map((r) => r.customer))]; return [...(s.rounds ?? []).flatMap((r) => [[r.customer, r.line], [r.customer, r.reply]]), ...buy.flatMap((b) => (s.stock ?? []).map((c) => [b, `No, not the ${c.label}! Listen again.`])), [s.who, s.doneLine]]; },
   'put-on': (s) => { const w = (r) => s.dolls?.[r.doll]?.who ?? s.who; const ask = [...new Set((s.rounds ?? []).map(w))]; return [...(s.rounds ?? []).flatMap((r) => [[w(r), r.line], [w(r), r.reply]]), ...ask.flatMap((a) => (s.clothes ?? []).map((c) => [a, `No, not the ${c.word}! Listen again.`])), [s.who, s.doneLine]]; },

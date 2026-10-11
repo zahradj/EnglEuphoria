@@ -509,6 +509,15 @@ export type Scene =
       doneLine: string;
     }
   | {
+      /** Shoe Painter (U9L5 game after the story film): Pip asks "Paint my shoes red, please!", the child taps
+       *  that paint pot, the paint flies onto his shoes (a magnifier shows them close up) and Pip says `reply`
+       *  ("My shoes are red!"). `paint` indexes `paints`; the shoes are washed white by the rain at the end. */
+      id: string; kind: 'shoe-painter'; bg: string; teacher: string; who: CharKey;
+      paints: { word: string; hex: string }[];
+      rounds: { paint: number; line: string; reply: string }[];
+      doneLine: string;
+    }
+  | {
       /** Who Am I? Fashion Show (U9L4 signature): three friends on the stage, each really wearing an outfit (the
        *  fitted dress-up layers, /lep1/dressup/<who>/<piece>.png). One of them says what they are wearing —
        *  "I'm wearing a green hat and blue shoes! Who am I?" — and the child taps that friend. `outfits[i]` =
@@ -14526,4 +14535,229 @@ export const LESSON_U9L4_SCENES: Scene[] = [
     ],
   },
   { id: 'u9l4-finale', kind: 'finale', bg: bgU9L4Stage, who: 'bella', line: 'What a great fashion show! Goodbye, friend!' },
+];
+
+/* =============================================================================
+ * Pre-A1 Unit 9, Lesson 5 — "Pip's White Shoes" (Clothes, story lesson)
+ *
+ * Our own story (approved scenario: docs/scenarios/u9l5-pips-white-shoes.md — the curriculum slot is named
+ * after a published book, nothing of it is used): Pip's new white shoes turn red (apples), blue (paint) and
+ * brown (mud), and each time he smiles: "My shoes are red! I like my red shoes!" A rain puddle washes them
+ * white again. Stills film; owner's order (2026-10-10): story → the words → a first game → THEN the song.
+ * New game: Shoe Painter. Pip is a boy: shoes, T-shirt and pants only (CLAUDE.md, 2026-10-11).
+ * ========================================================================= */
+
+const u9l5Page = (n: number) => `${A}/scenes/bg-u9l5-story-${n}-wide.png`;
+const bgU9L5Garden = u9l5Page(1);
+
+export const LESSON_U9L5_TITLE = "Pip's White Shoes";
+export const LESSON_U9L5_OBJECTIVE = 'Follow a short picture story and say the colour of the shoes ("My shoes are red! My shoes are white!"), make Pip\'s shoes the colour he asks for, put the story in order, and hear the first sound W (white, water), by watching, listening, moving and playing, no reading.';
+
+export const LESSON_U9L5_SCENES: Scene[] = [
+  { id: 'u9l5-title', kind: 'title-card', bg: bgU9L5Garden, level: 'Pre-A1', unit: 'Unit 9', lessonLabel: 'Lesson 5', title: "Pip's White Shoes", subtitle: 'A story' },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 9 · Lesson 4 · What Are You Wearing?
+    id: 'u9l5-recall-warmup', kind: 'recall-warmup', bg: bgU9L5Garden, who: 'mia', mode: 'click',
+    fromLabel: 'Lesson 4 · What Are You Wearing?',
+    teacher: 'Warm-up from last lesson: Mia says what she is wearing, the child clicks it and says it too.',
+    items: [
+      { word: 'dress', say: "I'm wearing a yellow dress!", img: itemDress },
+      { word: 'hat', say: "I'm wearing a green hat!", img: itemHatGreen },
+      { word: 'shoes', say: "I'm wearing blue shoes!", img: itemShoesBlue },
+    ],
+  },
+  {
+    id: 'u9l5-intro', kind: 'cinematic', bg: bgU9L5Garden, hidePipOverlay: true, title: "Pip's White Shoes", subtitle: 'Story time!', narrator: 'bella',
+    script: [
+      { who: 'bella', line: 'Story time! Look at Pip.' },
+      { who: 'bella', line: 'Pip has new shoes. What colour are they?' },
+    ],
+    cta: "Let's watch!",
+  },
+
+  /* 4 The story film (approved scenario) */
+  {
+    id: 'u9l5-story', kind: 'story-video', bg: bgU9L5Garden, videoUrl: `${A}/video/pips-white-shoes-u9l5.mp4?v=1`, title: "Pip's White Shoes",
+    teacher: 'Press play and watch. When Bella asks "What colour are Pip\'s shoes now?", wait, and let the child answer: "Brown!"',
+    pages: [
+      { img: u9l5Page(1), who: 'pip', line: 'Look! New shoes! My shoes are white!', atSec: 0 },
+      { img: u9l5Page(2), who: 'pip', line: 'Oh no! Apples! Squish, squish!', atSec: 4 },
+      { img: u9l5Page(3), who: 'pip', line: 'My shoes are red! I like my red shoes!', atSec: 8 },
+      { img: u9l5Page(4), who: 'pip', line: 'Oh no! Blue paint! Splat!', atSec: 13 },
+      { img: u9l5Page(5), who: 'pip', line: 'My shoes are blue! I like my blue shoes!', atSec: 17 },
+      { img: u9l5Page(6), who: 'pip', line: 'Oh no! Mud! Squelch!', atSec: 22 },
+      { img: u9l5Page(7), who: 'bella', line: "What colour are Pip's shoes now?", atSec: 26 },
+      { img: u9l5Page(7), who: 'bella', line: 'Brown!', atSec: 31 },
+      { img: u9l5Page(8), who: 'pip', line: 'Splash! Water! My shoes are white again!', atSec: 34 },
+      { img: u9l5Page(9), who: 'pip', line: 'I like my shoes!', atSec: 39 },
+      { img: u9l5Page(9), who: 'mia', line: 'Me too!', atSec: 42 },
+    ],
+    checkpoints: [],
+  },
+
+  /* 5-6 The words, move */
+  {
+    id: 'u9l5-words', kind: 'listen-repeat-cards', textSide: 'right', bg: bgU9L5Garden, teacher: 'Listen, then say it like Pip: "My shoes are red!" Point to your own shoes too.',
+    cards: [
+      { who: 'pip', sentence: 'My shoes are white!', img: u9l5Page(1), imgLabel: 'white' },
+      { who: 'pip', sentence: 'My shoes are red!', img: u9l5Page(3), imgLabel: 'red' },
+      { who: 'pip', sentence: 'My shoes are blue!', img: u9l5Page(5), imgLabel: 'blue' },
+      { who: 'pip', sentence: 'My shoes are brown!', img: u9l5Page(7), imgLabel: 'brown' },
+    ],
+  },
+  {
+    id: 'u9l5-move', kind: 'tpr-actions', bg: bgU9L5Garden, who: 'pip',
+    teacher: 'Stand up! Walk the story with Pip.',
+    rounds: [
+      { line: 'Walk, walk, walk! Squish!', emoji: '\u{1F34E}', img: u9l5Page(2) },
+      { line: 'Step in the paint! Splat!', emoji: '\u{1F3A8}', img: u9l5Page(4) },
+      { line: 'Stomp in the mud! Squelch!', emoji: '\u{1F7EB}', img: u9l5Page(6) },
+      { line: 'Jump in the puddle! Splash!', emoji: '\u{1F4A6}', img: u9l5Page(8) },
+    ],
+  },
+
+  /* 7 Signature game (new): Shoe Painter */
+  {
+    id: 'u9l5-shoe-painter', kind: 'shoe-painter', bg: bgU9L5Garden, who: 'pip',
+    teacher: 'Shoe Painter! Listen to Pip: which colour? Tap that paint pot — the paint flies onto his shoes. Then say it with Pip: "My shoes are red!"',
+    paints: [
+      { word: 'red', hex: '#E53935' },
+      { word: 'blue', hex: '#1E6FD9' },
+      { word: 'yellow', hex: '#FFD31A' },
+      { word: 'green', hex: '#3DAA3D' },
+      { word: 'brown', hex: '#8B5A2B' },
+    ],
+    rounds: [
+      { paint: 0, line: 'Paint my shoes red, please!', reply: 'My shoes are red! I like my red shoes!' },
+      { paint: 1, line: 'Now paint my shoes blue, please!', reply: 'My shoes are blue! I like my blue shoes!' },
+      { paint: 3, line: 'Green, please! Green shoes!', reply: 'My shoes are green! Wow!' },
+      { paint: 4, line: 'Brown, please! Like the mud!', reply: 'My shoes are brown! Squelch!' },
+      { paint: 2, line: 'And now yellow, please!', reply: 'My shoes are yellow! I like my yellow shoes!' },
+    ],
+    doneLine: 'Splash! Rain! My shoes are white again!',
+  },
+
+  /* 8 The song — now the child knows the words (owner, 2026-10-10) */
+  {
+    id: 'u9l5-song', kind: 'song', bg: u9l5Page(9), title: '\u{1F3B5} My Shoes Are White \u{1F3B5}', teacher: 'Sing and act: walk, squish, splat, splash — point to your shoes on every colour!',
+    durationSeconds: 20, bigWord: 'Shoes', songUrl: `${A}/audio/my-shoes-are-white-song-u9l5.mp3?v=1`,
+    songPrompt: 'Cheerful bouncy kids walking song about colourful shoes',
+    lyrics: [
+      { who: 'pip', text: 'My shoes are white! White, white, white!', emotion: 'happy' },
+      { who: 'pip', text: 'Squish! My shoes are red!', emotion: 'happy' },
+      { who: 'pip', text: 'Splat! My shoes are blue!', emotion: 'happy' },
+      { who: 'pip', text: 'Splash, splash! I like my shoes!', emotion: 'happy' },
+    ],
+  },
+
+  /* 9-11 More games */
+  {
+    id: 'u9l5-true-or-not', kind: 'tick-cross', bg: bgU9L5Garden, who: 'bella',
+    teacher: 'Look and listen. Is it right? Tap ✓ or ✗.',
+    rounds: [
+      { img: u9l5Page(1), sentence: 'His shoes are white.', isTrue: true },
+      { img: u9l5Page(3), sentence: 'His shoes are blue.', isTrue: false },
+      { img: u9l5Page(7), sentence: 'His shoes are brown.', isTrue: true },
+      { img: u9l5Page(5), sentence: 'His shoes are red.', isTrue: false },
+    ],
+  },
+  {
+    id: 'u9l5-story-order', kind: 'story-order', bg: bgU9L5Garden, who: 'bella',
+    teacher: 'Put the story in order! Then tell it with Bella: first white, then red, then blue, then brown.',
+    frames: [
+      { img: u9l5Page(1), caption: 'My shoes are white!', who: 'pip' },
+      { img: u9l5Page(3), caption: 'My shoes are red!', who: 'pip' },
+      { img: u9l5Page(5), caption: 'My shoes are blue!', who: 'pip' },
+      { img: u9l5Page(7), caption: 'My shoes are brown!', who: 'pip' },
+    ],
+  },
+  {
+    id: 'u9l5-who-said-it', kind: 'who-said-it', bg: bgU9L5Garden, teacher: 'Who said it? Listen to the voice and tap the friend: Pip, Bella or Mia.',
+    rounds: [
+      { line: 'My shoes are red!', who: 'pip', emotion: 'happy' },
+      { line: "What colour are Pip's shoes now?", who: 'bella', emotion: 'neutral' },
+      { line: 'Me too!', who: 'mia', emotion: 'happy' },
+      { line: 'Oh no! Mud!', who: 'pip', emotion: 'neutral' },
+    ],
+  },
+  {
+    id: 'u9l5-ask-shoes', kind: 'join-stage', bg: bgU9L5Garden, teacher: 'Pip asks the child about their own shoes. Any colour is fine.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Look! My shoes are white!', bubble: 'right' },
+      { who: 'pip', line: 'What colour are your shoes?', bubble: 'right' },
+      { who: 'student', line: 'My shoes are black!', bubble: 'right' },
+      { who: 'pip', line: 'Do you like your shoes?', bubble: 'right' },
+      { who: 'student', line: 'Yes! I like my shoes!', bubble: 'right' },
+    ],
+  },
+
+  /* 12-13 Sound: W (white, water) */
+  {
+    id: 'u9l5-model-w', kind: 'sound-model', bg: bgU9L5Garden, who: 'pip', letter: 'W', phoneme: '/w/', sound: 'wuh',
+    teacher: 'W says /w/ — white, water, window!',
+    anchors: [
+      { word: 'water', emoji: '\u{1F4A7}', img: itemWater },
+      { word: 'window', emoji: '\u{1FA9F}', img: itemWindow },
+      { word: 'whale', emoji: '\u{1F433}', img: itemWhale },
+    ],
+  },
+  {
+    id: 'u9l5-sort-ws', kind: 'sound-sort', bg: bgU9L5Garden, teacher: 'Listen to each word. Does it start with /w/ like water, or /s/ like socks? Drag it to W or S!',
+    targets: [
+      { letter: 'W', phoneme: '/w/', who: 'pip' },
+      { letter: 'S', phoneme: '/s/', who: 'mia' },
+    ],
+    items: [
+      { word: 'water', img: itemWater, emoji: '\u{1F4A7}', letter: 'W' },
+      { word: 'socks', img: itemSocksRed, emoji: '\u{1F9E6}', letter: 'S' },
+      { word: 'window', img: itemWindow, emoji: '\u{1FA9F}', letter: 'W' },
+      { word: 'sun', img: itemSun, emoji: '☀️', letter: 'S' },
+      { word: 'wheel', img: itemWheel, emoji: '\u{1F6DE}', letter: 'W' },
+      { word: 'snake', img: itemSnake, emoji: '\u{1F40D}', letter: 'S' },
+    ],
+  },
+
+  /* 14-15 Sticker + Home Mission */
+  {
+    id: 'u9l5-sticker', kind: 'sticker-reward', bg: u9l5Page(9), who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'What a story! Here is a shoe sticker for you!', sticker: { img: itemShoesBlue, label: 'Story star' },
+  },
+  {
+    id: 'u9l5-home-mission', kind: 'home-mission', bg: u9l5Page(9), who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: tell the shoe story at home! Squish, splat, squelch, splash!',
+    parentNote: "Today your child watched a story about Pip's new white shoes that turn red, blue and brown on a walk, and a puddle makes them white again. Ask \"What colour are your shoes?\" and let your child answer \"My shoes are …!\". Act the story out together: squish, splat, squelch, splash!",
+    steps: [
+      { emoji: '\u{1F45F}', img: u9l5Page(1), say: 'My shoes are white!' },
+      { emoji: '\u{1F34E}', img: u9l5Page(3), say: 'My shoes are red!' },
+      { emoji: '\u{1F4A6}', img: u9l5Page(8), say: 'Splash! White again!' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u9l5-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU9L5Garden, who: 'mia',
+    teacher: 'Extra time: Brain Break! Do each action with Mia.',
+    rounds: [
+      { line: 'Tiptoe in your shoes!', emoji: '\u{1F45F}' },
+      { line: 'Stomp, stomp, stomp!', emoji: '\u{1F463}' },
+      { line: 'Jump over the puddle!', emoji: '\u{1F4A6}' },
+      { line: 'Freeze!', emoji: '\u{1F976}', seconds: 3 },
+    ],
+  },
+
+  /* Goodbye */
+  {
+    id: 'u9l5-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u9l5-finale', kind: 'finale', bg: u9l5Page(9), who: 'pip', line: 'My shoes are white! I like my shoes! Goodbye, friend!' },
 ];

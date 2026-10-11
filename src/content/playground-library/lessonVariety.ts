@@ -60,6 +60,7 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
   '4-4': { settings: ['flower garden'], look: 'bright flower garden with big friendly mushrooms; Pip meets Bo, a round sky-blue three-eyed monster; code-drawn monsters on an empty lawn' },
   '4-5': { settings: ['animal park'], look: 'sunny animal park with a blue pond and tall trees; a tiger, a monkey, an elephant and a seal each show one move, Pip copies; a leafy bush to peek through' },
+  '9-5': { settings: ['sunny garden', 'picnic hill', 'farmyard after rain'], look: "a walk through the unit's places as a stills film: Pip in a red T-shirt, blue pants and brand-new white sneakers in a sunny garden, squishing red apples under the apple tree on the picnic hill, stepping into a spilled pot of blue paint on the path, stomping in a brown mud puddle in the farmyard after rain, and splashing in a clear rain puddle; the garden becomes the Shoe Painter game with paint pots and a big magnifier on his shoes" },
   '9-4': { settings: ['garden fashion show stage'], look: "a garden fashion show on a sunny afternoon: a wooden stage with a pink curtain, a row of warm stage lights and a little catwalk, bunting and fairy lights in green trees, flower pots and colourful chairs for the audience; Pip, Mia and Leo stand in the spotlights really wearing the clothes (fitted layers), and the camera flashes when the child finds the friend" },
   '9-3': { settings: ['clothes shop'], look: "Bella's little clothes shop on a sunny day: clothes rails with coats, skirts and T-shirts, wooden shelves, a round mirror, a shop window with sunshine and a green door; Bella the bunny smiles behind her wooden counter with a cash register; friends hop in through the door to buy, and the bought piece flies into a paper shopping bag" },
   '9-2': { settings: ['snowy front hallway'], look: "a cosy front hallway on a snowy winter morning: snow falling past the window and the glass front door, wooden coat hooks on a pale yellow wall, a little bench and a striped rug; Pip in a green knitted hat, red socks and blue shoes waves by the door; the empty hall becomes the Put It On! game where the child dresses Pip, Mia and Leo" },
@@ -209,6 +210,19 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'the child must understand the verb AND the body part to find the animal, then PRODUCES the move and the sentence — the screen waits for the child, never a clock',
       'the clue in Whose Is It? is one of the unit\'s body words, so naming the part and the animal go together, and the reveal recalls the story move',
       'wrong picks are named back with that animal\'s own move ("No, the seal claps her hands!"), and the right one glows after two tries',
+    ],
+  },
+  '9-5': {
+    sources: ['picture-book read-alongs for young learners (repeated line + colour change on each page)', 'Cambridge (Pre A1 Starters listening: "listen and colour")', 'Toca Boca / Lingokids colouring play', 'Blue\'s Clues pause (question, wait, answer)'],
+    mechanics: [
+      'stills story film with a planned pause: "What colour are Pip\'s shoes now?" … "Brown!"',
+      'listen and colour → Shoe Painter: Pip asks "Paint my shoes red, please!", the paint flies onto his shoes in a magnifier and he says "My shoes are red!"',
+      'true or false on the story pictures, story order, who said it (voices), ask and answer "What colour are your shoes?"; first sound W in a W / S sort',
+    ],
+    betterThan: [
+      'our own story built on one repeated sentence ("My shoes are …!") that changes only by the colour, so the child predicts and joins in',
+      'the colour change is the game\'s reward: the shoes really turn the colour (close-up magnifier), then Pip says the full sentence',
+      'no clock and no reading; a wrong pot is named back ("No, not blue! Listen again."), the right one glows after two tries; the rain washes the shoes white like in the story',
     ],
   },
   '9-4': {

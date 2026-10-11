@@ -101,6 +101,7 @@ import { WashingLineScene } from './scene-components/WashingLineScene';
 import { PutOnScene } from './scene-components/PutOnScene';
 import { ShopTillScene } from './scene-components/ShopTillScene';
 import { WearingShowScene } from './scene-components/WearingShowScene';
+import { ShoePainterScene } from './scene-components/ShoePainterScene';
 import { BuzzerShowScene } from './scene-components/BuzzerShowScene';
 import { HouseHideScene } from './scene-components/HouseHideScene';
 import { MovingDayScene } from './scene-components/MovingDayScene';
@@ -316,6 +317,7 @@ export function SceneRenderer(props: {
     case 'house-hide': return <HouseHideScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'buzzer-show': return <BuzzerShowScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'cafe-order': return <CafeOrderScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
+    case 'shoe-painter': return <ShoePainterScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'wearing-show': return <WearingShowScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'shop-till': return <ShopTillScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'put-on': return <PutOnScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;

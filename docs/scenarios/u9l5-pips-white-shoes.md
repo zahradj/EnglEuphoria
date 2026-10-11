@@ -1,6 +1,6 @@
 # Scenario — Pre-A1 Unit 9 Lesson 5 · story film "Pip's White Shoes"
 
-**Status: waiting for the owner's approval.** Nothing is drawn or ordered until the owner says yes.
+**Status: approved by the owner (2026-10-11).** Stills only, nothing paid is ordered.
 
 | | |
 |---|---|
@@ -53,4 +53,4 @@ Stills only: Canva pictures + recorded voices. **No paid clips.**
 title → Remember? (Lesson 4: hat, dress, shirt) → intro → **story film** → story words "My shoes are red!" (listen and say) → move ("Squish! Splat! Splash!") → a first game (new: **Shoe Painter** — the child hears "My shoes are blue!" and dips Pip's shoes in that colour) → **the song** "My Shoes Are White" (our own words) → story order (put the pictures in order) → ask and answer "What colour are your shoes?" → sounds → sticker → home mission → goodbye.
 
 ## Owner approval
-Approved: _(waiting)_
+Approved: owner, 2026-10-11 — "Yes".
