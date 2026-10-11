@@ -21,6 +21,7 @@ TAUGHT = {
 }
 POOL = ['hat', 'bat', 'mat', 'man', 'ham', 'rat', 'cat', 'can', 'cab', 'cap', 'map', 'pan', 'tap', 'bag', 'fan',
         'pot', 'top', 'mop', 'dog', 'rod', 'cob', 'bed', 'hen', 'ten', 'net', 'pen', 'web', 'peg', 'jam', 'jet']
+LOOKS = ['train', 'frog', 'slide', 'gumball']
 PHONICS = {'sound-model', 'sound-sort', 'sound-pop', 'brick-crush', 'alphabet-blocks', 'trace', 'basket', 'dash', 'sound-pick'}
 
 src = open(SCENES).read()
@@ -84,10 +85,14 @@ for u, l, name, new, words in reversed(plan):  # from the end so offsets stay va
             idx = max(0, idx)
     bg = re.search(r"\bbg: ([^,\n]+),", bl[idx][2]) or re.search(r"\bbg: ([^,\n]+),", bl[idx - 1][2])
     lid = 'u1l%d' % l if u == 1 else f'u{u}l{l}'
+    # vary the world (owner 2026-10-11: "do not just use the train"): continue the train/frog/slide/gumball rotation
+    look = LOOKS[src.count("kind: 'sound-blend'") % len(LOOKS)]
+    look_txt = '' if look == 'train' else f" look: '{look}',"
+    teacher = {'train': 'Tap each car and say the sound', 'frog': 'Tap each stepping stone and say the sound', 'slide': 'Tap each ball on the slide and say the sound', 'gumball': 'Tap each gumball and say the sound'}[look]
     rounds = ', '.join(f"{{ word: '{w}', img: `${{A}}/items/item-{w}.png` }}" for w in words)
     page = (f"\n  {{\n    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.\n"
-            f"    id: '{lid}-blend', kind: 'sound-blend', bg: {bg.group(1)},\n"
-            f"    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',\n"
+            f"    id: '{lid}-blend', kind: 'sound-blend',{look_txt} bg: {bg.group(1)},\n"
+            f"    teacher: 'Blend It! {teacher}, press Blend!, then find the picture. Every word uses sounds we know.',\n"
             f"    rounds: [{rounds}],\n  }},")
     end = bl[idx][1] + (1 if src[bl[idx][1]] == ',' else 0)
     src = src[:end] + page + src[end:]

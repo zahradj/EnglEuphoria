@@ -191,6 +191,19 @@ Game feel used: anticipation (mouth opens / line drops first), squash and stretc
 (soil, crumbs, splash, stars), idle life (breathing, swaying signs, bobbing fish), gentle wrong answers (the mole laughs,
 the monster shakes its head, the fish darts away; the word is said), reduced motion respected.
 
+### Blending games — four worlds, one routine (owner 2026-10-11: "vary the activities, do not just use the train")
+
+`sound-blend` (Blend It!, blueprint slot 14) takes `look`: `train` (default), `frog` (Frog Hop), `slide` (Slide Down),
+`gumball` (Gumball Blender) — `src/content/playground-library/BlendWorlds.tsx`. Same routine (say each sound in reading
+order → Blend! → find the picture out of three), same voices/sync/checks. Lessons rotate train → frog → slide → gumball
+(`scripts/plan-blend-rollout.py` continues the rotation for new lessons), so no two lessons in a row share a world.
+
+| look | Play | Source (mechanic only) |
+|---|---|---|
+| `frog` | a frog hops stone to stone (one sound per stone), then crosses again fast; jumps onto the lily pad with the picture | Teach Your Monster to Read "Stepping Stones"; drive-a-car-across-the-letters |
+| `slide` | Pip climbs one ladder step per sound, then slides down scooping the sound balls = slow sounds, fast word | "say it slowly, then fast", slinky stretch-and-blend |
+| `gumball` | letter gumballs drop into a machine (a sound each), the crank shakes it, three capsules roll out; open the right one | tap-the-sounds then reveal (Boom / Google Slides CVC blending decks) |
+
 **Pre-A1 children cannot read.** Never make reading the only way into a task: speak every prompt, give picture answers, keep printed text as a small caption for the adult.
 
 ## Playground hub — A1/A2 Welcome Town (`.../welcome-town/scenes.ts`, `.../welcome-town-a2/scenes.ts`)
