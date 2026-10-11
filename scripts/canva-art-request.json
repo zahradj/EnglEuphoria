@@ -1,17 +1,7 @@
 [
  {
-  "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0074-5520805908266785878.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261011%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261011T010249Z&X-Amz-Expires=63605&X-Amz-Signature=834fdcbcd0d113b7f60a13ca247d13444f890370c62be3840a2020a66cf86eba&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2011%20Oct%202026%2018%3A42%3A54%20GMT",
-  "out": "public/lep1/scenes/bg-u9l6-playroom-wide.png",
-  "sticker": false
- },
- {
-  "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0075-5520805908266785878.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261011%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261011T135325Z&X-Amz-Expires=17466&X-Amz-Signature=61bd19d13f7694112b4f4899d71bcc93f9175c8d116610f93c2ee34e79a1954e&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2011%20Oct%202026%2018%3A44%3A31%20GMT",
-  "out": "public/lep1/scenes/bg-u9l6-playroom-empty-wide.png",
-  "sticker": false
- },
- {
   "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0076-8772404841350809201.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261011%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261011T164521Z&X-Amz-Expires=8031&X-Amz-Signature=59febd778e9612c681f58310112e4b88893a09d3182e75f11cfd97401883baeb&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2011%20Oct%202026%2018%3A59%3A12%20GMT",
-  "out": "docs/art-gen/blend-sheet-1.png",
+  "out": "public/lep1/items/blend-sheet-1.png",
   "sticker": false,
   "raw": true
  }
