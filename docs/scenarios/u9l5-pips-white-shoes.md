@@ -60,3 +60,4 @@ Approved: owner, 2026-10-11 — "Yes".
 - Film: `public/lep1/video/pips-white-shoes-u9l5.mp4` (+ .webm), 45 s, stills cross-faded by `scripts/make-stills-film.py` (pages: `scripts/film-labels/u9l5-pips-white-shoes-pages.json`), labels by `scripts/label-video.py` (`scripts/film-labels/u9l5-pips-white-shoes.json`): shoes, apples, red, paint, blue, mud, brown (after the pause), white.
 - Voices: Pip's lines in Pip's recorded voice, Bella asks the pause question, Mia says "Me too!"; the story page plays each line at its `atSec`.
 - Song "My Shoes Are White": take 2 (score 0.96; the scorer heard "squish" as "swish").
+- Games, words and practice pages use `bg-u9l5-garden-empty-wide.png` (story picture 1 with Pip removed in Canva), so the game Pip is never shown twice; title, intro and story keep picture 1.
