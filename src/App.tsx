@@ -202,6 +202,7 @@ const PlayUnit8Lesson6 = lazy(() => import("./pages/playground-scene/PlayUnit8Le
 const PlayUnit9Lesson1 = lazy(() => import("./pages/playground-scene/PlayUnit9Lesson1"));
 const PlayUnit9Lesson2 = lazy(() => import("./pages/playground-scene/PlayUnit9Lesson2"));
 const PlayUnit9Lesson3 = lazy(() => import("./pages/playground-scene/PlayUnit9Lesson3"));
+const PlayUnit9Lesson4 = lazy(() => import("./pages/playground-scene/PlayUnit9Lesson4"));
 const PlayWelcomeTown1 = lazy(() => import("./pages/playground-scene/PlayWelcomeTown1"));
 const PlayWelcomeTown2 = lazy(() => import("./pages/playground-scene/PlayWelcomeTown2"));
 const PlayWelcomeTown3 = lazy(() => import("./pages/playground-scene/PlayWelcomeTown3"));
@@ -573,6 +574,11 @@ const App = () => {
                       <Route path="/playground-scene/unit-9-lesson-3" element={
                         <ImprovedProtectedRoute>
                           <Suspense fallback={<LoadingFallback />}><PlayUnit9Lesson3 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      <Route path="/playground-scene/unit-9-lesson-4" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayUnit9Lesson4 /></Suspense>
                         </ImprovedProtectedRoute>
                       } />
                       {/* A1 tier — Welcome Town, Unit 1 Lesson 1 ("Hello, Class!"). */}

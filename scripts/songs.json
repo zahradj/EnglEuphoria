@@ -3114,5 +3114,40 @@
       "T-shirt, T-shirt! Arms in!",
       "Coat, skirt, T-shirt! Let's go shopping!"
     ]
+  },
+  "u9l4-what-are-you-wearing": {
+    "publicPath": "public/lep1/audio/what-are-you-wearing-song-u9l4.mp3",
+    "durationSec": 20,
+    "style": "Cheerful bouncy kids catwalk question-and-answer song, 104 BPM with ukulele, bright piano, finger snaps and hand claps, ONE clear happy young singer, every word sung slowly and very clearly with crisp consonants: WEARING clearly said, DRESS, SHIRT and HAT clearly different. Definitely not a lullaby.",
+    "positiveStyles": [
+      "bouncy",
+      "ukulele",
+      "piano",
+      "finger snaps",
+      "hand claps",
+      "clear kids vocals",
+      "104 BPM",
+      "happy",
+      "playful"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "What are you wearing? What are you wearing?",
+      "I'm wearing a yellow dress!",
+      "I'm wearing a red shirt!",
+      "I'm wearing a green hat! Hooray!"
+    ]
   }
 }

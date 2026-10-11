@@ -433,7 +433,7 @@ const UNIT1_EXTRACTORS = {
   },
   // Mirror HouseBoardScene.tsx's houseBoardLines().
   'farm-verse': (s) => { const art = (w) => (/^[aeiou]/i.test(w) ? 'an' : 'a'); return [[s.who, 'You are the farmer! Choose an animal for your farm!'], ...(s.animals ?? []).flatMap((a) => [[s.who, `And on his farm he had ${art(a.label)} ${a.label}, E-I-E-I-O!`], [s.who, `With ${art(a.sound)} ${a.sound}, ${a.sound} here, and ${art(a.sound)} ${a.sound}, ${a.sound} there!`]]), [s.who, s.doneLine]]; },
-  'animal-riddle': (s) => { const used = [...new Set((s.rounds ?? []).flatMap((r) => r.options))]; return [[s.who, 'What animal is this?'], ...(s.rounds ?? []).flatMap((r) => r.clues.map((c) => [s.who, c])), ...used.flatMap((i) => { const a = (s.animals ?? [])[i]; return a ? [[s.who, a.say], [s.who, `No! It isn't the ${a.label}.`]] : []; }), [s.who, s.doneLine]]; },
+  'animal-riddle': (s) => { const used = [...new Set((s.rounds ?? []).flatMap((r) => r.options))]; return [[s.who, s.ask ?? 'What animal is this?'], ...(s.rounds ?? []).flatMap((r) => r.clues.map((c) => [s.who, c])), ...used.flatMap((i) => { const a = (s.animals ?? [])[i]; return a ? [[s.who, a.say], [s.who, `No! It isn't the ${a.label}.`]] : []; }), [s.who, s.doneLine]]; },
   'animal-parade': (s) => [[s.who, "Let's make an animal parade!"], [s.who, 'Listen again!'], ...(s.rounds ?? []).map((r) => [s.who, r.line]), ...(s.animals ?? []).map((a) => [s.who, a.say]), [s.who, s.doneLine]],
   'farm-wash': (s) => [[s.who, "Oh no! The animals are muddy! Let's wash them!"], ...(s.rounds ?? []).map((r) => [s.who, r.line]), ...(s.animals ?? []).flatMap((a) => [[s.who, a.say], [s.who, `Oops! That's the ${a.label}.`]]), [s.who, s.doneLine]],
   'photo-snap': (s) => [[s.who, 'Get your camera ready!'], ...(s.rounds ?? []).map((r) => [s.who, r.line]), ...(s.animals ?? []).flatMap((a) => [[s.who, a.say], [s.who, `Oops! That's the ${a.label}.`]]), [s.who, s.doneLine]],
@@ -469,6 +469,7 @@ const UNIT1_EXTRACTORS = {
     [s.who, s.doneLine],
   ],
   // Mirror DuckFeedScene.tsx's duckFeedLines().
+  'wearing-show': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.cast[r.answer], r.line], [s.cast[r.answer], r.reply]]), ...(s.cast ?? []).map((w) => [w, 'Not me! Listen again.']), [s.who, s.doneLine]],
   'shop-till': (s) => { const buy = [...new Set((s.rounds ?? []).map((r) => r.customer))]; return [...(s.rounds ?? []).flatMap((r) => [[r.customer, r.line], [r.customer, r.reply]]), ...buy.flatMap((b) => (s.stock ?? []).map((c) => [b, `No, not the ${c.label}! Listen again.`])), [s.who, s.doneLine]]; },
   'put-on': (s) => { const w = (r) => s.dolls?.[r.doll]?.who ?? s.who; const ask = [...new Set((s.rounds ?? []).map(w))]; return [...(s.rounds ?? []).flatMap((r) => [[w(r), r.line], [w(r), r.reply]]), ...ask.flatMap((a) => (s.clothes ?? []).map((c) => [a, `No, not the ${c.word}! Listen again.`])), [s.who, s.doneLine]]; },
   'washing-line': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...(s.clothes ?? []).map((c) => [s.who, `No, not the ${c.word}! Listen again.`]), [s.who, s.doneLine]],

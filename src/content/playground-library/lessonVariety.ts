@@ -60,6 +60,7 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
   '4-4': { settings: ['flower garden'], look: 'bright flower garden with big friendly mushrooms; Pip meets Bo, a round sky-blue three-eyed monster; code-drawn monsters on an empty lawn' },
   '4-5': { settings: ['animal park'], look: 'sunny animal park with a blue pond and tall trees; a tiger, a monkey, an elephant and a seal each show one move, Pip copies; a leafy bush to peek through' },
+  '9-4': { settings: ['garden fashion show stage'], look: "a garden fashion show on a sunny afternoon: a wooden stage with a pink curtain, a row of warm stage lights and a little catwalk, bunting and fairy lights in green trees, flower pots and colourful chairs for the audience; Pip, Mia and Leo stand in the spotlights really wearing the clothes (fitted layers), and the camera flashes when the child finds the friend" },
   '9-3': { settings: ['clothes shop'], look: "Bella's little clothes shop on a sunny day: clothes rails with coats, skirts and T-shirts, wooden shelves, a round mirror, a shop window with sunshine and a green door; Bella the bunny smiles behind her wooden counter with a cash register; friends hop in through the door to buy, and the bought piece flies into a paper shopping bag" },
   '9-2': { settings: ['snowy front hallway'], look: "a cosy front hallway on a snowy winter morning: snow falling past the window and the glass front door, wooden coat hooks on a pale yellow wall, a little bench and a striped rug; Pip in a green knitted hat, red socks and blue shoes waves by the door; the empty hall becomes the Put It On! game where the child dresses Pip, Mia and Leo" },
   '9-1': { settings: ['backyard laundry day'], look: "laundry day in Pip's sunny backyard: green grass, a wooden fence and flowers, a long washing line between two wooden poles with a red shirt, blue pants and a yellow dress on wooden pegs, Pip holding up the shirt by a wicker basket; the empty line becomes the Washing Line game where the clothes swing in the breeze" },
@@ -208,6 +209,19 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'the child must understand the verb AND the body part to find the animal, then PRODUCES the move and the sentence — the screen waits for the child, never a clock',
       'the clue in Whose Is It? is one of the unit\'s body words, so naming the part and the animal go together, and the reveal recalls the story move',
       'wrong picks are named back with that animal\'s own move ("No, the seal claps her hands!"), and the right one glows after two tries',
+    ],
+  },
+  '9-4': {
+    sources: ['"Guess Who?" (attributes → who)', 'Cambridge (Pre A1 Starters listening: "Look at the picture, listen and point")', 'the classroom "I\'m wearing…" description game', 'Toca Boca / Lingokids dress-up shows'],
+    mechanics: [
+      'Guess Who + dress-up → Who Am I? Fashion Show: three friends really wear outfits; one says "I\'m wearing a green hat and a red shirt! Who am I?" and the child taps them',
+      'riddles behind the stage curtain ("You wear it on your head.") and Guess Who with clothes cards ("Is it a hat?")',
+      'ask and answer "What are you wearing?" about the child\'s own clothes; first sound P (pants) in Balloon Letter Pop with D and T',
+    ],
+    betterThan: [
+      'every clue joins two pieces and the friends share some of them, so the child must hold both in mind: one word alone is never enough',
+      'the friends really wear the clothes (fitted layers on their own bodies), outfits change with a twirl each round, and the found friend struts into the spotlight with a camera flash',
+      'the sentence is heard in each friend\'s own voice and then said by the child about their own clothes; a wrong friend says "Not me! Listen again.", the right one glows after two tries; no clock',
     ],
   },
   '9-3': {
