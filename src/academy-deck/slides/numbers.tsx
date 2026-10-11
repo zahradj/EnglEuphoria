@@ -8,7 +8,7 @@ import { Feedback, NOT_YET, Panel } from './shared';
 
 /** Locker Pop: a number WORD is shown; open the locker with that number. */
 export function LockersView({ slide }: { slide: LockersSlide }) {
-  const { right, wrong, done, seed, artBase } = useDeck();
+  const { right, wrong, done, seed, artBase, speak } = useDeck();
   const [round, setRound] = useState(0);
   const [open, setOpen] = useState<number[]>([]);
   const [shake, setShake] = useState<number | null>(null);
@@ -18,7 +18,8 @@ export function LockersView({ slide }: { slide: LockersSlide }) {
   const finished = round >= slide.rounds.length;
   useEffect(() => {
     if (finished) done();
-  }, [finished, done]);
+    else void speak('Vee', slide.words[target]);
+  }, [finished, done, speak, slide.words, target]);
   const tap = (n: number) => {
     if (finished || open.includes(n)) return;
     if (n === target) {
@@ -54,7 +55,7 @@ export function LockersView({ slide }: { slide: LockersSlide }) {
 
 /** Number Train: drag (or tap) each number word onto the right carriage. */
 export function NumTrainView({ slide }: { slide: NumTrainSlide }) {
-  const { right, wrong, done, seed } = useDeck();
+  const { right, wrong, done, seed, speak } = useDeck();
   const [placed, setPlaced] = useState<number[]>([]);
   const [held, setHeld] = useState<number | null>(null);
   const [slip, setSlip] = useState(false);
@@ -71,7 +72,10 @@ export function NumTrainView({ slide }: { slide: NumTrainSlide }) {
       wrong();
     }
   };
-  const drag = useDragChip((id, t) => drop(Number(id), Number(t)), (id) => setHeld(held === Number(id) ? null : Number(id)));
+  const drag = useDragChip((id, t) => drop(Number(id), Number(t)), (id) => {
+    void speak('Vee', slide.words[Number(id)]);
+    setHeld(held === Number(id) ? null : Number(id));
+  });
   const all = placed.length === slide.numbers.length;
   useEffect(() => {
     if (all) done();

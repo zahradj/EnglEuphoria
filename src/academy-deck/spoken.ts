@@ -23,6 +23,9 @@ export function openLines(s: Slide): SpokenLine[] {
     case 'dial': return line('Vee', s.prompt);
     case 'say': return line(lead(s), s.prompt);
     case 'wrap': return [...line('Vee', s.heading), ...line('Vee', s.homework), ...line('Vee', s.clue)];
+    // game prompts are spoken when the game opens (the guide reads the task aloud)
+    case 'lockers': case 'numtrain': case 'border': case 'memory': case 'hunt': case 'shadow': case 'findwrong': case 'spell': return line(lead(s), s.prompt);
+    case 'padlock': return [...line(lead(s), s.prompt), ...line(lead(s), s.clue)];
     default: return [];
   }
 }
@@ -37,6 +40,12 @@ export function viewLines(s: Slide): SpokenLine[] {
     }
     case 'phonechat': return s.steps.flatMap((st) => line(s.contact, st.text));
     case 'model': return s.lines.flatMap((l) => line(l.who, l.text));
+    case 'lockers': return s.rounds.flatMap((n) => line('Vee', s.words[n]));
+    case 'numtrain': return s.numbers.flatMap((n) => line('Vee', s.words[n]));
+    case 'hunt': return s.targets.flatMap((t) => line('Vee', t.word));
+    case 'shadow': return s.rounds.flatMap((r) => line('Vee', r.answer));
+    case 'border': return s.rounds.flatMap((r) => line(lead(s), r.says));
+    case 'memory': return s.pairs.flatMap((p) => line('Vee', p.text));
     case 'teach': return s.pages.flatMap((p) => [...line(lead(s), sayable(p.word)), ...line(lead(s), p.example)]);
     case 'numwall': return Array.from({ length: 100 }, (_, i) => i + 1).flatMap((n) => line('Vee', numberWord(n)));
     default: return [];

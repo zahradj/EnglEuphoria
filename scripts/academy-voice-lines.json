@@ -197,6 +197,10 @@
   },
   {
     "who": "Vee",
+    "text": "Locker Pop! Read the number word and open that locker."
+  },
+  {
+    "who": "Vee",
     "text": "Spain, Spanish"
   },
   {
@@ -282,6 +286,10 @@
   {
     "who": "Ava",
     "text": "My number is four, two, seven."
+  },
+  {
+    "who": "Theo",
+    "text": "Number Train! Put each number word on its carriage."
   },
   {
     "who": "Vee",
@@ -644,6 +652,14 @@
     "text": "one hundred"
   },
   {
+    "who": "Theo",
+    "text": "Theo says your member number. Open the drawer with the code!"
+  },
+  {
+    "who": "Theo",
+    "text": "four, two, seven"
+  },
+  {
     "who": "Vee",
     "text": "spell"
   },
@@ -677,6 +693,34 @@
   },
   {
     "who": "Theo",
+    "text": "Spell Ava’s name. Drag each letter onto the badge."
+  },
+  {
+    "who": "Theo",
+    "text": "Border control! Drag each traveller onto the right passport."
+  },
+  {
+    "who": "Theo",
+    "text": "I am from Spain."
+  },
+  {
+    "who": "Theo",
+    "text": "I am from France."
+  },
+  {
+    "who": "Theo",
+    "text": "I am from Brazil."
+  },
+  {
+    "who": "Theo",
+    "text": "I am from Germany."
+  },
+  {
+    "who": "Theo",
+    "text": "I am from Japan."
+  },
+  {
+    "who": "Theo",
     "text": "Hi! Welcome to the desk. What is your name?"
   },
   {
@@ -685,7 +729,43 @@
   },
   {
     "who": "Vee",
+    "text": "Memory! Find each flag and its nationality word."
+  },
+  {
+    "who": "Vee",
+    "text": "Spanish"
+  },
+  {
+    "who": "Vee",
+    "text": "Italian"
+  },
+  {
+    "who": "Vee",
+    "text": "Brazilian"
+  },
+  {
+    "who": "Vee",
+    "text": "French"
+  },
+  {
+    "who": "Vee",
+    "text": "German"
+  },
+  {
+    "who": "Vee",
+    "text": "Japanese"
+  },
+  {
+    "who": "Vee",
+    "text": "Detective time! The fake profile of Sam has 2 spelling mistakes. Tap them."
+  },
+  {
+    "who": "Vee",
     "text": "Mission time! How much help do you want?"
+  },
+  {
+    "who": "Theo",
+    "text": "Now spell YOUR name on the badge."
   },
   {
     "who": "Theo",
@@ -724,8 +804,60 @@
     "text": "Clue 2 of 8: In the fake profile, Sam’s name is spelled S-A-N. That is not right! Sam is S-A-M."
   },
   {
+    "who": "Vee",
+    "text": "Shadow match! Which number is hiding?"
+  },
+  {
+    "who": "Vee",
+    "text": "Locker Pop! Read the word and open the locker."
+  },
+  {
+    "who": "Vee",
+    "text": "Find the hidden numbers!"
+  },
+  {
+    "who": "Vee",
+    "text": "Shadow match! Which nationality is hiding?"
+  },
+  {
+    "who": "Vee",
+    "text": "Border control! Drag each traveller onto the right passport."
+  },
+  {
+    "who": "Vee",
+    "text": "I am from Italy."
+  },
+  {
+    "who": "Vee",
+    "text": "I am from Brazil."
+  },
+  {
+    "who": "Vee",
+    "text": "I am from Spain."
+  },
+  {
+    "who": "Vee",
+    "text": "Number Train! Put each word on its carriage."
+  },
+  {
+    "who": "Vee",
+    "text": "Spell Sam’s name on the badge."
+  },
+  {
     "who": "Theo",
     "text": "What is your nationality?"
+  },
+  {
+    "who": "Vee",
+    "text": "Open the drawer with the code!"
+  },
+  {
+    "who": "Vee",
+    "text": "five, eight, three"
+  },
+  {
+    "who": "Vee",
+    "text": "Detective time! This profile has 2 spelling mistakes. Tap them."
   },
   {
     "who": "Vee",

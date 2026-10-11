@@ -8,7 +8,7 @@ import { Art } from './teach';
 
 /** Hidden-object hunt: number cards are tucked into the scene; read the number words and find them. */
 export function HuntView({ slide }: { slide: HuntSlide }) {
-  const { right, wrong, done } = useDeck();
+  const { right, wrong, done, speak } = useDeck();
   const [found, setFound] = useState<string[]>([]);
   const [slip, setSlip] = useState<string | null>(null);
   const all = found.length === slide.targets.length;
@@ -18,6 +18,7 @@ export function HuntView({ slide }: { slide: HuntSlide }) {
   const tapTarget = (w: string) => {
     if (found.includes(w)) return;
     setFound([...found, w]);
+    void speak('Vee', w);
     setSlip(null);
     right();
   };
@@ -57,7 +58,7 @@ export function HuntView({ slide }: { slide: HuntSlide }) {
 
 /** Shadow match: a dark silhouette of the picture; choose the word that matches it. */
 export function ShadowView({ slide }: { slide: ShadowSlide }) {
-  const { right, wrong, done, seed } = useDeck();
+  const { right, wrong, done, seed, speak } = useDeck();
   const [round, setRound] = useState(0);
   const [lit, setLit] = useState(false);
   const [slip, setSlip] = useState(false);
@@ -70,6 +71,7 @@ export function ShadowView({ slide }: { slide: ShadowSlide }) {
   const pick = (o: string) => {
     if (lit || finished) return;
     if (o === cur.answer) {
+      void speak('Vee', o);
       setLit(true);
       if (!slip) right();
       setSlip(false);

@@ -8,7 +8,7 @@ import { Feedback, NOT_YET, Panel } from './shared';
 
 /** Border control: a traveller arrives ("I am from Italy."). Drag the traveller onto the right nationality passport. */
 export function BorderView({ slide }: { slide: BorderSlide }) {
-  const { right, wrong, done, award, seed } = useDeck();
+  const { right, wrong, done, award, seed, speak } = useDeck();
   const [round, setRound] = useState(0);
   const [held, setHeld] = useState(false);
   const [slip, setSlip] = useState(false);
@@ -16,6 +16,9 @@ export function BorderView({ slide }: { slide: BorderSlide }) {
   const finished = round >= slide.rounds.length;
   const cur = slide.rounds[Math.min(round, slide.rounds.length - 1)];
   const opts = useMemo(() => shuffled(cur.options, seed + round), [cur, seed, round]);
+  useEffect(() => {
+    if (!finished) void speak(slide.actors?.[0]?.who ?? 'Theo', cur.says);
+  }, [round, finished, cur, speak, slide.actors]);
   const drop = (target: string) => {
     if (finished || stamped) return;
     if (target === cur.answer) {
@@ -73,7 +76,7 @@ export function BorderView({ slide }: { slide: BorderSlide }) {
 
 /** Memory: flip two cards, match each flag with its nationality word. No timers, no penalty. */
 export function MemoryView({ slide }: { slide: MemorySlide }) {
-  const { right, wrong, done, seed } = useDeck();
+  const { right, wrong, done, seed, speak } = useDeck();
   const cards = useMemo(() => shuffled(slide.pairs.flatMap((p, i) => [{ k: `f${i}`, pair: i, flag: p.flag, text: '' }, { k: `t${i}`, pair: i, flag: '', text: p.text }]), seed), [slide.pairs, seed]);
   const [open, setOpen] = useState<string[]>([]);
   const [matched, setMatched] = useState<number[]>([]);
@@ -101,7 +104,7 @@ export function MemoryView({ slide }: { slide: MemorySlide }) {
         {cards.map((c) => {
           const up = open.includes(c.k) || matched.includes(c.pair);
           return (
-            <button key={c.k} type="button" className="ad-mem" data-up={up} data-matched={matched.includes(c.pair)} disabled={up || open.length === 2} onClick={() => setOpen([...open, c.k])} aria-label={up ? (c.flag ? `Flag ${c.flag}` : c.text) : 'Hidden card'}>
+            <button key={c.k} type="button" className="ad-mem" data-up={up} data-matched={matched.includes(c.pair)} disabled={up || open.length === 2} onClick={() => { if (c.text) void speak('Vee', c.text); setOpen([...open, c.k]); }} aria-label={up ? (c.flag ? `Flag ${c.flag}` : c.text) : 'Hidden card'}>
               <span className="ad-mem-inner">
                 <span className="ad-mem-face ad-mem-back" aria-hidden="true">★</span>
                 <span className="ad-mem-face ad-mem-front">{c.flag && hasFlag(c.flag) ? <WavingFlag code={c.flag} label={`Flag ${c.flag}`} /> : <b>{c.text}</b>}</span>
