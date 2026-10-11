@@ -139,3 +139,19 @@ Owner rule 2026-10-10: flat 2D hand-illustrated anime-influenced teen illustrati
 Picks: first candidate accepted for all except v-me. v-me first try `MAHXpemV41Y` read as a thumbs-up beside the chest (rejected); the redo prompt asked for the thumb pressed on the middle of the chest and `MAHXp946ZLk` was accepted.
 Weaknesses: v-me thumb is still a little thumbs-up-like (thumb points up, hand on the chest). v-tired: one eye covered by the fist, the other eye shut-ish; reads clearly as yawning. v-hello and v-fine: boy is the same cast look as v-name/v-age (consistent). v-great and v-tired use a girl with dark wavy hair (new look, same palette). v-meet is cropped at the waist and the two figures fill the frame.
 Note: a Canva edit transaction left uncommitted expired once and the first pages were lost; re-added and committed.
+
+## Puppet parts, Route A (owner decision 2026-10-11): Vee only, stop for review before Ava/Theo/Mia
+
+Goal: layered puppet (torso, 2 arms, head, mouth set, eye set) from Canva-generated PARTS, all registered to the 900x1200 neutral `cast/vee/neutral.webp` (Canva media `MAHXqIseB6A`). Parts go to `public/academy-art/cast-parts/vee/<part>.webp` (transparent, 900x1200, same coordinates as the neutral). The fetcher has a new `kind: "part"` (900x1200, white background cut out). Holder design `DAHXiX3gn1o`, pages 72+ (900x1200). One generation per ~20-25 min (quota_cooldown).
+
+`separate-image-layers` on `MAHXqIseB6A`: failed twice with `quota_cooldown` (shares the image-generation credit cooldown; second try ~15 min after a generation).
+
+| Part | Canva media id | Page | Repo path | Status |
+|---|---|---|---|---|
+| head (hair + neck, mouth closed, eyes open) | MAHXqNNFZzU | 72 | cast-parts/vee/head.webp (raw export: head-raw.webp) | done, see below |
+| torso + legs part, no head, no arms | | | | not yet |
+| left arm + hand, right arm + hand | | | | not yet |
+| mouth set (closed smile, 'ah', 'oo', wide smile) | | | | not yet |
+| eye set (open, blink, happy arcs, worried) | | | | not yet |
+
+Head finding: the edit kept the identity (same face, hair, eyes, smile) but Canva re-framed the crop, so the RAW export is about 1.47x too big and about 150 px too far left/low. It does NOT overlay the neutral at the same coordinates by itself. A post step (scale 0.67 and shift, found by a grid search on the face region, mean grey error about 23/255) puts it back on the neutral: `head.webp` is that registered version, and `_check-head-overlay.png` is the 55% overlay on the neutral (eyes, brows, nose, mouth, ear and hair edge line up to a few px; hair strands differ slightly because the head is a re-draw, not a crop). The registration is a resize of a 900x1200 raw, so the registered head is a little softer than the neutral.
