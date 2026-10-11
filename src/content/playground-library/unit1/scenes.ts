@@ -14413,6 +14413,7 @@ export const LESSON_U9L4_SCENES: Scene[] = [
   {
     id: 'u9l4-song', kind: 'song', bg: bgU9L4Stage, title: '\u{1F3B5} What Are You Wearing? \u{1F3B5}', teacher: 'Sing and point: each friend shows what they are wearing, then the child sings their own line!',
     durationSeconds: 20, bigWord: 'Wearing', songUrl: `${A}/audio/what-are-you-wearing-song-u9l4.mp3?v=1`,
+    lineDurationsMs: [4540, 4200, 2460, 8862],
     songPrompt: 'Cheerful catwalk kids question-and-answer song',
     lyrics: [
       { who: 'bella', text: 'What are you wearing? What are you wearing?', emotion: 'happy' },

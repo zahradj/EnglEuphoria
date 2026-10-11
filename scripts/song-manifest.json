@@ -348,5 +348,10 @@
     "path": "public/lep1/audio/coat-skirt-tshirt-song-u9l3.mp3",
     "bytes": 321037,
     "sha256": "48cd76510e46b3735c85057cb21679b8e2d40d00638882a9ff016d763ef18f5a"
+  },
+  "u9l4-what-are-you-wearing": {
+    "path": "public/lep1/audio/what-are-you-wearing-song-u9l4.mp3",
+    "bytes": 321037,
+    "sha256": "233654dd4e98f79e503909d446a7357bb7086ad73a8f3609e3112cc09156f714"
   }
 }

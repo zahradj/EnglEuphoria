@@ -96,16 +96,19 @@ export function WearingShowScene({ scene, onWin, onNext, sync }: { scene: Show; 
         const isStar = star === i || (done && i === shown?.answer);
         const glow = r && misses >= 2 && i === r.answer;
         return (
-          <div key={who} className="absolute z-20 -translate-x-1/2 -translate-y-1/2" style={{ left: `${SPOTS[i]}%`, top: '60%', height: '50vh', aspectRatio: '1 / 1' }}>
+          <div key={who} className="absolute z-20 -translate-x-1/2 -translate-y-1/2" style={{ left: `${SPOTS[i]}%`, top: '60%', height: 'min(50vh, 33vw)', aspectRatio: '1 / 1' }}>
+            {/* hint after two misses: a gold ring pulses at the right friend's feet */}
+            {glow && <motion.span className="pointer-events-none absolute bottom-[0%] left-1/2 h-[12%] w-[64%] rounded-[50%]" style={{ x: '-50%', border: '6px solid #FACC15', background: 'radial-gradient(closest-side, rgba(254,240,138,0.95), rgba(250,204,21,0.55))', boxShadow: '0 0 36px 14px rgba(255,255,255,0.9)' }}
+              animate={reduce ? { opacity: 1 } : { opacity: [0.75, 1, 0.75], scale: [0.92, 1.1, 0.92] }} transition={{ duration: 1.1, repeat: Infinity }} />}
             {/* ground shadow */}
             <motion.span className="absolute bottom-[3%] left-1/2 h-[6%] w-[46%] -translate-x-1/2 rounded-[50%] bg-black/25 blur-sm" animate={isStar && !reduce ? { scaleX: [1, 0.7, 1.1, 1] } : { scaleX: 1 }} transition={{ duration: 0.8 }} />
             <motion.button onClick={() => { void pick(i); }} aria-label={c.name} className="absolute inset-0" style={{ transformOrigin: '50% 95%' }}
               whileTap={reduce ? undefined : { scale: 0.95 }}
               animate={reduce ? {} : nope === i ? { rotate: [0, -10, 10, -6, 6, 0], scale: 1 }
                 : isStar ? { scale: [1, 1.18, 1.12], y: ['0%', '-8%', '-4%'], scaleX: [1, -1, 1] }
+                : glow ? { scale: 1.04, y: ['0%', '-7%', '0%'], scaleX: 1 }
                 : { scale: star >= 0 ? 0.92 : 1, y: ['0%', '-1.5%', '0%'], scaleX: 1 }}
-              transition={nope === i ? { duration: 0.6 } : isStar ? { duration: 0.8, ease: 'easeOut' } : { y: { duration: 2.4 + i * 0.3, repeat: Infinity, ease: 'easeInOut' }, scale: { duration: 0.3 } }}>
-              {glow && <span className="absolute inset-[12%] animate-pulse rounded-full bg-yellow-300/60 blur-xl" />}
+              transition={nope === i ? { duration: 0.6 } : isStar ? { duration: 0.8, ease: 'easeOut' } : glow ? { y: { duration: 0.7, repeat: Infinity, ease: 'easeOut' }, scale: { duration: 0.3 } } : { y: { duration: 2.4 + i * 0.3, repeat: Infinity, ease: 'easeInOut' }, scale: { duration: 0.3 } }}>
               <img src={c.img} alt="" draggable={false} className="pointer-events-none absolute inset-0 h-full w-full object-contain drop-shadow-[0_10px_10px_rgba(0,0,0,0.3)]" />
               <AnimatePresence>
                 {outfit.map((p) => (

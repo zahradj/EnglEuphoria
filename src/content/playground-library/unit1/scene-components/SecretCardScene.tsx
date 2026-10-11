@@ -19,10 +19,12 @@ export const YES_LINE = 'Yes, it is!';
 export const NO_LINE = "No, it isn't!";
 type AskKind = 'color' | 'shape' | 'toy' | 'size' | 'person';
 const aAn = (w: string) => (/^[aeiou]/i.test(w) ? 'an' : 'a');
+/** Lower-case a card word but keep "T-shirt" (a letter name + hyphen) as it is written. */
+const lc = (w: string) => (/^[A-Z]-/.test(w) ? w : w.toLowerCase());
 export function askLine(kind: AskKind, word: string) {
   // People are asked by name, no article: "Is it Grandma?" (Unit 5 Lesson 4 family cards).
   if (kind === 'person') return `Is it ${word}?`;
-  const w = word.toLowerCase();
+  const w = lc(word);
   if (kind === 'color' || kind === 'size') return `Is it ${w}?`;
   return `Is it ${aAn(w)} ${w}?`;
 }
@@ -30,7 +32,7 @@ type Card = Extract<Scene, { kind: 'secret-card' }>['cards'][number];
 /** "It's a red circle!" for shapes; "It's a big red ball!" for toys. */
 export function foundLine(c: Card) {
   if (c.person && c.word) return `You found it! It's ${c.word}!`;
-  const parts = c.word ? [c.size, c.colorWord.toLowerCase(), c.word.toLowerCase()].filter(Boolean).join(' ') : `${c.colorWord.toLowerCase()} ${c.shape}`;
+  const parts = c.word ? [c.size, c.colorWord.toLowerCase(), lc(c.word)].filter(Boolean).join(' ') : `${c.colorWord.toLowerCase()} ${c.shape}`;
   return `You found it! It's ${aAn(parts)} ${parts}!`;
 }
 /** Does a card have this colour / shape / toy / size? */
