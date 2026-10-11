@@ -172,3 +172,14 @@ Goal: illustrated game objects for the lesson player instead of CSS widgets. Fla
 Sheet B first try `MAHXuXoFSrI` had no pill buttons (rejected); redo `MAHXuZukaCY` accepted. Sheet A accepted first try.
 Weaknesses: items are not on a strict grid (sheet B is stacked rows; sheet A is a 3x4 grid with slightly uneven row spacing), so cut by hand-set boxes or a connected-components cut-out on the grey background (grey is plain, gaps are large). Blue locker is a mid blue rather than periwinkle; the sky-blue pill is a mid blue. Pause icon is two green leaves (reads as pause). Gold is used for chest trim, padlock, key, stamp and star (accent colour, fine for reward objects). No text, letters or numbers on any item.
 Not yet in the repo: sheets are only in Canva until exported and fetched (see below).
+
+## Classroom-words sprite sheet (owner request 2026-10-11: "generate the pictures with Canva")
+
+One Canva generation (LANDSCAPE_16_9, references: v-name card `MAHXiyPmEHA`, Vee neutral-open `MAHXuQoUteU`): a 5x2 grid of 10 lavender rounded squares on plain grey, one teen scene each: listen, look, repeat, click, read (row 1); point, sorry?, slowly, I don't understand, what does it mean (row 2). Accepted on the first try.
+
+| Sheet | Canva media id | Holder design | Page | Page title | Target repo path |
+|---|---|---|---|---|---|
+| classroom words | MAHXu9KAxIE | DAHXiX3gn1o | 81 (1620x912, verified by listing pages after the commit) | classroom words | public/academy-art/objects/sheet-classroom.webp |
+
+Not in the repo yet: the owner downloads the page by hand (signed-URL commit blocked, Canva downloads blocked on the network). Cut into 10 by hand-set boxes (5 columns x 2 rows).
+Weaknesses: the teen is one boy with dark hair and a purple hoodie in 9 of 10 squares (consistent, but no cast variety); click (4) is a hand only, on a tablet. Gaps between squares are narrow (about 2-3% of the width), though clear. Pointing hand (6) and the slow-down hands (8) are slightly stylised; check fingers at full size before use. The flag target in 6 carries a small flag glyph; the clock in 8 has no numerals. No text, letters or numbers seen.
