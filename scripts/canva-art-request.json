@@ -1,7 +1,27 @@
 [
  {
-  "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0057-4647107511759689112.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261010%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261010T183355Z&X-Amz-Expires=29911&X-Amz-Signature=6634211566db78c4b1ba826d38324dfd437875382d22499c56b33f1e7a021c59&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2011%20Oct%202026%2002%3A52%3A26%20GMT",
-  "out": "public/lep1/scenes/map-u9l2-snow-village-wide.png",
+  "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0058-3561740050518732948.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261011%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261011T103221Z&X-Amz-Expires=12679&X-Amz-Signature=76298c5b54ea3cb76bc38d18038013317e80c717d14392a4d87fc132d6301f7f&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2011%20Oct%202026%2014%3A03%3A40%20GMT",
+  "out": "public/lep1/scenes/bg-u9l3-shop-wide.png",
   "sticker": false
+ },
+ {
+  "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0059-7017126863724776906.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261011%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261011T000723Z&X-Amz-Expires=51248&X-Amz-Signature=e0de0dbb632bc8198bd955024cee6f3a9bc4410e8cff3a8630df445c1c3c101e&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2011%20Oct%202026%2014%3A21%3A31%20GMT",
+  "out": "public/lep1/items/item-coat-blue.png",
+  "sticker": true
+ },
+ {
+  "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0060-7017126863724776906.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261011%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261011T072817Z&X-Amz-Expires=22258&X-Amz-Signature=c79bc755f0bea33ac5a359decc562f940542bf5276fc18a475eeea66902dc260&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2011%20Oct%202026%2013%3A39%3A15%20GMT",
+  "out": "public/lep1/items/item-skirt-pink.png",
+  "sticker": true
+ },
+ {
+  "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0061-7017126863724776906.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261011%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261011T013453Z&X-Amz-Expires=45595&X-Amz-Signature=cf14baa37274c76563d93a2c980340c8c76a5dc93366cf1bd885c0d0f6ebd358&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2011%20Oct%202026%2014%3A14%3A48%20GMT",
+  "out": "public/lep1/items/item-tshirt-yellow.png",
+  "sticker": true
+ },
+ {
+  "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0062-7017126863724776906.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261011%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261011T032431Z&X-Amz-Expires=36771&X-Amz-Signature=e00050483aa25a4143ad0e4c4453c27ce944901a631999cd069f7d01756bddfa&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sun%2C%2011%20Oct%202026%2013%3A37%3A22%20GMT",
+  "out": "public/lep1/items/item-shopping-bag.png",
+  "sticker": true
  }
 ]
