@@ -1,0 +1,15 @@
+
+=== docs/songs/u9l3-coat-skirt-tshirt-take1.mp3  length=20.1s  score=0.79  missing=3  extra=6
+heard: coat coat zip it up skirt skirt swish swish swish t shirt t shirt arms in coat skirt t shirt let's go shopping
+line starts (s): [np.float64(0.0), np.float64(4.0), np.float64(11.7), np.float64(13.3)]
+lineDurationsMs: [4040, 7620, 1660, 6742]
+
+=== docs/songs/u9l3-coat-skirt-tshirt-take2.mp3  length=20.1s  score=0.65  missing=6  extra=9
+heard: go go zip it up skirt skirt swish swish swish t shirt t shirt arms in cold skirt t shirt let's go shopping
+line starts (s): [np.float64(1.1), np.float64(4.8), np.float64(11.7), np.float64(14.3)]
+lineDurationsMs: [4780, 6920, 2580, 5782]
+
+=== docs/songs/u9l3-coat-skirt-tshirt-take3.mp3  length=20.1s  score=0.60  missing=7  extra=10
+heard: co co zip it up skirt skirt swish swish swish t shirt t shirt ons in co skirt t shirt let's go shopping
+line starts (s): [np.float64(2.2), np.float64(3.9), np.float64(12.7), np.float64(14.3)]
+lineDurationsMs: [3940, 8780, 1540, 5802]
