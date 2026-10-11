@@ -1,4 +1,4 @@
-import { type ReactNode, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import type { Scene } from '../scenes';
 import { cueSpeak, playLetterPhonic } from '../audio';
@@ -6,34 +6,72 @@ import * as sfx from '../sfx';
 import { Confetti } from '../fx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
 import { CLAY_BUTTON, THICK_WORDS, sayWithin } from './shared';
-import { Bursts, useBursts } from './gameFx';
+import { Bursts, FloatText, useBursts } from './gameFx';
 import { firstSound, phonicsListenLine, phonicsNo, phonicsYes } from './phonicsShared';
 
 /* ---------- Sound Moles (phonics whack-a-mole, owner 2026-10-11) ----------
- * Six molehills on the grass. Pip plays a letter SOUND (recorded clip). Moles pop up, each holding a picture
+ * Six painted molehills on a painted meadow (Canva art; back row smaller for depth). Pip plays a letter SOUND (recorded clip). Moles pop up, each holding a picture
  * sign; the child bonks every mole whose picture starts with that sound (the word is said, stars, the mole
  * spins down dizzy). A wrong mole giggles and its word is said ("Sun! Try again!") — nothing is lost. Calm pace:
  * moles stay up 2.6 s. Three bonks per sound. Sources (mechanic only): whack-a-mole phonics apps, Starfall /
  * Teach Your Monster first-sound games. Better: pictures, not letters, so the child must HEAR the first sound. */
 
 type Mole = Extract<Scene, { kind: 'sound-mole' }>;
-const HOLES = [{ x: 24, y: 56 }, { x: 50, y: 56 }, { x: 76, y: 56 }, { x: 24, y: 86 }, { x: 50, y: 86 }, { x: 76, y: 86 }];
+// painted Canva art (owner 2026-10-11: "improve the illustration and the animation, they look flat")
+const MEADOW = '/lep1/scenes/bg-game-meadow-wide.png';
+const ART = { peek: '/lep1/items/item-mole-peek.png', laugh: '/lep1/items/item-mole-laugh.png', dizzy: '/lep1/items/item-mole-dizzy.png', hole: '/lep1/items/item-mole-hole.png', holeGrass: '/lep1/items/item-mole-hole-grass.png', dirt: '/lep1/items/item-mole-dirt.png' };
+// back row smaller and higher = depth; front row bigger
+const HOLES = [{ x: 27, y: 62, s: 0.8 }, { x: 50, y: 62, s: 0.8 }, { x: 73, y: 62, s: 0.8 }, { x: 19, y: 87, s: 1 }, { x: 50, y: 87, s: 1 }, { x: 81, y: 87, s: 1 }];
 const NEED = 3;
+const CRUMBS = [-70, -35, 0, 35, 70];
 
-function MoleBody({ up, bonked, children }: { up: boolean; bonked: boolean; children: ReactNode }) {
+/** One hole: painted molehill, the mole rising out of it (clipped at the opening), soil flying when it pops. */
+function MoleHole({ i, pic, img, word, bonked, nope, reduce, onTap }: { i: number; pic: number | null; img?: string; word?: string; bonked: boolean; nope: boolean; reduce: boolean | null; onTap: () => void }) {
+  const h = HOLES[i];
+  const up = pic !== null;
+  const [ring, setRing] = useState(0);
+  const face = bonked ? ART.dizzy : nope ? ART.laugh : ART.peek;
   return (
-    <motion.div className="absolute inset-x-0 bottom-[18%] mx-auto flex w-[70%] flex-col items-center" initial={{ y: '60%', opacity: 0 }}
-      animate={{ y: up ? (bonked ? ['0%', '-8%', '60%'] : '0%') : '60%', opacity: up && !bonked ? 1 : bonked ? [1, 1, 0] : 0, rotate: bonked ? [0, 20, -20, 360] : 0, scaleY: bonked ? [1, 0.7, 1] : 1 }}
-      transition={{ duration: bonked ? 0.6 : 0.28, ease: up && !bonked ? 'backOut' : 'easeIn' }}>
-      {children}
-      <svg viewBox="0 0 100 90" className="w-full">
-        <ellipse cx="50" cy="55" rx="40" ry="38" fill="#8B5E3C" stroke="#3b2414" strokeWidth="4" />
-        <ellipse cx="50" cy="66" rx="18" ry="12" fill="#F5C9A5" />
-        <circle cx="36" cy="44" r="6" fill="#111" /><circle cx="64" cy="44" r="6" fill="#111" />
-        <circle cx="38" cy="42" r="2" fill="#fff" /><circle cx="66" cy="42" r="2" fill="#fff" />
-        <ellipse cx="50" cy="58" rx="8" ry="6" fill="#ff8fa3" stroke="#3b2414" strokeWidth="2" />
-      </svg>
-    </motion.div>
+    <button onClick={() => { setRing((r) => r + 1); onTap(); }} aria-label={word ?? 'hole'} className="absolute" style={{ left: `${h.x}%`, top: `${h.y}%`, width: `calc(min(27vh, 19vw) * ${h.s})`, aspectRatio: '1', translate: '-50% -50%', zIndex: h.y > 70 ? 22 : 18 }}>
+      {/* soft ground shadow + the painted hole */}
+      <span className="pointer-events-none absolute inset-x-[8%] top-[62%] h-[18%] rounded-[50%] bg-black/25 blur-md" />
+      <img src={i % 2 ? ART.holeGrass : ART.hole} alt="" draggable={false} className="pointer-events-none absolute inset-0 h-full w-full object-contain" />
+      {/* the mole lives in a window that ends at the hole's opening, so it really comes OUT of the ground */}
+      <div className="pointer-events-none absolute -inset-x-[12%] overflow-hidden" style={{ top: '-130%', bottom: '44%' }}>
+        <AnimatePresence>
+          {up && (
+            <motion.div key={pic} className="absolute inset-x-0 bottom-0 flex flex-col items-center" style={{ transformOrigin: '50% 100%' }}
+              initial={{ y: '105%' }}
+              animate={bonked ? { y: ['0%', '0%', '105%'], scaleY: [0.7, 0.8, 1], scaleX: [1.2, 1.1, 1] } : reduce ? { y: '0%' } : { y: '0%', scaleY: [0.75, 1.14, 0.94, 1], scaleX: [1.15, 0.9, 1.04, 1] }}
+              exit={{ y: '105%', transition: { duration: 0.22, ease: 'easeIn' } }}
+              transition={bonked ? { duration: 0.75, times: [0, 0.45, 1], ease: 'easeIn' } : { duration: 0.42, ease: 'easeOut' }}>
+              {/* the picture sign on its little stick */}
+              <motion.div className="relative -mb-[14%] flex flex-col items-center" animate={nope ? { rotate: [0, -14, 12, -8, 0] } : reduce ? {} : { rotate: [-3, 3, -3] }} transition={nope ? { duration: 0.5 } : { duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}>
+                <div className="rounded-2xl border-[5px] border-amber-700 bg-white p-1 shadow-[0_6px_0_#92400e,0_10px_16px_rgba(0,0,0,0.35)]">
+                  {img && <img src={img} alt="" draggable={false} className="object-contain" style={{ width: `calc(min(11vh, 7.6vw) * ${h.s})`, height: `calc(min(11vh, 7.6vw) * ${h.s})` }} />}
+                </div>
+                <span className="h-[3vh] w-2 rounded-b bg-amber-800" />
+              </motion.div>
+              <motion.img src={face} alt="" draggable={false} className="w-full object-contain" style={{ transformOrigin: '50% 100%', clipPath: 'inset(0 0 21% 0)', marginBottom: '-21%' }}
+                animate={reduce || bonked ? {} : { rotate: [-2, 2, -2], scaleY: [1, 1.03, 1] }} transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+      {/* the front rim of the hole, drawn again on top so the mole's bottom disappears INTO the ground */}
+      <img src={i % 2 ? ART.holeGrass : ART.hole} alt="" draggable={false} className="pointer-events-none absolute inset-0 h-full w-full object-contain" style={{ clipPath: 'inset(52% 0 0 0)' }} />
+      {/* soil flies out when a mole pops up */}
+      {up && !reduce && CRUMBS.map((dx, k) => (
+        <motion.img key={`${pic}-${k}`} src={ART.dirt} alt="" draggable={false} className="pointer-events-none absolute left-1/2 top-[40%] w-[18%]"
+          initial={{ x: '-50%', y: 0, opacity: 1, scale: 0.6 }} animate={{ x: [`-50%`, `${dx * 1.2 - 50}%`], y: [0, -40 - (k % 2) * 25, 30], opacity: [1, 1, 0], scale: [0.6, 0.8, 0.5], rotate: [0, dx] }}
+          transition={{ duration: 0.6, ease: 'easeOut' }} />
+      ))}
+      {/* tap ripple: every tap feels like a bonk */}
+      {ring > 0 && !reduce && (
+        <motion.span key={ring} className="pointer-events-none absolute left-1/2 top-[40%] h-[40%] w-[70%] rounded-[50%] border-4 border-white/90"
+          initial={{ x: '-50%', y: '-50%', scale: 0.3, opacity: 1 }} animate={{ scale: 1.4, opacity: 0 }} transition={{ duration: 0.45 }} />
+      )}
+    </button>
   );
 }
 
@@ -95,9 +133,9 @@ export function SoundMoleScene({ scene, onWin, onNext, sync }: { scene: Mole; on
     busy.current = true;
     setBonk(hole); sfx.pop();
     await new Promise((res) => window.setTimeout(res, reduce ? 0 : 90)); // hit-stop
-    sfx.match(); fire(HOLES[hole].x, HOLES[hole].y - 12, 'stars');
+    sfx.match(); fire(HOLES[hole].x, HOLES[hole].y - 22, 'stars');
     void sayWithin(phonicsYes(p.word), scene.who, 1500);
-    await new Promise((res) => window.setTimeout(res, 600));
+    await new Promise((res) => window.setTimeout(res, 800));
     setHoles((h) => { const n = [...h]; n[hole] = null; return n; }); setBonk(null);
     const nh = hits + 1;
     if (nh >= NEED) {
@@ -111,43 +149,28 @@ export function SoundMoleScene({ scene, onWin, onNext, sync }: { scene: Mole; on
   };
 
   return (
-    <div className="absolute inset-0 select-none overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
+    <div className="absolute inset-0 select-none overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${MEADOW})` }}>
       {done && <Confetti count={60} />}
       <div className="pointer-events-none absolute inset-x-0 top-14 z-30 flex justify-center px-14">
         <span className="text-center font-black text-white" style={{ ...THICK_WORDS, fontSize: 'clamp(1.15rem, min(calc(3*var(--svw,1vw)), 5vh), 2.4rem)' }}>
           {done ? 'Great bonking!' : 'Bonk the moles that start with the sound!'}
         </span>
       </div>
-      {/* the grassy field the moles live in (code-drawn so the holes read clearly on any lesson picture) */}
-      <div className="absolute inset-x-[6%] bottom-[5%] top-[34%] z-10 rounded-[40px] border-[6px] border-lime-200/80 shadow-xl" style={{ background: 'linear-gradient(180deg,#a3e635,#4d7c0f)' }} />
       {r && (
         <motion.button onClick={playSound} aria-label="Play the sound again" className="absolute left-1/2 top-[23%] z-30 flex -translate-x-1/2 items-center gap-2 rounded-full bg-white/95 px-6 py-2 text-4xl font-black text-orange-600 shadow-xl"
           animate={reduce ? {} : { scale: [1, 1.06, 1] }} transition={{ duration: 1.6, repeat: Infinity }}>
           🔊 <span>{r.letter.toLowerCase()}</span>
         </motion.button>
       )}
-      {HOLES.map((h, i) => {
+      {HOLES.map((_, i) => {
         const pic = holes[i];
-        const p = r && pic !== null ? r.pictures[pic] : null;
-        return (
-          <button key={i} onClick={() => { void whack(i); }} aria-label={p ? p.word : 'hole'} className="absolute z-20" style={{ left: `${h.x}%`, top: `${h.y}%`, width: 'min(24vh, 17vw)', height: 'min(26vh, 18vw)', translate: '-50% -80%' }}>
-            <div className="absolute inset-0">
-              <MoleBody up={!!p} bonked={bonk === i}>
-                {p && (
-                  <motion.div className="-mb-2 rounded-2xl border-4 border-amber-700 bg-white p-1 shadow-md" animate={nope === i ? { rotate: [0, -12, 12, -8, 0] } : {}} transition={{ duration: 0.5 }}>
-                    <img src={p.img} alt="" draggable={false} style={{ width: 'min(11vh, 7.5vw)', height: 'min(11vh, 7.5vw)' }} className="object-contain" />
-                  </motion.div>
-                )}
-              </MoleBody>
-            </div>
-            {/* the molehill in front */}
-            <span className="pointer-events-none absolute bottom-0 left-1/2 h-[26%] w-full -translate-x-1/2 rounded-t-[50%] bg-[#6b4423] shadow-[inset_0_6px_0_rgba(255,255,255,0.15)]" />
-          </button>
-        );
+        const p = r && pic !== null ? r.pictures[pic] : undefined;
+        return <MoleHole key={i} i={i} pic={p ? pic : null} img={p?.img} word={p?.word} bonked={bonk === i} nope={nope === i} reduce={reduce} onTap={() => { void whack(i); }} />;
       })}
+      <FloatText show={bonk !== null} x={bonk !== null ? HOLES[bonk].x : 50} y={bonk !== null ? HOLES[bonk].y - 30 : 50}><span className="text-3xl">BONK! ⭐</span></FloatText>
       {r && (
-        <div className="pointer-events-none absolute bottom-3 left-1/2 z-30 flex -translate-x-1/2 gap-1 rounded-full bg-white/85 px-3 py-1 shadow-lg">
-          {Array.from({ length: NEED }, (_, i) => <span key={i} className={`text-2xl ${i < hits ? '' : 'opacity-25 grayscale'}`}>⭐</span>)}
+        <div className="pointer-events-none absolute left-4 top-[22%] z-30 flex gap-1 rounded-full bg-white/85 px-3 py-1 shadow-lg">
+          {Array.from({ length: NEED }, (_, i) => <span key={i} className={`text-2xl ${i < hits ? '' : 'opacity-40 grayscale'}`}>⭐</span>)}
         </div>
       )}
       <Bursts items={bursts} />

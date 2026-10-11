@@ -174,6 +174,23 @@ Run `checkSlotGames(slot, scenes)` before calling a lesson done.
 
 **Every game must pass the `game-animation` skill's juice audit** (living world, springs, squash & stretch, bursts, gentle wrong, celebration) — a correct but flat game fails.
 
+### Phonics sound games (Oct 2026, owner: "add phonic games like Unit 1 in all lessons")
+
+Every Pre-A1 lesson has a sound game (Unit 1's balloon pops, then these). They rotate so neighbouring lessons differ
+(`scripts/plan-phonics-games.py` plans them; never c and k in one game). All three play the recorded letter SOUND
+(`playLetterPhonic`) and show PICTURES, so the child must hear the first sound — no reading. Painted Canva art
+(owner 2026-10-11: "improve the illustration and the animation, they look flat"): never code-drawn characters.
+
+| Kind | Mechanic | Art | Source (mechanic only) |
+|---|---|---|---|
+| `sound-mole` | moles pop out of 6 holes holding picture signs; bonk the ones that start with the sound (3 per sound) | meadow `bg-game-meadow`, `item-mole-*` (peek / laugh when wrong / dizzy when bonked), hole front rim drawn on top so moles rise OUT of the ground | whack-a-mole phonics, Starfall first sounds |
+| `letter-monsters` | 2-3 monsters with a letter on the tummy; feed each picture to the monster its word starts with | monster land `bg-game-monsterland`, `item-monster-<colour>[-open]` (swap to open mouth, chomp squash, crumbs, happy hop) | ESL "Hungry Monsters", Phonics Farm |
+| `sound-fish` | painted fish swim (flip at turns, bob, bubbles) carrying pictures; catch the one with the sound | pond `bg-game-pond`, `item-fish-<colour>`, `item-fish-bucket` (line drops, fish lifted out, arcs into the bucket) | Boom "Fishing Phonics", magnet fishing |
+
+Game feel used: anticipation (mouth opens / line drops first), squash and stretch, hit-stop on the hit, particles
+(soil, crumbs, splash, stars), idle life (breathing, swaying signs, bobbing fish), gentle wrong answers (the mole laughs,
+the monster shakes its head, the fish darts away; the word is said), reduced motion respected.
+
 **Pre-A1 children cannot read.** Never make reading the only way into a task: speak every prompt, give picture answers, keep printed text as a small caption for the adult.
 
 ## Playground hub — A1/A2 Welcome Town (`.../welcome-town/scenes.ts`, `.../welcome-town-a2/scenes.ts`)
