@@ -1,12 +1,46 @@
 [
  {
-  "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0002-2206156705287961451.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261012%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261012T090321Z&X-Amz-Expires=49525&X-Amz-Signature=9774daad87460a87bb9d212aa35f1ede3d60ad1435f15eafcde405ca6d13f12d&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2012%20Oct%202026%2022%3A48%3A46%20GMT",
-  "out": "public/lep1/maze/hedge-raw.png",
-  "raw": true
+  "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0004-2131847308987842611.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261012%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261012T003042Z&X-Amz-Expires=80744&X-Amz-Signature=31a712bb78e6142de3b2279dbc34b43fee0b3cc83778ee96bb72569da7f0c36b&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2012%20Oct%202026%2022%3A56%3A26%20GMT",
+  "out": "public/welcome-town/scenes/bg-leo-story-1-wide.png"
  },
  {
-  "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0003-2206156705287961451.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261012%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261012T140138Z&X-Amz-Expires=30039&X-Amz-Signature=b238d445f978fb311eac22ece7802500fdec2f461c7c4fb0f4fd140f13e2e695&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2012%20Oct%202026%2022%3A22%3A17%20GMT",
-  "out": "public/lep1/maze/path-raw.png",
-  "raw": true
+  "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0005-2131847308987842611.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261012%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261012T210919Z&X-Amz-Expires=7047&X-Amz-Signature=9baf7f0a8bbc7256b7431b5f6f3305555ea6774de3dfaf8a279a8a5073f26541&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2012%20Oct%202026%2023%3A06%3A46%20GMT",
+  "out": "public/welcome-town/scenes/bg-leo-story-2-wide.png"
+ },
+ {
+  "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0006-2131847308987842611.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261012%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261012T050033Z&X-Amz-Expires=66344&X-Amz-Signature=ad2ec405627cc46cff5bc2e1ac24e196f39a48ec58aec8e2d840d1528ce07a4c&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2012%20Oct%202026%2023%3A26%3A17%20GMT",
+  "out": "public/welcome-town/scenes/bg-leo-story-3-wide.png"
+ },
+ {
+  "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0007-2131847308987842611.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261012%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261012T013923Z&X-Amz-Expires=76819&X-Amz-Signature=cea0f0e6c0f0c21575ce7bea4434eace9257f696ae7e7029d5bae7e7497487bf&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2012%20Oct%202026%2022%3A59%3A42%20GMT",
+  "out": "public/welcome-town/scenes/bg-leo-story-4-wide.png"
+ },
+ {
+  "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0008-2131847308987842611.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261011%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261011T234015Z&X-Amz-Expires=84139&X-Amz-Signature=392791820f73bf34ba039307911d61d1b5d322a94d5239e2f70e6973bb343c1d&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2012%20Oct%202026%2023%3A02%3A34%20GMT",
+  "out": "public/welcome-town/scenes/bg-leo-story-5-wide.png"
+ },
+ {
+  "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0009-2131847308987842611.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261012%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261012T143224Z&X-Amz-Expires=30656&X-Amz-Signature=b3cd5e71bf24afab6b4facc065305b66711664927e24dd0eacc6379662c13605&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2012%20Oct%202026%2023%3A03%3A20%20GMT",
+  "out": "public/welcome-town/scenes/bg-leo-story-6-wide.png"
+ },
+ {
+  "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0010-2131847308987842611.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261012%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261012T052109Z&X-Amz-Expires=63561&X-Amz-Signature=0f8f439ed21eb7d947575474c52beff9d758ca03bbbc297afd3865aa986b0e06&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2012%20Oct%202026%2023%3A00%3A30%20GMT",
+  "out": "public/welcome-town/scenes/bg-leo-story-7-wide.png"
+ },
+ {
+  "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0011-2131847308987842611.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261012%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261012T125241Z&X-Amz-Expires=38971&X-Amz-Signature=9aa929bfc87be93a89a8956806d8c1773307fe06a42b2f46c11336afcf1f9d77&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2012%20Oct%202026%2023%3A42%3A12%20GMT",
+  "out": "public/welcome-town/scenes/bg-leo-story-8-wide.png"
+ },
+ {
+  "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0012-2131847308987842611.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261012%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261012T063914Z&X-Amz-Expires=61509&X-Amz-Signature=51c523c2c82f624f33437f6796bb60857da60e4d9e5eabd89e986c5647e947f6&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2012%20Oct%202026%2023%3A44%3A23%20GMT",
+  "out": "public/welcome-town/scenes/bg-leo-story-9-wide.png"
+ },
+ {
+  "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0013-2131847308987842611.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261012%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261012T120058Z&X-Amz-Expires=40942&X-Amz-Signature=0c503bcce9ae736d67733f827173c20b79439fa29aa04f4a9b0395a73e4cf020&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2012%20Oct%202026%2023%3A23%3A20%20GMT",
+  "out": "public/welcome-town/scenes/bg-leo-story-10-wide.png"
+ },
+ {
+  "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0014-2131847308987842611.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261012%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261012T110500Z&X-Amz-Expires=42850&X-Amz-Signature=a150feeaa94b50eaa7512f42eb3ef313b78a1192114b638e8d1ef218494a0240&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2012%20Oct%202026%2022%3A59%3A10%20GMT",
+  "out": "public/welcome-town/scenes/bg-leo-story-11-wide.png"
  }
 ]
