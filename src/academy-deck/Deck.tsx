@@ -114,7 +114,7 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
     onSlide?.(n);
   }, [controlled, onSlide, script.slides.length]);
   const [solved, setSolved] = useState<Record<string, boolean>>({});
-  const [vars, setVarsState] = useState<Vars>({ num: '4-2-7', numw: 'four, two, seven' });
+  const [vars, setVarsState] = useState<Vars>({ num: '427', numw: 'four hundred twenty-seven' });
   const [stamps, setStamps] = useState<string[]>([]);
   const [stats, setStats] = useState<Stats>({ right: 0, wrong: 0, hints: 0, skipped: [] });
   const [tiers, setTiers] = useState<Record<string, number>>({});
@@ -299,7 +299,7 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
   const panelAt = only === 'left' ? 'right' : only === 'right' ? 'left' : 'center';
   return (
     <DeckContext.Provider value={ctx}>
-      <div className="ad-root" data-embedded={embedded || undefined} data-follow={follow || undefined} style={artBase ? ({ ['--o-gem-empty' as string]: `url(${artBase}/objects/gem-empty.webp)`, ['--o-gem-full' as string]: `url(${artBase}/objects/gem-full.webp)`, ['--o-ribbon' as string]: `url(${artBase}/objects/ribbon.webp)`, ['--o-frame' as string]: `url(${artBase}/objects/frame.webp)`, ['--o-star' as string]: `url(${artBase}/objects/star.webp)`, ['--o-stamp' as string]: `url(${artBase}/objects/stamp.webp)`, ['--o-ticket' as string]: `url(${artBase}/objects/ticket.webp)`, ['--o-pill-violet' as string]: `url(${artBase}/objects/pill-violet.webp)`, ['--o-pill-blue' as string]: `url(${artBase}/objects/pill-blue.webp)`, ['--o-pill-orange' as string]: `url(${artBase}/objects/pill-orange.webp)` } as React.CSSProperties) : undefined} data-reduced={calm} data-kind={cur.kind} data-hw={!!homework} data-mood={mood ?? undefined} data-testid="deck">
+      <div className="ad-root" data-calm={calm || undefined} data-embedded={embedded || undefined} data-follow={follow || undefined} style={artBase ? ({ ['--o-gem-empty' as string]: `url(${artBase}/objects/gem-empty.webp)`, ['--o-gem-full' as string]: `url(${artBase}/objects/gem-full.webp)`, ['--o-ribbon' as string]: `url(${artBase}/objects/ribbon.webp)`, ['--o-frame' as string]: `url(${artBase}/objects/frame.webp)`, ['--o-star' as string]: `url(${artBase}/objects/star.webp)`, ['--o-stamp' as string]: `url(${artBase}/objects/stamp.webp)`, ['--o-ticket' as string]: `url(${artBase}/objects/ticket.webp)`, ['--o-pill-violet' as string]: `url(${artBase}/objects/pill-violet.webp)`, ['--o-pill-blue' as string]: `url(${artBase}/objects/pill-blue.webp)`, ['--o-pill-orange' as string]: `url(${artBase}/objects/pill-orange.webp)` } as React.CSSProperties) : undefined} data-reduced={calm} data-kind={cur.kind} data-hw={!!homework} data-mood={mood ?? undefined} data-testid="deck">
         <Plate id={cur.bg} artBase={artBase} key={cur.bg} />
         <div className="ad-actors" aria-hidden={actorsVisible.length === 0}>
           {actorsVisible.map((a) => <Character key={`${a.who}-${mood ?? 'base'}`} actor={mood ? { ...a, expr: mood } : a} artBase={artBase} small={compact} speaking={!calm && !mood && (speakingWho === a.who || (chat && !(voiceOn && slideHasClip) && ['title', 'brief', 'whosaid', 'teach', 'model', 'convo', 'say', 'wrap'].includes(cur.kind)))} />)}

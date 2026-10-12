@@ -11,6 +11,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { ACADEMY_VOICES } from '../src/academy-deck/voices.ts';
+import { speechText } from '../src/academy-deck/spoken.ts';
 import { approvedVoiceId, normalizeForSpeech, safeVoiceSettings, languageLock, DEFAULT_TTS_MODEL, unresolvedSpeechRisks, voiceStatus } from '../src/lib/speechPolicy.ts';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -54,14 +55,14 @@ function audit() {
   for (const l of lines) {
     per[l.who] = per[l.who] || { n: 0, chars: 0 };
     per[l.who].n++;
-    per[l.who].chars += normalizeForSpeech(l.text).length;
+    per[l.who].chars += normalizeForSpeech(speechText(l.text)).length;
   }
   console.log(`\nLines: ${lines.length}  (baked ${lines.length - todo.length}, still to bake ${todo.length})`);
   for (const [w, v] of Object.entries(per)) console.log(`  ${w.padEnd(5)} ${String(v.n).padStart(3)} lines  ${String(v.chars).padStart(5)} characters`);
   const total = Object.values(per).reduce((a, v) => a + v.chars, 0);
-  const left = todo.reduce((a, l) => a + normalizeForSpeech(l.text).length, 0);
+  const left = todo.reduce((a, l) => a + normalizeForSpeech(speechText(l.text)).length, 0);
   console.log(`\nCharacters: ${total} total, ${left} still to bake (ElevenLabs bills 1 credit per character; about $${((left / 1000) * 0.3).toFixed(2)} at $0.30 per 1,000 characters).`);
-  const risky = lines.map((l) => ({ l, r: unresolvedSpeechRisks(l.text) })).filter((x) => x.r.length);
+  const risky = lines.map((l) => ({ l, r: unresolvedSpeechRisks(speechText(l.text)) })).filter((x) => x.r.length);
   console.log(`\nPronunciation risks that cleanup cannot fix: ${risky.length}`);
   for (const x of risky) console.log(`  [${x.l.who}] "${x.l.text}" -> ${x.r.map((y) => `${y.code}:${y.match}`).join(', ')}`);
   problems += risky.length;
@@ -84,7 +85,7 @@ async function generateClip(l) {
       const res = await fetch(`${SUPABASE_URL}/functions/v1/elevenlabs-tts`, {
         method: 'POST',
         headers: { apikey: ANON_KEY, Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: normalizeForSpeech(l.text), voiceId }),
+        body: JSON.stringify({ text: normalizeForSpeech(speechText(l.text)), voiceId }),
       });
       if (!res.ok) throw new Error(`tts ${res.status}`);
       const buf = Buffer.from(await res.arrayBuffer());

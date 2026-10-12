@@ -3,6 +3,7 @@ import { shuffled, useDeck } from '../ctx';
 import { useDragChip } from '../drag';
 import { Icon } from '../Icon';
 import type { MatchSlide } from '../types';
+import { sayable } from '../spoken';
 import { Feedback, NOT_YET, Panel } from './shared';
 import { Art } from './teach';
 
@@ -22,7 +23,7 @@ export function MatchView({ slide }: { slide: MatchSlide }) {
       setHeld(null);
       if (!slip) right();
       setSlip(false);
-      void speak(lead, word);
+      void speak(lead, sayable(word));
     } else {
       setSlip(true);
       setBad(target);
@@ -31,7 +32,7 @@ export function MatchView({ slide }: { slide: MatchSlide }) {
     }
   };
   const drag = useDragChip((id, t) => drop(id, t), (id) => {
-    void speak(lead, id);
+    void speak(lead, sayable(id));
     setHeld(held === id ? null : id);
   });
   const all = placed.length === slide.pairs.length;
@@ -43,13 +44,13 @@ export function MatchView({ slide }: { slide: MatchSlide }) {
   const order = useMemo(() => shuffled(slide.pairs.map((p) => p.word), seed + 7), [slide.pairs, seed]);
   const target = order.find((w) => !placed.includes(w));
   useEffect(() => {
-    if (listen && target) void speak(lead, target);
+    if (listen && target) void speak(lead, sayable(target));
   }, [listen, target, speak, lead]);
   if (listen) {
     return (
       <Panel title={slide.prompt} wide>
         <div className="ad-row" style={{ justifyContent: 'center' }}>
-          <button type="button" className="ad-btn ad-btn-primary" onClick={() => target && void speak(lead, target)} disabled={!target}><Icon name="speaker" /> {target ? 'Hear it again' : 'All matched!'}</button>
+          <button type="button" className="ad-btn ad-btn-primary" onClick={() => target && void speak(lead, sayable(target))} disabled={!target}><Icon name="speaker" /> {target ? 'Hear it again' : 'All matched!'}</button>
         </div>
         <div className="ad-match">
           {slide.pairs.map((p, i) => (
