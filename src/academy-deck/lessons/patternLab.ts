@@ -103,12 +103,6 @@ export const PATTERN_LAB: DeckScript = {
       closing: 'Now YOU check the facts!',
     },
     {
-      id: 'whosaid-check', kind: 'whosaid', part: 2, bg: 'detective-wall', actors: [{ who: 'Ava', pos: 'left', expr: 'happy' }, { who: 'Theo', pos: 'right', expr: 'happy' }], trains: [2, 3],
-      prompt: 'Who said it? Drag each bubble to Ava or Theo.',
-      items: [{ text: 'I am not 15.', who: 'Ava' }, { text: 'You are 14.', who: 'Theo' }, { text: 'He is from Spain.', who: 'Ava' }, { text: 'She is Spanish.', who: 'Theo' }],
-      hints: ['Ava talks about herself (I). Theo talks about Ava (you, she).'],
-    },
-    {
       id: 'teach-not', kind: 'teach', part: 2, bg: 'detective-wall', actors: [{ who: 'Vee', pos: 'left', expr: 'happy' }], trains: [3, 4, 5], title: 'Two more tools: not, and questions',
       pages: [
         { word: 'I am not', art: { type: 'letters', text: 'NOT' }, meaning: 'not = this is false, this is not true.', example: 'I am not Spanish.', clue: 'Put not after am.' },
@@ -118,6 +112,12 @@ export const PATTERN_LAB: DeckScript = {
         { word: 'Yes, I am.', art: { type: 'letters', text: 'YES NO' }, meaning: 'a short answer: say yes or no, then am, is or are.', example: 'Are you Italian? Yes, I am.', clue: 'No, he is not. · Yes, she is.' },
       ],
       hints: ['A question starts with am, is or are. The short answer ends with am, is or are.'],
+    },
+    {
+      id: 'whosaid-check', kind: 'whosaid', part: 2, bg: 'detective-wall', actors: [{ who: 'Ava', pos: 'left', expr: 'happy' }, { who: 'Theo', pos: 'right', expr: 'happy' }], trains: [2, 3],
+      prompt: 'Who said it? Drag each bubble to Ava or Theo.',
+      items: [{ text: 'I am not 15.', who: 'Ava' }, { text: 'You are 14.', who: 'Theo' }, { text: 'He is from Spain.', who: 'Ava' }, { text: 'She is Spanish.', who: 'Theo' }],
+      hints: ['Ava talks about herself (I). Theo talks about Ava (you, she).'],
     },
 
     // ---------- 3 · Notice & Build ----------

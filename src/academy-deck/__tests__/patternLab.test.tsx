@@ -46,6 +46,16 @@ describe('Pattern Lab: blueprint and objective', () => {
   });
 });
 
+describe('Pattern Lab: sequencing (nothing is asked before it is taught)', () => {
+  it('negatives, questions and short answers are taught (teach-not) before any game asks for them', () => {
+    const taught = idx('teach-not');
+    const firstGameWithNot = slides.findIndex((s) => s.id !== 'checkin-chat' && ['whosaid', 'bepick', 'build', 'findwrong', 'convo', 'factcheck', 'memory', 'phonechat'].includes(s.kind) && /\bnot\b|\bAre you\b|\bIs (she|he)\b|\bYes, /.test(JSON.stringify(s)) && s.part >= 2);
+    expect(taught).toBeLessThan(firstGameWithNot);
+    expect(idx('teach-be')).toBeLessThan(idx('bepick'));
+    expect(idx('model-fake')).toBeLessThan(idx('whosaid-check'));
+  });
+});
+
 describe('Pattern Lab: variety, alignment, time', () => {
   it('VARIETY: no two neighbouring slides share a game; at least 12 different games', () => {
     for (let i = 1; i < slides.length; i++) expect(slides[i].kind, `slides ${i - 1} and ${i}`).not.toBe(slides[i - 1].kind);
