@@ -77,7 +77,7 @@ Deno.serve(async (req) => {
 
   const { data: tmpl } = await client
     .from("certificate_templates")
-    .select("primary_color, accent_color, text_color, logo_url, background_url, heading, subheading")
+    .select("primary_color, accent_color, text_color, logo_url, background_url, heading, subheading, design_config")
     .eq("hub", cert.hub)
     .eq("cefr_level", cert.cefr_level || "")
     .eq("template_type", "engine_mastery")
@@ -104,7 +104,40 @@ Deno.serve(async (req) => {
     : `<text x="600" y="105" text-anchor="middle" font-family="Inter,Arial,sans-serif" font-size="22" font-weight="900" fill="${primary}" letter-spacing="4">ENGLEUPHORIA</text>`;
   const bgNode = bgUrl ? `<image href="${esc(bgUrl)}" x="0" y="0" width="1200" height="630" preserveAspectRatio="xMidYMid slice" opacity="0.18"/>` : "";
 
-  const svg = `<?xml version="1.0" encoding="UTF-8"?>
+  // Illustrated certificate (design_config.artMode = 'full', e.g. the Canva Playground art): the picture at full
+  // strength, embedded as a data URI (resvg does not fetch remote images), text inside its white panel —
+  // the same layout as src/lib/certificateRenderer.ts renderFullArt().
+  const artMode = (tmpl?.design_config as { artMode?: string } | null)?.artMode;
+  let fullArtSvg: string | null = null;
+  if (artMode === "full" && bgUrl) {
+    try {
+      const res = await fetch(bgUrl);
+      if (res.ok) {
+        const bytes = new Uint8Array(await res.arrayBuffer());
+        let bin = "";
+        for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+        const type = res.headers.get("content-type") || "image/png";
+        const font = "Nunito,'Arial Rounded MT Bold','Trebuchet MS',Arial,sans-serif";
+        const pill = cert.cefr_level
+          ? `<g><rect x="495" y="452" width="210" height="40" rx="20" fill="${primary}"/><text x="600" y="479" text-anchor="middle" font-family="${font}" font-size="19" font-weight="900" fill="#ffffff">${esc(hubLabel)} · ${esc(String(cert.cefr_level))}</text></g>`
+          : "";
+        fullArtSvg = `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#FFF4D6"/>
+  <image href="data:${type};base64,${btoa(bin)}" x="0" y="0" width="1200" height="630" preserveAspectRatio="xMidYMid slice"/>
+  <text x="600" y="277" text-anchor="middle" font-family="${font}" font-size="17" font-weight="900" letter-spacing="5" fill="${primary}">${esc(heading)}</text>
+  <text x="600" y="404" text-anchor="middle" font-family="${font}" font-size="34" font-weight="900" fill="${text}">${esc(label)}</text>
+  <text x="600" y="436" text-anchor="middle" font-family="${font}" font-size="19" font-weight="700" fill="${text}" opacity="0.8">${runs} quests · ${pct}% accuracy</text>
+  ${pill}
+  <text x="600" y="550" text-anchor="middle" font-family="${font}" font-size="13" font-weight="800" letter-spacing="3" fill="${primary}">${esc(subheading)}</text>
+</svg>`;
+      }
+    } catch (e) {
+      console.error("[og] full-art background fetch failed:", (e as Error).message);
+    }
+  }
+
+  const svg = fullArtSvg ?? `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
