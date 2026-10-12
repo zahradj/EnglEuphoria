@@ -53,7 +53,7 @@ S speaking · G game break · P phonics/reading · R review/boss · X extra time
 | Activity | Kind | Status | How it plays | A1 upgrade | Slot |
 |---|---|---|---|---|---|
 | Listen & Tap | `listen-tap` | A1 | Hear it, tap the right thing in the scene | "Name That Feeling" situations (Khan Kids) | L |
-| Who Said It? | `who-said-it` | ⇄ Pre-A1 | Hear a voice line, tap the speaker | longer lines | L |
+| ~~Who Said It?~~ | `who-said-it` | ⇄ Pre-A1 | **Not for A1** (owner 2026-10-12: "doesn't make sense, it's not relevant") — use Question → Answer, Yes / No or Listen & Colour | — | — |
 | Tick or Cross | `tick-cross` / `true-false` | ⇄ / A1 | Is it true for the picture? | sentence statements (Cambridge format) | L |
 | Listen & Colour | `listen-colour` | ⇄ Pre-A1 | Colour what you hear (Cambridge Starters L5) | "Colour the bird on the tree blue" | L |
 | Simon Says | `simon-touch` | ⇄ Pre-A1 | Do it only when Simon says | full instructions, left/right | L, X |

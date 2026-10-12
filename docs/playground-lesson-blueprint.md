@@ -360,7 +360,7 @@ Test**, which decides whether the child is ready for A2 (teacher confirms, admin
 | Lesson | Type | What changes |
 |---|---|---|
 | L1, L2 | new language | 3-6 new words + one new structure; the signature game must need the new language to win |
-| L3 | listening | built around the unit song: no new grammar, listening for detail (Cambridge format tasks: listen & colour, tick or cross, who said it) |
+| L3 | listening | built around the unit song: no new grammar, listening for detail (Cambridge format tasks: listen & colour, yes / no, question → answer). **Never "who said it?"** — naming the cartoon who spoke trains nothing (owner, 2026-10-12) |
 | L4 | speaking | **the child is the expert**: the child describes / asks / instructs, the world's local friend makes a mistake the child corrects; ends in a free mini-conversation |
 | L5 | story | story video (scenario first, `kids-video-scenario`), pause questions, retell with 3 pictures |
 | L6 | extra practice | two games, accuracy over speed, everything recycled |
@@ -370,6 +370,15 @@ Test**, which decides whether the child is ready for A2 (teacher confirms, admin
 (which friend, which path, which animal), **1 surprise** after the words are taught, a move or song break every 8-10
 minutes, and rewards only for using English (never for taps). No leaderboards, no lives that block, no timer on first
 meeting a word.
+
+**A1 reads sentences, not just CVC words — the story is the spine (owner, 2026-10-12).** Every A1 unit has one serial
+story (Unit 1: *Leo's First Day*, `docs/a1-unit-1-welcome-town.md`). Each lesson reads its episode in the **Reader**
+(read-along, words light up, then the child reads; tap a word for help); L5 reads the whole book. Sight words come 3-4 per
+lesson. **Blend & Read** (every lesson): the blending words come from the story and the blended word flies into a story
+sentence that the child reads. **Tongue twister** (every lesson, after Blend & Read) on the lesson's sound, following the
+A1 ladder (easy in Unit 1 → contrast twisters, fast and timed in Unit 10; ladder in the Unit 1 doc §6).
+**Every page must name the part of the objective it trains**; pages with no language goal ("any answer is right — my
+favourite…") are not used.
 
 **Games:** any Pre-A1 game can run in an A1 lesson as `{ kind: 'prea1', scene: … }`; A1-only games live in the Welcome Town
 renderer. No signature game twice in a unit (`a1LessonPlans.test.ts` checks the plans; `lessonVariety` checks the lessons).
