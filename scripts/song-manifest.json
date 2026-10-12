@@ -378,5 +378,10 @@
     "path": "public/lep1/audio/clap-play-sleep-song-u10l3.mp3",
     "bytes": 321037,
     "sha256": "49c45cf61da1119fa1b0a2bac26432d67e226ed04a5c39e115db7405dc4f9f11"
+  },
+  "u10l4-what-can-you-do": {
+    "path": "public/lep1/audio/what-can-you-do-song-u10l4.mp3",
+    "bytes": 321037,
+    "sha256": "93e319cb3bc44b3e25d03d5a894293e84e5437b03ddc5a4e9c224a541ff6798f"
   }
 }

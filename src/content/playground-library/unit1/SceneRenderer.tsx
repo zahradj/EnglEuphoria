@@ -106,6 +106,7 @@ import { DressStudioScene } from './scene-components/DressStudioScene';
 import { ActionRunScene } from './scene-components/ActionRunScene';
 import { TalentShowScene } from './scene-components/TalentShowScene';
 import { CampfireSaysScene } from './scene-components/CampfireSaysScene';
+import { CanItScene } from './scene-components/CanItScene';
 import { SoundMoleScene } from './scene-components/SoundMoleScene';
 import { LetterMonstersScene } from './scene-components/LetterMonstersScene';
 import { SoundFishScene } from './scene-components/SoundFishScene';
@@ -327,6 +328,7 @@ export function SceneRenderer(props: {
     case 'sound-mole': return <SoundMoleScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'letter-monsters': return <LetterMonstersScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'sound-fish': return <SoundFishScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
+    case 'can-it': return <CanItScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'campfire-says': return <CampfireSaysScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'talent-show': return <TalentShowScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'action-run': return <ActionRunScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;

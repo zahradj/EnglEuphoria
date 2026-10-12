@@ -62,6 +62,7 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
   '4-4': { settings: ['flower garden'], look: 'bright flower garden with big friendly mushrooms; Pip meets Bo, a round sky-blue three-eyed monster; code-drawn monsters on an empty lawn' },
   '4-5': { settings: ['animal park'], look: 'sunny animal park with a blue pond and tall trees; a tiger, a monkey, an elephant and a seal each show one move, Pip copies; a leafy bush to peek through' },
+  '10-4': { settings: ['circus big top'], look: "the friends' circus inside a red-and-yellow striped big top: a round ring with a red rim on a sandy floor, bunting, warm spotlights, balloons and a striped podium; Leo is the ringmaster in a little red top hat, Pip jumps high and Mia dances on the podium; in Can It? the animals come into the empty ring one by one and really do the action (or comically flop)" },
   '10-3': { settings: ['garden camp-out at dusk'], look: "a cosy garden camp-out from dusk to night: an orange tent with fairy lights, a little campfire in a ring of stones, a log bench, a purple-blue starry sky with a crescent moon and fireflies; Pip claps by the fire, Mia plays with a red ball and Leo sleeps on his sleeping bag at the tent; in Campfire Says the sky darkens and the stars come out as the friends fall asleep" },
   '10-2': { settings: ['sunny beach', 'beach talent-show stage'], look: "a summer beach party: golden sand, a calm turquoise sea, palm trees, beach umbrellas and a beach ball, a little wooden beach stage with bunting; Pip swims in the sea, Mia dances on the sand and Leo sings on the stage with a toy microphone; the Beach Talent Show is a wooden stage with warm lights, red velvet curtains and a glowing paper screen where the next act's moving shadow plays" },
   '10-1': { settings: ['park sports-day track'], look: "sports day in a sunny green park: a curvy red running track with white lane lines, low wooden logs and a hay bale as hurdles, triangle bunting and a finish ribbon; Pip runs, Mia jumps the log and Coach Leo cheers with a whistle; the empty track becomes the Obstacle Run with code-drawn lane stripes streaming past" },
@@ -216,6 +217,19 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'the child must understand the verb AND the body part to find the animal, then PRODUCES the move and the sentence — the screen waits for the child, never a clock',
       'the clue in Whose Is It? is one of the unit\'s body words, so naming the part and the animal go together, and the reveal recalls the story move',
       'wrong picks are named back with that animal\'s own move ("No, the seal claps her hands!"), and the right one glows after two tries',
+    ],
+  },
+  '10-4': {
+    sources: ['Cambridge (Pre A1 Starters: "Can a … ?" yes/no; "Can you …? Yes, I can")', 'Lingokids (silly true-or-false animal questions)', 'Khan Academy Kids (yes / no comprehension)', 'the classroom ability game "Can a fish fly?"', 'Duolingo ABC (instant feedback on taps)'],
+    mechanics: [
+      'yes/no ability questions → Can It?: "Can a fish walk?" thumbs up / down, and the animal really does it or tries and flops',
+      'riddles → can / can\'t clues ("It can swim. It can\'t walk.") to guess the animal',
+      '"Can you …?" talk about the child, then the child asks Leo; the sounds C and B in a sort and Sound Moles',
+    ],
+    betterThan: [
+      'the answer is SHOWN as cause and effect: a right "yes" makes the animal perform, a wrong "yes" makes it try and comically flop, so "can" and "can\'t" are seen, not just heard',
+      'after every "can\'t" the animal shows what it CAN do, so each round models both forms ("No, it can\'t walk. It can swim!")',
+      'no penalty: a wrong answer turns into the funniest moment, then the right button glows',
     ],
   },
   '10-3': {

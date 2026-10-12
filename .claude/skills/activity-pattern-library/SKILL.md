@@ -220,6 +220,13 @@ does it (clap sparkles, bouncing ball, "zzz"); the sky darkens as friends fall a
 Data: `fire` {x,y}, `friends` {who, name, x, idle, poses {clap, play, sleep}}, `rounds` {friend (-1 = everybody),
 action, line, reply}. Sources: Simon Says / TPR, Cambridge Pre A1 names + actions, Khan Kids follow-the-instructions.
 
+### Can It? (`can-it`, U10L4 signature, slot 4)
+
+"Can a fish walk?" — an animal (cut-out sticker) bounces into the circus ring; 👍 "Yes, it can!" / 👎 "No, it can't!".
+Right yes: the animal performs (swim wave, fly up, jump arcs, run). Right no: it shakes its head and shows what it CAN
+do (`real`). Wrong yes: it tries and comically flops with a "?", then shows the truth; the right button glows.
+Data: `animals` {word, img}, `rounds` {animal, action, can, real, ask, answer}. Teaches can / can't as cause and effect.
+
 **Pre-A1 children cannot read.** Never make reading the only way into a task: speak every prompt, give picture answers, keep printed text as a small caption for the adult.
 
 ## Playground hub — A1/A2 Welcome Town (`.../welcome-town/scenes.ts`, `.../welcome-town-a2/scenes.ts`)

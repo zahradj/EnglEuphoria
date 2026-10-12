@@ -536,6 +536,14 @@ export type Scene =
       doneLine: string;
     }
   | {
+      /** Can It? (U10L4 signature): an animal in the circus ring, "Can a fish walk?" — 👍 / 👎; the animal really does
+       *  it, or tries and flops, then shows what it CAN do (`real`). `answer` is the full spoken answer. */
+      id: string; kind: 'can-it'; bg: string; teacher: string; who: CharKey;
+      animals: { word: string; img: string }[];
+      rounds: { animal: number; action: 'swim' | 'run' | 'jump' | 'fly' | 'walk' | 'sing' | 'dance'; can: boolean; real: 'swim' | 'run' | 'jump' | 'fly' | 'walk' | 'sing' | 'dance'; ask: string; answer: string }[];
+      doneLine: string;
+    }
+  | {
       /** Campfire Says (U10L3 signature): the host calls a friend and an action ("Pip, clap your hands!"); the child
        *  taps that friend's action picture and the friend does it. `friend: -1` = everybody (the last round). */
       id: string; kind: 'campfire-says'; bg: string; teacher: string; who: CharKey; fire: { x: number; y: number };
@@ -16070,4 +16078,202 @@ export const LESSON_U10L3_SCENES: Scene[] = [
     ],
   },
   { id: 'u10l3-finale', kind: 'finale', bg: bgU10L3Camp, who: 'pip', line: 'Clap, play, sleep! Goodnight, camp! Goodbye, friend!' },
+];
+
+/* =============================================================================
+ * Pre-A1 Unit 10, Lesson 4 — "What Can You Do?" (Can you …? Yes, I can / No, I can't; sounds C and B)
+ *
+ * The friends' circus. All the action words of the unit come back with the question "Can you …?": the child answers
+ * about themself ("Yes, I can! / No, I can't!"), a new signature game (Can It?: "Can a fish walk?" — the animal really
+ * does it, or tries and flops), animal riddles with can / can't clues, the lesson song after the first game, and
+ * the sounds C (can, cat) and B (ball, bed).
+ * ========================================================================= */
+
+const bgU10L4Circus = `${A}/scenes/bg-u10l4-circus-wide.png`;
+const bgU10L4CircusEmpty = `${A}/scenes/bg-u10l4-circus-empty-wide.png`;
+
+export const LESSON_U10L4_TITLE = 'What Can You Do?';
+export const LESSON_U10L4_OBJECTIVE = 'Ask and answer "Can you …? Yes, I can! / No, I can\'t!" with the unit\'s actions, say what animals can and can\'t do ("A fish can swim. It can\'t walk."), and hear the sounds C (can, cat) and B (ball, bed), by moving, listening and playing, no reading.';
+
+const u10l4Animals = [
+  { label: 'fish', img: itemFish, say: 'A fish!' },
+  { label: 'bird', img: itemBird, say: 'A bird!' },
+  { label: 'frog', img: itemFrog, say: 'A frog!' },
+  { label: 'dog', img: itemDog, say: 'A dog!' },
+  { label: 'snake', img: itemSnake, say: 'A snake!' },
+  { label: 'kangaroo', img: itemKangaroo, say: 'A kangaroo!' },
+];
+
+export const LESSON_U10L4_SCENES: Scene[] = [
+  { id: 'u10l4-title', kind: 'title-card', bg: bgU10L4Circus, level: 'Pre-A1', unit: 'Unit 10', lessonLabel: 'Lesson 4', title: 'What Can You Do?', subtitle: 'The friends\' circus' },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 10 · Lesson 3 · Clap, Play, Sleep!
+    id: 'u10l4-recall-warmup', kind: 'recall-warmup', bg: bgU10L4CircusEmpty, who: 'leo', mode: 'shadow',
+    fromLabel: 'Lesson 3 · Clap, Play, Sleep!',
+    teacher: 'Warm-up from last lesson: Leo says an action, the child finds its shadow, says it and does it.',
+    items: [
+      { word: 'clap', say: 'Clap!', img: `${A}/items/item-mia-clap.png` },
+      { word: 'play', say: 'Play!', img: `${A}/items/item-mia-play.png` },
+      { word: 'sleep', say: 'Sleep!', img: `${A}/items/item-mia-sleep.png` },
+    ],
+  },
+  {
+    id: 'u10l4-intro', kind: 'cinematic', bg: bgU10L4Circus, hidePipOverlay: true, title: 'What Can You Do?', subtitle: 'The friends\' circus', narrator: 'leo',
+    script: [
+      { who: 'leo', line: 'Welcome to our circus! What can you do?' },
+      { who: 'pip', line: 'I can jump! Look!' },
+      { who: 'mia', line: 'I can dance!' },
+      { who: 'leo', line: 'Can you jump? Can you dance? Show me!' },
+    ],
+    cta: 'Show time!',
+  },
+
+  /* 4-5 The question and the answers, then move */
+  {
+    id: 'u10l4-words', kind: 'listen-repeat-cards', textSide: 'right', bg: bgU10L4CircusEmpty, teacher: 'Listen, then answer about YOU: "Yes, I can!" or "No, I can\'t!" — and show it.',
+    cards: [
+      { who: 'leo', sentence: 'Can you jump? Yes, I can!', img: gifJump, imgLabel: 'Yes, I can!' },
+      { who: 'mia', sentence: 'Can you swim? Yes, I can!', img: gifSwim, imgLabel: 'Yes, I can!' },
+      { who: 'pip', sentence: "Can you fly? No, I can't!", img: itemBird, imgLabel: "No, I can't!" },
+    ],
+  },
+  {
+    id: 'u10l4-move', kind: 'tpr-actions', bg: bgU10L4CircusEmpty, who: 'leo',
+    teacher: 'Stand up! Leo asks "Can you …?" — the child says "Yes, I can!" and does it.',
+    rounds: [
+      { line: 'Can you jump? Jump, jump!', emoji: '\u{1F998}', img: gifJump },
+      { line: 'Can you clap? Clap, clap!', emoji: '\u{1F44F}', img: `${A}/items/item-pip-clap.png` },
+      { line: 'Can you dance? Dance!', emoji: '\u{1F483}', img: gifDance },
+      { line: 'Can you fly? No! Stop!', emoji: '\u{1F6D1}', seconds: 3 },
+    ],
+  },
+
+  /* 6 Signature game (new): Can It? */
+  {
+    id: 'u10l4-can-it', kind: 'can-it', bg: bgU10L4CircusEmpty, who: 'leo',
+    teacher: 'Can It? Leo asks about the animal. Thumbs up: "Yes, it can!" Thumbs down: "No, it can\'t!" Watch what happens!',
+    animals: [{ word: 'fish', img: itemFish }, { word: 'bird', img: itemBird }, { word: 'frog', img: itemFrog }, { word: 'dog', img: itemDog }, { word: 'snake', img: itemSnake }, { word: 'kangaroo', img: itemKangaroo }],
+    rounds: [
+      { animal: 1, action: 'fly', can: true, real: 'fly', ask: 'Can a bird fly?', answer: 'Yes! A bird can fly!' },
+      { animal: 0, action: 'walk', can: false, real: 'swim', ask: 'Can a fish walk?', answer: "No! A fish can't walk. It can swim!" },
+      { animal: 2, action: 'jump', can: true, real: 'jump', ask: 'Can a frog jump?', answer: 'Yes! A frog can jump!' },
+      { animal: 4, action: 'run', can: false, real: 'swim', ask: 'Can a snake run?', answer: "No! A snake can't run. It can swim!" },
+      { animal: 3, action: 'run', can: true, real: 'run', ask: 'Can a dog run?', answer: 'Yes! A dog can run!' },
+      { animal: 5, action: 'fly', can: false, real: 'jump', ask: 'Can a kangaroo fly?', answer: "No! A kangaroo can't fly. It can jump!" },
+    ],
+    doneLine: 'What a show! Every animal can do something!',
+  },
+
+  /* 7 The song — after the words and the first game (owner, 2026-10-10) */
+  {
+    id: 'u10l4-song', kind: 'song', bg: bgU10L4Circus, title: '\u{1F3B5} What Can You Do? \u{1F3B5}', teacher: 'Sing the answers: "Yes, I can!" with a thumbs up, "No, I can\'t!" with a head shake — and do the actions.',
+    durationSeconds: 20, bigWord: 'Can', songUrl: `${A}/audio/what-can-you-do-song-u10l4.mp3?v=1`,
+    lineDurationsMs: [4840, 4080, 4180, 6962],
+    songPrompt: 'Bright circus-march kids song',
+    lyrics: [
+      { who: 'leo', text: 'Can you jump? Yes, I can!', emotion: 'happy' },
+      { who: 'mia', text: 'Can you swim? Yes, I can!', emotion: 'happy' },
+      { who: 'pip', text: "Can you fly? No, I can't!", emotion: 'happy' },
+      { who: 'leo', text: 'What can you do? I can dance!', emotion: 'happy' },
+    ],
+  },
+
+  /* 8-9 More games */
+  {
+    id: 'u10l4-riddles', kind: 'animal-riddle', bg: bgU10L4CircusEmpty, who: 'mia',
+    ask: 'Who is it?',
+    teacher: 'Can-riddles! Mia gives "can / can\'t" clues one by one; the child can answer after any clue.',
+    animals: u10l4Animals,
+    rounds: [
+      { answer: 0, options: [0, 3, 1, 5], clues: ['It can swim.', "It can't walk.", 'It lives in the water.'] },
+      { answer: 1, options: [2, 1, 4, 0], clues: ['It can fly.', 'It can sing.', 'It is small.'] },
+      { answer: 5, options: [5, 3, 2, 1], clues: ['It can jump.', "It can't fly.", 'It is big.'] },
+      { answer: 3, options: [4, 0, 3, 2], clues: ['It can run.', 'It can swim.', 'It says woof.'] },
+    ],
+    doneLine: 'You know what they can do! Well done!',
+  },
+  {
+    id: 'u10l4-talk', kind: 'join-stage', bg: bgU10L4CircusEmpty, teacher: 'Talk time: Leo asks, the child answers about themself — "Yes, I can!" or "No, I can\'t!" Then the child asks Leo.', cast: ['leo'],
+    turns: [
+      { who: 'leo', line: 'Can you swim?', bubble: 'right' },
+      { who: 'student', line: "Yes, I can! / No, I can't!", bubble: 'right' },
+      { who: 'leo', line: 'Now ask me!', bubble: 'right' },
+      { who: 'student', line: 'Can you fly, Leo?', bubble: 'right' },
+    ],
+  },
+
+  /* 10-12 Sounds: C and B */
+  {
+    id: 'u10l4-sort', kind: 'sound-sort', bg: bgU10L4CircusEmpty, teacher: 'Listen! /k/ can, cat — /b/ ball, bed. Drag each picture to its sound.',
+    targets: [
+      { letter: 'C', phoneme: '/k/', who: 'leo' },
+      { letter: 'B', phoneme: '/b/', who: 'mia' },
+    ],
+    items: [
+      { word: 'cat', emoji: '\u{1F431}', img: itemCat, letter: 'C' },
+      { word: 'ball', emoji: '⚽', img: itemBall, letter: 'B' },
+      { word: 'cake', emoji: '\u{1F370}', img: itemCake, letter: 'C' },
+      { word: 'bed', emoji: '\u{1F6CF}️', img: itemBed, letter: 'B' },
+      { word: 'car', emoji: '\u{1F697}', img: itemCar, letter: 'C' },
+      { word: 'bag', emoji: '\u{1F392}', img: itemBag, letter: 'B' },
+    ],
+  },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u10l4-blend', kind: 'sound-blend', look: 'slide', bg: bgU10L4CircusEmpty,
+    teacher: 'Blend It! Tap each ball on the slide and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'cob', img: `${A}/items/item-cob.png` }, { word: 'cab', img: `${A}/items/item-cab.png` }, { word: 'bin', img: `${A}/items/item-bin.png` }, { word: 'bat', img: `${A}/items/item-bat.png` }],
+  },
+  {
+    id: 'u10l4-phonics', kind: 'sound-mole', bg: bgU10L4CircusEmpty, who: 'leo',
+    teacher: 'Sound Moles! Listen to the sound and bonk the moles whose picture starts with it. Say the word!',
+    rounds: [
+      { letter: 'c', pictures: [{ word: 'cat', img: itemCat }, { word: 'bed', img: itemBed }, { word: 'cake', img: itemCake }, { word: 'ball', img: itemBall }, { word: 'carrot', img: itemCarrot }, { word: 'bat', img: itemBat }] },
+      { letter: 'b', pictures: [{ word: 'ball', img: itemBall }, { word: 'car', img: itemCar }, { word: 'bag', img: itemBag }, { word: 'cow', img: itemCow }, { word: 'bed', img: itemBed }, { word: 'cat', img: itemCat }] },
+    ],
+  },
+
+  /* 13-14 Sticker + Home Mission */
+  {
+    id: 'u10l4-sticker', kind: 'sticker-reward', bg: bgU10L4Circus, who: 'leo', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'You are a circus star! You can do so much! Here is a jumping sticker for you!', sticker: { img: gifJump, label: 'Circus star' },
+  },
+  {
+    id: 'u10l4-home-mission', kind: 'home-mission', bg: bgU10L4Circus, who: 'leo',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: ask your family "Can you jump?", "Can you swim?", "Can you fly?" — and listen: "Yes, I can!" or "No, I can\'t!"',
+    parentNote: 'Ask each other "Can you …?" with the actions from this unit (run, jump, walk, swim, dance, sing, clap, play, sleep — and a silly one like "fly"). Answer "Yes, I can!" with a thumbs up and do it, or "No, I can\'t!" with a head shake.',
+    steps: [
+      { emoji: '\u{1F998}', img: gifJump, say: 'Can you jump? Yes, I can!' },
+      { emoji: '\u{1F3CA}', img: gifSwim, say: 'Can you swim? Yes, I can!' },
+      { emoji: '\u{1F426}', img: itemBird, say: "Can you fly? No, I can't!" },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u10l4-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU10L4CircusEmpty, who: 'mia',
+    teacher: 'Extra time: Brain Break! Do each circus act with Mia.',
+    rounds: [
+      { line: 'Walk on a rope! Arms out! Wobble!', emoji: '\u{1F938}' },
+      { line: 'Jump like a kangaroo! Boing!', emoji: '\u{1F998}' },
+      { line: 'Clap like a seal! Clap, clap!', emoji: '\u{1F9AD}' },
+      { line: 'Take a bow! Ta-da!', emoji: '\u{1F3AA}', seconds: 3 },
+    ],
+  },
+
+  /* Goodbye */
+  {
+    id: 'u10l4-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u10l4-finale', kind: 'finale', bg: bgU10L4Circus, who: 'leo', line: 'You can do so much! What a circus! Goodbye, friend!' },
 ];
