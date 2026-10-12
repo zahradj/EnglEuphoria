@@ -79,14 +79,16 @@ words and the first game; Boss Tests mirror the Pre-A1 ones.
 6. **Extra Practice: Greeting Game!** — use all Unit 1 language fast · Buzzer Show ⇄ + Bingo ⇄
 7. **Unit Review & Boss Test: Say Hello!** — hold a 6-line conversation · Boss Test
 
-### Unit 2 · Jungle *(L1 built)*
-1. **Jungle Animals: Lion, Monkey, Bird** — name jungle animals · It's a…, Is it a…? · flipbook + Claw Machine ⇄ (built)
-2. **What Can Animals Do?** — say what an animal can and can't do · It can climb, It can't fly · Jungle Obstacle Run ★ (say the action to pass each obstacle)
-3. **Listen to the Jungle Animal Song** — listening lesson · Can it swim? Yes, it can · Who Said It? ⇄ + song lines build
-4. **Talk About Animals!** — describe an animal in 3 sentences · It's a… It can… It can't… · Animal Riddle ⇄ (child gives the riddle)
-5. **Storybook: The Jungle Rescue** — story video · Coco can climb, Willow can fly
-6. **Extra Practice: Animal Action Match!** — Charades ⇄ + Peek-Pop ⇄
-7. **Unit Review & Boss Test: Jungle Explorer!** — Boss Test
+### Unit 2 · Jungle *(L1 built — unit objective and full outcomes: [`docs/a1-unit-2-jungle.md`](a1-unit-2-jungle.md))*
+**Unit objective:** describe a jungle animal in 4 sentences (what it is, what it looks like, what it can and can't do) and
+ask and answer "Can it…?".
+1. **Jungle Animals: Lion, Monkey, Bird** — name 3 jungle animals · I am a… / It's a… (built)
+2. **What Can Animals Do?** — say what an animal can and can't do · A monkey can climb. It can't fly. · Jungle Obstacle Run ★
+3. **Listen to the Jungle Animal Song** — understand "Can it…?" and answer; meet elephant, snake, crocodile in the song · Who Can? buzzer ⇄
+4. **Talk About Animals!** — describe an animal in 3-4 sentences (big/small, long/short) and ask one question · Animal Riddle ⇄ (child is the riddler)
+5. **Storybook: The Jungle Rescue** — follow the story and answer questions · story video
+6. **Extra Practice: Animal Action Match!** — use everything quickly · Charades ⇄ + Peek-Pop ⇄
+7. **Unit Review & Boss Test: Jungle Explorer!** — describe two animals and ask one question · Boss Test
 
 ### Unit 3 · Space
 1. **Count to Ten in Space!** — count 1-20 and say how many · How many stars? There are twelve · Count & Catch ⇄ (count-balloons, to 20)
@@ -161,6 +163,10 @@ words and the first game; Boss Tests mirror the Pre-A1 ones.
 6. **Extra Practice: Robot Instruction Match!** — Maze Chase ★ + Rapid Recall ⇄
 7. **Unit Review & Boss Test: Tech Inventor!** — Boss Test
 → **A1 Final Test after Unit 10** (moves to A2) + the A1 "Rising Star" certificate (two medals).
+
+Every unit gets its own objective file before its lessons are built (owner, 2026-10-12): unit objective, what the child
+brings from before, new vs recycled language, and a progressive "I can…" outcome + evidence for every lesson, researched
+from Cambridge, Oxford and online schools. Unit 2: [`docs/a1-unit-2-jungle.md`](a1-unit-2-jungle.md).
 
 ## 5. Build order
 
