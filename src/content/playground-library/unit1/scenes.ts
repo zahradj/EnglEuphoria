@@ -557,6 +557,12 @@ export type Scene =
       cards: { label: string; img: string; say: string }[]; doneLine: string;
     }
   | {
+      /** Picture Maze (extra practice, PictureMazeScene.tsx): a painted hedge maze, three `items` wait at its ends; each
+       *  round the voice says "Find the <label>!" (items[rounds[n]]) and the child walks there step by step. */
+      id: string; kind: 'picture-maze'; bg: string; teacher: string; who: CharKey; title: string; walker: string; layout?: number;
+      items: { label: string; img: string; say: string }[]; rounds: number[]; doneLine: string;
+    }
+  | {
       /** Jungle Obstacle Run (A1 U2L2 signature, ObstacleRunScene.tsx): stations on a 16:9 course picture (`left`/`top` in %
        *  of the picture); the child sends the friend who CAN pass (`answer` = index into `friends`, `options` = the cards
        *  shown). A wrong friend tries, flops and says "Oops! I can't <action>!". After each right pick the child says

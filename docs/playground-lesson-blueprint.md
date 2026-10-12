@@ -129,13 +129,21 @@ Rules:
 Owner: *"17 pages are not enough for 30-minute classes … use the games list and create extra practice … the maximum
 pages could be 25"* and *"there is no goodbye song at the end"*. So:
 
-- **Every lesson (not the 6-page tests) has 22-25 pages.** A lesson that is shorter gets an **extra practice block
-  before the sticker** (part of the lesson, not optional), written in `src/content/playground-library/unit1/extraPractice.ts`
-  (`EXTRA_PRACTICE['U-L']`): its teacher notes start "Extra practice:".
-- The block draws from the four **review routines** (ROUTINE_KINDS, so neighbouring lessons may share them):
-  `word-board` (Word Board — snakes & ladders: roll 1-3, say the picture you land on), `home-hunt` (Home Hunt — find /
-  show / act it at home, timer never fails), `flip-say` (Flip & Say — pick a card, say the sentence), `spin-wheel`
-  (never two in one lesson); plus one or two listening games from the lesson's slot list, filled with its own words.
+- **Every lesson (not the 6-page tests) has about 20 pages and never more than 25.** A lesson that is shorter gets an
+  **extra practice block before the sticker** (part of the lesson, not optional), written in
+  `src/content/playground-library/unit1/extraPractice.ts` (`EXTRA_PRACTICE['U-L']`); teacher notes start "Extra practice:".
+- **No game twice in a unit** (owner, 2026-10-12: "don't repeat the games in the same unit, be smart on how to use them
+  and when"): an extra-practice game is used once per unit and never repeats a game a lesson of that unit already has
+  (`pictureMaze.test.ts` checks it). Pick by purpose:
+
+| Lesson | Purpose | Extra practice that fits |
+|---|---|---|
+| L1-L3 new words | listen, notice, recognise | Picture Maze (`picture-maze`), Stepping Stones, Image Reveal, Shadow Match, Catch & Sort, Pattern Train, Quick Fire, What's Missing? |
+| L4 sentence frame | say the sentence, ask | Flip & Say (`flip-say`), role-play, Secret Card, Spin & Say |
+| L5 story | take the words home | Home Hunt (`home-hunt`) |
+| L6 unit review | recall the whole unit | Word Board (`word-board`), Odd One Out, Memory Train |
+
+  Long games (Word Board, Home Hunt, Picture Maze: 3-5 minutes each) fill time better than extra pages.
 - Words: only this lesson and the lessons before it in the unit; the lesson's own pictures and its empty backgrounds.
 - **Every lesson ends with a goodbye song** before the finale (the shared Pre-A1 goodbye song, `goodbyeSong()`), the
   unit tests and level tests too.

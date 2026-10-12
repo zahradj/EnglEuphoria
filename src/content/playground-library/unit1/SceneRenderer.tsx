@@ -111,6 +111,7 @@ import { ObstacleRunScene } from './scene-components/ObstacleRunScene';
 import { WordBoardScene } from './scene-components/WordBoardScene';
 import { HomeHuntScene } from './scene-components/HomeHuntScene';
 import { FlipSayScene } from './scene-components/FlipSayScene';
+import { PictureMazeScene } from './scene-components/PictureMazeScene';
 import { BearHuntTrailScene } from './scene-components/BearHuntTrailScene';
 import { CharadesScene } from './scene-components/CharadesScene';
 import { HeroTrialsScene } from './scene-components/HeroTrialsScene';
@@ -344,6 +345,7 @@ export function SceneRenderer(props: {
     case 'obstacle-run': return <ObstacleRunScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'word-board': return <WordBoardScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'home-hunt': return <HomeHuntScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
+    case 'picture-maze': return <PictureMazeScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'flip-say': return <FlipSayScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'level-test': return <LevelTestScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} role={props.role} roomId={props.roomId} />;
     case 'hero-trials': return <HeroTrialsScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;

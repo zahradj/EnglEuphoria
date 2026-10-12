@@ -26,7 +26,7 @@ export const ROUTINE_KINDS: ReadonlySet<string> = new Set([
   'sound-blend',
   // Extra practice (owner 2026-10-12: "create extra practice … the maximum pages could be 25"): three review mechanics that
   // rotate across lessons so neighbours differ (Word Board, Home Hunt, Flip & Say) — part of the spine, not a lesson's games.
-  'word-board', 'home-hunt', 'flip-say',
+  'word-board', 'home-hunt', 'flip-say', 'picture-maze',
 ]);
 
 /** Apps, schools and exam boards to research before every lesson (rotate; never only one). */

@@ -5,12 +5,12 @@ import type { CharKey, Scene } from './scenes';
  * pages are enough for 30-minute classes … use the games list and create extra practice for the student. Be creative.
  * Search the internet for any reference or inspiration … the maximum pages could be 25."
  *
- * Every lesson under 22 pages gets a practice block (placed before the sticker, so it is part of the lesson, not an
- * optional extra) and comes to 22-23 pages (never more than 25):
- *   - rotating review games built for this (lessonVariety ROUTINE_KINDS, so neighbours can share them):
- *       Word Board (snakes & ladders: roll, say the picture), Home Hunt (find / show / do it at home), Flip & Say
- *       (speaking cards), Spin & Say (the universal numbered wheel with this lesson's pictures);
- *   - one or two listening games from the lesson's own slot list (SLOT_GAMES), filled with this lesson's words.
+ * Every short lesson gets a practice block (placed before the sticker, so it is part of the lesson) and comes to about
+ * 20 pages (never more than 25). Owner, 2026-10-12: "don't repeat the games in the same unit, be smart on how to use them
+ * and when" — so each extra game is used ONCE per unit, never repeats a game the unit's lessons already have
+ * (pictureMaze.test.ts), and is chosen for the lesson's purpose: new-word lessons (L1-L3) get listening games (Picture
+ * Maze, Stepping Stones, Image Reveal…), sentence lessons (L4) Flip & Say / role-play / Secret Card, story lessons (L5)
+ * Home Hunt, unit reviews (L6) Word Board / Odd One Out.
  * Inspiration (mechanics only): snakes & ladders one-to-one review (Abridge Academy, "Top five interactive games for
  * online teaching"), the scavenger hunt (Twinkl, "Vocabulary games for online ESL students"), Wordwall flip tiles /
  * speaking cards / random wheel (JALT "Using Wordwall warm-up and review activities").
@@ -27,9 +27,10 @@ const w = (label: string, img: string, say: string): W => ({ label, img, say });
 
 type Hunt = { img: string; label: string; ask: string; found: string };
 type Extra =
-  | 'board' | 'hunt' | 'flip' | 'spin'
+  | 'board' | 'hunt' | 'flip' | 'spin' | 'maze'
   | { kind: 'rapid' } | { kind: 'memory' } | { kind: 'tile' } | { kind: 'shadow' } | { kind: 'jigsaw' }
-  | { kind: 'pattern' } | { kind: 'train'; question: string } | { kind: 'secret' }
+  | { kind: 'pattern' } | { kind: 'train'; question: string } | { kind: 'secret' } | { kind: 'stones' } | { kind: 'missing' }
+  | { kind: 'odd'; rounds: { items: string[]; labels: string[]; odd: number; line: string }[] }
   | { kind: 'sort'; left: { label: string; img: string }; right: { label: string; img: string }; items: (W & { target: 'left' | 'right' })[] }
   | { kind: 'roleplay'; cast: CharKey[]; script: { who: CharKey; line: string; repeat?: boolean }[] };
 
@@ -58,6 +59,12 @@ function build(key: string, p: Plan): Scene[] {
       teacher: T('Home Hunt! Read the mission, press Go! The student runs, finds or does it at home, shows it to the camera and says the word. Tap "Found it!" (no hurry — the timer never fails).'),
       rounds: p.hunt, doneLine: 'Great hunting! You found them all!',
     });
+    else if (e === 'maze') out.push({
+      id: id('maze'), kind: 'picture-maze', bg: p.bg, who: p.who, walker: p.walker, title: 'Picture Maze! Listen and find it!',
+      layout: (Number(u) + Number(l)) % 2,
+      teacher: T('Picture Maze! Listen (🔊 again any time): the student walks the friend through the hedges, one glowing step at a time, to the picture they hear, then says it. A wrong picture is fine — walk on.'),
+      items: bank.slice(0, 3), rounds: [1, 2, 0], doneLine: 'You found them all! Maze champion!',
+    });
     else if (e === 'flip') out.push({
       id: id('flip'), kind: 'flip-say', bg: p.bg, who: p.who, title: p.flip ?? 'Flip a card and say it!',
       teacher: T('Flip & Say! The student picks any card, it flips, and they say the sentence (🔊 = the model). Tap "I said it!" — the card turns gold.'),
@@ -74,7 +81,7 @@ function build(key: string, p: Plan): Scene[] {
       teacher: T('Quick fire! Say it before the ring runs out.'), cards: bank.map((b) => ({ img: b.img, word: b.label, say: b.say })),
     });
     else if (typeof e === 'object' && e.kind === 'memory') out.push({
-      id: id('memory'), kind: 'memory', bg: p.bg, teacher: T('Memory! Find the pairs and say each one.'),
+      id: id('memory'), kind: 'memory', bg: p.bg, teacher: 'Find the pairs! Say each one.',
       pairs: bank.slice(0, 5).map((b) => ({ id: b.label, label: b.label, emoji: '', img: b.img })),
     });
     else if (typeof e === 'object' && e.kind === 'tile') out.push({
@@ -88,7 +95,7 @@ function build(key: string, p: Plan): Scene[] {
       items: bank.slice(0, 5).map((b) => ({ label: b.label, img: b.img, line: b.say })),
     });
     else if (typeof e === 'object' && e.kind === 'jigsaw') out.push({
-      id: id('jigsaw'), kind: 'jigsaw-puzzle', bg: p.bg, teacher: T('Puzzle! Put the picture together, then say everything you can see in it.'), image: p.bg, rows: 2, cols: 3,
+      id: id('jigsaw'), kind: 'jigsaw-puzzle', bg: p.bg, teacher: 'Build the picture! Then say what you can see.', image: p.bg, rows: 2, cols: 3,
     });
     else if (typeof e === 'object' && e.kind === 'pattern') {
       const car = (b: W) => ({ colorWord: '', colorHex: '#ffffff', shape: 'circle' as const, img: b.img, word: b.label });
@@ -103,7 +110,7 @@ function build(key: string, p: Plan): Scene[] {
         ],
       });
     } else if (typeof e === 'object' && e.kind === 'train') out.push({
-      id: id('train'), kind: 'train-recall', bg: p.bg, teacher: T('Memory Train! Look at the wagons, they go into the tunnel — what was on the train? Say them all!'),
+      id: id('train'), kind: 'train-recall', bg: p.bg, teacher: 'Look at the train! What was on it?',
       question: e.question, cars: bank.slice(0, 4).map((b) => ({ word: b.label, img: b.img, emoji: '' })),
     });
     else if (typeof e === 'object' && e.kind === 'secret') out.push({
@@ -113,9 +120,31 @@ function build(key: string, p: Plan): Scene[] {
       rounds: [{ secret: 2 }, { secret: 0 }],
     });
     else if (typeof e === 'object' && e.kind === 'sort') out.push({
-      id: id('sort'), kind: 'catch-sort', bg: p.bg, teacher: T('Catch and sort! Tap the right basket before it lands, and say it.'),
+      id: id('sort'), kind: 'catch-sort', bg: p.bg, teacher: 'Catch it! Put it in the right basket and say it.',
       left: { ...e.left, emoji: '' }, right: { ...e.right, emoji: '' },
       items: e.items.map((it) => ({ word: it.label, img: it.img, emoji: '', target: it.target })), goal: Math.min(6, e.items.length), seconds: 6,
+    });
+    else if (typeof e === 'object' && e.kind === 'stones') out.push({
+      id: id('stones'), kind: 'stepping-stones', bg: p.bg, stoneImg: '/lep1/items/item-stone.png', who: p.who, walker: p.who,
+      teacher: T('Cross the river! Listen and tap the stone with the picture you hear; say it as the friend jumps.'),
+      rounds: bank.slice(0, 4).map((b, i) => {
+        const opts = [things[i], things[(i + 1) % things.length], things[(i + 2) % things.length]];
+        const answer = i % 3; const shown = [...opts.slice(1, 1 + answer), opts[0], ...opts.slice(1 + answer)];
+        return { line: `Jump on the ${b.label}!`, options: shown, answer, reply: b.say };
+      }),
+      goal: { img: '/lep1/stickers/chest-open.png', label: 'treasure chest', line: 'Over the river! Hooray, the treasure!' },
+    });
+    else if (typeof e === 'object' && e.kind === 'missing') {
+      const faces = bank.slice(0, 5).map((b) => ({ label: b.label, name: `the ${b.label}`, img: b.img, at: [50, 50] as [number, number], w: 100, aspect: 1 }));
+      out.push({
+        id: id('missing'), kind: 'whos-missing', bg: p.bg, who: p.who, look: 'Look at the pictures!', ask: 'What is missing?',
+        teacher: T("What's Missing? Look at the pictures, tap the lamp (lights off!), then say which one is gone."),
+        faces, rounds: [{ wall: [0, 1, 2], missing: 1, options: [0, 1, 2] }, { wall: [2, 0, 3, 1], missing: 0, options: [3, 0, 2] }, { wall: [4, 2, 1, 0], missing: 2, options: [2, 4, 1] }],
+        doneLine: 'Everything is back! Super memory!',
+      });
+    } else if (typeof e === 'object' && e.kind === 'odd') out.push({
+      id: id('odd'), kind: 'odd-one-out', bg: p.bg, who: p.who, teacher: T('Odd one out! Which one is different? Tap it and say why.'),
+      rounds: e.rounds.map((r) => ({ items: r.items.map((img, i) => ({ label: r.labels[i], img })), odd: r.odd, line: r.line })),
     });
     else if (typeof e === 'object' && e.kind === 'roleplay') out.push({
       id: id('roleplay'), kind: 'roleplay', bg: p.bg, teacher: T('Act it out! Listen to each line, then say it with the friends.'), cast: e.cast, script: e.script,
@@ -135,7 +164,7 @@ const PLANS: Record<string, Plan> = {
   '2-5': {
     who: 'mia', bg: BG('u2l5-sea'), walker: C('mia-happy'),
     bank: [w('ship', I('ship'), "It's a ship!"), w('shell', I('shell'), "It's a shell!"), w('shoe', I('shoe'), "It's a shoe!"), w('whale', I('whale'), "It's a whale!"), w('fish', I('shelly'), "It's a fish!"), w('wheel', I('wheel'), "It's a wheel!")],
-    extras: ['board', 'flip'],
+    extras: ['maze'],
   },
   '5-6': {
     who: 'pip', bg: BG('u5l6-stage'), walker: C('pip-happy'),
@@ -151,7 +180,7 @@ const PLANS: Record<string, Plan> = {
   '6-1': {
     who: 'pip', bg: BG('u6l1-dollhouse'), walker: C('pip-happy'),
     bank: [...rooms, w('house', I('house'), 'This is my house!')],
-    extras: ['hunt', 'flip'],
+    extras: [],
     hunt: [
       { img: I('room-kitchen'), label: 'kitchen', ask: 'Find something from the kitchen: a cup or a spoon!', found: 'From the kitchen! Super!' },
       { img: I('room-bedroom'), label: 'bedroom', ask: 'Find something from your bedroom: a pillow or a teddy!', found: 'From the bedroom! Great!' },
@@ -162,7 +191,7 @@ const PLANS: Record<string, Plan> = {
   '6-2': {
     who: 'mia', bg: BG('u6l2-room-empty'), walker: C('mia-happy'),
     bank: [...furniture, w('kitchen', I('room-kitchen'), 'This is the kitchen.'), w('bedroom', I('room-bedroom'), 'This is the bedroom.')],
-    extras: ['board', 'hunt'],
+    extras: [{ kind: 'stones' }],
     hunt: [
       { img: I('table'), label: 'table', ask: 'Touch a table! Say: table!', found: 'A table! Super!' },
       { img: I('chair'), label: 'chair', ask: 'Sit on a chair! Say: chair!', found: 'A chair! Great!' },
@@ -173,7 +202,7 @@ const PLANS: Record<string, Plan> = {
   '6-3': {
     who: 'leo', bg: BG('u6l3-house-empty'), walker: C('leo-happy'),
     bank: [w('bed', I('bed'), 'The bed is in the bedroom.'), w('table', I('table'), 'The table is in the kitchen.'), w('sofa', I('sofa'), 'The sofa is in the living room.'), w('chair', I('chair'), 'The chair is in the kitchen.'), w('bedroom', I('room-bedroom'), 'This is the bedroom.'), w('kitchen', I('room-kitchen'), 'This is the kitchen.')],
-    extras: ['flip', 'hunt'],
+    extras: [],
     hunt: [
       { img: I('table'), label: 'table', ask: 'Touch a table! Say: table!', found: 'A table! Super!' },
       { img: I('chair'), label: 'chair', ask: 'Sit on a chair! Say: chair!', found: 'A chair! Well done!' },
@@ -184,7 +213,7 @@ const PLANS: Record<string, Plan> = {
   '6-4': {
     who: 'bella', bg: BG('u6l4-bedroom-empty'), walker: C('bella-happy'),
     bank: [w('red bed', I('bed-red'), 'My bed is red!'), w('blue chair', I('chair-blue'), 'My chair is blue!'), w('green sofa', I('sofa-green'), 'My sofa is green!'), w('green bed', I('bed-green'), 'My bed is green!'), w('yellow chair', I('chair-yellow'), 'My chair is yellow!'), w('blue sofa', I('sofa-blue'), 'My sofa is blue!')],
-    extras: ['board', 'flip', 'hunt'],
+    extras: ['flip', { kind: 'roleplay', cast: ['bella', 'pip'], script: [{ who: 'bella', line: "This is my bedroom!", repeat: true }, { who: 'pip', line: "My bed is red!", repeat: true }, { who: 'bella', line: "My chair is blue!", repeat: true }, { who: 'pip', line: "I like your house!", repeat: true }] }],
     hunt: [
       { img: I('bed-red'), label: 'red', ask: 'Find something RED in your house!', found: 'It is red! Super!' },
       { img: I('chair-blue'), label: 'blue', ask: 'Find something BLUE!', found: 'It is blue! Great!' },
@@ -195,12 +224,18 @@ const PLANS: Record<string, Plan> = {
   '6-5': {
     who: 'pip', bg: BG('u6l5-street'), walker: C('pip-happy'),
     bank: [w('red door', I('u6l5-door-red'), "It's a red door!"), w('blue door', I('u6l5-door-blue'), "It's a blue door!"), w('yellow door', I('u6l5-door-yellow'), "It's a yellow door!"), w('red bed', I('bed-red'), "It's a red bed!"), w('blue chair', I('chair-blue'), "It's a blue chair!"), w('green sofa', I('sofa-green'), "It's a green sofa!")],
-    extras: ['flip', 'board', 'spin'],
+    extras: ['hunt'],
+    hunt: [
+      { img: I('u6l5-door-red'), label: 'red', ask: 'Find something RED in your house!', found: 'Red, like the red door! Super!' },
+      { img: I('u6l5-door-blue'), label: 'blue', ask: 'Find something BLUE!', found: 'Blue, like the blue door! Great!' },
+      { img: I('u6l5-door-yellow'), label: 'yellow', ask: 'Find something YELLOW!', found: 'Yellow, like the yellow door! Well done!' },
+      { img: I('door'), label: 'door', ask: 'Go to your door! Knock, knock!', found: 'Knock, knock! Is it your house? Yes!' },
+    ],
   },
   '6-6': {
     who: 'mia', bg: BG('u6l6-gamenight'), walker: C('mia-happy'),
     bank: [w('table', I('table'), "It's a table!"), w('chair', I('chair'), "It's a chair!"), w('sofa', I('sofa'), "It's a sofa!"), w('bed', I('bed'), "It's a bed!"), w('door', I('door'), "It's a door!"), w('kitchen', I('room-kitchen'), "It's the kitchen!")],
-    extras: [{ kind: 'shadow' }, 'board', 'hunt', 'flip'],
+    extras: [{ kind: 'shadow' }, { kind: 'missing' }, 'maze'],
     hunt: [
       { img: I('room-kitchen'), label: 'kitchen', ask: 'Find a spoon from the kitchen!', found: 'A spoon! From the kitchen!' },
       { img: I('chair'), label: 'chair', ask: 'Point to a chair! Say: It\'s a chair!', found: 'It\'s a chair! Super!' },
@@ -211,7 +246,7 @@ const PLANS: Record<string, Plan> = {
   '7-1': {
     who: 'pip', bg: BG('u7l1-petshop-empty'), walker: C('pip-happy'),
     bank: pets,
-    extras: ['board', 'hunt', 'flip', 'spin'],
+    extras: ['maze', 'spin'],
     hunt: [
       { img: I('dog'), label: 'dog', ask: 'Find a toy animal at home!', found: 'What is it? Say it!' },
       { img: I('dog'), label: 'dog', ask: 'Be a dog! Woof, woof!', found: 'Woof! A dog! Super!' },
@@ -222,7 +257,7 @@ const PLANS: Record<string, Plan> = {
   '7-2': {
     who: 'mia', bg: BG('u7l2-farm-empty'), walker: C('mia-happy'),
     bank: [...farmAnimals, ...pets],
-    extras: ['board', 'hunt', 'flip', 'spin'],
+    extras: [{ kind: 'sort', left: { label: 'farm', img: I('cow') }, right: { label: 'pets', img: I('dog') }, items: [{ ...farmAnimals[0], target: 'left' }, { ...pets[1], target: 'right' }, { ...farmAnimals[1], target: 'left' }, { ...pets[0], target: 'right' }, { ...farmAnimals[2], target: 'left' }, { ...pets[2], target: 'right' }] }, { kind: 'tile' }],
     hunt: [
       { img: I('cow'), label: 'cow', ask: 'Be a cow! Moo!', found: 'Moo! A cow! Super!' },
       { img: I('pig'), label: 'pig', ask: 'Be a pig! Oink!', found: 'Oink! A pig! Great!' },
@@ -233,7 +268,7 @@ const PLANS: Record<string, Plan> = {
   '7-3': {
     who: 'leo', bg: BG('u7l3-pond-empty'), walker: C('leo-happy'),
     bank: [...pondAnimals, ...farmAnimals],
-    extras: ['board', 'hunt', 'flip', 'spin'],
+    extras: [{ kind: 'pattern' }, { kind: 'rapid' }],
     hunt: [
       { img: I('horse'), label: 'horse', ask: 'Gallop like a horse! Neigh!', found: 'Neigh! A horse! Super!' },
       { img: I('hen'), label: 'chicken', ask: 'Flap like a chicken! Cluck, cluck!', found: 'Cluck! A chicken! Great!' },
@@ -244,7 +279,7 @@ const PLANS: Record<string, Plan> = {
   '7-4': {
     who: 'pip', bg: BG('u7l4-fair-empty'), walker: C('pip-happy'),
     bank: [w('cow', I('cow'), "What animal is this? It's a cow!"), w('cat', I('cat'), "What animal is this? It's a cat!"), w('horse', I('horse'), "What animal is this? It's a horse!"), w('dog', I('dog'), "What animal is this? It's a dog!"), w('pig', I('pig'), "What animal is this? It's a pig!"), w('duck', I('farm-duck'), "What animal is this? It's a duck!")],
-    extras: [{ kind: 'rapid' }, 'board', 'hunt', 'flip', 'spin'],
+    extras: ['flip', { kind: 'roleplay', cast: ['pip', 'mia'], script: [{ who: 'pip', line: "What animal is this?", repeat: true }, { who: 'mia', line: "It's a cow! Moo!", repeat: true }, { who: 'mia', line: "What animal is this?", repeat: true }, { who: 'pip', line: "It's a horse! Neigh!", repeat: true }] }, { kind: 'missing' }],
     board: { title: 'Animal Board! Roll and ask!', ask: 'What animal is this?', done: 'You know all the animals!' },
     hunt: [
       { img: I('cat'), label: 'animal', ask: 'Find a toy animal! What animal is it?', found: 'Say: It\'s a …!' },
@@ -256,7 +291,7 @@ const PLANS: Record<string, Plan> = {
   '7-5': {
     who: 'mia', bg: BG('u7l5-yard'), walker: C('mia-happy'),
     bank: [w('cow', I('cow'), "Moo! Moo! It's a cow!"), w('pig', I('pig'), "Oink! Oink! It's a pig!"), w('sheep', I('sheep'), "Baa! Baa! It's a sheep!"), w('duck', I('farm-duck'), "Quack! Quack! It's a duck!"), w('horse', I('horse'), "Neigh! It's a horse!"), w('dog', I('dog'), "Woof! It's a dog!")],
-    extras: ['board', 'flip', 'hunt'],
+    extras: ['hunt'],
     hunt: [
       { img: I('cow'), label: 'cow', ask: 'Moo like a cow, really loud!', found: 'Moo! Super cow!' },
       { img: I('sheep'), label: 'sheep', ask: 'Baa like a sheep, really soft!', found: 'Baa! Great sheep!' },
@@ -267,7 +302,7 @@ const PLANS: Record<string, Plan> = {
   '7-6': {
     who: 'leo', bg: BG('u7l6-night-farm'), walker: C('leo-happy'),
     bank: [w('cow', I('cow'), "Moo! It's a cow!"), w('horse', I('horse'), "Neigh! It's a horse!"), w('chicken', I('hen'), "Cluck! It's a chicken!"), w('cat', I('cat'), "Meow! It's a cat!"), w('dog', I('dog'), "Woof! It's a dog!"), w('sheep', I('sheep'), "Baa! It's a sheep!")],
-    extras: [{ kind: 'tile' }, 'board', 'spin', 'hunt'],
+    extras: ['board', { kind: 'odd', rounds: [{ items: [I('cow'), I('pig'), I('apple'), I('sheep')], labels: ['cow', 'pig', 'apple', 'sheep'], odd: 2, line: 'An apple is not an animal!' }, { items: [I('cat'), I('banana'), I('dog'), I('horse')], labels: ['cat', 'banana', 'dog', 'horse'], odd: 1, line: 'A banana is not an animal!' }, { items: [I('hen'), I('farm-duck'), I('bird'), I('cake')], labels: ['chicken', 'duck', 'bird', 'cake'], odd: 3, line: 'A cake is not an animal!' }] }],
     board: { title: 'Animal Sounds Board!', ask: 'What does it say? Say it!', done: 'You are an animal sounds champion!' },
     hunt: [
       { img: I('cow'), label: 'cow', ask: 'Make a cow sound!', found: 'Moo! Great!' },
@@ -279,7 +314,7 @@ const PLANS: Record<string, Plan> = {
   '8-1': {
     who: 'pip', bg: BG('u8l1-picnic-empty'), walker: C('pip-happy'),
     bank: [w('apple', I('apple'), "It's an apple!"), w('banana', I('banana'), "It's a banana!"), w('milk', I('milk'), "It's milk!"), w('cow', I('cow'), "It's a cow!"), w('cat', I('cat'), "It's a cat!"), w('duck', I('farm-duck'), "It's a duck!")],
-    extras: ['board', 'hunt', 'flip', 'spin'],
+    extras: ['maze', { kind: 'missing' }],
     hunt: [
       { img: I('apple'), label: 'apple', ask: 'Find an apple, or something red you can eat!', found: 'Yummy! Say: apple!' },
       { img: I('banana'), label: 'banana', ask: 'Find something yellow you can eat!', found: 'Yellow! Banana? Great!' },
@@ -290,26 +325,23 @@ const PLANS: Record<string, Plan> = {
   '8-2': {
     who: 'mia', bg: BG('u8l2-cafe-empty'), walker: C('mia-happy'),
     bank: [w('bread', I('bread'), "It's bread!"), w('water', I('water-glass'), "It's water!"), w('juice', I('juice'), "It's juice!"), w('apple', I('apple'), "It's an apple!"), w('banana', I('banana'), "It's a banana!"), w('milk', I('milk'), "It's milk!")],
-    extras: ['board', 'hunt', 'flip', 'spin'],
+    extras: [{ kind: 'roleplay', cast: ['mia', 'leo'], script: [{ who: 'mia', line: "Water, please!", repeat: true }, { who: 'leo', line: "Here you are!", repeat: true }, { who: 'leo', line: "Juice, please!", repeat: true }, { who: 'mia', line: "Here you are! Thank you!", repeat: true }] }, { kind: 'shadow' }],
     hunt: [
       { img: I('water-glass'), label: 'water', ask: 'Find a glass or a cup for water!', found: 'Water, please! Super!' },
       { img: I('bread'), label: 'bread', ask: 'Find something you eat for breakfast!', found: 'Yummy! What is it? Say it!' },
-      { img: I('juice'), label: 'juice', ask: 'Pretend to drink juice! Slurp!', found: 'Mmm, juice! Great!' },
+      { img: I('juice'), label: 'juice', ask: 'Pretend to drink juice! Slurp!', found: 'Yum, juice! Great!' },
       { img: I('apple'), label: 'fruit', ask: 'Find a fruit at home!', found: 'Yummy! What is it? Say it!' },
     ],
   },
   '8-3': {
     who: 'leo', bg: BG('u8l3-party-empty'), walker: C('leo-happy'),
     bank: [w('pizza', I('pizza-slice'), "It's pizza!"), w('cake', I('cake'), "It's cake!"), w('ice cream', I('ice-cream'), "It's ice cream!"), w('bread', I('bread'), "It's bread!"), w('juice', I('juice'), "It's juice!"), w('water', I('water-glass'), "It's water!")],
-    extras: ['board', 'flip', 'spin'],
+    extras: [{ kind: 'stones' }],
   },
   '8-4': {
     who: 'bella', bg: BG('u8l4-orchard-empty'), walker: C('bella-happy'),
     bank: [w('apples', I('apple'), 'I like apples!'), w('bananas', I('banana'), 'I like bananas!'), w('oranges', I('orange'), 'I like oranges!'), w('grapes', I('grapes'), 'I like grapes!'), w('milk', I('milk'), 'I like milk!'), w('cake', I('cake'), 'I like cake!')],
-    extras: ['board', 'hunt', 'flip', 'spin', { kind: 'roleplay', cast: ['bella', 'leo'], script: [
-      { who: 'bella', line: 'I like apples!', repeat: true }, { who: 'leo', line: 'I like bananas!', repeat: true },
-      { who: 'bella', line: 'I like grapes!', repeat: true }, { who: 'leo', line: 'I like oranges!', repeat: true },
-    ] }],
+    extras: ['flip', 'spin'],
     flip: 'Flip a card! Say: I like …!',
     hunt: [
       { img: I('apple'), label: 'fruit', ask: 'Find a fruit you like!', found: 'Say: I like …!' },
@@ -321,7 +353,7 @@ const PLANS: Record<string, Plan> = {
   '8-5': {
     who: 'pip', bg: BG('u8l5-garden-empty'), walker: C('pip-happy'),
     bank: [w('caterpillar', I('caterpillar'), "It's a caterpillar!"), w('apples', I('apple'), 'I like apples!'), w('bread', I('bread'), 'I like bread!'), w('cake', I('cake'), 'I like cake!'), w('butterfly', I('butterfly'), "It's a butterfly!"), w('leaf', I('leaf'), "It's a leaf!")],
-    extras: ['board', 'hunt', 'spin'],
+    extras: ['hunt'],
     hunt: [
       { img: I('caterpillar'), label: 'caterpillar', ask: 'Wiggle like a caterpillar!', found: 'Wiggle, wiggle! Super!' },
       { img: I('leaf'), label: 'leaf', ask: 'Find something green, like a leaf!', found: 'Green! Great!' },
@@ -332,18 +364,18 @@ const PLANS: Record<string, Plan> = {
   '8-6': {
     who: 'mia', bg: BG('u8l6-dining'), walker: C('mia-happy'),
     bank: [w('apple', I('apple'), "It's an apple!"), w('banana', I('banana'), "It's a banana!"), w('bread', I('bread'), "It's bread!"), w('pizza', I('pizza-slice'), "It's pizza!"), w('ice cream', I('ice-cream'), "It's ice cream!"), w('juice', I('juice'), "It's juice!")],
-    extras: [{ kind: 'shadow' }, 'board', 'flip', 'hunt'],
+    extras: ['board'],
     hunt: [
       { img: I('apple'), label: 'apple', ask: 'Find something you can eat!', found: 'Yummy! What is it?' },
       { img: I('juice'), label: 'juice', ask: 'Find something you can drink from!', found: 'A cup! Super!' },
       { img: I('pizza-slice'), label: 'pizza', ask: 'Draw a pizza in the air!', found: 'What a pizza! Yum!' },
-      { img: I('ice-cream'), label: 'ice cream', ask: 'Pretend to lick an ice cream!', found: 'Mmm! Cold and yummy!' },
+      { img: I('ice-cream'), label: 'ice cream', ask: 'Pretend to lick an ice cream!', found: 'Yum! Cold and yummy!' },
     ],
   },
   '9-1': {
     who: 'bella', bg: BG('u9l1-laundry-empty'), walker: C('bella-happy'),
     bank: [w('shirt', I('shirt-red'), "It's a shirt! A red shirt!"), w('pants', I('pants-blue'), 'Pants! Blue pants!'), w('dress', I('dress-yellow'), "It's a dress! A yellow dress!"), w('shoes', I('shoes-blue'), 'Shoes! Blue shoes!')],
-    extras: ['board', 'hunt', 'flip'],
+    extras: ['maze', { kind: 'shadow' }],
     hunt: [
       { img: I('shirt-red'), label: 'shirt', ask: 'Find a shirt! What colour is it?', found: 'A shirt! Say the colour!' },
       { img: I('pants-blue'), label: 'pants', ask: 'Find some pants!', found: 'Pants! Great!' },
@@ -354,7 +386,7 @@ const PLANS: Record<string, Plan> = {
   '9-2': {
     who: 'mia', bg: BG('u9l2-hall-empty'), walker: C('mia-happy'),
     bank: [w('hat', I('hat-green'), "It's a hat! A green hat!"), w('socks', I('socks-red'), 'Socks! Red socks!'), w('shoes', I('shoes-blue'), 'Shoes! Blue shoes!'), w('shirt', I('shirt-red'), "It's a shirt!"), w('pants', I('pants-blue'), 'Pants!'), w('dress', I('dress-yellow'), "It's a dress!")],
-    extras: [{ kind: 'shadow' }, 'board', 'hunt', 'flip', 'spin'],
+    extras: [{ kind: 'tile' }, { kind: 'train', question: 'What was on the train?' }],
     hunt: [
       { img: I('hat-green'), label: 'hat', ask: 'Find a hat! Put it on!', found: 'A hat! Super!' },
       { img: I('socks-red'), label: 'socks', ask: 'Show me your socks!', found: 'Socks! Great!' },
@@ -365,7 +397,7 @@ const PLANS: Record<string, Plan> = {
   '9-3': {
     who: 'leo', bg: BG('u9l3-shop'), walker: C('leo-happy'),
     bank: [w('coat', I('coat-blue'), "It's a coat! A blue coat!"), w('skirt', I('skirt-pink'), "It's a skirt! A pink skirt!"), w('T-shirt', I('tshirt-yellow'), "It's a T-shirt! A yellow T-shirt!"), w('hat', I('hat-green'), "It's a hat!"), w('socks', I('socks-red'), 'Socks!'), w('shoes', I('shoes-blue'), 'Shoes!')],
-    extras: [{ kind: 'pattern' }, 'board', 'flip', 'hunt'],
+    extras: [{ kind: 'roleplay', cast: ['leo', 'bella'], script: [{ who: 'leo', line: "A blue coat, please!", repeat: true }, { who: 'bella', line: "Here you are!", repeat: true }, { who: 'bella', line: "A yellow T-shirt, please!", repeat: true }, { who: 'leo', line: "Here you are!", repeat: true }] }, { kind: 'pattern' }],
     hunt: [
       { img: I('coat-blue'), label: 'coat', ask: 'Find a coat or a jacket!', found: 'A coat! Super!' },
       { img: I('tshirt-yellow'), label: 'T-shirt', ask: 'Find a T-shirt!', found: 'A T-shirt! Great!' },
@@ -376,7 +408,7 @@ const PLANS: Record<string, Plan> = {
   '9-4': {
     who: 'bella', bg: BG('u9l4-stage'), walker: C('bella-happy'),
     bank: [w('yellow dress', I('dress-yellow'), "I'm wearing a yellow dress!"), w('green hat', I('hat-green'), "I'm wearing a green hat!"), w('red shirt', I('shirt-red'), "I'm wearing a red shirt!"), w('blue shoes', I('shoes-blue'), "I'm wearing blue shoes!"), w('red socks', I('socks-red'), "I'm wearing red socks!"), w('blue coat', I('coat-blue'), "I'm wearing a blue coat!")],
-    extras: ['board', 'hunt', 'flip', 'spin'],
+    extras: ['flip', 'spin'],
     flip: 'Flip a card! Say: I\'m wearing …!',
     hunt: [
       { img: I('shirt-red'), label: 'wearing', ask: 'Look at your clothes! Say: I\'m wearing …!', found: 'Great sentence!' },
@@ -388,7 +420,7 @@ const PLANS: Record<string, Plan> = {
   '9-5': {
     who: 'pip', bg: BG('u9l5-garden-empty'), walker: C('pip-happy'),
     bank: [w('red', I('socks-red'), 'My socks are red!'), w('blue', I('shoes-blue'), 'My shoes are blue!'), w('green', I('hat-green'), 'My hat is green!'), w('yellow', I('dress-yellow'), 'The dress is yellow!'), w('white', P('u9l5', 1), 'My shoes are white!'), w('brown', P('u9l5', 7), 'My shoes are brown!')],
-    extras: ['board', 'flip', 'hunt'],
+    extras: ['hunt'],
     hunt: [
       { img: I('shoes-blue'), label: 'shoes', ask: 'Find your shoes! What colour are they?', found: 'Say: My shoes are …!' },
       { img: P('u9l5', 1), label: 'white', ask: 'Find something white!', found: 'White! Great!' },
@@ -399,7 +431,7 @@ const PLANS: Record<string, Plan> = {
   '9-6': {
     who: 'mia', bg: BG('u9l6-playroom-empty'), walker: C('mia-happy'),
     bank: [w('hat', I('hat-green'), "It's a hat!"), w('coat', I('coat-blue'), "It's a coat!"), w('dress', I('dress-yellow'), "It's a dress!"), w('skirt', I('skirt-pink'), "It's a skirt!"), w('shoes', I('shoes-blue'), 'They are shoes!'), w('socks', I('socks-red'), 'They are socks!')],
-    extras: [{ kind: 'shadow' }, 'board', 'hunt', 'flip', 'spin'],
+    extras: ['board', { kind: 'stones' }],
     hunt: [
       { img: I('hat-green'), label: 'hat', ask: 'Find something to wear on your head!', found: 'On your head! Super!' },
       { img: I('shoes-blue'), label: 'shoes', ask: 'Find something to wear on your feet!', found: 'On your feet! Great!' },
@@ -410,7 +442,7 @@ const PLANS: Record<string, Plan> = {
   '10-1': {
     who: 'pip', bg: BG('u10l1-track-empty'), walker: C('pip-happy'),
     bank: [w('run', I('pip-run'), 'Run! I run fast!'), w('jump', I('pip-jump'), 'Jump! I jump high!'), w('walk', I('pip-walk'), 'Walk! I walk slowly.'), w('hat', I('hat-green'), "It's a hat!"), w('coat', I('coat-blue'), "It's a coat!")],
-    extras: ['board', 'hunt', 'flip', 'spin'],
+    extras: ['hunt', { kind: 'missing' }],
     hunt: [
       { img: I('pip-run'), label: 'run', ask: 'Run on the spot! Fast, fast!', found: 'Say: I run fast!' },
       { img: I('pip-jump'), label: 'jump', ask: 'Jump three times! One, two, three!', found: 'Say: I jump high!' },
@@ -421,16 +453,12 @@ const PLANS: Record<string, Plan> = {
   '10-2': {
     who: 'mia', bg: BG('u10l2-beach-empty'), walker: C('mia-happy'),
     bank: [w('swim', G('u10l2-swim'), 'Swim! I can swim!'), w('dance', G('u10l2-dance'), 'Dance! I can dance!'), w('sing', G('u10l2-sing'), 'Sing! I can sing!'), w('run', I('pip-run'), 'Run! I can run!'), w('jump', I('pip-jump'), 'Jump! I can jump!'), w('walk', I('pip-walk'), 'Walk! I can walk!')],
-    extras: [{ kind: 'sort', left: { label: 'on the stage', img: G('u10l2-dance') }, right: { label: 'in the water', img: G('u10l2-swim') }, items: [
-      { ...w('dance', G('u10l2-dance'), 'I can dance!'), target: 'left' }, { ...w('swim', G('u10l2-swim'), 'I can swim!'), target: 'right' },
-      { ...w('sing', G('u10l2-sing'), 'I can sing!'), target: 'left' }, { ...w('fish', I('fish'), "It's a fish!"), target: 'right' },
-      { ...w('drum', I('drum'), "It's a drum!"), target: 'left' }, { ...w('whale', I('whale'), "It's a whale!"), target: 'right' },
-    ] }, 'board', 'flip', 'spin'],
+    extras: [{ kind: 'sort', left: { label: 'on the stage', img: G('u10l2-dance') }, right: { label: 'in the water', img: G('u10l2-swim') }, items: [{ ...w('dance', G('u10l2-dance'), 'I can dance!'), target: 'left' }, { ...w('swim', G('u10l2-swim'), 'I can swim!'), target: 'right' }, { ...w('sing', G('u10l2-sing'), 'I can sing!'), target: 'left' }, { ...w('fish', I('fish'), "It's a fish!"), target: 'right' }, { ...w('drum', I('drum'), "It's a drum!"), target: 'left' }, { ...w('whale', I('whale'), "It's a whale!"), target: 'right' }] }],
   },
   '10-3': {
     who: 'leo', bg: BG('u10l3-camp-empty'), walker: C('leo-happy'),
     bank: [w('clap', I('leo-clap'), 'Clap! I clap my hands!'), w('play', I('leo-play'), 'Play! I play with my ball!'), w('sleep', I('leo-sleep'), 'Sleep! Shh, I sleep.'), w('swim', G('u10l2-swim'), 'I can swim!'), w('dance', G('u10l2-dance'), 'I can dance!'), w('sing', G('u10l2-sing'), 'I can sing!')],
-    extras: ['board', 'hunt', 'flip', 'spin'],
+    extras: ['spin', { kind: 'stones' }],
     hunt: [
       { img: I('leo-clap'), label: 'clap', ask: 'Clap your hands five times!', found: 'Say: I clap my hands!' },
       { img: I('leo-play'), label: 'ball', ask: 'Find a ball or a toy to play with!', found: 'Say: I play with my ball!' },
@@ -441,7 +469,7 @@ const PLANS: Record<string, Plan> = {
   '10-4': {
     who: 'pip', bg: BG('u10l4-circus-empty'), walker: C('pip-happy'),
     bank: [w('fish', I('fish'), 'Can a fish swim? Yes, it can!'), w('bird', I('bird'), 'Can a bird fly? Yes, it can!'), w('frog', I('frog'), 'Can a frog jump? Yes, it can!'), w('dog', I('dog'), 'Can a dog run? Yes, it can!'), w('snake', I('snake'), "Can a snake fly? No, it can't!"), w('cat', I('cat'), 'Can a cat jump? Yes, it can!')],
-    extras: [{ kind: 'secret' }, 'board', 'hunt', 'flip', 'spin'],
+    extras: [{ kind: 'secret' }, 'flip'],
     hunt: [
       { img: G('u10l2-swim'), label: 'swim', ask: 'Can you swim? Show me!', found: 'Say: Yes, I can! or No, I can\'t!' },
       { img: I('pip-jump'), label: 'jump', ask: 'Can you jump? Jump!', found: 'Say: Yes, I can!' },
@@ -452,12 +480,12 @@ const PLANS: Record<string, Plan> = {
   '10-5': {
     who: 'mia', bg: BG('u10l5-trail-empty'), walker: C('mia-happy'),
     bank: [w('he', P('u10l5', 4), 'He can jump!'), w('she', P('u10l5', 6), 'She can swim!'), w('it', P('u10l5', 7), 'It can fly!'), w('they', P('u10l5', 2), 'They can walk!'), w('frog', P('u10l5', 3), 'It can jump!'), w('fish', P('u10l5', 5), 'It can swim!')],
-    extras: ['board', 'flip', 'spin'],
+    extras: [{ kind: 'roleplay', cast: ['bella', 'pip', 'mia'], script: [{ who: 'bella', line: "Look! A frog! It can jump!", repeat: true }, { who: 'pip', line: "I can jump too!", repeat: true }, { who: 'mia', line: "I can swim!", repeat: true }, { who: 'bella', line: "Shh! The bear can sleep!", repeat: true }] }],
   },
   '10-6': {
     who: 'leo', bg: BG('u10l6-games-night-empty'), walker: C('leo-happy'),
     bank: [w('run', G('u10l1-run'), 'I can run!'), w('swim', G('u10l2-swim'), 'I can swim!'), w('dance', G('u10l2-dance'), 'I can dance!'), w('sing', G('u10l2-sing'), 'I can sing!'), w('sleep', I('leo-sleep'), 'I can sleep!'), w('jump', G('u10l1-jump'), 'I can jump!')],
-    extras: [{ kind: 'tile' }, { kind: 'shadow' }, 'board', 'hunt', 'flip'],
+    extras: ['board'],
     hunt: [
       { img: G('u10l1-run'), label: 'run', ask: 'Run on the spot!', found: 'Say: I can run!' },
       { img: G('u10l2-sing'), label: 'sing', ask: 'Sing a song! La, la, la!', found: 'Say: I can sing!' },
@@ -468,10 +496,7 @@ const PLANS: Record<string, Plan> = {
   '10-7': {
     who: 'pip', bg: BG('u10l7-hero-academy-empty'), walker: C('pip-happy'),
     bank: [w('I', G('u10l1-run'), 'I can run!'), w('he', G('u10l1-jump'), 'He can jump!'), w('she', G('u10l2-dance'), 'She can dance!'), w('it', I('bird-fly'), 'It can fly!'), w('swim', G('u10l2-swim'), 'I can swim!'), w('sleep', I('leo-sleep'), 'He can sleep!')],
-    extras: ['board', 'hunt', 'flip', 'spin', { kind: 'roleplay', cast: ['pip', 'mia', 'leo'], script: [
-      { who: 'pip', line: 'I can run!', repeat: true }, { who: 'mia', line: 'I can dance!', repeat: true },
-      { who: 'leo', line: 'I can jump!', repeat: true }, { who: 'pip', line: 'We are action heroes!', repeat: true },
-    ] }],
+    extras: ['maze'],
     board: { title: 'Hero Board! Roll and say!', done: 'You are an action hero!' },
     hunt: [
       { img: G('u10l1-run'), label: 'run', ask: 'Hero training: run on the spot!', found: 'Say: I can run!' },

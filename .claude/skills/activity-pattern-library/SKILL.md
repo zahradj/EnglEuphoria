@@ -173,6 +173,7 @@ Run `checkSlotGames(slot, scenes)` before calling a lesson done.
 | Ring Toss: tap the prize to throw a spinning ring; rings stay on the pegs (also for sounds: "the P word") | fairground ring toss, Wordwall one-tap review | `ring-toss` (L6) |
 | Word Board: snakes & ladders, roll 1-3, say the picture you land on; ladders up, a fun slide down (review routine) | Abridge Academy one-to-one snakes & ladders | `word-board` (extra practice) |
 | Home Hunt: mission card ("Find something red!", "Act like a horse!"), run, show the camera, say it; timer never fails | Twinkl online ESL scavenger hunt, TPR | `home-hunt` (extra practice) |
+| Picture Maze: Canva-painted hedge maze (`/lep1/maze/hedge.png`, `path.png`), 3 pictures at the ends; hear "Find the cow!", tap the glowing step next to the walker (or arrow keys) to walk there; wrong picture = gentle redirect | printable picture mazes (Twinkl, eslvault, Tools for Educators maze maker) | `picture-maze` (extra practice) |
 | Flip & Say: face-down cards, pick any, it flips, say the sentence; all cards gold = win | Wordwall flip tiles / speaking cards (JALT) | `flip-say` (extra practice) |
 
 **Every game must pass the `game-animation` skill's juice audit** (living world, springs, squash & stretch, bursts, gentle wrong, celebration) — a correct but flat game fails.

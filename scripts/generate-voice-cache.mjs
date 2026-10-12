@@ -505,6 +505,7 @@ const UNIT1_EXTRACTORS = {
   },
   'word-board': (s) => [[s.who, s.ask ?? 'What is it? Say it!'], [s.who, 'Up the ladder!'], [s.who, 'Wheee! Down the slide!'], [s.who, s.doneLine], ...(s.words ?? []).map((w) => [s.who, w.say])],
   'home-hunt': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.ask], [s.who, r.found]]), [s.who, s.doneLine]],
+  'picture-maze': (s) => [...(s.items ?? []).flatMap((it) => [[s.who, `Find the ${it.label}!`], [s.who, it.say], ...(s.items ?? []).filter((o) => o !== it).map((o) => [s.who, `That's the ${it.label}! Find the ${o.label}.`])]), [s.who, s.doneLine]],
   'flip-say': (s) => [...(s.cards ?? []).map((c) => [s.who, c.say]), [s.who, s.doneLine]],
   'obstacle-run': (s) => [
     ...(s.stations ?? []).flatMap((st) => [[s.who, st.ask], [s.who, st.sentence],
