@@ -62,6 +62,7 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
   '4-4': { settings: ['flower garden'], look: 'bright flower garden with big friendly mushrooms; Pip meets Bo, a round sky-blue three-eyed monster; code-drawn monsters on an empty lawn' },
   '4-5': { settings: ['animal park'], look: 'sunny animal park with a blue pond and tall trees; a tiger, a monkey, an elephant and a seal each show one move, Pip copies; a leafy bush to peek through' },
+  '10-6': { settings: ['living-room games night'], look: "a cosy evening games night in the friends' living room: a purple-and-gold striped magic top hat full of paper cards on a little stool, a green sofa with cushions, a round orange rug, a warm standing lamp, fairy lights and paper bunting, a starry purple sky in the window; Pip pulls a charades card from the hat while Mia and Leo laugh on the sofa; Action Charades plays on a little velvet-curtain stage, plus the Buzzer Show stage and the ring-toss stall from earlier units" },
   '10-5': { settings: ['tall-grass meadow', 'stepping-stone stream', 'little river', 'green hill', 'bear cave'], look: "our own bear-hunt story as a stills film: the friends with a paper map at a garden gate, walking through tall grass, a green frog jumping over stepping stones in a stream (Pip jumps too), an orange fish in a little river (Mia swims too), a blue bird over a round green hill (Leo runs up), a cosy cave where Bruno, a round smiling brown bear, sleeps on autumn leaves by glowing mushrooms, wakes and dances with everybody at sunset; the games walk an empty forest trail with a bush, a hollow log, a lily pond and the cave" },
   '10-4': { settings: ['circus big top'], look: "the friends' circus inside a red-and-yellow striped big top: a round ring with a red rim on a sandy floor, bunting, warm spotlights, balloons and a striped podium; Leo is the ringmaster in a little red top hat, Pip jumps high and Mia dances on the podium; in Can It? the animals come into the empty ring one by one and really do the action (or comically flop)" },
   '10-3': { settings: ['garden camp-out at dusk'], look: "a cosy garden camp-out from dusk to night: an orange tent with fairy lights, a little campfire in a ring of stones, a log bench, a purple-blue starry sky with a crescent moon and fireflies; Pip claps by the fire, Mia plays with a red ball and Leo sleeps on his sleeping bag at the tent; in Campfire Says the sky darkens and the stars come out as the friends fall asleep" },
@@ -218,6 +219,19 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'the child must understand the verb AND the body part to find the animal, then PRODUCES the move and the sentence — the screen waits for the child, never a clock',
       'the clue in Whose Is It? is one of the unit\'s body words, so naming the part and the animal go together, and the reveal recalls the story move',
       'wrong picks are named back with that animal\'s own move ("No, the seal claps her hands!"), and the right one glows after two tries',
+    ],
+  },
+  '10-6': {
+    sources: ['classroom charades / "guess the action" (games4esl, teach-this)', 'Lingokids / Khan Academy Kids ("guess what I am doing" reveals)', 'Cambridge (Pre A1 Starters: actions, "Can you …?", "Who can …?")', 'Kahoot (answer early, more points — here without a fail state)', 'Wordwall (quiz-show buzzer and ring-toss review games)'],
+    mechanics: [
+      'charades → Action Charades: a friend acts behind a curtain that opens bit by bit, the child guesses from three spoken words (earlier = more stars); then the child gets a card and acts it out',
+      'quiz show → Who Can? Buzzer Show: "Who can fly?" — buzz the bird, say "It can fly!" (he / she / it from Lesson 5)',
+      'fair game → Action Toss on the action pictures; the unit\'s sounds in Sound Fishing',
+    ],
+    betterThan: [
+      'guessing early is the child\'s own choice (the curtain keeps opening, no clock, no losing), so confident children are rewarded and shy ones still get the full picture',
+      'every answer is said back as a full sentence with the right pronoun ("She can dance!"), joining the unit\'s verbs with Lesson 5\'s he / she / it',
+      'role swap: the child also PRODUCES the action with their body on "Your turn!", and the teacher can play the guesser',
     ],
   },
   '10-5': {

@@ -544,6 +544,15 @@ export type Scene =
       doneLine: string;
     }
   | {
+      /** Action Charades (U10L6 signature): `guess` rounds — a friend acts out `acts[act]` behind a curtain that opens
+       *  bit by bit; the child picks the word from `options` (indexes into acts). `act` rounds — the child gets the card
+       *  and acts it out, then taps 👏. `name`/`pronoun` say who is acting ("He can swim!"). */
+      id: string; kind: 'charades'; bg: string; teacher: string; who: CharKey;
+      acts: { word: string; img: string; name: string; pronoun: 'He' | 'She' }[];
+      rounds: { mode: 'guess' | 'act'; act: number; options: number[] }[];
+      doneLine: string;
+    }
+  | {
       /** Bear Hunt Trail (U10L5 signature): a trail of story places; at each stop the narrator says one sentence
        *  ("She can swim!") and the child taps WHO: Pip, Mia, Leo, the stop's animal or all three. The pronoun decides
        *  (he = Pip or Leo, she = Mia, it = the animal, they = all); that one then does `action`. */
@@ -16510,4 +16519,224 @@ export const LESSON_U10L5_SCENES: Scene[] = [
     ],
   },
   { id: 'u10l5-finale', kind: 'finale', bg: u10l5Page(12), who: 'bella', line: 'He can jump, she can swim, they can dance! What a bear hunt! Goodbye, friend!' },
+];
+
+/* =============================================================================
+ * Pre-A1 Unit 10, Lesson 6 — "Action Charades" (unit review: run, jump, walk, swim, dance, sing, clap, play, sleep;
+ * I can / can you …?; he / she / it / they can; the unit's sounds)
+ *
+ * Games night in the friends' living room. A new signature game (Action Charades: a friend acts behind a curtain that
+ * opens bit by bit and the child guesses, then the child gets a card and acts it out), a Buzzer Show "Who can fly?",
+ * a ring toss on the action pictures, the unit's sounds in Sound Fishing, and a song with all nine action words.
+ * ========================================================================= */
+
+const bgU10L6Games = `${A}/scenes/bg-u10l6-games-night-wide.png`;
+const bgU10L6GamesEmpty = `${A}/scenes/bg-u10l6-games-night-empty-wide.png`;
+const SONG_U10L6_MS = [3700, 4460, 4000, 7902]; // take 3 (docs/songs/u10l6-i-can-do-it-all-v2-scores.txt)
+
+export const LESSON_U10L6_TITLE = 'Action Charades';
+export const LESSON_U10L6_OBJECTIVE = 'Review all of Unit 10: understand, do and say the actions run, jump, walk, swim, dance, sing, clap, play and sleep, guess an action and act one out, say "I can …!" and "He / She / It can …!", and hear the unit\'s sounds (R, J, S, D, L, C, B) at the start of words, by acting, listening and playing, no reading.';
+
+const U10L6_ACTS = [
+  { word: 'run', img: gifRun, name: 'Pip', pronoun: 'He' as const },
+  { word: 'jump', img: gifJump, name: 'Pip', pronoun: 'He' as const },
+  { word: 'walk', img: gifWalk, name: 'Pip', pronoun: 'He' as const },
+  { word: 'swim', img: gifSwim, name: 'Pip', pronoun: 'He' as const },
+  { word: 'dance', img: gifDance, name: 'Mia', pronoun: 'She' as const },
+  { word: 'sing', img: gifSing, name: 'Leo', pronoun: 'He' as const },
+  { word: 'clap', img: pose('pip', 'clap'), name: 'Pip', pronoun: 'He' as const },
+  { word: 'play', img: pose('mia', 'play'), name: 'Mia', pronoun: 'She' as const },
+  { word: 'sleep', img: pose('leo', 'sleep'), name: 'Leo', pronoun: 'He' as const },
+];
+const U10L6_FACES = [
+  { label: 'Pip', name: 'Pip', img: `${A}/items/item-pip-wave.png` },
+  { label: 'Mia', name: 'Mia', img: `${A}/items/item-mia-wave.png` },
+  { label: 'Leo', name: 'Leo', img: `${A}/items/item-leo-wave.png` },
+  { label: 'bear', name: 'the bear', img: `${A}/items/item-bear-bruno.png` },
+  { label: 'frog', name: 'the frog', img: `${A}/items/item-frog-happy.png` },
+  { label: 'fish', name: 'the fish', img: `${A}/items/item-goldfish.png` },
+  { label: 'bird', name: 'the bird', img: `${A}/items/item-bird-fly.png` },
+];
+
+export const LESSON_U10L6_SCENES: Scene[] = [
+  { id: 'u10l6-title', kind: 'title-card', bg: bgU10L6Games, level: 'Pre-A1', unit: 'Unit 10', lessonLabel: 'Lesson 6', title: 'Action Charades', subtitle: 'Games night!' },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 10 · Lesson 5 · Pip's Bear Hunt
+    id: 'u10l6-recall-warmup', kind: 'recall-warmup', bg: bgU10L6GamesEmpty, who: 'mia', mode: 'shadow',
+    fromLabel: "Lesson 5 · Pip's Bear Hunt",
+    teacher: 'Warm-up from last lesson: Mia names an animal from the bear hunt, the child finds its shadow and says what it can do.',
+    items: [
+      { word: 'bear', say: 'The bear! It can sleep!', img: `${A}/items/item-bear-bruno.png` },
+      { word: 'frog', say: 'The frog! It can jump!', img: `${A}/items/item-frog-happy.png` },
+      { word: 'bird', say: 'The bird! It can fly!', img: `${A}/items/item-bird-fly.png` },
+    ],
+  },
+  {
+    id: 'u10l6-intro', kind: 'cinematic', bg: bgU10L6Games, hidePipOverlay: true, title: 'Action Charades', subtitle: 'Games night!', narrator: 'pip',
+    script: [
+      { who: 'pip', line: "It's games night! Let's play charades!" },
+      { who: 'mia', line: 'Take a card. Act it out. No words!' },
+      { who: 'leo', line: 'We guess what you can do!' },
+    ],
+    cta: "Let's play!",
+  },
+
+  /* 4-5 All the action words, move */
+  {
+    id: 'u10l6-words', kind: 'listen-repeat-cards', textSide: 'right', bg: bgU10L6GamesEmpty, teacher: 'Listen, say it and DO it: all the action words of the unit.',
+    cards: [
+      { who: 'pip', sentence: 'I can run!', img: gifRun, imgLabel: 'run' },
+      { who: 'pip', sentence: 'I can swim!', img: gifSwim, imgLabel: 'swim' },
+      { who: 'mia', sentence: 'I can dance!', img: gifDance, imgLabel: 'dance' },
+      { who: 'leo', sentence: 'I can sing!', img: gifSing, imgLabel: 'sing' },
+      { who: 'leo', sentence: 'I can sleep!', img: pose('leo', 'sleep'), imgLabel: 'sleep' },
+    ],
+  },
+  {
+    id: 'u10l6-move', kind: 'tpr-actions', bg: bgU10L6GamesEmpty, who: 'mia',
+    teacher: 'Stand up! Warm up for charades: do each action with Mia.',
+    rounds: [
+      { line: 'Walk, walk, walk!', emoji: '\u{1F6B6}', img: gifWalk },
+      { line: 'Jump, jump, jump!', emoji: '\u{1F998}', img: gifJump },
+      { line: 'Clap, clap, clap!', emoji: '\u{1F44F}', img: pose('pip', 'clap') },
+      { line: 'Sleep! Shh… zzz!', emoji: '\u{1F634}', seconds: 3 },
+    ],
+  },
+
+  /* 6 Signature game (new): Action Charades */
+  {
+    id: 'u10l6-charades', kind: 'charades', bg: bgU10L6GamesEmpty, who: 'mia',
+    teacher: 'Action Charades! A friend acts behind the curtain — guess early for more stars. On "Your turn!" the child acts out the card (the teacher can guess too), then taps 👏.',
+    acts: U10L6_ACTS,
+    rounds: [
+      { mode: 'guess', act: 3, options: [3, 4, 0] },
+      { mode: 'act', act: 1, options: [] },
+      { mode: 'guess', act: 4, options: [5, 4, 8] },
+      { mode: 'act', act: 6, options: [] },
+      { mode: 'guess', act: 8, options: [7, 8, 2] },
+      { mode: 'act', act: 3, options: [] },
+      { mode: 'guess', act: 5, options: [5, 6, 1] },
+      { mode: 'act', act: 4, options: [] },
+    ],
+    doneLine: 'What a games night! You can do it all!',
+  },
+
+  /* 7 The song — after the words and the first game (owner, 2026-10-10) */
+  {
+    id: 'u10l6-song', kind: 'song', bg: bgU10L6Games, title: '\u{1F3B5} I Can Do It All! \u{1F3B5}', teacher: 'Sing and do every action: run, jump, walk, swim, dance, sing, clap, play, sleep!',
+    durationSeconds: 20, bigWord: 'Act', songUrl: `${A}/audio/act-it-out-song-u10l6.mp3?v=1`,
+    lineDurationsMs: SONG_U10L6_MS,
+    songPrompt: 'Upbeat bouncy party pop kids song',
+    lyrics: [
+      { who: 'pip', text: 'Run and jump and walk, walk, walk!', emotion: 'happy' },
+      { who: 'mia', text: 'Swim and dance and sing, sing, sing!', emotion: 'happy' },
+      { who: 'leo', text: 'Clap, clap, clap and play, play, play!', emotion: 'happy' },
+      { who: 'pip', text: 'Sleep, sleep, sleep! Yes, I can!', emotion: 'happy' },
+    ],
+  },
+
+  /* 8-9 More games */
+  {
+    id: 'u10l6-buzzer', kind: 'buzzer-show', bg: bgU5L6Stage, who: 'leo',
+    teacher: 'Who Can? Buzzer Show! Leo asks "Who can …?". The child presses the buzzer under the right one, then says the sentence with he / she / it and taps the microphone.',
+    intro: 'Listen to my question. Then press the right buzzer!',
+    podiums: [{ x: 22.8, y: 72.5, by: 55.5 }, { x: 49.5, y: 72.5, by: 55.5 }, { x: 76.3, y: 72.5, by: 55.5 }],
+    faces: U10L6_FACES,
+    rounds: [
+      { faces: [2, 6, 1], answer: 1, line: 'Who can fly?', reply: 'The bird can fly!', say: 'It can fly!' },
+      { faces: [1, 0, 3], answer: 0, line: 'Who can dance? A girl!', reply: 'Mia can dance!', say: 'She can dance!' },
+      { faces: [5, 4, 2], answer: 0, line: 'Who can swim in the river?', reply: 'The fish can swim!', say: 'It can swim!' },
+      { faces: [0, 1, 2], answer: 2, line: 'Who can sing? A boy with a big mane!', reply: 'Leo can sing!', say: 'He can sing!' },
+      { faces: [3, 6, 5], answer: 0, line: 'Who can sleep in a cave?', reply: 'The bear can sleep in a cave!', say: 'It can sleep!' },
+    ],
+    doneLine: 'You are the Who Can? champion!',
+  },
+  {
+    id: 'u10l6-ring-toss', kind: 'ring-toss', bg: bgU3L6Toss, who: 'pip', ringImg: itemTossRing,
+    teacher: 'Action Toss! Listen to the action and throw the ring on its picture. Then do it!',
+    pegs: U3L6_PEGS,
+    prizes: [
+      { label: 'run', img: gifRun },
+      { label: 'swim', img: gifSwim },
+      { label: 'sing', img: gifSing },
+      { label: 'sleep', img: pose('leo', 'sleep') },
+    ],
+    rounds: [
+      { target: 3, line: 'Throw the ring on sleep!', reply: 'Yes! Sleep! Shh!' },
+      { target: 1, line: 'Throw the ring on swim!', reply: 'Yes! Swim, swim!' },
+      { target: 0, line: 'Throw the ring on run!', reply: 'Yes! Run, run, run!' },
+      { target: 2, line: 'Throw the ring on sing!', reply: 'Yes! Sing, la la la!' },
+    ],
+  },
+  {
+    id: 'u10l6-talk', kind: 'join-stage', bg: bgU10L6GamesEmpty, teacher: 'Talk time: Pip asks, the child answers about themself — "I can …!" or "I can\'t …!" Then the child asks Pip.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'What can you do?', bubble: 'right' },
+      { who: 'student', line: 'I can swim! I can dance!', bubble: 'right' },
+      { who: 'pip', line: 'Can you fly?', bubble: 'right' },
+      { who: 'student', line: "No, I can't!", bubble: 'right' },
+    ],
+  },
+
+  /* 11 Sounds: the unit's letters */
+  {
+    id: 'u10l6-phonics', kind: 'sound-fish', bg: bgU10L6GamesEmpty, who: 'leo',
+    teacher: 'Sound Fishing! The sounds of the whole unit. Listen to the sound and catch the fish whose picture starts with it. Say the word!',
+    rounds: [
+      { letter: 'r', fish: [{ word: 'sun', img: `${A}/items/item-sun.png` }, { word: 'rabbit', img: `${A}/items/item-rabbit.png` }, { word: 'jam', img: `${A}/items/item-jam.png` }, { word: 'lid', img: `${A}/items/item-lid.png` }] },
+      { letter: 'd', fish: [{ word: 'bin', img: `${A}/items/item-bin.png` }, { word: 'jet', img: `${A}/items/item-jet.png` }, { word: 'drum', img: itemDrum }, { word: 'sun', img: `${A}/items/item-sun.png` }] },
+      { letter: 'b', fish: [{ word: 'cat', img: `${A}/items/item-cat.png` }, { word: 'lion', img: itemLion }, { word: 'robot', img: `${A}/items/item-robot.png` }, { word: 'bat', img: `${A}/items/item-bat.png` }] },
+      { letter: 'j', fish: [{ word: 'jet', img: `${A}/items/item-jet.png` }, { word: 'snake', img: itemSnake }, { word: 'cat', img: `${A}/items/item-cat.png` }, { word: 'drum', img: itemDrum }] },
+    ],
+  },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u10l6-blend', kind: 'sound-blend', bg: bgU10L6GamesEmpty,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'log', img: `${A}/items/item-log.png` }, { word: 'jam', img: `${A}/items/item-jam.png` }, { word: 'jet', img: `${A}/items/item-jet.png` }, { word: 'bin', img: `${A}/items/item-bin.png` }],
+  },
+
+  /* 12-13 Sticker + Home Mission */
+  {
+    id: 'u10l6-sticker', kind: 'sticker-reward', bg: bgU10L6Games, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'You are a charades star! You can do it all! Here is a dancing sticker for you!', sticker: { img: gifDance, label: 'Charades star' },
+  },
+  {
+    id: 'u10l6-home-mission', kind: 'home-mission', bg: bgU10L6Games, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: games night at home! Act out an action, no words. Your family guesses: "You can swim!"',
+    parentNote: 'Play charades together: one person acts out an action from this unit (run, jump, walk, swim, dance, sing, clap, play, sleep) with no words, the others guess and say it: "You can swim!" / "He can jump!" / "She can dance!". Take turns.',
+    steps: [
+      { emoji: '\u{1F3A9}', img: `${A}/items/item-pip-wave.png`, say: 'Take a card!' },
+      { emoji: '\u{1F3CA}', img: gifSwim, say: 'Act it out! No words!' },
+      { emoji: '\u{1F44F}', img: pose('pip', 'clap'), say: 'You can swim! Yes!' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u10l6-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU10L6GamesEmpty, who: 'leo',
+    teacher: 'Extra time: Brain Break! Freeze dance with Leo.',
+    rounds: [
+      { line: 'Dance, dance, dance! … Freeze!', emoji: '\u{1F483}' },
+      { line: 'Run on the spot! … Freeze!', emoji: '\u{1F3C3}' },
+      { line: 'Swim, swim! … Freeze!', emoji: '\u{1F3CA}' },
+      { line: 'Sleep! Shh… zzz!', emoji: '\u{1F634}', seconds: 3 },
+    ],
+  },
+
+  /* Goodbye */
+  {
+    id: 'u10l6-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u10l6-finale', kind: 'finale', bg: bgU10L6Games, who: 'pip', line: 'Run, jump, swim, dance — you can do it all! Goodbye, friend!' },
 ];

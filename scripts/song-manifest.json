@@ -388,5 +388,10 @@
     "path": "public/lep1/audio/he-can-jump-song-u10l5.mp3",
     "bytes": 321037,
     "sha256": "f2c7f702a7cdefb1ef8d2f31aaa4b3c4e06b93a5d64a565a1ab09e3db653d3a1"
+  },
+  "u10l6-i-can-do-it-all-v2": {
+    "path": "public/lep1/audio/act-it-out-song-u10l6.mp3",
+    "bytes": 321037,
+    "sha256": "94bc86f676933cb6f37b1b608d026947aaaf1571bd65422d849ae83d92618816"
   }
 }
