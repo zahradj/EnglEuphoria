@@ -63,6 +63,15 @@ import {
   LESSON_U10L7_SCENES,
   LESSON_PREA1_FINAL_SCENES,
   LESSON_PREA1_CHECKPOINT1_SCENES,
+  LESSON_U1L7_SCENES,
+  LESSON_U2L7_SCENES,
+  LESSON_U3L7_SCENES,
+  LESSON_U4L7_SCENES,
+  LESSON_U5L7_SCENES,
+  LESSON_U6L7_SCENES,
+  LESSON_U7L7_SCENES,
+  LESSON_U8L7_SCENES,
+  LESSON_U9L7_SCENES,
 } from './scenes';
 import { validateLesson, formatValidationResult, type ValidationContext } from './sceneValidator';
 
@@ -129,6 +138,15 @@ const LESSONS: { ctx: ValidationContext; scenes: unknown[] }[] = [
   { ctx: { lessonNumber: 'U10L7' }, scenes: LESSON_U10L7_SCENES },
   { ctx: { lessonNumber: 'U10L8' }, scenes: LESSON_PREA1_FINAL_SCENES },
   { ctx: { lessonNumber: 'U5L8' }, scenes: LESSON_PREA1_CHECKPOINT1_SCENES },
+  { ctx: { lessonNumber: 'U1L7' }, scenes: LESSON_U1L7_SCENES },
+  { ctx: { lessonNumber: 'U2L7' }, scenes: LESSON_U2L7_SCENES },
+  { ctx: { lessonNumber: 'U3L7' }, scenes: LESSON_U3L7_SCENES },
+  { ctx: { lessonNumber: 'U4L7' }, scenes: LESSON_U4L7_SCENES },
+  { ctx: { lessonNumber: 'U5L7' }, scenes: LESSON_U5L7_SCENES },
+  { ctx: { lessonNumber: 'U6L7' }, scenes: LESSON_U6L7_SCENES },
+  { ctx: { lessonNumber: 'U7L7' }, scenes: LESSON_U7L7_SCENES },
+  { ctx: { lessonNumber: 'U8L7' }, scenes: LESSON_U8L7_SCENES },
+  { ctx: { lessonNumber: 'U9L7' }, scenes: LESSON_U9L7_SCENES },
 ];
 
 describe('Playground scene validation', () => {

@@ -1,6 +1,6 @@
 # Pre-A1 assessment plan — where we test, what we test, and who moves on
 
-**Status: approved by the owner (2026-10-12, "go").** Built: the Final Test (Unit 10 · Lesson 8 "Explorer Graduation"), Checkpoint 1 (Unit 5 · Lesson 8 "Halfway Explorer"), the results table `playground_assessment_results` and the level-request hook; and the Unit 10 Boss Test (U10L7 "Action Hero"),
+**Status: approved by the owner (2026-10-12, "go").** Built: the Final Test (Unit 10 · Lesson 8 "Explorer Graduation"), Checkpoint 1 (Unit 5 · Lesson 8 "Halfway Explorer"), the results table `playground_assessment_results` and the level-request hook; the Unit 10 Boss Test (U10L7 "Action Hero"), and the Boss Tests for Units 1–9 (Lesson 7 of each unit, `bossTest()` in `unit1/scenes.ts`, level-test `unit` mode: every part at 4+ stars = "Unit mastered", else "Practise again"),
 which is the model for the unit tests below.
 
 ## 1. What the research says (and what we take from it)

@@ -25,6 +25,10 @@ describe('level test scoring', () => {
     expect(decide('final', S(5, 5, 1, 5), STRONG)).toBe('not_yet'); // a section at 1
     expect(decide('final', S(2, 5, 2, 5), STRONG)).toBe('not_yet'); // two sections at 2
   });
+  it('unit Boss Test: every part at 4+ stars (80 %) passes', () => {
+    expect(decide('unit', S(4, 4, 4, 5))).toBe('unit_pass');
+    expect(decide('unit', S(5, 5, 3, 5))).toBe('unit_practise');
+  });
   it('checkpoint: go on / with support / review first', () => {
     expect(decide('checkpoint', S(4, 3, 3, 3))).toBe('go_on');
     expect(decide('checkpoint', S(3, 3, 3, 3))).toBe('go_on_support'); // 12 in all

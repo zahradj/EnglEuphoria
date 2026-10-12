@@ -548,7 +548,7 @@ export type Scene =
        *  (`blend` = recorded letter sounds played before "What word is it?"), then speaking rated by the teacher (0–3 per
        *  prompt). The teacher's screen shows stars per section, the decision and "Confirm & save result". */
       id: string; kind: 'level-test'; bg: string; teacher: string; who: CharKey;
-      testKey: string; title: string; level: string; mode: 'final' | 'checkpoint'; nextLevel?: string; strongKeys?: string[];
+      testKey: string; title: string; level: string; mode: 'final' | 'checkpoint' | 'unit'; nextLevel?: string; strongKeys?: string[];
       hero: string; medal: string; certificate: { title: string; line: string };
       sections: { key: string; label: string; icon: string; intro: string;
         items: { ask: string; reply: string; answer: number; blend?: string[]; options: { label: string; img?: string; text?: string }[] }[] }[];
@@ -17154,3 +17154,318 @@ export const LESSON_PREA1_CHECKPOINT1_SCENES: Scene[] = [
   },
   { id: 'prea1-cp1-finale', kind: 'finale', bg: bgU10L7Academy, who: 'mia', line: 'Well done, explorer! On to the next adventure! Goodbye, friend!' },
 ];
+
+/* =============================================================================
+ * Unit Boss Tests, Units 1–9 (Lesson 7 of each unit; owner-approved plan 2026-10-12 §2–3)
+ *
+ * The same calm level-test scene in `unit` mode: three short listening parts (words, sentences, sounds) + three
+ * speaking cards the teacher scores 0–3. Mastery bar: every part at 80 % or more (4+ stars) = "Unit mastered"; any part
+ * lower = "Practise again" for that part. The result is saved for the student like the big tests. (Unit 10's Lesson 7 is
+ * the full "Action Hero" lesson.)
+ * ========================================================================= */
+
+type BossSection = Extract<Scene, { kind: 'level-test' }>['sections'][number];
+type BossPrompt = Extract<Scene, { kind: 'level-test' }>['speaking']['prompts'][number];
+const ltL = (l: string) => ({ label: l, text: l });
+
+function bossTest(u: number, unitName: string, who: CharKey, hero: 'pip' | 'mia' | 'leo',
+  warm: { fromLabel: string; items: { word: string; say: string; img: string }[] },
+  words: BossSection['items'], sentences: BossSection['items'], sounds: BossSection['items'], prompts: BossPrompt[]): Scene[] {
+  const id = `u${u}l7`;
+  return [
+    { id: `${id}-title`, kind: 'title-card', bg: bgU10L7Academy, level: 'Pre-A1', unit: `Unit ${u}`, lessonLabel: 'Lesson 7', title: 'Boss Test!', subtitle: unitName },
+    {
+      // Remember? (owner, 2026-10-07): a calm warm-up of the lesson before — not scored
+      id: `${id}-recall-warmup`, kind: 'recall-warmup', bg: bgU10L7AcademyEmpty, who, mode: 'click', fromLabel: warm.fromLabel,
+      teacher: 'A calm warm-up before the Boss Test (not scored): find the picture and say it.',
+      items: warm.items,
+    },
+    {
+      id: `${id}-intro`, kind: 'cinematic', bg: bgU10L7Academy, hidePipOverlay: true, title: 'Boss Test!', subtitle: unitName, narrator: who,
+      script: [
+        { who, line: `Boss Test time, hero! Show what you know about ${unitName.toLowerCase()}!` },
+        { who, line: 'Listen, look and tap. Then talk with your teacher.' },
+      ],
+      cta: "Let's go!",
+    },
+    {
+      id: `${id}-boss`, kind: 'level-test', bg: bgU10L7AcademyEmpty, who,
+      teacher: `Unit ${u} Boss Test. Please do not help with the answers: let the child listen (🔊 repeats) and tap. In the last part ask each card and tap a score 0–3 on YOUR screen, then "Confirm & save result". Any part under 4 stars → give its Practise again homework.`,
+      testKey: `prea1-u${u}-boss`, title: `Unit ${u} Boss Test`, level: 'Pre-A1', mode: 'unit',
+      hero: u10l7Hero(hero), medal: u10l7Medal,
+      certificate: { title: 'Boss Test done!', line: `You finished Unit ${u}! Here is your hero medal!` },
+      sections: [
+        { key: 'words', label: 'Words', icon: '\u{1F442}', intro: 'Listen and find the picture!', items: words },
+        { key: 'sentences', label: 'Sentences', icon: '\u{1F4AC}', intro: 'Listen to the sentence and find it!', items: sentences },
+        { key: 'sounds', label: 'Sounds', icon: '\u{1F524}', intro: 'Listen to the sounds!', items: sounds },
+      ],
+      speaking: { key: 'speaking', label: 'Speaking', icon: '\u{1F3A4}', intro: 'Now talk with your teacher!', prompts },
+    },
+    {
+      id: `${id}-sticker`, kind: 'sticker-reward', bg: bgU10L7Academy, who, teacher: 'Sticker time! The hero medal goes in the Sticker Book — for every child, whatever the result.',
+      line: `You finished Unit ${u}, hero! Here is your medal!`, sticker: { img: u10l7Medal, label: `Unit ${u} hero` },
+    },
+    { id: `${id}-finale`, kind: 'finale', bg: bgU10L7Academy, who, line: 'Well done, hero! See you next time! Goodbye, friend!' },
+  ];
+}
+
+export const LESSON_U1L7_TITLE = 'Boss Test: Hello Hero';
+export const LESSON_U1L7_OBJECTIVE = 'Unit 1 Boss Test: show you can understand hello, names, feelings and age, hear the Unit 1 sounds and blend a word, and greet your teacher and say your name, age and how you feel.';
+export const LESSON_U1L7_SCENES: Scene[] = bossTest(1, 'Hello and feelings', 'pip', 'pip',
+  { fromLabel: 'Lesson 6 · Trophy Trail', items: [{ word: 'happy', say: 'Happy!', img: ltFace('pip-happy') }, { word: 'sad', say: 'Sad!', img: ltFace('mia-sad') }, { word: 'angry', say: 'Angry!', img: ltFace('leo-angry') }] },
+  [
+    { ask: 'Find: happy!', reply: 'Happy!', answer: 0, options: [{ label: 'happy', img: ltFace('pip-happy') }, { label: 'sad', img: ltFace('pip-sad') }, { label: 'angry', img: ltFace('pip-angry') }] },
+    { ask: 'Find: sad!', reply: 'Sad!', answer: 1, options: [{ label: 'happy', img: ltFace('mia-happy') }, { label: 'sad', img: ltFace('mia-sad') }, { label: 'angry', img: ltFace('mia-angry') }] },
+    { ask: 'Find: angry!', reply: 'Angry!', answer: 2, options: [{ label: 'happy', img: ltFace('leo-happy') }, { label: 'sad', img: ltFace('leo-sad') }, { label: 'angry', img: ltFace('leo-angry') }] },
+    { ask: 'Find: cake!', reply: 'Cake!', answer: 0, options: [{ label: 'cake', img: lt('cake') }, { label: 'balloon', img: lt('balloon-red') }, { label: 'kite', img: lt('kite') }] },
+    { ask: 'Find: three!', reply: 'Three!', answer: 1, options: [ltL('2'), ltL('3'), ltL('5')] },
+  ],
+  [
+    { ask: 'Hello! I am Pip! Find Pip!', reply: 'Pip! Hello, Pip!', answer: 1, options: [{ label: 'Mia', img: lt('mia-wave') }, { label: 'Pip', img: lt('pip-wave') }, { label: 'Leo', img: lt('leo-wave') }] },
+    { ask: 'Mia is happy! Find her!', reply: 'Mia is happy!', answer: 0, options: [{ label: 'Mia, happy', img: ltFace('mia-happy') }, { label: 'Mia, sad', img: ltFace('mia-sad') }, { label: 'Pip, happy', img: ltFace('pip-happy') }] },
+    { ask: 'Leo is angry. Find him!', reply: 'Leo is angry.', answer: 2, options: [{ label: 'Leo, happy', img: ltFace('leo-happy') }, { label: 'Pip, sad', img: ltFace('pip-sad') }, { label: 'Leo, angry', img: ltFace('leo-angry') }] },
+    { ask: 'I am five! Find five!', reply: 'Five! I am five!', answer: 2, options: [ltL('3'), ltL('4'), ltL('5')] },
+  ],
+  [
+    { ask: 'Hat. Which sound?', reply: 'H! Hat!', answer: 0, options: [ltL('H'), ltL('M'), ltL('W')] },
+    { ask: 'Sun. Which sound?', reply: 'S! Sun!', answer: 1, options: [ltL('N'), ltL('S'), ltL('B')] },
+    { ask: 'Ball. Which sound?', reply: 'B! Ball!', answer: 2, options: [ltL('T'), ltL('A'), ltL('B')] },
+    { ask: 'What word is it?', blend: ['m', 'a', 't'], reply: 'Mat!', answer: 1, options: [{ label: 'hat', img: itemHat }, { label: 'mat', img: lt('mat') }, { label: 'bat', img: lt('bat') }] },
+  ],
+  [
+    { img: ltFace('pip-hello'), say: 'Hello! What is your name?', prompt: 'Greet + name', model: 'Hello! My name is Sara.' },
+    { img: lt('three'), say: 'How old are you?', prompt: 'Age', model: "I'm five." },
+    { img: ltFace('mia-happy'), say: 'How are you today?', prompt: 'Feelings', model: "I'm happy!" },
+  ]);
+
+export const LESSON_U2L7_TITLE = 'Boss Test: Rainbow Hero';
+export const LESSON_U2L7_OBJECTIVE = 'Unit 2 Boss Test: show you can find colours and shapes and a colour + shape you hear, hear the Unit 2 sounds and blend a word, and say colours and shapes with your teacher.';
+export const LESSON_U2L7_SCENES: Scene[] = bossTest(2, 'Colours and shapes', 'mia', 'mia',
+  { fromLabel: 'Lesson 6 · Color & Shape Hunt', items: [{ word: 'red', say: 'Red!', img: lt('ball-red') }, { word: 'circle', say: 'Circle!', img: lt('gem-purple-circle') }, { word: 'triangle', say: 'Triangle!', img: lt('gem-yellow-triangle') }] },
+  [
+    { ask: 'Find: blue!', reply: 'Blue!', answer: 1, options: [{ label: 'red', img: lt('ball-red') }, { label: 'blue', img: lt('ball-blue') }, { label: 'yellow', img: lt('ball-yellow') }] },
+    { ask: 'Find: green!', reply: 'Green!', answer: 1, options: [{ label: 'red', img: itemCarRed }, { label: 'green', img: itemCarGreen }, { label: 'blue', img: lt('ball-blue') }] },
+    { ask: 'Find: circle!', reply: 'Circle!', answer: 1, options: [{ label: 'square', img: lt('gem-blue-square') }, { label: 'circle', img: lt('gem-purple-circle') }, { label: 'triangle', img: lt('gem-yellow-triangle') }] },
+    { ask: 'Find: square!', reply: 'Square!', answer: 0, options: [{ label: 'square', img: lt('gem-orange-square') }, { label: 'triangle', img: lt('gem-green-triangle') }, { label: 'circle', img: lt('gem-red-circle') }] },
+    { ask: 'Find: orange!', reply: 'Orange!', answer: 2, options: [{ label: 'red', img: lt('gem-red-circle') }, { label: 'yellow', img: lt('gem-yellow-triangle') }, { label: 'orange', img: lt('gem-orange-square') }] },
+  ],
+  [
+    { ask: 'Find the purple circle!', reply: 'The purple circle!', answer: 0, options: [{ label: 'purple circle', img: lt('gem-purple-circle') }, { label: 'red circle', img: lt('gem-red-circle') }, { label: 'orange square', img: lt('gem-orange-square') }] },
+    { ask: 'Find the green triangle!', reply: 'The green triangle!', answer: 1, options: [{ label: 'yellow triangle', img: lt('gem-yellow-triangle') }, { label: 'green triangle', img: lt('gem-green-triangle') }, { label: 'blue square', img: lt('gem-blue-square') }] },
+    { ask: 'Find the yellow ball!', reply: 'The yellow ball!', answer: 2, options: [{ label: 'red ball', img: lt('ball-red') }, { label: 'blue ball', img: lt('ball-blue') }, { label: 'yellow ball', img: lt('ball-yellow') }] },
+    { ask: 'Find the red car!', reply: 'The red car!', answer: 1, options: [{ label: 'green car', img: itemCarGreen }, { label: 'red car', img: itemCarRed }, { label: 'red ball', img: lt('ball-red') }] },
+  ],
+  [
+    { ask: 'Red. Which sound?', reply: 'R! Red!', answer: 0, options: [ltL('R'), ltL('B'), ltL('Y')] },
+    { ask: 'Yellow. Which sound?', reply: 'Y! Yellow!', answer: 1, options: [ltL('G'), ltL('Y'), ltL('R')] },
+    { ask: 'Blue. Which sound?', reply: 'B! Blue!', answer: 2, options: [ltL('C'), ltL('R'), ltL('B')] },
+    { ask: 'What word is it?', blend: ['c', 'a', 't'], reply: 'Cat!', answer: 1, options: [{ label: 'hat', img: itemHat }, { label: 'cat', img: itemCat }, { label: 'bat', img: lt('bat') }] },
+  ],
+  [
+    { img: lt('ball-red'), say: 'What colour is it?', prompt: 'Colour', model: "It's red!" },
+    { img: lt('gem-yellow-triangle'), say: 'What shape is it?', prompt: 'Shape', model: "It's a triangle!" },
+    { img: lt('ball-blue'), say: 'What is your favourite colour?', prompt: 'Personal: favourite colour', model: 'I like blue!' },
+  ]);
+
+export const LESSON_U3L7_TITLE = 'Boss Test: Toy Hero';
+export const LESSON_U3L7_OBJECTIVE = 'Unit 3 Boss Test: show you can find toys and a toy + colour you hear, hear the Unit 3 sounds and blend a word, and name toys and your favourite toy with your teacher.';
+export const LESSON_U3L7_SCENES: Scene[] = bossTest(3, 'Toys', 'leo', 'leo',
+  { fromLabel: 'Lesson 6 · The Toy Fair', items: [{ word: 'ball', say: 'Ball!', img: lt('ball-red') }, { word: 'teddy', say: 'Teddy!', img: itemTeddy }, { word: 'kite', say: 'Kite!', img: lt('kite') }] },
+  [
+    { ask: 'Find: teddy!', reply: 'Teddy!', answer: 2, options: [{ label: 'ball', img: lt('ball-red') }, { label: 'train', img: itemTrain }, { label: 'teddy', img: itemTeddy }] },
+    { ask: 'Find: doll!', reply: 'Doll!', answer: 0, options: [{ label: 'doll', img: itemDoll }, { label: 'car', img: itemCar }, { label: 'blocks', img: itemBlocks }] },
+    { ask: 'Find: kite!', reply: 'Kite!', answer: 1, options: [{ label: 'ball', img: lt('ball-blue') }, { label: 'kite', img: lt('kite') }, { label: 'teddy', img: itemTeddy }] },
+    { ask: 'Find: train!', reply: 'Train!', answer: 2, options: [{ label: 'car', img: itemCar }, { label: 'doll', img: itemDoll }, { label: 'train', img: itemTrain }] },
+    { ask: 'Find: blocks!', reply: 'Blocks!', answer: 0, options: [{ label: 'blocks', img: itemBlocks }, { label: 'kite', img: lt('kite') }, { label: 'ball', img: lt('ball-yellow') }] },
+  ],
+  [
+    { ask: 'I want the kite, please!', reply: 'The kite! Here you are!', answer: 0, options: [{ label: 'kite', img: lt('kite') }, { label: 'ball', img: lt('ball-red') }, { label: 'doll', img: itemDoll }] },
+    { ask: 'Find the purple doll!', reply: 'The purple doll!', answer: 1, options: [{ label: 'yellow doll', img: lt('doll-yellow') }, { label: 'purple doll', img: lt('doll-purple') }, { label: 'teddy', img: itemTeddy }] },
+    { ask: 'Find the blue ball!', reply: 'The blue ball!', answer: 2, options: [{ label: 'red ball', img: lt('ball-red') }, { label: 'blue car', img: itemCar }, { label: 'blue ball', img: lt('ball-blue') }] },
+    { ask: 'My favourite toy is the train! Find it!', reply: 'The train!', answer: 1, options: [{ label: 'teddy', img: itemTeddy }, { label: 'train', img: itemTrain }, { label: 'blocks', img: itemBlocks }] },
+  ],
+  [
+    { ask: 'Doll. Which sound?', reply: 'D! Doll!', answer: 0, options: [ltL('D'), ltL('T'), ltL('K')] },
+    { ask: 'Teddy. Which sound?', reply: 'T! Teddy!', answer: 1, options: [ltL('P'), ltL('T'), ltL('D')] },
+    { ask: 'Kite. Which sound?', reply: 'K! Kite!', answer: 2, options: [ltL('P'), ltL('O'), ltL('K')] },
+    { ask: 'What word is it?', blend: ['d', 'o', 'g'], reply: 'Dog!', answer: 1, options: [{ label: 'cat', img: itemCat }, { label: 'dog', img: itemDog }, { label: 'hat', img: itemHat }] },
+  ],
+  [
+    { img: itemTeddy, say: 'What is this?', prompt: 'Name the toy', model: "It's a teddy!" },
+    { img: itemTrain, say: 'What is your favourite toy?', prompt: 'Personal: favourite toy', model: 'My favourite toy is the train.' },
+    { img: lt('ball-blue'), say: 'What colour is the ball?', prompt: 'Toy + colour', model: "It's blue!" },
+  ]);
+
+export const LESSON_U4L7_TITLE = 'Boss Test: Body Hero';
+export const LESSON_U4L7_OBJECTIVE = 'Unit 4 Boss Test: show you can find the parts of the body and face you hear, hear the Unit 4 sounds and blend a word, and name and touch body parts with your teacher.';
+export const LESSON_U4L7_SCENES: Scene[] = bossTest(4, 'My body', 'mia', 'pip',
+  { fromLabel: 'Lesson 6 · Body review', items: [{ word: 'nose', say: 'Nose!', img: lt('card-nose') }, { word: 'eyes', say: 'Eyes!', img: lt('card-eyes') }, { word: 'ears', say: 'Ears!', img: lt('card-ears') }] },
+  [
+    { ask: 'Find: nose!', reply: 'Nose!', answer: 1, options: [{ label: 'mouth', img: lt('card-mouth') }, { label: 'nose', img: lt('card-nose') }, { label: 'eyes', img: lt('card-eyes') }] },
+    { ask: 'Find: ears!', reply: 'Ears!', answer: 0, options: [{ label: 'ears', img: lt('card-ears') }, { label: 'head', img: lt('card-head') }, { label: 'mouth', img: lt('card-mouth') }] },
+    { ask: 'Find: mouth!', reply: 'Mouth!', answer: 2, options: [{ label: 'nose', img: lt('card-nose') }, { label: 'eyes', img: lt('card-eyes') }, { label: 'mouth', img: lt('card-mouth') }] },
+    { ask: 'Find: head!', reply: 'Head!', answer: 1, options: [{ label: 'knees', img: lt('card-knees') }, { label: 'head', img: lt('card-head') }, { label: 'toes', img: lt('card-toes') }] },
+    { ask: 'Find: toes!', reply: 'Toes!', answer: 2, options: [{ label: 'shoulders', img: lt('card-shoulders') }, { label: 'head', img: lt('card-head') }, { label: 'toes', img: lt('card-toes') }] },
+  ],
+  [
+    { ask: 'Touch your eyes! Find the eyes!', reply: 'Eyes! Touch your eyes!', answer: 0, options: [{ label: 'eyes', img: lt('card-eyes') }, { label: 'nose', img: lt('card-nose') }, { label: 'head', img: lt('card-head') }] },
+    { ask: 'I have two ears! Find them!', reply: 'Ears! I have two ears!', answer: 1, options: [{ label: 'mouth', img: lt('card-mouth') }, { label: 'ears', img: lt('card-ears') }, { label: 'knees', img: lt('card-knees') }] },
+    { ask: 'Touch your knees! Find the knees!', reply: 'Knees!', answer: 1, options: [{ label: 'shoulders', img: lt('card-shoulders') }, { label: 'knees', img: lt('card-knees') }, { label: 'toes', img: lt('card-toes') }] },
+    { ask: 'Head and shoulders! Find the shoulders!', reply: 'Shoulders!', answer: 0, options: [{ label: 'shoulders', img: lt('card-shoulders') }, { label: 'head', img: lt('card-head') }, { label: 'ears', img: lt('card-ears') }] },
+  ],
+  [
+    { ask: 'Nose. Which sound?', reply: 'N! Nose!', answer: 0, options: [ltL('N'), ltL('M'), ltL('F')] },
+    { ask: 'Fish. Which sound?', reply: 'F! Fish!', answer: 1, options: [ltL('T'), ltL('F'), ltL('N')] },
+    { ask: 'Egg. Which sound?', reply: 'E! Egg!', answer: 2, options: [ltL('A'), ltL('O'), ltL('E')] },
+    { ask: 'What word is it?', blend: ['t', 'e', 'n'], reply: 'Ten!', answer: 0, options: [{ label: 'ten', img: lt('ten') }, { label: 'net', img: lt('net') }, { label: 'hen', img: lt('hen') }] },
+  ],
+  [
+    { img: lt('card-nose'), say: 'What is this? Touch it!', prompt: 'Name + touch', model: "It's my nose!" },
+    { img: lt('card-eyes'), say: 'How many eyes do you have?', prompt: 'I have …', model: 'I have two eyes.' },
+    { img: lt('card-head'), say: 'Touch your head! Now touch your toes! What did you touch?', prompt: 'Follow + name', model: 'My head! My toes!' },
+  ]);
+
+export const LESSON_U5L7_TITLE = 'Boss Test: Family Hero';
+export const LESSON_U5L7_OBJECTIVE = 'Unit 5 Boss Test: show you can find family members you hear, hear the Unit 5 sounds and blend a word, and talk about your family with your teacher ("This is my …").';
+export const LESSON_U5L7_SCENES: Scene[] = bossTest(5, 'My family', 'leo', 'mia',
+  { fromLabel: 'Lesson 6 · Family Match-Up', items: [{ word: 'mom', say: 'Mom!', img: famMom }, { word: 'grandpa', say: 'Grandpa!', img: famGrandpa }, { word: 'baby', say: 'Baby!', img: famBaby }] },
+  [
+    { ask: 'Find: mom!', reply: 'Mom!', answer: 0, options: [{ label: 'mom', img: famMom }, { label: 'sister', img: famSister }, { label: 'grandma', img: famGrandma }] },
+    { ask: 'Find: dad!', reply: 'Dad!', answer: 1, options: [{ label: 'grandpa', img: famGrandpa }, { label: 'dad', img: famDad }, { label: 'brother', img: famBrother }] },
+    { ask: 'Find: baby!', reply: 'Baby!', answer: 2, options: [{ label: 'sister', img: famSister }, { label: 'mom', img: famMom }, { label: 'baby', img: famBaby }] },
+    { ask: 'Find: grandma!', reply: 'Grandma!', answer: 1, options: [{ label: 'mom', img: famMom }, { label: 'grandma', img: famGrandma }, { label: 'grandpa', img: famGrandpa }] },
+    { ask: 'Find: brother!', reply: 'Brother!', answer: 0, options: [{ label: 'brother', img: famBrother }, { label: 'dad', img: famDad }, { label: 'baby', img: famBaby }] },
+  ],
+  [
+    { ask: 'This is my sister! Find her!', reply: 'My sister!', answer: 0, options: [{ label: 'sister', img: famSister }, { label: 'brother', img: famBrother }, { label: 'baby', img: famBaby }] },
+    { ask: 'This is my grandpa! Find him!', reply: 'My grandpa!', answer: 2, options: [{ label: 'dad', img: famDad }, { label: 'brother', img: famBrother }, { label: 'grandpa', img: famGrandpa }] },
+    { ask: 'Who is the baby? Find the baby!', reply: 'The baby!', answer: 1, options: [{ label: 'sister', img: famSister }, { label: 'baby', img: famBaby }, { label: 'grandma', img: famGrandma }] },
+    { ask: 'This is my dad! Find him!', reply: 'My dad!', answer: 0, options: [{ label: 'dad', img: famDad }, { label: 'grandpa', img: famGrandpa }, { label: 'mom', img: famMom }] },
+  ],
+  [
+    { ask: 'Mom. Which sound?', reply: 'M! Mom!', answer: 0, options: [ltL('M'), ltL('N'), ltL('D')] },
+    { ask: 'Dad. Which sound?', reply: 'D! Dad!', answer: 1, options: [ltL('B'), ltL('D'), ltL('T')] },
+    { ask: 'Sister. Which sound?', reply: 'S! Sister!', answer: 2, options: [ltL('G'), ltL('M'), ltL('S')] },
+    { ask: 'What word is it?', blend: ['d', 'a', 'd'], reply: 'Dad!', answer: 0, options: [{ label: 'dad', img: famDad }, { label: 'mom', img: famMom }, { label: 'baby', img: famBaby }] },
+  ],
+  [
+    { img: famGrandma, say: 'Who is this?', prompt: 'Family: who is it?', model: "It's my grandma!" },
+    { img: famMom, say: 'Who is in your family?', prompt: 'Personal: my family', model: 'My mom, my dad and me.' },
+    { img: famBaby, say: 'Who is this? This is my …', prompt: 'This is my …', model: 'This is my baby sister.' },
+  ]);
+
+export const LESSON_U6L7_TITLE = 'Boss Test: House Hero';
+export const LESSON_U6L7_OBJECTIVE = 'Unit 6 Boss Test: show you can find furniture and a colour + furniture you hear, hear first sounds and blend a word, and talk about your home with your teacher.';
+export const LESSON_U6L7_SCENES: Scene[] = bossTest(6, 'My house', 'pip', 'leo',
+  { fromLabel: 'Lesson 6 · My House Game', items: [{ word: 'bed', say: 'Bed!', img: itemBed }, { word: 'chair', say: 'Chair!', img: itemChair }, { word: 'sofa', say: 'Sofa!', img: lt('sofa-red') }] },
+  [
+    { ask: 'Find: bed!', reply: 'Bed!', answer: 1, options: [{ label: 'chair', img: itemChair }, { label: 'bed', img: itemBed }, { label: 'table', img: itemTable }] },
+    { ask: 'Find: table!', reply: 'Table!', answer: 2, options: [{ label: 'lamp', img: lt('lamp') }, { label: 'sofa', img: lt('sofa-green') }, { label: 'table', img: itemTable }] },
+    { ask: 'Find: chair!', reply: 'Chair!', answer: 0, options: [{ label: 'chair', img: itemChair }, { label: 'bed', img: itemBed }, { label: 'lamp', img: lt('lamp') }] },
+    { ask: 'Find: lamp!', reply: 'Lamp!', answer: 1, options: [{ label: 'table', img: itemTable }, { label: 'lamp', img: lt('lamp') }, { label: 'chair', img: itemChair }] },
+    { ask: 'Find: sofa!', reply: 'Sofa!', answer: 2, options: [{ label: 'bed', img: itemBed }, { label: 'table', img: itemTable }, { label: 'sofa', img: lt('sofa-blue') }] },
+  ],
+  [
+    { ask: 'Find the red sofa!', reply: 'The red sofa!', answer: 0, options: [{ label: 'red sofa', img: lt('sofa-red') }, { label: 'blue sofa', img: lt('sofa-blue') }, { label: 'green sofa', img: lt('sofa-green') }] },
+    { ask: 'Find the green sofa!', reply: 'The green sofa!', answer: 2, options: [{ label: 'blue sofa', img: lt('sofa-blue') }, { label: 'red sofa', img: lt('sofa-red') }, { label: 'green sofa', img: lt('sofa-green') }] },
+    { ask: 'I sit on the chair! Find it!', reply: 'The chair!', answer: 1, options: [{ label: 'bed', img: itemBed }, { label: 'chair', img: itemChair }, { label: 'lamp', img: lt('lamp') }] },
+    { ask: 'I sleep in the bed! Find it!', reply: 'The bed!', answer: 2, options: [{ label: 'table', img: itemTable }, { label: 'sofa', img: lt('sofa-blue') }, { label: 'bed', img: itemBed }] },
+  ],
+  [
+    { ask: 'Bed. Which sound?', reply: 'B! Bed!', answer: 0, options: [ltL('B'), ltL('D'), ltL('P')] },
+    { ask: 'Table. Which sound?', reply: 'T! Table!', answer: 1, options: [ltL('K'), ltL('T'), ltL('S')] },
+    { ask: 'Sofa. Which sound?', reply: 'S! Sofa!', answer: 2, options: [ltL('H'), ltL('B'), ltL('S')] },
+    { ask: 'What word is it?', blend: ['b', 'e', 'd'], reply: 'Bed!', answer: 0, options: [{ label: 'bed', img: itemBed }, { label: 'ten', img: lt('ten') }, { label: 'net', img: lt('net') }] },
+  ],
+  [
+    { img: itemBed, say: 'What is in your bedroom?', prompt: 'My room: name 2 things', model: 'A bed and a lamp.' },
+    { img: bgU6L1House, say: 'Look at the house! What can you see?', prompt: 'Point and name rooms / furniture', model: 'A kitchen! A bed! A sofa!' },
+    { img: lt('sofa-green'), say: 'What colour is the sofa?', prompt: 'Furniture + colour', model: "It's green." },
+  ]);
+
+export const LESSON_U7L7_TITLE = 'Boss Test: Animal Hero';
+export const LESSON_U7L7_OBJECTIVE = 'Unit 7 Boss Test: show you can find animals and animal sounds you hear, hear first sounds and blend a word, and talk about animals with your teacher.';
+export const LESSON_U7L7_SCENES: Scene[] = bossTest(7, 'Animals', 'leo', 'pip',
+  { fromLabel: 'Lesson 6 · Animal Sounds Game', items: [{ word: 'cow', say: 'Cow!', img: itemCow }, { word: 'dog', say: 'Dog!', img: itemDog }, { word: 'duck', say: 'Duck!', img: itemDuck }] },
+  [
+    { ask: 'Find: dog!', reply: 'Dog!', answer: 0, options: [{ label: 'dog', img: itemDog }, { label: 'cat', img: itemCat }, { label: 'pig', img: itemPig }] },
+    { ask: 'Find: horse!', reply: 'Horse!', answer: 1, options: [{ label: 'cow', img: itemCow }, { label: 'horse', img: itemHorse }, { label: 'sheep', img: itemSheep }] },
+    { ask: 'Find: chicken!', reply: 'Chicken!', answer: 2, options: [{ label: 'duck', img: itemDuck }, { label: 'bird', img: itemBird }, { label: 'chicken', img: itemChicken }] },
+    { ask: 'Find: pig!', reply: 'Pig!', answer: 1, options: [{ label: 'sheep', img: itemSheep }, { label: 'pig', img: itemPig }, { label: 'dog', img: itemDog }] },
+    { ask: 'Find: cat!', reply: 'Cat!', answer: 0, options: [{ label: 'cat', img: itemCat }, { label: 'horse', img: itemHorse }, { label: 'cow', img: itemCow }] },
+  ],
+  [
+    { ask: 'The cow says moo! Find the cow!', reply: 'The cow! Moo!', answer: 1, options: [{ label: 'sheep', img: itemSheep }, { label: 'cow', img: itemCow }, { label: 'horse', img: itemHorse }] },
+    { ask: 'The duck says quack! Find the duck!', reply: 'The duck! Quack!', answer: 2, options: [{ label: 'chicken', img: itemChicken }, { label: 'bird', img: itemBird }, { label: 'duck', img: itemDuck }] },
+    { ask: 'It is a pet. It says woof! Find it!', reply: 'The dog! Woof!', answer: 0, options: [{ label: 'dog', img: itemDog }, { label: 'horse', img: itemHorse }, { label: 'cow', img: itemCow }] },
+    { ask: 'The sheep says baa! Find the sheep!', reply: 'The sheep! Baa!', answer: 1, options: [{ label: 'pig', img: itemPig }, { label: 'sheep', img: itemSheep }, { label: 'cat', img: itemCat }] },
+  ],
+  [
+    { ask: 'Dog. Which sound?', reply: 'D! Dog!', answer: 0, options: [ltL('D'), ltL('B'), ltL('T')] },
+    { ask: 'Horse. Which sound?', reply: 'H! Horse!', answer: 1, options: [ltL('W'), ltL('H'), ltL('M')] },
+    { ask: 'Pig. Which sound?', reply: 'P! Pig!', answer: 2, options: [ltL('B'), ltL('D'), ltL('P')] },
+    { ask: 'What word is it?', blend: ['h', 'e', 'n'], reply: 'Hen!', answer: 0, options: [{ label: 'hen', img: lt('hen') }, { label: 'ten', img: lt('ten') }, { label: 'net', img: lt('net') }] },
+  ],
+  [
+    { img: itemCow, say: 'What animal is it?', prompt: 'Name the animal', model: "It's a cow!" },
+    { img: itemDog, say: 'What does the dog say?', prompt: 'Animal sound', model: 'Woof! Woof!' },
+    { img: bgU7L2Farm, say: 'Look at the farm! What can you see?', prompt: 'Point and name 3 animals', model: 'A cow, a pig and a horse!' },
+  ]);
+
+export const LESSON_U8L7_TITLE = 'Boss Test: Food Hero';
+export const LESSON_U8L7_OBJECTIVE = 'Unit 8 Boss Test: show you can find food and drink you hear and what someone likes, hear first sounds and blend a word, and say what you like with your teacher.';
+export const LESSON_U8L7_SCENES: Scene[] = bossTest(8, 'Food and drink', 'mia', 'leo',
+  { fromLabel: 'Lesson 6 · Food Preference Chart', items: [{ word: 'apple', say: 'Apple!', img: itemApple }, { word: 'pizza', say: 'Pizza!', img: itemPizza }, { word: 'milk', say: 'Milk!', img: itemMilk }] },
+  [
+    { ask: 'Find: apple!', reply: 'Apple!', answer: 0, options: [{ label: 'apple', img: itemApple }, { label: 'banana', img: itemBanana }, { label: 'bread', img: itemBread }] },
+    { ask: 'Find: bread!', reply: 'Bread!', answer: 1, options: [{ label: 'cake', img: itemCake }, { label: 'bread', img: itemBread }, { label: 'pizza', img: itemPizza }] },
+    { ask: 'Find: water!', reply: 'Water!', answer: 2, options: [{ label: 'milk', img: itemMilk }, { label: 'juice', img: itemJuice }, { label: 'water', img: itemWater }] },
+    { ask: 'Find: pizza!', reply: 'Pizza!', answer: 1, options: [{ label: 'cookie', img: itemCookie }, { label: 'pizza', img: itemPizza }, { label: 'apple', img: itemApple }] },
+    { ask: 'Find: ice cream!', reply: 'Ice cream!', answer: 0, options: [{ label: 'ice cream', img: itemIceCream }, { label: 'cake', img: itemCake }, { label: 'banana', img: itemBanana }] },
+  ],
+  [
+    { ask: 'I like cake! Find it!', reply: 'Cake! I like cake!', answer: 1, options: [{ label: 'ice cream', img: itemIceCream }, { label: 'cake', img: itemCake }, { label: 'cookie', img: itemCookie }] },
+    { ask: 'Water, please! Find the water!', reply: 'Water! Here you are!', answer: 0, options: [{ label: 'water', img: itemWater }, { label: 'juice', img: itemJuice }, { label: 'milk', img: itemMilk }] },
+    { ask: 'I like bananas! Find them!', reply: 'Bananas! I like bananas!', answer: 2, options: [{ label: 'apple', img: itemApple }, { label: 'egg', img: itemEgg }, { label: 'banana', img: itemBanana }] },
+    { ask: 'I like juice! Find it!', reply: 'Juice! I like juice!', answer: 0, options: [{ label: 'juice', img: itemJuice }, { label: 'bread', img: itemBread }, { label: 'egg', img: itemEgg }] },
+  ],
+  [
+    { ask: 'Apple. Which sound?', reply: 'A! Apple!', answer: 0, options: [ltL('A'), ltL('E'), ltL('O')] },
+    { ask: 'Juice. Which sound?', reply: 'J! Juice!', answer: 1, options: [ltL('G'), ltL('J'), ltL('D')] },
+    { ask: 'Pizza. Which sound?', reply: 'P! Pizza!', answer: 2, options: [ltL('B'), ltL('T'), ltL('P')] },
+    { ask: 'What word is it?', blend: ['j', 'a', 'm'], reply: 'Jam!', answer: 0, options: [{ label: 'jam', img: lt('jam') }, { label: 'cat', img: itemCat }, { label: 'hat', img: itemHat }] },
+  ],
+  [
+    { img: itemPizza, say: 'What do you like?', prompt: 'I like …', model: 'I like pizza!' },
+    { img: itemApple, say: 'What is this?', prompt: 'Name the food', model: "It's an apple." },
+    { img: itemMilk, say: 'Do you like milk?', prompt: 'Yes / no answer', model: 'Yes, I like milk!' },
+  ]);
+
+export const LESSON_U9L7_TITLE = 'Boss Test: Fashion Hero';
+export const LESSON_U9L7_OBJECTIVE = 'Unit 9 Boss Test: show you can find clothes and a colour + clothes you hear, hear first sounds and blend a word, and say what you are wearing with your teacher.';
+export const LESSON_U9L7_SCENES: Scene[] = bossTest(9, 'Clothes', 'pip', 'mia',
+  { fromLabel: 'Lesson 6 · Dress Up Game', items: [{ word: 'hat', say: 'Hat!', img: itemHat }, { word: 'shoes', say: 'Shoes!', img: itemShoesBlue }, { word: 'coat', say: 'Coat!', img: itemCoatRed }] },
+  [
+    { ask: 'Find: hat!', reply: 'Hat!', answer: 0, options: [{ label: 'hat', img: itemHat }, { label: 'shoes', img: itemShoesBlue }, { label: 'socks', img: itemSocksRed }] },
+    { ask: 'Find: socks!', reply: 'Socks!', answer: 1, options: [{ label: 'shoes', img: itemShoesBlue }, { label: 'socks', img: itemSocksRed }, { label: 'shirt', img: itemShirtRed }] },
+    { ask: 'Find: dress!', reply: 'Dress!', answer: 2, options: [{ label: 'coat', img: itemCoatBlue }, { label: 'pants', img: itemPantsBlue }, { label: 'dress', img: itemDressYellow }] },
+    { ask: 'Find: pants!', reply: 'Pants!', answer: 0, options: [{ label: 'pants', img: itemPantsBlue }, { label: 'shirt', img: itemShirtRed }, { label: 'hat', img: itemHat }] },
+    { ask: 'Find: coat!', reply: 'Coat!', answer: 1, options: [{ label: 'dress', img: itemDressYellow }, { label: 'coat', img: itemCoatRed }, { label: 'socks', img: itemSocksRed }] },
+  ],
+  [
+    { ask: 'Find the red coat!', reply: 'The red coat!', answer: 1, options: [{ label: 'blue coat', img: itemCoatBlue }, { label: 'red coat', img: itemCoatRed }, { label: 'red socks', img: itemSocksRed }] },
+    { ask: "I'm wearing a green hat! Find it!", reply: 'The green hat!', answer: 1, options: [{ label: 'hat', img: itemHat }, { label: 'green hat', img: lt('hat-green') }, { label: 'red shirt', img: itemShirtRed }] },
+    { ask: 'Find the blue pants!', reply: 'The blue pants!', answer: 0, options: [{ label: 'blue pants', img: itemPantsBlue }, { label: 'red shirt', img: itemShirtRed }, { label: 'blue shoes', img: itemShoesBlue }] },
+    { ask: 'My shoes are blue! Find them!', reply: 'Blue shoes!', answer: 1, options: [{ label: 'red socks', img: itemSocksRed }, { label: 'blue shoes', img: itemShoesBlue }, { label: 'blue coat', img: itemCoatBlue }] },
+  ],
+  [
+    { ask: 'Hat. Which sound?', reply: 'H! Hat!', answer: 0, options: [ltL('H'), ltL('W'), ltL('T')] },
+    { ask: 'Pants. Which sound?', reply: 'P! Pants!', answer: 1, options: [ltL('B'), ltL('P'), ltL('D')] },
+    { ask: 'Water. Which sound?', reply: 'W! Water!', answer: 2, options: [ltL('M'), ltL('N'), ltL('W')] },
+    { ask: 'What word is it?', blend: ['h', 'a', 't'], reply: 'Hat!', answer: 0, options: [{ label: 'hat', img: itemHat }, { label: 'cat', img: itemCat }, { label: 'mat', img: lt('mat') }] },
+  ],
+  [
+    { img: itemShirtRed, say: 'What are you wearing?', prompt: "I'm wearing …", model: "I'm wearing a red shirt." },
+    { img: itemShoesBlue, say: 'What colour are your shoes?', prompt: 'My shoes are …', model: 'My shoes are blue.' },
+    { img: itemCoatRed, say: 'What is this?', prompt: 'Name the clothes', model: "It's a coat." },
+  ]);

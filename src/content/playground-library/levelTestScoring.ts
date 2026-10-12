@@ -21,8 +21,8 @@ export function speakingShare(scores: number[]): number {
   return s.reduce((a, b) => a + b, 0) / (s.length * 3);
 }
 
-export type LevelTestMode = 'final' | 'checkpoint';
-export type Decision = 'ready' | 'almost' | 'not_yet' | 'go_on' | 'go_on_support' | 'review_first';
+export type LevelTestMode = 'final' | 'checkpoint' | 'unit';
+export type Decision = 'ready' | 'almost' | 'not_yet' | 'go_on' | 'go_on_support' | 'review_first' | 'unit_pass' | 'unit_practise';
 
 /**
  * `stars` in section order; `strongKeys` = sections that must reach 4 stars for "Ready" (final test: the two listening
@@ -38,6 +38,8 @@ export function decide(mode: LevelTestMode, sections: { key: string; stars: numb
     if (allThree || (low.length === 1 && low[0].stars === 2)) return 'almost';
     return 'not_yet';
   }
+  // unit Boss Test (mastery bar, plan §2): every part at 80 % or more (4+ stars) → pass; else practise the weak parts
+  if (mode === 'unit') return sections.every((s) => s.stars >= 4) ? 'unit_pass' : 'unit_practise';
   // checkpoint
   if (allThree && total >= 13) return 'go_on';
   if ((allThree && total >= 11) || (low.length === 1 && low[0].stars === 2 && total >= 11)) return 'go_on_support';
@@ -51,4 +53,6 @@ export const DECISION_TEXT: Record<Decision, { label: string; next: string }> = 
   go_on: { label: 'Go on', next: 'Continue to Unit 6.' },
   go_on_support: { label: 'Go on with support', next: 'Continue to Unit 6; give the weak skill\'s Practise again pack as homework for 2 weeks and re-check it in the Unit 6 test.' },
   review_first: { label: 'Review first', next: '2 review lessons on the weak units, then a short re-check before Unit 6.' },
+  unit_pass: { label: 'Unit mastered', next: 'On to the next unit.' },
+  unit_practise: { label: 'Practise again', next: 'Go on to the next unit, and give the Practise again homework for every part under 4 stars; re-check those words at the start of the next lessons.' },
 };

@@ -56,7 +56,7 @@ export const GRANDFATHERED: readonly string[] = ['5-1'];
 /** Level tests (owner-approved assessment plan 2026-10-12, docs/assessment/prea1-assessment-plan.md): a test lesson is
  *  deliberately ONE calm test activity, not a varied game lesson, so the variety rules don't apply to it. Only lessons
  *  whose scenes are routine kinds + one `level-test` may be listed here. */
-export const ASSESSMENT_LESSONS: readonly string[] = ['5-8', '10-8'];
+export const ASSESSMENT_LESSONS: readonly string[] = ['1-7', '2-7', '3-7', '4-7', '5-7', '6-7', '7-7', '8-7', '9-7', '5-8', '10-8'];
 
 export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '2-2': { settings: ['art studio', 'fruit market', 'meadow'], look: "Pip's sunny paint studio indoors, a striped market stall, the rainbow meadow; colour-mixing mission" },

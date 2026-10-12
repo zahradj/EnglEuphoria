@@ -252,7 +252,7 @@ export function LevelTestScene({ scene, onWin, onNext, sync, role, roomId }: {
                     </div>
                   </div>
                 )}
-                <div className={`rounded-xl px-3 py-2 font-black ${decision === 'ready' || decision === 'go_on' ? 'bg-emerald-100 text-emerald-800' : decision === 'almost' || decision === 'go_on_support' ? 'bg-amber-100 text-amber-800' : 'bg-rose-100 text-rose-800'}`}>
+                <div className={`rounded-xl px-3 py-2 font-black ${decision === 'ready' || decision === 'go_on' || decision === 'unit_pass' ? 'bg-emerald-100 text-emerald-800' : decision === 'almost' || decision === 'go_on_support' || decision === 'unit_practise' ? 'bg-amber-100 text-amber-800' : 'bg-rose-100 text-rose-800'}`}>
                   {DECISION_TEXT[decision].label}
                   <div className="font-semibold">{DECISION_TEXT[decision].next}</div>
                 </div>
