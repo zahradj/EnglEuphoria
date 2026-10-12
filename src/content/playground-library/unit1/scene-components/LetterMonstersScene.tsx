@@ -88,7 +88,7 @@ export function LetterMonstersScene({ scene, onWin, onNext, sync }: { scene: Mon
       <AnimatePresence mode="wait">
         {c && fly === null && (
           <motion.button key={round} onClick={() => cueSpeak(c.word.charAt(0).toUpperCase() + c.word.slice(1) + '!', scene.who)} aria-label={c.word}
-            className="absolute left-1/2 top-[21%] z-30 rounded-3xl border-4 border-white bg-white p-2 shadow-2xl" style={{ translate: '-50% 0' }}
+            className="absolute left-1/2 top-[21%] z-30 rounded-3xl border-4 border-amber-200 bg-gradient-to-b from-pink-200 to-rose-300 p-2 shadow-2xl" style={{ translate: '-50% 0' }}
             initial={{ scale: 0, rotate: -15, y: 0 }} animate={reduce ? { scale: 1 } : { scale: 1, rotate: [0, -3, 3, 0], y: [0, -10, 0] }} exit={{ scale: 0 }} transition={{ type: 'spring', stiffness: 300, damping: 14, y: { duration: 2, repeat: Infinity, ease: 'easeInOut' }, rotate: { duration: 2.6, repeat: Infinity } }}>
             <img src={c.img} alt="" draggable={false} style={{ width: 'min(16vh, 12vw)', height: 'min(16vh, 12vw)' }} className="object-contain" />
           </motion.button>

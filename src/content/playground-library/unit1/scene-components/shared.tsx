@@ -406,7 +406,7 @@ export function TrainWagon({ color, moving, children, className = '', glow }: { 
         </defs>
         <rect x="6" y="12" width="108" height="78" rx="12" fill={`url(#${id})`} stroke={edge} strokeWidth="3" />
         <rect x="16" y="18" width="40" height="6" rx="3" fill="#fff" opacity="0.4" />
-        <rect x="16" y="26" width="88" height="56" rx="9" fill="#FFFBEB" stroke={edge} strokeWidth="2" />
+        <rect x="16" y="26" width="88" height="56" rx="9" fill={shade(color, 0.55)} stroke={edge} strokeWidth="2" />
         <rect x="0" y="88" width="120" height="10" rx="4" fill="#27272A" />
         <rect x="-10" y="90" width="14" height="5" rx="2" fill="#52525B" />
         <Wheel cx={30} cy={104} r={13} moving={moving} dur={0.5} />
