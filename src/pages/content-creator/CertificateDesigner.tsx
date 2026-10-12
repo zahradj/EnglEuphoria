@@ -137,10 +137,10 @@ export default function CertificateDesigner() {
   const save = async () => {
     setSaving(true);
     const payload = { ...row, hub, cefr_level: level, template_type: "engine_mastery" as const };
-    const { error } = await supabase.from("certificate_templates").upsert(payload, {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- design_config is Json in the generated types
-      onConflict: "hub,cefr_level,template_type" as any,
-    });
+    // Match on the row id (set when the design was loaded): the table's unique rule is on COALESCE(hub, cefr_level, type),
+    // which an onConflict on the plain columns cannot use. No id yet → a new row.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- design_config is Json in the generated types
+    const { error } = await supabase.from("certificate_templates").upsert(payload as any);
     setSaving(false);
     if (error) { toast.error(error.message); return; }
     toast.success("Certificate design saved");
