@@ -276,3 +276,10 @@ The A1 Playground plan (themed worlds, owner decision 2026-10-12) lives in `docs
 lessons = the database slots, can-do goals, A1 grammar step, key words, phonics, signature game per lesson). Every gamified activity we can use at A1 (built A1, universal, Pre-A1 games to
 port with an A1 mode, and new researched games) is in `docs/a1-activity-library.md`. Owner: "you can also use the same games
 from the Pre-A1". Check both before choosing activities for any A1 lesson.
+
+**A1 curriculum blueprint and lesson plans (owner 2026-10-12, "update the curriculum… the lesson blueprint… also lesson plans"):**
+unit buckets (goal, grammar step, words, review targets) in `src/curriculum/roadmap/a1Roadmap.ts`; one plan per slot (70) in
+`src/curriculum/roadmap/a1LessonPlans.ts` (objective, grammar, new words, phonics, signature game, evidence, fun hook, home
+mission), synced to `curriculum_lessons` by `scripts/a1-lesson-plans-sql.ts` and guarded by
+`src/curriculum/__tests__/a1LessonPlans.test.ts`; teacher unit checks in `src/curriculum/knowledgeChecks/playground.ts`;
+A1 lesson rules in `docs/playground-lesson-blueprint.md` §3g. Change the plan first, then the lesson.

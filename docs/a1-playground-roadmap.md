@@ -198,7 +198,7 @@ ask and answer "Can it…?".
 3. **Listen: Where Is the Magic Lamp?** — listening lesson, prepositions (built)
 4. **There Is / There Are in My Room!** — describe a room and say whose things are · There are two lamps. Whose crown is it? It's Wim's. · Design My Room ★ (place furniture, then describe)
 5. **Storybook: The Hidden Treasure Room** — story video
-6. **Extra Practice: Find It in the Castle!** — Torch Hunt (A1) + Lift the Flap ⇄
+6. **Extra Practice: Find It in the Castle!** — Lift the Flap ⇄ + Memory ⇄ (Torch Hunt is already L3's game)
 7. **Unit Review & Boss Test: Castle Search!** — Boss Test
 
 ### Unit 10 · Gadget Lab
@@ -211,6 +211,10 @@ ask and answer "Can it…?".
 6. **Extra Practice: Robot Instruction Match!** — Maze Chase ★ + Rapid Recall ⇄
 7. **Unit Review & Boss Test: Tech Inventor!** — Boss Test
 → **A1 Final Test after Unit 10** (moves to A2) + the A1 "Rising Star" certificate (two medals).
+
+**Lesson plans in code:** every one of the 70 lessons above has a full plan (objective, grammar, new words, phonics, game,
+evidence, fun hook, home mission) in `src/curriculum/roadmap/a1LessonPlans.ts`, synced to the database rows; the unit
+buckets are in `src/curriculum/roadmap/a1Roadmap.ts`; A1 lesson rules are in `docs/playground-lesson-blueprint.md` §3g.
 
 Every unit gets its own objective file before its lessons are built (owner, 2026-10-12): unit objective, what the child
 brings from before, new vs recycled language, and a progressive "I can…" outcome + evidence for every lesson, researched
@@ -229,7 +233,7 @@ So in A1:
 | Fun mechanic | How it works | Rule that keeps it about learning |
 |---|---|---|
 | **The A1 Explorer Map** | One map with the 10 worlds. Each L7 ends with a 5-second teaser of the next world (a shadow, a sound, a local friend waving). | The next world opens when the Boss Test is passed (80 % per part). |
-| **The Golden Compass** (story across A1) | A piece of Willow's broken compass is hidden in every world. The cast travels to find it, and the 10 pieces open A2. | The piece is the Boss Test reward. The story frame never replaces the lesson's goal. |
+| **The Golden Compass** (story across A1) | Willow's compass breaks in the Jungle (Unit 2); one piece is hidden in each world from Unit 2 to Unit 10. The cast travels to find them, and the 9 pieces open A2. | The piece is the Boss Test reward. The story frame never replaces the lesson's goal. |
 | **Explorer Passport** | One stamp per lesson, shown at the sticker page. | The stamp is earned by saying the lesson's "I can…" sentence (the objective), never for taps. |
 | **Real choices** | At least 2 per lesson: which friend to help, which path, which animal to describe, your favourite. | Every choice needs the target language to make it. |
 | **The child is the expert** | In every L4 the child teaches or tests the local friend (riddler, reporter, robot boss, chef). | The friend makes a mistake the child corrects in the target language. |
