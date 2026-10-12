@@ -1,7 +1,7 @@
 [
  {
-  "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0097-2488757550264374801.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261011%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261011T173802Z&X-Amz-Expires=81373&X-Amz-Signature=b7d3e7e826c6fd9301bcaea2c2086f96660aad760cba648c4a85b9bc87eb228e&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2012%20Oct%202026%2016%3A14%3A15%20GMT",
-  "out": "public/certificates/playground-a1.png",
+  "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0098-7009245676266250815.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261011%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261011T150631Z&X-Amz-Expires=88490&X-Amz-Signature=5133c98fe83ec784c417910df92d7119a1c411701240b92e2883fe4980e4a92d&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2012%20Oct%202026%2015%3A41%3A21%20GMT",
+  "out": "public/certificates/playground-a2.png",
   "raw": true
  }
 ]
