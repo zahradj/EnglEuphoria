@@ -53,6 +53,19 @@ export const SIGN_ME_UP: DeckScript = {
       ],
       hints: ['Look at what the picture shows. A hand pointing is Point. An ear is Listen.', 'Tap a word to hear it, then tap the picture.'],
     },
+    {
+      id: 'memory-words', kind: 'memory', part: 0, bg: 'club-signup-desk', actors: [{ who: 'Vee', pos: 'left', expr: 'happy' }], trains: [1],
+      prompt: 'Memory! Flip two cards: find each picture and its word. Hear it, then say it.',
+      pairs: [
+        { art: { type: 'action' as const, id: 'listen' as const }, text: 'Listen' },
+        { art: { type: 'action' as const, id: 'look' as const }, text: 'Look' },
+        { art: { type: 'action' as const, id: 'repeat' as const }, text: 'Repeat' },
+        { art: { type: 'action' as const, id: 'click' as const }, text: 'Click' },
+        { art: { type: 'action' as const, id: 'read' as const }, text: 'Read' },
+        { art: { type: 'action' as const, id: 'point' as const }, text: 'Point' },
+      ],
+      hints: ['Flip a card and listen. Remember where each picture is.'],
+    },
 { id: 'badge', kind: 'badge', part: 0, bg: 'club-signup-desk', actors: [{ who: 'Theo', pos: 'right', expr: 'wave' }], trains: [4], prompt: 'Theo gives you a badge. Put your name on it.', starter: 'My name is', ages: [11, 12, 13, 14, 15, 16, 17, 18], hints: ['Type only your name, and tap your age.'] },
 {
       id: 'checkin-chat', part: 0, kind: 'convo', bg: 'club-signup-desk', actors: [{ who: 'Theo', pos: 'right', expr: 'happy' }], trains: [4],
@@ -99,6 +112,17 @@ export const SIGN_ME_UP: DeckScript = {
       hints: ['Look at the face and the hands in each picture. Which phrase would you say?', 'Tap a phrase to hear it, then tap the picture.'],
     },
     {
+      id: 'memory-help', kind: 'memory', part: 1, bg: 'club-signup-desk', actors: [{ who: 'Vee', pos: 'right', expr: 'happy' }], trains: [5],
+      prompt: 'Memory! Find each help phrase and its picture.',
+      pairs: [
+        { art: { type: 'action' as const, id: 'sorry' as const }, text: 'Sorry?' },
+        { art: { type: 'action' as const, id: 'slow' as const }, text: 'Slowly, please.' },
+        { art: { type: 'action' as const, id: 'confused' as const }, text: 'I don’t understand.' },
+        { art: { type: 'action' as const, id: 'meaning' as const }, text: 'What does it mean?' },
+      ],
+      hints: ['Flip two cards. Match the phrase with the face.'],
+    },
+    {
       id: 'count-revise', kind: 'countup', part: 1, bg: 'locker-hall', actors: [{ who: 'Vee', pos: 'right', expr: 'happy' }], trains: [2],
       prompt: 'Let’s count! Listen, then fill the gaps. 1 to 10, 11 to 20, then by tens.',
       rounds: [
@@ -121,6 +145,18 @@ export const SIGN_ME_UP: DeckScript = {
     },
 { id: 'lockers', kind: 'lockers', part: 2, bg: 'locker-hall', actors: [{ who: 'Vee', pos: 'right', expr: 'happy' }], trains: [2], prompt: 'Locker Pop! Read the number word and open that locker.', rounds: [4, 2, 5], grid: [1, 2, 3, 4, 5], words: WORDS, hints: ['Count the numbers on the doors. Four is 4.'] },
     {
+      id: 'memory-nums', kind: 'memory', part: 2, bg: 'locker-hall', actors: [{ who: 'Vee', pos: 'right', expr: 'happy' }], trains: [2],
+      prompt: 'Memory! Match each number word with its dots.',
+      pairs: [
+        { art: { type: 'count' as const, n: 3 }, text: WORDS[3] },
+        { art: { type: 'count' as const, n: 5 }, text: WORDS[5] },
+        { art: { type: 'count' as const, n: 6 }, text: WORDS[6] },
+        { art: { type: 'count' as const, n: 8 }, text: WORDS[8] },
+        { art: { type: 'count' as const, n: 10 }, text: WORDS[10] },
+      ],
+      hints: ['Count the dots on the card, then find its word.'],
+    },
+    {
       id: 'teach-nations', kind: 'teach', part: 2, bg: 'border-control', actors: [{ who: 'Vee', pos: 'left', expr: 'happy' }], trains: [3], title: 'Countries and nationalities (country · nationality)',
       pages: [
         { word: 'Spain · Spanish', art: { type: 'bearer' as const, code: 'es', who: 'Ava' as const }, meaning: 'a country and its people', example: 'I am from Spain. I am Spanish.', clue: 'Ava holds the flag of Spain: red, yellow, red. Spain → Spanish.' },
@@ -140,6 +176,17 @@ export const SIGN_ME_UP: DeckScript = {
         { word: 'France · French', art: { type: 'bearer' as const, code: 'fr', who: 'Vee' as const } },
       ],
       hints: ['Look at the flag in their hand. Red and yellow is Spain. Green and yellow is Brazil.', 'Tap a word to hear it, then tap the character.'],
+    },
+    {
+      id: 'memory-nations', kind: 'memory', part: 2, bg: 'border-control', actors: [{ who: 'Vee', pos: 'left', expr: 'happy' }], trains: [3],
+      prompt: 'Memory! Find each flag and its nationality word.',
+      pairs: [
+        { flag: 'es', text: 'Spanish' },
+        { flag: 'it', text: 'Italian' },
+        { flag: 'br', text: 'Brazilian' },
+        { flag: 'fr', text: 'French' },
+      ],
+      hints: ['Remember where the flags are. Spain is red and yellow.'],
     },
 {
       id: 'model-signup', kind: 'model', part: 2, bg: 'club-signup-desk', actors: [{ who: 'Ava', pos: 'left', expr: 'happy' }, { who: 'Theo', pos: 'right', expr: 'happy' }], trains: [1, 2, 3, 4, 5],
@@ -199,6 +246,28 @@ export const SIGN_ME_UP: DeckScript = {
         { word: 'Can you say it again?', art: { type: 'card', id: 'v-again', label: 'say it again' }, meaning: 'ask someone to repeat', example: 'Sorry, can you say it again?', clue: 'You did not hear? Ask. It is normal.' },
       ],
       hints: ['Press “Show again” to watch the letters appear.'],
+    },
+    {
+      id: 'match-spell', kind: 'match', part: 3, bg: 'club-signup-desk', actors: [{ who: 'Vee', pos: 'right', expr: 'happy' }], trains: [1, 5],
+      prompt: 'Match each word or question with its picture. Drag it onto the picture.',
+      pairs: [
+        { word: 'spell', art: { type: 'letters' as const, text: 'AVA' } },
+        { word: 'letter', art: { type: 'letters' as const, text: 'M' } },
+        { word: 'How do you spell it?', art: { type: 'card' as const, id: 'v-spell', label: 'spelling a name' } },
+        { word: 'Can you say it again?', art: { type: 'card' as const, id: 'v-again', label: 'say it again' } },
+      ],
+      hints: ['Spell is the letters of a word. Look at the picture, then drag.'],
+    },
+    {
+      id: 'memory-spell', kind: 'memory', part: 3, bg: 'club-signup-desk', actors: [{ who: 'Vee', pos: 'right', expr: 'happy' }], trains: [1, 5],
+      prompt: 'Memory! Find each picture and its word.',
+      pairs: [
+        { art: { type: 'letters' as const, text: 'AVA' }, text: 'spell' },
+        { art: { type: 'letters' as const, text: 'M' }, text: 'letter' },
+        { art: { type: 'card' as const, id: 'v-spell', label: 'spelling a name' }, text: 'How do you spell it?' },
+        { art: { type: 'card' as const, id: 'v-again', label: 'say it again' }, text: 'Can you say it again?' },
+      ],
+      hints: ['Flip two cards. Say the word when you find a pair.'],
     },
     {
       id: 'border', kind: 'border', part: 3, bg: 'border-control', actors: [{ who: 'Theo', pos: 'right', expr: 'happy' }], trains: [3],

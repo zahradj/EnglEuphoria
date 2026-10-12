@@ -45,6 +45,10 @@ Core 51 min is never skipped (Check-in 5 and Energiser 4 are the flex). If the e
 
 Level scaling: A1 teacher talk <= 40 %, scaffolds full; B1 task-first; C1 seminar/pitch, authentic text, mediation, register work (see season-system).
 
+## Vocabulary rule (owner, 2026-10-12)
+
+After **every** vocabulary introduction (every `teach` slide / Notice & Build word set) put **TWO different memorising games**: e.g. drag-match + flip-memory (pictures and words), or a number game (Locker Pop, Number Train) + flip-memory. Never one, never the same kind twice, no new teaching in between. `deck.test.tsx` ("RULE: after every vocabulary introduction…") enforces it. Budget the extra ~2 min per word set honestly: if the lesson no longer fits the hour, split the lesson, do not drop the games.
+
 ## Required parts of every session plan
 
 00. **Cast:** use only the Academy cast from the vault (`src/curriculum/academy/cast.ts`; blueprint field `cast`). Vee is the mentor voice (Remember? card, clue hand-over, Wrap: mistakes are normal); the Season lead and one helper student play the parts the blueprint gives them, following their vault traits (Ava asks, Theo listens, Mia = peer, traits to be defined). No invented characters.

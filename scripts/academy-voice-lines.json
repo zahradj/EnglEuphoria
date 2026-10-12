@@ -60,6 +60,10 @@
     "text": "Match each picture with its word. Drag the word onto the picture."
   },
   {
+    "who": "Vee",
+    "text": "Memory! Flip two cards: find each picture and its word. Hear it, then say it."
+  },
+  {
     "who": "Theo",
     "text": "What do you like?"
   },
@@ -118,6 +122,10 @@
   {
     "who": "Vee",
     "text": "Grab and drag: match each help phrase with its picture."
+  },
+  {
+    "who": "Vee",
+    "text": "Memory! Find each help phrase and its picture."
   },
   {
     "who": "Vee",
@@ -285,6 +293,10 @@
   },
   {
     "who": "Vee",
+    "text": "Memory! Match each number word with its dots."
+  },
+  {
+    "who": "Vee",
     "text": "Spain, Spanish"
   },
   {
@@ -318,6 +330,26 @@
   {
     "who": "Vee",
     "text": "Who is from where? Drag each country and nationality onto its character."
+  },
+  {
+    "who": "Vee",
+    "text": "Memory! Find each flag and its nationality word."
+  },
+  {
+    "who": "Vee",
+    "text": "Spanish"
+  },
+  {
+    "who": "Vee",
+    "text": "Italian"
+  },
+  {
+    "who": "Vee",
+    "text": "Brazilian"
+  },
+  {
+    "who": "Vee",
+    "text": "French"
   },
   {
     "who": "Theo",
@@ -752,6 +784,14 @@
     "text": "Sorry, can you say it again?"
   },
   {
+    "who": "Vee",
+    "text": "Match each word or question with its picture. Drag it onto the picture."
+  },
+  {
+    "who": "Vee",
+    "text": "Memory! Find each picture and its word."
+  },
+  {
     "who": "Theo",
     "text": "Border control! Drag each traveller onto the right passport."
   },
@@ -778,26 +818,6 @@
   {
     "who": "Theo",
     "text": "Your member number is four hundred twenty-seven!"
-  },
-  {
-    "who": "Vee",
-    "text": "Memory! Find each flag and its nationality word."
-  },
-  {
-    "who": "Vee",
-    "text": "Spanish"
-  },
-  {
-    "who": "Vee",
-    "text": "Italian"
-  },
-  {
-    "who": "Vee",
-    "text": "Brazilian"
-  },
-  {
-    "who": "Vee",
-    "text": "French"
   },
   {
     "who": "Vee",
