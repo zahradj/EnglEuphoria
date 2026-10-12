@@ -53,6 +53,11 @@ export const VARIETY_ENFORCED_FROM = { unit: 3, lesson: 4 };
 /** Built before the rule (rebuild them to the rule when they are next touched). */
 export const GRANDFATHERED: readonly string[] = ['5-1'];
 
+/** Level tests (owner-approved assessment plan 2026-10-12, docs/assessment/prea1-assessment-plan.md): a test lesson is
+ *  deliberately ONE calm test activity, not a varied game lesson, so the variety rules don't apply to it. Only lessons
+ *  whose scenes are routine kinds + one `level-test` may be listed here. */
+export const ASSESSMENT_LESSONS: readonly string[] = ['1-7', '2-7', '3-7', '4-7', '5-7', '6-7', '7-7', '8-7', '9-7', '5-8', '10-8'];
+
 export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '2-2': { settings: ['art studio', 'fruit market', 'meadow'], look: "Pip's sunny paint studio indoors, a striped market stall, the rainbow meadow; colour-mixing mission" },
   '2-3': { settings: ['town street', 'builder yard'], look: 'sunny Shape Town street with a clock tower, a house and a flag; a grassy builder yard where the friends build with shapes' },
@@ -62,6 +67,7 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
   '4-4': { settings: ['flower garden'], look: 'bright flower garden with big friendly mushrooms; Pip meets Bo, a round sky-blue three-eyed monster; code-drawn monsters on an empty lawn' },
   '4-5': { settings: ['animal park'], look: 'sunny animal park with a blue pond and tall trees; a tiger, a monkey, an elephant and a seal each show one move, Pip copies; a leafy bush to peek through' },
+  '10-7': { settings: ['hero academy training ground'], look: "a sunny outdoor hero academy in the park: a round wooden stage with a big golden star, flags with lightning bolts, a little winners' podium, hoops and cones on the grass; Pip, Mia and Leo in red, purple and blue hero capes in proud hero poses; the Boss Test is a hero power bar with Pip flying along it, picture and letter trial cards, and the golden hero medal with a result board" },
   '10-6': { settings: ['living-room games night'], look: "a cosy evening games night in the friends' living room: a purple-and-gold striped magic top hat full of paper cards on a little stool, a green sofa with cushions, a round orange rug, a warm standing lamp, fairy lights and paper bunting, a starry purple sky in the window; Pip pulls a charades card from the hat while Mia and Leo laugh on the sofa; Action Charades plays on a little velvet-curtain stage, plus the Buzzer Show stage and the ring-toss stall from earlier units" },
   '10-5': { settings: ['tall-grass meadow', 'stepping-stone stream', 'little river', 'green hill', 'bear cave'], look: "our own bear-hunt story as a stills film: the friends with a paper map at a garden gate, walking through tall grass, a green frog jumping over stepping stones in a stream (Pip jumps too), an orange fish in a little river (Mia swims too), a blue bird over a round green hill (Leo runs up), a cosy cave where Bruno, a round smiling brown bear, sleeps on autumn leaves by glowing mushrooms, wakes and dances with everybody at sunset; the games walk an empty forest trail with a bush, a hollow log, a lily pond and the cave" },
   '10-4': { settings: ['circus big top'], look: "the friends' circus inside a red-and-yellow striped big top: a round ring with a red rim on a sandy floor, bunting, warm spotlights, balloons and a striped podium; Leo is the ringmaster in a little red top hat, Pip jumps high and Mia dances on the podium; in Can It? the animals come into the empty ring one by one and really do the action (or comically flop)" },
@@ -219,6 +225,19 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'the child must understand the verb AND the body part to find the animal, then PRODUCES the move and the sentence — the screen waits for the child, never a clock',
       'the clue in Whose Is It? is one of the unit\'s body words, so naming the part and the animal go together, and the reveal recalls the story move',
       'wrong picks are named back with that animal\'s own move ("No, the seal claps her hands!"), and the right one glows after two tries',
+    ],
+  },
+  '10-7': {
+    sources: ['Cambridge (Pre A1 Starters listening: listen and tick the picture, one answer each)', 'Duolingo / Lingokids (unit checkpoints: a short mixed test that ends in a reward)', 'Khan Academy Kids (mastery stars per skill)', 'Kahoot (results screen)', 'Wordwall (memory and odd-one-out review games)'],
+    mechanics: [
+      'unit checkpoint → Hero Trials: one-try spoken trials for each skill (actions, can / can\'t, he / she / it, sounds) with a hero power bar',
+      'results screen → a board with stars PER SKILL and the words to practise again (evidence for the teacher, a medal for the child)',
+      'warm review before the test: memory pairs of the actions, odd-one-out with can / can\'t, the unit song; the sounds again in the Hero Treasure',
+    ],
+    betterThan: [
+      'the result is broken down by skill, so the teacher sees exactly what to practise (not one score)',
+      'it stays calm for a 4-6 year old: spoken questions, picture-only answers, no clock, 🔊 replays as often as needed',
+      'a miss still teaches: the right card glows and the full answer is said ("Good try! A fish can\'t walk. It can swim!")',
     ],
   },
   '10-6': {
