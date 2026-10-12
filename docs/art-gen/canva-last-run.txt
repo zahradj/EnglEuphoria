@@ -1,3 +1,4 @@
-+ public/lep1/scenes/bg-u10l6-games-night-empty-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u10l6-games-night-wide.png (1376, 768)
-2/2 saved
++ public/lep1/scenes/bg-u10l7-hero-academy-empty-wide.png (1376, 768)
++ public/lep1/scenes/bg-u10l7-hero-academy-wide.png (1376, 768)
++ public/lep1/items/tmp-sheet-heroes.png (1536, 1024) raw
+3/3 saved
