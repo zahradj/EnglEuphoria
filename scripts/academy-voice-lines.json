@@ -1285,6 +1285,298 @@
   },
   {
     "who": "Vee",
+    "text": "Hello, letters"
+  },
+  {
+    "who": "Vee",
+    "text": "Hi! This is the Name Wall. Every letter you learn lights up a tile."
+  },
+  {
+    "who": "Theo",
+    "text": "How are you?"
+  },
+  {
+    "who": "Vee",
+    "text": "A"
+  },
+  {
+    "who": "Vee",
+    "text": "A, B."
+  },
+  {
+    "who": "Vee",
+    "text": "B"
+  },
+  {
+    "who": "Vee",
+    "text": "B, C."
+  },
+  {
+    "who": "Vee",
+    "text": "C"
+  },
+  {
+    "who": "Vee",
+    "text": "C, D."
+  },
+  {
+    "who": "Vee",
+    "text": "D"
+  },
+  {
+    "who": "Vee",
+    "text": "D, E."
+  },
+  {
+    "who": "Vee",
+    "text": "Which letter do you hear? Tap it."
+  },
+  {
+    "who": "Vee",
+    "text": "Memory! Match each big letter with its small letter."
+  },
+  {
+    "who": "Vee",
+    "text": "a"
+  },
+  {
+    "who": "Vee",
+    "text": "b"
+  },
+  {
+    "who": "Vee",
+    "text": "c"
+  },
+  {
+    "who": "Vee",
+    "text": "d"
+  },
+  {
+    "who": "Vee",
+    "text": "One more time! Which letter do you hear?"
+  },
+  {
+    "who": "Ava",
+    "text": "Hi!"
+  },
+  {
+    "who": "Theo",
+    "text": "Hello! My name is Theo."
+  },
+  {
+    "who": "Ava",
+    "text": "Hi, Theo. I am Ava."
+  },
+  {
+    "who": "Vee",
+    "text": "I am Vee. Bye!"
+  },
+  {
+    "who": "Ava",
+    "text": "Bye, Vee!"
+  },
+  {
+    "who": "Vee",
+    "text": "Hello, Ava!"
+  },
+  {
+    "who": "Vee",
+    "text": "Hi!"
+  },
+  {
+    "who": "Vee",
+    "text": "Hi, Theo!"
+  },
+  {
+    "who": "Vee",
+    "text": "Bye!"
+  },
+  {
+    "who": "Vee",
+    "text": "Bye, Vee!"
+  },
+  {
+    "who": "Theo",
+    "text": "My name is Ava."
+  },
+  {
+    "who": "Theo",
+    "text": "My name is Theo."
+  },
+  {
+    "who": "Theo",
+    "text": "I am Ava."
+  },
+  {
+    "who": "Theo",
+    "text": "I am Vee."
+  },
+  {
+    "who": "Theo",
+    "text": "Match each sentence with its picture. Drag it onto the picture."
+  },
+  {
+    "who": "Theo",
+    "text": "Hello!"
+  },
+  {
+    "who": "Ava",
+    "text": "I am Theo."
+  },
+  {
+    "who": "Vee",
+    "text": "E"
+  },
+  {
+    "who": "Vee",
+    "text": "E, F."
+  },
+  {
+    "who": "Vee",
+    "text": "F"
+  },
+  {
+    "who": "Vee",
+    "text": "F, G."
+  },
+  {
+    "who": "Vee",
+    "text": "G"
+  },
+  {
+    "who": "Vee",
+    "text": "G, H."
+  },
+  {
+    "who": "Vee",
+    "text": "Which letter do you hear?"
+  },
+  {
+    "who": "Vee",
+    "text": "e"
+  },
+  {
+    "who": "Vee",
+    "text": "f"
+  },
+  {
+    "who": "Vee",
+    "text": "g"
+  },
+  {
+    "who": "Vee",
+    "text": "Read the line. Which picture is it? Tap a word to hear it."
+  },
+  {
+    "who": "Vee",
+    "text": "Hello, Ava."
+  },
+  {
+    "who": "Vee",
+    "text": "Hello"
+  },
+  {
+    "who": "Vee",
+    "text": "Ava"
+  },
+  {
+    "who": "Vee",
+    "text": "My name is Theo."
+  },
+  {
+    "who": "Vee",
+    "text": "My"
+  },
+  {
+    "who": "Vee",
+    "text": "name"
+  },
+  {
+    "who": "Vee",
+    "text": "is"
+  },
+  {
+    "who": "Vee",
+    "text": "Theo"
+  },
+  {
+    "who": "Vee",
+    "text": "Bye, Vee."
+  },
+  {
+    "who": "Vee",
+    "text": "Bye"
+  },
+  {
+    "who": "Vee",
+    "text": "Vee"
+  },
+  {
+    "who": "Vee",
+    "text": "I am Ava."
+  },
+  {
+    "who": "Vee",
+    "text": "I"
+  },
+  {
+    "who": "Vee",
+    "text": "am"
+  },
+  {
+    "who": "Theo",
+    "text": "Spell Ava’s name on the wall. Tap the letters."
+  },
+  {
+    "who": "Vee",
+    "text": "Which name do you hear? Tap it."
+  },
+  {
+    "who": "Theo",
+    "text": "Bye!"
+  },
+  {
+    "who": "Theo",
+    "text": "Memory! Find each picture and its greeting."
+  },
+  {
+    "who": "Ava",
+    "text": "Build your hello. Tap the words in the right order."
+  },
+  {
+    "who": "Ava",
+    "text": "Hello, Ava."
+  },
+  {
+    "who": "Ava",
+    "text": "I am Ava."
+  },
+  {
+    "who": "Theo",
+    "text": "Now spell YOUR name on the wall."
+  },
+  {
+    "who": "Theo",
+    "text": "Take 1 · Say hello to Theo and tell him your name."
+  },
+  {
+    "who": "Theo",
+    "text": "Take 2 · Say hello, your name and bye."
+  },
+  {
+    "who": "Vee",
+    "text": "The wall lights up!"
+  },
+  {
+    "who": "Vee",
+    "text": "Homework: say hello and your name to one person today. Not yet is okay!"
+  },
+  {
+    "who": "Vee",
+    "text": "Clue 1 of 8: The wall flashes the letter A. Whose name starts with A? Ava!"
+  },
+  {
+    "who": "Vee",
     "text": "Shadow match! Which number is hiding?"
   },
   {
@@ -1385,39 +1677,7 @@
   },
   {
     "who": "Vee",
-    "text": "A"
-  },
-  {
-    "who": "Vee",
-    "text": "B"
-  },
-  {
-    "who": "Vee",
-    "text": "C"
-  },
-  {
-    "who": "Vee",
-    "text": "D"
-  },
-  {
-    "who": "Vee",
-    "text": "E"
-  },
-  {
-    "who": "Vee",
-    "text": "F"
-  },
-  {
-    "who": "Vee",
-    "text": "G"
-  },
-  {
-    "who": "Vee",
     "text": "H"
-  },
-  {
-    "who": "Vee",
-    "text": "I"
   },
   {
     "who": "Vee",

@@ -96,6 +96,7 @@ export * from './types';
 export * from './lessonBlueprint';
 export * from './vocabGames';
 export * from './ladder';
+export * from './preA1';
 export * from './itemTypes';
 export * from './cast';
 export { validateItems, expectedCounts, coverageByLevel, normalizeItem } from './validateItems';

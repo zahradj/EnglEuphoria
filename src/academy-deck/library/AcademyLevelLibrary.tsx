@@ -19,7 +19,8 @@ export function AcademyLevelLibrary({ lessons, renderLesson, gridClassName = 'gr
 }) {
   const { t } = useTranslation();
   const groups = useMemo(() => groupAcademyLibrary(lessons, showSteps), [lessons, showSteps]);
-  const firstWithLessons = groups.find((g) => g.count > 0)?.id ?? groups[0].id;
+  // open the first step with lessons, preferring a regular level over Pre-A1 (most classes are A1 or above)
+  const firstWithLessons = (groups.find((g) => g.count > 0 && g.stage !== 'pre') ?? groups.find((g) => g.count > 0) ?? groups[0]).id;
   const [level, setLevel] = useState<string>(firstWithLessons);
   const [open, setOpen] = useState<Set<string>>(new Set());
   const current = groups.find((g) => g.id === level) ?? groups[0];
