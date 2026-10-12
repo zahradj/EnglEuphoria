@@ -8,4 +8,5 @@ export const academyLessonsTranslations = {
   'al.empty': 'Tes leçons apparaîtront ici dès qu’elles seront prêtes.',
   'al.back': 'Retour aux leçons',
   'al.missing': 'Cette leçon n’est pas disponible.',
+  'al.follow': 'Ton professeur fait avancer la leçon.',
 };

@@ -972,3 +972,8 @@
 .ad-write-sample { margin: 0; color: #5b21b6; font-style: italic; }
 @media (max-width: 640px) { .ad-fc { grid-template-columns: 1fr; } .ad-fc-flag { width: 46px; } }
 .ad-root[data-hw='true'] .ad-be-line, .ad-root[data-hw='true'] .ad-fc-claim { color: #1e1b4b; }
+
+/* ---------- live classroom: the deck fills the stage frame ---------- */
+.ad-root[data-embedded='true'] { height: 100%; max-height: 100%; border-radius: 0; }
+.ad-follow-note { position: absolute; inset-inline-start: 50%; bottom: 10px; transform: translateX(-50%); margin: 0; padding: 4px 14px; border-radius: 999px; background: rgba(46, 16, 101, 0.78); color: #fff; font-size: 0.8rem; font-weight: 700; pointer-events: none; z-index: 60; }
+[dir='rtl'] .ad-follow-note { transform: translateX(50%); }

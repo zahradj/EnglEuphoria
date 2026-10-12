@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Eye, Rocket, Search, BookOpen, Loader2, ChevronDown } from 'lucide-react';
 import { AssignLessonModal } from './AssignLessonModal';
 import { useNavigate } from 'react-router-dom';
+import { ACADEMY_DECK_LESSONS } from '@/academy-deck/lessonRegistry';
 import { getLibraryLessons, toLibraryLessonCard, resolvePlaygroundLessonRoute, type LibraryLessonCard, type LibraryHub } from '@/services/lessonLibraryService';
 
 const HUB_META: Record<LibraryHub, { label: string; emoji: string; color: string; active: string }> = {
@@ -92,7 +93,8 @@ export const TeacherLessonLibrary: React.FC = () => {
     enabled: !!user?.id,
   });
 
-  const displayLessons = lessons || [];
+  // The Academy hub is shown from the new Academy library (src/academy-deck/lessonRegistry); the old database-backed Academy rows are not listed here.
+  const displayLessons = (lessons || []).filter((l) => l.hub !== 'academy');
   const isSearching = search.trim().length > 0;
 
   const searched = useMemo(() => {
@@ -106,7 +108,7 @@ export const TeacherLessonLibrary: React.FC = () => {
   // Hubs that actually have lessons, in a fixed display order.
   const hubOrder: LibraryHub[] = ['playground', 'academy', 'professional'];
   const hubsWithContent = useMemo(
-    () => hubOrder.filter(h => displayLessons.some(l => l.hub === h)),
+    () => hubOrder.filter(h => h === 'academy' || displayLessons.some(l => l.hub === h)),
     [displayLessons]
   );
 
@@ -244,8 +246,31 @@ export const TeacherLessonLibrary: React.FC = () => {
             })}
           </div>
 
+          {activeHub === 'academy' && (
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {ACADEMY_DECK_LESSONS.map((l) => (
+                <Card key={l.id} className="overflow-hidden border-border/50">
+                  <div className="relative h-28" style={{ background: l.gradient }}>
+                    <img src={l.cover} alt="" className="absolute inset-0 h-full w-full object-cover" loading="lazy" onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} />
+                  </div>
+                  <CardContent className="space-y-2 p-4">
+                    <h3 className="font-semibold text-sm text-foreground">Lesson {l.lesson}. {l.title}</h3>
+                    <p className="text-xs text-muted-foreground line-clamp-2">{l.blurb}</p>
+                    <p className="text-xs text-muted-foreground">Season {l.season} · Level: {l.level} · {l.minutes} min</p>
+                    <div className="flex flex-wrap gap-2 pt-1">
+                      <Button size="sm" variant="outline" className="gap-1.5" onClick={() => navigate(`/academy-lesson/${l.id}`)}>
+                        <Eye className="w-3.5 h-3.5" /> View Lesson
+                      </Button>
+                    </div>
+                    <p className="text-[11px] text-muted-foreground">Open it in a live class from the classroom’s Lesson Library.</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+
           {/* Level pills */}
-          {levelsInHub.length > 1 && (
+          {activeHub !== 'academy' && levelsInHub.length > 1 && (
             <div className="flex flex-wrap gap-2">
               {levelsInHub.map(lvl => (
                 <button
@@ -264,7 +289,7 @@ export const TeacherLessonLibrary: React.FC = () => {
           )}
 
           {/* Unit accordions */}
-          {unitGroups.length === 0 ? (
+          {activeHub === 'academy' ? null : unitGroups.length === 0 ? (
             <Card className="p-10 text-center">
               <p className="text-muted-foreground">No lessons at this level yet.</p>
             </Card>

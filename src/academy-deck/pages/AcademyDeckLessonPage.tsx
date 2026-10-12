@@ -18,7 +18,7 @@ export default function AcademyDeckLessonPage({ homework = false }: { homework?:
   const lesson = getAcademyDeckLesson(id);
   const role = (user as { role?: string } | null)?.role;
   const isCreator = role === 'content_creator' || role === 'admin';
-  const back = () => navigate(isCreator ? '/academy-library' : '/dashboard/academy?tab=lessons');
+  const back = () => navigate(isCreator ? '/academy-library' : role === 'teacher' ? '/teacher-dashboard' : '/dashboard/academy?tab=lessons');
   const Player = id === 'sign-me-up' ? (homework ? SignMeUpHomework : SignMeUpLesson) : id === 'fake-or-real' && !homework ? FakeOrRealLesson : null;
 
   return (

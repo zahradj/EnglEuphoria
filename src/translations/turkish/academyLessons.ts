@@ -8,4 +8,5 @@ export const academyLessonsTranslations = {
   'al.empty': 'Dersların hazır olur olmaz burada görünecek.',
   'al.back': 'Derslere dön',
   'al.missing': 'Bu ders kullanılamıyor.',
+  'al.follow': 'Dersi öğretmenin ilerletir.',
 };

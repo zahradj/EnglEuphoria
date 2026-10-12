@@ -708,12 +708,12 @@ const App = () => {
                         </ImprovedProtectedRoute>
                       } />
                       <Route path="/academy-lesson/:id" element={
-                        <ImprovedProtectedRoute requiredRole={["student", "content_creator", "admin"]}>
+                        <ImprovedProtectedRoute requiredRole={["student", "teacher", "content_creator", "admin"]}>
                           <Suspense fallback={<LoadingFallback />}><AcademyDeckLessonPage /></Suspense>
                         </ImprovedProtectedRoute>
                       } />
                       <Route path="/academy-lesson/:id/homework" element={
-                        <ImprovedProtectedRoute requiredRole={["student", "content_creator", "admin"]}>
+                        <ImprovedProtectedRoute requiredRole={["student", "teacher", "content_creator", "admin"]}>
                           <Suspense fallback={<LoadingFallback />}><AcademyDeckLessonPage homework /></Suspense>
                         </ImprovedProtectedRoute>
                       } />

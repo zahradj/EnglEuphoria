@@ -13,12 +13,18 @@ import {
 import { isSceneLessonFormat } from '@/content/playground-library/sceneLessonFormats';
 import { LIBRARY_GAMES, type LibraryGame } from '@/content/playground-library/gamesCatalog';
 import { GAME_LESSON_FORMAT, gameLessonNumber } from '@/content/playground-library/gameLessons';
+import { ACADEMY_DECK_LESSONS, type AcademyDeckLesson } from '@/academy-deck/lessonRegistry';
 
 
 export interface SceneLessonMeta {
   contentFormat: string;
   unitNumber: number;
   lessonNumber: number;
+}
+
+/** Set when the picked lesson is an Academy library (deck) lesson: it lives in code (src/academy-deck), not in `content.slides`. */
+export interface DeckLessonMeta {
+  lessonId: string;
 }
 
 interface LibraryDrawerProps {
@@ -28,7 +34,7 @@ interface LibraryDrawerProps {
    *  Explorers Phonics) lesson whose real content lives in code, not in
    *  `content.slides` — the caller should render it via the scene player
    *  instead of treating `slides` as normal classroom slides. */
-  onSelectLesson: (slides: any[], title: string, sceneMeta?: SceneLessonMeta) => void;
+  onSelectLesson: (slides: any[], title: string, sceneMeta?: SceneLessonMeta, deckMeta?: DeckLessonMeta) => void;
   slideFormat?: 'classroom' | 'raw';
   /** Lock the drawer to a single hub (playground | academy | professional). */
   hubFilter?: string;
@@ -139,8 +145,20 @@ export default function LibraryDrawer({
   const [view, setView] = useState<'lessons' | 'games'>('lessons');
   const accent = (hubFilter && HUB_ACCENT[hubFilter]) || DEFAULT_ACCENT;
 
+  // The Academy hub's library is the new Academy library (src/academy-deck/lessonRegistry): the old database-backed Academy list is not shown here.
+  const academyDeck = hubFilter === 'academy';
+  const deckLessons = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    return ACADEMY_DECK_LESSONS.filter((l) => !q || [l.title, l.blurb, l.level].some((v) => v.toLowerCase().includes(q)));
+  }, [searchQuery]);
+
   useEffect(() => {
     if (!open) return;
+    if (academyDeck) {
+      setLessons([]);
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     getLibraryLessons(hubFilter, { includeDrafts: true })
       .then((data) => setLessons(data.map(toLibraryLessonCard)))
@@ -151,7 +169,7 @@ export default function LibraryDrawer({
       .finally(() => {
         setLoading(false);
       });
-  }, [open, hubFilter]);
+  }, [open, hubFilter, academyDeck]);
 
   // Fresh browsing state each time the drawer opens — don't carry over
   // whichever level/units were expanded last time.
@@ -227,6 +245,25 @@ export default function LibraryDrawer({
   const handleSelectGame = (game: LibraryGame) => {
     onSelectLesson([], game.title, { contentFormat: GAME_LESSON_FORMAT, unitNumber: 0, lessonNumber: gameLessonNumber(game.id) });
   };
+
+  /** An Academy library lesson opens in the classroom through the synced deck player. */
+  const renderDeckRow = (l: AcademyDeckLesson) => (
+    <button
+      key={l.id}
+      onClick={() => onSelectLesson([], l.title, undefined, { lessonId: l.id })}
+      className={`w-full text-left overflow-hidden rounded-2xl border border-slate-100 dark:border-slate-800 ${accent.rowHover} hover:shadow-md bg-white dark:bg-slate-800/60 transition-all group`}
+    >
+      <div className="relative aspect-video w-full" style={{ background: l.gradient }}>
+        <img src={l.cover} alt="" draggable={false} className="absolute inset-0 h-full w-full object-cover" loading="lazy" onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} />
+        <span className="absolute left-3 top-3 rounded-full bg-black/55 px-2.5 py-1 text-[11px] font-bold text-white">Season {l.season} · Lesson {l.lesson} · {l.level}</span>
+      </div>
+      <div className="p-4">
+        <h3 className={`font-semibold text-sm truncate ${accent.rowTitleHover} transition-colors`}>{l.title}</h3>
+        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">{l.blurb}</p>
+        <p className="text-[11px] font-semibold text-slate-400 mt-2">{l.minutes} min · {l.parts} parts</p>
+      </div>
+    </button>
+  );
 
   const renderGameRow = (game: LibraryGame) => (
     <button
@@ -428,7 +465,16 @@ export default function LibraryDrawer({
 
             {/* Lesson list */}
             <div className="flex-1 overflow-y-auto p-4 space-y-3">
-              {gamesAvailable && view === 'games' ? (
+              {academyDeck ? (
+                deckLessons.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center py-16 gap-2 opacity-50">
+                    <BookOpen size={40} />
+                    <p className="text-sm font-medium">{searchQuery ? 'No lessons match your search' : 'No lessons available'}</p>
+                  </div>
+                ) : (
+                  <div className="space-y-3">{deckLessons.map(renderDeckRow)}</div>
+                )
+              ) : gamesAvailable && view === 'games' ? (
                 filteredGames.length === 0 ? (
                   <div className="flex flex-col items-center justify-center py-16 gap-2 opacity-50">
                     <BookOpen size={40} />

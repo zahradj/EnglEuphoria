@@ -8,4 +8,5 @@ export const academyLessonsTranslations = {
   'al.empty': 'ستظهر دروسك هنا بمجرد أن تصبح جاهزة.',
   'al.back': 'العودة إلى الدروس',
   'al.missing': 'هذا الدرس غير متاح.',
+  'al.follow': 'معلمك هو من ينتقل بالدرس.',
 };
