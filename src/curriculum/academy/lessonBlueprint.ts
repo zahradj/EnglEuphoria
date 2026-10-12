@@ -158,6 +158,13 @@ export const EPISODES: Record<EpisodeType, EpisodeMeta> = {
 };
 
 /**
+ * Vocabulary rule (owner, 2026-10-12): after EVERY vocabulary introduction the student plays TWO different memorising games
+ * (e.g. drag-match + flip-memory with pictures, or a number game + flip-memory) before anything new is taught.
+ * Enforced in the lesson player by src/academy-deck/__tests__/deck.test.tsx ("RULE: after every vocabulary introduction…").
+ */
+export const VOCAB_GAMES_RULE = { gamesPerWordSet: 2, differentKinds: true, before: 'anything new is taught' } as const;
+
+/**
  * Fixed run of show. Core segments are never skipped; flex segments are the teacher's call.
  * `mustHave` = what a lesson plan must contain in that part for the lesson to be effective (research-based, 2026-10-10:
  * docs/academy-effective-lesson-plan.md; evidence logs docs/research/academy-fast-progress-evidence-A.md and -B.md).
@@ -177,12 +184,12 @@ export const RUN_OF_SHOW = [
   {
     name: 'The Drop', minutes: 10, core: true,
     technique: 'comprehensible input with MODELLING: meaning first, then the language in use',
-    mustHave: ['every new word is met first on its own page: a moving picture, its meaning, an example and a clue, BEFORE any game uses it', 'the cast MODEL the target language in use, line by line, with the pattern card (the frame stays, the part that changes is coloured), BEFORE the student produces it', 'nothing is asked that was not first shown or taught', 'a quick understanding check, and a student choice (skin)'],
+    mustHave: ['every new word is met first on its own page: a moving picture, its meaning, an example and a clue, BEFORE any game uses it', 'the cast MODEL the target language in use, line by line, with the pattern card (the frame stays, the part that changes is coloured), BEFORE the student produces it', 'nothing is asked that was not first shown or taught', 'after EVERY word set that is introduced come TWO different memorising games (VOCAB_GAMES_RULE) before anything new is taught', 'a quick understanding check, and a student choice (skin)'],
   },
   {
     name: 'Notice & Build', minutes: 10, core: true,
     technique: 'controlled practice with immediate feedback; noticing then a short explicit rule',
-    mustHave: ['each game trains one named success criterion; no screen without a criterion', 'the rule, if any, is 3 lines or fewer and comes after examples', 'beginners (A1-A2) can choose answers by picture, not only by reading; the meaning cue fades in later retrieval', 'no two neighbouring games of the same kind'],
+    mustHave: ['each game trains one named success criterion; no screen without a criterion', 'after every vocabulary introduction, two different memorising games (e.g. drag-match + flip-memory) help the student remember the words', 'the rule, if any, is 3 lines or fewer and comes after examples', 'beginners (A1-A2) can choose answers by picture, not only by reading; the meaning cue fades in later retrieval', 'no two neighbouring games of the same kind'],
   },
   {
     name: 'Energiser', minutes: 4, core: false,
@@ -293,6 +300,8 @@ export interface AcademyLessonBlueprint {
   release: { job: string; privateFirst: true; seasonRelease?: string };
   clue: { no: number; of: 8; unlockedBy: string };
   supports: (typeof LEVEL_SUPPORTS)[AcademyLevel];
+  /** every vocabulary introduction is followed by two different memorising games */
+  vocabGames: typeof VOCAB_GAMES_RULE;
   comfort: readonly string[];
   /** minimum fun ingredients to include when the session content is written */
   funIngredientsMin: 5;
@@ -462,6 +471,7 @@ export function buildLessonBlueprint(s: SeasonOutline, episodeIndex: number, pre
     release: { job: meta.jobs.release, privateFirst: true, seasonRelease: type === 'finale' ? s.release : undefined },
     clue: { no: meta.no, of: 8, unlockedBy: meta.clueUnlockedBy },
     supports: LEVEL_SUPPORTS[s.level],
+    vocabGames: VOCAB_GAMES_RULE,
     comfort: COMFORT_CONTROLS,
     funIngredientsMin: 5,
     mediation: type === 'finale' || type === 'deep-dive' ? s.mediation : undefined,

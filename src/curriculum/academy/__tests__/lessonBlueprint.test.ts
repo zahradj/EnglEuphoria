@@ -1,6 +1,6 @@
 // Deploy gate for the Academy LESSON blueprints (one per 60-minute Live Session). Fix the data, never the check.
 import { describe, expect, it } from 'vitest';
-import { ACADEMY_CAST_NAMES, ACADEMY_LESSON_BLUEPRINTS, ACADEMY_SEASONS, MAX_ITEMS_PER_SESSION, allocateItems, EPISODES, RECOMMENDED_RHYTHM, RUN_OF_SHOW } from '..';
+import { ACADEMY_CAST_NAMES, ACADEMY_LESSON_BLUEPRINTS, ACADEMY_SEASONS, MAX_ITEMS_PER_SESSION, allocateItems, EPISODES, RECOMMENDED_RHYTHM, RUN_OF_SHOW, VOCAB_GAMES_RULE } from '..';
 
 describe('Academy lesson blueprints', () => {
   it('has one blueprint per session: 560, unique ids, correct order', () => {
@@ -154,6 +154,14 @@ describe('Academy cast (owner rule: lessons use only the Academy characters from
       expect(new Set(b.cast.appears.map((a) => a.name)).size).toBe(b.cast.appears.length);
       b.cast.appears.forEach((a) => expect(ACADEMY_CAST_NAMES).toContain(a.name));
       expect(b.cast.appears.some((a) => a.name === 'Vee')).toBe(true);
+    }
+  });
+
+  it('VOCABULARY RULE (owner 2026-10-12): every blueprint asks for two different memorising games after each vocabulary introduction', () => {
+    expect(VOCAB_GAMES_RULE.gamesPerWordSet).toBe(2);
+    for (const b of ACADEMY_LESSON_BLUEPRINTS) {
+      expect(b.vocabGames, b.id).toEqual(VOCAB_GAMES_RULE);
+      expect(b.runOfShow.find((s) => s.name === 'The Drop')!.mustHave.join(' ')).toMatch(/TWO different memorising games/);
     }
   });
 });
