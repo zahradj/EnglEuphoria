@@ -3357,5 +3357,40 @@
       "Can you fly? No, I can't!",
       "What can you do? I can dance!"
     ]
+  },
+  "u10l5-he-can-jump": {
+    "publicPath": "public/lep1/audio/he-can-jump-song-u10l5.mp3",
+    "durationSec": 20,
+    "style": "Bouncy adventure-walk kids chant song, 104 BPM, marching drum, plucked double bass, ukulele and xylophone, footstep stomps, ONE clear happy young singer, every word sung slowly and very clearly with crisp consonants: HE, SHE and THEY clearly different, 'run, run, run!' fast and fun at the end.",
+    "positiveStyles": [
+      "adventure march",
+      "stomps",
+      "ukulele",
+      "xylophone",
+      "double bass",
+      "clear kids vocals",
+      "104 BPM",
+      "happy",
+      "chant"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "scary",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "He can jump, jump, jump!",
+      "She can swim, swim, swim!",
+      "It can fly, fly, fly!",
+      "They can run, run, run!"
+    ]
   }
 }
