@@ -18,6 +18,11 @@ import { Upload, Save, RotateCcw, ImageIcon } from "lucide-react";
 
 const HUBS: HubKey[] = ["playground", "academy", "success"];
 
+/** The saved picture address always points at the live site (it is read by the share-image function too). */
+const SITE = "https://www.engleuphoria.com";
+/** In the preview, load our own pictures from the site being used (a preview build has them before the live site). */
+const previewUrl = (u: string | null) => (u && u.startsWith(SITE) ? window.location.origin + u.slice(SITE.length) : u);
+
 /** Finished illustrated certificates made in Canva (public/certificates), one per hub × level. Owner, 2026-10-12:
  *  Playground = yellow → orange shades + white, each level its own style, 1 medal for Pre-A1, 2 for A1, 3 for A2. */
 const ILLUSTRATED_ART: Partial<Record<`${HubKey}:${CefrLevel}`, { file: string; primary: string; accent: string; text: string; heading: string }>> = {
@@ -91,7 +96,7 @@ export default function CertificateDesigner() {
     if (!preset) return;
     setRow((r) => ({
       ...r,
-      background_url: `${window.location.origin}${preset.file}`,
+      background_url: `${SITE}${preset.file}`,
       primary_color: preset.primary, accent_color: preset.accent, text_color: preset.text,
       heading: preset.heading,
       design_config: { ...r.design_config, artMode: "full" },
@@ -106,7 +111,7 @@ export default function CertificateDesigner() {
     recipientName: "Alex Learner",
     awardedAt: new Date().toISOString(),
     logoUrl: row.logo_url || undefined,
-    backgroundUrl: row.background_url || undefined,
+    backgroundUrl: previewUrl(row.background_url) || undefined,
     heading: row.heading || undefined,
     subheading: row.subheading || undefined,
     primaryOverride: row.primary_color || undefined,
