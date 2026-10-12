@@ -148,7 +148,6 @@ const StudentCertificatePage = lazy(() => import("./pages/StudentCertificatePage
 const HomeworkPage = lazy(() => import("./pages/student/HomeworkPage"));
 const PlaygroundDemo = lazy(() => import("./pages/PlaygroundLessonRedirect"));
 const SuccessDemo = lazy(() => import("./pages/SuccessLessonRedirect"));
-const PlaygroundCreator = lazy(() => import("./pages/PlaygroundCreator"));
 const PlayScenesLessonPage = lazy(() => import("./pages/playground-scene/PlayScenesLessonPage"));
 const PlayLesson1 = lazy(() => import("./pages/playground-scene/PlayLesson1"));
 const PlayLesson2 = lazy(() => import("./pages/playground-scene/PlayLesson2"));
@@ -318,11 +317,8 @@ const App = () => {
 
                       <Route path="/playground-demo" element={<Suspense fallback={<LoadingFallback />}><PlaygroundDemo /></Suspense>} />
                      <Route path="/success-demo" element={<Suspense fallback={<LoadingFallback />}><SuccessDemo /></Suspense>} />
-                      <Route path="/playground-creator" element={
-                        <ImprovedProtectedRoute requiredRole={["content_creator", "admin"]}>
-                          <Suspense fallback={<LoadingFallback />}><PlaygroundCreator /></Suspense>
-                        </ImprovedProtectedRoute>
-                      } />
+                      {/* The old Playground Creator was retired (owner, 2026-10-12): Playground lessons live in the Playground Library. */}
+                      <Route path="/playground-creator" element={<Navigate to="/playground-library" replace />} />
                       {/* Playground Library — scene-format lessons (Little Explorers Phonics style). */}
                       <Route path="/playground-scene/play/:lessonId" element={
                         <ImprovedProtectedRoute>
