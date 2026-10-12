@@ -17,10 +17,10 @@ TAUGHT = {
     (2, 1): 'ryb', (2, 2): 'g', (2, 3): 'c', (3, 1): 'd', (3, 2): 't', (3, 3): 'k', (3, 4): 'p', (3, 5): 'o',
     (4, 1): 'e', (4, 2): 'n', (4, 3): 'f', (4, 4): 'b', (4, 5): 't', (5, 2): 's', (5, 3): 'g', (5, 5): 'd',
     (6, 1): 'k', (8, 3): 'p', (9, 1): 'd', (9, 3): 't', (9, 4): 'p', (9, 5): 'w',
-    (10, 1): 'rj',
+    (10, 1): 'rj', (10, 2): 'i', (10, 3): 'l', (10, 4): 'cb', (10, 5): '', (10, 6): '',
 }
 POOL = ['hat', 'bat', 'mat', 'man', 'ham', 'rat', 'cat', 'can', 'cab', 'cap', 'map', 'pan', 'tap', 'bag', 'fan',
-        'pot', 'top', 'mop', 'dog', 'rod', 'cob', 'bed', 'hen', 'ten', 'net', 'pen', 'web', 'peg', 'jam', 'jet']
+        'pot', 'top', 'mop', 'dog', 'rod', 'cob', 'bed', 'hen', 'ten', 'net', 'pen', 'web', 'peg', 'jam', 'jet', 'pig', 'pin', 'bin', 'wig', 'lid', 'log']
 LOOKS = ['train', 'frog', 'slide', 'gumball']
 PHONICS = {'sound-model', 'sound-sort', 'sound-pop', 'brick-crush', 'alphabet-blocks', 'trace', 'basket', 'dash', 'sound-pick'}
 

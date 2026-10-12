@@ -25,3 +25,10 @@ full body; front view; Pip and Leo are boys in boys' clothes, Mia is a girl; cal
 
 ## Owner approval
 Approved: owner, 2026-10-11 — "Okay, you can update the previous lesson using the gif videos."
+
+## As built (2026-10-12)
+- Used in Pre-A1 U10L2 "Swim, Dance, Sing!": the word cards, the move page, the party train (Train Recall), the home mission
+  and the sticker; and in the new **Beach Talent Show** game.
+- Talent Show shadows: `public/lep1/gifs/u10l2-{swim,dance,sing}-shadow.gif` are made from these approved GIFs frame by
+  frame (the white background and, for swim, the water removed; the figure filled dark brown on transparency). No new
+  pictures, nothing generated; the game moves them gently (bob / sway / bounce) as live UI motion.

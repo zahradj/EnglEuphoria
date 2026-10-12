@@ -3254,5 +3254,176 @@
       "Walk, walk, walk! Walk so slow!",
       "Run, jump, walk! And stop!"
     ]
+  },
+  "u10l2-swim-dance-sing": {
+    "publicPath": "public/lep1/audio/swim-dance-sing-song-u10l2.mp3",
+    "durationSec": 20,
+    "style": "Happy summer beach-party kids song, 108 BPM with ukulele, steel drums, bright piano, light bongos and hand claps, ONE clear happy young singer, every word sung slowly and very clearly with crisp consonants: SWIM, DANCE and SING clearly different, a cheerful 'Yes, I can!' at the end. Definitely not a lullaby.",
+    "positiveStyles": [
+      "beach party",
+      "happy",
+      "ukulele",
+      "steel drums",
+      "bongos",
+      "hand claps",
+      "clear kids vocals",
+      "108 BPM",
+      "bouncy"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "I can swim, swim, swim!",
+      "I can dance, dance, dance!",
+      "I can sing, la, la, la!",
+      "Swim, dance, sing! Yes, I can!"
+    ]
+  },
+  "u10l3-clap-play-sleep": {
+    "publicPath": "public/lep1/audio/clap-play-sleep-song-u10l3.mp3",
+    "durationSec": 20,
+    "style": "Warm evening campfire kids song, 100 BPM with acoustic guitar, ukulele, soft hand claps and a gentle shaker, ONE clear happy young singer, every word sung slowly and very clearly with crisp consonants: CLAP, PLAY and SLEEP clearly different, the last line softer and slower like a goodnight. Not a lullaby until the last line.",
+    "positiveStyles": [
+      "campfire",
+      "acoustic guitar",
+      "ukulele",
+      "hand claps",
+      "shaker",
+      "clear kids vocals",
+      "100 BPM",
+      "warm",
+      "happy"
+    ],
+    "negativeStyles": [
+      "sleepy all the way",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling",
+      "fast"
+    ],
+    "lines": [
+      "Clap, clap, clap your hands!",
+      "Play, play, play with me!",
+      "Sleep, sleep, shh, goodnight!",
+      "Clap, play, sleep! Goodnight!"
+    ]
+  },
+  "u10l4-what-can-you-do": {
+    "publicPath": "public/lep1/audio/what-can-you-do-song-u10l4.mp3",
+    "durationSec": 20,
+    "style": "Bright circus-march kids song, 112 BPM with brass, bouncy tuba, xylophone, snare and hand claps, ONE clear happy young singer, call and answer, every word sung slowly and very clearly with crisp consonants: CAN and CAN'T clearly different, a big cheerful 'Yes, I can!' each time.",
+    "positiveStyles": [
+      "circus march",
+      "brass",
+      "tuba",
+      "xylophone",
+      "snare",
+      "hand claps",
+      "clear kids vocals",
+      "112 BPM",
+      "happy"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "Can you jump? Yes, I can!",
+      "Can you swim? Yes, I can!",
+      "Can you fly? No, I can't!",
+      "What can you do? I can dance!"
+    ]
+  },
+  "u10l5-he-can-jump": {
+    "publicPath": "public/lep1/audio/he-can-jump-song-u10l5.mp3",
+    "durationSec": 20,
+    "style": "Bouncy adventure-walk kids chant song, 104 BPM, marching drum, plucked double bass, ukulele and xylophone, footstep stomps, ONE clear happy young singer, every word sung slowly and very clearly with crisp consonants: HE, SHE and THEY clearly different, 'run, run, run!' fast and fun at the end.",
+    "positiveStyles": [
+      "adventure march",
+      "stomps",
+      "ukulele",
+      "xylophone",
+      "double bass",
+      "clear kids vocals",
+      "104 BPM",
+      "happy",
+      "chant"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "scary",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "He can jump, jump, jump!",
+      "She can swim, swim, swim!",
+      "It can fly, fly, fly!",
+      "They can run, run, run!"
+    ]
+  },
+  "u10l6-i-can-do-it-all-v2": {
+    "publicPath": "public/lep1/audio/act-it-out-song-u10l6.mp3",
+    "durationSec": 20,
+    "style": "Upbeat bouncy party pop kids song, 116 BPM, hand claps, bright synth bass, glockenspiel, ukulele and a little drum fill, ONE clear happy young singer, every action word sung slowly and very clearly with crisp consonants, each word repeated, CLAP and SLEEP sung extra clearly, with a small pause so children can do the move.",
+    "positiveStyles": [
+      "kids pop",
+      "party",
+      "hand claps",
+      "glockenspiel",
+      "ukulele",
+      "clear kids vocals",
+      "116 BPM",
+      "happy"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "Run and jump and walk, walk, walk!",
+      "Swim and dance and sing, sing, sing!",
+      "Clap, clap, clap and play, play, play!",
+      "Sleep, sleep, sleep! Yes, I can!"
+    ]
   }
 }

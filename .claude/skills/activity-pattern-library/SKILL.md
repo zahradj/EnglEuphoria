@@ -204,6 +204,29 @@ order → Blend! → find the picture out of three), same voices/sync/checks. Le
 | `slide` | Pip climbs one ladder step per sound, then slides down scooping the sound balls = slow sounds, fast word | "say it slowly, then fast", slinky stretch-and-blend |
 | `gumball` | letter gumballs drop into a machine (a sound each), the crank shakes it, three capsules roll out; open the right one | tap-the-sounds then reveal (Boom / Google Slides CVC blending decks) |
 
+### Beach Talent Show (`talent-show`, U10L2 signature, slot 2)
+
+The next act's MOVING SHADOW (a silhouette GIF made from the approved action GIF) plays behind a glowing paper screen; the
+child taps the act's ticket; drum-roll tremble → the screen rolls up → spotlights, the friend performs in colour and says
+"I can dance!", the beach audience claps; then the child says it. Teaches verbs + "I can …". Data: `acts` {word, gif,
+shadow, move: swim|dance|sing, who, line}, `rounds` {act, ask, reply}. Sources (mechanic only): silhouette "guess the
+action" (Lingokids / Khan Kids), shadow-puppet theatre, Cambridge Pre A1 "Can you …? Yes, I can".
+
+### Campfire Says (`campfire-says`, U10L3 signature, slot 3)
+
+Simon-Says with WHO + WHAT: the host calls a friend and an action ("Mia, play with the ball!"); the called friend
+steps into the campfire light, the child taps that friend's action picture (cut-out pose stickers), and the friend
+does it (clap sparkles, bouncing ball, "zzz"); the sky darkens as friends fall asleep; last round "Everybody, sleep!".
+Data: `fire` {x,y}, `friends` {who, name, x, idle, poses {clap, play, sleep}}, `rounds` {friend (-1 = everybody),
+action, line, reply}. Sources: Simon Says / TPR, Cambridge Pre A1 names + actions, Khan Kids follow-the-instructions.
+
+### Can It? (`can-it`, U10L4 signature, slot 4)
+
+"Can a fish walk?" — an animal (cut-out sticker) bounces into the circus ring; 👍 "Yes, it can!" / 👎 "No, it can't!".
+Right yes: the animal performs (swim wave, fly up, jump arcs, run). Right no: it shakes its head and shows what it CAN
+do (`real`). Wrong yes: it tries and comically flops with a "?", then shows the truth; the right button glows.
+Data: `animals` {word, img}, `rounds` {animal, action, can, real, ask, answer}. Teaches can / can't as cause and effect.
+
 **Pre-A1 children cannot read.** Never make reading the only way into a task: speak every prompt, give picture answers, keep printed text as a small caption for the adult.
 
 ## Playground hub — A1/A2 Welcome Town (`.../welcome-town/scenes.ts`, `.../welcome-town-a2/scenes.ts`)

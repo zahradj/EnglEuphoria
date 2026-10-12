@@ -1,2 +1,2 @@
-# song takes request (2026-10-11: U10L1 song; the workflow reads the FIRST key only)
-u10l1-run-jump-walk
+# song takes request (2026-10-12: U10L6 song v2 — clearer clap / sleep; the workflow reads the FIRST key only)
+u10l6-i-can-do-it-all-v2

@@ -477,6 +477,27 @@ const UNIT1_EXTRACTORS = {
   'sound-mole': (s) => [[s.who, 'Listen! Which one starts with this sound?'], ...(s.rounds ?? []).flatMap((r) => (r.pictures ?? []).flatMap((p) => [[s.who, `Yes! ${p.word.charAt(0).toUpperCase() + p.word.slice(1)}!`], [s.who, `${p.word.charAt(0).toUpperCase() + p.word.slice(1)}! Try again!`]]))],
   'letter-monsters': (s) => [[s.who, 'Feed the hungry monsters! Who eats this one?'], ...(s.cards ?? []).flatMap((c) => [[s.who, `${c.word.charAt(0).toUpperCase() + c.word.slice(1)}!`], [s.who, `Yes! ${c.word.charAt(0).toUpperCase() + c.word.slice(1)}!`], [s.who, `${c.word.charAt(0).toUpperCase() + c.word.slice(1)}! Try again!`]])],
   'sound-fish': (s) => [[s.who, 'Listen! Which one starts with this sound?'], ...(s.rounds ?? []).flatMap((r) => (r.fish ?? []).flatMap((f) => [[s.who, `Yes! ${f.word.charAt(0).toUpperCase() + f.word.slice(1)}!`], [s.who, `${f.word.charAt(0).toUpperCase() + f.word.slice(1)}! Try again!`]]))],
+  // Mirror CanItScene.tsx: each question + full answer, the done line
+  // Mirror CharadesScene.tsx: the turn call, every "Not <word>! Look again!", the answer; the child's card; the done line
+  'charades': (s) => [
+    ...(s.rounds ?? []).flatMap((r) => {
+      const a = s.acts[r.act];
+      return r.mode === 'guess'
+        ? [[s.who, `${a.name}'s turn! What can ${a.pronoun.toLowerCase()} do? Guess!`], ...r.options.filter((i) => i !== r.act).map((i) => [s.who, `Not ${s.acts[i].word}! Look again!`]), [s.who, `Yes! ${a.pronoun} can ${a.word}!`]]
+        : [[s.who, `Your turn! Can you ${a.word}? Show me!`], [s.who, `Yes! You can ${a.word}! Well done!`]];
+    }),
+    [s.who, s.doneLine],
+  ],
+  // Mirror BearHuntTrailScene.tsx: each stop's line, the pronoun hint + line on a miss, the reply, the done line
+  'bear-hunt-trail': (s) => {
+    const hint = { he: 'He is a boy!', she: 'She is a girl!', it: 'It is an animal!', they: 'They are all the friends!' };
+    return [...(s.stops ?? []).flatMap((st) => [[s.who, st.line], [s.who, `${hint[st.pronoun]} Listen: ${st.line}`], [s.who, st.reply]]), [s.who, s.doneLine]];
+  },
+  'can-it': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.ask], [s.who, r.answer]]), [s.who, s.doneLine]],
+  // Mirror CampfireSaysScene.tsx: each call + reply, the wrong-action line, the done line
+  'campfire-says': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...['clap', 'play', 'sleep'].map((a) => [s.who, `Not ${a}! Listen again.`]), [s.who, s.doneLine]],
+  // Mirror TalentShowScene.tsx: the ask + reply (host), each act's line (its own voice), the wrong-ticket line
+  'talent-show': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.ask], [s.who, r.reply]]), ...(s.acts ?? []).flatMap((a) => [[a.who, a.line], [s.who, `${a.word.charAt(0).toUpperCase()}${a.word.slice(1)}? No! Look again!`]]), [s.who, s.doneLine]],
   'action-run': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...(s.actions ?? []).map((a) => [s.who, `Not ${a.word}! Listen again.`]), [s.who, s.doneLine]],
   'dress-studio': (s) => {
     const has = { pip: ['hat', 'shirt', 'pants', 'socks', 'shoes'], leo: ['hat', 'shirt', 'pants', 'socks', 'shoes'], mia: ['hat', 'shirt', 'pants', 'socks', 'shoes', 'dress'] };

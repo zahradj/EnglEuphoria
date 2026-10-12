@@ -62,6 +62,11 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
   '4-4': { settings: ['flower garden'], look: 'bright flower garden with big friendly mushrooms; Pip meets Bo, a round sky-blue three-eyed monster; code-drawn monsters on an empty lawn' },
   '4-5': { settings: ['animal park'], look: 'sunny animal park with a blue pond and tall trees; a tiger, a monkey, an elephant and a seal each show one move, Pip copies; a leafy bush to peek through' },
+  '10-6': { settings: ['living-room games night'], look: "a cosy evening games night in the friends' living room: a purple-and-gold striped magic top hat full of paper cards on a little stool, a green sofa with cushions, a round orange rug, a warm standing lamp, fairy lights and paper bunting, a starry purple sky in the window; Pip pulls a charades card from the hat while Mia and Leo laugh on the sofa; Action Charades plays on a little velvet-curtain stage, plus the Buzzer Show stage and the ring-toss stall from earlier units" },
+  '10-5': { settings: ['tall-grass meadow', 'stepping-stone stream', 'little river', 'green hill', 'bear cave'], look: "our own bear-hunt story as a stills film: the friends with a paper map at a garden gate, walking through tall grass, a green frog jumping over stepping stones in a stream (Pip jumps too), an orange fish in a little river (Mia swims too), a blue bird over a round green hill (Leo runs up), a cosy cave where Bruno, a round smiling brown bear, sleeps on autumn leaves by glowing mushrooms, wakes and dances with everybody at sunset; the games walk an empty forest trail with a bush, a hollow log, a lily pond and the cave" },
+  '10-4': { settings: ['circus big top'], look: "the friends' circus inside a red-and-yellow striped big top: a round ring with a red rim on a sandy floor, bunting, warm spotlights, balloons and a striped podium; Leo is the ringmaster in a little red top hat, Pip jumps high and Mia dances on the podium; in Can It? the animals come into the empty ring one by one and really do the action (or comically flop)" },
+  '10-3': { settings: ['garden camp-out at dusk'], look: "a cosy garden camp-out from dusk to night: an orange tent with fairy lights, a little campfire in a ring of stones, a log bench, a purple-blue starry sky with a crescent moon and fireflies; Pip claps by the fire, Mia plays with a red ball and Leo sleeps on his sleeping bag at the tent; in Campfire Says the sky darkens and the stars come out as the friends fall asleep" },
+  '10-2': { settings: ['sunny beach', 'beach talent-show stage'], look: "a summer beach party: golden sand, a calm turquoise sea, palm trees, beach umbrellas and a beach ball, a little wooden beach stage with bunting; Pip swims in the sea, Mia dances on the sand and Leo sings on the stage with a toy microphone; the Beach Talent Show is a wooden stage with warm lights, red velvet curtains and a glowing paper screen where the next act's moving shadow plays" },
   '10-1': { settings: ['park sports-day track'], look: "sports day in a sunny green park: a curvy red running track with white lane lines, low wooden logs and a hay bale as hurdles, triangle bunting and a finish ribbon; Pip runs, Mia jumps the log and Coach Leo cheers with a whistle; the empty track becomes the Obstacle Run with code-drawn lane stripes streaming past" },
   '9-6': { settings: ['playroom dress-up corner'], look: "a cosy playroom dress-up corner on a rainy afternoon: a big wooden-framed standing mirror, a low clothes rail with hangers, an open wooden dress-up trunk, a round purple rug, rain on the window and warm lamp light; Pip in a green hat, Mia twirling in a yellow dress and Leo pulling on a blue coat; the empty corner becomes the Dress-Up Studio with a clothes rail and paint pots" },
   '9-5': { settings: ['sunny garden', 'picnic hill', 'farmyard after rain'], look: "a walk through the unit's places as a stills film: Pip in a red T-shirt, blue pants and brand-new white sneakers in a sunny garden, squishing red apples under the apple tree on the picnic hill, stepping into a spilled pot of blue paint on the path, stomping in a brown mud puddle in the farmyard after rain, and splashing in a clear rain puddle; the garden becomes the Shoe Painter game with paint pots and a big magnifier on his shoes" },
@@ -214,6 +219,71 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'the child must understand the verb AND the body part to find the animal, then PRODUCES the move and the sentence — the screen waits for the child, never a clock',
       'the clue in Whose Is It? is one of the unit\'s body words, so naming the part and the animal go together, and the reveal recalls the story move',
       'wrong picks are named back with that animal\'s own move ("No, the seal claps her hands!"), and the right one glows after two tries',
+    ],
+  },
+  '10-6': {
+    sources: ['classroom charades / "guess the action" (games4esl, teach-this)', 'Lingokids / Khan Academy Kids ("guess what I am doing" reveals)', 'Cambridge (Pre A1 Starters: actions, "Can you …?", "Who can …?")', 'Kahoot (answer early, more points — here without a fail state)', 'Wordwall (quiz-show buzzer and ring-toss review games)'],
+    mechanics: [
+      'charades → Action Charades: a friend acts behind a curtain that opens bit by bit, the child guesses from three spoken words (earlier = more stars); then the child gets a card and acts it out',
+      'quiz show → Who Can? Buzzer Show: "Who can fly?" — buzz the bird, say "It can fly!" (he / she / it from Lesson 5)',
+      'fair game → Action Toss on the action pictures; the unit\'s sounds in Sound Fishing',
+    ],
+    betterThan: [
+      'guessing early is the child\'s own choice (the curtain keeps opening, no clock, no losing), so confident children are rewarded and shy ones still get the full picture',
+      'every answer is said back as a full sentence with the right pronoun ("She can dance!"), joining the unit\'s verbs with Lesson 5\'s he / she / it',
+      'role swap: the child also PRODUCES the action with their body on "Your turn!", and the teacher can play the guesser',
+    ],
+  },
+  '10-5': {
+    sources: ['Cambridge (Pre A1 Starters listening: listen and point to the person)', 'Lingokids / Khan Academy Kids ("who is it?" picture taps, lift-the-flap searches)', 'Duolingo ABC (instant feedback on taps)', 'the classroom bear-hunt chant walk (a path of places, actions on the way)', 'Sesame Workshop / Blue\'s Clues (the planned pause: "What can it do?")'],
+    mechanics: [
+      'listen and point to the person → Bear Hunt Trail: Bella says "She can swim!" and the child taps WHO (Pip, Mia, Leo, the animal or all three); that one does the action and the trail moves on',
+      'lift-the-flap search → "Where is the bear?": the child asks "Is it in the bush?" and finds animals that say what they can do, the bear last',
+      'the story film with labels for he / she / it / they and a planned 4-second pause on the sleeping bear; tick or cross and story order on the film\'s pictures',
+    ],
+    betterThan: [
+      'the choice IS the pronoun: he = a boy (either boy is right), she = Mia, it = an animal, they = everybody, so one and many, boy and girl, friend and animal are contrasted at every stop',
+      'the answer is shown, not just marked: the one who can jumps into the middle and really jumps, swims, flies, runs or sleeps',
+      'a wrong tap explains the word ("She is a girl! Listen: She can swim!") and the right one glows after two misses — no clock, no lives',
+    ],
+  },
+  '10-4': {
+    sources: ['Cambridge (Pre A1 Starters: "Can a … ?" yes/no; "Can you …? Yes, I can")', 'Lingokids (silly true-or-false animal questions)', 'Khan Academy Kids (yes / no comprehension)', 'the classroom ability game "Can a fish fly?"', 'Duolingo ABC (instant feedback on taps)'],
+    mechanics: [
+      'yes/no ability questions → Can It?: "Can a fish walk?" thumbs up / down, and the animal really does it or tries and flops',
+      'riddles → can / can\'t clues ("It can swim. It can\'t walk.") to guess the animal',
+      '"Can you …?" talk about the child, then the child asks Leo; the sounds C and B in a sort and Sound Moles',
+    ],
+    betterThan: [
+      'the answer is SHOWN as cause and effect: a right "yes" makes the animal perform, a wrong "yes" makes it try and comically flop, so "can" and "can\'t" are seen, not just heard',
+      'after every "can\'t" the animal shows what it CAN do, so each round models both forms ("No, it can\'t walk. It can swim!")',
+      'no penalty: a wrong answer turns into the funniest moment, then the right button glows',
+    ],
+  },
+  '10-3': {
+    sources: ['Simon Says / classroom TPR (follow a spoken command)', 'Cambridge (Pre A1 Starters listening: names + actions)', 'Khan Academy Kids (follow the instructions)', 'Lingokids (bedtime routine games)', 'Wordwall (what comes next? pattern)'],
+    mechanics: [
+      'Simon Says → Campfire Says: the host calls WHO and WHAT ("Mia, play with the ball!"), the child picks that friend\'s action picture and the friend does it',
+      'what comes next? → a pattern train of action pictures (clap, sleep, clap, sleep, …)',
+      'a jigsaw of the camp picture, then "Pip claps! Mia plays! Leo sleeps!"; the sound L in Sound Fishing; blending lid and log',
+    ],
+    betterThan: [
+      'two pieces of meaning in one call (the name AND the verb): the child must listen for both, and the action pictures are of that friend only',
+      'real cause and effect in the world: clap sparkles, a bouncing ball, "zzz" while sleeping, and the sky turns to night as more friends sleep',
+      'the last round "Everybody, sleep!" ends the game as a calm goodnight; wrong picks are named back and the right one glows after two tries',
+    ],
+  },
+  '10-2': {
+    sources: ['Lingokids (action games: watch and do)', 'Khan Academy Kids (guess the picture from a clue)', 'shadow-puppet theatre / Duolingo ABC-style silhouette guess', 'Cambridge (Pre A1 Starters: "Can you …? Yes, I can")', 'Wordwall (missing-word train / what is missing?)'],
+    mechanics: [
+      'silhouette guessing → Beach Talent Show: the act\'s moving shadow plays behind a glowing screen, the child taps the act, the screen rolls up and the friend says "I can dance!"',
+      'what-is-missing memory → the party train carries the action GIFs, one car empties, the child says the missing action',
+      '"Can you …?" talk → "What can you do?" "I can swim!"; first sounds S/D/I in Sandy Dash and Letter Monsters, i-words to blend',
+    ],
+    betterThan: [
+      'the clue is the MOVEMENT itself (a moving shadow of the real action), not a still picture, so the child recognises the verb, not a costume',
+      'every reveal ends in the target sentence "I can …" in the friend\'s voice, then the child says it: the game leads straight to speaking',
+      'anticipation and payoff like a real show (drum-roll tremble, the screen rolls up, spotlights, the beach audience claps); a wrong ticket costs nothing and the right one glows after two tries',
     ],
   },
   '10-1': {
