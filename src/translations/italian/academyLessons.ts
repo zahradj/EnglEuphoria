@@ -9,4 +9,7 @@ export const academyLessonsTranslations = {
   'al.back': 'Torna alle lezioni',
   'al.missing': 'Questa lezione non è disponibile.',
   'al.follow': 'Il tuo insegnante fa avanzare la lezione.',
+  'al.soon': 'Prossimamente',
+  'al.soonLong': 'Le lezioni di questa stagione sono in preparazione.',
+  'al.count': '{{n}} lezioni',
 };

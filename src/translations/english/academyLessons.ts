@@ -9,4 +9,7 @@ export const academyLessonsTranslations = {
   'al.back': 'Back to lessons',
   'al.missing': 'This lesson isn’t available.',
   'al.follow': 'Your teacher moves the lesson.',
+  'al.soon': 'Coming soon',
+  'al.soonLong': 'The lessons of this season are being built.',
+  'al.count': '{{n}} lessons',
 };
