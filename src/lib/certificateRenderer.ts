@@ -18,10 +18,45 @@ export interface CertificateRenderInput {
   primaryOverride?: string;
   accentOverride?: string;
   textOverride?: string;
+  /** 'full': the background is a finished illustration (e.g. the Canva Playground certificate) — shown at full
+   *  strength, no drawn frame, and the text sits inside the picture's blank panel. Default 'wash' keeps the old look. */
+  artMode?: "wash" | "full";
 }
 
 function esc(s: string) {
   return String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]!));
+}
+
+/** Text laid inside the blank panel of a full illustrated certificate (panel ≈ x 18–82 %, y 24–88 % of 1200×630). */
+function renderFullArt(input: CertificateRenderInput, primary: string, text: string, awarded: string): string {
+  const hubLabel = HUB_LABEL[input.hub as HubKey] || input.hub;
+  const font = "Nunito,'Arial Rounded MT Bold','Trebuchet MS',Arial,sans-serif";
+  const heading = input.heading || "CERTIFICATE OF ACHIEVEMENT";
+  const name = input.recipientName
+    ? `<text x="600" y="275" text-anchor="middle" font-family="${font}" font-size="56" font-weight="900" fill="${primary}" stroke="#ffffff" stroke-width="2" paint-order="stroke">${esc(input.recipientName)}</text>`
+    : "";
+  const sub = input.subtitle
+    ? `<text x="600" y="398" text-anchor="middle" font-family="${font}" font-size="22" font-weight="700" fill="${text}" opacity="0.8">${esc(input.subtitle)}</text>`
+    : "";
+  const pill = input.cefrLevel
+    ? `<g><rect x="490" y="425" width="220" height="44" rx="22" fill="${primary}"/><text x="600" y="455" text-anchor="middle" font-family="${font}" font-size="21" font-weight="900" fill="#ffffff">${esc(hubLabel)} · ${esc(input.cefrLevel)}</text></g>`
+    : "";
+  const date = awarded
+    ? `<text x="600" y="505" text-anchor="middle" font-family="${font}" font-size="17" font-weight="700" fill="${text}" opacity="0.7">${esc(awarded)}</text>`
+    : "";
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#FFEFE2"/>
+  <image href="${esc(input.backgroundUrl || "")}" x="0" y="0" width="1200" height="630" preserveAspectRatio="xMidYMid slice"/>
+  <text x="600" y="200" text-anchor="middle" font-family="${font}" font-size="19" font-weight="900" letter-spacing="5" fill="${primary}">${esc(heading)}</text>
+  <text x="600" y="228" text-anchor="middle" font-family="${font}" font-size="18" font-weight="700" fill="${text}" opacity="0.75">This certificate is proudly given to</text>
+  ${name}
+  <text x="600" y="350" text-anchor="middle" font-family="${font}" font-size="40" font-weight="900" fill="${text}">${esc(input.title)}</text>
+  ${sub}
+  ${pill}
+  ${date}
+  <text x="600" y="540" text-anchor="middle" font-family="${font}" font-size="15" font-weight="800" letter-spacing="3" fill="${primary}">${esc(input.subheading || "engleuphoria.com")}</text>
+</svg>`;
 }
 
 export function renderCertificateSVG(input: CertificateRenderInput): string {
@@ -33,6 +68,7 @@ export function renderCertificateSVG(input: CertificateRenderInput): string {
   const heading = input.heading || "ENGLEUPHORIA · CERTIFICATE OF MASTERY";
   const subheading = input.subheading || "engleuphoria.com";
   const awarded = input.awardedAt ? new Date(input.awardedAt).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" }) : "";
+  if (input.artMode === "full" && input.backgroundUrl) return renderFullArt(input, primary, text, awarded);
   const bg = input.backgroundUrl
     ? `<image href="${esc(input.backgroundUrl)}" x="0" y="0" width="1200" height="630" preserveAspectRatio="xMidYMid slice" opacity="0.18"/>`
     : "";
