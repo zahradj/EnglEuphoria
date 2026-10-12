@@ -96,7 +96,7 @@ they fit the story (dinosaurs lived **long ago** → past; sea animals **are swi
 | prepositions behind / between / in front of, Whose? | 9 | 10 |
 | time, days, routines | 10 | A2 |
 
-### Proposed slot-title changes (database, only where the old title taught a repeat)
+### Slot-title changes (applied in the database 2026-10-12, only where the old title taught a repeat)
 
 | Slot | Old title | New title | Why |
 |---|---|---|---|
@@ -249,7 +249,7 @@ The Explorer Map, Compass and Passport are platform pieces to build once (after 
    Report (U3), Food Survey + Pip's Café (U4), Guess Who (U5), Live Reef (U6), Hero Mission (U7), Fossil Dig + See-Saw
    Scales + Racing (U8), Design My Room (U9), Clock Quest + Build-a-Bot + Maze Chase (U10).
 4. **Fun layer** (§4b): Explorer Map + Golden Compass + Passport after Unit 2.
-5. **Slot titles:** apply the 3 title changes in §3 to `curriculum_lessons` before those lessons are built.
+5. **Slot titles:** the 3 title changes in §3 are applied in `curriculum_lessons` (2026-10-12, unpublished slots).
 6. **Assessments** reuse the Pre-A1 system: Boss Test in every L7, A1 Halfway Check after Unit 5, A1 Final Test after
    Unit 10, Practise-again packs, parent report.
 
