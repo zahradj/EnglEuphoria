@@ -40,7 +40,7 @@ export const PATTERN_LAB: DeckScript = {
       say: 'Welcome back, detective! A fake profile of Ava is online. Today you check the facts.', heading: 'Your case card',
       stamps: [{ id: 'true', icon: 'check', label: 'Say who is who' }, { id: 'not', icon: 'search', label: 'Say what is not true' }, { id: 'ask', icon: 'chat', label: 'Ask and answer' }],
     },
-    { id: 'badge', kind: 'badge', part: 0, bg: 'detective-wall', actors: [{ who: 'Theo', pos: 'right', expr: 'wave' }], trains: [1], prompt: 'Theo gives you a detective badge. Put your name on it.', starter: 'My name is', ages: [11, 12, 13, 14, 15, 16, 17, 18], hints: ['Type only your name, and tap your age.'] },
+    { id: 'badge', kind: 'badge', part: 0, bg: 'detective-wall', actors: [{ who: 'Theo', pos: 'right', expr: 'wave' }], trains: [1], prompt: 'Theo gives you a detective badge. Put your name on it.', starter: 'My name is', ages: [13, 14, 15, 16, 17, 18], hints: ['Type only your name, and tap your age.'] },
     {
       id: 'checkin-chat', kind: 'convo', part: 0, bg: 'detective-wall', actors: [{ who: 'Theo', pos: 'right', expr: 'happy' }], trains: [1],
       prompt: 'Quick questions from Theo. Choose your answers.', me: 'Ava', meLabel: 'You', after: 'Thanks! Now Theo knows his new detective.',

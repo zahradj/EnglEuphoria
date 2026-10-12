@@ -64,7 +64,7 @@ export const SIGN_ME_UP_2: DeckScript = {
       ],
       note: 'Start = pre-A1, Core = A1, Stretch = post-A1. The student can switch any time (More → Easier / Harder); you can too.',
     },
-    { id: 'badge', kind: 'badge', part: 0, bg: BG, actors: [{ who: 'Theo', pos: 'right', expr: 'wave' }], trains: [4], prompt: 'Theo gives you a badge. Put your name on it.', starter: 'My name is', ages: [11, 12, 13, 14, 15, 16, 17, 18], hints: ['Type only your name, and tap your age.'] },
+    { id: 'badge', kind: 'badge', part: 0, bg: BG, actors: [{ who: 'Theo', pos: 'right', expr: 'wave' }], trains: [4], prompt: 'Theo gives you a badge. Put your name on it.', starter: 'My name is', ages: [13, 14, 15, 16, 17, 18], hints: ['Type only your name, and tap your age.'] },
     {
       id: 'checkin-chat', kind: 'convo', part: 0, bg: BG, actors: [{ who: 'Theo', pos: 'right', expr: 'happy' }], trains: [4],
       prompt: 'Quick questions from Theo. Choose your answers.', me: 'Ava', meLabel: 'You', after: 'Thanks! Now Theo knows you.',
@@ -268,7 +268,7 @@ export const SIGN_ME_UP_2: DeckScript = {
       id: 'card', kind: 'card', part: 6, bg: BG, actors: [VEE('right')], trains: [3, 4],
       prompt: 'Your turn! Make your club sign-up card, then print it.',
       model: [{ label: 'Age', text: 'I am 13.' }, { label: 'Country', text: 'I am from Spain.' }, { label: 'Nationality', text: 'I am Spanish.' }],
-      ages: [11, 12, 13, 14, 15, 16, 17, 18],
+      ages: [13, 14, 15, 16, 17, 18],
       nationalities: ['Spain → Spanish', 'Italy → Italian', 'Brazil → Brazilian', 'Japan → Japanese', 'France → French', 'USA → American'],
       lanes: { start: { nationalities: ['Spain → Spanish', 'Italy → Italian'] } },
       hints: ['Not in the list? Ask your teacher or write it your way.'],

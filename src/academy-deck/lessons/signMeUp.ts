@@ -66,7 +66,7 @@ export const SIGN_ME_UP: DeckScript = {
       ],
       hints: ['Flip a card and listen. Remember where each picture is.'],
     },
-{ id: 'badge', kind: 'badge', part: 0, bg: 'club-signup-desk', actors: [{ who: 'Theo', pos: 'right', expr: 'wave' }], trains: [4], prompt: 'Theo gives you a badge. Put your name on it.', starter: 'My name is', ages: [11, 12, 13, 14, 15, 16, 17, 18], hints: ['Type only your name, and tap your age.'] },
+{ id: 'badge', kind: 'badge', part: 0, bg: 'club-signup-desk', actors: [{ who: 'Theo', pos: 'right', expr: 'wave' }], trains: [4], prompt: 'Theo gives you a badge. Put your name on it.', starter: 'My name is', ages: [13, 14, 15, 16, 17, 18], hints: ['Type only your name, and tap your age.'] },
 {
       id: 'checkin-chat', part: 0, kind: 'convo', bg: 'club-signup-desk', actors: [{ who: 'Theo', pos: 'right', expr: 'happy' }], trains: [4],
       prompt: 'Quick questions from Theo. Choose your answers.', me: 'Ava', meLabel: 'You', after: 'Thanks! Theo knows how you feel today.',
@@ -349,7 +349,7 @@ export const SIGN_ME_UP: DeckScript = {
       id: 'card', kind: 'card', part: 6, bg: 'club-signup-desk', actors: [{ who: 'Vee', pos: 'right', expr: 'happy' }], trains: [3, 4],
       prompt: 'Your turn! Make your club sign-up card, then print it.',
       model: [{ label: 'Age', text: 'I am 13.' }, { label: 'Country', text: 'I am from Spain.' }, { label: 'Nationality', text: 'I am Spanish.' }],
-      ages: [11, 12, 13, 14, 15, 16, 17, 18],
+      ages: [13, 14, 15, 16, 17, 18],
       nationalities: ['Spain → Spanish', 'Italy → Italian', 'Brazil → Brazilian', 'Japan → Japanese', 'France → French', 'USA → American'],
       hints: ['Not in the list? Ask your teacher or write it your way.'],
     },
