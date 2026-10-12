@@ -1,0 +1,15 @@
+
+=== docs/songs/u10l3-clap-play-sleep-take1.mp3  length=20.1s  score=0.94  missing=1  extra=1
+heard: clap clap clap your hands play play play with me sleep sleep shish goodnight clap play sleep goodnight
+line starts (s): [np.float64(0.0), np.float64(4.3), np.float64(9.3), 14.2]
+lineDurationsMs: [4260, 5060, 4840, 5902]
+
+=== docs/songs/u10l3-clap-play-sleep-take2.mp3  length=20.1s  score=1.00  missing=0  extra=0
+heard: clap clap clap your hands play play play with me sleep sleep shh goodnight clap play sleep goodnight
+line starts (s): [np.float64(0.0), np.float64(5.0), np.float64(10.0), np.float64(14.9)]
+lineDurationsMs: [5040, 5000, 4840, 5182]
+
+=== docs/songs/u10l3-clap-play-sleep-take3.mp3  length=20.1s  score=0.94  missing=1  extra=1
+heard: clap clap clap your hands play play play with me sleep sleep she's goodnight clap play sleep goodnight
+line starts (s): [np.float64(0.0), np.float64(4.4), np.float64(9.5), np.float64(13.8)]
+lineDurationsMs: [4380, 5080, 4300, 6302]
