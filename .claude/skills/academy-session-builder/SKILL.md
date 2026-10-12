@@ -47,7 +47,7 @@ Level scaling: A1 teacher talk <= 40 %, scaffolds full; B1 task-first; C1 semina
 
 ## Vocabulary rule (owner, 2026-10-12)
 
-After **every** vocabulary introduction (every `teach` slide / Notice & Build word set) put **TWO different memorising games**: e.g. drag-match + flip-memory (pictures and words), or a number game (Locker Pop, Number Train) + flip-memory. Never one, never the same kind twice, no new teaching in between. `deck.test.tsx` ("RULE: after every vocabulary introduction…") enforces it. Budget the extra ~2 min per word set honestly: if the lesson no longer fits the hour, split the lesson, do not drop the games.
+After **every** vocabulary introduction (every `teach` slide / Notice & Build word set) put **TWO different memorising games**: e.g. drag-match + flip-memory (pictures and words), or a number game (Locker Pop, Number Train) + flip-memory. Never one, never the same kind twice, no new teaching in between. **Choose the two games from `VOCAB_GAME_MENU`** (`src/curriculum/academy/vocabGames.ts`; the blueprint lists `vocabGames.menu` + `suggested`): first a *recognise* game, then a *deepen* game, different, suited to the level, built games only (a `planned` one must be built first). Validate with `validateVocabGamePicks`. `deck.test.tsx` ("RULE: after every vocabulary introduction…") enforces the two-different-games rule in the player. Budget the extra ~2 min per word set honestly: if the lesson no longer fits the hour, split the lesson, do not drop the games.
 
 ## Required parts of every session plan
 
