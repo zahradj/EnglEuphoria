@@ -3,6 +3,7 @@ import type { DeckScript } from './types';
 
 const LOADERS: Record<string, () => Promise<DeckScript>> = {
   'sign-me-up': async () => (await import('./lessons/signMeUp')).SIGN_ME_UP,
+  'sign-me-up-2': async () => (await import('./lessons/signMeUp2')).SIGN_ME_UP_2,
   'fake-or-real': async () => (await import('./lessons/patternLab')).PATTERN_LAB,
 };
 

@@ -8,6 +8,8 @@ import './deck.css';
 import { DeckContext, type DeckCtx } from './ctx';
 import { Icon } from './Icon';
 import { Character, Plate } from './Stage';
+import { LaneView } from './slides/lane';
+import { applyLane, laneOf, LANE_LABEL } from './lanes';
 import { BadgeView, BriefView, DialView, TitleView } from './slides/intro';
 import { HuntView, ShadowView } from './slides/homework';
 import { ModelView, TeachView } from './slides/teach';
@@ -53,6 +55,7 @@ function SlideView({ slide }: { slide: Slide }) {
     case 'brief': return <BriefView slide={slide} />;
     case 'badge': return <BadgeView slide={slide} />;
     case 'dial': return <DialView slide={slide} />;
+    case 'lane': return <LaneView slide={slide} />;
     case 'whosaid': return <WhoSaidView slide={slide} />;
     case 'hunt': return <HuntView slide={slide} />;
     case 'shadow': return <ShadowView slide={slide} />;
@@ -142,7 +145,8 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
   }, []);
   const shownParts = useRef<Set<number>>(new Set());
   const [calm, setCalm] = useState(() => typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches);
-  const cur = script.slides[index];
+  const lane = laneOf(vars);
+  const cur = applyLane(script.slides[index], lane);
   // ---- recorded voices (silent when a clip or the clip list is missing; never the browser voice)
   const base = audioBaseFor(artBase, audioBase);
   const [voiceOn, setVoiceOn] = useState(true);
@@ -336,6 +340,12 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
         </nav>
         {menu && (
           <div className="ad-menu" role="menu">
+            {script.slides.some((x) => x.lanes) && (
+              <>
+                <button type="button" role="menuitem" disabled={lane === 'start'} onClick={() => setVars({ lane: lane === 'stretch' ? 'core' : 'start' })}>Easier ({LANE_LABEL[lane === 'stretch' ? 'core' : 'start'].student})</button>
+                <button type="button" role="menuitem" disabled={lane === 'stretch'} onClick={() => setVars({ lane: lane === 'start' ? 'core' : 'stretch' })}>Harder ({LANE_LABEL[lane === 'start' ? 'core' : 'stretch'].student})</button>
+              </>
+            )}
             <button type="button" role="menuitem" onClick={skip}><Icon name="skip" /> Skip this slide</button>
             <button type="button" role="menuitemcheckbox" aria-checked={voiceOn} onClick={() => setVoiceOn(!voiceOn)}>{voiceOn ? '✔ ' : ''}Voice {voiceOn ? 'on' : 'off'}</button>
             <button type="button" role="menuitemcheckbox" aria-checked={calm} onClick={() => setCalm(!calm)}>{calm ? '✔ ' : ''}Calm mode (no animation)</button>

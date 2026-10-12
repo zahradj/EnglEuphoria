@@ -869,6 +869,106 @@
   },
   {
     "who": "Vee",
+    "text": "Welcome back! Today you sign up at the club desk and win three stamps."
+  },
+  {
+    "who": "Vee",
+    "text": "Where do you want to start today?"
+  },
+  {
+    "who": "Vee",
+    "text": "Listen. Tap the picture for what you hear."
+  },
+  {
+    "who": "Vee",
+    "text": "Hello!"
+  },
+  {
+    "who": "Vee",
+    "text": "My name is Ava."
+  },
+  {
+    "who": "Vee",
+    "text": "I am 13."
+  },
+  {
+    "who": "Theo",
+    "text": "Introduce yourself to Theo. Read the little paragraph, then say it."
+  },
+  {
+    "who": "Theo",
+    "text": "Your member number is four, two, seven."
+  },
+  {
+    "who": "Vee",
+    "text": "Match each number word with its dots. Drag the word onto the picture."
+  },
+  {
+    "who": "Vee",
+    "text": "Listen. Tap the picture for the number you hear."
+  },
+  {
+    "who": "Vee",
+    "text": "Bonus! Tens: open the locker for the number word."
+  },
+  {
+    "who": "Vee",
+    "text": "Who is from where? Drag each word onto its picture: the flag is the country, the person is the nationality."
+  },
+  {
+    "who": "Vee",
+    "text": "Spain"
+  },
+  {
+    "who": "Vee",
+    "text": "Italy"
+  },
+  {
+    "who": "Vee",
+    "text": "Which flag is which? Drag each word onto its flag."
+  },
+  {
+    "who": "Theo",
+    "text": "Spell Ava’s name on the badge. Tap the letters."
+  },
+  {
+    "who": "Theo",
+    "text": "I am Italian."
+  },
+  {
+    "who": "Theo",
+    "text": "I am Spanish."
+  },
+  {
+    "who": "Vee",
+    "text": "Number Train! Put each number word on its carriage."
+  },
+  {
+    "who": "Vee",
+    "text": "Bonus Number Train! Tens and big numbers."
+  },
+  {
+    "who": "Theo",
+    "text": "Theo says your member number. Open the drawer with the code."
+  },
+  {
+    "who": "Theo",
+    "text": "four, two, seven"
+  },
+  {
+    "who": "Theo",
+    "text": "Open the drawer. The code is one number."
+  },
+  {
+    "who": "Theo",
+    "text": "seven"
+  },
+  {
+    "who": "Theo",
+    "text": "Bonus! Open the drawer with the big number."
+  },
+  {
+    "who": "Vee",
     "text": "Fake or Real?"
   },
   {
@@ -882,10 +982,6 @@
   {
     "who": "Vee",
     "text": "I am"
-  },
-  {
-    "who": "Vee",
-    "text": "I am 13."
   },
   {
     "who": "Vee",

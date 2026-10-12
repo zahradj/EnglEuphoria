@@ -32,7 +32,7 @@ export function openLines(s: Slide): SpokenLine[] {
   switch (s.kind) {
     case 'title': return line('Vee', s.heading);
     case 'brief': return line('Vee', s.say);
-    case 'dial': return line('Vee', s.prompt);
+    case 'dial': case 'lane': return line('Vee', s.prompt);
     case 'say': return line(lead(s), s.prompt);
     case 'wrap': return [...line('Vee', s.heading), ...line('Vee', s.homework), ...line('Vee', s.clue)];
     // game prompts are spoken when the game opens (the guide reads the task aloud)

@@ -21,8 +21,14 @@ export const PARTS = [
   { name: 'Wrap', goal: 'What you can do now', minutes: 5 },
 ] as const;
 
+/** Learner lanes (owner 2026-10-12): the same lesson at three levels. start = pre-A1, core = A1, stretch = post-A1. */
+export type Lane = 'start' | 'core' | 'stretch';
+export const LANES: Lane[] = ['start', 'core', 'stretch'];
+
 export interface SlideBase {
   id: string;
+  /** per-lane overrides: the fields listed here replace the slide's own when the student is in that lane (core = the slide as written) */
+  lanes?: Partial<Record<Exclude<Lane, 'core'>, Record<string, unknown>>>;
   /** which part of the blueprint's run of show this slide belongs to (0-7, see PARTS); slides stay in part order */
   part: number;
   /** scene plate id: `${artBase}/bg/<id>.webp` (a drawn gradient shows if the picture is missing) */
@@ -42,6 +48,8 @@ export interface TitleSlide extends SlideBase { kind: 'title'; heading: string; 
 export interface BriefSlide extends SlideBase { kind: 'brief'; say: string; heading: string; stamps: { id: string; icon: string; label: string }[] }
 export interface BadgeSlide extends SlideBase { kind: 'badge'; prompt: string; starter: string; /** also ask the age (saved as vars.age) */ ages?: number[] }
 export interface DialSlide extends SlideBase { kind: 'dial'; prompt: string }
+/** The student (or teacher) picks a lane: Start, Core or Stretch. Saved as vars.lane; can be changed any time from More. */
+export interface LaneSlide extends SlideBase { kind: 'lane'; prompt: string; choices: { lane: Lane; title: string; blurb: string; art: TeachArt }[] }
 export interface WhoSaidSlide extends Omit<SlideBase, 'items'> {
   kind: 'whosaid';
   prompt: string;
@@ -148,7 +156,7 @@ export interface WriteSlide extends SlideBase {
 export interface WrapSlide extends SlideBase { kind: 'wrap'; heading: string; ticks: string[]; homework: string; clue: string }
 
 export type Slide =
-  | TitleSlide | BriefSlide | BadgeSlide | DialSlide | WhoSaidSlide | LockersSlide | NumTrainSlide | PadlockSlide | ConvoSlide | SpellSlide
+  | TitleSlide | BriefSlide | BadgeSlide | DialSlide | LaneSlide | WhoSaidSlide | LockersSlide | NumTrainSlide | PadlockSlide | ConvoSlide | SpellSlide
   | MatchSlide | CountUpSlide | BePickSlide | BuildSlide | FactCheckSlide | WriteSlide | HuntSlide | ShadowSlide | TeachSlide | ModelSlide | FindWrongSlide | BorderSlide | MemorySlide | NumWallSlide | PhoneChatSlide | FadeSlide | CardSlide | SaySlide | WrapSlide;
 
 export interface DeckScript {

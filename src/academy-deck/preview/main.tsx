@@ -6,13 +6,14 @@ import { Deck } from '../Deck';
 import { HomeworkApp } from '../homework/Homework';
 import { SIGN_ME_UP } from '../lessons/signMeUp';
 import { PATTERN_LAB } from '../lessons/patternLab';
+import { SIGN_ME_UP_2 } from '../lessons/signMeUp2';
 
 const q = new URLSearchParams(window.location.search);
 const art = q.get('art') ?? (window as unknown as { __ACADEMY_ART__?: string }).__ACADEMY_ART__ ?? undefined;
 
 function Preview() {
   const [mode, setMode] = useState<string | null>(q.get('mode'));
-  if (mode === 'lesson') return <Deck script={q.get('lesson') === 'fake-or-real' ? PATTERN_LAB : SIGN_ME_UP} artBase={art} teacher={q.get('teacher') !== '0'} freeNext={q.get('teacher') !== '0'} />;
+  if (mode === 'lesson') return <Deck script={q.get('lesson') === 'fake-or-real' ? PATTERN_LAB : q.get('lesson') === 'sign-me-up-2' ? SIGN_ME_UP_2 : SIGN_ME_UP} artBase={art} teacher={q.get('teacher') !== '0'} freeNext={q.get('teacher') !== '0'} />;
   if (mode === 'homework') return <HomeworkApp artBase={art} demo={q.get('demo') !== '0'} />;
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', gap: 14, alignItems: 'center', justifyContent: 'center', padding: 16, background: 'linear-gradient(160deg,#f5f3ff,#e9e0ff)', color: '#1e1b4b', fontFamily: 'system-ui, sans-serif' }}>

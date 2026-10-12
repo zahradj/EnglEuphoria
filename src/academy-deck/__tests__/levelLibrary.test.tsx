@@ -25,7 +25,7 @@ describe('Academy library by level', () => {
       expect([season.level, season.no], l.id).toEqual([l.level, l.season]);
     }
     const s1 = g[0].seasons[0].lessons.map((l) => l.id);
-    expect(s1).toEqual(['sign-me-up', 'fake-or-real']);
+    expect(s1).toEqual(['sign-me-up', 'sign-me-up-2', 'fake-or-real']);
   });
 
   it('shows level tabs with counts, opens the first season with lessons, and says "Coming soon" for the rest', () => {
