@@ -7,9 +7,9 @@ const K = '/lep1/stickers';
 const G = '/lep1/gifs';
 const beach = `${S}/bg-u10l2-beach-empty-wide.png`;
 const it = (n: string) => `${I}/item-${n}.png`;
-const swim = `${G}/u10l2-swim.gif`;
-const dance = `${G}/u10l2-dance.gif`;
-const sing = `${G}/u10l2-sing.gif`;
+const swim = `${G}/u10l2-swim.webp`;
+const dance = `${G}/u10l2-dance.webp`;
+const sing = `${G}/u10l2-sing.webp`;
 
 /** Pre-A1 Unit 10 Lesson 2 "Swim, Dance, Sing!" — Beach Party Quest.
  *  Practises swim, dance, sing, "I can …", the sounds S and I, and blending i-words. */

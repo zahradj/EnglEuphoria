@@ -15466,9 +15466,9 @@ const itemJet = `${A}/items/item-jet.png`;
 const itemRabbit = `${A}/items/item-rabbit.png`;
 const itemRocket = `${A}/items/item-rocket.png`;
 // Canva GIF loops (owner-approved, docs/scenarios/u10l1-run-jump-walk-gifs.md): the action words move.
-const gifRun = `${A}/gifs/u10l1-run.gif`;
-const gifJump = `${A}/gifs/u10l1-jump.gif`;
-const gifWalk = `${A}/gifs/u10l1-walk.gif`;
+const gifRun = `${A}/gifs/u10l1-run.webp`;
+const gifJump = `${A}/gifs/u10l1-jump.webp`;
+const gifWalk = `${A}/gifs/u10l1-walk.webp`;
 
 export const LESSON_U10L1_TITLE = 'Run, Jump, Walk!';
 export const LESSON_U10L1_OBJECTIVE = 'Understand and do the actions run, jump and walk, say them ("Jump!"), pick the right move when the coach calls it, and hear the first sounds R (run) and J (jump), by moving, listening and playing, no reading.';
@@ -15677,9 +15677,9 @@ export const LESSON_U10L1_SCENES: Scene[] = [
 const bgU10L2Beach = `${A}/scenes/bg-u10l2-beach-wide.png`;
 const bgU10L2BeachEmpty = `${A}/scenes/bg-u10l2-beach-empty-wide.png`;
 const bgU10L2Stage = `${A}/scenes/bg-u10l2-stage-wide.png`;
-const gifSwim = `${A}/gifs/u10l2-swim.gif`;
-const gifDance = `${A}/gifs/u10l2-dance.gif`;
-const gifSing = `${A}/gifs/u10l2-sing.gif`;
+const gifSwim = `${A}/gifs/u10l2-swim.webp`;
+const gifDance = `${A}/gifs/u10l2-dance.webp`;
+const gifSing = `${A}/gifs/u10l2-sing.webp`;
 const itemCurtainPanel = `${A}/items/item-curtain-panel.png`;
 const itemIgloo = `${A}/items/item-igloo.png`;
 const itemInsect = `${A}/items/item-insect.png`;

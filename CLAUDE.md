@@ -51,6 +51,7 @@
 - **Canva GIFs/videos follow the scenario rule too** (owner, 2026-10-11): write the scenario (`docs/scenarios/`), and where possible show it to the owner as a quick preview GIF (the animatic) before it goes into a lesson; nothing ships without the owner's OK. No zoom/pan on stills, no on-picture text except our labels.
 - `scripts/generate-art.mjs` refuses the Higgsfield image path; the `higgsfield-video` edge function only allows video endpoints.
 - How to get a Canva picture into the repo (holder design, export, fetch bot): `docs/canva-art-pipeline.md`.
+- **No white backgrounds on pictures — everything is a cut-out sticker** (owner, 2026-10-12: "images without white background like stickers, it's the rule"). Every object, character and pose a child sees (items, characters, GIF/animation frames) has a transparent background: stickers via `scripts/split-sticker-sheet.py` / `cutout-stickers.py`, animated loops as cut-out animated WebP (white removed frame by frame, `public/lep1/gifs/*.webp`), never a picture sitting in a white box. Full scene backgrounds are the only pictures that fill their frame.
 
 ## Vary every lesson — research, then beat the best apps (hard rule — owner, 2026-10-04)
 

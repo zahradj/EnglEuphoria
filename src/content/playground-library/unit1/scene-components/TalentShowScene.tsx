@@ -133,13 +133,13 @@ export function TalentShowScene({ scene, onWin, onNext, sync }: { scene: Show; o
             const glow = misses >= 2 && r && i === r.act && !open;
             return (
               <motion.button key={a.word} type="button" aria-label={a.word} onClick={() => { void pick(i); }} disabled={open}
-                className="relative flex flex-col items-center rounded-[2.5vh] border-[0.6vh] border-amber-300 bg-gradient-to-b from-white to-amber-50 p-[0.8vh] shadow-[0_0.8vh_0_#b45309,0_1.5vh_2vh_rgba(0,0,0,0.3)] disabled:opacity-60"
+                className="relative flex flex-col items-center rounded-[2.5vh] border-[0.6vh] border-amber-300 bg-gradient-to-b from-sky-300 to-sky-500 p-[0.8vh] shadow-[0_0.8vh_0_#b45309,0_1.5vh_2vh_rgba(0,0,0,0.3)] disabled:opacity-60"
                 animate={nope === i && !reduce ? { x: [0, -10, 10, -6, 0] } : reduce ? {} : { y: [0, -5, 0] }}
                 transition={nope === i ? { duration: 0.45 } : { duration: 1.8 + i * 0.25, repeat: Infinity, ease: 'easeInOut' }}
                 whileTap={{ scale: 0.92 }}>
                 {glow && <span className="pointer-events-none absolute -inset-[12%] -z-10 animate-pulse rounded-[3vh] bg-yellow-300/80 blur-lg" />}
-                <img src={a.gif} alt="" draggable={false} className="rounded-[1.5vh] object-cover" style={{ width: 'min(15vh, 10vw)', height: 'min(15vh, 10vw)' }} />
-                <span className="mt-[0.4vh] font-black text-amber-800" style={{ fontSize: 'min(3.4vh, 2.2vw)' }}>{a.word}</span>
+                <img src={a.gif} alt="" draggable={false} className="object-contain drop-shadow-[0_0.5vh_0.4vh_rgba(0,0,0,0.3)]" style={{ width: 'min(15vh, 10vw)', height: 'min(15vh, 10vw)' }} />
+                <span className="mt-[0.4vh] font-black text-white [text-shadow:0_0.3vh_0_rgba(0,0,0,0.35)]" style={{ fontSize: 'min(3.4vh, 2.2vw)' }}>{a.word}</span>
               </motion.button>
             );
           })}
