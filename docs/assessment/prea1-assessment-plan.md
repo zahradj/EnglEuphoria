@@ -111,4 +111,4 @@ Order: Final Test first (it decides the move to A1), then Checkpoint 1, then the
 - Mastery learning research (Bloom model; Slavin 1987 review): https://institute.greatheartsamerica.org/media/scholarship-and-research/research-on-mastery-learning-including-a-comparison-of-the-bloom-model-and-the-fwtm-model/ , https://Www.Gwern.net/doc/psychology/1987-slavin.pdf
 - British Council / TeachingEnglish, Assessing young learners: https://www.teachingenglish.org.uk/professional-development/teachers/assessing-learning/assessing-young-learners , https://www.britishcouncil.org/sites/default/files/transcripts_assessing_young_learners.pdf
 - Quesada Pacheco (2022), formative and summative assessment of young English learners, Revista de Lenguas Modernas: https://archivo.revistas.ucr.ac.cr/index.php/rlm/article/download/48313/57774?inline=1
-- Our platform: `docs/placement-test-research.md`, `supabase/migrations/20261002150000_level_change_requests.sql`
+- Our platform: `supabase/migrations/20261002150000_level_change_requests.sql`
