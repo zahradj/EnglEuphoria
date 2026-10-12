@@ -2,7 +2,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { AcademyLevelLibrary } from '../library/AcademyLevelLibrary';
-import { ACADEMY_LEVELS, groupAcademyLessons } from '../library/levels';
+import { ACADEMY_LEVELS, groupAcademyLessons, groupAcademyLibrary } from '../library/levels';
 import { ACADEMY_DECK_LESSONS, ACADEMY_DECK_BLUEPRINT_IDS } from '../lessonRegistry';
 import { ACADEMY_SEASONS } from '../../curriculum/academy';
 
@@ -42,5 +42,44 @@ describe('Academy library by level', () => {
     expect(screen.getByText('The lessons of this season are being built.')).toBeTruthy();
     fireEvent.click(screen.getAllByRole('button', { name: /Coming soon/ })[0]);
     expect(screen.queryByText('The lessons of this season are being built.')).toBeNull();
+  });
+
+  it('LADDER VIEW (teachers and creators): tabs are the lean ladder steps, Pre-A1 first with planned seasons, A1 Upper holds Seasons 7-10', () => {
+    const g = groupAcademyLibrary(ACADEMY_DECK_LESSONS, true);
+    expect(g.map((x) => x.id)).toEqual(['pre-a1', 'a1', 'a1-upper', 'a2', 'b1', 'b2', 'c1']);
+    expect(g[0].seasons.map((s) => s.title)).toEqual(['Hello, letters', 'First sounds', 'Numbers and age']);
+    expect(g[0].seasons.every((s) => s.planned && s.no === null)).toBe(true);
+    expect(g[1].seasons.map((s) => s.no)).toEqual([1, 2, 3, 4, 5, 6]);
+    expect(g[2].seasons.map((s) => s.no)).toEqual([7, 8, 9, 10]);
+    expect(g.reduce((n, x) => n + x.count, 0)).toBe(ACADEMY_DECK_LESSONS.length);
+    // students keep plain levels (no Pre-A1, no Upper tab)
+    expect(groupAcademyLibrary(ACADEMY_DECK_LESSONS, false).map((x) => x.id)).toEqual(['a1', 'a2', 'b1', 'b2', 'c1']);
+  });
+
+  it('SLOTS: every season lists its 8 episodes; the built ones are marked, the rest are planned', () => {
+    const g = groupAcademyLibrary(ACADEMY_DECK_LESSONS, false);
+    const s1 = g[0].seasons[0];
+    expect(s1.slots.map((x) => x.episode)).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
+    expect(s1.slots.filter((x) => x.built).map((x) => x.episode)).toEqual([2, 3]); // Sign Me Up (E2) and Fake or Real? (E3)
+    expect(g[0].seasons[1].slots.every((x) => !x.built)).toBe(true);
+  });
+
+  it('the creator view shows the step tabs, the Pre-A1 plan and the planned lesson slots', () => {
+    render(<AcademyLevelLibrary showSteps lessons={ACADEMY_DECK_LESSONS} renderLesson={(l) => <span>{l.title}</span>} />);
+    expect(screen.getByRole('tab', { name: /^Pre-A1/ })).toBeTruthy();
+    expect(screen.getByRole('tab', { name: /^A1 Upper/ })).toBeTruthy();
+    expect(screen.getByRole('tab', { name: /^A1\b(?! Upper)/ }).getAttribute('aria-selected')).toBe('true');
+    // E1 of season 1 is not built: it is listed as a planned slot (E2 and E3 are built, so they are cards)
+    expect(screen.getAllByText(/E1 · /).length).toBeGreaterThan(0);
+    fireEvent.click(screen.getByRole('tab', { name: /^Pre-A1/ }));
+    expect(screen.getByText('Hello, letters')).toBeTruthy();
+    expect(screen.getAllByText('Planned').length).toBeGreaterThan(0);
+    expect(screen.getByText('The lessons of this season are being planned.')).toBeTruthy();
+  });
+
+  it('the student view has no Pre-A1 and no Upper tab', () => {
+    render(<AcademyLevelLibrary lessons={ACADEMY_DECK_LESSONS} renderLesson={(l) => <span>{l.title}</span>} />);
+    expect(screen.queryByRole('tab', { name: /Pre-A1/ })).toBeNull();
+    expect(screen.queryByRole('tab', { name: /Upper/ })).toBeNull();
   });
 });

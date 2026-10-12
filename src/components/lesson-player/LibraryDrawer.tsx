@@ -472,7 +472,7 @@ export default function LibraryDrawer({
                     <p className="text-sm font-medium">{searchQuery ? 'No lessons match your search' : 'No lessons available'}</p>
                   </div>
                 ) : (
-                  <AcademyLevelLibrary lessons={deckLessons} renderLesson={renderDeckRow} gridClassName="space-y-3" />
+                  <AcademyLevelLibrary lessons={deckLessons} renderLesson={renderDeckRow} gridClassName="space-y-3" showSteps />
                 )
               ) : gamesAvailable && view === 'games' ? (
                 filteredGames.length === 0 ? (

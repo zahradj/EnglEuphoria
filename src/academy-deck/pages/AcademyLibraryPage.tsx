@@ -20,6 +20,7 @@ export default function AcademyLibraryPage() {
         <AcademyLevelLibrary
           lessons={ACADEMY_DECK_LESSONS}
           gridClassName="grid gap-4 md:grid-cols-2"
+          showSteps
           renderLesson={(l) => (
             <article className="overflow-hidden rounded-3xl border border-violet-400/30 bg-violet-950/60 shadow-xl">
               <div className="relative aspect-video" style={{ background: l.gradient }}>

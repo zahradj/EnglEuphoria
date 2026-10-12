@@ -12,4 +12,9 @@ export const academyLessonsTranslations = {
   'al.soon': 'Bientôt',
   'al.soonLong': 'Les leçons de cette saison sont en préparation.',
   'al.count': '{{n}} leçons',
+  'al.upper': "{{level}} Supérieur",
+  'al.planned': "Prévu",
+  'al.plannedLong': "Les leçons de cette saison sont en cours de planification.",
+  'al.slots': "Leçons prévues",
+  'al.episodeShort': "É{{n}}",
 };
