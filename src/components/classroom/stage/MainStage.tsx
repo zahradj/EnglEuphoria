@@ -159,7 +159,7 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
   // pixel layout, just scaled.
   // Keyed on the scene-lesson branch being on stage: that area only exists
   // once the lesson has loaded, which on the student's side is AFTER mount.
-  const sceneLessonKey = sceneLessonRef ? `${hubType}-${mode}-${sceneLessonRef.contentFormat ?? ''}-${sceneLessonRef.unitNumber}-${sceneLessonRef.lessonNumber}` : null;
+  const sceneLessonKey = sceneLessonRef ? `${hubType}-${mode}-${sceneLessonRef.contentFormat ?? ''}-${sceneLessonRef.unitNumber}-${sceneLessonRef.lessonNumber}` : deckLessonRef ? `${hubType}-${mode}-deck-${deckLessonRef.lessonId}` : null;
   const sceneFrameSize = useLetterboxSize(sceneStageAreaRef, SCENE_DESIGN_W / SCENE_DESIGN_H, sceneLessonKey);
   const sceneFrameRef = useRef<HTMLDivElement>(null);
   const sceneFrameScale = sceneFrameSize.width > 0 ? sceneFrameSize.width / SCENE_DESIGN_W : 1;
@@ -399,36 +399,50 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
               )}
             </div>
           ) : hubType === 'academy' && mode === 'slide' && deckLessonRef ? (
-            // Academy library lesson (deck player): fixed 16:9 frame like plain stage content, pen layer inside it,
-            // so teacher and student share the same coordinates. The teacher moves the lesson; the student follows.
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div
-                className="relative overflow-hidden bg-background"
-                style={stageContentFrameSize.width > 0 ? { width: stageContentFrameSize.width, height: stageContentFrameSize.height } : { width: '100%', height: '100%' }}
-              >
-                <ClassroomSceneErrorBoundary resetKey={`deck-${deckLessonRef.lessonId}`}>
-                  <EmbeddedAcademyDeckLesson
-                    ref={deckHandleRef}
-                    lessonId={deckLessonRef.lessonId}
+            // Academy library lesson (deck player): framed exactly like a Playground scene lesson. A fixed 16:9 frame with
+            // margins (taller bottom clearance for the teacher's floating dock), the lesson drawn on a fixed design canvas
+            // that is scaled into it, and the pen layer INSIDE the frame, so teacher and student see the same layout and
+            // the same pen coordinates on every screen.
+            <div className={`absolute inset-x-3 top-3 sm:inset-x-4 sm:top-4 lg:inset-x-6 lg:top-6 flex flex-col gap-2 ${role === 'teacher' ? 'bottom-20 sm:bottom-24' : 'bottom-3 sm:bottom-4 lg:bottom-6'}`}>
+              <div ref={sceneStageAreaRef} className="relative flex-1 min-h-0 flex items-center justify-center">
+                <div
+                  ref={sceneFrameRef}
+                  className="relative overflow-hidden rounded-2xl bg-white shadow-2xl ring-1 ring-black/5"
+                  style={sceneFrameSize.width > 0 ? { width: sceneFrameSize.width, height: sceneFrameSize.height } : { width: '100%', height: '100%' }}
+                >
+                  <div className="absolute inset-0 overflow-hidden">
+                    <div style={{
+                      position: 'absolute', top: 0, left: 0,
+                      width: SCENE_DESIGN_W, height: SCENE_DESIGN_H,
+                      transform: `scale(${sceneFrameScale})`, transformOrigin: 'top left',
+                      visibility: sceneFrameSize.width > 0 ? 'visible' : 'hidden',
+                    }}>
+                      <ClassroomSceneErrorBoundary resetKey={`deck-${deckLessonRef.lessonId}`}>
+                        <EmbeddedAcademyDeckLesson
+                          ref={deckHandleRef}
+                          lessonId={deckLessonRef.lessonId}
+                          roomId={roomId}
+                          role={role}
+                          persistedSceneIdx={sceneLessonIdx}
+                          onSceneIdxPersist={onPersistSceneLessonIdx}
+                        />
+                      </ClassroomSceneErrorBoundary>
+                    </div>
+                  </div>
+                  <TransparentCanvas
                     roomId={roomId}
+                    userId={userId}
+                    userName={userName}
                     role={role}
-                    persistedSceneIdx={sceneLessonIdx}
-                    onSceneIdxPersist={onPersistSceneLessonIdx}
+                    drawingEnabled={drawingEnabled}
+                    activeTool={activeTool}
+                    activeColor={activeColor}
+                    strokes={strokes}
+                    onAddStroke={onAddStroke}
+                    mode={mode}
+                    iframeUnlocked={iframeUnlocked}
                   />
-                </ClassroomSceneErrorBoundary>
-                <TransparentCanvas
-                  roomId={roomId}
-                  userId={userId}
-                  userName={userName}
-                  role={role}
-                  drawingEnabled={drawingEnabled}
-                  activeTool={activeTool}
-                  activeColor={activeColor}
-                  strokes={strokes}
-                  onAddStroke={onAddStroke}
-                  mode={mode}
-                  iframeUnlocked={iframeUnlocked}
-                />
+                </div>
               </div>
             </div>
           ) : hubType === 'playground' && mode === 'slide' && !isInterview && (rawSlides as any)?.[0]?.playgroundUnit ? (
