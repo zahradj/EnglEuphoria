@@ -28,7 +28,7 @@ const previewUrl = (u: string | null) => (u && u.startsWith(SITE) ? window.locat
 const ILLUSTRATED_ART: Partial<Record<`${HubKey}:${CefrLevel}`, { file: string; primary: string; accent: string; text: string; heading: string; textShift: number }>> = {
   "playground:Pre-A1": { file: "/certificates/playground-pre-a1.png", primary: "#FE6A2F", accent: "#FFF4D6", text: "#7A3B0E", heading: "LITTLE EXPLORER CERTIFICATE", textShift: 0 },
   "playground:A1": { file: "/certificates/playground-a1.png", primary: "#E8590C", accent: "#FFE9A8", text: "#6B3A00", heading: "RISING STAR CERTIFICATE", textShift: -62 },
-  "playground:A2": { file: "/certificates/playground-a2.png", primary: "#C2410C", accent: "#FFD8A8", text: "#5C1900", heading: "SUPER CHAMPION CERTIFICATE", textShift: -40 },
+  "playground:A2": { file: "/certificates/playground-a2.png", primary: "#C2410C", accent: "#FFD8A8", text: "#5C1900", heading: "SUPER CHAMPION CERTIFICATE", textShift: -30 },
 };
 
 interface TemplateRow {
