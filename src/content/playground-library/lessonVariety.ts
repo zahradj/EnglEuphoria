@@ -53,6 +53,11 @@ export const VARIETY_ENFORCED_FROM = { unit: 3, lesson: 4 };
 /** Built before the rule (rebuild them to the rule when they are next touched). */
 export const GRANDFATHERED: readonly string[] = ['5-1'];
 
+/** Level tests (owner-approved assessment plan 2026-10-12, docs/assessment/prea1-assessment-plan.md): a test lesson is
+ *  deliberately ONE calm test activity, not a varied game lesson, so the variety rules don't apply to it. Only lessons
+ *  whose scenes are routine kinds + one `level-test` may be listed here. */
+export const ASSESSMENT_LESSONS: readonly string[] = ['5-8', '10-8'];
+
 export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '2-2': { settings: ['art studio', 'fruit market', 'meadow'], look: "Pip's sunny paint studio indoors, a striped market stall, the rainbow meadow; colour-mixing mission" },
   '2-3': { settings: ['town street', 'builder yard'], look: 'sunny Shape Town street with a clock tower, a house and a flag; a grassy builder yard where the friends build with shapes' },

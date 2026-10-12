@@ -1,6 +1,6 @@
 # Pre-A1 assessment plan — where we test, what we test, and who moves on
 
-**Status: proposal for the owner (2026-10-12).** Nothing here is built yet except the Unit 10 Boss Test (U10L7 "Action Hero"),
+**Status: approved by the owner (2026-10-12, "go").** Built: the Final Test (Unit 10 · Lesson 8 "Explorer Graduation"), Checkpoint 1 (Unit 5 · Lesson 8 "Halfway Explorer"), the results table `playground_assessment_results` and the level-request hook; and the Unit 10 Boss Test (U10L7 "Action Hero"),
 which is the model for the unit tests below.
 
 ## 1. What the research says (and what we take from it)

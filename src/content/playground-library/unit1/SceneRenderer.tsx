@@ -110,6 +110,7 @@ import { CanItScene } from './scene-components/CanItScene';
 import { BearHuntTrailScene } from './scene-components/BearHuntTrailScene';
 import { CharadesScene } from './scene-components/CharadesScene';
 import { HeroTrialsScene } from './scene-components/HeroTrialsScene';
+import { LevelTestScene } from './scene-components/LevelTestScene';
 import { SoundMoleScene } from './scene-components/SoundMoleScene';
 import { LetterMonstersScene } from './scene-components/LetterMonstersScene';
 import { SoundFishScene } from './scene-components/SoundFishScene';
@@ -245,6 +246,10 @@ export function SceneRenderer(props: {
   heartsRemaining: number;
   lessonNumber?: number;
   activitySync?: ActivitySync;
+  /** Live class: which screen this is and the class booking (level tests save the result from the teacher's screen). */
+  role?: 'teacher' | 'student';
+  roomId?: string;
+  activityUnlocked?: boolean;
 }) {
   const { scene, lessonNumber } = props;
   const teacherTip = lessonNumber === 3 ? L3_TEACHER_TIPS[scene.id] : undefined;
@@ -332,6 +337,7 @@ export function SceneRenderer(props: {
     case 'letter-monsters': return <LetterMonstersScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'sound-fish': return <SoundFishScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'can-it': return <CanItScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
+    case 'level-test': return <LevelTestScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} role={props.role} roomId={props.roomId} />;
     case 'hero-trials': return <HeroTrialsScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'charades': return <CharadesScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'bear-hunt-trail': return <BearHuntTrailScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;

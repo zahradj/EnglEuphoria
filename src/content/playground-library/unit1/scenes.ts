@@ -544,6 +544,17 @@ export type Scene =
       doneLine: string;
     }
   | {
+      /** Level Test (Pre-A1 Final Test / Checkpoint; docs/assessment/prea1-assessment-plan.md): one-try spoken sections
+       *  (`blend` = recorded letter sounds played before "What word is it?"), then speaking rated by the teacher (0–3 per
+       *  prompt). The teacher's screen shows stars per section, the decision and "Confirm & save result". */
+      id: string; kind: 'level-test'; bg: string; teacher: string; who: CharKey;
+      testKey: string; title: string; level: string; mode: 'final' | 'checkpoint'; nextLevel?: string; strongKeys?: string[];
+      hero: string; medal: string; certificate: { title: string; line: string };
+      sections: { key: string; label: string; icon: string; intro: string;
+        items: { ask: string; reply: string; answer: number; blend?: string[]; options: { label: string; img?: string; text?: string }[] }[] }[];
+      speaking: { key: string; label: string; icon: string; intro: string; prompts: { img: string; say: string; prompt: string; model: string }[] };
+    }
+  | {
       /** Hero Trials (unit Boss Test, Lesson 7): spoken one-try trials with picture / letter cards, grouped by `skills`;
        *  a wrong answer says the right one ("Good try! …") and moves on; the end shows stars per skill and the words to
        *  practise. `answer` indexes `options`; an option shows `img` (and `text` under it) or just `text`/`label`. */
@@ -16951,4 +16962,195 @@ export const LESSON_U10L7_SCENES: Scene[] = [
     ],
   },
   { id: 'u10l7-finale', kind: 'finale', bg: bgU10L7Academy, who: 'leo', line: 'You are an Action Hero! You can do so much! Goodbye, hero!' },
+];
+
+/* =============================================================================
+ * Pre-A1 level tests (owner-approved plan 2026-10-12: docs/assessment/prea1-assessment-plan.md)
+ *
+ *  - Checkpoint 1 "Halfway Explorer" — after Unit 5 (Units 1–5: me and my world), registered as Unit 5 · Lesson 8.
+ *  - Final Test "Explorer Graduation" — after Unit 10, decides the move to A1, registered as Unit 10 · Lesson 8.
+ * Each is a short lesson around ONE level-test scene: four sections (listening — words, listening — sentences, sounds &
+ * blending, speaking rated by the teacher), stars per section, the decision and "Confirm & save result" on the teacher's
+ * screen, a certificate for the child.
+ * ========================================================================= */
+
+const lt = (n: string) => `${A}/items/item-${n}.png`;
+const ltFace = (n: string) => `${A}/characters/${n}.png`;
+const LT_YES = { label: 'yes', text: '\u{1F44D}' };
+const LT_NO = { label: 'no', text: '\u{1F44E}' };
+
+export const LESSON_PREA1_FINAL_TITLE = 'Explorer Graduation';
+export const LESSON_PREA1_FINAL_OBJECTIVE = 'The Pre-A1 Final Test: show what you learned in Units 1–10 — find the word and the sentence you hear, hear first sounds and blend simple words, and talk with your teacher — to decide together if you are ready for A1.';
+
+export const LESSON_PREA1_FINAL_SCENES: Scene[] = [
+  { id: 'prea1-final-title', kind: 'title-card', bg: bgU10L7Academy, level: 'Pre-A1', unit: 'Final Test', lessonLabel: 'Explorer Graduation', title: 'Explorer Graduation', subtitle: 'Show what you know!' },
+  {
+    // Remember? (owner, 2026-10-07): a calm warm-up from Unit 10 · Lesson 7 · Action Hero — not scored
+    id: 'prea1-final-recall-warmup', kind: 'recall-warmup', bg: bgU10L7AcademyEmpty, who: 'leo', mode: 'click',
+    fromLabel: 'Lesson 7 · Action Hero',
+    teacher: 'A calm warm-up before the test (not scored): Leo says an action, the child finds it and does it.',
+    items: [
+      { word: 'run', say: 'Run!', img: gifRun },
+      { word: 'swim', say: 'Swim!', img: gifSwim },
+      { word: 'dance', say: 'Dance!', img: gifDance },
+    ],
+  },
+  {
+    id: 'prea1-final-intro', kind: 'cinematic', bg: bgU10L7Academy, hidePipOverlay: true, title: 'Explorer Graduation', subtitle: 'Show what you know!', narrator: 'leo',
+    script: [
+      { who: 'leo', line: 'Today is a big day, explorer!' },
+      { who: 'mia', line: 'Listen, look and tap. Then talk with your teacher.' },
+      { who: 'pip', line: 'You know so much English! Show us!' },
+    ],
+    cta: "Let's go!",
+  },
+  {
+    id: 'prea1-final-test', kind: 'level-test', bg: bgU10L7AcademyEmpty, who: 'leo',
+    teacher: 'Pre-A1 Final Test. Please do not help with the answers: let the child listen (🔊 repeats) and tap. In Part 4 ask each card, listen, and tap a score 0–3 on YOUR screen. At the end check the result, add a note and press "Confirm & save result" — if the child is Ready for A1, the level change request goes to the admin.',
+    testKey: 'prea1-final', title: 'Pre-A1 Final Test', level: 'Pre-A1', mode: 'final', nextLevel: 'A1', strongKeys: ['words', 'sentences', 'speaking'],
+    hero: u10l7Hero('pip'), medal: u10l7Medal,
+    certificate: { title: 'Great job, explorer!', line: 'You finished the Explorer test! Here is your medal!' },
+    sections: [
+      {
+        key: 'words', label: 'Words', icon: '\u{1F442}', intro: 'Listen and find the picture!',
+        items: [
+          { ask: 'Find: teddy!', reply: 'Teddy!', answer: 1, options: [{ label: 'ball', img: lt('ball-red') }, { label: 'teddy', img: itemTeddy }, { label: 'train', img: itemTrain }] },
+          { ask: 'Find: cow!', reply: 'Cow!', answer: 1, options: [{ label: 'pig', img: itemPig }, { label: 'cow', img: itemCow }, { label: 'sheep', img: itemSheep }] },
+          { ask: 'Find: banana!', reply: 'Banana!', answer: 2, options: [{ label: 'apple', img: itemApple }, { label: 'milk', img: itemMilk }, { label: 'banana', img: itemBanana }] },
+          { ask: 'Find: hat!', reply: 'Hat!', answer: 0, options: [{ label: 'hat', img: itemHat }, { label: 'shoes', img: itemShoesBlue }, { label: 'socks', img: itemSocksRed }] },
+          { ask: 'Find: bed!', reply: 'Bed!', answer: 1, options: [{ label: 'chair', img: itemChair }, { label: 'bed', img: itemBed }, { label: 'table', img: itemTable }] },
+          { ask: 'Find: grandma!', reply: 'Grandma!', answer: 1, options: [{ label: 'mom', img: famMom }, { label: 'grandma', img: famGrandma }, { label: 'sister', img: famSister }] },
+          { ask: 'Find: eyes!', reply: 'Eyes!', answer: 2, options: [{ label: 'nose', img: lt('card-nose') }, { label: 'ears', img: lt('card-ears') }, { label: 'eyes', img: lt('card-eyes') }] },
+          { ask: 'Find: swim!', reply: 'Swim!', answer: 0, options: [{ label: 'swim', img: gifSwim }, { label: 'run', img: gifRun }, { label: 'sing', img: gifSing }] },
+          { ask: 'Find: yellow!', reply: 'Yellow!', answer: 0, options: [{ label: 'yellow', img: itemDressYellow }, { label: 'blue', img: itemShoesBlue }, { label: 'red', img: itemSocksRed }] },
+          { ask: 'Find: triangle!', reply: 'Triangle!', answer: 1, options: [{ label: 'circle', img: lt('gem-red-circle') }, { label: 'triangle', img: lt('gem-yellow-triangle') }, { label: 'square', img: lt('gem-blue-square') }] },
+        ],
+      },
+      {
+        key: 'sentences', label: 'Sentences', icon: '\u{1F4AC}', intro: 'Listen to the sentence and find it!',
+        items: [
+          { ask: 'Find the red circle!', reply: 'The red circle!', answer: 1, options: [{ label: 'purple circle', img: lt('gem-purple-circle') }, { label: 'red circle', img: lt('gem-red-circle') }, { label: 'orange square', img: lt('gem-orange-square') }] },
+          { ask: 'Find the green car!', reply: 'The green car!', answer: 1, options: [{ label: 'red car', img: itemCarRed }, { label: 'green car', img: itemCarGreen }, { label: 'green hat', img: lt('hat-green') }] },
+          { ask: 'I like milk! Find it!', reply: 'Milk! I like milk!', answer: 1, options: [{ label: 'juice', img: itemJuice }, { label: 'milk', img: itemMilk }, { label: 'bread', img: itemBread }] },
+          { ask: 'Can a fish walk?', reply: "No! A fish can't walk. It can swim!", answer: 1, options: [LT_YES, { ...LT_NO, label: "a fish can't walk" }] },
+          { ask: 'She can dance! Who is it?', reply: 'Mia! She can dance!', answer: 1, options: [{ label: 'Pip', img: lt('pip-wave') }, { label: 'Mia', img: lt('mia-wave') }, { label: 'Leo', img: lt('leo-wave') }] },
+          { ask: 'He is sad. Who is it?', reply: 'Leo! He is sad.', answer: 1, options: [{ label: 'Mia, sad', img: ltFace('mia-sad') }, { label: 'Leo, sad', img: ltFace('leo-sad') }, { label: 'Pip, happy', img: ltFace('pip-happy') }] },
+          { ask: 'This is my dad! Find him!', reply: 'Dad! This is my dad!', answer: 0, options: [{ label: 'dad', img: famDad }, { label: 'grandpa', img: famGrandpa }, { label: 'brother', img: famBrother }] },
+          { ask: 'It can fly! What is it?', reply: 'The bird! It can fly!', answer: 1, options: [{ label: 'fish', img: lt('goldfish') }, { label: 'bird', img: lt('bird-fly') }, { label: 'frog', img: lt('frog-happy') }] },
+        ],
+      },
+      {
+        key: 'sounds', label: 'Sounds', icon: '\u{1F524}', intro: 'Listen to the sounds!',
+        items: [
+          { ask: 'Mom. Which sound?', reply: 'M! Mom!', answer: 0, options: [{ label: 'M', text: 'M' }, { label: 'D', text: 'D' }, { label: 'S', text: 'S' }] },
+          { ask: 'Cat. Which sound?', reply: 'C! Cat!', answer: 1, options: [{ label: 'B', text: 'B' }, { label: 'C', text: 'C' }, { label: 'D', text: 'D' }] },
+          { ask: 'Sun. Which sound?', reply: 'S! Sun!', answer: 2, options: [{ label: 'R', text: 'R' }, { label: 'J', text: 'J' }, { label: 'S', text: 'S' }] },
+          { ask: 'Hat. Which sound?', reply: 'H! Hat!', answer: 0, options: [{ label: 'H', text: 'H' }, { label: 'W', text: 'W' }, { label: 'M', text: 'M' }] },
+          { ask: 'Dog. Which sound?', reply: 'D! Dog!', answer: 1, options: [{ label: 'T', text: 'T' }, { label: 'D', text: 'D' }, { label: 'P', text: 'P' }] },
+          { ask: 'What word is it?', blend: ['p', 'i', 'g'], reply: 'Pig!', answer: 0, options: [{ label: 'pig', img: lt('pig') }, { label: 'pin', img: lt('pin') }, { label: 'wig', img: lt('wig') }] },
+          { ask: 'What word is it?', blend: ['j', 'a', 'm'], reply: 'Jam!', answer: 1, options: [{ label: 'jet', img: lt('jet') }, { label: 'jam', img: lt('jam') }, { label: 'bin', img: lt('bin') }] },
+          { ask: 'What word is it?', blend: ['l', 'o', 'g'], reply: 'Log!', answer: 2, options: [{ label: 'lid', img: lt('lid') }, { label: 'dog', img: itemDog }, { label: 'log', img: lt('log') }] },
+        ],
+      },
+    ],
+    speaking: {
+      key: 'speaking', label: 'Speaking', icon: '\u{1F3A4}', intro: 'Now talk with your teacher!',
+      prompts: [
+        { img: ltFace('pip-hello'), say: 'Hello! What is your name? How old are you?', prompt: 'Name and age', model: "My name is Sara. I'm five." },
+        { img: bgU7L2Farm, say: 'Look at the farm! What can you see?', prompt: 'Point and name 3 things in the big picture', model: 'A cow! A pig! A red barn!' },
+        { img: lt('ball-red'), say: 'What is this? What colour is it?', prompt: 'Object card: name + colour', model: "A ball! It's red." },
+        { img: itemPizza, say: 'What is your favourite food?', prompt: 'Personal question: I like …', model: 'I like pizza!' },
+        { img: gifRun, say: 'What can you do? Show me!', prompt: 'I can …', model: 'I can run! I can jump!' },
+      ],
+    },
+  },
+  {
+    id: 'prea1-final-sticker', kind: 'sticker-reward', bg: bgU10L7Academy, who: 'leo', teacher: 'Sticker time! The explorer medal goes in the Sticker Book — for every child, whatever the result.',
+    line: 'You are a super explorer! Here is your explorer medal!', sticker: { img: u10l7Medal, label: 'Explorer medal' },
+  },
+  { id: 'prea1-final-finale', kind: 'finale', bg: bgU10L7Academy, who: 'leo', line: 'Well done, explorer! You know so much English! Goodbye, friend!' },
+];
+
+export const LESSON_PREA1_CHECKPOINT1_TITLE = 'Halfway Explorer';
+export const LESSON_PREA1_CHECKPOINT1_OBJECTIVE = 'Pre-A1 Checkpoint 1 (after Unit 5): show what you learned in Units 1–5 — greetings and feelings, colours and shapes, toys, body and face, family — by finding what you hear, hearing first sounds, and talking with your teacher, to see if you are ready for Units 6–10.';
+
+export const LESSON_PREA1_CHECKPOINT1_SCENES: Scene[] = [
+  { id: 'prea1-cp1-title', kind: 'title-card', bg: bgU10L7Academy, level: 'Pre-A1', unit: 'Checkpoint 1', lessonLabel: 'Halfway Explorer', title: 'Halfway Explorer', subtitle: 'Show what you know!' },
+  {
+    // Remember? (owner, 2026-10-07): a calm warm-up of Unit 5 (My Family) — not scored
+    id: 'prea1-cp1-recall-warmup', kind: 'recall-warmup', bg: bgU10L7AcademyEmpty, who: 'mia', mode: 'click',
+    fromLabel: 'Unit 5 · My Family',
+    teacher: 'A calm warm-up before the checkpoint (not scored): Mia names a family member, the child finds the picture.',
+    items: [
+      { word: 'mom', say: 'Mom!', img: famMom },
+      { word: 'dad', say: 'Dad!', img: famDad },
+      { word: 'baby', say: 'Baby!', img: famBaby },
+    ],
+  },
+  {
+    id: 'prea1-cp1-intro', kind: 'cinematic', bg: bgU10L7Academy, hidePipOverlay: true, title: 'Halfway Explorer', subtitle: 'Show what you know!', narrator: 'mia',
+    script: [
+      { who: 'mia', line: 'You are halfway, explorer!' },
+      { who: 'pip', line: 'Listen, look and tap. Then talk with your teacher.' },
+    ],
+    cta: "Let's go!",
+  },
+  {
+    id: 'prea1-cp1-test', kind: 'level-test', bg: bgU10L7AcademyEmpty, who: 'mia',
+    teacher: 'Pre-A1 Checkpoint 1 (Units 1–5). Please do not help with the answers: let the child listen (🔊 repeats) and tap. In Part 4 ask each card, listen, and tap a score 0–3 on YOUR screen. At the end check the result and press "Confirm & save result".',
+    testKey: 'prea1-checkpoint-1', title: 'Pre-A1 Checkpoint 1', level: 'Pre-A1', mode: 'checkpoint',
+    hero: u10l7Hero('mia'), medal: u10l7Medal,
+    certificate: { title: 'Great job, explorer!', line: 'You are halfway! Here is your explorer medal!' },
+    sections: [
+      {
+        key: 'words', label: 'Words', icon: '\u{1F442}', intro: 'Listen and find the picture!',
+        items: [
+          { ask: 'Find: teddy!', reply: 'Teddy!', answer: 2, options: [{ label: 'ball', img: lt('ball-red') }, { label: 'train', img: itemTrain }, { label: 'teddy', img: itemTeddy }] },
+          { ask: 'Find: doll!', reply: 'Doll!', answer: 0, options: [{ label: 'doll', img: itemDoll }, { label: 'car', img: itemCar }, { label: 'blocks', img: itemBlocks }] },
+          { ask: 'Find: square!', reply: 'Square!', answer: 0, options: [{ label: 'square', img: lt('gem-blue-square') }, { label: 'circle', img: lt('gem-purple-circle') }, { label: 'triangle', img: lt('gem-yellow-triangle') }] },
+          { ask: 'Find: red!', reply: 'Red!', answer: 1, options: [{ label: 'blue', img: lt('ball-blue') }, { label: 'red', img: lt('balloon-red') }, { label: 'yellow', img: lt('ball-yellow') }] },
+          { ask: 'Find: nose!', reply: 'Nose!', answer: 1, options: [{ label: 'mouth', img: lt('card-mouth') }, { label: 'nose', img: lt('card-nose') }, { label: 'ears', img: lt('card-ears') }] },
+          { ask: 'Find: mouth!', reply: 'Mouth!', answer: 0, options: [{ label: 'mouth', img: lt('card-mouth') }, { label: 'eyes', img: lt('card-eyes') }, { label: 'nose', img: lt('card-nose') }] },
+          { ask: 'Find: dad!', reply: 'Dad!', answer: 2, options: [{ label: 'baby', img: famBaby }, { label: 'grandma', img: famGrandma }, { label: 'dad', img: famDad }] },
+          { ask: 'Find: sister!', reply: 'Sister!', answer: 0, options: [{ label: 'sister', img: famSister }, { label: 'brother', img: famBrother }, { label: 'mom', img: famMom }] },
+        ],
+      },
+      {
+        key: 'sentences', label: 'Sentences', icon: '\u{1F4AC}', intro: 'Listen to the sentence and find it!',
+        items: [
+          { ask: 'Find the red circle!', reply: 'The red circle!', answer: 1, options: [{ label: 'purple circle', img: lt('gem-purple-circle') }, { label: 'red circle', img: lt('gem-red-circle') }, { label: 'orange square', img: lt('gem-orange-square') }] },
+          { ask: 'Find the yellow triangle!', reply: 'The yellow triangle!', answer: 0, options: [{ label: 'yellow triangle', img: lt('gem-yellow-triangle') }, { label: 'green triangle', img: lt('gem-green-triangle') }, { label: 'red circle', img: lt('gem-red-circle') }] },
+          { ask: 'Find the green car!', reply: 'The green car!', answer: 2, options: [{ label: 'red car', img: itemCarRed }, { label: 'blue ball', img: lt('ball-blue') }, { label: 'green car', img: itemCarGreen }] },
+          { ask: 'I am happy! Who is happy?', reply: 'Mia! She is happy!', answer: 1, options: [{ label: 'Pip, sad', img: ltFace('pip-sad') }, { label: 'Mia, happy', img: ltFace('mia-happy') }, { label: 'Leo, angry', img: ltFace('leo-angry') }] },
+          { ask: 'He is angry. Who is it?', reply: 'Leo! He is angry.', answer: 0, options: [{ label: 'Leo, angry', img: ltFace('leo-angry') }, { label: 'Mia, sad', img: ltFace('mia-sad') }, { label: 'Pip, happy', img: ltFace('pip-happy') }] },
+          { ask: 'This is my grandpa! Find him!', reply: 'Grandpa! This is my grandpa!', answer: 1, options: [{ label: 'grandma', img: famGrandma }, { label: 'grandpa', img: famGrandpa }, { label: 'dad', img: famDad }] },
+        ],
+      },
+      {
+        key: 'sounds', label: 'Sounds', icon: '\u{1F524}', intro: 'Listen to the sounds!',
+        items: [
+          { ask: 'Mom. Which sound?', reply: 'M! Mom!', answer: 0, options: [{ label: 'M', text: 'M' }, { label: 'N', text: 'N' }, { label: 'W', text: 'W' }] },
+          { ask: 'Hat. Which sound?', reply: 'H! Hat!', answer: 1, options: [{ label: 'T', text: 'T' }, { label: 'H', text: 'H' }, { label: 'B', text: 'B' }] },
+          { ask: 'Sun. Which sound?', reply: 'S! Sun!', answer: 2, options: [{ label: 'A', text: 'A' }, { label: 'M', text: 'M' }, { label: 'S', text: 'S' }] },
+          { ask: 'Ball. Which sound?', reply: 'B! Ball!', answer: 0, options: [{ label: 'B', text: 'B' }, { label: 'T', text: 'T' }, { label: 'N', text: 'N' }] },
+          { ask: 'What word is it?', blend: ['h', 'a', 't'], reply: 'Hat!', answer: 1, options: [{ label: 'mat', img: lt('mat') }, { label: 'hat', img: itemHat }, { label: 'bat', img: lt('bat') }] },
+          { ask: 'What word is it?', blend: ['m', 'a', 't'], reply: 'Mat!', answer: 2, options: [{ label: 'bat', img: lt('bat') }, { label: 'hat', img: itemHat }, { label: 'mat', img: lt('mat') }] },
+        ],
+      },
+    ],
+    speaking: {
+      key: 'speaking', label: 'Speaking', icon: '\u{1F3A4}', intro: 'Now talk with your teacher!',
+      prompts: [
+        { img: ltFace('pip-hello'), say: 'Hello! What is your name? How old are you?', prompt: 'Name and age', model: "My name is Sara. I'm five." },
+        { img: lt('ball-red'), say: 'What is this? What colour is it?', prompt: 'Object card: name + colour', model: "A ball! It's red." },
+        { img: famGrandma, say: 'Who is this?', prompt: 'Family: who is it?', model: "It's my grandma!" },
+        { img: lt('card-nose'), say: 'What is this? Touch it!', prompt: 'Body: name it and touch it', model: "It's a nose!" },
+      ],
+    },
+  },
+  {
+    id: 'prea1-cp1-sticker', kind: 'sticker-reward', bg: bgU10L7Academy, who: 'mia', teacher: 'Sticker time! The halfway medal goes in the Sticker Book — for every child, whatever the result.',
+    line: 'You are halfway, super explorer! Here is your medal!', sticker: { img: u10l7Medal, label: 'Halfway medal' },
+  },
+  { id: 'prea1-cp1-finale', kind: 'finale', bg: bgU10L7Academy, who: 'mia', line: 'Well done, explorer! On to the next adventure! Goodbye, friend!' },
 ];
