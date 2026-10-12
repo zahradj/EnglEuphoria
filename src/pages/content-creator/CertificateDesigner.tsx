@@ -25,8 +25,9 @@ const previewUrl = (u: string | null) => (u && u.startsWith(SITE) ? window.locat
 
 /** Finished illustrated certificates made in Canva (public/certificates), one per hub × level. Owner, 2026-10-12:
  *  Playground = yellow → orange shades + white, each level its own style, 1 medal for Pre-A1, 2 for A1, 3 for A2. */
-const ILLUSTRATED_ART: Partial<Record<`${HubKey}:${CefrLevel}`, { file: string; primary: string; accent: string; text: string; heading: string }>> = {
-  "playground:Pre-A1": { file: "/certificates/playground-pre-a1.png", primary: "#FE6A2F", accent: "#FFF4D6", text: "#7A3B0E", heading: "LITTLE EXPLORER CERTIFICATE" },
+const ILLUSTRATED_ART: Partial<Record<`${HubKey}:${CefrLevel}`, { file: string; primary: string; accent: string; text: string; heading: string; textShift: number }>> = {
+  "playground:Pre-A1": { file: "/certificates/playground-pre-a1.png", primary: "#FE6A2F", accent: "#FFF4D6", text: "#7A3B0E", heading: "LITTLE EXPLORER CERTIFICATE", textShift: 0 },
+  "playground:A1": { file: "/certificates/playground-a1.png", primary: "#E8590C", accent: "#FFE9A8", text: "#6B3A00", heading: "RISING STAR CERTIFICATE", textShift: -62 },
 };
 
 interface TemplateRow {
@@ -99,15 +100,15 @@ export default function CertificateDesigner() {
       background_url: `${SITE}${preset.file}`,
       primary_color: preset.primary, accent_color: preset.accent, text_color: preset.text,
       heading: preset.heading,
-      design_config: { ...r.design_config, artMode: "full" },
+      design_config: { ...r.design_config, artMode: "full", textShift: preset.textShift },
     }));
   };
 
   const svg = useMemo(() => renderCertificateSVG({
     hub,
     cefrLevel: level,
-    title: artMode === "full" ? "Explorer Graduation" : `${level} Mastery`,
-    subtitle: artMode === "full" ? "Pre-A1 English · Units 1–10" : "12 quests · 88% accuracy",
+    title: artMode === "full" ? (level === "Pre-A1" ? "Explorer Graduation" : `${level} English`) : `${level} Mastery`,
+    subtitle: artMode === "full" ? (level === "Pre-A1" ? "Pre-A1 English · Units 1–10" : `${level} English · course complete`) : "12 quests · 88% accuracy",
     recipientName: "Alex Learner",
     awardedAt: new Date().toISOString(),
     logoUrl: row.logo_url || undefined,
@@ -118,6 +119,7 @@ export default function CertificateDesigner() {
     accentOverride: row.accent_color || undefined,
     textOverride: row.text_color || undefined,
     artMode,
+    textShift: Number(row.design_config?.textShift) || 0,
   }), [hub, level, row, artMode]);
 
   const dataUrl = `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;

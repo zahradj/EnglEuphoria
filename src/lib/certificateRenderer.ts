@@ -21,6 +21,8 @@ export interface CertificateRenderInput {
   /** 'full': the background is a finished illustration (e.g. the Canva Playground certificate) — shown at full
    *  strength, no drawn frame, and the text sits inside the picture's blank panel. Default 'wash' keeps the old look. */
   artMode?: "wash" | "full";
+  /** Full-art only: move the whole text block up (−) or down (+) in px to fit that picture's white panel. */
+  textShift?: number;
 }
 
 function esc(s: string) {
@@ -48,6 +50,7 @@ function renderFullArt(input: CertificateRenderInput, primary: string, text: str
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
   <rect width="1200" height="630" fill="#FFEFE2"/>
   <image href="${esc(input.backgroundUrl || "")}" x="0" y="0" width="1200" height="630" preserveAspectRatio="xMidYMid slice"/>
+  <g transform="translate(0 ${Number(input.textShift) || 0})">
   <text x="600" y="277" text-anchor="middle" font-family="${font}" font-size="17" font-weight="900" letter-spacing="5" fill="${primary}">${esc(heading)}</text>
   <text x="600" y="300" text-anchor="middle" font-family="${font}" font-size="16" font-weight="700" fill="${text}" opacity="0.75">This certificate is proudly given to</text>
   ${name}
@@ -56,6 +59,7 @@ function renderFullArt(input: CertificateRenderInput, primary: string, text: str
   ${pill}
   ${date}
   <text x="600" y="550" text-anchor="middle" font-family="${font}" font-size="13" font-weight="800" letter-spacing="3" fill="${primary}">${esc(input.subheading || "engleuphoria.com")}</text>
+  </g>
 </svg>`;
 }
 

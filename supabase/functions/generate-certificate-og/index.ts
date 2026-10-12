@@ -107,7 +107,9 @@ Deno.serve(async (req) => {
   // Illustrated certificate (design_config.artMode = 'full', e.g. the Canva Playground art): the picture at full
   // strength, embedded as a data URI (resvg does not fetch remote images), text inside its white panel —
   // the same layout as src/lib/certificateRenderer.ts renderFullArt().
-  const artMode = (tmpl?.design_config as { artMode?: string } | null)?.artMode;
+  const cfg = (tmpl?.design_config as { artMode?: string; textShift?: number } | null) ?? null;
+  const artMode = cfg?.artMode;
+  const shift = Number(cfg?.textShift) || 0;
   let fullArtSvg: string | null = null;
   if (artMode === "full" && bgUrl) {
     try {
@@ -125,11 +127,13 @@ Deno.serve(async (req) => {
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
   <rect width="1200" height="630" fill="#FFF4D6"/>
   <image href="data:${type};base64,${btoa(bin)}" x="0" y="0" width="1200" height="630" preserveAspectRatio="xMidYMid slice"/>
+  <g transform="translate(0 ${shift})">
   <text x="600" y="277" text-anchor="middle" font-family="${font}" font-size="17" font-weight="900" letter-spacing="5" fill="${primary}">${esc(heading)}</text>
   <text x="600" y="404" text-anchor="middle" font-family="${font}" font-size="34" font-weight="900" fill="${text}">${esc(label)}</text>
   <text x="600" y="436" text-anchor="middle" font-family="${font}" font-size="19" font-weight="700" fill="${text}" opacity="0.8">${runs} quests · ${pct}% accuracy</text>
   ${pill}
   <text x="600" y="550" text-anchor="middle" font-family="${font}" font-size="13" font-weight="800" letter-spacing="3" fill="${primary}">${esc(subheading)}</text>
+  </g>
 </svg>`;
       }
     } catch (e) {
