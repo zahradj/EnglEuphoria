@@ -4,6 +4,7 @@ import { useDragChip } from '../drag';
 import { hasFlag } from '../../academy-player/drawn';
 import { Traveller, WavingFlag } from './anim';
 import { Bearer } from './bearer';
+import { Art } from './teach';
 import { Hear } from '../Hear';
 import type { BorderSlide, MemorySlide } from '../types';
 import { Feedback, NOT_YET, Panel } from './shared';
@@ -92,7 +93,7 @@ export function BorderView({ slide }: { slide: BorderSlide }) {
 /** Memory: flip two cards, match each flag with its nationality word. No timers, no penalty. */
 export function MemoryView({ slide }: { slide: MemorySlide }) {
   const { right, wrong, done, seed, speak } = useDeck();
-  const cards = useMemo(() => shuffled(slide.pairs.flatMap((p, i) => [{ k: `f${i}`, pair: i, flag: p.flag, text: '' }, { k: `t${i}`, pair: i, flag: '', text: p.text }]), seed), [slide.pairs, seed]);
+  const cards = useMemo(() => shuffled(slide.pairs.flatMap((p, i) => [{ k: `f${i}`, pair: i, flag: p.flag ?? '', art: p.art, text: '' }, { k: `t${i}`, pair: i, flag: '', art: undefined, text: p.text }]), seed), [slide.pairs, seed]);
   const [open, setOpen] = useState<string[]>([]);
   const [matched, setMatched] = useState<number[]>([]);
   useEffect(() => {
@@ -119,10 +120,10 @@ export function MemoryView({ slide }: { slide: MemorySlide }) {
         {cards.map((c) => {
           const up = open.includes(c.k) || matched.includes(c.pair);
           return (
-            <button key={c.k} type="button" className="ad-mem" data-up={up} data-matched={matched.includes(c.pair)} disabled={up || open.length === 2} onClick={() => { if (c.text) void speak('Vee', c.text); setOpen([...open, c.k]); }} aria-label={up ? (c.flag ? `Flag ${c.flag}` : c.text) : 'Hidden card'}>
+            <button key={c.k} type="button" className="ad-mem" data-up={up} data-matched={matched.includes(c.pair)} disabled={up || open.length === 2} onClick={() => { if (c.text) void speak('Vee', c.text); setOpen([...open, c.k]); }} aria-label={up ? (c.flag ? `Flag ${c.flag}` : c.art ? `Picture of ${slide.pairs[c.pair].text}` : c.text) : 'Hidden card'}>
               <span className="ad-mem-inner">
                 <span className="ad-mem-face ad-mem-back" aria-hidden="true">★</span>
-                <span className="ad-mem-face ad-mem-front">{c.flag && hasFlag(c.flag) ? <WavingFlag code={c.flag} label={`Flag ${c.flag}`} /> : <b>{c.text}</b>}</span>
+                <span className="ad-mem-face ad-mem-front">{c.art ? <Art art={c.art} size="sm" /> : c.flag && hasFlag(c.flag) ? <WavingFlag code={c.flag} label={`Flag ${c.flag}`} /> : <b>{c.text}</b>}</span>
               </span>
             </button>
           );

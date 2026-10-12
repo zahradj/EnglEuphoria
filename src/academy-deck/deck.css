@@ -1040,3 +1040,7 @@
 .ad-stamp-img { position: absolute; width: 74px; inset: auto 6px 6px auto; opacity: 0.9; transform: rotate(-12deg); animation: ad-slam 0.4s cubic-bezier(0.2, 1.4, 0.4, 1) both; }
 @keyframes ad-sheen { 0%, 55% { transform: translateX(-120%); } 85%, 100% { transform: translateX(120%); } }
 @media (max-width: 720px) { .ad-booth { grid-template-columns: 1fr; } .ad-bearer-lg { width: 220px; height: 220px; } }
+
+/* Memory with picture cards (vocabulary) */
+.ad-mem-front .ad-art { height: 100%; overflow: hidden; }
+.ad-mem-front .ad-bearer { transform: scale(0.55); }

@@ -97,7 +97,7 @@ export interface HuntSlide extends SlideBase {
 export interface ShadowSlide extends SlideBase { kind: 'shadow'; prompt: string; rounds: { art: TeachArt; answer: string; options: string[] }[] }
 export interface BorderSlide extends SlideBase { kind: 'border'; prompt: string; /** nationality word -> flag code: each passport shows its flag */ flags?: Record<string, string>; /** `who`: the cast character who arrives holding the flag (default: a drawn traveller) */ rounds: { flag: string; says: string; answer: string; options: string[]; who?: CastName }[]; stamp?: string }
 export interface NumWallSlide extends SlideBase { kind: 'numwall'; title: string; /** also show 200, 300 … 900 under the chart */ hundreds?: boolean; /** how many different numbers the student must tap (default 8) */ need?: number }
-export interface MemorySlide extends SlideBase { kind: 'memory'; prompt: string; pairs: { flag: string; text: string }[] }
+export interface MemorySlide extends SlideBase { kind: 'memory'; prompt: string; /** each pair is a flag, or any teach picture (`art`), with its word */ pairs: { flag?: string; art?: TeachArt; text: string }[] }
 export interface PhoneChatSlide extends SlideBase { kind: 'phonechat'; prompt: string; contact: CastName; steps: { text: string; /** a sticker picture beside the message */ pic?: TeachArt; reply: string; extra?: string[]; /** pictures on the word tiles (key = the tile text) so beginners see what the word means */ tilePics?: Record<string, TeachArt> }[] }
 export interface FadeSlide extends SlideBase { kind: 'fade'; prompt: string; lines: { who: CastName; text: string; keys: string[] }[] }
 export interface CardSlide extends SlideBase {
