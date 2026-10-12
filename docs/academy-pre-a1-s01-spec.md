@@ -74,3 +74,8 @@ Letters and Sounds and Jolly Phonics both start with a small set of frequent, ea
 - **Decodability test** (`src/academy-deck/decodable.ts`): `DeckScript.taughtSounds` and `sightWords`; `decodabilityProblems(script)` fails a deck whose reading text is not blendable from the sounds taught or a taught whole word.
 - **Letter SOUND clips** use the key `sound <letter>` and stay silent until the owner approves recordings (never another voice).
 - Still to do: the PA1-S01 Season in the roadmap code, the 8 lessons, club lobby and Name Wall art, 4 letter-sound recordings, per-lesson audio manifests, pictures for the reader page.
+
+## 10. Layouts and backgrounds (owner 2026-10-12: "consistent layout is boring, change the background")
+- The three reading slides each have their own layout, with no white card: **blend** = dark glass stage with huge gold tiles and a glowing slider (`Panel variant="glass"`); **hear-and-pick** = a big round "ear" button and three round gold keys floating at different heights (`variant="bare"`); **reader** = a dark notice bar with big tap-to-hear words and the pictures scattered underneath as stickers (`variant="bare"`). The cast member stands left or right (set per slide in `actors`), so the screen is not the same twice.
+- **Backgrounds:** vary the plate per slide: `club-stage` (hear-and-pick), `locker-hall` (blend), `classroom-evening` (reader), `club-lobby` and `phone-profile-closeup` elsewhere. A dedicated **Name Wall** plate (club lobby with a blank letter wall) still has to be made in Canva (pictures: Canva only, `docs/canva-art-pipeline.md`).
+- The `glass` and `bare` panel variants can be used by any other slide kind.
