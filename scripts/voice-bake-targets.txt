@@ -1,13 +1,6 @@
-# 2026-10-12: Pre-A1 level tests (Final Test, Checkpoint 1)
-LESSON_PREA1_FINAL_SCENES
-LESSON_PREA1_CHECKPOINT1_SCENES
-# 2026-10-12: unit Boss Tests, Units 1-9
-LESSON_U1L7_SCENES
-LESSON_U2L7_SCENES
-LESSON_U3L7_SCENES
-LESSON_U4L7_SCENES
-LESSON_U5L7_SCENES
-LESSON_U6L7_SCENES
-LESSON_U7L7_SCENES
-LESSON_U8L7_SCENES
-LESSON_U9L7_SCENES
+# Homework Quest lines (every quest + Practise again packs) — keep this line: quests are not lesson exports.
+HOMEWORK
+# 2026-10-12 Pre-A1 audit: lines reworded so the voice does not spell "zzz" / "Mmm"
+LESSON_U8L1_SCENES
+LESSON_U10L5_SCENES
+LESSON_U10L6_SCENES
