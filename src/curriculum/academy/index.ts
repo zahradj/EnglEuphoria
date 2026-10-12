@@ -94,6 +94,7 @@ export function getSeason(id: string): SeasonOutline | undefined {
 
 export * from './types';
 export * from './lessonBlueprint';
+export * from './vocabGames';
 export * from './itemTypes';
 export * from './cast';
 export { validateItems, expectedCounts, coverageByLevel, normalizeItem } from './validateItems';
