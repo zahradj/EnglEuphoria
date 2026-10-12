@@ -62,6 +62,7 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
   '4-4': { settings: ['flower garden'], look: 'bright flower garden with big friendly mushrooms; Pip meets Bo, a round sky-blue three-eyed monster; code-drawn monsters on an empty lawn' },
   '4-5': { settings: ['animal park'], look: 'sunny animal park with a blue pond and tall trees; a tiger, a monkey, an elephant and a seal each show one move, Pip copies; a leafy bush to peek through' },
+  '10-2': { settings: ['sunny beach', 'beach talent-show stage'], look: "a summer beach party: golden sand, a calm turquoise sea, palm trees, beach umbrellas and a beach ball, a little wooden beach stage with bunting; Pip swims in the sea, Mia dances on the sand and Leo sings on the stage with a toy microphone; the Beach Talent Show is a wooden stage with warm lights, red velvet curtains and a glowing paper screen where the next act's moving shadow plays" },
   '10-1': { settings: ['park sports-day track'], look: "sports day in a sunny green park: a curvy red running track with white lane lines, low wooden logs and a hay bale as hurdles, triangle bunting and a finish ribbon; Pip runs, Mia jumps the log and Coach Leo cheers with a whistle; the empty track becomes the Obstacle Run with code-drawn lane stripes streaming past" },
   '9-6': { settings: ['playroom dress-up corner'], look: "a cosy playroom dress-up corner on a rainy afternoon: a big wooden-framed standing mirror, a low clothes rail with hangers, an open wooden dress-up trunk, a round purple rug, rain on the window and warm lamp light; Pip in a green hat, Mia twirling in a yellow dress and Leo pulling on a blue coat; the empty corner becomes the Dress-Up Studio with a clothes rail and paint pots" },
   '9-5': { settings: ['sunny garden', 'picnic hill', 'farmyard after rain'], look: "a walk through the unit's places as a stills film: Pip in a red T-shirt, blue pants and brand-new white sneakers in a sunny garden, squishing red apples under the apple tree on the picnic hill, stepping into a spilled pot of blue paint on the path, stomping in a brown mud puddle in the farmyard after rain, and splashing in a clear rain puddle; the garden becomes the Shoe Painter game with paint pots and a big magnifier on his shoes" },
@@ -214,6 +215,19 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'the child must understand the verb AND the body part to find the animal, then PRODUCES the move and the sentence — the screen waits for the child, never a clock',
       'the clue in Whose Is It? is one of the unit\'s body words, so naming the part and the animal go together, and the reveal recalls the story move',
       'wrong picks are named back with that animal\'s own move ("No, the seal claps her hands!"), and the right one glows after two tries',
+    ],
+  },
+  '10-2': {
+    sources: ['Lingokids (action games: watch and do)', 'Khan Academy Kids (guess the picture from a clue)', 'shadow-puppet theatre / Duolingo ABC-style silhouette guess', 'Cambridge (Pre A1 Starters: "Can you …? Yes, I can")', 'Wordwall (missing-word train / what is missing?)'],
+    mechanics: [
+      'silhouette guessing → Beach Talent Show: the act\'s moving shadow plays behind a glowing screen, the child taps the act, the screen rolls up and the friend says "I can dance!"',
+      'what-is-missing memory → the party train carries the action GIFs, one car empties, the child says the missing action',
+      '"Can you …?" talk → "What can you do?" "I can swim!"; first sounds S/D/I in Sandy Dash and Letter Monsters, i-words to blend',
+    ],
+    betterThan: [
+      'the clue is the MOVEMENT itself (a moving shadow of the real action), not a still picture, so the child recognises the verb, not a costume',
+      'every reveal ends in the target sentence "I can …" in the friend\'s voice, then the child says it: the game leads straight to speaking',
+      'anticipation and payoff like a real show (drum-roll tremble, the screen rolls up, spotlights, the beach audience claps); a wrong ticket costs nothing and the right one glows after two tries',
     ],
   },
   '10-1': {

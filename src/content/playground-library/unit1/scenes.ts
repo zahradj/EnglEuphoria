@@ -536,6 +536,14 @@ export type Scene =
       doneLine: string;
     }
   | {
+      /** Beach Talent Show (U10L2 signature): the act's moving shadow (its action GIF) behind a glowing screen; the child
+       *  taps the act's ticket (`act` indexes `acts`), the screen rolls up and the friend says "I can swim!". */
+      id: string; kind: 'talent-show'; bg: string; teacher: string; who: CharKey; curtain: string;
+      acts: { word: string; gif: string; shadow: string; move: 'swim' | 'dance' | 'sing'; who: CharKey; line: string }[];
+      rounds: { act: number; ask: string; reply: string }[];
+      doneLine: string;
+    }
+  | {
       /** Dress-Up Studio (U9L6 signature): a friend asks for a piece AND a colour (`rounds`: `piece` indexes `pieces`,
        *  `color` indexes `colors`); the child taps the piece, then the paint pot, and it lands on the friend's body
        *  (fitted layers, recoloured in `hex`). Then a free round: dress `free.friend` any way, 📸, and the friend
@@ -15655,4 +15663,206 @@ export const LESSON_U10L1_SCENES: Scene[] = [
     ],
   },
   { id: 'u10l1-finale', kind: 'finale', bg: bgU10L1Track, who: 'leo', line: 'Run, jump, walk! Great sports day! Goodbye, friend!' },
+];
+
+/* =============================================================================
+ * Pre-A1 Unit 10, Lesson 2 — "Swim, Dance, Sing!" (Action Verbs; "I can …"; the sound I)
+ *
+ * A beach party. New action words swim, dance, sing with the owner-approved Canva GIF loops
+ * (docs/scenarios/u10l2-swim-dance-sing-gifs.md), the chunk "I can …", a new signature game (Beach Talent Show:
+ * guess the act from its moving shadow, the friend says "I can dance!"), the lesson song after the first game,
+ * and the short vowel I (swim, sing, fish) with i-words to blend (pig, pin, bin, wig).
+ * ========================================================================= */
+
+const bgU10L2Beach = `${A}/scenes/bg-u10l2-beach-wide.png`;
+const bgU10L2BeachEmpty = `${A}/scenes/bg-u10l2-beach-empty-wide.png`;
+const bgU10L2Stage = `${A}/scenes/bg-u10l2-stage-wide.png`;
+const gifSwim = `${A}/gifs/u10l2-swim.gif`;
+const gifDance = `${A}/gifs/u10l2-dance.gif`;
+const gifSing = `${A}/gifs/u10l2-sing.gif`;
+const itemCurtainPanel = `${A}/items/item-curtain-panel.png`;
+const itemIgloo = `${A}/items/item-igloo.png`;
+const itemInsect = `${A}/items/item-insect.png`;
+const itemInk = `${A}/items/item-ink.png`;
+const itemDrum = `${A}/items/item-drum.png`;
+
+export const LESSON_U10L2_TITLE = 'Swim, Dance, Sing!';
+export const LESSON_U10L2_OBJECTIVE = 'Understand and do the actions swim, dance and sing, say what you can do ("I can swim!"), guess an action from how it moves, and hear the short sound I (swim, sing, igloo), by moving, listening and playing, no reading.';
+
+export const LESSON_U10L2_SCENES: Scene[] = [
+  { id: 'u10l2-title', kind: 'title-card', bg: bgU10L2Beach, level: 'Pre-A1', unit: 'Unit 10', lessonLabel: 'Lesson 2', title: 'Swim, Dance, Sing!', subtitle: 'A beach party' },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 10 · Lesson 1 · Run, Jump, Walk!
+    id: 'u10l2-recall-warmup', kind: 'recall-warmup', bg: bgU10L2BeachEmpty, who: 'leo', mode: 'shadow',
+    fromLabel: 'Lesson 1 · Run, Jump, Walk!',
+    teacher: 'Warm-up from last lesson: Leo says an action, the child finds its shadow, says it and does it.',
+    items: [
+      { word: 'run', say: 'Run!', img: itemPipRun },
+      { word: 'jump', say: 'Jump!', img: itemPipJump },
+      { word: 'walk', say: 'Walk!', img: itemPipWalk },
+    ],
+  },
+  {
+    id: 'u10l2-intro', kind: 'cinematic', bg: bgU10L2Beach, hidePipOverlay: true, title: 'Swim, Dance, Sing!', subtitle: 'A beach party', narrator: 'mia',
+    script: [
+      { who: 'mia', line: "It's a beach party! Hooray!" },
+      { who: 'pip', line: 'Look at me! I can swim!' },
+      { who: 'mia', line: 'And I can dance!' },
+      { who: 'leo', line: 'I can sing! La, la, la!' },
+    ],
+    cta: "Let's party!",
+  },
+
+  /* 4-5 The words (moving pictures), then move */
+  {
+    id: 'u10l2-words', kind: 'listen-repeat-cards', textSide: 'right', bg: bgU10L2BeachEmpty, teacher: 'Listen, then say it and do it: "I can swim!"',
+    cards: [
+      { who: 'pip', sentence: 'Swim! I can swim!', img: gifSwim, imgLabel: 'swim' },
+      { who: 'mia', sentence: 'Dance! I can dance!', img: gifDance, imgLabel: 'dance' },
+      { who: 'leo', sentence: 'Sing! I can sing!', img: gifSing, imgLabel: 'sing' },
+    ],
+  },
+  {
+    id: 'u10l2-move', kind: 'tpr-actions', bg: bgU10L2BeachEmpty, who: 'mia',
+    teacher: 'Stand up! Do each action with Mia and say the word.',
+    rounds: [
+      { line: 'Swim! Swim with your arms!', emoji: '\u{1F3CA}', img: gifSwim },
+      { line: 'Dance! Dance, dance, dance!', emoji: '\u{1F483}', img: gifDance },
+      { line: 'Sing! La, la, la!', emoji: '\u{1F3A4}', img: gifSing },
+      { line: 'Stop! Freeze!', emoji: '\u{1F6D1}', seconds: 3 },
+    ],
+  },
+
+  /* 6 Signature game (new): Beach Talent Show */
+  {
+    id: 'u10l2-talent-show', kind: 'talent-show', bg: bgU10L2Stage, who: 'bella', curtain: itemCurtainPanel,
+    teacher: 'Beach Talent Show! Look at the moving shadow: what can they do? Tap the ticket. Then the child says the line too: "I can swim!"',
+    acts: [
+      { word: 'swim', gif: gifSwim, shadow: `${A}/gifs/u10l2-swim-shadow.gif`, move: 'swim', who: 'pip', line: 'I can swim!' },
+      { word: 'dance', gif: gifDance, shadow: `${A}/gifs/u10l2-dance-shadow.gif`, move: 'dance', who: 'mia', line: 'I can dance!' },
+      { word: 'sing', gif: gifSing, shadow: `${A}/gifs/u10l2-sing-shadow.gif`, move: 'sing', who: 'leo', line: 'I can sing!' },
+    ],
+    rounds: [
+      { act: 1, ask: 'Who is it? What can she do?', reply: 'Yes! She can dance! Now you: I can dance!' },
+      { act: 2, ask: 'Shh! Look! What can he do?', reply: 'Yes! He can sing! Now you: I can sing!' },
+      { act: 0, ask: 'Splash, splash! What can he do?', reply: 'Yes! He can swim! Now you: I can swim!' },
+      { act: 2, ask: 'Here is the next act! What can he do?', reply: 'He can sing! Clap, clap!' },
+      { act: 1, ask: 'Look at the shadow! What can she do?', reply: 'She can dance! Bravo!' },
+    ],
+    doneLine: 'What a show! Everybody can do something!',
+  },
+
+  /* 7 The song — after the words and the first game (owner, 2026-10-10) */
+  {
+    id: 'u10l2-song', kind: 'song', bg: bgU10L2Beach, title: '\u{1F3B5} I Can Swim! \u{1F3B5}', teacher: 'Sing and do it: swim with your arms, dance, sing "la, la, la", then shout "Yes, I can!"',
+    durationSeconds: 20, bigWord: 'Swim', songUrl: `${A}/audio/swim-dance-sing-song-u10l2.mp3?v=1`,
+    lineDurationsMs: [4200, 4460, 4380, 7022],
+    songPrompt: 'Happy summer beach-party kids song',
+    lyrics: [
+      { who: 'pip', text: 'I can swim, swim, swim!', emotion: 'happy' },
+      { who: 'mia', text: 'I can dance, dance, dance!', emotion: 'happy' },
+      { who: 'leo', text: 'I can sing, la, la, la!', emotion: 'happy' },
+      { who: 'pip', text: 'Swim, dance, sing! Yes, I can!', emotion: 'happy' },
+    ],
+  },
+
+  /* 8-9 More games */
+  {
+    id: 'u10l2-train', kind: 'train-recall', bg: bgU10L2BeachEmpty, teacher: 'All aboard the party train! Remember the action in each car — one car goes empty. Say it and do it!',
+    question: 'Toot toot! One car is empty. What is missing?',
+    cars: [
+      { word: 'SWIM', img: gifSwim, emoji: '\u{1F3CA}' },
+      { word: 'DANCE', img: gifDance, emoji: '\u{1F483}' },
+      { word: 'SING', img: gifSing, emoji: '\u{1F3A4}' },
+      { word: 'RUN', img: itemPipRun, emoji: '\u{1F3C3}' },
+      { word: 'JUMP', img: itemPipJump, emoji: '\u{1F998}' },
+    ],
+  },
+  {
+    id: 'u10l2-can', kind: 'join-stage', bg: bgU10L2BeachEmpty, teacher: 'Talk time: Mia asks "What can you do?" — the child answers with "I can …" and shows it. Any action is fine.', cast: ['mia'],
+    turns: [
+      { who: 'mia', line: 'I can dance! What can you do?', bubble: 'right' },
+      { who: 'student', line: 'I can swim!', bubble: 'right' },
+      { who: 'mia', line: 'Wow! Can you sing?', bubble: 'right' },
+      { who: 'student', line: 'Yes! I can sing! La, la, la!', bubble: 'right' },
+    ],
+  },
+
+  /* 10-13 Sounds: the short I; S and D again */
+  {
+    id: 'u10l2-model-i', kind: 'sound-model', bg: bgU10L2BeachEmpty, who: 'pip', letter: 'I', phoneme: '/ɪ/', sound: 'ih',
+    teacher: 'I says /ɪ/ — igloo, insect, ink! We hear it in swim and sing too.',
+    anchors: [
+      { word: 'igloo', emoji: '\u{1F3E0}', img: itemIgloo },
+      { word: 'insect', emoji: '\u{1F41E}', img: itemInsect },
+      { word: 'ink', emoji: '\u{1F58B}️', img: itemInk },
+    ],
+  },
+  {
+    id: 'u10l2-dash', kind: 'dash', bg: bgU10L2BeachEmpty, teacher: 'Sandy Dash! Run along the beach and tap only the S words: sun, snake, sofa. Get 6!', who: 'mia', targetLetter: 'S', targetPhoneme: '/s/', goal: 6, seconds: 40,
+    items: [
+      { word: 'sun', letter: 'S', img: `${A}/items/item-sun.png`, emoji: '\u{2600}️' },
+      { word: 'snake', letter: 'S', img: `${A}/items/item-snake.png`, emoji: '\u{1F40D}' },
+      { word: 'sofa', letter: 'S', img: `${A}/items/item-sofa.png`, emoji: '\u{1F6CB}️' },
+      { word: 'drum', letter: 'D', img: itemDrum, emoji: '\u{1F941}' },
+      { word: 'dog', letter: 'D', img: `${A}/items/item-dog.png`, emoji: '\u{1F415}' },
+      { word: 'igloo', letter: 'I', img: itemIgloo, emoji: '\u{1F3E0}' },
+    ],
+  },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u10l2-blend', kind: 'sound-blend', bg: bgU10L2BeachEmpty,
+    teacher: 'Blend It! Tap each car and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'pig', img: `${A}/items/item-pig.png` }, { word: 'pin', img: `${A}/items/item-pin.png` }, { word: 'bin', img: `${A}/items/item-bin.png` }, { word: 'wig', img: `${A}/items/item-wig.png` }],
+  },
+  {
+    id: 'u10l2-phonics', kind: 'letter-monsters', bg: bgU10L2BeachEmpty, who: 'pip',
+    teacher: 'Hungry Letter Monsters! Say the word, listen to its first sound, and feed it to the monster with that letter. Tap a tummy to hear its sound.',
+    monsters: [{ letter: 's', color: '#FF9F43' }, { letter: 'd', color: '#4FA3F7' }, { letter: 'i', color: '#A78BFA' }],
+    cards: [{ word: 'igloo', img: itemIgloo }, { word: 'sun', img: `${A}/items/item-sun.png` }, { word: 'drum', img: itemDrum }, { word: 'insect', img: itemInsect }, { word: 'snake', img: `${A}/items/item-snake.png` }, { word: 'doll', img: `${A}/items/item-doll.png` }],
+  },
+
+  /* 14-15 Sticker + Home Mission */
+  {
+    id: 'u10l2-sticker', kind: 'sticker-reward', bg: bgU10L2Beach, who: 'mia', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'You are a beach party star! Here is a dancing sticker for you!', sticker: { img: gifDance, label: 'Party star' },
+  },
+  {
+    id: 'u10l2-home-mission', kind: 'home-mission', bg: bgU10L2Beach, who: 'mia',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: a talent show at home! Show your family what you can do and say "I can dance!"',
+    parentNote: 'Have a little talent show at home: your child shows an action and says "I can swim!", "I can dance!" or "I can sing!", then you show yours. Clap for every act! Ask "What can you do?" and wait for "I can …".',
+    steps: [
+      { emoji: '\u{1F3CA}', img: gifSwim, say: 'I can swim!' },
+      { emoji: '\u{1F483}', img: gifDance, say: 'I can dance!' },
+      { emoji: '\u{1F3A4}', img: gifSing, say: 'I can sing!' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u10l2-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU10L2BeachEmpty, who: 'leo',
+    teacher: 'Extra time: Brain Break! Do each action with Leo.',
+    rounds: [
+      { line: 'Swim like a fish! Splash!', emoji: '\u{1F41F}' },
+      { line: 'Dance like a crab! Side to side!', emoji: '\u{1F980}' },
+      { line: 'Sing like a bird! Tweet, tweet!', emoji: '\u{1F426}' },
+      { line: 'Freeze!', emoji: '\u{1F976}', seconds: 3 },
+    ],
+  },
+
+  /* Goodbye */
+  {
+    id: 'u10l2-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u10l2-finale', kind: 'finale', bg: bgU10L2Beach, who: 'mia', line: 'Swim, dance, sing! What a beach party! Goodbye, friend!' },
 ];

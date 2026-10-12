@@ -204,6 +204,14 @@ order → Blend! → find the picture out of three), same voices/sync/checks. Le
 | `slide` | Pip climbs one ladder step per sound, then slides down scooping the sound balls = slow sounds, fast word | "say it slowly, then fast", slinky stretch-and-blend |
 | `gumball` | letter gumballs drop into a machine (a sound each), the crank shakes it, three capsules roll out; open the right one | tap-the-sounds then reveal (Boom / Google Slides CVC blending decks) |
 
+### Beach Talent Show (`talent-show`, U10L2 signature, slot 2)
+
+The next act's MOVING SHADOW (a silhouette GIF made from the approved action GIF) plays behind a glowing paper screen; the
+child taps the act's ticket; drum-roll tremble → the screen rolls up → spotlights, the friend performs in colour and says
+"I can dance!", the beach audience claps; then the child says it. Teaches verbs + "I can …". Data: `acts` {word, gif,
+shadow, move: swim|dance|sing, who, line}, `rounds` {act, ask, reply}. Sources (mechanic only): silhouette "guess the
+action" (Lingokids / Khan Kids), shadow-puppet theatre, Cambridge Pre A1 "Can you …? Yes, I can".
+
 **Pre-A1 children cannot read.** Never make reading the only way into a task: speak every prompt, give picture answers, keep printed text as a small caption for the adult.
 
 ## Playground hub — A1/A2 Welcome Town (`.../welcome-town/scenes.ts`, `.../welcome-town-a2/scenes.ts`)
