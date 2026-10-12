@@ -131,7 +131,7 @@ export function TeachView({ slide }: { slide: TeachSlide }) {
 }
 
 /** Modelling: watch the characters do it. Each line shows its pattern card: the frame stays, the coloured part changes. */
-function ChatAvatar({ who }: { who: string }) {
+export function ChatAvatar({ who }: { who: string }) {
   const { artBase } = useDeck();
   const [bad, setBad] = useState(false);
   return (
