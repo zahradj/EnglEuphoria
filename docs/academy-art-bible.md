@@ -5,7 +5,7 @@ Nothing here is built until the owner approves it. Status of each section: DRAFT
 
 ## 1. Visual identity statement
 
-**One-line rule:** *"A cosy club after school: lilac rooms, glowing violet magic, and teens who look back at you."*
+**One-line rule:** *"A cosy club after school: lilac accents, glowing violet magic, warm wood and green plants, and teens who look back at you."*
 Supporting principles:
 1. **Everything the student touches is an illustrated object, not a UI widget.** Chests, lockers, tickets, stamps, badges, keys are drawn pictures with a rim light and a contact shadow. CSS gradients are only a fallback.
 2. **One light, one glow.** Warm window light from the upper right; violet magic glow marks what is interactive; gold marks reward. Nothing else glows.
@@ -29,18 +29,22 @@ Supporting principles:
 - **UI:** the same grammar as objects — chunky pills and tickets, never thin outlined boxes.
 - **Hero vs support:** the play object is 2× larger than anything around it and is the only thing with a glow.
 
-## 4. Colour system (owner, 2026-10-11)
+## 4. Colour system (owner, 2026-10-11; changed 2026-10-12: "35% purple, in the background images and all generated images, from now on")
 
-**Rule:** a mix of shades from **blue to purple**; **60–70% of everything on screen is purple**. White and black are allowed, and small touches of other colours (gold for reward, green for correct, orange for "not yet") are accents only, never more than a few percent.
+**Rule (supersedes the 60-70% purple rule of 2026-10-11):** about **35% of everything on screen is purple**, mixed with blue and warm, natural colours so the scenes are not one colour. It applies from now on to every background image and every generated image (Canva, Gemini). Skin and hair keep natural colours. The UI kit (ribbons, keys, buttons) stays violet; it is a small share of a scene.
 
 | Role | Share | Colours |
 |---|---|---|
-| Purple (dominant) | 60–70% | lilac `#ede9fe`, violet `#8b5cf6`, royal `#6d28d9`, deep `#2e1065` |
-| Blue (supporting) | 15–25% | sky `#7dd3fc`, azure `#38bdf8`, indigo `#4f46e5`, navy `#1e1b4b` |
-| White / black | 5–10% | white for highlights and text on dark; near-black `#0b0720` for outlines and shadows |
-| Accents | 3–5% total | gold `#fbbf24` reward, green `#4ade80` correct, orange `#fb923c` not-yet (never red) |
+| Purple | about 35% | lilac `#ede9fe`, violet `#8b5cf6`, royal `#6d28d9`, deep `#2e1065` |
+| Blue / teal | 15-20% | sky `#7dd3fc`, azure `#38bdf8`, teal `#14b8a6`, indigo `#4f46e5` |
+| Warm neutrals | 20-25% | cream `#fef3c7`, sand `#e7d5b3`, oak wood `#c8955b`, soft coral `#fda4af` |
+| Greens | 5-10% | plants and leaves `#4ade80`, `#16a34a` |
+| White / black | 5-10% | white for highlights and text on dark; near-black `#0b0720` for outlines and shadows |
+| Accents | 3-5% total | gold `#fbbf24` reward, green `#4ade80` correct, orange `#fb923c` not-yet (never red) |
 
-Applies to scenes, objects, UI, and clothes of the cast (the pending brand-colour pass). Skin and hair keep natural colours. Colour is never the only signal: right = tick + glow, not-yet = arrow + soft shake of the object, locked = padlock.
+**Prompt line for every generated image:** "Colour balance: about 35% purple, mixed with blue/teal, warm cream and wood tones and green plants; not a monochrome purple room." Check the result by eye (purple should read as a third, not as the whole picture) before it is used.
+**Existing pictures** made under the old 60-70% rule (the 9 scene plates and the cast clothes of the pending brand-colour pass) are restyled one at a time, each approved by the owner first.
+Colour is never the only signal: right = tick + glow, not-yet = arrow + soft shake of the object, locked = padlock.
 
 ## 5. Character direction
 
