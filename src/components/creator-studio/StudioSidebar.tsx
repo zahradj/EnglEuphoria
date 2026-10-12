@@ -14,7 +14,6 @@ const NAV: Array<{ key: CreatorStep; tKey: string; icon: React.ElementType; emoj
 
 
 
-  { key: 'playground-creator', tKey: 'nav.playground_library', icon: Sparkles, emoji: '🧒', fallback: 'Playground Library' },
   { key: 'academy-creator', tKey: 'nav.academy_creator', icon: GraduationCap, emoji: '🎓', fallback: 'Academy Creator' },
   { key: 'success-creator', tKey: 'nav.success_creator', icon: Briefcase, emoji: '💼', fallback: 'Success Creator' },
   { key: 'trial', tKey: 'nav.trial_creator', icon: Zap, emoji: '⚡' },
