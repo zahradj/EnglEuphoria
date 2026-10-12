@@ -14,6 +14,7 @@ import { isSceneLessonFormat } from '@/content/playground-library/sceneLessonFor
 import { LIBRARY_GAMES, type LibraryGame } from '@/content/playground-library/gamesCatalog';
 import { GAME_LESSON_FORMAT, gameLessonNumber } from '@/content/playground-library/gameLessons';
 import { ACADEMY_DECK_LESSONS, type AcademyDeckLesson } from '@/academy-deck/lessonRegistry';
+import { AcademyLevelLibrary } from '@/academy-deck/library/AcademyLevelLibrary';
 
 
 export interface SceneLessonMeta {
@@ -249,7 +250,6 @@ export default function LibraryDrawer({
   /** An Academy library lesson opens in the classroom through the synced deck player. */
   const renderDeckRow = (l: AcademyDeckLesson) => (
     <button
-      key={l.id}
       onClick={() => onSelectLesson([], l.title, undefined, { lessonId: l.id })}
       className={`w-full text-left overflow-hidden rounded-2xl border border-slate-100 dark:border-slate-800 ${accent.rowHover} hover:shadow-md bg-white dark:bg-slate-800/60 transition-all group`}
     >
@@ -472,7 +472,7 @@ export default function LibraryDrawer({
                     <p className="text-sm font-medium">{searchQuery ? 'No lessons match your search' : 'No lessons available'}</p>
                   </div>
                 ) : (
-                  <div className="space-y-3">{deckLessons.map(renderDeckRow)}</div>
+                  <AcademyLevelLibrary lessons={deckLessons} renderLesson={renderDeckRow} gridClassName="space-y-3" />
                 )
               ) : gamesAvailable && view === 'games' ? (
                 filteredGames.length === 0 ? (

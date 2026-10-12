@@ -9,6 +9,7 @@ import { Eye, Rocket, Search, BookOpen, Loader2, ChevronDown } from 'lucide-reac
 import { AssignLessonModal } from './AssignLessonModal';
 import { useNavigate } from 'react-router-dom';
 import { ACADEMY_DECK_LESSONS } from '@/academy-deck/lessonRegistry';
+import { AcademyLevelLibrary } from '@/academy-deck/library/AcademyLevelLibrary';
 import { getLibraryLessons, toLibraryLessonCard, resolvePlaygroundLessonRoute, type LibraryLessonCard, type LibraryHub } from '@/services/lessonLibraryService';
 
 const HUB_META: Record<LibraryHub, { label: string; emoji: string; color: string; active: string }> = {
@@ -247,9 +248,10 @@ export const TeacherLessonLibrary: React.FC = () => {
           </div>
 
           {activeHub === 'academy' && (
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {ACADEMY_DECK_LESSONS.map((l) => (
-                <Card key={l.id} className="overflow-hidden border-border/50">
+            <AcademyLevelLibrary
+              lessons={ACADEMY_DECK_LESSONS}
+              renderLesson={(l) => (
+                <Card className="overflow-hidden border-border/50">
                   <div className="relative h-28" style={{ background: l.gradient }}>
                     <img src={l.cover} alt="" className="absolute inset-0 h-full w-full object-cover" loading="lazy" onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} />
                   </div>
@@ -265,8 +267,8 @@ export const TeacherLessonLibrary: React.FC = () => {
                     <p className="text-[11px] text-muted-foreground">Open it in a live class from the classroom’s Lesson Library.</p>
                   </CardContent>
                 </Card>
-              ))}
-            </div>
+              )}
+            />
           )}
 
           {/* Level pills */}
