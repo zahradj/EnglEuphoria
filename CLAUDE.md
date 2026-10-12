@@ -1,5 +1,9 @@
 # EnglEuphoria — project rules
 
+## Age bands (owner, 2026-10-12)
+
+- **Playground: ages 4–12. Academy: ages 13–18.** An Academy student has already met hello, numbers and countries at school, so A1 lessons revise fast and spend the time on what school did not teach; they are never childish.
+
 ## Hub separation (hard rule — owner, 2026-10-08)
 
 - The **Playground, Academy and Success each own their own curriculum blueprint, lesson blueprint, skills and docs.** Never edit, import or reuse another hub's.

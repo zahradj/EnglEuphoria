@@ -2,7 +2,7 @@
 name: academy-player-ux
 description: >
   Layout, visual style, comfort controls and live-mode behaviour for the Academy lesson player (one-on-one live, 60 min) and
-  the gamified Daily 10: screen anatomy for laptop and phone, Explorer (11-13) / Studio (14-18) theme tokens, the comfort
+  the gamified Daily 10: screen anatomy for laptop and phone, Explorer (13-15) / Studio (16-18) theme tokens, the comfort
   dock, teacher vs student roles and sync rules, accessibility, safety/consent, and how to implement in this repo. Use when
   building or restyling any Academy screen or reviewing it for teen taste and comfort.
 ---
@@ -32,7 +32,7 @@ Only the Academy cast from the vault appears on screen (Vee, Ava, Theo, Mia). Th
 ## Look (two themes on one layout)
 
 Dark-first with a light option; one saturated accent + one reward colour; rounded 12-16 px cards; Lexend or Atkinson Hyperlegible body (don't claim dyslexia benefits - weak evidence).
-**Explorer (11-13)**: more colour and illustration, 18-20 px body, labelled icons, explicit "quest" language. **Studio (14-18)**: muted Spotify/Discord-like palette, 16-18 px body, icon-first with tooltips,
+**Explorer (13-15)**: more colour and illustration, 18-20 px body, labelled icons, explicit "quest" language. **Studio (16-18)**: muted Spotify/Discord-like palette, 16-18 px body, icon-first with tooltips,
 subtle XP, "playlist" outline. Implement as **theme tokens** (colour, radius, type scale, illustration density); learner can switch. No evidence supports a hard 13/14 split.
 Tokens live with the existing Academy theme (`themeMap` in `AcademyDemo.tsx`, hub theme in `src/utils/hubTheme.ts`); do not fork per-lesson styles.
 

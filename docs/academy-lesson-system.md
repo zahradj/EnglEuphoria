@@ -1,4 +1,4 @@
-# Academy lesson system — "Seasons" (one-on-one, 60 min, ages 11–18, A1 → C1)
+# Academy lesson system — "Seasons" (one-on-one, 60 min, ages 13–18, A1 → C1)
 
 Status: **proposal for owner approval** (2026-10-08). Nothing here is built yet. It extends `docs/research/academy-lesson-design.md` (evidence base), `docs/academy-learning-science.md` (**the scientific techniques, how each is built in, and how we measure acquisition**) and `docs/research/academy-teen-games.md` (teen game rules).
 Evidence labels: **[V]** seen in a source this session · **[K]** established literature/knowledge, re-check before quoting · **[RT]** rule of thumb · **[U]** unverified. Web fetching was mostly blocked, so many items are from search summaries.
@@ -206,7 +206,7 @@ Remember? retention score trend · Mistake Bank fixed-ratio · hints per session
 3. **`LessonBlueprint` fields:** `season`, `episode_type`, `skills[]`, `can_do[]`, `skin_options[]`, `release`, `recycle_from[]`; validator: strands coverage, zero new language in E7/E8, ≤ 14 words/session, no more than two same-kind in a row.
 4. **Academy roadmap data** (`cefrRoadmap.ts` returns an empty scaffold for Academy today): fill A1 first.
 5. **Comfort dock, Remember? step, Mistake Bank, per-skill levels, portfolio, Daily 10** (reuse `srs.ts`).
-6. **Theme tokens** for Explorer/Studio; align `supabase/functions/_shared/prompts/academy.ts` (ages 10–17, 13-type whitelist, "no sticker/reward language") with the real kinds, ages 11–18, and the Season System.
+6. **Theme tokens** for Explorer/Studio; align `supabase/functions/_shared/prompts/academy.ts` (ages 10–17, 13-type whitelist, "no sticker/reward language") with the real kinds, ages 13–18, and the Season System.
 7. **Skills to update when approved:** `smart-lesson-architect`, `lesson-quality-gate`, `activity-pattern-library`, `generate-lesson` (Academy section), and the Remember rule in `CLAUDE.md` for Academy.
 
 ## 11. Owner decisions
