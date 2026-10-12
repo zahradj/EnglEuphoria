@@ -544,6 +544,15 @@ export type Scene =
       doneLine: string;
     }
   | {
+      /** Bear Hunt Trail (U10L5 signature): a trail of story places; at each stop the narrator says one sentence
+       *  ("She can swim!") and the child taps WHO: Pip, Mia, Leo, the stop's animal or all three. The pronoun decides
+       *  (he = Pip or Leo, she = Mia, it = the animal, they = all); that one then does `action`. */
+      id: string; kind: 'bear-hunt-trail'; bg: string; teacher: string; who: CharKey;
+      friends: { key: 'pip' | 'mia' | 'leo'; name: string; img: string }[];
+      stops: { bg: string; icon: string; animal?: { word: string; img: string }; pronoun: 'he' | 'she' | 'it' | 'they'; action: 'walk' | 'jump' | 'swim' | 'fly' | 'run' | 'sleep' | 'dance'; line: string; reply: string }[];
+      doneBg: string; doneLine: string;
+    }
+  | {
       /** Campfire Says (U10L3 signature): the host calls a friend and an action ("Pip, clap your hands!"); the child
        *  taps that friend's action picture and the friend does it. `friend: -1` = everybody (the last round). */
       id: string; kind: 'campfire-says'; bg: string; teacher: string; who: CharKey; fire: { x: number; y: number };
@@ -16276,4 +16285,229 @@ export const LESSON_U10L4_SCENES: Scene[] = [
     ],
   },
   { id: 'u10l4-finale', kind: 'finale', bg: bgU10L4Circus, who: 'leo', line: 'You can do so much! What a circus! Goodbye, friend!' },
+];
+
+/* =============================================================================
+ * Pre-A1 Unit 10, Lesson 5 — "Pip's Bear Hunt" (story: he / she / it / they + can)
+ *
+ * Our own story (the curriculum slot is "We're Going on a Bear Hunt"; no lines or pictures from that book), told as a
+ * stills film from the owner-approved scenario docs/scenarios/u10l5-bear-hunt.md: the friends walk, a frog jumps and
+ * Pip jumps too, a fish swims and Mia swims too, a bird flies and Leo runs, and in the cave a bear… sleeps, then wakes
+ * up and dances. The child learns to say WHO can: he (a boy), she (a girl), it (an animal), they (the friends).
+ * ========================================================================= */
+
+const u10l5Page = (n: number) => `${A}/scenes/bg-u10l5-story-${n}-wide.png`;
+const bgU10L5Trail = `${A}/scenes/bg-u10l5-trail-empty-wide.png`;
+const u10l5Pip = `${A}/items/item-pip-wave.png`;
+const u10l5Mia = `${A}/items/item-mia-wave.png`;
+const u10l5Leo = `${A}/items/item-leo-wave.png`;
+const u10l5Bear = `${A}/items/item-bear-bruno.png`;
+const u10l5Fish = `${A}/items/item-goldfish.png`;
+const u10l5Frog = `${A}/items/item-frog-happy.png`;
+const u10l5Bird = `${A}/items/item-bird-fly.png`;
+const SONG_U10L5_MS = [3980, 4700, 5080, 6302]; // take 1 (docs/songs/u10l5-he-can-jump-scores.txt)
+
+export const LESSON_U10L5_TITLE = "Pip's Bear Hunt";
+export const LESSON_U10L5_OBJECTIVE = 'Follow a short picture story and say who can do it with the right word: "He can jump! She can swim! It can fly! They can walk!" (he = a boy, she = a girl, it = an animal, they = the friends), put the story in order, and review the unit\'s sounds, by watching, listening, moving and playing, no reading.';
+
+export const LESSON_U10L5_SCENES: Scene[] = [
+  { id: 'u10l5-title', kind: 'title-card', bg: u10l5Page(1), level: 'Pre-A1', unit: 'Unit 10', lessonLabel: 'Lesson 5', title: "Pip's Bear Hunt", subtitle: 'Story time!' },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 10 · Lesson 4 · What Can You Do?
+    id: 'u10l5-recall-warmup', kind: 'recall-warmup', bg: bgU10L5Trail, who: 'pip', mode: 'click',
+    fromLabel: 'Lesson 4 · What Can You Do?',
+    teacher: 'Warm-up from last lesson: Pip says what an animal can do, the child finds the animal and says it.',
+    items: [
+      { word: 'fish', say: 'A fish can swim!', img: u10l5Fish },
+      { word: 'bird', say: 'A bird can fly!', img: u10l5Bird },
+      { word: 'frog', say: 'A frog can jump!', img: u10l5Frog },
+    ],
+  },
+  {
+    id: 'u10l5-intro', kind: 'cinematic', bg: u10l5Page(1), hidePipOverlay: true, title: "Pip's Bear Hunt", subtitle: 'Story time!', narrator: 'bella',
+    script: [
+      { who: 'bella', line: 'Story time! Look at the friends.' },
+      { who: 'pip', line: 'We have a map! We want to find a bear!' },
+      { who: 'bella', line: 'What can they do? Watch and listen!' },
+    ],
+    cta: "Let's watch!",
+  },
+
+  /* 4 The story film (approved scenario) */
+  {
+    id: 'u10l5-story', kind: 'story-video', bg: u10l5Page(1), videoUrl: `${A}/video/pips-bear-hunt-u10l5.mp4?v=1`, title: "Pip's Bear Hunt",
+    teacher: 'Press play and watch. When Bella asks "What can it do?", wait, and let the child answer: "It can sleep!"',
+    pages: [
+      { img: u10l5Page(1), who: 'bella', line: 'Look! They have a map. They want to find a bear!', atSec: 0 },
+      { img: u10l5Page(2), who: 'bella', line: 'Tall grass! They can walk. Walk, walk, walk.', atSec: 5 },
+      { img: u10l5Page(3), who: 'bella', line: 'Look, a frog! It can jump!', atSec: 10 },
+      { img: u10l5Page(4), who: 'pip', line: 'He can jump too! Look at me!', atSec: 14 },
+      { img: u10l5Page(4), who: 'bella', line: 'He can jump!', atSec: 16.4 },
+      { img: u10l5Page(5), who: 'bella', line: 'Look, a fish! It can swim.', atSec: 18 },
+      { img: u10l5Page(6), who: 'bella', line: 'Mia can swim too! She can swim!', atSec: 22 },
+      { img: u10l5Page(7), who: 'bella', line: 'Look, a bird! It can fly.', atSec: 27 },
+      { img: u10l5Page(8), who: 'bella', line: "Leo can't fly. He can run! Run, Leo, run!", atSec: 31 },
+      { img: u10l5Page(9), who: 'leo', line: 'A dark cave! Shh!', atSec: 35 },
+      { img: u10l5Page(10), who: 'bella', line: 'Look at the bear. What can it do?', atSec: 39 },
+      { img: u10l5Page(10), who: 'bella', line: 'It can sleep!', atSec: 44.8 },
+      { img: u10l5Page(11), who: 'bella', line: 'The bear wakes up. It can dance!', atSec: 47 },
+      { img: u10l5Page(12), who: 'bella', line: 'They can dance too! Hooray!', atSec: 52 },
+    ],
+    checkpoints: [],
+  },
+
+  /* 5-6 The words, move */
+  {
+    id: 'u10l5-words', kind: 'listen-repeat-cards', textSide: 'right', bg: bgU10L5Trail, teacher: 'Listen, then say it and point: a boy → "He", Mia → "She", an animal → "It", all the friends → "They".',
+    cards: [
+      { who: 'bella', sentence: 'He can jump!', img: u10l5Page(4), imgLabel: 'he' },
+      { who: 'bella', sentence: 'She can swim!', img: u10l5Page(6), imgLabel: 'she' },
+      { who: 'bella', sentence: 'It can fly!', img: u10l5Page(7), imgLabel: 'it' },
+      { who: 'bella', sentence: 'They can walk!', img: u10l5Page(2), imgLabel: 'they' },
+    ],
+  },
+  {
+    id: 'u10l5-move', kind: 'tpr-actions', bg: bgU10L5Trail, who: 'pip',
+    teacher: 'Stand up! Go on the bear hunt with Pip: do each move.',
+    rounds: [
+      { line: 'Walk in the tall grass! Walk, walk, walk!', emoji: '\u{1F33E}', img: gifWalk },
+      { line: 'Jump over the stones! Jump, jump!', emoji: '\u{1FAA8}', img: gifJump },
+      { line: 'Swim in the river! Swim, swim!', emoji: '\u{1F30A}', img: gifSwim },
+      { line: 'Tiptoe into the cave! Shh!', emoji: '\u{1F92B}', seconds: 3 },
+    ],
+  },
+
+  /* 7 Signature game (new): Bear Hunt Trail */
+  {
+    id: 'u10l5-trail', kind: 'bear-hunt-trail', bg: bgU10L5Trail, who: 'bella',
+    teacher: 'Bear Hunt Trail! Bella says who can do it. Tap WHO: he = Pip or Leo, she = Mia, it = the animal, they = all the friends.',
+    friends: [{ key: 'pip', name: 'Pip', img: u10l5Pip }, { key: 'mia', name: 'Mia', img: u10l5Mia }, { key: 'leo', name: 'Leo', img: u10l5Leo }],
+    stops: [
+      { bg: u10l5Page(2), icon: '\u{1F33E}', pronoun: 'they', action: 'walk', line: 'They can walk!', reply: 'Yes! They can walk! Walk, walk, walk!' },
+      { bg: u10l5Page(3), icon: '\u{1FAA8}', animal: { word: 'frog', img: u10l5Frog }, pronoun: 'he', action: 'jump', line: 'He can jump!', reply: 'Yes! He can jump! Jump, jump!' },
+      { bg: u10l5Page(5), icon: '\u{1F30A}', animal: { word: 'fish', img: u10l5Fish }, pronoun: 'she', action: 'swim', line: 'She can swim!', reply: 'Yes! Mia can swim! She can swim!' },
+      { bg: u10l5Page(7), icon: '⛰️', animal: { word: 'bird', img: u10l5Bird }, pronoun: 'it', action: 'fly', line: 'It can fly!', reply: 'Yes! The bird can fly! It can fly!' },
+      { bg: u10l5Page(7), icon: '\u{1F3C3}', animal: { word: 'bird', img: u10l5Bird }, pronoun: 'he', action: 'run', line: 'He can run!', reply: 'Yes! He can run! Run, run, run!' },
+      { bg: u10l5Page(9), icon: '\u{1F573}️', animal: { word: 'bear', img: u10l5Bear }, pronoun: 'it', action: 'sleep', line: 'Shh! It can sleep!', reply: 'Yes! The bear can sleep! Shh!' },
+    ],
+    doneBg: u10l5Page(12), doneLine: 'The bear wakes up! It can dance! They can dance too! Hooray!',
+  },
+
+  /* 8 The song — after the words and the first game (owner, 2026-10-10) */
+  {
+    id: 'u10l5-song', kind: 'song', bg: u10l5Page(12), title: '\u{1F3B5} He Can Jump! \u{1F3B5}', teacher: 'Sing and point: "He" to a boy, "She" to a girl, "It" to an animal, "They" to everybody — and do the actions.',
+    durationSeconds: 20, bigWord: 'Can', songUrl: `${A}/audio/he-can-jump-song-u10l5.mp3?v=1`,
+    lineDurationsMs: SONG_U10L5_MS,
+    songPrompt: 'Bouncy adventure-walk kids chant song',
+    lyrics: [
+      { who: 'pip', text: 'He can jump, jump, jump!', emotion: 'happy' },
+      { who: 'mia', text: 'She can swim, swim, swim!', emotion: 'happy' },
+      { who: 'bella', text: 'It can fly, fly, fly!', emotion: 'happy' },
+      { who: 'leo', text: 'They can run, run, run!', emotion: 'happy' },
+    ],
+  },
+
+  /* 9-11 More games */
+  {
+    id: 'u10l5-where-bear', kind: 'lift-flap', bg: bgU10L5Trail, who: 'leo',
+    teacher: 'Where is the bear? The child asks at each place ("Is it in the bush?") and taps to look. Say what each animal can do.',
+    question: 'Where is the bear?',
+    notYet: 'Not yet! Look in the other places first!',
+    spots: [
+      { x: 8, y: 52, size: 14, ask: 'Is it in the bush?', reveal: "No! It's a frog! It can jump!", under: { img: u10l5Frog, label: 'frog' } },
+      { x: 30, y: 49, size: 12, ask: 'Is it in the log?', reveal: "No! It's a bird! It can fly!", under: { img: u10l5Bird, label: 'bird' } },
+      { x: 55, y: 53, size: 12, ask: 'Is it in the pond?', reveal: "No! It's a fish! It can swim!", under: { img: u10l5Fish, label: 'fish' } },
+      { x: 87, y: 35, size: 13, ask: 'Is it in the cave?', reveal: "Yes! It's the bear! Shh! It can sleep!", target: true, under: { img: u10l5Bear, label: 'bear' } },
+    ],
+  },
+  {
+    id: 'u10l5-true-or-not', kind: 'tick-cross', bg: bgU10L5Trail, who: 'bella',
+    teacher: 'Look and listen. Is it right? Tap ✓ or ✗.',
+    rounds: [
+      { img: u10l5Page(6), sentence: 'She can swim.', isTrue: true },
+      { img: u10l5Page(8), sentence: 'Leo can fly.', isTrue: false },
+      { img: u10l5Page(4), sentence: 'He can jump.', isTrue: true },
+      { img: u10l5Page(10), sentence: 'The bear can dance.', isTrue: false },
+      { img: u10l5Page(2), sentence: 'They can walk.', isTrue: true },
+    ],
+  },
+  {
+    id: 'u10l5-story-order', kind: 'story-order', bg: bgU10L5Trail, who: 'bella',
+    teacher: 'Put the bear hunt in order! Then tell it with Bella: walk, jump, swim, run… and the bear!',
+    frames: [
+      { img: u10l5Page(2), caption: 'They can walk!', who: 'bella' },
+      { img: u10l5Page(4), caption: 'He can jump!', who: 'bella' },
+      { img: u10l5Page(6), caption: 'She can swim!', who: 'bella' },
+      { img: u10l5Page(8), caption: 'He can run!', who: 'bella' },
+      { img: u10l5Page(11), caption: 'It can dance!', who: 'bella' },
+    ],
+  },
+
+  /* 12 Talk: what can it do? */
+  {
+    id: 'u10l5-talk', kind: 'join-stage', bg: u10l5Page(12), teacher: 'Talk time: Bella asks about the story, the child answers with he / she / it / they. Then the child tells Bella what THEY can do.', cast: ['bella'],
+    turns: [
+      { who: 'bella', line: 'What can the bear do?', bubble: 'right' },
+      { who: 'student', line: 'It can dance!', bubble: 'right' },
+      { who: 'bella', line: 'What can Mia do?', bubble: 'right' },
+      { who: 'student', line: 'She can swim!', bubble: 'right' },
+    ],
+  },
+
+  /* 13 Sounds: the unit's letters again */
+  {
+    id: 'u10l5-phonics', kind: 'letter-monsters', bg: bgU10L5Trail, who: 'pip',
+    teacher: 'Hungry Letter Monsters! The sounds of our unit: J (jump), S (swim), R (run). Say the word, listen to its first sound, and feed it to the right monster.',
+    monsters: [{ letter: 'j', color: '#34D399' }, { letter: 's', color: '#FF9F43' }, { letter: 'r', color: '#F87171' }],
+    cards: [{ word: 'jam', img: `${A}/items/item-jam.png` }, { word: 'sun', img: `${A}/items/item-sun.png` }, { word: 'rabbit', img: `${A}/items/item-rabbit.png` }, { word: 'jet', img: `${A}/items/item-jet.png` }, { word: 'snake', img: itemSnake }, { word: 'robot', img: `${A}/items/item-robot.png` }],
+  },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u10l5-blend', kind: 'sound-blend', look: 'gumball', bg: bgU10L5Trail,
+    teacher: 'Blend It! Tap each gumball and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'pig', img: `${A}/items/item-pig.png` }, { word: 'pin', img: `${A}/items/item-pin.png` }, { word: 'wig', img: `${A}/items/item-wig.png` }, { word: 'lid', img: `${A}/items/item-lid.png` }],
+  },
+  /* 15-16 Sticker + Home Mission */
+  {
+    id: 'u10l5-sticker', kind: 'sticker-reward', bg: u10l5Page(12), who: 'bella', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'You found the bear! You are a brave bear hunter! Here is a bear sticker for you!', sticker: { img: u10l5Bear, label: 'Bear hunter' },
+  },
+  {
+    id: 'u10l5-home-mission', kind: 'home-mission', bg: u10l5Page(1), who: 'bella',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: a bear hunt at home! Hide a teddy, go on a hunt, and say what everybody can do: "He can jump! She can walk! They can run!"',
+    parentNote: 'Hide a teddy bear and go on a little "bear hunt" round the house together. On the way, do the moves and say who can do them: "He can jump!" (a boy), "She can walk!" (a girl), "It can …" (a pet or a toy animal), "They can run!" (everybody). When you find the bear: "Shh! It can sleep!"',
+    steps: [
+      { emoji: '\u{1F998}', img: u10l5Pip, say: 'He can jump!' },
+      { emoji: '\u{1F3CA}', img: u10l5Mia, say: 'She can swim!' },
+      { emoji: '\u{1F43B}', img: u10l5Bear, say: 'Shh! It can sleep!' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u10l5-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU10L5Trail, who: 'leo',
+    teacher: 'Extra time: Brain Break! Do the bear moves with Leo.',
+    rounds: [
+      { line: 'Walk like a big bear! Stomp, stomp!', emoji: '\u{1F43B}' },
+      { line: 'Sleep like a bear! Shh… zzz!', emoji: '\u{1F634}' },
+      { line: 'Wake up and dance like the bear!', emoji: '\u{1F483}' },
+      { line: 'Hooray! Arms up!', emoji: '\u{1F64C}', seconds: 3 },
+    ],
+  },
+
+  /* Goodbye */
+  {
+    id: 'u10l5-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u10l5-finale', kind: 'finale', bg: u10l5Page(12), who: 'bella', line: 'He can jump, she can swim, they can dance! What a bear hunt! Goodbye, friend!' },
 ];

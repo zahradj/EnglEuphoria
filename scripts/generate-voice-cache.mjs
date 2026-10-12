@@ -478,6 +478,11 @@ const UNIT1_EXTRACTORS = {
   'letter-monsters': (s) => [[s.who, 'Feed the hungry monsters! Who eats this one?'], ...(s.cards ?? []).flatMap((c) => [[s.who, `${c.word.charAt(0).toUpperCase() + c.word.slice(1)}!`], [s.who, `Yes! ${c.word.charAt(0).toUpperCase() + c.word.slice(1)}!`], [s.who, `${c.word.charAt(0).toUpperCase() + c.word.slice(1)}! Try again!`]])],
   'sound-fish': (s) => [[s.who, 'Listen! Which one starts with this sound?'], ...(s.rounds ?? []).flatMap((r) => (r.fish ?? []).flatMap((f) => [[s.who, `Yes! ${f.word.charAt(0).toUpperCase() + f.word.slice(1)}!`], [s.who, `${f.word.charAt(0).toUpperCase() + f.word.slice(1)}! Try again!`]]))],
   // Mirror CanItScene.tsx: each question + full answer, the done line
+  // Mirror BearHuntTrailScene.tsx: each stop's line, the pronoun hint + line on a miss, the reply, the done line
+  'bear-hunt-trail': (s) => {
+    const hint = { he: 'He is a boy!', she: 'She is a girl!', it: 'It is an animal!', they: 'They are all the friends!' };
+    return [...(s.stops ?? []).flatMap((st) => [[s.who, st.line], [s.who, `${hint[st.pronoun]} Listen: ${st.line}`], [s.who, st.reply]]), [s.who, s.doneLine]];
+  },
   'can-it': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.ask], [s.who, r.answer]]), [s.who, s.doneLine]],
   // Mirror CampfireSaysScene.tsx: each call + reply, the wrong-action line, the done line
   'campfire-says': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...['clap', 'play', 'sleep'].map((a) => [s.who, `Not ${a}! Listen again.`]), [s.who, s.doneLine]],

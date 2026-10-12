@@ -383,5 +383,10 @@
     "path": "public/lep1/audio/what-can-you-do-song-u10l4.mp3",
     "bytes": 321037,
     "sha256": "93e319cb3bc44b3e25d03d5a894293e84e5437b03ddc5a4e9c224a541ff6798f"
+  },
+  "u10l5-he-can-jump": {
+    "path": "public/lep1/audio/he-can-jump-song-u10l5.mp3",
+    "bytes": 321037,
+    "sha256": "f2c7f702a7cdefb1ef8d2f31aaa4b3c4e06b93a5d64a565a1ab09e3db653d3a1"
   }
 }

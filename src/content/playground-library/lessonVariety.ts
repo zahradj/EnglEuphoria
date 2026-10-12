@@ -62,6 +62,7 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
   '4-2': { settings: ['kitchen'], look: 'cozy sunny breakfast kitchen with pancakes and fruit; top-down plate where Pip and Mia make pancake faces' },
   '4-4': { settings: ['flower garden'], look: 'bright flower garden with big friendly mushrooms; Pip meets Bo, a round sky-blue three-eyed monster; code-drawn monsters on an empty lawn' },
   '4-5': { settings: ['animal park'], look: 'sunny animal park with a blue pond and tall trees; a tiger, a monkey, an elephant and a seal each show one move, Pip copies; a leafy bush to peek through' },
+  '10-5': { settings: ['tall-grass meadow', 'stepping-stone stream', 'little river', 'green hill', 'bear cave'], look: "our own bear-hunt story as a stills film: the friends with a paper map at a garden gate, walking through tall grass, a green frog jumping over stepping stones in a stream (Pip jumps too), an orange fish in a little river (Mia swims too), a blue bird over a round green hill (Leo runs up), a cosy cave where Bruno, a round smiling brown bear, sleeps on autumn leaves by glowing mushrooms, wakes and dances with everybody at sunset; the games walk an empty forest trail with a bush, a hollow log, a lily pond and the cave" },
   '10-4': { settings: ['circus big top'], look: "the friends' circus inside a red-and-yellow striped big top: a round ring with a red rim on a sandy floor, bunting, warm spotlights, balloons and a striped podium; Leo is the ringmaster in a little red top hat, Pip jumps high and Mia dances on the podium; in Can It? the animals come into the empty ring one by one and really do the action (or comically flop)" },
   '10-3': { settings: ['garden camp-out at dusk'], look: "a cosy garden camp-out from dusk to night: an orange tent with fairy lights, a little campfire in a ring of stones, a log bench, a purple-blue starry sky with a crescent moon and fireflies; Pip claps by the fire, Mia plays with a red ball and Leo sleeps on his sleeping bag at the tent; in Campfire Says the sky darkens and the stars come out as the friends fall asleep" },
   '10-2': { settings: ['sunny beach', 'beach talent-show stage'], look: "a summer beach party: golden sand, a calm turquoise sea, palm trees, beach umbrellas and a beach ball, a little wooden beach stage with bunting; Pip swims in the sea, Mia dances on the sand and Leo sings on the stage with a toy microphone; the Beach Talent Show is a wooden stage with warm lights, red velvet curtains and a glowing paper screen where the next act's moving shadow plays" },
@@ -217,6 +218,19 @@ export const RESEARCH_LOG: Record<string, ResearchEntry> = {
       'the child must understand the verb AND the body part to find the animal, then PRODUCES the move and the sentence — the screen waits for the child, never a clock',
       'the clue in Whose Is It? is one of the unit\'s body words, so naming the part and the animal go together, and the reveal recalls the story move',
       'wrong picks are named back with that animal\'s own move ("No, the seal claps her hands!"), and the right one glows after two tries',
+    ],
+  },
+  '10-5': {
+    sources: ['Cambridge (Pre A1 Starters listening: listen and point to the person)', 'Lingokids / Khan Academy Kids ("who is it?" picture taps, lift-the-flap searches)', 'Duolingo ABC (instant feedback on taps)', 'the classroom bear-hunt chant walk (a path of places, actions on the way)', 'Sesame Workshop / Blue\'s Clues (the planned pause: "What can it do?")'],
+    mechanics: [
+      'listen and point to the person → Bear Hunt Trail: Bella says "She can swim!" and the child taps WHO (Pip, Mia, Leo, the animal or all three); that one does the action and the trail moves on',
+      'lift-the-flap search → "Where is the bear?": the child asks "Is it in the bush?" and finds animals that say what they can do, the bear last',
+      'the story film with labels for he / she / it / they and a planned 4-second pause on the sleeping bear; tick or cross and story order on the film\'s pictures',
+    ],
+    betterThan: [
+      'the choice IS the pronoun: he = a boy (either boy is right), she = Mia, it = an animal, they = everybody, so one and many, boy and girl, friend and animal are contrasted at every stop',
+      'the answer is shown, not just marked: the one who can jumps into the middle and really jumps, swims, flies, runs or sleeps',
+      'a wrong tap explains the word ("She is a girl! Listen: She can swim!") and the right one glows after two misses — no clock, no lives',
     ],
   },
   '10-4': {

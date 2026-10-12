@@ -62,3 +62,10 @@ house: "He can…", "She can…") → goodbye.
 
 ## Owner approval
 Approved: owner, 2026-10-12 — "Go" (after "change it to he, she, they, then add animals to use it can").
+
+## As built (2026-10-12)
+- 12 Canva stills (`public/lep1/scenes/bg-u10l5-story-<n>-wide.png`; pairs p3/p4, p5/p6, p7/p8, p10/p11 as edits of one picture), Bruno reference in Canva.
+- Stills film `public/lep1/video/pips-bear-hunt-u10l5.{mp4,webm}` (`make-stills-film.py` + `label-video.py`, pages and labels in `scripts/film-labels/u10l5-pips-bear-hunt*.json`): he / she / it / they and the action words labelled with a line to the exact person or animal; the 4 s pause on the sleeping bear before "It can sleep!".
+- Lesson `LESSON_U10L5_SCENES`: story → words → move → **Bear Hunt Trail** (new) → song "He can jump, she can swim, it can fly, they can run" (take 1, perfect lyric match; "it can fly" added so all four words are sung) → Where is the bear? (lift-the-flap) → tick or cross → story order → talk → letter monsters (J, S, R) → Blend It! → sticker → home mission.
+- No paid clips.
+
