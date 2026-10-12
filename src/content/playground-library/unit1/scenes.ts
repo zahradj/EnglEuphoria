@@ -13094,7 +13094,7 @@ export const LESSON_U8L1_SCENES: Scene[] = [
       { line: 'Crunch, crunch! Eat an apple!', emoji: '\u{1F34E}', img: itemApple },
       { line: 'Peel a banana! Yum!', emoji: '\u{1F34C}', img: itemBanana },
       { line: 'Gulp, gulp! Drink your milk!', emoji: '\u{1F95B}', img: itemMilk },
-      { line: 'Rub your tummy! Mmm!', emoji: '\u{1F60B}' },
+      { line: 'Rub your tummy! Yummy!', emoji: '\u{1F60B}' },
     ],
   },
 
@@ -16519,7 +16519,7 @@ export const LESSON_U10L5_SCENES: Scene[] = [
     teacher: 'Extra time: Brain Break! Do the bear moves with Leo.',
     rounds: [
       { line: 'Walk like a big bear! Stomp, stomp!', emoji: '\u{1F43B}' },
-      { line: 'Sleep like a bear! Shh… zzz!', emoji: '\u{1F634}' },
+      { line: 'Sleep like a bear! Shh, sleep!', emoji: '\u{1F634}' },
       { line: 'Wake up and dance like the bear!', emoji: '\u{1F483}' },
       { line: 'Hooray! Arms up!', emoji: '\u{1F64C}', seconds: 3 },
     ],
@@ -16619,7 +16619,7 @@ export const LESSON_U10L6_SCENES: Scene[] = [
       { line: 'Walk, walk, walk!', emoji: '\u{1F6B6}', img: gifWalk },
       { line: 'Jump, jump, jump!', emoji: '\u{1F998}', img: gifJump },
       { line: 'Clap, clap, clap!', emoji: '\u{1F44F}', img: pose('pip', 'clap') },
-      { line: 'Sleep! Shh… zzz!', emoji: '\u{1F634}', seconds: 3 },
+      { line: 'Sleep! Shh, sleep!', emoji: '\u{1F634}', seconds: 3 },
     ],
   },
 
@@ -16741,7 +16741,7 @@ export const LESSON_U10L6_SCENES: Scene[] = [
       { line: 'Dance, dance, dance! … Freeze!', emoji: '\u{1F483}' },
       { line: 'Run on the spot! … Freeze!', emoji: '\u{1F3C3}' },
       { line: 'Swim, swim! … Freeze!', emoji: '\u{1F3CA}' },
-      { line: 'Sleep! Shh… zzz!', emoji: '\u{1F634}', seconds: 3 },
+      { line: 'Sleep! Shh, sleep!', emoji: '\u{1F634}', seconds: 3 },
     ],
   },
 

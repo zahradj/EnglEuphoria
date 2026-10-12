@@ -1,5 +1,6 @@
 # Homework Quest lines (every quest + Practise again packs) — keep this line: quests are not lesson exports.
 HOMEWORK
-# 2026-10-12 Pre-A1 audit: lines added after their lessons were baked
-LESSON_U10L2_SCENES
+# 2026-10-12 Pre-A1 audit: lines reworded so the voice does not spell "zzz" / "Mmm"
+LESSON_U8L1_SCENES
 LESSON_U10L5_SCENES
+LESSON_U10L6_SCENES
