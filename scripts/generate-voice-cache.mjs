@@ -503,7 +503,7 @@ const UNIT1_EXTRACTORS = {
     const hint = { he: 'He is a boy!', she: 'She is a girl!', it: 'It is an animal!', they: 'They are all the friends!' };
     return [...(s.stops ?? []).flatMap((st) => [[s.who, st.line], [s.who, `${hint[st.pronoun]} Listen: ${st.line}`], [s.who, st.reply]]), [s.who, s.doneLine]];
   },
-  'word-board': (s) => [[s.who, s.ask ?? 'What is it? Say it!'], [s.who, 'Up the ladder!'], [s.who, 'Wheee! Down the slide!'], [s.who, s.doneLine], ...(s.words ?? []).map((w) => [s.who, w.say])],
+  'word-board': (s) => [[s.who, s.ask ?? 'What is it? Say it!'], [s.who, 'Up the ladder!'], [s.who, 'Wheee! Down the slide!'], [s.who, s.doneLine], ...(s.words ?? []).map((w) => [s.who, w.say]), ...(s.words ?? []).filter((w) => w.text).map((w) => [s.who, w.text])],
   'home-hunt': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.ask], [s.who, r.found]]), [s.who, s.doneLine]],
   'picture-maze': (s) => [...(s.items ?? []).flatMap((it) => [[s.who, `Find the ${it.label}!`], [s.who, it.say], ...(s.items ?? []).filter((o) => o !== it).map((o) => [s.who, `That's the ${it.label}! Find the ${o.label}.`])]), [s.who, s.doneLine]],
   'flip-say': (s) => [...(s.cards ?? []).map((c) => [s.who, c.say]), [s.who, s.doneLine]],
@@ -748,7 +748,7 @@ const WT_EXTRACTORS = {
     [it.who ?? 'teacher', it.sentence],
   ]),
   echo: (s) => [[s.who, s.word]],
-  memory: (s) => (s.pairs ?? []).map((p) => ['teacher', p.label]),
+  memory: (s) => (s.pairs ?? []).flatMap((p) => [['teacher', p.label], ...(p.match ? [['teacher', p.match]] : [])]),
   'drag-match': (s) => (s.items ?? []).map((it) => [it.who ?? 'teacher', it.label]),
   roleplay: (s) => (s.script ?? []).map((l) => [l.who, l.line]),
   'join-stage': (s) => (s.turns ?? []).filter((t) => t.who !== 'student').map((t) => [t.who, t.line]),
@@ -788,6 +788,10 @@ const WT_EXTRACTORS = {
   'feelings-survey': (s) => [[s.who, s.intro], ...(s.friends ?? []).flatMap((f) => [[s.who, `How are you, ${f.name}?`], [f.who, `I am ${f.feeling}!`], [s.who, `${f.name} is ${f.feeling}!`]])],
   'listen-tap': (s) => (s.rounds ?? []).flatMap((r) => [[r.who ?? 'marigold', r.prompt], [r.who ?? 'marigold', `Yes! ${r.answerLabel}!`]]),
   'true-false': (s) => (s.rounds ?? []).map((r) => [r.who, r.statement]),
+  // ReadDoScene / AnswerRaceScene / WordSplatScene (welcome-town/scene-components).
+  'read-do': (s) => [['pip', s.doneLine], ...(s.rounds ?? []).flatMap((r) => [['teacher', r.text], [s.cast?.[r.to] ?? 'pip', r.reply]])],
+  'answer-race': (s) => [[s.who, s.doneLine], ...(s.rounds ?? []).flatMap((r) => [[s.who, r.ask], ...(r.choices ?? []).map((c) => ['teacher', c])])],
+  'word-splat': (s) => [[s.who, s.doneLine], ...(s.words ?? []).map((w) => [s.who, w])],
   'spin-wheel': (s) => (s.items ?? []).map((it) => ['teacher', it.label]),
   'picture-match': (s) => (s.items ?? []).map((it) => ['teacher', it.word]),
   // welcome-town/WhereGames.tsx — every line those games can say.

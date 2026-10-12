@@ -541,7 +541,8 @@ export type Scene =
        *  squares cycling `words`, finish); roll 1–3, say the picture you land on (`say` = the model on 🔊), ladders up,
        *  slides down. `ask` = what the voice says on landing (default "What is it? Say it!"). */
       id: string; kind: 'word-board'; bg: string; teacher: string; who: CharKey; title: string; walker: string;
-      words: { label: string; img: string; say: string }[]; ask?: string;
+      /** `text` (A1): a sentence to READ or a question to answer on that square — shown big in the panel. */
+      words: { label: string; img: string; say: string; text?: string }[]; ask?: string;
       ladders?: [number, number][]; slides?: [number, number][]; doneLine: string;
     }
   | {

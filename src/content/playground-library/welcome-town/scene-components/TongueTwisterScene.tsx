@@ -44,6 +44,12 @@ export function TongueTwisterScene({ scene, onNext, onWin, sync }: { scene: Extr
   const [state, setState] = useSyncedState(sync, { step: 0, run: 0, gemDone: false });
   const { step, run, gemDone } = state;
   const words = useMemo(() => scene.line.split(/\s+/), [scene.line]);
+  // Twister Race (A1 U1L6): several twisters, one per row; `line` is all of them (what the voice reads).
+  const rows = useMemo(() => {
+    const parts = scene.lines?.length ? scene.lines : [scene.line];
+    let at = 0;
+    return parts.map((p) => p.split(/\s+/).map((w) => ({ w, i: at++ })));
+  }, [scene.line, scene.lines]);
   const [wandAt, setWandAt] = useState(-1);
   const round = step >= 1 && step <= speeds ? ROUNDS[step - 1] : null;
   const done = step > speeds;
@@ -91,8 +97,9 @@ export function TongueTwisterScene({ scene, onNext, onWin, sync }: { scene: Extr
           style={{ borderColor: MAGIC_GOLD, background: 'linear-gradient(180deg, #FFF8E7, #FCEFC9)', boxShadow: MAGIC_GLOW }}>
           <span className="absolute -left-4 -top-5 text-4xl">{town ? CAST[scene.who].emoji : '🧙'}</span>
           <span className="absolute -right-3 -top-5 text-4xl" style={{ animation: 'lep1-twinkle 1.6s ease-in-out infinite' }}>✨</span>
-          <div className="flex flex-wrap justify-center gap-x-3 gap-y-2 font-black leading-tight text-[#3B0764]" style={{ fontSize: 'clamp(28px, calc(5.2*var(--svh,1vh)), 54px)' }}>
-            {words.map((w, i) => (
+          {rows.map((row, r) => (
+          <div key={r} className="flex flex-wrap justify-center gap-x-3 gap-y-2 font-black leading-tight text-[#3B0764]" style={{ fontSize: rows.length > 1 ? 'clamp(22px, calc(4.2*var(--svh,1vh)), 42px)' : 'clamp(28px, calc(5.2*var(--svh,1vh)), 54px)' }}>
+            {row.map(({ w, i }) => (
               <span key={i} className="relative inline-block rounded-xl px-1 transition-transform duration-150"
                 style={{ transform: wandAt === i ? 'translateY(-8px) scale(1.12)' : undefined, background: wandAt === i ? 'rgba(168,85,247,0.18)' : undefined }}>
                 {wandAt === i && <span className="absolute -top-9 left-1/2 -translate-x-1/2 text-3xl">🪄</span>}
@@ -102,6 +109,7 @@ export function TongueTwisterScene({ scene, onNext, onWin, sync }: { scene: Extr
               </span>
             ))}
           </div>
+          ))}
           {/* Three potions fill as each speed is said */}
           <div className="mt-6 flex items-center justify-center gap-6">
             {ROUNDS.map((rd, i) => {

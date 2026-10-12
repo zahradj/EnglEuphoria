@@ -322,11 +322,11 @@ The Welcome Song moves to L4 as its lesson song (greeting questions + *How old a
 | Read & Check (tick-cross) | L5 |
 | Word Board ★ | L6 |
 | Memory (question ↔ answer) | L6 |
-| Catch the answer (dash) | L6 |
-| Sight-word Splat | L6 |
+| Catch the answer (answer gates, `answer-race` look `gates`) | L6 |
+| Sight-word Splat (`word-splat`, new) | L6 |
 | Read & Do ★ new | L6 |
 | Feelings Dice | L6 |
-| Racing (boss warm-up) ★ new | L7 |
+| Racing (boss warm-up, `answer-race` look `race`: a car race) | L7 |
 
 **Routines** (the frame of every lesson, not games): title, Remember?, word / sentence pages, echo, the songs, brain break,
 **the Reader**, **Blend & Read** (its world changes each lesson: Sound Train, Frog Hop, Slide, Gumball, Rocket), **the

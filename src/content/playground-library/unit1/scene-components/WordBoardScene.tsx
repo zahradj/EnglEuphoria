@@ -154,7 +154,9 @@ export function WordBoardScene({ scene, onWin, onNext, sync }: { scene: Board; o
               initial={reduce ? false : { y: 40, opacity: 0, scale: 0.9 }} animate={{ y: 0, opacity: 1, scale: 1 }} exit={{ opacity: 0 }}>
               <img src={here.img} alt="" className="object-contain" style={{ height: 'min(11vh, 7vw)', width: 'min(11vh, 7vw)' }} />
               <button type="button" onClick={() => cueSpeak(here.say, scene.who)} aria-label="Hear it" className="grid h-[7vh] w-[7vh] place-items-center rounded-full bg-sky-100 text-[3.4vh]">🔊</button>
-              <span className="font-black text-emerald-800" style={{ fontSize: 'min(3.2vh, 2vw)' }}>🗣️ Say it!</span>
+              {here.text
+                ? <span className="max-w-[46vw] font-black leading-tight text-[#3b2410]" style={{ fontSize: 'min(4.2vh, 2.7vw)' }}>📖 {here.text}</span>
+                : <span className="font-black text-emerald-800" style={{ fontSize: 'min(3.2vh, 2vw)' }}>🗣️ Say it!</span>}
               <button type="button" onClick={() => { void said(); }} className={`${CLAY_BUTTON} px-6 py-2`} style={{ fontSize: 'min(3.2vh, 2vw)' }}>I said it! ✓</button>
             </motion.div>
           )}
