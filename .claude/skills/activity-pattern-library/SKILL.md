@@ -73,6 +73,11 @@ Variety Rule → if nothing fits, do the Research Step.
    in order and eyeball-check rules 1-2. This takes under a minute and is
    the single check that was skipped when Lesson 3 first shipped.
 
+5. **Pre-A1 extra practice: no game twice in a unit** (owner 2026-10-12). An extra-practice game (`EXTRA_PRACTICE` in
+   `unit1/extraPractice.ts`) is used once per unit and never repeats a game the unit's lessons already have; choose it
+   for the lesson's purpose (L1-L3 listening, L4 sentence frame, L5 Home Hunt, L6 Word Board review). Enforced by
+   `unit1/pictureMaze.test.ts`.
+
 ## Required Research Step
 
 Run this whenever either is true: (a) the target purpose has only 1-2
