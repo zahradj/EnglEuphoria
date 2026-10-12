@@ -3322,5 +3322,40 @@
       "Sleep, sleep, shh, goodnight!",
       "Clap, play, sleep! Goodnight!"
     ]
+  },
+  "u10l4-what-can-you-do": {
+    "publicPath": "public/lep1/audio/what-can-you-do-song-u10l4.mp3",
+    "durationSec": 20,
+    "style": "Bright circus-march kids song, 112 BPM with brass, bouncy tuba, xylophone, snare and hand claps, ONE clear happy young singer, call and answer, every word sung slowly and very clearly with crisp consonants: CAN and CAN'T clearly different, a big cheerful 'Yes, I can!' each time.",
+    "positiveStyles": [
+      "circus march",
+      "brass",
+      "tuba",
+      "xylophone",
+      "snare",
+      "hand claps",
+      "clear kids vocals",
+      "112 BPM",
+      "happy"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "nursery rhyme",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "Can you jump? Yes, I can!",
+      "Can you swim? Yes, I can!",
+      "Can you fly? No, I can't!",
+      "What can you do? I can dance!"
+    ]
   }
 }
