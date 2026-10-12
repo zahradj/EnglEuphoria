@@ -1,2 +1,2 @@
-# song takes request (2026-10-12: U10L2 song; the workflow reads the FIRST key only)
-u10l2-swim-dance-sing
+# song takes request (2026-10-12: U10L3 song; the workflow reads the FIRST key only)
+u10l3-clap-play-sleep
