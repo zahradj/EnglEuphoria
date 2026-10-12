@@ -1,12 +1,25 @@
 import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import type { Scene } from '../scenes';
+import type { CharKey, Scene } from '../scenes';
 import { CAST } from '../scenes';
 import { cueSpeak, safeSpeak } from '../../unit1/audio';
 import * as sfx from '../../unit1/sfx';
 import { Confetti } from '../../unit1/fx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
 import { voiceOf } from './shared';
+import { SpriteMascot, type MascotProfile } from '../../unit1/SpriteMascot';
+
+/** Talking cast (owner 2026-10-12: "can we use characters like in the Academy? They can move and they can talk"):
+ *  the speaker of the line being read stands beside the text, breathes and blinks, and bobs while the voice plays.
+ *  Eye bands measured on public/welcome-town/sprites/*-wave.png. */
+const TALKER: Partial<Record<CharKey, MascotProfile>> = {
+  pip: { src: '/welcome-town/sprites/pip-wave.png', eyeBand: { y: 0.38, halfHeight: 0.035, x: 0.6, halfWidth: 0.17 } },
+  mia: { src: '/welcome-town/sprites/mia-wave.png', eyeBand: { y: 0.39, halfHeight: 0.035, x: 0.53, halfWidth: 0.16 } },
+  leo: { src: '/welcome-town/sprites/leo-wave.png', eyeBand: { y: 0.33, halfHeight: 0.035, x: 0.52, halfWidth: 0.15 } },
+  bella: { src: '/welcome-town/sprites/bella-wave.png', eyeBand: { y: 0.5, halfHeight: 0.03, x: 0.47, halfWidth: 0.2 } },
+  willow: { src: '/welcome-town/sprites/willow-wave.png', eyeBand: { y: 0.33, halfHeight: 0.035, x: 0.46, halfWidth: 0.17 } },
+  marigold: { src: '/welcome-town/sprites/marigold-wave.png', eyeBand: { y: 0.27, halfHeight: 0.04, x: 0.58, halfWidth: 0.22 } },
+};
 
 /* ---------- The Reader (A1 reading strand, owner 2026-10-12: "in A1 … they need to learn how to read full sentences,
  * so focus on the story") ----------
@@ -33,6 +46,7 @@ export function ReaderScene({ scene, onNext, onWin, sync }: { scene: Reader; onN
   const phase: Phase = state.phase === 'read' ? 'read' : 'listen';
   const done = !!state.done;
   const [lit, setLit] = useState(-1);
+  const [talking, setTalking] = useState<number>(-1); // index of the line being spoken
   const alive = useRef(true);
   useEffect(() => { alive.current = true; return () => { alive.current = false; }; }, []);
 
@@ -48,10 +62,10 @@ export function ReaderScene({ scene, onNext, onWin, sync }: { scene: Reader; onN
         const count = ln.text.split(/\s+/).filter(Boolean).length;
         const start = offset;
         let k = 0;
-        setLit(start);
+        setLit(start); setTalking(li);
         timer = window.setInterval(() => { k += 1; if (k < count) setLit(start + k); }, reduce ? 0 : 430);
         await safeSpeak(ln.text, ln.who ? voiceOf(ln.who) : 'teacher');
-        window.clearInterval(timer);
+        window.clearInterval(timer); setTalking(-1);
         if (cancelled || !alive.current) return;
         offset += count;
         await new Promise((r) => window.setTimeout(r, 250));
@@ -59,7 +73,7 @@ export function ReaderScene({ scene, onNext, onWin, sync }: { scene: Reader; onN
       if (!cancelled && alive.current) setLit(-1);
     };
     void run();
-    return () => { cancelled = true; window.clearInterval(timer); };
+    return () => { cancelled = true; window.clearInterval(timer); setTalking(-1); };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageIdx, phase, state.run, done]);
 
@@ -93,6 +107,8 @@ export function ReaderScene({ scene, onNext, onWin, sync }: { scene: Reader; onN
   if (!page) return null;
 
   let n = -1;
+  const speakerLine = talking >= 0 ? page.lines[talking] : page.lines.find((l) => l.who);
+  const speaker = speakerLine?.who ? TALKER[speakerLine.who] : undefined;
   return (
     <div className="absolute inset-0 select-none overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})`, containerType: 'size' }}>
       <div className="absolute inset-0 bg-gradient-to-b from-[#2b1650]/55 via-[#2b1650]/35 to-[#2b1650]/70" />
@@ -113,8 +129,8 @@ export function ReaderScene({ scene, onNext, onWin, sync }: { scene: Reader; onN
             <img src={page.img} alt="" draggable={false} className="h-full w-full object-cover" />
             <span className="absolute bottom-[3%] right-[2%] rounded-full bg-white/90 px-3 py-0.5 text-xs font-black text-orange-700 shadow">{pageIdx + 1} / {total}</span>
           </div>
-          {/* the text plate */}
-          <div className="w-full max-w-[96cqw] rounded-[2.5cqh] border-[0.5cqh] border-amber-300 bg-[#FFFBF0] px-[2.5cqw] py-[1.6cqh] shadow-2xl">
+          {/* the text plate, with the talking speaker beside it */}
+          <div className="relative w-full max-w-[96cqw] rounded-[2.5cqh] border-[0.5cqh] border-amber-300 bg-[#FFFBF0] px-[2.5cqw] py-[1.6cqh] shadow-2xl" style={{ paddingLeft: speaker ? 'min(16cqw, 29cqh)' : undefined }}>
             {page.lines.map((ln, li) => (
               <div key={li} className="flex flex-wrap items-baseline gap-x-[1.1cqw] gap-y-[0.4cqh] font-black leading-snug text-[#2a1a0a]" style={{ fontSize: 'clamp(1.05rem, 6.2cqh, 2.6rem)' }}>
                 {ln.who && <span className="rounded-full px-[1.2cqw] text-white" style={{ background: CAST[ln.who].color, fontSize: '0.62em' }}>{CAST[ln.who].name}</span>}
@@ -131,6 +147,11 @@ export function ReaderScene({ scene, onNext, onWin, sync }: { scene: Reader; onN
                 })}
               </div>
             ))}
+            {speaker && (
+              <div key={speakerLine?.who} className="pointer-events-none absolute bottom-[0.4cqh] left-[0.8cqw] z-10" style={{ width: 'min(14cqw, 26cqh)' }}>
+                <SpriteMascot profile={speaker} isTalking={talking >= 0} emotion="happy" />
+              </div>
+            )}
           </div>
         </motion.div>
       </AnimatePresence>
