@@ -9,6 +9,8 @@ import { CLAY_BUTTON, THICK_WORDS, sayWithin } from './shared';
 import { Bursts, useBursts } from './gameFx';
 import { DECISION_TEXT, decide, speakingShare, starsFor } from '../../levelTestScoring';
 import { saveAssessmentResult } from '@/services/playgroundAssessmentService';
+import { getHomeworkQuest } from '@/content/homework-quests/registry';
+import { practisePackId, practiseScopeForTest } from '@/content/homework-quests/practise-again';
 
 /* ---------- Level Test (owner-approved plan 2026-10-12, docs/assessment/prea1-assessment-plan.md) ----------
  * The Pre-A1 Final Test ("Explorer Graduation") and Checkpoint 1 ("Halfway Explorer"). Shaped like Cambridge Pre A1
@@ -43,6 +45,8 @@ export function LevelTestScene({ scene, onWin, onNext, sync, role, roomId }: {
   const [rubric, setRubric] = useState<number[]>(() => scene.speaking.prompts.map(() => -1));
   const [requestLevel, setRequestLevel] = useState(true);
   const [note, setNote] = useState('');
+  // Practise again packs the teacher will send (section key → on/off); default = every part under 4 stars
+  const [practiseOff, setPractiseOff] = useState<Record<string, boolean>>({});
   const [save, setSave] = useState<{ status: 'idle' | 'saving' | 'saved' | 'error'; msg?: string }>({ status: 'idle' });
   const [bursts, fire] = useBursts();
 
@@ -99,6 +103,12 @@ export function LevelTestScene({ scene, onWin, onNext, sync, role, roomId }: {
   const starsTotal = all.reduce((a, s) => a + s.stars, 0);
   const decision = decide(scene.mode, all, scene.strongKeys ?? []);
   const rubricDone = rubric.every((r) => r >= 0);
+  const practiseScope = practiseScopeForTest(scene.testKey);
+  const practiseOptions = practiseScope
+    ? all.filter((s) => s.stars < 4).map((s) => ({ key: s.key, label: s.label, quest: getHomeworkQuest(practisePackId(practiseScope, s.key)) }))
+      .filter((p): p is { key: string; label: string; quest: NonNullable<typeof p.quest> } => !!p.quest)
+    : [];
+  const practiseChosen = practiseOptions.filter((p) => !practiseOff[p.key]);
   const missed = flat.filter((f, q) => chosen[q] >= 0 && chosen[q] !== f.it.answer).map((f) => f.it.options[f.it.answer].label);
 
   const doSave = async () => {
@@ -113,8 +123,12 @@ export function LevelTestScene({ scene, onWin, onNext, sync, role, roomId }: {
       requestLevel: scene.mode === 'final' && decision === 'ready' && requestLevel && scene.nextLevel
         ? { level: scene.nextLevel, reason: `${scene.title}: ${all.map((s) => `${s.label} ${s.stars}/5`).join(', ')} — ${starsTotal}/${all.length * 5} stars. Ready for ${scene.nextLevel}.${note.trim() ? ` ${note.trim()}` : ''}` }
         : undefined,
+      practise: practiseChosen.map((p) => ({ questId: p.quest.id, title: `${p.quest.title} · ${p.quest.subtitle}` })),
     });
-    if (res.ok) setSave({ status: 'saved', msg: res.requestId ? 'Saved. The level change request is waiting for the admin.' : 'Saved.' });
+    if (res.ok) {
+      const hw = res.homeworkSent ? ` ${res.homeworkSent} Practise again homework${res.homeworkSent > 1 ? 's' : ''} sent.` : '';
+      setSave({ status: 'saved', msg: (res.requestId ? 'Saved. The level change request is waiting for the admin.' : 'Saved.') + hw });
+    }
     else setSave({ status: 'error', msg: (res as { error: string }).error });
   };
 
@@ -257,6 +271,17 @@ export function LevelTestScene({ scene, onWin, onNext, sync, role, roomId }: {
                   <div className="font-semibold">{DECISION_TEXT[decision].next}</div>
                 </div>
                 {missed.length > 0 && <div className="text-slate-600"><b>Practise:</b> {missed.join(', ')}</div>}
+                {practiseOptions.length > 0 && (
+                  <div className="rounded bg-sky-50 px-2 py-1 text-sky-900">
+                    <b>Send Practise again homework:</b>
+                    {practiseOptions.map((p) => (
+                      <label key={p.key} className="flex items-center gap-2">
+                        <input type="checkbox" checked={!practiseOff[p.key]} onChange={(e) => setPractiseOff((o) => ({ ...o, [p.key]: !e.target.checked }))} />
+                        {p.label} — {p.quest.title.replace('Practise again: ', '')} ({p.quest.levels.length} games)
+                      </label>
+                    ))}
+                  </div>
+                )}
                 {scene.mode === 'final' && decision === 'ready' && scene.nextLevel && (
                   <label className="flex items-center gap-2 font-bold"><input type="checkbox" checked={requestLevel} onChange={(e) => setRequestLevel(e.target.checked)} /> Also send the level change request (Pre-A1 → {scene.nextLevel}) to the admin</label>
                 )}

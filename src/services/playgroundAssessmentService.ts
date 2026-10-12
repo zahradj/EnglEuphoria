@@ -25,9 +25,11 @@ export type SaveAssessmentInput = {
   note?: string;
   /** When set, also files a level change request (e.g. Pre-A1 → A1) for the admin to approve. */
   requestLevel?: { level: string; reason: string };
+  /** "Practise again" packs (homework quests) to send the student, one per weak part. */
+  practise?: { questId: string; title: string }[];
 };
 
-export async function saveAssessmentResult(input: SaveAssessmentInput): Promise<{ ok: true; requestId: string | null } | { ok: false; error: string }> {
+export async function saveAssessmentResult(input: SaveAssessmentInput): Promise<{ ok: true; requestId: string | null; homeworkSent: number } | { ok: false; error: string }> {
   try {
     const { data: auth } = await supabase.auth.getUser();
     const me = auth?.user?.id;
@@ -69,7 +71,29 @@ export async function saveAssessmentResult(input: SaveAssessmentInput): Promise<
       level_request_id: requestId,
     });
     if (error) throw error;
-    return { ok: true, requestId };
+
+    // Practise again packs → the student's Homework (same shape as the lesson quests: content {type:'quest', questId}).
+    let homeworkSent = 0;
+    const due = new Date(Date.now() + 14 * 24 * 3600_000).toISOString();
+    for (const p of input.practise ?? []) {
+      const { data: hw, error: hErr } = await db.from('homework_assignments').insert({
+        teacher_id: me,
+        lesson_id: null,
+        title: p.title.slice(0, 60),
+        description: `Practise again after the ${input.testKey} test.`,
+        instructions: 'Play the Homework Quest and collect the stars!',
+        content: { type: 'quest', questId: p.questId },
+        source: 'assessment-practise',
+        status: 'active',
+        points: 10,
+        due_date: due,
+      }).select('id').single();
+      if (hErr) throw hErr;
+      const { error: lErr } = await db.from('homework_assignment_students').insert({ assignment_id: hw.id, student_id: booking.student_id });
+      if (lErr) throw lErr;
+      homeworkSent++;
+    }
+    return { ok: true, requestId, homeworkSent };
   } catch (e) {
     const msg = e instanceof Error ? e.message : typeof e === 'object' && e && 'message' in e ? String((e as { message: unknown }).message) : String(e);
     return { ok: false, error: msg };

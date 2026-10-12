@@ -41,3 +41,14 @@ drop policy if exists "Students, their teachers and admins read assessment resul
 create policy "Students, their teachers and admins read assessment results"
   on public.playground_assessment_results for select to authenticated
   using (student_id = auth.uid() or _can_manage_student(student_id));
+
+-- Parents (approved, allowed to see progress) read their child's results for the parent report.
+drop policy if exists "Parents read their child's assessment results" on public.playground_assessment_results;
+create policy "Parents read their child's assessment results"
+  on public.playground_assessment_results for select to authenticated
+  using (exists (
+    select 1 from public.student_parent_relationships spr
+    where spr.student_id = playground_assessment_results.student_id
+      and spr.parent_id = (select auth.uid())
+      and spr.approved_at is not null
+      and spr.can_view_progress = true));

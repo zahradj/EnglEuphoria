@@ -1,4 +1,5 @@
 import { questLines, type HomeworkQuest, type QuestVoice } from './types';
+import { buildPractisePacks } from './practise-again';
 import { QUEST_MAGIC_CASTLE_U9L1 } from './magic-castle-u9l1';
 import { QUEST_MAGIC_CASTLE_U9L2 } from './magic-castle-u9l2';
 import { QUEST_MAGIC_CASTLE_U9L3 } from './magic-castle-u9l3';
@@ -82,7 +83,10 @@ export const HOMEWORK_QUESTS: Record<string, HomeworkQuest> = Object.fromEntries
 ].map((q) => [q.id, q]),
 );
 
-export const getHomeworkQuest = (id: string): HomeworkQuest | null => HOMEWORK_QUESTS[id] ?? null;
+/** "Practise again" packs the teacher sends after a test (practise-again.ts) — built from the lesson quests above. */
+export const PRACTISE_PACKS: Record<string, HomeworkQuest> = buildPractisePacks(Object.values(HOMEWORK_QUESTS));
+
+export const getHomeworkQuest = (id: string): HomeworkQuest | null => HOMEWORK_QUESTS[id] ?? PRACTISE_PACKS[id] ?? null;
 
 /** The quest that practises a scene lesson (registry key, e.g. 'castle-rich-9-1'). */
 export const questForLesson = (lessonKey: string): HomeworkQuest | null =>
@@ -90,5 +94,5 @@ export const questForLesson = (lessonKey: string): HomeworkQuest | null =>
 
 /** Every line every quest can say — recorded by scripts/generate-voice-cache.mjs. */
 export function allQuestLines(): [QuestVoice, string][] {
-  return Object.values(HOMEWORK_QUESTS).flatMap(questLines);
+  return [...Object.values(HOMEWORK_QUESTS), ...Object.values(PRACTISE_PACKS)].flatMap(questLines);
 }
