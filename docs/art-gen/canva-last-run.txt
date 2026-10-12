@@ -1,4 +1,2 @@
-+ public/lep1/scenes/bg-u10l7-hero-academy-empty-wide.png (1376, 768)
-+ public/lep1/scenes/bg-u10l7-hero-academy-wide.png (1376, 768)
-+ public/lep1/items/tmp-sheet-heroes.png (1536, 1024) raw
-3/3 saved
++ public/certificates/playground-pre-a1.png (1920, 1080) raw
+1/1 saved
