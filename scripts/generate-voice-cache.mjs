@@ -503,6 +503,9 @@ const UNIT1_EXTRACTORS = {
     const hint = { he: 'He is a boy!', she: 'She is a girl!', it: 'It is an animal!', they: 'They are all the friends!' };
     return [...(s.stops ?? []).flatMap((st) => [[s.who, st.line], [s.who, `${hint[st.pronoun]} Listen: ${st.line}`], [s.who, st.reply]]), [s.who, s.doneLine]];
   },
+  'word-board': (s) => [[s.who, s.ask ?? 'What is it? Say it!'], [s.who, 'Up the ladder!'], [s.who, 'Wheee! Down the slide!'], [s.who, s.doneLine], ...(s.words ?? []).map((w) => [s.who, w.say])],
+  'home-hunt': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.ask], [s.who, r.found]]), [s.who, s.doneLine]],
+  'flip-say': (s) => [...(s.cards ?? []).map((c) => [s.who, c.say]), [s.who, s.doneLine]],
   'obstacle-run': (s) => [
     ...(s.stations ?? []).flatMap((st) => [[s.who, st.ask], [s.who, st.sentence],
       ...(st.options ?? []).map((fi) => [s.friends?.[fi]?.voice, fi === st.answer ? `I can ${st.action}!` : `Oops! I can't ${st.action}!`])]),

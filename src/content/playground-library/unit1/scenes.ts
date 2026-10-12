@@ -9,6 +9,7 @@ import type { WhatsMissingSceneData } from '../WhatsMissingScene';
 import type { SortBasketSceneData } from '../SortBasketScene';
 import type { GrammarGapSceneData } from '../GrammarGapScene';
 import type { ColorPlaySceneData } from '../ColorPlayScene';
+import { EXTRA_PRACTICE, goodbyeSong } from './extraPractice';
 
 /**
  * Little Explorers Phonics — Lesson 1 "The Forest of Hellos" (H + M sounds).
@@ -534,6 +535,26 @@ export type Scene =
       actions: { id: 'run' | 'jump' | 'walk'; word: string; img: string }[];
       rounds: { action: number; obstacle: { img: string; label: string; w?: string; buzz?: boolean }; line: string; reply: string }[];
       doneLine: string;
+    }
+  | {
+      /** Word Board (extra practice, WordBoardScene.tsx): a 15-square snakes-and-ladders board (start, 13 picture
+       *  squares cycling `words`, finish); roll 1–3, say the picture you land on (`say` = the model on 🔊), ladders up,
+       *  slides down. `ask` = what the voice says on landing (default "What is it? Say it!"). */
+      id: string; kind: 'word-board'; bg: string; teacher: string; who: CharKey; title: string; walker: string;
+      words: { label: string; img: string; say: string }[]; ask?: string;
+      ladders?: [number, number][]; slides?: [number, number][]; doneLine: string;
+    }
+  | {
+      /** Home Hunt (extra practice, HomeHuntScene.tsx): a mission card per round ("Find something red!"), a calm
+       *  countdown that never fails, "Found it!" by the teacher; `found` = the praise line. */
+      id: string; kind: 'home-hunt'; bg: string; teacher: string; who: CharKey; title: string; seconds?: number;
+      rounds: { img: string; label: string; ask: string; found: string }[]; doneLine: string;
+    }
+  | {
+      /** Flip & Say (extra practice, FlipSayScene.tsx): face-down speaking cards; flip one, say `say` (the model on 🔊),
+       *  the teacher taps ✓; all cards = win. */
+      id: string; kind: 'flip-say'; bg: string; teacher: string; who: CharKey; title: string;
+      cards: { label: string; img: string; say: string }[]; doneLine: string;
     }
   | {
       /** Jungle Obstacle Run (A1 U2L2 signature, ObstacleRunScene.tsx): stations on a 16:9 course picture (`left`/`top` in %
@@ -4685,6 +4706,7 @@ export const LESSON_U2L4_SCENES: Scene[] = [
     ],
   },
 
+  goodbyeSong('u2l4-goodbye-song', bgU2L4Party),
   { id: 'u2l4-finale', kind: 'finale', bg: bgU2L4Party, who: 'pip', line: 'You asked and answered! Colors and shapes! Goodbye, friends!' },
 ];
 
@@ -4989,6 +5011,8 @@ export const LESSON_U2L5_SCENES: Scene[] = [
     targets: [0, 1, 2, 4, 6],
   },
 
+  ...EXTRA_PRACTICE['2-5'],
+  goodbyeSong('u2l5-goodbye-song', bgU2L5Rainbow),
   { id: 'u2l5-finale', kind: 'finale', bg: bgU2L5Rainbow, who: 'pip', line: 'Shelly is a rainbow fish! Share and be kind. Goodbye, friends!' },
 ];
 
@@ -9991,6 +10015,7 @@ export const LESSON_U5L6_SCENES: Scene[] = [
   },
 
   /* 12-13 Sticker + Home Mission */
+  ...EXTRA_PRACTICE['5-6'],
   {
     id: 'u5l6-sticker', kind: 'sticker-reward', bg: bgU5L6Host, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
     line: 'You are the Family Match-Up champion! Here is a family sticker for you!', sticker: { img: famPip, label: 'Family champion' },
@@ -10234,6 +10259,7 @@ export const LESSON_U6L1_SCENES: Scene[] = [
   },
 
   /* 19-20 Sticker + Home Mission */
+  ...EXTRA_PRACTICE['6-1'],
   {
     id: 'u6l1-sticker', kind: 'sticker-reward', bg: bgU6L1Front, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
     line: "You know all my rooms! Here is a house sticker for you!", sticker: { img: `${A}/items/item-house.png`, label: "Pip's house" },
@@ -10479,6 +10505,7 @@ export const LESSON_U6L2_SCENES: Scene[] = [
   },
 
   /* 19-20 Sticker + Home Mission */
+  ...EXTRA_PRACTICE['6-2'],
   {
     id: 'u6l2-sticker', kind: 'sticker-reward', bg: bgU6L2Truck, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
     line: 'Great moving helper! Here is a sofa sticker for you!', sticker: { img: itemSofa, label: 'Moving helper' },
@@ -10711,6 +10738,7 @@ export const LESSON_U6L3_SCENES: Scene[] = [
   },
 
   /* 19-20 Sticker + Home Mission */
+  ...EXTRA_PRACTICE['6-3'],
   {
     id: 'u6l3-sticker', kind: 'sticker-reward', bg: bgU6L3Family, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
     line: 'Super house builder! Here is a bed sticker for you!', sticker: { img: itemBed, label: 'House builder' },
@@ -10940,6 +10968,7 @@ export const LESSON_U6L4_SCENES: Scene[] = [
   },
 
   /* 15-16 Sticker + Home Mission */
+  ...EXTRA_PRACTICE['6-4'],
   {
     id: 'u6l4-sticker', kind: 'sticker-reward', bg: bgU6L4Street, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
     line: 'Great show and tell! Here is a red bed sticker for you!', sticker: { img: itemBedRed, label: 'Show and tell star' },
@@ -11187,6 +11216,7 @@ export const LESSON_U6L5_SCENES: Scene[] = [
   },
 
   /* 12-13 Sticker + Home Mission */
+  ...EXTRA_PRACTICE['6-5'],
   {
     id: 'u6l5-sticker', kind: 'sticker-reward', bg: bgU6L5RedC, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
     line: 'You helped me find my house! Here is a red door sticker for you!', sticker: { img: itemDoorRed, label: 'Home finder' },
@@ -11740,6 +11770,7 @@ export const LESSON_U6L6_SCENES: Scene[] = [
   },
 
   /* 11-12 Sticker + Home Mission */
+  ...EXTRA_PRACTICE['6-6'],
   {
     id: 'u6l6-sticker', kind: 'sticker-reward', bg: bgU6L6GameNight, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
     line: 'You won the My House Game! Here is a house sticker for you!', sticker: { img: itemHouse, label: 'House champion' },
@@ -11949,6 +11980,7 @@ export const LESSON_U7L1_SCENES: Scene[] = [
   },
 
   /* 12-13 Sticker + Home Mission */
+  ...EXTRA_PRACTICE['7-1'],
   {
     id: 'u7l1-sticker', kind: 'sticker-reward', bg: bgU7L1Shop, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
     line: 'You took great pet photos! Here is a puppy sticker for you!', sticker: { img: itemDog, label: 'Pet photographer' },
@@ -12151,6 +12183,7 @@ export const LESSON_U7L2_SCENES: Scene[] = [
   },
 
   /* 12-13 Sticker + Home Mission */
+  ...EXTRA_PRACTICE['7-2'],
   {
     id: 'u7l2-sticker', kind: 'sticker-reward', bg: bgU7L2Farm, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
     line: 'You washed all the animals! Here is a piggy sticker for you!', sticker: { img: itemPig, label: 'Farm helper' },
@@ -12345,6 +12378,7 @@ export const LESSON_U7L3_SCENES: Scene[] = [
   },
 
   /* 12-13 Sticker + Home Mission */
+  ...EXTRA_PRACTICE['7-3'],
   {
     id: 'u7l3-sticker', kind: 'sticker-reward', bg: bgU7L3Pond, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
     line: 'You made a great parade! Here is a duck sticker for you!', sticker: { img: itemFarmDuck, label: 'Parade leader' },
@@ -12549,6 +12583,7 @@ export const LESSON_U7L4_SCENES: Scene[] = [
   },
 
   /* 11-12 Sticker + Home Mission */
+  ...EXTRA_PRACTICE['7-4'],
   {
     id: 'u7l4-sticker', kind: 'sticker-reward', bg: bgU7L4Fair, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
     line: 'You know all the animals! Here is a horse sticker for you!', sticker: { img: itemHorse, label: 'Animal expert' },
@@ -12796,6 +12831,7 @@ export const LESSON_U7L5_SCENES: Scene[] = [
   },
 
   /* 12-13 Sticker + Home Mission */
+  ...EXTRA_PRACTICE['7-5'],
   {
     id: 'u7l5-sticker', kind: 'sticker-reward', bg: bgU7L5Yard, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
     line: 'You sang the farm song! Here is a cow sticker for you!', sticker: { img: itemCow, label: 'Farm singer' },
@@ -13003,6 +13039,7 @@ export const LESSON_U7L6_SCENES: Scene[] = [
   },
 
   /* 11-12 Sticker + Home Mission */
+  ...EXTRA_PRACTICE['7-6'],
   {
     id: 'u7l6-sticker', kind: 'sticker-reward', bg: bgU7L6Night, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
     line: 'You found every animal in the dark! Here is a cow sticker for you!', sticker: { img: itemCow, label: 'Animal sounds champion' },
@@ -13204,6 +13241,7 @@ export const LESSON_U8L1_SCENES: Scene[] = [
   },
 
   /* 12-13 Sticker + Home Mission */
+  ...EXTRA_PRACTICE['8-1'],
   {
     id: 'u8l1-sticker', kind: 'sticker-reward', bg: bgU8L1Picnic, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
     line: 'You fed me so well! Here is a banana sticker for you!', sticker: { img: itemBanana, label: 'Picnic helper' },
@@ -13409,6 +13447,7 @@ export const LESSON_U8L2_SCENES: Scene[] = [
   },
 
   /* 12-13 Sticker + Home Mission */
+  ...EXTRA_PRACTICE['8-2'],
   {
     id: 'u8l2-sticker', kind: 'sticker-reward', bg: bgU8L2Cafe, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
     line: 'You are a great waiter! Here is a juice sticker for you!', sticker: { img: itemJuice, label: 'Café waiter' },
@@ -13612,6 +13651,7 @@ export const LESSON_U8L3_SCENES: Scene[] = [
   },
 
   /* 14-15 Sticker + Home Mission */
+  ...EXTRA_PRACTICE['8-3'],
   {
     id: 'u8l3-sticker', kind: 'sticker-reward', bg: bgU8L3Party, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
     line: 'What a party! Here is an ice-cream sticker for you!', sticker: { img: itemIceCream, label: 'Party star' },
@@ -13814,6 +13854,7 @@ export const LESSON_U8L4_SCENES: Scene[] = [
   },
 
   /* 13-14 Sticker + Home Mission */
+  ...EXTRA_PRACTICE['8-4'],
   {
     id: 'u8l4-sticker', kind: 'sticker-reward', bg: bgU8L4Orchard, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
     line: 'You made yummy smoothies! Here is an apple sticker for you!', sticker: { img: itemApple, label: 'Smoothie maker' },
@@ -14034,6 +14075,7 @@ export const LESSON_U8L5_SCENES: Scene[] = [
   },
 
   /* 13-14 Sticker + Home Mission */
+  ...EXTRA_PRACTICE['8-5'],
   {
     id: 'u8l5-sticker', kind: 'sticker-reward', bg: u8l5Page(9), who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
     line: 'What a story! Here is a butterfly sticker for you!', sticker: { img: itemButterflyU8, label: 'Story star' },
@@ -14236,6 +14278,7 @@ export const LESSON_U8L6_SCENES: Scene[] = [
   },
 
   /* 12-13 Trophy + Home Mission */
+  ...EXTRA_PRACTICE['8-6'],
   {
     id: 'u8l6-sticker', kind: 'sticker-reward', bg: bgU8L6Dining, who: 'pip', teacher: 'The Unit 8 trophy! The child opens the pack and puts the sticker in their Sticker Book.',
     line: 'You finished the food unit! Here is your Unit 8 sticker!', sticker: { img: itemCake, label: 'Food champion' },
@@ -14442,6 +14485,7 @@ export const LESSON_U9L1_SCENES: Scene[] = [
   },
 
   /* 13-14 Sticker + Home Mission */
+  ...EXTRA_PRACTICE['9-1'],
   {
     id: 'u9l1-sticker', kind: 'sticker-reward', bg: bgU9L1Laundry, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
     line: 'Thank you for helping! Here is a dress sticker for you!', sticker: { img: itemDressYellow, label: 'Laundry helper' },
@@ -14642,6 +14686,7 @@ export const LESSON_U9L2_SCENES: Scene[] = [
   },
 
   /* 12-13 Sticker + Home Mission */
+  ...EXTRA_PRACTICE['9-2'],
   {
     id: 'u9l2-sticker', kind: 'sticker-reward', bg: bgU9L2Hall, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
     line: 'Thank you! Now we can all play in the snow! Here is a hat sticker for you!', sticker: { img: itemHatGreen, label: 'Snow helper' },
@@ -14843,6 +14888,7 @@ export const LESSON_U9L3_SCENES: Scene[] = [
   },
 
   /* 13-14 Sticker + Home Mission */
+  ...EXTRA_PRACTICE['9-3'],
   {
     id: 'u9l3-sticker', kind: 'sticker-reward', bg: bgU9L3Shop, who: 'bella', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
     line: 'You are a great shop helper! Here is a T-shirt sticker for you!', sticker: { img: itemTshirtYellow, label: 'Shop helper' },
@@ -15044,6 +15090,7 @@ export const LESSON_U9L4_SCENES: Scene[] = [
   },
 
   /* 13-14 Sticker + Home Mission */
+  ...EXTRA_PRACTICE['9-4'],
   {
     id: 'u9l4-sticker', kind: 'sticker-reward', bg: bgU9L4Stage, who: 'mia', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
     line: 'You are a fashion show star! Here is a dress sticker for you!', sticker: { img: itemDress, label: 'Show star' },
@@ -15277,6 +15324,7 @@ export const LESSON_U9L5_SCENES: Scene[] = [
   },
 
   /* 14-15 Sticker + Home Mission */
+  ...EXTRA_PRACTICE['9-5'],
   {
     id: 'u9l5-sticker', kind: 'sticker-reward', bg: u9l5Page(9), who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
     line: 'What a story! Here is a shoe sticker for you!', sticker: { img: itemShoesBlue, label: 'Story star' },
@@ -15467,6 +15515,7 @@ export const LESSON_U9L6_SCENES: Scene[] = [
   },
 
   /* 12-13 Sticker + Home Mission */
+  ...EXTRA_PRACTICE['9-6'],
   {
     id: 'u9l6-sticker', kind: 'sticker-reward', bg: bgU9L6Playroom, who: 'mia', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
     line: 'You finished the clothes unit! Here is a coat sticker for you!', sticker: { img: itemCoatBlue, label: 'Dress-up star' },
@@ -15686,6 +15735,7 @@ export const LESSON_U10L1_SCENES: Scene[] = [
   },
 
   /* 13-14 Sticker + Home Mission */
+  ...EXTRA_PRACTICE['10-1'],
   {
     id: 'u10l1-sticker', kind: 'sticker-reward', bg: bgU10L1Track, who: 'leo', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
     line: 'You are a sports day star! Here is a jumping sticker for you!', sticker: { img: itemPipJump, label: 'Sports star' },
@@ -15888,6 +15938,7 @@ export const LESSON_U10L2_SCENES: Scene[] = [
   },
 
   /* 14-15 Sticker + Home Mission */
+  ...EXTRA_PRACTICE['10-2'],
   {
     id: 'u10l2-sticker', kind: 'sticker-reward', bg: bgU10L2Beach, who: 'mia', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
     line: 'You are a beach party star! Here is a dancing sticker for you!', sticker: { img: gifDance, label: 'Party star' },
@@ -16085,6 +16136,7 @@ export const LESSON_U10L3_SCENES: Scene[] = [
   },
 
   /* 13-14 Sticker + Home Mission */
+  ...EXTRA_PRACTICE['10-3'],
   {
     id: 'u10l3-sticker', kind: 'sticker-reward', bg: bgU10L3Camp, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
     line: 'You are a camp-out star! Here is a clapping sticker for you!', sticker: { img: pose('pip', 'clap'), label: 'Camp star' },
@@ -16283,6 +16335,7 @@ export const LESSON_U10L4_SCENES: Scene[] = [
   },
 
   /* 13-14 Sticker + Home Mission */
+  ...EXTRA_PRACTICE['10-4'],
   {
     id: 'u10l4-sticker', kind: 'sticker-reward', bg: bgU10L4Circus, who: 'leo', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
     line: 'You are a circus star! You can do so much! Here is a jumping sticker for you!', sticker: { img: gifJump, label: 'Circus star' },
@@ -16508,6 +16561,7 @@ export const LESSON_U10L5_SCENES: Scene[] = [
     rounds: [{ word: 'pig', img: `${A}/items/item-pig.png` }, { word: 'pin', img: `${A}/items/item-pin.png` }, { word: 'wig', img: `${A}/items/item-wig.png` }, { word: 'lid', img: `${A}/items/item-lid.png` }],
   },
   /* 15-16 Sticker + Home Mission */
+  ...EXTRA_PRACTICE['10-5'],
   {
     id: 'u10l5-sticker', kind: 'sticker-reward', bg: u10l5Page(12), who: 'bella', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
     line: 'You found the bear! You are a brave bear hunter! Here is a bear sticker for you!', sticker: { img: u10l5Bear, label: 'Bear hunter' },
@@ -16728,6 +16782,7 @@ export const LESSON_U10L6_SCENES: Scene[] = [
   },
 
   /* 12-13 Sticker + Home Mission */
+  ...EXTRA_PRACTICE['10-6'],
   {
     id: 'u10l6-sticker', kind: 'sticker-reward', bg: bgU10L6Games, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
     line: 'You are a charades star! You can do it all! Here is a dancing sticker for you!', sticker: { img: gifDance, label: 'Charades star' },
@@ -16930,6 +16985,7 @@ export const LESSON_U10L7_SCENES: Scene[] = [
   },
 
   /* 13-14 Sticker + Home Mission */
+  ...EXTRA_PRACTICE['10-7'],
   {
     id: 'u10l7-sticker', kind: 'sticker-reward', bg: bgU10L7Academy, who: 'leo', teacher: 'Sticker time! The child opens the pack and puts the hero medal in their Sticker Book.',
     line: 'You are an Action Hero! You finished Unit 10! Here is your hero medal!', sticker: { img: u10l7Medal, label: 'Action Hero' },
@@ -17078,6 +17134,7 @@ export const LESSON_PREA1_FINAL_SCENES: Scene[] = [
     id: 'prea1-final-sticker', kind: 'sticker-reward', bg: bgU10L7Academy, who: 'leo', teacher: 'Sticker time! The explorer medal goes in the Sticker Book — for every child, whatever the result.',
     line: 'You are a super explorer! Here is your explorer medal!', sticker: { img: u10l7Medal, label: 'Explorer medal' },
   },
+  goodbyeSong('prea1-final-goodbye-song', bgU10L7Academy),
   { id: 'prea1-final-finale', kind: 'finale', bg: bgU10L7Academy, who: 'leo', line: 'Well done, explorer! You know so much English! Goodbye, friend!' },
 ];
 
@@ -17162,6 +17219,7 @@ export const LESSON_PREA1_CHECKPOINT1_SCENES: Scene[] = [
     id: 'prea1-cp1-sticker', kind: 'sticker-reward', bg: bgU10L7Academy, who: 'mia', teacher: 'Sticker time! The halfway medal goes in the Sticker Book — for every child, whatever the result.',
     line: 'You are halfway, super explorer! Here is your medal!', sticker: { img: u10l7Medal, label: 'Halfway medal' },
   },
+  goodbyeSong('prea1-cp1-goodbye-song', bgU10L7Academy),
   { id: 'prea1-cp1-finale', kind: 'finale', bg: bgU10L7Academy, who: 'mia', line: 'Well done, explorer! On to the next adventure! Goodbye, friend!' },
 ];
 
@@ -17215,6 +17273,7 @@ function bossTest(u: number, unitName: string, who: CharKey, hero: 'pip' | 'mia'
       id: `${id}-sticker`, kind: 'sticker-reward', bg: bgU10L7Academy, who, teacher: 'Sticker time! The hero medal goes in the Sticker Book — for every child, whatever the result.',
       line: `You finished Unit ${u}, hero! Here is your medal!`, sticker: { img: u10l7Medal, label: `Unit ${u} hero` },
     },
+    goodbyeSong(`${id}-goodbye-song`, bgU10L7Academy),
     { id: `${id}-finale`, kind: 'finale', bg: bgU10L7Academy, who, line: 'Well done, hero! See you next time! Goodbye, friend!' },
   ];
 }

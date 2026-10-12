@@ -123,6 +123,25 @@ Rules:
 - Bonus games use only words already taught in this lesson or earlier.
 - The Variety Rule still applies: no more than 2 of the same kind in a row,
   counting the extra block.
+
+### 3b+. Extra practice block — every lesson has 22-25 pages (owner, 2026-10-12)
+
+Owner: *"17 pages are not enough for 30-minute classes … use the games list and create extra practice … the maximum
+pages could be 25"* and *"there is no goodbye song at the end"*. So:
+
+- **Every lesson (not the 6-page tests) has 22-25 pages.** A lesson that is shorter gets an **extra practice block
+  before the sticker** (part of the lesson, not optional), written in `src/content/playground-library/unit1/extraPractice.ts`
+  (`EXTRA_PRACTICE['U-L']`): its teacher notes start "Extra practice:".
+- The block draws from the four **review routines** (ROUTINE_KINDS, so neighbouring lessons may share them):
+  `word-board` (Word Board — snakes & ladders: roll 1-3, say the picture you land on), `home-hunt` (Home Hunt — find /
+  show / act it at home, timer never fails), `flip-say` (Flip & Say — pick a card, say the sentence), `spin-wheel`
+  (never two in one lesson); plus one or two listening games from the lesson's slot list, filled with its own words.
+- Words: only this lesson and the lessons before it in the unit; the lesson's own pictures and its empty backgrounds.
+- **Every lesson ends with a goodbye song** before the finale (the shared Pre-A1 goodbye song, `goodbyeSong()`), the
+  unit tests and level tests too.
+- Research (mechanics only): Abridge Academy "Top five interactive games for online teaching" (snakes & ladders review
+  board), Twinkl "Vocabulary games for online ESL students" (home scavenger hunt), JALT "Using Wordwall warm-up and
+  review activities" (flip tiles, speaking cards, random wheel).
 - The finale (celebration) and goodbye song come after the extra block, so
   the lesson always **exits on a high**.
 
