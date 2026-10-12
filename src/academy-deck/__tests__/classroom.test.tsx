@@ -18,21 +18,21 @@ describe('Academy library in the classroom', () => {
     render(<EmbeddedAcademyDeckLesson lessonId="fake-or-real" roomId="r1" role="teacher" persistedSceneIdx={1} onSceneIdxPersist={persist} />);
     await waitFor(() => expect(screen.getByTestId('academy-deck-embed')).toBeTruthy());
     await screen.findByRole('button', { name: 'Next', exact: true });
-    expect(screen.getByText('2/25')).toBeTruthy();
+    expect(screen.getByText('2/27')).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: 'Next', exact: true }));
     expect(persist).toHaveBeenCalledWith(2);
-    expect(screen.getByText('3/25')).toBeTruthy();
+    expect(screen.getByText('3/27')).toBeTruthy();
   });
 
   it('STUDENT: follows the saved slide, has no Back / Next, and the strip does not navigate', async () => {
     const { rerender } = render(<EmbeddedAcademyDeckLesson lessonId="fake-or-real" roomId="r1" role="student" persistedSceneIdx={4} />);
-    await screen.findByText('5/25');
+    await screen.findByText('5/27');
     expect(screen.queryByRole('button', { name: 'Next', exact: true })).toBeNull();
     expect(screen.queryByRole('button', { name: '◀ Back', exact: true })).toBeNull();
     expect(screen.getByText(/Your teacher moves the lesson/)).toBeTruthy();
     expect((screen.getByRole('button', { name: /^Slide 9/ }) as HTMLButtonElement).disabled).toBe(true);
     rerender(<EmbeddedAcademyDeckLesson lessonId="fake-or-real" roomId="r1" role="student" persistedSceneIdx={5} />);
-    await screen.findByText('6/25');
+    await screen.findByText('6/27');
   });
 
   it('an unknown lesson shows a friendly message instead of crashing', async () => {

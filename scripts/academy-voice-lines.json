@@ -876,14 +876,6 @@
     "text": "Welcome back, detective! A fake profile of Ava is online. Today you check the facts."
   },
   {
-    "who": "Ava",
-    "text": "I am 14."
-  },
-  {
-    "who": "Ava",
-    "text": "I am from Italy. I am Italian."
-  },
-  {
     "who": "Theo",
     "text": "Spell YOUR name on the detective badge."
   },
@@ -893,7 +885,7 @@
   },
   {
     "who": "Vee",
-    "text": "I am 14."
+    "text": "I am 13."
   },
   {
     "who": "Vee",
@@ -901,7 +893,7 @@
   },
   {
     "who": "Vee",
-    "text": "You are Italian."
+    "text": "You are Spanish."
   },
   {
     "who": "Vee",
@@ -909,7 +901,7 @@
   },
   {
     "who": "Vee",
-    "text": "She is from Italy."
+    "text": "She is from Spain."
   },
   {
     "who": "Vee",
@@ -917,27 +909,59 @@
   },
   {
     "who": "Vee",
-    "text": "He is Spanish."
+    "text": "He is Italian."
   },
   {
     "who": "Theo",
-    "text": "The profile says: She is 15. She is Spanish."
-  },
-  {
-    "who": "Ava",
-    "text": "No! I am not 15. I am 14."
-  },
-  {
-    "who": "Ava",
-    "text": "I am not Spanish. I am Italian."
+    "text": "Pick am, is or are for each person."
   },
   {
     "who": "Theo",
-    "text": "You are 14. You are from Italy."
+    "text": "I am 13."
+  },
+  {
+    "who": "Theo",
+    "text": "You are Spanish."
+  },
+  {
+    "who": "Theo",
+    "text": "She is from Spain."
+  },
+  {
+    "who": "Theo",
+    "text": "He is Italian."
   },
   {
     "who": "Vee",
-    "text": "Are you from Spain, Ava?"
+    "text": "Memory! Find each character and the sentence about them."
+  },
+  {
+    "who": "Vee",
+    "text": "She is Spanish."
+  },
+  {
+    "who": "Vee",
+    "text": "He is French."
+  },
+  {
+    "who": "Theo",
+    "text": "The profile says: She is 15. She is Italian."
+  },
+  {
+    "who": "Ava",
+    "text": "No! I am not 15. I am 13."
+  },
+  {
+    "who": "Ava",
+    "text": "I am not Italian. I am Spanish."
+  },
+  {
+    "who": "Theo",
+    "text": "You are 13. You are from Spain."
+  },
+  {
+    "who": "Vee",
+    "text": "Are you from Italy, Ava?"
   },
   {
     "who": "Ava",
@@ -945,11 +969,11 @@
   },
   {
     "who": "Vee",
-    "text": "Is he Spanish?"
+    "text": "Is he Italian?"
   },
   {
     "who": "Ava",
-    "text": "Yes, he is. He is from Spain."
+    "text": "Yes, he is. He is from Italy."
   },
   {
     "who": "Vee",
@@ -965,7 +989,7 @@
   },
   {
     "who": "Vee",
-    "text": "I am not Spanish."
+    "text": "I am not Italian."
   },
   {
     "who": "Vee",
@@ -981,7 +1005,7 @@
   },
   {
     "who": "Vee",
-    "text": "Are you 14?"
+    "text": "Are you 13?"
   },
   {
     "who": "Vee",
@@ -989,7 +1013,7 @@
   },
   {
     "who": "Vee",
-    "text": "Is she Italian?"
+    "text": "Is she Spanish?"
   },
   {
     "who": "Vee",
@@ -997,43 +1021,7 @@
   },
   {
     "who": "Vee",
-    "text": "Are you Italian? Yes, I am."
-  },
-  {
-    "who": "Theo",
-    "text": "Pick am, is or are for each person."
-  },
-  {
-    "who": "Theo",
-    "text": "I am 14."
-  },
-  {
-    "who": "Theo",
-    "text": "You are Italian."
-  },
-  {
-    "who": "Theo",
-    "text": "She is from Italy."
-  },
-  {
-    "who": "Theo",
-    "text": "He is Spanish."
-  },
-  {
-    "who": "Theo",
-    "text": "I am not Spanish."
-  },
-  {
-    "who": "Theo",
-    "text": "She is not 15."
-  },
-  {
-    "who": "Theo",
-    "text": "Are you 14?"
-  },
-  {
-    "who": "Theo",
-    "text": "Is she Italian?"
+    "text": "Are you Spanish? Yes, I am."
   },
   {
     "who": "Ava",
@@ -1041,11 +1029,11 @@
   },
   {
     "who": "Ava",
-    "text": "She is Italian."
+    "text": "She is Spanish."
   },
   {
     "who": "Ava",
-    "text": "He is from Spain."
+    "text": "He is from Italy."
   },
   {
     "who": "Ava",
@@ -1053,11 +1041,11 @@
   },
   {
     "who": "Ava",
-    "text": "Are you 14?"
+    "text": "Are you 13?"
   },
   {
     "who": "Ava",
-    "text": "Is he Spanish?"
+    "text": "Is he Italian?"
   },
   {
     "who": "Vee",
@@ -1065,11 +1053,31 @@
   },
   {
     "who": "Theo",
-    "text": "Are you Spanish?"
+    "text": "Pick am, is or are: now with not and questions."
   },
   {
     "who": "Theo",
-    "text": "Is Theo Spanish?"
+    "text": "I am not Italian."
+  },
+  {
+    "who": "Theo",
+    "text": "She is not 15."
+  },
+  {
+    "who": "Theo",
+    "text": "Are you 13?"
+  },
+  {
+    "who": "Theo",
+    "text": "Is she Spanish?"
+  },
+  {
+    "who": "Theo",
+    "text": "Are you Italian?"
+  },
+  {
+    "who": "Theo",
+    "text": "Is Theo Italian?"
   },
   {
     "who": "Theo",
@@ -1085,11 +1093,11 @@
   },
   {
     "who": "Vee",
-    "text": "She is 14."
+    "text": "She is 13."
   },
   {
     "who": "Vee",
-    "text": "She is Spanish."
+    "text": "She is Italian."
   },
   {
     "who": "Vee",
@@ -1105,11 +1113,11 @@
   },
   {
     "who": "Vee",
-    "text": "I am Brazilian."
+    "text": "He is from Italy."
   },
   {
     "who": "Vee",
-    "text": "She is French."
+    "text": "I am Brazilian."
   },
   {
     "who": "Vee",
@@ -1145,7 +1153,7 @@
   },
   {
     "who": "Theo",
-    "text": "She is not Spanish."
+    "text": "She is not Italian."
   },
   {
     "who": "Theo",
@@ -1153,7 +1161,7 @@
   },
   {
     "who": "Theo",
-    "text": "Are you from Spain?"
+    "text": "Are you from Italy?"
   },
   {
     "who": "Theo",
@@ -1177,7 +1185,7 @@
   },
   {
     "who": "Vee",
-    "text": "Clue 3 of 8: The fake profile says “She is 15. She is Spanish.” But Ava is 14 and Italian. Who is 15 and Spanish? Theo! Someone mixed up their facts."
+    "text": "Clue 3 of 8: The fake profile says “She is 15. She is Italian.” But Ava is 13 and Spanish. Who is 15 and Italian? Theo! Someone mixed up their facts."
   },
   {
     "who": "Vee",

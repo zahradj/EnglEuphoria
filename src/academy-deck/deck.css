@@ -1043,7 +1043,7 @@
 
 /* Memory with picture cards (vocabulary) */
 .ad-mem-front .ad-art { height: 100%; overflow: hidden; }
-.ad-mem-front .ad-bearer { transform: scale(0.55); }
+.ad-mem-front .ad-bearer { transform: scale(1.05); transform-origin: 50% 70%; }
 
 /* Match board (owner 2026-10-12): big pictures scattered like stickers on a desk, no boxes; the word appears under a picture when matched.
    Comfort: huge drop areas (the whole picture + padding), large word pills, soft glow instead of dashed frames, no timers. */
