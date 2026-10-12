@@ -42,7 +42,7 @@ export interface TitleSlide extends SlideBase { kind: 'title'; heading: string; 
 export interface BriefSlide extends SlideBase { kind: 'brief'; say: string; heading: string; stamps: { id: string; icon: string; label: string }[] }
 export interface BadgeSlide extends SlideBase { kind: 'badge'; prompt: string; starter: string; /** also ask the age (saved as vars.age) */ ages?: number[] }
 export interface DialSlide extends SlideBase { kind: 'dial'; prompt: string }
-export interface WhoSaidSlide extends SlideBase {
+export interface WhoSaidSlide extends Omit<SlideBase, 'items'> {
   kind: 'whosaid';
   prompt: string;
   items: { text: string; who: CastName }[];
