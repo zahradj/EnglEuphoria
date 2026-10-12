@@ -107,6 +107,7 @@ import { ActionRunScene } from './scene-components/ActionRunScene';
 import { TalentShowScene } from './scene-components/TalentShowScene';
 import { CampfireSaysScene } from './scene-components/CampfireSaysScene';
 import { CanItScene } from './scene-components/CanItScene';
+import { ObstacleRunScene } from './scene-components/ObstacleRunScene';
 import { BearHuntTrailScene } from './scene-components/BearHuntTrailScene';
 import { CharadesScene } from './scene-components/CharadesScene';
 import { HeroTrialsScene } from './scene-components/HeroTrialsScene';
@@ -337,6 +338,7 @@ export function SceneRenderer(props: {
     case 'letter-monsters': return <LetterMonstersScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'sound-fish': return <SoundFishScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'can-it': return <CanItScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
+    case 'obstacle-run': return <ObstacleRunScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'level-test': return <LevelTestScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} role={props.role} roomId={props.roomId} />;
     case 'hero-trials': return <HeroTrialsScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'charades': return <CharadesScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;

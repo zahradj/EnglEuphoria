@@ -1,6 +1,5 @@
-# Homework Quest lines (every quest + Practise again packs) — keep this line: quests are not lesson exports.
+# HOMEWORK must stay (quests are not lesson exports)
 HOMEWORK
-# 2026-10-12 Pre-A1 audit: lines reworded so the voice does not spell "zzz" / "Mmm"
-LESSON_U8L1_SCENES
-LESSON_U10L5_SCENES
-LESSON_U10L6_SCENES
+# 2026-10-12 A1 Jungle: Unit 2 Lessons 1-2 (the jungle file is now in the bake engines)
+LESSON_A1U2L1_SCENES
+LESSON_A1U2L2_SCENES

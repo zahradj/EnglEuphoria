@@ -50,6 +50,7 @@ import * as unit1Scenes from '../src/content/playground-library/unit1/scenes.ts'
 import * as wtScenes from '../src/content/playground-library/welcome-town/scenes.ts';
 import * as wtA2Scenes from '../src/content/playground-library/welcome-town-a2/scenes.ts';
 import * as magicCastleScenes from '../src/content/playground-library/magic-castle/scenes.ts';
+import * as jungleScenes from '../src/content/playground-library/jungle-adventure/scenes.ts';
 import { homeworkA1U9L1Lines } from '../src/content/playground-library/magic-castle/homework.ts';
 import { allQuestLines } from '../src/content/homework-quests/registry.ts';
 import { placementLines } from '../src/components/placement/placementLines.ts';
@@ -502,6 +503,11 @@ const UNIT1_EXTRACTORS = {
     const hint = { he: 'He is a boy!', she: 'She is a girl!', it: 'It is an animal!', they: 'They are all the friends!' };
     return [...(s.stops ?? []).flatMap((st) => [[s.who, st.line], [s.who, `${hint[st.pronoun]} Listen: ${st.line}`], [s.who, st.reply]]), [s.who, s.doneLine]];
   },
+  'obstacle-run': (s) => [
+    ...(s.stations ?? []).flatMap((st) => [[s.who, st.ask], [s.who, st.sentence],
+      ...(st.options ?? []).map((fi) => [s.friends?.[fi]?.voice, fi === st.answer ? `I can ${st.action}!` : `Oops! I can't ${st.action}!`])]),
+    [s.who, s.freePrompt], [s.who, s.doneLine],
+  ],
   'can-it': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.ask], [s.who, r.answer]]), [s.who, s.doneLine]],
   // Mirror CampfireSaysScene.tsx: each call + reply, the wrong-action line, the done line
   'campfire-says': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...['clap', 'play', 'sleep'].map((a) => [s.who, `Not ${a}! Listen again.`]), [s.who, s.doneLine]],
@@ -830,6 +836,8 @@ const ENGINES = [
   { scenesModule: wtA2Scenes, extractors: WT_EXTRACTORS, resolveWho: (who) => wtScenes.VOICE_KEY[who] ?? who },
   // Magic Castle (A1 Unit 9) plays through welcome-town's renderer too.
   { scenesModule: magicCastleScenes, extractors: WT_EXTRACTORS, resolveWho: (who) => wtScenes.VOICE_KEY[who] ?? who },
+  // Jungle Adventure (A1 Unit 2) plays through welcome-town's renderer too.
+  { scenesModule: jungleScenes, extractors: WT_EXTRACTORS, resolveWho: (who) => wtScenes.VOICE_KEY[who] ?? who },
 ];
 
 /** Homework games: every line they can say, already as (voice, text). */

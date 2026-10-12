@@ -536,6 +536,17 @@ export type Scene =
       doneLine: string;
     }
   | {
+      /** Jungle Obstacle Run (A1 U2L2 signature, ObstacleRunScene.tsx): stations on a 16:9 course picture (`left`/`top` in %
+       *  of the picture); the child sends the friend who CAN pass (`answer` = index into `friends`, `options` = the cards
+       *  shown). A wrong friend tries, flops and says "Oops! I can't <action>!". After each right pick the child says
+       *  `sentence` (guided practice); at the end the child picks any friend and says their own `frame` sentences,
+       *  the teacher taps ✓ `freeGoal` times (free practice). Friend lines: "I can <action>!" in the friend's `voice`. */
+      id: string; kind: 'obstacle-run'; bg: string; teacher: string; who: CharKey;
+      friends: { name: string; img: string; voice: CharKey; frame: string }[];
+      stations: { action: 'run' | 'climb' | 'swim' | 'swing' | 'fly' | 'jump'; left: string; top: string; ask: string; options: number[]; answer: number; sentence: string }[];
+      freePrompt: string; freeGoal: number; doneLine: string;
+    }
+  | {
       /** Can It? (U10L4 signature): an animal in the circus ring, "Can a fish walk?" — 👍 / 👎; the animal really does
        *  it, or tries and flops, then shows what it CAN do (`real`). `answer` is the full spoken answer. */
       id: string; kind: 'can-it'; bg: string; teacher: string; who: CharKey;
