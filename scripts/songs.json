@@ -3392,5 +3392,38 @@
       "It can fly, fly, fly!",
       "They can run, run, run!"
     ]
+  },
+  "u10l6-i-can-do-it-all": {
+    "publicPath": "public/lep1/audio/act-it-out-song-u10l6.mp3",
+    "durationSec": 20,
+    "style": "Upbeat bouncy party pop kids song, 116 BPM, hand claps, bright synth bass, glockenspiel, ukulele and a little drum fill, ONE clear happy young singer, every action word sung slowly and very clearly with crisp consonants, each word repeated with a small pause so children can do the move.",
+    "positiveStyles": [
+      "kids pop",
+      "party",
+      "hand claps",
+      "glockenspiel",
+      "ukulele",
+      "clear kids vocals",
+      "116 BPM",
+      "happy"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "lines": [
+      "Run and jump and walk, walk, walk!",
+      "Swim and dance and sing, sing, sing!",
+      "Clap and play and sleep, sleep, sleep!",
+      "Act it out! Yes, I can!"
+    ]
   }
 }
