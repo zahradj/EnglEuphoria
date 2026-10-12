@@ -1,3 +1,2 @@
-+ public/lep1/items/tmp-sheet-animals.png (1920, 1080) raw
-+ public/lep1/items/tmp-sheet-friends.png (1536, 1024) raw
-2/2 saved
++ public/lep1/scenes/bg-u10l5-trail-empty-wide.png (1376, 768)
+1/1 saved
