@@ -53,10 +53,29 @@ Sanity check against Cambridge's cumulative hours (1 session = 1 hour of live le
 - Tests that assert 70 Seasons / 560 sessions are updated to 76 / 608; the lesson blueprint's level-specific supports (hints, speed, speaking ladder) get an "upper" setting that fades the supports a little further than the core step.
 - Season sizes: A1 Upper is 4 Seasons (not 5) because A1 is 10 Seasons; this keeps the existing A1 Seasons as they are.
 
-## 5. My recommendation
-Yes, but with one Pre (Pre-A1) and an Upper for every level, not a Pre for every level. Call the steps "Pre-A1, A1, A1 Upper, A2, ...". Treat A1 Upper and C1 Upper as our own labels. Build it level by level, as the owner said, starting with A1: Pre-A1 first, then split the current 10 A1 Seasons into A1 (6) and A1 Upper (4).
+## 5. Scale: the platform is growing (research and measurements, 2026-10-12)
+What other platforms do (limited, from search): Lingoda covers A1-C1 with CEFR labels and a certificate after each 50 classes ([Lingoda](https://www.lingoda.com/en/english-learn-by-level/)); Novakid uses its own age-appropriate level names aligned to CEFR and covers Pre-A1 to B1 for children ([Novakid](https://www.novakidschool.com/blog/novakid-curriculum-aligned-with-cefr-levels/)); Pearson's Global Scale of English keeps a fine numeric scale (10-90) and maps course books onto it, with free learning objectives per audience (young learners, adult, professional) ([Pearson GSE](https://pearson.com/english/about/gse/learning-objectives.html)); Duolingo maps its test score bands to CEFR with an outside validation ([Duolingo](https://blog.englishtest.duolingo.com/duolingo-test-aligned-with-cefr)). Could not confirm: EF level details, Duolingo course unit counts. Licence note: the CEFR can-do statements belong to the Council of Europe (permission needed to republish), so our can-dos must be our own wording.
 
-## 6. Decisions needed
+What our own repo says about growth (measured today):
+| Risk | Today | At 608 lessons | Advice |
+|---|---|---|---|
+| **Lesson production** | 3 hand-built deck lessons, each took many review rounds | 600+ lessons cannot be hand-built | build the map for all steps, but produce lessons in slices (Pre-A1 + A1 first); make a lesson mostly **data**: season spec -> deck generator using episode templates + the game menu + lanes, then human review and the quality gate |
+| **Audio files** | 427 clips = 13 MB in `public/academy-audio/` (in git) | roughly 80,000+ clips, about 2-3 GB | move audio to object storage / CDN (not git); **one manifest per lesson**, loaded on demand (today `manifest.json` is one file loaded whole by `loadManifest`) |
+| **Roadmap in code** | 1,220 lines of TS in `levels/*.ts`, tests that assert 70 Seasons / 560 sessions | levels are hard-coded and every change breaks totals | one **ordered step list** with stable ids; tests check invariants (ordered, no gaps, every step has Seasons), not totals; later move the roadmap to data/DB |
+| **Lesson registry** | hand-listed `ACADEMY_DECK_LESSONS` | hundreds of entries | generate the registry from lesson files / DB; library already groups level -> season -> lesson |
+| **Choice overload** | 5 level tabs | 11 steps | students see a simple label ("A1", "A1 Upper") and the next lesson; the full ladder is for teachers/creators |
+| **Placement** | none yet | 11 steps cannot be told apart by a 5-minute test (Busuu's placement is about 5 minutes, [Busuu](https://help.busuu.com/hc/en-us/articles/16526383831569-What-is-a-Placement-Test)) | placement picks the CEFR level; the step inside it comes from the first lessons (lane + results) |
+
+Two different axes, do not mix them: the **ladder** says where the student is in the curriculum (Pre-A1 ... C1 Upper); the **lane** (Start / Core / Stretch) says how hard one lesson is for this student today.
+
+## 6. My recommendation
+1. **Yes to the ladder, as one Pre-A1 and an Upper for every level** (not a Pre for every level; it duplicates the previous Upper). Show the CEFR label plus "Upper"; call A1 Upper and C1 Upper ours, never an exam claim.
+2. **Make it data, not code, now** (cheap, and it is what lets the platform grow): an ordered step list with stable ids (`pre-a1`, `a1`, `a1-upper`, ...) and display labels in one file; roadmap tests check invariants instead of 70 / 560.
+3. **Build in slices, level by level, as you said:** Pre-A1 and A1 first (96 sessions of Seasons, with A1 Upper outlined); leave A2 and above as outlines until A1 has real students and data. Do not decide the A2+ splits now.
+4. **Fix the scaling risks before the lesson count grows:** audio out of git and manifests per lesson (do this before Pre-A1 lessons are baked); a lesson generator for the repeated episode shapes.
+5. **Placement and lanes:** keep lanes inside lessons; add a short placement later, to choose the CEFR level only.
+
+## 7. Decisions needed
 1. Approve the ladder (one Pre-A1, then core + Upper for every level)?
-2. Approve splitting the current A1 into A1 (6 Seasons) and A1 Upper (4 Seasons)?
-3. Show "Upper" to students, or only in the teacher/creator views?
+2. Approve doing the data-driven step list first (small change, no content), then Pre-A1?
+3. Approve moving audio out of git and splitting manifests per lesson before more voices are baked?
