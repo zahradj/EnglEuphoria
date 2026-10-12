@@ -9,6 +9,7 @@ import { DeckContext, type DeckCtx } from './ctx';
 import { Icon } from './Icon';
 import { Character, Plate } from './Stage';
 import { LaneView } from './slides/lane';
+import { BlendView, HearPickView, ReaderView } from './slides/reading';
 import { applyLane, laneOf, LANE_LABEL } from './lanes';
 import { BadgeView, BriefView, DialView, TitleView } from './slides/intro';
 import { HuntView, ShadowView } from './slides/homework';
@@ -24,7 +25,7 @@ import { BePickView, BuildView, FactCheckView, WriteView } from './slides/patter
 import { ConvoView, FadeView, PhoneChatView, SayView, WhoSaidView } from './slides/talk';
 import { audioBaseFor, hasClip, loadManifest, playLine, stopLine } from './audio';
 import { openLines, slideLines } from './spoken';
-import { PARTS, type DeckScript, type Slide, type Stats, type Vars } from './types';
+import { partsOf, type DeckScript, type Slide, type Stats, type Vars } from './types';
 
 class Guard extends Component<{ children: ReactNode; onSkip: () => void; id: string }, { err: string | null; n: number }> {
   state = { err: null as string | null, n: 0 };
@@ -56,6 +57,9 @@ function SlideView({ slide }: { slide: Slide }) {
     case 'badge': return <BadgeView slide={slide} />;
     case 'dial': return <DialView slide={slide} />;
     case 'lane': return <LaneView slide={slide} />;
+    case 'blend': return <BlendView slide={slide} />;
+    case 'hearpick': return <HearPickView slide={slide} />;
+    case 'reader': return <ReaderView slide={slide} />;
     case 'whosaid': return <WhoSaidView slide={slide} />;
     case 'hunt': return <HuntView slide={slide} />;
     case 'shadow': return <ShadowView slide={slide} />;
@@ -145,6 +149,7 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
   }, []);
   const shownParts = useRef<Set<number>>(new Set());
   const [calm, setCalm] = useState(() => typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches);
+  const parts = partsOf(script.shape);
   const lane = laneOf(vars);
   const cur = applyLane(script.slides[index], lane);
   // ---- recorded voices (silent when a clip or the clip list is missing; never the browser voice)
@@ -309,7 +314,7 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
           {actorsVisible.map((a) => <Character key={`${a.who}-${mood ?? 'base'}`} actor={mood ? { ...a, expr: mood } : a} artBase={artBase} small={compact} speaking={!calm && !mood && (speakingWho === a.who || (chat && !(voiceOn && slideHasClip) && ['title', 'brief', 'whosaid', 'teach', 'model', 'convo', 'say', 'wrap'].includes(cur.kind)))} />)}
         </div>
         <header className="ad-strip" aria-label="Slides">
-          <span className="ad-lesson">{homework ? `${homework.label} · game ${index + 1} of ${script.slides.length}` : PARTS[cur.part]?.name}</span>
+          <span className="ad-lesson">{homework ? `${homework.label} · game ${index + 1} of ${script.slides.length}` : parts[cur.part]?.name}</span>
           <ol>
             {script.slides.map((s, i) => (
               <li key={s.id} data-part-start={i > 0 && s.part !== script.slides[i - 1].part}>
@@ -352,12 +357,12 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
           </div>
         )}
         {partCard !== null && (
-          <div className="ad-partcard" data-leaving={partLeaving || undefined} role="dialog" aria-label={`Part ${partCard + 1}: ${PARTS[partCard].name}`} onClick={closePart}>
+          <div className="ad-partcard" data-leaving={partLeaving || undefined} role="dialog" aria-label={`Part ${partCard + 1}: ${parts[partCard].name}`} onClick={closePart}>
             <span className="ad-partcard-num" aria-hidden="true">{partCard + 1}</span>
-            <span className="ad-partcard-kicker">Part {partCard + 1} of {PARTS.length} · {PARTS[partCard].minutes} min</span>
-            <span className="ad-partcard-name">{PARTS[partCard].name}</span>
-            <span className="ad-partcard-goal">{script.partGoals?.[partCard] ?? PARTS[partCard].goal}</span>
-            <span className="ad-partcard-pips" aria-hidden="true">{PARTS.map((_, k) => <i key={k} data-on={k <= partCard} />)}</span>
+            <span className="ad-partcard-kicker">Part {partCard + 1} of {parts.length} · {parts[partCard].minutes} min</span>
+            <span className="ad-partcard-name">{parts[partCard].name}</span>
+            <span className="ad-partcard-goal">{script.partGoals?.[partCard] ?? parts[partCard].goal}</span>
+            <span className="ad-partcard-pips" aria-hidden="true">{parts.map((_, k) => <i key={k} data-on={k <= partCard} />)}</span>
             <span className="ad-partcard-tap">Tap to start</span>
           </div>
         )}

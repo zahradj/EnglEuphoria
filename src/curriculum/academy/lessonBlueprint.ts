@@ -215,7 +215,21 @@ export const RUN_OF_SHOW = [
 ] as const;
 
 /**
- * Recommended rhythm (research-based proposal 2026-10-10; frequency and structure are the strongest levers we control).
+ * Pre-A1 run of show (owner 2026-10-12, docs/academy-pre-a1-curriculum.md §3): slower, with a Read part (blending and a decodable text).
+ * Eight parts as well, so slides keep part indexes 0-7; the deck player mirrors it (PRE_A1_PARTS) and a test keeps them equal.
+ */
+export const PRE_A1_RUN_OF_SHOW = [
+  { name: 'Check-in', minutes: 5, core: false, technique: 'low-anxiety start; goal shown; no new language', mustHave: ['a greeting and the day\'s goal with pictures', 'no new language'] },
+  { name: 'Remember?', minutes: 10, core: true, technique: 'retrieval of the last two lessons, production-light', mustHave: ['letters, sounds and words from the last two lessons come back as hear-and-pick or flip memory', 'every item gets feedback'] },
+  { name: 'The Drop', minutes: 8, core: true, technique: 'picture scene with meaning first', mustHave: ['a short picture scene or story that shows the new words in use', 'nothing is asked that was not first shown'] },
+  { name: 'Learn', minutes: 10, core: true, technique: 'a few new items, then two different memorising games', mustHave: ['at most 4 new items taught on their own pages', 'two different memorising games follow (VOCAB_GAMES_RULE)'] },
+  { name: 'Read', minutes: 8, core: true, technique: 'blending and a short decodable text with tap-to-hear', mustHave: ['a blending routine (letters slide together into a word)', 'a reading page whose words are blendable from the sounds taught or are taught whole words', 'every word can be tapped to hear it'] },
+  { name: 'Learn more', minutes: 8, core: true, technique: 'a second small set, then two different games', mustHave: ['at most 4 new items', 'two different memorising games follow'] },
+  { name: 'Mission', minutes: 6, core: true, technique: 'use the language with a cast member: tiles or speech, Take 1, feedback, Take 2', mustHave: ['the student chooses the help', 'Take 1, feedback, short Take 2', 'type-instead-of-speak stays available'] },
+  { name: 'Wrap', minutes: 5, core: true, technique: 'can-do ticks, Daily 10, next clue', mustHave: ['can-do ticks tied to the success criteria', 'the Daily 10 is assigned and the next clue is shown'] },
+] as const;
+
+/** Recommended rhythm (research-based proposal 2026-10-10; frequency and structure are the strongest levers we control).
  * A guideline for planning and sales copy, never a promise of a level by a date.
  */
 export const RECOMMENDED_RHYTHM = {

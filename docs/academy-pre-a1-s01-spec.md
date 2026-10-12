@@ -1,6 +1,6 @@
 # Pre-A1 Season P1 "Hello, letters" — Season plan (2026-10-12)
 
-Owner: "go" on the first Pre-A1 Lite Season. Follows `academy-roadmap-architect` (Season spec) and `docs/academy-pre-a1-curriculum.md`. Ages 13-18, zero English, reading, blending and vocabulary, slower. **Status: plan for the owner to approve; no lesson or code built. Not checked against the database (Supabase not queried); the Pre-A1 step has no Seasons in the roadmap data yet (`ladder.ts`, plannedTitles).**
+Owner: "go" on the first Pre-A1 Lite Season. Follows `academy-roadmap-architect` (Season spec) and `docs/academy-pre-a1-curriculum.md`. Ages 13-18, zero English, reading, blending and vocabulary, slower. **Status: approved by the owner (all four decisions, 2026-10-12). Engineering step done: run of show per ladder step, blend / hear-and-pick / reader slides and the decodability test (§6 items 1-3); the P1 lessons, letter-sound recordings and art are not built yet. Not checked against the database (Supabase not queried); the Pre-A1 step has no Seasons in the roadmap data yet (`ladder.ts`, plannedTitles).**
 
 ## 1. Season at a glance
 | | |
@@ -66,3 +66,11 @@ Letters and Sounds and Jolly Phonics both start with a small set of frequent, ea
 2. Approve sounds s, a, t, p in P1 (then i, n, m, d in P2)? (This replaces the earlier P2 line "s a t p i n m d".)
 3. Approve making the run of show a property of the ladder step (engineering first)?
 4. Approve building the reading mechanics before writing the P1 lessons?
+
+
+## 9. Engineering done (2026-10-12)
+- **Run of show per ladder step:** `LadderStep.runOfShow` ('standard' | 'pre-a1'); `PRE_A1_RUN_OF_SHOW` (5/10/8/10/8/8/6/5, Read part) in the blueprint; the deck has `PRE_A1_PARTS`, `DeckScript.shape` and `partsOf()`; a test keeps the deck and the blueprint equal.
+- **New slide kinds** (`src/academy-deck/slides/reading.tsx`): `blend` (slider and "Blend it": letters slide together into the word), `hearpick` (hear a letter or word, pick the tile), `reader` (tap any word to hear it, match each line to its picture).
+- **Decodability test** (`src/academy-deck/decodable.ts`): `DeckScript.taughtSounds` and `sightWords`; `decodabilityProblems(script)` fails a deck whose reading text is not blendable from the sounds taught or a taught whole word.
+- **Letter SOUND clips** use the key `sound <letter>` and stay silent until the owner approves recordings (never another voice).
+- Still to do: the PA1-S01 Season in the roadmap code, the 8 lessons, club lobby and Name Wall art, 4 letter-sound recordings, per-lesson audio manifests, pictures for the reader page.
