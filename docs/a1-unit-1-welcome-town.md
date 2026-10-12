@@ -73,8 +73,8 @@ Sources: [Cambridge Starters — test format](https://www.cambridgeenglish.org/e
 | Numbers | 11-20 (eleven … twenty) | 1-10 (Pre-A1) |
 | Story words | new, lost, cap, find, look, now, friends | red, cat, happy, sad |
 | **Sight words to read** (3-4 per lesson) | L1 *I, my, name, is* · L2 *how, are, you, am* · L4 *this, friend, nice, meet* · L5 *the, look, now, see* | — |
-| **Blending (from the story)** | L1 h: *hi, hop, hat* · L2 short a: *sad, mad, had* · L3 number words: *six, ten* · L4 f / short u: *fun, run, sun* · L5 a whole sentence, word by word | s a t p i n (Pre-A1) |
-| **Tongue twisters** (level 1 of the A1 ladder) | L1 *Happy Hen hops.* · L2 *Sad Sam sits.* · L3 *Six silly snakes.* · L4 *Fun Fred finds a frog.* · L6 all four, faster | — |
+| **Blending (from the story)** | L1 h: *hi, hop, hat* · L2 short a: *sad, mad, had* · L3 /t/: *ten, top, two* · L4 f / short u: *fun, run, sun* · L5 a whole sentence, word by word | s a t p i n (Pre-A1) |
+| **Tongue twisters** (level 1 of the A1 ladder) | L1 *Happy Hen hops.* · L2 *Sad Sam sits.* · L3 *Ten tiny teddies.* · L4 *Fun Fred finds a frog.* · L6 all four, faster | — |
 
 ## 4. The reading strand — *Leo's First Day* (one story, read a bit more each lesson)
 
@@ -189,18 +189,18 @@ two friends their age (Cambridge Starters Speaking Part 4 personal question).
 | 5 | Sentence page: *How old are you? — I am seven.* (Leo with 7 candles) | hear, repeat with fingers | the question + the answer | P |
 | 6 | Echo: *How old are you?* | rising voice | pronounce the question | G |
 | **B** | **MEMORISE THE NUMBERS** | | | |
-| 7 | **Number Balloons** (count-balloons) | *Pop number 14!* — pop the balloon, say the number | hear → recognise 1-20 | G |
-| 8 | **Number Stepping Stones** | cross the river on the stones in order 11 → 20, saying each one; one stone is missing — say it | order + recall | G |
-| 9 | Counting song (lesson song, after the words + a first game) | count and clap to 20 | memorise with rhythm | G |
+| 7 | **Number Tap** (numbers-review 1-20) | *Fourteen!* — tap the number, say it | hear → recognise 1-20 | G |
+| 8 | **Count the Balloons** (count-balloons, 20) | pop the balloons one by one, counting to 20 | order + recall | G |
+| 9 | Count-and-move chant (counting song to be recorded) | jump, clap, stamp, stretch while counting to 20 | memorise with rhythm | G |
 | **C** | **PRACTISE: HOW OLD ARE YOU?** | | | |
 | 10 | **Birthday Balloons** (age-balloons) | *Mia is six!* — pop the balloon with her age, say *She is six.* | ages by listening | G |
 | 11 | **Age Match** (age-sentence-match) | read *I am eight.* → match the cake with 8 candles | read the age sentence | R |
-| 12 | **Birthday Buzzer** (buzzer-show) | *How old is Willow?* → press her age, say *She is nine!* | understand the question about someone | G |
+
 | 13 | Your turn (join-stage) | Miss Marigold asks *How old are you?* — the child answers, then ASKS her | answer + ask | F |
 | 14 | Brain break: count and jump to 20 | | | — |
 | 15 | **Reader: Leo's age** (story pages 2-3 + new lines) | *How old are you, Leo? — I am seven. How old are you? — I am eight!* | read the age dialogue | R |
-| 16 | **Blend & Read: number words** | *s-i-x six, t-e-n ten* → *"Bella is six."* / *"I am ten."* | phonics → sentence (numbers are decodable!) | R |
-| 17 | Tongue twister: *Six silly snakes.* | 2 speeds | quick reading | R |
+| 16 | **Sound /t/ → Sound Moles → Blend & Read** | *t-e-n ten* → *"I am ten."*, *t-o-p top*, *two* | phonics → sentence (numbers are decodable!) | R |
+| 17 | Tongue twister: *Ten tiny teddies.* | 2 speeds | quick reading | R |
 | 18 | Birthday interview (free) | the child asks the teacher and Pip *What's your name? How old are you?* and introduces one: *This is Pip. He is eight.* | free practice | F |
 | 19-22 | Check · sticker + stamp · home mission (ask 3 family members their age, count to 20 with them) · goodbye song · finale | | | |
 | X | Extra time: **Quick Fire numbers** (flash a number, say it before the ring ends) | | | G |
@@ -306,12 +306,12 @@ The Welcome Song moves to L4 as its lesson song (greeting questions + *How old a
 | Feelings Survey ★ | L2 |
 | Read & Drag (drag-match) | L2 |
 | He / She / They sort | L2 extra |
-| Number Balloons (count-balloons) | L3 |
-| Number Stepping Stones | L3 |
+| Number Tap (numbers-review) | L3 |
+| Count the Balloons (count-balloons) | L3 |
 | Birthday Balloons (age-balloons) | L3 |
 | Age Match (age-sentence-match) | L3 |
-| Birthday Buzzer (buzzer-show) | L3 |
-| Quick Fire numbers (rapid-recall) | L3 extra |
+| Sound Moles | L3 |
+
 | Knock, Knock! | L4 |
 | Chat Chain | L4 |
 | Guess My Friend ★ (secret-card) | L4 |

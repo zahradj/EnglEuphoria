@@ -1043,270 +1043,162 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
  * comments); extras at the end are optional. Phonics: a tongue twister reviewing s a t p i n.
  * * ========================================================================= */
 
-export const LESSON_3_TITLE = 'Listen to the Greetings Song';
-export const LESSON_3_OBJECTIVE = 'Listen to the Greetings Song and say who sings each line (hello, what\'s your name?, how are you?, goodbye), answer and ask its questions, and sing it yourself.';
+export const LESSON_3_TITLE = 'How Old Are You? Numbers 1-20';
+export const LESSON_3_OBJECTIVE = 'I can count and say the numbers 1-20, ask "How old are you?" and say my age: "I am seven."';
 
 
 
+/* Rebuilt 2026-10-12 (owner: "add numbers from 1 to 20 … as far as the students say their age … first modeling, then
+ * memorising the numbers, then the practice in which they practise how old they are"). docs/a1-unit-1-welcome-town.md §5.3.
+ * A MODEL (1-10, 11-20, How old are you? I am seven.) → B MEMORISE (Number Tap, count the balloons to 20) → C AGE
+ * (Birthday Balloons, Age Match, answer + ask) → reading, phonics (/t/ ten), free interview. */
 export const LESSON_3_SCENES: Scene[] = classroomLook([
-  { id: 'wt3-title', kind: 'title-card', bg: bgL1Class, level: 'A1', unit: 'Unit 1', lessonLabel: 'Lesson 3', title: 'Listen to the Greetings Song', subtitle: 'Listen, find who sings it, and sing it yourself', cta: '\u{1F3B5} LET’S GO!' },
+  { id: 'wt3-title', kind: 'title-card', bg: bgL1Party, level: 'A1', unit: 'Unit 1', lessonLabel: 'Lesson 3', title: 'How Old Are You?', subtitle: 'Count to 20 — and say how old you are!', cta: '\u{1F382} LET’S GO!' },
   {
-    // Remember? (owner, 2026-10-07): Lesson 2 · How Are You? — sticker pictures, so the shadow look.
-    id: 'wt3-recall-warmup', kind: 'recall-warmup', bg: bgL1Circle, who: 'pip', mode: 'shadow',
+    id: 'wt3-recall-warmup', kind: 'recall-warmup', bg: bgCircleW, who: 'pip', mode: 'click',
     fromLabel: 'Lesson 2 · How Are You?',
-    teacher: 'Warm-up from last lesson: Pip says a feeling, the student finds its shadow and says "I am happy!".',
+    teacher: 'Guided: Pip says how a friend feels, the student finds the picture and says it too.',
     items: [
-      { word: 'happy', say: 'Find happy!', img: feelSpr('pip-happy') },
-      { word: 'tired', say: 'Find tired!', img: feelSpr('leo-tired') },
-      { word: 'sad', say: 'Find sad!', img: feelSpr('mia-sad') },
-      { word: 'hungry', say: 'Find hungry!', img: feelSpr('willow-hungry') },
+      { word: 'sad', say: 'Find: She is sad!', img: feelSpr('mia-sad') },
+      { word: 'tired', say: 'Find: He is tired!', img: feelSpr('leo-tired') },
+      { word: 'hungry', say: 'Find: She is hungry!', img: feelSpr('willow-hungry') },
     ],
   },
-  /* 1 Warm-up song (TPR) */
+  /* A — MODELING */
   {
-    // Warm-up: the unit's Hello Song (scripts/songs.json "wt-hello"). Wave on
-    // "hello", point to yourself on "say your name". (First lesson: no Remember? page.)
-    id: 'wt3-hello-song', kind: 'song', bg: bgL1Class, title: '\u{1F3B5} The Hello Song \u{1F3B5}', teacher: 'Wave and sing! Point to you when we say “name”.',
-    durationSeconds: 20, bigWord: 'Hello',
-    songUrl: `${W}/audio/hello-song.mp3?v=1`,
-    lineDurationsMs: [3640, 4120, 4320, 7982],
-    lyrics: [
-      { who: 'marigold', text: 'Hello, hello, hello to you!' },
-      { who: 'pip', text: 'Hi, hi, hi! And hi to you!' },
-      { who: 'marigold', text: 'What’s your name? What’s your name?' },
-      { who: 'pip', text: 'Say your name! Say your name!' },
-    ],
+    id: 'wt3-numbers-1-10', kind: 'prea1', teacher: 'Present: count 1 to 10 with Pip — tap each number, say it, show it with your fingers.',
+    scene: { id: 'wt3-numbers-1-10', kind: 'numbers-learn', bg: bgL1Party, who: 'pip', from: 1, to: 10, teacher: 'Tap each number, listen and say it. Show it with your fingers!' },
   },
-  /* 2 Pip greeting + question */
-  { id: 'wt3-pip-greets', kind: 'meet', focus: ['songs'], bg: bgL1Peers, who: 'pip', cardSide: 'left', teacher: 'Tap Pip. Answer: "I am happy! Yes, I like songs!"', line: 'Hello! How are you? Do you like songs?', repeat: 'I like songs!' },
-  /* 3 Story opener */
   {
-    id: 'wt3-story-open', kind: 'cinematic', bg: bgL1Class, title: 'The School Concert', subtitle: 'Everybody sings the Greetings Song!', narrator: 'marigold',
-    script: [
-      { who: 'marigold', line: 'Today is our school concert!' },
-      { who: 'pip', line: 'We sing the Greetings Song. Every friend sings one line!' },
-      { who: 'marigold', line: 'Listen carefully. Who sings each line?' },
-    ],
-    cta: '\u{1F3A4} LISTEN!',
+    id: 'wt3-numbers-11-20', kind: 'prea1', teacher: 'Present: the new numbers 11 to 20. Stretch and clap the end: four-TEEN! Then twenty.',
+    scene: { id: 'wt3-numbers-11-20', kind: 'numbers-learn', bg: bgL1Party, who: 'mia', from: 11, to: 20, teacher: 'New numbers! Tap each one, listen and say it: eleven, twelve, thirteen…' },
   },
-  /* 4 Vocabulary reveal: each friend's line of the song, one arrow at a time */
+  { id: 'wt3-how-old', kind: 'meet', focus: ['How old'], bg: leoStory(3), who: 'leo', cardSide: 'left', teacher: 'Present: listen to Leo. Show seven fingers and say: I am seven!', line: 'How old are you? I am seven!', repeat: 'I am seven!' },
+  { id: 'wt3-echo', kind: 'echo', bg: bgL1Peers, who: 'pip', textSide: 'top', teacher: 'Guided: say the question with Pip.', word: 'How old are you?' },
+  /* B — MEMORISE THE NUMBERS */
   {
-    id: 'wt3-song-lines', kind: 'vocab-spot', bg: bgL1Class, teacher: 'Tap each arrow. Listen to the friend’s line, then say it.',
-    items: [
-      { label: 'Hello!', sentence: 'Hello, hello, hello to you!', emoji: '\u{1F44B}', left: '50%', top: '22%', color: '#8ECAE6', who: 'marigold' },
-      { label: 'Hi!', sentence: 'Hi, hi, hi! And hi to you!', emoji: '\u{1F64B}', left: '23%', top: '62%', color: '#FE6A2F', who: 'pip' },
-      { label: 'What’s your name?', sentence: 'What’s your name? What’s your name?', emoji: '\u{2753}', left: '34%', top: '64%', color: '#B85CD1', who: 'mia' },
-      { label: 'How are you?', sentence: 'How are you? How are you?', emoji: '\u{1F60A}', left: '78%', top: '62%', color: '#C97A2F', who: 'leo' },
-      { label: 'Goodbye!', sentence: 'Goodbye, goodbye, my new friend!', emoji: '\u{1F44B}', left: '46%', top: '66%', color: '#E76FA5', who: 'bella' },
-      { label: 'See you!', sentence: 'See you again!', emoji: '\u{1F31F}', left: '63%', top: '64%', color: '#4FA9E0', who: 'willow' },
-    ],
+    id: 'wt3-number-tap', kind: 'prea1', teacher: 'Guided: Number Tap! Pip says a number from 1 to 20 — tap it and say it.',
+    scene: { id: 'wt3-number-tap', kind: 'numbers-review', bg: bgL1Party, who: 'pip', from: 1, to: 20, teacher: 'Tap the number Pip says!' },
   },
-  /* 5 Echo mimic */
-  { id: 'wt3-echo', kind: 'echo', bg: bgL1Peers, who: 'pip', textSide: 'top', teacher: 'Listen and sing it with Pip!', word: 'Hello to you!' },
-  /* 6 Reveal game: who sings it? (listening for detail) */
   {
-    id: 'wt3-who-sings', kind: 'listen-tap', bg: bgL1Class, teacher: 'Listen to the line. Who sings it? Tap the friend!',
-    targets: [
-      { label: 'Pip', left: '22%', top: '72%', color: '#FE6A2F' },
-      { label: 'Mia', left: '33%', top: '74%', color: '#B85CD1' },
-      { label: 'Bella', left: '45%', top: '76%', color: '#E76FA5' },
-      { label: 'Willow', left: '62%', top: '74%', color: '#4FA9E0' },
-      { label: 'Leo', left: '78%', top: '72%', color: '#C97A2F' },
-    ],
-    rounds: [
-      { prompt: 'What’s your name? What’s your name?', answerLabel: 'Mia', who: 'mia' },
-      { prompt: 'How are you? How are you?', answerLabel: 'Leo', who: 'leo' },
-      { prompt: 'Goodbye, goodbye, my new friend!', answerLabel: 'Bella', who: 'bella' },
-      { prompt: 'Hi, hi, hi! And hi to you!', answerLabel: 'Pip', who: 'pip' },
-    ],
+    id: 'wt3-count-balloons', kind: 'prea1', teacher: 'Guided: count to 20! Pop the balloons one by one and count with Pip.',
+    scene: { id: 'wt3-count-balloons', kind: 'count-balloons', bg: '/lep1/scenes/bg-l4-plain-sky.jpg', who: 'pip', total: 20, teacher: 'Twenty balloons! Pop them one by one and count with Pip!' },
   },
-  /* 7 Drag & match: put the song line together */
   {
-    id: 'wt3-build-lines', kind: 'sentence-build', bg: bgL1Reading, teacher: 'Drag the words into order to make the song line. Then sing it!',
-    rounds: [
-      { words: ['Hello', 'to', 'you!'], emoji: '\u{1F44B}' },
-      { words: ['What’s', 'your', 'name?'], emoji: '\u{2753}' },
-      { words: ['How', 'are', 'you?'], emoji: '\u{1F60A}' },
-      { words: ['See', 'you', 'again!'], emoji: '\u{1F31F}' },
-    ],
-  },
-  /* 8 Implicit grammar model: the song as a conversation */
-  {
-    id: 'wt3-song-talk', kind: 'roleplay', bg: bgL1Peers, teacher: 'The song is a real conversation! Listen to Pip and Leo, then say each line after them.', cast: ['pip', 'leo'],
-    script: [
-      { who: 'pip', line: 'Hello, Leo! How are you?', repeat: true },
-      { who: 'leo', line: 'I am happy! What’s your name?', repeat: true },
-      { who: 'pip', line: 'My name is Pip. Goodbye, Leo!', repeat: true },
-      { who: 'leo', line: 'Bye, Pip! See you again!', repeat: true },
-    ],
-  },
-  /* 9 Spinner -> sing a line to the friend */
-  {
-    id: 'wt3-spin-sing', kind: 'spin-wheel', bg: bgL1Class, title: 'Spin and sing!',
-    teacher: 'Have the student spin and sing that friend’s line of the song. If you prefer, do the activity without the spinner.',
-    items: [
-      { label: 'Hi, hi, hi! And hi to you!', left: '23%', top: '50%' },
-      { label: 'What’s your name?', left: '34%', top: '50%' },
-      { label: 'Goodbye, my new friend!', left: '46%', top: '52%' },
-      { label: 'See you again!', left: '63%', top: '52%' },
-      { label: 'How are you?', left: '78%', top: '50%' },
-      { label: 'Hello, hello to you!', left: '50%', top: '14%' },
-    ],
-    wheelAt: { left: '84%', top: '24%' },
-  },
-  /* 10 Teacher asks, child answers (in song lines) */
-  {
-    id: 'wt3-answer', kind: 'join-stage', bg: bgL1Circle, teacher: 'Pip sings a line; the student answers in a whole sentence.', cast: ['pip', 'marigold'],
-    turns: [
-      { who: 'pip', line: 'Hello, hello! How are you?' },
-      { who: 'student', line: 'I am … ! Thank you!' },
-      { who: 'marigold', line: 'What’s your name? What’s your name?' },
-      { who: 'student', line: 'My name is … !' },
-    ],
-  },
-  /* 11 Role swap: the child asks */
-  {
-    id: 'wt3-ask', kind: 'join-stage', bg: bgL1Peers, teacher: 'Now the student sings the questions to Pip and Leo.', cast: ['pip', 'leo'],
-    turns: [
-      { who: 'student', line: 'Hello, Pip! How are you?' },
-      { who: 'pip', line: 'I am happy!' },
-      { who: 'student', line: 'What’s your name?' },
-      { who: 'leo', line: 'My name is Leo!' },
-      { who: 'student', line: 'Goodbye! See you again!' },
-    ],
-  },
-  /* 12 Game break: memory (line <-> picture) */
-  {
-    id: 'wt3-memory', kind: 'memory', bg: bgL1Circle, teacher: 'Memory! Find the pairs and sing each line when you see it.',
-    pairs: [
-      { id: 'hello', label: 'Hello to you!', emoji: '\u{1F44B}' },
-      { id: 'name', label: 'What’s your name?', emoji: '\u{1F3F7}\u{FE0F}' },
-      { id: 'how', label: 'How are you?', emoji: '\u{1F60A}' },
-      { id: 'again', label: 'See you again!', emoji: '\u{1F31F}' },
-    ],
-  },
-  /* 13 Personal production */
-  {
-    id: 'wt3-my-line', kind: 'choice', bg: bgL1Circle, who: 'pip', teacher: 'Any answer is right! The student picks a line and sings it to the teacher, with their own name.',
-    prompt: 'Which line will YOU sing to your teacher?',
-    options: [
-      { label: 'Hello to you!', emoji: '\u{1F44B}', correct: true },
-      { label: 'How are you?', emoji: '\u{1F60A}', correct: true },
-      { label: 'My name is …', emoji: '\u{1F3F7}\u{FE0F}', correct: true },
-      { label: 'See you again!', emoji: '\u{1F31F}', correct: true },
-    ],
-  },
-  /* 14 Phonics micro-moment (review s a t p i n) */
-  {
-    // Universal phonics slide (blueprint slot 14): Blend It! — say each sound, blend, find the picture.
-    id: 'wt3-blend', kind: 'sound-blend', bg: bgL1Reading,
-    teacher: 'Tap each car and say the sound with the student (/s/ /u/ /n/), press Blend!, then find the picture.',
-    rounds: [
-      { word: 'sun', img: '/lep1/items/item-sun.png' },
-      { word: 'hen', img: '/lep1/items/item-hen.png' },
-      { word: 'pig', img: '/lep1/items/item-pig.png' },
-      { word: 'cat', img: '/lep1/items/item-cat.png' },
-    ],
-  },
-  /* 15 Quick-fire recall */
-  {
-    id: 'wt3-quick-fire', kind: 'prea1', teacher: 'Quick fire! Say the line before the ring runs out.',
+    id: 'wt3-count-jump', kind: 'prea1', teacher: 'Brain break: count and move with Pip!',
     scene: {
-      id: 'wt3-quick-fire', kind: 'rapid-recall', bg: bgL1Class, who: 'pip', seconds: 4,
-      teacher: 'Quick fire! Say the line before the ring runs out.',
-      cards: [
-        { img: feelSpr('pip-happy'), word: 'Hello!', say: 'Hello to you!' },
-        { img: spr('mia'), word: 'What’s your name?' },
-        { img: feelSpr('leo-tired'), word: 'How are you?' },
-        { img: spr('bella'), word: 'Goodbye!', say: 'Goodbye, my new friend!' },
+      id: 'wt3-count-jump', kind: 'tpr-actions', mode: 'break', bg: bgL1Circle, who: 'pip', teacher: 'Count and move with Pip!',
+      rounds: [
+        { line: 'Jump and count: one, two, three, four, five!', emoji: '\u{1F998}' },
+        { line: 'Clap and count: six, seven, eight, nine, ten!', emoji: '\u{1F44F}' },
+        { line: 'Stamp and count: eleven, twelve, thirteen, fourteen, fifteen!', emoji: '\u{1F463}' },
+        { line: 'Stretch and count: sixteen, seventeen, eighteen, nineteen, twenty!', emoji: '\u{1F64C}' },
       ],
     },
   },
-  /* 16 Story payoff */
+  /* C — PRACTISE: HOW OLD ARE YOU? */
   {
-    id: 'wt3-story-end', kind: 'cinematic', bg: bgL1Class, title: 'Bravo!', subtitle: 'The concert was great', narrator: 'marigold',
-    script: [
-      { who: 'marigold', line: 'Bravo, everyone! What a great song!' },
-      { who: 'pip', line: 'We sang hello, how are you and goodbye!' },
-      { who: 'marigold', line: 'Now YOU lead the song!' },
-    ],
-    cta: '\u{1F3A4} MY TURN!',
-  },
-  /* 17 Sing-back: the child leads */
-  {
-    // Warm-up: the unit's Hello Song (scripts/songs.json "wt-hello"). Wave on
-    // "hello", point to yourself on "say your name". (First lesson: no Remember? page.)
-    id: 'wt3-sing-back', kind: 'song', bg: bgL1Class, title: '\u{1F3B5} The Hello Song \u{1F3B5}', teacher: 'Sing-back: now the student leads the song and the teacher answers. Wave on hello, point on name!',
-    durationSeconds: 20, bigWord: 'Hello',
-    songUrl: `${W}/audio/hello-song.mp3?v=1`,
-    lineDurationsMs: [3640, 4120, 4320, 7982],
-    lyrics: [
-      { who: 'marigold', text: 'Hello, hello, hello to you!' },
-      { who: 'pip', text: 'Hi, hi, hi! And hi to you!' },
-      { who: 'marigold', text: 'What’s your name? What’s your name?' },
-      { who: 'pip', text: 'Say your name! Say your name!' },
-    ],
-  },
-  /* 18 Reflection */
-  {
-    id: 'wt3-favourite', kind: 'choice', bg: bgL1Circle, who: 'pip', teacher: 'Any answer is right! The student picks a favourite line and sings it once more.',
-    prompt: 'Which line of the song is your favourite?',
-    options: [
-      { label: 'Hello to you!', emoji: '\u{1F44B}', correct: true },
-      { label: 'What’s your name?', emoji: '\u{2753}', correct: true },
-      { label: 'How are you?', emoji: '\u{1F60A}', correct: true },
-      { label: 'See you again!', emoji: '\u{1F31F}', correct: true },
-    ],
-  },
-  /* 19 Sticker  20 Home Mission */
-  {
-    id: 'wt3-sticker', kind: 'prea1', teacher: 'Sticker time! The student opens the pack and puts the singing sticker in their Sticker Book.',
+    id: 'wt3-age-balloons', kind: 'prea1', teacher: 'Guided: tap a friend, count their birthday balloons, then say: Mia is six!',
     scene: {
-      id: 'wt3-sticker', kind: 'sticker-reward', bg: bgL1Class, who: 'pip', teacher: 'Sticker time! The student opens the pack and puts the singing sticker in their Sticker Book.',
-      line: 'You can listen and sing the Greetings Song! Here is your sticker.',
-      sticker: { img: feelSpr('pip-happy'), label: 'Hello to you!' },
+      id: 'wt3-age-balloons', kind: 'age-balloons', bg: '/lep1/scenes/bg-l4-plain-sky.jpg', teacher: 'Tap a friend! Count the balloons, then say: Mia is six!',
+      friends: [{ who: 'mia', age: 6 }, { who: 'leo', age: 7 }, { who: 'pip', age: 8 }, { who: 'bella', age: 9 }],
+    },
+  },
+  {
+    id: 'wt3-age-match', kind: 'prea1', teacher: 'Reading: read each sentence and drag it to the right friend. Then read it aloud.',
+    scene: {
+      id: 'wt3-age-match', kind: 'age-sentence-match', bg: '/lep1/scenes/bg-l4-plain-sky.jpg', teacher: 'Read the sentence and drag it to the friend!',
+      friends: [{ who: 'mia', age: 6 }, { who: 'leo', age: 7 }, { who: 'pip', age: 8 }],
+    },
+  },
+  {
+    id: 'wt3-your-age', kind: 'join-stage', bg: bgL1Circle, teacher: 'Free: Miss Marigold asks — the student answers with their real age, then asks her.', cast: ['marigold', 'pip'],
+    turns: [
+      { who: 'marigold', line: 'Hello! How old are you?' },
+      { who: 'student', line: 'I am … How old are you?' },
+      { who: 'marigold', line: 'I am fifty! Ha ha! How old is Pip?' },
+      { who: 'student', line: 'He is eight!' },
+    ],
+  },
+  /* Reading */
+  {
+    id: 'wt3-reader', kind: 'reader', bg: bgL1Reading, title: 'Leo’s First Day: How old are you?', doneLine: 'Leo is seven and Pip is eight. Next time: Leo’s red cap!',
+    teacher: 'Reading: listen while the words light up, then the student reads Leo’s and Pip’s lines.',
+    pages: [
+      { img: leoStory(3), lines: [{ who: 'pip', text: 'How old are you, Leo?' }, { who: 'leo', text: 'I am seven. How old are you?' }] },
+      { img: leoStory(2), lines: [{ who: 'pip', text: 'I am eight!' }, { who: 'leo', text: 'Eight? Wow!' }] },
+    ],
+  },
+  /* Phonics: the sound → Sound Mole → Blend & Read → tongue twister */
+  {
+    id: 'wt3-sound-t', kind: 'sound-model', bg: bgL1Reading, who: 'leo', letter: 'T', phoneme: '/t/', sound: 't', soundSide: 'center',
+    teacher: 'Present: /t/ — tap your tongue behind your teeth! Ten, two, teddy, top. Find the /t/ words.',
+    anchors: [
+      { word: 'ten', emoji: '\u{1F51F}', img: '/lep1/items/item-ten.png' },
+      { word: 'two', emoji: '2\u{FE0F}\u{20E3}', img: '/lep1/items/item-two.png' },
+      { word: 'teddy', emoji: '\u{1F9F8}', img: '/lep1/items/item-teddy.png' },
+      { word: 'top', emoji: '\u{1F9F8}', img: '/lep1/items/item-top.png' },
+    ],
+  },
+  {
+    id: 'wt3-sound-mole', kind: 'prea1', teacher: 'Guided: Sound Moles! Hear /t/, bonk every mole whose picture starts with /t/ and say it.',
+    scene: {
+      id: 'wt3-sound-mole', kind: 'sound-mole', bg: bgL1Reading, who: 'leo', teacher: 'Hear the sound, then bonk every mole whose picture starts with it!',
+      rounds: [
+        { letter: 't', pictures: [{ word: 'ten', img: '/lep1/items/item-ten.png' }, { word: 'teddy', img: '/lep1/items/item-teddy.png' }, { word: 'top', img: '/lep1/items/item-top.png' }, { word: 'hat', img: '/lep1/items/item-hat.png' }, { word: 'sun', img: '/lep1/items/item-sun.png' }] },
+      ],
+    },
+  },
+  {
+    id: 'wt3-blend', kind: 'sound-blend', bg: bgL1Reading, look: 'gumball',
+    teacher: 'Reading: say each sound, blend, find the picture — then read the age sentence.',
+    rounds: [
+      { word: 'ten', img: '/lep1/items/item-ten.png', sentence: 'I am ten.' },
+      { word: 'top', img: '/lep1/items/item-top.png', sentence: 'The top is red.' },
+      { word: 'two', sounds: ['t', 'oo'], img: '/lep1/items/item-two.png', sentence: 'Two friends say hello.' },
+    ],
+  },
+  { id: 'wt3-twister', kind: 'tongue-twister', look: 'town', speeds: 2, bg: bgL1Reading, who: 'leo', focus: 't', teacher: 'Reading: quick reading! Listen to Leo, then say it slow, then faster.', line: 'Ten tiny teddies.' },
+  /* Free: the birthday interview */
+  {
+    id: 'wt3-interview', kind: 'join-stage', bg: bgL1Party, teacher: 'Free: the student interviews Pip — name and age — then tells the teacher about him.', cast: ['pip', 'marigold'],
+    turns: [
+      { who: 'student', line: 'Hello! What’s your name?' },
+      { who: 'pip', line: 'My name is Pip.' },
+      { who: 'student', line: 'How old are you?' },
+      { who: 'pip', line: 'I am eight!' },
+      { who: 'student', line: 'This is Pip. He is eight.' },
+    ],
+  },
+  { id: 'wt3-i-can', kind: 'meet', focus: ['How old'], bg: bgL1Circle, who: 'marigold', cardSide: 'left', teacher: 'Check: count to 20, then say it and get your passport stamp!', line: 'I can count to twenty. I can ask: How old are you? I am …', repeat: 'How old are you?' },
+  {
+    id: 'wt3-sticker', kind: 'prea1', teacher: 'Sticker time! The student opens the pack and puts the birthday sticker in their Sticker Book.',
+    scene: {
+      id: 'wt3-sticker', kind: 'sticker-reward', bg: bgL1Party, who: 'pip', teacher: 'Sticker time!',
+      line: 'You can count to twenty and say how old you are! Here is your sticker.',
+      sticker: { img: '/lep1/items/item-ten.png', label: 'I can count!' },
     },
   },
   {
     id: 'wt3-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
     scene: {
       id: 'wt3-home-mission', kind: 'home-mission', bg: bgL1Class, who: 'pip',
-      teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
+      teacher: 'Home Mission: read the steps with the student.',
       line: 'Your home mission!',
-      parentNote: 'Today your child listened to and sang the Greetings Song (hello, what’s your name?, how are you?, goodbye). Let them sing it for you and answer their questions.',
+      parentNote: 'Today your child learned the numbers 1-20 and "How old are you? — I am seven." Count to 20 together and let them ask your age.',
       steps: [
-        { emoji: '\u{1F3B5}', say: 'Sing the Greetings Song for your family.' },
-        { emoji: '\u{2753}', say: 'Ask: How are you? What’s your name?' },
-        { emoji: '\u{1F44B}', say: 'Say: See you again!' },
+        { emoji: '\u{1F522}', say: 'Count to twenty with your family.' },
+        { emoji: '\u{2753}', say: 'Ask three people: How old are you?' },
+        { emoji: '\u{1F382}', say: 'Say: I am … (your age!)' },
       ],
     },
   },
-  /* Extra time (blueprint §3b): only if there is time left */
-  { id: 'wt3-twister', kind: 'tongue-twister', bg: bgL1Reading, who: 'pip', focus: 'p|i|n|s|t', teacher: 'Extra time: listen to Pip’s tongue twister. Say it slow, then faster!', line: 'Pip sits. Pip taps. Pip spins a pin!' },
   {
-    id: 'wt3-true-false', kind: 'true-false', bg: bgL1Class, teacher: 'Extra time: listen. Is it true or false? Tap the right answer.',
-    rounds: [
-      { who: 'mia', statement: 'Mia sings: What’s your name?', isTrue: true },
-      { who: 'leo', statement: 'Leo sings: Goodbye, my new friend!', isTrue: false },
-      { who: 'willow', statement: 'Willow sings: See you again!', isTrue: true },
-    ],
+    id: 'wt3-quick-numbers', kind: 'prea1', teacher: 'Extra time (Guided): Number Tap again, faster! Tap 11 to 20 as Pip says them.',
+    scene: { id: 'wt3-quick-numbers', kind: 'numbers-review', bg: bgL1Circle, who: 'mia', from: 11, to: 20, teacher: 'Tap the number Mia says!' },
   },
   {
-    id: 'wt3-dance-break', kind: 'prea1', teacher: 'Extra time: brain break! Dance and freeze with Pip.',
-    scene: {
-      id: 'wt3-dance-break', kind: 'tpr-actions', mode: 'break', bg: '/lep1/scenes/bg-u3l4-room-empty-wide.png', who: 'pip',
-      teacher: 'Extra time: brain break! Dance and freeze with Pip.',
-      rounds: [
-        { line: 'Dance and wave hello!', emoji: '\u{1F44B}' },
-        { line: 'Clap to the song!', emoji: '\u{1F44F}' },
-        { line: 'Jump and sing: hi, hi, hi!', emoji: '\u{1F998}' },
-        { line: 'Freeze!', emoji: '\u{1F9CA}' },
-      ],
-    },
-  },
-  /* 21 Closing routine goodbye  22 Celebration */
-  {
-    id: 'wt3-goodbye-song', kind: 'song', bg: bgExpressGoodbyeW, title: '\u{1F3B5} Welcome Town School Goodbye Song \u{1F3B5}', teacher: 'It’s time to go — wave goodbye and sing along together!',
+    id: 'wt3-goodbye-song', kind: 'song', bg: bgL1Goodbye, title: '\u{1F3B5} Welcome Town School Goodbye Song \u{1F3B5}', teacher: 'It’s time to go — wave goodbye and sing along together!',
     durationSeconds: 20, bigWord: 'Goodbye',
     songUrl: `${W}/audio/goodbye-song.mp3?v=3`,
     lineDurationsMs: [3600, 4120, 4020, 8322],
@@ -1317,7 +1209,7 @@ export const LESSON_3_SCENES: Scene[] = classroomLook([
       { who: 'pip', text: '\u{1F496} Byeeee, friends! See you soon!' },
     ],
   },
-  { id: 'wt3-finale', kind: 'finale', bg: bgL1Class, who: 'pip', line: 'You listened to the Greetings Song, found who sang each line, and sang it yourself! See you again!' },
+  { id: 'wt3-finale', kind: 'finale', bg: bgL1Party, who: 'pip', line: 'You counted to twenty and said how old you are! ✨\u{1F382}' },
 ]);
 
 
