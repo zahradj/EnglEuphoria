@@ -24,6 +24,8 @@ export interface LadderStep {
   plannedTitles: string[];
   /** true when the label is an official CEFR Companion Volume level; A1 Upper and C1 Upper are our own labels */
   officialCefr: boolean;
+  /** which run of show lessons of this step follow: the standard one (RUN_OF_SHOW) or the slower Pre-A1 one (PRE_A1_RUN_OF_SHOW) */
+  runOfShow: 'standard' | 'pre-a1';
 }
 
 /** Seasons per CEFR level in the approved roadmap (src/curriculum/academy/levels). */
@@ -33,7 +35,7 @@ export const SESSIONS_PER_SEASON = 8;
 /** Working titles of the Pre-A1 Seasons (first 3 = Pre-A1 Lite). */
 export const PRE_A1_SEASON_TITLES = ['Hello, letters', 'First sounds', 'Numbers and age', 'My things', 'People and places', 'My day'];
 
-const step = (id: string, label: string, cefr: LadderStep['cefr'], stage: LadderStage, level: AcademyLevel | null, seasons: [number, number] | null, plannedSeasons: number, officialCefr: boolean): LadderStep => ({ id, label, cefr, stage, level, seasons, plannedSeasons, plannedTitles: PRE_A1_SEASON_TITLES.slice(0, level === null ? plannedSeasons : 0), officialCefr });
+const step = (id: string, label: string, cefr: LadderStep['cefr'], stage: LadderStage, level: AcademyLevel | null, seasons: [number, number] | null, plannedSeasons: number, officialCefr: boolean): LadderStep => ({ id, label, cefr, stage, level, seasons, plannedSeasons, plannedTitles: PRE_A1_SEASON_TITLES.slice(0, level === null ? plannedSeasons : 0), officialCefr, runOfShow: stage === 'pre' ? 'pre-a1' : 'standard' });
 
 /**
  * lean (active): Pre-A1 Lite (3 Seasons to write), A1 split into A1 (Seasons 1-6) and A1 Upper (7-10), the other levels unsplit until A1 has real students and data.

@@ -21,6 +21,21 @@ export const PARTS = [
   { name: 'Wrap', goal: 'What you can do now', minutes: 5 },
 ] as const;
 
+/** Pre-A1 run of show (owner 2026-10-12): slower, with reading. Mirrors PRE_A1_RUN_OF_SHOW in src/curriculum/academy/lessonBlueprint.ts (a test keeps them equal). */
+export const PRE_A1_PARTS = [
+  { name: 'Check-in', goal: 'Say hello and see today’s goal', minutes: 5 },
+  { name: 'Remember?', goal: 'Wake up the last two lessons', minutes: 10 },
+  { name: 'The Drop', goal: 'Meet the scene and the new words', minutes: 8 },
+  { name: 'Learn', goal: 'A few new words, then two games', minutes: 10 },
+  { name: 'Read', goal: 'Blend sounds and read a short text', minutes: 8 },
+  { name: 'Learn more', goal: 'A few more words, then two games', minutes: 8 },
+  { name: 'Mission', goal: 'Use it with Theo', minutes: 6 },
+  { name: 'Wrap', goal: 'What you can do now', minutes: 5 },
+] as const;
+/** Which run of show a deck follows: the A1+ one (PARTS) or the slower Pre-A1 one with a Read part. */
+export type RunShape = 'standard' | 'pre-a1';
+export const partsOf = (shape?: RunShape): readonly { name: string; goal: string; minutes: number }[] => (shape === 'pre-a1' ? PRE_A1_PARTS : PARTS);
+
 /** Learner lanes (owner 2026-10-12): the same lesson at three levels. start = pre-A1, core = A1, stretch = post-A1. */
 export type Lane = 'start' | 'core' | 'stretch';
 export const LANES: Lane[] = ['start', 'core', 'stretch'];
@@ -153,15 +168,26 @@ export interface WriteSlide extends SlideBase {
   prompt: string;
   rows: { label: string; frame: string; /** regular expressions (source) tested on the normalised sentence */ accept: string[]; hint: string; sample: string }[];
 }
+/** Blending (Pre-A1): letters slide together into a word (s-a-t → sat). The student drags the slider or taps "Blend it". */
+export interface BlendSlide extends SlideBase { kind: 'blend'; prompt: string; rounds: { letters: string[]; word: string; art?: TeachArt }[] }
+/** Hear and pick (Pre-A1): the guide says a letter name or a word; the student picks it from big tiles. */
+export interface HearPickSlide extends SlideBase { kind: 'hearpick'; prompt: string; rounds: { say: string; options: string[]; answer: string }[] }
+/** Decodable reader page (Pre-A1): short lines with tap-to-hear words; match each line to its picture. */
+export interface ReaderSlide extends SlideBase { kind: 'reader'; prompt: string; lines: { text: string; art: TeachArt }[] }
 export interface WrapSlide extends SlideBase { kind: 'wrap'; heading: string; ticks: string[]; homework: string; clue: string }
 
 export type Slide =
   | TitleSlide | BriefSlide | BadgeSlide | DialSlide | LaneSlide | WhoSaidSlide | LockersSlide | NumTrainSlide | PadlockSlide | ConvoSlide | SpellSlide
-  | MatchSlide | CountUpSlide | BePickSlide | BuildSlide | FactCheckSlide | WriteSlide | HuntSlide | ShadowSlide | TeachSlide | ModelSlide | FindWrongSlide | BorderSlide | MemorySlide | NumWallSlide | PhoneChatSlide | FadeSlide | CardSlide | SaySlide | WrapSlide;
+  | MatchSlide | CountUpSlide | BePickSlide | BuildSlide | FactCheckSlide | WriteSlide | HuntSlide | ShadowSlide | TeachSlide | ModelSlide | FindWrongSlide | BorderSlide | MemorySlide | NumWallSlide | PhoneChatSlide | FadeSlide | CardSlide | SaySlide | WrapSlide | BlendSlide | HearPickSlide | ReaderSlide;
 
 export interface DeckScript {
   lessonId: string;
-  level: 'A1' | 'A2' | 'B1' | 'B2' | 'C1';
+  level: 'Pre-A1' | 'A1' | 'A2' | 'B1' | 'B2' | 'C1';
+  /** which run of show the lesson follows (default: standard) */
+  shape?: RunShape;
+  /** Pre-A1 reading: the letters whose sounds are taught so far and the whole words (sight words) taught; reading pages are tested against them (decodable.ts) */
+  taughtSounds?: string[];
+  sightWords?: string[];
   title: string;
   objective: string;
   criteria: string[];

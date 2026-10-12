@@ -32,7 +32,7 @@ export function openLines(s: Slide): SpokenLine[] {
   switch (s.kind) {
     case 'title': return line('Vee', s.heading);
     case 'brief': return line('Vee', s.say);
-    case 'dial': case 'lane': return line('Vee', s.prompt);
+    case 'dial': case 'lane': case 'blend': case 'hearpick': case 'reader': return line(lead(s), s.prompt);
     case 'say': return line(lead(s), s.prompt);
     case 'wrap': return [...line('Vee', s.heading), ...line('Vee', s.homework), ...line('Vee', s.clue)];
     // game prompts are spoken when the game opens (the guide reads the task aloud)
@@ -64,6 +64,9 @@ export function viewLines(s: Slide): SpokenLine[] {
     case 'bepick': return s.rounds.flatMap((r) => line(lead(s), cap(r.frame.replace('___', r.answer))));
     case 'build': return s.rounds.flatMap((r) => line(lead(s), r.target));
     case 'factcheck': return s.claims.flatMap((c) => line(lead(s), c.text));
+    case 'blend': return s.rounds.flatMap((r) => line('Vee', r.word));
+    case 'hearpick': return s.rounds.flatMap((r) => line('Vee', r.say));
+    case 'reader': return s.lines.flatMap((l) => [...line('Vee', l.text), ...[...new Set(l.text.replace(/[.,!?]/g, '').split(/\s+/))].flatMap((w) => line('Vee', w))]);
     case 'numwall': return [...Array.from({ length: 100 }, (_, i) => i + 1), ...(s.hundreds ? [200, 300, 400, 500, 600, 700, 800, 900] : [])].flatMap((n) => line('Vee', numberWord(n)));
     default: return [];
   }
@@ -73,3 +76,6 @@ export const slideLines = (s: Slide): SpokenLine[] => [...openLines(s), ...viewL
 
 /** The speaker of a convo's questions (the actor who is not the student). */
 export const convoAsker = (s: Extract<Slide, { kind: 'convo' }>): CastName => s.actors?.find((a) => a.who !== s.me)?.who ?? 'Theo';
+
+/** Letter SOUNDS (not names) need careful recordings (policy voice, no "suh"). The text key is "sound <letter>": it has no clip until the owner approves the recordings, so tapping a tile stays silent (never another voice). */
+export const soundKey = (letter: string): string => `sound ${letter.toLowerCase()}`;
