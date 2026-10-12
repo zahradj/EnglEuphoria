@@ -5,8 +5,7 @@ the lesson blueprint or the Playground Library. Tested first: see PR #49.
 
 ## 1. Old Pre-A1 draft rows (database)
 
-71 unpublished rows in `curriculum_lessons` (70 July drafts "U1L1 — …" … "U10L6 — …" + 2 "Seed unit (edit me)"
-— the count is 71 because one of the July titles was never created). Nothing referenced them; the blueprint, the
+71 unpublished rows in `curriculum_lessons`: 69 July drafts ("U1L1 — …" … "U10L6 — …") + 2 "Seed unit (edit me)". Nothing referenced them; the blueprint, the
 Playground Library and the student lesson list never used them (no unit/lesson numbers, not published, wrong source).
 
 - **Step taken:** archived — `ai_metadata.hub` changed from `playground` to `playground-archived`.
