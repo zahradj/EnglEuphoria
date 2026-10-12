@@ -32,6 +32,8 @@ import { HelloDoorsScene } from './scene-components/HelloDoorsScene';
 import { WelcomePartyScene } from './scene-components/WelcomePartyScene';
 import { NameBadgeScene } from './scene-components/NameBadgeScene';
 import { FlipbookScene } from './scene-components/FlipbookScene';
+import { ReaderScene } from './scene-components/ReaderScene';
+import { displayScene } from '../stageLabel';
 import { SongScene } from './scene-components/SongScene';
 import { SoundModelScene } from './scene-components/SoundModelScene';
 import { TraceScene } from './scene-components/TraceScene';
@@ -104,8 +106,8 @@ export function SceneRenderer(props: {
   heartsRemaining: number;
   activitySync?: ActivitySync;
 }) {
-  const { scene } = props;
-  const instruction = (scene as { teacher?: string }).teacher;
+  const instruction = (props.scene as { teacher?: string }).teacher;
+  const scene = displayScene(props.scene);
   const content = (() => {
     switch (scene.kind) {
       case 'title-card': return <TitleCardScene scene={scene} onNext={props.onNext} />;
@@ -126,6 +128,7 @@ export function SceneRenderer(props: {
       case 'hello-doors': return <HelloDoorsScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'welcome-party': return <WelcomePartyScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'name-badge': return <NameBadgeScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
+      case 'reader': return <ReaderScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
       case 'flipbook': return <FlipbookScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'song': return <SongScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
       case 'sound-model': return <SoundModelScene scene={scene} onNext={props.onNext} sync={props.activitySync} />;

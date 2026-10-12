@@ -197,7 +197,7 @@ const castName = (who) => CAST[who]?.name ?? who;
  *  for one scene instance. */
 const UNIT1_EXTRACTORS = {
   // Universal Sound Train (../SoundBlendScene.tsx): the whole word, teacher voice (single sounds are recorded files).
-  'sound-blend': (s) => (s.rounds ?? []).map((r) => ['teacher', r.word]),
+  'sound-blend': (s) => (s.rounds ?? []).flatMap((r) => [['teacher', r.word], ...(r.sentence ? [['teacher', r.sentence], ...r.sentence.split(/\s+/).map((w) => ['teacher', w.replace(/[^A-Za-z'’]/g, '')]).filter(([, w]) => w)] : [])]),
   cinematic: (s) => (s.script ?? []).map((l) => [l.who, l.line]),
   meet: (s) => {
     const out = [[s.who, s.line]];
@@ -736,7 +736,7 @@ const WT_EXTRACTORS = {
   ],
   // welcome-town SentenceBuildScene: says the finished sentence in Pip's voice.
   'sentence-build': (s) => (s.rounds ?? []).map((r) => ['pip', r.words.join(' ')]),
-  'sound-blend': (s) => (s.rounds ?? []).map((r) => ['teacher', r.word]),
+  'sound-blend': (s) => (s.rounds ?? []).flatMap((r) => [['teacher', r.word], ...(r.sentence ? [['teacher', r.sentence], ...r.sentence.split(/\s+/).map((w) => ['teacher', w.replace(/[^A-Za-z'’]/g, '')]).filter(([, w]) => w)] : [])]),
   cinematic: (s) => (s.script ?? []).map((l) => [l.who, l.line]),
   meet: (s) => {
     const out = [[s.who, s.line]];
@@ -781,6 +781,7 @@ const WT_EXTRACTORS = {
   'word-build': (s) => (s.rounds ?? []).map((r) => ['pip', r.word]),
   finale: (s) => (s.line ? [[s.who, s.line]] : []),
   'tongue-twister': (s) => [[s.who, s.line]],
+  reader: (s) => (s.pages ?? []).flatMap((p) => (p.lines ?? []).flatMap((l) => [[l.who ?? 'teacher', l.text], ...l.text.split(/\s+/).map((w) => [l.who ?? 'teacher', w.replace(/[^A-Za-z'’-]/g, '')]).filter(([, w]) => w)])),
   // Verified against welcome-town/SceneRenderer.tsx call sites.
   // FeelingsSurveyScene.tsx: intro, "How are you, <name>?" + "<name> is <feeling>!" (host), "I am <feeling>!" (friend).
   'chat-chain': (s) => [[s.partner, s.intro], ...(s.turns ?? []).map((t) => [t.who === 'student' ? 'pip' : t.who, t.line])],

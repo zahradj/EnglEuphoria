@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { displayScene } from '../stageLabel';
 import type { Scene } from './scenes';
 import { type ActivitySync } from '../sceneActivitySync';
 import { SpinWheelScene } from '../SpinWheelScene';
@@ -256,9 +257,10 @@ export function SceneRenderer(props: {
   roomId?: string;
   activityUnlocked?: boolean;
 }) {
-  const { scene, lessonNumber } = props;
+  const { lessonNumber } = props;
+  const scene = displayScene(props.scene);
   const teacherTip = lessonNumber === 3 ? L3_TEACHER_TIPS[scene.id] : undefined;
-  const instruction = (scene as { teacher?: string }).teacher;
+  const instruction = (props.scene as { teacher?: string }).teacher;
   const tipOverlay = (instruction || teacherTip) ? <TeacherTip key={scene.id} instruction={instruction} tip={teacherTip} /> : null;
   const content = (() => {
   switch (scene.kind) {

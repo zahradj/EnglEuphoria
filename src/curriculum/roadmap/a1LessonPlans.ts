@@ -61,20 +61,22 @@ export const A1_LESSON_PLANS: A1LessonPlan[] = [
     signatureGame: 'Feelings Survey (A1): ask 4 friends, report one', evidence: 'The child asks 4 friends "How are you?" and reports one ("She is tired."); reads pages 4-5.',
     funHook: 'Situations make the feeling ("I have no lunch!" → hungry); a claw grabs the friend who is tired.', homeMission: 'Ask three people "How are you?" and draw their faces.',
   }),
-  p(1, 3, 'Listen to the Welcome Song', {
-    objective: 'I can understand the Welcome Song and the questions in it, answer them, sing it and read its lines.',
-    grammarFocus: ['What\'s your name?', 'How are you?'], newVocabulary: [], reviewTargets: ['hello', 'goodbye', 'fine', 'happy', 'sad'],
-    phonicsFocus: ['c / r: cap, cat, red → "Leo\'s cap is red."', 'twister: Red cap, red cap, red cap!'],
-    communicationGoal: 'Understand greeting questions when I hear them and answer them.',
-    signatureGame: 'Question → Answer Stepping Stones + Listen & Colour (Cambridge Starters)', evidence: 'The child answers 4 questions heard in the song in full sentences and reads two song lines aloud.',
-    funHook: 'The friends make a song for Leo; the child writes a new verse with their own name.', homeMission: 'Sing the Welcome Song to your family and ask them its questions.',
+  p(1, 3, 'How Old Are You? Numbers 1-20', {
+    // Owner 2026-10-12: "add numbers from 1 to 20 … as far as the students say their age … start with modeling, then
+    // memorising the numbers, then the practice in which they practise how old they are."
+    objective: 'I can count and say the numbers 1-20, ask "How old are you?" and say my age: "I am seven."',
+    grammarFocus: ['How old are you? I am…', 'He / She is + number'], newVocabulary: ['eleven … twenty', 'How old are you?', 'birthday'],
+    reviewTargets: ['numbers 1-10', 'He is / She is…', 'What\'s your name?'], phonicsFocus: ['number words: six, ten → "Bella is six." / "I am ten."', 'twister: Six silly snakes.'],
+    communicationGoal: 'Ask and tell age, the second personal question after the name (Cambridge Starters Speaking Part 4).',
+    signatureGame: 'Birthday Balloons + Number Stepping Stones (model → memorise → age practice)', evidence: 'The child says 1-20 in order and 5 random numbers, answers "How old are you?" in a full sentence and asks two friends.',
+    funHook: 'Birthday buzzer: guess each friend\'s age; the child interviews Pip.', homeMission: 'Ask three family members "How old are you?" and count to 20 with them.',
   }),
   p(1, 4, 'This Is My Friend!', {
     objective: 'I can introduce a friend — "This is my friend Leo." — answer "Nice to meet you!" and hold a 6-line conversation.',
     grammarFocus: ['This is my friend…', 'Nice to meet you (too)'], newVocabulary: ['friend', 'nice to meet you', 'come in'],
     reviewTargets: ['How are you?', 'He is / She is…', 'My name is…'], phonicsFocus: ['f / short u: fun, run, sun → "Come on! It is fun!"', 'sight words: this, friend, nice, meet', 'twister: Fun Fred finds a frog.'],
     communicationGoal: 'Introduce a friend to someone new and have a short conversation.',
-    signatureGame: 'Guess My Friend (secret-card): ask, find, introduce', evidence: 'The child introduces two friends and holds a 6-line conversation with the teacher; reads pages 6-8.',
+    signatureGame: 'Guess My Friend (secret-card): ask, find, introduce; Welcome Song', evidence: 'The child introduces two friends and holds a 6-line conversation with the teacher; reads pages 6-8.',
     funHook: 'The child is the expert: Pip introduces the wrong friend and the child corrects him; Willow\'s red hat surprise.', homeMission: 'Introduce a family member to a toy: "This is my mum."',
   }),
   p(1, 5, 'Storybook: Leo\'s First Day', {

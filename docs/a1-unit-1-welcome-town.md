@@ -25,7 +25,7 @@ harder as we go to the last unit."*
 ## 2. Unit objective
 
 **By the end of Unit 1 the child can meet someone new in English — say hello, say and ask names, ask and answer
-"How are you?", introduce a friend and say goodbye — and READ ALOUD the short story *Leo's First Day* (11 pages, about
+"How are you?" and "How old are you?" (numbers 1-20), introduce a friend and say goodbye — and READ ALOUD the short story *Leo's First Day* (11 pages, about
 25 sentences built from those same lines).**
 
 > *"Hello! My name is Pip. What's your name?" — "Hi, Pip! My name is Leo." — "How are you, Leo?" — "I am sad. My red cap
@@ -68,12 +68,13 @@ Sources: [Cambridge Starters — test format](https://www.cambridgeenglish.org/e
 | | New in Unit 1 | Recycled from Pre-A1 |
 |---|---|---|
 | Greetings | hello, hi, goodbye, see you tomorrow, nice to meet you, thank you | hello, goodbye |
-| Questions | What's your name? · How are you? | What's this? |
-| Answers | My name is… / I'm… · I am fine / happy / sad / tired / hungry · This is my friend… | I am happy · He / She is… |
+| Questions | What's your name? · How are you? · How old are you? | What's this? |
+| Answers | My name is… / I'm… · I am fine / happy / sad / tired / hungry · I am seven. · This is my friend… | I am happy · He / She is… |
+| Numbers | 11-20 (eleven … twenty) | 1-10 (Pre-A1) |
 | Story words | new, lost, cap, find, look, now, friends | red, cat, happy, sad |
 | **Sight words to read** (3-4 per lesson) | L1 *I, my, name, is* · L2 *how, are, you, am* · L4 *this, friend, nice, meet* · L5 *the, look, now, see* | — |
-| **Blending (from the story)** | L1 h: *hi, hop, hat* · L2 short a: *sad, mad, had* · L3 c / r: *cap, cat, red* · L4 f / short u: *fun, run, sun* · L5 a whole sentence, word by word | s a t p i n (Pre-A1) |
-| **Tongue twisters** (level 1 of the A1 ladder) | L1 *Happy Hen hops.* · L2 *Sad Sam sits.* · L3 *Red cap, red cap, red cap!* · L4 *Fun Fred finds a frog.* · L6 all four, faster | — |
+| **Blending (from the story)** | L1 h: *hi, hop, hat* · L2 short a: *sad, mad, had* · L3 number words: *six, ten* · L4 f / short u: *fun, run, sun* · L5 a whole sentence, word by word | s a t p i n (Pre-A1) |
+| **Tongue twisters** (level 1 of the A1 ladder) | L1 *Happy Hen hops.* · L2 *Sad Sam sits.* · L3 *Six silly snakes.* · L4 *Fun Fred finds a frog.* · L6 all four, faster | — |
 
 ## 4. The reading strand — *Leo's First Day* (one story, read a bit more each lesson)
 
@@ -163,30 +164,41 @@ Stages: **P** present · **G** guided practice · **F** free practice · **R** r
 | 17-20 | Check page · sticker + stamp · home mission (ask 3 people *How are you?*, draw their faces) · goodbye song · finale | | | |
 | X | Extra time: **He / She / They sort** (pronoun-sort) | | | G |
 
-### 5.3 Lesson 3 — The Welcome Song (listening lesson)
+### 5.3 Lesson 3 — How Old Are You? Numbers 1-20 (changed 2026-10-12, owner: "add numbers from 1 to 20 … as far as the
+students say their age … first start with modeling, then the practice with memorising the numbers, then the practice
+in which they practise how old they are")
 
-**New objective (replaces "say who sings each line"):** *I can understand the Welcome Song and the questions in it, answer them, sing it, and read its lines.*
-**Evidence:** the child answers 4 questions heard in the song in full sentences, and reads two song lines aloud.
+**Objective:** *I can count and say the numbers 1-20, ask "How old are you?" and say my age: "I am seven."*
+**Evidence:** the child says 1-20 in order and 5 random numbers, answers *How old are you?* with a full sentence and asks
+two friends their age (Cambridge Starters Speaking Part 4 personal question).
 
 | # | Page | What the child does | Why | Stage |
 |---|---|---|---|---|
 | 1 | Title | | | |
-| 2 | Remember? | faces of L2 → the child says *She is happy!* | recall | G |
-| 3 | Story hook: the friends make a song for Leo | watch, listen | why we listen | P |
-| 4 | Song lines (vocab-spot on the song picture) | tap each line, hear, repeat | the song's language | P |
-| 5 | The Welcome Song (karaoke) | sing, actions | listening for gist | G |
-| 6 | **Listen & Colour** (Cambridge Starters Listening Part 5) | *"Colour Leo's cap red. Colour Mia's hat yellow."* | listening for detail | G |
-| 7 | **Question → Answer Stepping Stones** | hear the song's question (*How are you?*) → jump on the stone with the right answer (*I am fine!*) → say it | understand the questions | G |
-| 8 | **Yes or No?** (true-false, a picture of the song) | *"Pip is sad." — No!* | Cambridge yes/no listening | G |
-| 9 | **Build the Song Line** (sentence-build) | drag words into *How are you today?* then sing it | read + order the lines | R |
-| 10 | Your turn to sing the questions | the child sings the questions; the teacher answers (role swap) | ask in a fun frame | F |
-| 11 | Brain break: song actions | | | — |
-| 12 | **Reader: the song as a lyric book** | read-along, then the child reads 2 lines | read song lines | R |
-| 13 | **Blend & Read: c / r** | *c-a-p cap, c-a-t cat, r-e-d red* → *"Leo's cap is red."* | phonics → sentence (story word) | R |
-| 14 | Tongue twister: *Red cap, red cap, red cap!* | 2 speeds | quick reading | R |
-| 15 | Make a new verse (free) | the child puts their own name and feeling into the song line: *Hello, (Sara), how are you? I am happy!* | personal sentence | F |
-| 16-19 | Check · sticker + stamp · home mission (sing the song to the family, ask them the questions) · goodbye song · finale | | | |
-| X | Extra time: **Tile Reveal** (who is in the picture? *It's Bella!*) | | | G |
+| 2 | Remember? | feelings faces of L2 → *She is happy!* | recall | G |
+| **A** | **MODELING** | | | |
+| 3 | Numbers 1-10 (count-along) | hear each number, see the dots and the fingers, say it | the numbers 1-10 (review from Pre-A1) | P |
+| 4 | Numbers 11-20 (count-along) | *eleven, twelve, thirteen… twenty* — the "-teen" ending stretched and clapped | the new numbers 11-20 | P |
+| 5 | Sentence page: *How old are you? — I am seven.* (Leo with 7 candles) | hear, repeat with fingers | the question + the answer | P |
+| 6 | Echo: *How old are you?* | rising voice | pronounce the question | G |
+| **B** | **MEMORISE THE NUMBERS** | | | |
+| 7 | **Number Balloons** (count-balloons) | *Pop number 14!* — pop the balloon, say the number | hear → recognise 1-20 | G |
+| 8 | **Number Stepping Stones** | cross the river on the stones in order 11 → 20, saying each one; one stone is missing — say it | order + recall | G |
+| 9 | Counting song (lesson song, after the words + a first game) | count and clap to 20 | memorise with rhythm | G |
+| **C** | **PRACTISE: HOW OLD ARE YOU?** | | | |
+| 10 | **Birthday Balloons** (age-balloons) | *Mia is six!* — pop the balloon with her age, say *She is six.* | ages by listening | G |
+| 11 | **Age Match** (age-sentence-match) | read *I am eight.* → match the cake with 8 candles | read the age sentence | R |
+| 12 | **Birthday Buzzer** (buzzer-show) | *How old is Willow?* → press her age, say *She is nine!* | understand the question about someone | G |
+| 13 | Your turn (join-stage) | Miss Marigold asks *How old are you?* — the child answers, then ASKS her | answer + ask | F |
+| 14 | Brain break: count and jump to 20 | | | — |
+| 15 | **Reader: Leo's age** (story pages 2-3 + new lines) | *How old are you, Leo? — I am seven. How old are you? — I am eight!* | read the age dialogue | R |
+| 16 | **Blend & Read: number words** | *s-i-x six, t-e-n ten* → *"Bella is six."* / *"I am ten."* | phonics → sentence (numbers are decodable!) | R |
+| 17 | Tongue twister: *Six silly snakes.* | 2 speeds | quick reading | R |
+| 18 | Birthday interview (free) | the child asks the teacher and Pip *What's your name? How old are you?* and introduces one: *This is Pip. He is eight.* | free practice | F |
+| 19-22 | Check · sticker + stamp · home mission (ask 3 family members their age, count to 20 with them) · goodbye song · finale | | | |
+| X | Extra time: **Quick Fire numbers** (flash a number, say it before the ring ends) | | | G |
+
+The Welcome Song moves to L4 as its lesson song (greeting questions + *How old are you?*).
 
 ### 5.4 Lesson 4 — This Is My Friend! (speaking lesson, the child is the expert)
 
@@ -250,7 +262,7 @@ Stages: **P** present · **G** guided practice · **F** free practice · **R** r
 | 4 | **Memory: question ↔ answer** | find *How are you?* + *I am fine.*, read both | read + match Q/A | R |
 | 5 | **Catch the answer** (dash) | run through the gate with the right answer to the question | fast comprehension | G |
 | 6 | Song medley (Hello + Welcome + Goodbye) | | | G |
-| 7 | **Sight-word Splat** (quick-fire reading) | the sight words flash, the child reads them fast | reading speed | R |
+| 7 | **Sight-word Splat** (sound-pop style: splat the word you hear) | the sight words float, the child splats the one they hear and reads it | reading speed | R |
 | 8 | **Twister Race** | all four twisters, slow → normal → fast | quick reading | R |
 | 9 | **Read & Do** | read *"Give Leo the red cap."* / *"Wave goodbye to Mia."* and do it in the picture | read and understand | R |
 | 10 | **Feelings Dice** | roll a feeling, say *I am…*, then ask the teacher *How are you?* | free talk | F |
@@ -287,11 +299,12 @@ Stages: **P** present · **G** guided practice · **F** free practice · **R** r
 | Feelings Survey ★ | L2 |
 | Read & Drag (drag-match) | L2 |
 | He / She / They sort | L2 extra |
-| Listen & Colour | L3 |
-| Q → A Stepping Stones | L3 |
-| Yes or No? (true-false) | L3 |
-| Build the Song Line (sentence-build) | L3 |
-| Tile Reveal | L3 extra |
+| Number Balloons (count-balloons) | L3 |
+| Number Stepping Stones | L3 |
+| Birthday Balloons (age-balloons) | L3 |
+| Age Match (age-sentence-match) | L3 |
+| Birthday Buzzer (buzzer-show) | L3 |
+| Quick Fire numbers (rapid-recall) | L3 extra |
 | Knock, Knock! | L4 |
 | Chat Chain | L4 |
 | Guess My Friend ★ (secret-card) | L4 |
@@ -303,7 +316,7 @@ Stages: **P** present · **G** guided practice · **F** free practice · **R** r
 | Word Board ★ | L6 |
 | Memory (question ↔ answer) | L6 |
 | Catch the answer (dash) | L6 |
-| Sight-word Splat (quick fire) | L6 |
+| Sight-word Splat | L6 |
 | Read & Do ★ new | L6 |
 | Feelings Dice | L6 |
 | Racing (boss warm-up) ★ new | L7 |
@@ -349,4 +362,4 @@ Units 8-10: 3× fast, beat your own time).
 
 Nothing above uses a paid video; the song files we already have are kept.
 
-**Approval:** _(waiting for the owner)_
+**Approval:** owner, 2026-10-12: "yes"
