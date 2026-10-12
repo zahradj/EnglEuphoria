@@ -368,5 +368,10 @@
     "path": "public/lep1/audio/run-jump-walk-song-u10l1.mp3",
     "bytes": 321037,
     "sha256": "0db0951dae8666d614c05866051d6e5c86f80f9a92676bf75421620a350b96e2"
+  },
+  "u10l2-swim-dance-sing": {
+    "path": "public/lep1/audio/swim-dance-sing-song-u10l2.mp3",
+    "bytes": 321037,
+    "sha256": "ffd513768e7caa67a1a5cf5ee79e158b4add4d5d6ab632a3a7a9a5e38bb6641e"
   }
 }
