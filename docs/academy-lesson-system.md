@@ -49,6 +49,10 @@ Lessons use only the **Academy characters from the cast vault** (`cast_vault_cha
 
 Inside every Season each lesson **adds to everything before it**: lesson 1 teaches something; lesson 2 = lesson 1 + lesson 2; lesson 3 = lessons 1 and 2 + lesson 3; and so on up to the Finale, which integrates all seven earlier lessons with no new language. Practically: Remember? revisits every earlier lesson of the unit (not only the last), the Mission and the Release must use language from all earlier lessons, and input texts use at least 95 % words already met. It is written into every lesson blueprint as `buildsOn` (earlier lesson ids, items known before and after, structures known before and after, the stack label, what must be reused) and enforced by `lessonBlueprint.test.ts`.
 
+### 2.1c Vocabulary rule (owner rule, 2026-10-12)
+
+After **every** vocabulary introduction (each teach page set) the student plays **two different memorising games** before anything new is taught: e.g. a drag-match and a flip-memory with pictures, or a number game (Locker Pop, Number Train) and a flip-memory. It is `VOCAB_GAMES_RULE` / `vocabGames` in `lessonBlueprint.ts`, a `mustHave` line of The Drop and of Notice & Build, and a player test. Budget about 2 minutes per word set; if a lesson then no longer fits the hour, split the lesson (fewer word sets each) instead of dropping the games.
+
 ### 2.2 Spiral across Seasons
 
 - **Recycle:** each Season's E1 re-uses ~30 % of words from the previous two Seasons, so every target word meets ≥ 8–10 varied encounters across skills [K/RT]. 20–30 % new language per lesson [RT, from research].
