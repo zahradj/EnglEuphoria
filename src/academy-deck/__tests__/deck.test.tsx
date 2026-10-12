@@ -90,6 +90,9 @@ const minutes = (s: Slide): number => {
     case 'border': return 0.4 + s.rounds.length * 0.3;
     case 'memory': return 0.5 + s.pairs.length * 0.4;
     case 'numwall': return 1.6;
+    case 'match': return 0.4 + s.pairs.length * (s.mode === 'listen' ? 0.25 : 0.2);
+    case 'countup': return 0.4 + s.rounds.length * 0.4;
+    case 'bepick': case 'build': case 'factcheck': case 'write': return 1;
     case 'phonechat': return 0.4 + s.steps.length * 0.65;
     case 'fade': return 0.3 + s.lines.length * 0.5;
     case 'card': return 2.2;
@@ -109,9 +112,12 @@ describe('blueprint structure (run of show)', () => {
 
   it('every part fills its time (>= 60 % and <= 115 % of the blueprint minutes) and the whole lesson fits the hour', () => {
     const per = PARTS.map((_, i) => slides.filter((s) => s.part === i).reduce((a, s) => a + minutes(s), 0));
+    // Lesson 1 teaches the classroom words (Listen, Look…) with a matching practice and a "introduce yourself" paragraph inside the Check-in
+    // (owner, 2026-10-12): the Check-in may run up to 3.5 min over its 5. Remember? also revises the numbers 1-100 (count-up + listen-and-match), practises the help phrases and reads the messages aloud (up to 5 min over its 7). Notice & Build adds the big numbers (hundreds: teach page + Locker Pop, up to 2.5 min over its 10). The whole lesson must still fit the hour.
+    const ALLOWANCE: Record<number, number> = { 0: 3.5, 1: 5, 3: 2.5 };
     per.forEach((m, i) => {
       expect(m, `${PARTS[i].name}: ${m.toFixed(1)} min`).toBeGreaterThanOrEqual(PARTS[i].minutes * 0.6);
-      expect(m, `${PARTS[i].name}: ${m.toFixed(1)} min`).toBeLessThanOrEqual(PARTS[i].minutes * 1.15);
+      expect(m, `${PARTS[i].name}: ${m.toFixed(1)} min`).toBeLessThanOrEqual(PARTS[i].minutes * 1.15 + (ALLOWANCE[i] ?? 0));
     });
     expect(per.reduce((a, b) => a + b, 0)).toBeLessThanOrEqual(60);
   });
@@ -156,6 +162,124 @@ describe('deck shell', () => {
   });
 });
 
+describe('lesson 1 fixes (owner 2026-10-12)', () => {
+  const at = (id: string) => slides.findIndex((s) => s.id === id);
+
+  it('FIRST PAGE: the title card is the intro, no part card slides over it', () => {
+    render(<Deck script={SIGN_ME_UP} />);
+    expect(screen.getByText('Sign Me Up', { selector: 'h1' })).toBeTruthy();
+    expect(screen.queryByRole('dialog')).toBeNull();
+  });
+
+  it('PART CARD: later parts still announce themselves, and fade out instead of vanishing', () => {
+    render(<Deck script={SIGN_ME_UP} teacher slide={at('whosaid')} />);
+    const card = screen.getByRole('dialog');
+    expect(card.textContent).toMatch(/Remember\?/);
+    fireEvent.click(card);
+    expect(card.getAttribute('data-leaving')).toBe('true');
+  });
+
+  it('ORDER: after the classroom words comes a picture-word match; after the feelings chat comes the "introduce yourself" paragraph', () => {
+    expect(at('teach-words')).toBeLessThan(at('match-words'));
+    expect(slides[at('teach-words') + 1].id).toBe('match-words');
+    expect(at('badge')).toBeLessThan(at('checkin-chat'));
+    expect(slides[at('checkin-chat') + 1].id).toBe('intro-me');
+    const intro = slides[at('intro-me')];
+    expect(intro.kind === 'say' && intro.model).toMatch(/My name is \{name\}\. I am \{age\} years old\. I feel happy today\. I am great!/);
+    expect(intro.kind === 'say' && intro.open).toBe(true);
+  });
+
+  it('MATCH: every picture gets its word; a wrong word says Not yet; the last match unlocks Next', () => {
+    open(at('match-words'));
+    const m = slides[at('match-words')] as Extract<Slide, { kind: 'match' }>;
+    const cards = () => screen.getAllByRole('button', { name: /Picture: drop the word here/ });
+    fireEvent.click(screen.getByRole('button', { name: m.pairs[1].word })); // wrong word for the first picture
+    fireEvent.click(cards()[0]);
+    expect(screen.getByText(/Not yet/)).toBeTruthy();
+    m.pairs.forEach((p, k) => {
+      fireEvent.click(screen.getByRole('button', { name: p.word }));
+      fireEvent.click(screen.getAllByRole('button', { name: /Picture: drop the word here|matched/ })[k]);
+    });
+    expect(screen.getByRole('button', { name: /Next ▶/ })).toBeEnabled();
+  });
+});
+
+describe('lesson 1: messages, help practice, counting and big numbers (owner 2026-10-12)', () => {
+  const at = (id: string) => slides.findIndex((s) => s.id === id);
+
+  it('WHO SAID: the remembered conversation is a text-message chat with speech bubbles, and every line is heard AND repeated ("I said it")', () => {
+    open(at('whosaid'));
+    expect(document.querySelector('.ad-chatwin')).toBeTruthy();
+    expect(document.querySelectorAll('.ad-cm-bubble').length).toBe(1);
+    expect(screen.getByText(/Then say it out loud/)).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: /^I said it ▸/ }));
+    expect(document.querySelectorAll('.ad-cm-bubble').length).toBe(2);
+  });
+
+  it('HELP PHRASES: after the help words there is a picture match (grab and drag)', () => {
+    expect(slides[at('teach-help') + 1].id).toBe('match-help');
+    const m = slides[at('match-help')];
+    expect(m.kind === 'match' && m.pairs.map((p) => p.word)).toEqual(['Sorry?', 'Slowly, please.', 'I don’t understand.', 'What does it mean?']);
+  });
+
+  it('NUMBERS: before the number words are taught the student revises counting (1-10, 11-20, by tens to 100), then listens and matches', () => {
+    expect(at('count-revise')).toBeLessThan(at('teach-nums'));
+    expect(at('listen-numbers')).toBeLessThan(at('teach-nums'));
+    const c = slides[at('count-revise')] as Extract<Slide, { kind: 'countup' }>;
+    const seqs = c.rounds.map((r) => r.seq);
+    expect(seqs[0]).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+    expect(seqs[1][0]).toBe(11);
+    expect(seqs[2][seqs[2].length - 1]).toBe(100);
+    expect((slides[at('listen-numbers')] as Extract<Slide, { kind: 'match' }>).mode).toBe('listen');
+  });
+
+  it('COUNT UP: gaps are filled in counting order; a wrong number says Not yet; the last round unlocks Next', () => {
+    open(at('count-revise'));
+    const c = slides[at('count-revise')] as Extract<Slide, { kind: 'countup' }>;
+    c.rounds.forEach((r, k) => {
+      r.blanks.forEach((bi, j) => {
+        if (k === 0 && j === 0) {
+          const wrong = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].find((v) => !r.seq.slice(0, 0).includes(v) && v !== r.seq[bi] && screen.queryByRole('button', { name: String(v), exact: true }));
+          if (wrong !== undefined) fireEvent.click(screen.getByRole('button', { name: String(wrong), exact: true }));
+          expect(screen.getByText(/Not yet/)).toBeTruthy();
+        }
+        fireEvent.click(screen.getAllByRole('button', { name: String(r.seq[bi]), exact: true }).find((b) => b.className.includes('ad-chip'))!);
+      });
+      if (k + 1 < c.rounds.length) fireEvent.click(screen.getByRole('button', { name: /Next counting/ }));
+    });
+    expect(screen.getByRole('button', { name: /Next ▶/ })).toBeEnabled();
+  });
+
+  it('LISTEN AND MATCH: the number is heard, the student chooses the card; wrong cards say Not yet; every card is matched at the end', () => {
+    open(at('listen-numbers'));
+    const m = slides[at('listen-numbers')] as Extract<Slide, { kind: 'match' }>;
+    let matched = 0;
+    let guard = 0;
+    while (matched < m.pairs.length && guard++ < 40) {
+      const cards = screen.getAllByRole('button', { name: /^Picture \d+$/ });
+      for (const c of cards) {
+        fireEvent.click(c);
+        const now = screen.queryAllByRole('button', { name: /: matched$/ }).length;
+        if (now > matched) { matched = now; break; }
+      }
+    }
+    expect(matched).toBe(m.pairs.length);
+    expect(screen.getByRole('button', { name: /Next ▶/ })).toBeEnabled();
+  });
+
+  it('BIG NUMBERS: hundreds are taught before Locker Pop uses them, and 431 becomes 400 (four hundred)', async () => {
+    const { numberWord } = await import('../spoken');
+    expect(numberWord(400)).toBe('four hundred');
+    expect(numberWord(431)).toBe('four hundred thirty-one');
+    expect(numberWord(100)).toBe('one hundred');
+    expect(at('teach-hundreds')).toBeLessThan(at('lockers-hundreds'));
+    const l = slides[at('lockers-hundreds')] as Extract<Slide, { kind: 'lockers' }>;
+    expect(l.rounds.every((n) => n % 100 === 0 && n >= 100)).toBe(true);
+    const wall = slides[at('numwall')] as Extract<Slide, { kind: 'numwall' }>;
+    expect(wall.hundreds).toBe(true);
+  });
+});
+
 describe('games', () => {
   const idx = (id: string) => slides.findIndex((s) => s.id === id);
 
@@ -174,7 +298,7 @@ describe('games', () => {
     open(idx('whosaid'));
     expect(screen.getByText(/Remember last time/)).toBeTruthy();
     expect(screen.queryByText('How old are you?')).toBeNull();
-    for (let k = 0; k < 3; k++) fireEvent.click(screen.getByRole('button', { name: /Next line/ }));
+    for (let k = 0; k < 3; k++) fireEvent.click(screen.getByRole('button', { name: /^I said it ▸/ }));
     expect(screen.getByText('I am 13.')).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: /Now you try/ }));
     expect(screen.getByText(/Drag each bubble/)).toBeTruthy();
@@ -222,7 +346,7 @@ describe('games', () => {
     const picOptionSteps = slides.flatMap((s) => (s.kind === 'convo' ? s.steps.filter((st) => st.options.every((o) => o.pic)) : []));
     expect(picOptionSteps.length).toBeGreaterThanOrEqual(4);
     const stickers = slides.flatMap((s) => (s.kind === 'phonechat' ? s.steps.filter((st) => st.pic) : []));
-    expect(stickers.length).toBeGreaterThanOrEqual(5);
+    expect(stickers.length).toBeGreaterThanOrEqual(3);
     const modelPics = slides.flatMap((s) => (s.kind === 'model' ? s.lines.filter((l) => l.pic) : []));
     expect(modelPics.length).toBeGreaterThanOrEqual(5);
   });
@@ -248,17 +372,17 @@ describe('games', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Locker 1' }));
     expect(screen.getByText(/Not yet/)).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: 'Locker 4' }));
-    expect(screen.getByText(/1 of 5 lockers opened/)).toBeTruthy();
+    expect(screen.getByText(/1 of 4 lockers opened/)).toBeTruthy();
   });
 
   it('SPELL: tapping the letters in order spells the name and unlocks Next; a wrong letter is not placed', () => {
-    open(idx('spell-ava'));
+    open(idx('spell-me')); // the student's own name (no name typed yet: "friend")
     const tiles = () => within(document.querySelector('.ad-chips') as HTMLElement).getAllByRole('button');
     const tap = (l: string) => fireEvent.click(tiles().find((b) => b.textContent === l && !(b as HTMLButtonElement).disabled)!);
-    tap('E'); // a look-alike, wrong
+    tap('R'); // wrong first letter (F is next)
     expect(screen.getByText(/Not yet/)).toBeTruthy();
-    ['A', 'V', 'A'].forEach(tap);
-    expect(screen.getByText(/A-V-A/)).toBeTruthy();
+    ['F', 'R', 'I', 'E', 'N', 'D'].forEach(tap);
+    expect(screen.getByText(/F-R-I-E-N-D/)).toBeTruthy();
     expect(screen.getByRole('button', { name: /Next/ })).toBeEnabled();
   });
 

@@ -42,6 +42,15 @@ export function NumWallView({ slide }: { slide: NumWallSlide }) {
           ))}
         </div>
       </div>
+      {slide.hundreds && (
+        <div className="ad-wall-hundreds" role="group" aria-label="Hundreds">
+          <b>Big numbers:</b>
+          {[200, 300, 400, 500, 600, 700, 800, 900].map((n) => (
+            <button key={n} type="button" className="ad-wall-cell ad-wall-hun" data-now={cur === n} onClick={() => { setCur(n); void speak('Vee', numberWord(n)); }} aria-label={`${n}, ${numberWord(n)}`}>{n}</button>
+          ))}
+          {cur !== null && cur >= 200 && <span className="ad-wall-rule">{cur / 100} × 100 → {numberWord(cur)}</span>}
+        </div>
+      )}
       <p className="ad-hint-line">{seen.length >= need ? <><Icon name="check" /> You explored {seen.length} numbers. Tap more if you like!</> : `Tap ${need - seen.length} more number${need - seen.length === 1 ? '' : 's'} to continue (${seen.length}/${need}).`}</p>
     </Panel>
   );

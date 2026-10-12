@@ -93,6 +93,8 @@ describe('Pattern Lab: variety, alignment, time', () => {
       case 'factcheck': return 0.4 + s.claims.length * 0.35;
       case 'write': return 1 + s.rows.length * 0.9;
       case 'wrap': return 3.2;
+      case 'match': return 0.4 + s.pairs.length * 0.2;
+      case 'countup': return 0.4 + s.rounds.length * 0.4;
       default: return 1;
     }
   };

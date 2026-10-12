@@ -94,7 +94,7 @@ export interface HuntSlide extends SlideBase {
 /** Shadow match (homework): a dark silhouette of a picture; pick the right word. */
 export interface ShadowSlide extends SlideBase { kind: 'shadow'; prompt: string; rounds: { art: TeachArt; answer: string; options: string[] }[] }
 export interface BorderSlide extends SlideBase { kind: 'border'; prompt: string; /** nationality word -> flag code: each passport shows its flag */ flags?: Record<string, string>; rounds: { flag: string; says: string; answer: string; options: string[] }[]; stamp?: string }
-export interface NumWallSlide extends SlideBase { kind: 'numwall'; title: string; /** how many different numbers the student must tap (default 8) */ need?: number }
+export interface NumWallSlide extends SlideBase { kind: 'numwall'; title: string; /** also show 200, 300 … 900 under the chart */ hundreds?: boolean; /** how many different numbers the student must tap (default 8) */ need?: number }
 export interface MemorySlide extends SlideBase { kind: 'memory'; prompt: string; pairs: { flag: string; text: string }[] }
 export interface PhoneChatSlide extends SlideBase { kind: 'phonechat'; prompt: string; contact: CastName; steps: { text: string; /** a sticker picture beside the message */ pic?: TeachArt; reply: string; extra?: string[]; /** pictures on the word tiles (key = the tile text) so beginners see what the word means */ tilePics?: Record<string, TeachArt> }[] }
 export interface FadeSlide extends SlideBase { kind: 'fade'; prompt: string; lines: { who: CastName; text: string; keys: string[] }[] }
@@ -114,6 +114,16 @@ export interface SaySlide extends SlideBase {
   /** the model stays visible (Mission takes); without it the model is hidden until "Show me" (the exit task) */
   open?: boolean;
 }
+/** Match the picture with the word (drag the word onto its picture, or tap word then picture). */
+export interface MatchSlide extends SlideBase {
+  kind: 'match';
+  prompt: string;
+  pairs: { word: string; art: TeachArt }[];
+  /** 'drag' (default): drag the word onto its picture. 'listen': hear the word, then choose its picture. */
+  mode?: 'drag' | 'listen';
+}
+/** Counting practice: a row of numbers with gaps; fill each gap with the right number (the row is counted aloud first). */
+export interface CountUpSlide extends SlideBase { kind: 'countup'; prompt: string; rounds: { seq: number[]; /** indexes of seq that are hidden */ blanks: number[] }[] }
 /** Grammar: pick am / is / are for a sentence with a blank (statements, negatives and questions). */
 export interface BePickSlide extends SlideBase { stamp?: string; kind: 'bepick'; prompt: string; rounds: { frame: string; answer: 'am' | 'is' | 'are'; who: TeachArt; why: string }[] }
 /** Grammar: build a sentence from word tiles (a short fact on top says what to build); wrong forms are the distractors. */
@@ -137,7 +147,7 @@ export interface WrapSlide extends SlideBase { kind: 'wrap'; heading: string; ti
 
 export type Slide =
   | TitleSlide | BriefSlide | BadgeSlide | DialSlide | WhoSaidSlide | LockersSlide | NumTrainSlide | PadlockSlide | ConvoSlide | SpellSlide
-  | BePickSlide | BuildSlide | FactCheckSlide | WriteSlide | HuntSlide | ShadowSlide | TeachSlide | ModelSlide | FindWrongSlide | BorderSlide | MemorySlide | NumWallSlide | PhoneChatSlide | FadeSlide | CardSlide | SaySlide | WrapSlide;
+  | MatchSlide | CountUpSlide | BePickSlide | BuildSlide | FactCheckSlide | WriteSlide | HuntSlide | ShadowSlide | TeachSlide | ModelSlide | FindWrongSlide | BorderSlide | MemorySlide | NumWallSlide | PhoneChatSlide | FadeSlide | CardSlide | SaySlide | WrapSlide;
 
 export interface DeckScript {
   lessonId: string;

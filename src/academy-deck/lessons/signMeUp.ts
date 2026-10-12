@@ -2,6 +2,7 @@
 // Objective, criteria and blueprint facts: docs/academy-a1s01e2-spec.md. Items (blueprint): one … ten, Spain, Spanish, Italy, Italian.
 // Every slide = a full scene plate + ONE different game; no two neighbouring slides use the same game.
 import type { DeckScript } from '../types';
+import { numberWord as numberWordOf } from '../spoken';
 
 export const OBJECTIVE = 'By the end I can sign up at the club desk: spell my name, say my country and nationality, say my member number, and ask someone to say it again.';
 export const CRITERIA = [
@@ -39,6 +40,19 @@ export const SIGN_ME_UP: DeckScript = {
       ],
       hints: ['These are the words you will hear in every lesson.'],
     },
+    {
+      id: 'match-words', kind: 'match', part: 0, bg: 'club-signup-desk', actors: [{ who: 'Vee', pos: 'left', expr: 'happy' }], trains: [1],
+      prompt: 'Match each picture with its word. Drag the word onto the picture.',
+      pairs: [
+        { word: 'Listen', art: { type: 'action' as const, id: 'listen' as const } },
+        { word: 'Look', art: { type: 'action' as const, id: 'look' as const } },
+        { word: 'Repeat', art: { type: 'action' as const, id: 'repeat' as const } },
+        { word: 'Click', art: { type: 'action' as const, id: 'click' as const } },
+        { word: 'Read', art: { type: 'action' as const, id: 'read' as const } },
+        { word: 'Point', art: { type: 'action' as const, id: 'point' as const } },
+      ],
+      hints: ['Look at what the picture shows. A hand pointing is Point. An ear is Listen.', 'Tap a word to hear it, then tap the picture.'],
+    },
 { id: 'badge', kind: 'badge', part: 0, bg: 'club-signup-desk', actors: [{ who: 'Theo', pos: 'right', expr: 'wave' }], trains: [4], prompt: 'Theo gives you a badge. Put your name on it.', starter: 'My name is', ages: [11, 12, 13, 14, 15, 16, 17, 18], hints: ['Type only your name, and tap your age.'] },
 {
       id: 'checkin-chat', part: 0, kind: 'convo', bg: 'club-signup-desk', actors: [{ who: 'Theo', pos: 'right', expr: 'happy' }], trains: [4],
@@ -48,6 +62,12 @@ export const SIGN_ME_UP: DeckScript = {
         { ask: 'What do you like?', options: [{ text: 'I like music.', pic: { type: 'card', id: 'v-music', label: 'music' }, ok: true }, { text: 'I like football.', pic: { type: 'card', id: 'v-football', label: 'football' }, ok: true }, { text: 'I like games.', pic: { type: 'card', id: 'v-games', label: 'games' }, ok: true }] },
       ],
       hints: ['There is no wrong answer here. Choose what is true for you.'],
+    },
+    {
+      id: 'intro-me', kind: 'say', part: 0, bg: 'club-signup-desk', actors: [{ who: 'Theo', pos: 'right', expr: 'happy' }], trains: [4], open: true,
+      prompt: 'Now introduce yourself! Read the little paragraph, then say it in your own words.',
+      model: 'Hello! My name is {name}. I am {age} years old. I feel happy today. I am great!',
+      hints: ['Read it slowly: Hello, my name is…, I am … years old.', 'You can change the last part: I am fine. I am great. I feel happy today.'],
     },
     {
       id: 'whosaid', kind: 'whosaid', part: 1, bg: 'club-signup-desk', actors: [{ who: 'Ava', pos: 'left', expr: 'happy' }, { who: 'Theo', pos: 'right', expr: 'happy' }], trains: [4],
@@ -68,21 +88,38 @@ export const SIGN_ME_UP: DeckScript = {
       hints: ['Teachers love this question. Asking is how you learn.'],
     },
     {
-      id: 'recall-chat', part: 1, kind: 'phonechat', bg: 'club-lobby', actors: [{ who: 'Ava', pos: 'left', expr: 'happy' }], trains: [4],
-      prompt: 'Remember last time? Theo texts you. Build your replies.', contact: 'Theo',
-      steps: [
-        { text: 'Hi! What is your name?', pic: { type: 'card', id: 'v-name', label: 'a name tag' }, reply: 'My name is {name}.', extra: ['I', 'name'] },
-        { text: 'How old are you?', pic: { type: 'card', id: 'v-age', label: 'a birthday cake' }, reply: 'I am {age}.', extra: ['have', 'old'] },
-        { text: 'Nice to meet you!', pic: { type: 'card', id: 'v-meet', label: 'nice to meet you' }, reply: 'Nice to meet you, too.', extra: ['name'] },
+      id: 'match-help', kind: 'match', part: 1, bg: 'club-signup-desk', actors: [{ who: 'Vee', pos: 'right', expr: 'happy' }], trains: [5],
+      prompt: 'Grab and drag: match each help phrase with its picture.',
+      pairs: [
+        { word: 'Sorry?', art: { type: 'action' as const, id: 'sorry' as const } },
+        { word: 'Slowly, please.', art: { type: 'action' as const, id: 'slow' as const } },
+        { word: 'I don’t understand.', art: { type: 'action' as const, id: 'confused' as const } },
+        { word: 'What does it mean?', art: { type: 'action' as const, id: 'meaning' as const } },
       ],
-      hints: ['Answer Theo’s question. Your name and age are on the tiles.'],
+      hints: ['Look at the face and the hands in each picture. Which phrase would you say?', 'Tap a phrase to hear it, then tap the picture.'],
+    },
+    {
+      id: 'count-revise', kind: 'countup', part: 1, bg: 'locker-hall', actors: [{ who: 'Vee', pos: 'right', expr: 'happy' }], trains: [2],
+      prompt: 'Let’s count! Listen, then fill the gaps. 1 to 10, 11 to 20, then by tens.',
+      rounds: [
+        { seq: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], blanks: [2, 6, 8] },
+        { seq: [11, 12, 13, 14, 15, 16, 17, 18, 19, 20], blanks: [3, 9] },
+        { seq: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100], blanks: [2, 4, 7] },
+      ],
+      hints: ['Say the numbers in your head: one, two, … Which number comes next?', 'By tens: ten, twenty, thirty, forty, fifty…'],
+    },
+    {
+      id: 'listen-numbers', kind: 'match', part: 1, bg: 'locker-hall', actors: [{ who: 'Vee', pos: 'right', expr: 'thumbs' }], trains: [2], mode: 'listen',
+      prompt: 'Listen and match: hear the number, then tap the right number card.',
+      pairs: [3, 12, 40, 70, 100].map((n) => ({ word: numberWordOf(n), art: { type: 'count' as const, n } })),
+      hints: ['Listen for the end of the word: -teen (13) or -ty (30).', 'Tap Hear it again as many times as you like.'],
     },
 {
       id: 'teach-nums', part: 2, kind: 'teach', bg: 'locker-hall', actors: [{ who: 'Vee', pos: 'left', expr: 'happy' }], trains: [2], title: 'Meet the numbers 1 to 10',
       pages: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => ({ word: WORDS[n], art: { type: 'count' as const, n }, meaning: `the number ${n}`, example: `My number is ${WORDS[n]}.`, clue: `Count the dots: ${n <= 5 ? Array.from({ length: n }, (_, i) => i + 1).join(', ') : `${n} dots`}.` })),
       hints: ['Watch the dots appear one by one. Press “Show again” to see it again.'],
     },
-{ id: 'lockers', kind: 'lockers', part: 2, bg: 'locker-hall', actors: [{ who: 'Vee', pos: 'right', expr: 'happy' }], trains: [2], prompt: 'Locker Pop! Read the number word and open that locker.', rounds: [4, 2, 5, 1, 3], grid: [1, 2, 3, 4, 5], words: WORDS, hints: ['Count the numbers on the doors. Four is 4.'] },
+{ id: 'lockers', kind: 'lockers', part: 2, bg: 'locker-hall', actors: [{ who: 'Vee', pos: 'right', expr: 'happy' }], trains: [2], prompt: 'Locker Pop! Read the number word and open that locker.', rounds: [4, 2, 5, 1], grid: [1, 2, 3, 4, 5], words: WORDS, hints: ['Count the numbers on the doors. Four is 4.'] },
     {
       id: 'teach-nations', kind: 'teach', part: 2, bg: 'border-control', actors: [{ who: 'Vee', pos: 'left', expr: 'happy' }], trains: [3], title: 'Countries and nationalities (country · nationality)',
       pages: [
@@ -115,8 +152,23 @@ export const SIGN_ME_UP: DeckScript = {
       ],
       closing: 'Now YOU help Ava sign up!',
     },
-{ id: 'numtrain', kind: 'numtrain', part: 3, bg: 'locker-hall', actors: [{ who: 'Theo', pos: 'left', expr: 'happy' }], trains: [2], prompt: 'Number Train! Put each number word on its carriage.', numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], words: WORDS, hints: ['Look at the dots on the carriage. Count them.'] },
-{ id: 'numwall', kind: 'numwall', part: 3, bg: 'locker-hall', actors: [{ who: 'Vee', pos: 'left', expr: 'happy' }], trains: [2], title: 'More numbers: 11 to 100', need: 8, hints: ['Tap 20, then 21, then 30. Look at the pattern: twenty, twenty-one, thirty.'] },
+{ id: 'numwall', kind: 'numwall', part: 3, bg: 'locker-hall', actors: [{ who: 'Vee', pos: 'left', expr: 'happy' }], trains: [2], title: 'More numbers: 11 to 100, and the big numbers', need: 8, hundreds: true, hints: ['Tap 20, then 21, then 30. Look at the pattern: twenty, twenty-one, thirty.'] },
+    {
+      id: 'teach-hundreds', kind: 'teach', part: 3, bg: 'locker-hall', actors: [{ who: 'Vee', pos: 'left', expr: 'happy' }], trains: [2], title: 'Big numbers: hundreds',
+      pages: [
+        { word: 'one hundred', art: { type: 'count' as const, n: 100 }, meaning: 'the number 100: ten tens', example: 'The locker is one hundred.', clue: '100 = one hundred.' },
+        { word: 'two hundred', art: { type: 'letters' as const, text: '200' }, meaning: 'the number 200: two times one hundred', example: 'Open locker two hundred.', clue: 'The first number says how many hundreds: 2 → two hundred.' },
+        { word: 'four hundred', art: { type: 'letters' as const, text: '400' }, meaning: 'the number 400: four times one hundred', example: 'My number is four hundred.', clue: '400 = four hundred. And 300? Three hundred. 500? Five hundred!' },
+      ],
+      hints: ['Hundreds are easy: say the number, then “hundred”.'],
+    },
+    {
+      id: 'lockers-hundreds', kind: 'lockers', part: 3, bg: 'locker-hall', actors: [{ who: 'Theo', pos: 'left', expr: 'happy' }], trains: [2],
+      prompt: 'Locker Pop: big numbers! Listen and open the locker.',
+      rounds: [400, 200, 100], grid: [100, 200, 300, 400, 500],
+      words: { 100: 'one hundred', 200: 'two hundred', 300: 'three hundred', 400: 'four hundred', 500: 'five hundred' },
+      hints: ['One hundred is 100. Two hundred is 200. Four hundred is 400.', 'The first number tells you how many hundreds.'],
+    },
 {
       id: 'padlock', kind: 'padlock', part: 3, bg: 'locker-hall', actors: [{ who: 'Theo', pos: 'right', expr: 'wave' }], trains: [2],
       prompt: 'Theo says your member number. Open the drawer with the code!', clue: 'four, two, seven', code: '427', reward: 'Your member number is 4-2-7.', stamp: 'number',
@@ -132,7 +184,6 @@ export const SIGN_ME_UP: DeckScript = {
       ],
       hints: ['Press “Show again” to watch the letters appear.'],
     },
-{ id: 'spell-ava', kind: 'spell', part: 3, bg: 'club-signup-desk', actors: [{ who: 'Theo', pos: 'right', expr: 'happy' }], trains: [1], prompt: 'Spell Ava’s name. Drag each letter onto the badge.', target: 'AVA', hints: ['Start with the first letter on the badge: A.'] },
 {
       id: 'border', kind: 'border', part: 3, bg: 'border-control', actors: [{ who: 'Theo', pos: 'right', expr: 'happy' }], trains: [3],
       prompt: 'Border control! Drag each traveller onto the right passport.',

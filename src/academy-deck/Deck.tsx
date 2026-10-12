@@ -16,6 +16,8 @@ import { FindWrongView, SpellView } from './slides/letters';
 import { LockersView, NumTrainView, PadlockView } from './slides/numbers';
 import { BorderView, MemoryView } from './slides/passport';
 import { NumWallView } from './slides/numwall';
+import { MatchView } from './slides/match';
+import { CountUpView } from './slides/countup';
 import { BePickView, BuildView, FactCheckView, WriteView } from './slides/pattern';
 import { ConvoView, FadeView, PhoneChatView, SayView, WhoSaidView } from './slides/talk';
 import { audioBaseFor, hasClip, loadManifest, playLine, stopLine } from './audio';
@@ -65,6 +67,8 @@ function SlideView({ slide }: { slide: Slide }) {
     case 'border': return <BorderView slide={slide} />;
     case 'memory': return <MemoryView slide={slide} />;
     case 'numwall': return <NumWallView slide={slide} />;
+    case 'match': return <MatchView slide={slide} />;
+    case 'countup': return <CountUpView slide={slide} />;
     case 'bepick': return <BePickView slide={slide} />;
     case 'build': return <BuildView slide={slide} />;
     case 'factcheck': return <FactCheckView slide={slide} />;
@@ -126,7 +130,16 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
     window.clearTimeout(moodTimer.current);
     moodTimer.current = window.setTimeout(() => setMood(null), 1400);
   }, []);
-  const [partCard, setPartCard] = useState<number | null>(homework ? null : 0);
+  const [partCard, setPartCard] = useState<number | null>(null);
+  const [partLeaving, setPartLeaving] = useState(false);
+  const closePart = useCallback(() => {
+    // fade out instead of vanishing: a hard cut looked like a glitch
+    setPartLeaving(true);
+    window.setTimeout(() => {
+      setPartCard(null);
+      setPartLeaving(false);
+    }, 320);
+  }, []);
   const shownParts = useRef<Set<number>>(new Set());
   const [calm, setCalm] = useState(() => typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches);
   const cur = script.slides[index];
@@ -240,9 +253,13 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
     }
     if (shownParts.current.has(part)) return;
     shownParts.current.add(part);
+    // the title card is the intro of the lesson: no part card on top of it (it made the first page slide in and vanish)
+    if (cur.kind === 'title' && script.slides[0] === cur) return;
+    setPartLeaving(false);
     setPartCard(part);
-    const t = window.setTimeout(() => setPartCard(null), 2200);
+    const t = window.setTimeout(() => closePart(), 2200);
     return () => window.clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cur.part]);
   // a short sparkle burst on every correct answer (UI motion tied to success; none in Calm mode)
   useEffect(() => {
@@ -325,7 +342,7 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
           </div>
         )}
         {partCard !== null && (
-          <div className="ad-partcard" role="dialog" aria-label={`Part ${partCard + 1}: ${PARTS[partCard].name}`} onClick={() => setPartCard(null)}>
+          <div className="ad-partcard" data-leaving={partLeaving || undefined} role="dialog" aria-label={`Part ${partCard + 1}: ${PARTS[partCard].name}`} onClick={closePart}>
             <span className="ad-partcard-num" aria-hidden="true">{partCard + 1}</span>
             <span className="ad-partcard-kicker">Part {partCard + 1} of {PARTS.length} · {PARTS[partCard].minutes} min</span>
             <span className="ad-partcard-name">{PARTS[partCard].name}</span>
