@@ -1,8 +1,3 @@
-+ public/jungle-adventure/scenes/bg-jungle-obstacle-course.png (1376, 768)
-+ public/jungle-adventure/scenes/bg-jungle-actions.png (1376, 768)
-+ public/jungle-adventure/scenes/bg-jungle-coco-swing.png (1376, 768)
-+ public/jungle-adventure/scenes/bg-jungle-coco-cant-fly.png (1376, 768)
-+ public/lep1/items/tmp-sheet-jungle-actions.png (1536, 1024) raw
-+ public/jungle-adventure/scenes/bg-jungle-waterfall-party.png (1376, 768)
-+ public/lep1/items/tmp-sheet-jungle-ch.png (1920, 1080) raw
-7/7 saved
++ public/lep1/maze/hedge-raw.png (1024, 1024) raw
++ public/lep1/maze/path-raw.png (1024, 1024) raw
+2/2 saved
