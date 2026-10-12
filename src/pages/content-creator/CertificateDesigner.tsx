@@ -130,7 +130,8 @@ export default function CertificateDesigner() {
     setSaving(true);
     const payload = { ...row, hub, cefr_level: level, template_type: "engine_mastery" as const };
     const { error } = await supabase.from("certificate_templates").upsert(payload, {
-      onConflict: "hub,cefr_level,template_type",
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- design_config is Json in the generated types
+      onConflict: "hub,cefr_level,template_type" as any,
     });
     setSaving(false);
     if (error) { toast.error(error.message); return; }
