@@ -16,6 +16,9 @@ import { FindWrongView, SpellView } from './slides/letters';
 import { LockersView, NumTrainView, PadlockView } from './slides/numbers';
 import { BorderView, MemoryView } from './slides/passport';
 import { NumWallView } from './slides/numwall';
+import { MatchView } from './slides/match';
+import { CountUpView } from './slides/countup';
+import { BePickView, BuildView, FactCheckView, WriteView } from './slides/pattern';
 import { ConvoView, FadeView, PhoneChatView, SayView, WhoSaidView } from './slides/talk';
 import { audioBaseFor, hasClip, loadManifest, playLine, stopLine } from './audio';
 import { openLines, slideLines } from './spoken';
@@ -64,6 +67,12 @@ function SlideView({ slide }: { slide: Slide }) {
     case 'border': return <BorderView slide={slide} />;
     case 'memory': return <MemoryView slide={slide} />;
     case 'numwall': return <NumWallView slide={slide} />;
+    case 'match': return <MatchView slide={slide} />;
+    case 'countup': return <CountUpView slide={slide} />;
+    case 'bepick': return <BePickView slide={slide} />;
+    case 'build': return <BuildView slide={slide} />;
+    case 'factcheck': return <FactCheckView slide={slide} />;
+    case 'write': return <WriteView slide={slide} />;
     case 'phonechat': return <PhoneChatView slide={slide} />;
     case 'fade': return <FadeView slide={slide} />;
     case 'card': return <CardView slide={slide} />;
@@ -83,6 +92,12 @@ export interface DeckProps {
   freeNext?: boolean;
   /** live classroom: controlled slide index (the teacher moves the class) */
   slide?: number;
+  /** first slide when the deck keeps its own position (e.g. a teacher re-joining a class) */
+  start?: number;
+  /** inside the live classroom stage: fills its frame instead of the whole window */
+  embedded?: boolean;
+  /** student in a live class: the teacher moves the lesson, so Back / Next / the slide strip do not navigate */
+  follow?: boolean;
   onSlide?: (index: number) => void;
   onFinish?: (result: { vars: Vars; stats: Stats; stamps: string[] }) => void;
   /** homework quest mode: no part title cards, the strip label is `label`, and every solved slide reports its wrong tries */
@@ -90,8 +105,8 @@ export interface DeckProps {
   onSlideDone?: (slide: Slide, result: { wrong: number }) => void;
 }
 
-export function Deck({ script, artBase, audioBase, teacher = false, freeNext = false, slide: controlled, onSlide, onFinish, homework, onSlideDone }: DeckProps) {
-  const [own, setOwn] = useState(0);
+export function Deck({ script, artBase, audioBase, teacher = false, freeNext = false, slide: controlled, start, embedded = false, follow = false, onSlide, onFinish, homework, onSlideDone }: DeckProps) {
+  const [own, setOwn] = useState(start ?? 0);
   const index = Math.min(controlled ?? own, script.slides.length - 1);
   const go = useCallback((i: number) => {
     const n = Math.max(0, Math.min(script.slides.length - 1, i));
@@ -115,7 +130,16 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
     window.clearTimeout(moodTimer.current);
     moodTimer.current = window.setTimeout(() => setMood(null), 1400);
   }, []);
-  const [partCard, setPartCard] = useState<number | null>(homework ? null : 0);
+  const [partCard, setPartCard] = useState<number | null>(null);
+  const [partLeaving, setPartLeaving] = useState(false);
+  const closePart = useCallback(() => {
+    // fade out instead of vanishing: a hard cut looked like a glitch
+    setPartLeaving(true);
+    window.setTimeout(() => {
+      setPartCard(null);
+      setPartLeaving(false);
+    }, 320);
+  }, []);
   const shownParts = useRef<Set<number>>(new Set());
   const [calm, setCalm] = useState(() => typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches);
   const cur = script.slides[index];
@@ -229,9 +253,13 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
     }
     if (shownParts.current.has(part)) return;
     shownParts.current.add(part);
+    // the title card is the intro of the lesson: no part card on top of it (it made the first page slide in and vanish)
+    if (cur.kind === 'title' && script.slides[0] === cur) return;
+    setPartLeaving(false);
     setPartCard(part);
-    const t = window.setTimeout(() => setPartCard(null), 2200);
+    const t = window.setTimeout(() => closePart(), 2200);
     return () => window.clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cur.part]);
   // a short sparkle burst on every correct answer (UI motion tied to success; none in Calm mode)
   useEffect(() => {
@@ -241,12 +269,13 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
     const k = (e: KeyboardEvent) => {
       const t = e.target as HTMLElement | null;
       if (t && /^(INPUT|TEXTAREA)$/.test(t.tagName)) return;
+      if (follow) return;
       if (e.key === 'ArrowRight' && isSolved && !last) go(index + 1);
       if (e.key === 'ArrowLeft') go(index - 1);
     };
     window.addEventListener('keydown', k);
     return () => window.removeEventListener('keydown', k);
-  }, [go, index, isSolved, last]);
+  }, [go, index, isSolved, last, follow]);
   const hint = () => {
     const tier = (tiers[cur.id] ?? 0) + 1;
     setTiers({ ...tiers, [cur.id]: tier });
@@ -270,7 +299,7 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
   const panelAt = only === 'left' ? 'right' : only === 'right' ? 'left' : 'center';
   return (
     <DeckContext.Provider value={ctx}>
-      <div className="ad-root" style={artBase ? ({ ['--o-gem-empty' as string]: `url(${artBase}/objects/gem-empty.webp)`, ['--o-gem-full' as string]: `url(${artBase}/objects/gem-full.webp)`, ['--o-ribbon' as string]: `url(${artBase}/objects/ribbon.webp)`, ['--o-frame' as string]: `url(${artBase}/objects/frame.webp)`, ['--o-star' as string]: `url(${artBase}/objects/star.webp)`, ['--o-stamp' as string]: `url(${artBase}/objects/stamp.webp)`, ['--o-ticket' as string]: `url(${artBase}/objects/ticket.webp)`, ['--o-pill-violet' as string]: `url(${artBase}/objects/pill-violet.webp)`, ['--o-pill-blue' as string]: `url(${artBase}/objects/pill-blue.webp)`, ['--o-pill-orange' as string]: `url(${artBase}/objects/pill-orange.webp)` } as React.CSSProperties) : undefined} data-reduced={calm} data-kind={cur.kind} data-hw={!!homework} data-mood={mood ?? undefined} data-testid="deck">
+      <div className="ad-root" data-embedded={embedded || undefined} data-follow={follow || undefined} style={artBase ? ({ ['--o-gem-empty' as string]: `url(${artBase}/objects/gem-empty.webp)`, ['--o-gem-full' as string]: `url(${artBase}/objects/gem-full.webp)`, ['--o-ribbon' as string]: `url(${artBase}/objects/ribbon.webp)`, ['--o-frame' as string]: `url(${artBase}/objects/frame.webp)`, ['--o-star' as string]: `url(${artBase}/objects/star.webp)`, ['--o-stamp' as string]: `url(${artBase}/objects/stamp.webp)`, ['--o-ticket' as string]: `url(${artBase}/objects/ticket.webp)`, ['--o-pill-violet' as string]: `url(${artBase}/objects/pill-violet.webp)`, ['--o-pill-blue' as string]: `url(${artBase}/objects/pill-blue.webp)`, ['--o-pill-orange' as string]: `url(${artBase}/objects/pill-orange.webp)` } as React.CSSProperties) : undefined} data-reduced={calm} data-kind={cur.kind} data-hw={!!homework} data-mood={mood ?? undefined} data-testid="deck">
         <Plate id={cur.bg} artBase={artBase} key={cur.bg} />
         <div className="ad-actors" aria-hidden={actorsVisible.length === 0}>
           {actorsVisible.map((a) => <Character key={`${a.who}-${mood ?? 'base'}`} actor={mood ? { ...a, expr: mood } : a} artBase={artBase} small={compact} speaking={!calm && !mood && (speakingWho === a.who || (chat && !(voiceOn && slideHasClip) && ['title', 'brief', 'whosaid', 'teach', 'model', 'convo', 'say', 'wrap'].includes(cur.kind)))} />)}
@@ -280,7 +309,7 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
           <ol>
             {script.slides.map((s, i) => (
               <li key={s.id} data-part-start={i > 0 && s.part !== script.slides[i - 1].part}>
-                <button type="button" className="ad-dot" data-now={i === index} data-done={!!solved[s.id]} disabled={!teacher && i > index && !solved[script.slides[i - 1]?.id]} aria-label={`Slide ${i + 1}${i === index ? ' (now)' : ''}`} aria-current={i === index} onClick={() => go(i)} />
+                <button type="button" className="ad-dot" data-now={i === index} data-done={!!solved[s.id]} disabled={follow || (!teacher && i > index && !solved[script.slides[i - 1]?.id])} aria-label={`Slide ${i + 1}${i === index ? ' (now)' : ''}`} aria-current={i === index} onClick={() => go(i)} />
               </li>
             ))}
           </ol>
@@ -299,11 +328,11 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
           </div>
         )}
         <nav className="ad-dock" aria-label="Lesson controls">
-          <button type="button" className="ad-dockbtn" onClick={() => go(index - 1)} disabled={index === 0}>◀ Back</button>
+          {!follow && <button type="button" className="ad-dockbtn" onClick={() => go(index - 1)} disabled={index === 0}>◀ Back</button>}
           <button type="button" className="ad-dockbtn" onClick={hint}>{artBase ? <img className="ad-dockico" src={`${artBase}/objects/btn-hint.webp`} alt="" aria-hidden="true" /> : <Icon name="bulb" />} Hint</button>
           <button type="button" className="ad-dockbtn" onClick={() => setMinute(true)}>{artBase ? <img className="ad-dockico" src={`${artBase}/objects/btn-pause.webp`} alt="" aria-hidden="true" /> : <Icon name="pause" />} <span className="ad-long">I need a minute</span><span className="ad-short">Minute</span></button>
           <button type="button" className="ad-dockbtn" onClick={() => setMenu(!menu)} aria-expanded={menu}>{artBase ? <img className="ad-dockico" src={`${artBase}/objects/btn-gear.webp`} alt="" aria-hidden="true" /> : <Icon name="gear" />} More</button>
-          <button type="button" className="ad-dockbtn ad-dock-next" onClick={next} disabled={!isSolved && !freeNext}>{last ? 'Finish ✓' : <>Next {artBase ? <img className="ad-dockico ad-nextico" src={`${artBase}/objects/btn-next.webp`} alt="" aria-hidden="true" /> : '▶'}</>}</button>
+          {!follow && (<button type="button" className="ad-dockbtn ad-dock-next" onClick={next} disabled={!isSolved && !freeNext}>{last ? 'Finish ✓' : <>Next {artBase ? <img className="ad-dockico ad-nextico" src={`${artBase}/objects/btn-next.webp`} alt="" aria-hidden="true" /> : '▶'}</>}</button>)}
         </nav>
         {menu && (
           <div className="ad-menu" role="menu">
@@ -313,11 +342,11 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
           </div>
         )}
         {partCard !== null && (
-          <div className="ad-partcard" role="dialog" aria-label={`Part ${partCard + 1}: ${PARTS[partCard].name}`} onClick={() => setPartCard(null)}>
+          <div className="ad-partcard" data-leaving={partLeaving || undefined} role="dialog" aria-label={`Part ${partCard + 1}: ${PARTS[partCard].name}`} onClick={closePart}>
             <span className="ad-partcard-num" aria-hidden="true">{partCard + 1}</span>
             <span className="ad-partcard-kicker">Part {partCard + 1} of {PARTS.length} · {PARTS[partCard].minutes} min</span>
             <span className="ad-partcard-name">{PARTS[partCard].name}</span>
-            <span className="ad-partcard-goal">{PARTS[partCard].goal}</span>
+            <span className="ad-partcard-goal">{script.partGoals?.[partCard] ?? PARTS[partCard].goal}</span>
             <span className="ad-partcard-pips" aria-hidden="true">{PARTS.map((_, k) => <i key={k} data-on={k <= partCard} />)}</span>
             <span className="ad-partcard-tap">Tap to start</span>
           </div>

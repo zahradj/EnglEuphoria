@@ -56,8 +56,16 @@
     "text": "Point to the flag."
   },
   {
+    "who": "Vee",
+    "text": "Match each picture with its word. Drag the word onto the picture."
+  },
+  {
     "who": "Theo",
     "text": "What do you like?"
+  },
+  {
+    "who": "Theo",
+    "text": "Now introduce yourself! Read the little paragraph, then say it in your own words."
   },
   {
     "who": "Theo",
@@ -108,12 +116,12 @@
     "text": "What does “nationality” mean?"
   },
   {
-    "who": "Theo",
-    "text": "Hi! What is your name?"
+    "who": "Vee",
+    "text": "Grab and drag: match each help phrase with its picture."
   },
   {
-    "who": "Theo",
-    "text": "Nice to meet you!"
+    "who": "Vee",
+    "text": "Let’s count! Listen, then fill the gaps. 1 to 10, 11 to 20, then by tens."
   },
   {
     "who": "Vee",
@@ -121,15 +129,7 @@
   },
   {
     "who": "Vee",
-    "text": "My number is one."
-  },
-  {
-    "who": "Vee",
     "text": "two"
-  },
-  {
-    "who": "Vee",
-    "text": "My number is two."
   },
   {
     "who": "Vee",
@@ -137,15 +137,7 @@
   },
   {
     "who": "Vee",
-    "text": "My number is three."
-  },
-  {
-    "who": "Vee",
     "text": "four"
-  },
-  {
-    "who": "Vee",
-    "text": "My number is four."
   },
   {
     "who": "Vee",
@@ -153,15 +145,7 @@
   },
   {
     "who": "Vee",
-    "text": "My number is five."
-  },
-  {
-    "who": "Vee",
     "text": "six"
-  },
-  {
-    "who": "Vee",
-    "text": "My number is six."
   },
   {
     "who": "Vee",
@@ -169,15 +153,7 @@
   },
   {
     "who": "Vee",
-    "text": "My number is seven."
-  },
-  {
-    "who": "Vee",
     "text": "eight"
-  },
-  {
-    "who": "Vee",
-    "text": "My number is eight."
   },
   {
     "who": "Vee",
@@ -185,11 +161,119 @@
   },
   {
     "who": "Vee",
-    "text": "My number is nine."
+    "text": "ten"
   },
   {
     "who": "Vee",
-    "text": "ten"
+    "text": "eleven"
+  },
+  {
+    "who": "Vee",
+    "text": "twelve"
+  },
+  {
+    "who": "Vee",
+    "text": "thirteen"
+  },
+  {
+    "who": "Vee",
+    "text": "fourteen"
+  },
+  {
+    "who": "Vee",
+    "text": "fifteen"
+  },
+  {
+    "who": "Vee",
+    "text": "sixteen"
+  },
+  {
+    "who": "Vee",
+    "text": "seventeen"
+  },
+  {
+    "who": "Vee",
+    "text": "eighteen"
+  },
+  {
+    "who": "Vee",
+    "text": "nineteen"
+  },
+  {
+    "who": "Vee",
+    "text": "twenty"
+  },
+  {
+    "who": "Vee",
+    "text": "thirty"
+  },
+  {
+    "who": "Vee",
+    "text": "forty"
+  },
+  {
+    "who": "Vee",
+    "text": "fifty"
+  },
+  {
+    "who": "Vee",
+    "text": "sixty"
+  },
+  {
+    "who": "Vee",
+    "text": "seventy"
+  },
+  {
+    "who": "Vee",
+    "text": "eighty"
+  },
+  {
+    "who": "Vee",
+    "text": "ninety"
+  },
+  {
+    "who": "Vee",
+    "text": "one hundred"
+  },
+  {
+    "who": "Vee",
+    "text": "Listen and match: hear the number, then tap the right number card."
+  },
+  {
+    "who": "Vee",
+    "text": "My number is one."
+  },
+  {
+    "who": "Vee",
+    "text": "My number is two."
+  },
+  {
+    "who": "Vee",
+    "text": "My number is three."
+  },
+  {
+    "who": "Vee",
+    "text": "My number is four."
+  },
+  {
+    "who": "Vee",
+    "text": "My number is five."
+  },
+  {
+    "who": "Vee",
+    "text": "My number is six."
+  },
+  {
+    "who": "Vee",
+    "text": "My number is seven."
+  },
+  {
+    "who": "Vee",
+    "text": "My number is eight."
+  },
+  {
+    "who": "Vee",
+    "text": "My number is nine."
   },
   {
     "who": "Vee",
@@ -288,50 +372,6 @@
     "text": "My number is four, two, seven."
   },
   {
-    "who": "Theo",
-    "text": "Number Train! Put each number word on its carriage."
-  },
-  {
-    "who": "Vee",
-    "text": "eleven"
-  },
-  {
-    "who": "Vee",
-    "text": "twelve"
-  },
-  {
-    "who": "Vee",
-    "text": "thirteen"
-  },
-  {
-    "who": "Vee",
-    "text": "fourteen"
-  },
-  {
-    "who": "Vee",
-    "text": "fifteen"
-  },
-  {
-    "who": "Vee",
-    "text": "sixteen"
-  },
-  {
-    "who": "Vee",
-    "text": "seventeen"
-  },
-  {
-    "who": "Vee",
-    "text": "eighteen"
-  },
-  {
-    "who": "Vee",
-    "text": "nineteen"
-  },
-  {
-    "who": "Vee",
-    "text": "twenty"
-  },
-  {
     "who": "Vee",
     "text": "twenty-one"
   },
@@ -366,10 +406,6 @@
   {
     "who": "Vee",
     "text": "twenty-nine"
-  },
-  {
-    "who": "Vee",
-    "text": "thirty"
   },
   {
     "who": "Vee",
@@ -409,10 +445,6 @@
   },
   {
     "who": "Vee",
-    "text": "forty"
-  },
-  {
-    "who": "Vee",
     "text": "forty-one"
   },
   {
@@ -446,10 +478,6 @@
   {
     "who": "Vee",
     "text": "forty-nine"
-  },
-  {
-    "who": "Vee",
-    "text": "fifty"
   },
   {
     "who": "Vee",
@@ -489,10 +517,6 @@
   },
   {
     "who": "Vee",
-    "text": "sixty"
-  },
-  {
-    "who": "Vee",
     "text": "sixty-one"
   },
   {
@@ -526,10 +550,6 @@
   {
     "who": "Vee",
     "text": "sixty-nine"
-  },
-  {
-    "who": "Vee",
-    "text": "seventy"
   },
   {
     "who": "Vee",
@@ -569,10 +589,6 @@
   },
   {
     "who": "Vee",
-    "text": "eighty"
-  },
-  {
-    "who": "Vee",
     "text": "eighty-one"
   },
   {
@@ -606,10 +622,6 @@
   {
     "who": "Vee",
     "text": "eighty-nine"
-  },
-  {
-    "who": "Vee",
-    "text": "ninety"
   },
   {
     "who": "Vee",
@@ -649,7 +661,51 @@
   },
   {
     "who": "Vee",
-    "text": "one hundred"
+    "text": "two hundred"
+  },
+  {
+    "who": "Vee",
+    "text": "three hundred"
+  },
+  {
+    "who": "Vee",
+    "text": "four hundred"
+  },
+  {
+    "who": "Vee",
+    "text": "five hundred"
+  },
+  {
+    "who": "Vee",
+    "text": "six hundred"
+  },
+  {
+    "who": "Vee",
+    "text": "seven hundred"
+  },
+  {
+    "who": "Vee",
+    "text": "eight hundred"
+  },
+  {
+    "who": "Vee",
+    "text": "nine hundred"
+  },
+  {
+    "who": "Vee",
+    "text": "The locker is one hundred."
+  },
+  {
+    "who": "Vee",
+    "text": "Open locker two hundred."
+  },
+  {
+    "who": "Vee",
+    "text": "My number is four hundred."
+  },
+  {
+    "who": "Theo",
+    "text": "Locker Pop: big numbers! Listen and open the locker."
   },
   {
     "who": "Theo",
@@ -690,10 +746,6 @@
   {
     "who": "Vee",
     "text": "Sorry, can you say it again?"
-  },
-  {
-    "who": "Theo",
-    "text": "Spell Ava’s name. Drag each letter onto the badge."
   },
   {
     "who": "Theo",
@@ -802,6 +854,322 @@
   {
     "who": "Vee",
     "text": "Clue 2 of 8: In the fake profile, Sam’s name is spelled S-A-N. That is not right! Sam is S-A-M."
+  },
+  {
+    "who": "Vee",
+    "text": "Fake or Real?"
+  },
+  {
+    "who": "Vee",
+    "text": "Welcome back, detective! A fake profile of Ava is online. Today you check the facts."
+  },
+  {
+    "who": "Ava",
+    "text": "I am 14."
+  },
+  {
+    "who": "Ava",
+    "text": "I am from Italy. I am Italian."
+  },
+  {
+    "who": "Theo",
+    "text": "I am from Italy."
+  },
+  {
+    "who": "Theo",
+    "text": "Spell YOUR name on the detective badge."
+  },
+  {
+    "who": "Vee",
+    "text": "I am"
+  },
+  {
+    "who": "Vee",
+    "text": "I am 14."
+  },
+  {
+    "who": "Vee",
+    "text": "You are"
+  },
+  {
+    "who": "Vee",
+    "text": "You are Italian."
+  },
+  {
+    "who": "Vee",
+    "text": "She is"
+  },
+  {
+    "who": "Vee",
+    "text": "She is from Italy."
+  },
+  {
+    "who": "Vee",
+    "text": "He is"
+  },
+  {
+    "who": "Vee",
+    "text": "He is Spanish."
+  },
+  {
+    "who": "Theo",
+    "text": "The profile says: She is 15. She is Spanish."
+  },
+  {
+    "who": "Ava",
+    "text": "No! I am not 15. I am 14."
+  },
+  {
+    "who": "Ava",
+    "text": "I am not Spanish. I am Italian."
+  },
+  {
+    "who": "Theo",
+    "text": "You are 14. You are from Italy."
+  },
+  {
+    "who": "Vee",
+    "text": "Are you from Spain, Ava?"
+  },
+  {
+    "who": "Ava",
+    "text": "No, I am not."
+  },
+  {
+    "who": "Vee",
+    "text": "Is he Spanish?"
+  },
+  {
+    "who": "Ava",
+    "text": "Yes, he is. He is from Spain."
+  },
+  {
+    "who": "Vee",
+    "text": "Is he 16?"
+  },
+  {
+    "who": "Ava",
+    "text": "No, he is not. He is 15."
+  },
+  {
+    "who": "Vee",
+    "text": "I am not"
+  },
+  {
+    "who": "Vee",
+    "text": "I am not Spanish."
+  },
+  {
+    "who": "Vee",
+    "text": "She is not"
+  },
+  {
+    "who": "Vee",
+    "text": "She is not 15."
+  },
+  {
+    "who": "Vee",
+    "text": "Are you…?"
+  },
+  {
+    "who": "Vee",
+    "text": "Are you 14?"
+  },
+  {
+    "who": "Vee",
+    "text": "Is she…?"
+  },
+  {
+    "who": "Vee",
+    "text": "Is she Italian?"
+  },
+  {
+    "who": "Vee",
+    "text": "Yes, I am."
+  },
+  {
+    "who": "Vee",
+    "text": "Are you Italian? Yes, I am."
+  },
+  {
+    "who": "Theo",
+    "text": "Pick am, is or are for each person."
+  },
+  {
+    "who": "Theo",
+    "text": "I am 14."
+  },
+  {
+    "who": "Theo",
+    "text": "You are Italian."
+  },
+  {
+    "who": "Theo",
+    "text": "She is from Italy."
+  },
+  {
+    "who": "Theo",
+    "text": "He is Spanish."
+  },
+  {
+    "who": "Theo",
+    "text": "I am not Spanish."
+  },
+  {
+    "who": "Theo",
+    "text": "She is not 15."
+  },
+  {
+    "who": "Theo",
+    "text": "Are you 14?"
+  },
+  {
+    "who": "Theo",
+    "text": "Is she Italian?"
+  },
+  {
+    "who": "Ava",
+    "text": "Build the sentence. Tap the words in the right order."
+  },
+  {
+    "who": "Ava",
+    "text": "She is Italian."
+  },
+  {
+    "who": "Ava",
+    "text": "He is from Spain."
+  },
+  {
+    "who": "Ava",
+    "text": "I am not Spanish."
+  },
+  {
+    "who": "Ava",
+    "text": "Are you 14?"
+  },
+  {
+    "who": "Ava",
+    "text": "Is he Spanish?"
+  },
+  {
+    "who": "Vee",
+    "text": "Detective time! The fake profile has 3 mistakes with am, is, are or not. Tap them."
+  },
+  {
+    "who": "Theo",
+    "text": "Are you Spanish?"
+  },
+  {
+    "who": "Theo",
+    "text": "Is Theo Spanish?"
+  },
+  {
+    "who": "Theo",
+    "text": "Are you 15?"
+  },
+  {
+    "who": "Theo",
+    "text": "Is he 16?"
+  },
+  {
+    "who": "Vee",
+    "text": "Is each sentence true? Check it on Ava’s real card."
+  },
+  {
+    "who": "Vee",
+    "text": "She is 14."
+  },
+  {
+    "who": "Vee",
+    "text": "She is Spanish."
+  },
+  {
+    "who": "Vee",
+    "text": "She is 15."
+  },
+  {
+    "who": "Vee",
+    "text": "She is not French."
+  },
+  {
+    "who": "Vee",
+    "text": "Memory! Find each flag and the sentence about its country."
+  },
+  {
+    "who": "Vee",
+    "text": "I am Brazilian."
+  },
+  {
+    "who": "Vee",
+    "text": "She is French."
+  },
+  {
+    "who": "Vee",
+    "text": "He is from Japan."
+  },
+  {
+    "who": "Vee",
+    "text": "You are American."
+  },
+  {
+    "who": "Ava",
+    "text": "Hi, detective! Are you ready?"
+  },
+  {
+    "who": "Ava",
+    "text": "Is Theo 16?"
+  },
+  {
+    "who": "Ava",
+    "text": "Ask me about Theo!"
+  },
+  {
+    "who": "Ava",
+    "text": "Yes, he is! And you? How old are you?"
+  },
+  {
+    "who": "Theo",
+    "text": "Sentence duel! Build each sentence for the case. No timer, take your time."
+  },
+  {
+    "who": "Theo",
+    "text": "He is not 16."
+  },
+  {
+    "who": "Theo",
+    "text": "She is not Spanish."
+  },
+  {
+    "who": "Theo",
+    "text": "I am not 15."
+  },
+  {
+    "who": "Theo",
+    "text": "Are you from Spain?"
+  },
+  {
+    "who": "Theo",
+    "text": "Yes, he is."
+  },
+  {
+    "who": "Theo",
+    "text": "Take 1 · Check in with Theo. Say who you are, one thing that is not true, and ask him a question."
+  },
+  {
+    "who": "Theo",
+    "text": "Take 2 · Theo asks YOU: “Are you Spanish?” Answer, then ask him about Ava."
+  },
+  {
+    "who": "Vee",
+    "text": "Case solved?"
+  },
+  {
+    "who": "Vee",
+    "text": "Homework: write three sentences about a friend: one with is, one with is not, and one question."
+  },
+  {
+    "who": "Vee",
+    "text": "Clue 3 of 8: The fake profile says “She is 15. She is Spanish.” But Ava is 14 and Italian. Who is 15 and Spanish? Theo! Someone mixed up their facts."
   },
   {
     "who": "Vee",

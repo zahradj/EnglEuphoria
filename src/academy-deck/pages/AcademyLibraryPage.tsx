@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, BookOpen, Clock, Play, Swords } from 'lucide-react';
 import { ACADEMY_DECK_LESSONS } from '../lessonRegistry';
+import { AcademyLevelLibrary } from '../library/AcademyLevelLibrary';
 
 /** Content creator's Academy Library: every Academy deck lesson (and its homework quest) with a preview. Creator-facing, English. */
 export default function AcademyLibraryPage() {
@@ -16,9 +17,11 @@ export default function AcademyLibraryPage() {
           <h1 className="flex items-center gap-2 text-3xl font-black"><BookOpen className="h-7 w-7" /> Academy Library</h1>
           <p className="text-sm text-violet-200">Lessons built for the Academy. They appear in the student’s <b>My Lessons</b> tab. Open one to preview it exactly as a student sees it.</p>
         </header>
-        <div className="grid gap-4 md:grid-cols-2">
-          {ACADEMY_DECK_LESSONS.map((l) => (
-            <article key={l.id} className="overflow-hidden rounded-3xl border border-violet-400/30 bg-violet-950/60 shadow-xl">
+        <AcademyLevelLibrary
+          lessons={ACADEMY_DECK_LESSONS}
+          gridClassName="grid gap-4 md:grid-cols-2"
+          renderLesson={(l) => (
+            <article className="overflow-hidden rounded-3xl border border-violet-400/30 bg-violet-950/60 shadow-xl">
               <div className="relative aspect-video" style={{ background: l.gradient }}>
                 <img src={l.cover} alt="" className="absolute inset-0 h-full w-full object-cover" loading="lazy" onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} />
                 <span className="absolute start-3 top-3 rounded-full bg-black/55 px-2.5 py-1 text-xs font-bold">Season {l.season} · Lesson {l.lesson} · {l.level}</span>
@@ -33,8 +36,8 @@ export default function AcademyLibraryPage() {
                 </div>
               </div>
             </article>
-          ))}
-        </div>
+          )}
+        />
       </div>
     </div>
   );

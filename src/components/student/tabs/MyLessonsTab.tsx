@@ -9,6 +9,7 @@ import { PlayCircle, Filter, CheckCircle2, Lock, Play, BookMarked } from 'lucide
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
 import { ACADEMY_DECK_LESSONS } from '@/academy-deck/lessonRegistry';
+import { AcademyLevelLibrary } from '@/academy-deck/library/AcademyLevelLibrary';
 import { Badge } from '@/components/ui/badge';
 import { HubBackButton } from '@/components/student/common/HubBackButton';
 
@@ -112,9 +113,10 @@ function AcademyLessonList() {
     return <div className="rounded-2xl border border-dashed bg-card/40 p-8 text-center text-muted-foreground">{t('al.empty', 'Your lessons will show up here as soon as they are ready.')}</div>;
   }
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {ACADEMY_DECK_LESSONS.map((l) => (
-        <article key={l.id} className="overflow-hidden rounded-3xl border border-violet-300/30 bg-card shadow-lg">
+    <AcademyLevelLibrary
+      lessons={ACADEMY_DECK_LESSONS}
+      renderLesson={(l) => (
+        <article className="overflow-hidden rounded-3xl border border-violet-300/30 bg-card shadow-lg">
           <div className="relative aspect-video" style={{ background: l.gradient }}>
             <img src={l.cover} alt="" className="absolute inset-0 h-full w-full object-cover" loading="lazy" onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} />
             <span className="absolute start-3 top-3 rounded-full bg-black/55 px-2.5 py-1 text-xs font-bold text-white">
@@ -139,8 +141,8 @@ function AcademyLessonList() {
             </div>
           </div>
         </article>
-      ))}
-    </div>
+      )}
+    />
   );
 }
 

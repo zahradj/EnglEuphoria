@@ -4,10 +4,12 @@ import type { CastName, Slide } from './types';
 
 const ONES = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen'];
 const TENS = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety'];
-/** 1-100 in words, hyphenated like a teacher writes them: twenty-one. */
-export const numberWord = (n: number): string => (n === 100 ? 'one hundred' : n < 20 ? ONES[n] : TENS[Math.floor(n / 10)] + (n % 10 ? `-${ONES[n % 10]}` : ''));
+/** 1-999 in words, hyphenated like a teacher writes them: twenty-one, four hundred, four hundred thirty-one. */
+export const numberWord = (n: number): string => (n >= 100 ? `${ONES[Math.floor(n / 100)]} hundred${n % 100 ? ` ${numberWord(n % 100)}` : ''}` : n < 20 ? ONES[n] : TENS[Math.floor(n / 10)] + (n % 10 ? `-${ONES[n % 10]}` : ''));
 /** A teach-page title such as 'Spain · Spanish' is spoken as 'Spain, Spanish'. */
 export const sayable = (word: string): string => word.replace(/ · /g, ', ');
+
+const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
 
 export interface SpokenLine { who: CastName; text: string }
 
@@ -24,7 +26,7 @@ export function openLines(s: Slide): SpokenLine[] {
     case 'say': return line(lead(s), s.prompt);
     case 'wrap': return [...line('Vee', s.heading), ...line('Vee', s.homework), ...line('Vee', s.clue)];
     // game prompts are spoken when the game opens (the guide reads the task aloud)
-    case 'lockers': case 'numtrain': case 'border': case 'memory': case 'hunt': case 'shadow': case 'findwrong': case 'spell': return line(lead(s), s.prompt);
+    case 'lockers': case 'numtrain': case 'match': case 'countup': case 'bepick': case 'build': case 'factcheck': case 'border': case 'memory': case 'hunt': case 'shadow': case 'findwrong': case 'spell': return line(lead(s), s.prompt);
     case 'padlock': return [...line(lead(s), s.prompt), ...line(lead(s), s.clue)];
     default: return [];
   }
@@ -47,7 +49,12 @@ export function viewLines(s: Slide): SpokenLine[] {
     case 'border': return s.rounds.flatMap((r) => line(lead(s), r.says));
     case 'memory': return s.pairs.flatMap((p) => line('Vee', p.text));
     case 'teach': return s.pages.flatMap((p) => [...line(lead(s), sayable(p.word)), ...line(lead(s), p.example)]);
-    case 'numwall': return Array.from({ length: 100 }, (_, i) => i + 1).flatMap((n) => line('Vee', numberWord(n)));
+    case 'match': return s.pairs.flatMap((p) => line(lead(s), p.word));
+    case 'countup': return [...new Set(s.rounds.flatMap((r) => r.seq))].flatMap((n) => line('Vee', numberWord(n)));
+    case 'bepick': return s.rounds.flatMap((r) => line(lead(s), cap(r.frame.replace('___', r.answer))));
+    case 'build': return s.rounds.flatMap((r) => line(lead(s), r.target));
+    case 'factcheck': return s.claims.flatMap((c) => line(lead(s), c.text));
+    case 'numwall': return [...Array.from({ length: 100 }, (_, i) => i + 1), ...(s.hundreds ? [200, 300, 400, 500, 600, 700, 800, 900] : [])].flatMap((n) => line('Vee', numberWord(n)));
     default: return [];
   }
 }

@@ -42,7 +42,7 @@ export interface TitleSlide extends SlideBase { kind: 'title'; heading: string; 
 export interface BriefSlide extends SlideBase { kind: 'brief'; say: string; heading: string; stamps: { id: string; icon: string; label: string }[] }
 export interface BadgeSlide extends SlideBase { kind: 'badge'; prompt: string; starter: string; /** also ask the age (saved as vars.age) */ ages?: number[] }
 export interface DialSlide extends SlideBase { kind: 'dial'; prompt: string }
-export interface WhoSaidSlide extends SlideBase {
+export interface WhoSaidSlide extends Omit<SlideBase, 'items'> {
   kind: 'whosaid';
   prompt: string;
   items: { text: string; who: CastName }[];
@@ -94,7 +94,7 @@ export interface HuntSlide extends SlideBase {
 /** Shadow match (homework): a dark silhouette of a picture; pick the right word. */
 export interface ShadowSlide extends SlideBase { kind: 'shadow'; prompt: string; rounds: { art: TeachArt; answer: string; options: string[] }[] }
 export interface BorderSlide extends SlideBase { kind: 'border'; prompt: string; /** nationality word -> flag code: each passport shows its flag */ flags?: Record<string, string>; rounds: { flag: string; says: string; answer: string; options: string[] }[]; stamp?: string }
-export interface NumWallSlide extends SlideBase { kind: 'numwall'; title: string; /** how many different numbers the student must tap (default 8) */ need?: number }
+export interface NumWallSlide extends SlideBase { kind: 'numwall'; title: string; /** also show 200, 300 … 900 under the chart */ hundreds?: boolean; /** how many different numbers the student must tap (default 8) */ need?: number }
 export interface MemorySlide extends SlideBase { kind: 'memory'; prompt: string; pairs: { flag: string; text: string }[] }
 export interface PhoneChatSlide extends SlideBase { kind: 'phonechat'; prompt: string; contact: CastName; steps: { text: string; /** a sticker picture beside the message */ pic?: TeachArt; reply: string; extra?: string[]; /** pictures on the word tiles (key = the tile text) so beginners see what the word means */ tilePics?: Record<string, TeachArt> }[] }
 export interface FadeSlide extends SlideBase { kind: 'fade'; prompt: string; lines: { who: CastName; text: string; keys: string[] }[] }
@@ -114,11 +114,40 @@ export interface SaySlide extends SlideBase {
   /** the model stays visible (Mission takes); without it the model is hidden until "Show me" (the exit task) */
   open?: boolean;
 }
+/** Match the picture with the word (drag the word onto its picture, or tap word then picture). */
+export interface MatchSlide extends SlideBase {
+  kind: 'match';
+  prompt: string;
+  pairs: { word: string; art: TeachArt }[];
+  /** 'drag' (default): drag the word onto its picture. 'listen': hear the word, then choose its picture. */
+  mode?: 'drag' | 'listen';
+}
+/** Counting practice: a row of numbers with gaps; fill each gap with the right number (the row is counted aloud first). */
+export interface CountUpSlide extends SlideBase { kind: 'countup'; prompt: string; rounds: { seq: number[]; /** indexes of seq that are hidden */ blanks: number[] }[] }
+/** Grammar: pick am / is / are for a sentence with a blank (statements, negatives and questions). */
+export interface BePickSlide extends SlideBase { stamp?: string; kind: 'bepick'; prompt: string; rounds: { frame: string; answer: 'am' | 'is' | 'are'; who: TeachArt; why: string }[] }
+/** Grammar: build a sentence from word tiles (a short fact on top says what to build); wrong forms are the distractors. */
+export interface BuildSlide extends SlideBase { stamp?: string; kind: 'build'; prompt: string; rounds: { cue: string; target: string; extra?: string[]; hint?: string }[] }
+/** Fact-check a profile card: is each sentence true? If not, choose the sentence that fixes it. */
+export interface FactCheckSlide extends SlideBase {
+  kind: 'factcheck';
+  stamp?: string;
+  prompt: string;
+  profile: { who: CastName; name: string; age: number; from: string; nationality: string; flag: string };
+  claims: { text: string; fact: boolean; fixes?: { text: string; ok?: boolean; hint?: string }[] }[];
+}
+/** Writing: the student types sentences with the pattern; each row is checked against accepted shapes (model hidden until "Show me"). */
+export interface WriteSlide extends SlideBase {
+  kind: 'write';
+  stamp?: string;
+  prompt: string;
+  rows: { label: string; frame: string; /** regular expressions (source) tested on the normalised sentence */ accept: string[]; hint: string; sample: string }[];
+}
 export interface WrapSlide extends SlideBase { kind: 'wrap'; heading: string; ticks: string[]; homework: string; clue: string }
 
 export type Slide =
   | TitleSlide | BriefSlide | BadgeSlide | DialSlide | WhoSaidSlide | LockersSlide | NumTrainSlide | PadlockSlide | ConvoSlide | SpellSlide
-  | HuntSlide | ShadowSlide | TeachSlide | ModelSlide | FindWrongSlide | BorderSlide | MemorySlide | NumWallSlide | PhoneChatSlide | FadeSlide | CardSlide | SaySlide | WrapSlide;
+  | MatchSlide | CountUpSlide | BePickSlide | BuildSlide | FactCheckSlide | WriteSlide | HuntSlide | ShadowSlide | TeachSlide | ModelSlide | FindWrongSlide | BorderSlide | MemorySlide | NumWallSlide | PhoneChatSlide | FadeSlide | CardSlide | SaySlide | WrapSlide;
 
 export interface DeckScript {
   lessonId: string;
@@ -127,6 +156,8 @@ export interface DeckScript {
   objective: string;
   criteria: string[];
   cast: CastName[];
+  /** one line per part (index 0-7) shown on the part card; defaults to the PARTS goals */
+  partGoals?: string[];
   slides: Slide[];
 }
 

@@ -52,7 +52,7 @@ export function HomeworkApp({ artBase, lessonDate = todayISO(), demo = true }: H
   const save = useCallback((p: HwProgress) => { setProgress(p); saveProgress(LESSON_ID, p); }, []);
 
   const onSlideDone = useCallback((s: Slide, r: { wrong: number }) => {
-    if (!results.some((x) => x.slideId === s.id)) results.push({ slideId: s.id, items: s.items ?? [], wrong: r.wrong });
+    if (!results.some((x) => x.slideId === s.id)) results.push({ slideId: s.id, items: s.kind === 'whosaid' ? [] : s.items ?? [], wrong: r.wrong });
   }, [results]);
   const finish = useCallback(() => {
     if (!chest) return;
