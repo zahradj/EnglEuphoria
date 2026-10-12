@@ -254,7 +254,7 @@ The Explorer Map, Compass and Passport are platform pieces to build once (after 
    Scales + Racing (U8), Design My Room (U9), Clock Quest + Build-a-Bot + Maze Chase (U10).
 4. **Fun layer** (§4b): Explorer Map + Golden Compass + Passport after Unit 2.
 5. **Slot titles:** the 3 title changes in §3 are applied in `curriculum_lessons` (2026-10-12, unpublished slots).
-6. **Assessments** reuse the Pre-A1 system: Boss Test in every L7, A1 Halfway Check after Unit 5, A1 Final Test after
+6. **Assessments** (full plan: [`docs/assessment/a1-assessment-plan.md`](assessment/a1-assessment-plan.md) — Lesson 7 of every unit is the evaluation lesson; A1 Halfway Check after Unit 5; A1 Final Test after Unit 10 decides Ready for A2 / Almost / Not yet) reuse the Pre-A1 system: Boss Test in every L7, A1 Halfway Check after Unit 5, A1 Final Test after
    Unit 10, Practise-again packs, parent report.
 
 ## 6. Research sources

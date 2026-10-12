@@ -7,7 +7,7 @@ import { Confetti } from '../fx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
 import { CLAY_BUTTON, THICK_WORDS, sayWithin } from './shared';
 import { Bursts, useBursts } from './gameFx';
-import { DECISION_TEXT, decide, speakingShare, starsFor } from '../../levelTestScoring';
+import { decide, decisionText, speakingShare, starsFor } from '../../levelTestScoring';
 import { saveAssessmentResult } from '@/services/playgroundAssessmentService';
 import { getHomeworkQuest } from '@/content/homework-quests/registry';
 import { practisePackId, practiseScopeForTest } from '@/content/homework-quests/practise-again';
@@ -267,8 +267,8 @@ export function LevelTestScene({ scene, onWin, onNext, sync, role, roomId }: {
                   </div>
                 )}
                 <div className={`rounded-xl px-3 py-2 font-black ${decision === 'ready' || decision === 'go_on' || decision === 'unit_pass' ? 'bg-emerald-100 text-emerald-800' : decision === 'almost' || decision === 'go_on_support' || decision === 'unit_practise' ? 'bg-amber-100 text-amber-800' : 'bg-rose-100 text-rose-800'}`}>
-                  {DECISION_TEXT[decision].label}
-                  <div className="font-semibold">{DECISION_TEXT[decision].next}</div>
+                  {decisionText(decision, scene.level).label}
+                  <div className="font-semibold">{decisionText(decision, scene.level).next}</div>
                 </div>
                 {missed.length > 0 && <div className="text-slate-600"><b>Practise:</b> {missed.join(', ')}</div>}
                 {practiseOptions.length > 0 && (
@@ -283,7 +283,7 @@ export function LevelTestScene({ scene, onWin, onNext, sync, role, roomId }: {
                   </div>
                 )}
                 {scene.mode === 'final' && decision === 'ready' && scene.nextLevel && (
-                  <label className="flex items-center gap-2 font-bold"><input type="checkbox" checked={requestLevel} onChange={(e) => setRequestLevel(e.target.checked)} /> Also send the level change request (Pre-A1 → {scene.nextLevel}) to the admin</label>
+                  <label className="flex items-center gap-2 font-bold"><input type="checkbox" checked={requestLevel} onChange={(e) => setRequestLevel(e.target.checked)} /> Also send the level change request ({scene.level} → {scene.nextLevel}) to the admin</label>
                 )}
                 <textarea value={note} onChange={(e) => setNote(e.target.value)} placeholder="Note for the record (optional)" className="h-[7vh] w-full resize-none rounded-lg border p-2" />
                 <div className="flex items-center gap-2">

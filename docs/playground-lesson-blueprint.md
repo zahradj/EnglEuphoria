@@ -310,6 +310,24 @@ in `a1Roadmap.ts`; the unit's own objective file (e.g. `docs/a1-unit-2-jungle.md
 | 19 | Vault sticker | sticker **+ Explorer Passport stamp**, earned by saying the lesson's "I can…" sentence |
 | 20 | Home Mission | the plan's home mission (a real-life use of the sentence) |
 
+**Enough guided practice, then free practice (owner, 2026-10-12: "make sure that the student practises enough guided
+practice and free practice").** Every A1 lesson climbs the same ladder, and no step is skipped:
+
+| Stage | What the child does | Slots | Minimum |
+|---|---|---|---|
+| Present | hears and sees the new words / the sentence (word pages, sentence page, watch & copy) | 3-5, 8 | — |
+| **Guided practice** (controlled) | uses the language **with support**: a model to copy, choices to pick from, a sentence frame to fill ("A ___ can ___."), drag / match / listen-and-tap, chorus and echo; the answer is fixed and the game checks it | 6-9, the first game, the song | **3 activities** (≈ 8-10 min), at least one where the child says the full sentence |
+| **Free practice** (less controlled → free) | uses the language **without the model**: own sentences about own life (slot 13), describing a picture or animal in their own words, asking the teacher questions (slot 11), choosing and explaining, role-play, the "child is the expert" moment; more than one right answer | 10-13, 16, the signature game's last round | **2 activities** (≈ 6-8 min), each ending in the child's own spoken sentences |
+| Check | the lesson's evidence page from its plan (what proves the objective) | before the sticker | 1 |
+
+The teacher note on each scene says which stage it is (`teacher` starts with "Guided:" or "Free:"), and the lesson-quality
+gate counts them. A lesson whose only speaking is repeating is not done.
+
+**Lesson 7 is the evaluation lesson** (the unit Boss Test, `docs/assessment/a1-assessment-plan.md`): review games first,
+then the Boss Test (words, sentences, reading & sounds, speaking rated by the teacher, 80 % per part), then the compass piece,
+the teaser of the next world and the sticker. After Unit 5 comes the **A1 Halfway Check** and after Unit 10 the **A1 Final
+Test**, which decides whether the child is ready for A2 (teacher confirms, admin approves the level change).
+
 **The unit arc decides the lesson type** (same in every world):
 
 | Lesson | Type | What changes |
@@ -333,6 +351,7 @@ renderer. No signature game twice in a unit (`a1LessonPlans.test.ts` checks the 
 - [ ] the lesson matches its plan (objective, grammar, words, game, evidence, home mission)
 - [ ] one structure per sentence page, each with its own matching picture
 - [ ] the child answers in full sentences AND asks at least one question
+- [ ] at least 3 guided-practice and 2 free-practice activities, marked "Guided:" / "Free:" in the teacher notes
 - [ ] Remember? warm-up, song after the words + first game, sticker + passport stamp, home mission
 - [ ] 2 choices + 1 surprise; L4 has the child-is-expert moment; L7 has the compass piece and the teaser
 - [ ] DB row: real title, `contentFormat`, unpublished until merged (lesson hand-off rule)
