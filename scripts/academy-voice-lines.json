@@ -317,27 +317,7 @@
   },
   {
     "who": "Vee",
-    "text": "Germany, German"
-  },
-  {
-    "who": "Vee",
-    "text": "I am from Germany. I am German."
-  },
-  {
-    "who": "Vee",
-    "text": "Japan, Japanese"
-  },
-  {
-    "who": "Vee",
-    "text": "I am from Japan. I am Japanese."
-  },
-  {
-    "who": "Vee",
-    "text": "America, American"
-  },
-  {
-    "who": "Vee",
-    "text": "I am from America. I am American."
+    "text": "Who is from where? Drag each country and nationality onto its character."
   },
   {
     "who": "Theo",
@@ -357,7 +337,7 @@
   },
   {
     "who": "Theo",
-    "text": "Your member number is four, two, seven."
+    "text": "Your member number is four hundred twenty-seven."
   },
   {
     "who": "Ava",
@@ -365,11 +345,11 @@
   },
   {
     "who": "Theo",
-    "text": "Four… two… seven."
+    "text": "Four hundred… twenty-seven."
   },
   {
     "who": "Ava",
-    "text": "My number is four, two, seven."
+    "text": "My number is four hundred twenty-seven."
   },
   {
     "who": "Vee",
@@ -701,7 +681,15 @@
   },
   {
     "who": "Vee",
-    "text": "My number is four hundred."
+    "text": "Open locker four hundred."
+  },
+  {
+    "who": "Vee",
+    "text": "four hundred twenty-seven"
+  },
+  {
+    "who": "Vee",
+    "text": "My number is four hundred twenty-seven."
   },
   {
     "who": "Theo",
@@ -709,11 +697,27 @@
   },
   {
     "who": "Theo",
+    "text": "Number Train! Put each number word on its carriage: two-digit and three-digit numbers."
+  },
+  {
+    "who": "Vee",
+    "text": "one hundred eighty"
+  },
+  {
+    "who": "Vee",
+    "text": "five hundred three"
+  },
+  {
+    "who": "Vee",
+    "text": "two hundred forty-five"
+  },
+  {
+    "who": "Theo",
     "text": "Theo says your member number. Open the drawer with the code!"
   },
   {
     "who": "Theo",
-    "text": "four, two, seven"
+    "text": "four hundred twenty-seven"
   },
   {
     "who": "Vee",
@@ -765,11 +769,7 @@
   },
   {
     "who": "Theo",
-    "text": "I am from Germany."
-  },
-  {
-    "who": "Theo",
-    "text": "I am from Japan."
+    "text": "I am from Italy."
   },
   {
     "who": "Theo",
@@ -777,7 +777,7 @@
   },
   {
     "who": "Theo",
-    "text": "Your member number is four two seven!"
+    "text": "Your member number is four hundred twenty-seven!"
   },
   {
     "who": "Vee",
@@ -798,14 +798,6 @@
   {
     "who": "Vee",
     "text": "French"
-  },
-  {
-    "who": "Vee",
-    "text": "German"
-  },
-  {
-    "who": "Vee",
-    "text": "Japanese"
   },
   {
     "who": "Vee",
@@ -870,10 +862,6 @@
   {
     "who": "Ava",
     "text": "I am from Italy. I am Italian."
-  },
-  {
-    "who": "Theo",
-    "text": "I am from Italy."
   },
   {
     "who": "Theo",
@@ -1189,6 +1177,14 @@
   },
   {
     "who": "Vee",
+    "text": "German"
+  },
+  {
+    "who": "Vee",
+    "text": "Japanese"
+  },
+  {
+    "who": "Vee",
     "text": "Border control! Drag each traveller onto the right passport."
   },
   {
@@ -1262,5 +1258,109 @@
   {
     "who": "Vee",
     "text": "Your number is five, eight, three!"
+  },
+  {
+    "who": "Vee",
+    "text": "A"
+  },
+  {
+    "who": "Vee",
+    "text": "B"
+  },
+  {
+    "who": "Vee",
+    "text": "C"
+  },
+  {
+    "who": "Vee",
+    "text": "D"
+  },
+  {
+    "who": "Vee",
+    "text": "E"
+  },
+  {
+    "who": "Vee",
+    "text": "F"
+  },
+  {
+    "who": "Vee",
+    "text": "G"
+  },
+  {
+    "who": "Vee",
+    "text": "H"
+  },
+  {
+    "who": "Vee",
+    "text": "I"
+  },
+  {
+    "who": "Vee",
+    "text": "J"
+  },
+  {
+    "who": "Vee",
+    "text": "K"
+  },
+  {
+    "who": "Vee",
+    "text": "L"
+  },
+  {
+    "who": "Vee",
+    "text": "M"
+  },
+  {
+    "who": "Vee",
+    "text": "N"
+  },
+  {
+    "who": "Vee",
+    "text": "O"
+  },
+  {
+    "who": "Vee",
+    "text": "P"
+  },
+  {
+    "who": "Vee",
+    "text": "Q"
+  },
+  {
+    "who": "Vee",
+    "text": "R"
+  },
+  {
+    "who": "Vee",
+    "text": "S"
+  },
+  {
+    "who": "Vee",
+    "text": "T"
+  },
+  {
+    "who": "Vee",
+    "text": "U"
+  },
+  {
+    "who": "Vee",
+    "text": "V"
+  },
+  {
+    "who": "Vee",
+    "text": "W"
+  },
+  {
+    "who": "Vee",
+    "text": "X"
+  },
+  {
+    "who": "Vee",
+    "text": "Y"
+  },
+  {
+    "who": "Vee",
+    "text": "Z"
   }
 ]

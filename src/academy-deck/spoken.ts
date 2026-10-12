@@ -11,6 +11,16 @@ export const sayable = (word: string): string => word.replace(/ · /g, ', ');
 
 const cap = (t: string): string => t.charAt(0).toUpperCase() + t.slice(1);
 
+/** How each letter is SAID (letter names), so spelled words and single letters are recorded correctly: A-V-A -> "ay, vee, ay." */
+export const LETTER_NAME: Record<string, string> = { A: 'ay', B: 'bee', C: 'see', D: 'dee', E: 'ee', F: 'eff', G: 'jee', H: 'aitch', I: 'eye', J: 'jay', K: 'kay', L: 'ell', M: 'em', N: 'en', O: 'oh', P: 'pee', Q: 'cue', R: 'ar', S: 'ess', T: 'tee', U: 'you', V: 'vee', W: 'double you', X: 'ex', Y: 'why', Z: 'zee' };
+export const ALPHABET = Object.keys(LETTER_NAME);
+/** The text sent to the voice for a line: spelled letters (A-V-A) and single capital letters become their names; everything else is unchanged. The clip key stays the original text. */
+export function speechText(text: string): string {
+  const t = text.trim();
+  if (/^[A-Z]$/.test(t)) return `${LETTER_NAME[t]}.`;
+  return text.replace(/\b([A-Z](?:-[A-Z])+)\b/g, (_m, g: string) => g.split('-').map((l) => LETTER_NAME[l]).join(', '));
+}
+
 export interface SpokenLine { who: CastName; text: string }
 
 const fixed = (l: SpokenLine): boolean => !/[{}]|_{2,}/.test(l.text) && l.text.trim().length > 0;
@@ -49,7 +59,7 @@ export function viewLines(s: Slide): SpokenLine[] {
     case 'border': return s.rounds.flatMap((r) => line(lead(s), r.says));
     case 'memory': return s.pairs.flatMap((p) => line('Vee', p.text));
     case 'teach': return s.pages.flatMap((p) => [...line(lead(s), sayable(p.word)), ...line(lead(s), p.example)]);
-    case 'match': return s.pairs.flatMap((p) => line(lead(s), p.word));
+    case 'match': return s.pairs.flatMap((p) => line(lead(s), sayable(p.word)));
     case 'countup': return [...new Set(s.rounds.flatMap((r) => r.seq))].flatMap((n) => line('Vee', numberWord(n)));
     case 'bepick': return s.rounds.flatMap((r) => line(lead(s), cap(r.frame.replace('___', r.answer))));
     case 'build': return s.rounds.flatMap((r) => line(lead(s), r.target));

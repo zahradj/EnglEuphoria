@@ -122,8 +122,35 @@ export function Flag({ code, label }: { code: string; label: string }) {
   );
 }
 
-/** A number card: the big digit and that many dots, so the number is understood without translation. */
+/** A number card: the big number and, up to 20, that many dots (so it is understood without translation). Bigger numbers show their parts: 503 = 500 + 3. */
 export function NumberCard({ n, label }: { n: number; label: string }) {
+  if (n > 20) {
+    const hundreds = Math.floor(n / 100) * 100;
+    const rest = n % 100;
+    const parts = [hundreds, rest].filter((v) => v > 0);
+    const tens = rest >= 20 ? Math.floor(rest / 10) * 10 : 0;
+    const split = hundreds > 0 && tens > 0 && rest % 10 > 0 ? [hundreds, tens, rest % 10] : tens > 0 && rest % 10 > 0 && hundreds === 0 ? [tens, rest % 10] : parts;
+    return (
+      <svg className="ap-drawn ap-numcard" viewBox="0 0 300 225" role="img" aria-label={label}>
+        <rect width="300" height="225" rx="22" fill="#f3edff" />
+        <text x="150" y="120" textAnchor="middle" fontSize={n >= 100 ? 92 : 108} fontWeight="900" fill="#4c1d95" fontFamily="system-ui, sans-serif">{n}</text>
+        {split.length > 1 && (
+          <g>
+            {split.map((v, i) => {
+              const w = 76;
+              const x = 150 + (i - (split.length - 1) / 2) * (w + 10) - w / 2;
+              return (
+                <g key={i}>
+                  <rect x={x} y="150" width={w} height="40" rx="12" fill={['#8b5cf6', '#6366f1', '#a78bfa'][i % 3]} stroke="#fff" strokeWidth="3" />
+                  <text x={x + w / 2} y="178" textAnchor="middle" fontSize="24" fontWeight="800" fill="#fff" fontFamily="system-ui, sans-serif">{v}</text>
+                </g>
+              );
+            })}
+          </g>
+        )}
+      </svg>
+    );
+  }
   const dots = Array.from({ length: n }, (_, i) => i);
   const perRow = n <= 5 ? n : Math.ceil(n / 2);
   return (
@@ -134,9 +161,9 @@ export function NumberCard({ n, label }: { n: number; label: string }) {
         const row = Math.floor(i / perRow);
         const inRow = n <= 5 ? n : row === 0 ? perRow : n - perRow;
         const col = i % perRow;
-        const x = 150 + (col - (inRow - 1) / 2) * 34;
-        const y = n <= 5 ? 172 : 150 + row * 34;
-        return <circle key={i} cx={x} cy={y} r="13" fill={['#8b5cf6', '#6366f1', '#a78bfa'][i % 3]} stroke="#fff" strokeWidth="3" />;
+        const x = 150 + (col - (inRow - 1) / 2) * (n > 10 ? 26 : 34);
+        const y = n <= 5 ? 172 : 150 + row * (n > 10 ? 30 : 34);
+        return <circle key={i} cx={x} cy={y} r={n > 10 ? 10 : 13} fill={['#8b5cf6', '#6366f1', '#a78bfa'][i % 3]} stroke="#fff" strokeWidth="3" />;
       })}
     </svg>
   );

@@ -75,6 +75,8 @@ export type TeachArt =
   | { type: 'letters'; text: string }
   /** flag + traveller side by side (a country and its nationality) */
   | { type: 'pair'; code: string }
+  /** a cast character holding the flag of a country (painted character, waving flag) */
+  | { type: 'bearer'; code: string; who: CastName }
   /** an animated drawn classroom picture (slides/actions.tsx): the instruction words and the help phrases */
   | { type: 'action'; id: ActionId }
   /** a Canva picture card from `cards/<id>.webp` (flat 2D illustration; never 3D, never emoji) */
@@ -93,7 +95,7 @@ export interface HuntSlide extends SlideBase {
 }
 /** Shadow match (homework): a dark silhouette of a picture; pick the right word. */
 export interface ShadowSlide extends SlideBase { kind: 'shadow'; prompt: string; rounds: { art: TeachArt; answer: string; options: string[] }[] }
-export interface BorderSlide extends SlideBase { kind: 'border'; prompt: string; /** nationality word -> flag code: each passport shows its flag */ flags?: Record<string, string>; rounds: { flag: string; says: string; answer: string; options: string[] }[]; stamp?: string }
+export interface BorderSlide extends SlideBase { kind: 'border'; prompt: string; /** nationality word -> flag code: each passport shows its flag */ flags?: Record<string, string>; /** `who`: the cast character who arrives holding the flag (default: a drawn traveller) */ rounds: { flag: string; says: string; answer: string; options: string[]; who?: CastName }[]; stamp?: string }
 export interface NumWallSlide extends SlideBase { kind: 'numwall'; title: string; /** also show 200, 300 … 900 under the chart */ hundreds?: boolean; /** how many different numbers the student must tap (default 8) */ need?: number }
 export interface MemorySlide extends SlideBase { kind: 'memory'; prompt: string; pairs: { flag: string; text: string }[] }
 export interface PhoneChatSlide extends SlideBase { kind: 'phonechat'; prompt: string; contact: CastName; steps: { text: string; /** a sticker picture beside the message */ pic?: TeachArt; reply: string; extra?: string[]; /** pictures on the word tiles (key = the tile text) so beginners see what the word means */ tilePics?: Record<string, TeachArt> }[] }

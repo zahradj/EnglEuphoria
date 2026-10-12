@@ -14,7 +14,7 @@ import { fileURLToPath } from 'node:url';
 import { SIGN_ME_UP } from '../src/academy-deck/lessons/signMeUp.ts';
 import { PATTERN_LAB } from '../src/academy-deck/lessons/patternLab.ts';
 import { SIGN_ME_UP_QUEST } from '../src/academy-deck/homework/signMeUpQuest.ts';
-import { slideLines } from '../src/academy-deck/spoken.ts';
+import { slideLines, ALPHABET } from '../src/academy-deck/spoken.ts';
 import { ACADEMY_VOICES } from '../src/academy-deck/voices.ts';
 
 const OUT = path.join(path.dirname(fileURLToPath(import.meta.url)), 'academy-voice-lines.json');
@@ -35,6 +35,8 @@ for (const d of decks) {
     }
   }
 }
+// letter names for the spelling game (the student's own name can use any letter)
+if (decks.some((d) => d.slides.some((s) => s.kind === 'spell'))) for (const l of ALPHABET) seen.set(`Vee::${l}`, { who: 'Vee', text: l });
 const lines = [...seen.values()];
 fs.writeFileSync(OUT, JSON.stringify(lines, null, 2) + '\n');
 const per = {};
