@@ -1,0 +1,15 @@
+
+=== docs/songs/u10l5-he-can-jump-take1.mp3  length=20.1s  score=1.00  missing=0  extra=0
+heard: he can jump jump jump she can swim swim swim it can fly fly fly they can run run run
+line starts (s): [np.float64(0.0), np.float64(4.0), np.float64(8.7), np.float64(13.8)]
+lineDurationsMs: [3980, 4700, 5080, 6302]
+
+=== docs/songs/u10l5-he-can-jump-take2.mp3  length=20.1s  score=0.95  missing=1  extra=1
+heard: we can jump jump jump she can swim swim swim it can fly fly fly they can run run run
+line starts (s): [np.float64(0.5), np.float64(4.0), np.float64(8.6), np.float64(13.6)]
+lineDurationsMs: [3980, 4660, 4920, 6502]
+
+=== docs/songs/u10l5-he-can-jump-take3.mp3  length=20.1s  score=1.00  missing=0  extra=0
+heard: he can jump jump jump she can swim swim swim it can fly fly fly they can run run run
+line starts (s): [np.float64(0.0), np.float64(4.5), np.float64(9.1), np.float64(13.9)]
+lineDurationsMs: [4500, 4600, 4760, 6202]
