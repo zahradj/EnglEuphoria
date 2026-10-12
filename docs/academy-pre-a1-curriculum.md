@@ -27,6 +27,13 @@ Owner request: a Pre-A1 curriculum for students with no English at all, focused 
 | Mission | 6 | say or tap a chunk with Theo/Ava (Take 1, feedback, Take 2 short) |
 | Wrap | 5 | can-dos, Daily 10, next clue |
 
+## 3b. Blending first, and age-appropriate (owner 2026-10-12: "focus more on blending, reading and vocabulary; it has to be age-appropriate")
+- **Blending is the spine of the level.** Every session has a blending routine of 3-5 minutes inside the Read part: see the letters, hear each sound, slide them together (s-i-t -> sit), then read the word, then read it in a line. Sound set grows by about 3 per Season; words are decodable from the sounds taught so far. Sight words (I, a, is, the, my, you...) are taught as whole words, a few at a time, because they cannot be blended.
+- **Vocabulary is chosen to be read, not only seen:** words that can be blended now and matter to a teenager come first (cap, bag, bus, van, pen, map, phone, tap, pin, hat, sun, red, bed). Words that cannot be blended yet (phone, school) are taught as whole-word pictures and read as sight words.
+- **Age-appropriate decodables:** teen scenes, no childish stories. Example lines: "Sam has a van. Tim has a cap." / "Dan sits on a bus." / "Mia has a pen. It is red." Cast: Vee, Ava, Theo (plus Mia in the Pre-A1 level if the owner adds her to the vault). Topics: phone, bus, bag, cap, music, football, friends. No nursery rhymes, no animal-mascot readers, no baby voices.
+- **Look:** Studio-style text, real teen scenes (the club desk, the bus stop, the school gate), clean illustrated word cards; the blend slider is a game-like control (letters slide together with a click sound), not a worksheet.
+- **Check:** every reading page is tested against the sounds taught (a decodability test: every word is blendable or a taught sight word).
+
 ## 4. Seasons (6 Seasons x 8 sessions = 48 sessions, about 24 weeks at 2 a week)
 Target by the end: about 220 words, the alphabet names and about 25 letter-sound patterns, and the ability to read a 5-sentence profile. Lists are first drafts for the roadmap architect to check against the A1 Season 1 items.
 
