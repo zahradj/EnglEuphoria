@@ -6347,7 +6347,6 @@ const bgU3L4Bella = `${A}/scenes/bg-u3l4-bella-wide.png`;
 const bgU3L4Share = `${A}/scenes/bg-u3l4-share-wide.png`;
 const bgU3L4Room = `${A}/scenes/bg-u3l4-room-empty-wide.png`;
 const bgU3L4Pool = `${A}/scenes/bg-u3l4-pool-wide.png`;
-const loopU3L4 = (name: string) => `${A}/video/loops/u3l4-${name}.mp4`;
 const T_BALL_BIG = { colorWord: 'RED', colorHex: '#EF4444', shape: 'circle' as const, img: itemBallRed, word: 'ball', size: 'big' as const };
 const T_BALL_SMALL = { colorWord: 'RED', colorHex: '#EF4444', shape: 'circle' as const, img: itemBallRed, word: 'ball', size: 'small' as const };
 const T_TEDDY_BIG = { colorWord: 'BROWN', colorHex: '#92400E', shape: 'circle' as const, img: itemTeddy, word: 'teddy bear', size: 'big' as const };
@@ -6423,7 +6422,7 @@ export const LESSON_U3L4_SCENES: Scene[] = [
 
   /* 6 Listening game: fish the toys out of the pool */
   {
-    id: 'u3l4-pool', kind: 'shape-fishing', bg: bgU3L4Pool, bgVideo: loopU3L4('pool'), floating: true, who: 'pip',
+    id: 'u3l4-pool', kind: 'shape-fishing', bg: bgU3L4Pool, floating: true, who: 'pip',
     teacher: 'The toys are in the pool! Listen: big or small? Tap the toy Pip says.',
     fish: [T_BALL_BIG, T_TEDDY_SMALL, T_CAR_BIG, T_BALL_SMALL, T_TEDDY_BIG, T_CAR_SMALL],
     targets: [0, 3, 2, 1],
@@ -6586,7 +6585,7 @@ export const LESSON_U3L4_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'u3l4-pool-2', kind: 'shape-fishing', bg: bgU3L4Pool, bgVideo: loopU3L4('pool'), floating: true, who: 'mia',
+    id: 'u3l4-pool-2', kind: 'shape-fishing', bg: bgU3L4Pool, floating: true, who: 'mia',
     teacher: 'Extra time: More toys in the pool! Big or small? Tap the toy Mia says.',
     fish: [T_ROBOT_SMALL, T_PLANE_BIG, T_TEDDY_BIG, T_KITE_SMALL, T_BALL_SMALL, T_CAR_BIG],
     targets: [2, 0, 3],
