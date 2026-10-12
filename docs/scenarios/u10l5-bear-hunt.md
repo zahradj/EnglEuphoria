@@ -1,6 +1,6 @@
 # Scenario — Pre-A1 Unit 10 Lesson 5 · story film "Pip's Bear Hunt"
 
-**Status: waiting for the owner's approval.** Stills only, nothing paid is ordered.
+**Status: approved by the owner (2026-10-12).** Stills only, nothing paid is ordered.
 
 | | |
 |---|---|
@@ -61,4 +61,4 @@ WHO it is: Pip or Leo for he, Mia for she, the animal for it, all three for they
 house: "He can…", "She can…") → goodbye.
 
 ## Owner approval
-Approved: — (waiting)
+Approved: owner, 2026-10-12 — "Go" (after "change it to he, she, they, then add animals to use it can").
