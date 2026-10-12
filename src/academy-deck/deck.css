@@ -943,7 +943,7 @@
 
 .ad-fc { display: grid; grid-template-columns: minmax(150px, 210px) 1fr; gap: 14px; align-items: start; }
 .ad-fc-card { position: relative; padding: 12px 12px 8px; border-radius: 16px; border: 3px solid #5b21b6; background: linear-gradient(180deg, #fff, #f3edff); box-shadow: 0 6px 0 rgba(76, 29, 149, 0.35); }
-.ad-fc-flag { position: absolute; top: -14px; inset-inline-end: 10px; width: 54px; filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.25)); }
+.ad-fc-flag { display: block; width: 58px; margin-bottom: 8px; filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.25)); }
 .ad-fc-card dl { margin: 0; display: grid; gap: 4px; }
 .ad-fc-card dl div { display: flex; justify-content: space-between; gap: 8px; border-bottom: 1px dashed #d3c8f8; padding-bottom: 3px; }
 .ad-fc-card dt { color: #6b5aa8; font-size: 0.85rem; font-weight: 700; }
@@ -970,5 +970,5 @@
 .ad-write-mark { position: absolute; top: 8px; inset-inline-end: 10px; color: #16a34a; width: 26px; }
 .ad-write-hint { margin: 0; color: #b45309; font-weight: 700; }
 .ad-write-sample { margin: 0; color: #5b21b6; font-style: italic; }
-@media (max-width: 640px) { .ad-fc { grid-template-columns: 1fr; } .ad-fc-flag { top: -10px; width: 44px; } }
+@media (max-width: 640px) { .ad-fc { grid-template-columns: 1fr; } .ad-fc-flag { width: 46px; } }
 .ad-root[data-hw='true'] .ad-be-line, .ad-root[data-hw='true'] .ad-fc-claim { color: #1e1b4b; }

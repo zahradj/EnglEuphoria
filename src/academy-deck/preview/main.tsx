@@ -1,17 +1,18 @@
 // Standalone preview (dev + artifact). Without ?mode= a small picker offers the lesson deck and the homework quest.
-// Options: ?art=/academy-art  ?teacher=0 (turn OFF review mode: by default the preview lets you open any slide and press Next freely)  ?mode=lesson|homework  ?demo=0 (real calendar unlocking)
+// Options: ?lesson=fake-or-real (default: Sign Me Up)  ?art=/academy-art  ?teacher=0 (turn OFF review mode: by default the preview lets you open any slide and press Next freely)  ?mode=lesson|homework  ?demo=0 (real calendar unlocking)
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Deck } from '../Deck';
 import { HomeworkApp } from '../homework/Homework';
 import { SIGN_ME_UP } from '../lessons/signMeUp';
+import { PATTERN_LAB } from '../lessons/patternLab';
 
 const q = new URLSearchParams(window.location.search);
 const art = q.get('art') ?? (window as unknown as { __ACADEMY_ART__?: string }).__ACADEMY_ART__ ?? undefined;
 
 function Preview() {
   const [mode, setMode] = useState<string | null>(q.get('mode'));
-  if (mode === 'lesson') return <Deck script={SIGN_ME_UP} artBase={art} teacher={q.get('teacher') !== '0'} freeNext={q.get('teacher') !== '0'} />;
+  if (mode === 'lesson') return <Deck script={q.get('lesson') === 'fake-or-real' ? PATTERN_LAB : SIGN_ME_UP} artBase={art} teacher={q.get('teacher') !== '0'} freeNext={q.get('teacher') !== '0'} />;
   if (mode === 'homework') return <HomeworkApp artBase={art} demo={q.get('demo') !== '0'} />;
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', gap: 14, alignItems: 'center', justifyContent: 'center', padding: 16, background: 'linear-gradient(160deg,#f5f3ff,#e9e0ff)', color: '#1e1b4b', fontFamily: 'system-ui, sans-serif' }}>
