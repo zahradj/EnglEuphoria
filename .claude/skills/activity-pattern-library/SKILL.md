@@ -212,6 +212,14 @@ child taps the act's ticket; drum-roll tremble → the screen rolls up → spotl
 shadow, move: swim|dance|sing, who, line}, `rounds` {act, ask, reply}. Sources (mechanic only): silhouette "guess the
 action" (Lingokids / Khan Kids), shadow-puppet theatre, Cambridge Pre A1 "Can you …? Yes, I can".
 
+### Campfire Says (`campfire-says`, U10L3 signature, slot 3)
+
+Simon-Says with WHO + WHAT: the host calls a friend and an action ("Mia, play with the ball!"); the called friend
+steps into the campfire light, the child taps that friend's action picture (cut-out pose stickers), and the friend
+does it (clap sparkles, bouncing ball, "zzz"); the sky darkens as friends fall asleep; last round "Everybody, sleep!".
+Data: `fire` {x,y}, `friends` {who, name, x, idle, poses {clap, play, sleep}}, `rounds` {friend (-1 = everybody),
+action, line, reply}. Sources: Simon Says / TPR, Cambridge Pre A1 names + actions, Khan Kids follow-the-instructions.
+
 **Pre-A1 children cannot read.** Never make reading the only way into a task: speak every prompt, give picture answers, keep printed text as a small caption for the adult.
 
 ## Playground hub — A1/A2 Welcome Town (`.../welcome-town/scenes.ts`, `.../welcome-town-a2/scenes.ts`)

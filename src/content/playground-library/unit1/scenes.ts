@@ -536,6 +536,14 @@ export type Scene =
       doneLine: string;
     }
   | {
+      /** Campfire Says (U10L3 signature): the host calls a friend and an action ("Pip, clap your hands!"); the child
+       *  taps that friend's action picture and the friend does it. `friend: -1` = everybody (the last round). */
+      id: string; kind: 'campfire-says'; bg: string; teacher: string; who: CharKey; fire: { x: number; y: number };
+      friends: { who: CharKey; name: string; x: number; idle: string; poses: { clap: string; play: string; sleep: string } }[];
+      rounds: { friend: number; action: 'clap' | 'play' | 'sleep'; line: string; reply: string }[];
+      doneLine: string;
+    }
+  | {
       /** Beach Talent Show (U10L2 signature): the act's moving shadow (its action GIF) behind a glowing screen; the child
        *  taps the act's ticket (`act` indexes `acts`), the screen rolls up and the friend says "I can swim!". */
       id: string; kind: 'talent-show'; bg: string; teacher: string; who: CharKey; curtain: string;
@@ -15865,4 +15873,201 @@ export const LESSON_U10L2_SCENES: Scene[] = [
     ],
   },
   { id: 'u10l2-finale', kind: 'finale', bg: bgU10L2Beach, who: 'mia', line: 'Swim, dance, sing! What a beach party! Goodbye, friend!' },
+];
+
+/* =============================================================================
+ * Pre-A1 Unit 10, Lesson 3 — "Clap, Play, Sleep!" (Action Verbs; the sound L, as in cl-ap, p-l-ay, s-l-eep)
+ *
+ * A garden camp-out from dusk to night. New action words clap, play, sleep (cut-out pose stickers of Pip, Mia and
+ * Leo), a new signature game (Campfire Says: the host calls a friend and an action, the child picks it, the friend
+ * does it and the night falls as everybody sleeps), the lesson song after the first game, and the sound L.
+ * ========================================================================= */
+
+const bgU10L3Camp = `${A}/scenes/bg-u10l3-camp-wide.png`;
+const bgU10L3CampEmpty = `${A}/scenes/bg-u10l3-camp-empty-wide.png`;
+const pose = (who: string, act: string) => `${A}/items/item-${who}-${act}.png`;
+const itemLion = `${A}/items/item-lion.png`;
+const itemLemon = `${A}/items/item-lemon.png`;
+const itemLollipop = `${A}/items/item-lollipop.png`;
+const itemLamp = `${A}/items/item-lamp.png`;
+const itemLadder = `${A}/items/item-ladder.png`;
+const itemCloud = `${A}/items/item-cloud.png`;
+const itemSled = `${A}/items/item-sled.png`;
+const PC = (img: string, word: string) => ({ colorWord: word.toUpperCase(), colorHex: '#FDE68A', shape: 'circle' as const, img, word });
+
+export const LESSON_U10L3_TITLE = 'Clap, Play, Sleep!';
+export const LESSON_U10L3_OBJECTIVE = 'Understand and do the actions clap, play and sleep, follow "Pip, clap your hands!" (who + what), say the words, and hear the sound L (lion, leaf, lemon; cl-ap, s-l-eep), by moving, listening and playing, no reading.';
+
+export const LESSON_U10L3_SCENES: Scene[] = [
+  { id: 'u10l3-title', kind: 'title-card', bg: bgU10L3Camp, level: 'Pre-A1', unit: 'Unit 10', lessonLabel: 'Lesson 3', title: 'Clap, Play, Sleep!', subtitle: 'A camp-out in the garden' },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 10 · Lesson 2 · Swim, Dance, Sing!
+    id: 'u10l3-recall-warmup', kind: 'recall-warmup', bg: bgU10L3CampEmpty, who: 'pip', mode: 'click',
+    fromLabel: 'Lesson 2 · Swim, Dance, Sing!',
+    teacher: 'Warm-up from last lesson: Pip says an action, the child finds the picture, says it and does it.',
+    items: [
+      { word: 'swim', say: 'Swim!', img: gifSwim },
+      { word: 'dance', say: 'Dance!', img: gifDance },
+      { word: 'sing', say: 'Sing!', img: gifSing },
+    ],
+  },
+  {
+    id: 'u10l3-intro', kind: 'cinematic', bg: bgU10L3Camp, hidePipOverlay: true, title: 'Clap, Play, Sleep!', subtitle: 'A camp-out in the garden', narrator: 'pip',
+    script: [
+      { who: 'pip', line: "It's a camp-out! Clap, clap!" },
+      { who: 'mia', line: "Let's play ball!" },
+      { who: 'leo', line: 'Yawn! I want to sleep.' },
+      { who: 'pip', line: 'Shh! Goodnight, Leo!' },
+    ],
+    cta: "Let's camp!",
+  },
+
+  /* 4-5 The words, then move */
+  {
+    id: 'u10l3-words', kind: 'listen-repeat-cards', textSide: 'right', bg: bgU10L3CampEmpty, teacher: 'Listen, then say it and do it: "Clap!"',
+    cards: [
+      { who: 'pip', sentence: 'Clap! I clap my hands!', img: pose('pip', 'clap'), imgLabel: 'clap' },
+      { who: 'mia', sentence: 'Play! I play with my ball!', img: pose('mia', 'play'), imgLabel: 'play' },
+      { who: 'leo', sentence: 'Sleep! Shh, I sleep.', img: pose('leo', 'sleep'), imgLabel: 'sleep' },
+    ],
+  },
+  {
+    id: 'u10l3-move', kind: 'tpr-actions', bg: bgU10L3CampEmpty, who: 'pip',
+    teacher: 'Stand up! Do each action with Pip and say the word.',
+    rounds: [
+      { line: 'Clap! Clap your hands! Clap, clap, clap!', emoji: '\u{1F44F}', img: pose('pip', 'clap') },
+      { line: 'Play! Kick the ball! Play, play!', emoji: '⚽', img: pose('pip', 'play') },
+      { line: 'Sleep! Shh! Close your eyes.', emoji: '\u{1F634}', img: pose('pip', 'sleep') },
+      { line: 'Wake up! Stand up!', emoji: '\u{1F31E}', seconds: 3 },
+    ],
+  },
+
+  /* 6 Signature game (new): Campfire Says */
+  {
+    id: 'u10l3-campfire', kind: 'campfire-says', bg: bgU10L3CampEmpty, who: 'bella', fire: { x: 35, y: 84 },
+    teacher: 'Campfire Says! Listen for WHO and WHAT: "Mia, play!" Tap the action — the friend does it. The child can do it too!',
+    friends: [
+      { who: 'pip', name: 'Pip', x: 15, idle: `${A}/characters/pip-hello.png`, poses: { clap: pose('pip', 'clap'), play: pose('pip', 'play'), sleep: pose('pip', 'sleep') } },
+      { who: 'mia', name: 'Mia', x: 56, idle: `${A}/characters/mia-happy.png`, poses: { clap: pose('mia', 'clap'), play: pose('mia', 'play'), sleep: pose('mia', 'sleep') } },
+      { who: 'leo', name: 'Leo', x: 83, idle: `${A}/characters/leo-happy.png`, poses: { clap: pose('leo', 'clap'), play: pose('leo', 'play'), sleep: pose('leo', 'sleep') } },
+    ],
+    rounds: [
+      { friend: 0, action: 'clap', line: 'Pip, clap your hands!', reply: 'Clap, clap! Well done, Pip!' },
+      { friend: 1, action: 'play', line: 'Mia, play with the ball!', reply: 'Bounce, bounce! Mia plays!' },
+      { friend: 2, action: 'clap', line: 'Leo, clap your hands!', reply: 'Clap, clap, clap! Yes!' },
+      { friend: 0, action: 'play', line: 'Pip, play!', reply: 'Kick! Pip plays!' },
+      { friend: 1, action: 'sleep', line: 'Mia, sleep. Shh!', reply: 'Shh! Mia is sleeping.' },
+      { friend: -1, action: 'sleep', line: 'Everybody, sleep! Goodnight!', reply: 'Shh! Goodnight, everybody!' },
+    ],
+    doneLine: 'The stars are out. Goodnight, camp!',
+  },
+
+  /* 7 The song — after the words and the first game (owner, 2026-10-10) */
+  {
+    id: 'u10l3-song', kind: 'song', bg: bgU10L3Camp, title: '\u{1F3B5} Clap, Play, Sleep! \u{1F3B5}', teacher: 'Sing and do it: clap your hands, play, then lie down and whisper "goodnight".',
+    durationSeconds: 20, bigWord: 'Clap', songUrl: `${A}/audio/clap-play-sleep-song-u10l3.mp3?v=1`,
+    lineDurationsMs: [5040, 5000, 4840, 5182],
+    songPrompt: 'Warm evening campfire kids song',
+    lyrics: [
+      { who: 'pip', text: 'Clap, clap, clap your hands!', emotion: 'happy' },
+      { who: 'mia', text: 'Play, play, play with me!', emotion: 'happy' },
+      { who: 'leo', text: 'Sleep, sleep, shh, goodnight!', emotion: 'happy' },
+      { who: 'pip', text: 'Clap, play, sleep! Goodnight!', emotion: 'happy' },
+    ],
+  },
+
+  /* 8-9 More games */
+  {
+    id: 'u10l3-pattern', kind: 'pattern-train', bg: bgU10L3CampEmpty, who: 'mia',
+    teacher: 'What comes next? Say the actions in the train, then tap the next one — and do it!',
+    rounds: [
+      { pattern: [PC(pose('pip', 'clap'), 'clap'), PC(pose('pip', 'sleep'), 'sleep'), PC(pose('pip', 'clap'), 'clap'), PC(pose('pip', 'sleep'), 'sleep'), PC(pose('pip', 'clap'), 'clap')], answer: PC(pose('pip', 'sleep'), 'sleep'), options: [PC(pose('pip', 'play'), 'play'), PC(pose('pip', 'sleep'), 'sleep'), PC(pose('pip', 'clap'), 'clap')] },
+      { pattern: [PC(pose('mia', 'play'), 'play'), PC(pose('mia', 'play'), 'play'), PC(pose('mia', 'clap'), 'clap'), PC(pose('mia', 'play'), 'play'), PC(pose('mia', 'play'), 'play')], answer: PC(pose('mia', 'clap'), 'clap'), options: [PC(pose('mia', 'clap'), 'clap'), PC(pose('mia', 'sleep'), 'sleep'), PC(pose('mia', 'play'), 'play')] },
+      { pattern: [PC(pose('leo', 'clap'), 'clap'), PC(pose('leo', 'play'), 'play'), PC(pose('leo', 'sleep'), 'sleep'), PC(pose('leo', 'clap'), 'clap'), PC(pose('leo', 'play'), 'play')], answer: PC(pose('leo', 'sleep'), 'sleep'), options: [PC(pose('leo', 'play'), 'play'), PC(pose('leo', 'clap'), 'clap'), PC(pose('leo', 'sleep'), 'sleep')] },
+    ],
+  },
+  {
+    id: 'u10l3-jigsaw', kind: 'jigsaw-puzzle', bg: bgU10L3CampEmpty, image: `${A}/scenes/bg-u10l3-camp-square.png`,
+    teacher: 'Build the camp-out picture! Then point and say: "Pip claps! Mia plays! Leo sleeps!"',
+  },
+  {
+    id: 'u10l3-talk', kind: 'join-stage', bg: bgU10L3CampEmpty, teacher: 'Your turn to be the leader: Pip gives an action, then the child tells Pip what to do. Any action is fine.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: "Let's play! Clap your hands!", bubble: 'right' },
+      { who: 'student', line: 'Clap, clap, clap!', bubble: 'right' },
+      { who: 'pip', line: 'Now you tell me!', bubble: 'right' },
+      { who: 'student', line: 'Pip, sleep! Shh!', bubble: 'right' },
+    ],
+  },
+
+  /* 10-12 Sounds: L */
+  {
+    id: 'u10l3-model-l', kind: 'sound-model', bg: bgU10L3CampEmpty, who: 'mia', letter: 'L', phoneme: '/l/', sound: 'lll',
+    teacher: 'L says /l/ — lion, leaf, lemon! We hear it in cl-ap, p-l-ay and s-l-eep too.',
+    anchors: [
+      { word: 'lion', emoji: '\u{1F981}', img: itemLion },
+      { word: 'leaf', emoji: '\u{1F343}', img: itemLeaf },
+      { word: 'lemon', emoji: '\u{1F34B}', img: itemLemon },
+    ],
+  },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u10l3-blend', kind: 'sound-blend', look: 'frog', bg: bgU10L3CampEmpty,
+    teacher: 'Blend It! Tap each stepping stone and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'lid', img: `${A}/items/item-lid.png` }, { word: 'log', img: `${A}/items/item-log.png` }, { word: 'jam', img: `${A}/items/item-jam.png` }, { word: 'jet', img: `${A}/items/item-jet.png` }],
+  },
+  {
+    id: 'u10l3-phonics', kind: 'sound-fish', bg: bgU10L3CampEmpty, who: 'mia',
+    teacher: 'Sound Fishing! Listen to the sound and catch the fish whose picture starts with it. Say the word!',
+    rounds: [
+      { letter: 'l', fish: [{ word: 'sun', img: `${A}/items/item-sun.png` }, { word: 'lion', img: itemLion }, { word: 'drum', img: itemDrum }, { word: 'igloo', img: itemIgloo }] },
+      { letter: 'l', fish: [{ word: 'pig', img: `${A}/items/item-pig.png` }, { word: 'snake', img: `${A}/items/item-snake.png` }, { word: 'lollipop', img: itemLollipop }, { word: 'bin', img: `${A}/items/item-bin.png` }] },
+      { letter: 'c', fish: [{ word: 'ladder', img: itemLadder }, { word: 'clock', img: itemClock }, { word: 'sun', img: `${A}/items/item-sun.png` }, { word: 'lamp', img: itemLamp }] },
+      { letter: 's', fish: [{ word: 'lemon', img: itemLemon }, { word: 'leaf', img: itemLeaf }, { word: 'sled', img: itemSled }, { word: 'cloud', img: itemCloud }] },
+    ],
+  },
+
+  /* 13-14 Sticker + Home Mission */
+  {
+    id: 'u10l3-sticker', kind: 'sticker-reward', bg: bgU10L3Camp, who: 'pip', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
+    line: 'You are a camp-out star! Here is a clapping sticker for you!', sticker: { img: pose('pip', 'clap'), label: 'Camp star' },
+  },
+  {
+    id: 'u10l3-home-mission', kind: 'home-mission', bg: bgU10L3Camp, who: 'pip',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your mission: play "Campfire Says" at home! Say "Mum, clap!", "Dad, play!", "Everybody, sleep!"',
+    parentNote: 'Play "Campfire Says" at home: your child gives a name and an action ("Mum, clap your hands!", "Grandpa, sleep!") and that person does it; then swap. Use clap, play, sleep (and run, jump, walk, swim, dance, sing). End with "Everybody, sleep! Goodnight!"',
+    steps: [
+      { emoji: '\u{1F44F}', img: pose('pip', 'clap'), say: 'Clap!' },
+      { emoji: '⚽', img: pose('mia', 'play'), say: 'Play!' },
+      { emoji: '\u{1F634}', img: pose('leo', 'sleep'), say: 'Sleep!' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u10l3-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU10L3CampEmpty, who: 'leo',
+    teacher: 'Extra time: Brain Break! Do each action with Leo.',
+    rounds: [
+      { line: 'Clap like a seal! Clap, clap!', emoji: '\u{1F9AD}' },
+      { line: 'Play like a puppy! Woof!', emoji: '\u{1F436}' },
+      { line: 'Sleep like a bear! Snore!', emoji: '\u{1F43B}' },
+      { line: 'Wake up! Stretch!', emoji: '\u{1F31E}', seconds: 3 },
+    ],
+  },
+
+  /* Goodbye */
+  {
+    id: 'u10l3-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u10l3-finale', kind: 'finale', bg: bgU10L3Camp, who: 'pip', line: 'Clap, play, sleep! Goodnight, camp! Goodbye, friend!' },
 ];

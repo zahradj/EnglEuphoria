@@ -373,5 +373,10 @@
     "path": "public/lep1/audio/swim-dance-sing-song-u10l2.mp3",
     "bytes": 321037,
     "sha256": "ffd513768e7caa67a1a5cf5ee79e158b4add4d5d6ab632a3a7a9a5e38bb6641e"
+  },
+  "u10l3-clap-play-sleep": {
+    "path": "public/lep1/audio/clap-play-sleep-song-u10l3.mp3",
+    "bytes": 321037,
+    "sha256": "49c45cf61da1119fa1b0a2bac26432d67e226ed04a5c39e115db7405dc4f9f11"
   }
 }
