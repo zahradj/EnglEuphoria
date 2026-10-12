@@ -6,7 +6,7 @@ database slot titles (the curriculum engine's source of truth). To keep the lang
 clear **A1 grammar step**, one **phonics step** and **new words beyond Pre-A1**, so A1 always moves the child up from
 Pre-A1 (words) to **sentences, questions and short exchanges** (Cambridge A1 Movers direction).
 
-Earlier plan (Welcome Town only, 2026-10-09): replaced by this file; see git history. Game list:
+Earlier plan (Welcome Town only, 2026-10-09): replaced by this file; see git history. **Strengthened 2026-10-12** (owner: "fix the curriculum… make it stronger and better… and fun"): the Welcome Town draft's grammar spine (present continuous, must, weather, clothes, routines, time, past) moved into the worlds, *can* no longer repeated, and a fun layer added (§3, §4b). Game list:
 [`docs/a1-activity-library.md`](a1-activity-library.md) — every A1, universal and Pre-A1 game (Pre-A1 games run in A1 lessons
 as `kind: 'prea1'`).
 
@@ -53,16 +53,57 @@ mode, 80 % per part, Practise-again packs — same system as Pre-A1).
 
 | Unit | World | Can-do goal of the unit | New A1 grammar step | Key words (beyond Pre-A1) | Phonics |
 |---|---|---|---|---|---|
-| 1 | **Welcome Town** (built) | greet, introduce myself and a friend, say how we feel | My name is…, What's your name?, How are you?, He/She is…, They are…, This is my friend | friend, teacher, class, tired, hungry, nice to meet you | s a t p i n review + f (as built) |
-| 2 | **Jungle** | name jungle animals and say what they can do | It's a…, It can / can't + verb, Can it…? Yes, it can / No, it can't | monkey, parrot, snake, tiger, crocodile, elephant; climb, swing, swim, fly, run, jump | ch, ck (chimp, cheetah, snack, rock) |
-| 3 | **Space** | count to 20, say how many, give directions and say where things are | How many…? There is / There are + numbers 11-20, Go left/right/up/down, in/on/under/next to | eleven-twenty, rocket, star, planet, moon, robot, astronaut | th, ng (three, thirteen, ring, swing) |
-| 4 | **Food Festival** | say what I like, ask a friend, offer and accept food | I like / I don't like…, Do you like…? Yes, I do / No, I don't, Would you like some…? Yes, please / No, thank you | rice, cheese, soup, chicken, salad, sandwich, chips, grapes | consonant blends gr pl sn br (grapes, plum, snack, bread) |
-| 5 | **Monster Town** | say how I and others feel and describe what someone looks like | I'm / He's / She's + feeling (tired, scared, excited, bored), He's got / She's got + big/small/long/short + eyes/hair/teeth, tall/short | scared, excited, bored, surprised; teeth, hair, horn, tail | ee, ea (green, teeth, feet, scream) |
-| 6 | **Ocean** | name sea animals, say where they live, ask and answer yes/no questions | Is it a…? Yes, it is / No, it isn't, It lives in/on…, Where does it live? (chunk) | shark, whale, octopus, crab, turtle, starfish, shell, reef | sh, wh (shark, shell, fish, whale) |
-| 7 | **Hero City** | say what I can and can't do, ask for and offer help | I can / I can't (people), Can you…?, Can I help you? Yes, please, Give/Show/Tell me… | help, carry, lift, fix, save, push, pull; strong, kind | ai, ay (rain, train, play, day) |
-| 8 | **Dino Valley** | compare two things by size, speed and length | big/small, fast/slow, long/short → bigger/smaller/faster/slower/longer + than | dinosaur, egg, tail, neck, claw, footprint | oo, ar (tooth, food, moon, large, sharp) |
-| 9 | **Magic Castle** (L1-L3 built) | name rooms and furniture, say what is where | There is / There are…, Where is…? It's in/on/under/behind/next to… | kitchen, bedroom, bathroom, hall, stairs, lamp, window, door | oa, ow (moat, coat, tower, crown) |
-| 10 | **Gadget Lab** | follow and give step-by-step instructions | Press/Turn/Open/Close/Wait…, First…, Then…, Next…, How do I…? (chunk) | button, switch, screen, wheel, gadget; press, turn, open, close, fix | er, ur, or + sight-word review (computer, turn, robot, for) |
+| 1 | **Welcome Town** (built) | greet, introduce myself and a friend, say how we feel | be: I'm / He's / She's / They're…, What's your name?, How are you?, This is my friend | friend, teacher, class, tired, hungry, nice to meet you | s a t p i n review + f (as built) |
+| 2 | **Jungle** | describe a jungle animal in 4 sentences (what it is, looks like, can, can't) and ask "Can it…?" | It can / can't + verb (animals), Can it…? Yes, it can / No, it can't, It's got a long tail | monkey, elephant, snake, crocodile; climb, swing; long, short, tail | ch, ck (chimp, chick, lunch, rock) |
+| 3 | **Space** | count to 100 in tens, say how many, steer with directions and say what the weather is like on a planet | How many…? There are + 21-100 (tens), Go left / right / up / down, above / below, What's the weather like? It's hot / cold / windy / sunny | thirty…one hundred, rocket, star, planet, moon, astronaut; weather, hot, cold, windy, sunny, cloudy, snow | th, ng (three, thirty, ring, swing) |
+| 4 | **Food Festival** | say what I like and like doing, ask a friend, offer and accept food, plan a meal | I like / I don't like + food **and + -ing** (I like cooking), Do you like…?, Would you like some…? Yes, please / No, thank you, **Let's…!** | rice, soup, salad, sandwich, chips, grapes; breakfast, lunch, dinner; cook | blends gr pl sn br (grapes, plum, snack, bread) |
+| 5 | **Monster Town** | say how someone feels and why, and describe a monster's looks, family and clothes | He's / She's + feeling **because…** (chunk), He's got / She's got (looks **and family**: She's got a little brother), **He's wearing…** | scared, excited, bored, surprised; teeth, horn, tail; wear, scarf, glasses | ee, ea (green, teeth, feet, scream) |
+| 6 | **Ocean** | name sea animals, say **what they are doing** and where they live, ask and answer yes/no questions | **Present continuous:** What's it doing? It's swimming / hiding, Is it a…? Yes, it is / No, it isn't, **present simple with it:** It lives in… It eats… | shark, whale, octopus, crab, turtle, starfish, shell; hide, dive | sh, wh (shark, shell, fish, whale) |
+| 7 | **Hero City** | say what I can do **well**, offer help, find out what's wrong and give hero rules | I can… **well / fast** (adverbs), Can I help you? Yes, please, **What's the matter? I've got a cold / headache**, **You must / mustn't…** | help, carry, lift, fix, save; headache, cold, toothache; strong, kind | ai, ay (rain, train, play, day) |
+| 8 | **Dino Valley** | compare dinosaurs and say what they **were** like long ago | **comparatives + than** and **the biggest**, **was / were, had** (past chunks: It was big. It had sharp teeth.) | dinosaur, egg, neck, claw, footprint; long ago, fast, slow | oo, ar (tooth, food, moon, large, sharp) |
+| 9 | **Magic Castle** (L1-L3 built) | name rooms and furniture, say what is where and **whose** it is | There is / There are…, Where is…? It's behind / between / in front of…, **Whose…is it? It's Wim's.** | kitchen, bedroom, bathroom, hall, stairs, lamp, window | oa, ow (moat, coat, tower, crown) |
+| 10 | **Gadget Lab** | give step-by-step instructions and tell a robot's day | imperatives, First… Then… Next…, **present simple routines:** Nano gets up at 7 o'clock, **What time is it?**, days of the week | button, switch, screen, wheel; o'clock, get up, go to bed, Monday-Sunday | er, ur, or + sight-word review (computer, turn, robot, for) |
+
+**Why these steps (research, 2026-10-12).** Cambridge's Young Learners handbook names the structures A1 Movers candidates
+need most: *there is/are, be, have (got), can/can't, must/mustn't and the present continuous of common action verbs*; the
+Movers grammar list adds past simple (regular and irregular), comparatives and superlatives, adverbs, verb + -ing / + to,
+*Let's*, *What's the matter?*, *Whose?* and *because*. The first themed-worlds draft taught *can* three times (Pre-A1 U10,
+A1 U2, A1 U7) and missed present continuous, *must*, weather, clothes, routines, time and the past — exactly what the Welcome
+Town draft had. The table above keeps every world and its database slots and moves those missing steps into the world where
+they fit the story (dinosaurs lived **long ago** → past; sea animals **are swimming / hiding** → present continuous; heroes
+**must** help and ask **What's the matter?**; a robot's **day** → routines and time).
+
+### Grammar coverage check (every A1 Movers step has a home)
+
+| Movers step | Unit | Recycled again in |
+|---|---|---|
+| be + he/she/they | 1 | 5 |
+| can / can't (animals), Can it…? | 2 | 7 (people + well/fast) |
+| have got (it / he / she) | 2 (it's got) · 5 (looks, family) | 6, 8 |
+| there is / there are, How many? 21-100 | 3 | 9 |
+| imperatives, directions | 3 (go left/right) | 10 (instructions) |
+| weather | 3 | 6 (beach weather in the story) |
+| like / don't like + noun + -ing, Do you like…? | 4 | 5 |
+| would like, some, Let's | 4 | 7 |
+| because (chunk) | 5 | 7, 8 |
+| present continuous (wearing; doing) | 5 (wearing) · 6 (doing) | 7, 10 |
+| present simple with he/she/it | 6 (it lives / eats) · 10 (routines) | 8 |
+| adverbs well / fast | 7 | 8 |
+| What's the matter? + illnesses | 7 | 10 (fix the robot) |
+| must / mustn't | 7 | 10 (lab rules) |
+| comparatives, superlatives | 8 | 10 |
+| past: was / were, had | 8 | 10 (story: what Nano did) — full past simple in A2 |
+| prepositions behind / between / in front of, Whose? | 9 | 10 |
+| time, days, routines | 10 | A2 |
+
+### Proposed slot-title changes (database, only where the old title taught a repeat)
+
+| Slot | Old title | New title | Why |
+|---|---|---|---|
+| U3 L1 | Count to Ten in Space! | **Count to 100 in Space!** | 1-10 is Pre-A1 and 11-20 is A1 U1-U2 recycling; Movers counts to 100 |
+| U3 L4 | Where Is It? In, On, Under! | **What's the Weather on the Planets?** | in/on/under is Pre-A1 and the Magic Castle teaches place words; weather had no home |
+| U10 L2 | More Actions: Close, Wait, Fix | **Nano's Day: What Time Is It?** | routines, time and days had no home |
+
 
 ## 4. Lesson-by-lesson map
 
@@ -91,57 +132,63 @@ ask and answer "Can it…?".
 7. **Unit Review & Boss Test: Jungle Explorer!** — describe two animals and ask one question · Boss Test
 
 ### Unit 3 · Space
-1. **Count to Ten in Space!** — count 1-20 and say how many · How many stars? There are twelve · Count & Catch ⇄ (count-balloons, to 20)
-2. **Left, Right, Up, Down: Space Directions** — follow directions · Go left / right / up / down · Rocket Maze ★ (steer by the direction you hear, Wordwall Maze Chase style)
-3. **Listen to the Counting Rocket Song** — listening lesson · countdown 20 → 1 · Listen & Colour ⇄ (Cambridge format)
-4. **Where Is It? In, On, Under!** — say where things are · It's on the moon, next to the rocket · Torch Hunt (A1) in a dark spaceship
-5. **Storybook: The Lost Robot** — story video · directions + there are
+**Unit objective:** count to 100 in tens, say how many, steer a rocket with directions and give a planet weather report.
+1. **Count to 100 in Space!** *(new title)* — count in tens to 100 and say how many · There are forty stars · Count & Catch ⇄ (count-balloons, tens)
+2. **Left, Right, Up, Down: Space Directions** — follow and give directions · Go left / up, The moon is above the rocket · Rocket Maze ★ (steer by the direction you hear, then the child steers the teacher)
+3. **Listen to the Counting Rocket Song** — listening lesson · countdown 100 → 10 in tens · Listen & Colour ⇄ (Cambridge format)
+4. **What's the Weather on the Planets?** *(new title)* — say what the weather is like · It's cold and snowy on Planet Ice · Planet Weather Report ★ (the child is the TV weather reporter; packs the astronaut's bag for each planet)
+5. **Storybook: The Lost Robot** — story video · directions + weather + there are
 6. **Extra Practice: Number & Direction Match!** — Rapid Recall ⇄ + Stepping Stones ⇄
 7. **Unit Review & Boss Test: Space Navigator!** — Boss Test
 
 ### Unit 4 · Food Festival
-1. **Yummy Foods at the Festival** — name festival foods · I like rice · Market Sort ⇄ (catch-sort)
-2. **More Foods: Rice, Cheese, Pizza** — say what I don't like · I don't like cheese · Food Preference Chart ⇄ (A1: full sentences)
+**Unit objective:** say what I like and like doing, ask a friend, and offer and accept food at a festival stall.
+1. **Yummy Foods at the Festival** — name festival foods and meals · I have rice for lunch · Market Sort ⇄ (breakfast / lunch / dinner)
+2. **More Foods: Rice, Cheese, Pizza** — say what I like and don't like **doing** · I like cooking. I don't like washing up. · Food Preference Chart ⇄ (A1: full sentences)
 3. **Listen: What Do You Like to Eat?** — listening lesson · Do you like…? Yes, I do / No, I don't · Tick or Cross ⇄ (who likes what)
-4. **I Like / I Don't Like!** — interview a friend · Do you like…? + Would you like some…? · Food Survey ★ (ask 4 friends, fill the chart)
-5. **Storybook: Chef Cilla's Recipe** — story video · some, would you like
+4. **I Like / I Don't Like!** — interview a friend, offer food · Do you like…? Would you like some…? Let's make a pizza! · Food Survey ★ (ask 4 friends, fill the chart)
+5. **Storybook: Chef Cilla's Recipe** — story video · some, would you like, let's
 6. **Extra Practice: Food Taste Test!** — Pip's Café ★ (serve orders) + Cookie Faces ⇄
 7. **Unit Review & Boss Test: Festival Feast!** — Boss Test
 
 ### Unit 5 · Monster Town
-1. **How Do You Feel? Happy, Sad, Tired** — say how I and others feel · I'm scared, He's excited · Feelings Wheel ⇄ (new feelings)
-2. **What Do They Look Like? Tall, Short, Big, Small** — describe looks · She's got long hair, He's tall · Face Builder ⇄ (build what you hear)
+**Unit objective:** describe a monster in 4 sentences (feeling + why, looks, family, what it's wearing).
+1. **How Do You Feel? Happy, Sad, Tired** — say how someone feels and why · He's scared because it's dark · Feelings Wheel ⇄ (new feelings + because)
+2. **What Do They Look Like? Tall, Short, Big, Small** — describe looks and family · She's got long hair. She's got a little brother. · Face Builder ⇄ (build what you hear)
 3. **Listen to the Feelings Song** — listening lesson · Who is…? · Listen & Tap (A1, "Name That Feeling")
-4. **Describe a Monster Friend!** — describe a monster in 3 sentences · He's got… He's… · Monster Maker ⇄ (child describes, teacher builds)
-5. **Storybook: Bibi's Bad Day** — story video · feelings + because (chunk)
-6. **Extra Practice: Feelings Charades!** — Charades ⇄ + Guess Who ★ (ask "Has he got…?")
+4. **Describe a Monster Friend!** — describe a monster in 4 sentences · He's got three eyes. He's wearing a big hat. · Monster Maker ⇄ (the child describes, the teacher builds; then swap)
+5. **Storybook: Bibi's Bad Day** — story video · feelings + because
+6. **Extra Practice: Feelings Charades!** — Charades ⇄ + Guess Who ★ (ask "Has he got…? Is he wearing…?")
 7. **Unit Review & Boss Test: Monster Portrait!** — Boss Test
 → **A1 Halfway Check after Unit 5** (like Pre-A1 Checkpoint 1).
 
 ### Unit 6 · Ocean
+**Unit objective:** say what a sea animal is doing and where it lives, and find a hidden animal by asking yes/no questions.
 1. **Meet the Sea Animals: Shark, Whale** — name sea animals · It's a whale · Shape/Sound Fishing ⇄ (fish for the animal you hear)
-2. **More Sea Animals: Octopus, Crab** — describe sea animals · It's got eight legs · Tile Reveal ⇄ (guess early)
-3. **Listen: Where Do They Live?** — listening lesson · It lives in the sea / on the beach · Sort Basket ⇄ (sea / beach / reef)
-4. **Ask and Answer: Is It a Shark?** — ask yes/no questions · Is it a…? Yes, it is / No, it isn't · Secret Card ⇄ (child asks)
-5. **Storybook: The Treasure Reef** — story video
+2. **More Sea Animals: Octopus, Crab** — say what an animal **is doing** · The octopus is hiding. The crab is walking. · Live Reef ★ (a moving reef: the child says what each animal is doing to light it up)
+3. **Listen: Where Do They Live?** — listening lesson · It lives in the sea. It eats fish. · Sort Basket ⇄ (sea / beach / reef)
+4. **Ask and Answer: Is It a Shark?** — ask yes/no questions · Is it a…? Is it swimming? Yes, it is / No, it isn't · Secret Card ⇄ (the child asks)
+5. **Storybook: The Treasure Reef** — story video · present continuous + a windy, sunny beach
 6. **Extra Practice: Ocean Question Game!** — Buzzer Show ⇄ + Memory ⇄
 7. **Unit Review & Boss Test: Ocean Explorer!** — Boss Test
 
 ### Unit 7 · Hero City
-1. **Superhero Powers: I Can Help!** — say what I can do · I can carry, I can fix · Hero Trials ⇄ (built for Pre-A1 U10L7)
-2. **Can You Lift It? Can't and Can!** — ask about abilities · Can you lift it? No, I can't · Can It? ⇄ (built, A1 sentences)
-3. **Listen to the Hero Helper Song** — listening lesson · Who can help? · Who Said It? ⇄
-4. **Offer to Help: Give, Show, Tell** — offer and ask for help · Can I help you? Yes, please. Give me the… · Hero Mission ★ (people ask, you choose the helper and say it)
+**Unit objective:** help a citizen: ask what's wrong, offer help, say what I can do well and give one hero rule.
+1. **Superhero Powers: I Can Help!** — say what I can do **well / fast** · I can run fast. I can swim well. · Hero Trials ⇄ (A1: with well / fast)
+2. **Can You Lift It? Can't and Can!** — ask a friend and compare · Can you lift it? No, I can't, but Leo can! · Can It? ⇄ (A1: people, "but … can")
+3. **Listen to the Hero Helper Song** — listening lesson · hero rules: You must help. You mustn't run on the road. · Who Said It? ⇄
+4. **Offer to Help: Give, Show, Tell** — find out what's wrong and help · What's the matter? I've got a headache. Can I help you? · Hero Mission ★ (citizens say what's wrong, the child picks the helper and says it)
 5. **Storybook: Captain Spark Saves the Day** — story video
-6. **Extra Practice: Hero Mission Match!** — Simon Says ⇄ + Ring Toss ⇄
+6. **Extra Practice: Hero Mission Match!** — Simon Says ⇄ (hero rules) + Ring Toss ⇄
 7. **Unit Review & Boss Test: Super Helper!** — Boss Test
 
 ### Unit 8 · Dino Valley
-1. **Dinosaur Sizes: Big and Small** — describe dinosaurs · It's big, It's got a long neck · Part Peek ⇄
-2. **Fast or Slow? Long or Short?** — opposites · It's fast / slow · Odd One Out ⇄
-3. **Listen to the Dinosaur Compare Song** — listening lesson · bigger than · Tick or Cross ⇄
-4. **This One Is Bigger Than That One!** — compare two things · The T-rex is bigger than… · See-Saw Scales ★ (say the comparison to tip the scale)
-5. **Storybook: Rexi and Tilly's Race** — story video
+**Unit objective:** compare two dinosaurs and say what one was like long ago.
+1. **Dinosaur Sizes: Big and Small** — say what a dinosaur was like · It was big. It had a long neck. · Fossil Dig ★ (brush the sand, name the part, say "It had…")
+2. **Fast or Slow? Long or Short?** — opposites · It was fast / slow · Odd One Out ⇄
+3. **Listen to the Dinosaur Compare Song** — listening lesson · bigger than, the biggest · Tick or Cross ⇄
+4. **This One Is Bigger Than That One!** — compare two things · The T-rex is bigger than… The biggest is… · See-Saw Scales ★ (say the comparison to tip the scale)
+5. **Storybook: Rexi and Tilly's Race** — story video · past chunks: was, had, ran
 6. **Extra Practice: Compare the Dinosaurs!** — Racing ★ (each right sentence moves your dino) + Pattern Train ⇄
 7. **Unit Review & Boss Test: Dino Detective!** — Boss Test
 
@@ -149,17 +196,18 @@ ask and answer "Can it…?".
 1. **Rooms in the Castle: Kitchen, Bedroom** — name rooms (built)
 2. **Castle Furniture: Bed, Lamp, Door, Window** — name furniture (built)
 3. **Listen: Where Is the Magic Lamp?** — listening lesson, prepositions (built)
-4. **There Is / There Are in My Room!** — describe a room · There's a bed, There are two lamps · Design My Room ★ (place furniture, then describe)
+4. **There Is / There Are in My Room!** — describe a room and say whose things are · There are two lamps. Whose crown is it? It's Wim's. · Design My Room ★ (place furniture, then describe)
 5. **Storybook: The Hidden Treasure Room** — story video
 6. **Extra Practice: Find It in the Castle!** — Torch Hunt (A1) + Lift the Flap ⇄
 7. **Unit Review & Boss Test: Castle Search!** — Boss Test
 
 ### Unit 10 · Gadget Lab
+**Unit objective:** give a robot 3-step instructions and tell its day with times.
 1. **Cool Gadgets: Press, Turn, Open** — follow gadget instructions · Press the button, Turn the wheel · Robo-Copy ⇄ (the robot does what you say)
-2. **More Actions: Close, Wait, Fix** — more instructions · Close the door, Wait! · Simon Says ⇄ (A1: two-step)
+2. **Nano's Day: What Time Is It?** *(new title)* — tell a routine with times and days · Nano gets up at seven o'clock. On Monday he… · Clock Quest ★ (set the clock to the time you hear, then tell the child's own day)
 3. **Listen: How Do I Turn It On?** — listening lesson · First… then… · Story Order ⇄ (put the steps in order)
-4. **First, Then, Next: Give Instructions!** — give 3-step instructions · First press…, Then turn…, Next… · Build-a-Bot ★ (child gives the steps, the bot builds)
-5. **Storybook: Nano the Bot's Big Invention** — story video
+4. **First, Then, Next: Give Instructions!** — give 3-step instructions and a lab rule · First press…, Then turn… You mustn't touch the red button! · Build-a-Bot ★ (the child gives the steps, the bot builds)
+5. **Storybook: Nano the Bot's Big Invention** — story video · what Nano did (past chunks)
 6. **Extra Practice: Robot Instruction Match!** — Maze Chase ★ + Rapid Recall ⇄
 7. **Unit Review & Boss Test: Tech Inventor!** — Boss Test
 → **A1 Final Test after Unit 10** (moves to A2) + the A1 "Rising Star" certificate (two medals).
@@ -168,15 +216,41 @@ Every unit gets its own objective file before its lessons are built (owner, 2026
 brings from before, new vs recycled language, and a progressive "I can…" outcome + evidence for every lesson, researched
 from Cambridge, Oxford and online schools. Unit 2: [`docs/a1-unit-2-jungle.md`](a1-unit-2-jungle.md).
 
+## 4b. The fun layer — why a child wants to come back
+
+What the research says about 6-9 year olds:
+- Enjoyment drives them at this age; a feeling of progress matters more later on (Myles, primary languages research).
+- The strongest motivation factors are meaningful, challenging tasks at the right level, working together, and the child's own curiosity (systematic review of young learners' motivation, SiSAL 2026).
+- Choices make children work harder, and tasks that are too easy or too hard demotivate them (Cambridge English, "How to increase motivation").
+- Rewards that are not tied to learning fade once they stop (same review). Lingokids, for example, gives a star only when the activity's learning goal is met.
+
+So in A1:
+
+| Fun mechanic | How it works | Rule that keeps it about learning |
+|---|---|---|
+| **The A1 Explorer Map** | One map with the 10 worlds. Each L7 ends with a 5-second teaser of the next world (a shadow, a sound, a local friend waving). | The next world opens when the Boss Test is passed (80 % per part). |
+| **The Golden Compass** (story across A1) | A piece of Willow's broken compass is hidden in every world. The cast travels to find it, and the 10 pieces open A2. | The piece is the Boss Test reward. The story frame never replaces the lesson's goal. |
+| **Explorer Passport** | One stamp per lesson, shown at the sticker page. | The stamp is earned by saying the lesson's "I can…" sentence (the objective), never for taps. |
+| **Real choices** | At least 2 per lesson: which friend to help, which path, which animal to describe, your favourite. | Every choice needs the target language to make it. |
+| **The child is the expert** | In every L4 the child teaches or tests the local friend (riddler, reporter, robot boss, chef). | The friend makes a mistake the child corrects in the target language. |
+| **Move and sing** | A song or action break every 8-10 minutes (TPR). | The words of the break are the lesson's words. |
+| **Surprise** | One "peek" moment per lesson (something hidden, a friend's running joke, a twist in the story). | It comes after the words are taught, never instead of them. |
+| **My Explorer Journal** | The child's own sentences from every lesson, collected per unit for the parent report and the home mission. | Only sentences the child really said or built. |
+| **Right level** | No timer on first meeting a word. Practise-again packs adapt after Boss Tests, and an optional "challenge" round is there for fast learners. | Never leaderboards, lives that block, or punishment for trying. |
+
+The Explorer Map, Compass and Passport are platform pieces to build once (after Unit 2, on top of the existing sticker, medal and Boss Test system). Until then the sticker page and home mission carry the role.
+
 ## 5. Build order
 
 1. **Unit 1:** publish L5-L7 (built).
 2. **Units 2-10 in order**, one lesson at a time through `lesson-variety-engine` research → build → `lesson-quality-gate`;
    Unit 2 and Unit 9 reuse their built lessons.
-3. **New signature games** in the order the units need them: Jungle Obstacle Run (U2), Rocket Maze (U3), Food Survey +
-   Pip's Café (U4), Guess Who (U5), Hero Mission (U7), See-Saw Scales + Racing (U8), Design My Room (U9), Build-a-Bot +
-   Maze Chase (U10).
-4. **Assessments** reuse the Pre-A1 system: Boss Test in every L7, A1 Halfway Check after Unit 5, A1 Final Test after
+3. **New signature games** in the order the units need them: Jungle Obstacle Run (U2), Rocket Maze + Planet Weather
+   Report (U3), Food Survey + Pip's Café (U4), Guess Who (U5), Live Reef (U6), Hero Mission (U7), Fossil Dig + See-Saw
+   Scales + Racing (U8), Design My Room (U9), Clock Quest + Build-a-Bot + Maze Chase (U10).
+4. **Fun layer** (§4b): Explorer Map + Golden Compass + Passport after Unit 2.
+5. **Slot titles:** apply the 3 title changes in §3 to `curriculum_lessons` before those lessons are built.
+6. **Assessments** reuse the Pre-A1 system: Boss Test in every L7, A1 Halfway Check after Unit 5, A1 Final Test after
    Unit 10, Practise-again packs, parent report.
 
 ## 6. Research sources
@@ -188,3 +262,5 @@ from Cambridge, Oxford and online schools. Unit 2: [`docs/a1-unit-2-jungle.md`](
 - Classroom game platforms: Wordwall templates (Match Up, Group Sort, Whack-a-Mole, Open the Box, Maze Chase, Airplane, Random Wheel…) — https://wordwall.net/features , https://avidopenaccess.org/wp-content/uploads/2020/11/Wordwall-Tip-Sheet.pdf ; Blooket/Gimkit/Kahoot modes (Tower Defense, Gold Quest, Café, Racing, Fishing Frenzy, Floor is Lava, Team mode) — https://ditchthattextbook.com/game-show-classroom-comparing-the-big-5/ , https://triviamaker.com/blooket-vs-gimkit-vs-kahoot/
 - ESL game design: Games4ESL feelings lesson — https://games4esl.com/lesson-plans/teaching-feelings-and-emotions/ ; feelings dice — https://www.eslprintables.com/printable.asp?id=144860 ; he/she/they games — https://www.teach-this.com/parts-of-speech/subject-object-pronouns ; TPR online — https://tutor.help.allright.com/en/articles/13832453-tpr-in-online-esl-teaching ; Simon Says A1 — https://twee.com/esl-lesson-plans/simon-says
 - Game-based learning evidence (vocabulary gains and retention with digital games for young learners) — https://journal.unnes.ac.id/journals/eej/article/download/25770/7651/129288 , https://wej.unwir.ac.id/index.php/wej/article/view/401
+- Grammar scope: Cambridge Young Learners handbook ("the structures candidates will need most frequently are there is/are, the present tense of be and have (got), can/can't and must/mustn't and the present continuous of some action verbs") — https://www.institutoivoti.com.br/idiomas/arquivos/Movers_en.pdf ; Movers grammar and structures list (past simple, comparatives/superlatives, adverbs, verb + -ing / to, Let's, Whose, because) — https://flyer.us/movers-cambridge-grammar/ , http://englishmilagrosa.blogspot.com/2015/04/grammar-and-structures-lists-for-movers.html ; wordlists 2025 — https://www.cambridgeenglish.org/Images/739104-starters-movers-flyers-word-list-2025.pdf
+- Motivation of young learners: Myles (enjoyment first at age 7) — https://www.governmentevents.co.uk/wp-content/uploads/2021/03/Florence-Myles.pdf ; systematic review of factors in young learners' motivation (SiSAL 2026) — https://sisaljournal.org/archives/volume-17/march-2026/lena_nikolov/ ; Cambridge "How to increase motivation to learn English" (right level, choices, intrinsic motivation) — https://cambridgeenglish.org/learning-english/parents-and-children/how-to-support-your-child/how-to-increase-motivation-to-learn-english ; Lingokids rewards (stars only when the learning goal is met) — https://help.lingokids.com/hc/en-us/articles/18393545177874-How-does-the-reward-system-work

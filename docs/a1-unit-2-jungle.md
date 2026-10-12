@@ -46,7 +46,7 @@ with *it*, and joining sentences into a short description.
 | Animals | monkey, elephant, snake, crocodile (+ lion, bird from L1 as jungle animals) | lion, bird, fish, frog |
 | Actions | climb, swing | run, jump, swim, fly |
 | Describing | long, short | big, small |
-| Sentences | It's a / an…, It can't…, Can it…? Yes, it can. / No, it can't. | It can…, I can…, It's big. |
+| Sentences | It's a / an…, It can't…, Can it…? Yes, it can. / No, it can't., It's got a long tail. | It can…, I can…, It's big. |
 | Phonics | ch (chimp, chick, lunch), ck (rock, duck, snack) | s a t p i n blends |
 
 ## Lesson by lesson — progressive outcomes
