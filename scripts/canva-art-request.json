@@ -1,12 +1,6 @@
 [
  {
-  "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0096-336036878261497332.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261011%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261011T074718Z&X-Amz-Expires=72165&X-Amz-Signature=90a81bef9c4f03bf1cb36bac87f74207839010fd870aa7b529599509f91d90cc&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2012%20Oct%202026%2003%3A50%3A03%20GMT",
-  "out": "public/lep1/items/tmp-sheet-animals.png",
-  "raw": true
- },
- {
-  "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0099-336036878261497332.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261011%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261011T215306Z&X-Amz-Expires=21278&X-Amz-Signature=0f568d4dbb7b15296292413c7eb1f39440c7b837f8d1147531cb2a4693bfbac3&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2012%20Oct%202026%2003%3A47%3A44%20GMT",
-  "out": "public/lep1/items/tmp-sheet-friends.png",
-  "raw": true
+  "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0097-8584379631146322902.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261011%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261011T123909Z&X-Amz-Expires=83235&X-Amz-Signature=44b414c8c140cab9c09fbf9691f58178e7cbb5bb65ac1be87f901e3e64fc78e3&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2012%20Oct%202026%2011%3A46%3A24%20GMT",
+  "out": "public/lep1/scenes/bg-u10l5-trail-empty-wide.png"
  }
 ]
