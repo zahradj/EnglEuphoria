@@ -33,6 +33,11 @@ describe('Academy level ladder (data)', () => {
     expect(getLadderStep('pre-a1', 'full')?.plannedSeasons).toBe(6);
   });
 
+  it('Pre-A1 has one working title per planned Season, and no other step has planned Seasons', () => {
+    for (const p of PROFILES) for (const s of ladderSteps(p)) expect(s.plannedTitles.length, `${p} ${s.id}`).toBe(s.plannedSeasons);
+    expect(getLadderStep('pre-a1', 'lean')?.plannedTitles).toEqual(['Hello, letters', 'First sounds', 'Numbers and age']);
+  });
+
   it('A1 is split in both ladders (A1 = Seasons 1-6, A1 Upper = 7-10) and Upper labels are marked official or ours', () => {
     for (const p of PROFILES) {
       expect(getLadderStep('a1', p)?.seasons).toEqual([1, 6]);

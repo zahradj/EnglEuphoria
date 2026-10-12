@@ -249,6 +249,7 @@ export const TeacherLessonLibrary: React.FC = () => {
 
           {activeHub === 'academy' && (
             <AcademyLevelLibrary
+              showSteps
               lessons={ACADEMY_DECK_LESSONS}
               renderLesson={(l) => (
                 <Card className="overflow-hidden border-border/50">
