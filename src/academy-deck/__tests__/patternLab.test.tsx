@@ -261,6 +261,28 @@ describe('Pattern Lab: voices and rules', () => {
     expect(all.length).toBeGreaterThan(80);
     all.forEach((l) => expect(l.text).not.toMatch(/[{}]|_{2,}/));
     const texts = new Set(all.map((l) => l.text));
-    ['Is she Italian?', 'She is not Spanish.', 'Are you from Spain?', 'I am not 15.'].forEach((t) => expect(texts.has(t), t).toBe(true));
+    ['Is she Spanish?', 'She is not Italian.', 'Are you from Italy?', 'I am not 15.'].forEach((t) => expect(texts.has(t), t).toBe(true));
+  });
+  it('RULE (owner 2026-10-12): after each vocabulary introduction come two different games', () => {
+    const GAMES = new Set(['match', 'memory', 'lockers', 'numtrain', 'countup', 'shadow', 'spell', 'bepick', 'build', 'findwrong', 'factcheck']);
+    slides.forEach((s, i) => {
+      if (s.kind !== 'teach') return;
+      const after = slides.slice(i + 1, i + 3).filter((g) => g.kind !== 'model');
+      expect(after.length, s.id).toBe(2);
+      expect(after.every((g) => GAMES.has(g.kind)), `${s.id}: games after it`).toBe(true);
+      expect(new Set(after.map((g) => g.kind)).size, `${s.id}: different kinds`).toBe(2);
+    });
+  });
+
+  it('CAST CANON (same as lesson 1): Ava is 13 and Spanish, Theo is 15 and Italian; only the blueprint cast appears (art too)', () => {
+    const fc = slides.find((s) => s.id === 'factcheck') as Extract<Slide, { kind: 'factcheck' }>;
+    expect(fc.profile).toMatchObject({ who: 'Ava', age: 13, from: 'Spain', nationality: 'Spanish', flag: 'es' });
+    const json = JSON.stringify(slides.filter((x) => x.id !== 'write'));
+    expect(json).not.toMatch(/"who":"Mia"/);
+    expect(json).not.toMatch(/I am 14|Ava is 14|She is 14|You are 14|Are you 14/);
+    const mem = slides.find((s) => s.id === 'memory-be') as Extract<Slide, { kind: 'memory' }>;
+    expect(mem.pairs.map((p) => p.art && p.art.type === 'bearer' && `${p.art.who}:${p.art.code}`)).toEqual(['Ava:es', 'Theo:it', 'Vee:fr']);
+    const b = slides.find((s) => s.id === 'border') as Extract<Slide, { kind: 'border' }>;
+    expect(b.rounds.every((r) => !!r.who)).toBe(true);
   });
 });

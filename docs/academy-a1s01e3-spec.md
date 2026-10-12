@@ -56,3 +56,12 @@ Different from lessons 1-2: story (detective fact-check, case file #3), scene (d
 - No homework quest yet for this lesson (Daily 10 is planned in `academy-daily-practice`).
 - No new Canva pictures: existing plates (detective wall, phone profile, lobby, stage, border, classroom) and drawn flags / travellers are reused; the "fake profile" has no dedicated picture yet.
 - Owner approval and the Academy hand-off rule are pending. Live two-device sync is not wired.
+
+
+## Refactor 2026-10-12 (owner: lesson 2, level A1 first)
+
+- **Cast canon now matches lesson 1:** Ava is 13 and Spanish; Theo is 15 and Italian; Vee holds France. The fake profile copies Theo's facts ("She is 15. She is Italian."); the clue asks "Who is 15 and Italian? Theo!". Only the blueprint cast appears (Vee, Ava, Theo), also in the pictures.
+- **Vocabulary rule:** after each word set two different games. am / is / are: `bepick` + `memory-be` (character and sentence pairs). not, questions, short answers: `build-1` + `findwrong`. Further practice: `whosaid-check`, `bepick-2` (not and questions), `answers`, `factcheck`.
+- **Order:** The Drop = teach-be, bepick, memory-be, model-fake, teach-not; Notice & Build = build-1, findwrong, whosaid-check, bepick-2, answers, factcheck.
+- Border control now uses cast characters with flags (no flat travellers); the Brazil round was dropped because Mia is not in this lesson's cast.
+- Matching boards use the scattered-picture layout (lesson 1 round 4).
