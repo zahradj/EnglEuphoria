@@ -1,6 +1,6 @@
 # Lesson 1 "Sign Me Up" (A1-S01-E2) — evaluation and rewritten lesson plan
 
-Owner request 2026-10-12: the lesson looks too difficult for the audience, the audience is unclear, the structure is off. Rewrite the plan so it is easier to absorb, understand, acquire and interact with, for Pre-A1, A1 and post-A1 students. **Status: proposal, not approved by the owner. Nothing in the player has been changed yet.**
+Owner request 2026-10-12: the lesson looks too difficult for the audience, the audience is unclear, the structure is off. Rewrite the plan so it is easier to absorb, understand, acquire and interact with, for Pre-A1, A1 and post-A1 students. **Status: Sample 2 is built (library: "Sign Me Up · Sample 2", `src/academy-deck/lessons/signMeUp2.ts`) next to the original lesson; not approved by the owner.**
 
 ## 1. Evaluation (what is wrong, with numbers)
 
@@ -80,3 +80,20 @@ Can-dos: I spelled my name. · I said my number (one…ten). · I said my countr
 2. Approve three lanes (Start / Core / Stretch) with a picture picker and an automatic offer to change?
 3. Labels: show "Pre-A1 / A1 / Post-A1" to the student, or friendlier names (Start / Core / Stretch)? (Suggested: friendly names to students, CEFR labels to teachers.)
 4. Should the Class Kit exist as its own short card, or be dropped (teacher explains the buttons)?
+
+
+## 9. Decisions taken (owner, 2026-10-12: "use whatever you think is suitable, as an English-teacher expert")
+
+1. **Scope cut: yes.** 14 blueprint items; classroom words, help phrases, hundreds and 1-100 out of the 60 minutes.
+2. **Three lanes: yes**, picker at the start, switch any time (More → Easier / Harder; the teacher can too). Students see **Start / Core / Stretch**; teachers see Pre-A1 / A1 / Post-A1 (shown in small print on the picker).
+3. **Class Kit: yes, as its own 5-minute card, not built yet.** Until it exists the teacher explains the buttons.
+4. **Numbers one at a time:** Core member number is read digit by digit ("four, two, seven"), the way people actually give numbers; "four hundred twenty-seven" is Stretch only.
+5. **Nationalities:** only Spain/Spanish and Italy/Italian are core (they are the blueprint's); Brazil and France are Stretch.
+
+## 10. Extra research (2026-10-12, English-teacher view)
+
+- Absolute-beginner guidance: keep early lessons oral, listening before reading and speaking, consistent gestures/pictures (TPR), start with fixed chunks such as "My name is…", recycle the same core language over several lessons, teach a few classroom/survival phrases first ([TEFL.net](https://www.tefl.net/elt/articles/teacher-technique/teaching-absolute-beginners/), [BusyTeacher](https://busyteacher.org/12158-how-to-teach-absolute-beginners-esl-zero-to-hero.html), [EBC TEFL: 6-step first lesson](https://www.ebcteflcourse.com/what-to-teach-english-beginners/), [DoTEFL](https://www.dotefl.com/teaching-english-to-beginners/)). Applied: story and pictures first, sound on every item, chunks as frames, Class Kit for classroom phrases, the same frames recycled from lesson 1. Limits: mostly general TEFL blogs, little teen-specific evidence; no source gave a firm "new words per lesson" number.
+- Letter names versus letter sounds: letter names do not map cleanly onto sounds, so teachers decide which to teach first ([OUP Teaching English](https://teachingenglishwithoxford.oup.com/2011/09/20/teaching-english-as-a-foreign-script-part-1-the-alphabet/amp)). Applied: only letter NAMES, only for the student's own name and A-V-A, no alphabet song, no phonics in this lesson. A British Council teen listening task models asking someone to spell their name ([LearnEnglish Teens](https://learnenglishteens.britishcouncil.org/comment/72871)).
+- Placement: Busuu lets learners choose their level or take a short adaptive placement test and offers to continue from the suggested level ([Busuu help](https://help.busuu.com/hc/en-us/articles/16526383831569-What-is-a-Placement-Test)). Applied: self-chosen lane first, no test; the lesson offers a change from what the student does.
+- Cambridge Pre A1 Starters is built on everyday topics with picture word lists ([Starters word list picture book](https://www.cambridgeenglish.org/Images/starters-word-list-picture-book.pdf)); the search could not confirm a numbers/nationalities list, and Starters is written for ages 6-12, so topics were adapted for teens (club desk, badges, lockers), not copied.
+- Not found: Duolingo / Busuu first-unit sizes, CEFR descriptor text. The lane definitions remain our own design.
