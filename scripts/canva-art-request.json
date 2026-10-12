@@ -1,7 +1,7 @@
 [
- {
-  "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0098-7009245676266250815.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261011%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261011T150631Z&X-Amz-Expires=88490&X-Amz-Signature=5133c98fe83ec784c417910df92d7119a1c411701240b92e2883fe4980e4a92d&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2012%20Oct%202026%2015%3A41%3A21%20GMT",
-  "out": "public/certificates/playground-a2.png",
-  "raw": true
- }
+  {
+    "url": "https://export-download.canva.com/azfa8/DAHX1eazfa8/-1/0/0001-4575050113469565103.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261012%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261012T203915Z&X-Amz-Expires=12145&X-Amz-Signature=737e520a096296f96b1cb677927d65872da137d5e9e226cdd11f5026d1dbf160&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2013%20Oct%202026%2000%3A01%3A40%20GMT",
+    "out": "public/academy-art/bg/name-wall-src.png",
+    "sticker": false
+  }
 ]
