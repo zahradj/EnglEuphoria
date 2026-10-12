@@ -552,9 +552,9 @@ export const LEO_STORY: { img: string; lines: { who?: CharKey; text: string }[] 
 export const LESSON_1_SCENES: Scene[] = classroomLook([
   { id: 'wt-title', kind: 'title-card', bg: leoStory(1), level: 'A1', unit: 'Unit 1', lessonLabel: 'Lesson 1', title: 'Hello, My Name Is…', subtitle: 'Say hello, ask a name — and read Leo’s story!', cta: '\u{1F44B} LET’S GO!' },
   /* Present: the words, then the sentence */
-  { id: 'wt-word-hello', kind: 'meet', look: 'word', word: 'Hello!', focus: ['Hello'], bg: bgL1WordHello, who: 'pip', teacher: 'Present: Pip says it. The student waves and says "Hello!"', line: 'Hello! Hi!', repeat: 'Hello!' },
-  { id: 'wt-word-goodbye', kind: 'meet', look: 'word', word: 'Goodbye!', focus: ['Goodbye'], bg: bgL1WordGoodbye, who: 'pip', teacher: 'Present: when we go, we say "Goodbye!" The student waves goodbye and says it.', line: 'Goodbye! Bye-bye!', repeat: 'Goodbye!' },
-  { id: 'wt-sentence-name', kind: 'meet', focus: ['name'], bg: bgL1Hello, who: 'pip', cardSide: 'left', teacher: 'Present: the question and the answer. The student says the answer with their own name.', line: 'My name is Pip. What’s your name?', repeat: 'My name is …' },
+  { id: 'wt-word-hello', kind: 'meet', look: 'word', word: 'Hello!', focus: ['Hello'], bg: bgL1WordHello, who: 'pip', teacher: 'Present: wave and say "Hello!"', line: 'Hello! Hi!', repeat: 'Hello!' },
+  { id: 'wt-word-goodbye', kind: 'meet', look: 'word', word: 'Goodbye!', focus: ['Goodbye'], bg: bgL1WordGoodbye, who: 'pip', teacher: 'Present: when we go, we say "Goodbye!" Wave and say it.', line: 'Goodbye! Bye-bye!', repeat: 'Goodbye!' },
+  { id: 'wt-sentence-name', kind: 'meet', focus: ['name'], bg: bgL1Hello, who: 'pip', cardSide: 'left', teacher: 'Present: listen to Pip. Then say: My name is … (your name!)', line: 'My name is Pip. What’s your name?', repeat: 'My name is …' },
   { id: 'wt-echo-question', kind: 'echo', bg: bgL1Peers, who: 'pip', textSide: 'top', teacher: 'Guided: say the question with Pip — the voice goes up at the end.', word: 'What’s your name?' },
   /* Guided: when do we say hello / goodbye? */
   {
@@ -661,6 +661,29 @@ export const LESSON_1_SCENES: Scene[] = classroomLook([
     ],
     bg: bgL1Circle,
   },
+  /* Phonics (owner 2026-10-12: "don't forget phonic sounds, phonic games, blending games"): hear the sound → a
+   * phonics game → Blend & Read → tongue twister. */
+  {
+    id: 'wt-sound-h', kind: 'sound-model', bg: bgL1Reading, who: 'pip', letter: 'H', phoneme: '/h/', sound: 'h', soundSide: 'center',
+    teacher: 'Present: /h/ is a little puff of air — feel it on your hand! Find the /h/ words.',
+    anchors: [
+      { word: 'hello', emoji: '\u{1F44B}', img: spr('pip') },
+      { word: 'hat', emoji: '\u{1F3A9}', img: '/lep1/items/item-hat.png' },
+      { word: 'hen', emoji: '\u{1F414}', img: '/lep1/items/item-hen.png' },
+      { word: 'house', emoji: '\u{1F3E0}', img: '/lep1/items/item-house.png' },
+    ],
+  },
+  {
+    id: 'wt-first-sound', kind: 'first-sound', bg: bgL1Reading, prompt: 'Catch the fish with the first sound!',
+    teacher: 'Guided: hear the word, catch the fish with its first sound (the recorded sound plays). Is it /h/?',
+    rounds: [
+      { word: 'hat', letter: 'h', choices: ['h', 's', 'm'], img: '/lep1/items/item-hat.png' },
+      { word: 'sun', letter: 's', choices: ['h', 's', 'p'], img: '/lep1/items/item-sun.png' },
+      { word: 'hen', letter: 'h', choices: ['p', 'h', 'm'], img: '/lep1/items/item-hen.png' },
+      { word: 'pig', letter: 'p', choices: ['h', 'm', 'p'], img: '/lep1/items/item-pig.png' },
+      { word: 'house', letter: 'h', choices: ['s', 'h', 'p'], img: '/lep1/items/item-house.png' },
+    ],
+  },
   {
     id: 'wt-blend', kind: 'sound-blend', bg: bgL1Reading, look: 'frog',
     teacher: 'Reading: tap each sound (/h/ /i/), blend, find the picture — then the word jumps into a sentence and the student reads it.',
@@ -682,7 +705,7 @@ export const LESSON_1_SCENES: Scene[] = classroomLook([
     ],
   },
   /* Check: the objective in the child's own words */
-  { id: 'wt-i-can', kind: 'meet', focus: ['name'], bg: bgL1Circle, who: 'marigold', cardSide: 'left', teacher: 'Check: the student says the "I can" sentence for the passport stamp.', line: 'I can say hello and goodbye. I can ask: What’s your name?', repeat: 'I can say hello!' },
+  { id: 'wt-i-can', kind: 'meet', focus: ['name'], bg: bgL1Circle, who: 'marigold', cardSide: 'left', teacher: 'Check: say it and get your passport stamp!', line: 'I can say hello and goodbye. I can ask: What’s your name?', repeat: 'I can say hello!' },
   {
     id: 'wt-sticker', kind: 'prea1', teacher: 'Sticker time! The student opens the pack and puts Pip in their Sticker Book.',
     scene: {

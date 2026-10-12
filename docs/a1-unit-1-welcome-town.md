@@ -101,6 +101,11 @@ subtitles, recorded voices) — no paid clips; cost: Canva only.
 
 ## 5. Lesson by lesson
 
+**Phonics in every lesson** (owner, 2026-10-12: *"don't forget phonic sounds, phonic games, blending games"*):
+the sound (sound-model, recorded sound) → **a phonics game** (a different one each lesson: L1 First Sound Fishing, L2 Sound
+Pop, L3 Sound Mole, L4 Letter Monsters, L5 Sound Fish, L6 Trophy Chest) → **Blend & Read** (blending world changes each
+lesson) → **tongue twister**.
+
 Every lesson keeps the A1 blueprint frame (§3g of `docs/playground-lesson-blueprint.md`): title → Remember? → the new
 language → a first game → the song → more practice → the reader → Blend & Read → tongue twister → the child's own
 conversation (free practice) → sticker + passport → home mission → goodbye song. **No game is used twice in the unit**
@@ -128,6 +133,8 @@ Stages: **P** present · **G** guided practice · **F** free practice · **R** r
 | 10 | Brain break | wave hello, wave goodbye, freeze | move | — |
 | 11 | **Reader: Leo's First Day, pages 1-3** | read-along (words light up), then the child reads Pip's and Leo's lines | read sentences with *I, my, name, is* | R |
 | 12 | **Read & Match** (picture-match, sentences) | match *Hello! / Goodbye! / My name is Leo.* to pictures | read the unit's sentences | R |
+| 12a | **Sound /h/** (sound-model) | hear the sound, feel the puff of air, *hello, hat, hen, house* | the sound | P |
+| 12b | **First Sound Fishing** (first-sound) | hear *hat* → catch the fish with **h** (recorded sounds) | hear the first sound | G |
 | 13 | **Blend & Read: h** | blend *h-i hi, h-o-p hop, h-a-t hat* → the word drops into *"Hi! I am Pip."*, child reads the sentence | phonics → sentence reading | R |
 | 14 | Tongue twister: *Happy Hen hops.* | slow → normal (2 speeds) | quick reading, the h sound | R |
 | 15 | Meet a new friend (roleplay, child leads) | the child says hello, gives their name, asks the friend's name, says goodbye | the full mini-conversation | F |
