@@ -12,6 +12,7 @@ import { ClassroomToolOverlay } from './ClassroomToolOverlay';
 import { EmbeddedSceneLesson } from './EmbeddedSceneLesson';
 import { EmbeddedWelcomeTownLesson } from './EmbeddedWelcomeTownLesson';
 import { ClassroomSceneErrorBoundary } from './ClassroomSceneErrorBoundary';
+import { EmbeddedAcademyDeckLesson, type EmbeddedAcademyDeckHandle } from '@/academy-deck/classroom/EmbeddedAcademyDeckLesson';
 import { useLetterboxSize } from '@/hooks/useLetterboxSize';
 import { isWelcomeTownFamilyFormat } from '@/content/playground-library/sceneLessonFormats';
 import { LiveReactionBar, STUDENT_REACTIONS } from '@/components/classroom/engagement/LiveReactionBar';
@@ -138,6 +139,9 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
     | { unitNumber: number; lessonNumber: number; contentFormat?: string }
     | undefined;
   const isWelcomeTownScene = isWelcomeTownFamilyFormat(sceneLessonRef?.contentFormat);
+  // Academy library (deck) lesson: one synthetic slide carries { lessonId } (see TeacherClassroom / classroomLessonResolver).
+  const deckLessonRef = (rawSlides as { deckLessonRef?: { lessonId: string } }[] | undefined)?.[0]?.deckLessonRef;
+  const deckHandleRef = useRef<EmbeddedAcademyDeckHandle>(null);
 
   const sceneLessonHandleRef = useRef<SceneLessonHandle>(null);
   const sceneStageAreaRef = useRef<HTMLDivElement>(null);
@@ -169,7 +173,7 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
   );
 
   useImperativeHandle(ref, () => ({
-    goToScene: (idx: number) => sceneLessonHandleRef.current?.goToIndex(idx),
+    goToScene: (idx: number) => (deckLessonRef ? deckHandleRef.current?.goToIndex(idx) : sceneLessonHandleRef.current?.goToIndex(idx)),
     // Lets a caller outside the scene content (the bottom toolbar's
     // combined "let student interact" toggle) drive the exact same
     // gate the scene's own inline lock button already uses — real
@@ -177,7 +181,7 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
     // setInteractionUnlocked, not a separate/parallel mechanism.
     // No-op when no scene lesson is on stage.
     setSceneInteractionUnlocked: (unlocked: boolean) => sceneLessonHandleRef.current?.setInteractionUnlocked(unlocked),
-  }), []);
+  }), [deckLessonRef]);
 
   // Reset stale nav state once the scene lesson is no longer the active stage content
   // (e.g. the teacher swaps to a regular slide deck) so callers mirroring this state
@@ -394,6 +398,39 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
                 </div>
               )}
             </div>
+          ) : hubType === 'academy' && mode === 'slide' && deckLessonRef ? (
+            // Academy library lesson (deck player): fixed 16:9 frame like plain stage content, pen layer inside it,
+            // so teacher and student share the same coordinates. The teacher moves the lesson; the student follows.
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div
+                className="relative overflow-hidden bg-background"
+                style={stageContentFrameSize.width > 0 ? { width: stageContentFrameSize.width, height: stageContentFrameSize.height } : { width: '100%', height: '100%' }}
+              >
+                <ClassroomSceneErrorBoundary resetKey={`deck-${deckLessonRef.lessonId}`}>
+                  <EmbeddedAcademyDeckLesson
+                    ref={deckHandleRef}
+                    lessonId={deckLessonRef.lessonId}
+                    roomId={roomId}
+                    role={role}
+                    persistedSceneIdx={sceneLessonIdx}
+                    onSceneIdxPersist={onPersistSceneLessonIdx}
+                  />
+                </ClassroomSceneErrorBoundary>
+                <TransparentCanvas
+                  roomId={roomId}
+                  userId={userId}
+                  userName={userName}
+                  role={role}
+                  drawingEnabled={drawingEnabled}
+                  activeTool={activeTool}
+                  activeColor={activeColor}
+                  strokes={strokes}
+                  onAddStroke={onAddStroke}
+                  mode={mode}
+                  iframeUnlocked={iframeUnlocked}
+                />
+              </div>
+            </div>
           ) : hubType === 'playground' && mode === 'slide' && !isInterview && (rawSlides as any)?.[0]?.playgroundUnit ? (
             // Only reachable with a real AI-generated unit (from PlaygroundCreator)
             // to render — without one, PlaygroundLessonPlayer silently falls back
@@ -489,7 +526,7 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
 
 
         {/* Slide counter (only in slide mode) */}
-        {mode === 'slide' && slides.length > 0 && (
+        {mode === 'slide' && slides.length > 0 && !deckLessonRef && (
           <div className="absolute bottom-4 right-4 z-[60] bg-foreground/70 text-background px-2.5 py-0.5 rounded-full text-[11px] font-medium pointer-events-none">
             {currentSlideIndex + 1} / {slides.length}
           </div>

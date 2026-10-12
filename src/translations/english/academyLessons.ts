@@ -8,4 +8,5 @@ export const academyLessonsTranslations = {
   'al.empty': 'Your lessons will show up here as soon as they are ready.',
   'al.back': 'Back to lessons',
   'al.missing': 'This lesson isn’t available.',
+  'al.follow': 'Your teacher moves the lesson.',
 };

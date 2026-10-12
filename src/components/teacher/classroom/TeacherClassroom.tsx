@@ -1719,8 +1719,40 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
         onClose={() => setIsLibraryOpen(false)}
         slideFormat="raw"
         hubFilter={hubType}
-        onSelectLesson={async (selectedSlides, title, sceneMeta) => {
+        onSelectLesson={async (selectedSlides, title, sceneMeta, deckMeta) => {
           setIsLibraryOpen(false);
+
+          if (deckMeta) {
+            // Academy library (deck) lesson — its content lives in code (src/academy-deck). One synthetic slide carries the
+            // reference; MainStage plays it with the synced deck player (teacher moves the lesson, the student follows).
+            const deckSlides = [{
+              id: `deck-lesson-${deckMeta.lessonId}`,
+              type: 'academy_deck',
+              deckLessonRef: { lessonId: deckMeta.lessonId },
+            }];
+            setRawSlides(deckSlides);
+            try {
+              // Reset BEFORE swapping the slides in: the new lesson's player adopts the index saved at that moment.
+              await updateSceneLessonIdx(0);
+              await updateSharedDisplay({ lessonSlides: deckSlides, lessonTitle: title, embeddedUrl: null });
+              await updateSlide(0);
+              await setStageMode('slide');
+              await updateCanvasTab('slides');
+              toast({
+                title: "📚 Lesson Loaded!",
+                description: `"${title}" is now on screen.`,
+                className: "bg-indigo-900 border-indigo-700",
+              });
+            } catch (error) {
+              console.error('Failed to load Academy lesson into classroom:', error);
+              toast({
+                title: '❌ Failed to load lesson',
+                description: 'The student may not have received it — try again or use Force Sync.',
+                variant: 'destructive',
+              });
+            }
+            return;
+          }
 
           if (sceneMeta) {
             // Scene-based (e.g. Little Explorers Phonics) lesson — its real

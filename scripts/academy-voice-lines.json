@@ -805,6 +805,322 @@
   },
   {
     "who": "Vee",
+    "text": "Fake or Real?"
+  },
+  {
+    "who": "Vee",
+    "text": "Welcome back, detective! A fake profile of Ava is online. Today you check the facts."
+  },
+  {
+    "who": "Ava",
+    "text": "I am 14."
+  },
+  {
+    "who": "Ava",
+    "text": "I am from Italy. I am Italian."
+  },
+  {
+    "who": "Theo",
+    "text": "I am from Italy."
+  },
+  {
+    "who": "Theo",
+    "text": "Spell YOUR name on the detective badge."
+  },
+  {
+    "who": "Vee",
+    "text": "I am"
+  },
+  {
+    "who": "Vee",
+    "text": "I am 14."
+  },
+  {
+    "who": "Vee",
+    "text": "You are"
+  },
+  {
+    "who": "Vee",
+    "text": "You are Italian."
+  },
+  {
+    "who": "Vee",
+    "text": "She is"
+  },
+  {
+    "who": "Vee",
+    "text": "She is from Italy."
+  },
+  {
+    "who": "Vee",
+    "text": "He is"
+  },
+  {
+    "who": "Vee",
+    "text": "He is Spanish."
+  },
+  {
+    "who": "Theo",
+    "text": "The profile says: She is 15. She is Spanish."
+  },
+  {
+    "who": "Ava",
+    "text": "No! I am not 15. I am 14."
+  },
+  {
+    "who": "Ava",
+    "text": "I am not Spanish. I am Italian."
+  },
+  {
+    "who": "Theo",
+    "text": "You are 14. You are from Italy."
+  },
+  {
+    "who": "Vee",
+    "text": "Are you from Spain, Ava?"
+  },
+  {
+    "who": "Ava",
+    "text": "No, I am not."
+  },
+  {
+    "who": "Vee",
+    "text": "Is he Spanish?"
+  },
+  {
+    "who": "Ava",
+    "text": "Yes, he is. He is from Spain."
+  },
+  {
+    "who": "Vee",
+    "text": "Is he 16?"
+  },
+  {
+    "who": "Ava",
+    "text": "No, he is not. He is 15."
+  },
+  {
+    "who": "Vee",
+    "text": "I am not"
+  },
+  {
+    "who": "Vee",
+    "text": "I am not Spanish."
+  },
+  {
+    "who": "Vee",
+    "text": "She is not"
+  },
+  {
+    "who": "Vee",
+    "text": "She is not 15."
+  },
+  {
+    "who": "Vee",
+    "text": "Are you…?"
+  },
+  {
+    "who": "Vee",
+    "text": "Are you 14?"
+  },
+  {
+    "who": "Vee",
+    "text": "Is she…?"
+  },
+  {
+    "who": "Vee",
+    "text": "Is she Italian?"
+  },
+  {
+    "who": "Vee",
+    "text": "Yes, I am."
+  },
+  {
+    "who": "Vee",
+    "text": "Are you Italian? Yes, I am."
+  },
+  {
+    "who": "Theo",
+    "text": "Pick am, is or are for each person."
+  },
+  {
+    "who": "Theo",
+    "text": "I am 14."
+  },
+  {
+    "who": "Theo",
+    "text": "You are Italian."
+  },
+  {
+    "who": "Theo",
+    "text": "She is from Italy."
+  },
+  {
+    "who": "Theo",
+    "text": "He is Spanish."
+  },
+  {
+    "who": "Theo",
+    "text": "I am not Spanish."
+  },
+  {
+    "who": "Theo",
+    "text": "She is not 15."
+  },
+  {
+    "who": "Theo",
+    "text": "Are you 14?"
+  },
+  {
+    "who": "Theo",
+    "text": "Is she Italian?"
+  },
+  {
+    "who": "Ava",
+    "text": "Build the sentence. Tap the words in the right order."
+  },
+  {
+    "who": "Ava",
+    "text": "She is Italian."
+  },
+  {
+    "who": "Ava",
+    "text": "He is from Spain."
+  },
+  {
+    "who": "Ava",
+    "text": "I am not Spanish."
+  },
+  {
+    "who": "Ava",
+    "text": "Are you 14?"
+  },
+  {
+    "who": "Ava",
+    "text": "Is he Spanish?"
+  },
+  {
+    "who": "Vee",
+    "text": "Detective time! The fake profile has 3 mistakes with am, is, are or not. Tap them."
+  },
+  {
+    "who": "Theo",
+    "text": "Are you Spanish?"
+  },
+  {
+    "who": "Theo",
+    "text": "Is Theo Spanish?"
+  },
+  {
+    "who": "Theo",
+    "text": "Are you 15?"
+  },
+  {
+    "who": "Theo",
+    "text": "Is he 16?"
+  },
+  {
+    "who": "Vee",
+    "text": "Is each sentence true? Check it on Ava’s real card."
+  },
+  {
+    "who": "Vee",
+    "text": "She is 14."
+  },
+  {
+    "who": "Vee",
+    "text": "She is Spanish."
+  },
+  {
+    "who": "Vee",
+    "text": "She is 15."
+  },
+  {
+    "who": "Vee",
+    "text": "She is not French."
+  },
+  {
+    "who": "Vee",
+    "text": "Memory! Find each flag and the sentence about its country."
+  },
+  {
+    "who": "Vee",
+    "text": "I am Brazilian."
+  },
+  {
+    "who": "Vee",
+    "text": "She is French."
+  },
+  {
+    "who": "Vee",
+    "text": "He is from Japan."
+  },
+  {
+    "who": "Vee",
+    "text": "You are American."
+  },
+  {
+    "who": "Ava",
+    "text": "Hi, detective! Are you ready?"
+  },
+  {
+    "who": "Ava",
+    "text": "Is Theo 16?"
+  },
+  {
+    "who": "Ava",
+    "text": "Ask me about Theo!"
+  },
+  {
+    "who": "Ava",
+    "text": "Yes, he is! And you? How old are you?"
+  },
+  {
+    "who": "Theo",
+    "text": "Sentence duel! Build each sentence for the case. No timer, take your time."
+  },
+  {
+    "who": "Theo",
+    "text": "He is not 16."
+  },
+  {
+    "who": "Theo",
+    "text": "She is not Spanish."
+  },
+  {
+    "who": "Theo",
+    "text": "I am not 15."
+  },
+  {
+    "who": "Theo",
+    "text": "Are you from Spain?"
+  },
+  {
+    "who": "Theo",
+    "text": "Yes, he is."
+  },
+  {
+    "who": "Theo",
+    "text": "Take 1 · Check in with Theo. Say who you are, one thing that is not true, and ask him a question."
+  },
+  {
+    "who": "Theo",
+    "text": "Take 2 · Theo asks YOU: “Are you Spanish?” Answer, then ask him about Ava."
+  },
+  {
+    "who": "Vee",
+    "text": "Case solved?"
+  },
+  {
+    "who": "Vee",
+    "text": "Homework: write three sentences about a friend: one with is, one with is not, and one question."
+  },
+  {
+    "who": "Vee",
+    "text": "Clue 3 of 8: The fake profile says “She is 15. She is Spanish.” But Ava is 14 and Italian. Who is 15 and Spanish? Theo! Someone mixed up their facts."
+  },
+  {
+    "who": "Vee",
     "text": "Shadow match! Which number is hiding?"
   },
   {

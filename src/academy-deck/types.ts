@@ -114,11 +114,30 @@ export interface SaySlide extends SlideBase {
   /** the model stays visible (Mission takes); without it the model is hidden until "Show me" (the exit task) */
   open?: boolean;
 }
+/** Grammar: pick am / is / are for a sentence with a blank (statements, negatives and questions). */
+export interface BePickSlide extends SlideBase { stamp?: string; kind: 'bepick'; prompt: string; rounds: { frame: string; answer: 'am' | 'is' | 'are'; who: TeachArt; why: string }[] }
+/** Grammar: build a sentence from word tiles (a short fact on top says what to build); wrong forms are the distractors. */
+export interface BuildSlide extends SlideBase { stamp?: string; kind: 'build'; prompt: string; rounds: { cue: string; target: string; extra?: string[]; hint?: string }[] }
+/** Fact-check a profile card: is each sentence true? If not, choose the sentence that fixes it. */
+export interface FactCheckSlide extends SlideBase {
+  kind: 'factcheck';
+  stamp?: string;
+  prompt: string;
+  profile: { who: CastName; name: string; age: number; from: string; nationality: string; flag: string };
+  claims: { text: string; fact: boolean; fixes?: { text: string; ok?: boolean; hint?: string }[] }[];
+}
+/** Writing: the student types sentences with the pattern; each row is checked against accepted shapes (model hidden until "Show me"). */
+export interface WriteSlide extends SlideBase {
+  kind: 'write';
+  stamp?: string;
+  prompt: string;
+  rows: { label: string; frame: string; /** regular expressions (source) tested on the normalised sentence */ accept: string[]; hint: string; sample: string }[];
+}
 export interface WrapSlide extends SlideBase { kind: 'wrap'; heading: string; ticks: string[]; homework: string; clue: string }
 
 export type Slide =
   | TitleSlide | BriefSlide | BadgeSlide | DialSlide | WhoSaidSlide | LockersSlide | NumTrainSlide | PadlockSlide | ConvoSlide | SpellSlide
-  | HuntSlide | ShadowSlide | TeachSlide | ModelSlide | FindWrongSlide | BorderSlide | MemorySlide | NumWallSlide | PhoneChatSlide | FadeSlide | CardSlide | SaySlide | WrapSlide;
+  | BePickSlide | BuildSlide | FactCheckSlide | WriteSlide | HuntSlide | ShadowSlide | TeachSlide | ModelSlide | FindWrongSlide | BorderSlide | MemorySlide | NumWallSlide | PhoneChatSlide | FadeSlide | CardSlide | SaySlide | WrapSlide;
 
 export interface DeckScript {
   lessonId: string;
@@ -127,6 +146,8 @@ export interface DeckScript {
   objective: string;
   criteria: string[];
   cast: CastName[];
+  /** one line per part (index 0-7) shown on the part card; defaults to the PARTS goals */
+  partGoals?: string[];
   slides: Slide[];
 }
 
