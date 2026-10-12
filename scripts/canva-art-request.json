@@ -1,6 +1,10 @@
 [
  {
-  "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0097-8584379631146322902.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261011%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261011T123909Z&X-Amz-Expires=83235&X-Amz-Signature=44b414c8c140cab9c09fbf9691f58178e7cbb5bb65ac1be87f901e3e64fc78e3&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2012%20Oct%202026%2011%3A46%3A24%20GMT",
-  "out": "public/lep1/scenes/bg-u10l5-trail-empty-wide.png"
+  "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0096-3923154021468925324.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261011%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261011T204829Z&X-Amz-Expires=58394&X-Amz-Signature=011f738ce8cb1497b3851746b3c1e37acf145997ec80d1ab6828ff925e7754ec&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2012%20Oct%202026%2013%3A01%3A43%20GMT",
+  "out": "public/lep1/scenes/bg-u10l6-games-night-empty-wide.png"
+ },
+ {
+  "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0098-3923154021468925324.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261012%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261012T071746Z&X-Amz-Expires=20546&X-Amz-Signature=55cffa4d5f32a2235505bd4998bdc910d58fdfd5e8fbd3c61c276e39a529cfcc&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2012%20Oct%202026%2013%3A00%3A12%20GMT",
+  "out": "public/lep1/scenes/bg-u10l6-games-night-wide.png"
  }
 ]
