@@ -7,6 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 
 const SignMeUpLesson = lazy(() => import('@/academy-games/signMeUp/SignMeUpLesson'));
 const SignMeUpHomework = lazy(() => import('@/academy-games/signMeUp/SignMeUpHomework'));
+const FakeOrRealLesson = lazy(() => import('./FakeOrRealLesson'));
 
 /** Full-screen player for one Academy deck lesson (or its homework quest). Students come from My Lessons, creators from the Academy Library. */
 export default function AcademyDeckLessonPage({ homework = false }: { homework?: boolean }) {
@@ -18,7 +19,7 @@ export default function AcademyDeckLessonPage({ homework = false }: { homework?:
   const role = (user as { role?: string } | null)?.role;
   const isCreator = role === 'content_creator' || role === 'admin';
   const back = () => navigate(isCreator ? '/academy-library' : '/dashboard/academy?tab=lessons');
-  const Player = id === 'sign-me-up' ? (homework ? SignMeUpHomework : SignMeUpLesson) : null;
+  const Player = id === 'sign-me-up' ? (homework ? SignMeUpHomework : SignMeUpLesson) : id === 'fake-or-real' && !homework ? FakeOrRealLesson : null;
 
   return (
     <div className="relative min-h-screen bg-[#f5f3ff]">

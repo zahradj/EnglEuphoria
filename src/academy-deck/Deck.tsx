@@ -16,6 +16,7 @@ import { FindWrongView, SpellView } from './slides/letters';
 import { LockersView, NumTrainView, PadlockView } from './slides/numbers';
 import { BorderView, MemoryView } from './slides/passport';
 import { NumWallView } from './slides/numwall';
+import { BePickView, BuildView, FactCheckView, WriteView } from './slides/pattern';
 import { ConvoView, FadeView, PhoneChatView, SayView, WhoSaidView } from './slides/talk';
 import { audioBaseFor, hasClip, loadManifest, playLine, stopLine } from './audio';
 import { openLines, slideLines } from './spoken';
@@ -64,6 +65,10 @@ function SlideView({ slide }: { slide: Slide }) {
     case 'border': return <BorderView slide={slide} />;
     case 'memory': return <MemoryView slide={slide} />;
     case 'numwall': return <NumWallView slide={slide} />;
+    case 'bepick': return <BePickView slide={slide} />;
+    case 'build': return <BuildView slide={slide} />;
+    case 'factcheck': return <FactCheckView slide={slide} />;
+    case 'write': return <WriteView slide={slide} />;
     case 'phonechat': return <PhoneChatView slide={slide} />;
     case 'fade': return <FadeView slide={slide} />;
     case 'card': return <CardView slide={slide} />;
@@ -317,7 +322,7 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
             <span className="ad-partcard-num" aria-hidden="true">{partCard + 1}</span>
             <span className="ad-partcard-kicker">Part {partCard + 1} of {PARTS.length} · {PARTS[partCard].minutes} min</span>
             <span className="ad-partcard-name">{PARTS[partCard].name}</span>
-            <span className="ad-partcard-goal">{PARTS[partCard].goal}</span>
+            <span className="ad-partcard-goal">{script.partGoals?.[partCard] ?? PARTS[partCard].goal}</span>
             <span className="ad-partcard-pips" aria-hidden="true">{PARTS.map((_, k) => <i key={k} data-on={k <= partCard} />)}</span>
             <span className="ad-partcard-tap">Tap to start</span>
           </div>

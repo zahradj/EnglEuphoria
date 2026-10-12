@@ -12,6 +12,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { SIGN_ME_UP } from '../src/academy-deck/lessons/signMeUp.ts';
+import { PATTERN_LAB } from '../src/academy-deck/lessons/patternLab.ts';
 import { SIGN_ME_UP_QUEST } from '../src/academy-deck/homework/signMeUpQuest.ts';
 import { slideLines } from '../src/academy-deck/spoken.ts';
 import { ACADEMY_VOICES } from '../src/academy-deck/voices.ts';
@@ -20,6 +21,7 @@ const OUT = path.join(path.dirname(fileURLToPath(import.meta.url)), 'academy-voi
 
 const decks = [
   { name: SIGN_ME_UP.lessonId, slides: SIGN_ME_UP.slides },
+  { name: PATTERN_LAB.lessonId, slides: PATTERN_LAB.slides },
   { name: `${SIGN_ME_UP.lessonId} homework`, slides: SIGN_ME_UP_QUEST.flatMap((c) => c.slides) },
 ];
 

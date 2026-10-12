@@ -916,3 +916,59 @@
 .ad-options[data-pics='false'] .ad-option:nth-child(2n) { background-color: #0284c7; }
 .ad-options[data-pics='false'] .ad-option:nth-child(3n) { background-color: #d97706; }
 .ad-options[data-pics='false'] .ad-option { text-shadow: 0 1px 0 rgba(30, 10, 90, 0.7); font-weight: 800; }
+
+/* ---------- Pattern Lab games: am/is/are pick, sentence build, profile fact-check, write ---------- */
+.ad-be { display: grid; gap: 12px; justify-items: center; padding: 6px 4px; }
+.ad-be-who { min-height: 96px; display: grid; place-items: center; }
+.ad-be-line { margin: 0; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; justify-content: center; font-size: clamp(1.4rem, 4.5vw, 2.1rem); font-weight: 800; color: var(--ink); }
+.ad-be-blank { min-width: 76px; padding: 2px 14px; text-align: center; border-radius: 14px; border: 3px dashed #c4b5fd; background: #faf7ff; color: var(--violet-d); }
+.ad-be-blank[data-filled='true'] { border-style: solid; border-color: #22c55e; background: #ecfdf5; animation: ad-pop 0.3s cubic-bezier(0.2, 1.8, 0.4, 1); }
+.ad-be-opts { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+.ad-be-btn { min-width: 92px; min-height: 58px; padding: 6px 22px; border-radius: 16px; font-size: 1.6rem; font-weight: 900; color: #fff; border: 3px solid #5b21b6; background: linear-gradient(160deg, #8b5cf6, #6d46e6); box-shadow: 0 5px 0 #4c1d95; cursor: pointer; transition: transform 0.12s; }
+.ad-be-btn[data-w='is'] { background: linear-gradient(160deg, #38bdf8, #4f46e5); }
+.ad-be-btn[data-w='are'] { background: linear-gradient(160deg, #a78bfa, #7c3aed); }
+.ad-be-btn:hover:not(:disabled) { transform: translateY(-3px); }
+.ad-be-btn:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 2px 0 #4c1d95; }
+.ad-be-btn:disabled { opacity: 0.35; box-shadow: none; cursor: default; }
+.ad-be-btn[data-bad='true'] { animation: ad-shake 0.35s; background: #f97316; border-color: #ea580c; box-shadow: none; }
+
+.ad-build { display: grid; gap: 12px; }
+.ad-build-cue { margin: 0; display: flex; gap: 8px; align-items: center; justify-content: center; padding: 8px 14px; border-radius: 14px; background: #ede9fe; color: var(--violet-d); font-weight: 800; font-size: 1.05rem; }
+.ad-build-line { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; align-items: center; min-height: 58px; }
+.ad-build-slot { min-width: 64px; min-height: 48px; padding: 4px 12px; display: inline-flex; align-items: center; justify-content: center; border-radius: 12px; border: 3px dashed #c4b5fd; background: #faf7ff; font-weight: 900; font-size: 1.3rem; color: var(--violet-d); }
+.ad-build-slot[data-next='true'] { border-color: var(--warn); background: #fff7e0; }
+.ad-build-slot[data-filled='true'] { border-style: solid; border-color: #22c55e; background: #ecfdf5; animation: ad-pop 0.3s cubic-bezier(0.2, 1.8, 0.4, 1); }
+.ad-build[data-done='true'] .ad-build-slot { box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.25); }
+.ad-build-tile { cursor: pointer !important; font-size: 1.15rem; }
+
+.ad-fc { display: grid; grid-template-columns: minmax(150px, 210px) 1fr; gap: 14px; align-items: start; }
+.ad-fc-card { position: relative; padding: 12px 12px 8px; border-radius: 16px; border: 3px solid #5b21b6; background: linear-gradient(180deg, #fff, #f3edff); box-shadow: 0 6px 0 rgba(76, 29, 149, 0.35); }
+.ad-fc-flag { position: absolute; top: -14px; inset-inline-end: 10px; width: 54px; filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.25)); }
+.ad-fc-card dl { margin: 0; display: grid; gap: 4px; }
+.ad-fc-card dl div { display: flex; justify-content: space-between; gap: 8px; border-bottom: 1px dashed #d3c8f8; padding-bottom: 3px; }
+.ad-fc-card dt { color: #6b5aa8; font-size: 0.85rem; font-weight: 700; }
+.ad-fc-card dd { margin: 0; font-weight: 900; color: var(--ink); }
+.ad-fc-main { display: grid; gap: 10px; }
+.ad-fc-claim { margin: 0; padding: 12px 14px; border-radius: 14px; background: #fff7e0; border: 2px solid var(--warn); font-size: 1.35rem; font-weight: 800; animation: ad-rise 0.35s ease-out both; }
+.ad-fc-q { display: block; font-size: 0.8rem; font-weight: 700; color: #92600a; text-transform: uppercase; letter-spacing: 0.06em; }
+.ad-fc-opts, .ad-fc-fix, .ad-fc-next { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.ad-fc-fix { flex-direction: column; align-items: stretch; }
+.ad-fc-btn { min-height: 54px; padding: 8px 24px; border-radius: 16px; font-size: 1.2rem; font-weight: 900; border: 3px solid #5b21b6; color: #fff; cursor: pointer; box-shadow: 0 5px 0 #4c1d95; display: inline-flex; gap: 8px; align-items: center; }
+.ad-fc-btn[data-t='yes'] { background: linear-gradient(160deg, #22c55e, #15803d); border-color: #166534; box-shadow: 0 5px 0 #14532d; }
+.ad-fc-btn[data-t='no'] { background: linear-gradient(160deg, #8b5cf6, #6d28d9); }
+.ad-fc-log { margin: 8px 0 0; padding: 0; list-style: none; display: flex; gap: 6px; justify-content: center; }
+.ad-fc-log li { min-width: 62px; padding: 3px 10px; text-align: center; border-radius: 999px; font-size: 0.8rem; font-weight: 800; background: #ede9fe; color: #6b5aa8; }
+.ad-fc-log li[data-state='true'] { background: #dcfce7; color: #166534; }
+.ad-fc-log li[data-state='lie'] { background: #ffe4e6; color: #9f1239; }
+.ad-fc-log li[data-state='now'] { outline: 3px solid var(--warn); }
+
+.ad-write { display: grid; gap: 10px; }
+.ad-write-row { position: relative; display: grid; gap: 4px; padding: 8px 10px; border-radius: 14px; border: 2px solid var(--line); background: #fff; }
+.ad-write-row[data-ok='true'] { border-color: #22c55e; background: #f0fdf4; }
+.ad-write-row[data-ok='false'] { border-color: #f97316; background: #fff7ed; }
+.ad-write-row label { font-weight: 700; color: var(--violet-d); }
+.ad-write-mark { position: absolute; top: 8px; inset-inline-end: 10px; color: #16a34a; width: 26px; }
+.ad-write-hint { margin: 0; color: #b45309; font-weight: 700; }
+.ad-write-sample { margin: 0; color: #5b21b6; font-style: italic; }
+@media (max-width: 640px) { .ad-fc { grid-template-columns: 1fr; } .ad-fc-flag { top: -10px; width: 44px; } }
+.ad-root[data-hw='true'] .ad-be-line, .ad-root[data-hw='true'] .ad-fc-claim { color: #1e1b4b; }
