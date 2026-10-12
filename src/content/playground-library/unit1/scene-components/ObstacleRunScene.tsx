@@ -57,7 +57,9 @@ export function ObstacleRunScene({ scene, onWin, onNext, sync }: { scene: Run; o
   const spot = useMemo(() => (st ? { left: st.left, top: st.top } : { left: '90%', top: '58%' }), [st]);
 
   useEffect(() => {
-    busy.current = false; setShow(null); setBubble(null);
+    busy.current = false;
+    // the friend who passed stays on the obstacle while the child says the sentence; a new station starts empty
+    if (phase !== 'say') { setShow(null); setBubble(null); }
     if (st && phase === 'pick') {
       const t = window.setTimeout(() => cueSpeak(st.ask, scene.who), 700);
       return () => window.clearTimeout(t);

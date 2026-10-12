@@ -437,7 +437,7 @@ export const LESSON_A1U2L2_SCENES: Scene[] = [
       stations: [
         { action: 'run', left: '18%', top: '64%', ask: 'The long path! Who can run fast?', options: [0, 3], answer: 0, sentence: 'A lion can run!' },
         { action: 'climb', left: '27%', top: '38%', ask: 'The tall tree! Who can climb it?', options: [3, 1, 0], answer: 1, sentence: 'A monkey can climb!' },
-        { action: 'swim', left: '41%', top: '84%', ask: 'The river! Who can swim across?', options: [2, 3, 1], answer: 3, sentence: 'A fish can swim!' },
+        { action: 'swim', left: '44%', top: '57%', ask: 'The river! Who can swim across?', options: [2, 3, 1], answer: 3, sentence: 'A fish can swim!' },
         { action: 'swing', left: '72%', top: '42%', ask: 'The big gap! Who can swing on the vines?', options: [0, 1, 3], answer: 1, sentence: 'A monkey can swing!' },
         { action: 'fly', left: '90%', top: '30%', ask: 'The top of the waterfall! Who can fly up?', options: [1, 0, 2], answer: 2, sentence: 'A bird can fly!' },
       ],
@@ -597,7 +597,6 @@ export const LESSON_A1U2L2_SCENES: Scene[] = [
       { id: 'swim', label: 'swim', emoji: '\u{1F41F}' },
       { id: 'run', label: 'run', emoji: '\u{1F981}' },
       { id: 'jump', label: 'jump', emoji: '\u{1F438}' },
-      { id: 'swing', label: 'swing', emoji: '\u{1F412}' },
     ],
   },
   /* Closing routine goodbye + celebration */
