@@ -538,6 +538,50 @@ Deno.serve(async (req) => {
       return json({ success: true, bookingId: booking.id, joinLink, emailSent, isTrial, weeklyBooked, weeklyFailed })
     }
 
+    // ── Teacher-only: a join link for a lesson that ALREADY exists. For a student who cannot get into the
+    // classroom (not signed in, wrong account, forgotten password): the link signs them straight in to their
+    // own account and opens this lesson, the same as the emailed invite link.
+    if (action === 'link_for_booking') {
+      const auth = await requireAuth(req, { allowedRoles: ['teacher', 'admin'] })
+      if (!auth.ok) return json(auth.body, auth.status)
+
+      const bookingId = typeof body.bookingId === 'string' ? body.bookingId : ''
+      if (!/^[0-9a-f-]{36}$/i.test(bookingId)) return json({ error: 'bookingId is required' }, 400)
+
+      const { data: booking } = await adminClient
+        .from('class_bookings')
+        .select('id, teacher_id, student_id, scheduled_at, duration, status')
+        .eq('id', bookingId)
+        .maybeSingle()
+      if (!booking) return json({ error: 'Lesson not found' }, 404)
+      if (booking.teacher_id !== auth.userId) {
+        const { data: roles } = await adminClient.from('user_roles').select('role').eq('user_id', auth.userId)
+        if (!(roles ?? []).some((r: { role: string }) => r.role === 'admin')) return json({ error: 'This is not your lesson' }, 403)
+      }
+      if (booking.status === 'cancelled') return json({ error: 'This lesson was cancelled' }, 409)
+      if (!booking.student_id) return json({ error: 'No student is booked on this lesson' }, 409)
+
+      const { data: student } = await adminClient.from('users').select('email, full_name').eq('id', booking.student_id).maybeSingle()
+      if (!student?.email) return json({ error: 'The student has no sign-in email on file' }, 409)
+
+      // Valid for the lesson plus an hour either side, and always for at least the next hour (a lesson already running).
+      const startMs = new Date(booking.scheduled_at).getTime()
+      const expiresMs = Math.max(startMs + ((booking.duration ?? 30) + 60) * 60_000, Date.now() + 60 * 60_000)
+
+      const token = generateToken()
+      const { error: inviteErr } = await adminClient.from('class_booking_invites').insert({
+        booking_id: booking.id,
+        token,
+        student_email: student.email,
+        student_name: student.full_name || null,
+        created_by: auth.userId,
+        expires_at: new Date(expiresMs).toISOString(),
+      })
+      if (inviteErr) return json({ error: `Could not create the link: ${inviteErr.message}` }, 500)
+
+      return json({ success: true, joinLink: `${SITE_URL}/join-classroom/${token}`, studentName: student.full_name ?? null })
+    }
+
     // ── Public: redeem an invite token for a one-time sign-in credential.
     // No JWT — this is reached by an unauthenticated student who just
     // clicked a link in their email.

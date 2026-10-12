@@ -25,6 +25,7 @@ import { LiveReactionBar } from "@/components/classroom/engagement/LiveReactionB
 import { ZenModeOverlay } from "@/components/classroom/ZenModeOverlay";
 import { PictureInPicture } from "@/components/classroom/PictureInPicture";
 import { LessonWrapUpDialog } from "@/components/classroom/LessonWrapUpDialog";
+import { StudentLinkButton } from "@/components/classroom/StudentLinkButton";
 import { TeacherInstructionsSidebar } from "@/components/classroom/TeacherInstructionsSidebar";
 import { ConnectionDebugPanel, type ConnectionHealthStatus } from "@/components/classroom/debug/ConnectionDebugPanel";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -1163,6 +1164,13 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
         </div>
       )}
 
+
+      {/* Teacher-only: a join link for a student who can't get into this lesson. */}
+      {classId && !isInterview && (
+        <div className="fixed bottom-4 start-4 z-[80]">
+          <StudentLinkButton bookingId={classId} studentName={studentName} />
+        </div>
+      )}
 
       {/* Teacher-only: live diagnostics for realtime + WebRTC, plus a
           "send to support" action that attaches this lesson/sync state on
