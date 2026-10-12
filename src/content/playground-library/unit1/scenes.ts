@@ -544,6 +544,16 @@ export type Scene =
       doneLine: string;
     }
   | {
+      /** Hero Trials (unit Boss Test, Lesson 7): spoken one-try trials with picture / letter cards, grouped by `skills`;
+       *  a wrong answer says the right one ("Good try! …") and moves on; the end shows stars per skill and the words to
+       *  practise. `answer` indexes `options`; an option shows `img` (and `text` under it) or just `text`/`label`. */
+      id: string; kind: 'hero-trials'; bg: string; teacher: string; who: CharKey;
+      hero: { img: string; name: string }; medal: string;
+      skills: { key: string; label: string; icon: string }[];
+      items: { skill: string; ask: string; reply: string; options: { label: string; img?: string; text?: string }[]; answer: number }[];
+      doneLine: string;
+    }
+  | {
       /** Action Charades (U10L6 signature): `guess` rounds — a friend acts out `acts[act]` behind a curtain that opens
        *  bit by bit; the child picks the word from `options` (indexes into acts). `act` rounds — the child gets the card
        *  and acts it out, then taps 👏. `name`/`pronoun` say who is acting ("He can swim!"). */
@@ -16739,4 +16749,206 @@ export const LESSON_U10L6_SCENES: Scene[] = [
     ],
   },
   { id: 'u10l6-finale', kind: 'finale', bg: bgU10L6Games, who: 'pip', line: 'Run, jump, swim, dance — you can do it all! Goodbye, friend!' },
+];
+
+/* =============================================================================
+ * Pre-A1 Unit 10, Lesson 7 — "Action Hero" (the Unit 10 Boss Test)
+ *
+ * The Hero Academy. A last warm review (the words, a memory game, the unit song, "which one can't…?"), then the Boss
+ * Test: Hero Trials — one-try spoken trials for each skill of the unit (the action words, can / can't, he / she / it,
+ * the sounds), a hero power bar and, at the end, the medal and a result board with stars per skill and the words to
+ * practise again. Then the treasure, a talk, Blend It! and the hero's home mission.
+ * ========================================================================= */
+
+const bgU10L7Academy = `${A}/scenes/bg-u10l7-hero-academy-wide.png`;
+const bgU10L7AcademyEmpty = `${A}/scenes/bg-u10l7-hero-academy-empty-wide.png`;
+const u10l7Hero = (who: 'pip' | 'mia' | 'leo') => `${A}/items/item-${who}-hero.png`;
+const u10l7Medal = `${A}/items/item-hero-medal.png`;
+const u10l7Wave = (who: 'pip' | 'mia' | 'leo') => `${A}/items/item-${who}-wave.png`;
+
+export const LESSON_U10L7_TITLE = 'Action Hero';
+export const LESSON_U10L7_OBJECTIVE = 'Show what you learned in Unit 10 (Boss Test): find the action you hear (run, jump, walk, swim, dance, sing, clap, play, sleep), answer "Can a … ?" with yes or no, find who "he", "she" and "it" mean, and hear the first sound of a word (J, R, S, B), then say "I can …!" about yourself, by listening, tapping and speaking, no reading.';
+
+export const LESSON_U10L7_SCENES: Scene[] = [
+  { id: 'u10l7-title', kind: 'title-card', bg: bgU10L7Academy, level: 'Pre-A1', unit: 'Unit 10', lessonLabel: 'Lesson 7', title: 'Action Hero', subtitle: 'Boss Test!' },
+  {
+    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 10 · Lesson 6 · Action Charades
+    id: 'u10l7-recall-warmup', kind: 'recall-warmup', bg: bgU10L7AcademyEmpty, who: 'leo', mode: 'click',
+    fromLabel: 'Lesson 6 · Action Charades',
+    teacher: 'Warm-up from last lesson: Leo says an action from games night, the child finds the picture, says it and does it.',
+    items: [
+      { word: 'sing', say: 'Sing!', img: gifSing },
+      { word: 'clap', say: 'Clap!', img: pose('pip', 'clap') },
+      { word: 'play', say: 'Play!', img: pose('mia', 'play') },
+    ],
+  },
+  {
+    id: 'u10l7-intro', kind: 'cinematic', bg: bgU10L7Academy, hidePipOverlay: true, title: 'Action Hero', subtitle: 'Boss Test!', narrator: 'leo',
+    script: [
+      { who: 'leo', line: 'Welcome to the Hero Academy!' },
+      { who: 'mia', line: 'Can you be an Action Hero?' },
+      { who: 'pip', line: 'Show us what you can do! Run, jump, dance!' },
+    ],
+    cta: "Let's train!",
+  },
+
+  /* 4-5 Warm review: the language of the unit, move */
+  {
+    id: 'u10l7-words', kind: 'listen-repeat-cards', textSide: 'right', bg: bgU10L7AcademyEmpty, teacher: 'Hero training: listen, say it and show it. "I can run!", "He can jump!", "She can dance!", "It can fly!"',
+    cards: [
+      { who: 'pip', sentence: 'I can run!', img: gifRun, imgLabel: 'I' },
+      { who: 'mia', sentence: 'He can jump!', img: gifJump, imgLabel: 'he' },
+      { who: 'leo', sentence: 'She can dance!', img: gifDance, imgLabel: 'she' },
+      { who: 'mia', sentence: 'It can fly!', img: `${A}/items/item-bird-fly.png`, imgLabel: 'it' },
+    ],
+  },
+  {
+    id: 'u10l7-move', kind: 'tpr-actions', bg: bgU10L7AcademyEmpty, who: 'leo',
+    teacher: 'Stand up! Hero warm-up with Leo.',
+    rounds: [
+      { line: 'Run on the spot, hero! Run, run, run!', emoji: '\u{1F3C3}', img: gifRun },
+      { line: 'Jump high, hero! Jump, jump!', emoji: '\u{1F998}', img: gifJump },
+      { line: 'Swim, hero! Swim, swim!', emoji: '\u{1F3CA}', img: gifSwim },
+      { line: 'Hero pose! Fist up! Ta-da!', emoji: '\u{1F9B8}', seconds: 3 },
+    ],
+  },
+
+  /* 6 Practice game */
+  {
+    id: 'u10l7-memory', kind: 'memory', bg: bgU10L7AcademyEmpty, teacher: 'Hero memory! Find the action pairs. Say the action every time you turn a card: "Swim!"',
+    pairs: [
+      { id: 'run', label: 'run', emoji: '\u{1F3C3}', img: gifRun },
+      { id: 'swim', label: 'swim', emoji: '\u{1F3CA}', img: gifSwim },
+      { id: 'dance', label: 'dance', emoji: '\u{1F483}', img: gifDance },
+      { id: 'sing', label: 'sing', emoji: '\u{1F3A4}', img: gifSing },
+      { id: 'clap', label: 'clap', emoji: '\u{1F44F}', img: pose('pip', 'clap') },
+      { id: 'sleep', label: 'sleep', emoji: '\u{1F634}', img: pose('leo', 'sleep') },
+    ],
+  },
+
+  /* 7 The unit song again — now as the hero's theme */
+  {
+    id: 'u10l7-song', kind: 'song', bg: bgU10L7Academy, title: '\u{1F3B5} I Can Do It All! \u{1F3B5}', teacher: 'The unit song, hero style: sing and do every action!',
+    durationSeconds: 20, bigWord: 'Can', songUrl: `${A}/audio/act-it-out-song-u10l6.mp3?v=1`,
+    lineDurationsMs: [3700, 4460, 4000, 7902],
+    songPrompt: 'Upbeat bouncy party pop kids song',
+    lyrics: [
+      { who: 'pip', text: 'Run and jump and walk, walk, walk!', emotion: 'happy' },
+      { who: 'mia', text: 'Swim and dance and sing, sing, sing!', emotion: 'happy' },
+      { who: 'leo', text: 'Clap, clap, clap and play, play, play!', emotion: 'happy' },
+      { who: 'pip', text: 'Sleep, sleep, sleep! Yes, I can!', emotion: 'happy' },
+    ],
+  },
+
+  /* 8 Practice game: can / can't */
+  {
+    id: 'u10l7-odd', kind: 'odd-one-out', bg: bgU10L7AcademyEmpty, who: 'mia',
+    teacher: 'Which one is different? Tap it and say why with can / can\'t.',
+    rounds: [
+      { items: [{ label: 'bird', img: `${A}/items/item-bird-fly.png` }, { label: 'fish', img: `${A}/items/item-goldfish.png` }, { label: 'bird', img: itemBird }, { label: 'bird', img: `${A}/items/item-bird-fly.png` }], odd: 1, line: "The fish! A fish can't fly. It can swim!" },
+      { items: [{ label: 'frog', img: `${A}/items/item-frog-happy.png` }, { label: 'frog', img: `${A}/items/item-frog-happy.png` }, { label: 'frog', img: itemFrog }, { label: 'bear', img: `${A}/items/item-bear-bruno.png` }], odd: 3, line: "The bear! The bear can't jump like a frog. It can sleep!" },
+      { items: [{ label: 'fish', img: `${A}/items/item-goldfish.png` }, { label: 'bird', img: `${A}/items/item-bird-fly.png` }, { label: 'fish', img: itemFish }, { label: 'fish', img: `${A}/items/item-goldfish.png` }], odd: 1, line: "The bird! A bird can't swim like a fish. It can fly!" },
+    ],
+  },
+
+  /* 9 THE BOSS TEST */
+  {
+    id: 'u10l7-boss', kind: 'hero-trials', bg: bgU10L7AcademyEmpty, who: 'leo',
+    teacher: 'Boss Test! One try for each trial — no help, please: let the child listen (🔊 replays the question as often as needed) and tap. At the end the board shows stars for each skill and the words to practise again.',
+    hero: { img: u10l7Hero('pip'), name: 'Action Hero' }, medal: u10l7Medal,
+    skills: [
+      { key: 'act', label: 'Actions', icon: '\u{1F3C3}' },
+      { key: 'can', label: "Can / can't", icon: '\u{1F44D}' },
+      { key: 'who', label: 'He, she, it', icon: '\u{1F64B}' },
+      { key: 'snd', label: 'Sounds', icon: '\u{1F524}' },
+    ],
+    items: [
+      { skill: 'act', ask: 'Find: swim!', reply: 'Swim! I can swim!', answer: 0, options: [{ label: 'swim', img: gifSwim }, { label: 'sing', img: gifSing }, { label: 'run', img: gifRun }] },
+      { skill: 'can', ask: 'Can a fish walk?', reply: "No! A fish can't walk. It can swim!", answer: 1, options: [{ label: 'yes', text: '\u{1F44D}' }, { label: "a fish can't walk", text: '\u{1F44E}' }] },
+      { skill: 'who', ask: 'She can dance! Who is it?', reply: 'Mia! She can dance!', answer: 1, options: [{ label: 'Pip', img: u10l7Wave('pip') }, { label: 'Mia', img: u10l7Wave('mia') }, { label: 'Leo', img: u10l7Wave('leo') }] },
+      { skill: 'snd', ask: 'Jam. Which sound?', reply: 'J! Jam!', answer: 0, options: [{ label: 'J', text: 'J' }, { label: 'S', text: 'S' }, { label: 'R', text: 'R' }] },
+      { skill: 'act', ask: 'Find: sleep!', reply: 'Sleep! Shh!', answer: 1, options: [{ label: 'play', img: pose('mia', 'play') }, { label: 'sleep', img: pose('leo', 'sleep') }, { label: 'jump', img: gifJump }] },
+      { skill: 'can', ask: 'Can a bird fly?', reply: 'Yes! A bird can fly!', answer: 0, options: [{ label: 'a bird can fly', text: '\u{1F44D}' }, { label: 'no', text: '\u{1F44E}' }] },
+      { skill: 'who', ask: 'It can sleep in a cave! Who is it?', reply: 'The bear! It can sleep!', answer: 0, options: [{ label: 'bear', img: `${A}/items/item-bear-bruno.png` }, { label: 'Leo', img: u10l7Wave('leo') }, { label: 'fish', img: `${A}/items/item-goldfish.png` }] },
+      { skill: 'snd', ask: 'Run. Which sound?', reply: 'R! Run!', answer: 2, options: [{ label: 'B', text: 'B' }, { label: 'J', text: 'J' }, { label: 'R', text: 'R' }] },
+      { skill: 'act', ask: 'Find: dance!', reply: 'Dance! I can dance!', answer: 2, options: [{ label: 'walk', img: gifWalk }, { label: 'clap', img: pose('pip', 'clap') }, { label: 'dance', img: gifDance }] },
+      { skill: 'can', ask: 'Can a frog jump?', reply: 'Yes! A frog can jump!', answer: 0, options: [{ label: 'a frog can jump', text: '\u{1F44D}' }, { label: 'no', text: '\u{1F44E}' }] },
+      { skill: 'who', ask: 'He can sing! Who is it?', reply: 'Leo! He can sing!', answer: 1, options: [{ label: 'Mia', img: u10l7Wave('mia') }, { label: 'Leo', img: u10l7Wave('leo') }, { label: 'bird', img: `${A}/items/item-bird-fly.png` }] },
+      { skill: 'snd', ask: 'Ball. Which sound?', reply: 'B! Ball!', answer: 1, options: [{ label: 'C', text: 'C' }, { label: 'B', text: 'B' }, { label: 'D', text: 'D' }] },
+    ],
+    doneLine: 'You did it! You are an Action Hero! Here is your hero medal!',
+  },
+
+  /* 10 The hero treasure: sounds once more, with a prize in every chest */
+  {
+    id: 'u10l7-treasure', kind: 'trophy-chest', bg: bgU10L7AcademyEmpty, who: 'pip',
+    teacher: 'The Hero Treasure! Listen to the first sound, tap the letter, and a prize pops out.',
+    rounds: [
+      { letter: 'S', phoneme: '/s/', word: 'sun', img: `${A}/items/item-sun.png`, emoji: '☀️', choices: ['S', 'D', 'L'] },
+      { letter: 'D', phoneme: '/d/', word: 'drum', img: itemDrum, emoji: '\u{1F941}', choices: ['B', 'D', 'R'] },
+      { letter: 'L', phoneme: '/l/', word: 'lion', img: itemLion, emoji: '\u{1F981}', choices: ['J', 'C', 'L'] },
+      { letter: 'C', phoneme: '/k/', word: 'cat', img: `${A}/items/item-cat.png`, emoji: '\u{1F431}', choices: ['C', 'S', 'B'] },
+    ],
+  },
+
+  /* 11 Talk: the hero tells what they can do */
+  {
+    id: 'u10l7-talk', kind: 'join-stage', bg: bgU10L7Academy, teacher: 'Hero interview: Leo asks, the child answers about themself — "I can …!" / "I can\'t …!" — and shows it.', cast: ['leo'],
+    turns: [
+      { who: 'leo', line: 'Hero, what can you do?', bubble: 'right' },
+      { who: 'student', line: 'I can run! I can jump!', bubble: 'right' },
+      { who: 'leo', line: 'Can you fly?', bubble: 'right' },
+      { who: 'student', line: "No, I can't! I can swim!", bubble: 'right' },
+    ],
+  },
+  {
+    // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
+    id: 'u10l7-blend', kind: 'sound-blend', look: 'frog', bg: bgU10L7Academy,
+    teacher: 'Blend It! Tap each stepping stone and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
+    rounds: [{ word: 'pig', img: `${A}/items/item-pig.png` }, { word: 'pin', img: `${A}/items/item-pin.png` }, { word: 'wig', img: `${A}/items/item-wig.png` }, { word: 'lid', img: `${A}/items/item-lid.png` }],
+  },
+
+  /* 13-14 Sticker + Home Mission */
+  {
+    id: 'u10l7-sticker', kind: 'sticker-reward', bg: bgU10L7Academy, who: 'leo', teacher: 'Sticker time! The child opens the pack and puts the hero medal in their Sticker Book.',
+    line: 'You are an Action Hero! You finished Unit 10! Here is your hero medal!', sticker: { img: u10l7Medal, label: 'Action Hero' },
+  },
+  {
+    id: 'u10l7-home-mission', kind: 'home-mission', bg: bgU10L7Academy, who: 'leo',
+    teacher: 'Home Mission: read the parent note and show the picture steps.',
+    line: 'Your hero mission: show your family three things you can do, and say it: "I can run! I can jump! I can dance!"',
+    parentNote: 'Your child finished Unit 10 (actions and "can"). Ask "What can you do?" and let them show and say three actions: "I can run! I can jump! I can dance!". Then ask about someone else: "What can Dad do?" — "He can …!"',
+    steps: [
+      { emoji: '\u{1F3C3}', img: gifRun, say: 'I can run!' },
+      { emoji: '\u{1F998}', img: gifJump, say: 'I can jump!' },
+      { emoji: '\u{1F483}', img: gifDance, say: 'I can dance!' },
+    ],
+  },
+
+  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  {
+    id: 'u10l7-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU10L7AcademyEmpty, who: 'mia',
+    teacher: 'Extra time: Brain Break! Hero moves with Mia.',
+    rounds: [
+      { line: 'Fly like a hero! Arms out! Whoosh!', emoji: '\u{1F9B8}' },
+      { line: 'Run, run, run! … Stop!', emoji: '\u{1F3C3}' },
+      { line: 'Jump, jump! … Freeze!', emoji: '\u{1F998}' },
+      { line: 'Hero pose! Ta-da!', emoji: '\u{1F31F}', seconds: 3 },
+    ],
+  },
+
+  /* Goodbye */
+  {
+    id: 'u10l7-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3580, 4020, 4980, 7482],
+    songPrompt: 'Cheerful upbeat kids goodbye song, sweet real singing with a teacher voice and small kids choir, ukulele + light claps, ending with a happy Byeeee!',
+    lyrics: [
+      { who: 'bella', text: '\u{1F44B} Goodbye, goodbye, goodbye my friend', emotion: 'happy' },
+      { who: 'willow', text: '\u{1F44B} Goodbye, goodbye, see you again', emotion: 'happy' },
+      { who: 'leo', text: '\u{1F590}️ Wave your hand and say goodbye', emotion: 'happy' },
+      { who: 'mia', text: '\u{1F496} Byeeee, friend! See you soon!', emotion: 'happy' },
+    ],
+  },
+  { id: 'u10l7-finale', kind: 'finale', bg: bgU10L7Academy, who: 'leo', line: 'You are an Action Hero! You can do so much! Goodbye, hero!' },
 ];

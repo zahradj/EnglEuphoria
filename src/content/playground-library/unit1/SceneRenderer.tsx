@@ -109,6 +109,7 @@ import { CampfireSaysScene } from './scene-components/CampfireSaysScene';
 import { CanItScene } from './scene-components/CanItScene';
 import { BearHuntTrailScene } from './scene-components/BearHuntTrailScene';
 import { CharadesScene } from './scene-components/CharadesScene';
+import { HeroTrialsScene } from './scene-components/HeroTrialsScene';
 import { SoundMoleScene } from './scene-components/SoundMoleScene';
 import { LetterMonstersScene } from './scene-components/LetterMonstersScene';
 import { SoundFishScene } from './scene-components/SoundFishScene';
@@ -331,6 +332,7 @@ export function SceneRenderer(props: {
     case 'letter-monsters': return <LetterMonstersScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'sound-fish': return <SoundFishScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'can-it': return <CanItScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
+    case 'hero-trials': return <HeroTrialsScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'charades': return <CharadesScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'bear-hunt-trail': return <BearHuntTrailScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'campfire-says': return <CampfireSaysScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;

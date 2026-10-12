@@ -478,6 +478,8 @@ const UNIT1_EXTRACTORS = {
   'letter-monsters': (s) => [[s.who, 'Feed the hungry monsters! Who eats this one?'], ...(s.cards ?? []).flatMap((c) => [[s.who, `${c.word.charAt(0).toUpperCase() + c.word.slice(1)}!`], [s.who, `Yes! ${c.word.charAt(0).toUpperCase() + c.word.slice(1)}!`], [s.who, `${c.word.charAt(0).toUpperCase() + c.word.slice(1)}! Try again!`]])],
   'sound-fish': (s) => [[s.who, 'Listen! Which one starts with this sound?'], ...(s.rounds ?? []).flatMap((r) => (r.fish ?? []).flatMap((f) => [[s.who, `Yes! ${f.word.charAt(0).toUpperCase() + f.word.slice(1)}!`], [s.who, `${f.word.charAt(0).toUpperCase() + f.word.slice(1)}! Try again!`]]))],
   // Mirror CanItScene.tsx: each question + full answer, the done line
+  // Mirror HeroTrialsScene.tsx: each trial's question, the answer (right) and "Good try! <answer>" (wrong), the done line
+  'hero-trials': (s) => [...(s.items ?? []).flatMap((it) => [[s.who, it.ask], [s.who, it.reply], [s.who, `Good try! ${it.reply}`]]), [s.who, s.doneLine]],
   // Mirror CharadesScene.tsx: the turn call, every "Not <word>! Look again!", the answer; the child's card; the done line
   'charades': (s) => [
     ...(s.rounds ?? []).flatMap((r) => {
