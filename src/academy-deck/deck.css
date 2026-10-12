@@ -1044,3 +1044,31 @@
 /* Memory with picture cards (vocabulary) */
 .ad-mem-front .ad-art { height: 100%; overflow: hidden; }
 .ad-mem-front .ad-bearer { transform: scale(0.55); }
+
+/* Match board (owner 2026-10-12): big pictures scattered like stickers on a desk, no boxes; the word appears under a picture when matched.
+   Comfort: huge drop areas (the whole picture + padding), large word pills, soft glow instead of dashed frames, no timers. */
+.ad-match { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px 22px; padding: 10px 6px 18px; align-items: start; }
+.ad-match[data-n='4'] { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.ad-match[data-n='2'], .ad-match[data-n='3'] { grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); }
+.ad-match-card { position: relative; border: 0 !important; background: none !important; box-shadow: none !important; padding: 10px 6px 8px; border-radius: 28px; transform: translateY(var(--y, 0)) rotate(var(--r, 0deg)); animation: ad-bob 4.5s ease-in-out var(--d, 0s) infinite; transition: filter 0.2s; }
+.ad-match-card::before { content: ''; position: absolute; left: 50%; top: 46%; width: 86%; aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(circle, rgba(167, 139, 250, 0.38), rgba(167, 139, 250, 0) 68%); opacity: 0; transition: opacity 0.2s; pointer-events: none; }
+.ad-match-card:hover:not([data-done='true'])::before, .ad-root:has([data-dragging='true']) .ad-match-card:not([data-done='true'])::before { opacity: 1; }
+.ad-match-card:hover:not([data-done='true']) { transform: translateY(calc(var(--y, 0) - 5px)) rotate(var(--r, 0deg)) scale(1.04); border-color: transparent; }
+.ad-match-card[data-done='true'] { animation: ad-pop 0.35s cubic-bezier(0.2, 1.8, 0.4, 1); transform: translateY(var(--y, 0)) rotate(0deg); }
+.ad-match-card[data-done='true']::before { opacity: 1; background: radial-gradient(circle, rgba(74, 222, 128, 0.4), rgba(74, 222, 128, 0) 68%); }
+.ad-match-card[data-bad='true'] { animation: ad-shake 0.35s; }
+.ad-match-art { min-height: 150px; filter: drop-shadow(0 10px 8px rgba(60, 30, 140, 0.28)); }
+.ad-match-art .ad-art { gap: 0; }
+.ad-match-art svg { width: min(170px, 100%); height: auto; }
+.ad-match-art .ad-art-card img { max-width: 150px; }
+.ad-match-slot { min-height: 40px; justify-content: center; font-size: 1.3rem; }
+.ad-match-card[data-done='true'] .ad-match-slot { padding: 2px 16px; border-radius: 999px; background: #fff; color: #15803d; box-shadow: 0 3px 8px rgba(21, 128, 61, 0.25); }
+.ad-match-blank { width: 46px; height: 6px; border-radius: 6px; background: repeating-linear-gradient(90deg, #c4b5fd 0 8px, transparent 8px 14px); opacity: 0.8; }
+@keyframes ad-bob { 0%, 100% { translate: 0 0; } 50% { translate: 0 -5px; } }
+/* the word pills: large, glossy, easy to grab */
+.ad-chips:has(.ad-chip:not([data-pic])) { gap: 14px; padding: 14px; }
+.ad-match + .ad-chips .ad-chip { min-height: 58px; padding: 10px 28px; font-size: 1.3rem; box-shadow: 0 6px 0 #4c2fb0, 0 12px 16px rgba(76, 47, 176, 0.3); }
+.ad-match + .ad-chips .ad-chip:hover { transform: translateY(-3px); }
+@media (max-width: 720px) { .ad-match, .ad-match[data-n='4'] { grid-template-columns: repeat(2, minmax(0, 1fr)); } .ad-match { gap: 4px 12px; padding: 4px 2px 8px; } .ad-match-art { min-height: 78px; } .ad-match-art svg { width: min(96px, 100%); } .ad-match-slot { min-height: 26px; font-size: 1.05rem; } .ad-match + .ad-chips .ad-chip { min-height: 50px; padding: 8px 20px; font-size: 1.15rem; } }
+.ad-root[data-calm='true'] .ad-match-card { animation: none; }
+.ad-match-art .ad-bearer-sm { transform: scale(1.25); transform-origin: 50% 90%; margin: 0 auto; }
