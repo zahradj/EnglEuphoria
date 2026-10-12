@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { Icon } from '../Icon';
 
 /** The glass panel a game sits on, over the scene plate. */
-export function Panel({ title, children, wide = false, variant }: { title?: string; children: ReactNode; wide?: boolean; variant?: 'booth' }) {
+export function Panel({ title, children, wide = false, variant }: { title?: string; children: ReactNode; wide?: boolean; variant?: 'booth' | 'glass' | 'bare' }) {
   return (
     <section className="ad-panel" data-wide={wide} data-variant={variant}>
       {title && <h2 className="ad-prompt">{title}</h2>}

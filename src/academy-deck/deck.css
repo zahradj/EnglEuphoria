@@ -1106,3 +1106,34 @@
 .ad-root .ad-reader-pic:hover { transform: translateY(-4px); }
 .ad-root .ad-reader-pic[data-bad='true'] { animation: ad-shake 0.35s; }
 @media (max-width: 720px) { .ad-root .ad-blend-tile { width: 64px; height: 78px; font-size: 2.2rem; } .ad-root .ad-reader-pics { gap: 8px; } .ad-root .ad-reader-pic { min-width: 90px; } }
+
+/* Reading layouts (owner 2026-10-12: "consistent layout is boring"): each reading game has its own look and no white card.
+   glass = dark glass stage (blend), bare = pieces float on the scene (hear-and-pick, reader). */
+.ad-panel[data-variant='glass'] { width: min(980px, 100%); background: linear-gradient(180deg, rgba(14, 12, 58, 0.9), rgba(38, 20, 104, 0.92)); border: 2px solid rgba(246, 215, 122, 0.5); color: #fff; box-shadow: 0 20px 50px rgba(8, 3, 44, 0.65), inset 0 0 0 1px rgba(255, 255, 255, 0.1); backdrop-filter: blur(8px); }
+.ad-panel[data-variant='glass'] .ad-hint-line { color: #ddd6fe; }
+.ad-panel[data-variant='bare'] { width: min(1000px, 100%); background: none; border: 0; box-shadow: none; backdrop-filter: none; overflow: visible; }
+.ad-panel[data-variant='bare'] .ad-hint-line { width: fit-content; margin: 14px auto 0; padding: 6px 16px; border-radius: 999px; background: rgba(20, 10, 80, 0.72); color: #fff; text-align: center; }
+.ad-panel[data-variant='glass'] .ad-btn:not(.ad-btn-primary) { background: #fff; color: var(--violet-d); border-color: #c4b5fd; }
+.ad-panel[data-variant='bare'] .ad-feedback { background: rgba(255, 255, 255, 0.92); }
+.ad-root .ad-panel[data-variant='glass'] .ad-blend-tile { width: 128px; height: 150px; font-size: 5rem; border-radius: 20px; box-shadow: 0 8px 0 #a4731f, 0 0 36px rgba(246, 215, 122, 0.55); }
+.ad-root .ad-panel[data-variant='glass'] .ad-blend[data-joined='true'] .ad-blend-tile { border-radius: 8px; box-shadow: 0 8px 0 #a4731f, 0 0 60px rgba(246, 215, 122, 0.9); }
+.ad-root .ad-panel[data-variant='glass'] .ad-blend-word { font-size: 4rem; color: #fde68a; text-shadow: 0 0 24px rgba(253, 230, 138, 0.8); }
+.ad-root .ad-panel[data-variant='glass'] .ad-blend-ctl input[type='range'] { height: 44px; accent-color: #fbbf24; }
+.ad-root .ad-hp-ear { width: 84px; height: 84px; border-radius: 50%; border: 4px solid #fff; background: radial-gradient(circle at 35% 30%, #a78bfa, #6d28d9); color: #fff; display: grid; place-items: center; box-shadow: 0 8px 0 #3b1d8f, 0 0 34px rgba(167, 139, 250, 0.7); cursor: pointer; animation: ad-pinbob 2.4s ease-in-out infinite; }
+.ad-root .ad-hp-ear svg { width: 44px; height: 44px; }
+.ad-root .ad-panel[data-variant='bare'] .ad-hearpick { gap: 34px; padding: 26px 0 10px; }
+.ad-root .ad-panel[data-variant='bare'] .ad-hp-tile { min-width: 150px; min-height: 150px; border-radius: 50%; font-size: 4.2rem; border: 5px solid #fff; background: radial-gradient(circle at 35% 28%, #fff3cf, #f2c46a 70%); color: #5b3b0a; box-shadow: 0 10px 0 #a4731f, 0 18px 26px rgba(20, 8, 70, 0.45); transform: translateY(var(--y, 0)) rotate(var(--r, 0deg)); }
+.ad-root .ad-panel[data-variant='bare'] .ad-hp-tile:hover { transform: translateY(calc(var(--y, 0) - 6px)) rotate(var(--r, 0deg)) scale(1.06); }
+.ad-root .ad-panel[data-variant='bare'] .ad-reader-line { margin: 4px auto 14px; padding: 12px 24px; width: fit-content; max-width: 100%; border-radius: 22px; background: linear-gradient(180deg, rgba(14, 12, 58, 0.88), rgba(38, 20, 104, 0.9)); border: 2px solid rgba(246, 215, 122, 0.5); }
+.ad-root .ad-panel[data-variant='bare'] .ad-reader-word { color: #fff; font-size: 2.8rem; border-bottom-color: rgba(253, 230, 138, 0.7); }
+.ad-root .ad-panel[data-variant='bare'] .ad-reader-word:hover { background: rgba(255, 255, 255, 0.14); }
+.ad-root .ad-panel[data-variant='bare'] .ad-reader-pics { gap: 40px; padding: 24px 0 8px; }
+.ad-root .ad-panel[data-variant='bare'] .ad-reader-pic { transform: translateY(var(--y, 0)) rotate(var(--r, 0deg)); filter: drop-shadow(0 14px 12px rgba(20, 8, 70, 0.45)); }
+.ad-root .ad-panel[data-variant='bare'] .ad-reader-pic:hover { transform: translateY(calc(var(--y, 0) - 6px)) rotate(var(--r, 0deg)) scale(1.05); }
+.ad-root[data-calm='true'] .ad-hp-ear { animation: none; }
+@media (max-width: 720px) {
+  .ad-root .ad-panel[data-variant='glass'] .ad-blend-tile { width: 82px; height: 100px; font-size: 3.2rem; }
+  .ad-root .ad-panel[data-variant='bare'] .ad-hp-tile { min-width: 96px; min-height: 96px; font-size: 2.8rem; }
+  .ad-root .ad-panel[data-variant='bare'] .ad-hearpick { gap: 16px; }
+  .ad-root .ad-panel[data-variant='bare'] .ad-reader-word { font-size: 1.9rem; }
+}

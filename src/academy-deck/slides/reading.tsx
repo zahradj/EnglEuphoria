@@ -25,7 +25,7 @@ export function BlendView({ slide }: { slide: BlendSlide }) {
   if (finished) return <Panel title={slide.prompt} wide><Feedback kind="ok">You blended every word!</Feedback></Panel>;
   const gap = Math.round(((100 - Math.min(v, 100)) / 100) * 46);
   return (
-    <Panel title={slide.prompt} wide>
+    <Panel title={slide.prompt} wide variant="glass">
       <div className="ad-blend" data-joined={joined} style={{ ['--bgap' as string]: `${gap}px` }}>
         {r.art && <div className="ad-blend-art"><Art art={r.art} size="sm" /></div>}
         <div className="ad-blend-tiles" role="group" aria-label={`Letters: ${r.letters.join(' ')}`}>
@@ -65,7 +65,7 @@ export function HearPickView({ slide }: { slide: HearPickSlide }) {
     if (finished) done();
     else void speak(lead, r.say);
   }, [finished, done, speak, lead, r]);
-  if (finished) return <Panel title={slide.prompt} wide><Feedback kind="ok">All found!</Feedback></Panel>;
+  if (finished) return <Panel title={slide.prompt} wide variant="bare"><Feedback kind="ok">All found!</Feedback></Panel>;
   const pick = (o: string) => {
     if (o === r.answer) {
       if (!slip) right();
@@ -79,12 +79,12 @@ export function HearPickView({ slide }: { slide: HearPickSlide }) {
     }
   };
   return (
-    <Panel title={slide.prompt} wide>
+    <Panel title={slide.prompt} wide variant="bare">
       <div className="ad-row" style={{ justifyContent: 'center' }}>
-        <button type="button" className="ad-btn ad-btn-primary" onClick={() => void speak(lead, r.say)}><Icon name="speaker" /> Hear it again</button>
+        <button type="button" className="ad-hp-ear" onClick={() => void speak(lead, r.say)} aria-label="Hear it again"><Icon name="speaker" /></button>
       </div>
       <div className="ad-hearpick" role="group" aria-label="Choose what you hear">
-        {opts.map((o) => <button key={o} type="button" className="ad-hp-tile" data-bad={bad === o} onClick={() => pick(o)}>{o}</button>)}
+        {opts.map((o, k) => <button key={o} type="button" className="ad-hp-tile" data-bad={bad === o} style={{ ['--y' as string]: `${[0, 26, -10][k % 3]}px`, ['--r' as string]: `${[-5, 4, -2][k % 3]}deg` }} onClick={() => pick(o)}>{o}</button>)}
       </div>
       {slip && <Feedback kind="try">{NOT_YET} Listen again, then choose.</Feedback>}
       <p className="ad-hint-line">{round + 1} of {slide.rounds.length}. Listen, then tap what you hear.</p>
@@ -108,7 +108,7 @@ export function ReaderView({ slide }: { slide: ReaderSlide }) {
     const others = slide.lines.map((_, k) => k).filter((k) => k !== i);
     return shuffled([i, ...shuffled(others, seed + i).slice(0, 2)], seed + i * 3);
   }, [slide.lines, i, seed, finished]);
-  if (finished) return <Panel title={slide.prompt} wide><Feedback kind="ok">You read the whole page!</Feedback></Panel>;
+  if (finished) return <Panel title={slide.prompt} wide variant="bare"><Feedback kind="ok">You read the whole page!</Feedback></Panel>;
   const line = slide.lines[i];
   const choose = (k: number) => {
     if (k === i) {
@@ -123,7 +123,7 @@ export function ReaderView({ slide }: { slide: ReaderSlide }) {
     }
   };
   return (
-    <Panel title={slide.prompt} wide>
+    <Panel title={slide.prompt} wide variant="bare">
       <div className="ad-reader-line" aria-label={`Line ${i + 1}: ${line.text}`}>
         {line.text.split(/\s+/).map((w, k) => (
           <button key={k} type="button" className="ad-reader-word" onClick={() => void speak(lead, w.replace(/[.,!?]/g, ''))}>{w}</button>
@@ -131,8 +131,8 @@ export function ReaderView({ slide }: { slide: ReaderSlide }) {
         <button type="button" className="ad-btn" onClick={() => void speak(lead, line.text)}><Icon name="speaker" /> Hear the line</button>
       </div>
       <div className="ad-reader-pics" role="group" aria-label="Which picture is it?">
-        {options.map((k) => (
-          <button key={k} type="button" className="ad-reader-pic" data-bad={bad === k} aria-label={`Picture ${k + 1}`} onClick={() => choose(k)}><Art art={slide.lines[k].art} size="sm" /></button>
+        {options.map((k, n) => (
+          <button key={k} type="button" className="ad-reader-pic" data-bad={bad === k} aria-label={`Picture ${k + 1}`} style={{ ['--y' as string]: `${[0, 22, -8][n % 3]}px`, ['--r' as string]: `${[-4, 3, -2][n % 3]}deg` }} onClick={() => choose(k)}><Art art={slide.lines[k].art} size="sm" /></button>
         ))}
       </div>
       {slip && <Feedback kind="try">{NOT_YET} Read the line again, then choose.</Feedback>}
