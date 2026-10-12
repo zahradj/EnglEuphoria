@@ -1,6 +1,6 @@
 # Academy ladder: deep research and a plan that is not too much work (2026-10-12)
 
-Owner: "do a deep research from different sources, create a plan, tell me; creating pre-A / A / upper-A is a lot of work." **Status: proposal for discussion; no code changed.** Builds on `docs/academy-level-ladder.md` and `docs/academy-pre-a1-curriculum.md`.
+Owner: "do a deep research from different sources, create a plan, tell me; creating pre-A / A / upper-A is a lot of work." **Status: Option 3 (lean ladder) approved by the owner on 2026-10-12, with the full ladder kept as a future option. Step 1 is built: `src/curriculum/academy/ladder.ts` (data) + `__tests__/ladder.test.ts`.** Builds on `docs/academy-level-ladder.md` and `docs/academy-pre-a1-curriculum.md`.
 
 ## 1. The most important finding: "Upper" is almost free, Pre-A1 is the expensive part
 - Today's roadmap already has 70 Seasons / 560 sessions. An **Upper step adds no lessons**: it is a *boundary* inside the Seasons we already have (for example A1 has 10 Seasons: the first 6 are A1, the last 4 are A1 Upper). The work is a label, a place in the library, a short step check and a slightly lighter support setting.
@@ -53,3 +53,10 @@ Why: you get the structure you wanted (Pre-A1, level, Upper) at almost no conten
 2. Pre-A1 Lite first (24 sessions), growing to 6 Seasons later?
 3. Show "Upper" to teachers/creators only at first?
 4. OK to start with the data-driven step list (no content) before any new lesson?
+
+
+## 7. Decision and what exists now (2026-10-12)
+- **Approved:** the lean ladder, with an option to move to the full ladder later.
+- **Built (step 1):** `src/curriculum/academy/ladder.ts`: two profiles, `lean` (active: Pre-A1 Lite 3 Seasons to write, A1 = Seasons 1-6, A1 Upper = 7-10, A2 / B1 / B2 / C1 unsplit) and `full` (Pre-A1 Full 6 Seasons, every level split into core + Upper). `ACTIVE_LADDER_PROFILE = 'lean'`; switching to the full ladder is changing that one value (or passing a profile). Helpers: `ladderSteps`, `getLadderStep`, `stepOfSeason(level, seasonNo)`, `stepSize`, `ladderTotals`. Lean = 7 steps / 73 Seasons / 584 sessions; full = 11 steps / 76 Seasons / 608 sessions. No existing Season or lesson was changed; the roadmap still has 70 Seasons.
+- **Not built yet:** the library tabs for Upper (teachers/creators only at first), the step checks, the Pre-A1 Seasons and reading mechanics, the audio-out-of-git and per-lesson manifests, the lesson generator.
+- **Next, in order:** (a) show the step in the creator/teacher library, (b) Pre-A1 Lite Season 1 plan + reading mechanics, (c) audio storage and per-lesson manifests, (d) finish A1 with a generator.
