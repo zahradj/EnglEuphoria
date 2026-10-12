@@ -1,8 +1,6 @@
-+ public/lep1/items/tmp-sheet-gumball.png (1536, 1024) raw
-+ public/lep1/items/tmp-sheet-pipslide.png (1536, 1024) raw
-+ public/lep1/items/tmp-sheet-frog.png (1536, 1024) raw
-+ public/lep1/items/tmp-sheet-slide.png (1920, 1080) raw
-+ public/lep1/scenes/bg-game-river-wide.png (1376, 768)
-+ public/lep1/scenes/bg-game-sweetshop-wide.png (1376, 768)
-+ public/lep1/scenes/bg-game-playground-wide.png (1376, 768)
-7/7 saved
++ public/lep1/scenes/bg-u10l2-beach-wide.png (1376, 768)
++ public/lep1/scenes/bg-u10l2-beach-empty-wide.png (1376, 768)
++ public/lep1/scenes/bg-u10l2-stage-wide.png (1376, 768)
++ public/lep1/items/tmp-sheet-curtain.png (1536, 1024) raw
++ public/lep1/items/tmp-sheet-iwords.png (1536, 1024) raw
+5/5 saved
