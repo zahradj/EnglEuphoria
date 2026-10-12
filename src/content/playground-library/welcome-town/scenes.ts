@@ -1240,13 +1240,16 @@ const bgPlay = `${W}/scenes/bg-playground-break-wide.png`;
 export const LESSON_4_SCENES: Scene[] = classroomLook([
   { id: 'wt4-title', kind: 'title-card', bg: leoStory(6), level: 'A1', unit: 'Unit 1', lessonLabel: 'Lesson 4', title: 'This Is My Friend!', subtitle: 'Introduce a friend and say: Nice to meet you!', cta: '\u{1F91D} LET’S GO!' },
   {
-    id: 'wt4-recall-warmup', kind: 'recall-warmup', bg: bgL1Party, who: 'pip', mode: 'click',
+    id: 'wt4-recall-warmup', kind: 'recall-warmup', bg: bgL1Party, who: 'pip', mode: 'click', listen: true,
     fromLabel: 'Lesson 3 · How Old Are You?',
-    teacher: 'Guided: Pip says a number, the student finds it and says: I am …!',
+    // Owner 2026-10-12: "Find ten is too easy … add characters and audio: his name is Leo and he is seven, her name is
+    // Mia and she is six … the student hears and clicks on the character" — names + he/she + age in one listening task.
+    teacher: 'Guided: listen — who is it? Click the friend, then say it too: His name is Leo. He is seven!',
     items: [
-      { word: 'ten', say: 'Find ten!', img: '/lep1/items/item-ten.png' },
-      { word: 'two', say: 'Find two!', img: '/lep1/items/item-two.png' },
-      { word: 'three', say: 'Find three!', img: '/lep1/items/item-three.png' },
+      { word: 'Leo', say: 'His name is Leo. He is seven years old.', img: spr('leo') },
+      { word: 'Mia', say: 'Her name is Mia. She is six years old.', img: spr('mia') },
+      { word: 'Pip', say: 'His name is Pip. He is eight years old.', img: spr('pip') },
+      { word: 'Bella', say: 'Her name is Bella. She is nine years old.', img: spr('bella') },
     ],
   },
   /* Present */
@@ -1440,196 +1443,66 @@ export const LESSON_4_SCENES: Scene[] = classroomLook([
  * after it they order the pictures, check true/false, act the story out and play Pip themself.
  * ========================================================================= */
 
-export const LESSON_5_TITLE = 'Storybook: The Playground Friends';
-export const LESSON_5_OBJECTIVE = 'Follow a short picture story that uses the unit\'s greetings ("Hello! What\'s your name?", "How are you?", "I am sad / happy", "Goodbye!"), put its pictures in order, say who says each line, and act it out as Pip.';
+export const LESSON_5_TITLE = 'Storybook: Leo’s First Day';
+export const LESSON_5_OBJECTIVE = 'I can read the story "Leo’s First Day" with help, answer questions about it and act it out.';
 
 const story5 = (n: number) => `${W}/scenes/bg-wt5-story-${n}-wide.png`;
 
+/* Rebuilt 2026-10-12 to the approved Unit 1 plan (docs/a1-unit-1-welcome-town.md §5.5): the storybook lesson.
+ * Objective: I can read the story "Leo's First Day" with help, answer questions about it and act it out.
+ * (The stills film of the book follows once its scenario is approved — CLAUDE.md "scenario first".) */
+const I1 = (n: string) => `/lep1/items/item-${n}.png`;
 export const LESSON_5_SCENES: Scene[] = classroomLook([
-  { id: 'wt5-title', kind: 'title-card', bg: story5(6), level: 'A1', unit: 'Unit 1', lessonLabel: 'Lesson 5', title: 'The Playground Friends', subtitle: 'A storybook', cta: '\u{1F4D6} LET’S READ!' },
+  { id: 'wt5-title', kind: 'title-card', bg: leoStory(10), level: 'A1', unit: 'Unit 1', lessonLabel: 'Lesson 5', title: 'Storybook: Leo’s First Day', subtitle: 'Read the whole story — where is Leo’s red cap?', cta: '\u{1F4D6} LET’S READ!' },
   {
-    // Remember? (owner, 2026-10-07): a quick warm-up of Lesson 4 · Meet a Friend: Speak!
     id: 'wt5-recall-warmup', kind: 'recall-warmup', bg: bgL1Circle, who: 'pip', mode: 'click',
-    fromLabel: 'Lesson 4 · Meet a Friend: Speak!',
-    teacher: 'Warm-up from last lesson: Pip says a line from the chat, the student finds who said it and says it too.',
+    fromLabel: 'Lesson 4 · This Is My Friend!',
+    teacher: 'Guided: Pip says a line, the student finds the picture and introduces the friend: This is my friend Mia!',
     items: [
-      { word: 'Bella', say: 'Who said: My name is Bella?', img: spr('bella') },
-      { word: 'Leo', say: 'Who said: I am fine, thank you?', img: spr('leo') },
-      { word: 'Mia', say: 'Who said: I am happy?', img: spr('mia') },
+      { word: 'Mia', say: 'Find: This is my friend Mia!', img: spr('mia') },
+      { word: 'Leo', say: 'Find: This is my friend Leo!', img: spr('leo') },
+      { word: 'Bella', say: 'Find: This is my friend Bella!', img: spr('bella') },
     ],
   },
-  /* 1 Warm-up song */
-  {
-    id: 'wt5-hello-song', kind: 'song', bg: bgL1Class, title: '\u{1F3B5} The Hello Song \u{1F3B5}', teacher: 'Wave and sing! Point to you when we say “name”.',
-    durationSeconds: 20, bigWord: 'Hello',
-    songUrl: `${W}/audio/hello-song.mp3?v=1`,
-    lineDurationsMs: [3640, 4120, 4320, 7982],
-    lyrics: [
-      { who: 'marigold', text: 'Hello, hello, hello to you!' },
-      { who: 'pip', text: 'Hi, hi, hi! And hi to you!' },
-      { who: 'marigold', text: 'What’s your name? What’s your name?' },
-      { who: 'pip', text: 'Say your name! Say your name!' },
-    ],
-  },
-  /* 2 Pip greeting + question */
-  { id: 'wt5-pip-greets', kind: 'meet', focus: ['story'], bg: story5(1), who: 'pip', cardSide: 'right', teacher: 'Tap Pip. Answer him: "Yes, I do!"', line: 'Hello! I have a story for you. Do you like stories?', repeat: 'Yes, I do!' },
-  /* 3 Story opener: predict */
-  {
-    id: 'wt5-predict', kind: 'cinematic', bg: story5(1), title: 'The Playground Friends', subtitle: 'What will happen?', narrator: 'marigold',
-    script: [
-      { who: 'marigold', line: 'Look! Pip is at the playground.' },
-      { who: 'marigold', line: 'Who will he meet? What will they say?' },
-      { who: 'pip', line: 'Let’s read and find out!' },
-    ],
-    cta: '\u{1F440} LET’S SEE!',
-  },
-  /* 4 Story lines: meet the friends before the book, one arrow at a time */
-  {
-    id: 'wt5-story-lines', kind: 'vocab-spot', bg: story5(5), teacher: 'Tap each arrow. Listen to the friend’s line from the story, then say it.',
+  { id: 'wt5-predict', kind: 'meet', focus: ['cap'], bg: leoStory(4), who: 'leo', cardSide: 'left', teacher: 'Present: Leo’s cap is lost! Where is it? Let the student guess before reading: Is it in the tree? On the slide?', line: 'My red cap is lost! Where is it?', repeat: 'Where is it?' },
+  { id: 'wt5-sight-words', kind: 'vocab-spot', bg: leoStory(9), teacher: 'Present: the last story words. Tap each arrow, listen and read the word.',
     items: [
-      { label: 'What’s your name?', sentence: 'Hello! What’s your name?', emoji: '\u{1F44B}', left: '52%', top: '40%', color: '#FE6A2F', who: 'pip' },
-      { label: 'My name is Bella.', sentence: 'My name is Bella.', emoji: '\u{1F430}', left: '25%', top: '42%', color: '#E76FA5', who: 'bella' },
-      { label: 'Nice to meet you!', sentence: 'Nice to meet you, Bella!', emoji: '\u{1F91D}', left: '67%', top: '55%', color: '#B85CD1', who: 'mia' },
-      { label: 'Let’s play!', sentence: 'Let’s play together!', emoji: '\u{1F938}', left: '84%', top: '45%', color: '#C97A2F', who: 'leo' },
+      { label: 'Look!', sentence: 'Look! The cap is on the cat!', emoji: '\u{1F440}', left: '18%', top: '30%', color: '#B85CD1', who: 'mia' },
+      { label: 'the', sentence: 'The cap is on the cat.', emoji: '\u{1F9E2}', left: '45%', top: '40%', color: '#FE6A2F', who: 'pip' },
+      { label: 'now', sentence: 'I am happy now!', emoji: '\u{1F60A}', left: '62%', top: '30%', color: '#C97A2F', who: 'leo' },
+      { label: 'see you', sentence: 'See you tomorrow!', emoji: '\u{1F44B}', left: '82%', top: '35%', color: '#4FA9E0', who: 'pip' },
     ],
   },
-  /* 5 Echo */
-  { id: 'wt5-echo', kind: 'echo', bg: story5(4), who: 'leo', textSide: 'top', teacher: 'Say it with Leo! Hold and say it.', word: 'Let’s play!' },
-  /* 6-7 The storybook (with check questions) */
+  /* Reading: the whole book */
   {
-    id: 'wt5-storybook', kind: 'flipbook', bg: bgL1Reading, title: 'The Playground Friends',
-    pages: [
-      { who: 'pip', img: story5(1), text: 'Pip goes to the playground. "Hello!"' },
-      { who: 'mia', img: story5(2), text: 'Mia is on the slide. "Hi, Pip! I am happy!"' },
-      { who: 'pip', img: story5(3), text: 'Leo is on the swing. "How are you, Leo?" "I am sad."' },
-      { who: 'leo', img: story5(4), text: '"Let’s play!" Now Leo is happy!' },
-      { who: 'bella', img: story5(5), text: '"Hello! What’s your name?" "My name is Bella."' },
-      { img: story5(6), text: '"Goodbye, friends! See you tomorrow!"' },
-    ],
-    checkpoints: [
-      { afterPage: 2, who: 'leo', question: 'How is Leo on the swing?', options: ['Happy', 'Sad', 'Hungry'], answer: 'Sad' },
-      { afterPage: 4, who: 'bella', question: 'What is her name?', options: ['Mia', 'Willow', 'Bella'], answer: 'Bella' },
+    id: 'wt5-book', kind: 'reader', bg: bgL1Reading, title: 'Leo’s First Day', doneLine: 'The end! Leo found his cap — and new friends!',
+    teacher: 'Reading: the whole book. Listen and follow the light on every page; the student reads the pages they know (1-8) on their own.',
+    pages: LEO_STORY,
+  },
+  /* Guided: understand the story */
+  {
+    id: 'wt5-wheres-the-cap', kind: 'whats-missing', bg: bgL1Reading, title: 'Where’s the cap?',
+    teacher: 'Guided: look at the things, one hides — say what is missing: The cap is missing!',
+    rounds: [
+      { items: [{ word: 'cap', img: I1('cap') }, { word: 'cat', img: I1('cat') }, { word: 'hat', img: I1('hat') }, { word: 'fan', img: I1('fan') }], missing: 0 },
+      { items: [{ word: 'cat', img: I1('cat') }, { word: 'cap', img: I1('cap') }, { word: 'sun', img: I1('sun') }, { word: 'ten', img: I1('ten') }], missing: 0 },
     ],
   },
-  /* 8 Story order (pictures, no reading needed) */
   {
-    id: 'wt5-story-order', kind: 'prea1', teacher: 'Put the story pictures in order, then tell the story: first, then, then, at the end!',
+    id: 'wt5-story-order', kind: 'prea1', teacher: 'Guided: put the story pictures in order, then tell it: first, then, then, at the end!',
     scene: {
-      id: 'wt5-story-order', kind: 'story-order', bg: story5(6), who: 'pip', teacher: 'Put the story pictures in order, then tell the story: first, then, then, at the end!',
+      id: 'wt5-story-order', kind: 'story-order', bg: leoStory(9), who: 'pip', teacher: 'Put the pictures in order, then tell the story!',
       frames: [
-        { img: story5(1), caption: 'Pip goes to the playground. Hello!', who: 'pip' },
-        { img: story5(3), caption: 'Leo is sad.', who: 'leo' },
-        { img: story5(4), caption: 'They play. Leo is happy!', who: 'leo' },
-        { img: story5(6), caption: 'Goodbye, friends!', who: 'pip' },
+        { img: leoStory(2), caption: 'Hello! My name is Pip.', who: 'pip' },
+        { img: leoStory(4), caption: 'I am sad. My red cap is lost.', who: 'leo' },
+        { img: leoStory(6), caption: 'Mia, this is my friend Leo.', who: 'pip' },
+        { img: leoStory(9), caption: 'Look! The cap is on the cat!', who: 'mia' },
+        { img: leoStory(11), caption: 'Goodbye, friends!', who: 'leo' },
       ],
     },
   },
-  /* 9 True or false */
   {
-    id: 'wt5-true-false', kind: 'true-false', bg: story5(4), teacher: 'Listen to the sentence about the story. Is it true or false?',
-    rounds: [
-      { who: 'mia', statement: 'Mia is on the slide.', isTrue: true },
-      { who: 'leo', statement: 'Leo is happy at first.', isTrue: false },
-      { who: 'bella', statement: 'The new friend’s name is Bella.', isTrue: true },
-      { who: 'pip', statement: 'Pip says goodbye in the morning.', isTrue: false },
-    ],
-  },
-  /* 10 Act it out: Pip and Leo */
-  {
-    id: 'wt5-act-out', kind: 'roleplay', bg: story5(3), teacher: 'Act out the story! Listen to Pip and Leo, then say each line after them.', cast: ['pip', 'leo'],
-    script: [
-      { who: 'pip', line: 'Hello, Leo! How are you?', repeat: true },
-      { who: 'leo', line: 'I am sad.', repeat: true },
-      { who: 'pip', line: 'Let’s play!', repeat: true },
-      { who: 'leo', line: 'Yes! Now I am happy!', repeat: true },
-    ],
-  },
-  /* 11 Who says it? */
-  {
-    id: 'wt5-who-said', kind: 'prea1', teacher: 'Listen to a line from the story. Who is talking? Tap the friend.',
-    scene: {
-      id: 'wt5-who-said', kind: 'who-said-it', bg: story5(6), teacher: 'Listen to a line from the story. Who is talking? Tap the friend.',
-      rounds: [
-        { line: 'Hi, Pip! I am happy!', who: 'mia' },
-        { line: 'I am sad.', who: 'leo', emotion: 'sad' },
-        { line: 'My name is Bella.', who: 'bella' },
-        { line: 'Let’s play!', who: 'pip' },
-      ],
-    },
-  },
-  /* 12 You are Pip */
-  {
-    id: 'wt5-you-are-pip', kind: 'join-stage', bg: story5(5), teacher: 'The student is Pip now and meets Bella. Say each line with a whole sentence.', cast: ['bella', 'mia'],
-    turns: [
-      { who: 'student', line: 'Hello! What’s your name?' },
-      { who: 'bella', line: 'My name is Bella. What’s your name?' },
-      { who: 'student', line: 'My name is … ! How are you?' },
-      { who: 'bella', line: 'I am happy! Let’s play!' },
-      { who: 'student', line: 'Goodbye, Bella! See you tomorrow!' },
-    ],
-  },
-  /* 13 Reflection */
-  {
-    id: 'wt5-favourite', kind: 'choice', bg: story5(6), who: 'pip', teacher: 'Any answer is right! The student picks a favourite friend from the story and says hello to them.',
-    prompt: 'Who is your favourite friend in the story?',
-    options: [
-      { label: 'Pip', emoji: '\u{1F98A}', correct: true },
-      { label: 'Mia', emoji: '\u{1F42D}', correct: true },
-      { label: 'Leo', emoji: '\u{1F981}', correct: true },
-      { label: 'Bella', emoji: '\u{1F430}', correct: true },
-    ],
-  },
-  /* 14 Phonics: Blend It! */
-  {
-    id: 'wt5-blend', kind: 'sound-blend', bg: bgL1Reading,
-    teacher: 'Tap each car and say the sound with the student (/s/ /a/ /d/), press Blend!, then find the picture. "Sad" is from the story!',
-    rounds: [
-      { word: 'sad', img: '/lep1/items/item-sad.png' },
-      { word: 'ant', img: '/lep1/items/item-ant.png' },
-      { word: 'yak', img: '/lep1/items/item-yak.png' },
-      { word: 'egg', sounds: ['e', 'g'], img: '/lep1/items/item-egg.png' },
-    ],
-  },
-  /* 15 Sticker + 16 Home mission */
-  {
-    id: 'wt5-sticker', kind: 'prea1', teacher: 'Sticker time! The student opens the pack and puts the story sticker in their Sticker Book.',
-    scene: {
-      id: 'wt5-sticker', kind: 'sticker-reward', bg: story5(6), who: 'pip', teacher: 'Sticker time! The student opens the pack and puts the story sticker in their Sticker Book.',
-      line: 'You read the whole story! Here is your sticker.',
-      sticker: { img: spr('leo'), label: 'Story reader' },
-    },
-  },
-  {
-    id: 'wt5-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
-    scene: {
-      id: 'wt5-home-mission', kind: 'home-mission', bg: story5(6), who: 'pip',
-      teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
-      line: 'Your home mission!',
-      parentNote: 'Today your child read "The Playground Friends": Pip meets Mia, cheers up Leo and meets Bella. Ask your child to tell you the story with the pictures and the greetings.',
-      steps: [
-        { emoji: '\u{1F4D6}', say: 'Tell the story to your family.' },
-        { emoji: '\u{1F981}', say: 'Say: How are you, Leo? I am sad.' },
-        { emoji: '\u{1F44B}', say: 'Say: Goodbye, friends!' },
-      ],
-    },
-  },
-  /* Extra time */
-  {
-    id: 'wt5-move-break', kind: 'prea1', teacher: 'Extra time: brain break! Play at the playground with Pip.',
-    scene: {
-      id: 'wt5-move-break', kind: 'tpr-actions', mode: 'break', bg: story5(4), who: 'pip',
-      teacher: 'Extra time: brain break! Play at the playground with Pip.',
-      rounds: [
-        { line: 'Go down the slide! Wheee!', emoji: '\u{1F6DD}' },
-        { line: 'Swing high on the swing!', emoji: '\u{1F3A0}' },
-        { line: 'Dig in the sandbox!', emoji: '\u{1F3D6}\u{FE0F}' },
-        { line: 'Wave goodbye!', emoji: '\u{1F44B}' },
-      ],
-    },
-  },
-  /* Goodbye + celebration */
-  {
-    id: 'wt5-goodbye-song', kind: 'song', bg: bgExpressGoodbyeW, title: '\u{1F3B5} Welcome Town School Goodbye Song \u{1F3B5}', teacher: 'It’s time to go — wave goodbye and sing along together!',
+    id: 'wt5-goodbye-sing', kind: 'song', bg: leoStory(11), title: '\u{1F3B5} The Goodbye Song \u{1F3B5}', teacher: 'Guided: the story ends with goodbye — sing it with the friends and wave to Leo!',
     durationSeconds: 20, bigWord: 'Goodbye',
     songUrl: `${W}/audio/goodbye-song.mp3?v=3`,
     lineDurationsMs: [3600, 4120, 4020, 8322],
@@ -1640,7 +1513,117 @@ export const LESSON_5_SCENES: Scene[] = classroomLook([
       { who: 'pip', text: '\u{1F496} Byeeee, friends! See you soon!' },
     ],
   },
-  { id: 'wt5-finale', kind: 'finale', bg: story5(6), who: 'pip', line: 'You read The Playground Friends! Hello, how are you, goodbye: you know them all! See you tomorrow!' },
+  {
+    id: 'wt5-read-check', kind: 'prea1', teacher: 'Reading: read the sentence, look at the picture — tick or cross? (Cambridge Starters "look and read")',
+    scene: {
+      id: 'wt5-read-check', kind: 'tick-cross', bg: bgL1Reading, who: 'pip', teacher: 'Read and look. Yes or no?',
+      rounds: [
+        { img: leoStory(1), sentence: 'Leo is new in Welcome Town.', isTrue: true },
+        { img: leoStory(4), sentence: 'Leo is happy.', isTrue: false },
+        { img: leoStory(8), sentence: 'Willow has a red hat.', isTrue: true },
+        { img: leoStory(9), sentence: 'The cap is on the bed.', isTrue: false },
+        { img: leoStory(10), sentence: 'Leo is happy now.', isTrue: true },
+      ],
+    },
+  },
+  {
+    id: 'wt5-act-out', kind: 'roleplay', bg: leoStory(2), teacher: 'Free: act it out! The student is Pip, then Leo. Say the lines with the face and the voice.', cast: ['pip', 'leo'],
+    script: [
+      { who: 'pip', line: 'Hello! My name is Pip. What’s your name?', repeat: true },
+      { who: 'leo', line: 'Hi, Pip! My name is Leo.', repeat: true },
+      { who: 'pip', line: 'How are you, Leo?', repeat: true },
+      { who: 'leo', line: 'I am sad. My red cap is lost.', repeat: true },
+      { who: 'pip', line: 'Come on, Leo! Let’s find it!', repeat: true },
+    ],
+  },
+  {
+    id: 'wt5-cap-hunt', kind: 'prea1', teacher: 'Brain break: find the cap! Do the actions with Pip.',
+    scene: {
+      id: 'wt5-cap-hunt', kind: 'tpr-actions', mode: 'break', bg: leoStory(5), who: 'pip', teacher: 'Find the cap! Do it with Pip.',
+      rounds: [
+        { line: 'Look up! Is it in the tree?', emoji: '\u{1F333}' },
+        { line: 'Look down! Is it on the slide?', emoji: '\u{1F6DD}' },
+        { line: 'Tiptoe to the sandpit!', emoji: '\u{1F463}' },
+        { line: 'Look! The cap is on the cat! Jump!', emoji: '\u{1F431}' },
+      ],
+    },
+  },
+  /* Phonics: /k/ → Sound Fish → blend a whole sentence → twister review */
+  {
+    id: 'wt5-sound-c', kind: 'sound-model', bg: bgL1Reading, who: 'mia', letter: 'C', phoneme: '/k/', sound: 'c', soundSide: 'center',
+    teacher: 'Present: /k/ — a little click at the back of your mouth! Cap, cat, car, cake.',
+    anchors: [
+      { word: 'cap', emoji: '\u{1F9E2}', img: I1('cap') },
+      { word: 'cat', emoji: '\u{1F431}', img: I1('cat') },
+      { word: 'car', emoji: '\u{1F697}', img: I1('car') },
+      { word: 'cake', emoji: '\u{1F370}', img: I1('cake') },
+    ],
+  },
+  {
+    id: 'wt5-sound-fish', kind: 'prea1', teacher: 'Guided: Sound Fishing! Hear /k/ and catch every fish whose picture starts with it.',
+    scene: {
+      id: 'wt5-sound-fish', kind: 'sound-fish', bg: bgL1Reading, who: 'mia', teacher: 'Catch the fish that start with the sound!',
+      rounds: [
+        { letter: 'c', fish: [{ word: 'cap', img: I1('cap') }, { word: 'cat', img: I1('cat') }, { word: 'car', img: I1('car') }, { word: 'hat', img: I1('hat') }, { word: 'fan', img: I1('fan') }] },
+      ],
+    },
+  },
+  {
+    id: 'wt5-blend', kind: 'sound-blend', bg: bgL1Reading, look: 'frog',
+    teacher: 'Reading: blend each word of the sentence — then read the whole sentence fast!',
+    rounds: [
+      { word: 'cap', img: I1('cap'), sentence: 'The cap is on the cat.' },
+      { word: 'cat', img: I1('cat'), sentence: 'Look! The cat has the cap!' },
+      { word: 'red', img: I1('cap'), sentence: 'Leo’s cap is red.' },
+    ],
+  },
+  { id: 'wt5-twister', kind: 'tongue-twister', look: 'town', speeds: 2, bg: bgL1Reading, who: 'mia', focus: 'c', teacher: 'Reading: quick reading! Listen to Mia, then say it slow, then faster.', line: 'Cool cat, cool cap.' },
+  /* Free: my ending */
+  {
+    id: 'wt5-my-ending', kind: 'join-stage', bg: leoStory(10), teacher: 'Free: what does Leo say to the cat — and to Willow? The student makes up a new line.', cast: ['leo', 'pip'],
+    turns: [
+      { who: 'pip', line: 'Look, Leo! The cat has your cap! What do you say?' },
+      { who: 'student', line: 'Hello, cat! My cap, please!' },
+      { who: 'pip', line: 'And what do you say to Willow?' },
+      { who: 'student', line: 'Willow, nice hat! Goodbye!' },
+    ],
+  },
+  { id: 'wt5-i-can', kind: 'meet', focus: ['read'], bg: bgL1Circle, who: 'marigold', cardSide: 'left', teacher: 'Check: say it and get your passport stamp!', line: 'I can read the story Leo’s First Day!', repeat: 'I can read!' },
+  {
+    id: 'wt5-sticker', kind: 'prea1', teacher: 'Sticker time! The student opens the pack and puts the story sticker in their Sticker Book.',
+    scene: {
+      id: 'wt5-sticker', kind: 'sticker-reward', bg: leoStory(10), who: 'leo', teacher: 'Sticker time!',
+      line: 'You read the whole story! Here is your sticker.',
+      sticker: { img: I1('cap'), label: 'Leo’s red cap' },
+    },
+  },
+  {
+    id: 'wt5-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
+    scene: {
+      id: 'wt5-home-mission', kind: 'home-mission', bg: bgL1Class, who: 'leo',
+      teacher: 'Home Mission: read the steps with the student.',
+      line: 'Your home mission!',
+      parentNote: 'Today your child read the whole story "Leo’s First Day". Let them read it to you — help with one word at a time.',
+      steps: [
+        { emoji: '\u{1F4D6}', say: 'Read the story to your family.' },
+        { emoji: '\u{1F9E2}', say: 'Hide a cap or a hat. Ask: Where is it?' },
+        { emoji: '\u{1F3AD}', say: 'Act it out: you are Pip, they are Leo!' },
+      ],
+    },
+  },
+  {
+    id: 'wt5-goodbye-song', kind: 'song', bg: bgL1Goodbye, title: '\u{1F3B5} Welcome Town School Goodbye Song \u{1F3B5}', teacher: 'It’s time to go — wave goodbye and sing along together!',
+    durationSeconds: 20, bigWord: 'Goodbye',
+    songUrl: `${W}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3600, 4120, 4020, 8322],
+    lyrics: [
+      { who: 'marigold', text: '\u{1F44B} Goodbye, goodbye, my new friend' },
+      { who: 'pip', text: '\u{1F44B} Goodbye, goodbye, see you again' },
+      { who: 'marigold', text: '\u{1F3EB} Welcome Town School is happy today' },
+      { who: 'pip', text: '\u{1F496} Byeeee, friends! See you soon!' },
+    ],
+  },
+  { id: 'wt5-finale', kind: 'finale', bg: leoStory(11), who: 'leo', line: 'You read the whole story! Goodbye, friends! \u{1F4D6}' },
 ]);
 
 /* =============================================================================
