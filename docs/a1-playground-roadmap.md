@@ -1,11 +1,14 @@
-# A1 Playground Roadmap — Welcome Town
+# A1 Playground Curriculum — themed worlds (Plan B)
 
-**Owner request (2026-10-09):** "Start from lesson one. Use the curriculum blueprint and the lesson blueprint … the quality skill …
-create a list of activities that can be used in level A1 … deep research (Oxford, Cambridge, online English schools, learning
-apps, fun games, video games) … create a roadmap for level A1 Playground. You can use some of the Pre-A1 as well."
-"The activity should be gamified and interactive. Create a list of every possible activity that can be used."
+**Owner decision (2026-10-12):** A1 follows the **themed worlds** already seeded as lesson slots in `curriculum_lessons`
+(Plan B), not the earlier all-Welcome-Town roadmap. Each unit is its own world and adventure; the lesson titles below are the
+database slot titles (the curriculum engine's source of truth). To keep the language order systematic, every world carries one
+clear **A1 grammar step**, one **phonics step** and **new words beyond Pre-A1**, so A1 always moves the child up from
+Pre-A1 (words) to **sentences, questions and short exchanges** (Cambridge A1 Movers direction).
 
-Companion file: [`docs/a1-activity-library.md`](a1-activity-library.md) — every gamified activity, its status and where it fits.
+Earlier plan (Welcome Town only, 2026-10-09): replaced by this file; see git history. Game list:
+[`docs/a1-activity-library.md`](a1-activity-library.md) — every A1, universal and Pre-A1 game (Pre-A1 games run in A1 lessons
+as `kind: 'prea1'`).
 
 ---
 
@@ -13,10 +16,11 @@ Companion file: [`docs/a1-activity-library.md`](a1-activity-library.md) — ever
 
 | | |
 |---|---|
-| Learners | ages 6-9 who finished Pre-A1 (or placed at A1); 1-on-1 online, 30 min, 22 pages (`docs/playground-lesson-blueprint.md`) |
-| World | **Welcome Town** — school, park, shops, homes. Cast: Pip (fox, boy), Mia (mouse, girl), Leo (lion, boy), Bella (bunny, girl), Willow (bird, girl), Miss Marigold (owl, teacher) |
-| Exit level | Cambridge **A1 Movers** language (bridge from Pre A1 Starters); the child can talk about self, family, school, home, animals, food, clothes, weather, daily routine and town in short sentences, ask and answer simple questions, read short sentences |
-| What changes from Pre-A1 | words → **sentences and questions**; listening for detail; first reading of sentences; phonics moves to blends and digraphs; the child **asks** as well as answers; every lesson ends in a real mini-conversation |
+| Learners | ages 6-9 who passed the Pre-A1 Final Test (or placed at A1); 1-on-1 online, 30 min, 22 pages (`docs/playground-lesson-blueprint.md`) |
+| Worlds | U1 Welcome Town · U2 Jungle · U3 Space · U4 Food Festival · U5 Monster Town · U6 Ocean · U7 Hero City · U8 Dino Valley · U9 Magic Castle · U10 Gadget Lab |
+| Cast | Pip (fox, boy), Mia (mouse, girl), Leo (lion, boy), Bella (bunny, girl), Willow (bird, girl), Miss Marigold (owl, teacher) travel to every world; each world adds 1-2 local friends (built: Coco the monkey in the Jungle, Wim in the Magic Castle). Boys never wear a dress or skirt. |
+| Exit level | A1 (Cambridge Movers language): talk about self, animals, food, feelings, people, places, abilities and routines in short sentences; ask and answer simple questions; read short sentences; follow and give simple instructions |
+| What changes from Pre-A1 | words → **sentences and questions**; listening for detail; first reading of sentences; phonics moves from letters and CVC blends to **digraphs, blends and vowel teams**; the child **asks** as well as answers; every unit ends in a real mini-conversation |
 
 ## 2. Design rules (from the blueprint, the quality gate and the research)
 
@@ -43,127 +47,131 @@ games speak with the Pre-A1 voices (pip, mia, leo, bella, willow, teacher), not 
 
 ## 3. The 10 units (70 lessons)
 
-Grammar follows the Cambridge young-learners progression (Starters structures first, then Movers: have got, can, there is/are,
-present continuous, like + -ing, would like, prepositions, comparatives, present simple routines, time, Let's). Words come from the
-official Cambridge Starters/Movers wordlists. Each unit recycles Pre-A1 words of the same theme, then adds the A1 language.
+Each unit has the same 7-lesson arc as the database slots: **L1-L2 new language · L3 listening lesson around the unit song ·
+L4 speaking (put it together) · L5 story video (scenario first) · L6 extra-practice games · L7 Boss Test** (level-test `unit`
+mode, 80 % per part, Practise-again packs — same system as Pre-A1).
 
-| Unit | Theme (setting) | Can-do goal of the unit | Key A1 language | Phonics |
-|---|---|---|---|---|
-| 1 | **Hello, Welcome Town!** (school, playground) | greet, introduce myself and a friend, say how I feel and my age | Hello/Hi, My name is…, What's your name?, How are you? I'm happy/tired…, He/She/They + is/are, How old are you? I'm 7, This is my friend | s a t p i n (review) + m d |
-| 2 | **At School** (classroom, library) | name school things, say what's mine, follow class instructions | What's this? It's a…, These are…, my/your, in/on/under, Open/Close/Sit down…, Can I have a…? | g o c k, ck |
-| 3 | **Family & Friends** (homes, park) | describe my family and people | I've got a brother, He's got…, Mia's mum ('s), tall/short/young/old, hair/eyes | e u r h b |
-| 4 | **Me and My Body** (gym, doctor) | talk about my body and what I can do; say what's wrong | I can jump/swim, I can't…, Can you…? Yes, I can, What's the matter? I've got a headache | f ff l ll ss, blends st/sp |
-| 5 | **Animals Everywhere** (zoo, farm, pet shop) | describe animals and where they live | There is a… / There are…, How many…?, It can fly, big/bigger, It's got four legs | sh ch, blends fr/fl |
-| 6 | **Food & Picnics** (café, market, picnic) | say what I like, order food | I like / I don't like, Do you like…?, Would you like…? Yes, please, some, How much…? | th ng, ai ee |
-| 7 | **Home Sweet Home** (house, garden) | describe my home and find things | There's a bed in my bedroom, Where's the cat? behind/next to/in front of/between | oa ie igh |
-| 8 | **Clothes & Weather** (wardrobe, seasons) | say what people are wearing and what the weather is like | She's wearing…, What are you wearing?, It's sunny/raining, Put on your coat! | oo ow ar |
-| 9 | **My Day** (home, school, clock tower) | tell my daily routine and the time | I get up at 7 o'clock, What time is it?, Monday-Sunday, every day, before/after | or ur ou oi |
-| 10 | **Out in Town** (streets, shops, park, bus) | find places, talk about hobbies, make plans | Where's the park? Go straight, turn left, What are you doing? I'm playing…, I like swimming, Let's…! | er air ear, sight-word review |
+| Unit | World | Can-do goal of the unit | New A1 grammar step | Key words (beyond Pre-A1) | Phonics |
+|---|---|---|---|---|---|
+| 1 | **Welcome Town** (built) | greet, introduce myself and a friend, say how we feel | My name is…, What's your name?, How are you?, He/She is…, They are…, This is my friend | friend, teacher, class, tired, hungry, nice to meet you | s a t p i n review + f (as built) |
+| 2 | **Jungle** | name jungle animals and say what they can do | It's a…, It can / can't + verb, Can it…? Yes, it can / No, it can't | monkey, parrot, snake, tiger, crocodile, elephant; climb, swing, swim, fly, run, jump | ch, ck (chimp, cheetah, snack, rock) |
+| 3 | **Space** | count to 20, say how many, give directions and say where things are | How many…? There is / There are + numbers 11-20, Go left/right/up/down, in/on/under/next to | eleven-twenty, rocket, star, planet, moon, robot, astronaut | th, ng (three, thirteen, ring, swing) |
+| 4 | **Food Festival** | say what I like, ask a friend, offer and accept food | I like / I don't like…, Do you like…? Yes, I do / No, I don't, Would you like some…? Yes, please / No, thank you | rice, cheese, soup, chicken, salad, sandwich, chips, grapes | consonant blends gr pl sn br (grapes, plum, snack, bread) |
+| 5 | **Monster Town** | say how I and others feel and describe what someone looks like | I'm / He's / She's + feeling (tired, scared, excited, bored), He's got / She's got + big/small/long/short + eyes/hair/teeth, tall/short | scared, excited, bored, surprised; teeth, hair, horn, tail | ee, ea (green, teeth, feet, scream) |
+| 6 | **Ocean** | name sea animals, say where they live, ask and answer yes/no questions | Is it a…? Yes, it is / No, it isn't, It lives in/on…, Where does it live? (chunk) | shark, whale, octopus, crab, turtle, starfish, shell, reef | sh, wh (shark, shell, fish, whale) |
+| 7 | **Hero City** | say what I can and can't do, ask for and offer help | I can / I can't (people), Can you…?, Can I help you? Yes, please, Give/Show/Tell me… | help, carry, lift, fix, save, push, pull; strong, kind | ai, ay (rain, train, play, day) |
+| 8 | **Dino Valley** | compare two things by size, speed and length | big/small, fast/slow, long/short → bigger/smaller/faster/slower/longer + than | dinosaur, egg, tail, neck, claw, footprint | oo, ar (tooth, food, moon, large, sharp) |
+| 9 | **Magic Castle** (L1-L3 built) | name rooms and furniture, say what is where | There is / There are…, Where is…? It's in/on/under/behind/next to… | kitchen, bedroom, bathroom, hall, stairs, lamp, window, door | oa, ow (moat, coat, tower, crown) |
+| 10 | **Gadget Lab** | follow and give step-by-step instructions | Press/Turn/Open/Close/Wait…, First…, Then…, Next…, How do I…? (chunk) | button, switch, screen, wheel, gadget; press, turn, open, close, fix | er, ur, or + sight-word review (computer, turn, robot, for) |
 
 ## 4. Lesson-by-lesson map
 
-Format: **Title** — I can … · key language · signature game (★ = new game to build, ⇄ = port a Pre-A1 game to A1)
+Format: **slot title** — I can … · key language · signature game (A1 = built in Welcome Town renderer, U = universal,
+⇄ = Pre-A1 game used as `kind: 'prea1'`, ★ = new game to build). Remember? warm-up on page 2 of every lesson; song after the
+words and the first game; Boss Tests mirror the Pre-A1 ones.
 
-### Unit 1 · Hello, Welcome Town!  *(titles = the curriculum slots in `curriculum_lessons`; L1-L3 rebuilt to the 22-slide blueprint 2026-10-10)*
-1. **Hello, My Name Is…** — greet and say my name · Hello/Hi, My name is…, What's your name?, Goodbye · Welcome Party door game
-2. **Saying "How Are You?"** — say how I and others feel · How are you? I'm happy/tired/sad/angry/hungry; He/She is…, They are… · Feelings Survey
-3. **Listen to the Greetings Song** — the unit's LISTENING lesson, no new words · who sings each line, build the lines, lead the song
-4. **Meet a Friend: Speak!** — the unit's SPEAKING lesson · This is my friend…, Nice to meet you · Hello Doors
-5. **Storybook: The Playground Friends** — story video with pause questions (`story-video`) ⇄
-6. **Extra Practice: Greeting Game!** — use all Unit 1 language fast · Buzzer Show quiz ⇄ + Bingo ⇄
-7. **Unit Review & Boss Test: Say Hello!** — hold a 6-line conversation · Boss Battle ★
-("How old are you?" + numbers 11-20 move to the numbers unit.)
+### Unit 1 · Welcome Town *(all 7 built — L1-L4 published; L5-L7 built, waiting to publish)*
+1. **Hello, My Name Is...** — greet and say my name · Hello, My name is…, What's your name? · Welcome Party doors (A1)
+2. **Saying 'How Are You?'** — say how I and friends feel · How are you? I'm…, He/She is…, They are… · Feelings Survey (A1)
+3. **Listen to the Greetings Song** — listening lesson · who sings each line, build the lines · song karaoke (A1)
+4. **Meet a Friend: Speak!** — introduce a friend · This is my friend…, Nice to meet you · Hello Doors (A1)
+5. **Storybook: The Playground Friends** — follow a story and answer · story video with pause questions
+6. **Extra Practice: Greeting Game!** — use all Unit 1 language fast · Buzzer Show ⇄ + Bingo ⇄
+7. **Unit Review & Boss Test: Say Hello!** — hold a 6-line conversation · Boss Test
 
-### Unit 2 · At School
-1. **Pencil, Book, Bag!** — name school things · What's this? It's a pencil · Mystery Bag ⇄ (feel and guess)
-2. **These Are My Crayons** — singular/plural, my/your · These are…, my/your · Sort Basket ⇄ (this/these bins)
-3. **Where's My Pencil?** — find things in/on/under · Where's…? It's in/on/under… · Torch Hunt (built) + Place-it (built)
-4. **Can I Have a Ruler?** — ask politely in class · Can I have a…? Here you are · Pip's Classroom Shop ★ (serve the order)
-5. **Story: The Lost Lunchbox** (video)
-6. **Classroom Games** — Simon Says instructions ⇄ (simon-touch) + Whack-a-word ⇄ (peek-pop)
-7. **Boss: School Champion** — Treasure Map quest ★ (stations across the school)
+### Unit 2 · Jungle *(L1 built)*
+1. **Jungle Animals: Lion, Monkey, Bird** — name jungle animals · It's a…, Is it a…? · flipbook + Claw Machine ⇄ (built)
+2. **What Can Animals Do?** — say what an animal can and can't do · It can climb, It can't fly · Jungle Obstacle Run ★ (say the action to pass each obstacle)
+3. **Listen to the Jungle Animal Song** — listening lesson · Can it swim? Yes, it can · Who Said It? ⇄ + song lines build
+4. **Talk About Animals!** — describe an animal in 3 sentences · It's a… It can… It can't… · Animal Riddle ⇄ (child gives the riddle)
+5. **Storybook: The Jungle Rescue** — story video · Coco can climb, Willow can fly
+6. **Extra Practice: Animal Action Match!** — Charades ⇄ + Peek-Pop ⇄
+7. **Unit Review & Boss Test: Jungle Explorer!** — Boss Test
 
-### Unit 3 · Family & Friends
-1. **I've Got a Brother** — have got family · I've got…, Have you got…? · Family Photo ⇄ (photo-snap)
-2. **Mia's Mum** — possessive 's · This is Mia's mum · Who's Missing? ⇄ (whos-missing)
-3. **Tall, Short, Young, Old** — describe people · He's tall, She's got long hair · Guess Who ★ (secret-card upgrade: ask "Has she got…?")
-4. **My Best Friend** — describe a friend in 3 sentences · Face Builder ⇄ (build the face you hear, then describe)
-5. **Story: Grandpa's Glasses** (video)
-6. **Family Games** — Family Tree drag ⇄ + Memory ⇄
-7. **Boss: Family Quiz Show** — Jeopardy Board ★
+### Unit 3 · Space
+1. **Count to Ten in Space!** — count 1-20 and say how many · How many stars? There are twelve · Count & Catch ⇄ (count-balloons, to 20)
+2. **Left, Right, Up, Down: Space Directions** — follow directions · Go left / right / up / down · Rocket Maze ★ (steer by the direction you hear, Wordwall Maze Chase style)
+3. **Listen to the Counting Rocket Song** — listening lesson · countdown 20 → 1 · Listen & Colour ⇄ (Cambridge format)
+4. **Where Is It? In, On, Under!** — say where things are · It's on the moon, next to the rocket · Torch Hunt (A1) in a dark spaceship
+5. **Storybook: The Lost Robot** — story video · directions + there are
+6. **Extra Practice: Number & Direction Match!** — Rapid Recall ⇄ + Stepping Stones ⇄
+7. **Unit Review & Boss Test: Space Navigator!** — Boss Test
 
-### Unit 4 · Me and My Body
-1. **Head, Hands, Feet** — body + have got · I've got two hands · Monster Maker ⇄ (build from spoken description)
-2. **I Can Jump!** — can/can't abilities · I can jump, I can't fly · Robo-Copy ⇄ (robot does what you say)
-3. **Can You Swim?** — ask about abilities · Can you…? Yes, I can / No, I can't · Obstacle Course ★ (say the action to pass each obstacle)
-4. **What's the Matter?** — say what's wrong · I've got a headache/tummy ache · Doctor Pip ★ (patients tell you, you choose the cure)
-5. **Story: The Big Race** (video)
-6. **Action Games** — Simon Says ⇄ + Body Stack ⇄
-7. **Boss: Sports Day** — Racing ★ (each right sentence moves your runner)
+### Unit 4 · Food Festival
+1. **Yummy Foods at the Festival** — name festival foods · I like rice · Market Sort ⇄ (catch-sort)
+2. **More Foods: Rice, Cheese, Pizza** — say what I don't like · I don't like cheese · Food Preference Chart ⇄ (A1: full sentences)
+3. **Listen: What Do You Like to Eat?** — listening lesson · Do you like…? Yes, I do / No, I don't · Tick or Cross ⇄ (who likes what)
+4. **I Like / I Don't Like!** — interview a friend · Do you like…? + Would you like some…? · Food Survey ★ (ask 4 friends, fill the chart)
+5. **Storybook: Chef Cilla's Recipe** — story video · some, would you like
+6. **Extra Practice: Food Taste Test!** — Pip's Café ★ (serve orders) + Cookie Faces ⇄
+7. **Unit Review & Boss Test: Festival Feast!** — Boss Test
 
-### Unit 5 · Animals Everywhere
-1. **At the Zoo** — name zoo animals · It's a giraffe, It's big/tall · Claw Machine ⇄
-2. **There Are Three Lions** — there is/are + numbers · There is a…, There are… · Count & Catch ⇄ (count-balloons)
-3. **It Can Fly!** — what animals can do · It can swim, It's got wings · Animal Riddle ⇄ (listen and guess)
-4. **Bigger and Smaller** — compare animals · An elephant is bigger than a mouse · See-Saw Scales ★
-5. **Story: Leo Lost at the Zoo** (video)
-6. **Animal Games** — Shadow Match ⇄ + Feed the Animals ⇄ (duck-feed)
-7. **Boss: Safari Rescue** — Escape Room ★ (four doors, one puzzle each)
+### Unit 5 · Monster Town
+1. **How Do You Feel? Happy, Sad, Tired** — say how I and others feel · I'm scared, He's excited · Feelings Wheel ⇄ (new feelings)
+2. **What Do They Look Like? Tall, Short, Big, Small** — describe looks · She's got long hair, He's tall · Face Builder ⇄ (build what you hear)
+3. **Listen to the Feelings Song** — listening lesson · Who is…? · Listen & Tap (A1, "Name That Feeling")
+4. **Describe a Monster Friend!** — describe a monster in 3 sentences · He's got… He's… · Monster Maker ⇄ (child describes, teacher builds)
+5. **Storybook: Bibi's Bad Day** — story video · feelings + because (chunk)
+6. **Extra Practice: Feelings Charades!** — Charades ⇄ + Guess Who ★ (ask "Has he got…?")
+7. **Unit Review & Boss Test: Monster Portrait!** — Boss Test
+→ **A1 Halfway Check after Unit 5** (like Pre-A1 Checkpoint 1).
 
-### Unit 6 · Food & Picnics
-1. **Fruit and Vegetables** — food words · I like apples · Market Sort ⇄ (catch-sort fruit/veg)
-2. **Do You Like…?** — ask and answer likes · Do you like…? Yes I do / No I don't · Food Survey ★ (interview 4 friends, fill the chart)
-3. **Would You Like Some Juice?** — offer and accept · Would you like…? Yes, please / No, thank you · Pip's Café ★ (serve orders, Blooket Café style)
-4. **My Lunchbox** — describe my meal · I've got some bread and some cheese · Lunchbox Builder ★
-5. **Story: The Picnic Ants** (video)
-6. **Food Games** — Cookie Faces ⇄ + Brick Crush ⇄
-7. **Boss: Masterchef** — order-and-cook timer game ★
+### Unit 6 · Ocean
+1. **Meet the Sea Animals: Shark, Whale** — name sea animals · It's a whale · Shape/Sound Fishing ⇄ (fish for the animal you hear)
+2. **More Sea Animals: Octopus, Crab** — describe sea animals · It's got eight legs · Tile Reveal ⇄ (guess early)
+3. **Listen: Where Do They Live?** — listening lesson · It lives in the sea / on the beach · Sort Basket ⇄ (sea / beach / reef)
+4. **Ask and Answer: Is It a Shark?** — ask yes/no questions · Is it a…? Yes, it is / No, it isn't · Secret Card ⇄ (child asks)
+5. **Storybook: The Treasure Reef** — story video
+6. **Extra Practice: Ocean Question Game!** — Buzzer Show ⇄ + Memory ⇄
+7. **Unit Review & Boss Test: Ocean Explorer!** — Boss Test
 
-### Unit 7 · Home Sweet Home
-1. **Rooms** — rooms of a house · This is the kitchen · House Builder ⇄
-2. **There's a Bed in My Bedroom** — furniture + there is · There's a sofa in the living room · Whose Room? ⇄
-3. **Where's the Cat?** — behind/next to/in front of/between · House Hide ⇄ (find the cat by listening)
-4. **My Dream House** — describe my home · Design My Room ★ (place furniture, then describe)
-5. **Story: The Noisy House** (video)
-6. **Home Games** — Moving Day ⇄ + Tidy Up ⇄
-7. **Boss: Hide and Seek Champion** — Lamp/Torch Hunt in a dark house ⇄
+### Unit 7 · Hero City
+1. **Superhero Powers: I Can Help!** — say what I can do · I can carry, I can fix · Hero Trials ⇄ (built for Pre-A1 U10L7)
+2. **Can You Lift It? Can't and Can!** — ask about abilities · Can you lift it? No, I can't · Can It? ⇄ (built, A1 sentences)
+3. **Listen to the Hero Helper Song** — listening lesson · Who can help? · Who Said It? ⇄
+4. **Offer to Help: Give, Show, Tell** — offer and ask for help · Can I help you? Yes, please. Give me the… · Hero Mission ★ (people ask, you choose the helper and say it)
+5. **Storybook: Captain Spark Saves the Day** — story video
+6. **Extra Practice: Hero Mission Match!** — Simon Says ⇄ + Ring Toss ⇄
+7. **Unit Review & Boss Test: Super Helper!** — Boss Test
 
-### Unit 8 · Clothes & Weather
-1. **T-shirt, Jeans, Shoes** — clothes · It's a red T-shirt · Dress-Up Doll ★ (dress as you hear)
-2. **She's Wearing…** — present continuous wear · She's wearing a hat · Spot the Difference ★ (two pictures, say what's different)
-3. **What's the Weather Like?** — weather · It's sunny/raining/snowing · Weather Wheel ⇄ (spin-wheel)
-4. **Put On Your Coat!** — dress for the weather · Put on…, Take off… · Weather Dress-Up ★ (weather changes, dress Pip in time)
-5. **Story: Pip's Windy Day** (video)
-6. **Fashion Games** — Odd One Out ⇄ + Ring Toss ⇄
-7. **Boss: Fashion Show** — catwalk show + quiz ★
+### Unit 8 · Dino Valley
+1. **Dinosaur Sizes: Big and Small** — describe dinosaurs · It's big, It's got a long neck · Part Peek ⇄
+2. **Fast or Slow? Long or Short?** — opposites · It's fast / slow · Odd One Out ⇄
+3. **Listen to the Dinosaur Compare Song** — listening lesson · bigger than · Tick or Cross ⇄
+4. **This One Is Bigger Than That One!** — compare two things · The T-rex is bigger than… · See-Saw Scales ★ (say the comparison to tip the scale)
+5. **Storybook: Rexi and Tilly's Race** — story video
+6. **Extra Practice: Compare the Dinosaurs!** — Racing ★ (each right sentence moves your dino) + Pattern Train ⇄
+7. **Unit Review & Boss Test: Dino Detective!** — Boss Test
 
-### Unit 9 · My Day
-1. **Get Up, Wash, Eat** — routine verbs · I get up, I brush my teeth · Story Order ⇄ (put the day in order)
-2. **What Time Is It?** — o'clock · It's 7 o'clock · Clock Tower ★ (turn the hands to the time you hear)
-3. **Monday to Sunday** — days + activities · On Monday I play football · Week Planner ★
-4. **My Day** — tell my routine · I get up at 7. Then I… · Daily Diary comic ★ (build a 4-panel comic and read it)
-5. **Story: Pip's Busy Day** (video)
-6. **Day Games** — Train Recall ⇄ + Pattern Train ⇄
-7. **Boss: Beat the Clock** — timed rapid recall ⇄ (rapid-recall)
+### Unit 9 · Magic Castle *(L1-L3 built and published)*
+1. **Rooms in the Castle: Kitchen, Bedroom** — name rooms (built)
+2. **Castle Furniture: Bed, Lamp, Door, Window** — name furniture (built)
+3. **Listen: Where Is the Magic Lamp?** — listening lesson, prepositions (built)
+4. **There Is / There Are in My Room!** — describe a room · There's a bed, There are two lamps · Design My Room ★ (place furniture, then describe)
+5. **Storybook: The Hidden Treasure Room** — story video
+6. **Extra Practice: Find It in the Castle!** — Torch Hunt (A1) + Lift the Flap ⇄
+7. **Unit Review & Boss Test: Castle Search!** — Boss Test
 
-### Unit 10 · Out in Town
-1. **Park, Shop, School** — places · Where's the park? It's next to the shop · Town Map ⇄ (draw-path)
-2. **Go Straight, Turn Left** — directions · Go straight, turn left/right · Maze Chase ★ (steer by directions)
-3. **What Are You Doing?** — present continuous hobbies · I'm playing football · Charades ★ (act/guess)
-4. **Let's Go to the Park!** — make plans · Let's…! Good idea! · Plan the Day ★ (choose and agree)
-5. **Story: The Town Treasure Hunt** (video)
-6. **Town Games** — Stepping Stones ⇄ + Dash runner ⇄
-7. **Boss: A1 Graduation Quest** — Treasure Map across Welcome Town ★ + A1 certificate
+### Unit 10 · Gadget Lab
+1. **Cool Gadgets: Press, Turn, Open** — follow gadget instructions · Press the button, Turn the wheel · Robo-Copy ⇄ (the robot does what you say)
+2. **More Actions: Close, Wait, Fix** — more instructions · Close the door, Wait! · Simon Says ⇄ (A1: two-step)
+3. **Listen: How Do I Turn It On?** — listening lesson · First… then… · Story Order ⇄ (put the steps in order)
+4. **First, Then, Next: Give Instructions!** — give 3-step instructions · First press…, Then turn…, Next… · Build-a-Bot ★ (child gives the steps, the bot builds)
+5. **Storybook: Nano the Bot's Big Invention** — story video
+6. **Extra Practice: Robot Instruction Match!** — Maze Chase ★ + Rapid Recall ⇄
+7. **Unit Review & Boss Test: Tech Inventor!** — Boss Test
+→ **A1 Final Test after Unit 10** (moves to A2) + the A1 "Rising Star" certificate (two medals).
 
-## 5. Build order (what makes the most lessons playable soonest)
+## 5. Build order
 
-1. **Unit 1 L1-L7** (L1-L4 exist): rebuild L2 to the blueprint (in progress), build L5 story video scenario, L6-L7.
-2. **Port the top 12 Pre-A1 games** to the A1 renderer as universal scenes (like `spin-wheel`, `picture-match`, `recall-warmup`):
-   mystery-bag, sort-basket, simon-touch, peek-pop (whack-a-word), buzzer-show, bingo, claw-machine, story-order, rapid-recall,
-   memory upgrade, face-builder, monster-maker. Each gets an A1 content mode (sentences, questions).
-3. **Build 6 new signature games** that many units reuse: Boss Battle, Treasure Map quest, Pip's Shop/Café (order game),
-   Guess Who (ask questions), Spot the Difference, Maze Chase (directions/arcade).
-4. Then units 2-10 in order, each lesson through `lesson-variety-engine` research + `lesson-quality-gate`.
+1. **Unit 1:** publish L5-L7 (built).
+2. **Units 2-10 in order**, one lesson at a time through `lesson-variety-engine` research → build → `lesson-quality-gate`;
+   Unit 2 and Unit 9 reuse their built lessons.
+3. **New signature games** in the order the units need them: Jungle Obstacle Run (U2), Rocket Maze (U3), Food Survey +
+   Pip's Café (U4), Guess Who (U5), Hero Mission (U7), See-Saw Scales + Racing (U8), Design My Room (U9), Build-a-Bot +
+   Maze Chase (U10).
+4. **Assessments** reuse the Pre-A1 system: Boss Test in every L7, A1 Halfway Check after Unit 5, A1 Final Test after
+   Unit 10, Practise-again packs, parent report.
 
 ## 6. Research sources
 
