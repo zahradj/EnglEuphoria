@@ -73,7 +73,7 @@ export default function ParentLessons() {
       .then(({ data, error }) => {
         if (cancelled) return;
         if (error) toast({ title: t('pk.loadFail', 'Could not load lesson packages'), description: error.message, variant: 'destructive' });
-        setPacks((data ?? []).map((p: any) => ({ ...p, price_eur: Number(p.price_eur) })));
+        setPacks((data ?? []).map((p: Pick<Pack, 'id' | 'name' | 'session_count' | 'family_only'> & { price_eur: number | string }) => ({ ...p, price_eur: Number(p.price_eur) })));
         setLoadingPacks(false);
       });
     return () => { cancelled = true; };

@@ -9,6 +9,18 @@ export interface FamilyLearnerView extends FamilyLearner {
   profile?: FamilyChildProfile;
 }
 
+/** One row of the parent's student_parent_relationships query (the joined child comes back as an object or a one-item list). */
+interface RelationshipRow {
+  id: string;
+  student_id: string;
+  relationship_type: string;
+  is_primary_contact: boolean;
+  can_view_progress: boolean;
+  can_book_lessons: boolean;
+  can_communicate_teachers: boolean;
+  student: { id: string; full_name: string; email: string | null } | { id: string; full_name: string; email: string | null }[] | null;
+}
+
 /**
  * The signed-in parent's children (name, hub, buddy) and each one's unused lessons. Same query keys as the
  * family dashboard, so opening the lessons page from the dashboard reuses what is already loaded.
@@ -38,7 +50,7 @@ export function useFamilyLearners() {
         `)
         .eq('parent_id', user!.id);
       if (error) throw error;
-      return (data || []).map((item: any) => ({
+      return ((data || []) as unknown as RelationshipRow[]).map((item) => ({
         id: item.id,
         student_id: item.student_id,
         relationship_type: item.relationship_type,
@@ -51,8 +63,8 @@ export function useFamilyLearners() {
     },
   });
 
-  const rows = (students.data ?? []).filter((s: any) => s.student);
-  const ids = (students.data ?? []).map((s: any) => s.student_id as string);
+  const rows = (students.data ?? []).filter((s) => s.student);
+  const ids = (students.data ?? []).map((s) => s.student_id);
 
   const profiles = useQuery<Record<string, FamilyChildProfile>>({
     queryKey: ['parent-student-profiles', user?.id, ids.join(',')],
@@ -64,7 +76,7 @@ export function useFamilyLearners() {
         .in('user_id', ids);
       if (error) throw error;
       const map: Record<string, FamilyChildProfile> = {};
-      (data ?? []).forEach((p: any) => {
+      (data ?? []).forEach((p: { user_id: string; hub_type: string | null; age: number | null; companion_id: string | null }) => {
         map[p.user_id] = { hub: p.hub_type ?? null, age: p.age ?? null, companionId: p.companion_id ?? null };
       });
       return map;
@@ -73,12 +85,12 @@ export function useFamilyLearners() {
 
   const credits = useFamilyCredits(ids, user?.id);
 
-  const learners: FamilyLearnerView[] = rows.map((s: any) => {
+  const learners: FamilyLearnerView[] = rows.map((s) => {
     const profile = profiles.data?.[s.student_id];
     const hub = profile?.hub;
     return {
       studentId: s.student_id,
-      name: s.student.full_name as string,
+      name: (s.student as { full_name: string }).full_name,
       hub: hub === 'academy' || hub === 'professional' ? hub : 'playground',
       profile,
     };
