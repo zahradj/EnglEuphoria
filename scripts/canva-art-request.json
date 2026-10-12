@@ -1,7 +1,32 @@
 [
  {
-  "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0098-7009245676266250815.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261011%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261011T150631Z&X-Amz-Expires=88490&X-Amz-Signature=5133c98fe83ec784c417910df92d7119a1c411701240b92e2883fe4980e4a92d&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2012%20Oct%202026%2015%3A41%3A21%20GMT",
-  "out": "public/certificates/playground-a2.png",
+  "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0096-7502389861124119010.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261012%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261012T165647Z&X-Amz-Expires=17999&X-Amz-Signature=d5b6dcc0e8ade51136802f56f2b43055d9ae9d2f4ec2d0cfb3ec7eca8e0eab19&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2012%20Oct%202026%2021%3A56%3A46%20GMT",
+  "out": "public/jungle-adventure/scenes/bg-jungle-obstacle-course.png"
+ },
+ {
+  "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0097-3755394972316382085.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261012%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261012T051857Z&X-Amz-Expires=58280&X-Amz-Signature=fdd2f5df97ae192a99fb511eca0cdd2e95a12820b78f06919a6282fdbefdfb29&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2012%20Oct%202026%2021%3A30%3A17%20GMT",
+  "out": "public/jungle-adventure/scenes/bg-jungle-actions.png"
+ },
+ {
+  "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0098-2206156701997111569.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261011%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261011T203009Z&X-Amz-Expires=89172&X-Amz-Signature=289bb47dc7f3e3f7ddfd2f2f05ebb679c9e3292e8e66674489a415c3978b79e6&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2012%20Oct%202026%2021%3A16%3A21%20GMT",
+  "out": "public/jungle-adventure/scenes/bg-jungle-coco-swing.png"
+ },
+ {
+  "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0100-5485903130408917643.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261012%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261012T190524Z&X-Amz-Expires=10157&X-Amz-Signature=5b6f6710d8682ee7b5e747f37139b5bfe78e112ba1a2a1b4edeef91a7b7b5642&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2012%20Oct%202026%2021%3A54%3A41%20GMT",
+  "out": "public/jungle-adventure/scenes/bg-jungle-coco-cant-fly.png"
+ },
+ {
+  "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0093-1343717371481214580.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261011%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261011T225730Z&X-Amz-Expires=80483&X-Amz-Signature=155d30abf280dbad1106288f3b07cdccfc12c51d634db36446d66225717661a4&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2012%20Oct%202026%2021%3A18%3A53%20GMT",
+  "out": "public/lep1/items/tmp-sheet-jungle-actions.png",
+  "raw": true
+ },
+ {
+  "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0096-6585907338065206777.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261011%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261011T203534Z&X-Amz-Expires=88360&X-Amz-Signature=bd8e0f790b30d42a6f31b92bf9d634349664f7b55b9c8085596475cdb42b74c3&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2012%20Oct%202026%2021%3A08%3A14%20GMT",
+  "out": "public/jungle-adventure/scenes/bg-jungle-waterfall-party.png"
+ },
+ {
+  "url": "https://export-download.canva.com/lGPx4/DAHXjZlGPx4/-1/0/0097-4528888209088907337.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261012%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261012T132244Z&X-Amz-Expires=30685&X-Amz-Signature=48cbaaa89c3f85b19b4ba272da8125528235e7cdc1a63229721f905ce03e071f&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Mon%2C%2012%20Oct%202026%2021%3A54%3A09%20GMT",
+  "out": "public/lep1/items/tmp-sheet-jungle-ch.png",
   "raw": true
  }
 ]

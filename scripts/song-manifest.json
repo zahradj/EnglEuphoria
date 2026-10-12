@@ -393,5 +393,10 @@
     "path": "public/lep1/audio/act-it-out-song-u10l6.mp3",
     "bytes": 321037,
     "sha256": "94bc86f676933cb6f37b1b608d026947aaaf1571bd65422d849ae83d92618816"
+  },
+  "a1u2l2-jungle-can": {
+    "path": "public/jungle-adventure/audio/jungle-can-song-a1u2l2.mp3",
+    "bytes": 756133,
+    "sha256": "e63c43816e6aa1461dc63caa91aaf7f1432437a1e1bb4456fbb459687aa56686"
   }
 }
