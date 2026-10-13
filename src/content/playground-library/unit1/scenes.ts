@@ -14961,6 +14961,7 @@ export const LESSON_U9L4_TITLE = 'What Are You Wearing?';
 export const LESSON_U9L4_OBJECTIVE = 'Say what you are wearing ("I\'m wearing a red shirt!"), understand a friend who says it and find them at the fashion show, answer "What are you wearing?", guess clothes from clues, and hear the first sound P (pants), by listening, moving and playing, no reading.';
 
 export const LESSON_U9L4_SCENES: Scene[] = [
+  /* WARM-UP */
   { id: 'u9l4-title', kind: 'title-card', bg: bgU9L4Stage, level: 'Pre-A1', unit: 'Unit 9', lessonLabel: 'Lesson 4', title: 'What Are You Wearing?', subtitle: 'The garden fashion show' },
   {
     // Remember? (owner, 2026-10-07): a quick warm-up of Unit 9 · Lesson 3 · Coat, Skirt, T-shirt!
@@ -14984,7 +14985,7 @@ export const LESSON_U9L4_SCENES: Scene[] = [
     cta: "Let's watch the show!",
   },
 
-  /* 4-5 The words, move */
+  /* PRESENT — the words: I’m wearing a red shirt! */
   {
     id: 'u9l4-words', kind: 'listen-repeat-cards', textSide: 'right', bg: bgU9L4Stage, teacher: 'Listen, then say it with each friend: "I\'m wearing a red shirt!" Point to your own clothes too.',
     cards: [
@@ -14994,6 +14995,8 @@ export const LESSON_U9L4_SCENES: Scene[] = [
       { who: 'bella', sentence: "I'm wearing blue shoes!", img: itemShoesBlue, imgLabel: 'shoes' },
     ],
   },
+
+  /* CONTROLLED PRACTICE 1 — move, listen, sing (the song after the first game, owner 2026-10-10). Fashion Show: boys never wear a dress (CLAUDE.md, 2026-10-11) */
   {
     id: 'u9l4-move', kind: 'tpr-actions', bg: bgU9L4Stage, who: 'mia',
     teacher: 'Stand up! Walk the show with Mia.',
@@ -15004,8 +15007,6 @@ export const LESSON_U9L4_SCENES: Scene[] = [
       { line: 'Touch your T-shirt! Smile!', emoji: '\u{1F455}', img: itemTshirtYellow },
     ],
   },
-
-  /* 6 Signature game (new): Who Am I? Fashion Show — boys never wear a dress (CLAUDE.md, 2026-10-11) */
   {
     id: 'u9l4-fashion-show', kind: 'wearing-show', bg: bgU9L4Stage, who: 'bella', cast: ['pip', 'mia', 'leo'],
     teacher: 'Who Am I? One friend says what they are wearing. Listen for BOTH pieces, then tap that friend. Then the child says it too: "I\'m wearing a green hat!"',
@@ -15017,8 +15018,6 @@ export const LESSON_U9L4_SCENES: Scene[] = [
     ],
     doneLine: 'You found every friend! What a great show!',
   },
-
-  /* 7 The song — after the words and the first game (owner, 2026-10-10) */
   {
     id: 'u9l4-song', kind: 'song', bg: bgU9L4Stage, title: '\u{1F3B5} What Are You Wearing? \u{1F3B5}', teacher: 'Sing and point: each friend shows what they are wearing, then the child sings their own line!',
     durationSeconds: 20, bigWord: 'Wearing', songUrl: `${A}/audio/what-are-you-wearing-song-u9l4.mp3?v=1`,
@@ -15031,8 +15030,6 @@ export const LESSON_U9L4_SCENES: Scene[] = [
       { who: 'pip', text: "I'm wearing a green hat! Hooray!", emotion: 'happy' },
     ],
   },
-
-  /* 8-10 More games */
   {
     id: 'u9l4-riddles', kind: 'animal-riddle', bg: bgU9L4Stage, who: 'bella', ask: 'What is it?',
     teacher: 'Clothes Riddles! Something hides behind the curtain. Bella gives clues one by one; the child can answer after any clue: "It\'s a hat!"',
@@ -15045,30 +15042,8 @@ export const LESSON_U9L4_SCENES: Scene[] = [
     ],
     doneLine: 'You solved every riddle! Well done!',
   },
-  {
-    id: 'u9l4-secret', kind: 'secret-card', bg: bgU9L4Stage, who: 'pip',
-    teacher: 'Pip hides one clothes card. The student asks "Is it a hat?" Pip answers yes or no. Then swap: the student hides one!',
-    cards: [
-      clothesCard(itemHatGreen, 'hat'),
-      clothesCard(itemDress, 'dress'),
-      clothesCard(itemShirt, 'shirt'),
-      clothesCard(itemCoatBlue, 'coat'),
-      clothesCard(itemSkirtPink, 'skirt'),
-      clothesCard(itemTshirtYellow, 'T-shirt'),
-    ],
-    rounds: [{ secret: 3 }, { secret: 0 }],
-  },
-  {
-    id: 'u9l4-what-wearing', kind: 'join-stage', bg: bgU9L4Stage, teacher: 'Bella and Leo ask the child. The child looks at their own clothes and answers — any piece and colour is fine.', cast: ['bella', 'leo'],
-    turns: [
-      { who: 'bella', line: 'What are you wearing?', bubble: 'right' },
-      { who: 'student', line: "I'm wearing a blue T-shirt!", bubble: 'right' },
-      { who: 'leo', line: 'What colour are your shoes?', bubble: 'left' },
-      { who: 'student', line: 'My shoes are white!', bubble: 'right' },
-    ],
-  },
 
-  /* 11-12 Sounds: P (and D, T review) */
+  /* PHONICS — P (and D, T review) */
   {
     id: 'u9l4-model-p', kind: 'sound-model', bg: bgU9L4Stage, who: 'pip', letter: 'P', phoneme: '/p/', sound: 'puh',
     teacher: 'P says /p/ — pants, pig, pizza! (And Pip!)',
@@ -15098,8 +15073,36 @@ export const LESSON_U9L4_SCENES: Scene[] = [
     rounds: [{ word: 'cap', img: `${A}/items/item-cap.png` }, { word: 'map', img: `${A}/items/item-map.png` }, { word: 'pan', img: `${A}/items/item-pan.png` }, { word: 'pot', img: `${A}/items/item-pot.png` }],
   },
 
-  /* 13-14 Sticker + Home Mission */
+  /* CONTROLLED PRACTICE 2 — say the sentence (Flip & Say, Spin) */
   ...EXTRA_PRACTICE['9-4'],
+
+  /* FREE PRACTICE — the child asks: Is it a hat? */
+  {
+    id: 'u9l4-secret', kind: 'secret-card', bg: bgU9L4Stage, who: 'pip',
+    teacher: 'Pip hides one clothes card. The student asks "Is it a hat?" Pip answers yes or no. Then swap: the student hides one!',
+    cards: [
+      clothesCard(itemHatGreen, 'hat'),
+      clothesCard(itemDress, 'dress'),
+      clothesCard(itemShirt, 'shirt'),
+      clothesCard(itemCoatBlue, 'coat'),
+      clothesCard(itemSkirtPink, 'skirt'),
+      clothesCard(itemTshirtYellow, 'T-shirt'),
+    ],
+    rounds: [{ secret: 3 }, { secret: 0 }],
+  },
+
+  /* PRODUCE — What are YOU wearing? */
+  {
+    id: 'u9l4-what-wearing', kind: 'join-stage', bg: bgU9L4Stage, teacher: 'Bella and Leo ask the child. The child looks at their own clothes and answers — any piece and colour is fine.', cast: ['bella', 'leo'],
+    turns: [
+      { who: 'bella', line: 'What are you wearing?', bubble: 'right' },
+      { who: 'student', line: "I'm wearing a blue T-shirt!", bubble: 'right' },
+      { who: 'leo', line: 'What colour are your shoes?', bubble: 'left' },
+      { who: 'student', line: 'My shoes are white!', bubble: 'right' },
+    ],
+  },
+
+  /* CHECK AND GOODBYE — sticker + Home Mission */
   {
     id: 'u9l4-sticker', kind: 'sticker-reward', bg: bgU9L4Stage, who: 'mia', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
     line: 'You are a fashion show star! Here is a dress sticker for you!', sticker: { img: itemDress, label: 'Show star' },
@@ -15116,7 +15119,7 @@ export const LESSON_U9L4_SCENES: Scene[] = [
     ],
   },
 
-  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  /* EXTRA TIME (blueprint §3b): use if there are minutes left; Next skips. */
   {
     id: 'u9l4-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU9L4Stage, who: 'leo',
     teacher: 'Extra time: Brain Break! Do each action with Leo.',
@@ -15128,7 +15131,7 @@ export const LESSON_U9L4_SCENES: Scene[] = [
     ],
   },
 
-  /* Goodbye */
+  /* GOODBYE */
   {
     id: 'u9l4-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
     durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
