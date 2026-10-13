@@ -1650,7 +1650,7 @@ export const LESSON_4_SCENES: Scene[] = classroomLook([
       { before: 'No, no! That is my red', after: '!', choices: ['hat', 'cap'], answer: 'hat', img: leoStory(8) },
     ],
   },
-  { id: 'wt4-jigsaw', kind: 'jigsaw-puzzle', bg: bgL1Reading, teacher: 'Reading: build the story picture, then tell it — Mia, this is my friend Leo! Nice to meet you!', image: leoStory(6), rows: 2, cols: 3 },
+  { id: 'wt4-jigsaw', kind: 'jigsaw-puzzle', bg: bgL1Reading, teacher: 'Build the story picture — then tell it!', image: leoStory(6), rows: 2, cols: 3 },
   /* Phonics: the sound → Letter Monsters → Blend & Read → tongue twister */
   {
     id: 'wt4-sound-f', kind: 'sound-model', bg: bgL1Reading, who: 'willow', letter: 'F', phoneme: '/f/', sound: 'f', soundSide: 'center',
