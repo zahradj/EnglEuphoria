@@ -295,6 +295,10 @@ export const LESSON_A1U2L1_SCENES: Scene[] = [
  *   games (watch and do). Better than them: the language IS the move in the Obstacle Run (a station only opens for the
  *   friend who CAN), a wrong pick is a funny visible "I can't…" instead of a red cross, flags stay on the course, and
  *   the game ends in the child's own sentences. New mechanic: `obstacle-run` (unit1/scene-components/ObstacleRunScene.tsx).
+ * Trimmed 2026-10-13 to the Unit 2 plan (docs/a1-unit-2-jungle.md §5.2): 32 → 24 pages. Removed the two "any answer is
+ *   right" choice pages, the sing-back, the payoff cinematic and the extra-time freeze + memory (Memory belongs to L6, no
+ *   game twice in the unit). Added: listen-only Remember? of Lesson 1's looks, The Jungle Rescue pp. 3-5 (Reader),
+ *   /ch/ sound model, Sound Pop (ch vs c vs h), Blend & Read with story sentences, twister "Chip the chimp chews chips."
  * Safe animal facts only in generic sentences (monkey climb/swing, can't fly; fish swim, can't run; lion run, can't
  *   swing; bird fly; frog jump). First-person "I can't…" lines belong to one character, not to a species.
  * ========================================================================= */
@@ -334,14 +338,15 @@ export const LESSON_A1U2L2_OBJECTIVE = 'I can say what a jungle animal can and c
 export const LESSON_A1U2L2_SCENES: Scene[] = [
   { id: 'ja2-title', kind: 'title-card', bg: bgObstacle, level: 'A1', unit: 'Unit 2', lessonLabel: 'Lesson 2', title: 'What Can Animals Do?', subtitle: 'Jungle Games Day: climb, swing, swim and fly!', cta: '\u{1F3C1} LET’S GO!' },
   {
-    // Remember? (owner, 2026-10-07): Lesson 1's three animals, with the pictures Lesson 1 taught them with.
-    id: 'ja2-recall-warmup', kind: 'recall-warmup', bg: bgWide, who: 'pip', mode: 'click',
+    // Remember? (owner, 2026-10-07): Lesson 1's animals and looks, listen-only — the child hears the looks and clicks.
+    id: 'ja2-recall-warmup', kind: 'recall-warmup', bg: bgWide, who: 'pip', mode: 'click', listen: true,
     fromLabel: 'Unit 2 · Lesson 1 · Jungle Animals',
-    teacher: 'Warm-up from last lesson: Pip says it, the student finds the picture and says it too.',
+    teacher: 'Guided: listen — which animal is it? Click it, then say both sentences: It’s an elephant. It’s big and grey.',
     items: [
-      { word: 'lion', say: 'I am a lion! Find me!', img: bgLeoDen },
-      { word: 'monkey', say: 'I am a monkey! Find me!', img: bgCocoVines },
-      { word: 'bird', say: 'I am a bird! Find me!', img: bgWillowNest },
+      { word: 'elephant', say: 'It’s big and grey.', img: it('elephant') },
+      { word: 'snake', say: 'It’s long and green.', img: it('snake') },
+      { word: 'bird', say: 'It’s small and blue.', img: it('bird') },
+      { word: 'monkey', say: 'It’s brown.', img: it('coco-cheer') },
     ],
   },
   /* 3 Story opener */
@@ -482,29 +487,50 @@ export const LESSON_A1U2L2_SCENES: Scene[] = [
     ],
     wheelAt: { left: '30%', top: '72%' },
   },
-  /* 14 Free: personal sentence (the child's own life) */
+
+  /* Reading: The Jungle Rescue pages 4-5 */
   {
-    id: 'ja2-what-can-you-do', kind: 'choice', bg: bgFriends, who: 'coco',
-    teacher: 'Free: any answer is right! The student taps what they CAN do and says it, then adds one thing they can’t do: "I can swim. I can’t fly!"',
-    prompt: 'What can YOU do? Tap and say it!',
-    options: [
-      { label: 'I can swim', emoji: '\u{1F3CA}', correct: true },
-      { label: 'I can run', emoji: '\u{1F3C3}', correct: true },
-      { label: 'I can climb', emoji: '\u{1F9D7}', correct: true },
-      { label: 'I can jump', emoji: '\u{1F938}', correct: true },
+    id: 'ja2-reader', kind: 'reader', bg: jungleRescue(4), title: 'The Jungle Rescue', doneLine: 'Oh no! Kip is stuck on a rock! Who can help? Find out next time!',
+    teacher: 'Reading: page 3 again, then the new pages. Listen while the words light up, then the student reads. Tap any word to hear it.',
+    pages: JUNGLE_RESCUE.slice(2, 5),
+  },
+  /* Phonics: ch → Sound Pop → Blend & Read → tongue twister */
+  {
+    id: 'ja2-sound-ch', kind: 'sound-model', bg: bgWide, who: 'coco', letter: 'CH', phoneme: '/ch/', sound: 'ch', soundSide: 'center',
+    teacher: 'Present: c + h make ONE new sound, /ch/ — like a little train: ch-ch-ch! Chips, chick, cheese, chair.',
+    anchors: [
+      { word: 'chips', emoji: '\u{1F35F}', img: it('chip') },
+      { word: 'chick', emoji: '\u{1F424}', img: it('chick') },
+      { word: 'cheese', emoji: '\u{1F9C0}', img: it('cheese') },
+      { word: 'chair', emoji: '\u{1FA91}', img: it('chair') },
     ],
   },
-  /* 15 Phonics: ch */
+  {
+    id: 'ja2-sound-pop', kind: 'prea1', teacher: 'Reading: Sound Pop! Pop only the balloons that start with /ch/ — not /c/, not /h/!',
+    scene: {
+      id: 'ja2-sound-pop', kind: 'sound-pop', bg: bgWide, who: 'mia', goal: 5, seconds: 45,
+      teacher: 'Pop only the CH balloons! /ch/ like chick!',
+      targets: [{ letter: 'CH', phoneme: '/ch/' }],
+      items: [
+        { word: 'chick', letter: 'CH', img: it('chick'), emoji: '\u{1F424}' },
+        { word: 'chips', letter: 'CH', img: it('chip'), emoji: '\u{1F35F}' },
+        { word: 'cheese', letter: 'CH', img: it('cheese'), emoji: '\u{1F9C0}' },
+        { word: 'cat', letter: 'C', img: it('cat'), emoji: '\u{1F431}' },
+        { word: 'hat', letter: 'H', img: it('hat-green'), emoji: '\u{1F452}' },
+        { word: 'hen', letter: 'H', img: it('hen'), emoji: '\u{1F414}' },
+      ],
+    },
+  },
   {
     id: 'ja2-blend-ch', kind: 'sound-blend', bg: bgWide, look: 'frog',
-    teacher: 'Tap each lily pad and say the sound with the student (/ch/ /i/ /p/) — ch is ONE sound! Press Blend!, then find the picture.',
+    teacher: 'Reading: tap each lily pad and say the sound (/ch/ /i/ /p/) — ch is ONE sound! Blend, find the picture, then read the sentence.',
     rounds: [
-      { word: 'chip', sounds: ['ch', 'i', 'p'], img: it('chip') },
-      { word: 'chick', sounds: ['ch', 'i', 'ck'], img: it('chick') },
-      { word: 'lunch', sounds: ['l', 'u', 'n', 'ch'], img: it('lunchbox') },
-      { word: 'bench', sounds: ['b', 'e', 'n', 'ch'], img: it('bench') },
+      { word: 'chip', sounds: ['ch', 'i', 'p'], img: it('chip'), sentence: 'Lunch! Chips for all!' },
+      { word: 'chick', sounds: ['ch', 'i', 'ck'], img: it('chick'), sentence: 'Look! A chick. It is small.' },
+      { word: 'lunch', sounds: ['l', 'u', 'n', 'ch'], img: it('lunchbox'), sentence: 'It is my lunch.' },
     ],
   },
+  { id: 'ja2-twister', kind: 'tongue-twister', look: 'town', speeds: 2, bg: bgWide, who: 'coco', focus: 'ch', teacher: 'Reading: quick reading! Listen to Coco, then say it slow, then faster.', line: 'Chip the chimp chews chips.' },
   /* 16 Guided: quick fire */
   {
     id: 'ja2-quick-fire', kind: 'prea1', teacher: 'Guided: quick fire! Say the whole sentence before the ring runs out.',
@@ -520,16 +546,7 @@ export const LESSON_A1U2L2_SCENES: Scene[] = [
       ],
     },
   },
-  /* 17 Story payoff at the waterfall */
-  {
-    id: 'ja2-payoff', kind: 'cinematic', bg: bgWaterfall, title: 'We Did It!', subtitle: 'The golden banana', narrator: 'coco',
-    script: [
-      { who: 'coco', line: 'We did it! I can climb and swing!' },
-      { who: 'leo', line: 'I can run fast. I can’t swing!' },
-      { who: 'willow', line: 'I can fly! Every friend can help.' },
-    ],
-    cta: '\u{1F389} HOORAY!',
-  },
+
   /* 18 Check (the plan's listening evidence: 4 of 5) */
   {
     id: 'ja2-check', kind: 'true-false', bg: bgWaterfall,
@@ -542,23 +559,8 @@ export const LESSON_A1U2L2_SCENES: Scene[] = [
       { who: 'leo', statement: 'A lion can’t swing.', isTrue: true },
     ],
   },
-  /* 19 Sing-back: the child leads */
-  {
-    id: 'ja2-sing-back', kind: 'song', bg: bgWaterfall, title: '\u{1F3B5} Jungle Friends, Let’s Try! \u{1F3B5}',
-    teacher: 'Sing-back: now the student sings the "can" lines and the teacher answers the "can’t" lines. Thumbs up, head shake!',
-    durationSeconds: 47, bigWord: 'can', songUrl: SONG_A1U2L2, lineDurationsMs: SONG_A1U2L2_MS, lyrics: SONG_A1U2L2_LYRICS,
-  },
-  /* 20 Reflection */
-  {
-    id: 'ja2-favourite', kind: 'choice', bg: bgWaterfall, who: 'willow', teacher: 'Any answer is right! The student picks a favourite part and says why.',
-    prompt: 'What was your favourite?',
-    options: [
-      { label: 'Obstacle run', emoji: '\u{1F3C1}', correct: true },
-      { label: 'The song', emoji: '\u{1F3B5}', correct: true },
-      { label: 'Spin and say', emoji: '\u{1F3A1}', correct: true },
-      { label: 'Copy the moves', emoji: '\u{1F938}', correct: true },
-    ],
-  },
+
+
   /* 21 Sticker  22 Home Mission */
   {
     id: 'ja2-sticker', kind: 'prea1', teacher: 'Sticker time! First the student says the lesson sentence ("A monkey can climb. It can’t fly!"), then opens the pack.',
@@ -583,30 +585,8 @@ export const LESSON_A1U2L2_SCENES: Scene[] = [
       ],
     },
   },
-  /* Extra time (blueprint §3b): only if there is time left */
-  {
-    id: 'ja2-animal-freeze', kind: 'prea1', teacher: 'Extra time: Brain break! Move like the animal, then FREEZE.',
-    scene: {
-      id: 'ja2-animal-freeze', kind: 'tpr-actions', mode: 'break', bg: bgObstacle, who: 'bella',
-      teacher: 'Extra time: Brain break! Move like the animal, then FREEZE.',
-      rounds: [
-        { line: 'Swing like a monkey! Freeze!', emoji: '\u{1F412}' },
-        { line: 'Fly like a bird! Freeze!', emoji: '\u{1F426}' },
-        { line: 'Jump like a frog! Freeze!', emoji: '\u{1F438}' },
-        { line: 'Swim like a fish! Freeze!', emoji: '\u{1F41F}' },
-        { line: 'Run like a lion! Freeze!', emoji: '\u{1F981}' },
-      ],
-    },
-  },
-  {
-    id: 'ja2-memory', kind: 'memory', bg: bgActions, teacher: 'Extra time: Memory! Find the pairs and say the sentence for each one: "A bird can fly!"',
-    pairs: [
-      { id: 'fly', label: 'fly', emoji: '\u{1F426}' },
-      { id: 'swim', label: 'swim', emoji: '\u{1F41F}' },
-      { id: 'run', label: 'run', emoji: '\u{1F981}' },
-      { id: 'jump', label: 'jump', emoji: '\u{1F438}' },
-    ],
-  },
+
+
   /* Closing routine goodbye + celebration */
   {
     id: 'ja2-goodbye-song', kind: 'song', bg: bgFriends, title: '\u{1F3B5} Goodbye Song \u{1F3B5}', teacher: 'It’s time to go — wave goodbye and sing along together!',
@@ -620,5 +600,5 @@ export const LESSON_A1U2L2_SCENES: Scene[] = [
       { who: 'coco', text: '\u{1F496} Byeeee, friends! See you soon!' },
     ],
   },
-  { id: 'ja2-finale', kind: 'finale', bg: bgWaterfall, who: 'coco', line: 'You can say what animals can and can’t do — and you blended CHIP, CHICK, LUNCH and BENCH! ✨\u{1F34C}' },
+  { id: 'ja2-finale', kind: 'finale', bg: bgWaterfall, who: 'coco', line: 'You can say what animals can and can’t do — and read about Kip! Who can help him? ✨\u{1F34C}' },
 ];

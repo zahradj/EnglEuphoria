@@ -117,7 +117,7 @@ export const A1_LESSON_PLANS: A1LessonPlan[] = [
   p(2, 2, 'What Can Animals Do?', {
     objective: 'I can say what a jungle animal can and can\'t do: "A monkey can climb. It can\'t fly."',
     grammarFocus: ['It can + verb', 'It can\'t + verb'], newVocabulary: ['climb', 'swing', 'can\'t'],
-    reviewTargets: ['lion', 'monkey', 'bird', 'fish', 'run', 'jump', 'swim', 'fly'], phonicsFocus: ['ch (chip, chest, lunch, bench)'],
+    reviewTargets: ['lion', 'monkey', 'bird', 'fish', 'run', 'jump', 'swim', 'fly', 'big / small / long'], phonicsFocus: ['ch (chips, chick, cheese, chair → chip, chick, lunch)', 'twister: Chip the chimp chews chips.'],
     communicationGoal: 'Say what an animal can and can\'t do.',
     signatureGame: '★ Jungle Obstacle Run', evidence: 'The child passes each obstacle by naming the action, then says one can and one can\'t sentence about an animal.',
     funHook: 'A wrong friend tries the obstacle and says "I can\'t climb!"; the child picks who goes next.',
