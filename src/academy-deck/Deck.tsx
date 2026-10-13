@@ -12,6 +12,8 @@ import { LaneView } from './slides/lane';
 import { BlendView, HearPickView, ReaderView } from './slides/reading';
 import { RuleView } from './slides/rule';
 import { ExploreView } from './slides/explore';
+import { SortView } from './slides/sort';
+import { playSfx } from './sfx';
 import { applyLane, laneOf, LANE_LABEL } from './lanes';
 import { BadgeView, BriefView, DialView, TitleView } from './slides/intro';
 import { HuntView, ShadowView } from './slides/homework';
@@ -64,6 +66,7 @@ function SlideView({ slide }: { slide: Slide }) {
     case 'reader': return <ReaderView slide={slide} />;
     case 'rule': return <RuleView slide={slide} />;
     case 'explore': return <ExploreView slide={slide} />;
+    case 'sort': return <SortView slide={slide} />;
     case 'whosaid': return <WhoSaidView slide={slide} />;
     case 'hunt': return <HuntView slide={slide} />;
     case 'shadow': return <ShadowView slide={slide} />;
@@ -159,8 +162,14 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
   // ---- recorded voices (silent when a clip or the clip list is missing; never the browser voice)
   const base = audioBaseFor(artBase, audioBase);
   const [voiceOn, setVoiceOn] = useState(true);
+  const [sfxOn, setSfxOn] = useState(true);
+  const sfxRef = useRef(true);
+  const [combo, setCombo] = useState(0);
+  const comboRef = useRef(0);
+  const [prevBg, setPrevBg] = useState<string | null>(null);
   const voiceRef = useRef(true);
   voiceRef.current = voiceOn;
+  sfxRef.current = sfxOn && !calm;
   const [clipsReady, setClipsReady] = useState(false);
   const [unlocked, setUnlocked] = useState(false);
   const unlockedRef = useRef(false);
@@ -231,17 +240,24 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
     // report once per slide, outside the state updater's purity: schedule it
     const slideNow = slideRef.current;
     window.setTimeout(() => cbRef.current?.(slideNow, { wrong: wrongBySlide.current[slideNow.id] ?? 0 }), 0);
+    playSfx('done', sfxRef.current);
     return { ...s, [curId.current]: true };
   }), []);
   const setVars = useCallback((p: Vars) => setVarsState((v) => ({ ...v, ...p })), []);
   const award = useCallback((id: string) => setStamps((s) => (s.includes(id) ? s : [...s, id])), []);
   const right = useCallback(() => {
     setStats((s) => ({ ...s, right: s.right + 1 }));
+    comboRef.current += 1;
+    setCombo(comboRef.current);
+    playSfx(comboRef.current % 5 === 0 ? 'combo' : 'right', sfxRef.current);
     react('happy');
   }, [react]);
   const wrong = useCallback(() => {
     wrongBySlide.current[curId.current] = (wrongBySlide.current[curId.current] ?? 0) + 1;
     setStats((s) => ({ ...s, wrong: s.wrong + 1 }));
+    comboRef.current = 0;
+    setCombo(0);
+    playSfx('wrong', sfxRef.current);
     react('concerned');
   }, [react]);
   const ctx: DeckCtx = useMemo(() => ({ artBase, vars, setVars, done, right, wrong, award, stamps, reduced: calm, seed: 1000 + index * 17, voice: voiceOn, clipsReady, canHear, speak, speakSeq }), [artBase, vars, setVars, done, right, wrong, award, stamps, calm, index, voiceOn, clipsReady, canHear, speak, speakSeq]);
@@ -257,6 +273,15 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
     setToast(null);
     setMenu(false);
   }, [index]);
+  // the scene changes with a soft cross-fade (the old plate fades out under the new one), none in Calm mode
+  const lastBg = useRef(cur.bg);
+  useEffect(() => {
+    if (lastBg.current === cur.bg) return;
+    setPrevBg(lastBg.current);
+    lastBg.current = cur.bg;
+    const t = window.setTimeout(() => setPrevBg(null), 560);
+    return () => window.clearTimeout(t);
+  }, [cur.bg]);
   // a cinematic title card when a new part of the lesson starts (once per part; tap to skip, closes by itself)
   useEffect(() => {
     const part = cur.part;
@@ -313,7 +338,8 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
   return (
     <DeckContext.Provider value={ctx}>
       <div className="ad-root" dir="ltr" data-calm={calm || undefined} data-embedded={embedded || undefined} data-follow={follow || undefined} style={artBase ? ({ ['--o-gem-empty' as string]: `url(${artBase}/objects/gem-empty.webp)`, ['--o-gem-full' as string]: `url(${artBase}/objects/gem-full.webp)`, ['--o-ribbon' as string]: `url(${artBase}/objects/ribbon.webp)`, ['--o-frame' as string]: `url(${artBase}/objects/frame.webp)`, ['--o-star' as string]: `url(${artBase}/objects/star.webp)`, ['--o-stamp' as string]: `url(${artBase}/objects/stamp.webp)`, ['--o-ticket' as string]: `url(${artBase}/objects/ticket.webp)`, ['--o-pill-violet' as string]: `url(${artBase}/objects/pill-violet.webp)`, ['--o-pill-blue' as string]: `url(${artBase}/objects/pill-blue.webp)`, ['--o-pill-orange' as string]: `url(${artBase}/objects/pill-orange.webp)` } as React.CSSProperties) : undefined} data-reduced={calm} data-kind={cur.kind} data-hw={!!homework} data-mood={mood ?? undefined} data-testid="deck">
-        <Plate id={cur.bg} artBase={artBase} key={cur.bg} />
+        {prevBg && prevBg !== cur.bg && !calm && <Plate id={prevBg} artBase={artBase} key={`out-${prevBg}`} phase="out" />}
+        <Plate id={cur.bg} artBase={artBase} key={cur.bg} phase={prevBg && prevBg !== cur.bg && !calm ? 'in' : undefined} />
         <div className="ad-actors" aria-hidden={actorsVisible.length === 0}>
           {actorsVisible.map((a) => <Character key={`${a.who}-${mood ?? 'base'}`} actor={mood ? { ...a, expr: mood } : a} artBase={artBase} small={compact} speaking={!calm && !mood && (speakingWho === a.who || (chat && !(voiceOn && slideHasClip) && ['title', 'brief', 'whosaid', 'teach', 'model', 'convo', 'say', 'wrap'].includes(cur.kind)))} />)}
         </div>
@@ -328,6 +354,12 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
           </ol>
           <span className="ad-count">{index + 1}/{script.slides.length}</span>
         </header>
+        {!homework && stats.right > 0 && (
+          <div className="ad-xp" role="status" aria-label={`${stats.right * 10} XP${combo >= 3 ? `, combo ${combo}` : ''}`}>
+            <span className="ad-xp-num" key={stats.right}>{stats.right * 10} XP</span>
+            {combo >= 3 && <span className="ad-xp-combo" key={`c${combo}`}>×{combo}</span>}
+          </div>
+        )}
         <main className="ad-main" data-panel={panelAt}>
           <Guard id={cur.id} onSkip={skip}>
             <SlideView key={cur.id} slide={cur} />
@@ -357,6 +389,7 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
             )}
             <button type="button" role="menuitem" onClick={skip}><Icon name="skip" /> Skip this slide</button>
             <button type="button" role="menuitemcheckbox" aria-checked={voiceOn} onClick={() => setVoiceOn(!voiceOn)}>{voiceOn ? '✔ ' : ''}Voice {voiceOn ? 'on' : 'off'}</button>
+            <button type="button" role="menuitemcheckbox" aria-checked={sfxOn} onClick={() => setSfxOn(!sfxOn)}>{sfxOn ? '✔ ' : ''}Sounds {sfxOn ? 'on' : 'off'}</button>
             <button type="button" role="menuitemcheckbox" aria-checked={calm} onClick={() => setCalm(!calm)}>{calm ? '✔ ' : ''}Calm mode (no animation)</button>
           </div>
         )}

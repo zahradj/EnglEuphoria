@@ -1157,3 +1157,24 @@
 .ad-root .ad-spot-bubble { position: absolute; transform: translateX(-50%); z-index: 3; margin: 0; max-width: min(46vw, 420px); padding: 10px 18px; border-radius: 18px; background: #fff; color: #2e1065; font-weight: 800; font-size: clamp(16px, 1.7vw, 24px); box-shadow: 0 8px 22px rgba(20, 8, 70, 0.45); border: 3px solid #a78bfa; animation: ad-pop 0.3s cubic-bezier(0.2, 1.6, 0.4, 1); }
 .ad-root .ad-spot-bubble b { color: #7c3aed; margin-inline-end: 6px; }
 @keyframes ad-spot-pulse { 0%, 100% { transform: scale(0.94); opacity: 0.85; } 50% { transform: scale(1.06); opacity: 1; } }
+
+/* scene cross-fade (the old plate stays underneath while the new one fades in) */
+.ad-root .ad-plate[data-phase='in'] { animation: ad-plate-in 0.5s ease both; z-index: 1; }
+.ad-root .ad-plate[data-phase='out'] { z-index: 0; }
+@keyframes ad-plate-in { from { opacity: 0; } to { opacity: 1; } }
+/* teen HUD: XP and a combo that a miss softly resets (no hearts, no game over, no ranking) */
+.ad-root .ad-xp { position: absolute; z-index: 6; inset-inline-start: 14px; top: 44px; display: flex; gap: 8px; align-items: center; pointer-events: none; }
+.ad-root .ad-xp-num { padding: 4px 12px; border-radius: 999px; background: rgba(30, 27, 75, 0.82); color: #fde68a; font-weight: 900; font-size: 0.95rem; letter-spacing: 0.02em; border: 1.5px solid rgba(253, 230, 138, 0.55); animation: ad-xp-pop 0.35s cubic-bezier(0.2, 1.6, 0.4, 1); }
+.ad-root .ad-xp-combo { padding: 4px 10px; border-radius: 999px; background: linear-gradient(135deg, #7c3aed, #14b8a6); color: #fff; font-weight: 900; font-size: 0.95rem; animation: ad-xp-pop 0.35s cubic-bezier(0.2, 1.6, 0.4, 1); }
+@keyframes ad-xp-pop { 0% { transform: scale(0.7); } 100% { transform: scale(1); } }
+.ad-root[data-calm='true'] .ad-plate[data-phase], .ad-root[data-calm='true'] .ad-xp-num, .ad-root[data-calm='true'] .ad-xp-combo { animation: none; }
+
+/* sort slide: your own opinions */
+.ad-root .ad-sort-pool { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; min-height: 118px; margin-bottom: 14px; }
+.ad-root .ad-sort-item { display: grid; justify-items: center; gap: 4px; width: 104px; padding: 8px; border-radius: 16px; background: #fff; border: 2px solid #c4b5fd; font-weight: 800; color: #2e1065; cursor: pointer; transition: transform 0.2s; }
+.ad-root .ad-sort-item[data-on='true'] { transform: translateY(-6px) scale(1.06); border-color: #7c3aed; box-shadow: 0 8px 18px rgba(76, 29, 149, 0.35); }
+.ad-root .ad-sort-bins { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+.ad-root .ad-sort-bin { text-align: start; padding: 12px 16px; min-height: 120px; border-radius: 18px; background: rgba(124, 58, 237, 0.12); border: 3px dashed #a78bfa; color: #2e1065; cursor: pointer; }
+.ad-root .ad-sort-bin[data-ready='true'] { background: rgba(124, 58, 237, 0.22); border-style: solid; animation: ad-spot-pulse 1.4s ease-in-out infinite; }
+.ad-root .ad-sort-bin b { display: block; font-size: 1.2rem; margin-bottom: 6px; }
+.ad-root .ad-sort-bin ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font-weight: 700; }
