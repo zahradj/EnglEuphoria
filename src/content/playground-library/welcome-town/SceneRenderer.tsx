@@ -67,6 +67,8 @@ import { WeatherReportScene } from './scene-components/WeatherReportScene';
 import { FoodSurveyScene } from './scene-components/FoodSurveyScene';
 import { FestivalCafeScene } from './scene-components/FestivalCafeScene';
 import { BuildDishScene } from './scene-components/BuildDishScene';
+import { DesignRoomScene } from './scene-components/DesignRoomScene';
+import { LostPropertyScene } from './scene-components/LostPropertyScene';
 import { FieldGuideScene } from './scene-components/FieldGuideScene';
 import { displayScene } from '../stageLabel';
 import { SongScene } from './scene-components/SongScene';
@@ -199,6 +201,8 @@ export function SceneRenderer(props: {
       case 'food-survey': return <FoodSurveyScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'festival-cafe': return <FestivalCafeScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'build-dish': return <BuildDishScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
+      case 'design-room': return <DesignRoomScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
+      case 'lost-property': return <LostPropertyScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'flipbook': return <FlipbookScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'song': return <SongScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
       case 'sound-model': return <SoundModelScene scene={scene} onNext={props.onNext} sync={props.activitySync} />;

@@ -1,0 +1,15 @@
+
+=== docs/songs/a1u9l4-castle-tower-take1.mp3  length=73.0s  score=0.95  missing=6  extra=6
+heard: up in the tower what can you see there is there are for you and me there is a bed a big big bed between the lamps the blue and red up in the tower what can you see there is there art for you and me there is a rug a blue blue rug in front of a door give it a hug there are two windows one and two between them look the sky is blue up in the tower what can you see there is there are for you and me whose is the crown between the lamps it swims it swims he jumps and stamps up in the tower what can you see there is there are for you and me
+line starts (s): [np.float64(3.7), np.float64(8.7), 12.8, np.float64(16.5), np.float64(20.8), np.float64(25.8), np.float64(29.4), np.float64(33.6), np.float64(38.0), np.float64(42.2), np.float64(46.5), np.float64(50.7), np.float64(55.1), np.float64(61.8), np.float64(63.7), np.float64(68.1)]
+lineDurationsMs: [8720, 4080, 3700, 4340, 5000, 3580, 4220, 4340, 4240, 4280, 4200, 4400, 6740, 1860, 4360, 4978]
+
+=== docs/songs/a1u9l4-castle-tower-take2.mp3  length=73.0s  score=0.96  missing=5  extra=5
+heard: up in the tower what can you see there is there are for you and me there is a bed a big big bed between the lamps the blue and red up in the tower what can you see there is there are for you and me there is a rug a blue blue rug in front of the door give it a hug there are two windows one and two between them look the sky is blue up in the tower what can you see there is there are for you and me who's is the crown between the lamps it swims it swims he jumps and stamps up in the tower what can you see there is there are for you and me
+line starts (s): [np.float64(3.8), np.float64(8.7), np.float64(12.8), np.float64(16.6), np.float64(20.9), np.float64(25.7), np.float64(29.4), np.float64(33.7), np.float64(38.0), np.float64(42.3), np.float64(46.6), np.float64(51.7), np.float64(56.3), np.float64(62.4), np.float64(63.9), np.float64(68.8)]
+lineDurationsMs: [8740, 4040, 3860, 4220, 4840, 3720, 4300, 4300, 4300, 4300, 5080, 4600, 6060, 1580, 4840, 4258]
+
+=== docs/songs/a1u9l4-castle-tower-take3.mp3  length=73.0s  score=0.92  missing=10  extra=10
+heard: up in the tower what can you see there is there art for you and me there is a bed a big big bed between the lance of blue and red up in the tower what can you see there is there art for you and me there is a rug a blue blue rug in front of the door give it a hug there are two windows one and two between them look the sky is blue up in the tower what can you see there is there art for you and me whose is the ground between the lamps it swims it swims he jumps and stamps up in the tower what can you see there is there are for you and me
+line starts (s): [np.float64(6.0), np.float64(11.1), np.float64(14.9), np.float64(18.5), np.float64(23.3), np.float64(27.2), np.float64(31.9), np.float64(35.5), np.float64(40.4), np.float64(44.0), np.float64(48.9), np.float64(52.5), np.float64(57.6), np.float64(62.6), np.float64(66.1), np.float64(70.2)]
+lineDurationsMs: [11060, 3880, 3560, 4780, 3960, 4640, 3600, 4960, 3560, 4940, 3580, 5100, 4960, 3520, 4080, 2858]

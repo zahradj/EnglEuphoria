@@ -620,6 +620,23 @@ export type Scene =
       /** `steps[i].topping` = the toppings index that step names; the eater tastes the dish at the end. */
       toppings: { label: string; img: string }[]; steps: { text: string; topping: number }[];
       eater: { who: CharKey; img: string; line: string }; doneLine: string; }
+  /** ★ Design My Room (A1 U9L4, docs/a1-unit-9-lesson-4.md): stickers go to spots in an empty room (a framed picture above the shelf). `listen` = Wim says
+   *  where each thing goes (rounds); `free` = the child places `pick` things anywhere, then describes the room. Spots are % of
+   *  the room picture (bottom-centre of the sticker), `w` is % of its width; `where` is the place phrase. */
+  | {
+      id: string; kind: 'design-room'; bg: string; who: CharKey; teacher: string; title: string; mode: 'listen' | 'free';
+      things: { label: string; img: string; w: number }[];
+      spots: { where: string; left: number; top: number }[];
+      rounds?: { line: string; thing: number; spot: number }[];
+      pick?: number; doneLine: string;
+    }
+  /** Lost Property Box (A1 U9L4): things pop out of a box one by one ("Whose crown is it?"); the child gives each to its
+   *  owner, who keeps it; then "It's Wim's crown." */
+  | {
+      id: string; kind: 'lost-property'; bg: string; who: CharKey; teacher: string; title: string; boxImg?: string;
+      owners: { name: string; who: CharKey; img: string }[];
+      items: { label: string; img: string; owner: number }[]; doneLine: string;
+    }
   | { id: string; kind: 'hot-cold'; bg: string; teacher: string; title: string; who: CharKey;
       /** The picture hides at (x, y) % of the 16:9 art; the child searches by tapping, the voice says Cold / Warm / Hot. */
       rounds: { label: string; img: string; x: number; y: number; find: string; say: string }[]; doneLine: string; }
