@@ -30,17 +30,20 @@ checking *after* (practice → produce). It is PPP with the story in the middle.
 | 10 | **Practice** (game) | **Where's the star?** (lift-the-flap) — the child asks "Is it under the hat?" and looks | the refrain, said by the child |
 | 11 | Practice | **Story order** — put the pictures in order, tell it: first, then, at the end | retell |
 | 12 | Practice | **Tick or cross** — listen: is it right? | comprehension |
-| 13 | Practice | **He is sad / She is happy** | the feelings of the story |
 | 14 | **Produce** | **Act the story** (role-play with the friends: Leo, Mia, Bella) | drama, whole lines |
 | 15 | **Produce** | **Leo asks you** — name, how are you, how old | real answers about me |
 | 16 | **Produce** | **You ask Leo** — "How are you?" "We can help you!" | the child asks |
-| 17 | Phonics | Alphabet Blocks — B, H, M, A, T: bat, hat, mat | the unit sounds |
-| 18 | Phonics | Blend It! — b-a-t, h-a-t, m-a-t | blending |
+| 16 | **Phonics game** | **Sound Moles** — hear b / h, bonk every mole whose picture starts with it (bat, bag, ball · hat, house, hen) | first sounds |
+| 17 | **Phonics game** | **Hungry Letter Monsters** — feed mat, moon / sun, star / ten, top to the m, s, t monsters | first sounds → letters |
+| 18 | **Phonics game** | **Sound Fishing** — hear n, a, s; catch the one fish that starts with it (nut, ant, star) | listening for one sound |
+| 19 | Phonics | Blend It! — b-a-t, m-a-t, h-a-t | blending |
 | 19 | Extra practice | **Home Hunt** — find a hat, a bag, a star, something under the table | take the words home |
 | 20-21 | Close | Sticker (Leo's star) · Home Mission (hide-and-find at home) | |
 | 22-24 | Extra time | Brain break · Goodbye song · Finale | |
 
-24 pages (Pre-A1: 22-25). Games are all from the story slot or new: Wind Catch (new), lift-flap, story-order,
+25 pages (Pre-A1: 22-25). Owner, 2026-10-13: "add also some phonic games" — three phonics games added (Sound Moles,
+Letter Monsters, Sound Fishing; none used before in Unit 1); to stay within 25 pages, Alphabet Blocks (in every other
+Unit 1 lesson) and "He is sad" (Lesson 3's topic; the acted story covers it) were taken out. Games are all from the story slot or new: Wind Catch (new), lift-flap, story-order,
 tick-cross, alphabet-blocks; home-hunt is the story slot's extra practice. Nothing repeats a game of Lessons 1-4 or 6.
 
 ## The new game: Wind Catch (`wind-catch`)

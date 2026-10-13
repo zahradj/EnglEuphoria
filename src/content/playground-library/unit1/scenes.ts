@@ -2513,16 +2513,6 @@ export const LESSON_5_SCENES: Scene[] = [
       { img: bgL5FoundW, sentence: 'Leo is happy at the end.', isTrue: true },
     ],
   },
-  {
-    // Implicit grammar: I am → He is / She is, with the story's feelings.
-    id: 'l5-he-is', kind: 'x-is-feeling', bg: bgL5Empty, teacher: 'How are they? Listen and say: "He is sad." "She is happy."',
-    rounds: [
-      { who: 'leo', emotion: 'sad', sentence: 'He is sad.' },
-      { who: 'mia', emotion: 'happy', sentence: 'She is happy.' },
-      { who: 'pip', emotion: 'angry', sentence: 'He is angry.' },
-      { who: 'leo', emotion: 'happy', sentence: 'He is happy!' },
-    ],
-  },
 
   /* PRODUCE: act the story, answer Leo, ask Leo */
   {
@@ -2556,14 +2546,28 @@ export const LESSON_5_SCENES: Scene[] = [
     ],
   },
 
-  /* PHONICS: the story words b-a-t, h-a-t, m-a-t */
+  /* PHONICS GAMES (owner 2026-10-13: "add also some phonic games"): the unit sounds b h m s t n a with the story words — moles, monsters, fishing, then blend b-a-t, m-a-t, h-a-t */
   {
-    id: 'l5-blocks', kind: 'alphabet-blocks', bg: bgL5Empty, teacher: 'Alphabet Blocks! First, tap the sound. Then, stack the words from the story: bat, hat, mat!', letters: ['B', 'H', 'M', 'A', 'T'],
-    tapRounds: [{ letter: 'B' }, { letter: 'H' }, { letter: 'M' }, { letter: 'B' }],
-    words: [
-      { word: 'BAT', emoji: '\u{1F987}' },
-      { word: 'HAT', emoji: '\u{1F3A9}' },
-      { word: 'MAT', emoji: '\u{1F9FA}' },
+    id: 'l5-sound-moles', kind: 'sound-mole', bg: bgL5Empty, who: 'leo',
+    teacher: 'Sound Moles! Listen to the sound, then bonk every mole whose picture starts with it — the things from Leo\'s story. Say each word!',
+    rounds: [
+      { letter: 'b', pictures: [{ word: 'bat', img: `${A}/items/item-bat.png` }, { word: 'bag', img: `${A}/items/item-bag.png` }, { word: 'ball', img: `${A}/items/item-ball.png` }, { word: 'hat', img: `${A}/items/item-hat.png` }, { word: 'mat', img: `${A}/items/item-mat.png` }] },
+      { letter: 'h', pictures: [{ word: 'hat', img: `${A}/items/item-hat.png` }, { word: 'house', img: `${A}/items/item-house.png` }, { word: 'hen', img: `${A}/items/item-hen.png` }, { word: 'bat', img: `${A}/items/item-bat.png` }, { word: 'nut', img: `${A}/items/item-nut.png` }] },
+    ],
+  },
+  {
+    id: 'l5-letter-monsters', kind: 'letter-monsters', bg: bgL5Empty, who: 'leo',
+    teacher: 'Hungry Letter Monsters! Say the word, listen to its first sound, and feed it to the monster with that letter. Tap a tummy to hear its sound.',
+    monsters: [{ letter: 'm', color: '#8BD450' }, { letter: 's', color: '#FF9F43' }, { letter: 't', color: '#A78BFA' }],
+    cards: [{ word: 'mat', img: `${A}/items/item-mat.png` }, { word: 'sun', img: `${A}/items/item-sun.png` }, { word: 'ten', img: `${A}/items/item-ten.png` }, { word: 'moon', img: `${A}/items/item-moon.png` }, { word: 'star', img: `${A}/items/item-star-gold.png` }, { word: 'top', img: `${A}/items/item-top.png` }],
+  },
+  {
+    id: 'l5-sound-fish', kind: 'sound-fish', bg: bgL5Empty, who: 'leo',
+    teacher: 'Sound Fishing! Listen to the sound and catch the one fish whose picture starts with it. Say the word!',
+    rounds: [
+      { letter: 'n', fish: [{ word: 'nut', img: `${A}/items/item-nut.png` }, { word: 'hat', img: `${A}/items/item-hat.png` }, { word: 'bag', img: `${A}/items/item-bag.png` }, { word: 'sun', img: `${A}/items/item-sun.png` }] },
+      { letter: 'a', fish: [{ word: 'mat', img: `${A}/items/item-mat.png` }, { word: 'ant', img: `${A}/items/item-ant.png` }, { word: 'ten', img: `${A}/items/item-ten.png` }, { word: 'bat', img: `${A}/items/item-bat.png` }] },
+      { letter: 's', fish: [{ word: 'hen', img: `${A}/items/item-hen.png` }, { word: 'top', img: `${A}/items/item-top.png` }, { word: 'star', img: `${A}/items/item-star-gold.png` }, { word: 'nut', img: `${A}/items/item-nut.png` }] },
     ],
   },
   {
