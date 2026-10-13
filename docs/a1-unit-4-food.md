@@ -6,7 +6,7 @@ research. In A1 the child reads **full sentences**: **one story read a bit more 
 game + Blend & Read + a tongue twister in every lesson**, **30-49 pages per lesson**, **no game twice in the unit**,
 **no story videos** (Canva story GIFs only after a scenario and the owner's OK).
 
-**Status:** plan — waiting for the owner's OK.
+**Status:** approved (owner, 2026-10-13: "next") — building.
 
 ## 1. Where we start
 
@@ -204,4 +204,4 @@ and offer someone a snack in English.
 
 No paid video. Database rows after the branch is merged (like Units 1-3).
 
-**Approval:** waiting for the owner.
+**Approval:** owner, 2026-10-13: "next"
