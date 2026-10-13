@@ -116,6 +116,23 @@ export const ACADEMY_GAMES: AcademyGame[] = [
     method: 'Spaced review: each chest unlocks on a later day (day 1, 3, 7, 10, 21).',
     howToPlay: ['Open a chest when it unlocks.', 'Play the short games.', 'Earn stars; come back for the next chest.'],
   },
+  {
+    id: 'always-or-now',
+    title: 'Always or Now?',
+    tagline: 'Present simple or present continuous? Let the cue words decide, spell -s and -ing correctly, avoid the state-verb trap, and laugh at silly breaking news.',
+    skill: 'Grammar · Tenses',
+    levels: ['A1', 'A2', 'B1'],
+    minutes: '20 min',
+    gradient: 'linear-gradient(135deg,#134e4a 0%,#0f766e 45%,#db2777 100%)',
+    cover: '/academy/games/always-or-now-cover.jpg',
+    method: 'Cue words first → choose the tense in a sentence → silly scenes → spelling rules → state-verb trap → type it from memory (spaced review).',
+    howToPlay: [
+      'Cue Sort: always, every day (habit) or now, Look! (happening now)?',
+      'Scene Check: read the cue in a sentence and choose the form.',
+      'Funny Reporter: the same job, with silly breaking news.',
+      'Spell It, No -ing Club and Recall: -s / -ing spelling, state verbs (know, like, want), and typed answers that come back in the Memory Vault.',
+    ],
+  },
 ];
 
 export const getAcademyGame = (id: string | undefined) => ACADEMY_GAMES.find((g) => g.id === id);

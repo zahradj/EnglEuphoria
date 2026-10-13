@@ -70,6 +70,7 @@ import { verbForgeLines } from '../src/academy-games/verbForge/verbData.ts';
 import { soundLabLines } from '../src/academy-games/soundLab/soundLabData.ts';
 import { twisterLines } from '../src/academy-games/twisterLab/twisterData.ts';
 import { hopLines } from '../src/academy-games/timeHop/hopData.ts';
+import { nowLines } from '../src/academy-games/alwaysNow/nowData.ts';
 import { VOICE_PROFILES, approvedVoiceId, isShortLine, normalizeForSpeech, SHORT_LINE_CLIP_VERSION, unresolvedSpeechRisks, voiceStatus } from '../src/lib/speechPolicy.ts';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -806,6 +807,8 @@ function gameLines() {
   verbForgeLines().forEach((l) => words.add(l));
   // Academy game: Time Hop says every present/past word and every answered signal sentence.
   hopLines().forEach((l) => words.add(l));
+  // Academy game: Always or Now says every cue word and every answered sentence.
+  nowLines().forEach((l) => words.add(l));
   // Academy game: Sound Lab says every word of every minimal pair in THREE voices (hearing one sound in several voices trains the ear).
   return [...[...words].map((w) => ['teacher', w]), ...soundLabLines(), ...twisterLines()];
 }
