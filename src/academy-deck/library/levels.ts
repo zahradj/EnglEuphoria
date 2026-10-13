@@ -35,7 +35,11 @@ export function groupAcademyLessons(lessons: AcademyDeckLesson[]): LevelGroup[] 
 
 // ---------- the ladder view (owner 2026-10-12: lean ladder; teachers and creators see the steps, students see the levels) ----------
 /** One planned or built lesson slot of a season (one per episode of the roadmap). */
-export interface LessonSlot { episode: number; name: string; built: boolean }
+export interface LessonSlot {
+  episode: number; name: string; built: boolean;
+  /** the lesson blueprint's plan (A1 and above), shown to teachers and creators */
+  plan?: { id: string; objective: string; newItems: number; focus: string; structures: string[]; mission: string; release: string; clue: string };
+}
 export interface LibrarySeason {
   key: string;
   /** number shown as "Season N"; null for a planned Pre-A1 season (shown by its title only) */
@@ -65,7 +69,10 @@ function preA1Slots(lessons: AcademyDeckLesson[]): LessonSlot[] {
 
 function slotsOf(level: AcademyLevel, no: number, lessons: AcademyDeckLesson[]): LessonSlot[] {
   const built = new Set(lessons.map((l) => ACADEMY_DECK_BLUEPRINT_IDS[l.id]).filter(Boolean));
-  return ACADEMY_LESSON_BLUEPRINTS.filter((b) => b.level === level && b.seasonNo === no).map((b) => ({ episode: b.episode.no, name: b.episode.name, built: built.has(b.id) }));
+  return ACADEMY_LESSON_BLUEPRINTS.filter((b) => b.level === level && b.seasonNo === no).map((b) => ({
+    episode: b.episode.no, name: b.episode.name, built: built.has(b.id),
+    plan: { id: b.id, objective: b.objective, newItems: b.newItems.count, focus: b.itemFocus, structures: b.structures.map((x) => x.label), mission: b.mission.job, release: b.release.job, clue: b.clue.unlockedBy },
+  }));
 }
 
 /**

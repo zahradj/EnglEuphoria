@@ -17,4 +17,12 @@ export const academyLessonsTranslations = {
   'al.plannedLong': "يجري تخطيط دروس هذا الموسم.",
   'al.slots': "الدروس المخططة",
   'al.episodeShort': "ح{{n}}",
+  'al.goal': "الهدف",
+  'al.newLang': "لغة جديدة",
+  'al.items': "{{n}} عناصر",
+  'al.noNew': "لا شيء: فقط ما تعرفه",
+  'al.pattern': "النمط",
+  'al.mission': "المهمة",
+  'al.release': "الإنتاج",
+  'al.clue': "يُفتح التلميح عبر",
 };

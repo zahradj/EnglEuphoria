@@ -17,4 +17,12 @@ export const academyLessonsTranslations = {
   'al.plannedLong': "The lessons of this season are being planned.",
   'al.slots': "Planned lessons",
   'al.episodeShort': "E{{n}}",
+  'al.goal': "Goal",
+  'al.newLang': "New language",
+  'al.items': "{{n}} items",
+  'al.noNew': "None: only what you already know",
+  'al.pattern': "Pattern",
+  'al.mission': "Mission",
+  'al.release': "Release",
+  'al.clue': "Clue unlocked by",
 };
