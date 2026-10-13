@@ -101,6 +101,10 @@ Whenever the owner says "create a lesson" / "proceed with creating the lesson", 
 
 - **Don't dress male characters in girls' clothes.** Pip and Leo are boys: never a dress or a skirt on them — not in a lesson game, a homework level, a picture, a mock-up or a song line. Dress-up games give a boy no dress piece (it isn't on his rail); a dress is worn only by a girl (Mia, Bella, Willow) or shown as a thing (laundry, a shop). Lines to the child stay neutral (no "twirl in your dress"). `src/content/homework-quests/noDressForBoys.test.ts` fails otherwise.
 
+## Words → matching → a game (hard rule — owner, 2026-10-13)
+
+- **Every time new words are shown, a matching activity follows**: Pre-A1 = **listen and match** (`listen-match`, sounds only, no written words); A1 = **read and match** (`picture-match`). Then **another game** with the same words, so they stick. Blueprint §3f+.
+
 ## A1 lessons — length and story GIFs (hard rule — owner, 2026-10-13)
 
 - **Every A1 lesson has 30-49 pages** ("A1 lessons can be from 30 to 49 pages"): real practice, not padding — and still no game twice in a unit. `a1LessonLength.test.ts` (deploy gate) fails otherwise.

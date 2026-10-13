@@ -29,6 +29,9 @@ export const ROUTINE_KINDS: ReadonlySet<string> = new Set([
   'word-board', 'home-hunt', 'flip-say', 'picture-maze',
   // Pet Pal: a short collecting moment after the sticker reward in every A1 lesson (Biscuit the puppy grows across units).
   'pet-pal',
+  // Listen and Match (owner 2026-10-13): after every word presentation a matching activity follows — Pre-A1 listens and
+  // matches (sounds only), A1 reads and matches (picture-match). A routine, so it may come in every lesson.
+  'listen-match',
 ]);
 
 /** Apps, schools and exam boards to research before every lesson (rotate; never only one). */

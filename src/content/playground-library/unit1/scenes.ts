@@ -784,7 +784,11 @@ export type Scene =
        *  x/y = centre in % of the scene, size = width %. A spot without a
        *  `cover` is a place painted in the picture (e.g. the tree). */
       id: string; kind: 'lift-flap'; bg: string; teacher: string; who: CharKey; question: string; notYet: string;
-      spots: { x: number; y: number; size: number; ask: string; reveal: string; target?: boolean; cover?: { img: string; label: string }; under: { img: string; label: string } }[];
+      /** Guided (owner 2026-10-13, U1L5: "the activity must be organized"): one place at a time, in order — the banner
+       *  asks "Where is the star? Is it under the hat?", only that place can be tapped, the thing pops out, the child
+       *  answers ("It's a bat!", `say`; default = `reveal` without its "No!"), then the model line and the next place. */
+      guided?: boolean;
+      spots: { x: number; y: number; size: number; ask: string; reveal: string; say?: string; target?: boolean; cover?: { img: string; label: string }; under: { img: string; label: string } }[];
     }
   | {
       /** Simon Says Touch (classroom "Simon says, touch your knees!" + the
@@ -1070,6 +1074,12 @@ export type Scene =
       faces: { label: string; name: string; img: string; at: [number, number]; w: number; aspect?: number }[];
       rounds: { wall: number[]; missing: number; options: number[] }[];
       doneLine: string;
+    }
+  | {
+      /** Listen and Match (owner 2026-10-13: after every word presentation a matching activity — Pre-A1 listens and
+       *  matches, sounds only). Speakers (no text) play `say`; the child taps a speaker, then its picture. */
+      id: string; kind: 'listen-match'; bg: string; teacher: string; who: CharKey; prompt: string; doneLine: string;
+      items: { label: string; img: string; say: string; who?: CharKey }[];
     }
   | {
       /** Wind Catch (U1L5 signature, docs/prea1-u1l5-leos-lost-star-plan.md): the wind that took Leo's star carries the
@@ -2420,15 +2430,39 @@ export const LESSON_5_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'l5-move-say', kind: 'tpr-actions', bg: bgL5Empty, who: 'pip',
-    teacher: 'Act the story! Do each action and say it.',
-    rounds: [
-      { line: 'Wave hello to Leo!', emoji: '\u{1F44B}' },
-      { line: 'Blow like the wind! Whoosh!', emoji: '\u{1F32C}️' },
-      { line: 'Make a sad face!', emoji: '\u{1F622}' },
-      { line: 'Look under the hat!', emoji: '\u{1F440}', img: itemHat },
-      { line: 'Jump! You are happy!', emoji: '\u{1F929}' },
+    // Owner 2026-10-13: after the words, a matching activity — Pre-A1 listens and matches (sounds only, no words).
+    id: 'l5-listen-match', kind: 'listen-match', bg: bgL5Empty, who: 'leo',
+    teacher: 'Listen and match! Tap a speaker, listen, then tap the picture. No words on the screen — only sounds. The child says each word after it sticks.',
+    prompt: 'Listen and match!',
+    doneLine: 'Great listening!',
+    items: [
+      { label: 'star', img: itemStarGold, say: 'A star!', who: 'leo' },
+      { label: 'hat', img: itemHat, say: 'A hat.', who: 'bella' },
+      { label: 'bat', img: itemBat, say: 'A bat!', who: 'bella' },
+      { label: 'mat', img: itemMat, say: 'A mat.', who: 'mia' },
+      { label: 'ant', img: itemAnt, say: 'An ant!', who: 'mia' },
+      { label: 'tree', img: itemTree, say: 'A tree.', who: 'willow' },
     ],
+  },
+  {
+    id: 'l5-wind-catch', kind: 'wind-catch', bg: bgL5Empty, who: 'leo',
+    teacher: 'Wind Catch (after the matching, before the film)! The wind blows the story things across the sky. Leo says one — the child taps it, it drops into his basket. Say the word with its first sound. The star comes last!',
+    things: [
+      { label: 'hat', img: itemHat, sound: 'h' },
+      { label: 'bat', img: itemBat, sound: 'b' },
+      { label: 'mat', img: itemMat, sound: 'm' },
+      { label: 'ant', img: itemAnt, sound: 'a' },
+      { label: 'nut', img: itemNut, sound: 'n' },
+      { label: 'star', img: itemStarGold, sound: 's' },
+    ],
+    rounds: [
+      { thing: 0, line: 'Catch the hat!', reply: 'A hat! Thank you!' },
+      { thing: 1, line: 'Catch the bat!', reply: 'A bat! Thank you!' },
+      { thing: 3, line: 'Catch the ant!', reply: 'An ant! Thank you!' },
+      { thing: 2, line: 'Catch the mat!', reply: 'A mat! Thank you!' },
+      { thing: 5, line: 'Catch my star!', reply: 'My star! I am happy! Thank you!' },
+    ],
+    doneLine: 'We caught my star! Now let\'s watch the story!',
   },
 
   /* WHILE-STORY: the whole film — part 1, then part 2 straight away (picture questions pause it) */
@@ -2454,29 +2488,9 @@ export const LESSON_5_SCENES: Scene[] = [
 
   /* POST-STORY PRACTICE: the story slot's games (no game from Lessons 1-4 or 6) */
   {
-    id: 'l5-wind-catch', kind: 'wind-catch', bg: bgL5Empty, who: 'leo',
-    teacher: 'Wind Catch! The wind blows the story things across the sky. Leo says one — the child taps it, it drops into his basket. Say the word with its first sound. The star comes last!',
-    things: [
-      { label: 'hat', img: itemHat, sound: 'h' },
-      { label: 'bat', img: itemBat, sound: 'b' },
-      { label: 'mat', img: itemMat, sound: 'm' },
-      { label: 'ant', img: itemAnt, sound: 'a' },
-      { label: 'nut', img: itemNut, sound: 'n' },
-      { label: 'star', img: itemStarGold, sound: 's' },
-    ],
-    rounds: [
-      { thing: 0, line: 'Catch the hat!', reply: 'A hat! Thank you!' },
-      { thing: 1, line: 'Catch the bat!', reply: 'A bat! Thank you!' },
-      { thing: 3, line: 'Catch the ant!', reply: 'An ant! Thank you!' },
-      { thing: 2, line: 'Catch the mat!', reply: 'A mat! Thank you!' },
-      { thing: 5, line: 'Catch my star!', reply: 'My star! I am happy! Thank you!' },
-    ],
-    doneLine: 'We caught my star! Thank you, friend!',
-  },
-  {
     // Signature game: the story's search as a lift-the-flap book.
-    id: 'l5-where-star', kind: 'lift-flap', bg: bgL5Empty, who: 'leo',
-    teacher: "Where's the star? The child asks each question (\"Is it under the hat?\") and taps to look.",
+    id: 'l5-where-star', kind: 'lift-flap', bg: bgL5Empty, who: 'leo', guided: true,
+    teacher: 'Where is the star? One place at a time: "Is it under the hat?" The child taps the hat, the bat pops out and the child answers "It\'s a bat!" (🔊 helps). Then the next place lights up; the star is under the tree.',
     question: 'Where is my star?',
     notYet: 'Not yet! Look under the other things first!',
     spots: [

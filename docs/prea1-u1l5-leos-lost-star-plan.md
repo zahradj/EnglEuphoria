@@ -24,24 +24,27 @@ checking *after* (practice → produce). It is PPP with the story in the middle.
 | 1-3 | Warm-up | Title · Hello song · Remember? (Lesson 4 words) | routine, recall |
 | 4 | **Pre-story** (predict) | Intro: "Look! This is Leo. What does he have? A star! What can happen?" | prediction from the cover |
 | 5 | **Present** | Story words with pictures: star, hat, bat, mat, ant, tree | the child knows every word before the film |
-| 6 | **Present** (body) | Story moves: wave hello, blow like the wind, sad face, look under, jump happy | gestures to do during the film (TPR) |
-| 7 | **While-story** | The film — parts 1 and 2 joined into ONE 64-second film (owner 2026-10-13); 3 picture questions pause it | one story, not cut in half |
-| 9 | **Practice** (game) | ★ NEW **Wind Catch** — the wind blows the story things across the sky; catch the one Leo names; the star last | the nouns, in the story's own world |
-| 10 | **Practice** (game) | **Where's the star?** (lift-the-flap) — the child asks "Is it under the hat?" and looks | the refrain, said by the child |
-| 11 | Practice | **Story order** — put the pictures in order, tell it: first, then, at the end | retell |
-| 12 | Practice | **Tick or cross** — listen: is it right? | comprehension |
-| 14 | **Produce** | **Act the story** (role-play with the friends: Leo, Mia, Bella) | drama, whole lines |
-| 15 | **Produce** | **Leo asks you** — name, how are you, how old | real answers about me |
-| 16 | **Produce** | **You ask Leo** — "How are you?" "We can help you!" | the child asks |
-| 16 | **Phonics game** | **Sound Moles** — hear b / h, bonk every mole whose picture starts with it (bat, bag, ball · hat, house, hen) | first sounds |
-| 17 | **Phonics game** | **Hungry Letter Monsters** — feed mat, moon / sun, star / ten, top to the m, s, t monsters | first sounds → letters |
-| 18 | **Phonics game** | **Sound Fishing** — hear n, a, s; catch the one fish that starts with it (nut, ant, star) | listening for one sound |
-| 19 | Phonics | Blend It! — b-a-t, m-a-t, h-a-t | blending |
-| 19 | Extra practice | **Home Hunt** — find a hat, a bag, a star, something under the table | take the words home |
-| 20-21 | Close | Sticker (Leo's star) · Home Mission (hide-and-find at home) | |
+| 6 | **Practice** (match) | ★ NEW **Listen and Match** — coloured speakers, no written words: tap a speaker, hear "A bat!", tap the bat | owner 2026-10-13: after the words, a listen-and-match |
+| 7 | **Practice** (game) | ★ **Wind Catch** — the story things fly on the wind; catch the one Leo names; the star last | a second game with the same words |
+| 8 | **While-story** | The film — ONE 64-second film; 3 picture questions pause it | one story, not cut in half |
+| 9 | **Practice** (game) | **Where's the star?** (guided lift-the-flap) — "Where is my star? Is it under the hat?" Only the hat lights up; the child taps it, the bat pops out, Leo asks "What is it?" and the child answers "It's a bat!"; then the mat, the bag, the tree | the refrain, in order (owner: "the activity must be organized") |
+| 10 | Practice | **Story order** — put the pictures in order, tell it | retell |
+| 11 | Practice | **Tick or cross** — listen: is it right? | comprehension |
+| 12 | **Produce** | **Act the story** (role-play: Leo, Mia, Bella) | drama, whole lines |
+| 13 | **Produce** | **Leo asks you** — name, how are you, how old | real answers about me |
+| 14 | **Produce** | **You ask Leo** — "How are you?" "We can help you!" | the child asks |
+| 15 | **Phonics game** | **Sound Moles** — b / h | first sounds |
+| 16 | **Phonics game** | **Hungry Letter Monsters** — m, s, t | first sounds → letters |
+| 17 | **Phonics game** | **Sound Fishing** — n, a, s | listening for one sound |
+| 18 | Phonics | Blend It! — b-a-t, m-a-t, h-a-t | blending |
+| 19 | Extra practice | **Home Hunt** | take the words home |
+| 20-21 | Close | Sticker (Leo's star) · Home Mission | |
 | 22-24 | Extra time | Brain break · Goodbye song · Finale | |
 
-25 pages (Pre-A1: 22-25). Owner, 2026-10-13: "add also some phonic games" — three phonics games added (Sound Moles,
+24 pages (Pre-A1: 22-25). Owner, 2026-10-13: the story-moves page was taken out; Listen and Match was added after the
+words, with Wind Catch moved before the film as the second game with the words.
+
+Earlier: 25 pages. Owner, 2026-10-13: "add also some phonic games" — three phonics games added (Sound Moles,
 Letter Monsters, Sound Fishing; none used before in Unit 1); to stay within 25 pages, Alphabet Blocks (in every other
 Unit 1 lesson) and "He is sad" (Lesson 3's topic; the acted story covers it) were taken out. Games are all from the story slot or new: Wind Catch (new), lift-flap, story-order,
 tick-cross, alphabet-blocks; home-hunt is the story slot's extra practice. Nothing repeats a game of Lessons 1-4 or 6.
