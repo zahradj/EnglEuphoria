@@ -9,6 +9,7 @@ const PLAYERS: Record<string, ComponentType<{ onBack?: () => void }>> = {
   'twister-lab': lazy(() => import('./twisterLab/TwisterGame')),
   'time-hop': lazy(() => import('./timeHop/TimeHopGame')),
   'silly-sounds': lazy(() => import('./sillySounds/SillySoundsGame')),
+  'always-or-now': lazy(() => import('./alwaysNow/AlwaysNowGame')),
   'sign-me-up': lazy(() => import('./signMeUp/SignMeUpLesson')),
   'sign-me-up-homework': lazy(() => import('./signMeUp/SignMeUpHomework')),
 };
