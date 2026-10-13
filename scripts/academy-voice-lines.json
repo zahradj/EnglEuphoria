@@ -1285,27 +1285,35 @@
   },
   {
     "who": "Vee",
-    "text": "Club Fair"
+    "text": "The Missing Poster"
+  },
+  {
+    "who": "Ava",
+    "text": "SOS! My club poster is gone!"
+  },
+  {
+    "who": "Ava",
+    "text": "Thanks! How old are you?"
+  },
+  {
+    "who": "Ava",
+    "text": "See you at the fair tonight!"
   },
   {
     "who": "Vee",
-    "text": "Welcome to the Club Fair! Ava needs three members by Friday. Today you meet the club and say what you like."
+    "text": "Find the hidden numbers on the stall signs: three, seven, ten."
+  },
+  {
+    "who": "Vee",
+    "text": "Ava needs members. Which number do you hear? Tap it."
   },
   {
     "who": "Ava",
     "text": "I am from Spain."
   },
   {
-    "who": "Vee",
-    "text": "Memory! Match each flag with its country."
-  },
-  {
-    "who": "Vee",
-    "text": "Brazil"
-  },
-  {
-    "who": "Vee",
-    "text": "France"
+    "who": "Ava",
+    "text": "My name is Theo."
   },
   {
     "who": "Vee",
@@ -1313,123 +1321,131 @@
   },
   {
     "who": "Ava",
-    "text": "Hi! I am Ava. This is my club."
+    "text": "Hi! This is my club."
+  },
+  {
+    "who": "Ava",
+    "text": "Oh no! My poster is gone!"
   },
   {
     "who": "Theo",
-    "text": "Hello, Ava. I like music."
-  },
-  {
-    "who": "Ava",
-    "text": "I love drawing! Join my club!"
-  },
-  {
-    "who": "Ava",
-    "text": "We need three members. Look at the poster!"
-  },
-  {
-    "who": "Theo",
-    "text": "Free time is fun. I play games."
-  },
-  {
-    "who": "Ava",
-    "text": "Three members by Friday, please!"
+    "text": "Look! Five stalls. Ask them what they like!"
   },
   {
     "who": "Vee",
-    "text": "Join the club, Theo?"
-  },
-  {
-    "who": "Vee",
-    "text": "Who has a club?"
-  },
-  {
-    "who": "Vee",
-    "text": "How many members does Ava need?"
-  },
-  {
-    "who": "Vee",
-    "text": "What does Theo like?"
-  },
-  {
-    "who": "Vee",
-    "text": "club"
-  },
-  {
-    "who": "Vee",
-    "text": "Ava has a club."
-  },
-  {
-    "who": "Vee",
-    "text": "fair"
-  },
-  {
-    "who": "Vee",
-    "text": "We are at the Club Fair."
-  },
-  {
-    "who": "Vee",
-    "text": "member"
-  },
-  {
-    "who": "Vee",
-    "text": "Ava needs three members."
-  },
-  {
-    "who": "Vee",
-    "text": "poster"
-  },
-  {
-    "who": "Vee",
-    "text": "Look at the poster!"
-  },
-  {
-    "who": "Vee",
-    "text": "Friday"
-  },
-  {
-    "who": "Vee",
-    "text": "Three members by Friday."
-  },
-  {
-    "who": "Ava",
-    "text": "Drag each club word onto its picture."
-  },
-  {
-    "who": "Ava",
-    "text": "club"
-  },
-  {
-    "who": "Ava",
-    "text": "fair"
-  },
-  {
-    "who": "Ava",
-    "text": "member"
-  },
-  {
-    "who": "Ava",
-    "text": "poster"
-  },
-  {
-    "who": "Ava",
-    "text": "Friday"
-  },
-  {
-    "who": "Vee",
-    "text": "Whose shadow is it? Pick the word."
+    "text": "Walk the fair. Tap every glowing stall."
   },
   {
     "who": "Theo",
     "text": "I like music."
   },
   {
+    "who": "Theo",
+    "text": "I like playing games."
+  },
+  {
     "who": "Ava",
-    "text": "I love drawing."
+    "text": "I love drawing!"
+  },
+  {
+    "who": "Vee",
+    "text": "I like watching films."
   },
   {
     "who": "Theo",
-    "text": "I like playing games."
+    "text": "I like football."
+  },
+  {
+    "who": "Vee",
+    "text": "Who needs members?"
+  },
+  {
+    "who": "Vee",
+    "text": "Who loves drawing?"
+  },
+  {
+    "who": "Ava",
+    "text": "club"
+  },
+  {
+    "who": "Ava",
+    "text": "Ava has a club."
+  },
+  {
+    "who": "Ava",
+    "text": "member"
+  },
+  {
+    "who": "Ava",
+    "text": "Ava needs three members."
+  },
+  {
+    "who": "Ava",
+    "text": "poster"
+  },
+  {
+    "who": "Ava",
+    "text": "Look at the poster!"
+  },
+  {
+    "who": "Ava",
+    "text": "Friday"
+  },
+  {
+    "who": "Ava",
+    "text": "Three members by Friday."
+  },
+  {
+    "who": "Ava",
+    "text": "Listen. Tap the picture for what you hear."
+  },
+  {
+    "who": "Ava",
+    "text": "Memory! Find each picture and its word."
+  },
+  {
+    "who": "Vee",
+    "text": "club"
+  },
+  {
+    "who": "Vee",
+    "text": "member"
+  },
+  {
+    "who": "Vee",
+    "text": "poster"
+  },
+  {
+    "who": "Vee",
+    "text": "Friday"
+  },
+  {
+    "who": "Theo",
+    "text": "Drag each club word onto its picture."
+  },
+  {
+    "who": "Theo",
+    "text": "club"
+  },
+  {
+    "who": "Theo",
+    "text": "fair"
+  },
+  {
+    "who": "Theo",
+    "text": "member"
+  },
+  {
+    "who": "Theo",
+    "text": "poster"
+  },
+  {
+    "who": "Theo",
+    "text": "Friday"
+  },
+  {
+    "who": "Ava",
+    "text": "I love drawing."
   },
   {
     "who": "Vee",
@@ -1496,10 +1512,6 @@
     "text": "Which sentence do you hear? Tap it."
   },
   {
-    "who": "Vee",
-    "text": "I like watching films."
-  },
-  {
     "who": "Ava",
     "text": "Memory! Find each hobby picture and its word."
   },
@@ -1525,31 +1537,39 @@
   },
   {
     "who": "Theo",
-    "text": "Drag each sentence onto the picture it tells about."
+    "text": "Your hobby wall: like or love? Tap a picture, then a box."
   },
   {
-    "who": "Theo",
-    "text": "I love drawing."
+    "who": "Vee",
+    "text": "I love music."
   },
   {
-    "who": "Theo",
+    "who": "Vee",
+    "text": "I like games."
+  },
+  {
+    "who": "Vee",
+    "text": "I love games."
+  },
+  {
+    "who": "Vee",
+    "text": "I like drawing."
+  },
+  {
+    "who": "Vee",
     "text": "I like football."
   },
   {
-    "who": "Theo",
-    "text": "Football or music?"
+    "who": "Vee",
+    "text": "I love football."
   },
   {
-    "who": "Theo",
-    "text": "Games or drawing?"
+    "who": "Vee",
+    "text": "I like films."
   },
   {
-    "who": "Theo",
-    "text": "Watch a film or listen to music?"
-  },
-  {
-    "who": "Ava",
-    "text": "I like music."
+    "who": "Vee",
+    "text": "I love films."
   },
   {
     "who": "Ava",
@@ -1573,7 +1593,7 @@
   },
   {
     "who": "Ava",
-    "text": "Warm up, together: build your badge line. Tap the words in the right order."
+    "text": "Warm up, together: build your lines. Tap the words in the right order."
   },
   {
     "who": "Ava",
@@ -1609,7 +1629,7 @@
   },
   {
     "who": "Vee",
-    "text": "Clue 1 of 8: Ava’s poster has a smudge. A name on it starts with M. Who could it be?"
+    "text": "Clue 1 of 8: Ava’s poster is gone, but there is a torn corner on the art stall. It starts with the letter M. Who could it be?"
   },
   {
     "who": "Vee",
@@ -1632,6 +1652,10 @@
     "text": "Build the sentence. Tap the words in the right order."
   },
   {
+    "who": "Theo",
+    "text": "I love drawing."
+  },
+  {
     "who": "Vee",
     "text": "Day two at the Club Fair!"
   },
@@ -1650,6 +1674,10 @@
   {
     "who": "Theo",
     "text": "I like cooking and reading."
+  },
+  {
+    "who": "Vee",
+    "text": "Join the club, Theo?"
   },
   {
     "who": "Vee",
@@ -1717,19 +1745,11 @@
   },
   {
     "who": "Ava",
-    "text": "Listen. Tap the picture for what you hear."
-  },
-  {
-    "who": "Ava",
     "text": "football"
   },
   {
     "who": "Ava",
     "text": "games"
-  },
-  {
-    "who": "Ava",
-    "text": "Memory! Find each picture and its word."
   },
   {
     "who": "Vee",
