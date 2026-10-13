@@ -146,7 +146,7 @@ export const A1_LESSON_PLANS: A1LessonPlan[] = [
     objective: 'I can read "The Jungle Rescue" with help and say who can help Kip and why: "The elephant. It is big. It can walk in the river."',
     grammarFocus: ['It can / can\'t…', 'Can it…?', 'It\'s big / small'], newVocabulary: ['help', 'river', 'rock'], reviewTargets: ['all Unit 2'],
     phonicsFocus: ['review i, ch, sh (Sound Pick)', 'twister: Big Kip sits on a big rock.'], communicationGoal: 'Read a short story about animals helping and retell it.',
-    signatureGame: 'Reader: the whole book with a "Who can help?" pause + Rescue Map', evidence: 'The child chooses at the pause and retells why (6-line retell); reads the book with help.',
+    signatureGame: 'Story video (stills film, after the scenario is approved) + Reader: the whole book with a "Who can help?" pause + Rescue Map', evidence: 'The child chooses at the pause and retells why (6-line retell); reads the book with help.',
     funHook: 'The child chooses who helps Kip — and acts out the elephant.', homeMission: 'Read the book to your family and ask "Who can help Kip?".',
   }),
   p(2, 6, 'Extra Practice: Animal Action Match!', {
