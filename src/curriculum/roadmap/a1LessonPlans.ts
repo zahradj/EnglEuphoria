@@ -149,12 +149,13 @@ export const A1_LESSON_PLANS: A1LessonPlan[] = [
     signatureGame: 'Story video (stills film, after the scenario is approved) + Reader: the whole book with a "Who can help?" pause + Rescue Map', evidence: 'The child chooses at the pause and retells why (6-line retell); reads the book with help.',
     funHook: 'The child chooses who helps Kip — and acts out the elephant.', homeMission: 'Read the book to your family and ask "Who can help Kip?".',
   }),
-  p(2, 6, 'Extra Practice: Animal Action Match!', {
-    objective: 'I can use all the Unit 2 language quickly.',
+  p(2, 6, 'Extra Practice: Jungle Game Day!', {
+    built: true,
+    objective: 'I can use all the Unit 2 language quickly — animals, looks, can / can\'t, "Can it…?" — and read its sentences fast.',
     grammarFocus: ['It can / can\'t…', 'Can it…?', 'It\'s got…'], newVocabulary: [], reviewTargets: ['all Unit 2'],
-    phonicsFocus: [], communicationGoal: 'Talk about animals without thinking.',
-    signatureGame: 'Charades ⇄ + Peek-Pop ⇄', evidence: 'Accuracy in the games (not speed).',
-    funHook: 'The child mimes for the teacher to guess.', homeMission: 'Play animal charades at home.',
+    phonicsFocus: ['Twister Race: the four Unit 2 twisters', 'Blend & Read: big, chick, fish'], communicationGoal: 'Talk about animals without thinking.',
+    signatureGame: '★ River Crossing + Charades ⇄ + Tile Reveal', evidence: 'Accuracy in the games (not speed) and the free chat with Kip.',
+    funHook: 'Cross the river to the golden banana; the child acts, the teacher guesses.', homeMission: 'Play animal charades at home.',
   }),
   p(2, 7, 'Unit Review & Boss Test: Jungle Explorer!', {
     objective: 'I can describe two animals and ask a friend one "Can it…?" question.',

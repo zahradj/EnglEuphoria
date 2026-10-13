@@ -1195,3 +1195,170 @@ export const LESSON_A1U2L5_SCENES: Scene[] = [
   },
   { id: 'ja5-finale', kind: 'finale', bg: jungleRescue(12), who: 'coco', line: 'You read the whole story! Kip is safe! Thank you, friends! \u{1F418}\u{1F412}' },
 ];
+
+/* =============================================================================
+ * A1 Unit 2 Lesson 6: "Jungle Game Day" (extra practice, built 2026-10-13, plan docs/a1-unit-2-jungle.md §5.6)
+ *
+ * Objective: I can use all the Unit 2 language quickly and read its sentences fast. Different games from Unit 1's
+ * Game Day (variety rule, same slot): River Crossing ★ (stepping-stones: hop on the animal described), Memory
+ * (description ↔ animal), Sort Basket (can swim / can't swim), Jungle Charades, Tile Reveal, the Twister Race (the four
+ * Unit 2 twisters), Blend & Read, a free chat. Research (mechanics only): classroom "jump on the stone" floor game,
+ * Wordwall image quiz / memory / group sort, charades. Better: every move needs the unit sentence (can / can't / looks).
+ * ========================================================================= */
+
+export const LESSON_A1U2L6_TITLE = 'Extra Practice: Jungle Game Day!';
+export const LESSON_A1U2L6_OBJECTIVE = 'I can use all the Unit 2 language quickly — animals, looks, can / can\'t, "Can it…?" — and read its sentences fast.';
+
+export const LESSON_A1U2L6_SCENES: Scene[] = [
+  { id: 'ja6-title', kind: 'title-card', bg: bgObstacle, level: 'A1', unit: 'Unit 2', lessonLabel: 'Lesson 6', title: 'Jungle Game Day!', subtitle: 'Cross the river, guess, act and race!', cta: '\u{1F3AE} LET’S PLAY!' },
+  {
+    id: 'ja6-recall-warmup', kind: 'recall-warmup', bg: bgWide, who: 'pip', mode: 'click', listen: true,
+    fromLabel: 'Unit 2 · Lesson 5 · The Jungle Rescue',
+    teacher: 'Guided: Pip reads a line from the story — the student finds the picture, then reads the line too.',
+    items: [
+      { word: 'rock', say: 'Help! Help! I am stuck!', img: jungleRescue(5) },
+      { word: 'fish', say: 'I can swim. I can’t lift Kip!', img: jungleRescue(7) },
+      { word: 'elephant', say: 'The elephant lifts Kip with its long nose.', img: jungleRescue(10) },
+      { word: 'lunch', say: 'Lunch! Chips for all!', img: jungleRescue(12) },
+    ],
+  },
+  /* ★ River Crossing: hop on the animal described */
+  {
+    id: 'ja6-river', kind: 'prea1', teacher: 'Guided: River Crossing! Listen to Pip and hop on the right animal stone — then say the sentence.',
+    scene: {
+      id: 'ja6-river', kind: 'stepping-stones', bg: bgWide, stoneImg: it('stone'), who: 'pip', walker: 'pip',
+      teacher: 'Listen! Hop on the right animal stone.',
+      rounds: [
+        { line: 'Hop on the animal that can fly!', options: [{ label: 'elephant', img: it('elephant') }, { label: 'bird', img: it('bird') }, { label: 'snake', img: it('snake') }], answer: 1, reply: 'Yes! A bird can fly!' },
+        { line: 'Hop on the animal with a long nose!', options: [{ label: 'elephant', img: it('elephant') }, { label: 'frog', img: it('frog') }, { label: 'fish', img: it('fish') }], answer: 0, reply: 'Yes! The elephant has got a long nose!' },
+        { line: 'Hop on the animal that can’t walk. It can swim!', options: [{ label: 'monkey', img: it('coco-cheer') }, { label: 'frog', img: it('frog') }, { label: 'fish', img: it('fish') }], answer: 2, reply: 'Yes! A fish can’t walk. It can swim!' },
+        { line: 'Hop on the animal that is long and green. It can climb!', options: [{ label: 'crocodile', img: it('alligator') }, { label: 'snake', img: it('snake') }, { label: 'bird', img: it('bird') }], answer: 1, reply: 'Yes! The snake can climb a tree!' },
+        { line: 'Hop on the animal that is small and green. It can jump!', options: [{ label: 'frog', img: it('frog') }, { label: 'crocodile', img: it('alligator') }, { label: 'elephant', img: it('elephant') }], answer: 0, reply: 'Yes! A frog can jump!' },
+      ],
+      goal: { img: it('banana-trophy'), label: 'golden banana', line: 'You crossed the river! Here is the golden banana!' },
+    },
+  },
+  {
+    id: 'ja6-memory', kind: 'memory', bg: bgWide, teacher: 'Reading: Memory! Find the sentence and its animal. Read the sentence aloud when you find a pair.',
+    pairs: [
+      { id: 'elephant', label: 'It’s got a long nose.', emoji: '\u{1F418}', img: it('elephant') },
+      { id: 'crocodile', label: 'It’s got a long tail.', emoji: '\u{1F40A}', img: it('alligator') },
+      { id: 'bird', label: 'It can fly.', emoji: '\u{1F426}', img: it('bird') },
+      { id: 'frog', label: 'It can jump.', emoji: '\u{1F438}', img: it('frog') },
+    ],
+  },
+  {
+    id: 'ja6-song', kind: 'song', bg: bgObstacle, title: '\u{1F3B5} Ask Them! \u{1F3B5}',
+    teacher: 'Game Day song: sing the questions and answers — thumbs up, head shake!',
+    durationSeconds: 47, bigWord: 'Can it?', songUrl: SONG_A1U2L3, lineDurationsMs: SONG_A1U2L3_MS, lyrics: SONG_A1U2L3_LYRICS,
+  },
+  {
+    id: 'ja6-sort', kind: 'sort-basket', bg: bgWide, title: 'Can it swim?',
+    teacher: 'Guided: sort the animals — can it swim or can’t it? Say the sentence: A crocodile can swim!',
+    baskets: [{ label: 'It can swim', emoji: '\u{1F30A}' }, { label: 'It can’t swim', emoji: '\u{1F6AB}' }],
+    items: [
+      { word: 'crocodile', img: it('alligator'), basket: 0 },
+      { word: 'bird', img: it('bird'), basket: 1 },
+      { word: 'fish', img: it('fish'), basket: 0 },
+      { word: 'chick', img: it('chick'), basket: 1 },
+      { word: 'elephant', img: it('elephant'), basket: 0 },
+      { word: 'duck', img: it('duck-yellow'), basket: 0 },
+    ],
+  },
+  {
+    id: 'ja6-charades', kind: 'prea1', teacher: 'Free: Jungle Charades! Guess what the friend can do — then the student acts and the teacher guesses: “You can swing!”',
+    scene: {
+      id: 'ja6-charades', kind: 'charades', bg: bgObstacle, who: 'pip',
+      teacher: 'Watch! What can the friend do? Then your turn to act!',
+      acts: [
+        { word: 'run', img: it('leo-run'), name: 'Leo', pronoun: 'He' },
+        { word: 'fly', img: it('willow-fly'), name: 'Willow', pronoun: 'She' },
+        { word: 'swing', img: it('coco-swing'), name: 'Coco', pronoun: 'She' },
+        { word: 'jump', img: it('pip-jump'), name: 'Pip', pronoun: 'He' },
+        { word: 'climb', img: it('pip-climb'), name: 'Pip', pronoun: 'He' },
+      ],
+      rounds: [
+        { mode: 'guess', act: 2, options: [2, 0, 3] },
+        { mode: 'guess', act: 4, options: [1, 4, 2] },
+        { mode: 'act', act: 1, options: [] },
+        { mode: 'guess', act: 0, options: [3, 1, 0] },
+        { mode: 'act', act: 3, options: [] },
+      ],
+      doneLine: 'Super acting! You can do it all!',
+    },
+  },
+  {
+    id: 'ja6-reveal', kind: 'prea1', teacher: 'Guided: Tile Reveal! Tiles open one by one — listen to the clue and guess early. Then say two sentences about it.',
+    scene: {
+      id: 'ja6-reveal', kind: 'tile-reveal', bg: bgWide, who: 'pip',
+      teacher: 'Who is hiding? Guess early!',
+      rounds: [
+        { img: it('elephant'), word: 'elephant', line: 'It’s big and grey. What is it?', options: [{ label: 'elephant', img: it('elephant') }, { label: 'frog', img: it('frog') }, { label: 'bird', img: it('bird') }] },
+        { img: it('snake'), word: 'snake', line: 'It’s long and green. It can’t run. What is it?', options: [{ label: 'crocodile', img: it('alligator') }, { label: 'snake', img: it('snake') }, { label: 'fish', img: it('fish') }] },
+        { img: it('coco-cheer'), word: 'monkey', line: 'It’s brown. It can climb and swing. What is it?', options: [{ label: 'lion', img: it('lion') }, { label: 'bird', img: it('bird') }, { label: 'monkey', img: it('coco-cheer') }] },
+      ],
+    },
+  },
+  {
+    id: 'ja6-twister-race', kind: 'tongue-twister', look: 'town', speeds: 3, bg: bgWide, who: 'pip', focus: '',
+    teacher: 'Reading: the Twister Race! All four Unit 2 twisters — slow, faster, then super fast!',
+    line: 'Six big pigs sit still. Chip the chimp chews chips. A duck on a rock eats a snack. Shy fish swish and splash.',
+    lines: ['Six big pigs sit still.', 'Chip the chimp chews chips.', 'A duck on a rock eats a snack.', 'Shy fish swish and splash.'],
+  },
+  {
+    id: 'ja6-blend', kind: 'sound-blend', bg: bgWide, look: 'frog',
+    teacher: 'Reading: the Blend & Read challenge — one word for each Unit 2 sound, then read the sentence.',
+    rounds: [
+      { word: 'big', img: it('elephant'), sentence: 'The elephant is big.' },
+      { word: 'chick', sounds: ['ch', 'i', 'ck'], img: it('chick'), sentence: 'A chick can’t swim.' },
+      { word: 'fish', sounds: ['f', 'i', 'sh'], img: it('fish'), sentence: 'A fish can swim.' },
+    ],
+  },
+  {
+    id: 'ja6-free-chat', kind: 'join-stage', bg: jungleRescue(12), teacher: 'Free: Kip wants to meet the student (Coco speaks for her little brother). The student says hello, asks and answers.', cast: ['coco', 'pip'],
+    turns: [
+      { who: 'coco', line: 'This is my brother Kip. Say hello!' },
+      { who: 'student', line: 'Hello, Kip! Nice to meet you!' },
+      { who: 'coco', line: 'Kip asks: can you swim?' },
+      { who: 'student', line: 'Yes, I can. / No, I can’t. Can Kip swim?' },
+      { who: 'coco', line: 'No, he can’t! What is your favourite animal? Tell Kip!' },
+      { who: 'student', line: 'It’s a … It’s … It can … It can’t …' },
+    ],
+  },
+  { id: 'ja6-i-can', kind: 'meet', focus: ['fast'], bg: bgFriends, who: 'coco', cardSide: 'left', teacher: 'Check: say it and get your passport stamp!', line: 'I can talk about animals and read fast!', repeat: 'I can do it fast!' },
+  {
+    id: 'ja6-sticker', kind: 'prea1', teacher: 'Sticker time! The student opens the pack and puts the Game Day sticker in their Sticker Book.',
+    scene: {
+      id: 'ja6-sticker', kind: 'sticker-reward', bg: bgObstacle, who: 'pip', teacher: 'Sticker time!',
+      line: 'You won Jungle Game Day! Here is your sticker.',
+      sticker: { img: it('banana-trophy'), label: 'Jungle Game Day' },
+    },
+  },
+  {
+    id: 'ja6-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
+    scene: {
+      id: 'ja6-home-mission', kind: 'home-mission', bg: bgFriends, who: 'pip',
+      teacher: 'Home Mission: read the steps with the student.',
+      line: 'Your home mission!',
+      parentNote: 'Today your child played Jungle Game Day with all the Unit 2 language. Play animal charades: one acts, the other guesses and says "It can swim!".',
+      steps: [
+        { emoji: '\u{1F3AD}', say: 'Play animal charades with your family.' },
+        { emoji: '\u{1F445}', say: 'Say a jungle twister three times, fast!' },
+        { emoji: '\u{2753}', say: 'Ask: Can it swim? Can it fly?' },
+      ],
+    },
+  },
+  {
+    id: 'ja6-goodbye-song', kind: 'song', bg: bgFriends, title: '\u{1F3B5} Goodbye Song \u{1F3B5}', teacher: 'It’s time to go — wave goodbye and sing along together!',
+    durationSeconds: 20, bigWord: 'Goodbye',
+    songUrl: '/welcome-town/audio/goodbye-song.mp3?v=3',
+    lineDurationsMs: [3600, 4120, 4020, 8322],
+    lyrics: [
+      { who: 'coco', text: '\u{1F44B} Goodbye, goodbye, my new friend' },
+      { who: 'leo', text: '\u{1F44B} Goodbye, goodbye, see you again' },
+      { who: 'willow', text: '\u{1F3EB} Welcome Town School is happy today' },
+      { who: 'coco', text: '\u{1F496} Byeeee, friends! See you soon!' },
+    ],
+  },
+  { id: 'ja6-finale', kind: 'finale', bg: bgObstacle, who: 'coco', line: 'Jungle Game Day champion! Next time: the Boss Test! \u{1F3C6}' },
+];

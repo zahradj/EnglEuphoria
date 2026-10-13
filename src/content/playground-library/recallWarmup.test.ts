@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { SCENE_LESSON_REGISTRY } from './sceneLessonRegistry';
 import { getWelcomeTownLesson } from './welcomeTownLessonRegistry';
-import { LESSON_A1U2L1_SCENES, LESSON_A1U2L2_SCENES, LESSON_A1U2L3_SCENES, LESSON_A1U2L4_SCENES, LESSON_A1U2L5_SCENES } from './jungle-adventure/scenes';
+import { LESSON_A1U2L1_SCENES, LESSON_A1U2L2_SCENES, LESSON_A1U2L3_SCENES, LESSON_A1U2L4_SCENES, LESSON_A1U2L5_SCENES, LESSON_A1U2L6_SCENES } from './jungle-adventure/scenes';
 import type { RecallWarmupSceneData } from './RecallWarmupScene';
 
 // Owner's rule (2026-10-07, universal): every lesson after the first of its track opens
@@ -25,6 +25,7 @@ const lessons: [string, readonly AnyScene[]][] = [
   ['jungle-rich-2-3', LESSON_A1U2L3_SCENES],
   ['jungle-rich-2-4', LESSON_A1U2L4_SCENES],
   ['jungle-rich-2-5', LESSON_A1U2L5_SCENES],
+  ['jungle-rich-2-6', LESSON_A1U2L6_SCENES],
 ];
 
 describe('Remember? warm-up', () => {
