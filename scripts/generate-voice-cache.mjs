@@ -819,7 +819,7 @@ const WT_EXTRACTORS = {
     return [[s.who, q.ask], ['teacher', `${q.choices[q.answer]} ${p ? `${/^[aeiou]/i.test(p.label) ? 'An' : 'A'} ${p.label}!` : ''}`]];
   })],
   // DrawGuessScene / EchoCaveScene / GridHuntScene (welcome-town/scene-components).
-  'draw-guess': (s) => [[s.who, s.doneLine], [s.who, 'You draw! Don’t say it! Your teacher guesses.'], [s.who, 'Your teacher draws! What is it? Guess and say it!'], [s.who, 'Not yet! Look again!'],
+  'draw-guess': (s) => [[s.who, s.doneLine], [s.who, 'You draw! Don’t say it! Your teacher guesses.'], [s.who, 'Your teacher draws! What is it? Guess and say it!'], [s.who, 'Look! I’m drawing! What is it? Guess and say it!'], [s.who, 'Not yet! Look again!'],
     ...(s.rounds ?? []).flatMap((r) => (r.options ?? []).map((o) => ['teacher', o.say]))],
   'echo-cave': (s) => [[s.who, s.doneLine], [s.who, 'Shh! Listen! Who is calling? Where is the voice?'], [s.who, 'Not this tunnel! Listen again!'],
     ...(s.rounds ?? []).flatMap((r) => [[r.voice, r.line], [r.voice, r.reply]])],

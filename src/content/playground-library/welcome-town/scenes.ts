@@ -543,7 +543,9 @@ export type Scene =
        *  canvas (strokes sync live), the other guesses from the picture options and SAYS it ("It's a frog!").
        *  `drawer` per round: 'student' or 'teacher'; in a live class only the drawer's screen shows the secret. */
       id: string; kind: 'draw-guess'; bg: string; teacher: string; title: string; who: CharKey;
-      rounds: { drawer: 'student' | 'teacher'; secret: number; options: { label: string; img: string; say: string }[] }[]; doneLine: string;
+      rounds: { drawer: 'student' | 'teacher'; secret: number; options: { label: string; img: string; say: string }[];
+        /** A ready-made doodle of the secret (SVG path data, 1000×600 paper): drawn stroke by stroke on the teacher's turn. */
+        doodle?: string[] }[]; doneLine: string;
     }
   | {
       /** Echo Cave (EchoCaveScene.tsx, Marco Polo / blind man's buff redesigned): a dark cave with `tunnels` openings
@@ -1188,7 +1190,7 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
         { label: 'sad', img: feelSpr('mia-sad'), say: 'Sad! A sad face!' },
         { label: 'angry', img: feelSpr('bella-angry'), say: 'Angry! An angry face!' },
         { label: 'tired', img: feelSpr('leo-tired'), say: 'Tired! A tired face!' },
-      ] },
+      ], doodle: ['M 300 300 a 200 200 0 1 0 400 0 a 200 200 0 1 0 -400 0', 'M 410 250 Q 440 215 470 250', 'M 530 250 Q 560 215 590 250', 'M 395 340 Q 500 450 605 340'] },
       { drawer: 'student', secret: 1, options: [
         { label: 'happy', img: feelSpr('pip-happy'), say: 'Happy! A happy face!' },
         { label: 'sad', img: feelSpr('mia-sad'), say: 'Sad! A sad face!' },
@@ -1200,7 +1202,7 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
         { label: 'sad', img: feelSpr('mia-sad'), say: 'Sad! A sad face!' },
         { label: 'angry', img: feelSpr('bella-angry'), say: 'Angry! An angry face!' },
         { label: 'tired', img: feelSpr('leo-tired'), say: 'Tired! A tired face!' },
-      ] },
+      ], doodle: ['M 300 300 a 200 200 0 1 0 400 0 a 200 200 0 1 0 -400 0', 'M 405 255 Q 440 280 475 255', 'M 525 255 Q 560 280 595 255', 'M 480 385 a 20 20 0 1 0 40 0 a 20 20 0 1 0 -40 0', 'M 720 120 L 780 120 L 720 180 L 780 180', 'M 800 60 L 840 60 L 800 100 L 840 100'] },
       { drawer: 'student', secret: 2, options: [
         { label: 'happy', img: feelSpr('pip-happy'), say: 'Happy! A happy face!' },
         { label: 'sad', img: feelSpr('mia-sad'), say: 'Sad! A sad face!' },
