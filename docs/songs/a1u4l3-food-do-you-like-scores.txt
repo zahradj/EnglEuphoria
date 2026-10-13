@@ -1,14 +1,15 @@
 
-=== docs/songs/a1u4l3-food-do-you-like-take1.mp3  length=55.8s  score=0.97  missing=2  extra=2
-heard: do you like it yes i do pizza pizza me and you do you like soup yes i do soup for me and soup for you do you like it yes i do pizza pizza me and you do you like rice yes i do rice for me and rice for you do you like snails no i don't snails for lunch oh no no no do you like it guess i do pizza pizza me and you
-line starts (s): [np.float64(8.3), np.float64(10.8), np.float64(16.8), np.float64(19.5), np.float64(25.4), np.float64(28.0), np.float64(33.9), np.float64(36.6), np.float64(42.5), np.float64(45.0), np.float64(51.0), np.float64(53.3)]
-lineDurationsMs: [10840, 6000, 2640, 5880, 2600, 5980, 2620, 5960, 2480, 6040, 2280, 2530]
+=== docs/songs/a1u4l3-food-do-you-like-take1.mp3  length=55.8s  score=0.95  missing=4  extra=3
+heard: do you like it yes i do pizza pizza me and you do you like soup yes i do soup for me and soup for you do you like it yes i do pizza pizza me and you do you like rice yes i do rice for me and rice for you do you like snails no i don't snails for lunch oh no no no feel like yeah yes i do pizza pizza me and you
+line starts (s): [np.float64(8.2), np.float64(10.9), np.float64(16.7), np.float64(19.4), np.float64(25.4), np.float64(28.0), np.float64(34.4), np.float64(36.6), np.float64(42.5), np.float64(45.0), np.float64(51.7), np.float64(53.4)]
+lineDurationsMs: [10880, 5840, 2700, 5960, 2580, 6440, 2160, 5960, 2480, 6660, 1700, 2490]
 
-=== docs/songs/a1u4l3-food-do-you-like-take2.mp3  length=55.8s  score=0.95  missing=6  extra=1
-heard: do you like it yes i do pizza pizza me and you do you like soup yes i do soup for me and soup for you do you like it yes i do pizza pizza me and you do you like rice yes i do rice for me and rice for you do you like snails no i don't snails for lunch oh no no no do you like it yes i do
-line starts (s): [np.float64(8.2), np.float64(10.8), np.float64(16.8), np.float64(19.5), np.float64(25.4), np.float64(27.9), np.float64(34.2), np.float64(36.6), np.float64(42.6), np.float64(45.0), np.float64(51.2), None]
+=== docs/songs/a1u4l3-food-do-you-like-take2.mp3  length=55.8s  score=0.96  missing=3  extra=3
+heard: do you like it yes i do pizza pizza me and you do you like soup yes i do soup for me and soup for you do you like it yes i do pizza pizza me and you do you like rice yes i do rice for me and rice for you do you like snails no i don't snails for lots of no no no do you like it yes i do pizza pizza me and you
+line starts (s): [np.float64(8.2), np.float64(10.6), np.float64(16.8), np.float64(19.4), np.float64(25.4), np.float64(28.0), np.float64(34.0), np.float64(36.6), np.float64(42.6), np.float64(45.1), np.float64(51.4), np.float64(53.8)]
+lineDurationsMs: [10620, 6180, 2640, 5960, 2640, 5940, 2600, 5980, 2580, 6260, 2400, 2050]
 
-=== docs/songs/a1u4l3-food-do-you-like-take3.mp3  length=55.8s  score=0.94  missing=5  extra=5
-heard: do you like it yes i do pizza pizza me and you do you like soup yes i do soup for me and soup for you do you like it yes i do pizza pizza me and you do you like rice yes i do rice for me and rice for you do you like snails no i don't snails where i'm drawn no no no do you like rice yes i do pizza pizza me and you
-line starts (s): [np.float64(8.2), np.float64(10.8), np.float64(16.8), np.float64(19.4), np.float64(25.4), np.float64(28.0), np.float64(34.0), np.float64(36.4), np.float64(42.6), np.float64(45.0), np.float64(51.2), np.float64(53.7)]
-lineDurationsMs: [10820, 5960, 2640, 5940, 2620, 6000, 2380, 6200, 2420, 6220, 2500, 2150]
+=== docs/songs/a1u4l3-food-do-you-like-take3.mp3  length=55.8s  score=0.99  missing=1  extra=1
+heard: do you like it yes i do pizza pizza me and you do you like soup yes i do soup for me and soup for you do you like it yes i do pizza pizza me and you do you like rice yes i do rice for me and rice for you do you like snails no i don't snails for lunch oh no no no do you like it yes i do pizza pizza me and you
+line starts (s): [np.float64(8.2), np.float64(10.9), np.float64(16.8), np.float64(19.4), np.float64(25.4), np.float64(27.7), np.float64(33.9), np.float64(36.3), np.float64(42.5), np.float64(44.9), np.float64(51.1), np.float64(53.7)]
+lineDurationsMs: [10860, 5920, 2620, 5960, 2360, 6220, 2340, 6220, 2360, 6200, 2660, 2130]
