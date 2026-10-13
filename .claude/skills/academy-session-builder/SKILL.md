@@ -58,7 +58,7 @@ After **every** vocabulary introduction (every `teach` slide / Notice & Build wo
 1. **Last-Time card** (30-60 s): 3 bullet "what we did" (from the previous SessionPlan), 1 sentence the student produced ("Best Line"), 1 thing to remember today. Generated, never typed ad hoc.
 2. **Remember? list**: item ids from the SRS due list (calendar days), mistakes from the Mistake Bank first, 8-12 items, >= 60 % production.
 3. **Input**: spec (kind, words, CEFR, known-word %), glosses, audio file ids (recorded voices only), comprehension check.
-4. **Notice & Build**: exact examples, the <= 3-line rule text, 2 mechanics (from selector) + reasons.
+4. **Notice & Build**: the teacher MODEL (I do, we do, you do; owner 2026-10-13: "modelling is very important"), exact examples, the <= 3-line rule text STATED plainly before the practice (also in E1, also for chunks; "stating the rule is extremely important"), 2 mechanics (from selector) + reasons. The Mission also opens with a teacher model; the Wrap has a teach-back where the student restates the rule.
 5. **Mission**: scenario, roles, success criteria in student words, dial variants (Chill/Normal/Push), planning time, Take 2 constraint, error-log categories.
 6. **Release**: product spec, rubric id, private-first flow.
 7. **Wrap**: can-dos to tick (<= 4), homework, Daily-10 pack id, next-session teaser (the next clue).
