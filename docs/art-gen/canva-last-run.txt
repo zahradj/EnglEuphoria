@@ -1,2 +1,3 @@
-+ public/academy-art/sheets/a1s03-hobby-sheet.png (1024, 1024) raw
+cut out: public/magic-castle/stickers/crown.png (739, 656)
++ public/magic-castle/stickers/crown.png (1024, 1024)
 1/1 saved
