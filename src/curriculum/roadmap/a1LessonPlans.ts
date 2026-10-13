@@ -158,11 +158,12 @@ export const A1_LESSON_PLANS: A1LessonPlan[] = [
     funHook: 'Cross the river to the golden banana; the child acts, the teacher guesses.', homeMission: 'Play animal charades at home.',
   }),
   p(2, 7, 'Unit Review & Boss Test: Jungle Explorer!', {
-    objective: 'I can describe two animals and ask a friend one "Can it…?" question.',
-    grammarFocus: ['all Unit 2'], newVocabulary: [], reviewTargets: ['all Unit 2'], phonicsFocus: ['ch, ck'],
-    communicationGoal: 'Talk about animals with a friend.',
-    signatureGame: 'Boss Test', evidence: 'Boss Test, 80 % in every part.',
-    funHook: 'Golden Compass piece 1 + teaser: a rocket countdown.', homeMission: 'Show your medal and describe an animal.',
+    built: true,
+    objective: 'I can show everything from Unit 2: describe two animals, ask "Can it…?", understand descriptions and read the story.',
+    grammarFocus: ['all Unit 2'], newVocabulary: [], reviewTargets: ['all Unit 2'], phonicsFocus: ['i, ch, ck, sh', 'read a story page aloud'],
+    communicationGoal: 'Talk about animals with a friend; read a short story page.',
+    signatureGame: 'Boss Test (listening, reading yes/no, story gaps, speaking, reading aloud)', evidence: 'Boss Test, 80 % in every part.',
+    funHook: 'Raft Race warm-up; Golden Compass piece 1 at the end; teaser: next stop, space!', homeMission: 'Show your trophy and describe two animals.',
   }),
 
   // ── Unit 3 · Space ────────────────────────────────────────────────────────────────────────────────

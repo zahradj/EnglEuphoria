@@ -426,7 +426,7 @@ export type Scene =
       /** Answer Race (AnswerRaceScene.tsx): a question (`ask`, spoken unless `read`), three answer cards; each right
        *  answer moves the racer one step to the finish. `look: 'gates'` = Pip runs through answer gates (L6 Catch the
        *  answer), `'race'` = a car race (L7 Boss warm-up, Blooket racing mechanic). */
-      id: string; kind: 'answer-race'; bg: string; teacher: string; title: string; look: 'gates' | 'race'; who: CharKey;
+      id: string; kind: 'answer-race'; bg: string; teacher: string; title: string; look: 'gates' | 'race' | 'raft'; who: CharKey;
       racer: string; rounds: { ask: string; choices: string[]; answer: number; read?: boolean }[]; doneLine: string;
     }
   | {

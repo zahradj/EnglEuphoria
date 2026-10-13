@@ -1362,3 +1362,150 @@ export const LESSON_A1U2L6_SCENES: Scene[] = [
   },
   { id: 'ja6-finale', kind: 'finale', bg: bgObstacle, who: 'coco', line: 'Jungle Game Day champion! Next time: the Boss Test! \u{1F3C6}' },
 ];
+
+/* =============================================================================
+ * A1 Unit 2 Lesson 7: "Boss Test: Jungle Explorer!" (built 2026-10-13, plan docs/a1-unit-2-jungle.md §5.7)
+ *
+ * Warm-up: the Raft Race (answer-race, look 'raft'). Then five parts (Cambridge Pre A1/A1 formats), 4 of 5 to pass each:
+ * 1 listening (hear the description → tap the animal, one-try Hero Trials with stars), 2 reading yes/no about a big
+ * picture (Starters R&W Part 2), 3 the story with gaps (Starters R&W Part 4), 4 speaking (describe two animals + ask one
+ * "Can it…?" question), 5 reading a story page aloud. Any part below 4 → practise it again (teacher note).
+ * ========================================================================= */
+
+export const LESSON_A1U2L7_TITLE = 'Unit Review & Boss Test: Jungle Explorer!';
+export const LESSON_A1U2L7_OBJECTIVE = 'I can show everything from Unit 2: describe two animals, ask "Can it…?", understand descriptions and read the story.';
+
+export const LESSON_A1U2L7_SCENES: Scene[] = [
+  { id: 'ja7-title', kind: 'title-card', bg: bgWaterfall, level: 'A1', unit: 'Unit 2', lessonLabel: 'Lesson 7', title: 'Boss Test: Jungle Explorer!', subtitle: 'Show everything you can do in the jungle', cta: '\u{1F3C6} I’M READY!' },
+  {
+    id: 'ja7-recall-warmup', kind: 'recall-warmup', bg: bgWide, who: 'pip', mode: 'click', listen: true,
+    fromLabel: 'Unit 2 · Lesson 6 · Jungle Game Day',
+    teacher: 'Guided: listen — which animal is it? Click it and say one more sentence about it.',
+    items: [
+      { word: 'bird', say: 'It can fly. It’s small and blue.', img: it('bird') },
+      { word: 'snake', say: 'It’s long and green. It can climb.', img: it('snake') },
+      { word: 'fish', say: 'It can’t walk. It can swim.', img: it('fish') },
+    ],
+  },
+  {
+    id: 'ja7-intro', kind: 'cinematic', bg: bgWaterfall, title: 'The Boss Test', subtitle: 'A race, then five parts', narrator: 'coco',
+    script: [
+      { who: 'coco', line: 'Welcome, jungle explorer!' },
+      { who: 'coco', line: 'Listen, read, read the story, talk and read aloud!' },
+      { who: 'pip', line: 'First, the raft race! Let’s go!' },
+    ],
+    cta: '\u{1F6F6} RACE!',
+  },
+  {
+    id: 'ja7-raft', kind: 'answer-race', look: 'raft', bg: bgWaterfall, who: 'pip', racer: it('coco-cheer'),
+    title: 'The Raft Race! Every right answer moves your raft!',
+    teacher: 'Warm-up: the student answers — every right answer moves Coco’s raft. The last two cards are read, not heard.',
+    rounds: [
+      { ask: 'Can a fish fly?', choices: ['Yes, it can.', 'No, it can’t.', 'It’s big.'], answer: 1 },
+      { ask: 'What is it? It’s got a long nose.', choices: ['It’s a frog.', 'It’s a bird.', 'It’s an elephant.'], answer: 2 },
+      { ask: 'Can a monkey climb?', choices: ['Yes, it can.', 'No, it can’t.', 'It’s green.'], answer: 0 },
+      { ask: 'Is a frog big?', choices: ['No. It’s small.', 'Yes. It’s big.', 'It can fly.'], answer: 0, read: true },
+      { ask: 'What can a crocodile do?', choices: ['It can fly.', 'It can swim.', 'It can’t swim.'], answer: 1, read: true },
+    ],
+    doneLine: 'You won the raft race! Now the Boss Test!',
+  },
+  /* Part 1 — Listening */
+  {
+    id: 'ja7-p1-listen', kind: 'prea1', teacher: 'Part 1 — Listening (5). One try each; 🔊 replays the description. Pass: 4 of 5. The student works alone.',
+    scene: {
+      id: 'ja7-p1-listen', kind: 'hero-trials', bg: bgWide, who: 'pip',
+      teacher: 'Listen and tap the animal. One try!',
+      hero: { img: it('coco-cheer'), name: 'Jungle Explorer' }, medal: it('banana-trophy'),
+      skills: [
+        { key: 'looks', label: 'How it looks', icon: '\u{1F440}' },
+        { key: 'can', label: 'Can / can’t', icon: '\u{1F44D}' },
+      ],
+      items: [
+        { skill: 'looks', ask: 'It’s got a long tail. It can swim. It’s green.', reply: 'The crocodile!', answer: 1, options: [{ label: 'snake', img: it('snake') }, { label: 'crocodile', img: it('alligator') }, { label: 'frog', img: it('frog') }] },
+        { skill: 'can', ask: 'It can fly. It’s small and blue.', reply: 'The bird!', answer: 0, options: [{ label: 'bird', img: it('bird') }, { label: 'fish', img: it('fish') }, { label: 'monkey', img: it('coco-cheer') }] },
+        { skill: 'looks', ask: 'It’s big and grey. It’s got a long nose.', reply: 'The elephant!', answer: 2, options: [{ label: 'lion', img: it('lion') }, { label: 'crocodile', img: it('alligator') }, { label: 'elephant', img: it('elephant') }] },
+        { skill: 'can', ask: 'It can’t walk. It can swim. It’s orange.', reply: 'The fish!', answer: 1, options: [{ label: 'frog', img: it('frog') }, { label: 'fish', img: it('fish') }, { label: 'bird', img: it('bird') }] },
+        { skill: 'can', ask: 'It can climb and swing. It’s brown.', reply: 'The monkey!', answer: 0, options: [{ label: 'monkey', img: it('coco-cheer') }, { label: 'snake', img: it('snake') }, { label: 'elephant', img: it('elephant') }] },
+      ],
+      doneLine: 'Listening done! Super ears!',
+    },
+  },
+  /* Part 2 — Reading: yes or no? */
+  {
+    id: 'ja7-p2-read', kind: 'true-false', bg: bgWide, img: jungleRescue(3), read: true,
+    teacher: 'Part 2 — Reading (5). Look at the picture. Read: yes or no? Pass: 4 of 5.',
+    rounds: [
+      { who: 'coco', statement: 'The elephant is big.', isTrue: true },
+      { who: 'coco', statement: 'The snake is small.', isTrue: false },
+      { who: 'coco', statement: 'The snake is in a tree.', isTrue: true },
+      { who: 'coco', statement: 'The elephant is green.', isTrue: false },
+      { who: 'coco', statement: 'The monkey is brown.', isTrue: true },
+    ],
+  },
+  /* Part 3 — Reading: the story */
+  {
+    id: 'ja7-p3-story', kind: 'grammar-gap', bg: bgWide, title: 'Part 3 — The story',
+    teacher: 'Part 3 — Reading the story (5). Read and choose the missing word. Pass: 4 of 5.',
+    rounds: [
+      { before: 'Kip is on a', after: '.', choices: ['rock', 'tree'], answer: 'rock', img: jungleRescue(5) },
+      { before: 'I can fly. But I am', after: '.', choices: ['big', 'small'], answer: 'small', img: jungleRescue(6) },
+      { before: 'I can swim. I', after: 'lift Kip!', choices: ['can', 'can’t'], answer: 'can’t', img: jungleRescue(7) },
+      { before: 'I am big. I can', after: 'in the river.', choices: ['walk', 'fly'], answer: 'walk', img: jungleRescue(9) },
+      { before: 'The elephant lifts Kip with its long', after: '.', choices: ['tail', 'nose'], answer: 'nose', img: jungleRescue(10) },
+    ],
+  },
+  /* Part 4 — Speaking */
+  {
+    id: 'ja7-p4-speak', kind: 'join-stage', bg: bgFriends, teacher: 'Part 4 — Speaking (5 points: 2 for each animal described in 4 sentences, 1 for a correct “Can it…?” question). Pass: 4 of 5.', cast: ['coco', 'pip'],
+    turns: [
+      { who: 'coco', line: 'Pick an animal. Tell me four things about it!' },
+      { who: 'student', line: 'It’s a … It’s … It can … It can’t …' },
+      { who: 'coco', line: 'Great! Now another animal!' },
+      { who: 'student', line: 'It’s a … It’s … It can … It can’t …' },
+      { who: 'coco', line: 'Now ask me a question!' },
+      { who: 'student', line: 'Can a … ?' },
+    ],
+  },
+  /* Part 5 — Reading aloud */
+  {
+    id: 'ja7-p5-read-aloud', kind: 'reader', bg: bgWide, title: 'Part 5 — Read it aloud!', doneLine: 'You read it all by yourself!',
+    teacher: 'Part 5 — Reading aloud (5 points: every word read, then fluency). Skip the listening: tap “My turn to read” at once. Pass: 4 of 5.',
+    pages: [JUNGLE_RESCUE[8], JUNGLE_RESCUE[9]],
+  },
+  { id: 'ja7-i-can', kind: 'meet', focus: ['Unit 2'], bg: bgWaterfall, who: 'coco', cardSide: 'left', teacher: 'Check: any part below 4 of 5? Play it again next lesson (Practise again). Then the trophy!', line: 'I can show everything from Unit 2!', repeat: 'I’m a jungle explorer!' },
+  {
+    id: 'ja7-sticker', kind: 'prea1', teacher: 'The Unit 2 trophy! The student opens the pack and puts the trophy sticker in their Sticker Book.',
+    scene: {
+      id: 'ja7-sticker', kind: 'sticker-reward', bg: bgWaterfall, who: 'pip', teacher: 'The Unit 2 trophy!',
+      line: 'You passed the Boss Test! Here is your Unit 2 trophy — and piece 1 of the Golden Compass!',
+      sticker: { img: it('banana-trophy'), label: 'Golden Compass piece 1' },
+    },
+  },
+  {
+    id: 'ja7-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
+    scene: {
+      id: 'ja7-home-mission', kind: 'home-mission', bg: bgFriends, who: 'pip',
+      teacher: 'Home Mission: read the steps with the student.',
+      line: 'Your home mission!',
+      parentNote: 'Your child finished Unit 2: jungle animals, how they look, can / can\'t, "Can it…?", and the story "The Jungle Rescue". Let them describe two animals and ask you a question.',
+      steps: [
+        { emoji: '\u{1F418}', say: 'Describe two animals: four sentences each.' },
+        { emoji: '\u{2753}', say: 'Ask your family: Can it…?' },
+        { emoji: '\u{1F3C6}', say: 'Show your trophy and read the story!' },
+      ],
+    },
+  },
+  {
+    id: 'ja7-goodbye-song', kind: 'song', bg: bgFriends, title: '\u{1F3B5} Goodbye Song \u{1F3B5}', teacher: 'It’s time to go — wave goodbye and sing along together!',
+    durationSeconds: 20, bigWord: 'Goodbye',
+    songUrl: '/welcome-town/audio/goodbye-song.mp3?v=3',
+    lineDurationsMs: [3600, 4120, 4020, 8322],
+    lyrics: [
+      { who: 'coco', text: '\u{1F44B} Goodbye, goodbye, my new friend' },
+      { who: 'leo', text: '\u{1F44B} Goodbye, goodbye, see you again' },
+      { who: 'willow', text: '\u{1F3EB} Welcome Town School is happy today' },
+      { who: 'coco', text: '\u{1F496} Byeeee, friends! See you soon!' },
+    ],
+  },
+  { id: 'ja7-finale', kind: 'finale', bg: bgWaterfall, who: 'coco', line: 'You finished Unit 2 and found piece 1 of the Golden Compass! Next stop: space! \u{1F680}' },
+];

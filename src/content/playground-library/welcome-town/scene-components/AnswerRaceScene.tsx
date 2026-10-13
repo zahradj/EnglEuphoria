@@ -14,7 +14,8 @@ import { CLAY_BUTTON, THICK_WORDS } from '../../unit1/scene-components/shared';
  * Mechanics: Blooket "Racing" (each right answer moves your car), Kahoot-style answer tiles, the Duolingo "tap the
  * reply" chat check. Better: the cards are full ANSWERS to a real question ("How are you?" → "I am fine, thank you."),
  * so the race is won by understanding the conversation, not by speed — there is no clock.
- * `look: 'gates'` = Pip runs through the answer gate; `'race'` = a car race with two friendly rival cars. */
+ * `look: 'gates'` = Pip runs through the answer gate; `'race'` = a car race with two friendly rival cars; `'raft'` = a
+ * river race (A1 U2L7): the racer floats on the water against a duck and a frog. */
 
 type Race = Extract<Scene, { kind: 'answer-race' }>;
 const GATE = ['#FE6A2F', '#4FA9E0', '#B85CD1'];
@@ -28,7 +29,9 @@ export function AnswerRaceScene({ scene, onNext, onWin, onLose, sync }: { scene:
   const step = Math.max(0, Math.min(total, Number(state.step) || 0));
   const done = !!state.done;
   const gemDone = useRef(false);
-  const race = scene.look === 'race';
+  const raft = scene.look === 'raft';
+  const race = scene.look === 'race' || raft;
+  const flip = scene.look === 'race'; // the car pictures face left
 
   useEffect(() => {
     if (done || !r || r.read) return undefined;
@@ -60,7 +63,8 @@ export function AnswerRaceScene({ scene, onNext, onWin, onLose, sync }: { scene:
   };
 
   const at = (k: number) => 8 + (k / Math.max(1, total)) * 80; // % along the track
-  const rivals = race ? [{ img: '/lep1/items/item-car-green.png', lane: 0 }, { img: '/lep1/items/item-car.png', lane: 2 }] : [];
+  const rivals = raft ? [{ img: '/lep1/items/item-duck-yellow.png', lane: 0 }, { img: '/lep1/items/item-frog.png', lane: 2 }]
+    : race ? [{ img: '/lep1/items/item-car-green.png', lane: 0 }, { img: '/lep1/items/item-car.png', lane: 2 }] : [];
   const laneY = (lane: number) => 18 + lane * 32; // % inside the track strip
 
   return (
@@ -74,7 +78,7 @@ export function AnswerRaceScene({ scene, onNext, onWin, onLose, sync }: { scene:
       </div>
 
       {/* the track */}
-      <div className={`absolute inset-x-[4%] top-[16%] z-20 h-[24%] overflow-hidden rounded-[3vh] border-[0.5vh] border-white shadow-xl ${race ? 'bg-slate-600' : 'bg-lime-200'}`}>
+      <div className={`absolute inset-x-[4%] top-[16%] z-20 h-[24%] overflow-hidden rounded-[3vh] border-[0.5vh] border-white shadow-xl ${raft ? 'bg-sky-400' : race ? 'bg-slate-600' : 'bg-lime-200'}`}>
         {race
           ? [1, 2].map((k) => <div key={k} className="absolute inset-x-0 border-t-[0.5vh] border-dashed border-white/70" style={{ top: `${k * 33.3}%` }} />)
           : <div className="absolute inset-x-0 top-1/2 h-[30%] -translate-y-1/2 rounded-full bg-amber-200/90" />}
@@ -83,14 +87,14 @@ export function AnswerRaceScene({ scene, onNext, onWin, onLose, sync }: { scene:
         {rivals.map((rv, k) => (
           <motion.div key={k} className="absolute" style={{ height: '28%', aspectRatio: '1.3', top: `${laneY(rv.lane)}%`, translate: '-50% -50%' }}
             animate={{ left: `${at(Math.min(step * (0.62 + k * 0.12), total - 0.4))}%` }} transition={{ type: 'spring', stiffness: 60, damping: 16 }}>
-            <img src={rv.img} alt="" draggable={false} className="h-full w-full object-contain opacity-90" style={{ transform: 'scaleX(-1)' }} />
+            <img src={rv.img} alt="" draggable={false} className="h-full w-full object-contain opacity-90" style={flip ? { transform: 'scaleX(-1)' } : undefined} />
           </motion.div>
         ))}
         <motion.div className="absolute z-10" style={{ height: race ? '30%' : '62%', aspectRatio: race ? '1.3' : '1', top: `${race ? laneY(1) : 46}%`, translate: '-50% -50%' }}
           animate={{ left: `${at(step)}%`, y: !reduce && state.right >= 0 ? [0, -12, 0] : 0 }}
           transition={{ type: 'spring', stiffness: 90, damping: 14 }}>
           {/* the car pictures face left: flip them to drive to the finish */}
-          <img src={scene.racer} alt="" draggable={false} className="h-full w-full object-contain drop-shadow-[0_0.6vh_0.5vh_rgba(0,0,0,0.35)]" style={race ? { transform: 'scaleX(-1)' } : undefined} />
+          <img src={scene.racer} alt="" draggable={false} className="h-full w-full object-contain drop-shadow-[0_0.6vh_0.5vh_rgba(0,0,0,0.35)]" style={flip ? { transform: 'scaleX(-1)' } : undefined} />
         </motion.div>
       </div>
 

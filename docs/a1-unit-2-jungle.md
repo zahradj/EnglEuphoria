@@ -5,7 +5,7 @@ teacher, the lesson blueprint (`docs/playground-lesson-blueprint.md` §3g), the 
 apps). In A1 the child reads **full sentences**, so the unit has **one story** read a bit more each lesson, **phonics +
 a blending game + Blend & Read + a tongue twister in every lesson**, and **no game twice in the unit**.
 
-**Status:** approved (owner, 2026-10-13: "Ok") — being built.
+**Status:** approved (owner, 2026-10-13: "Ok") — built 2026-10-13 (all 7 lessons; database rows after merge: scripts/sql/a1-unit2-after-merge.sql).
 
 ## 1. What is wrong with Unit 2 today (audit of the built lessons)
 
