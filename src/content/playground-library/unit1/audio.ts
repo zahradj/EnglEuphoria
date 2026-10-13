@@ -699,6 +699,8 @@ const NAME_CLIP: Record<string, string> = Object.fromEntries(
 for (const pair of ['sh', 'th', 'ch', 'wh', 'ar', 'au', 'er', 'ing', 'ou']) {
   PHONIC_CLIP[pair] = `/lep1/audio/letters/phon-${pair}.ogg`;
 }
+// ck (duck, rock — A1 U2L3) is the same /k/ sound: reuse the recorded k.
+PHONIC_CLIP.ck = PHONIC_CLIP.k;
 
 // Long-vowel variants (phonics-master's double-underscore recordings), kept under
 // a distinct key since e.g. 'a' is already the SHORT /æ/ sound above.

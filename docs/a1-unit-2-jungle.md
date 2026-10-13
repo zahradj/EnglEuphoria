@@ -129,12 +129,12 @@ sentences onto the pictures), **ch** sound model + **Sound Pop (ch)**, twister *
 | 1-2 | Title · Remember? (*A monkey can climb.* → click) | | G |
 | 3-4 | Model: *Can it fly? No, it can't!* (Willow and the fish, story pictures) · echo | listen, say | P |
 | 5 | **Can It?** (the can-it game: the animal tries the action; *Yes, it can!* / *No, it can't!*) | answer | G |
-| 6 | **New song: "Can It Fly?"** (kids-song-writer, one take, karaoke) | sing | G |
+| 6 | **New song: "Ask Them!"** (kids-song-writer, one take, karaoke) | sing | G |
 | 7 | **Who Can? Buzzer** (*Who can swim?* → buzz the animal) | listen, buzz, say | G |
-| 8 | **Peek-Pop** (an animal peeks; the child ASKS *Can it swim?* before guessing) | ask | F |
+| 8 | **Flip & Ask** (flip a card, the child ASKS *Can a frog jump?*, the teacher answers) | ask | F |
 | 9 | Brain break: *Can you jump? Yes, I can!* | | — |
-| 10-11 | **Reader** pages 6-7 · **True or False reading** with the page picture | read | R |
-| 12-15 | **ck** sound model · **Ring Toss (ck)** · Blend & Read (Slide): *rock, duck, Kip* | sound, toss, blend, read | R |
+| 10-11 | **Reader** pages 5-7 · **Read & Check** (tick or cross, the page picture + a sentence) | read | R |
+| 12-15 | **ck** sound model · **Word Build (ck / ch / sh endings)** · Blend & Read (Slide): *duck, rock, chick* | sound, build, blend, read | R |
 | 16 | Twister: *A duck on a rock eats a snack.* | R |
 | 17 | Free talk: interview Coco (*Can you swim? Can you fly?*) | F |
 | 18-22 | Check · sticker · home mission · goodbye · finale | |
@@ -195,7 +195,7 @@ likes bananas*-style labels — only Unit 2 words), Blend & Read, free talk with
 |---|---|
 | Shadow Match · Safari Snap ★ · Brick Crush (i) · Read & Match | L1 |
 | Obstacle Run ★ · Read & Drag · Sound Pop (ch) | L2 |
-| Can It? · Who Can? Buzzer · Peek-Pop · True or False reading · Ring Toss (ck) | L3 |
+| Can It? · Who Can? Buzzer · Flip & Ask · Read & Check (tick-cross) · Word Build (ck) | L3 |
 | Animal Riddle ★ · Mixed-up Animal ★ · Sentence Build · Sound Mole (sh) | L4 |
 | Rescue Map ★ · Odd One Out · Sound Pick | L5 |
 | River Crossing ★ · Charades · Memory (animal ↔ description) · Tile Reveal · Feed the animals | L6 |

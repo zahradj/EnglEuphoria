@@ -602,3 +602,231 @@ export const LESSON_A1U2L2_SCENES: Scene[] = [
   },
   { id: 'ja2-finale', kind: 'finale', bg: bgWaterfall, who: 'coco', line: 'You can say what animals can and can’t do — and read about Kip! Who can help him? ✨\u{1F34C}' },
 ];
+
+/* =============================================================================
+ * A1 Unit 2 Lesson 3: "Can It…?" (built 2026-10-13, plan docs/a1-unit-2-jungle.md §5.3)
+ *
+ * Objective: I can ask "Can it…?" and answer "Yes, it can. / No, it can't."  Evidence: Who Can? buzzer (4 of 5) and the
+ * child asks the teacher 2 questions (Flip & Ask, interview with Coco). Reading: The Jungle Rescue pp. 5-7 (who can help
+ * Kip? Willow can fly but is small; the fish can swim but can't lift Kip). Phonics: ck (duck, clock, socks, chick).
+ * Research (mechanics only): Cambridge Starters "Can you…? Yes, I can / No, I can't" (coursebook unit), British Council
+ * TeachingEnglish can/can't mime, Kahoot / game-show buzzers. Better: in Can It? the animal really tries and flops, so the
+ * answer is SEEN; in Flip & Ask the child is the one asking. Plan swaps (no new art needed, same purpose): Ring Toss → Word
+ * Build for ck (ck is an END sound: du_ → ck / ch / sh), Peek-Pop → Flip & Ask (the child asks "Can a frog jump?").
+ * ========================================================================= */
+
+const bgStage = '/lep1/scenes/bg-u5l6-stage-wide.png';
+const SONG_A1U2L3 = `${J}/audio/can-it-song-a1u2l3.mp3?v=1`;
+const SONG_A1U2L3_LYRICS: { who: CharKey; text: string }[] = [
+  { who: 'coco', text: 'Elephant, snake and crocodile,' },
+  { who: 'coco', text: 'Ask them, ask them, with a smile!' },
+  { who: 'pip', text: 'Can an elephant swim? Yes, it can!' },
+  { who: 'pip', text: 'Can an elephant fly? No, it can’t!' },
+  { who: 'willow', text: 'Can a snake climb a tree? Yes, it can!' },
+  { who: 'willow', text: 'Can a snake run fast? No, it can’t!' },
+  { who: 'leo', text: 'Can a crocodile swim? Yes, it can!' },
+  { who: 'leo', text: 'Can a crocodile fly? No, it can’t!' },
+  { who: 'coco', text: 'Elephant, snake and crocodile,' },
+  { who: 'coco', text: 'Ask them, ask them, with a smile!' },
+];
+// take 3 (docs/songs/a1u2l3-jungle-can-it-scores.txt, score 0.93): line starts measured from the transcript.
+// Transcript check: "snake run a tree" (sung "climb"?) and "elephants they can crocodile" in the last chorus — owner to listen.
+const SONG_A1U2L3_MS = [10460, 6300, 2200, 6100, 2460, 6120, 2560, 3360, 1340, 6355];
+
+const JA_FACES = [
+  { label: 'elephant', name: 'the elephant', img: it('elephant') },
+  { label: 'crocodile', name: 'the crocodile', img: it('alligator') },
+  { label: 'snake', name: 'the snake', img: it('snake') },
+  { label: 'bird', name: 'the bird', img: it('bird') },
+  { label: 'frog', name: 'the frog', img: it('frog') },
+  { label: 'monkey', name: 'the monkey', img: it('coco-cheer') },
+];
+
+export const LESSON_A1U2L3_TITLE = 'Can It…?';
+export const LESSON_A1U2L3_OBJECTIVE = 'I can ask "Can it…?" and answer "Yes, it can." / "No, it can\'t." — about the elephant, the snake, the crocodile and friends.';
+
+export const LESSON_A1U2L3_SCENES: Scene[] = [
+  { id: 'ja3-title', kind: 'title-card', bg: jungleRescue(6), level: 'A1', unit: 'Unit 2', lessonLabel: 'Lesson 3', title: 'Can It…?', subtitle: 'Who can help Kip? Ask and find out!', cta: '\u{2753} LET’S ASK!' },
+  {
+    id: 'ja3-recall-warmup', kind: 'recall-warmup', bg: bgWide, who: 'pip', mode: 'click', listen: true,
+    fromLabel: 'Unit 2 · Lesson 2 · What Can Animals Do?',
+    teacher: 'Guided: listen — who can do it? Click it and say the sentence: A monkey can climb!',
+    items: [
+      { word: 'monkey', say: 'It can climb.', img: it('coco-cheer') },
+      { word: 'fish', say: 'It can swim. It can’t run.', img: it('fish') },
+      { word: 'bird', say: 'It can fly.', img: it('bird') },
+      { word: 'frog', say: 'It can jump.', img: it('frog') },
+    ],
+  },
+  /* Present: the question and the two short answers, each on its story picture */
+  { id: 'ja3-model-yes', kind: 'meet', focus: ['Yes, it can'], bg: jungleRescue(6), who: 'willow', cardSide: 'right', teacher: 'Present: the question goes UP, the answer comes down. Thumbs up for “Yes, it can!”', line: 'Can a bird fly? Yes, it can!', repeat: 'Yes, it can!' },
+  { id: 'ja3-model-no', kind: 'meet', focus: ['No, it can’t'], bg: jungleRescue(7), who: 'pip', cardSide: 'left', teacher: 'Present: thumbs down and a head shake for “No, it can’t!” — a strong T at the end.', line: 'Can a fish fly? No, it can’t!', repeat: 'No, it can’t!' },
+  { id: 'ja3-echo', kind: 'echo', bg: bgWide, who: 'pip', textSide: 'top', teacher: 'Guided: ask like Pip — the voice goes UP at the end.', word: 'Can it swim?' },
+  {
+    id: 'ja3-can-it', kind: 'prea1', teacher: 'Guided: Can It? Pip asks; the student answers with a thumbs up “Yes, it can!” or thumbs down “No, it can’t!” — then watch what happens.',
+    scene: {
+      id: 'ja3-can-it', kind: 'can-it', bg: bgWide, who: 'pip',
+      teacher: 'Thumbs up: Yes, it can! Thumbs down: No, it can’t!',
+      animals: [{ word: 'elephant', img: it('elephant') }, { word: 'crocodile', img: it('alligator') }, { word: 'snake', img: it('snake') }, { word: 'frog', img: it('frog') }, { word: 'bird', img: it('bird') }, { word: 'fish', img: it('fish') }],
+      rounds: [
+        { animal: 0, action: 'swim', can: true, real: 'swim', ask: 'Can an elephant swim?', answer: 'Yes! An elephant can swim!' },
+        { animal: 1, action: 'fly', can: false, real: 'swim', ask: 'Can a crocodile fly?', answer: 'No! A crocodile can’t fly. It can swim!' },
+        { animal: 2, action: 'run', can: false, real: 'swim', ask: 'Can a snake run?', answer: 'No! A snake can’t run. It can swim!' },
+        { animal: 3, action: 'jump', can: true, real: 'jump', ask: 'Can a frog jump?', answer: 'Yes! A frog can jump!' },
+        { animal: 5, action: 'walk', can: false, real: 'swim', ask: 'Can a fish walk?', answer: 'No! A fish can’t walk. It can swim!' },
+        { animal: 4, action: 'fly', can: true, real: 'fly', ask: 'Can a bird fly?', answer: 'Yes! A bird can fly!' },
+      ],
+      doneLine: 'Super answers! Yes, it can! No, it can’t!',
+    },
+  },
+  {
+    id: 'ja3-song', kind: 'song', bg: bgWide, title: '\u{1F3B5} Ask Them! \u{1F3B5}',
+    teacher: 'Sing! The question goes up — thumbs up on “Yes, it can!”, head shake on “No, it can’t!”',
+    durationSeconds: 47, bigWord: 'Can it?', songUrl: SONG_A1U2L3, lineDurationsMs: SONG_A1U2L3_MS, lyrics: SONG_A1U2L3_LYRICS,
+  },
+  {
+    id: 'ja3-who-can', kind: 'prea1', teacher: 'Guided: Who Can? Buzzer Show! Listen to the question, press the buzzer under the animal that CAN, then say the sentence.',
+    scene: {
+      id: 'ja3-who-can', kind: 'buzzer-show', bg: bgStage, who: 'pip',
+      teacher: 'Listen! Who can do it? Press the right buzzer, then say it.',
+      intro: 'Who can do it? Press the buzzer!',
+      podiums: [{ x: 22.8, y: 72.5, by: 55.5 }, { x: 49.5, y: 72.5, by: 55.5 }, { x: 76.3, y: 72.5, by: 55.5 }],
+      faces: JA_FACES,
+      rounds: [
+        { faces: [0, 3, 2], answer: 1, line: 'Who can fly?', reply: 'Yes! The bird can fly!', say: 'The bird can fly.' },
+        { faces: [5, 1, 4], answer: 0, line: 'Who can climb a tree?', reply: 'Yes! The monkey can climb!', say: 'The monkey can climb.' },
+        { faces: [3, 4, 1], answer: 2, line: 'Who can swim? It is big and green!', reply: 'Yes! The crocodile can swim!', say: 'The crocodile can swim.' },
+        { faces: [2, 0, 5], answer: 1, line: 'Who can walk in the river? It is big and grey!', reply: 'Yes! The elephant can!', say: 'The elephant can walk in the river.' },
+        { faces: [4, 2, 3], answer: 0, line: 'Who can jump? It is small and green!', reply: 'Yes! The frog can jump!', say: 'The frog can jump.' },
+      ],
+      doneLine: 'Buzzer champion! You know who can!',
+    },
+  },
+  {
+    id: 'ja3-move-break', kind: 'prea1', teacher: 'Brain break: Pip asks — the student answers and does it!',
+    scene: {
+      id: 'ja3-move-break', kind: 'tpr-actions', mode: 'break', bg: bgWide, who: 'pip', teacher: 'Can you do it? Show me!',
+      rounds: [
+        { line: 'Can you jump? Yes, I can! Jump, jump!', emoji: '\u{1F998}' },
+        { line: 'Can you swim? Yes, I can! Swim, swim!', emoji: '\u{1F3CA}' },
+        { line: 'Can you fly? No, I can’t! Flap, flap… no!', emoji: '\u{1F426}' },
+        { line: 'Can you climb? Yes, I can! Climb, climb!', emoji: '\u{1F9D7}' },
+      ],
+    },
+  },
+  /* Reading: The Jungle Rescue pages 5-7 */
+  {
+    id: 'ja3-reader', kind: 'reader', bg: jungleRescue(5), title: 'The Jungle Rescue', doneLine: 'Willow can’t help. The fish can’t help. Who can help Kip? Find out next time!',
+    teacher: 'Reading: page 5 again, then the new pages. Listen while the words light up, then the student reads.',
+    pages: JUNGLE_RESCUE.slice(4, 7),
+  },
+  {
+    id: 'ja3-read-check', kind: 'prea1', teacher: 'Reading: look at the picture, READ the sentence — tick or cross? Then say the true sentence.',
+    scene: {
+      id: 'ja3-read-check', kind: 'tick-cross', bg: bgWide, who: 'pip',
+      teacher: 'Read it. Is it right? Tick or cross!',
+      rounds: [
+        { img: jungleRescue(5), sentence: 'Kip is on a rock.', isTrue: true },
+        { img: jungleRescue(6), sentence: 'Willow can fly.', isTrue: true },
+        { img: jungleRescue(6), sentence: 'Willow is big.', isTrue: false },
+        { img: jungleRescue(7), sentence: 'The fish can lift Kip.', isTrue: false },
+        { img: jungleRescue(3), sentence: 'The snake is long.', isTrue: true },
+      ],
+    },
+  },
+  /* Phonics: ck → Word Build → Blend & Read → tongue twister */
+  {
+    id: 'ja3-sound-ck', kind: 'sound-model', bg: bgWide, who: 'pip', letter: 'CK', phoneme: '/k/', sound: 'k', soundSide: 'center',
+    teacher: 'Present: c + k at the END of a word say /k/ — duck, clock, socks, chick. Listen for the end!',
+    anchors: [
+      { word: 'duck', emoji: '\u{1F986}', img: it('duck-yellow') },
+      { word: 'clock', emoji: '\u{1F570}\u{FE0F}', img: it('clock') },
+      { word: 'socks', emoji: '\u{1F9E6}', img: it('socks-red') },
+      { word: 'chick', emoji: '\u{1F424}', img: it('chick') },
+    ],
+  },
+  {
+    id: 'ja3-word-build', kind: 'word-build', bg: bgWide,
+    teacher: 'Reading: which ending is missing? ck, ch or sh? Pick it, then read the word.',
+    rounds: [
+      { word: 'duck', tiles: ['d', 'u', 'ck'], blankIndex: 2, answer: 'ck', choices: ['ck', 'ch', 'sh'], img: it('duck-yellow'), emoji: '\u{1F986}' },
+      { word: 'clock', tiles: ['c', 'l', 'o', 'ck'], blankIndex: 3, answer: 'ck', choices: ['sh', 'ck', 'ch'], img: it('clock'), emoji: '\u{1F570}\u{FE0F}' },
+      { word: 'fish', tiles: ['f', 'i', 'sh'], blankIndex: 2, answer: 'sh', choices: ['ck', 'ch', 'sh'], img: it('fish'), emoji: '\u{1F41F}' },
+      { word: 'chick', tiles: ['ch', 'i', 'ck'], blankIndex: 2, answer: 'ck', choices: ['ch', 'ck', 'sh'], img: it('chick'), emoji: '\u{1F424}' },
+    ],
+  },
+  {
+    id: 'ja3-blend', kind: 'sound-blend', bg: bgWide, look: 'slide',
+    teacher: 'Reading: blend the word (ck is ONE sound), find the picture — then read the sentence.',
+    rounds: [
+      { word: 'duck', sounds: ['d', 'u', 'ck'], img: it('duck-yellow'), sentence: 'A duck can swim.' },
+      { word: 'rock', sounds: ['r', 'o', 'ck'], img: it('stone'), sentence: 'Kip is on a rock.' },
+      { word: 'chick', sounds: ['ch', 'i', 'ck'], img: it('chick'), sentence: 'A chick can’t swim.' },
+    ],
+  },
+  { id: 'ja3-twister', kind: 'tongue-twister', look: 'town', speeds: 2, bg: bgWide, who: 'pip', focus: 'ck', teacher: 'Reading: quick reading! Listen to Pip, then say it slow, then faster.', line: 'A duck on a rock eats a snack.' },
+  /* Free: the child asks */
+  {
+    id: 'ja3-flip-ask', kind: 'prea1', teacher: 'Free: Flip & Ask! The student flips a card and ASKS the question (🔊 = the model). The teacher answers “Yes, it can! / No, it can’t!” — then swap.',
+    scene: {
+      id: 'ja3-flip-ask', kind: 'flip-say', bg: bgWide, who: 'pip', title: 'Flip a card and ask!',
+      teacher: 'Flip a card. Ask the question!',
+      cards: [
+        { label: 'frog', img: it('frog'), say: 'Can a frog jump?' },
+        { label: 'snake', img: it('snake'), say: 'Can a snake fly?' },
+        { label: 'elephant', img: it('elephant'), say: 'Can an elephant swim?' },
+        { label: 'crocodile', img: it('alligator'), say: 'Can a crocodile climb?' },
+        { label: 'bird', img: it('bird'), say: 'Can a bird swim?' },
+        { label: 'monkey', img: it('coco-cheer'), say: 'Can a monkey swing?' },
+      ],
+      doneLine: 'Great questions! You can ask!',
+    },
+  },
+  {
+    id: 'ja3-interview', kind: 'join-stage', bg: bgFriends, teacher: 'Free: the student interviews Coco (the teacher answers as Coco), then Coco asks the student.', cast: ['coco', 'pip'],
+    turns: [
+      { who: 'coco', line: 'Ask me! What can I do?' },
+      { who: 'student', line: 'Coco, can you climb?' },
+      { who: 'coco', line: 'Yes, I can! Ask me again!' },
+      { who: 'student', line: 'Can you fly?' },
+      { who: 'coco', line: 'No, I can’t! Now my turn: can you swim?' },
+      { who: 'student', line: 'Yes, I can. / No, I can’t.' },
+    ],
+  },
+  { id: 'ja3-i-can', kind: 'meet', focus: ['Can it'], bg: bgFriends, who: 'coco', cardSide: 'left', teacher: 'Check: say it and get your passport stamp!', line: 'I can ask “Can it swim?” and answer “Yes, it can!”', repeat: 'Can it swim?' },
+  {
+    id: 'ja3-sticker', kind: 'prea1', teacher: 'Sticker time! The student opens the pack and puts the question sticker in their Sticker Book.',
+    scene: {
+      id: 'ja3-sticker', kind: 'sticker-reward', bg: bgFriends, who: 'pip', teacher: 'Sticker time!',
+      line: 'Super questions! Here is your sticker.',
+      sticker: { img: it('alligator'), label: 'Question champion' },
+    },
+  },
+  {
+    id: 'ja3-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
+    scene: {
+      id: 'ja3-home-mission', kind: 'home-mission', bg: bgFriends, who: 'pip',
+      teacher: 'Home Mission: read the steps with the student.',
+      line: 'Your home mission!',
+      parentNote: 'Today your child learned to ask "Can it…?" and answer "Yes, it can. / No, it can\'t." Let them ask you three questions about animals and sing "Ask Them!".',
+      steps: [
+        { emoji: '\u{2753}', say: 'Ask a grown-up: Can a fish fly?' },
+        { emoji: '\u{1F44D}', say: 'Answer: Yes, it can! No, it can’t!' },
+        { emoji: '\u{1F3B5}', say: 'Sing the song Ask Them!' },
+      ],
+    },
+  },
+  {
+    id: 'ja3-goodbye-song', kind: 'song', bg: bgFriends, title: '\u{1F3B5} Goodbye Song \u{1F3B5}', teacher: 'It’s time to go — wave goodbye and sing along together!',
+    durationSeconds: 20, bigWord: 'Goodbye',
+    songUrl: '/welcome-town/audio/goodbye-song.mp3?v=3',
+    lineDurationsMs: [3600, 4120, 4020, 8322],
+    lyrics: [
+      { who: 'coco', text: '\u{1F44B} Goodbye, goodbye, my new friend' },
+      { who: 'leo', text: '\u{1F44B} Goodbye, goodbye, see you again' },
+      { who: 'willow', text: '\u{1F3EB} Welcome Town School is happy today' },
+      { who: 'coco', text: '\u{1F496} Byeeee, friends! See you soon!' },
+    ],
+  },
+  { id: 'ja3-finale', kind: 'finale', bg: bgFriends, who: 'coco', line: 'You can ask “Can it…?” and answer! Who can help Kip? Find out next time! \u{1F418}' },
+];

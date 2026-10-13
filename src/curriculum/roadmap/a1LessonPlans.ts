@@ -123,13 +123,14 @@ export const A1_LESSON_PLANS: A1LessonPlan[] = [
     funHook: 'A wrong friend tries the obstacle and says "I can\'t climb!"; the child picks who goes next.',
     homeMission: 'Mime an animal for your family and say what it can and can\'t do.',
   }),
-  p(2, 3, 'Listen to the Jungle Animal Song', {
-    objective: 'I can understand "Can it…?" questions and answer "Yes, it can / No, it can\'t." I know elephant, snake and crocodile.',
-    grammarFocus: ['Can it…? Yes, it can / No, it can\'t'], newVocabulary: ['elephant', 'snake', 'crocodile'],
-    reviewTargets: ['It can / can\'t…'], phonicsFocus: ['ck (rock, duck, snack)'],
-    communicationGoal: 'Understand questions about animals.',
-    signatureGame: 'Song karaoke + Who Can? buzzer ⇄', evidence: 'The child answers 4 of 5 questions from the song.',
-    funHook: 'The child buzzes before the friends.', homeMission: 'Sing the song and ask a grown-up "Can it…?"',
+  p(2, 3, 'Can It…?', {
+    built: true,
+    objective: 'I can ask "Can it…?" and answer "Yes, it can. / No, it can\'t." — about the elephant, the snake, the crocodile and friends.',
+    grammarFocus: ['Can it…? Yes, it can. / No, it can\'t.', 'Can you…? Yes, I can. / No, I can\'t.'], newVocabulary: ['Can it…?', 'Yes, it can', 'No, it can\'t'],
+    reviewTargets: ['all Unit 2 animals', 'It can / can\'t…', 'big / small / long'], phonicsFocus: ['ck at the end (duck, clock, socks, chick → duck, rock, chick)', 'twister: A duck on a rock eats a snack.'],
+    communicationGoal: 'Ask about an animal and answer questions about it.',
+    signatureGame: 'Can It? + Who Can? buzzer + Flip & Ask (the child asks)', evidence: 'Who Can? buzzer 4 of 5; the child asks the teacher 2 questions (Flip & Ask, interview with Coco); reads pages 5-7.',
+    funHook: 'The animal really tries — and flops when it can\'t.', homeMission: 'Ask a grown-up three "Can it…?" questions and sing "Ask Them!".',
   }),
   p(2, 4, 'Talk About Animals!', {
     objective: 'I can describe an animal in 4 sentences and ask a question: "It\'s a snake. It\'s long. It can swim. It can\'t jump."',

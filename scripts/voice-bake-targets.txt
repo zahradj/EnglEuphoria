@@ -3,6 +3,7 @@ HOMEWORK
 # 2026-10-12 A1 Jungle: Unit 2 Lessons 1-2 (the jungle file is now in the bake engines)
 LESSON_A1U2L1_SCENES
 LESSON_A1U2L2_SCENES
+LESSON_A1U2L3_SCENES
 # 2026-10-12 Pre-A1 extra practice (Word Board, Home Hunt, Flip & Say, spin, review games) + goodbye songs
 LESSON_U2L5_SCENES
 LESSON_U5L6_SCENES
