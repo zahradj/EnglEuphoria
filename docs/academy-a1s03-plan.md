@@ -16,6 +16,9 @@ Audience: Academy 13-18, A1. They know hello, name, age, countries, numbers 1-10
 | E7 | Remix | mix all of it | none | Retrieval |
 | E8 | Finale | give a 45-second pitch for a club I would start | none | Season Release |
 
+## 1b. How each lesson is sequenced (research: `docs/research/academy-lesson-sequencing.md`)
+Teaching episodes use **PPP with gradual release**: context (the story) → **model** (I do) → **rule** (stated, 3 lines) → **controlled practice** (we do: games with one right answer) → **free practice** (choices) → **produce** (you do: Mission Take 1, feedback, Take 2, Release) → teach-back. Episodes where the learner already has the language use a task-first order: E3 Pattern Lab = test-teach-test / guided discovery; E4 and E6 and E8 = task-based (pre-task, task, language focus). A test checks the order model → rule → controlled → free → produce in every deck that sets `stage` on its slides.
+
 ## 2. Tomorrow: E1 Cold Open, minute by minute
 Objective (student words): **"I can understand the Club Fair story and say one thing I like."**
 Exit task (hidden until the end): say "I like ___" for two hobbies and point to the club you would join.
@@ -48,4 +51,5 @@ Every lesson has: (a) a **teacher model** before the student tries anything new 
 - Sequencing: no word is asked before it is introduced; "I like" is heard before it is said.
 - Variety: games alternate (memory, odd-one-out, point, hot seat, this-or-that, role-play); no kind twice in a row.
 - Fun ingredients (5+): a mystery poster, a student badge, a role-play with Ava, a smudged clue, humour in Hot Seat.
-- Honest limit: this is a draft for a live teacher, not yet a built deck. The pictures and the Club Fair plates are not made. I can build it as a playable deck after your OK, with the Canva step for the 35 %-purple fair background.
+- Built: the lesson is now a playable deck (`free-time-club-1`, 30 slides, `src/academy-deck/lessons/freeTimeClub1.ts`) following the order above, with a new Rule slide. It differs slightly from the table: the story is followed by a club-words set with two games, the rule slide comes right after a model slide, and the end has a rule-check game and a spoken teach-back.
+- Honest limit (earlier draft): The pictures and the Club Fair plates are not made. I can build it as a playable deck after your OK, with the Canva step for the 35 %-purple fair background.

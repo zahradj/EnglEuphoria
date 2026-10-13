@@ -40,7 +40,13 @@ export const partsOf = (shape?: RunShape): readonly { name: string; goal: string
 export type Lane = 'start' | 'core' | 'stretch';
 export const LANES: Lane[] = ['start', 'core', 'stretch'];
 
+/** Where a slide sits in the teaching sequence (docs/research/academy-lesson-sequencing.md): context, model (I do), rule, controlled practice (we do), free practice, produce (you do), review. */
+export type Stage = 'context' | 'model' | 'rule' | 'controlled' | 'free' | 'produce' | 'review';
+export const STAGE_ORDER: Stage[] = ['context', 'model', 'rule', 'controlled', 'free', 'produce'];
+
 export interface SlideBase {
+  /** the teaching stage of this slide (optional; lessons that set it are checked for the order model, rule, controlled, free, produce) */
+  stage?: Stage;
   id: string;
   /** per-lane overrides: the fields listed here replace the slide's own when the student is in that lane (core = the slide as written) */
   lanes?: Partial<Record<Exclude<Lane, 'core'>, Record<string, unknown>>>;
@@ -174,11 +180,13 @@ export interface BlendSlide extends SlideBase { kind: 'blend'; prompt: string; r
 export interface HearPickSlide extends SlideBase { kind: 'hearpick'; prompt: string; rounds: { say: string; options: string[]; answer: string }[] }
 /** Decodable reader page (Pre-A1): short lines with tap-to-hear words; match each line to its picture. */
 export interface ReaderSlide extends SlideBase { kind: 'reader'; prompt: string; lines: { text: string; art: TeachArt }[] }
+/** The rule, stated plainly (owner 2026-10-13): at most 3 lines, each with an example; the guide reads it, the student repeats it and taps "I said it". */
+export interface RuleSlide extends SlideBase { kind: 'rule'; title: string; lines: { rule: string; /** spoken version of the rule (symbols like + are not read) */ say: string; example: string }[] }
 export interface WrapSlide extends SlideBase { kind: 'wrap'; heading: string; ticks: string[]; homework: string; clue: string }
 
 export type Slide =
   | TitleSlide | BriefSlide | BadgeSlide | DialSlide | LaneSlide | WhoSaidSlide | LockersSlide | NumTrainSlide | PadlockSlide | ConvoSlide | SpellSlide
-  | MatchSlide | CountUpSlide | BePickSlide | BuildSlide | FactCheckSlide | WriteSlide | HuntSlide | ShadowSlide | TeachSlide | ModelSlide | FindWrongSlide | BorderSlide | MemorySlide | NumWallSlide | PhoneChatSlide | FadeSlide | CardSlide | SaySlide | WrapSlide | BlendSlide | HearPickSlide | ReaderSlide;
+  | MatchSlide | CountUpSlide | BePickSlide | BuildSlide | FactCheckSlide | WriteSlide | HuntSlide | ShadowSlide | TeachSlide | ModelSlide | FindWrongSlide | BorderSlide | MemorySlide | NumWallSlide | PhoneChatSlide | FadeSlide | CardSlide | SaySlide | WrapSlide | BlendSlide | HearPickSlide | ReaderSlide | RuleSlide;
 
 export interface DeckScript {
   lessonId: string;

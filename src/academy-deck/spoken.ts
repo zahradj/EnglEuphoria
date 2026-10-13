@@ -33,6 +33,7 @@ export function openLines(s: Slide): SpokenLine[] {
     case 'title': return line('Vee', s.heading);
     case 'brief': return line('Vee', s.say);
     case 'dial': case 'lane': case 'blend': case 'hearpick': case 'reader': return line(lead(s), s.prompt);
+    case 'rule': return line('Vee', s.title);
     case 'say': return line(lead(s), s.prompt);
     case 'wrap': return [...line('Vee', s.heading), ...line('Vee', s.homework), ...line('Vee', s.clue)];
     // game prompts are spoken when the game opens (the guide reads the task aloud)
@@ -66,6 +67,7 @@ export function viewLines(s: Slide): SpokenLine[] {
     case 'factcheck': return s.claims.flatMap((c) => line(lead(s), c.text));
     case 'blend': return s.rounds.flatMap((r) => line('Vee', r.word));
     case 'hearpick': return s.rounds.flatMap((r) => line('Vee', r.say));
+    case 'rule': return s.lines.flatMap((l) => [...line('Vee', l.say), ...line('Vee', l.example)]);
     case 'reader': return s.lines.flatMap((l) => [...line('Vee', l.text), ...[...new Set(l.text.replace(/[.,!?]/g, '').split(/\s+/))].flatMap((w) => line('Vee', w))]);
     case 'numwall': return [...Array.from({ length: 100 }, (_, i) => i + 1), ...(s.hundreds ? [200, 300, 400, 500, 600, 700, 800, 900] : [])].flatMap((n) => line('Vee', numberWord(n)));
     default: return [];

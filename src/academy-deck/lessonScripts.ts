@@ -5,6 +5,7 @@ const LOADERS: Record<string, () => Promise<DeckScript>> = {
   'sign-me-up': async () => (await import('./lessons/signMeUp')).SIGN_ME_UP,
   'sign-me-up-2': async () => (await import('./lessons/signMeUp2')).SIGN_ME_UP_2,
   'pa1-s01-e1': async () => (await import('./lessons/pa1s01e1')).PA1_S01_E1,
+  'free-time-club-1': async () => (await import('./lessons/freeTimeClub1')).FREE_TIME_CLUB_1,
   'fake-or-real': async () => (await import('./lessons/patternLab')).PATTERN_LAB,
 };
 
