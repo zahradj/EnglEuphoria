@@ -198,11 +198,17 @@ export interface SortSlide extends SlideBase {
   bins: { id: string; label: string; /** the sentence made when an item goes in: {w} is the item's word */ template: string }[];
   items: { id: string; art: TeachArt; word: string }[];
 }
+/** Story (owner 2026-10-14: stories as full scene plates): each beat is ONE full-bleed generated scene with the cast painted into it (public/academy-art/bg/<plate>.webp); the lines show as film subtitles and are spoken; the plates cross-fade (never zoom or pan). Done when the last line has been seen. */
+export interface StorySlide extends SlideBase {
+  kind: 'story';
+  title: string;
+  beats: { plate: string; lines: { who: CastName; text: string }[] }[];
+}
 export interface WrapSlide extends SlideBase { kind: 'wrap'; heading: string; ticks: string[]; homework: string; clue: string }
 
 export type Slide =
   | TitleSlide | BriefSlide | BadgeSlide | DialSlide | LaneSlide | WhoSaidSlide | LockersSlide | NumTrainSlide | PadlockSlide | ConvoSlide | SpellSlide
-  | MatchSlide | CountUpSlide | BePickSlide | BuildSlide | FactCheckSlide | WriteSlide | HuntSlide | ShadowSlide | TeachSlide | ModelSlide | FindWrongSlide | BorderSlide | MemorySlide | NumWallSlide | PhoneChatSlide | FadeSlide | CardSlide | SaySlide | WrapSlide | BlendSlide | HearPickSlide | ReaderSlide | RuleSlide | ExploreSlide | SortSlide;
+  | MatchSlide | CountUpSlide | BePickSlide | BuildSlide | FactCheckSlide | WriteSlide | HuntSlide | ShadowSlide | TeachSlide | ModelSlide | FindWrongSlide | BorderSlide | MemorySlide | NumWallSlide | PhoneChatSlide | FadeSlide | CardSlide | SaySlide | WrapSlide | BlendSlide | HearPickSlide | ReaderSlide | RuleSlide | ExploreSlide | SortSlide | StorySlide;
 
 export interface DeckScript {
   lessonId: string;
