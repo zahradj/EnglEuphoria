@@ -6,7 +6,23 @@ research. In A1 the child reads **full sentences**: **one story read a bit more 
 game + Blend & Read + a tongue twister in every lesson**, **30-49 pages per lesson**, **no game twice in the unit**,
 **no story videos** (Canva story GIFs only after a scenario and the owner's OK).
 
-**Status:** approved (owner, 2026-10-13: "next") — building.
+**Status:** approved (owner, 2026-10-13: "next") — **built 2026-10-13** (`src/content/playground-library/food-festival/scenes.ts`,
+format `food-rich`, routes `/playground-scene/food-lesson-1..7`, homework `src/content/homework-quests/food-festival-a1-u4.ts`).
+
+### Changes made while building (for the owner)
+
+- **Phonics games:** the games that check only the FIRST letter (Letter Monsters, Sound Mole) cannot check a blend
+  (gr = g + r), so each lesson uses a game that names the sound: L1 **Sound Sort** (gr / br), L2 **Word Build** (pl),
+  L3 **Brick Crush** (sn / st / sp), L4 **Treasure Chest** (fr / fl / gr / pl), L5 **Sound Pick**. Blends play our own
+  recorded single sounds one after the other (g, then r) — no new recording.
+- **L4:** Go Fish ("Have you got…?") does not fit food, so L4 has **Food Bingo**, **Food Dominoes**, **Tic-Tac-Toe** and
+  **Word Splat** (polite words) beside Food Survey ★ and Build a Pizza.
+- **More games so every lesson has 30 pages** (none twice in the unit): L1 Feed Pip, Shadow Match, Food Memory; L2 Spin
+  & Say, Red Light Green Light (kitchen jobs), Balloon Match, jigsaw; L3 Echo Cave, Musical Plates, Whisper Tube, Pico's
+  Glider; L5 Story Stones, Team Flags, Story Quiz Board; L6 Catch the Answer, First Sound, Word Blocks, Treasure Map,
+  Cake Tower, Treasure Chests, Bridge, Pass the Present.
+- **Song:** "Do You Like…?" take 1 (score 0.97, every line heard) — please listen once.
+- **Chef Cilla and Pico** speak with the teacher voice for now (like Coco, Nova and Beep).
 
 ## 1. Where we start
 
@@ -175,10 +191,10 @@ Balloon** (spell *soup, rice, cake*) · **Treasure Chests** · Twister Race · B
 
 | Lesson | Games |
 |---|---|
-| L1 | Market Sort · Mystery Bag · Food Memory · Read & Match · Letter Monsters (gr) |
-| L2 | Food Preference Chart · Kitchen Charades · Thumbs Up or Down · Read & Drag · Sound Mole (pl) |
-| L3 | Tick or Cross · Hot Plate · Listen & Tap · Read & Check · Word Build (sn) |
-| L4 | Food Survey ★ · Build a Pizza · Food Bingo · Sentence Build · Brick Crush (fr) |
+| L1 | Market Sort · Mystery Bag · Food Memory · Read & Match · Sound Sort (gr / br) |
+| L2 | Like Chart · Kitchen Charades · Spin & Say · Read & Drag · Word Build (pl) |
+| L3 | Tick or Cross · Hot Plate · Listen & Tap · Yes or No? · Brick Crush (sn) |
+| L4 | Food Survey ★ · Build a Pizza · Food Bingo · Sentence Build · Treasure Chest (fr) |
 | L5 | Treasure Radar · Story Order · Picture Crossword · Sound Pick |
 | L6 | Festival Café ★ · Cookie Faces · Rapid Recall · Save the Balloon · Treasure Chests |
 | L7 | Food Race (boss warm-up) |

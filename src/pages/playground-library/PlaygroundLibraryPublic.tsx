@@ -140,6 +140,11 @@ export default function PlaygroundLibraryPublic() {
       navigate(`/playground-scene/jungle-lesson-${lessonNum}`);
       return;
     }
+    if (fmt === 'food-rich') {
+      const lessonNum = row.ai_metadata?.lesson_number ?? 1;
+      navigate(`/playground-scene/food-lesson-${lessonNum}`);
+      return;
+    }
     if (fmt === 'space-rich') {
       const lessonNum = row.ai_metadata?.lesson_number ?? 1;
       navigate(`/playground-scene/space-lesson-${lessonNum}`);

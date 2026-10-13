@@ -22,6 +22,7 @@ export function playgroundLessonPath(rowId: string, m: LessonRouteMeta | null | 
     case 'wt-a2-rich': return `/playground-scene/a2-unit-${unit}-lesson-${lesson}`;
     case 'jungle-rich': return `/playground-scene/jungle-lesson-${lesson}`;
     case 'space-rich': return `/playground-scene/space-lesson-${lesson}`;
+    case 'food-rich': return `/playground-scene/food-lesson-${lesson}`;
     case 'castle-rich': return `/playground-scene/castle-lesson-${lesson}`;
     case 'scene-player': return `/playground-scene/play/${rowId}`;
     default: return null;

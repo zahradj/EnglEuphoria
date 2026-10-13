@@ -771,8 +771,17 @@ async function playPhonicsClip(clip: string | undefined, label: string): Promise
   }
 }
 
+/** Initial consonant blends (A1 Unit 4: gr, pl, sn, fr…) have no clip of their own: they are played as their two (or
+ *  three) recorded single sounds one after the other — g, r — which is how a blend is taught ("blend the sounds"). */
+const BLENDS = new Set(['bl', 'br', 'cl', 'cr', 'dr', 'fl', 'fr', 'gl', 'gr', 'pl', 'pr', 'sk', 'sl', 'sm', 'sn', 'sp', 'st', 'sw', 'tr', 'tw', 'spl', 'spr', 'str']);
+async function playBlend(blend: string): Promise<void> {
+  for (const l of blend.split('')) await playPhonicsClip(PHONIC_CLIP[l], l);
+}
+
 export function playLetterPhonic(letter: string): Promise<void> {
-  return playPhonicsClip(PHONIC_CLIP[letter.toLowerCase()], letter);
+  const k = letter.toLowerCase();
+  if (!PHONIC_CLIP[k] && BLENDS.has(k)) return playBlend(k);
+  return playPhonicsClip(PHONIC_CLIP[k], letter);
 }
 
 export function playLetterName(letter: string): Promise<void> {

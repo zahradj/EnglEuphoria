@@ -28,6 +28,7 @@ import * as wtA2 from './welcome-town-a2/scenes';
 import * as castle from './magic-castle/scenes';
 import * as jungle from './jungle-adventure/scenes';
 import * as space from './space-mission/scenes';
+import * as food from './food-festival/scenes';
 import { LIBRARY_GAMES } from './gamesCatalog';
 import { gameToScenes } from './gameLessons';
 
@@ -45,6 +46,7 @@ const ENGINES: { name: string; Renderer: ComponentType<any>; lessons: [string, A
   { name: 'magic-castle (A1 U9)', Renderer: WtRenderer, lessons: lessonsOf(castle) },
   { name: 'jungle (A1 U2)', Renderer: WtRenderer, lessons: lessonsOf(jungle) },
   { name: 'space (A1 U3)', Renderer: WtRenderer, lessons: lessonsOf(space) },
+  { name: 'food (A1 U4)', Renderer: WtRenderer, lessons: lessonsOf(food) },
   { name: 'games in the classroom library (Welcome Town player)', Renderer: WtRenderer, lessons: gameLessons },
   { name: 'games in the classroom library (Pre-A1 player)', Renderer: Unit1Renderer, lessons: gameLessons },
 ];

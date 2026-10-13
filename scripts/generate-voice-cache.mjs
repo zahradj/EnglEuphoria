@@ -52,6 +52,8 @@ import * as wtA2Scenes from '../src/content/playground-library/welcome-town-a2/s
 import * as magicCastleScenes from '../src/content/playground-library/magic-castle/scenes.ts';
 import * as jungleScenes from '../src/content/playground-library/jungle-adventure/scenes.ts';
 import * as spaceScenes from '../src/content/playground-library/space-mission/scenes.ts';
+import * as foodScenes from '../src/content/playground-library/food-festival/scenes.ts';
+import { surveyQuestion, surveyAnswer, surveyReport, CAFE_WRONG, CAFE_YES } from '../src/content/playground-library/welcome-town/scene-components/foodRules.ts';
 import { homeworkA1U9L1Lines } from '../src/content/playground-library/magic-castle/homework.ts';
 import { allQuestLines } from '../src/content/homework-quests/registry.ts';
 import { placementLines } from '../src/components/placement/placementLines.ts';
@@ -862,6 +864,12 @@ const WT_EXTRACTORS = {
     ...(s.icons ?? []).map((i) => ['teacher', i.label]),
     ...(s.planets ?? []).flatMap((p) => [[s.who, p.forecast], ['teacher', p.report]]),
     ...(s.bag ?? []).flatMap((b) => [[s.who, b.line], ['teacher', b.say]])],
+  'food-survey': (s) => [[s.who, s.doneLine], [s.who, 'Ask your friends! Tap a box.'], [s.who, 'Now read the chart. Likes or doesn’t like?'], [s.who, 'Look at the chart again!'],
+    ...(s.friends ?? []).flatMap((fr, f) => (s.foods ?? []).flatMap((fd, c) => [['teacher', surveyQuestion(fd.label, fr.name)], [fr.who, surveyAnswer(!!s.answers?.[f]?.[c])]])),
+    ...(s.reports ?? []).map((r) => ['teacher', surveyReport(s.friends[r.friend].name, s.foods[r.food].label, !!s.answers?.[r.friend]?.[r.food])])],
+  'festival-cafe': (s) => [[s.who, s.doneLine], ...(s.menu ?? []).map((m) => ['teacher', m.label]),
+    ...(s.rounds ?? []).flatMap((r) => [[r.customer, r.line], [r.customer, r.reply], [r.customer, CAFE_WRONG], ...(r.offer ? [['teacher', r.offer.line], [r.customer, CAFE_YES]] : [])])],
+  'build-dish': (s) => [[s.who, s.doneLine], [s.who, 'Read the recipe. Then add it!'], [s.who, 'Read it again!'], [s.eater?.who, s.eater?.line], ...(s.steps ?? []).map((st) => ['teacher', st.text])],
   'hot-coconut': (s) => [[s.who, s.doneLine], ...(s.rounds ?? []).flatMap((q) => {
     const n = (s.seats ?? []).length || 1; const at = ((q.stop % n) + n) % n;
     return [[s.who, `${at === 0 ? 'Your turn!' : `Help ${s.seats[at].name}!`} ${q.ask}`], ['teacher', q.choices[q.answer]]];
@@ -922,6 +930,7 @@ const ENGINES = [
   // Jungle Adventure (A1 Unit 2) plays through welcome-town's renderer too.
   { scenesModule: jungleScenes, extractors: WT_EXTRACTORS, resolveWho: (who) => wtScenes.VOICE_KEY[who] ?? who },
   { scenesModule: spaceScenes, extractors: WT_EXTRACTORS, resolveWho: (who) => wtScenes.VOICE_KEY[who] ?? who },
+  { scenesModule: foodScenes, extractors: WT_EXTRACTORS, resolveWho: (who) => wtScenes.VOICE_KEY[who] ?? who },
 ];
 
 /** Homework games: every line they can say, already as (voice, text). */

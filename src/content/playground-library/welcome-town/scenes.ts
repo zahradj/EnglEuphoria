@@ -60,7 +60,7 @@ import type { ColorPlaySceneData } from '../ColorPlayScene';
 
 const W = '/welcome-town';
 
-export type CharKey = 'pip' | 'marigold' | 'mia' | 'bella' | 'willow' | 'leo' | 'coco' | 'wim' | 'catcat' | 'nova' | 'beep';
+export type CharKey = 'pip' | 'marigold' | 'mia' | 'bella' | 'willow' | 'leo' | 'coco' | 'wim' | 'catcat' | 'nova' | 'beep' | 'cilla' | 'pico';
 
 /** Every one of these maps onto an audio.ts voice already built for that
  *  exact character (pip/mia/bella/willow/leo are the same characters as the
@@ -83,6 +83,9 @@ export const VOICE_KEY: Record<CharKey, 'pip' | 'mia' | 'bella' | 'willow' | 'le
   // Unit 3 (Space Mission): Captain Nova and Beep the Robot — no own recorded voice yet, like Coco.
   nova: 'teacher',
   beep: 'teacher',
+  // Unit 4 (Food Festival): Chef Cilla and Pico the Mouse — teacher voice until they have their own recorded voices.
+  cilla: 'teacher',
+  pico: 'teacher',
 };
 
 /** No `img` field — every character appears painted directly into a scene's
@@ -104,6 +107,8 @@ export const CAST: Record<CharKey, { name: string; emoji: string; color: string 
   catcat: { name: 'Cat-cat', emoji: '\u{1F431}', color: '#9A8C98' },
   nova: { name: 'Captain Nova', emoji: '\u{1F469}\u{200D}\u{1F680}', color: '#6366F1' },
   beep: { name: 'Beep', emoji: '\u{1F916}', color: '#64748B' },
+  cilla: { name: 'Chef Cilla', emoji: '\u{1F469}\u{200D}\u{1F373}', color: '#E63946' },
+  pico: { name: 'Pico', emoji: '\u{1F42D}', color: '#94A3B8' },
 };
 
 const bgWide = `${W}/scenes/bg-classroom-wide.png`;
@@ -600,6 +605,21 @@ export type Scene =
       icons: { key: string; label: string; img: string }[];
       bag: { planet: number; line: string; choices: { label: string; img: string }[]; answer: number; say: string }[];
       doneLine: string; }
+  | { id: string; kind: 'food-survey'; bg: string; teacher: string; title: string; who: CharKey;
+      /** A chart friends × foods; `answers[f][c]` = does friend f like food c. The child asks every box, then reads
+       *  the chart for each `reports` card and picks likes / doesn't like. */
+      friends: { name: string; who: CharKey; img: string }[]; foods: { label: string; img: string }[];
+      answers: boolean[][]; reports: { friend: number; food: number }[]; doneLine: string; }
+  | { id: string; kind: 'festival-cafe'; bg: string; teacher: string; title: string; who: CharKey;
+      /** `order` = menu indexes the tray must hold exactly; `offer` = the polite offer the child then SAYS (its item is
+       *  added to the tray when the customer says "Yes, please!"). */
+      menu: { label: string; img: string }[];
+      rounds: { customer: CharKey; customerImg: string; line: string; order: number[]; reply: string; offer?: { line: string; item: number } }[];
+      doneLine: string; }
+  | { id: string; kind: 'build-dish'; bg: string; teacher: string; title: string; who: CharKey;
+      /** `steps[i].topping` = the toppings index that step names; the eater tastes the dish at the end. */
+      toppings: { label: string; img: string }[]; steps: { text: string; topping: number }[];
+      eater: { who: CharKey; img: string; line: string }; doneLine: string; }
   | { id: string; kind: 'hot-cold'; bg: string; teacher: string; title: string; who: CharKey;
       /** The picture hides at (x, y) % of the 16:9 art; the child searches by tapping, the voice says Cold / Warm / Hot. */
       rounds: { label: string; img: string; x: number; y: number; find: string; say: string }[]; doneLine: string; }
