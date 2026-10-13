@@ -1,7 +1,12 @@
 [
   {
-    "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0076-1456307469586814514.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261013%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261013T154606Z&X-Amz-Expires=25846&X-Amz-Signature=048e634dcec0e4ad4511e6c691f38e6b0d57579f150be69c93e2a29999a56a77&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2013%20Oct%202026%2022%3A56%3A52%20GMT",
-    "out": "public/magic-castle/stickers/crown.png",
+    "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0077-3088862335357127015.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261013%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261013T173305Z&X-Amz-Expires=22490&X-Amz-Signature=ce19d5a41a4e9c36ce8bf1488baba7c2be5b75bb851d57cdf081b06d5447f8e1&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2013%20Oct%202026%2023%3A47%3A55%20GMT",
+    "out": "public/magic-castle/stickers/boat.png",
+    "sticker": true
+  },
+  {
+    "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0078-3088862335357127015.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261013%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261013T120331Z&X-Amz-Expires=40793&X-Amz-Signature=b4e63b0a28f116c7481fb3f3e5e390d5c009873e4d5ac7ccc4308043803c1df9&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2013%20Oct%202026%2023%3A23%3A24%20GMT",
+    "out": "public/magic-castle/stickers/tower.png",
     "sticker": true
   }
 ]
