@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import * as WT from './welcome-town/scenes';
 import * as JA from './jungle-adventure/scenes';
+import * as SM from './space-mission/scenes';
 
 /**
  * A1 lessons (owner, 2026-10-13: "A1 lessons can be from 30 to 49 pages"): every rebuilt A1 lesson has 30-49 pages,
@@ -21,6 +22,7 @@ const ROUTINES = new Set([
 const UNITS: { unit: string; lessons: AnyScene[][] }[] = [
   { unit: 'A1 Unit 1 Welcome Town', lessons: [1, 2, 3, 4, 5, 6, 7].map((n) => (WT as unknown as Record<string, AnyScene[]>)[`LESSON_${n}_SCENES`]) },
   { unit: 'A1 Unit 2 Jungle', lessons: [1, 2, 3, 4, 5, 6, 7].map((n) => (JA as unknown as Record<string, AnyScene[]>)[`LESSON_A1U2L${n}_SCENES`]) },
+  { unit: 'A1 Unit 3 Space', lessons: [1, 2, 3, 4, 5, 6, 7].map((n) => (SM as unknown as Record<string, AnyScene[]>)[`LESSON_A1U3L${n}_SCENES`]) },
 ];
 
 describe('A1 lessons: 30-49 pages, no game twice in a unit', () => {

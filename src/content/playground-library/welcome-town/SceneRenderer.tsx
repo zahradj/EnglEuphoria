@@ -62,6 +62,8 @@ import { CrosswordScene } from './scene-components/CrosswordScene';
 import { FlagRaceScene } from './scene-components/FlagRaceScene';
 import { BalloonMatchScene } from './scene-components/BalloonMatchScene';
 import { PetPalScene } from './scene-components/PetPalScene';
+import { RocketMazeScene } from './scene-components/RocketMazeScene';
+import { WeatherReportScene } from './scene-components/WeatherReportScene';
 import { FieldGuideScene } from './scene-components/FieldGuideScene';
 import { displayScene } from '../stageLabel';
 import { SongScene } from './scene-components/SongScene';
@@ -189,6 +191,8 @@ export function SceneRenderer(props: {
       case 'flag-race': return <FlagRaceScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'balloon-match': return <BalloonMatchScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'pet-pal': return <PetPalScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
+      case 'rocket-maze': return <RocketMazeScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
+      case 'weather-report': return <WeatherReportScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'flipbook': return <FlipbookScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'song': return <SongScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;
       case 'sound-model': return <SoundModelScene scene={scene} onNext={props.onNext} sync={props.activitySync} />;

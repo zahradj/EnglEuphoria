@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { SCENE_LESSON_REGISTRY } from './sceneLessonRegistry';
 import { getWelcomeTownLesson } from './welcomeTownLessonRegistry';
 import { LESSON_A1U2L1_SCENES, LESSON_A1U2L2_SCENES, LESSON_A1U2L3_SCENES, LESSON_A1U2L4_SCENES, LESSON_A1U2L5_SCENES, LESSON_A1U2L6_SCENES, LESSON_A1U2L7_SCENES } from './jungle-adventure/scenes';
+import * as SPACE from './space-mission/scenes';
 import type { RecallWarmupSceneData } from './RecallWarmupScene';
 
 // Owner's rule (2026-10-07, universal): every lesson after the first of its track opens
@@ -27,6 +28,13 @@ const lessons: [string, readonly AnyScene[]][] = [
   ['jungle-rich-2-5', LESSON_A1U2L5_SCENES],
   ['jungle-rich-2-6', LESSON_A1U2L6_SCENES],
   ['jungle-rich-2-7', LESSON_A1U2L7_SCENES],
+  ['space-rich-3-1', SPACE.LESSON_A1U3L1_SCENES],
+  ['space-rich-3-2', SPACE.LESSON_A1U3L2_SCENES],
+  ['space-rich-3-3', SPACE.LESSON_A1U3L3_SCENES],
+  ['space-rich-3-4', SPACE.LESSON_A1U3L4_SCENES],
+  ['space-rich-3-5', SPACE.LESSON_A1U3L5_SCENES],
+  ['space-rich-3-6', SPACE.LESSON_A1U3L6_SCENES],
+  ['space-rich-3-7', SPACE.LESSON_A1U3L7_SCENES],
 ];
 
 describe('Remember? warm-up', () => {

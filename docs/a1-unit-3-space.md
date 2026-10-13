@@ -6,7 +6,23 @@ TPR games, ESL weather games, number games). In A1 the child reads **full senten
 bit more each lesson**, **phonics + a phonics game + Blend & Read + a tongue twister in every lesson**, **30-49 pages per
 lesson**, **no game twice in the unit**, and **no story videos** (Canva story GIFs only after a scenario and the owner's OK).
 
-**Status:** approved (owner, 2026-10-13: "go") — building.
+**Status:** approved (owner, 2026-10-13: "go") — **built 2026-10-13** (`src/content/playground-library/space-mission/scenes.ts`,
+format `space-rich`, routes `/playground-scene/space-lesson-1..7`, homework `src/content/homework-quests/space-mission-a1-u3.ts`).
+
+### Changes made while building (for the owner)
+
+- **Lesson 2 sound:** ng on its own has no recording of our own yet (`docs/phonics-sounds-to-record.md`), so Lesson 2
+  teaches the **-ing** chunk (ring, wing, swing) with our recorded *ing* clip, and its phonics game is **Sound Sort**
+  (ing / th / sh) instead of Sound Mole (Sound Mole only works with first sounds).
+- **Lesson 1 sound:** th as in *three, thumb, thin, bath* (unvoiced) — voiced th (*this, that*) is not recorded yet.
+- **Lesson 6:** "Lava Planet" became **River Crossing on Planet Sun** (the stepping-stones game draws water).
+- **Extra games so every lesson has 30+ pages** (none twice in the unit): L1 Memory, Star Splat, Tic-Tac-Toe, jigsaw;
+  L2 I Spy, Red Light Green Light (orders), Where is…? listen & tap; L3 Team Flags, Pass the Present, Listen & check;
+  L4 Ice Tower, Go Fish (weather cards); L5 Story Quiz Board; L6 Catch the Answer, Hot Moon, Treasure Chests, Ice Bridge.
+- **Counting in tens:** the number games got a `step` (10) so the child taps / pops 10, 20 … 100; number cards are
+  drawn in code (no picture files).
+- **Song:** "Counting Rocket" take 1 (best score 0.83; the scorer cannot hear sung numbers, so please listen once).
+- **Captain Nova and Beep** speak with the teacher voice for now (like Coco), until they get their own recorded voices.
 
 ## 1. Where we start
 

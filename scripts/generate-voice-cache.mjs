@@ -51,6 +51,7 @@ import * as wtScenes from '../src/content/playground-library/welcome-town/scenes
 import * as wtA2Scenes from '../src/content/playground-library/welcome-town-a2/scenes.ts';
 import * as magicCastleScenes from '../src/content/playground-library/magic-castle/scenes.ts';
 import * as jungleScenes from '../src/content/playground-library/jungle-adventure/scenes.ts';
+import * as spaceScenes from '../src/content/playground-library/space-mission/scenes.ts';
 import { homeworkA1U9L1Lines } from '../src/content/playground-library/magic-castle/homework.ts';
 import { allQuestLines } from '../src/content/homework-quests/registry.ts';
 import { placementLines } from '../src/components/placement/placementLines.ts';
@@ -164,9 +165,10 @@ const CAST = unit1Scenes.CAST;
  *  exactly as safe to pre-generate as a verbatim field. Keep each one in
  *  sync with its renderer counterpart; a mismatch here bakes an audio clip
  *  that says something different from what the app actually displays. */
-const NUMBER_WORDS = ['ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX', 'SEVEN', 'EIGHT', 'NINE', 'TEN'];
+const NUMBER_WORDS = ['ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX', 'SEVEN', 'EIGHT', 'NINE', 'TEN', 'ELEVEN', 'TWELVE', 'THIRTEEN', 'FOURTEEN', 'FIFTEEN', 'SIXTEEN', 'SEVENTEEN', 'EIGHTEEN', 'NINETEEN', 'TWENTY'];
+const TENS_WORDS = { 30: 'THIRTY', 40: 'FORTY', 50: 'FIFTY', 60: 'SIXTY', 70: 'SEVENTY', 80: 'EIGHTY', 90: 'NINETY', 100: 'ONE HUNDRED' };
 function numberSpeech(n) {
-  const w = NUMBER_WORDS[n - 1];
+  const w = NUMBER_WORDS[n - 1] ?? TENS_WORDS[n];
   return w ? w.charAt(0) + w.slice(1).toLowerCase() : String(n);
 }
 function buildColorSentence(colorWord, exampleWord) {
@@ -280,9 +282,9 @@ const UNIT1_EXTRACTORS = {
     ...(s.rounds ?? []).map((r) => ['teacher', r.prompt]),
     ...(s.tiles ?? []).map((t) => [t.who, `Yes! ${castName(t.who)} is ${t.emotion}!`]),
   ],
-  'numbers-learn': (s) => { const out = []; for (let n = s.from; n <= s.to; n++) out.push([s.who, numberSpeech(n)]); return out; },
+  'numbers-learn': (s) => { const out = []; for (let n = s.from; n <= s.to; n += (s.step ?? 1)) out.push([s.who, numberSpeech(n)]); return out; },
   'numbers-review': (s) => { const out = []; for (let n = s.from; n <= s.to; n++) out.push([s.who, numberSpeech(n)]); return out; },
-  'count-balloons': (s) => { const out = []; for (let n = 1; n <= s.total; n++) out.push([s.who, numberSpeech(n)]); return out; },
+  'count-balloons': (s) => { const out = []; for (let n = 1; n <= s.total; n++) out.push([s.who, numberSpeech(n * (s.step ?? 1))]); return out; },
   'candle-cake': (s) => (s.rounds ?? []).flatMap((r) => [[r.asker, r.prompt], [r.asker, r.celebrate]]),
   'age-balloons': (s) => (s.friends ?? []).map((f) => [f.who, `${castName(f.who)} is ${f.age}!`]),
   'age-sentence-match': (s) => (s.friends ?? []).map((f) => [f.who, `${castName(f.who)} is ${f.age}!`]),
@@ -847,6 +849,19 @@ const WT_EXTRACTORS = {
     ...(s.rounds ?? []).flatMap((r, i) => [...(i % 2 === 0 ? [[s.who, `Your turn! ${r.ask}`]] : []), [s.who, r.ask], ['teacher', r.choices[r.answer]]])],
   'balloon-match': (s) => [[s.who, s.doneLine], [s.who, 'Read a balloon. Find its picture!'], ...(s.pairs ?? []).flatMap((p) => [[s.who, p.text], ['teacher', p.text]])],
   'pet-pal': (s) => [[s.who, s.doneLine], [s.who, 'No, thank you! Listen again!'], ...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], ['teacher', r.say]])],
+  'rocket-maze': (s) => {
+    const SAY = { up: 'Go up!', down: 'Go down!', left: 'Go left!', right: 'Go right!' };
+    const out = [[s.who, s.doneLine], [s.who, 'Oops! A rock! Try again!'], ...Object.values(SAY).flatMap((l) => [['teacher', l], [s.who, l], [s.who, `Listen! ${l}`]])];
+    for (const m of s.missions ?? []) {
+      out.push(['teacher', m.win], [s.who, m.intro]);
+      if (m.mode === 'listen' && m.route?.length) out.push([s.who, `${m.intro} ${SAY[m.route[0]]}`]);
+    }
+    return out;
+  },
+  'weather-report': (s) => [[s.who, s.doneLine], [s.who, 'You are the weather reporter! Read the report.'], [s.who, 'Listen again!'], [s.who, 'Hmm, not for this weather!'],
+    ...(s.icons ?? []).map((i) => ['teacher', i.label]),
+    ...(s.planets ?? []).flatMap((p) => [[s.who, p.forecast], ['teacher', p.report]]),
+    ...(s.bag ?? []).flatMap((b) => [[s.who, b.line], ['teacher', b.say]])],
   'hot-coconut': (s) => [[s.who, s.doneLine], ...(s.rounds ?? []).flatMap((q) => {
     const n = (s.seats ?? []).length || 1; const at = ((q.stop % n) + n) % n;
     return [[s.who, `${at === 0 ? 'Your turn!' : `Help ${s.seats[at].name}!`} ${q.ask}`], ['teacher', q.choices[q.answer]]];
@@ -906,6 +921,7 @@ const ENGINES = [
   { scenesModule: magicCastleScenes, extractors: WT_EXTRACTORS, resolveWho: (who) => wtScenes.VOICE_KEY[who] ?? who },
   // Jungle Adventure (A1 Unit 2) plays through welcome-town's renderer too.
   { scenesModule: jungleScenes, extractors: WT_EXTRACTORS, resolveWho: (who) => wtScenes.VOICE_KEY[who] ?? who },
+  { scenesModule: spaceScenes, extractors: WT_EXTRACTORS, resolveWho: (who) => wtScenes.VOICE_KEY[who] ?? who },
 ];
 
 /** Homework games: every line they can say, already as (voice, text). */

@@ -235,6 +235,13 @@ const PlayJungleLesson4 = lazy(() => import("./pages/playground-scene/PlayJungle
 const PlayJungleLesson5 = lazy(() => import("./pages/playground-scene/PlayJungleLesson5"));
 const PlayJungleLesson6 = lazy(() => import("./pages/playground-scene/PlayJungleLesson6"));
 const PlayJungleLesson7 = lazy(() => import("./pages/playground-scene/PlayJungleLesson7"));
+const PlaySpaceLesson1 = lazy(() => import("./pages/playground-scene/PlaySpaceLesson1"));
+const PlaySpaceLesson2 = lazy(() => import("./pages/playground-scene/PlaySpaceLesson2"));
+const PlaySpaceLesson3 = lazy(() => import("./pages/playground-scene/PlaySpaceLesson3"));
+const PlaySpaceLesson4 = lazy(() => import("./pages/playground-scene/PlaySpaceLesson4"));
+const PlaySpaceLesson5 = lazy(() => import("./pages/playground-scene/PlaySpaceLesson5"));
+const PlaySpaceLesson6 = lazy(() => import("./pages/playground-scene/PlaySpaceLesson6"));
+const PlaySpaceLesson7 = lazy(() => import("./pages/playground-scene/PlaySpaceLesson7"));
 const PlayMagicCastleLesson1 = lazy(() => import("./pages/playground-scene/PlayMagicCastleLesson1"));
 const PlayMagicCastleLesson2 = lazy(() => import("./pages/playground-scene/PlayMagicCastleLesson2"));
 const PlayMagicCastleLesson3 = lazy(() => import("./pages/playground-scene/PlayMagicCastleLesson3"));
@@ -775,7 +782,49 @@ const App = () => {
                           <Suspense fallback={<LoadingFallback />}><PlayJungleLesson7 /></Suspense>
                         </ImprovedProtectedRoute>
                       } />
-                      {/* A1 tier — Magic Castle, Unit 9 Lesson 1 ("Rooms in the Castle: Kitchen, Bedroom"). */}
+
+                      {/* A1 tier — Space Mission, Unit 3 Lesson 1. */}
+                      <Route path="/playground-scene/space-lesson-1" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlaySpaceLesson1 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A1 tier — Space Mission, Unit 3 Lesson 2. */}
+                      <Route path="/playground-scene/space-lesson-2" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlaySpaceLesson2 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A1 tier — Space Mission, Unit 3 Lesson 3. */}
+                      <Route path="/playground-scene/space-lesson-3" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlaySpaceLesson3 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A1 tier — Space Mission, Unit 3 Lesson 4. */}
+                      <Route path="/playground-scene/space-lesson-4" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlaySpaceLesson4 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A1 tier — Space Mission, Unit 3 Lesson 5. */}
+                      <Route path="/playground-scene/space-lesson-5" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlaySpaceLesson5 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A1 tier — Space Mission, Unit 3 Lesson 6. */}
+                      <Route path="/playground-scene/space-lesson-6" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlaySpaceLesson6 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A1 tier — Space Mission, Unit 3 Lesson 7. */}
+                      <Route path="/playground-scene/space-lesson-7" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlaySpaceLesson7 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />                      {/* A1 tier — Magic Castle, Unit 9 Lesson 1 ("Rooms in the Castle: Kitchen, Bedroom"). */}
                       <Route path="/playground-scene/castle-lesson-1" element={
                         <ImprovedProtectedRoute>
                           <Suspense fallback={<LoadingFallback />}><PlayMagicCastleLesson1 /></Suspense>

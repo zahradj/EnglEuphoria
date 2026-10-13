@@ -60,7 +60,7 @@ import type { ColorPlaySceneData } from '../ColorPlayScene';
 
 const W = '/welcome-town';
 
-export type CharKey = 'pip' | 'marigold' | 'mia' | 'bella' | 'willow' | 'leo' | 'coco' | 'wim' | 'catcat';
+export type CharKey = 'pip' | 'marigold' | 'mia' | 'bella' | 'willow' | 'leo' | 'coco' | 'wim' | 'catcat' | 'nova' | 'beep';
 
 /** Every one of these maps onto an audio.ts voice already built for that
  *  exact character (pip/mia/bella/willow/leo are the same characters as the
@@ -80,6 +80,9 @@ export const VOICE_KEY: Record<CharKey, 'pip' | 'mia' | 'bella' | 'willow' | 'le
   coco: 'teacher',
   wim: 'teacher',
   catcat: 'teacher',
+  // Unit 3 (Space Mission): Captain Nova and Beep the Robot — no own recorded voice yet, like Coco.
+  nova: 'teacher',
+  beep: 'teacher',
 };
 
 /** No `img` field — every character appears painted directly into a scene's
@@ -99,6 +102,8 @@ export const CAST: Record<CharKey, { name: string; emoji: string; color: string 
   coco: { name: 'Coco', emoji: '\u{1F412}', color: '#8B5A2B' },
   wim: { name: 'Wim', emoji: '\u{1F9D9}', color: '#4A4E69' },
   catcat: { name: 'Cat-cat', emoji: '\u{1F431}', color: '#9A8C98' },
+  nova: { name: 'Captain Nova', emoji: '\u{1F469}\u{200D}\u{1F680}', color: '#6366F1' },
+  beep: { name: 'Beep', emoji: '\u{1F916}', color: '#64748B' },
 };
 
 const bgWide = `${W}/scenes/bg-classroom-wide.png`;
@@ -583,6 +588,18 @@ export type Scene =
       /** what the pet got in earlier lessons (shown on its shelf; the pet is bigger for each) */
       earlier: { label: string; img: string }[];
       rounds: { line: string; choices: { label: string; img: string }[]; answer: number; say: string }[]; doneLine: string; }
+  | { id: string; kind: 'rocket-maze'; bg: string; teacher: string; title: string; who: CharKey; rocketImg: string;
+      /** A star map grid (cols × rows). 'listen' missions: the voice gives `route` one step at a time, the child taps it;
+       *  'steer' missions: the child gives the orders aloud and presses the arrows. `rocks` are blocked squares. */
+      cols: number; rows: number;
+      missions: { mode: 'listen' | 'steer'; intro: string; start: [number, number]; target: [number, number]; targetImg: string; targetLabel: string; route?: ('up' | 'down' | 'left' | 'right')[]; rocks?: [number, number][]; win: string }[];
+      doneLine: string; }
+  | { id: string; kind: 'weather-report'; bg: string; teacher: string; title: string; who: CharKey;
+      /** Up to 4 planets (2 × 2 map); `weather` lists icon keys. Then the child reads each `report`, then packs the bag. */
+      planets: { name: string; img: string; weather: string[]; forecast: string; report: string }[];
+      icons: { key: string; label: string; img: string }[];
+      bag: { planet: number; line: string; choices: { label: string; img: string }[]; answer: number; say: string }[];
+      doneLine: string; }
   | { id: string; kind: 'hot-cold'; bg: string; teacher: string; title: string; who: CharKey;
       /** The picture hides at (x, y) % of the 16:9 art; the child searches by tapping, the voice says Cold / Warm / Hot. */
       rounds: { label: string; img: string; x: number; y: number; find: string; say: string }[]; doneLine: string; }
