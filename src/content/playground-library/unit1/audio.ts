@@ -726,6 +726,10 @@ PHONIC_CLIP.ck = PHONIC_CLIP.k;
 const LONG_VOWEL_CLIP: Record<string, string> = Object.fromEntries(
   ['a', 'e', 'i', 'o', 'u', 'oo'].map((v) => [v, `/lep1/audio/letters/phon-${v}-long.ogg`]),
 );
+// Vowel digraphs (A1 U9L4) reuse the same recordings: oa (coat, boat, goat) IS the long o /oʊ/; ow as taught there
+// (cow, crown, tower) IS the ou /aʊ/ of "out". (ow in snow/bow = long o is not taught with this key.)
+PHONIC_CLIP.oa = LONG_VOWEL_CLIP.o;
+PHONIC_CLIP.ow = PHONIC_CLIP.ou;
 
 // Real recorded encouragement/instruction phrases from the same phonics-master
 // archive, for scenes that currently rely on TTS or sfx-only feedback.

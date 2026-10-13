@@ -505,7 +505,7 @@ export const A1_LESSON_PLANS: A1LessonPlan[] = [
     funHook: 'Golden Compass piece 7 + teaser: a castle door creaks open.', homeMission: 'Show your medal and compare two animals.',
   }),
 
-  // ── Unit 9 · Magic Castle (L1-L3 built) ───────────────────────────────────────────────────────────
+  // ── Unit 9 · Magic Castle (L1-L4 built) ───────────────────────────────────────────────────────────
   p(9, 1, 'Rooms in the Castle: Kitchen, Bedroom', {
     built: true,
     objective: 'I can name rooms and say "There is a… in the kitchen."',
@@ -534,11 +534,12 @@ export const A1_LESSON_PLANS: A1LessonPlan[] = [
     funHook: 'The magic lamp keeps moving.', homeMission: 'Hide a toy and tell a grown-up where it is.',
   }),
   p(9, 4, 'There Is / There Are in My Room!', {
+    built: true,
     objective: 'I can describe a room and say whose things are: "There are two lamps. Whose crown is it? It\'s Wim\'s."',
     grammarFocus: ['There is / There are…', 'between / in front of', 'Whose… is it? It\'s …\'s'], newVocabulary: ['between', 'in front of', 'whose', 'crown'],
-    reviewTargets: ['How many… (Unit 3)', 'next to / behind'], phonicsFocus: ['oa, ow (coat, moat, tower, crown)'],
+    reviewTargets: ['How many… (Unit 3)', 'next to / behind'], phonicsFocus: ['oa, ow (coat, goat, boat · cow, crown, tower)'],
     communicationGoal: 'Describe my room and talk about whose things are.',
-    signatureGame: '★ Design My Room', evidence: 'The child places 5 things and describes the room in 4 sentences.',
+    signatureGame: '★ Design My Room (listen + free) + Lost Property Box', evidence: 'The child places 5 things and describes the room in 4 sentences.',
     funHook: 'The child designs their own castle room and Wim mixes up whose things are.', homeMission: 'Describe your room in 4 sentences.',
   }),
   p(9, 5, 'Storybook: The Hidden Treasure Room', {

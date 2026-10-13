@@ -67,6 +67,7 @@ import { RapidRecallScene } from './scene-components/RapidRecallScene';
 import { StickerRewardScene } from './scene-components/StickerRewardScene';
 import { HomeMissionScene } from './scene-components/HomeMissionScene';
 import { LiftFlapScene } from './scene-components/LiftFlapScene';
+import { WindCatchScene } from './scene-components/WindCatchScene';
 import { DrawPathScene } from './scene-components/DrawPathScene';
 import { TileRevealScene } from './scene-components/TileRevealScene';
 import { TidyUpScene } from './scene-components/TidyUpScene';
@@ -314,6 +315,7 @@ export function SceneRenderer(props: {
     case 'sticker-reward': return <StickerRewardScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'home-mission': return <HomeMissionScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'lift-flap': return <LiftFlapScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
+    case 'wind-catch': return <WindCatchScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'draw-path': return <DrawPathScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} sync={props.activitySync} />;
     case 'simon-touch': return <SimonTouchScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} sync={props.activitySync} />;
     case 'body-stack': return <BodyStackScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} sync={props.activitySync} />;

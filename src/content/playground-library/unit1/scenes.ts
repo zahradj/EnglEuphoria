@@ -1072,6 +1072,15 @@ export type Scene =
       doneLine: string;
     }
   | {
+      /** Wind Catch (U1L5 signature, docs/prea1-u1l5-leos-lost-star-plan.md): the wind that took Leo's star carries the
+       *  story things across the sky; Leo names one ("Catch the bat!"), the child taps it and it drops into his basket
+       *  (`sound` = its first sound, played from the recorded phonics clip). The last round is the star. */
+      id: string; kind: 'wind-catch'; bg: string; teacher: string; who: CharKey;
+      things: { label: string; img: string; sound: string }[];
+      rounds: { thing: number; line: string; reply: string }[];
+      doneLine: string;
+    }
+  | {
       /** Who Can Do It? (U4L5 signature): "Who stomps their feet?" — tap the animal's face, its move fills the
        *  screen, then the child does the move and taps "I can do it!". face = centre of the face in `img` (%),
        *  faceW = % of the picture width the round face window shows; move = "stomps its feet" (wrong-pick line). */
@@ -2331,30 +2340,18 @@ export const LESSON_4_SCENES: Scene[] = [
 
 /* =========================================================================
  * Lesson 5 — "Leo's Lost Star" (the unit's story lesson)
- *
- * RECREATED (2026-10-03) on the Universal Playground Lesson Blueprint
- * (docs/playground-lesson-blueprint.md): 22-slide arc + Extra time, story as
- * a REAL animated film (§3a, Higgsfield image-to-video, 8 beats in two parts),
- * no reading (the old version had word-order reading tasks), new consistent
- * wide art (the old art drew Bella pink and extra characters).
- *
- * Unit 1 language, all recycled through the story: "Hello! My name is …",
- * "What is your name?", "How are you? — I am sad/happy/angry", "He is sad",
- * "How old are you?", and the unit's sounds H M N W A S B T (hat, mat, bag,
- * bat, ant, nut, star, tree).
- *
- * Research behind the design (mechanics only, no copied content):
- * - Pre / while / post story stages, prediction from the cover, pauses for a
- *   repeated phrase and gestures, then sequencing, retelling and drama
- *   (Cambridge "Storytelling online with young learners", Cambridge Storyfun /
- *   World of Fun, British Council "Storytelling in young learner classes").
- * - Lift-the-flap picture books (Eric Hill's "Where's Spot?"): a predictable
- *   refrain — "Is it under the hat? No! It's a bat!" — becomes the signature
- *   game `lift-flap`.
- * - Lost-toy picture books (Knuffle Bunny) for the emotional arc: sad → help
- *   from friends → happy.
- * Film: public/lep1/video/leo-story-u1l5-a/-b (scripts/story-videos.json
- * "u1l5-leo"; clips via the higgsfield-video edge function).
+ * REBUILT (2026-10-13, owner: "recreate it — research, a lesson plan, PPP or any sequence that helps the student
+ * understand; use the games"): docs/prea1-u1l5-leos-lost-star-plan.md. Sequence Pre → While → Post (the story version
+ * of Present → Practice → Produce): predict from the cover → the story words with pictures + the story moves → the
+ * WHOLE film (part 1 then part 2, no games in between) → the story slot's games (★ new Wind Catch, Where's the star?,
+ * story order, tick or cross, He is sad) → produce (act the story, answer Leo, ask Leo) → phonics (bat, hat, mat) →
+ * Home Hunt → sticker, home mission. No game from Lessons 1-4 or 6 (blueprint §3d).
+ * Unit 1 language, all recycled through the story: "Hello! My name is …", "How are you? — I am sad/happy",
+ * "He is sad", "How old are you?", and the unit's sounds H M N W A S B T (hat, mat, bat, ant, nut, star, tree).
+ * Research (mechanics only): pre/while/post storytelling, picture walk and prediction (Quebec MEES "Picture Walk",
+ * JALT picturebook post-reading projects), TPR storytelling with preschoolers (Universidad de Cuenca), lift-the-flap
+ * refrain books ("Where's Spot?"), lost-toy picture books for the sad → happy arc, kids' app catch games (Wind Catch).
+ * Film: public/lep1/video/leo-story-u1l5-a/-b (scripts/story-videos.json "u1l5-leo"; made before the plan rule).
  * ========================================================================= */
 
 const bgL5Play = `${A}/scenes/bg-l5-play-wide.png`;
@@ -2373,9 +2370,8 @@ export const LESSON_5_TITLE = "Leo's Lost Star";
 export const LESSON_5_OBJECTIVE = 'Follow and retell an animated story (Leo loses his star; his friends say hello and help him look; "Is it under the hat? No! It\'s a bat!"; he is sad, then happy), using all of Unit 1 — hello and names, "How are you? — I am sad/happy", "He is happy", "How old are you?" — and the sounds H M N W A S B T. No reading: listen, move, tap and speak.';
 
 export const LESSON_5_SCENES: Scene[] = [
+  /* WARM-UP */
   { id: 'l5-title', kind: 'title-card', bg: bgL5Play, level: 'Pre-A1', unit: 'Unit 1', lessonLabel: 'Lesson 5 · Story', title: "Leo's Lost Star", subtitle: 'A story with all our friends' },
-
-  /* 1-3 Hook, greeting, story part 1 (pre-story prediction → film) */
   {
     id: 'l5-hello-song', kind: 'song', bg: bgHelloCast, title: '\u{1F44B} Hello Song \u{1F44B}', teacher: 'Stand up! Sing, clap and wave on every "hello".',
     durationSeconds: 20, bigWord: 'Hello', songUrl: `${A}/audio/hello-song.mp3?v=2`,
@@ -2400,38 +2396,27 @@ export const LESSON_5_SCENES: Scene[] = [
       { word: "toy", say: "Find the toy!", img: `${A}/items/item-toy.png` },
     ],
   },
+
+  /* PRE-STORY (present): predict from the cover, the story words with pictures, the story moves */
   {
     // Pre-story: look at the "cover" and guess (prediction).
     id: 'l5-intro', kind: 'cinematic', bg: bgL5Play, hidePipOverlay: true, title: "Leo's Lost Star", subtitle: 'Look! What does Leo have?', narrator: 'pip',
     script: [
       { who: 'pip', line: 'Hello! How are you today?' },
-      { who: 'pip', line: 'Look! This is Leo. What does he have? A star! Let\'s watch.' },
+      { who: 'pip', line: 'Look! This is Leo. What does he have? A star!' },
+      { who: 'pip', line: 'Oh! The wind is coming. What can happen to the star? Let\'s learn the words, then watch!' },
     ],
     cta: 'Watch the story',
   },
   {
-    id: 'l5-story-a', kind: 'story-video', bg: bgL5Play, videoUrl: `${A}/video/leo-story-u1l5-a.mp4?v=1`, title: "Leo's Lost Star — part 1",
-    teacher: 'Watch together. Make a sad face and a wave with the characters; answer the picture questions.',
-    pages: [
-      { img: bgL5Play, who: 'pip', line: 'This is Leo. He has a shiny star. He is happy!', motion: 'zoom-in', fx: 'sparkles', atSec: 0 },
-      { img: bgL5Wind, who: 'pip', line: 'Whoosh! The wind blows. Oh no! Where is the star?', motion: 'pan-right', atSec: 8 },
-      { img: bgL5SadW, who: 'leo', line: 'I am sad. I lost my star.', motion: 'zoom-in', fx: 'tear', atSec: 16 },
-      { img: bgL5Friends, who: 'mia', line: 'Hello, Leo! My name is Mia. We can help you!', motion: 'zoom-out', fx: 'hearts', atSec: 24 },
-    ],
-    checkpoints: [
-      { afterPage: 2, who: 'pip', question: 'How is Leo?', answer: 'Sad', options: [{ label: 'Happy', img: getEmotionSprite('leo', 'happy') }, { label: 'Sad', img: getEmotionSprite('leo', 'sad') }, { label: 'Angry', img: getEmotionSprite('leo', 'angry') }] },
-    ],
-  },
-
-  /* 4-6 Story language, move, signature game */
-  {
-    id: 'l5-story-words', kind: 'listen-repeat-cards', bg: bgL5Empty, teacher: 'The words of the story. Listen, then say them with the face and the action!',
+    id: 'l5-story-words', kind: 'listen-repeat-cards', bg: bgL5Empty, teacher: 'Before the film: the things in the story. Listen, say each word and point. Ask: where is the star? (Don\'t tell — we will see!)',
     cards: [
-      { who: 'leo', sentence: 'I am sad.', img: getEmotionSprite('leo', 'sad'), imgLabel: '😢' },
-      { who: 'leo', sentence: 'Where is my star?', img: itemStarGold, imgLabel: '⭐❓' },
-      { who: 'bella', sentence: 'Is it under the hat?', img: itemHat, imgLabel: '🎩' },
-      { who: 'bella', sentence: "No! It's a bat!", img: itemBat, imgLabel: '🦇' },
-      { who: 'leo', sentence: 'I am happy! Thank you!', img: getEmotionSprite('leo', 'happy'), imgLabel: '😀' },
+      { who: 'leo', sentence: 'A star!', img: itemStarGold, imgLabel: 'star' },
+      { who: 'bella', sentence: 'A hat.', img: itemHat, imgLabel: 'hat' },
+      { who: 'bella', sentence: 'A bat!', img: itemBat, imgLabel: 'bat' },
+      { who: 'mia', sentence: 'A mat.', img: itemMat, imgLabel: 'mat' },
+      { who: 'mia', sentence: 'An ant!', img: itemAnt, imgLabel: 'ant' },
+      { who: 'willow', sentence: 'A tree.', img: itemTree, imgLabel: 'tree' },
     ],
   },
   {
@@ -2444,6 +2429,57 @@ export const LESSON_5_SCENES: Scene[] = [
       { line: 'Look under the hat!', emoji: '\u{1F440}', img: itemHat },
       { line: 'Jump! You are happy!', emoji: '\u{1F929}' },
     ],
+  },
+
+  /* WHILE-STORY: the whole film — part 1, then part 2 straight away (picture questions pause it) */
+  {
+    id: 'l5-story-a', kind: 'story-video', bg: bgL5Play, videoUrl: `${A}/video/leo-story-u1l5-a.mp4?v=1`, title: "Leo's Lost Star — part 1",
+    teacher: 'While watching (part 1): make the moves with the characters — wave, blow like the wind, sad face — and answer the picture question. Part 2 follows straight away.',
+    pages: [
+      { img: bgL5Play, who: 'pip', line: 'This is Leo. He has a shiny star. He is happy!', motion: 'zoom-in', fx: 'sparkles', atSec: 0 },
+      { img: bgL5Wind, who: 'pip', line: 'Whoosh! The wind blows. Oh no! Where is the star?', motion: 'pan-right', atSec: 8 },
+      { img: bgL5SadW, who: 'leo', line: 'I am sad. I lost my star.', motion: 'zoom-in', fx: 'tear', atSec: 16 },
+      { img: bgL5Friends, who: 'mia', line: 'Hello, Leo! My name is Mia. We can help you!', motion: 'zoom-out', fx: 'hearts', atSec: 24 },
+    ],
+    checkpoints: [
+      { afterPage: 2, who: 'pip', question: 'How is Leo?', answer: 'Sad', options: [{ label: 'Happy', img: getEmotionSprite('leo', 'happy') }, { label: 'Sad', img: getEmotionSprite('leo', 'sad') }, { label: 'Angry', img: getEmotionSprite('leo', 'angry') }] },
+    ],
+  },
+  {
+    id: 'l5-story-b', kind: 'story-video', bg: bgL5Glow, videoUrl: `${A}/video/leo-story-u1l5-b.mp4?v=1`, title: "Leo's Lost Star — part 2",
+    teacher: 'While watching (part 2): the search! Before each look, ask the child: is the star there? Say the refrain with the friends: "Is it under the hat? No!"',
+    pages: [
+      { img: bgL5HatW, who: 'bella', line: "Is it under the hat? No! It's a bat!", motion: 'pan-right', atSec: 0 },
+      { img: bgL5MatW, who: 'mia', line: "Is it under the mat? No! It's an ant!", motion: 'pan-left', atSec: 8 },
+      { img: bgL5Glow, who: 'willow', line: 'Look! Under the tree!', motion: 'zoom-in', fx: 'sparkles', atSec: 16 },
+      { img: bgL5FoundW, who: 'leo', line: 'My star! I am happy! Thank you, friends!', motion: 'zoom-out', fx: 'hearts', atSec: 24 },
+    ],
+    checkpoints: [
+      { afterPage: 0, who: 'bella', question: 'What is under the hat?', answer: 'A bat', options: [{ label: 'A star', img: itemStarGold }, { label: 'A bat', img: itemBat }, { label: 'An ant', img: itemAnt }] },
+      { afterPage: 2, who: 'willow', question: 'Where is the star?', answer: 'Under the tree', options: [{ label: 'Under the hat', img: itemHat }, { label: 'Under the tree', img: itemTree }, { label: 'In the bag', img: itemBag }] },
+    ],
+  },
+
+  /* POST-STORY PRACTICE: the story slot's games (no game from Lessons 1-4 or 6) */
+  {
+    id: 'l5-wind-catch', kind: 'wind-catch', bg: bgL5Empty, who: 'leo',
+    teacher: 'Wind Catch! The wind blows the story things across the sky. Leo says one — the child taps it, it drops into his basket. Say the word with its first sound. The star comes last!',
+    things: [
+      { label: 'hat', img: itemHat, sound: 'h' },
+      { label: 'bat', img: itemBat, sound: 'b' },
+      { label: 'mat', img: itemMat, sound: 'm' },
+      { label: 'ant', img: itemAnt, sound: 'a' },
+      { label: 'nut', img: itemNut, sound: 'n' },
+      { label: 'star', img: itemStarGold, sound: 's' },
+    ],
+    rounds: [
+      { thing: 0, line: 'Catch the hat!', reply: 'A hat! Thank you!' },
+      { thing: 1, line: 'Catch the bat!', reply: 'A bat! Thank you!' },
+      { thing: 3, line: 'Catch the ant!', reply: 'An ant! Thank you!' },
+      { thing: 2, line: 'Catch the mat!', reply: 'A mat! Thank you!' },
+      { thing: 5, line: 'Catch my star!', reply: 'My star! I am happy! Thank you!' },
+    ],
+    doneLine: 'We caught my star! Thank you, friend!',
   },
   {
     // Signature game: the story's search as a lift-the-flap book.
@@ -2458,52 +2494,37 @@ export const LESSON_5_SCENES: Scene[] = [
       { x: 84, y: 66, size: 16, ask: 'Is it under the tree?', reveal: 'Yes! Here it is! My star!', target: true, under: { img: itemStarGold, label: 'star' } },
     ],
   },
-
-  /* 7-9 Controlled practice */
   {
-    id: 'l5-sort-sounds', kind: 'sound-sort', bg: bgL5Empty, teacher: 'The things from the search! Drag each picture to its sound.',
-    targets: [
-      { letter: 'H', phoneme: '/h/', who: 'pip' },
-      { letter: 'M', phoneme: '/m/', who: 'mia' },
-      { letter: 'B', phoneme: '/b/', who: 'bella' },
-      { letter: 'S', phoneme: '/s/', who: 'leo' },
-    ],
-    items: [
-      { word: 'hat', emoji: '\u{1F3A9}', img: itemHat, letter: 'H' },
-      { word: 'house', emoji: '\u{1F3E0}', img: itemHouse, letter: 'H' },
-      { word: 'mat', emoji: '\u{1F9FA}', img: itemMat, letter: 'M' },
-      { word: 'moon', emoji: '\u{1F319}', img: itemMoon, letter: 'M' },
-      { word: 'bat', emoji: '\u{1F987}', img: itemBat, letter: 'B' },
-      { word: 'bag', emoji: '\u{1F392}', img: itemBag, letter: 'B' },
-      { word: 'star', emoji: '⭐', img: itemStarGold, letter: 'S' },
-      { word: 'sun', emoji: '☀️', img: itemSun, letter: 'S' },
+    id: 'l5-story-order', kind: 'story-order', bg: bgL5Empty, who: 'pip', teacher: 'Put the story in order, then tell it: first, then, then, at the end!',
+    frames: [
+      { img: bgL5Wind, caption: 'The wind blows the star away.', who: 'pip' },
+      { img: bgL5SadW, caption: 'Leo is sad.', who: 'leo' },
+      { img: bgL5HatW, caption: "Is it under the hat? No! It's a bat!", who: 'bella' },
+      { img: bgL5FoundW, caption: 'The star! Leo is happy!', who: 'leo' },
     ],
   },
   {
-    // Implicit grammar: I am → He is / She is, with the story's feelings.
-    id: 'l5-he-is', kind: 'x-is-feeling', bg: bgL5Empty, teacher: 'How are they? Listen and say: "He is sad." "She is happy."',
+    id: 'l5-tick-cross', kind: 'tick-cross', bg: bgL5Empty, who: 'pip', teacher: 'Listen. Is it right? Tap ✔ or ✘.',
     rounds: [
-      { who: 'leo', emotion: 'sad', sentence: 'He is sad.' },
-      { who: 'mia', emotion: 'happy', sentence: 'She is happy.' },
-      { who: 'pip', emotion: 'angry', sentence: 'He is angry.' },
-      { who: 'leo', emotion: 'happy', sentence: 'He is happy!' },
+      { img: bgL5Play, sentence: 'Leo has a star.', isTrue: true },
+      { img: bgL5SadW, sentence: 'Leo is happy.', isTrue: false },
+      { img: bgL5HatW, sentence: 'There is a bat under the hat.', isTrue: true },
+      { img: bgL5MatW, sentence: 'There is a star under the mat.', isTrue: false },
+      { img: bgL5FoundW, sentence: 'Leo is happy at the end.', isTrue: true },
     ],
-  },
-  {
-    // Badges on the five friends painted on bg-l5-friends-wide (checked against the art).
-    id: 'l5-spin', kind: 'spin-wheel', bg: bgL5Friends, title: '',
-    teacher: 'Have the student spin and say: "Hello! It\'s Mia!" (or "This is Mia. She is happy."). Or tap a number.',
-    items: [
-      { label: "Hello! It's Pip!", left: '19%', top: '41%' },
-      { label: "Hello! It's Mia!", left: '34%', top: '48%' },
-      { label: "Hello! It's Bella!", left: '48%', top: '40%' },
-      { label: "Hello! It's Willow!", left: '63%', top: '49%' },
-      { label: "Hello! It's Leo!", left: '77%', top: '43%' },
-    ],
-    wheelAt: { left: '33%', top: '25%' },
   },
 
-  /* 10-13 Communicative + game break + personal */
+  /* PRODUCE: act the story, answer Leo, ask Leo */
+  {
+    id: 'l5-act-story', kind: 'roleplay', bg: bgL5Friends, cast: ['leo', 'mia', 'bella'],
+    teacher: 'Act the story! Listen to each friend, then say their line with the face and the action — sad Leo, kind Mia, Bella looking under the hat.',
+    script: [
+      { who: 'leo', line: 'I am sad. I lost my star.' },
+      { who: 'mia', line: 'Hello, Leo! My name is Mia. We can help you!', repeat: true },
+      { who: 'bella', line: "Is it under the hat? No! It's a bat!", repeat: true },
+      { who: 'leo', line: 'My star! I am happy! Thank you, friends!', repeat: true },
+    ],
+  },
   {
     id: 'l5-leo-asks', kind: 'join-stage', bg: bgL5SadW, teacher: 'Leo asks you questions. Answer him!', cast: ['leo', 'pip'],
     turns: [
@@ -2524,92 +2545,52 @@ export const LESSON_5_SCENES: Scene[] = [
       { who: 'leo', line: 'Thank you!', bubble: 'right' },
     ],
   },
-  {
-    id: 'l5-memory', kind: 'memory', bg: bgL5Empty, teacher: 'Find the pairs from the search! Say each one.',
-    pairs: [
-      { id: 'star', label: 'Star', emoji: '⭐', img: itemStarGold },
-      { id: 'hat', label: 'Hat', emoji: '\u{1F3A9}', img: itemHat },
-      { id: 'bat', label: 'Bat', emoji: '\u{1F987}', img: itemBat },
-      { id: 'mat', label: 'Mat', emoji: '\u{1F9FA}', img: itemMat },
-      { id: 'ant', label: 'Ant', emoji: '\u{1F41C}', img: itemAnt },
-      { id: 'bag', label: 'Bag', emoji: '\u{1F392}', img: itemBag },
-    ],
-  },
-  {
-    id: 'l5-feelings', kind: 'feelings', bg: bgL5FoundW, teacher: 'Leo was sad, now he is happy. How are YOU today? Tap and say it.',
-    options: [
-      { label: 'Happy', emoji: '\u{1F600}', reply: 'I am happy too! Just like Leo!' },
-      { label: 'Sad', emoji: '\u{1F622}', reply: "It's okay to be sad. Your friends can help, like Leo's friends!" },
-      { label: 'Angry', emoji: '\u{1F620}', reply: "It's okay. Take a big breath with me." },
-    ],
-  },
 
-  /* 14-16 Phonics, quick-fire, story part 2 */
+  /* PHONICS GAMES (owner 2026-10-13: "add also some phonic games"): the unit sounds b h m s t n a with the story words — moles, monsters, fishing, then blend b-a-t, m-a-t, h-a-t */
   {
-    id: 'l5-dash', kind: 'dash', bg: bgL5Empty, teacher: 'Bella Dash! Tap only the B words: bat, bag, ball. Get 6!', who: 'bella', targetLetter: 'B', targetPhoneme: '/b/', goal: 6, seconds: 40,
-    items: [
-      { word: 'bat', letter: 'B', img: itemBat, emoji: '\u{1F987}' },
-      { word: 'bag', letter: 'B', img: itemBag, emoji: '\u{1F392}' },
-      { word: 'ball', letter: 'B', img: itemBallL4, emoji: '⚽' },
-      { word: 'hat', letter: 'H', img: itemHat, emoji: '\u{1F3A9}' },
-      { word: 'mat', letter: 'M', img: itemMat, emoji: '\u{1F9FA}' },
-      { word: 'star', letter: 'S', img: itemStarGold, emoji: '⭐' },
-      { word: 'ant', letter: 'A', img: itemAnt, emoji: '\u{1F41C}' },
+    id: 'l5-sound-moles', kind: 'sound-mole', bg: bgL5Empty, who: 'leo',
+    teacher: 'Sound Moles! Listen to the sound, then bonk every mole whose picture starts with it — the things from Leo\'s story. Say each word!',
+    rounds: [
+      { letter: 'b', pictures: [{ word: 'bat', img: `${A}/items/item-bat.png` }, { word: 'bag', img: `${A}/items/item-bag.png` }, { word: 'ball', img: `${A}/items/item-ball.png` }, { word: 'hat', img: `${A}/items/item-hat.png` }, { word: 'mat', img: `${A}/items/item-mat.png` }] },
+      { letter: 'h', pictures: [{ word: 'hat', img: `${A}/items/item-hat.png` }, { word: 'house', img: `${A}/items/item-house.png` }, { word: 'hen', img: `${A}/items/item-hen.png` }, { word: 'bat', img: `${A}/items/item-bat.png` }, { word: 'nut', img: `${A}/items/item-nut.png` }] },
+    ],
+  },
+  {
+    id: 'l5-letter-monsters', kind: 'letter-monsters', bg: bgL5Empty, who: 'leo',
+    teacher: 'Hungry Letter Monsters! Say the word, listen to its first sound, and feed it to the monster with that letter. Tap a tummy to hear its sound.',
+    monsters: [{ letter: 'm', color: '#8BD450' }, { letter: 's', color: '#FF9F43' }, { letter: 't', color: '#A78BFA' }],
+    cards: [{ word: 'mat', img: `${A}/items/item-mat.png` }, { word: 'sun', img: `${A}/items/item-sun.png` }, { word: 'ten', img: `${A}/items/item-ten.png` }, { word: 'moon', img: `${A}/items/item-moon.png` }, { word: 'star', img: `${A}/items/item-star-gold.png` }, { word: 'top', img: `${A}/items/item-top.png` }],
+  },
+  {
+    id: 'l5-sound-fish', kind: 'sound-fish', bg: bgL5Empty, who: 'leo',
+    teacher: 'Sound Fishing! Listen to the sound and catch the one fish whose picture starts with it. Say the word!',
+    rounds: [
+      { letter: 'n', fish: [{ word: 'nut', img: `${A}/items/item-nut.png` }, { word: 'hat', img: `${A}/items/item-hat.png` }, { word: 'bag', img: `${A}/items/item-bag.png` }, { word: 'sun', img: `${A}/items/item-sun.png` }] },
+      { letter: 'a', fish: [{ word: 'mat', img: `${A}/items/item-mat.png` }, { word: 'ant', img: `${A}/items/item-ant.png` }, { word: 'ten', img: `${A}/items/item-ten.png` }, { word: 'bat', img: `${A}/items/item-bat.png` }] },
+      { letter: 's', fish: [{ word: 'hen', img: `${A}/items/item-hen.png` }, { word: 'top', img: `${A}/items/item-top.png` }, { word: 'star', img: `${A}/items/item-star-gold.png` }, { word: 'nut', img: `${A}/items/item-nut.png` }] },
     ],
   },
   {
     // Blend It! (blueprint slot 14, owner 2026-10-11): words made only of sounds the child has met.
     id: 'u1l5-blend', kind: 'sound-blend', look: 'frog', bg: bgL5Empty,
     teacher: 'Blend It! Tap each stepping stone and say the sound, press Blend!, then find the picture. Every word uses sounds we know.',
-    rounds: [{ word: 'man', img: `${A}/items/item-man.png` }, { word: 'ham', img: `${A}/items/item-ham.png` }, { word: 'hat', img: `${A}/items/item-hat.png` }],
-  },
-  {
-    id: 'l5-quick-fire', kind: 'rapid-recall', bg: bgL5Empty, who: 'pip', seconds: 3,
-    teacher: 'Quick-fire! Say each picture before the ring runs out.',
-    cards: [
-      { img: itemStarGold, word: 'Star' },
-      { img: itemHat, word: 'Hat' },
-      { img: itemBat, word: 'Bat' },
-      { img: itemMat, word: 'Mat' },
-      { img: getEmotionSprite('leo', 'sad'), word: 'Sad', say: 'He is sad.' },
-      { img: getEmotionSprite('leo', 'happy'), word: 'Happy', say: 'He is happy!' },
-    ],
-  },
-  {
-    id: 'l5-story-b', kind: 'story-video', bg: bgL5Glow, videoUrl: `${A}/video/leo-story-u1l5-b.mp4?v=1`, title: "Leo's Lost Star — part 2",
-    teacher: 'The search! Say the refrain with the friends: "Is it under the hat? No!"',
-    pages: [
-      { img: bgL5HatW, who: 'bella', line: "Is it under the hat? No! It's a bat!", motion: 'pan-right', atSec: 0 },
-      { img: bgL5MatW, who: 'mia', line: "Is it under the mat? No! It's an ant!", motion: 'pan-left', atSec: 8 },
-      { img: bgL5Glow, who: 'willow', line: 'Look! Under the tree!', motion: 'zoom-in', fx: 'sparkles', atSec: 16 },
-      { img: bgL5FoundW, who: 'leo', line: 'My star! I am happy! Thank you, friends!', motion: 'zoom-out', fx: 'hearts', atSec: 24 },
-    ],
-    checkpoints: [
-      { afterPage: 0, who: 'bella', question: 'What is under the hat?', answer: 'A bat', options: [{ label: 'A star', img: itemStarGold }, { label: 'A bat', img: itemBat }, { label: 'An ant', img: itemAnt }] },
-      { afterPage: 2, who: 'willow', question: 'Where is the star?', answer: 'Under the tree', options: [{ label: 'Under the hat', img: itemHat }, { label: 'Under the tree', img: itemTree }, { label: 'In the bag', img: itemBag }] },
-    ],
+    rounds: [{ word: 'bat', img: itemBat }, { word: 'mat', img: itemMat }, { word: 'hat', img: itemHat }],
   },
 
-  /* 17-20 Post-story: order, check, sticker, home mission */
+  /* EXTRA PRACTICE (blueprint §3b+, story slot): take the words home */
   {
-    id: 'l5-story-order', kind: 'story-order', bg: bgL5Empty, who: 'pip', teacher: 'Put the story in order, then tell it: first, then, then, at the end!',
-    frames: [
-      { img: bgL5Wind, caption: 'The wind blows the star away.', who: 'pip' },
-      { img: bgL5SadW, caption: 'Leo is sad.', who: 'leo' },
-      { img: bgL5HatW, caption: "Is it under the hat? No! It's a bat!", who: 'bella' },
-      { img: bgL5FoundW, caption: 'The star! Leo is happy!', who: 'leo' },
-    ],
-  },
-  {
-    id: 'l5-tick-cross', kind: 'tick-cross', bg: bgL5Empty, who: 'pip', teacher: 'Listen. Is it right? Tap ✔ or ✘.',
+    id: 'l5-home-hunt', kind: 'home-hunt', bg: bgL5Empty, who: 'leo', title: 'Home Hunt! Help Leo look!',
+    teacher: 'Extra practice: Home Hunt! Read the mission, press Go! The student runs, finds it at home, shows it to the camera and says the word. Tap "Found it!" (no hurry — the timer never fails).',
     rounds: [
-      { img: bgL5Play, sentence: 'Leo has a star.', isTrue: true },
-      { img: bgL5SadW, sentence: 'Leo is happy.', isTrue: false },
-      { img: bgL5HatW, sentence: 'There is a bat under the hat.', isTrue: true },
-      { img: bgL5MatW, sentence: 'There is a star under the mat.', isTrue: false },
-      { img: bgL5FoundW, sentence: 'Leo is happy at the end.', isTrue: true },
+      { img: itemHat, label: 'hat', ask: 'Find a hat!', found: 'A hat! Is my star under the hat? No!' },
+      { img: itemBag, label: 'bag', ask: 'Find a bag!', found: 'A bag! Is my star in the bag? No!' },
+      { img: itemStarGold, label: 'star', ask: 'Find a star — a toy, a sticker or a picture!', found: 'A star! Thank you! I am happy!' },
+      { img: itemTree, label: 'tree', ask: 'Find a picture of a tree!', found: 'A tree! The star was under the tree!' },
     ],
+    doneLine: 'Great hunting! You found them all!',
   },
+
+  /* CHECK AND GOODBYE */
   {
     id: 'l5-sticker', kind: 'sticker-reward', bg: bgL5FoundW, who: 'leo', teacher: 'Sticker time! The child opens the pack and puts Leo\'s star in their Sticker Book.',
     line: 'You found my star! Here is a star sticker for you!', sticker: { img: itemStarGold, label: 'Star' },
@@ -2626,7 +2607,7 @@ export const LESSON_5_SCENES: Scene[] = [
     ],
   },
 
-  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  /* EXTRA TIME (blueprint §3b): use if there are minutes left; Next skips. */
   {
     id: 'l5-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgL5Empty, who: 'pip',
     teacher: 'Extra time — Brain Break! Stand up and move together. Skip with Next if there is no time.',
@@ -2638,24 +2619,8 @@ export const LESSON_5_SCENES: Scene[] = [
       { line: 'Freeze!', emoji: '\u{1F976}', seconds: 3 },
     ],
   },
-  {
-    id: 'l5-who', kind: 'who-said-it', bg: bgL5Friends, teacher: 'Extra time — Who said it in the story? Listen and tap the friend.',
-    rounds: [
-      { line: 'I am sad. I lost my star.', who: 'leo', emotion: 'sad' },
-      { line: 'Hello, Leo! My name is Mia.', who: 'mia' },
-      { line: "Is it under the hat? No! It's a bat!", who: 'bella' },
-      { line: 'Look! Under the tree!', who: 'willow' },
-    ],
-  },
-  {
-    id: 'l5-hello-doors', kind: 'hello-doors', bg: bgHelloDoorsTree, teacher: 'Extra time — Knock knock! Tap the right door, then say hello to your friend!', cast: ['pip', 'mia', 'bella', 'willow'],
-    rounds: [
-      { target: 'bella', prompt: 'Knock knock! Where is Bella?', helloLine: 'Hello! My name is Bella.', echoLine: 'Hello, Bella!' },
-      { target: 'willow', prompt: 'Knock knock! Where is Willow?', helloLine: 'Hello! My name is Willow.', echoLine: 'Hi, Willow!' },
-    ],
-  },
 
-  /* 21-22 Closing */
+  /* GOODBYE */
   {
     id: 'l5-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye to Leo! Sing along together.',
     durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,
@@ -14961,6 +14926,7 @@ export const LESSON_U9L4_TITLE = 'What Are You Wearing?';
 export const LESSON_U9L4_OBJECTIVE = 'Say what you are wearing ("I\'m wearing a red shirt!"), understand a friend who says it and find them at the fashion show, answer "What are you wearing?", guess clothes from clues, and hear the first sound P (pants), by listening, moving and playing, no reading.';
 
 export const LESSON_U9L4_SCENES: Scene[] = [
+  /* WARM-UP */
   { id: 'u9l4-title', kind: 'title-card', bg: bgU9L4Stage, level: 'Pre-A1', unit: 'Unit 9', lessonLabel: 'Lesson 4', title: 'What Are You Wearing?', subtitle: 'The garden fashion show' },
   {
     // Remember? (owner, 2026-10-07): a quick warm-up of Unit 9 · Lesson 3 · Coat, Skirt, T-shirt!
@@ -14984,7 +14950,7 @@ export const LESSON_U9L4_SCENES: Scene[] = [
     cta: "Let's watch the show!",
   },
 
-  /* 4-5 The words, move */
+  /* PRESENT — the words: I’m wearing a red shirt! */
   {
     id: 'u9l4-words', kind: 'listen-repeat-cards', textSide: 'right', bg: bgU9L4Stage, teacher: 'Listen, then say it with each friend: "I\'m wearing a red shirt!" Point to your own clothes too.',
     cards: [
@@ -14994,6 +14960,8 @@ export const LESSON_U9L4_SCENES: Scene[] = [
       { who: 'bella', sentence: "I'm wearing blue shoes!", img: itemShoesBlue, imgLabel: 'shoes' },
     ],
   },
+
+  /* CONTROLLED PRACTICE 1 — move, listen, sing (the song after the first game, owner 2026-10-10). Fashion Show: boys never wear a dress (CLAUDE.md, 2026-10-11) */
   {
     id: 'u9l4-move', kind: 'tpr-actions', bg: bgU9L4Stage, who: 'mia',
     teacher: 'Stand up! Walk the show with Mia.',
@@ -15004,8 +14972,6 @@ export const LESSON_U9L4_SCENES: Scene[] = [
       { line: 'Touch your T-shirt! Smile!', emoji: '\u{1F455}', img: itemTshirtYellow },
     ],
   },
-
-  /* 6 Signature game (new): Who Am I? Fashion Show — boys never wear a dress (CLAUDE.md, 2026-10-11) */
   {
     id: 'u9l4-fashion-show', kind: 'wearing-show', bg: bgU9L4Stage, who: 'bella', cast: ['pip', 'mia', 'leo'],
     teacher: 'Who Am I? One friend says what they are wearing. Listen for BOTH pieces, then tap that friend. Then the child says it too: "I\'m wearing a green hat!"',
@@ -15017,8 +14983,6 @@ export const LESSON_U9L4_SCENES: Scene[] = [
     ],
     doneLine: 'You found every friend! What a great show!',
   },
-
-  /* 7 The song — after the words and the first game (owner, 2026-10-10) */
   {
     id: 'u9l4-song', kind: 'song', bg: bgU9L4Stage, title: '\u{1F3B5} What Are You Wearing? \u{1F3B5}', teacher: 'Sing and point: each friend shows what they are wearing, then the child sings their own line!',
     durationSeconds: 20, bigWord: 'Wearing', songUrl: `${A}/audio/what-are-you-wearing-song-u9l4.mp3?v=1`,
@@ -15031,8 +14995,6 @@ export const LESSON_U9L4_SCENES: Scene[] = [
       { who: 'pip', text: "I'm wearing a green hat! Hooray!", emotion: 'happy' },
     ],
   },
-
-  /* 8-10 More games */
   {
     id: 'u9l4-riddles', kind: 'animal-riddle', bg: bgU9L4Stage, who: 'bella', ask: 'What is it?',
     teacher: 'Clothes Riddles! Something hides behind the curtain. Bella gives clues one by one; the child can answer after any clue: "It\'s a hat!"',
@@ -15045,30 +15007,8 @@ export const LESSON_U9L4_SCENES: Scene[] = [
     ],
     doneLine: 'You solved every riddle! Well done!',
   },
-  {
-    id: 'u9l4-secret', kind: 'secret-card', bg: bgU9L4Stage, who: 'pip',
-    teacher: 'Pip hides one clothes card. The student asks "Is it a hat?" Pip answers yes or no. Then swap: the student hides one!',
-    cards: [
-      clothesCard(itemHatGreen, 'hat'),
-      clothesCard(itemDress, 'dress'),
-      clothesCard(itemShirt, 'shirt'),
-      clothesCard(itemCoatBlue, 'coat'),
-      clothesCard(itemSkirtPink, 'skirt'),
-      clothesCard(itemTshirtYellow, 'T-shirt'),
-    ],
-    rounds: [{ secret: 3 }, { secret: 0 }],
-  },
-  {
-    id: 'u9l4-what-wearing', kind: 'join-stage', bg: bgU9L4Stage, teacher: 'Bella and Leo ask the child. The child looks at their own clothes and answers — any piece and colour is fine.', cast: ['bella', 'leo'],
-    turns: [
-      { who: 'bella', line: 'What are you wearing?', bubble: 'right' },
-      { who: 'student', line: "I'm wearing a blue T-shirt!", bubble: 'right' },
-      { who: 'leo', line: 'What colour are your shoes?', bubble: 'left' },
-      { who: 'student', line: 'My shoes are white!', bubble: 'right' },
-    ],
-  },
 
-  /* 11-12 Sounds: P (and D, T review) */
+  /* PHONICS — P (and D, T review) */
   {
     id: 'u9l4-model-p', kind: 'sound-model', bg: bgU9L4Stage, who: 'pip', letter: 'P', phoneme: '/p/', sound: 'puh',
     teacher: 'P says /p/ — pants, pig, pizza! (And Pip!)',
@@ -15098,8 +15038,36 @@ export const LESSON_U9L4_SCENES: Scene[] = [
     rounds: [{ word: 'cap', img: `${A}/items/item-cap.png` }, { word: 'map', img: `${A}/items/item-map.png` }, { word: 'pan', img: `${A}/items/item-pan.png` }, { word: 'pot', img: `${A}/items/item-pot.png` }],
   },
 
-  /* 13-14 Sticker + Home Mission */
+  /* CONTROLLED PRACTICE 2 — say the sentence (Flip & Say, Spin) */
   ...EXTRA_PRACTICE['9-4'],
+
+  /* FREE PRACTICE — the child asks: Is it a hat? */
+  {
+    id: 'u9l4-secret', kind: 'secret-card', bg: bgU9L4Stage, who: 'pip',
+    teacher: 'Pip hides one clothes card. The student asks "Is it a hat?" Pip answers yes or no. Then swap: the student hides one!',
+    cards: [
+      clothesCard(itemHatGreen, 'hat'),
+      clothesCard(itemDress, 'dress'),
+      clothesCard(itemShirt, 'shirt'),
+      clothesCard(itemCoatBlue, 'coat'),
+      clothesCard(itemSkirtPink, 'skirt'),
+      clothesCard(itemTshirtYellow, 'T-shirt'),
+    ],
+    rounds: [{ secret: 3 }, { secret: 0 }],
+  },
+
+  /* PRODUCE — What are YOU wearing? */
+  {
+    id: 'u9l4-what-wearing', kind: 'join-stage', bg: bgU9L4Stage, teacher: 'Bella and Leo ask the child. The child looks at their own clothes and answers — any piece and colour is fine.', cast: ['bella', 'leo'],
+    turns: [
+      { who: 'bella', line: 'What are you wearing?', bubble: 'right' },
+      { who: 'student', line: "I'm wearing a blue T-shirt!", bubble: 'right' },
+      { who: 'leo', line: 'What colour are your shoes?', bubble: 'left' },
+      { who: 'student', line: 'My shoes are white!', bubble: 'right' },
+    ],
+  },
+
+  /* CHECK AND GOODBYE — sticker + Home Mission */
   {
     id: 'u9l4-sticker', kind: 'sticker-reward', bg: bgU9L4Stage, who: 'mia', teacher: 'Sticker time! The child opens the pack and puts the sticker in their Sticker Book.',
     line: 'You are a fashion show star! Here is a dress sticker for you!', sticker: { img: itemDress, label: 'Show star' },
@@ -15116,7 +15084,7 @@ export const LESSON_U9L4_SCENES: Scene[] = [
     ],
   },
 
-  /* Extra time (blueprint §3b): use if there are minutes left; Next skips. */
+  /* EXTRA TIME (blueprint §3b): use if there are minutes left; Next skips. */
   {
     id: 'u9l4-brain-break', kind: 'tpr-actions', mode: 'break', bg: bgU9L4Stage, who: 'leo',
     teacher: 'Extra time: Brain Break! Do each action with Leo.',
@@ -15128,7 +15096,7 @@ export const LESSON_U9L4_SCENES: Scene[] = [
     ],
   },
 
-  /* Goodbye */
+  /* GOODBYE */
   {
     id: 'u9l4-goodbye-song', kind: 'song', bg: bgGoodbyeCast, title: '\u{1F44B} Goodbye Song \u{1F44B}', teacher: 'Wave goodbye! Sing along together.',
     durationSeconds: 20, bigWord: 'Goodbye', songUrl: `${A}/audio/goodbye-song.mp3?v=3`,

@@ -54,6 +54,7 @@ import * as jungleScenes from '../src/content/playground-library/jungle-adventur
 import * as spaceScenes from '../src/content/playground-library/space-mission/scenes.ts';
 import * as foodScenes from '../src/content/playground-library/food-festival/scenes.ts';
 import { surveyQuestion, surveyAnswer, surveyReport, CAFE_WRONG, CAFE_YES } from '../src/content/playground-library/welcome-town/scene-components/foodRules.ts';
+import { placeSentence, roomSentences, whoseQuestion, ownerSentence, OWNER_YES, OWNER_NO, ROOM_AGAIN, ROOM_FREE_START, ROOM_DESCRIBE } from '../src/content/playground-library/welcome-town/scene-components/roomRules.ts';
 import { homeworkA1U9L1Lines } from '../src/content/playground-library/magic-castle/homework.ts';
 import { allQuestLines } from '../src/content/homework-quests/registry.ts';
 import { placementLines } from '../src/components/placement/placementLines.ts';
@@ -544,6 +545,7 @@ const UNIT1_EXTRACTORS = {
   'cafe-order': (s) => [...(s.rounds ?? []).flatMap((r) => [[r.customer, r.line], [r.customer, r.reply], [r.customer, `Oh no! ${r.line}`]]), ...(s.menu ?? []).map((m) => [s.who, m.word]), [s.who, s.doneLine]],
   'feed-pip': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...(s.foods ?? []).map((f) => [s.who, `No, thank you! That's ${f.phrase}.`]), [s.who, s.doneLine]],
   'night-sounds': (s) => (s.animals ?? []).flatMap((a) => [[s.who, `${a.sound} ${a.sound} Who's there?`], [s.who, `Yes! It's a ${a.word}! ${a.sound}`], [s.who, `That's a ${a.word}. ${a.sound}`]]),
+  'wind-catch': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...(s.things ?? []).map((t) => [s.who, `That's the ${t.label}! Listen again!`]), [s.who, s.doneLine]],
   'duck-feed': (s) => [
     ...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]),
     ...(s.ducks ?? []).map((d) => [s.who, `No, that's ${d.name}! Try again!`]),
@@ -870,6 +872,13 @@ const WT_EXTRACTORS = {
   'festival-cafe': (s) => [[s.who, s.doneLine], ...(s.menu ?? []).map((m) => ['teacher', m.label]),
     ...(s.rounds ?? []).flatMap((r) => [[r.customer, r.line], [r.customer, r.reply], [r.customer, CAFE_WRONG], ...(r.offer ? [['teacher', r.offer.line], [r.customer, CAFE_YES]] : [])])],
   'build-dish': (s) => [[s.who, s.doneLine], [s.who, 'Read the recipe. Then add it!'], [s.who, 'Read it again!'], [s.eater?.who, s.eater?.line], ...(s.steps ?? []).map((st) => ['teacher', st.text])],
+  'design-room': (s) => [[s.who, s.doneLine], [s.who, ROOM_AGAIN], [s.who, ROOM_FREE_START], [s.who, ROOM_DESCRIBE],
+    ...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], ['teacher', placeSentence(s.things[r.thing]?.label ?? '', s.spots[r.spot]?.where ?? '')]]),
+    ...(s.things ?? []).map((t) => ['teacher', t.label]),
+    ...(s.mode === 'free' ? (s.things ?? []).flatMap((t) => (s.spots ?? []).map((sp) => ['teacher', placeSentence(t.label, sp.where)])) : []),
+    ...(s.mode === 'free' ? [...new Set((s.things ?? []).map((t) => t.label))].flatMap((l) => [1, 2].map((n) => ['teacher', roomSentences(Array(n).fill(l))[0]])) : [])],
+  'lost-property': (s) => [[s.who, s.doneLine], ...(s.items ?? []).flatMap((it) => [[s.who, whoseQuestion(it.label)], ['teacher', ownerSentence(s.owners[it.owner]?.name ?? '', it.label)]]),
+    ...(s.owners ?? []).flatMap((o) => [[o.who, OWNER_YES], [o.who, OWNER_NO]])],
   'hot-coconut': (s) => [[s.who, s.doneLine], ...(s.rounds ?? []).flatMap((q) => {
     const n = (s.seats ?? []).length || 1; const at = ((q.stop % n) + n) % n;
     return [[s.who, `${at === 0 ? 'Your turn!' : `Help ${s.seats[at].name}!`} ${q.ask}`], ['teacher', q.choices[q.answer]]];

@@ -252,6 +252,7 @@ const PlayFoodLesson7 = lazy(() => import("./pages/playground-scene/PlayFoodLess
 const PlayMagicCastleLesson1 = lazy(() => import("./pages/playground-scene/PlayMagicCastleLesson1"));
 const PlayMagicCastleLesson2 = lazy(() => import("./pages/playground-scene/PlayMagicCastleLesson2"));
 const PlayMagicCastleLesson3 = lazy(() => import("./pages/playground-scene/PlayMagicCastleLesson3"));
+const PlayMagicCastleLesson4 = lazy(() => import("./pages/playground-scene/PlayMagicCastleLesson4"));
 const HomeworkQuestPage = lazy(() => import("./pages/HomeworkQuestPage"));
 const PlayA2Unit1Lesson1 = lazy(() => import("./pages/playground-scene/PlayA2Unit1Lesson1"));
 const PlayA2Unit1Lesson2 = lazy(() => import("./pages/playground-scene/PlayA2Unit1Lesson2"));
@@ -889,6 +890,12 @@ const App = () => {
                       <Route path="/playground-scene/castle-lesson-3" element={
                         <ImprovedProtectedRoute>
                           <Suspense fallback={<LoadingFallback />}><PlayMagicCastleLesson3 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A1 tier — Magic Castle, Unit 9 Lesson 4 ("There Is / There Are in My Room!"). */}
+                      <Route path="/playground-scene/castle-lesson-4" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayMagicCastleLesson4 /></Suspense>
                         </ImprovedProtectedRoute>
                       } />
                       {/* A2 tier — Welcome Town, Unit 1 Lesson 1 ("My Day"). */}
