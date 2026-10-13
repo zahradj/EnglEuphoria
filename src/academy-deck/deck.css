@@ -1146,3 +1146,14 @@
 .ad-root .ad-rule-text { display: grid; gap: 2px; }
 .ad-root .ad-rule-text strong { font-size: clamp(18px, 2.2vw, 26px); }
 .ad-root .ad-rule-text em { font-style: normal; opacity: 0.9; font-size: clamp(16px, 1.9vw, 22px); }
+
+/* explore slide: hotspots on the scene plate */
+.ad-root .ad-explore { position: absolute; inset: 0; z-index: 2; }
+.ad-root .ad-spot { position: absolute; transform: translate(-50%, -50%); width: clamp(84px, 11vw, 150px); aspect-ratio: 1; padding: 0; border: 0; background: none; cursor: pointer; display: grid; place-items: center; }
+.ad-root .ad-spot-ring { position: absolute; inset: -8%; border-radius: 50%; border: 3px solid rgba(255, 255, 255, 0.85); box-shadow: 0 0 0 6px rgba(167, 139, 250, 0.45), 0 0 24px rgba(251, 191, 36, 0.7); animation: ad-spot-pulse 1.8s ease-in-out infinite; }
+.ad-root .ad-spot-pic { position: relative; width: 78%; filter: drop-shadow(0 6px 8px rgba(20, 8, 70, 0.55)); transition: transform 0.25s cubic-bezier(0.2, 1.6, 0.4, 1); }
+.ad-root .ad-spot:hover .ad-spot-pic, .ad-root .ad-spot[data-open='true'] .ad-spot-pic { transform: scale(1.18) rotate(-4deg); }
+.ad-root .ad-spot[data-seen='true'] .ad-spot-ring { animation: none; border-color: #4ade80; box-shadow: 0 0 0 6px rgba(74, 222, 128, 0.4); }
+.ad-root .ad-spot-bubble { position: absolute; transform: translateX(-50%); z-index: 3; margin: 0; max-width: min(46vw, 420px); padding: 10px 18px; border-radius: 18px; background: #fff; color: #2e1065; font-weight: 800; font-size: clamp(16px, 1.7vw, 24px); box-shadow: 0 8px 22px rgba(20, 8, 70, 0.45); border: 3px solid #a78bfa; animation: ad-pop 0.3s cubic-bezier(0.2, 1.6, 0.4, 1); }
+.ad-root .ad-spot-bubble b { color: #7c3aed; margin-inline-end: 6px; }
+@keyframes ad-spot-pulse { 0%, 100% { transform: scale(0.94); opacity: 0.85; } 50% { transform: scale(1.06); opacity: 1; } }

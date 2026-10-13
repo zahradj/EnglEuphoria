@@ -11,6 +11,7 @@ import { Character, Plate } from './Stage';
 import { LaneView } from './slides/lane';
 import { BlendView, HearPickView, ReaderView } from './slides/reading';
 import { RuleView } from './slides/rule';
+import { ExploreView } from './slides/explore';
 import { applyLane, laneOf, LANE_LABEL } from './lanes';
 import { BadgeView, BriefView, DialView, TitleView } from './slides/intro';
 import { HuntView, ShadowView } from './slides/homework';
@@ -62,6 +63,7 @@ function SlideView({ slide }: { slide: Slide }) {
     case 'hearpick': return <HearPickView slide={slide} />;
     case 'reader': return <ReaderView slide={slide} />;
     case 'rule': return <RuleView slide={slide} />;
+    case 'explore': return <ExploreView slide={slide} />;
     case 'whosaid': return <WhoSaidView slide={slide} />;
     case 'hunt': return <HuntView slide={slide} />;
     case 'shadow': return <ShadowView slide={slide} />;
