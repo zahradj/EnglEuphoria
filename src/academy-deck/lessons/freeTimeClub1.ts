@@ -272,7 +272,7 @@ export const FREE_TIME_CLUB_1: DeckScript = {
     },
     {
       id: 'recap-hear', kind: 'hearpick', part: 6, stage: 'review', bg: 'club-signup-desk', actors: [who('Vee', 'right')], trains: [3],
-      prompt: 'Rule check! Which sentence is like + -ing? Tap it.',
+      prompt: 'Rule check! Which sentence has a word with -ing? Tap it.',
       rounds: [
         { say: 'I like playing games.', options: ['I like music.', 'I like playing games.', 'I love music.'], answer: 'I like playing games.' },
         { say: 'I love drawing.', options: ['I like drawing.', 'I love drawing.', 'I like music.'], answer: 'I love drawing.' },
