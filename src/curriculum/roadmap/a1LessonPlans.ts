@@ -142,11 +142,12 @@ export const A1_LESSON_PLANS: A1LessonPlan[] = [
     funHook: 'The child is the expert: Coco says wrong things and the child corrects her.', homeMission: 'Give your family an animal riddle with four clues.',
   }),
   p(2, 5, 'Storybook: The Jungle Rescue', {
-    objective: 'I can follow a story and say who can help and why.',
-    grammarFocus: ['It can / can\'t…', 'Can it…?'], newVocabulary: [], reviewTargets: ['all Unit 2'],
-    phonicsFocus: [], communicationGoal: 'Understand a short story about animals helping.',
-    signatureGame: 'Story video (scenario first) with pause questions', evidence: 'Pause questions + retell 3 pictures.',
-    funHook: 'The child chooses which animal helps at each pause.', homeMission: 'Tell the story with the pictures.',
+    built: true,
+    objective: 'I can read "The Jungle Rescue" with help and say who can help Kip and why: "The elephant. It is big. It can walk in the river."',
+    grammarFocus: ['It can / can\'t…', 'Can it…?', 'It\'s big / small'], newVocabulary: ['help', 'river', 'rock'], reviewTargets: ['all Unit 2'],
+    phonicsFocus: ['review i, ch, sh (Sound Pick)', 'twister: Big Kip sits on a big rock.'], communicationGoal: 'Read a short story about animals helping and retell it.',
+    signatureGame: 'Reader: the whole book with a "Who can help?" pause + Rescue Map', evidence: 'The child chooses at the pause and retells why (6-line retell); reads the book with help.',
+    funHook: 'The child chooses who helps Kip — and acts out the elephant.', homeMission: 'Read the book to your family and ask "Who can help Kip?".',
   }),
   p(2, 6, 'Extra Practice: Animal Action Match!', {
     objective: 'I can use all the Unit 2 language quickly.',

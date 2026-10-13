@@ -1027,3 +1027,171 @@ export const LESSON_A1U2L4_SCENES: Scene[] = [
   },
   { id: 'ja4-finale', kind: 'finale', bg: bgFriends, who: 'coco', line: 'You are a jungle expert! Next time: can the elephant help Kip? \u{1F418}' },
 ];
+
+/* =============================================================================
+ * A1 Unit 2 Lesson 5: "Storybook: The Jungle Rescue" (built 2026-10-13, plan docs/a1-unit-2-jungle.md §5.5)
+ *
+ * Objective: I can read "The Jungle Rescue" with help and say who can help and why. Evidence: at the pause the child
+ * chooses who helps Kip, then retells: "The elephant. It is big. It can walk in the river." Whole book in the Reader
+ * (pp. 1-8, the pause, pp. 9-12), Rescue Map (draw-path: take Pip to the animal described), Odd One Out (which one is
+ * different — and why), act it out (the child is the elephant), phonics review of the unit's sounds, Blend & Read, twister.
+ * Research (mechanics only): Oxford Reading Tree one growing story; Blue's Clues pause before the answer; Cambridge
+ * story retell. Better: the child decides at the pause with the unit language (who CAN help) and then retells why.
+ * A stills film of the book needs an approved scenario first (kids-video-scenario) — not in this lesson.
+ * ========================================================================= */
+
+export const LESSON_A1U2L5_TITLE = 'Storybook: The Jungle Rescue';
+export const LESSON_A1U2L5_OBJECTIVE = 'I can read "The Jungle Rescue" with help and say who can help Kip and why: "The elephant. It is big. It can walk in the river."';
+
+export const LESSON_A1U2L5_SCENES: Scene[] = [
+  { id: 'ja5-title', kind: 'title-card', bg: jungleRescue(10), level: 'A1', unit: 'Unit 2', lessonLabel: 'Lesson 5', title: 'The Jungle Rescue', subtitle: 'Read the whole story — who can help Kip?', cta: '\u{1F4D6} LET’S READ!' },
+  {
+    id: 'ja5-recall-warmup', kind: 'recall-warmup', bg: bgWide, who: 'pip', mode: 'click', listen: true,
+    fromLabel: 'Unit 2 · Lesson 4 · Talk About Animals!',
+    teacher: 'Guided: listen to the riddle — which animal is it? Click it and add one more sentence.',
+    items: [
+      { word: 'elephant', say: 'It’s big. It’s got a long nose.', img: it('elephant') },
+      { word: 'crocodile', say: 'It’s green. It’s got a long tail.', img: it('alligator') },
+      { word: 'snake', say: 'It’s long. It can climb a tree.', img: it('snake') },
+      { word: 'frog', say: 'It’s small and green. It can jump.', img: it('frog') },
+    ],
+  },
+  { id: 'ja5-predict', kind: 'meet', focus: ['help'], bg: jungleRescue(5), who: 'pip', cardSide: 'left', teacher: 'Present: Kip is stuck! Ask the student: who can help? Willow? The fish? Let them guess before reading.', line: 'Oh no! Kip is on a rock. Who can help Kip?', repeat: 'Who can help?' },
+  {
+    id: 'ja5-book-1', kind: 'reader', bg: bgWide, title: 'The Jungle Rescue', doneLine: 'Stop! Who can help Kip? You choose!',
+    teacher: 'Reading: the student reads pages 1-8 (listen first only where needed). Tap any word to hear it.',
+    pages: JUNGLE_RESCUE.slice(0, 8),
+  },
+  {
+    id: 'ja5-pause', kind: 'choice', bg: jungleRescue(8), who: 'pip',
+    teacher: 'The pause: the student chooses who can help Kip — and says why. A wrong friend: ask “Can it…?” and look at the story again.',
+    prompt: 'Who can help Kip? Why?',
+    options: [
+      { label: 'Willow — she can fly', emoji: '\u{1F426}' },
+      { label: 'The fish — it can swim', emoji: '\u{1F41F}' },
+      { label: 'The elephant — it is big', emoji: '\u{1F418}', correct: true },
+    ],
+  },
+  {
+    id: 'ja5-book-2', kind: 'reader', bg: bgWide, title: 'The Jungle Rescue', doneLine: 'The end! The elephant can help — and Kip is safe!',
+    teacher: 'Reading: the student reads pages 9-12, the happy end.',
+    pages: JUNGLE_RESCUE.slice(8, 12),
+  },
+  {
+    id: 'ja5-rescue-map', kind: 'prea1', teacher: 'Guided: Rescue Map! Listen to the description and draw a line from Pip to the right animal. Then say who it is.',
+    scene: {
+      id: 'ja5-rescue-map', kind: 'draw-path', bg: bgWide, who: 'pip', walker: 'pip',
+      teacher: 'Listen and draw a line from Pip to the animal!',
+      start: { x: 9, y: 84 },
+      spots: [
+        { label: 'elephant', img: it('elephant'), x: 74, y: 70, size: 13 },
+        { label: 'bird', img: it('bird'), x: 46, y: 36, size: 8 },
+        { label: 'crocodile', img: it('alligator'), x: 52, y: 82, size: 12 },
+        { label: 'fish', img: it('fish'), x: 30, y: 58, size: 8 },
+      ],
+      rounds: [
+        { line: 'Take Pip to the animal that can fly. But it is small!', target: 1, reply: 'It’s the bird. It can fly!' },
+        { line: 'Take Pip to the animal with a long tail. It can swim!', target: 2, reply: 'It’s the crocodile. It can swim!' },
+        { line: 'Now take Pip to the animal that can help Kip. It is big and grey!', target: 0, reply: 'It’s the elephant! It can walk in the river!' },
+      ],
+    },
+  },
+  {
+    id: 'ja5-song', kind: 'song', bg: bgWide, title: '\u{1F3B5} Ask Them! \u{1F3B5}',
+    teacher: 'Story song: sing the questions and answers — thumbs up, head shake!',
+    durationSeconds: 47, bigWord: 'Can it?', songUrl: SONG_A1U2L3, lineDurationsMs: SONG_A1U2L3_MS, lyrics: SONG_A1U2L3_LYRICS,
+  },
+  {
+    id: 'ja5-odd', kind: 'prea1', teacher: 'Guided: Odd One Out! Which one is different? Tap it, then say why: The bird can fly. The others can swim.',
+    scene: {
+      id: 'ja5-odd', kind: 'odd-one-out', bg: bgWide, who: 'pip',
+      teacher: 'Which one is different? Tap it and say why!',
+      rounds: [
+        { items: [{ label: 'elephant', img: it('elephant') }, { label: 'crocodile', img: it('alligator') }, { label: 'bird', img: it('bird') }, { label: 'fish', img: it('fish') }], odd: 2, line: 'The bird can fly. The others can swim!' },
+        { items: [{ label: 'snake', img: it('snake') }, { label: 'elephant', img: it('elephant') }, { label: 'frog', img: it('frog') }, { label: 'crocodile', img: it('alligator') }], odd: 1, line: 'The elephant is grey. The others are green!' },
+        { items: [{ label: 'bird', img: it('bird') }, { label: 'frog', img: it('frog') }, { label: 'elephant', img: it('elephant') }, { label: 'fish', img: it('fish') }], odd: 2, line: 'The elephant is big. The others are small!' },
+      ],
+    },
+  },
+  {
+    id: 'ja5-act-out', kind: 'join-stage', bg: jungleRescue(9), teacher: 'Free: act it out! The student is the elephant (long-nose arm!), the teacher is Coco.', cast: ['coco', 'pip'],
+    turns: [
+      { who: 'coco', line: 'Help! Kip is on a rock! Can you help?' },
+      { who: 'student', line: 'I am big. I can walk in the river.' },
+      { who: 'coco', line: 'Can you lift Kip?' },
+      { who: 'student', line: 'Yes, I can! I’ve got a long nose.' },
+      { who: 'coco', line: 'Thank you, Elephant!' },
+      { who: 'student', line: 'Lunch! Chips for all!' },
+    ],
+  },
+  /* Phonics review: the unit's sounds → Blend & Read → twister */
+  {
+    id: 'ja5-sound-pick', kind: 'prea1', teacher: 'Reading: Sound Pick! Hear the sound, pick the picture that starts with it — i, ch or sh.',
+    scene: {
+      id: 'ja5-sound-pick', kind: 'sound-pick', bg: bgWide, who: 'pip', teacher: 'Which one starts with this sound?',
+      rounds: [
+        { sound: 'ch', options: [{ word: 'ship', img: it('ship') }, { word: 'chick', img: it('chick') }, { word: 'igloo', img: it('igloo') }], answer: 1 },
+        { sound: 'sh', options: [{ word: 'sheep', img: it('sheep') }, { word: 'chair', img: it('chair') }, { word: 'ink', img: it('ink') }], answer: 0 },
+        { sound: 'i', options: [{ word: 'cheese', img: it('cheese') }, { word: 'shell', img: it('shell') }, { word: 'insect', img: it('insect') }], answer: 2 },
+      ],
+    },
+  },
+  {
+    id: 'ja5-blend', kind: 'sound-blend', bg: bgWide,
+    teacher: 'Reading: blend the word from the story, find the picture — then read the story sentence.',
+    rounds: [
+      { word: 'big', img: it('elephant'), sentence: 'I am big. I can walk in the river.' },
+      { word: 'swim', sounds: ['s', 'w', 'i', 'm'], img: it('fish-swim'), sentence: 'I can swim. I can’t lift Kip!' },
+      { word: 'chip', sounds: ['ch', 'i', 'p'], img: it('chip'), sentence: 'Lunch! Chips for all!' },
+    ],
+  },
+  { id: 'ja5-twister', kind: 'tongue-twister', look: 'town', speeds: 2, bg: bgWide, who: 'pip', focus: 'i|ck', teacher: 'Reading: the story twister! Listen to Pip, then say it slow, then faster.', line: 'Big Kip sits on a big rock.' },
+  /* Free: retell — who can help and why */
+  {
+    id: 'ja5-retell', kind: 'join-stage', bg: jungleRescue(11), teacher: 'Free: the student retells the story — who can’t help and why, who can help and why.', cast: ['pip', 'coco'],
+    turns: [
+      { who: 'pip', line: 'Where is Kip?' },
+      { who: 'student', line: 'Kip is on a rock.' },
+      { who: 'pip', line: 'Can Willow help? Why?' },
+      { who: 'student', line: 'No. She can fly, but she is small.' },
+      { who: 'pip', line: 'Who can help Kip? Why?' },
+      { who: 'student', line: 'The elephant. It is big. It can walk in the river.' },
+    ],
+  },
+  { id: 'ja5-i-can', kind: 'meet', focus: ['read'], bg: jungleRescue(12), who: 'coco', cardSide: 'left', teacher: 'Check: say it and get your passport stamp!', line: 'I can read The Jungle Rescue and say who can help!', repeat: 'The elephant can help!' },
+  {
+    id: 'ja5-sticker', kind: 'prea1', teacher: 'Sticker time! The student opens the pack and puts the story sticker in their Sticker Book.',
+    scene: {
+      id: 'ja5-sticker', kind: 'sticker-reward', bg: jungleRescue(12), who: 'pip', teacher: 'Sticker time!',
+      line: 'You read the whole story! Here is your sticker.',
+      sticker: { img: it('elephant'), label: 'The Jungle Rescue' },
+    },
+  },
+  {
+    id: 'ja5-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
+    scene: {
+      id: 'ja5-home-mission', kind: 'home-mission', bg: bgFriends, who: 'pip',
+      teacher: 'Home Mission: read the steps with the student.',
+      line: 'Your home mission!',
+      parentNote: 'Today your child read the whole story "The Jungle Rescue". Let them read it to you and ask: "Who can help Kip? Why?"',
+      steps: [
+        { emoji: '\u{1F4D6}', say: 'Read the story to your family.' },
+        { emoji: '\u{2753}', say: 'Ask them: Who can help Kip?' },
+        { emoji: '\u{1F418}', say: 'Act it out: you are the elephant!' },
+      ],
+    },
+  },
+  {
+    id: 'ja5-goodbye-song', kind: 'song', bg: bgFriends, title: '\u{1F3B5} Goodbye Song \u{1F3B5}', teacher: 'It’s time to go — wave goodbye and sing along together!',
+    durationSeconds: 20, bigWord: 'Goodbye',
+    songUrl: '/welcome-town/audio/goodbye-song.mp3?v=3',
+    lineDurationsMs: [3600, 4120, 4020, 8322],
+    lyrics: [
+      { who: 'coco', text: '\u{1F44B} Goodbye, goodbye, my new friend' },
+      { who: 'leo', text: '\u{1F44B} Goodbye, goodbye, see you again' },
+      { who: 'willow', text: '\u{1F3EB} Welcome Town School is happy today' },
+      { who: 'coco', text: '\u{1F496} Byeeee, friends! See you soon!' },
+    ],
+  },
+  { id: 'ja5-finale', kind: 'finale', bg: jungleRescue(12), who: 'coco', line: 'You read the whole story! Kip is safe! Thank you, friends! \u{1F418}\u{1F412}' },
+];
