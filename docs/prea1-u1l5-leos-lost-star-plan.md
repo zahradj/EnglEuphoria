@@ -37,7 +37,7 @@ checking *after* (practice → produce). It is PPP with the story in the middle.
 | 16 | **Phonics game** | **Hungry Letter Monsters** — m, s, t | first sounds → letters |
 | 17 | **Phonics game** | **Sound Fishing** — n, a, s | listening for one sound |
 | 18 | Phonics | Blend It! — b-a-t, m-a-t, h-a-t | blending |
-| 19 | Extra practice | **Home Hunt** | take the words home |
+| 19 | Extra practice | **Picture Maze** — "Find the hat!" walk Leo through the maze to the hat, the mat, then the tree (owner 2026-10-13: Home Hunt was too hard) | fun review of the words |
 | 20-21 | Close | Sticker (Leo's star) · Home Mission | |
 | 22-24 | Extra time | Brain break · Goodbye song · Finale | |
 

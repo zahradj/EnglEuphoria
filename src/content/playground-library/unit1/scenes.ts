@@ -2592,15 +2592,16 @@ export const LESSON_5_SCENES: Scene[] = [
 
   /* EXTRA PRACTICE (blueprint §3b+, story slot): take the words home */
   {
-    id: 'l5-home-hunt', kind: 'home-hunt', bg: bgL5Empty, who: 'leo', title: 'Home Hunt! Help Leo look!',
-    teacher: 'Extra practice: Home Hunt! Read the mission, press Go! The student runs, finds it at home, shows it to the camera and says the word. Tap "Found it!" (no hurry — the timer never fails).',
-    rounds: [
-      { img: itemHat, label: 'hat', ask: 'Find a hat!', found: 'A hat! Is my star under the hat? No!' },
-      { img: itemBag, label: 'bag', ask: 'Find a bag!', found: 'A bag! Is my star in the bag? No!' },
-      { img: itemStarGold, label: 'star', ask: 'Find a star — a toy, a sticker or a picture!', found: 'A star! Thank you! I am happy!' },
-      { img: itemTree, label: 'tree', ask: 'Find a picture of a tree!', found: 'A tree! The star was under the tree!' },
+    // Owner 2026-10-13: Home Hunt (page 20 on the live site) was too hard — replaced with a fun game: the Picture Maze.
+    id: 'l5-maze', kind: 'picture-maze', bg: bgL5Empty, who: 'leo', walker: getEmotionSprite('leo', 'happy'), layout: 2,
+    title: 'Help Leo! Listen and find it!',
+    teacher: 'Picture Maze! Listen: "Find the hat!" The child walks Leo through the maze to the picture and says the word. The tree comes last — the star is there!',
+    items: [
+      { label: 'hat', img: itemHat, say: 'A hat! Is my star under the hat? No!' },
+      { label: 'mat', img: itemMat, say: 'A mat! Is my star under the mat? No!' },
+      { label: 'tree', img: itemTree, say: 'A tree! My star is under the tree!' },
     ],
-    doneLine: 'Great hunting! You found them all!',
+    rounds: [0, 1, 2], doneLine: 'You found them all! Thank you!',
   },
 
   /* CHECK AND GOODBYE */
