@@ -1,5 +1,7 @@
 # A1 Activity Library — every gamified activity we can use
 
+**Extended 2026-10-13** (owner: "Search the internet and extend the activities games list, even use old ones with modern designs"): §10 built since, §11 classic games redesigned, §12 platform mechanics.
+
 Owner (2026-10-09): "The activity should be gamified and interactive. Create a list of every possible activity that can be used …
 you can use also the same games from the Pre-A1."
 
@@ -98,9 +100,9 @@ S speaking · G game break · P phonics/reading · R review/boss · X extra time
 | Train Recall / Pattern Train | `train-recall` / `pattern-train` | ⇄ Pre-A1 | Load the train in order | days of the week | G |
 | Sand Prints / Photo Snap | `sand-prints` / `photo-snap` | ⇄ Pre-A1 | Follow tracks / take the photo | — | G |
 | Rapid Recall | `rapid-recall` | ⇄ Pre-A1 | 3-second flash, say it | beat-the-clock boss | R |
-| **Maze Chase** | — | ★ New | Steer through a maze to the right answer (Wordwall Maze Chase) | directions, answers | G |
+| Picture Maze | `picture-maze` | ⇄ Pre-A1 | Walk the hedge maze to the thing you hear (Wordwall Maze Chase) | "Find the animal that can fly!" | G |
 | **Airplane** | — | ★ New | Fly into the right cloud (Wordwall Airplane) | — | G |
-| **Racing** | — | ★ New | Each right answer moves your car/runner (Blooket Racing) | — | R |
+| Answer Race | `answer-race` (looks `gates` / `race` / `raft`) | A1 | Each right answer moves your car / runner / raft (Blooket Racing) | questions + read cards | G, R |
 | **Tower Defense** | — | ★ New | Right answers build towers that stop the monsters (Blooket Tower Defense) | — | R |
 | **Floor Is Lava** | — | ★ New | Jump to the right platform before the lava rises (Gimkit) | — | G |
 
@@ -119,8 +121,8 @@ S speaking · G game break · P phonics/reading · R review/boss · X extra time
 | Show and Tell | `photo-snap` + `join-stage` | ⇄ | Show a picture of yours, say 3 sentences | — | S |
 | **Food Survey / Find Someone Who** | — | ★ New | Ask 4 friends, fill the chart | Do you like…? | S |
 | **Spot the Difference** | — | ★ New | Two pictures, say the differences (information gap) | She's wearing… | S |
-| **Charades** | — | ★ New | Act it, the teacher guesses — or guess Pip's | What are you doing? | S |
-| **Pip's Shop / Café** | — | ★ New | Customers order, you serve and talk (Blooket Café) | Can I have…? Would you like…? | S, G |
+| Charades | `charades` | ⇄ Pre-A1 | Curtain opens bit by bit on a friend acting; or the child acts and the teacher guesses | He can swim! / What are you doing? | S |
+| Pip's Shop / Café | `shop-till` / `cafe-order` / `smoothie-bar` | ⇄ Pre-A1 | Customers order, you serve and talk (Blooket Café) | Can I have…? Would you like…? | S, G |
 | **Doctor Pip** | — | ★ New | Patients say what's wrong, choose the cure | What's the matter? | S |
 
 ## 7. Grammar in play
@@ -138,7 +140,7 @@ S speaking · G game break · P phonics/reading · R review/boss · X extra time
 | Age / Number sentences | `age-sentence-match` | ⇄ Pre-A1 | Match sentence to picture | How old…? | C |
 | **See-Saw Scales** | — | ★ New | Put two animals on the see-saw, say which is bigger | comparatives | C |
 | **Clock Tower** | — | ★ New | Set the clock to the time you hear | What time is it? | C |
-| **Dress-Up / Weather Dress-Up** | — | ★ New | Dress the character as you hear; weather changes | She's wearing…, Put on… | C, G |
+| Dress-Up | `dress-studio` / `put-on` / `wearing-show` | ⇄ Pre-A1 | Dress the character as you hear (boys get no dress piece) | She's wearing…, Put on… | C, G |
 | **Design My Room** | — | ★ New | Place furniture, then describe | There's a… next to… | C, S |
 | **Daily Diary Comic** | — | ★ New | Build a 4-panel comic of your day, read it | present simple | C, P |
 
@@ -153,8 +155,8 @@ S speaking · G game break · P phonics/reading · R review/boss · X extra time
 | Alphabet Blocks / Order | `alphabet-blocks` / `alphabet-order` | ⇄ Pre-A1 | Order the letters | P |
 | Name Badge | `name-badge` | A1 | Spell your name | P |
 | Word ↔ Picture | `word-picture-match` | ⇄ Pre-A1 | Read and match | P |
-| **Read & Do** | — | ★ New | Read a sentence, do it in the picture ("The cat is on the box") | P |
-| **Sight-Word Splat** | — | ★ New | Splat the sight word you hear | P |
+| Read & Do | `read-do` | A1 | Read the card, tap the thing, then the friend ("Give Leo the red cap.") | P |
+| Word Splat | `word-splat` | A1 | Splat the sight word you hear | P |
 | **Rhyme Pairs** | — | ★ New | Match rhyming words (cat/hat) | P |
 
 ## 9. Review, bosses, rewards (the game frame)
@@ -170,8 +172,81 @@ S speaking · G game break · P phonics/reading · R review/boss · X extra time
 | **Treasure Map Quest** | — | ★ New | Walk the map; each station is a mini-game; the chest at the end | R |
 | **Escape Room** | — | ★ New (hello-doors upgrade) | Four doors, one puzzle each | R |
 | **Jeopardy Board** | — | ★ New | Pick a category and points | R |
-| **Board Game Race** | — | ★ New | Roll, move, answer the square (snakes & ladders) | R |
+| Word Board / House Board | `word-board` / `house-board` | ⇄ Pre-A1 | Roll, hop, read or answer the square; ladders and slides | R |
 | **Pet Pal** | — | ★ New | Feed and dress a pet with the words you learned; it grows each lesson | X |
+
+## 10. Built since the first list (2026-10-12 / 13)
+
+The games below were built after this list was written. They are in the renderers already and every A1 unit can use them.
+
+| Activity | Kind | Status | How it plays | Slot |
+|---|---|---|---|---|
+| Field Guide | `field-guide` | A1 | Build a 4-sentence animal card, one gap at a time, then read it aloud | C, S |
+| Chat Chain | `chat-chain` | A1 | A friend talks; the child picks the reply that fits and SAYS it | S |
+| Jungle Obstacle Run | `obstacle-run` | ⇄ Pre-A1 | Send the friend who CAN pass each obstacle | C, S |
+| Can It? | `can-it` | ⇄ Pre-A1 | Thumbs up / down answers, then watch what happens | L, S |
+| Hero Trials | `hero-trials` | ⇄ Pre-A1 | Badge per skill (read it / answer it / find it), medal at the end | R |
+| Home Hunt | `home-hunt` | ⇄ Pre-A1 | Mission card: "Find something long!", the child shows it on camera | X |
+| Flip & Say | `flip-say` | ⇄ Pre-A1 | Face-down speaking cards (Wordwall Speaking cards) | S |
+| Letter Monsters / Sound Moles / Sound Fishing | `letter-monsters` / `sound-mole` / `sound-fish` | ⇄ Pre-A1 | Feed / bonk / catch by first sound (digraphs too) | P |
+| Party Belt / Talent Show / Campfire Says | `party-belt` / `talent-show` / `campfire-says` | ⇄ Pre-A1 | Conveyor belt, stage show, campfire Simon-says | G, X |
+
+## 11. Classic games with a modern design (owner, 2026-10-13: "even use old ones with modern designs")
+
+These are playground and party games that teachers still use for English. Sources: esl-kids.com, eslactive.com, languageadvisor.net, British Council LearnEnglish Kids, and Baamboozle's Four in a Row, Tic Tac Toe, Memory and Bingo modes. The rule stays the same: we take the mechanic, never the content. The modern part is the look and feel: painted Canva sets, cut-out stickers, juicy UI motion (`game-animation`), recorded voices, a calm pace and no losing. A classic whose original form is unkind is redesigned (marked ⚠️).
+
+| Classic | Modern design (our version) | A1 language | Build on | Status | Slot |
+|---|---|---|---|---|---|
+| Hangman ⚠️ | **Save the Balloon**: a hot-air balloon with Pip in it. A wrong letter lets one sandbag drop, never a person in danger. The word fills tile by tile, and the balloon lands when it's solved | spelling unit words, then read the sentence | `name-badge` + a balloon layer | ★ New | P |
+| Bingo | **Sticker Bingo**: a 3×3 card of pictures; the voice says a SENTENCE, the child stamps it with a sticker that pops; the line glows and confetti falls | "She is sad." / "It can fly." | `feelings-bingo` → universal, A1 mode = sentences | ⇄ upgrade | L, R |
+| Tic-Tac-Toe / Four in a Row | **Noughts & Crosses Duel**: the child vs Pip. To place your token, answer the question on the square; tokens drop with a bounce (Baamboozle Tic Tac Toe / Four in a Row) | any Q&A | ★ new `tic-tac-toe` | ★ New | R, X |
+| Snakes & Ladders | Word Board / House Board (exists) **+ skins**: jungle vines (ladders) and slides, a castle, space | read the square | `word-board` | ✓ built | R |
+| Hot Potato | **Hot Coconut**: a coconut passes between the friends while the music plays; when it stops, whoever holds it gets the question and the child answers for them. Timer ring, no forfeit | questions of the unit | ★ new `hot-potato` | ★ New | S, X |
+| I Spy | **I Spy with my binoculars**: a painted scene; the voice gives a clue ("I spy something small and green"), and the child moves the binocular circle and taps | descriptions | `torch-hunt` with a binocular mask | ⇄ re-skin | L |
+| Simon Says | exists (`simon-touch`, `campfire-says`) **+ Red Light, Green Light**: move on "green", freeze on "red", and the child's runner advances | instructions, can | ★ new mode of `campfire-says` | ★ New | X |
+| Musical Chairs ⚠️ | **Musical Islands**: animals hop between lily pads while the music plays; when it stops, the child says where each animal is. Nobody is "out" | prepositions, "The frog is on the…" | ★ new `musical-islands` | ★ New | L, X |
+| Telephone / Chinese Whispers | **Whisper Tube**: Pip whispers a sentence down a tube to Mia, a word gets mixed up, and the child hears both and fixes the wrong word | listening for detail | `true-false` + 2-voice audio | ★ New | L |
+| Pictionary | **Draw That** (Gimkit): the teacher (or child) draws on a shared canvas and the other guesses in a sentence; drawing syncs live | "It's a…" / "It's got…" | ★ new `draw-guess` (synced canvas) | ★ New | S |
+| 20 Questions / Guess Who | exists: `secret-card` (Guess the Animal / Guess My Friend) | yes/no questions | `secret-card` | ✓ built | S |
+| Go Fish (card game) | **Go Fish! with Pip**: the child holds picture cards and asks "Have you got a frog?"; Pip answers "Yes, here you are! / No — go fish!"; pairs fly to the table | have got, animals, food | ★ new `go-fish` | ★ New | S |
+| Dominoes | **Sentence Dominoes**: a tile with a picture and half a sentence; snap the next tile whose half finishes the sentence, so the chain grows across the table | sentence halves | ★ new `dominoes` | ★ New | C, P |
+| Hopscotch | **Number Hop**: a painted hopscotch; Pip throws a pebble on a square and the child says the number or sentence on each square Pip hops | numbers 1-20, routines | `stepping-stones` re-skin | ⇄ re-skin | X |
+| Hot and Cold | **Treasure Radar**: the child taps the beach to search; the screen tints from blue ("cold") to red ("hot") and Pip says "Warmer! Hotter!" | listening for direction words | ★ new `hot-cold` | ★ New | L, X |
+| Battleship | **Treasure Islands**: a 4×4 sea grid (A-D, 1-4); the child calls "B3!" and a chest or a splash appears. A1 mode: answer a question to get each shot | letters + numbers, questions | ★ new `grid-hunt` | ★ New | R |
+| Kim's Game | exists: `whats-missing` / `whos-missing` | "The cap is missing!" | ✓ built | ✓ built | W, R |
+| Pass the Parcel | **Pass the Present**: a gift with 4 layers of paper; each right answer tears one layer off, and the prize sticker is inside | any review | `trophy-chest` re-skin | ⇄ re-skin | R |
+| Jenga | **Wobbly Tower**: tap a block to pull it out; the question is on it, and a right answer means the block slides out cleanly. The tower never falls on a child's turn | review questions | ★ new `tower-pull` | ★ New | R |
+| Word Search / Crossword | **Picture Crossword**: picture clues; type or tap letters, and the word lights up and is said | spelling | ★ new `crossword` (Wordwall) | ★ New | P |
+| Rock-Paper-Scissors | **Who starts?**: a quick hand game decides the first turn in duel games; say "Rock, paper, scissors, go!" | chant | UI helper in duel games | ★ New | — |
+| Marco Polo / Blind Man's Buff ⚠️ | **Echo Cave**: eyes closed (a dark screen); a friend calls from left / right / up / down, and the child points where the voice comes from (stereo pan) | here/there, left/right | ★ new `echo-cave` | ★ New | L |
+
+## 12. Modern platform mechanics to borrow (2026 research)
+
+Sources: Wordwall templates (34+ interactives: Maze Chase, Airplane, Whack-a-mole, Balloon Pop, Flip Tiles, Speaking Cards, Group Sort, Image Quiz, Anagram, Spell the Word, Labyrinth), Blooket modes (Gold Quest, Factory, Café, Tower Defense, Racing, Fishing Frenzy, Crazy Kingdom), Gimkit modes (Draw That, Fishtopia, The Floor is Lava, Capture the Flag), Kahoot game modes, Baamboozle (one shared screen), Duolingo ABC (word puzzles, tracing, illustrated stories) and Lingokids. Modes built on deception or fear (Gimkit Trust No One, Humans vs Zombies) and stealing from others (Blooket Gold Quest "steal") are **not for children**; their safe cores are adapted below.
+
+| Platform mechanic | Our version | A1 language | Build on | Status | Slot |
+|---|---|---|---|---|---|
+| Wordwall Airplane | **Jungle Glider**: Coco glides; tap or steer into the cloud with the right answer, and wrong clouds puff away gently | sentence ↔ picture | ★ new `glider` | ★ New | G |
+| Wordwall Balloon Pop | **Balloon Match**: balloons carry words and float to their pictures; pop when matched | word ↔ sentence | `count-balloons` → universal | ⇄ upgrade | C, G |
+| Wordwall Anagram / Duolingo ABC word puzzle | **Letter Bubbles**: scrambled letter bubbles; drag them into order and the word is said and read in a sentence | spelling | `letter-blocks` letters mode | ⇄ upgrade | P |
+| Wordwall Labyrinth / Maze Chase | exists (`picture-maze`); **+ chase mode**: a friendly bee follows slowly and the child must reach the answer first | answers | `picture-maze` | ⇄ upgrade | G |
+| Blooket Gold Quest (no stealing) | **Treasure Chests**: each right answer opens a chest with coins, a double or a sticker; coins fill the class jar (no taking from others) | any review | ★ new `chest-quest` | ★ New | R |
+| Blooket Factory / Crazy Kingdom | **Build the Town**: every right answer builds one piece of the unit's world (a hut, a tree, a bridge), and it stays built across lessons | unit review | ★ new `world-builder` (persists in Sticker Book) | ★ New | R, X |
+| Blooket Tower Defense | **Garden Guard** (listed in §5): right answers plant flowers that keep the friendly goats from the veggies; nothing gets hurt | any | ★ New | ★ New | R |
+| Gimkit The Floor is Lava | **Rising River**: the class answers together and each answer lifts the bridge before the water rises; cooperative, so the teacher and child win together | any | ★ new `rising-river` | ★ New | R |
+| Gimkit Fishtopia | exists: `shape-fishing` / `sound-fish`; **+ shop**: catches buy aquarium decorations | any | ⇄ upgrade | ⇄ upgrade | G |
+| Gimkit Capture the Flag (safe) | **Team Flags**: teacher vs child; each right answer moves your flag one hill closer; first to the top | Q&A | ★ new `flag-race` | ★ New | R |
+| Gimkit Draw That | see Pictionary (§11) | | | | |
+| Kahoot Robot Run / Treasure Trove | `answer-race` looks already cover running; **+ treasure look**: collect gems on the path | Q&A | `answer-race` new look | ⇄ re-skin | R |
+| Baamboozle board (one screen) | **Jungle Jeopardy** (listed in §9): a grid of picture tiles by category and points; tiles flip to a question, with a mystery "Boom!" tile that doubles | review | ★ new `quiz-board` | ★ New | R |
+| Lingokids / Khan Kids collectible pets | **Pet Pal** (listed in §9): every lesson's words feed and dress the pet, which grows across the unit | unit words | ★ New | ★ New | X |
+| Duolingo ABC illustrated stories | Reader + story GIFs (scenarios waiting for the owner's OK) | reading | `reader` | ✓ built (GIFs pending) | P |
+
+### Build order suggestion (most value, least art)
+1. **Sticker Bingo**, **Tic-Tac-Toe Duel**, **Pass the Present**, **I Spy binoculars**. These reuse existing art and kinds, are quick to build and fit any unit.
+2. **Save the Balloon**, **Sentence Dominoes**, **Go Fish!**, **Hot Coconut**. Each is one new kind with simple art.
+3. **Jungle Jeopardy**, **Treasure Chests**, **Rising River**, **Build the Town**. These are the game-frame and review layer for L6 and L7.
+4. **Draw That** (synced canvas), **Echo Cave** (stereo audio), **Treasure Islands** (grid). These are technically new.
 
 ---
 

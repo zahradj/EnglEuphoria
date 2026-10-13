@@ -238,6 +238,8 @@ Data: `animals` {word, img}, `rounds` {animal, action, can, real, ask, answer}. 
 
 **Pre-A1 children cannot read.** Never make reading the only way into a task: speak every prompt, give picture answers, keep printed text as a small caption for the adult.
 
+**Extended list (2026-10-13):** `docs/a1-activity-library.md` §11 (classic games redesigned: Sticker Bingo, Tic-Tac-Toe Duel, Save the Balloon, Hot Coconut, Go Fish!, Sentence Dominoes, Treasure Islands…) and §12 (Wordwall / Blooket / Gimkit / Kahoot / Baamboozle mechanics made child-safe). Check them before inventing a new kind.
+
 ## Playground hub — A1/A2 Welcome Town (`.../welcome-town/scenes.ts`, `.../welcome-town-a2/scenes.ts`)
 
 **Every Pre-A1 `kind` above is also available in A1/A2** through the wrapper `{ id, kind: 'prea1', teacher, scene: <Pre-A1 scene> }`
