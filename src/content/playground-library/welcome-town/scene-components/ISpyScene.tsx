@@ -83,6 +83,8 @@ export function ISpyScene({ scene, onNext, onWin, onLose, sync }: { scene: Spy; 
   const hint = !found && (Number(state.misses) || 0) >= 4;
   const lx = [p.x - 0.55 * LENS, p.x + 0.55 * LENS];
   const ly = p.y * (9 / 16); // in the 100 × 56.25 viewBox
+  const Rpx = (LENS / 100) * box.width;
+  const lensMask = lx.map((x) => `radial-gradient(circle ${Rpx}px at ${(x / 100) * box.width}px ${(p.y / 100) * box.height}px, transparent 97%, #000 100%)`).join(', ');
   return (
     <div ref={rootRef} className="absolute inset-0 select-none overflow-hidden bg-[#1b2a12]">
       <div ref={artRef} className="absolute touch-none" style={{ width: box.width, height: box.height, left: box.left, top: box.top, cursor: found ? 'default' : 'grab' }}
@@ -92,22 +94,50 @@ export function ISpyScene({ scene, onNext, onWin, onLose, sync }: { scene: Spy; 
         onPointerCancel={() => setLive(null)}>
         <img src={scene.bg} alt="" draggable={false} className="pointer-events-none absolute inset-0 h-full w-full object-cover" />
         {!done && (
-          <svg viewBox="0 0 100 56.25" preserveAspectRatio="none" className="pointer-events-none absolute inset-0 h-full w-full" aria-hidden>
-            <defs>
-              <mask id={`ispy-${scene.id}`}>
-                <rect width="100" height="56.25" fill="white" />
-                {lx.map((x, i) => <circle key={i} cx={x} cy={ly} r={LENS} fill="black" />)}
-              </mask>
-            </defs>
-            <rect width="100" height="56.25" fill="rgba(10,18,8,0.82)" mask={`url(#ispy-${scene.id})`} />
-            {lx.map((x, i) => <circle key={i} cx={x} cy={ly} r={LENS} fill="none" stroke={found ? '#FCD34D' : '#1f2937'} strokeWidth={found ? 1.4 : 1.8} />)}
-            <rect x={p.x - 2.4} y={ly - 1.6} width="4.8" height="3.2" rx="1" fill={found ? '#FCD34D' : '#1f2937'} />
-          </svg>
+          <>
+            {/* outside the lenses: dimmed and softly blurred, like looking past the eyecups */}
+            <div className="pointer-events-none absolute inset-0" style={{
+              background: 'rgba(10,20,8,0.6)', backdropFilter: 'blur(3px) saturate(0.55)', WebkitBackdropFilter: 'blur(3px) saturate(0.55)',
+              maskImage: lensMask, WebkitMaskImage: lensMask, maskComposite: 'intersect', WebkitMaskComposite: 'source-in',
+            }} />
+            {/* the binoculars */}
+            <svg viewBox="0 0 100 56.25" preserveAspectRatio="none" className="pointer-events-none absolute inset-0 h-full w-full" aria-hidden>
+              <defs>
+                <radialGradient id={`ispy-glass-${scene.id}`} cx="50%" cy="50%" r="50%">
+                  <stop offset="72%" stopColor="#000" stopOpacity="0" />
+                  <stop offset="100%" stopColor="#0b1a08" stopOpacity="0.38" />
+                </radialGradient>
+                <linearGradient id={`ispy-body-${scene.id}`} x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stopColor="#4d7c32" />
+                  <stop offset="1" stopColor="#1f3a14" />
+                </linearGradient>
+              </defs>
+              {lx.map((x, i) => (
+                <g key={i}>
+                  <circle cx={x} cy={ly} r={LENS} fill={`url(#ispy-glass-${scene.id})`} />
+                  <circle cx={x} cy={ly} r={LENS + 1.15} fill="none" stroke={`url(#ispy-body-${scene.id})`} strokeWidth="2.3" />
+                  <circle cx={x} cy={ly} r={LENS + 2.25} fill="none" stroke="#163010" strokeWidth="0.35" />
+                  <circle cx={x} cy={ly} r={LENS + 0.05} fill="none" stroke={found ? '#FCD34D' : '#c9a24a'} strokeWidth={found ? 0.9 : 0.35} />
+                  {/* glass shine */}
+                  <path d={`M ${x - LENS * 0.62} ${ly - LENS * 0.32} A ${LENS * 0.72} ${LENS * 0.72} 0 0 1 ${x - LENS * 0.18} ${ly - LENS * 0.7}`} fill="none" stroke="#fff" strokeOpacity="0.55" strokeWidth="0.7" strokeLinecap="round" />
+                  <circle cx={x - LENS * 0.1} cy={ly - LENS * 0.72} r="0.45" fill="#fff" fillOpacity="0.6" />
+                </g>
+              ))}
+              {/* bridge + focus wheel */}
+              <rect x={p.x - 3.4} y={ly - 2.3} width="6.8" height="4.6" rx="1.6" fill={`url(#ispy-body-${scene.id})`} stroke="#163010" strokeWidth="0.3" />
+              <rect x={p.x - 1.5} y={ly - 3.6} width="3" height="2.2" rx="0.6" fill="#c9a24a" stroke="#7a5a1a" strokeWidth="0.2" />
+              {[-1, -0.5, 0, 0.5, 1].map((k) => <line key={k} x1={p.x + k} y1={ly - 3.4} x2={p.x + k} y2={ly - 1.6} stroke="#7a5a1a" strokeWidth="0.18" />)}
+            </svg>
+          </>
         )}
         {hint && r && (
           <motion.div className="pointer-events-none absolute -translate-x-1/2 -translate-y-1/2 rounded-full" style={{ left: `${r.spot.left}%`, top: `${r.spot.top}%`, width: '7%', aspectRatio: '1', boxShadow: '0 0 30px 14px rgba(255,214,102,.6)' }}
             animate={reduce ? {} : { opacity: [0.3, 1, 0.3] }} transition={{ duration: 1.4, repeat: Infinity }} />
         )}
+        {found && r && !reduce && [0, 1, 2, 3, 4, 5, 6, 7].map((k) => (
+          <motion.span key={`${round}-${k}`} className="pointer-events-none absolute -translate-x-1/2 -translate-y-1/2" style={{ left: `${r.spot.left}%`, top: `${r.spot.top}%`, fontSize: 'min(4vh, 2.6vw)' }}
+            initial={{ x: 0, y: 0, opacity: 1, scale: 0.4 }} animate={{ x: Math.cos((k / 8) * Math.PI * 2) * 90, y: Math.sin((k / 8) * Math.PI * 2) * 90, opacity: 0, scale: 1.2 }} transition={{ duration: 0.9, ease: 'easeOut' }}>✨</motion.span>
+        ))}
         {found && r && (
           <motion.div className="pointer-events-none absolute -translate-x-1/2 -translate-y-1/2 rounded-full border-[5px] border-white" style={{ left: `${r.spot.left}%`, top: `${r.spot.top}%`, width: `${r.spot.r * 2}%`, aspectRatio: '1', boxShadow: '0 0 0 4px #FFD34E, 0 0 30px 10px rgba(255,211,78,.7)' }}
             initial={reduce ? false : { scale: 0.4, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: 'spring', stiffness: 260, damping: 14 }} />
@@ -116,7 +146,7 @@ export function ISpyScene({ scene, onNext, onWin, onLose, sync }: { scene: Spy; 
       {done && <Confetti count={60} />}
       <div className="pointer-events-none absolute inset-x-0 top-[7%] z-30 flex justify-center px-14">
         <span className="text-center font-black text-white" style={{ ...THICK_WORDS, fontSize: 'clamp(1.1rem, min(calc(2.6*var(--svw,1vw)), 4.4vh), 2.1rem)' }}>
-          {done ? scene.doneLine : `👀 ${r?.clue ?? ''}`}
+          {done ? scene.doneLine : scene.guide ? '👀 I spy with my little eye…' : `👀 ${r?.clue ?? ''}`}
         </span>
       </div>
       {!done && (
@@ -124,6 +154,16 @@ export function ISpyScene({ scene, onNext, onWin, onLose, sync }: { scene: Spy; 
           className="absolute right-3 top-[14%] z-30 flex items-center gap-2 rounded-full bg-white/95 px-4 py-2 font-black text-emerald-700 shadow-lg active:scale-95" style={{ fontSize: 'min(3vh, 2vw)' }}>
           🔊 Again <span className="text-neutral-400">{round + 1}/{total}</span>
         </button>
+      )}
+      {scene.guide && !done && r && (
+        <div className="pointer-events-none absolute bottom-[2%] left-[1%] z-30 flex items-end">
+          <motion.img src={scene.guide} alt="" draggable={false} className="w-[min(30vh,20vw)] drop-shadow-[0_1vh_1vh_rgba(0,0,0,0.35)]"
+            animate={reduce ? {} : { rotate: [0, -2, 2, 0] }} transition={{ duration: 3, repeat: Infinity }} />
+          <motion.div key={round} className="relative mb-[22vh] -ml-[2vw] max-w-[min(46vh,30vw)] rounded-[2.4vh] border-[0.5vh] border-white bg-white/95 px-4 py-2 font-black text-[#3b2410] shadow-2xl"
+            style={{ fontSize: 'min(3.4vh, 2.3vw)' }} initial={reduce ? false : { scale: 0, originX: 0, originY: 1 }} animate={{ scale: 1 }}>
+            {r.clue}
+          </motion.div>
+        </div>
       )}
       {found && r && !done && (
         <motion.div className={`absolute inset-x-0 z-40 flex flex-col items-center gap-[1.4vh] ${r.spot.top > 55 ? 'top-[22%]' : 'bottom-[5%]'}`} initial={reduce ? false : { y: r.spot.top > 55 ? -60 : 60, opacity: 0 }} animate={{ y: 0, opacity: 1 }}>

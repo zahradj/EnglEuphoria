@@ -469,6 +469,8 @@ export type Scene =
        *  binoculars (drag, or tap to jump them) until the thing (`spot`, % of the picture, r = radius in % of width) is in
        *  the lenses, it lights up, and the answer (`answer`) is said and repeated by the child. */
       id: string; kind: 'i-spy'; bg: string; teacher: string; who: CharKey;
+      /** Cut-out sticker of the clue-giver holding binoculars; the clue then appears in their speech bubble. */
+      guide?: string;
       rounds: { clue: string; spot: { left: number; top: number; r: number }; answer: string }[]; doneLine: string;
     }
   | { id: string; kind: 'letter-game'; bg: string; who: CharKey; teacher: string; mode: 'name' | 'sound'; rounds: { letter: string; phoneme?: string; choices: string[] }[] }
