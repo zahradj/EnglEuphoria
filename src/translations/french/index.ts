@@ -24,6 +24,7 @@ import { authUiTranslations } from './authUi';
 import { parentReportTranslations } from './parentReport';
 import { waitingRoomTranslations } from './waitingRoom';
 import { pushNotificationsTranslations } from './pushNotifications';
+import { cancelPolicyTranslations } from './cancelPolicy';
 import { lessonsPageTranslations } from './lessonsPage';
 import { academyLessonsTranslations } from './academyLessons';
 
@@ -53,6 +54,7 @@ export const frenchTranslations = {
   ...parentReportTranslations,
   ...waitingRoomTranslations,
   ...pushNotificationsTranslations,
+  ...cancelPolicyTranslations,
   ...lessonsPageTranslations,
   ...academyLessonsTranslations,
 };

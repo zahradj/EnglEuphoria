@@ -1,0 +1,38 @@
+// Cancellation policy: students cancel up to 8 hours before a lesson, teachers need 5 days' notice.
+// Namespaced `cx.` (messages) and `rp.` (the Refund & Cancellation Policy page). Every key must exist in all six
+// languages (cancelPolicy.test.ts checks it). English is the source and the fallback language.
+
+export const cancelPolicyTranslations = {
+  "cx.warn.cancel": "Cancelling within 8 hours of the lesson will result in a full charge. The teacher has reserved this time for you.",
+  "cx.policy.full": "Full refund — more than 8 hours before the lesson.",
+  "cx.policy.none": "No refund — less than 8 hours before the lesson. Teacher gets paid for the reserved time.",
+  "cx.toast.tooLate": "Lessons must be cancelled at least 8 hours in advance. Cancelling now will result in a full charge.",
+  "cx.plan.cancel": "Free cancellation (8h notice)",
+  "rp.title": "Refund & Cancellation Policy",
+  "rp.desc": "EnglEuphoria refund and cancellation policy: students can cancel up to 8 hours before a lesson; teachers must give 5 days’ notice.",
+  "rp.updated": "October 13, 2026",
+  "rp.s1.title": "1. Overview",
+  "rp.s1.body": "EnglEuphoria operates on a credit-based booking model. Students purchase lesson credits, then redeem them when booking sessions with teachers. This Policy governs how cancellations and refunds are handled.",
+  "rp.s2.title": "2. Student Cancellation Rule (8 Hours)",
+  "rp.s2.lead": "To receive a credit refund for a scheduled lesson, a student must cancel at least 8 hours before the lesson start time.",
+  "rp.s2.b1": "Cancellations made <b>more than 8 hours in advance</b>: the lesson credit is fully returned to your account and may be reused for another booking.",
+  "rp.s2.b2": "Cancellations made <b>within 8 hours</b> of the lesson: the lesson is considered final. <b>No refund or credit return will be issued.</b>",
+  "rp.s2.b3": "<b>No-shows:</b> students who fail to attend a scheduled lesson without cancelling forfeit the credit in full.",
+  "rp.s2.foot": "This window protects our teachers, who block out time exclusively for your booking.",
+  "rp.s3.title": "3. Teacher Cancellation Rule (5 Days)",
+  "rp.s3.body": "Teachers must cancel or reschedule a booked lesson at least <b>120 hours (5 full days)</b> before its start time, so students can plan around it. Teachers who cancel later may be subject to a late-cancellation penalty.",
+  "rp.s4.title": "4. Trial Lessons",
+  "rp.s4.body": "<b>Trial lessons are final sale and non-refundable</b> under any circumstance. Trials are offered at a discounted introductory rate specifically because they are not eligible for refunds.",
+  "rp.s5.title": "5. Credit Pack Purchases",
+  "rp.s5.body": "Lesson credit packs are non-refundable once purchased. Unused credits remain valid for the period specified at checkout (typically 12 months from the purchase date). Expired credits cannot be reinstated.",
+  "rp.s6.title": "6. Teacher-Initiated Cancellations",
+  "rp.s6.body": "If a teacher cancels a lesson for any reason, your credit will be <b>fully refunded</b> regardless of the time of cancellation, and you will be offered priority rebooking.",
+  "rp.s7.title": "7. Technical Failures",
+  "rp.s7.body": "If a lesson cannot be delivered due to a verified Platform-side technical failure (e.g., server outage), the credit will be returned in full. Failures originating from the user’s device, network, or browser do not qualify for a refund.",
+  "rp.s8.title": "8. How to Cancel",
+  "rp.s8.body": "You can cancel any upcoming booking from your dashboard under “My Schedule.” The system will display whether you are within or outside the 8-hour window before confirming the cancellation.",
+  "rp.s9.title": "9. Disputes & Chargebacks",
+  "rp.s9.body": "All payments are processed by Stripe, our payment processor. Refund disputes should first be raised with EnglEuphoria support at <mail>billing@engleuphoria.com</mail>. Initiating a chargeback without first contacting support may result in account suspension.",
+  "rp.s10.title": "10. Contact",
+  "rp.s10.body": "For refund inquiries, contact <mail>billing@engleuphoria.com</mail> or by mail at:",
+};

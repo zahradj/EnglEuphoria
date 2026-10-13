@@ -311,7 +311,7 @@ export const TeacherHubTab = () => {
         </CardHeader>
         <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
           <RuleCard icon={<Clock className="h-4 w-4" />} title="The 5-Day Rule"
-            body="Cancel or reschedule at least 120 hours before the session. Inside that window, the credit is forfeited." />
+            body="Teachers: cancel or reschedule at least 120 hours (5 days) before the session. Students may cancel up to 8 hours before; a lesson you cancel yourself is always refunded to the student." />
           <RuleCard icon={<Users className="h-4 w-4" />} title="Role Separation"
             body="Playground Specialists teach only Playground. Mentors teach Academy and Success. Never cross without approval." />
           <RuleCard icon={<Handshake className="h-4 w-4" />} title="Platform Integrity"

@@ -289,7 +289,7 @@ export const dashboardUITranslations = {
   'lp.pricing.feature.plan': 'Piano lezione personalizzato',
   'lp.pricing.feature.homework': 'Compiti e risorse',
   'lp.pricing.feature.tracking': 'Monitoraggio dei progressi',
-  'lp.pricing.feature.cancellation': 'Cancellazione gratuita (24 h+)',
+  'lp.pricing.feature.cancellation': 'Cancellazione gratuita (8 h+)',
   'lp.pricing.feature.validity': 'Crediti validi 6 mesi',
   'lp.pricing.cta': 'Inizia il tuo percorso',
   'lp.pricing.policy.title': 'La nostra politica di cancellazione equa',

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -11,14 +12,18 @@ interface CancelRescheduleResult {
   getRefundInfo: (scheduledAt: string, cost: number) => { refundAmount: number; penalty: number; policyMessage: string };
   getHoursUntilLesson: (scheduledAt: string) => number;
   POLICY_HOURS: number;
+  CANCEL_POLICY_HOURS: number;
 }
 
-// 5-day policy = 120 hours
+// Students cancel up to 8 hours before a lesson (credit returned). Rescheduling still needs 5 days (120 hours).
+// Teachers' own rule is 5 days; see cancelSlotService.ts. The 8 hours here must match student_cancel_lesson in the database.
+export const CANCEL_POLICY_HOURS = 8;
 const POLICY_HOURS = 120;
 
 export function useCancelReschedule(): CancelRescheduleResult {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   const getHoursUntilLesson = (scheduledAt: string): number => {
     const lessonTime = new Date(scheduledAt);
@@ -28,7 +33,7 @@ export function useCancelReschedule(): CancelRescheduleResult {
 
   const canCancel = (scheduledAt: string, isTrialOrFree = false): boolean => {
     if (isTrialOrFree) return true; // Trial lessons can always be cancelled
-    return getHoursUntilLesson(scheduledAt) >= POLICY_HOURS;
+    return getHoursUntilLesson(scheduledAt) >= CANCEL_POLICY_HOURS;
   };
 
   const canReschedule = (scheduledAt: string, isTrialOrFree = false): boolean => {
@@ -44,10 +49,10 @@ export function useCancelReschedule(): CancelRescheduleResult {
 
     const hoursUntil = getHoursUntilLesson(scheduledAt);
 
-    if (hoursUntil >= POLICY_HOURS) {
-      return { refundAmount: cost, penalty: 0, policyMessage: 'Full refund — more than 5 days before lesson.' };
+    if (hoursUntil >= CANCEL_POLICY_HOURS) {
+      return { refundAmount: cost, penalty: 0, policyMessage: t('cx.policy.full', 'Full refund — more than 8 hours before the lesson.') };
     } else {
-      return { refundAmount: 0, penalty: cost, policyMessage: 'No refund — less than 5 days before lesson. Teacher gets paid for the reserved time.' };
+      return { refundAmount: 0, penalty: cost, policyMessage: t('cx.policy.none', 'No refund — less than 8 hours before the lesson. Teacher gets paid for the reserved time.') };
     }
   };
 
@@ -65,8 +70,8 @@ export function useCancelReschedule(): CancelRescheduleResult {
       if (rpcError) {
         toast({
           title: 'Cannot Cancel',
-          description: rpcError.message.includes('5 days')
-            ? 'Lessons must be cancelled at least 5 days in advance. Cancelling now will result in a full charge.'
+          description: /8 hours|5 days/.test(rpcError.message)
+            ? t('cx.toast.tooLate', 'Lessons must be cancelled at least 8 hours in advance. Cancelling now will result in a full charge.')
             : rpcError.message,
           variant: 'destructive',
         });
@@ -158,6 +163,7 @@ export function useCancelReschedule(): CancelRescheduleResult {
     canReschedule,
     getRefundInfo,
     getHoursUntilLesson,
-    POLICY_HOURS
+    POLICY_HOURS,
+    CANCEL_POLICY_HOURS
   };
 }

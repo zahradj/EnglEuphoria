@@ -1,0 +1,38 @@
+// Cancellation policy: students cancel up to 8 hours before a lesson, teachers need 5 days' notice.
+// Namespaced `cx.` (messages) and `rp.` (the Refund & Cancellation Policy page). Every key must exist in all six
+// languages (cancelPolicy.test.ts checks it). English is the source and the fallback language.
+
+export const cancelPolicyTranslations = {
+  "cx.warn.cancel": "Dersten 8 saatten az süre önce iptal etmek, ücretin tamamının tahsil edilmesine yol açar. Öğretmen bu saati sizin için ayırmıştır.",
+  "cx.policy.full": "Tam iade — dersten 8 saatten fazla önce.",
+  "cx.policy.none": "İade yok — dersten 8 saatten az önce. Öğretmene ayrılan süre için ödeme yapılır.",
+  "cx.toast.tooLate": "Dersler en az 8 saat önceden iptal edilmelidir. Şimdi iptal etmek ücretin tamamının tahsil edilmesine yol açar.",
+  "cx.plan.cancel": "Ücretsiz iptal (8 saat önceden)",
+  "rp.title": "İade ve İptal Politikası",
+  "rp.desc": "EnglEuphoria iade ve iptal politikası: öğrenciler dersten 8 saat öncesine kadar iptal edebilir; öğretmenler 5 gün önceden bildirmelidir.",
+  "rp.updated": "13 Ekim 2026",
+  "rp.s1.title": "1. Genel Bakış",
+  "rp.s1.body": "EnglEuphoria kredi tabanlı bir rezervasyon modeliyle çalışır. Öğrenciler ders kredisi satın alır, ardından öğretmenlerle seans ayırırken bu kredileri kullanır. Bu Politika, iptallerin ve iadelerin nasıl ele alınacağını belirler.",
+  "rp.s2.title": "2. Öğrenci İptal Kuralı (8 Saat)",
+  "rp.s2.lead": "Planlanmış bir ders için kredi iadesi alabilmek için öğrencinin dersin başlama saatinden en az 8 saat önce iptal etmesi gerekir.",
+  "rp.s2.b1": "<b>8 saatten fazla önce</b> yapılan iptaller: ders kredisi hesabınıza tamamen iade edilir ve başka bir rezervasyon için yeniden kullanılabilir.",
+  "rp.s2.b2": "Dersten <b>8 saat içinde</b> yapılan iptaller: ders kesinleşmiş sayılır. <b>Herhangi bir iade veya kredi geri verilmez.</b>",
+  "rp.s2.b3": "<b>Derse katılmama:</b> planlanmış bir derse iptal etmeden katılmayan öğrenciler krediyi tamamen kaybeder.",
+  "rp.s2.foot": "Bu süre, yalnızca sizin rezervasyonunuz için zaman ayıran öğretmenlerimizi korur.",
+  "rp.s3.title": "3. Öğretmen İptal Kuralı (5 Gün)",
+  "rp.s3.body": "Öğretmenler, öğrencilerin plan yapabilmesi için rezerve edilmiş bir dersi başlama saatinden en az <b>120 saat (5 tam gün)</b> önce iptal etmeli veya ertelemelidir. Daha geç iptal eden öğretmenler geç iptal cezasına tabi olabilir.",
+  "rp.s4.title": "4. Deneme Dersleri",
+  "rp.s4.body": "<b>Deneme dersleri kesin satıştır ve hiçbir koşulda iade edilmez.</b> Denemeler, tam da iade edilemedikleri için indirimli bir tanıtım fiyatıyla sunulur.",
+  "rp.s5.title": "5. Kredi Paketi Satın Alımları",
+  "rp.s5.body": "Ders kredisi paketleri satın alındıktan sonra iade edilemez. Kullanılmayan krediler, ödeme sırasında belirtilen süre boyunca (genellikle satın alma tarihinden itibaren 12 ay) geçerlidir. Süresi dolan krediler yeniden etkinleştirilemez.",
+  "rp.s6.title": "6. Öğretmen Tarafından Yapılan İptaller",
+  "rp.s6.body": "Bir öğretmen herhangi bir nedenle dersi iptal ederse, iptalin zamanı ne olursa olsun kredinizin <b>tamamı iade edilir</b> ve size öncelikli yeniden rezervasyon sunulur.",
+  "rp.s7.title": "7. Teknik Arızalar",
+  "rp.s7.body": "Bir ders, doğrulanmış Platform kaynaklı bir teknik arıza (örneğin sunucu kesintisi) nedeniyle verilemezse kredi tamamen iade edilir. Kullanıcının cihazından, ağından veya tarayıcısından kaynaklanan arızalar iade hakkı doğurmaz.",
+  "rp.s8.title": "8. Nasıl İptal Edilir",
+  "rp.s8.body": "Yaklaşan herhangi bir rezervasyonu kontrol panelinizde “Programım” bölümünden iptal edebilirsiniz. Sistem, iptali onaylamadan önce 8 saatlik sürenin içinde mi dışında mı olduğunuzu gösterir.",
+  "rp.s9.title": "9. İtirazlar ve Ters İbraz (Chargeback)",
+  "rp.s9.body": "Tüm ödemeler ödeme işlemcimiz Stripe tarafından işlenir. İade itirazları öncelikle <mail>billing@engleuphoria.com</mail> adresinden EnglEuphoria desteğine iletilmelidir. Önce destekle iletişime geçmeden ters ibraz başlatmak hesabın askıya alınmasına yol açabilir.",
+  "rp.s10.title": "10. İletişim",
+  "rp.s10.body": "İade talepleri için <mail>billing@engleuphoria.com</mail> adresine yazın veya posta ile şu adrese başvurun:",
+};

@@ -1,0 +1,38 @@
+// Cancellation policy: students cancel up to 8 hours before a lesson, teachers need 5 days' notice.
+// Namespaced `cx.` (messages) and `rp.` (the Refund & Cancellation Policy page). Every key must exist in all six
+// languages (cancelPolicy.test.ts checks it). English is the source and the fallback language.
+
+export const cancelPolicyTranslations = {
+  "cx.warn.cancel": "Cancelar con menos de 8 horas de antelación supondrá el cobro completo. El profesor ha reservado este horario para ti.",
+  "cx.policy.full": "Reembolso completo — más de 8 horas antes de la clase.",
+  "cx.policy.none": "Sin reembolso — menos de 8 horas antes de la clase. El profesor cobra por el horario reservado.",
+  "cx.toast.tooLate": "Las clases deben cancelarse con al menos 8 horas de antelación. Cancelar ahora supondrá el cobro completo.",
+  "cx.plan.cancel": "Cancelación gratuita (8 h de antelación)",
+  "rp.title": "Política de reembolsos y cancelaciones",
+  "rp.desc": "Política de reembolsos y cancelaciones de EnglEuphoria: los estudiantes pueden cancelar hasta 8 horas antes de una clase; los profesores deben avisar con 5 días de antelación.",
+  "rp.updated": "13 de octubre de 2026",
+  "rp.s1.title": "1. Resumen",
+  "rp.s1.body": "EnglEuphoria funciona con un modelo de reservas basado en créditos. Los estudiantes compran créditos de clase y luego los canjean al reservar sesiones con los profesores. Esta Política regula cómo se gestionan las cancelaciones y los reembolsos.",
+  "rp.s2.title": "2. Regla de cancelación para estudiantes (8 horas)",
+  "rp.s2.lead": "Para recibir el reembolso del crédito de una clase programada, el estudiante debe cancelar al menos 8 horas antes de la hora de inicio de la clase.",
+  "rp.s2.b1": "Cancelaciones realizadas <b>con más de 8 horas de antelación</b>: el crédito de la clase se devuelve íntegramente a tu cuenta y puede reutilizarse en otra reserva.",
+  "rp.s2.b2": "Cancelaciones realizadas <b>con menos de 8 horas</b> de antelación: la clase se considera definitiva. <b>No se concederá reembolso ni devolución de crédito.</b>",
+  "rp.s2.b3": "<b>Ausencias:</b> los estudiantes que no asistan a una clase programada sin cancelarla pierden el crédito por completo.",
+  "rp.s2.foot": "Este plazo protege a nuestros profesores, que reservan tiempo exclusivamente para tu reserva.",
+  "rp.s3.title": "3. Regla de cancelación para profesores (5 días)",
+  "rp.s3.body": "Los profesores deben cancelar o reprogramar una clase reservada con al menos <b>120 horas (5 días completos)</b> de antelación a su hora de inicio, para que los estudiantes puedan organizarse. Los profesores que cancelen más tarde pueden estar sujetos a una penalización por cancelación tardía.",
+  "rp.s4.title": "4. Clases de prueba",
+  "rp.s4.body": "<b>Las clases de prueba son de venta final y no reembolsables</b> bajo ninguna circunstancia. Las pruebas se ofrecen a una tarifa introductoria reducida precisamente porque no son reembolsables.",
+  "rp.s5.title": "5. Compra de paquetes de créditos",
+  "rp.s5.body": "Los paquetes de créditos de clase no son reembolsables una vez comprados. Los créditos sin usar siguen siendo válidos durante el periodo indicado al pagar (normalmente 12 meses desde la fecha de compra). Los créditos caducados no se pueden restablecer.",
+  "rp.s6.title": "6. Cancelaciones realizadas por el profesor",
+  "rp.s6.body": "Si un profesor cancela una clase por cualquier motivo, tu crédito será <b>reembolsado íntegramente</b> sea cual sea el momento de la cancelación, y se te ofrecerá una reprogramación prioritaria.",
+  "rp.s7.title": "7. Fallos técnicos",
+  "rp.s7.body": "Si una clase no puede impartirse debido a un fallo técnico comprobado por parte de la Plataforma (por ejemplo, una caída del servidor), el crédito se devolverá íntegramente. Los fallos originados en el dispositivo, la red o el navegador del usuario no dan derecho a reembolso.",
+  "rp.s8.title": "8. Cómo cancelar",
+  "rp.s8.body": "Puedes cancelar cualquier reserva próxima desde tu panel, en «Mi horario». El sistema te indicará si estás dentro o fuera del plazo de 8 horas antes de confirmar la cancelación.",
+  "rp.s9.title": "9. Disputas y devoluciones de cargo",
+  "rp.s9.body": "Todos los pagos los procesa Stripe, nuestro procesador de pagos. Las disputas sobre reembolsos deben plantearse primero al soporte de EnglEuphoria en <mail>billing@engleuphoria.com</mail>. Iniciar una devolución de cargo sin contactar antes con el soporte puede conllevar la suspensión de la cuenta.",
+  "rp.s10.title": "10. Contacto",
+  "rp.s10.body": "Para consultas sobre reembolsos, escribe a <mail>billing@engleuphoria.com</mail> o por correo postal a:",
+};
