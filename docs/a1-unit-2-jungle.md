@@ -5,7 +5,7 @@ teacher, the lesson blueprint (`docs/playground-lesson-blueprint.md` §3g), the 
 apps). In A1 the child reads **full sentences**, so the unit has **one story** read a bit more each lesson, **phonics +
 a blending game + Blend & Read + a tongue twister in every lesson**, and **no game twice in the unit**.
 
-**Status:** waiting for the owner's OK. Nothing is built from this plan until then.
+**Status:** approved (owner, 2026-10-13: "Ok") — being built.
 
 ## 1. What is wrong with Unit 2 today (audit of the built lessons)
 
@@ -221,4 +221,4 @@ sibling · L7 show your medal and describe an animal.
 
 No paid video. Database rows: synced after the branch is merged (like Unit 1).
 
-**Approval:** _waiting for the owner_
+**Approval:** owner, 2026-10-13: "Ok"
