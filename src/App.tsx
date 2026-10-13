@@ -231,6 +231,7 @@ const PlayWelcomeTown7 = lazy(() => import("./pages/playground-scene/PlayWelcome
 const PlayJungleLesson1 = lazy(() => import("./pages/playground-scene/PlayJungleLesson1"));
 const PlayJungleLesson2 = lazy(() => import("./pages/playground-scene/PlayJungleLesson2"));
 const PlayJungleLesson3 = lazy(() => import("./pages/playground-scene/PlayJungleLesson3"));
+const PlayJungleLesson4 = lazy(() => import("./pages/playground-scene/PlayJungleLesson4"));
 const PlayMagicCastleLesson1 = lazy(() => import("./pages/playground-scene/PlayMagicCastleLesson1"));
 const PlayMagicCastleLesson2 = lazy(() => import("./pages/playground-scene/PlayMagicCastleLesson2"));
 const PlayMagicCastleLesson3 = lazy(() => import("./pages/playground-scene/PlayMagicCastleLesson3"));
@@ -745,6 +746,12 @@ const App = () => {
                       <Route path="/playground-scene/jungle-lesson-3" element={
                         <ImprovedProtectedRoute>
                           <Suspense fallback={<LoadingFallback />}><PlayJungleLesson3 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A1 tier — Jungle Adventure, Unit 2 Lesson 4. */}
+                      <Route path="/playground-scene/jungle-lesson-4" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayJungleLesson4 /></Suspense>
                         </ImprovedProtectedRoute>
                       } />
                       {/* A1 tier — Magic Castle, Unit 9 Lesson 1 ("Rooms in the Castle: Kitchen, Bedroom"). */}

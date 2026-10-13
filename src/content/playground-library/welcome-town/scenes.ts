@@ -430,6 +430,13 @@ export type Scene =
       racer: string; rounds: { ask: string; choices: string[]; answer: number; read?: boolean }[]; doneLine: string;
     }
   | {
+      /** Field Guide (FieldGuideScene.tsx, A1 U2L4): build an animal's 4-sentence card — each `lines` frame has one ___ gap;
+       *  pick the right word from `options` (a wrong one: the animal says `no`), then the child reads the card aloud. */
+      id: string; kind: 'field-guide'; bg: string; teacher: string; title: string; who: CharKey;
+      animals: { name: string; img: string; lines: { frame: string; options: string[]; answer: string; no?: string }[] }[];
+      doneLine: string;
+    }
+  | {
       /** Word Splat (WordSplatScene.tsx): sight words float as paint blobs; the voice says one, the child splats it
        *  (it stays painted) and reads it. `rounds` = the words called, in order (each must be in `words`). */
       id: string; kind: 'word-splat'; bg: string; teacher: string; title: string; who: CharKey;

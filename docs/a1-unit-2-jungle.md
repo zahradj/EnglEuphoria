@@ -150,7 +150,7 @@ sentences onto the pictures), **ch** sound model + **Sound Pop (ch)**, twister *
 | 3-4 | Model: *It's got a long tail / a long nose.* (meet) · echo | | P |
 | 5 | **Animal Riddle ★** (Coco gives clues → the child guesses; then roles swap) | read / say | G/F |
 | 6 | Song: "Can It Fly?" (sing-back: the child sings Coco's lines) | | G |
-| 7 | **Mixed-up Animal** (monster-maker with animal parts: build *a snake with wings*, say *It's got wings. It can fly!*) ★ new art | create, say | F |
+| 7 | **Field Guide ★** (new `field-guide`: the child builds each animal's 4-sentence card — size, colour, can, can't — every word checked against the real animal, then reads the card) | build, read, say | G/F |
 | 8 | Brain break: *Make a long neck! Make a long tail!* | | — |
 | 9-10 | **Reader** pages 8-9 · **Sentence Build** (4-word sentences from the page) | read, build | R |
 | 11-14 | **sh** sound model · **Sound Mole (sh)** · Blend & Read (Gumball): *fish, ship, shop* | sound, whack, blend, read | R |
@@ -196,7 +196,7 @@ likes bananas*-style labels — only Unit 2 words), Blend & Read, free talk with
 | Shadow Match · Safari Snap ★ · Brick Crush (i) · Read & Match | L1 |
 | Obstacle Run ★ · Read & Drag · Sound Pop (ch) | L2 |
 | Can It? · Who Can? Buzzer · Flip & Ask · Read & Check (tick-cross) · Word Build (ck) | L3 |
-| Animal Riddle ★ · Mixed-up Animal ★ · Sentence Build · Sound Mole (sh) | L4 |
+| Animal Riddle ★ · Field Guide ★ · Sentence Build · Sound Mole (sh) | L4 |
 | Rescue Map ★ · Odd One Out · Sound Pick | L5 |
 | River Crossing ★ · Charades · Memory (animal ↔ description) · Tile Reveal · Feed the animals | L6 |
 | Raft Race (boss warm-up) | L7 |
@@ -215,7 +215,6 @@ sibling · L7 show your medal and describe an animal.
 |---|---|---|
 | Story pictures | 12 pages of *The Jungle Rescue* (Canva), new cut-out stickers: Kip (little monkey), crocodile, elephant with trunk | Canva |
 | Song | "Can It Fly?" — written to the beat (kids-song-writer), one take from the song bot | song bot |
-| Mixed-up Animal parts | heads / bodies / tails / wings as cut-out stickers (Canva) for monster-maker | Canva |
 | Raft Race look | a river look for the answer race | code |
 | Lessons | L1 + L2 rebuilt, L3-L7 built, plans in `a1LessonPlans.ts`, voices baked | code + voice bot |
 

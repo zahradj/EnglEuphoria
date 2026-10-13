@@ -36,6 +36,7 @@ import { ReaderScene } from './scene-components/ReaderScene';
 import { ReadDoScene } from './scene-components/ReadDoScene';
 import { AnswerRaceScene } from './scene-components/AnswerRaceScene';
 import { WordSplatScene } from './scene-components/WordSplatScene';
+import { FieldGuideScene } from './scene-components/FieldGuideScene';
 import { displayScene } from '../stageLabel';
 import { SongScene } from './scene-components/SongScene';
 import { SoundModelScene } from './scene-components/SoundModelScene';
@@ -134,6 +135,7 @@ export function SceneRenderer(props: {
       case 'reader': return <ReaderScene scene={scene} onNext={props.onNext} onWin={props.onWin} sync={props.activitySync} />;
       case 'read-do': return <ReadDoScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'answer-race': return <AnswerRaceScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
+      case 'field-guide': return <FieldGuideScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'word-splat': return <WordSplatScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'flipbook': return <FlipbookScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'song': return <SongScene scene={scene} onNext={props.onNext} onWin={props.onWin} />;

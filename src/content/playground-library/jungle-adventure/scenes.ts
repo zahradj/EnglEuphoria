@@ -830,3 +830,200 @@ export const LESSON_A1U2L3_SCENES: Scene[] = [
   },
   { id: 'ja3-finale', kind: 'finale', bg: bgFriends, who: 'coco', line: 'You can ask “Can it…?” and answer! Who can help Kip? Find out next time! \u{1F418}' },
 ];
+
+/* =============================================================================
+ * A1 Unit 2 Lesson 4: "Talk About Animals!" (built 2026-10-13, plan docs/a1-unit-2-jungle.md §5.4)
+ *
+ * Objective: I can describe an animal in 4 sentences and ask "Can it…?". Evidence: Animal Riddle (the child gives a
+ * 4-clue riddle) + the Field Guide card the child builds and reads. The child is the expert: Coco says wrong things
+ * ("The elephant is small and green!") and the child corrects her. New: "It's got a long tail / a long nose."
+ * Reading: The Jungle Rescue pp. 7-9 (the crocodile can swim — "No! Your teeth!"; the elephant is big). Phonics: sh.
+ * Research (mechanics only): "What Am I?" riddle cards (TES / games4esl: I am… I have… I can…), Cambridge Starters
+ * "describe … colour, size", Kid's Box 1 wild-animals description. Better: the child builds and reads a 4-sentence card
+ * checked against the real animal (Field Guide, new kind `field-guide`), and corrects a friend's mistakes.
+ * Plan swap: "Mixed-up Animal" → Field Guide (no new part art; it is exactly the unit's 4-sentence description).
+ * ========================================================================= */
+
+export const LESSON_A1U2L4_TITLE = 'Talk About Animals!';
+export const LESSON_A1U2L4_OBJECTIVE = 'I can describe an animal in 4 sentences — "It\'s a crocodile. It\'s big and green. It can swim. It can\'t fly." — and ask "Can it…?".';
+
+const FG = (name: string, img: string, size: [string, string[]], colour: [string, string[]], can: [string, string[]], cant: [string, string[]]) => ({
+  name, img,
+  lines: [
+    { frame: 'It’s ___.', answer: size[0], options: size[1], no: `No! It isn’t ${size[1].find((o) => o !== size[0])}!` },
+    { frame: 'It’s ___.', answer: colour[0], options: colour[1], no: 'No! Look at the colour!' },
+    { frame: 'It can ___.', answer: can[0], options: can[1], no: 'No! It can’t do that!' },
+    { frame: 'It can’t ___.', answer: cant[0], options: cant[1], no: 'Oh, but it can do that!' },
+  ],
+});
+
+export const LESSON_A1U2L4_SCENES: Scene[] = [
+  { id: 'ja4-title', kind: 'title-card', bg: jungleRescue(9), level: 'A1', unit: 'Unit 2', lessonLabel: 'Lesson 4', title: 'Talk About Animals!', subtitle: 'Be the jungle expert: say it in 4 sentences', cta: '\u{1F4D2} LET’S TALK!' },
+  {
+    id: 'ja4-recall-warmup', kind: 'recall-warmup', bg: bgWide, who: 'pip', mode: 'click', listen: true,
+    fromLabel: 'Unit 2 · Lesson 3 · Can It…?',
+    teacher: 'Guided: listen — who is it? Click it, then ask Pip a question about it: Can it fly?',
+    items: [
+      { word: 'bird', say: 'It can fly, but it is small.', img: it('bird') },
+      { word: 'fish', say: 'It can swim. It can’t walk.', img: it('fish') },
+      { word: 'crocodile', say: 'It can swim. It is big and green.', img: it('alligator') },
+      { word: 'monkey', say: 'It can climb and swing.', img: it('coco-cheer') },
+    ],
+  },
+  /* Present: it's got … (one chunk, its own story picture each) */
+  { id: 'ja4-model-nose', kind: 'meet', focus: ['long nose'], bg: jungleRescue(10), who: 'pip', cardSide: 'left', teacher: 'Present: point to the elephant’s trunk — its long nose! Listen, then say it with a long arm.', line: 'Look! The elephant has got a long nose. It’s got a long nose!', repeat: 'It’s got a long nose!' },
+  { id: 'ja4-model-tail', kind: 'meet', focus: ['long tail'], bg: jungleRescue(8), who: 'pip', cardSide: 'left', teacher: 'Present: point to the crocodile’s tail. It’s got a long tail!', line: 'The crocodile has got a long tail. It’s got a long tail!', repeat: 'It’s got a long tail!' },
+  { id: 'ja4-echo', kind: 'echo', bg: bgWide, who: 'pip', textSide: 'top', teacher: 'Guided: say it like Pip — a long, long tail!', word: 'It’s got a long tail.' },
+  /* ★ Animal Riddle: four clues, the child guesses */
+  {
+    id: 'ja4-riddle', kind: 'prea1', teacher: 'Guided: Animal Riddle! Listen to the four clues and pick the animal. Then say the four sentences yourself.',
+    scene: {
+      id: 'ja4-riddle', kind: 'animal-riddle', bg: bgWide, who: 'pip', ask: 'What animal is it?', teacher: 'Listen to the clues. What animal is it?',
+      animals: [
+        { label: 'elephant', img: it('elephant'), say: 'I’m an elephant! I’ve got a long nose!' },
+        { label: 'crocodile', img: it('alligator'), say: 'I’m a crocodile! I’ve got a long tail!' },
+        { label: 'snake', img: it('snake'), say: 'I’m a snake! I’m long!' },
+        { label: 'monkey', img: it('coco-cheer'), say: 'I’m a monkey! I can climb!' },
+        { label: 'frog', img: it('frog'), say: 'I’m a frog! I can jump!' },
+        { label: 'bird', img: it('bird'), say: 'I’m a bird! I can fly!' },
+      ],
+      rounds: [
+        { answer: 0, options: [0, 3, 4], clues: ['It’s big.', 'It’s grey.', 'It’s got a long nose.', 'It can’t fly.'] },
+        { answer: 1, options: [2, 1, 4], clues: ['It’s green.', 'It’s big.', 'It’s got a long tail.', 'It can swim.'] },
+        { answer: 5, options: [3, 5, 2], clues: ['It’s small.', 'It’s blue.', 'It can fly.', 'It can’t swim.'] },
+        { answer: 2, options: [2, 0, 4], clues: ['It’s long.', 'It’s green.', 'It can climb a tree.', 'It can’t run.'] },
+      ],
+      doneLine: 'Riddle champion! Now YOU make a riddle!',
+    },
+  },
+  {
+    id: 'ja4-sing-back', kind: 'song', bg: bgWide, title: '\u{1F3B5} Ask Them! \u{1F3B5}',
+    teacher: 'Sing-back: the student sings the questions, the teacher sings the answers — then swap!',
+    durationSeconds: 47, bigWord: 'Can it?', songUrl: SONG_A1U2L3, lineDurationsMs: SONG_A1U2L3_MS, lyrics: SONG_A1U2L3_LYRICS,
+  },
+  /* ★ Field Guide: the child writes the 4-sentence card */
+  {
+    id: 'ja4-field-guide', kind: 'field-guide', bg: bgWide, who: 'pip', title: 'My Jungle Field Guide',
+    teacher: 'Free (guided): build each animal’s card — pick the right word for every sentence, then read the whole card aloud and tap ✓.',
+    animals: [
+      FG('elephant', it('elephant'), ['big', ['big', 'small']], ['grey', ['grey', 'green', 'blue']], ['swim', ['swim', 'fly']], ['fly', ['fly', 'walk']]),
+      FG('crocodile', it('alligator'), ['big', ['small', 'big']], ['green', ['brown', 'green', 'grey']], ['swim', ['fly', 'swim']], ['climb', ['swim', 'climb']]),
+      FG('frog', it('frog'), ['small', ['big', 'small']], ['green', ['green', 'grey', 'yellow']], ['jump', ['jump', 'fly']], ['fly', ['jump', 'fly']]),
+    ],
+    doneLine: 'Your field guide is ready! You are a jungle expert!',
+  },
+  {
+    id: 'ja4-move-break', kind: 'prea1', teacher: 'Brain break: be the animals with Pip!',
+    scene: {
+      id: 'ja4-move-break', kind: 'tpr-actions', mode: 'break', bg: bgWide, who: 'pip', teacher: 'Show me!',
+      rounds: [
+        { line: 'Make a long nose! Swing it like an elephant!', emoji: '\u{1F418}' },
+        { line: 'Make a long tail! Swish, swish!', emoji: '\u{1F40A}' },
+        { line: 'Be small! Be big!', emoji: '\u{2195}\u{FE0F}' },
+        { line: 'Swim like a crocodile! Snap, snap!', emoji: '\u{1F30A}' },
+      ],
+    },
+  },
+  /* Reading: The Jungle Rescue pages 7-9 */
+  {
+    id: 'ja4-reader', kind: 'reader', bg: jungleRescue(8), title: 'The Jungle Rescue', doneLine: 'The elephant is big. Can it help Kip? Find out in the storybook!',
+    teacher: 'Reading: page 7 again, then the new pages. Listen while the words light up, then the student reads.',
+    pages: JUNGLE_RESCUE.slice(6, 9),
+  },
+  {
+    id: 'ja4-build', kind: 'sentence-build', bg: bgWide, teacher: 'Reading: put the words of the story in order, then read the sentence.',
+    rounds: [
+      { words: ['I', 'can', 'swim!'], emoji: '\u{1F40A}' },
+      { words: ['Can', 'I', 'help?'], emoji: '\u{2753}' },
+      { words: ['I', 'am', 'big.'], emoji: '\u{1F418}' },
+      { words: ['It', 'can', 'walk', 'in', 'the', 'river.'], emoji: '\u{1F30A}' },
+    ],
+  },
+  /* Phonics: sh → Sound Mole → Blend & Read → tongue twister */
+  {
+    id: 'ja4-sound-sh', kind: 'sound-model', bg: bgWide, who: 'willow', letter: 'SH', phoneme: '/sh/', sound: 'sh', soundSide: 'center',
+    teacher: 'Present: s + h make ONE quiet sound, /sh/ — finger on your lips: shhh! Ship, shell, sheep, shoe.',
+    anchors: [
+      { word: 'ship', emoji: '\u{1F6A2}', img: it('ship') },
+      { word: 'shell', emoji: '\u{1F41A}', img: it('shell') },
+      { word: 'sheep', emoji: '\u{1F411}', img: it('sheep') },
+      { word: 'shoe', emoji: '\u{1F45F}', img: it('shoe') },
+    ],
+  },
+  {
+    id: 'ja4-sound-mole', kind: 'prea1', teacher: 'Reading: Sound Moles! Hear /sh/, then bonk every mole whose picture starts with /sh/ — not /s/!',
+    scene: {
+      id: 'ja4-sound-mole', kind: 'sound-mole', bg: bgWide, who: 'willow', teacher: 'Hear the sound, then bonk every mole whose picture starts with it!',
+      rounds: [
+        { letter: 'sh', pictures: [{ word: 'ship', img: it('ship') }, { word: 'shell', img: it('shell') }, { word: 'sheep', img: it('sheep') }, { word: 'sun', img: it('sun') }, { word: 'socks', img: it('socks-red') }] },
+      ],
+    },
+  },
+  {
+    id: 'ja4-blend', kind: 'sound-blend', bg: bgWide, look: 'gumball',
+    teacher: 'Reading: blend the word (sh is ONE sound), find the picture — then read the sentence.',
+    rounds: [
+      { word: 'fish', sounds: ['f', 'i', 'sh'], img: it('fish'), sentence: 'A fish can swim. It can’t lift Kip.' },
+      { word: 'ship', sounds: ['sh', 'i', 'p'], img: it('ship'), sentence: 'Look! A big ship.' },
+      { word: 'shell', sounds: ['sh', 'e', 'll'], img: it('shell'), sentence: 'It’s a small shell.' },
+    ],
+  },
+  { id: 'ja4-twister', kind: 'tongue-twister', look: 'town', speeds: 2, bg: bgWide, who: 'willow', focus: 'sh', teacher: 'Reading: quick reading! Listen to Willow, then say it slow, then faster.', line: 'Shy fish swish and splash.' },
+  /* Free: the child is the expert */
+  {
+    id: 'ja4-expert', kind: 'join-stage', bg: bgFriends, teacher: 'Free: Coco gets it wrong on purpose — the student corrects her in whole sentences.', cast: ['coco', 'pip'],
+    turns: [
+      { who: 'coco', line: 'The elephant is small and green!' },
+      { who: 'student', line: 'No! It’s big and grey!' },
+      { who: 'coco', line: 'The snake can run!' },
+      { who: 'student', line: 'No! It can’t run. It can climb.' },
+      { who: 'coco', line: 'The crocodile has got a short tail!' },
+      { who: 'student', line: 'No! It’s got a long tail!' },
+    ],
+  },
+  {
+    id: 'ja4-my-riddle', kind: 'join-stage', bg: bgFriends, teacher: 'Free: the student picks an animal in secret and gives four clues; the teacher guesses. Then the student asks the teacher one “Can it…?” question.', cast: ['coco', 'pip'],
+    turns: [
+      { who: 'coco', line: 'Your turn! Give me a riddle — four clues!' },
+      { who: 'student', line: 'It’s … It’s … It can … It can’t …' },
+      { who: 'coco', line: 'Is it a …? Ask me a question too!' },
+      { who: 'student', line: 'Can it …?' },
+    ],
+  },
+  { id: 'ja4-i-can', kind: 'meet', focus: ['4 sentences'], bg: bgFriends, who: 'coco', cardSide: 'left', teacher: 'Check: say it and get your passport stamp!', line: 'I can talk about an animal in 4 sentences!', repeat: 'It’s big. It’s grey. It can swim. It can’t fly.' },
+  {
+    id: 'ja4-sticker', kind: 'prea1', teacher: 'Sticker time! The student opens the pack and puts the expert sticker in their Sticker Book.',
+    scene: {
+      id: 'ja4-sticker', kind: 'sticker-reward', bg: bgFriends, who: 'pip', teacher: 'Sticker time!',
+      line: 'Jungle expert! Here is your sticker.',
+      sticker: { img: it('frog'), label: 'Jungle expert' },
+    },
+  },
+  {
+    id: 'ja4-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
+    scene: {
+      id: 'ja4-home-mission', kind: 'home-mission', bg: bgFriends, who: 'pip',
+      teacher: 'Home Mission: read the steps with the student.',
+      line: 'Your home mission!',
+      parentNote: 'Today your child learned to describe an animal in 4 sentences ("It\'s big. It\'s grey. It can swim. It can\'t fly.") and "It\'s got a long tail." Let them give you an animal riddle — guess the animal!',
+      steps: [
+        { emoji: '\u{1F914}', say: 'Give your family an animal riddle: four clues.' },
+        { emoji: '\u{1F4D2}', say: 'Draw your favourite animal and write: It’s big.' },
+        { emoji: '\u{1F4D6}', say: 'Read pages 7 to 9 of the story.' },
+      ],
+    },
+  },
+  {
+    id: 'ja4-goodbye-song', kind: 'song', bg: bgFriends, title: '\u{1F3B5} Goodbye Song \u{1F3B5}', teacher: 'It’s time to go — wave goodbye and sing along together!',
+    durationSeconds: 20, bigWord: 'Goodbye',
+    songUrl: '/welcome-town/audio/goodbye-song.mp3?v=3',
+    lineDurationsMs: [3600, 4120, 4020, 8322],
+    lyrics: [
+      { who: 'coco', text: '\u{1F44B} Goodbye, goodbye, my new friend' },
+      { who: 'leo', text: '\u{1F44B} Goodbye, goodbye, see you again' },
+      { who: 'willow', text: '\u{1F3EB} Welcome Town School is happy today' },
+      { who: 'coco', text: '\u{1F496} Byeeee, friends! See you soon!' },
+    ],
+  },
+  { id: 'ja4-finale', kind: 'finale', bg: bgFriends, who: 'coco', line: 'You are a jungle expert! Next time: can the elephant help Kip? \u{1F418}' },
+];

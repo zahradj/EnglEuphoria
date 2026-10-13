@@ -791,6 +791,7 @@ const WT_EXTRACTORS = {
   // ReadDoScene / AnswerRaceScene / WordSplatScene (welcome-town/scene-components).
   'read-do': (s) => [['pip', s.doneLine], ...(s.rounds ?? []).flatMap((r) => [['teacher', r.text], [s.cast?.[r.to] ?? 'pip', r.reply]])],
   'answer-race': (s) => [[s.who, s.doneLine], ...(s.rounds ?? []).flatMap((r) => [[s.who, r.ask], ...(r.choices ?? []).map((c) => ['teacher', c])])],
+  'field-guide': (s) => [[s.who, s.doneLine], [s.who, 'No! Look again!'], ...(s.animals ?? []).flatMap((a) => [[s.who, `What is it like? Let's write the ${a.name} card!`], ...(a.lines ?? []).flatMap((l) => [['teacher', l.frame.replace('___', l.answer)], ...(l.no ? [[s.who, l.no]] : [])])])],
   'word-splat': (s) => [[s.who, s.doneLine], ...(s.words ?? []).map((w) => [s.who, w])],
   'spin-wheel': (s) => (s.items ?? []).map((it) => ['teacher', it.label]),
   'picture-match': (s) => (s.items ?? []).map((it) => ['teacher', it.word]),

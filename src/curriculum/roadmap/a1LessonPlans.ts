@@ -133,12 +133,13 @@ export const A1_LESSON_PLANS: A1LessonPlan[] = [
     funHook: 'The animal really tries — and flops when it can\'t.', homeMission: 'Ask a grown-up three "Can it…?" questions and sing "Ask Them!".',
   }),
   p(2, 4, 'Talk About Animals!', {
-    objective: 'I can describe an animal in 4 sentences and ask a question: "It\'s a snake. It\'s long. It can swim. It can\'t jump."',
-    grammarFocus: ['It\'s long / short / big / small', 'It\'s got a long tail', 'Can it…?'], newVocabulary: ['long', 'short', 'tail'],
-    reviewTargets: ['all Unit 2 animals and actions'], phonicsFocus: ['ch / ck review'],
+    built: true,
+    objective: 'I can describe an animal in 4 sentences — "It\'s a crocodile. It\'s big and green. It can swim. It can\'t fly." — and ask "Can it…?".',
+    grammarFocus: ['It\'s big / small / long + colour', 'It\'s got a long tail / nose', 'It can / can\'t…', 'Can it…?'], newVocabulary: ['tail', 'nose', 'It\'s got'],
+    reviewTargets: ['all Unit 2 animals and actions'], phonicsFocus: ['sh (ship, shell, sheep, shoe → fish, ship, shell)', 'twister: Shy fish swish and splash.'],
     communicationGoal: 'Describe an animal so someone can guess it.',
-    signatureGame: 'Animal Riddle ⇄ (the child is the riddler)', evidence: 'A 3-4 sentence riddle + one question; teacher scores 0-3.',
-    funHook: 'The child is the expert: Coco guesses wrong and the child corrects her.', homeMission: 'Describe your favourite animal in 3 sentences.',
+    signatureGame: '★ Animal Riddle + ★ Field Guide (the child builds and reads a 4-sentence card)', evidence: 'The Field Guide cards read aloud; a 4-clue riddle + one question; reads pages 7-9.',
+    funHook: 'The child is the expert: Coco says wrong things and the child corrects her.', homeMission: 'Give your family an animal riddle with four clues.',
   }),
   p(2, 5, 'Storybook: The Jungle Rescue', {
     objective: 'I can follow a story and say who can help and why.',
