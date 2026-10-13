@@ -30,6 +30,8 @@ const minutes = (s: Slide): number => {
     case 'hearpick': return 0.5 + s.rounds.length * 0.5;
     case 'fade': return 0.6 + s.lines.length * 0.6;
     case 'write': return 1 + s.rows.length * 1.2;
+    case 'shadow': return 0.5 + s.rounds.length * 0.5;
+    case 'spell': return 0.8 + 0.2 * s.target.length;
     case 'say': return 2;
     case 'wrap': return 3.2;
     default: return 1;
@@ -108,15 +110,26 @@ describe('A1 S3 E1 Club Fair: sequencing and the owner rules (modelling, the rul
     slides.filter((s) => !['title', 'brief', 'wrap', 'dial'].includes(s.kind)).forEach((s) => expect(s.trains?.length, s.id).toBeGreaterThan(0));
   });
 
-  it('TIME: with the slow-beginner estimate every part fills 70-125 % of its time and the lesson totals 57-64.5 minutes', () => {
-    const per = PARTS.map((_, i) => slides.filter((s) => s.part === i).reduce((a, s) => a + minutes(s), 0));
+  it('TIME: the core slides (without the bonus games) fill 70-125 % of each part and total 57-64.5 minutes; the bonus games add at most 15 more', () => {
+    const core = slides.filter((s) => !s.flex);
+    const per = PARTS.map((_, i) => core.filter((s) => s.part === i).reduce((a, s) => a + minutes(s), 0));
     per.forEach((m, i) => {
       expect(m, `${PARTS[i].name}: ${m.toFixed(1)} min`).toBeGreaterThanOrEqual(PARTS[i].minutes * 0.7);
       expect(m, `${PARTS[i].name}: ${m.toFixed(1)} min`).toBeLessThanOrEqual(PARTS[i].minutes * 1.25);
     });
     const total = per.reduce((a, b) => a + b, 0);
-    expect(total, `total ${total.toFixed(1)} min`).toBeGreaterThanOrEqual(57);
-    expect(total, `total ${total.toFixed(1)} min`).toBeLessThanOrEqual(64.5);
+    expect(total, `core total ${total.toFixed(1)} min`).toBeGreaterThanOrEqual(57);
+    expect(total, `core total ${total.toFixed(1)} min`).toBeLessThanOrEqual(64.5);
+    const bonus = slides.filter((s) => s.flex).reduce((a, s) => a + minutes(s), 0);
+    expect(bonus, `bonus ${bonus.toFixed(1)} min`).toBeLessThanOrEqual(15);
+  });
+
+  it('VOCABULARY GAMES: the club words and the hobby words each get drag-match, listen/hear, memory and shadow games, and every bonus game is marked so the teacher can skip it', () => {
+    const kinds = (ids: string[]) => ids.map((id) => slides[idx(id)].kind);
+    expect(kinds(['match-club-drag', 'shadow-club', 'mem-hobby', 'shadow-hobby', 'match-like'])).toEqual(['match', 'shadow', 'memory', 'shadow', 'match']);
+    slides.filter((s) => s.flex).forEach((s) => expect(s.note, s.id).toMatch(/Bonus game/));
+    expect(slides.filter((s) => s.kind === 'match' && (s.mode ?? 'drag') === 'drag').length).toBeGreaterThanOrEqual(3);
+    expect(slides.length).toBeGreaterThanOrEqual(35);
   });
 
   it('every spoken line can be baked (no variables or blanks) except the learner-filled model lines', () => {
