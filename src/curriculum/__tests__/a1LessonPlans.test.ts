@@ -19,9 +19,9 @@ describe('A1 Playground curriculum blueprint + lesson plans', () => {
     }
   });
 
-  it('follows the unit arc: L5 story video, L7 Boss Test, L1/L2 teach 1-7 new words', () => {
+  it('follows the unit arc: L5 story GIFs (no story videos in A1), L7 Boss Test, L1/L2 teach 1-7 new words', () => {
     for (const p of A1_LESSON_PLANS) {
-      if (p.lesson === 5) expect(p.signatureGame).toMatch(/Story video/);
+      if (p.lesson === 5) { expect(p.signatureGame).toMatch(/Story GIFs/); expect(p.signatureGame).not.toMatch(/video/i); }
       if (p.lesson === 7) expect(p.signatureGame).toMatch(/Boss Test/);
       if (p.lesson <= 2 && !p.built) {
         expect(p.newVocabulary.length).toBeGreaterThanOrEqual(1);

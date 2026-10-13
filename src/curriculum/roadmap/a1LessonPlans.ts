@@ -7,7 +7,7 @@
 // with scripts/a1-lesson-plans-sql.mjs; a1LessonPlans.test.ts keeps it consistent with the buckets.
 //
 // Unit arc (same in every unit): L1-L2 new language · L3 listening lesson around the unit song · L4 speaking (the
-// child is the expert) · L5 story video · L6 extra-practice games · L7 Boss Test. Every lesson follows the 22-page
+// child is the expert) · L5 story GIFs (no story videos in A1, owner 2026-10-13) · L6 extra-practice games · L7 Boss Test. Every lesson follows the 22-page
 // Playground lesson blueprint (docs/playground-lesson-blueprint.md, §3g for A1).
 
 export type A1LessonType = 'core' | 'storybook' | 'extra_practice' | 'unit_review';
@@ -84,7 +84,7 @@ export const A1_LESSON_PLANS: A1LessonPlan[] = [
     grammarFocus: ['all Unit 1 lines in the story'], newVocabulary: [], reviewTargets: ['hello', 'friend', 'feelings', 'cap, cat, red'],
     phonicsFocus: ['blend a whole sentence: The cap is on the cat.', 'sight words: the, look, now, see'],
     communicationGoal: 'Read and understand a short story about meeting friends.',
-    signatureGame: 'Story video (stills film of the book with read-along subtitles) + Reader', evidence: 'The child reads 4 pages alone, answers 4 yes/no questions and acts out pages 2-4 as Pip.',
+    signatureGame: 'Story GIFs (Canva, scenario first) + Reader: the whole book', evidence: 'The child reads 4 pages alone, answers 4 yes/no questions and acts out pages 2-4 as Pip.',
     funHook: 'Where is the cap? The child predicts, and it is on the cat!', homeMission: 'Read the book to your family.',
   }),
   p(1, 6, 'Extra Practice: Game Day!', {
@@ -146,7 +146,7 @@ export const A1_LESSON_PLANS: A1LessonPlan[] = [
     objective: 'I can read "The Jungle Rescue" with help and say who can help Kip and why: "The elephant. It is big. It can walk in the river."',
     grammarFocus: ['It can / can\'t…', 'Can it…?', 'It\'s big / small'], newVocabulary: ['help', 'river', 'rock'], reviewTargets: ['all Unit 2'],
     phonicsFocus: ['review i, ch, sh (Sound Pick)', 'twister: Big Kip sits on a big rock.'], communicationGoal: 'Read a short story about animals helping and retell it.',
-    signatureGame: 'Story video (stills film, after the scenario is approved) + Reader: the whole book with a "Who can help?" pause + Rescue Map', evidence: 'The child chooses at the pause and retells why (6-line retell); reads the book with help.',
+    signatureGame: 'Story GIFs (Canva, scenario first) + Reader: the whole book with a "Who can help?" pause + Rescue Map', evidence: 'The child chooses at the pause and retells why (6-line retell); reads the book with help.',
     funHook: 'The child chooses who helps Kip — and acts out the elephant.', homeMission: 'Read the book to your family and ask "Who can help Kip?".',
   }),
   p(2, 6, 'Extra Practice: Jungle Game Day!', {
@@ -202,7 +202,7 @@ export const A1_LESSON_PLANS: A1LessonPlan[] = [
     objective: 'I can follow a story and say where the robot went and what the weather was.',
     grammarFocus: ['directions', 'weather', 'There are…'], newVocabulary: [], reviewTargets: ['all Unit 3'],
     phonicsFocus: [], communicationGoal: 'Understand a space story.',
-    signatureGame: 'Story video (scenario first) with pause questions', evidence: 'Pause questions + retell 3 pictures.',
+    signatureGame: 'Story GIFs (Canva, scenario first) + Reader with pause questions', evidence: 'Pause questions + retell 3 pictures.',
     funHook: 'The child gives the directions that bring the robot home.', homeMission: 'Tell the story with the pictures.',
   }),
   p(3, 6, 'Extra Practice: Number & Direction Match!', {
@@ -256,7 +256,7 @@ export const A1_LESSON_PLANS: A1LessonPlan[] = [
     objective: 'I can follow a cooking story and say what the friends would like.',
     grammarFocus: ['Would you like…?', 'some', 'Let\'s…'], newVocabulary: [], reviewTargets: ['all Unit 4'],
     phonicsFocus: [], communicationGoal: 'Understand a story about cooking together.',
-    signatureGame: 'Story video (scenario first) with pause questions', evidence: 'Pause questions + retell 3 pictures.',
+    signatureGame: 'Story GIFs (Canva, scenario first) + Reader with pause questions', evidence: 'Pause questions + retell 3 pictures.',
     funHook: 'The child chooses the secret ingredient.', homeMission: 'Help cook something and name the food.',
   }),
   p(4, 6, 'Extra Practice: Food Taste Test!', {
@@ -310,7 +310,7 @@ export const A1_LESSON_PLANS: A1LessonPlan[] = [
     objective: 'I can follow a story and say how Bibi feels and why.',
     grammarFocus: ['feeling + because', 'wearing'], newVocabulary: [], reviewTargets: ['all Unit 5'],
     phonicsFocus: [], communicationGoal: 'Understand feelings in a story.',
-    signatureGame: 'Story video (scenario first) with pause questions', evidence: 'Pause questions + retell 3 pictures.',
+    signatureGame: 'Story GIFs (Canva, scenario first) + Reader with pause questions', evidence: 'Pause questions + retell 3 pictures.',
     funHook: 'The child chooses how to cheer Bibi up.', homeMission: 'Tell the story and say how Bibi felt.',
   }),
   p(5, 6, 'Extra Practice: Feelings Charades!', {
@@ -364,7 +364,7 @@ export const A1_LESSON_PLANS: A1LessonPlan[] = [
     objective: 'I can follow a story and say what the animals are doing and what the weather is like.',
     grammarFocus: ['-ing', 'weather'], newVocabulary: [], reviewTargets: ['all Unit 6', 'weather (Unit 3)'],
     phonicsFocus: [], communicationGoal: 'Understand an ocean adventure.',
-    signatureGame: 'Story video (scenario first) with pause questions', evidence: 'Pause questions + retell 3 pictures.',
+    signatureGame: 'Story GIFs (Canva, scenario first) + Reader with pause questions', evidence: 'Pause questions + retell 3 pictures.',
     funHook: 'The child spots the treasure before the friends.', homeMission: 'Tell the story with the pictures.',
   }),
   p(6, 6, 'Extra Practice: Ocean Question Game!', {
@@ -419,7 +419,7 @@ export const A1_LESSON_PLANS: A1LessonPlan[] = [
     objective: 'I can follow a hero story and say who helped and how.',
     grammarFocus: ['can well / fast', 'must', 'What\'s the matter?'], newVocabulary: [], reviewTargets: ['all Unit 7'],
     phonicsFocus: [], communicationGoal: 'Understand a story about helping.',
-    signatureGame: 'Story video (scenario first) with pause questions', evidence: 'Pause questions + retell 3 pictures.',
+    signatureGame: 'Story GIFs (Canva, scenario first) + Reader with pause questions', evidence: 'Pause questions + retell 3 pictures.',
     funHook: 'The child chooses Captain Spark\'s plan.', homeMission: 'Tell the story with the pictures.',
   }),
   p(7, 6, 'Extra Practice: Hero Mission Match!', {
@@ -473,7 +473,7 @@ export const A1_LESSON_PLANS: A1LessonPlan[] = [
     objective: 'I can follow a race story and say who was faster and what happened.',
     grammarFocus: ['comparatives', 'was / had / ran (past chunks)'], newVocabulary: [], reviewTargets: ['all Unit 8'],
     phonicsFocus: [], communicationGoal: 'Understand a story told in the past.',
-    signatureGame: 'Story video (scenario first) with pause questions', evidence: 'Pause questions + retell 3 pictures.',
+    signatureGame: 'Story GIFs (Canva, scenario first) + Reader with pause questions', evidence: 'Pause questions + retell 3 pictures.',
     funHook: 'The child predicts the winner.', homeMission: 'Tell the story with the pictures.',
   }),
   p(8, 6, 'Extra Practice: Compare the Dinosaurs!', {
@@ -531,7 +531,7 @@ export const A1_LESSON_PLANS: A1LessonPlan[] = [
     objective: 'I can follow a story and say where the treasure is and whose it is.',
     grammarFocus: ['there is / are', 'place words', 'Whose?'], newVocabulary: [], reviewTargets: ['all Unit 9'],
     phonicsFocus: [], communicationGoal: 'Understand a treasure-hunt story.',
-    signatureGame: 'Story video (scenario first) with pause questions', evidence: 'Pause questions + retell 3 pictures.',
+    signatureGame: 'Story GIFs (Canva, scenario first) + Reader with pause questions', evidence: 'Pause questions + retell 3 pictures.',
     funHook: 'The child reads the map before the friends.', homeMission: 'Tell the story with the pictures.',
   }),
   p(9, 6, 'Extra Practice: Find It in the Castle!', {
@@ -585,7 +585,7 @@ export const A1_LESSON_PLANS: A1LessonPlan[] = [
     objective: 'I can follow a story and say what Nano did, step by step.',
     grammarFocus: ['first / then / next', 'was / had (Unit 8)'], newVocabulary: [], reviewTargets: ['all Unit 10'],
     phonicsFocus: [], communicationGoal: 'Understand an invention story.',
-    signatureGame: 'Story video (scenario first) with pause questions', evidence: 'Pause questions + retell 3 pictures.',
+    signatureGame: 'Story GIFs (Canva, scenario first) + Reader with pause questions', evidence: 'Pause questions + retell 3 pictures.',
     funHook: 'The child names Nano\'s invention.', homeMission: 'Tell the story with the pictures.',
   }),
   p(10, 6, 'Extra Practice: Robot Instruction Match!', {

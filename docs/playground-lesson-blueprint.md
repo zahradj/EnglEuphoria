@@ -362,9 +362,18 @@ Test**, which decides whether the child is ready for A2 (teacher confirms, admin
 | L1, L2 | new language | 3-6 new words + one new structure; the signature game must need the new language to win |
 | L3 | listening | built around the unit song: no new grammar, listening for detail (Cambridge format tasks: listen & colour, yes / no, question → answer). **Never "who said it?"** — naming the cartoon who spoke trains nothing (owner, 2026-10-12) |
 | L4 | speaking | **the child is the expert**: the child describes / asks / instructs, the world's local friend makes a mistake the child corrects; ends in a free mini-conversation |
-| L5 | story | story video (scenario first, `kids-video-scenario`), pause questions, retell with 3 pictures |
+| L5 | story | the whole book in the Reader + **story GIFs** (Canva GIF loops of the story pictures — no story videos in A1, owner 2026-10-13; scenario + preview GIF + owner OK first), pause questions, retell |
 | L6 | extra practice | two games, accuracy over speed, everything recycled |
 | L7 | Boss Test | 80 % per part, Practise-again pack; a **Golden Compass piece** (Units 2-10) and a 5-second **teaser** of the next world |
+
+**Length (owner, 2026-10-13: "A1 lessons can be from 30 to 49 pages"):** every A1 lesson has **30-49 pages**. The extra
+pages are real teaching, never padding: one model page per new word or chunk (one idea per page), echo pages, more
+guided and free practice, reading games, speaking stages, brain breaks and an Extra-time block — and still **no game
+twice in a unit** (the Boss Test may reuse formats). Checked by `a1LessonLength.test.ts`.
+
+**No story videos in A1 (owner, 2026-10-13: "In A1 no need for story videos, just use GIF videos"):** A1 stories use
+Canva GIFs made from the approved story pictures (flip-book of poses, picture-to-picture), never generated video. Every
+GIF follows the scenario rule: written scenario (`docs/scenarios/`) → quick preview GIF → owner OK → into the lesson.
 
 **Fun layer in every A1 lesson** (research in the roadmap §4b): at least **2 real choices** that need the target language
 (which friend, which path, which animal), **1 surprise** after the words are taught, a move or song break every 8-10

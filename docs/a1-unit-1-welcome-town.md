@@ -101,6 +101,11 @@ subtitles, recorded voices) — no paid clips; cost: Canva only.
 
 ## 5. Lesson by lesson
 
+> **Update (owner, 2026-10-13):** every A1 lesson now has **30-49 pages** (more model pages, practice, reading, speaking
+> and an Extra-time block — still no game twice in the unit), and **no story videos in A1**: the story lesson uses Canva
+> story GIFs, made after a written scenario, a preview GIF and the owner's OK. The page tables below list the core; the
+> added pages are listed in each lesson's code header.
+
 **Phonics in every lesson** (owner, 2026-10-12: *"don't forget phonic sounds, phonic games, blending games"*):
 the sound (sound-model, recorded sound) → **a phonics game** (a different one each lesson: L1 First Sound Fishing, L2 Sound
 Pop, L3 Sound Mole, L4 Letter Monsters, L5 Sound Fish, L6 Trophy Chest) → **Blend & Read** (blending world changes each

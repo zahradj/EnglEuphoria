@@ -86,6 +86,11 @@ Pictures: Canva (owner rule), the Unit 1 cast + Coco + new cut-out stickers (Kip
 
 ## 5. Lesson by lesson
 
+> **Update (owner, 2026-10-13):** every A1 lesson now has **30-49 pages** (more model pages, practice, reading, speaking
+> and an Extra-time block — still no game twice in the unit), and **no story videos in A1**: the story lesson uses Canva
+> story GIFs, made after a written scenario, a preview GIF and the owner's OK. The page tables below list the core; the
+> added pages are listed in each lesson's code header.
+
 **Every lesson** (same routine as Unit 1): title → Remember? → words / sentences (model) → first game → the song →
 games → brain break → **the Reader** (new story pages) → reading game → **sound model → a phonics game (different each
 lesson) → Blend & Read → tongue twister** → free talk → check · sticker · home mission · goodbye song · finale.
@@ -166,7 +171,7 @@ Pages: predict (*Who can help Kip?*) → **Reader**: the whole book with a **pau
 who helps; a wrong friend says why they can't) → **Rescue Map** (draw-path: lead the elephant to Kip, reading the signs) →
 song → **Odd One Out** (*Which friend can't help?*) → act it out (the child is the elephant)
 → phonics review (all 4 sounds, **Sound Pick**) → Blend & Read (Train): *Kip, stuck, chips* → twister of the unit →
-check · sticker · home · goodbye · finale. A stills film of the book needs a scenario approved first — not in this plan.
+check · sticker · home · goodbye · finale. Story GIFs (Canva) of the book come after the scenario and the owner's OK — no story videos in A1.
 
 ### 5.6 Lesson 6 — Jungle Game Day (extra practice)
 
