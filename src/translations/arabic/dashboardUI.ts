@@ -289,7 +289,7 @@ export const dashboardUITranslations = {
   'lp.pricing.feature.plan': 'خطّة درس مخصّصة',
   'lp.pricing.feature.homework': 'واجبات وموارد',
   'lp.pricing.feature.tracking': 'متابعة التقدّم',
-  'lp.pricing.feature.cancellation': 'إلغاء مجاني (24 ساعة فأكثر)',
+  'lp.pricing.feature.cancellation': 'إلغاء مجاني (8 ساعات فأكثر)',
   'lp.pricing.feature.validity': 'الرصيد صالح لمدّة 6 أشهر',
   'lp.pricing.cta': 'ابدأ رحلتك',
   'lp.pricing.policy.title': 'سياستنا العادلة للإلغاء',

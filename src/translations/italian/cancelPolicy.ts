@@ -1,0 +1,38 @@
+// Cancellation policy: students cancel up to 8 hours before a lesson, teachers need 48 hours' notice.
+// Namespaced `cx.` (messages) and `rp.` (the Refund & Cancellation Policy page). Every key must exist in all six
+// languages (cancelPolicy.test.ts checks it). English is the source and the fallback language.
+
+export const cancelPolicyTranslations = {
+  "cx.warn.cancel": "Annullare meno di 8 ore prima della lezione comporta l’addebito completo. L’insegnante ha riservato questo orario per te.",
+  "cx.policy.full": "Rimborso completo — più di 8 ore prima della lezione.",
+  "cx.policy.none": "Nessun rimborso — meno di 8 ore prima della lezione. L’insegnante viene pagato per l’orario riservato.",
+  "cx.toast.tooLate": "Le lezioni devono essere annullate con almeno 8 ore di anticipo. Annullare ora comporterà l’addebito completo.",
+  "cx.plan.cancel": "Cancellazione gratuita (8 ore di preavviso)",
+  "rp.title": "Politica di rimborso e cancellazione",
+  "rp.desc": "Politica di rimborso e cancellazione di EnglEuphoria: gli studenti possono annullare fino a 8 ore prima di una lezione; gli insegnanti devono dare 48 ore di preavviso.",
+  "rp.updated": "13 ottobre 2026",
+  "rp.s1.title": "1. Panoramica",
+  "rp.s1.body": "EnglEuphoria funziona con un modello di prenotazione a crediti. Gli studenti acquistano crediti lezione e poi li utilizzano per prenotare sessioni con gli insegnanti. La presente Politica disciplina la gestione di annullamenti e rimborsi.",
+  "rp.s2.title": "2. Regola di annullamento per gli studenti (8 ore)",
+  "rp.s2.lead": "Per ricevere il rimborso del credito di una lezione programmata, lo studente deve annullare almeno 8 ore prima dell’orario di inizio della lezione.",
+  "rp.s2.b1": "Annullamenti effettuati <b>con più di 8 ore di anticipo</b>: il credito della lezione viene restituito per intero al tuo account e può essere riutilizzato per un’altra prenotazione.",
+  "rp.s2.b2": "Annullamenti effettuati <b>entro 8 ore</b> dalla lezione: la lezione è considerata definitiva. <b>Non verrà concesso alcun rimborso né restituzione del credito.</b>",
+  "rp.s2.b3": "<b>Assenze:</b> gli studenti che non si presentano a una lezione programmata senza annullarla perdono interamente il credito.",
+  "rp.s2.foot": "Questo termine tutela i nostri insegnanti, che riservano del tempo esclusivamente per la tua prenotazione.",
+  "rp.s3.title": "3. Regola di annullamento per gli insegnanti (48 ore)",
+  "rp.s3.body": "Gli insegnanti devono annullare o riprogrammare una lezione prenotata con almeno <b>48 ore (2 giorni interi)</b> di anticipo rispetto all’orario di inizio, affinché gli studenti possano organizzarsi. Gli insegnanti che annullano più tardi possono essere soggetti a una penale per annullamento tardivo.",
+  "rp.s4.title": "4. Lezioni di prova",
+  "rp.s4.body": "<b>Le lezioni di prova sono vendita definitiva e non rimborsabili</b> in nessuna circostanza. Le prove sono offerte a una tariffa introduttiva scontata proprio perché non sono rimborsabili.",
+  "rp.s5.title": "5. Acquisto di pacchetti di crediti",
+  "rp.s5.body": "I pacchetti di crediti lezione non sono rimborsabili una volta acquistati. I crediti non utilizzati restano validi per il periodo indicato al momento del pagamento (di norma 12 mesi dalla data di acquisto). I crediti scaduti non possono essere ripristinati.",
+  "rp.s6.title": "6. Annullamenti da parte dell’insegnante",
+  "rp.s6.body": "Se un insegnante annulla una lezione per qualsiasi motivo, il tuo credito sarà <b>rimborsato per intero</b> indipendentemente dal momento dell’annullamento e ti verrà offerta una riprenotazione prioritaria.",
+  "rp.s7.title": "7. Guasti tecnici",
+  "rp.s7.body": "Se una lezione non può essere erogata a causa di un guasto tecnico verificato lato Piattaforma (ad esempio un’interruzione del server), il credito verrà restituito per intero. I problemi originati dal dispositivo, dalla rete o dal browser dell’utente non danno diritto al rimborso.",
+  "rp.s8.title": "8. Come annullare",
+  "rp.s8.body": "Puoi annullare qualsiasi prenotazione futura dalla tua dashboard, in «Il mio calendario». Il sistema mostrerà se ti trovi entro o oltre il limite di 8 ore prima di confermare l’annullamento.",
+  "rp.s9.title": "9. Contestazioni e chargeback",
+  "rp.s9.body": "Tutti i pagamenti sono elaborati da Stripe, il nostro fornitore di servizi di pagamento. Le contestazioni sui rimborsi devono essere prima sottoposte all’assistenza di EnglEuphoria all’indirizzo <mail>billing@engleuphoria.com</mail>. Avviare un chargeback senza aver prima contattato l’assistenza può comportare la sospensione dell’account.",
+  "rp.s10.title": "10. Contatti",
+  "rp.s10.body": "Per richieste di rimborso, scrivi a <mail>billing@engleuphoria.com</mail> oppure per posta a:",
+};

@@ -289,7 +289,7 @@ export const dashboardUITranslations = {
   'lp.pricing.feature.plan': 'Kişiselleştirilmiş ders planı',
   'lp.pricing.feature.homework': 'Ödevler ve kaynaklar',
   'lp.pricing.feature.tracking': 'İlerleme takibi',
-  'lp.pricing.feature.cancellation': 'Ücretsiz iptal (24 sa+)',
+  'lp.pricing.feature.cancellation': 'Ücretsiz iptal (8 sa+)',
   'lp.pricing.feature.validity': 'Krediler 6 ay geçerli',
   'lp.pricing.cta': 'Yolculuğunuza başlayın',
   'lp.pricing.policy.title': 'Adil iptal politikamız',

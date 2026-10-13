@@ -17,6 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { useTranslation } from 'react-i18next';
 import { supabase } from '@/integrations/supabase/client';
 import { useCancelReschedule } from '@/hooks/useCancelReschedule';
 import { AlertCircle, Calendar as CalendarIcon, Clock, Euro, Gift, AlertTriangle } from 'lucide-react';
@@ -65,6 +66,7 @@ export function LessonManagementModal({
   lesson,
   onSuccess
 }: LessonManagementModalProps) {
+  const { t } = useTranslation();
   const {
     loading,
     cancelLesson,
@@ -202,7 +204,7 @@ export function LessonManagementModal({
               <AlertTriangle className="h-4 w-4" />
               <AlertDescription>
                 {mode === 'cancel'
-                  ? 'Cancelling within 5 days of the lesson will result in a full charge. The teacher has reserved this time for you.'
+                  ? t('cx.warn.cancel', 'Cancelling within 8 hours of the lesson will result in a full charge. The teacher has reserved this time for you.')
                   : 'Rescheduling is only available 5+ days in advance.'}
               </AlertDescription>
             </Alert>

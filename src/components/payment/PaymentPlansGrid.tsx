@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ONLINE_PAYMENTS_ENABLED, contactToBuyHref } from "@/config/payments";
 import { Badge } from "@/components/ui/badge";
 import { Check, Star, CreditCard, Sparkles, Clock, Loader2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { useToast } from "@/hooks/use-toast";
 import { useStudentLevel } from "@/hooks/useStudentLevel";
 import { supabase } from "@/integrations/supabase/client";
@@ -88,6 +89,7 @@ export const PaymentPlansGrid: React.FC<PaymentPlansGridProps> = ({ hubOverride,
   const hub: AudienceLevel = hubOverride ?? (studentLevel as AudienceLevel) ?? "academy";
   const theme = HUB_THEME[hub];
   const { toast } = useToast();
+  const { t } = useTranslation();
   const [packs, setPacks] = useState<CreditPack[]>([]);
   const [loading, setLoading] = useState(true);
   const [buyingId, setBuyingId] = useState<string | null>(null);
@@ -230,7 +232,7 @@ export const PaymentPlansGrid: React.FC<PaymentPlansGridProps> = ({ hubOverride,
                     "1-on-1 with verified teacher",
                     "Personalized lesson plan",
                     "Homework & progress tracking",
-                    "Free cancellation (120h notice)",
+                    t('cx.plan.cancel', 'Free cancellation (8h notice)'),
                     "Credits valid for 6 months",
                   ].map((feature) => (
                     <li key={feature} className="flex items-start gap-2 text-sm text-gray-700">

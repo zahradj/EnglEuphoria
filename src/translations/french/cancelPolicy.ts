@@ -1,0 +1,38 @@
+// Cancellation policy: students cancel up to 8 hours before a lesson, teachers need 48 hours' notice.
+// Namespaced `cx.` (messages) and `rp.` (the Refund & Cancellation Policy page). Every key must exist in all six
+// languages (cancelPolicy.test.ts checks it). English is the source and the fallback language.
+
+export const cancelPolicyTranslations = {
+  "cx.warn.cancel": "Annuler moins de 8 heures avant le cours entraîne la facturation complète. L’enseignant a réservé ce créneau pour vous.",
+  "cx.policy.full": "Remboursement complet — plus de 8 heures avant le cours.",
+  "cx.policy.none": "Aucun remboursement — moins de 8 heures avant le cours. L’enseignant est rémunéré pour le créneau réservé.",
+  "cx.toast.tooLate": "Un cours doit être annulé au moins 8 heures à l’avance. Annuler maintenant entraînera la facturation complète.",
+  "cx.plan.cancel": "Annulation gratuite (préavis de 8 h)",
+  "rp.title": "Politique de remboursement et d’annulation",
+  "rp.desc": "Politique de remboursement et d’annulation d’EnglEuphoria : les élèves peuvent annuler jusqu’à 8 heures avant un cours ; les enseignants doivent respecter un préavis de 48 heures.",
+  "rp.updated": "13 octobre 2026",
+  "rp.s1.title": "1. Présentation",
+  "rp.s1.body": "EnglEuphoria fonctionne avec un système de réservation par crédits. Les élèves achètent des crédits de cours, puis les utilisent pour réserver des séances avec les enseignants. La présente politique régit le traitement des annulations et des remboursements.",
+  "rp.s2.title": "2. Règle d’annulation pour les élèves (8 heures)",
+  "rp.s2.lead": "Pour obtenir le remboursement d’un crédit pour un cours programmé, l’élève doit annuler au moins 8 heures avant l’heure de début du cours.",
+  "rp.s2.b1": "Annulations effectuées <b>plus de 8 heures à l’avance</b> : le crédit de cours est entièrement restitué sur votre compte et peut être réutilisé pour une autre réservation.",
+  "rp.s2.b2": "Annulations effectuées <b>moins de 8 heures avant</b> le cours : le cours est considéré comme définitif. <b>Aucun remboursement ni restitution de crédit ne sera accordé.</b>",
+  "rp.s2.b3": "<b>Absences :</b> les élèves qui ne se présentent pas à un cours programmé sans l’avoir annulé perdent intégralement le crédit.",
+  "rp.s2.foot": "Ce délai protège nos enseignants, qui bloquent du temps exclusivement pour votre réservation.",
+  "rp.s3.title": "3. Règle d’annulation pour les enseignants (48 heures)",
+  "rp.s3.body": "Les enseignants doivent annuler ou reporter un cours réservé au moins <b>48 heures (2 jours entiers)</b> avant son heure de début, afin que les élèves puissent s’organiser. Les enseignants qui annulent plus tard peuvent se voir appliquer une pénalité d’annulation tardive.",
+  "rp.s4.title": "4. Cours d’essai",
+  "rp.s4.body": "<b>Les cours d’essai sont définitifs et non remboursables</b> en toute circonstance. Les essais sont proposés à un tarif d’introduction réduit précisément parce qu’ils ne sont pas remboursables.",
+  "rp.s5.title": "5. Achat de packs de crédits",
+  "rp.s5.body": "Les packs de crédits de cours ne sont pas remboursables une fois achetés. Les crédits non utilisés restent valables pendant la durée indiquée lors du paiement (généralement 12 mois à compter de la date d’achat). Les crédits expirés ne peuvent pas être rétablis.",
+  "rp.s6.title": "6. Annulations à l’initiative de l’enseignant",
+  "rp.s6.body": "Si un enseignant annule un cours, quelle qu’en soit la raison, votre crédit sera <b>intégralement remboursé</b> quel que soit le moment de l’annulation, et une reprogrammation prioritaire vous sera proposée.",
+  "rp.s7.title": "7. Défaillances techniques",
+  "rp.s7.body": "Si un cours ne peut pas être dispensé en raison d’une défaillance technique avérée du côté de la plateforme (par exemple, une panne de serveur), le crédit sera restitué intégralement. Les défaillances provenant de l’appareil, du réseau ou du navigateur de l’utilisateur ne donnent pas droit à un remboursement.",
+  "rp.s8.title": "8. Comment annuler",
+  "rp.s8.body": "Vous pouvez annuler toute réservation à venir depuis votre tableau de bord, sous « Mon planning ». Le système indiquera si vous êtes dans le délai de 8 heures ou en dehors avant de confirmer l’annulation.",
+  "rp.s9.title": "9. Litiges et rétrofacturations",
+  "rp.s9.body": "Tous les paiements sont traités par Stripe, notre prestataire de paiement. Les litiges de remboursement doivent d’abord être soumis au support d’EnglEuphoria à l’adresse <mail>billing@engleuphoria.com</mail>. Engager une rétrofacturation sans avoir d’abord contacté le support peut entraîner la suspension du compte.",
+  "rp.s10.title": "10. Contact",
+  "rp.s10.body": "Pour toute demande de remboursement, écrivez à <mail>billing@engleuphoria.com</mail> ou par courrier à l’adresse suivante :",
+};
