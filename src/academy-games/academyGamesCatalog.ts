@@ -116,6 +116,23 @@ export const ACADEMY_GAMES: AcademyGame[] = [
     method: 'Spaced review: each chest unlocks on a later day (day 1, 3, 7, 10, 21).',
     howToPlay: ['Open a chest when it unlocks.', 'Play the short games.', 'Earn stars; come back for the next chest.'],
   },
+  {
+    id: 'silly-sounds',
+    title: 'Silly Sounds Circus',
+    tagline: 'Funny phonics: through rhymes with blue, the k in knife is silent, and a robot teacher knows everything. Hear the sound, catch the silent letter, fix the silly spelling.',
+    skill: 'Phonics · Pronunciation · Spelling',
+    levels: ['A1', 'A2', 'B1'],
+    minutes: '15–20 min',
+    gradient: 'linear-gradient(135deg,#701a75 0%,#c026d3 50%,#f59e0b 100%)',
+    cover: '/academy/games/silly-sounds-cover.jpg',
+    method: 'Ears first (rhymes, odd vowel) → silent letters → silly spelling sentences → say it next to the parrot (private, never scored).',
+    howToPlay: [
+      'Rhyme Roulette: hear a word and pick the one that rhymes, whatever the spelling.',
+      'Odd One Out: hear four words and find the different vowel sound.',
+      'Silent Ninja: tap the letter nobody says (knife, island, listen).',
+      'Spelling Doctor and Parrot Echo: fix silly sentences, then record yourself. Your voice stays on your device and is never scored.',
+    ],
+  },
 ];
 
 export const getAcademyGame = (id: string | undefined) => ACADEMY_GAMES.find((g) => g.id === id);
