@@ -1,12 +1,122 @@
 [
  {
-  "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0027-4695521457988149472.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261012%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261012T155728Z&X-Amz-Expires=77835&X-Amz-Signature=f61d21a2b79cce708f7c31b0238118326008538bff74007679dfb387bfbcc2d0&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2013%20Oct%202026%2013%3A34%3A43%20GMT",
-  "out": "public/jungle-adventure/scenes/bg-jungle-ispy-wide.png",
+  "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0029-4164096728979372244.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261013%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261013T070211Z&X-Amz-Expires=42661&X-Amz-Signature=1606731aec773845bf391929e5840c9f54386f418d952063dfeeb3c6df91b144&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2013%20Oct%202026%2018%3A53%3A12%20GMT",
+  "out": "public/space-mission/scenes/bg-space-robot-1-wide.png",
   "sticker": false
  },
  {
-  "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0028-2442595745964352184.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261012%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261012T130608Z&X-Amz-Expires=85571&X-Amz-Signature=59cb55af04e72b7a60f373e52cff1f9df4bb15f6f2cf23740aecd5a72459577f&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2013%20Oct%202026%2012%3A52%3A19%20GMT",
-  "out": "public/lep1/items/item-pip-binoculars.png",
+  "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0030-4164096728979372244.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261013%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261013T123830Z&X-Amz-Expires=24173&X-Amz-Signature=6c7534c75824c0681754cb2f2e5511ead76d2a2e2c97fa91f49e40eca66615c7&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2013%20Oct%202026%2019%3A21%3A23%20GMT",
+  "out": "public/space-mission/scenes/bg-space-robot-2-wide.png",
+  "sticker": false
+ },
+ {
+  "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0031-4164096728979372244.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261013%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261013T091346Z&X-Amz-Expires=35139&X-Amz-Signature=aecf723dc028c5625e5740fceb371342eb388f51aad11630871ba3a2437acf63&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2013%20Oct%202026%2018%3A59%3A25%20GMT",
+  "out": "public/space-mission/scenes/bg-space-robot-3-wide.png",
+  "sticker": false
+ },
+ {
+  "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0032-4164096728979372244.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261013%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261013T082431Z&X-Amz-Expires=39096&X-Amz-Signature=76eac2174a2de4104afaa7034a832f01f281e40adc95224b976a50aebed1015f&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2013%20Oct%202026%2019%3A16%3A07%20GMT",
+  "out": "public/space-mission/scenes/bg-space-robot-4-wide.png",
+  "sticker": false
+ },
+ {
+  "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0033-4164096728979372244.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261013%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261013T111221Z&X-Amz-Expires=27597&X-Amz-Signature=2d8895800092e2a49bc32440e91ca6af3bfb711e32bced4a36b7c3252f192815&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2013%20Oct%202026%2018%3A52%3A18%20GMT",
+  "out": "public/space-mission/scenes/bg-space-robot-5-wide.png",
+  "sticker": false
+ },
+ {
+  "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0034-4164096728979372244.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261012%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261012T202024Z&X-Amz-Expires=83170&X-Amz-Signature=eedb799287a702f92306034cbe59cae2654ddf58556a44f79c94edff2826f4fa&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2013%20Oct%202026%2019%3A26%3A34%20GMT",
+  "out": "public/space-mission/scenes/bg-space-robot-6-wide.png",
+  "sticker": false
+ },
+ {
+  "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0035-4164096728979372244.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261012%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261012T215041Z&X-Amz-Expires=76615&X-Amz-Signature=c20f6a65b18fab20223614a12e4bd5492a6c7277653aad52ab57cd94b6316d44&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2013%20Oct%202026%2019%3A07%3A36%20GMT",
+  "out": "public/space-mission/scenes/bg-space-robot-7-wide.png",
+  "sticker": false
+ },
+ {
+  "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0036-4164096728979372244.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261013%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261013T062308Z&X-Amz-Expires=44965&X-Amz-Signature=38385942afd647905d4447cb22d36cd74433467eea872152af594e3187e7b1db&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2013%20Oct%202026%2018%3A52%3A33%20GMT",
+  "out": "public/space-mission/scenes/bg-space-robot-8-wide.png",
+  "sticker": false
+ },
+ {
+  "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0037-4164096728979372244.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261013%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261013T025557Z&X-Amz-Expires=60342&X-Amz-Signature=94942a89c59077569320a141365abc2ca5c7731e37dcae635deeabfdca5ef050&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2013%20Oct%202026%2019%3A41%3A39%20GMT",
+  "out": "public/space-mission/scenes/bg-space-robot-9-wide.png",
+  "sticker": false
+ },
+ {
+  "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0038-4164096728979372244.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261013%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261013T100020Z&X-Amz-Expires=31624&X-Amz-Signature=ae47ca28906f06688674d688832a047b45dcc65a0aa5360cae24fb67816dfbb7&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2013%20Oct%202026%2018%3A47%3A24%20GMT",
+  "out": "public/space-mission/scenes/bg-space-robot-10-wide.png",
+  "sticker": false
+ },
+ {
+  "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0039-4164096728979372244.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261013%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261013T151320Z&X-Amz-Expires=13375&X-Amz-Signature=35c32fcf0b8333be0552de2d834fbfa79e05ba2edf20593e7f5bdfea7355a62b&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2013%20Oct%202026%2018%3A56%3A15%20GMT",
+  "out": "public/space-mission/scenes/bg-space-robot-11-wide.png",
+  "sticker": false
+ },
+ {
+  "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0040-4164096728979372244.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261013%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261013T015411Z&X-Amz-Expires=63482&X-Amz-Signature=5918b1a9ef70b7f858d594efd07fdd5661bd871c537113cc3fcd32369c343640&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2013%20Oct%202026%2019%3A32%3A13%20GMT",
+  "out": "public/space-mission/scenes/bg-space-robot-12-wide.png",
+  "sticker": false
+ },
+ {
+  "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0041-4164096728979372244.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261012%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261012T201451Z&X-Amz-Expires=82615&X-Amz-Signature=8db5321b7e8a34821a4fd9d7d7fa5b1728c9028eff3a7df7c603086b7acc4761&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2013%20Oct%202026%2019%3A11%3A46%20GMT",
+  "out": "public/space-mission/scenes/bg-space-station-wide.png",
+  "sticker": false
+ },
+ {
+  "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0042-4164096728979372244.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261012%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261012T232042Z&X-Amz-Expires=72921&X-Amz-Signature=772120778eaa4d575776a63f489b50a3d64eec77b5ab13bc64f67663f83abdf0&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2013%20Oct%202026%2019%3A36%3A03%20GMT",
+  "out": "public/space-mission/scenes/bg-space-deep-wide.png",
+  "sticker": false
+ },
+ {
+  "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0043-6803206111332924802.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261013%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261013T091032Z&X-Amz-Expires=36782&X-Amz-Signature=a747ab4de0b7e2f5d2eb3628d090d0271f5f95ddd8dc7598b8a83d68505db9e2&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2013%20Oct%202026%2019%3A23%3A34%20GMT",
+  "out": "public/lep1/items/item-nova.png",
+  "sticker": true
+ },
+ {
+  "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0044-6803206111332924802.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261013%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261013T062642Z&X-Amz-Expires=47104&X-Amz-Signature=e3dfb2f9031f598b93f1d43f4b7741faa72ca8cc8f88d0ee791d902cc015e95f&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2013%20Oct%202026%2019%3A31%3A46%20GMT",
+  "out": "public/lep1/items/item-beep.png",
+  "sticker": true
+ },
+ {
+  "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0045-6803206111332924802.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261013%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261013T143703Z&X-Amz-Expires=16167&X-Amz-Signature=84ce78c8be44f62b2549bed138032baa7bc32057db5635be46b2d6fe10875862&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2013%20Oct%202026%2019%3A06%3A30%20GMT",
+  "out": "public/lep1/items/item-snow.png",
+  "sticker": true
+ },
+ {
+  "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0046-6803206111332924802.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261013%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261013T174205Z&X-Amz-Expires=4990&X-Amz-Signature=4e8992dd013ba02569f8679499982ffbcb425b8622eb6a856beef6deb473d435&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2013%20Oct%202026%2019%3A05%3A15%20GMT",
+  "out": "public/lep1/items/item-sunglasses.png",
+  "sticker": true
+ },
+ {
+  "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0047-6803206111332924802.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261013%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261013T022420Z&X-Amz-Expires=59522&X-Amz-Signature=94679ffdd49bcbcaa5c6d1b0b11c68a320035aee9c8f23c942b05de1d1303e46&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2013%20Oct%202026%2018%3A56%3A22%20GMT",
+  "out": "public/lep1/items/item-umbrella.png",
+  "sticker": true
+ },
+ {
+  "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0048-6803206111332924802.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261012%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261012T223258Z&X-Amz-Expires=75285&X-Amz-Signature=c1c04cd2901a693bc0d3edbc253a170f8e21d5972615369f3fff4ba643d6f8e0&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2013%20Oct%202026%2019%3A27%3A43%20GMT",
+  "out": "public/lep1/items/item-scarf.png",
+  "sticker": true
+ },
+ {
+  "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0049-6803206111332924802.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261013%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261013T135453Z&X-Amz-Expires=20268&X-Amz-Signature=e04dadaf1c869a203518abeed6c382c4aa2538fd8268c1cca00261a88311a24b&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2013%20Oct%202026%2019%3A32%3A41%20GMT",
+  "out": "public/lep1/items/item-planet-sun.png",
+  "sticker": true
+ },
+ {
+  "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0050-6803206111332924802.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261012%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261012T202737Z&X-Amz-Expires=82291&X-Amz-Signature=2e8ce2daf4e2d70699c6e2281a23c75b8e22b79964816f3ff96b6507fad60b71&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2013%20Oct%202026%2019%3A19%3A08%20GMT",
+  "out": "public/lep1/items/item-planet-wind.png",
+  "sticker": true
+ },
+ {
+  "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0051-6803206111332924802.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261013%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261013T153923Z&X-Amz-Expires=13901&X-Amz-Signature=aa11e20e0c3d6f8ecaf85a67f2af8654429c693db0a88eb9d81e523c7a59fedc&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2013%20Oct%202026%2019%3A31%3A04%20GMT",
+  "out": "public/lep1/items/item-planet-ice.png",
+  "sticker": true
+ },
+ {
+  "url": "https://export-download.canva.com/ocLGI/DAHXotocLGI/-1/0/0052-6803206111332924802.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261012%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261012T220232Z&X-Amz-Expires=76199&X-Amz-Signature=30ea60f8fb3482673c160a7ef6da7d518fba1e9cd2ef8478a47dbc805e8a9437&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Tue%2C%2013%20Oct%202026%2019%3A12%3A31%20GMT",
+  "out": "public/lep1/items/item-planet-rain.png",
   "sticker": true
  }
 ]
