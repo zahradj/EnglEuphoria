@@ -12,16 +12,22 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { SIGN_ME_UP } from '../src/academy-deck/lessons/signMeUp.ts';
+import { PA1_S01_E1 } from '../src/academy-deck/lessons/pa1s01e1.ts';
+import { SIGN_ME_UP_2 } from '../src/academy-deck/lessons/signMeUp2.ts';
+import { applyLane } from '../src/academy-deck/lanes.ts';
 import { PATTERN_LAB } from '../src/academy-deck/lessons/patternLab.ts';
 import { SIGN_ME_UP_QUEST } from '../src/academy-deck/homework/signMeUpQuest.ts';
-import { slideLines } from '../src/academy-deck/spoken.ts';
+import { slideLines, ALPHABET } from '../src/academy-deck/spoken.ts';
 import { ACADEMY_VOICES } from '../src/academy-deck/voices.ts';
 
 const OUT = path.join(path.dirname(fileURLToPath(import.meta.url)), 'academy-voice-lines.json');
 
 const decks = [
   { name: SIGN_ME_UP.lessonId, slides: SIGN_ME_UP.slides },
+  // sample 2: every lane's version of every slide
+  { name: `${SIGN_ME_UP_2.lessonId} sample 2`, slides: SIGN_ME_UP_2.slides.flatMap((s) => ['core', 'start', 'stretch'].map((l) => applyLane(s, l))) },
   { name: PATTERN_LAB.lessonId, slides: PATTERN_LAB.slides },
+  { name: PA1_S01_E1.lessonId, slides: PA1_S01_E1.slides },
   { name: `${SIGN_ME_UP.lessonId} homework`, slides: SIGN_ME_UP_QUEST.flatMap((c) => c.slides) },
 ];
 
@@ -35,6 +41,8 @@ for (const d of decks) {
     }
   }
 }
+// letter names for the spelling game (the student's own name can use any letter)
+if (decks.some((d) => d.slides.some((s) => s.kind === 'spell'))) for (const l of ALPHABET) seen.set(`Vee::${l}`, { who: 'Vee', text: l });
 const lines = [...seen.values()];
 fs.writeFileSync(OUT, JSON.stringify(lines, null, 2) + '\n');
 const per = {};

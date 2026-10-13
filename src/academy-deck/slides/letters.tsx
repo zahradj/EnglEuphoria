@@ -10,7 +10,7 @@ const LOOKALIKE: Record<string, string> = { A: 'E', B: 'P', C: 'S', D: 'T', E: '
 
 /** Spell It: drag (or tap) letter tiles onto a name badge, in order. */
 export function SpellView({ slide }: { slide: SpellSlide }) {
-  const { vars, setVars, right, wrong, done, award, seed } = useDeck();
+  const { vars, setVars, right, wrong, done, award, seed, speak } = useDeck();
   const word = slide.target.replace(/\{(\w+)\}/g, (_m, k: string) => vars[k] ?? 'friend');
   const letters = useMemo(() => word.toUpperCase().replace(/[^A-Z]/g, '').split('').slice(0, 14), [word]);
   const tiles = useMemo(() => {
@@ -28,6 +28,7 @@ export function SpellView({ slide }: { slide: SpellSlide }) {
     if (!t) return;
     if (t.l === letters[next] && (slot === undefined || slot === next)) {
       setUsed([...used, id]);
+      void speak('Vee', t.l); // the letter name, recorded (not the browser voice)
       if (!slip) right();
       setSlip(false);
     } else {

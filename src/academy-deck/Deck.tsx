@@ -8,6 +8,9 @@ import './deck.css';
 import { DeckContext, type DeckCtx } from './ctx';
 import { Icon } from './Icon';
 import { Character, Plate } from './Stage';
+import { LaneView } from './slides/lane';
+import { BlendView, HearPickView, ReaderView } from './slides/reading';
+import { applyLane, laneOf, LANE_LABEL } from './lanes';
 import { BadgeView, BriefView, DialView, TitleView } from './slides/intro';
 import { HuntView, ShadowView } from './slides/homework';
 import { ModelView, TeachView } from './slides/teach';
@@ -22,7 +25,7 @@ import { BePickView, BuildView, FactCheckView, WriteView } from './slides/patter
 import { ConvoView, FadeView, PhoneChatView, SayView, WhoSaidView } from './slides/talk';
 import { audioBaseFor, hasClip, loadManifest, playLine, stopLine } from './audio';
 import { openLines, slideLines } from './spoken';
-import { PARTS, type DeckScript, type Slide, type Stats, type Vars } from './types';
+import { partsOf, type DeckScript, type Slide, type Stats, type Vars } from './types';
 
 class Guard extends Component<{ children: ReactNode; onSkip: () => void; id: string }, { err: string | null; n: number }> {
   state = { err: null as string | null, n: 0 };
@@ -53,6 +56,10 @@ function SlideView({ slide }: { slide: Slide }) {
     case 'brief': return <BriefView slide={slide} />;
     case 'badge': return <BadgeView slide={slide} />;
     case 'dial': return <DialView slide={slide} />;
+    case 'lane': return <LaneView slide={slide} />;
+    case 'blend': return <BlendView slide={slide} />;
+    case 'hearpick': return <HearPickView slide={slide} />;
+    case 'reader': return <ReaderView slide={slide} />;
     case 'whosaid': return <WhoSaidView slide={slide} />;
     case 'hunt': return <HuntView slide={slide} />;
     case 'shadow': return <ShadowView slide={slide} />;
@@ -114,7 +121,7 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
     onSlide?.(n);
   }, [controlled, onSlide, script.slides.length]);
   const [solved, setSolved] = useState<Record<string, boolean>>({});
-  const [vars, setVarsState] = useState<Vars>({ num: '4-2-7', numw: 'four, two, seven' });
+  const [vars, setVarsState] = useState<Vars>({ num: '427', numw: 'four hundred twenty-seven' });
   const [stamps, setStamps] = useState<string[]>([]);
   const [stats, setStats] = useState<Stats>({ right: 0, wrong: 0, hints: 0, skipped: [] });
   const [tiers, setTiers] = useState<Record<string, number>>({});
@@ -142,7 +149,9 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
   }, []);
   const shownParts = useRef<Set<number>>(new Set());
   const [calm, setCalm] = useState(() => typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches);
-  const cur = script.slides[index];
+  const parts = partsOf(script.shape);
+  const lane = laneOf(vars);
+  const cur = applyLane(script.slides[index], lane);
   // ---- recorded voices (silent when a clip or the clip list is missing; never the browser voice)
   const base = audioBaseFor(artBase, audioBase);
   const [voiceOn, setVoiceOn] = useState(true);
@@ -299,13 +308,13 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
   const panelAt = only === 'left' ? 'right' : only === 'right' ? 'left' : 'center';
   return (
     <DeckContext.Provider value={ctx}>
-      <div className="ad-root" data-embedded={embedded || undefined} data-follow={follow || undefined} style={artBase ? ({ ['--o-gem-empty' as string]: `url(${artBase}/objects/gem-empty.webp)`, ['--o-gem-full' as string]: `url(${artBase}/objects/gem-full.webp)`, ['--o-ribbon' as string]: `url(${artBase}/objects/ribbon.webp)`, ['--o-frame' as string]: `url(${artBase}/objects/frame.webp)`, ['--o-star' as string]: `url(${artBase}/objects/star.webp)`, ['--o-stamp' as string]: `url(${artBase}/objects/stamp.webp)`, ['--o-ticket' as string]: `url(${artBase}/objects/ticket.webp)`, ['--o-pill-violet' as string]: `url(${artBase}/objects/pill-violet.webp)`, ['--o-pill-blue' as string]: `url(${artBase}/objects/pill-blue.webp)`, ['--o-pill-orange' as string]: `url(${artBase}/objects/pill-orange.webp)` } as React.CSSProperties) : undefined} data-reduced={calm} data-kind={cur.kind} data-hw={!!homework} data-mood={mood ?? undefined} data-testid="deck">
+      <div className="ad-root" data-calm={calm || undefined} data-embedded={embedded || undefined} data-follow={follow || undefined} style={artBase ? ({ ['--o-gem-empty' as string]: `url(${artBase}/objects/gem-empty.webp)`, ['--o-gem-full' as string]: `url(${artBase}/objects/gem-full.webp)`, ['--o-ribbon' as string]: `url(${artBase}/objects/ribbon.webp)`, ['--o-frame' as string]: `url(${artBase}/objects/frame.webp)`, ['--o-star' as string]: `url(${artBase}/objects/star.webp)`, ['--o-stamp' as string]: `url(${artBase}/objects/stamp.webp)`, ['--o-ticket' as string]: `url(${artBase}/objects/ticket.webp)`, ['--o-pill-violet' as string]: `url(${artBase}/objects/pill-violet.webp)`, ['--o-pill-blue' as string]: `url(${artBase}/objects/pill-blue.webp)`, ['--o-pill-orange' as string]: `url(${artBase}/objects/pill-orange.webp)` } as React.CSSProperties) : undefined} data-reduced={calm} data-kind={cur.kind} data-hw={!!homework} data-mood={mood ?? undefined} data-testid="deck">
         <Plate id={cur.bg} artBase={artBase} key={cur.bg} />
         <div className="ad-actors" aria-hidden={actorsVisible.length === 0}>
           {actorsVisible.map((a) => <Character key={`${a.who}-${mood ?? 'base'}`} actor={mood ? { ...a, expr: mood } : a} artBase={artBase} small={compact} speaking={!calm && !mood && (speakingWho === a.who || (chat && !(voiceOn && slideHasClip) && ['title', 'brief', 'whosaid', 'teach', 'model', 'convo', 'say', 'wrap'].includes(cur.kind)))} />)}
         </div>
         <header className="ad-strip" aria-label="Slides">
-          <span className="ad-lesson">{homework ? `${homework.label} · game ${index + 1} of ${script.slides.length}` : PARTS[cur.part]?.name}</span>
+          <span className="ad-lesson">{homework ? `${homework.label} · game ${index + 1} of ${script.slides.length}` : parts[cur.part]?.name}</span>
           <ol>
             {script.slides.map((s, i) => (
               <li key={s.id} data-part-start={i > 0 && s.part !== script.slides[i - 1].part}>
@@ -336,18 +345,24 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
         </nav>
         {menu && (
           <div className="ad-menu" role="menu">
+            {script.slides.some((x) => x.lanes) && (
+              <>
+                <button type="button" role="menuitem" disabled={lane === 'start'} onClick={() => setVars({ lane: lane === 'stretch' ? 'core' : 'start' })}>Easier ({LANE_LABEL[lane === 'stretch' ? 'core' : 'start'].student})</button>
+                <button type="button" role="menuitem" disabled={lane === 'stretch'} onClick={() => setVars({ lane: lane === 'start' ? 'core' : 'stretch' })}>Harder ({LANE_LABEL[lane === 'start' ? 'core' : 'stretch'].student})</button>
+              </>
+            )}
             <button type="button" role="menuitem" onClick={skip}><Icon name="skip" /> Skip this slide</button>
             <button type="button" role="menuitemcheckbox" aria-checked={voiceOn} onClick={() => setVoiceOn(!voiceOn)}>{voiceOn ? '✔ ' : ''}Voice {voiceOn ? 'on' : 'off'}</button>
             <button type="button" role="menuitemcheckbox" aria-checked={calm} onClick={() => setCalm(!calm)}>{calm ? '✔ ' : ''}Calm mode (no animation)</button>
           </div>
         )}
         {partCard !== null && (
-          <div className="ad-partcard" data-leaving={partLeaving || undefined} role="dialog" aria-label={`Part ${partCard + 1}: ${PARTS[partCard].name}`} onClick={closePart}>
+          <div className="ad-partcard" data-leaving={partLeaving || undefined} role="dialog" aria-label={`Part ${partCard + 1}: ${parts[partCard].name}`} onClick={closePart}>
             <span className="ad-partcard-num" aria-hidden="true">{partCard + 1}</span>
-            <span className="ad-partcard-kicker">Part {partCard + 1} of {PARTS.length} · {PARTS[partCard].minutes} min</span>
-            <span className="ad-partcard-name">{PARTS[partCard].name}</span>
-            <span className="ad-partcard-goal">{script.partGoals?.[partCard] ?? PARTS[partCard].goal}</span>
-            <span className="ad-partcard-pips" aria-hidden="true">{PARTS.map((_, k) => <i key={k} data-on={k <= partCard} />)}</span>
+            <span className="ad-partcard-kicker">Part {partCard + 1} of {parts.length} · {parts[partCard].minutes} min</span>
+            <span className="ad-partcard-name">{parts[partCard].name}</span>
+            <span className="ad-partcard-goal">{script.partGoals?.[partCard] ?? parts[partCard].goal}</span>
+            <span className="ad-partcard-pips" aria-hidden="true">{parts.map((_, k) => <i key={k} data-on={k <= partCard} />)}</span>
             <span className="ad-partcard-tap">Tap to start</span>
           </div>
         )}

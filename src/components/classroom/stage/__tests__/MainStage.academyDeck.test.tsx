@@ -28,13 +28,13 @@ describe('Academy classroom stage', () => {
     expect(embed.getAttribute('data-role')).toBe('teacher');
     expect(screen.getByTestId('pen-layer')).toBeTruthy();
     expect(screen.queryByTestId('plain-stage')).toBeNull();
-    expect(await screen.findByText('3/25')).toBeTruthy();
+    expect(await screen.findByText('3/27')).toBeTruthy();
   });
 
   it('student: follows the teacher’s saved slide and cannot move the lesson', async () => {
     render(<MainStage {...base} slides={deckSlides} rawSlides={deckSlides} role="student" sceneLessonIdx={4} />);
     expect((await screen.findByTestId('academy-deck-embed')).getAttribute('data-role')).toBe('student');
-    expect(await screen.findByText('5/25')).toBeTruthy();
+    expect(await screen.findByText('5/27')).toBeTruthy();
     expect(screen.queryByRole('button', { name: 'Next', exact: true })).toBeNull();
   });
 

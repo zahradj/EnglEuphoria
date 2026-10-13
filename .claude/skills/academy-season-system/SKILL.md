@@ -1,7 +1,7 @@
 ---
 name: academy-season-system
 description: >
-  REQUIRED FIRST for ANY Academy-hub work (ages 11-18, A1 -> C1, one-on-one 60-minute live lessons): designing a roadmap,
+  REQUIRED FIRST for ANY Academy-hub work (ages 13-18, A1 -> C1, one-on-one 60-minute live lessons): designing a roadmap,
   Season, Episode, Live Session, Daily 10 practice, homework, quiz/assessment, player screen, or reviewing any of them.
   The master rules of the owner-approved "Season System": Level -> Season (= unit = 8 sessions) -> Episode -> 60-minute
   Live Session run of show; themed story worlds; fun ingredients; spaced "Remember?"; Daily 10; comfort first; scientific
@@ -18,7 +18,7 @@ If a doc and this skill disagree, the **owner's latest message wins**, then the 
 ## The facts every Academy output must respect
 
 - **One-on-one, live, 60 minutes**, teacher + ONE student, shared interactive stage + teacher video. Plus a solo **Daily 10**.
-- **Ages 11-18.** Two looks on one layout: Explorer (11-13) and Studio (14-18). Never childish, never mascots/stickers
+- **Ages 13-18** (owner 2026-10-12: Playground 4-12, Academy 13-18; a 13-year-old has already met hello, numbers and countries at school, so A1 lessons revise fast and teach what school did not). Two looks on one layout: Explorer (13-15) and Studio (16-18). Never childish, never mascots/stickers
   (Academy prompt ban); teen idiom: quests, unlocks, Word Cards, drops.
 - **Levels A1 -> A2 -> B1 -> B2 -> C1.** Approved sizing: **A1 10, A2 12, B1 16, B2 16, C1 16 Seasons = 70 Seasons**
   (sessions 80 / 96 / 128 / 128 / 128 = **560**). Recompute from the doc table if you change anything.

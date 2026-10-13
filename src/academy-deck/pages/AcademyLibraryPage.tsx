@@ -13,13 +13,14 @@ export default function AcademyLibraryPage() {
           <ArrowLeft className="h-4 w-4" /> Back to Creator Studio
         </button>
         <header className="space-y-1">
-          <p className="text-xs font-bold uppercase tracking-widest text-violet-300">Academy Hub · ages 11–18 · A1 → C1</p>
+          <p className="text-xs font-bold uppercase tracking-widest text-violet-300">Academy Hub · ages 13–18 · A1 → C1</p>
           <h1 className="flex items-center gap-2 text-3xl font-black"><BookOpen className="h-7 w-7" /> Academy Library</h1>
           <p className="text-sm text-violet-200">Lessons built for the Academy. They appear in the student’s <b>My Lessons</b> tab. Open one to preview it exactly as a student sees it.</p>
         </header>
         <AcademyLevelLibrary
           lessons={ACADEMY_DECK_LESSONS}
           gridClassName="grid gap-4 md:grid-cols-2"
+          showSteps
           renderLesson={(l) => (
             <article className="overflow-hidden rounded-3xl border border-violet-400/30 bg-violet-950/60 shadow-xl">
               <div className="relative aspect-video" style={{ background: l.gradient }}>

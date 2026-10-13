@@ -18,7 +18,11 @@ describe('Classroom Lesson Library: Academy hub', () => {
   it('lists the new Academy library lessons, never the old database list, and opens one as a deck lesson', async () => {
     const onSelectLesson = vi.fn();
     render(<LibraryDrawer open onClose={() => {}} onSelectLesson={onSelectLesson} hubFilter="academy" />);
-    for (const l of ACADEMY_DECK_LESSONS) expect(await screen.findByText(l.title)).toBeTruthy();
+    for (const l of ACADEMY_DECK_LESSONS.filter((x) => x.level !== 'Pre-A1')) expect(await screen.findByText(l.title)).toBeTruthy();
+    // Pre-A1 lessons sit on their own step tab (teachers see the ladder)
+    fireEvent.click(screen.getByRole('tab', { name: /^Pre-A1/ }));
+    for (const l of ACADEMY_DECK_LESSONS.filter((x) => x.level === 'Pre-A1')) expect(await screen.findByText(l.title)).toBeTruthy();
+    fireEvent.click(screen.getByRole('tab', { name: /^A1(?! Upper)/ }));
     expect(getLibraryLessons).not.toHaveBeenCalled();
     expect(screen.queryByText('OLD DATABASE ACADEMY LESSON')).toBeNull();
     fireEvent.click(screen.getByText('Fake or Real?'));

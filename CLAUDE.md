@@ -1,5 +1,9 @@
 # EnglEuphoria — project rules
 
+## Age bands (owner, 2026-10-12)
+
+- **Playground: ages 4–12. Academy: ages 13–18.** An Academy student has already met hello, numbers and countries at school, so A1 lessons revise fast and spend the time on what school did not teach; they are never childish.
+
 ## Hub separation (hard rule — owner, 2026-10-08)
 
 - The **Playground, Academy and Success each own their own curriculum blueprint, lesson blueprint, skills and docs.** Never edit, import or reuse another hub's.
@@ -49,6 +53,7 @@
 - **Gemini is allowed for pictures too** (owner, 2026-10-06: "yes, enable Gemini for picture"): the platform's `ai-image-generation` function through `scripts/art-targets.json` + `.github/workflows/bake-art.yml`, with an approved picture as the reference for character consistency. Still never Higgsfield for pictures.
 - **Videos: Higgsfield (AI image-to-video) or Canva (owner, 2026-10-11: "yes" — Canva GIF and MP4).** Higgsfield for AI motion clips (story clips, game background loops — image-to-video from a Canva/approved picture). Canva for animated GIF/MP4 made from our own approved Canva pictures (flip-book of poses, word cards popping in, picture-to-picture sequences): build the frames as pages of a Canva design and export `gif` or `mp4` (`export-design`), then fetch through the art bot like any picture.
 - **Canva GIFs/videos follow the scenario rule too** (owner, 2026-10-11): write the scenario (`docs/scenarios/`), and where possible show it to the owner as a quick preview GIF (the animatic) before it goes into a lesson; nothing ships without the owner's OK. No zoom/pan on stills, no on-picture text except our labels.
+- **Colour balance: about 35% purple** (owner, 2026-10-12: "from now on", in background images and all generated images), mixed with blue/teal, warm cream and wood tones and green plants; never a one-colour purple room. Put the line in every picture prompt; details in `docs/academy-art-bible.md` §4 (Academy). Older pictures are restyled one at a time with the owner's approval.
 - `scripts/generate-art.mjs` refuses the Higgsfield image path; the `higgsfield-video` edge function only allows video endpoints.
 - How to get a Canva picture into the repo (holder design, export, fetch bot): `docs/canva-art-pipeline.md`.
 - **No white backgrounds on pictures — everything is a cut-out sticker** (owner, 2026-10-12: "images without white background like stickers, it's the rule"). Every object, character and pose a child sees (items, characters, GIF/animation frames) has a transparent background: stickers via `scripts/split-sticker-sheet.py` / `cutout-stickers.py`, animated loops as cut-out animated WebP (white removed frame by frame, `public/lep1/gifs/*.webp`), never a picture sitting in a white box. Full scene backgrounds are the only pictures that fill their frame.
@@ -79,6 +84,10 @@ Whenever the owner says "create a lesson" / "proceed with creating the lesson", 
 4. **Be creative and visual, not dry.** The player must look like a game or a film, not a worksheet: full-bleed scenes and pictures on every screen, large characters, cinematic transitions between parts, rich reactions. A lesson that is plain text on a flat background is not done.
 5. **Design like an education UX/UI designer and game designer** (skill `.claude/skills/academy-game-ui`, research `docs/research/academy-game-ui.md`): every page and activity is built like a video game or story game — illustrated, animated, with motion where it helps — and must pass its "dullness test". Motion rules still hold: UI motion, sparkles, card flips, expression swaps and approved silent background loops are fine; never zoom/pan/loop-scale a story picture, never browser voices.
 6. Fill the hour (the blueprint's run of show), keep the cast to the blueprint's cast, and keep all other Academy rules (hub separation, voice, comfort).
+
+## Modelling and the rule — every Academy lesson (hard rule — owner, 2026-10-13)
+
+- "The modelling in the lesson is very important. Stating the rule is extremely important." Every Academy lesson: (1) the teacher **models** new language and the Mission task first (I do → we do → you do) before the student tries; (2) the **rule is stated plainly** (≤ 3 lines, an example each, read aloud, student repeats) BEFORE the practice games, even in E1 and for chunks; (3) the student **restates it** at the end (teach-back). A lesson plan or deck without a model step and a stated rule is not done. Checked in `academy-quality-gate` and `academy-session-builder`.
 
 ## Languages — every page is translated (hard rule — owner, 2026-10-09)
 

@@ -1,4 +1,4 @@
-/* Academy lesson player — self-contained styles (no Tailwind dependency). Tokens per theme: Explorer (11-13) / Studio (14-18).
+/* Academy lesson player — self-contained styles (no Tailwind dependency). Tokens per theme: Explorer (13-15) / Studio (16-18).
    Rules (docs/academy-player-design.md): stills hold still (no zoom/pan/scale loops on any picture), opacity cross-fades only,
    touch targets >= 44px, body text >= 16px (18px in Explorer / A1-A2), contrast >= 4.5:1, no timers, reduced motion honoured. */
 

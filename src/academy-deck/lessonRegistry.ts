@@ -23,6 +23,19 @@ export interface AcademyDeckLesson {
 
 export const ACADEMY_DECK_LESSONS: AcademyDeckLesson[] = [
   {
+    id: 'pa1-s01-e1',
+    season: 1,
+    lesson: 1,
+    title: 'Hello, letters · Cold Open',
+    blurb: 'Pre-A1: meet the Name Wall, say hello and your name, hear the letters A to G, read three names. Slower, with reading.',
+    level: 'Pre-A1',
+    minutes: 60,
+    cover: '/academy-art/bg/name-wall.webp',
+    gradient: 'linear-gradient(135deg,#312e81 0%,#7c3aed 55%,#f59e0b 100%)',
+    homework: null,
+    parts: 8,
+  },
+  {
     id: 'sign-me-up',
     season: 1,
     lesson: 1,
@@ -33,6 +46,19 @@ export const ACADEMY_DECK_LESSONS: AcademyDeckLesson[] = [
     cover: '/academy-art/bg/club-signup-desk.webp',
     gradient: 'linear-gradient(135deg,#2e1065 0%,#6d28d9 55%,#38bdf8 100%)',
     homework: { title: 'Sign Me Up · homework quest', blurb: 'Five chests over three weeks: numbers, nationalities, classroom words and a big check.' },
+    parts: 8,
+  },
+  {
+    id: 'sign-me-up-2',
+    season: 1,
+    lesson: 1,
+    title: 'Sign Me Up · Sample 2',
+    blurb: 'The rewrite: the same sign-up mission with only 14 new words, two games after every word set, and three lanes (Start, Core, Stretch) you can switch any time.',
+    level: 'A1',
+    minutes: 60,
+    cover: '/academy-art/bg/club-signup-desk.webp',
+    gradient: 'linear-gradient(135deg,#0f172a 0%,#4338ca 50%,#22d3ee 100%)',
+    homework: null,
     parts: 8,
   },
   {
@@ -51,6 +77,6 @@ export const ACADEMY_DECK_LESSONS: AcademyDeckLesson[] = [
 ];
 
 /** Blueprint id of each deck lesson (src/curriculum/academy). The library numbers lessons in the order they were built (Sign Me Up = Lesson 1, Fake or Real? = Lesson 2); the blueprint episodes are E2 and E3. */
-export const ACADEMY_DECK_BLUEPRINT_IDS: Record<string, string> = { 'sign-me-up': 'A1-S01-E2', 'fake-or-real': 'A1-S01-E3' };
+export const ACADEMY_DECK_BLUEPRINT_IDS: Record<string, string> = { 'pa1-s01-e1': 'PA1-S01-E1', 'sign-me-up': 'A1-S01-E2', 'sign-me-up-2': 'A1-S01-E2', 'fake-or-real': 'A1-S01-E3' };
 
 export const getAcademyDeckLesson = (id: string | undefined) => ACADEMY_DECK_LESSONS.find((l) => l.id === id);
