@@ -508,6 +508,36 @@ export type Scene =
       seats: { name: string; img: string }[];
       rounds: { ask: string; choices: string[]; answer: number; stop: number }[]; doneLine: string;
     }
+  | {
+      /** Quiz Board (QuizBoardScene.tsx, Jeopardy / Baamboozle board redesigned): columns = categories, rows = 100 /
+       *  200 / 300 points. The child picks a tile, it flips to its question; a right answer scores the points (a wrong
+       *  one only says "Try again!"). The `boom` tile ([column, row]) is a surprise that doubles its points. */
+      id: string; kind: 'quiz-board'; bg: string; teacher: string; title: string; who: CharKey;
+      categories: { name: string; emoji: string; tiles: { ask: string; choices: string[]; answer: number; img?: string }[] }[];
+      boom?: [number, number]; doneLine: string;
+    }
+  | {
+      /** Treasure Chests (ChestQuestScene.tsx, Blooket Gold Quest without stealing): every right answer lets the
+       *  child open one of three chests; `rounds[i].prizes` are what the three chests hold (coins, "×2", a sticker).
+       *  Coins drop into the class jar; the jar target is `goal` coins. */
+      id: string; kind: 'chest-quest'; bg: string; teacher: string; title: string; who: CharKey; goal: number;
+      rounds: { ask: string; choices: string[]; answer: number; img?: string; prizes: [string, string, string] }[]; doneLine: string;
+    }
+  | {
+      /** Rising River (RisingRiverScene.tsx, Gimkit "The Floor is Lava" made cooperative and gentle): the friends wait
+       *  on a rock; every right answer lays one plank of the bridge; a wrong answer lets the river rise a little (only
+       *  wet feet — nobody falls). When the bridge is complete the friends walk across. */
+      id: string; kind: 'rising-river'; bg: string; teacher: string; title: string; who: CharKey;
+      friends: string[]; rounds: { ask: string; choices: string[]; answer: number; img?: string }[]; doneLine: string;
+    }
+  | {
+      /** Build the Town (WorldBuilderScene.tsx, Blooket Factory / Crazy Kingdom redesigned): an empty place; every
+       *  right answer drops one piece (house, tree, slide…) onto its spot with a bounce and says it ("A house!").
+       *  `pieces` x/y = foot of the piece in % of the picture, size = width %. Round i places pieces[i]. */
+      id: string; kind: 'world-builder'; bg: string; teacher: string; title: string; who: CharKey;
+      pieces: { label: string; img: string; x: number; y: number; size: number }[];
+      rounds: { ask: string; choices: string[]; answer: number; img?: string }[]; doneLine: string;
+    }
   | { id: string; kind: 'letter-game'; bg: string; who: CharKey; teacher: string; mode: 'name' | 'sound'; rounds: { letter: string; phoneme?: string; choices: string[] }[] }
   | { id: string; kind: 'jigsaw-puzzle'; bg: string; teacher: string; image: string; rows: number; cols: number }
   /** `cast`: the friends shown on the finale card (defaults to Welcome Town's
@@ -2233,6 +2263,37 @@ export const LESSON_6_SCENES: Scene[] = classroomLook([
     doneLine: 'Great passing! Great answers!',
   },
   {
+    id: 'wt6-quiz-board', kind: 'quiz-board', bg: bgL1Stage, who: 'marigold', title: 'The Welcome Town Quiz Board!',
+    teacher: 'Free: the student picks any tile — harder questions are worth more. Read or answer, then say it aloud. One tile is a BOOM tile: double points!',
+    categories: [
+      { name: 'Hello', emoji: '\u{1F44B}', tiles: [{ ask: 'What’s your name?', choices: ['My name is Pip.', 'I am six.'], answer: 0 }, { ask: 'Goodbye, Leo!', choices: ['Hello!', 'See you tomorrow!'], answer: 1 }, { ask: 'This is my friend Mia.', choices: ['Nice to meet you!', 'I am tired.'], answer: 0 }] },
+      { name: 'Feelings', emoji: '\u{1F60A}', tiles: [{ ask: 'How is she?', choices: ['She is sad.', 'He is happy.'], answer: 0, img: feelSpr('mia-sad') }, { ask: 'How is he?', choices: ['He is hungry.', 'He is tired.'], answer: 1, img: feelSpr('leo-tired') }, { ask: 'How are you?', choices: ['I am fine, thank you.', 'My name is Bella.'], answer: 0 }] },
+      { name: 'Numbers', emoji: '\u{1F522}', tiles: [{ ask: 'What number is it?', choices: ['ten', 'six'], answer: 0, img: I1('ten') }, { ask: 'Eighteen, nineteen …', choices: ['twelve', 'twenty'], answer: 1 }, { ask: 'How old is Bella?', choices: ['She is nine.', 'She is sad.'], answer: 0, img: spr('bella') }] },
+      { name: 'Story', emoji: '\u{1F4D6}', tiles: [{ ask: 'Who is new?', choices: ['Leo', 'Pip'], answer: 0, img: leoStory(1) }, { ask: 'Where is the cap?', choices: ['On the cat!', 'On the bed!'], answer: 0, img: leoStory(9) }, { ask: 'Whose red hat is it?', choices: ['Willow’s hat', 'Leo’s hat'], answer: 0, img: leoStory(8) }] },
+    ],
+    boom: [2, 1],
+    doneLine: 'The board is finished! Quiz champion!',
+  },
+  {
+    id: 'wt6-build-town', kind: 'world-builder', bg: bgParkEmpty, who: 'pip', title: 'Build Welcome Town!',
+    teacher: 'Guided: every right answer builds a piece of Welcome Town. Say the answer aloud — then name the new piece!',
+    pieces: [
+      { label: 'house', img: I1('house'), x: 24, y: 62, size: 18 },
+      { label: 'slide', img: I1('slide'), x: 46, y: 66, size: 14 },
+      { label: 'bench', img: I1('bench'), x: 64, y: 70, size: 12 },
+      { label: 'lamp', img: I1('lamp'), x: 37, y: 62, size: 6 },
+      { label: 'flag', img: I1('flag'), x: 56, y: 50, size: 6 },
+      { label: 'rainbow', img: I1('rainbow'), x: 42, y: 32, size: 26 },
+    ],
+    rounds: [{ ask: 'Hello! What’s your name?', choices: ['My name is …', 'I am seven.'], answer: 0 },
+      { ask: 'How are you?', choices: ['I am happy.', 'Goodbye!'], answer: 0 },
+      { ask: 'How old are you?', choices: ['Nice to meet you!', 'I am … years old.'], answer: 1 },
+      { ask: 'This is my friend Leo.', choices: ['See you!', 'Nice to meet you, Leo!'], answer: 1 },
+      { ask: 'Is Leo sad?', choices: ['Yes, he is sad.', 'She is nine.'], answer: 0, img: feelSpr('leo-tired') },
+      { ask: 'Goodbye!', choices: ['Goodbye! See you tomorrow!', 'What’s your name?'], answer: 0 }],
+    doneLine: 'Look! We built Welcome Town! Hooray!',
+  },
+  {
     id: 'wt6-catch', kind: 'answer-race', look: 'gates', bg: bgL1Class, who: 'pip', racer: I1('pip-run'),
     title: 'Catch the answer! Run through the right gate!',
     teacher: 'Guided: Pip asks — the student taps the gate with the right answer, then says it.',
@@ -2750,6 +2811,30 @@ export const LESSON_7_SCENES: Scene[] = classroomLook([
     ],
     prize: { img: feelSpr('pip-happy'), label: 'Super friend sticker' },
     doneLine: 'You opened the present! Super friend!',
+  },
+  {
+    id: 'wt7-pa-chests', kind: 'chest-quest', bg: bgL1Party, who: 'pip', title: 'Treasure Chests!', goal: 60,
+    teacher: 'Practise again: every right answer opens a chest — coins fill the class jar. Can we reach 60 coins?',
+    rounds: [
+      { ask: 'How old are you?', choices: ['I am … years old.', 'I am sad.'], answer: 0, prizes: ['10', '20', '⭐'] },
+      { ask: 'She is …', choices: ['happy', 'hungry'], answer: 1, img: feelSpr('willow-hungry'), prizes: ['20', '10', '×2'] },
+      { ask: 'What’s your name?', choices: ['My name is …', 'See you!'], answer: 0, prizes: ['×2', '20', '10'] },
+      { ask: 'Nice to meet you!', choices: ['Nice to meet you, too!', 'I am ten.'], answer: 0, prizes: ['10', '⭐', '20'] },
+    ],
+    doneLine: 'Look at the jar! Super answers!',
+  },
+  {
+    id: 'wt7-pa-river', kind: 'rising-river', bg: bgParkEmpty, who: 'pip', title: 'Build the bridge home!',
+    teacher: 'Practise again (together!): every right answer lays a plank. A wrong answer — the water rises a little. Get the friends home!',
+    friends: [spr('mia'), spr('leo'), spr('bella')],
+    rounds: [
+      { ask: 'Hello! How are you?', choices: ['I am fine, thank you.', 'I am eight.'], answer: 0 },
+      { ask: 'What’s your name?', choices: ['Goodbye!', 'My name is …'], answer: 1 },
+      { ask: 'How many? Count!', choices: ['ten', 'six'], answer: 0, img: I1('ten') },
+      { ask: 'Who is this?', choices: ['This is Mia.', 'This is Leo.'], answer: 0, img: spr('mia') },
+      { ask: 'Goodbye, friends!', choices: ['Goodbye! See you!', 'How old are you?'], answer: 0 },
+    ],
+    doneLine: 'The friends are home! Great teamwork!',
   },
   {
     id: 'wt7-goodbye-song', kind: 'song', bg: bgExpressGoodbyeW, title: '\u{1F3B5} Welcome Town School Goodbye Song \u{1F3B5}', teacher: 'It’s time to go — wave goodbye and sing along together!',

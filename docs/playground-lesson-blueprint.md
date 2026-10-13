@@ -407,8 +407,8 @@ in §11). Still no game twice in a unit.
 | Free speaking | L2-L4, L6 | ✓ Secret Card (20 questions) · ✓ Chat Chain · ✓ Flip & Say · ✓ Charades · ✓ Go Fish! (`go-fish`) · ✓ Hot Coconut (`hot-coconut`, hot potato) · ★ Draw That (Pictionary) |
 | Phonics / reading | every lesson | ✓ Letter Blocks · ✓ Word Splat · ✓ Letter Monsters / Moles / Fishing · ✓ Letter Game · ✓ Save the Balloon (`save-balloon`, hangman ⚠️) · ★ Letter Bubbles (anagram) · ★ Picture Crossword |
 | Game break / arcade | any | ✓ Obstacle Run · ✓ Brick Crush · ✓ Stepping Stones · ✓ Number Hop (stepping-stones look) · ★ Red Light, Green Light |
-| Review / L6 Game Day | L6 | ✓ Word Board (snakes & ladders) · ✓ Answer Race · ✓ Hero Trials · ✓ Tic-Tac-Toe Duel (`tic-tac-toe`) · ✓ Pass the Present (`pass-parcel`) · ★ Wobbly Tower (Jenga) · ★ Treasure Chests · ★ Team Flags |
-| Boss Test / unit frame | L7 | ✓ Answer Race · ✓ Hero Trials · ★ Jungle Jeopardy (quiz board) · ★ Rising River (floor is lava, co-op) · ★ Treasure Islands (battleship) · ★ Build the Town (persists) |
+| Review / L6 Game Day | L6 | ✓ Word Board (snakes & ladders) · ✓ Answer Race · ✓ Hero Trials · ✓ Tic-Tac-Toe Duel (`tic-tac-toe`) · ✓ Pass the Present (`pass-parcel`) · ★ Wobbly Tower (Jenga) · ✓ Treasure Chests (`chest-quest`) · ★ Team Flags |
+| Boss Test / unit frame | L7 | ✓ Answer Race · ✓ Hero Trials · ✓ Jungle Jeopardy (`quiz-board`) · ✓ Rising River (`rising-river`, floor is lava, co-op) · ★ Treasure Islands (battleship) · ✓ Build the Town (`world-builder`; keeping it across lessons is still to build) |
 | Extra time | any | ✓ Home Hunt · ✓ brain breaks · ★ Pet Pal |
 
 **A1 checklist (before "done", with `lesson-quality-gate`):**

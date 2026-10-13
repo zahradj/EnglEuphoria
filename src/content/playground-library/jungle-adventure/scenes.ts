@@ -1751,6 +1751,38 @@ export const LESSON_A1U2L6_SCENES: Scene[] = [
     doneLine: 'No more cards! Super asking and answering!',
   },
   {
+    id: 'ja6-build-camp', kind: 'world-builder', bg: bgWide, who: 'coco', title: 'Build the Jungle Camp!',
+    teacher: 'Guided: every right answer builds a piece of the jungle camp. Say the answer aloud — then name the new piece!',
+    pieces: [
+      { label: 'house', img: it('house'), x: 26, y: 60, size: 16 },
+      { label: 'log', img: it('log'), x: 50, y: 70, size: 12 },
+      { label: 'stone', img: it('stone'), x: 68, y: 68, size: 8 },
+      { label: 'banana', img: it('banana'), x: 14, y: 62, size: 7 },
+      { label: 'flag', img: it('flag'), x: 60, y: 50, size: 6 },
+      { label: 'rainbow', img: it('rainbow'), x: 46, y: 30, size: 28 },
+    ],
+    rounds: [
+      { ask: 'Can a monkey climb?', choices: ['Yes, it can.', 'No, it can’t.'], answer: 0 },
+      { ask: 'What is it? It’s got a long nose.', choices: ['It’s an elephant.', 'It’s a frog.'], answer: 0 },
+      { ask: 'Can a fish walk?', choices: ['Yes, it can.', 'No, it can’t.'], answer: 1 },
+      { ask: 'Is the snake short?', choices: ['No. It’s long.', 'Yes. It’s short.'], answer: 0, img: it('snake') },
+      { ask: 'What can a bird do?', choices: ['It can fly.', 'It can swim.'], answer: 0 },
+      { ask: 'Who can help Kip?', choices: ['The elephant.', 'The fish.'], answer: 0 },
+    ],
+    doneLine: 'Look! We built the jungle camp! Hooray!',
+  },
+  {
+    id: 'ja6-chests', kind: 'chest-quest', bg: bgWaterfall, who: 'coco', title: 'Jungle Treasure Chests!', goal: 60,
+    teacher: 'Guided: every right answer opens a chest — coins fill the class jar. Can we reach 60 coins?',
+    rounds: [
+      { ask: 'It’s small and green. It can jump.', choices: ['It’s a frog.', 'It’s a lion.'], answer: 0, prizes: ['10', '20', '⭐'] },
+      { ask: 'Can a crocodile swim?', choices: ['Yes, it can.', 'No, it can’t.'], answer: 0, img: it('alligator'), prizes: ['20', '×2', '10'] },
+      { ask: 'What’s it got?', choices: ['A long tail.', 'A long nose.'], answer: 1, img: it('elephant'), prizes: ['10', '20', '×2'] },
+      { ask: 'Can a lion swing?', choices: ['Yes, it can.', 'No, it can’t.'], answer: 1, img: it('lion'), prizes: ['⭐', '10', '20'] },
+    ],
+    doneLine: 'Look at the jar! Super answers!',
+  },
+  {
     id: 'ja6-charades', kind: 'prea1', teacher: 'Free: Jungle Charades! Guess what the friend can do — then the student acts and the teacher guesses: “You can swing!”',
     scene: {
       id: 'ja6-charades', kind: 'charades', bg: bgObstacle, who: 'pip',
@@ -2225,6 +2257,31 @@ export const LESSON_A1U2L7_SCENES: Scene[] = [
     ],
     prize: { img: it('banana-trophy'), label: 'Golden banana' },
     doneLine: 'You opened the present! Golden banana!',
+  },
+  {
+    id: 'ja7-pa-quiz-board', kind: 'quiz-board', bg: bgWaterfall, who: 'coco', title: 'Jungle Jeopardy!',
+    teacher: 'Practise again: the student picks any tile — harder questions are worth more. Answer, then say it aloud. One tile is a BOOM tile: double points!',
+    categories: [
+      { name: 'Animals', emoji: '\u{1F418}', tiles: [{ ask: 'What is it?', choices: ['It’s a snake.', 'It’s a bird.'], answer: 0, img: it('snake') }, { ask: 'It’s big and grey. What is it?', choices: ['an elephant', 'a frog'], answer: 0 }, { ask: 'It’s got a long tail. It can swim.', choices: ['a crocodile', 'a monkey'], answer: 0 }] },
+      { name: 'Can it?', emoji: '\u{1F985}', tiles: [{ ask: 'Can a bird fly?', choices: ['Yes, it can.', 'No, it can’t.'], answer: 0 }, { ask: 'Can a fish run?', choices: ['Yes, it can.', 'No, it can’t.'], answer: 1 }, { ask: 'What can a monkey do?', choices: ['It can climb.', 'It can fly.'], answer: 0 }] },
+      { name: 'Story', emoji: '\u{1F4D6}', tiles: [{ ask: 'Where is Kip?', choices: ['On a rock.', 'In a tree.'], answer: 0, img: jungleRescue(5) }, { ask: 'Why can’t Willow help?', choices: ['She is small.', 'She is big.'], answer: 0, img: jungleRescue(6) }, { ask: 'Who helps Kip?', choices: ['The elephant.', 'The crocodile.'], answer: 0, img: jungleRescue(10) }] },
+      { name: 'Sounds', emoji: '\u{1F524}', tiles: [{ ask: 'Which word starts with ch?', choices: ['chick', 'ship'], answer: 0 }, { ask: 'Which word ends with ck?', choices: ['duck', 'fish'], answer: 0 }, { ask: 'Which word starts with sh?', choices: ['chips', 'shell'], answer: 1 }] },
+    ],
+    boom: [1, 2],
+    doneLine: 'The board is finished! Jungle quiz champion!',
+  },
+  {
+    id: 'ja7-pa-river', kind: 'rising-river', bg: bgWide, who: 'coco', title: 'Build the bridge for Kip!',
+    teacher: 'Practise again (together!): every right answer lays a plank. A wrong answer — the water rises a little. Get the friends across!',
+    friends: [it('coco-cheer'), it('leo-run'), wtSpr('pip')],
+    rounds: [
+      { ask: 'Can an elephant walk in the river?', choices: ['Yes, it can.', 'No, it can’t.'], answer: 0 },
+      { ask: 'Is a frog big?', choices: ['No. It’s small.', 'Yes. It’s big.'], answer: 0, img: it('frog') },
+      { ask: 'What can a fish do?', choices: ['It can swim.', 'It can climb.'], answer: 0 },
+      { ask: 'It can fly. It’s small and blue.', choices: ['It’s a bird.', 'It’s a snake.'], answer: 0 },
+      { ask: 'Lunch!', choices: ['Chips for all!', 'Help! Help!'], answer: 0 },
+    ],
+    doneLine: 'Everyone is across! Great teamwork!',
   },
   {
     id: 'ja7-goodbye-song', kind: 'song', bg: bgFriends, title: '\u{1F3B5} Goodbye Song \u{1F3B5}', teacher: 'It’s time to go — wave goodbye and sing along together!',

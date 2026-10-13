@@ -230,15 +230,15 @@ Sources: Wordwall templates (34+ interactives: Maze Chase, Airplane, Whack-a-mol
 | Wordwall Balloon Pop | **Balloon Match**: balloons carry words and float to their pictures; pop when matched | word ↔ sentence | `count-balloons` → universal | ⇄ upgrade | C, G |
 | Wordwall Anagram / Duolingo ABC word puzzle | **Letter Bubbles**: scrambled letter bubbles; drag them into order and the word is said and read in a sentence | spelling | `letter-blocks` letters mode | ⇄ upgrade | P |
 | Wordwall Labyrinth / Maze Chase | exists (`picture-maze`); **+ chase mode**: a friendly bee follows slowly and the child must reach the answer first | answers | `picture-maze` | ⇄ upgrade | G |
-| Blooket Gold Quest (no stealing) | **Treasure Chests**: each right answer opens a chest with coins, a double or a sticker; coins fill the class jar (no taking from others) | any review | ★ new `chest-quest` | ★ New | R |
-| Blooket Factory / Crazy Kingdom | **Build the Town**: every right answer builds one piece of the unit's world (a hut, a tree, a bridge), and it stays built across lessons | unit review | ★ new `world-builder` (persists in Sticker Book) | ★ New | R, X |
+| Blooket Gold Quest (no stealing) | **Treasure Chests**: each right answer opens a chest with coins, a double or a sticker; coins fill the class jar (no taking from others) | any review | `chest-quest` (U1 L7, U2 L6) | ✓ built | R |
+| Blooket Factory / Crazy Kingdom | **Build the Town**: every right answer builds one piece of the unit's world (a hut, a tree, a bridge), and it stays built across lessons | unit review | `world-builder` (U1 L6 town, U2 L6 jungle camp; persisting across lessons still to build) | ✓ built | R, X |
 | Blooket Tower Defense | **Garden Guard** (listed in §5): right answers plant flowers that keep the friendly goats from the veggies; nothing gets hurt | any | ★ New | ★ New | R |
-| Gimkit The Floor is Lava | **Rising River**: the class answers together and each answer lifts the bridge before the water rises; cooperative, so the teacher and child win together | any | ★ new `rising-river` | ★ New | R |
+| Gimkit The Floor is Lava | **Rising River**: the class answers together and each answer lifts the bridge before the water rises; cooperative, so the teacher and child win together | any | `rising-river` (U1 L7, U2 L7) | ✓ built | R |
 | Gimkit Fishtopia | exists: `shape-fishing` / `sound-fish`; **+ shop**: catches buy aquarium decorations | any | ⇄ upgrade | ⇄ upgrade | G |
 | Gimkit Capture the Flag (safe) | **Team Flags**: teacher vs child; each right answer moves your flag one hill closer; first to the top | Q&A | ★ new `flag-race` | ★ New | R |
 | Gimkit Draw That | see Pictionary (§11) | | | | |
 | Kahoot Robot Run / Treasure Trove | `answer-race` looks already cover running; **+ treasure look**: collect gems on the path | Q&A | `answer-race` new look | ⇄ re-skin | R |
-| Baamboozle board (one screen) | **Jungle Jeopardy** (listed in §9): a grid of picture tiles by category and points; tiles flip to a question, with a mystery "Boom!" tile that doubles | review | ★ new `quiz-board` | ★ New | R |
+| Baamboozle board (one screen) | **Jungle Jeopardy** (listed in §9): a grid of picture tiles by category and points; tiles flip to a question, with a mystery "Boom!" tile that doubles | review | `quiz-board` (U1 L6, U2 L7) | ✓ built | R |
 | Lingokids / Khan Kids collectible pets | **Pet Pal** (listed in §9): every lesson's words feed and dress the pet, which grows across the unit | unit words | ★ New | ★ New | X |
 | Duolingo ABC illustrated stories | Reader + story GIFs (scenarios waiting for the owner's OK) | reading | `reader` | ✓ built (GIFs pending) | P |
 

@@ -807,6 +807,17 @@ const WT_EXTRACTORS = {
       ['teacher', 'Yes, I have. Here you are.'], ['teacher', 'No, I haven’t. Go fish!'],
       ...(s.cards ?? []).flatMap((c) => [['teacher', `Have you got ${art(c.label)} ${c.label}?`], [s.who, `Have you got ${art(c.label)} ${c.label}?`]])];
   },
+  // QuizBoardScene / ChestQuestScene / RisingRiverScene / WorldBuilderScene (welcome-town/scene-components).
+  'quiz-board': (s) => [[s.who, s.doneLine], [s.who, 'Pick a tile! Big points, big questions!'], [s.who, 'Boom! Double points!'], [s.who, 'Try again!'],
+    ...(s.categories ?? []).flatMap((c) => (c.tiles ?? []).flatMap((t) => [[s.who, t.ask], ['teacher', t.choices[t.answer]]]))],
+  'chest-quest': (s) => [[s.who, s.doneLine], [s.who, 'Double! Your coins are doubled!'], [s.who, 'A sticker!'],
+    ...(s.rounds ?? []).flatMap((q) => [[s.who, q.ask], ['teacher', `${q.choices[q.answer]} Pick a chest!`], ...(q.prizes ?? []).filter((p) => /^\d+$/.test(p)).map((p) => [s.who, `${p} coins!`])])],
+  'rising-river': (s) => [[s.who, s.doneLine], [s.who, 'Splash! Wet feet! Quick, try again!'], [s.who, 'Oh! The water is rising! Try again!'],
+    ...(s.rounds ?? []).flatMap((q) => [[s.who, q.ask], ['teacher', q.choices[q.answer]]])],
+  'world-builder': (s) => [[s.who, s.doneLine], [s.who, 'Try again!'], ...(s.rounds ?? []).flatMap((q, i) => {
+    const p = (s.pieces ?? [])[i];
+    return [[s.who, q.ask], ['teacher', `${q.choices[q.answer]} ${p ? `${/^[aeiou]/i.test(p.label) ? 'An' : 'A'} ${p.label}!` : ''}`]];
+  })],
   'hot-coconut': (s) => [[s.who, s.doneLine], ...(s.rounds ?? []).flatMap((q) => {
     const n = (s.seats ?? []).length || 1; const at = ((q.stop % n) + n) % n;
     return [[s.who, `${at === 0 ? 'Your turn!' : `Help ${s.seats[at].name}!`} ${q.ask}`], ['teacher', q.choices[q.answer]]];
