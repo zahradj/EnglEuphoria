@@ -21,6 +21,9 @@ export default defineConfig(() => ({
       workbox: {
         // Push notification handlers (public/push-sw.js) live inside the same service worker.
         importScripts: ["push-sw.js"],
+        // A new version takes over at once (src/pwa/registerServiceWorker.ts reloads open tabs when it is safe).
+        skipWaiting: true,
+        clientsClaim: true,
         navigateFallback: "/index.html",
         navigateFallbackDenylist: [/^\/~oauth/, /^\/api\//],
         globPatterns: ["**/*.{js,css,html,ico,png,svg,webmanifest,woff2}"],
