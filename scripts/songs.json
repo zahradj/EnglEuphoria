@@ -3808,5 +3808,127 @@
       "Do you like it? Yes, I do!",
       "Pizza, pizza, me and you!"
     ]
+  },
+  "a1u9l4-castle-tower": {
+    "publicPath": "public/magic-castle/audio/in-wims-tower-song-a1u9l4.mp3",
+    "bpm": 112,
+    "key": "F major",
+    "beatsPerLine": 4,
+    "barsPerLine": 2,
+    "introBars": 2,
+    "maxSeconds": 80,
+    "targetWords": [
+      "tower",
+      "there",
+      "between"
+    ],
+    "style": "Gentle magical kids song, 112 BPM in 4/4, F major, with celesta, glockenspiel, pizzicato strings, soft hand claps and a light shaker, ONE clear happy young singer, every word sung slowly and very clearly, a warm sunset castle feeling, a little sparkle sound on \"there is, there are\".",
+    "positiveStyles": [
+      "kids song",
+      "celesta",
+      "glockenspiel",
+      "pizzicato strings",
+      "claps",
+      "clear kids vocals",
+      "112 BPM",
+      "magical",
+      "happy"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "sleepy",
+      "adult vocals",
+      "rap",
+      "dark",
+      "scary",
+      "instrumental only",
+      "extra verses",
+      "mumbling",
+      "autotune"
+    ],
+    "sections": [
+      {
+        "name": "Chorus",
+        "rhyme": "AA",
+        "lines": [
+          "Up in the tower, what can you see?",
+          "There is, there are, for you and me!"
+        ]
+      },
+      {
+        "name": "Verse 1",
+        "rhyme": "AA",
+        "lines": [
+          "There is a bed, a big, big bed,",
+          "Between the lamps, the blue and red."
+        ]
+      },
+      {
+        "name": "Chorus 2",
+        "rhyme": "AA",
+        "lines": [
+          "Up in the tower, what can you see?",
+          "There is, there are, for you and me!"
+        ]
+      },
+      {
+        "name": "Verse 2",
+        "rhyme": "AA",
+        "lines": [
+          "There is a rug, a blue, blue rug,",
+          "In front of the door, give it a hug!"
+        ]
+      },
+      {
+        "name": "Verse 3",
+        "rhyme": "AA",
+        "lines": [
+          "There are two windows, one and two,",
+          "Between them, look, the sky is blue!"
+        ]
+      },
+      {
+        "name": "Chorus 3",
+        "rhyme": "AA",
+        "lines": [
+          "Up in the tower, what can you see?",
+          "There is, there are, for you and me!"
+        ]
+      },
+      {
+        "name": "Verse 4",
+        "rhyme": "AA",
+        "lines": [
+          "Whose is the crown between the lamps?",
+          "It’s Wim’s, it’s Wim’s! He jumps and stamps!"
+        ]
+      },
+      {
+        "name": "Chorus 4",
+        "rhyme": "AA",
+        "lines": [
+          "Up in the tower, what can you see?",
+          "There is, there are, for you and me!"
+        ]
+      }
+    ],
+    "lines": [
+      "Up in the tower, what can you see?",
+      "There is, there are, for you and me!",
+      "There is a bed, a big, big bed,",
+      "Between the lamps, the blue and red.",
+      "Up in the tower, what can you see?",
+      "There is, there are, for you and me!",
+      "There is a rug, a blue, blue rug,",
+      "In front of the door, give it a hug!",
+      "There are two windows, one and two,",
+      "Between them, look, the sky is blue!",
+      "Up in the tower, what can you see?",
+      "There is, there are, for you and me!",
+      "Whose is the crown between the lamps?",
+      "It’s Wim’s, it’s Wim’s! He jumps and stamps!",
+      "Up in the tower, what can you see?",
+      "There is, there are, for you and me!"
+    ]
   }
 }
