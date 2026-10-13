@@ -1533,6 +1533,22 @@
   },
   {
     "who": "Theo",
+    "text": "One more page. Read the line. Which picture is it?"
+  },
+  {
+    "who": "Vee",
+    "text": "Hi, Theo."
+  },
+  {
+    "who": "Vee",
+    "text": "Hi"
+  },
+  {
+    "who": "Vee",
+    "text": "I am Vee."
+  },
+  {
+    "who": "Theo",
     "text": "Bye!"
   },
   {
@@ -1562,6 +1578,10 @@
   {
     "who": "Theo",
     "text": "Take 2 · Say hello, your name and bye."
+  },
+  {
+    "who": "Vee",
+    "text": "Exit check · Listen. Tap the picture for what you hear."
   },
   {
     "who": "Vee",

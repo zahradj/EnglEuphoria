@@ -101,6 +101,14 @@ export const PA1_S01_E1: DeckScript = {
       closing: 'Now YOU say hello!',
     },
     {
+      id: 'whosaid-wall', kind: 'whosaid', part: 2, bg: NW, actors: [who('Ava', 'left'), who('Theo', 'right')], trains: [1, 2],
+      replayTitle: 'Look again: Ava and Theo meet at the wall…',
+      replay: [{ who: 'Theo', text: 'Hello! My name is Theo.' }, { who: 'Ava', text: 'Hi, Theo. I am Ava.' }],
+      prompt: 'Who said it? Drag each bubble to Ava or Theo.',
+      items: [{ text: 'My name is Theo.', who: 'Theo' }, { text: 'I am Ava.', who: 'Ava' }, { text: 'Hello!', who: 'Theo' }],
+      hints: ['Theo says My name is Theo. Ava says I am Ava.'],
+    },
+    {
       id: 'teach-hello', kind: 'teach', part: 2, bg: NW, actors: [who('Vee', 'left')], trains: [1], title: 'Hello, hi and bye',
       pages: [
         { word: 'Hello!', art: card('v-hello', 'hello'), meaning: 'what you say when you meet someone', example: 'Hello, Ava!', clue: 'Say it with a smile.' },
@@ -176,6 +184,13 @@ export const PA1_S01_E1: DeckScript = {
       hints: ['Listen, then read the names.'],
     },
 
+    {
+      id: 'read-chat', kind: 'reader', part: 4, bg: 'classroom-evening', actors: [who('Theo', 'right')], trains: [4],
+      prompt: 'One more page. Read the line. Which picture is it?',
+      lines: [{ text: 'Hi, Theo.', art: L('HI') }, { text: 'I am Vee.', art: card('v-me', 'me') }, { text: 'My name is Ava.', art: card('v-name', 'a name tag') }],
+      hints: ['Tap a word to hear it. Then pick the picture.'],
+    },
+
     // ---------- 5 · Use it: hello and your name ----------
     {
       id: 'convo-hello', kind: 'convo', part: 5, bg: 'phone-profile-closeup', actors: [who('Theo', 'right')], trains: [1, 2, 4],
@@ -227,6 +242,12 @@ export const PA1_S01_E1: DeckScript = {
     },
 
     // ---------- 7 · Wrap ----------
+    {
+      id: 'exit', kind: 'match', part: 7, bg: NW, actors: [who('Vee', 'right')], trains: [1, 2], mode: 'listen',
+      prompt: 'Exit check · Listen. Tap the picture for what you hear.',
+      pairs: [{ word: 'Bye!', art: L('BYE') }, { word: 'My name is Ava.', art: card('v-name', 'a name tag') }, { word: 'Hi!', art: L('HI') }],
+      hints: ['Listen to the line, then look for its picture.'],
+    },
     {
       id: 'wrap', kind: 'wrap', part: 7, bg: NW, actors: [who('Vee', 'left', 'thumbs')], heading: 'The wall lights up!', ticks: CRITERIA,
       homework: 'Homework: say hello and your name to one person today. Not yet is okay!',
