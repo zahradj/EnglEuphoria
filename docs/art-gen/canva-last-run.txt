@@ -1,13 +1,4 @@
-+ public/jungle-adventure/scenes/bg-jungle-rescue-1-wide.png (1376, 768)
-+ public/jungle-adventure/scenes/bg-jungle-rescue-2-wide.png (1376, 768)
-+ public/jungle-adventure/scenes/bg-jungle-rescue-3-wide.png (1376, 768)
-+ public/jungle-adventure/scenes/bg-jungle-rescue-4-wide.png (1376, 768)
-+ public/jungle-adventure/scenes/bg-jungle-rescue-5-wide.png (1376, 768)
-+ public/jungle-adventure/scenes/bg-jungle-rescue-6-wide.png (1376, 768)
-+ public/jungle-adventure/scenes/bg-jungle-rescue-7-wide.png (1376, 768)
-+ public/jungle-adventure/scenes/bg-jungle-rescue-8-wide.png (1376, 768)
-+ public/jungle-adventure/scenes/bg-jungle-rescue-9-wide.png (1376, 768)
-+ public/jungle-adventure/scenes/bg-jungle-rescue-10-wide.png (1376, 768)
-+ public/jungle-adventure/scenes/bg-jungle-rescue-11-wide.png (1376, 768)
-+ public/jungle-adventure/scenes/bg-jungle-rescue-12-wide.png (1376, 768)
-12/12 saved
+cut out: public/lep1/items/item-pip-binoculars.png (702, 899)
++ public/jungle-adventure/scenes/bg-jungle-ispy-wide.png (1376, 768)
++ public/lep1/items/item-pip-binoculars.png (1024, 1024)
+2/2 saved
