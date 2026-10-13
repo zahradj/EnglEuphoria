@@ -15,6 +15,7 @@ const ROUTINES = new Set([
   'title-card', 'recall-warmup', 'cinematic', 'meet', 'vocab-spot', 'echo', 'listen-repeat-cards', 'numbers-learn',
   'song', 'reader', 'sound-model', 'sound-blend', 'tongue-twister', 'join-stage', 'roleplay', 'tpr-actions',
   'sticker-reward', 'home-mission', 'finale',
+  'pet-pal', // a short collecting moment like the sticker reward: Biscuit grows across the units, so it is in every lesson
 ]);
 
 const UNITS: { unit: string; lessons: AnyScene[][] }[] = [

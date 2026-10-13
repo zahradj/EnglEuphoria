@@ -842,6 +842,11 @@ const WT_EXTRACTORS = {
   'red-green': (s) => [[s.who, s.doneLine], [s.who, 'Oops! Red light! Freeze!'], ...(s.rounds ?? []).map((r) => [s.who, r.say])],
   'letter-bubbles': (s) => [[s.who, s.doneLine], ...(s.words ?? []).flatMap((w) => [[s.who, `Spell it! ${w.word}!`], [s.who, w.word], ['teacher', w.say]])],
   'crossword': (s) => [[s.who, s.doneLine], [s.who, 'What is it? Spell it!'], [s.who, 'Pick a picture!'], ...(s.words ?? []).flatMap((w) => [[s.who, w.word], ['teacher', w.say]])],
+  // FlagRaceScene / BalloonMatchScene / PetPalScene (welcome-town/scene-components).
+  'flag-race': (s) => [[s.who, s.doneLine], [s.who, 'Now ask your teacher!'],
+    ...(s.rounds ?? []).flatMap((r, i) => [...(i % 2 === 0 ? [[s.who, `Your turn! ${r.ask}`]] : []), [s.who, r.ask], ['teacher', r.choices[r.answer]]])],
+  'balloon-match': (s) => [[s.who, s.doneLine], [s.who, 'Read a balloon. Find its picture!'], ...(s.pairs ?? []).flatMap((p) => [[s.who, p.text], ['teacher', p.text]])],
+  'pet-pal': (s) => [[s.who, s.doneLine], [s.who, 'No, thank you! Listen again!'], ...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], ['teacher', r.say]])],
   'hot-coconut': (s) => [[s.who, s.doneLine], ...(s.rounds ?? []).flatMap((q) => {
     const n = (s.seats ?? []).length || 1; const at = ((q.stop % n) + n) % n;
     return [[s.who, `${at === 0 ? 'Your turn!' : `Help ${s.seats[at].name}!`} ${q.ask}`], ['teacher', q.choices[q.answer]]];

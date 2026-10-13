@@ -573,6 +573,16 @@ export type Scene =
       words: { word: string; img: string; say: string }[]; doneLine: string; }
   | { id: string; kind: 'crossword'; bg: string; teacher: string; title: string; who: CharKey;
       words: { word: string; img: string; say: string }[]; doneLine: string; }
+  | { id: string; kind: 'flag-race'; bg: string; teacher: string; title: string; who: CharKey;
+      /** turns alternate: even = the child answers, odd = the teacher answers (the child asks). First flag up the hill wins. */
+      rounds: { ask: string; choices: string[]; answer: number }[]; doneLine: string; }
+  | { id: string; kind: 'balloon-match'; bg: string; teacher: string; title: string; who: CharKey;
+      pairs: { text: string; img: string; label: string }[]; doneLine: string; }
+  | { id: string; kind: 'pet-pal'; bg: string; teacher: string; title: string; who: CharKey;
+      pet: { name: string; img: string };
+      /** what the pet got in earlier lessons (shown on its shelf; the pet is bigger for each) */
+      earlier: { label: string; img: string }[];
+      rounds: { line: string; choices: { label: string; img: string }[]; answer: number; say: string }[]; doneLine: string; }
   | { id: string; kind: 'hot-cold'; bg: string; teacher: string; title: string; who: CharKey;
       /** The picture hides at (x, y) % of the 16:9 art; the child searches by tapping, the voice says Cold / Warm / Hot. */
       rounds: { label: string; img: string; x: number; y: number; find: string; say: string }[]; doneLine: string; }
@@ -944,6 +954,14 @@ export const LESSON_1_SCENES: Scene[] = classroomLook([
       line: 'You can say hello, ask a name and read Leo’s story! Here is your sticker.',
       sticker: { img: spr('pip'), label: 'Hello, Pip!' },
     },
+  },
+  {
+    id: 'wt-pet-pal', kind: 'pet-pal', bg: bgParkEmpty, who: 'pip', title: 'Pet Pal: Biscuit',
+    teacher: 'Routine (1 minute): Biscuit the puppy says what he wants. The student listens, taps it and says it. It goes on his shelf and he grows — the shelf keeps everything from earlier lessons.',
+    pet: { name: 'Biscuit', img: '/lep1/items/item-dog.png' },
+    earlier: [],
+    rounds: [{ line: 'Hello! I’m Biscuit! I want a star!', choices: [{ label: 'cake', img: '/lep1/items/item-cake.png' }, { label: 'star', img: '/lep1/items/item-star-gold.png' }, { label: 'present', img: '/lep1/items/item-gift.png' }], answer: 1, say: 'A star for Biscuit! Hello, Biscuit!' }],
+    doneLine: 'Biscuit is so happy! See you next time!',
   },
   {
     id: 'wt-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
@@ -1368,6 +1386,14 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
     },
   },
   {
+    id: 'wt2-pet-pal', kind: 'pet-pal', bg: bgParkEmpty, who: 'pip', title: 'Pet Pal: Biscuit',
+    teacher: 'Routine (1 minute): Biscuit the puppy says what he wants. The student listens, taps it and says it. It goes on his shelf and he grows — the shelf keeps everything from earlier lessons.',
+    pet: { name: 'Biscuit', img: '/lep1/items/item-dog.png' },
+    earlier: [{ label: 'star', img: '/lep1/items/item-star-gold.png' }],
+    rounds: [{ line: 'I’m hungry! I want an apple!', choices: [{ label: 'apple', img: '/lep1/items/item-apple.png' }, { label: 'present', img: '/lep1/items/item-gift.png' }, { label: 'green hat', img: '/lep1/items/item-hat-green.png' }], answer: 0, say: 'An apple! Now Biscuit is happy!' }],
+    doneLine: 'Biscuit is so happy! See you next time!',
+  },
+  {
     id: 'wt2-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
     scene: {
       id: 'wt2-home-mission', kind: 'home-mission', bg: bgCircleW, who: 'pip',
@@ -1661,6 +1687,14 @@ export const LESSON_3_SCENES: Scene[] = classroomLook([
     },
   },
   {
+    id: 'wt3-pet-pal', kind: 'pet-pal', bg: bgParkEmpty, who: 'pip', title: 'Pet Pal: Biscuit',
+    teacher: 'Routine (1 minute): Biscuit the puppy says what he wants. The student listens, taps it and says it. It goes on his shelf and he grows — the shelf keeps everything from earlier lessons.',
+    pet: { name: 'Biscuit', img: '/lep1/items/item-dog.png' },
+    earlier: [{ label: 'star', img: '/lep1/items/item-star-gold.png' }, { label: 'apple', img: '/lep1/items/item-apple.png' }],
+    rounds: [{ line: 'It’s my birthday! I’m two! I want a cake!', choices: [{ label: 'cookie', img: '/lep1/items/item-cookie.png' }, { label: 'cake', img: '/lep1/items/item-cake.png' }, { label: 'apple', img: '/lep1/items/item-apple.png' }], answer: 1, say: 'A birthday cake! Happy birthday, Biscuit!' }],
+    doneLine: 'Biscuit is so happy! See you next time!',
+  },
+  {
     id: 'wt3-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
     scene: {
       id: 'wt3-home-mission', kind: 'home-mission', bg: bgL1Class, who: 'pip',
@@ -1923,6 +1957,17 @@ export const LESSON_4_SCENES: Scene[] = classroomLook([
       { before: 'No, no! That is my red', after: '!', choices: ['hat', 'cap'], answer: 'hat', img: leoStory(8) },
     ],
   },
+  {
+    id: 'wt4-balloon-match', kind: 'balloon-match', bg: bgParkEmpty, who: 'pip', title: 'Balloon Match: who is it?',
+    teacher: 'Reading game: the student reads a balloon (tap it to hear it), then taps the friend it belongs to. The balloon floats down and pops!',
+    pairs: [
+      { text: 'This is Mia.', img: spr('mia'), label: 'Mia' },
+      { text: 'This is Leo.', img: spr('leo'), label: 'Leo' },
+      { text: 'This is Bella.', img: spr('bella'), label: 'Bella' },
+      { text: 'This is Pip.', img: spr('pip'), label: 'Pip' },
+    ],
+    doneLine: 'Pop, pop! You can read their names!',
+  },
   { id: 'wt4-jigsaw', kind: 'jigsaw-puzzle', bg: bgL1Reading, teacher: 'Build the story picture — then tell it!', image: leoStory(6), rows: 2, cols: 3 },
   /* Phonics: the sound → Letter Monsters → Blend & Read → tongue twister */
   {
@@ -1997,6 +2042,14 @@ export const LESSON_4_SCENES: Scene[] = classroomLook([
       line: 'You can introduce your friends! Here is your sticker.',
       sticker: { img: spr('leo'), label: 'This is my friend!' },
     },
+  },
+  {
+    id: 'wt4-pet-pal', kind: 'pet-pal', bg: bgParkEmpty, who: 'pip', title: 'Pet Pal: Biscuit',
+    teacher: 'Routine (1 minute): Biscuit the puppy says what he wants. The student listens, taps it and says it. It goes on his shelf and he grows — the shelf keeps everything from earlier lessons.',
+    pet: { name: 'Biscuit', img: '/lep1/items/item-dog.png' },
+    earlier: [{ label: 'star', img: '/lep1/items/item-star-gold.png' }, { label: 'apple', img: '/lep1/items/item-apple.png' }, { label: 'cake', img: '/lep1/items/item-cake.png' }],
+    rounds: [{ line: 'This is my friend! We want a ball!', choices: [{ label: 'ball', img: '/lep1/items/item-ball-red.png' }, { label: 'balloon', img: '/lep1/items/item-balloon-red.png' }, { label: 'banana', img: '/lep1/items/item-banana.png' }], answer: 0, say: 'A ball! Nice to meet you!' }],
+    doneLine: 'Biscuit is so happy! See you next time!',
   },
   {
     id: 'wt4-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
@@ -2295,6 +2348,14 @@ export const LESSON_5_SCENES: Scene[] = classroomLook([
       line: 'You read the whole story! Here is your sticker.',
       sticker: { img: I1('cap'), label: 'Leo’s red cap' },
     },
+  },
+  {
+    id: 'wt5-pet-pal', kind: 'pet-pal', bg: bgParkEmpty, who: 'pip', title: 'Pet Pal: Biscuit',
+    teacher: 'Routine (1 minute): Biscuit the puppy says what he wants. The student listens, taps it and says it. It goes on his shelf and he grows — the shelf keeps everything from earlier lessons.',
+    pet: { name: 'Biscuit', img: '/lep1/items/item-dog.png' },
+    earlier: [{ label: 'star', img: '/lep1/items/item-star-gold.png' }, { label: 'apple', img: '/lep1/items/item-apple.png' }, { label: 'cake', img: '/lep1/items/item-cake.png' }, { label: 'ball', img: '/lep1/items/item-ball-red.png' }],
+    rounds: [{ line: 'Leo’s cap is red. I want a hat, please!', choices: [{ label: 'star', img: '/lep1/items/item-star-gold.png' }, { label: 'hat', img: '/lep1/items/item-hat.png' }, { label: 'trophy', img: '/lep1/items/item-banana-trophy.png' }], answer: 1, say: 'A hat! Thank you!' }],
+    doneLine: 'Biscuit is so happy! See you next time!',
   },
   {
     id: 'wt5-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
@@ -2640,6 +2701,22 @@ export const LESSON_6_SCENES: Scene[] = classroomLook([
     },
   },
   {
+    id: 'wt6-team-flags', kind: 'flag-race', bg: bgParkEmpty, who: 'pip', title: 'Team Flags: you vs your teacher',
+    teacher: 'Team game, student vs teacher: turns take it in turns. On the student’s turn they answer; on the teacher’s turn the student READS the question to the teacher and the teacher answers. Each right answer moves your flag up your hill. Nobody slides back.',
+    rounds: [
+      { ask: 'What’s your name?', choices: ['My name is …', 'I am fine.'], answer: 0 },
+      { ask: 'How are you?', choices: ['I am six.', 'I am happy!'], answer: 1 },
+      { ask: 'How old are you?', choices: ['I am … years old.', 'Goodbye!'], answer: 0 },
+      { ask: 'Is Leo sad?', choices: ['Yes, he is.', 'Hello, Leo!'], answer: 0 },
+      { ask: 'This is Bella. Say …', choices: ['Nice to meet you!', 'I am hungry.'], answer: 0 },
+      { ask: 'What comes after nine?', choices: ['ten', 'eight'], answer: 0 },
+      { ask: 'Say goodbye!', choices: ['Hello!', 'Goodbye! See you!'], answer: 1 },
+      { ask: 'How is Mia?', choices: ['She is happy.', 'She is seven pears.'], answer: 0 },
+      { ask: 'What is it? 🧢', choices: ['It’s a cap.', 'It’s a cat.'], answer: 0 },
+    ],
+    doneLine: 'Your flag is on the top! What a team game!',
+  },
+  {
     id: 'wt6-blend', kind: 'sound-blend', bg: bgL1Reading, look: 'gumball',
     teacher: 'Reading: the Blend & Read challenge — blend the word, then read the whole sentence from the story.',
     rounds: [
@@ -2697,6 +2774,14 @@ export const LESSON_6_SCENES: Scene[] = classroomLook([
       line: 'You won Game Day! Here is your sticker.',
       sticker: { img: feelSpr('pip-happy'), label: 'Game Day champion' },
     },
+  },
+  {
+    id: 'wt6-pet-pal', kind: 'pet-pal', bg: bgParkEmpty, who: 'pip', title: 'Pet Pal: Biscuit',
+    teacher: 'Routine (1 minute): Biscuit the puppy says what he wants. The student listens, taps it and says it. It goes on his shelf and he grows — the shelf keeps everything from earlier lessons.',
+    pet: { name: 'Biscuit', img: '/lep1/items/item-dog.png' },
+    earlier: [{ label: 'star', img: '/lep1/items/item-star-gold.png' }, { label: 'apple', img: '/lep1/items/item-apple.png' }, { label: 'cake', img: '/lep1/items/item-cake.png' }, { label: 'ball', img: '/lep1/items/item-ball-red.png' }, { label: 'hat', img: '/lep1/items/item-hat.png' }],
+    rounds: [{ line: 'It’s Game Day! I want a present!', choices: [{ label: 'present', img: '/lep1/items/item-gift.png' }, { label: 'ball', img: '/lep1/items/item-ball-red.png' }, { label: 'medal', img: '/lep1/items/item-hero-medal.png' }], answer: 0, say: 'A present! Let’s play!' }],
+    doneLine: 'Biscuit is so happy! See you next time!',
   },
   {
     id: 'wt6-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
@@ -2920,6 +3005,14 @@ export const LESSON_7_SCENES: Scene[] = classroomLook([
       line: 'You passed the Boss Test! Here is your Unit 1 trophy.',
       sticker: { img: feelSpr('pip-happy'), label: 'Unit 1 champion' },
     },
+  },
+  {
+    id: 'wt7-pet-pal', kind: 'pet-pal', bg: bgParkEmpty, who: 'pip', title: 'Pet Pal: Biscuit',
+    teacher: 'Routine (1 minute): Biscuit the puppy says what he wants. The student listens, taps it and says it. It goes on his shelf and he grows — the shelf keeps everything from earlier lessons.',
+    pet: { name: 'Biscuit', img: '/lep1/items/item-dog.png' },
+    earlier: [{ label: 'star', img: '/lep1/items/item-star-gold.png' }, { label: 'apple', img: '/lep1/items/item-apple.png' }, { label: 'cake', img: '/lep1/items/item-cake.png' }, { label: 'ball', img: '/lep1/items/item-ball-red.png' }, { label: 'hat', img: '/lep1/items/item-hat.png' }, { label: 'present', img: '/lep1/items/item-gift.png' }],
+    rounds: [{ line: 'You are a champion! I want a medal too!', choices: [{ label: 'banana', img: '/lep1/items/item-banana.png' }, { label: 'medal', img: '/lep1/items/item-hero-medal.png' }, { label: 'milk', img: '/lep1/items/item-milk.png' }], answer: 1, say: 'A medal! Well done, Biscuit!' }],
+    doneLine: 'Biscuit is so happy! See you next time!',
   },
   {
     id: 'wt7-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',

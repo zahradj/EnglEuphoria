@@ -173,7 +173,7 @@ S speaking · G game break · P phonics/reading · R review/boss · X extra time
 | **Escape Room** | — | ★ New (hello-doors upgrade) | Four doors, one puzzle each | R |
 | **Jeopardy Board** | — | ★ New | Pick a category and points | R |
 | Word Board / House Board | `word-board` / `house-board` | ⇄ Pre-A1 | Roll, hop, read or answer the square; ladders and slides | R |
-| **Pet Pal** | — | ★ New | Feed and dress a pet with the words you learned; it grows each lesson | X |
+| **Pet Pal** | — | ✓ built (`pet-pal`, routine after the sticker reward in every A1 lesson) | Feed and dress a pet with the words you learned; it grows each lesson | X |
 
 ## 10. Built since the first list (2026-10-12 / 13)
 
@@ -227,7 +227,7 @@ Sources: Wordwall templates (34+ interactives: Maze Chase, Airplane, Whack-a-mol
 | Platform mechanic | Our version | A1 language | Build on | Status | Slot |
 |---|---|---|---|---|---|
 | Wordwall Airplane | **Jungle Glider**: Coco glides; tap or steer into the cloud with the right answer, and wrong clouds puff away gently | sentence ↔ picture | `glider` (U1 L2 `wt2-glider` feelings, U2 L2 `ja2-glider` can; tap a cloud to steer, no timer) | ✓ built | G |
-| Wordwall Balloon Pop | **Balloon Match**: balloons carry words and float to their pictures; pop when matched | word ↔ sentence | `count-balloons` → universal | ⇄ upgrade | C, G |
+| Wordwall Balloon Pop | **Balloon Match**: balloons carry words and float to their pictures; pop when matched | word ↔ sentence | `balloon-match` (U1 L4 `wt4-balloon-match` "This is Mia.", U2 L1 `ja-balloon-match` "It’s big and grey."); tap a balloon, then its picture | ✓ built | C, G |
 | Wordwall Anagram / Duolingo ABC word puzzle | **Letter Bubbles**: scrambled letter bubbles; drag them into order and the word is said and read in a sentence | spelling | `letter-bubbles` (U1 L4 `wt4-letter-bubbles` F words, U2 L5 `ja5-letter-bubbles` story words); tap the bubbles in order | ✓ built | P |
 | Wordwall Labyrinth / Maze Chase | exists (`picture-maze`); **+ chase mode**: a friendly bee follows slowly and the child must reach the answer first | answers | `picture-maze` | ⇄ upgrade | G |
 | Blooket Gold Quest (no stealing) | **Treasure Chests**: each right answer opens a chest with coins, a double or a sticker; coins fill the class jar (no taking from others) | any review | `chest-quest` (U1 L7, U2 L6) | ✓ built | R |
@@ -235,11 +235,11 @@ Sources: Wordwall templates (34+ interactives: Maze Chase, Airplane, Whack-a-mol
 | Blooket Tower Defense | **Garden Guard** (listed in §5): right answers plant flowers that keep the friendly goats from the veggies; nothing gets hurt | any | ★ New | ★ New | R |
 | Gimkit The Floor is Lava | **Rising River**: the class answers together and each answer lifts the bridge before the water rises; cooperative, so the teacher and child win together | any | `rising-river` (U1 L7, U2 L7) | ✓ built | R |
 | Gimkit Fishtopia | exists: `shape-fishing` / `sound-fish`; **+ shop**: catches buy aquarium decorations | any | ⇄ upgrade | ⇄ upgrade | G |
-| Gimkit Capture the Flag (safe) | **Team Flags**: teacher vs child; each right answer moves your flag one hill closer; first to the top | Q&A | ★ new `flag-race` | ★ New | R |
+| Gimkit Capture the Flag (safe) | **Team Flags**: teacher vs child; each right answer moves your flag one hill closer; first to the top | Q&A | `flag-race` (U1 L6 `wt6-team-flags`, U2 L6 `ja6-team-flags`); turns alternate, the child reads the teacher’s question aloud; on one screen the friend answers for the teacher | ✓ built | R |
 | Gimkit Draw That | see Pictionary (§11) | | | | |
 | Kahoot Robot Run / Treasure Trove | `answer-race` looks already cover running; **+ treasure look**: collect gems on the path | Q&A | `answer-race` new look | ⇄ re-skin | R |
 | Baamboozle board (one screen) | **Jungle Jeopardy** (listed in §9): a grid of picture tiles by category and points; tiles flip to a question, with a mystery "Boom!" tile that doubles | review | `quiz-board` (U1 L6, U2 L7) | ✓ built | R |
-| Lingokids / Khan Kids collectible pets | **Pet Pal** (listed in §9): every lesson's words feed and dress the pet, which grows across the unit | unit words | ★ New | ★ New | X |
+| Lingokids / Khan Kids collectible pets | **Pet Pal** (listed in §9): every lesson's words feed and dress the pet, which grows across the unit | unit words | `pet-pal`: Biscuit the puppy, after the sticker reward in all 14 A1 lessons; `earlier` (lesson data) keeps the shelf, so it is the same on every device | ✓ built | X |
 | Duolingo ABC illustrated stories | Reader + story GIFs (scenarios waiting for the owner's OK) | reading | `reader` | ✓ built (GIFs pending) | P |
 
 ### Build order suggestion (most value, least art)

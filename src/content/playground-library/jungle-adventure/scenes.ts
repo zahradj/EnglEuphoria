@@ -257,6 +257,18 @@ export const LESSON_A1U2L1_SCENES: Scene[] = [
     bg: bgWide,
   },
   { id: 'ja-jigsaw', kind: 'jigsaw-puzzle', bg: bgWide, teacher: 'Build the story picture — then read its page!', image: jungleRescue(3), rows: 2, cols: 3 },
+  {
+    id: 'ja-balloon-match', kind: 'balloon-match', bg: bgWide, who: 'leo', title: 'Balloon Match: which animal?',
+    teacher: 'Reading game: the student reads a balloon (tap it to hear it), then taps the animal it describes. The balloon floats down and pops!',
+    pairs: [
+      { text: 'It’s big and grey.', img: ANIMALS.elephant.img, label: 'elephant' },
+      { text: 'It’s long and green.', img: ANIMALS.snake.img, label: 'snake' },
+      { text: 'It’s small and green.', img: ANIMALS.frog.img, label: 'frog' },
+      { text: 'It’s big and yellow.', img: ANIMALS.lion.img, label: 'lion' },
+      { text: 'It’s small and blue.', img: ANIMALS.bird.img, label: 'bird' },
+    ],
+    doneLine: 'Pop, pop! You can read about animals!',
+  },
   /* Phonics: short i → Brick Crush → Blend & Read → tongue twister */
   {
     id: 'ja-sound-i', kind: 'sound-model', bg: bgWide, who: 'pip', letter: 'I', phoneme: '/i/', sound: 'i', soundSide: 'center',
@@ -321,6 +333,14 @@ export const LESSON_A1U2L1_SCENES: Scene[] = [
       line: 'Super safari! Here is your sticker.',
       sticker: { img: ANIMALS.elephant.img, label: 'Jungle explorer' },
     },
+  },
+  {
+    id: 'ja-pet-pal', kind: 'pet-pal', bg: bgWide, who: 'leo', title: 'Pet Pal: Biscuit in the jungle',
+    teacher: 'Routine (1 minute): Biscuit the puppy says what he wants. The student listens, taps it and says it. It goes on his shelf and he grows — the shelf keeps everything from earlier lessons.',
+    pet: { name: 'Biscuit', img: '/lep1/items/item-dog.png' },
+    earlier: [{ label: 'star', img: '/lep1/items/item-star-gold.png' }, { label: 'apple', img: '/lep1/items/item-apple.png' }, { label: 'cake', img: '/lep1/items/item-cake.png' }, { label: 'ball', img: '/lep1/items/item-ball-red.png' }, { label: 'hat', img: '/lep1/items/item-hat.png' }, { label: 'present', img: '/lep1/items/item-gift.png' }, { label: 'medal', img: '/lep1/items/item-hero-medal.png' }],
+    rounds: [{ line: 'We are in the jungle! I want a banana!', choices: [{ label: 'apple', img: '/lep1/items/item-apple.png' }, { label: 'banana', img: '/lep1/items/item-banana.png' }, { label: 'hat', img: '/lep1/items/item-hat.png' }], answer: 1, say: 'A banana! Yum!' }],
+    doneLine: 'Biscuit is so happy! See you next time!',
   },
   {
     id: 'ja-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
@@ -769,6 +789,14 @@ export const LESSON_A1U2L2_SCENES: Scene[] = [
     },
   },
   {
+    id: 'ja2-pet-pal', kind: 'pet-pal', bg: bgWide, who: 'leo', title: 'Pet Pal: Biscuit in the jungle',
+    teacher: 'Routine (1 minute): Biscuit the puppy says what he wants. The student listens, taps it and says it. It goes on his shelf and he grows — the shelf keeps everything from earlier lessons.',
+    pet: { name: 'Biscuit', img: '/lep1/items/item-dog.png' },
+    earlier: [{ label: 'star', img: '/lep1/items/item-star-gold.png' }, { label: 'apple', img: '/lep1/items/item-apple.png' }, { label: 'cake', img: '/lep1/items/item-cake.png' }, { label: 'ball', img: '/lep1/items/item-ball-red.png' }, { label: 'hat', img: '/lep1/items/item-hat.png' }, { label: 'present', img: '/lep1/items/item-gift.png' }, { label: 'medal', img: '/lep1/items/item-hero-medal.png' }, { label: 'banana', img: '/lep1/items/item-banana.png' }],
+    rounds: [{ line: 'I can run and jump! Now I want a cookie!', choices: [{ label: 'cookie', img: '/lep1/items/item-cookie.png' }, { label: 'hat', img: '/lep1/items/item-hat.png' }, { label: 'green hat', img: '/lep1/items/item-hat-green.png' }], answer: 0, say: 'A cookie! Biscuit can run!' }],
+    doneLine: 'Biscuit is so happy! See you next time!',
+  },
+  {
     id: 'ja2-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
     scene: {
       id: 'ja2-home-mission', kind: 'home-mission', bg: bgFriends, who: 'willow',
@@ -1097,6 +1125,14 @@ export const LESSON_A1U2L3_SCENES: Scene[] = [
       line: 'Super questions! Here is your sticker.',
       sticker: { img: it('alligator'), label: 'Question champion' },
     },
+  },
+  {
+    id: 'ja3-pet-pal', kind: 'pet-pal', bg: bgWide, who: 'leo', title: 'Pet Pal: Biscuit in the jungle',
+    teacher: 'Routine (1 minute): Biscuit the puppy says what he wants. The student listens, taps it and says it. It goes on his shelf and he grows — the shelf keeps everything from earlier lessons.',
+    pet: { name: 'Biscuit', img: '/lep1/items/item-dog.png' },
+    earlier: [{ label: 'star', img: '/lep1/items/item-star-gold.png' }, { label: 'apple', img: '/lep1/items/item-apple.png' }, { label: 'cake', img: '/lep1/items/item-cake.png' }, { label: 'ball', img: '/lep1/items/item-ball-red.png' }, { label: 'hat', img: '/lep1/items/item-hat.png' }, { label: 'present', img: '/lep1/items/item-gift.png' }, { label: 'medal', img: '/lep1/items/item-hero-medal.png' }, { label: 'banana', img: '/lep1/items/item-banana.png' }, { label: 'cookie', img: '/lep1/items/item-cookie.png' }],
+    rounds: [{ line: 'Can I have milk, please?', choices: [{ label: 'banana', img: '/lep1/items/item-banana.png' }, { label: 'milk', img: '/lep1/items/item-milk.png' }, { label: 'apple', img: '/lep1/items/item-apple.png' }], answer: 1, say: 'Yes, you can! Milk for Biscuit!' }],
+    doneLine: 'Biscuit is so happy! See you next time!',
   },
   {
     id: 'ja3-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
@@ -1438,6 +1474,14 @@ export const LESSON_A1U2L4_SCENES: Scene[] = [
     },
   },
   {
+    id: 'ja4-pet-pal', kind: 'pet-pal', bg: bgWide, who: 'leo', title: 'Pet Pal: Biscuit in the jungle',
+    teacher: 'Routine (1 minute): Biscuit the puppy says what he wants. The student listens, taps it and says it. It goes on his shelf and he grows — the shelf keeps everything from earlier lessons.',
+    pet: { name: 'Biscuit', img: '/lep1/items/item-dog.png' },
+    earlier: [{ label: 'star', img: '/lep1/items/item-star-gold.png' }, { label: 'apple', img: '/lep1/items/item-apple.png' }, { label: 'cake', img: '/lep1/items/item-cake.png' }, { label: 'ball', img: '/lep1/items/item-ball-red.png' }, { label: 'hat', img: '/lep1/items/item-hat.png' }, { label: 'present', img: '/lep1/items/item-gift.png' }, { label: 'medal', img: '/lep1/items/item-hero-medal.png' }, { label: 'banana', img: '/lep1/items/item-banana.png' }, { label: 'cookie', img: '/lep1/items/item-cookie.png' }, { label: 'milk', img: '/lep1/items/item-milk.png' }],
+    rounds: [{ line: 'I’ve got a long tail! I want a green hat!', choices: [{ label: 'green hat', img: '/lep1/items/item-hat-green.png' }, { label: 'balloon', img: '/lep1/items/item-balloon-red.png' }, { label: 'medal', img: '/lep1/items/item-hero-medal.png' }], answer: 0, say: 'A green hat! Cool, Biscuit!' }],
+    doneLine: 'Biscuit is so happy! See you next time!',
+  },
+  {
     id: 'ja4-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
     scene: {
       id: 'ja4-home-mission', kind: 'home-mission', bg: bgFriends, who: 'pip',
@@ -1699,6 +1743,14 @@ export const LESSON_A1U2L5_SCENES: Scene[] = [
       line: 'You read the whole story! Here is your sticker.',
       sticker: { img: it('elephant'), label: 'The Jungle Rescue' },
     },
+  },
+  {
+    id: 'ja5-pet-pal', kind: 'pet-pal', bg: bgWide, who: 'leo', title: 'Pet Pal: Biscuit in the jungle',
+    teacher: 'Routine (1 minute): Biscuit the puppy says what he wants. The student listens, taps it and says it. It goes on his shelf and he grows — the shelf keeps everything from earlier lessons.',
+    pet: { name: 'Biscuit', img: '/lep1/items/item-dog.png' },
+    earlier: [{ label: 'star', img: '/lep1/items/item-star-gold.png' }, { label: 'apple', img: '/lep1/items/item-apple.png' }, { label: 'cake', img: '/lep1/items/item-cake.png' }, { label: 'ball', img: '/lep1/items/item-ball-red.png' }, { label: 'hat', img: '/lep1/items/item-hat.png' }, { label: 'present', img: '/lep1/items/item-gift.png' }, { label: 'medal', img: '/lep1/items/item-hero-medal.png' }, { label: 'banana', img: '/lep1/items/item-banana.png' }, { label: 'cookie', img: '/lep1/items/item-cookie.png' }, { label: 'milk', img: '/lep1/items/item-milk.png' }, { label: 'green hat', img: '/lep1/items/item-hat-green.png' }],
+    rounds: [{ line: 'Kip is safe! I want a red balloon!', choices: [{ label: 'star', img: '/lep1/items/item-star-gold.png' }, { label: 'balloon', img: '/lep1/items/item-balloon-red.png' }, { label: 'trophy', img: '/lep1/items/item-banana-trophy.png' }], answer: 1, say: 'A red balloon! Hooray!' }],
+    doneLine: 'Biscuit is so happy! See you next time!',
   },
   {
     id: 'ja5-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
@@ -2020,6 +2072,22 @@ export const LESSON_A1U2L6_SCENES: Scene[] = [
     },
   },
   {
+    id: 'ja6-team-flags', kind: 'flag-race', bg: bgWaterfall, who: 'leo', title: 'Team Flags: you vs your teacher',
+    teacher: 'Team game, student vs teacher: turns take it in turns. On the student’s turn they answer; on the teacher’s turn the student READS the question to the teacher and the teacher answers. Each right answer moves your flag up your hill. Nobody slides back.',
+    rounds: [
+      { ask: 'Can a bird fly?', choices: ['Yes, it can.', 'No, it can’t.'], answer: 0 },
+      { ask: 'Can a fish climb?', choices: ['Yes, it can.', 'No, it can’t.'], answer: 1 },
+      { ask: 'What is it? It’s long and green.', choices: ['It’s a snake.', 'It’s a lion.'], answer: 0 },
+      { ask: 'Has the elephant got a long nose?', choices: ['Yes, it has.', 'No, it hasn’t.'], answer: 0 },
+      { ask: 'What can a monkey do?', choices: ['It can climb.', 'It can swim.'], answer: 0 },
+      { ask: 'Who helps Kip?', choices: ['The elephant.', 'The fish.'], answer: 0 },
+      { ask: 'Can you jump?', choices: ['Yes, I can!', 'It’s a frog.'], answer: 0 },
+      { ask: 'What colour is the frog?', choices: ['It’s green.', 'It’s grey.'], answer: 0 },
+      { ask: 'Can a lion run fast?', choices: ['Yes, it can.', 'No, it can’t.'], answer: 0 },
+    ],
+    doneLine: 'Your flag is on the top! What a team game!',
+  },
+  {
     id: 'ja6-quiz-show', kind: 'join-stage', bg: bgObstacle, teacher: 'Free: swap! Now the STUDENT is the quiz master and asks Leo. Leo answers.', cast: ['leo'],
     turns: [
       { who: 'student', line: 'Leo, can a crocodile fly?' },
@@ -2066,6 +2134,14 @@ export const LESSON_A1U2L6_SCENES: Scene[] = [
       line: 'You won Jungle Game Day! Here is your sticker.',
       sticker: { img: it('banana-trophy'), label: 'Jungle Game Day' },
     },
+  },
+  {
+    id: 'ja6-pet-pal', kind: 'pet-pal', bg: bgWide, who: 'leo', title: 'Pet Pal: Biscuit in the jungle',
+    teacher: 'Routine (1 minute): Biscuit the puppy says what he wants. The student listens, taps it and says it. It goes on his shelf and he grows — the shelf keeps everything from earlier lessons.',
+    pet: { name: 'Biscuit', img: '/lep1/items/item-dog.png' },
+    earlier: [{ label: 'star', img: '/lep1/items/item-star-gold.png' }, { label: 'apple', img: '/lep1/items/item-apple.png' }, { label: 'cake', img: '/lep1/items/item-cake.png' }, { label: 'ball', img: '/lep1/items/item-ball-red.png' }, { label: 'hat', img: '/lep1/items/item-hat.png' }, { label: 'present', img: '/lep1/items/item-gift.png' }, { label: 'medal', img: '/lep1/items/item-hero-medal.png' }, { label: 'banana', img: '/lep1/items/item-banana.png' }, { label: 'cookie', img: '/lep1/items/item-cookie.png' }, { label: 'milk', img: '/lep1/items/item-milk.png' }, { label: 'green hat', img: '/lep1/items/item-hat-green.png' }, { label: 'balloon', img: '/lep1/items/item-balloon-red.png' }],
+    rounds: [{ line: 'It’s Jungle Game Day! I want a trophy!', choices: [{ label: 'trophy', img: '/lep1/items/item-banana-trophy.png' }, { label: 'ball', img: '/lep1/items/item-ball-red.png' }, { label: 'present', img: '/lep1/items/item-gift.png' }], answer: 0, say: 'A trophy! Biscuit is a winner!' }],
+    doneLine: 'Biscuit is so happy! See you next time!',
   },
   {
     id: 'ja6-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
@@ -2302,6 +2378,14 @@ export const LESSON_A1U2L7_SCENES: Scene[] = [
       line: 'You passed the Boss Test! Here is your Unit 2 trophy — and piece 1 of the Golden Compass!',
       sticker: { img: it('banana-trophy'), label: 'Golden Compass piece 1' },
     },
+  },
+  {
+    id: 'ja7-pet-pal', kind: 'pet-pal', bg: bgWide, who: 'leo', title: 'Pet Pal: Biscuit in the jungle',
+    teacher: 'Routine (1 minute): Biscuit the puppy says what he wants. The student listens, taps it and says it. It goes on his shelf and he grows — the shelf keeps everything from earlier lessons.',
+    pet: { name: 'Biscuit', img: '/lep1/items/item-dog.png' },
+    earlier: [{ label: 'star', img: '/lep1/items/item-star-gold.png' }, { label: 'apple', img: '/lep1/items/item-apple.png' }, { label: 'cake', img: '/lep1/items/item-cake.png' }, { label: 'ball', img: '/lep1/items/item-ball-red.png' }, { label: 'hat', img: '/lep1/items/item-hat.png' }, { label: 'present', img: '/lep1/items/item-gift.png' }, { label: 'medal', img: '/lep1/items/item-hero-medal.png' }, { label: 'banana', img: '/lep1/items/item-banana.png' }, { label: 'cookie', img: '/lep1/items/item-cookie.png' }, { label: 'milk', img: '/lep1/items/item-milk.png' }, { label: 'green hat', img: '/lep1/items/item-hat-green.png' }, { label: 'balloon', img: '/lep1/items/item-balloon-red.png' }, { label: 'trophy', img: '/lep1/items/item-banana-trophy.png' }],
+    rounds: [{ line: 'I am a jungle explorer! I want a rainbow medal!', choices: [{ label: 'medal', img: '/lep1/items/item-hero-medal.png' }, { label: 'rainbow medal', img: '/lep1/items/item-medal-rainbow.png' }, { label: 'cookie', img: '/lep1/items/item-cookie.png' }], answer: 1, say: 'A rainbow medal! Well done!' }],
+    doneLine: 'Biscuit is so happy! See you next time!',
   },
   {
     id: 'ja7-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',

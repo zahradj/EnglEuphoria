@@ -27,6 +27,8 @@ export const ROUTINE_KINDS: ReadonlySet<string> = new Set([
   // Extra practice (owner 2026-10-12: "create extra practice … the maximum pages could be 25"): three review mechanics that
   // rotate across lessons so neighbours differ (Word Board, Home Hunt, Flip & Say) — part of the spine, not a lesson's games.
   'word-board', 'home-hunt', 'flip-say', 'picture-maze',
+  // Pet Pal: a short collecting moment after the sticker reward in every A1 lesson (Biscuit the puppy grows across units).
+  'pet-pal',
 ]);
 
 /** Apps, schools and exam boards to research before every lesson (rotate; never only one). */
