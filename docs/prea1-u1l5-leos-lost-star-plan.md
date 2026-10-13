@@ -25,7 +25,7 @@ checking *after* (practice → produce). It is PPP with the story in the middle.
 | 4 | **Pre-story** (predict) | Intro: "Look! This is Leo. What does he have? A star! What can happen?" | prediction from the cover |
 | 5 | **Present** | Story words with pictures: star, hat, bat, mat, ant, tree | the child knows every word before the film |
 | 6 | **Present** (body) | Story moves: wave hello, blow like the wind, sad face, look under, jump happy | gestures to do during the film (TPR) |
-| 7-8 | **While-story** | The film, part 1 then part 2, straight after each other (picture questions pause it) | one story, not cut in half |
+| 7 | **While-story** | The film — parts 1 and 2 joined into ONE 64-second film (owner 2026-10-13); 3 picture questions pause it | one story, not cut in half |
 | 9 | **Practice** (game) | ★ NEW **Wind Catch** — the wind blows the story things across the sky; catch the one Leo names; the star last | the nouns, in the story's own world |
 | 10 | **Practice** (game) | **Where's the star?** (lift-the-flap) — the child asks "Is it under the hat?" and looks | the refrain, said by the child |
 | 11 | Practice | **Story order** — put the pictures in order, tell it: first, then, at the end | retell |

@@ -2351,7 +2351,7 @@ export const LESSON_4_SCENES: Scene[] = [
  * Research (mechanics only): pre/while/post storytelling, picture walk and prediction (Quebec MEES "Picture Walk",
  * JALT picturebook post-reading projects), TPR storytelling with preschoolers (Universidad de Cuenca), lift-the-flap
  * refrain books ("Where's Spot?"), lost-toy picture books for the sad → happy arc, kids' app catch games (Wind Catch).
- * Film: public/lep1/video/leo-story-u1l5-a/-b (scripts/story-videos.json "u1l5-leo"; made before the plan rule).
+ * Film: public/lep1/video/leo-story-u1l5 — parts 1 and 2 joined into one 64 s film (owner 2026-10-13: "merge part 1 and 2 in one video"; scripts/story-videos.json "u1l5-leo").
  * ========================================================================= */
 
 const bgL5Play = `${A}/scenes/bg-l5-play-wide.png`;
@@ -2433,30 +2433,22 @@ export const LESSON_5_SCENES: Scene[] = [
 
   /* WHILE-STORY: the whole film — part 1, then part 2 straight away (picture questions pause it) */
   {
-    id: 'l5-story-a', kind: 'story-video', bg: bgL5Play, videoUrl: `${A}/video/leo-story-u1l5-a.mp4?v=1`, title: "Leo's Lost Star — part 1",
-    teacher: 'While watching (part 1): make the moves with the characters — wave, blow like the wind, sad face — and answer the picture question. Part 2 follows straight away.',
+    id: 'l5-story', kind: 'story-video', bg: bgL5Play, videoUrl: `${A}/video/leo-story-u1l5.mp4?v=1`, title: "Leo's Lost Star",
+    teacher: 'The whole story in one film (owner 2026-10-13: "merge part 1 and 2 in one video"). Make the moves with the characters — wave, blow like the wind, sad face — answer the picture questions, and before each look in the search ask: is the star there? Say the refrain with the friends: "Is it under the hat? No!"',
     pages: [
       { img: bgL5Play, who: 'pip', line: 'This is Leo. He has a shiny star. He is happy!', motion: 'zoom-in', fx: 'sparkles', atSec: 0 },
       { img: bgL5Wind, who: 'pip', line: 'Whoosh! The wind blows. Oh no! Where is the star?', motion: 'pan-right', atSec: 8 },
       { img: bgL5SadW, who: 'leo', line: 'I am sad. I lost my star.', motion: 'zoom-in', fx: 'tear', atSec: 16 },
       { img: bgL5Friends, who: 'mia', line: 'Hello, Leo! My name is Mia. We can help you!', motion: 'zoom-out', fx: 'hearts', atSec: 24 },
+      { img: bgL5HatW, who: 'bella', line: "Is it under the hat? No! It's a bat!", motion: 'pan-right', atSec: 32 },
+      { img: bgL5MatW, who: 'mia', line: "Is it under the mat? No! It's an ant!", motion: 'pan-left', atSec: 40 },
+      { img: bgL5Glow, who: 'willow', line: 'Look! Under the tree!', motion: 'zoom-in', fx: 'sparkles', atSec: 48 },
+      { img: bgL5FoundW, who: 'leo', line: 'My star! I am happy! Thank you, friends!', motion: 'zoom-out', fx: 'hearts', atSec: 56 },
     ],
     checkpoints: [
       { afterPage: 2, who: 'pip', question: 'How is Leo?', answer: 'Sad', options: [{ label: 'Happy', img: getEmotionSprite('leo', 'happy') }, { label: 'Sad', img: getEmotionSprite('leo', 'sad') }, { label: 'Angry', img: getEmotionSprite('leo', 'angry') }] },
-    ],
-  },
-  {
-    id: 'l5-story-b', kind: 'story-video', bg: bgL5Glow, videoUrl: `${A}/video/leo-story-u1l5-b.mp4?v=1`, title: "Leo's Lost Star — part 2",
-    teacher: 'While watching (part 2): the search! Before each look, ask the child: is the star there? Say the refrain with the friends: "Is it under the hat? No!"',
-    pages: [
-      { img: bgL5HatW, who: 'bella', line: "Is it under the hat? No! It's a bat!", motion: 'pan-right', atSec: 0 },
-      { img: bgL5MatW, who: 'mia', line: "Is it under the mat? No! It's an ant!", motion: 'pan-left', atSec: 8 },
-      { img: bgL5Glow, who: 'willow', line: 'Look! Under the tree!', motion: 'zoom-in', fx: 'sparkles', atSec: 16 },
-      { img: bgL5FoundW, who: 'leo', line: 'My star! I am happy! Thank you, friends!', motion: 'zoom-out', fx: 'hearts', atSec: 24 },
-    ],
-    checkpoints: [
-      { afterPage: 0, who: 'bella', question: 'What is under the hat?', answer: 'A bat', options: [{ label: 'A star', img: itemStarGold }, { label: 'A bat', img: itemBat }, { label: 'An ant', img: itemAnt }] },
-      { afterPage: 2, who: 'willow', question: 'Where is the star?', answer: 'Under the tree', options: [{ label: 'Under the hat', img: itemHat }, { label: 'Under the tree', img: itemTree }, { label: 'In the bag', img: itemBag }] },
+      { afterPage: 4, who: 'bella', question: 'What is under the hat?', answer: 'A bat', options: [{ label: 'A star', img: itemStarGold }, { label: 'A bat', img: itemBat }, { label: 'An ant', img: itemAnt }] },
+      { afterPage: 6, who: 'willow', question: 'Where is the star?', answer: 'Under the tree', options: [{ label: 'Under the hat', img: itemHat }, { label: 'Under the tree', img: itemTree }, { label: 'In the bag', img: itemBag }] },
     ],
   },
 
