@@ -15,7 +15,8 @@ for k, word in enumerate(words):
     if word == '-':
         continue
     r, c = divmod(k, cols)
-    cell = np.asarray(im.crop((c * W // cols, r * H // rows, (c + 1) * W // cols, (r + 1) * H // rows))).astype(int)
+    pad = int(0.05 * W // cols)  # a little bleed so an object that crosses the grid line is not cut
+    cell = np.asarray(im.crop((max(0, c * W // cols - pad), max(0, r * H // rows - pad), min(W, (c + 1) * W // cols + pad), min(H, (r + 1) * H // rows + pad)))).astype(int)
     white = (cell.min(2) > 232) & (np.ptp(cell, axis=2) < 18)
     lab, _ = ndimage.label(white)
     border = set(np.unique(np.concatenate([lab[0], lab[-1], lab[:, 0], lab[:, -1]]))) - {0}

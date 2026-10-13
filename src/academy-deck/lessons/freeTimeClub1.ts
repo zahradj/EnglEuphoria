@@ -139,6 +139,24 @@ export const FREE_TIME_CLUB_1: DeckScript = {
       hints: ['Flip two cards. Say the word when you find a pair.'],
     },
 
+    {
+      id: 'match-club-drag', kind: 'match', part: 2, stage: 'controlled', flex: true, note: 'Bonus game: skip it if time is short.', bg: 'club-lobby', actors: [who('Ava', 'right')], trains: [1, 2],
+      prompt: 'Drag each club word onto its picture.',
+      pairs: [{ word: 'club', art: CLUB }, { word: 'fair', art: FAIR }, { word: 'member', art: MEMBER }, { word: 'poster', art: POSTER }, { word: 'Friday', art: FRIDAY }],
+      hints: ['Grab a word, drag it to the picture. Tap a word to hear it.'],
+    },
+    {
+      id: 'shadow-club', kind: 'shadow', part: 2, stage: 'controlled', flex: true, note: 'Bonus game: skip it if time is short.', bg: 'club-lobby', actors: [who('Vee', 'left')], trains: [1, 2],
+      prompt: 'Whose shadow is it? Pick the word.',
+      rounds: [
+        { art: CLUB, answer: 'club', options: ['club', 'poster', 'member'] },
+        { art: FAIR, answer: 'fair', options: ['Friday', 'fair', 'club'] },
+        { art: MEMBER, answer: 'member', options: ['member', 'fair', 'poster'] },
+        { art: POSTER, answer: 'poster', options: ['club', 'member', 'poster'] },
+      ],
+      hints: ['Look at the shape. Which word is it?'],
+    },
+
     // ---------- 3 · Model, rule, hobby words, controlled practice ----------
     {
       id: 'model-like', kind: 'model', part: 3, stage: 'model', bg: 'club-stage', actors: [who('Vee', 'left'), who('Ava', 'center'), who('Theo', 'right')], trains: [3, 4],
@@ -185,6 +203,29 @@ export const FREE_TIME_CLUB_1: DeckScript = {
         { say: 'I like watching films.', options: ['I like watching films.', 'I like listening to music.', 'I love watching films.'], answer: 'I like watching films.' },
       ],
       hints: ['Listen carefully. Like and love sound different.'],
+    },
+
+    {
+      id: 'mem-hobby', kind: 'memory', part: 3, stage: 'controlled', flex: true, note: 'Bonus game: skip it if time is short.', bg: 'club-stage', actors: [who('Ava', 'left')], trains: [2],
+      prompt: 'Memory! Find each hobby picture and its word.',
+      pairs: [{ art: PLAY, text: 'play' }, { art: WATCH, text: 'watch' }, { art: LISTEN, text: 'listen to' }, { art: DRAW, text: 'draw' }],
+      hints: ['Flip two cards. Say the word when you find a pair.'],
+    },
+    {
+      id: 'shadow-hobby', kind: 'shadow', part: 3, stage: 'controlled', flex: true, note: 'Bonus game: skip it if time is short.', bg: 'club-stage', actors: [who('Vee', 'right')], trains: [2],
+      prompt: 'Whose shadow is it? Pick the hobby word.',
+      rounds: [
+        { art: WATCH, answer: 'watch', options: ['listen to', 'watch', 'play'] },
+        { art: LISTEN, answer: 'listen to', options: ['draw', 'listen to', 'watch'] },
+        { art: DRAW, answer: 'draw', options: ['draw', 'play', 'listen to'] },
+      ],
+      hints: ['Look at the shape. Which hobby is it?'],
+    },
+    {
+      id: 'match-like', kind: 'match', part: 3, stage: 'controlled', flex: true, note: 'Bonus game: skip it if time is short.', bg: 'club-stage', actors: [who('Theo', 'right')], trains: [3, 4],
+      prompt: 'Drag each sentence onto the picture it tells about.',
+      pairs: [{ word: 'I like music.', art: MUSIC }, { word: 'I love drawing.', art: DRAW }, { word: 'I like playing games.', art: PLAY }, { word: 'I like football.', art: FOOTBALL }],
+      hints: ['Tap a sentence to hear it, then tap the picture.'],
     },
 
     // ---------- 4 · Energiser: free choices ----------

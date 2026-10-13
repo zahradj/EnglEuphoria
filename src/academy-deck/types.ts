@@ -45,6 +45,8 @@ export type Stage = 'context' | 'model' | 'rule' | 'controlled' | 'free' | 'prod
 export const STAGE_ORDER: Stage[] = ['context', 'model', 'rule', 'controlled', 'free', 'produce'];
 
 export interface SlideBase {
+  /** a bonus game (owner 2026-10-14: more vocabulary games): the teacher can skip it when time is short; it is not counted in the core 60 minutes */
+  flex?: boolean;
   /** the teaching stage of this slide (optional; lessons that set it are checked for the order model, rule, controlled, free, produce) */
   stage?: Stage;
   id: string;
