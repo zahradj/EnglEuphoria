@@ -132,6 +132,18 @@ export const LESSON_A1U2L1_SCENES: Scene[] = [
     },
   },
   {
+    id: 'ja-musical-islands', kind: 'musical-islands', bg: '/lep1/scenes/bg-game-pond-wide.png', who: 'leo', music: '/lep1/audio/hello-song.mp3', title: 'Musical Lily Pads',
+    teacher: 'Game: press the music — the animals hop between the lily pads. When it stops, listen: Who is on the blue lily pad? The student taps the animal and says it. Nobody is out!',
+    players: [{ label: 'frog', img: ANIMALS.frog.img }, { label: 'bird', img: ANIMALS.bird.img }, { label: 'monkey', img: ANIMALS.monkey.img }, { label: 'elephant', img: ANIMALS.elephant.img }],
+    rounds: [
+      { at: [0, 1, 2, 3], pad: 1, ask: 'Who is on the blue lily pad?', say: 'The bird! It’s a bird.' },
+      { at: [2, 3, 0, 1], pad: 2, ask: 'Who is on the yellow lily pad?', say: 'The frog! It’s a frog.' },
+      { at: [1, 0, 3, 2], pad: 3, ask: 'Who is on the green lily pad?', say: 'The monkey! It’s a monkey.' },
+      { at: [2, 1, 3, 0], pad: 0, ask: 'Who is on the red lily pad?', say: 'The elephant! It’s an elephant.' },
+    ],
+    doneLine: 'Great listening! Everybody is still in the game!',
+  },
+  {
     id: 'ja-mystery-bag', kind: 'prea1', teacher: 'Guided: Who is in the bag? Look at the shape, tap the animal — then say it with its colour: It’s a grey elephant!',
     scene: {
       id: 'ja-mystery-bag', kind: 'mystery-bag', bg: bgWide, who: 'leo',
@@ -520,6 +532,21 @@ export const LESSON_A1U2L2_SCENES: Scene[] = [
         { word: 'frog · jump', emoji: '\u{1F438}', target: 'left' },
       ],
     },
+  },
+  {
+    id: 'ja2-red-green', kind: 'red-green', bg: bgWide, who: 'leo', runner: it('pip-run'), title: 'Red Light, Green Light!',
+    teacher: 'Listening race: on green, the student taps the action they hear and Pip moves on (they can do the action too!). On red — freeze! Do not tap until it turns green.',
+    cards: [{ label: 'run', img: it('pip-run') }, { label: 'jump', img: it('pip-jump') }, { label: 'climb', img: it('pip-climb') }, { label: 'swim', img: it('fish-swim') }],
+    rounds: [
+      { light: 'green', say: 'Green light! Run!', answer: 0, steps: 2 },
+      { light: 'green', say: 'Green light! Jump!', answer: 1, steps: 2 },
+      { light: 'red', say: 'Red light! Stop!' },
+      { light: 'green', say: 'Green light! Climb!', answer: 2, steps: 2 },
+      { light: 'green', say: 'Green light! Swim!', answer: 3, steps: 2 },
+      { light: 'red', say: 'Red light! Freeze!' },
+      { light: 'green', say: 'Green light! Run!', answer: 0, steps: 2 },
+    ],
+    doneLine: 'Pip is at the flag! Great listening!',
   },
   /* 10 The lesson song (after the words and the first game, owner 2026-10-10) */
   {
@@ -1272,6 +1299,19 @@ export const LESSON_A1U2L4_SCENES: Scene[] = [
     ],
   },
   {
+    id: 'ja4-crossword', kind: 'crossword', bg: bgWide, who: 'leo', title: 'Jungle Crossword',
+    teacher: 'Spelling game: tap a picture, then tap the letters to fill its squares. Crossing letters help! Say each word when it is done.',
+    words: [
+      { word: 'snake', img: ANIMALS.snake.img, say: 'Snake! It’s long and green.' },
+      { word: 'frog', img: ANIMALS.frog.img, say: 'Frog! It’s small and green.' },
+      { word: 'lion', img: ANIMALS.lion.img, say: 'Lion! It’s big and yellow.' },
+      { word: 'fish', img: ANIMALS.fish.img, say: 'Fish! It can swim.' },
+      { word: 'nose', img: ANIMALS.elephant.img, say: 'Nose! The elephant has got a long nose.' },
+      { word: 'tail', img: ANIMALS.crocodile.img, say: 'Tail! The crocodile has got a long tail.' },
+    ],
+    doneLine: 'You did the whole crossword!',
+  },
+  {
     id: 'ja4-whos-missing', kind: 'prea1', teacher: 'Reading: the story animals on the photo wall — lights off! Who is missing? Say: The crocodile is missing!',
     scene: {
       id: 'ja4-whos-missing', kind: 'whos-missing', bg: jungleRescue(9), who: 'pip',
@@ -1608,6 +1648,16 @@ export const LESSON_A1U2L5_SCENES: Scene[] = [
         { sound: 'i', options: [{ word: 'cheese', img: it('cheese') }, { word: 'shell', img: it('shell') }, { word: 'insect', img: it('insect') }], answer: 2 },
       ],
     },
+  },
+  {
+    id: 'ja5-letter-bubbles', kind: 'letter-bubbles', bg: bgWide, who: 'leo', title: 'Letter Bubbles: story words',
+    teacher: 'Spelling game: look at the picture, then pop the bubbles in order to spell the word from the story. Say the word at the end.',
+    words: [
+      { word: 'bird', img: ANIMALS.bird.img, say: 'Bird! The bird can fly.' },
+      { word: 'fish', img: ANIMALS.fish.img, say: 'Fish! The fish can swim.' },
+      { word: 'help', img: jungleRescue(5), say: 'Help! Kip says: Help! Help!' },
+    ],
+    doneLine: 'Pop, pop, pop! You can spell!',
   },
   {
     id: 'ja5-blend', kind: 'sound-blend', bg: bgWide,

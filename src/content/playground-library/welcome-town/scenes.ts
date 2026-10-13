@@ -561,6 +561,18 @@ export type Scene =
       id: string; kind: 'grid-hunt'; bg: string; teacher: string; title: string; who: CharKey;
       treasures: string[]; rounds: { ask: string; choices: string[]; answer: number; img?: string }[]; doneLine: string;
     }
+  | { id: string; kind: 'musical-islands'; bg: string; teacher: string; title: string; who: CharKey; music: string;
+      /** players hop between the four coloured lily pads while the music plays; each round `at` = pad of each player,
+       *  `pad` = the pad asked about ("Who is on the red lily pad?"). */
+      players: { label: string; img: string }[]; rounds: { at: number[]; pad: number; ask: string; say: string }[]; doneLine: string; }
+  | { id: string; kind: 'red-green'; bg: string; teacher: string; title: string; who: CharKey; runner: string;
+      cards: { label: string; img?: string }[];
+      /** green: tap `cards[answer]` and the runner moves `steps`; red: freeze (don't tap) until it turns green. */
+      rounds: { light: 'green' | 'red'; say: string; answer?: number; steps?: number }[]; doneLine: string; }
+  | { id: string; kind: 'letter-bubbles'; bg: string; teacher: string; title: string; who: CharKey;
+      words: { word: string; img: string; say: string }[]; doneLine: string; }
+  | { id: string; kind: 'crossword'; bg: string; teacher: string; title: string; who: CharKey;
+      words: { word: string; img: string; say: string }[]; doneLine: string; }
   | { id: string; kind: 'hot-cold'; bg: string; teacher: string; title: string; who: CharKey;
       /** The picture hides at (x, y) % of the 16:9 art; the child searches by tapping, the voice says Cold / Warm / Hot. */
       rounds: { label: string; img: string; x: number; y: number; find: string; say: string }[]; doneLine: string; }
@@ -820,6 +832,18 @@ export const LESSON_1_SCENES: Scene[] = classroomLook([
       { who: 'marigold', line: 'My name is Miss Marigold.' },
       { who: 'student', line: 'Goodbye, Miss Marigold!' },
     ],
+  },
+  {
+    id: 'wt-musical-islands', kind: 'musical-islands', bg: '/lep1/scenes/bg-game-pond-wide.png', who: 'pip', music: '/lep1/audio/hello-song.mp3', title: 'Musical Islands',
+    teacher: 'Game: press the music — the friends hop between the lily pads. When it stops, listen: Who is on the red lily pad? The student taps the friend and says the name. Nobody is out!',
+    players: [{ label: 'Pip', img: spr('pip') }, { label: 'Mia', img: spr('mia') }, { label: 'Leo', img: spr('leo') }, { label: 'Bella', img: spr('bella') }],
+    rounds: [
+      { at: [0, 1, 2, 3], pad: 1, ask: 'Who is on the blue lily pad?', say: 'Mia! It’s Mia.' },
+      { at: [2, 3, 0, 1], pad: 2, ask: 'Who is on the yellow lily pad?', say: 'Pip! It’s Pip.' },
+      { at: [1, 0, 3, 2], pad: 3, ask: 'Who is on the green lily pad?', say: 'Leo! It’s Leo.' },
+      { at: [2, 1, 3, 0], pad: 0, ask: 'Who is on the red lily pad?', say: 'Bella! It’s Bella.' },
+    ],
+    doneLine: 'Great listening! Everybody is still in the game!',
   },
   {
     id: 'wt-brain-break', kind: 'prea1', teacher: 'Brain break: stand up and move with Pip.',
@@ -1475,6 +1499,20 @@ export const LESSON_3_SCENES: Scene[] = classroomLook([
     },
   },
   {
+    id: 'wt3-red-green', kind: 'red-green', bg: bgParkEmpty, who: 'pip', runner: spr('pip'), title: 'Red Light, Green Light!',
+    teacher: 'Listening race: on green, the student taps the number they hear and Pip runs that many steps. On red — freeze! Do not tap until it turns green.',
+    cards: [{ label: '2' }, { label: '3' }, { label: '4' }, { label: '5' }],
+    rounds: [
+      { light: 'green', say: 'Green light! Three steps!', answer: 1, steps: 3 },
+      { light: 'red', say: 'Red light! Stop!' },
+      { light: 'green', say: 'Green light! Two steps!', answer: 0, steps: 2 },
+      { light: 'green', say: 'Green light! Four steps!', answer: 2, steps: 4 },
+      { light: 'red', say: 'Red light! Freeze!' },
+      { light: 'green', say: 'Green light! Five steps!', answer: 3, steps: 5 },
+    ],
+    doneLine: 'Pip is at the flag! Great listening!',
+  },
+  {
     id: 'wt3-count-jump', kind: 'prea1', teacher: 'Brain break: count and move with Pip!',
     scene: {
       id: 'wt3-count-jump', kind: 'tpr-actions', mode: 'break', bg: bgL1Circle, who: 'pip', teacher: 'Count and move with Pip!',
@@ -1918,6 +1956,16 @@ export const LESSON_4_SCENES: Scene[] = classroomLook([
       { word: 'fish', sounds: ['f', 'i', 'sh'], img: '/lep1/items/item-fish.png', sentence: 'Look! A fish!' },
     ],
   },
+  {
+    id: 'wt4-letter-bubbles', kind: 'letter-bubbles', bg: bgParkEmpty, who: 'pip', title: 'Letter Bubbles: F words',
+    teacher: 'Spelling game: look at the picture, then pop the bubbles in order to spell the word. Say the word at the end.',
+    words: [
+      { word: 'fox', img: spr('pip'), say: 'Fox! Pip is a fox.' },
+      { word: 'fish', img: I1('fish'), say: 'Fish! It’s a fish.' },
+      { word: 'friend', img: spr('mia'), say: 'Friend! This is my friend.' },
+    ],
+    doneLine: 'Pop, pop, pop! You can spell!',
+  },
   { id: 'wt4-twister', kind: 'tongue-twister', look: 'town', speeds: 2, bg: bgL1Reading, who: 'willow', focus: 'f', teacher: 'Reading: quick reading! Listen to Willow, then say it slow, then faster.', line: 'Fun Fred finds a frog.' },
   {
     id: 'wt4-meet-teacher', kind: 'join-stage', bg: bgL1Class, teacher: 'Free: the student introduces Pip to Miss Marigold, the new teacher.', cast: ['pip', 'marigold'],
@@ -2104,6 +2152,18 @@ export const LESSON_5_SCENES: Scene[] = classroomLook([
         { img: leoStory(11), caption: 'Goodbye, friends!', who: 'leo' },
       ],
     },
+  },
+  {
+    id: 'wt5-crossword', kind: 'crossword', bg: bgL1Reading, who: 'pip', title: 'Picture Crossword',
+    teacher: 'Spelling game: tap a picture, then tap the letters to fill its squares. Crossing letters help! Say each word when it is done.',
+    words: [
+      { word: 'cap', img: I1('cap'), say: 'Cap! Leo’s red cap.' },
+      { word: 'red', img: I1('balloon-red'), say: 'Red! The cap is red.' },
+      { word: 'sad', img: feelSpr('mia-sad'), say: 'Sad! Mia is sad.' },
+      { word: 'happy', img: feelSpr('pip-happy'), say: 'Happy! Pip is happy.' },
+      { word: 'teacher', img: spr('marigold'), say: 'Teacher! Miss Marigold is our teacher.' },
+    ],
+    doneLine: 'You did the whole crossword!',
   },
   {
     id: 'wt5-goodbye-sing', kind: 'song', bg: leoStory(11), title: '\u{1F3B5} The Goodbye Song \u{1F3B5}', teacher: 'Guided: the story ends with goodbye — sing it with the friends and wave to Leo!',
