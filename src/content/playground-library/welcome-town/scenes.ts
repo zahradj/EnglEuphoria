@@ -591,6 +591,7 @@ export const LESSON_1_SCENES: Scene[] = classroomLook([
   { id: 'wt-word-goodbye', kind: 'meet', look: 'word', word: 'Goodbye!', focus: ['Goodbye'], bg: bgL1WordGoodbye, who: 'pip', teacher: 'Present: when we go, we say "Goodbye!" Wave and say it.', line: 'Goodbye! Bye-bye!', repeat: 'Goodbye!' },
   { id: 'wt-sentence-name', kind: 'meet', focus: ['name'], bg: bgL1Hello, who: 'pip', cardSide: 'left', teacher: 'Present: listen to Pip. Then say: My name is … (your name!)', line: 'My name is Pip. What’s your name?', repeat: 'My name is …' },
   { id: 'wt-echo-question', kind: 'echo', bg: bgL1Peers, who: 'pip', textSide: 'top', teacher: 'Guided: say the question with Pip — the voice goes up at the end.', word: 'What’s your name?' },
+  { id: 'wt-echo-goodbye', kind: 'echo', bg: bgL1Goodbye, who: 'pip', textSide: 'top', teacher: 'Guided: wave and say it with Pip — loud, then quiet.', word: 'Goodbye! See you!' },
   /* Guided: when do we say hello / goodbye? */
   {
     id: 'wt-hello-goodbye-sort', kind: 'prea1', teacher: 'Guided: Hello or Goodbye? A friend arrives → catch it in Hello!; a friend leaves → Goodbye! Say it as you catch it.',
@@ -658,6 +659,15 @@ export const LESSON_1_SCENES: Scene[] = classroomLook([
       },
     ],
   },
+  {
+    id: 'wt-hello-doors', kind: 'hello-doors', bg: bgL1Class, teacher: 'Guided: Knock, knock! Listen, tap the door of the friend, then say hello and their name.', cast: ['mia', 'bella', 'leo', 'willow'],
+    rounds: [
+      { target: 'mia', prompt: 'Knock, knock! Where is Mia?', helloLine: 'Hello! My name is Mia.', echoLine: 'Hello, Mia!' },
+      { target: 'leo', prompt: 'Knock, knock! Where is Leo?', helloLine: 'Hi! My name is Leo.', echoLine: 'Hi, Leo!' },
+      { target: 'willow', prompt: 'Knock, knock! Where is Willow?', helloLine: 'Hello! My name is Willow.', echoLine: 'Hello, Willow!' },
+      { target: 'bella', prompt: 'Knock, knock! Where is Bella?', helloLine: 'Hi! My name is Bella.', echoLine: 'Hi, Bella!' },
+    ],
+  },
   /* Free: the teacher asks, then the child asks */
   {
     id: 'wt-answer', kind: 'join-stage', bg: bgL1Circle, teacher: 'Free: Miss Marigold asks, the student answers in a whole sentence — then the student asks her.', cast: ['marigold', 'pip'],
@@ -695,6 +705,14 @@ export const LESSON_1_SCENES: Scene[] = classroomLook([
       { word: 'Goodbye, Leo!', img: leoStory(11) },
     ],
     bg: bgL1Circle,
+  },
+  {
+    id: 'wt-build-name', kind: 'sentence-build', bg: bgL1Reading, teacher: 'Reading: put the words of the story in order, then read the sentence.',
+    rounds: [
+      { words: ['My', 'name', 'is', 'Pip.'], emoji: '\u{1F98A}' },
+      { words: ['What’s', 'your', 'name?'], emoji: '\u{2753}' },
+      { words: ['Hi,', 'Pip!', 'My', 'name', 'is', 'Leo.'], emoji: '\u{1F981}' },
+    ],
   },
   /* Phonics (owner 2026-10-12: "don't forget phonic sounds, phonic games, blending games"): hear the sound → a
    * phonics game → Blend & Read → tongue twister. */
@@ -739,6 +757,17 @@ export const LESSON_1_SCENES: Scene[] = classroomLook([
       { who: 'leo', line: 'Goodbye, Pip!', repeat: true },
     ],
   },
+  {
+    id: 'wt-answer-2', kind: 'join-stage', bg: bgL1Peers, teacher: 'Free: a new class friend (the teacher) says hello. The student answers and asks the name.', cast: ['marigold', 'pip'],
+    turns: [
+      { who: 'marigold', line: 'Hi! I’m new here.' },
+      { who: 'student', line: 'Hello! What’s your name?' },
+      { who: 'marigold', line: 'My name is Sam. What’s your name?' },
+      { who: 'student', line: 'My name is … Nice to meet you, Sam!' },
+      { who: 'marigold', line: 'Goodbye! See you!' },
+      { who: 'student', line: 'Goodbye, Sam!' },
+    ],
+  },
   /* Check: the objective in the child's own words */
   { id: 'wt-i-can', kind: 'meet', focus: ['name'], bg: bgL1Circle, who: 'marigold', cardSide: 'left', teacher: 'Check: say it and get your passport stamp!', line: 'I can say hello and goodbye. I can ask: What’s your name?', repeat: 'I can say hello!' },
   {
@@ -760,6 +789,47 @@ export const LESSON_1_SCENES: Scene[] = classroomLook([
         { emoji: '\u{1F44B}', say: 'Say hello and your name to two people.' },
         { emoji: '\u{2753}', say: 'Ask them: What’s your name?' },
         { emoji: '\u{1F4D6}', say: 'Read them Leo’s story.' },
+      ],
+    },
+  },
+  /* Extra time (blueprint §3b) — only if there is time left */
+  {
+    id: 'wt-flip-hello', kind: 'prea1', teacher: 'Extra time: Flip & Say! Flip a card and say the line to that friend (🔊 = the model).',
+    scene: {
+      id: 'wt-flip-hello', kind: 'flip-say', bg: bgL1Class, who: 'pip', title: 'Flip a card and say it!',
+      teacher: 'Flip a card. Say hello or goodbye!',
+      cards: [
+        { label: 'Mia', img: spr('mia'), say: 'Hello, Mia!' },
+        { label: 'Leo', img: spr('leo'), say: 'Hi, Leo! What’s your name?' },
+        { label: 'Bella', img: spr('bella'), say: 'Goodbye, Bella!' },
+        { label: 'Willow', img: spr('willow'), say: 'Hello! My name is …' },
+        { label: 'Pip', img: spr('pip'), say: 'Hi, Pip! See you!' },
+        { label: 'Miss Marigold', img: spr('marigold'), say: 'Goodbye, Miss Marigold!' },
+      ],
+      doneLine: 'All the cards are gold! Great greetings!',
+    },
+  },
+  {
+    id: 'wt-friend-pop', kind: 'prea1', teacher: 'Extra time: Whack-a-Friend! Listen, tap the friend who pops up, and say hello.',
+    scene: {
+      id: 'wt-friend-pop', kind: 'friend-pop', bg: bgL1Class, teacher: 'Tap the friend I call — then say hello!', cast: ['pip', 'mia', 'bella', 'willow'],
+      rounds: [
+        { target: 'bella', prompt: 'Where is Bella?', sayLine: 'Hello, Bella!' },
+        { target: 'pip', prompt: 'Where is Pip?', sayLine: 'Hi, Pip!' },
+        { target: 'willow', prompt: 'Where is Willow?', sayLine: 'Hello, Willow!' },
+        { target: 'mia', prompt: 'Where is Mia?', sayLine: 'Hi, Mia!' },
+      ],
+    },
+  },
+  {
+    id: 'wt-brain-break-2', kind: 'prea1', teacher: 'Extra time: brain break — wave, bow and high-five with Pip.',
+    scene: {
+      id: 'wt-brain-break-2', kind: 'tpr-actions', mode: 'break', bg: bgL1Circle, who: 'pip', teacher: 'Move with Pip!',
+      rounds: [
+        { line: 'Wave and say: Hello!', emoji: '\u{1F44B}' },
+        { line: 'Bow and say: Nice to meet you!', emoji: '\u{1F647}' },
+        { line: 'High five and say: Hi!', emoji: '\u{1F64C}' },
+        { line: 'Walk to the door and say: Goodbye!', emoji: '\u{1F6AA}' },
       ],
     },
   },
@@ -871,7 +941,20 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
     teacher: 'Present: point to Pip — he! Point to Mia — she! Say it.',
     line: 'He is happy. She is happy. They are happy!', repeat: 'She is happy!',
   },
+  {
+    id: 'wt2-he-she-say', kind: 'prea1', teacher: 'Guided: look at the friend and say the sentence with He or She: He is happy. She is sad.',
+    scene: {
+      id: 'wt2-he-she-say', kind: 'he-she-say', bg: bgCircleW, teacher: 'He or she? Say it!',
+      rounds: [
+        { who: 'pip', emotion: 'happy', pronoun: 'He' },
+        { who: 'mia', emotion: 'sad', pronoun: 'She' },
+        { who: 'leo', emotion: 'angry', pronoun: 'He' },
+        { who: 'bella', emotion: 'happy', pronoun: 'She' },
+      ],
+    },
+  },
   { id: 'wt2-echo-howareyou', kind: 'echo', bg: bgCircleW, who: 'pip', textSide: 'top', teacher: 'Guided: say the question with Pip.', word: 'How are you?' },
+  { id: 'wt2-echo-tired', kind: 'echo', bg: bgCircleW, who: 'pip', textSide: 'top', teacher: 'Guided: say it with a big yawn — then the same with "He".', word: 'She is tired.' },
   /* Guided */
   {
     id: 'wt2-feelings-mirror', kind: 'listen-tap', bg: bgFeelingsW, teacher: 'Guided: listen — how does the friend feel? Tap them, then say it: I am hungry!',
@@ -945,6 +1028,18 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
     ],
   },
   {
+    id: 'wt2-feelings-wheel', kind: 'prea1', teacher: 'Guided: spin the wheel! When it stops, the student says the friend’s feeling in a sentence: She is happy!',
+    scene: {
+      id: 'wt2-feelings-wheel', kind: 'feelings-wheel', bg: bgFeelingsW, teacher: 'Spin! Say how the friend feels.',
+      slots: [
+        { who: 'mia', emotion: 'happy', label: 'She is happy' },
+        { who: 'leo', emotion: 'sad', label: 'He is sad' },
+        { who: 'bella', emotion: 'angry', label: 'She is angry' },
+        { who: 'pip', emotion: 'happy', label: 'He is happy' },
+      ],
+    },
+  },
+  {
     id: 'wt2-answer', kind: 'join-stage', bg: bgCircleW, teacher: 'Free: how does the student really feel today? Then they ask the teacher, and tell how Pip is.', cast: ['marigold', 'pip'],
     turns: [
       { who: 'marigold', line: 'How are you today?' },
@@ -981,6 +1076,18 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
       { label: 'She is angry.', color: '#E76FA5', who: 'bella', targetLeft: '61.8%', targetTop: '56.8%' },
       { label: 'She is hungry.', color: '#4FA9E0', who: 'willow', targetLeft: '72.5%', targetTop: '57.9%' },
     ],
+  },
+  {
+    id: 'wt2-reveal', kind: 'prea1', teacher: 'Reading: Tile Reveal! Who is hiding — and how does the friend feel? Guess early, then read the sentence.',
+    scene: {
+      id: 'wt2-reveal', kind: 'tile-reveal', bg: bgCircleW, who: 'pip',
+      teacher: 'Who is it? How is the friend?',
+      rounds: [
+        { img: feelSpr('leo-tired'), word: 'tired', line: 'He is tired!', options: [{ label: 'tired', img: feelSpr('leo-tired') }, { label: 'happy', img: feelSpr('pip-happy') }, { label: 'hungry', img: feelSpr('willow-hungry') }] },
+        { img: feelSpr('willow-hungry'), word: 'hungry', line: 'She is hungry!', options: [{ label: 'sad', img: feelSpr('mia-sad') }, { label: 'hungry', img: feelSpr('willow-hungry') }, { label: 'angry', img: feelSpr('bella-angry') }] },
+        { img: feelSpr('bella-angry'), word: 'angry', line: 'She is angry!', options: [{ label: 'tired', img: feelSpr('leo-tired') }, { label: 'happy', img: feelSpr('pip-happy') }, { label: 'angry', img: feelSpr('bella-angry') }] },
+      ],
+    },
   },
   /* Phonics: the sound → a phonics game → Blend & Read → tongue twister */
   {
@@ -1019,6 +1126,16 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
     ],
   },
   { id: 'wt2-twister', kind: 'tongue-twister', look: 'town', speeds: 2, bg: bgL1Reading, who: 'mia', focus: 's|a', teacher: 'Reading: quick reading! Listen to Mia, then say it slow, then faster.', line: 'Sad Sam sits.' },
+  {
+    id: 'wt2-answer-2', kind: 'join-stage', bg: bgFeelingsW, teacher: 'Free: Pip asks about the friends in the picture — the student answers with He is / She is, then asks Pip “How are you?”.', cast: ['pip', 'marigold'],
+    turns: [
+      { who: 'pip', line: 'Look at Leo. How is he?' },
+      { who: 'student', line: 'He is tired.' },
+      { who: 'pip', line: 'And Willow? How is she?' },
+      { who: 'student', line: 'She is hungry. How are you, Pip?' },
+      { who: 'pip', line: 'I am happy! Thank you!' },
+    ],
+  },
   /* Check + close */
   { id: 'wt2-i-can', kind: 'meet', focus: ['How are you'], bg: bgCircleW, who: 'marigold', cardSide: 'left', teacher: 'Check: say it and get your passport stamp!', line: 'I can ask: How are you? I can say: I am happy. She is tired.', repeat: 'How are you?' },
   {
@@ -1053,6 +1170,32 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
       { who: 'willow', img: feelSpr('willow-hungry'), emotion: 'hungry', answer: 'She' },
       { who: ['pip', 'mia'], img: [feelSpr('pip-happy'), feelSpr('mia-sad')], emotion: 'happy and sad', answer: 'They' },
     ],
+  },
+  {
+    id: 'wt2-quick-feelings', kind: 'prea1', teacher: 'Extra time: quick fire! Say the whole sentence before the ring runs out.',
+    scene: {
+      id: 'wt2-quick-feelings', kind: 'rapid-recall', bg: bgFeelingsW, who: 'pip', seconds: 5,
+      teacher: 'Say it before the ring runs out!',
+      cards: [
+        { img: feelSpr('pip-happy'), word: 'happy', say: 'He is happy.' },
+        { img: feelSpr('mia-sad'), word: 'sad', say: 'She is sad.' },
+        { img: feelSpr('leo-tired'), word: 'tired', say: 'He is tired.' },
+        { img: feelSpr('willow-hungry'), word: 'hungry', say: 'She is hungry.' },
+        { img: feelSpr('bella-angry'), word: 'angry', say: 'She is angry.' },
+      ],
+    },
+  },
+  {
+    id: 'wt2-feelings-break-2', kind: 'prea1', teacher: 'Extra time: brain break — show the feeling with your face and body.',
+    scene: {
+      id: 'wt2-feelings-break-2', kind: 'tpr-actions', mode: 'break', bg: bgCircleW, who: 'pip', teacher: 'Show me!',
+      rounds: [
+        { line: 'Show me tired! Yawn!', emoji: '\u{1F971}' },
+        { line: 'Show me hungry! Rub your tummy!', emoji: '\u{1F60B}' },
+        { line: 'Show me happy! Jump!', emoji: '\u{1F604}' },
+        { line: 'Show me fine! Thumbs up!', emoji: '\u{1F44D}' },
+      ],
+    },
   },
   {
     id: 'wt2-goodbye-song', kind: 'song', bg: bgExpressGoodbyeW, title: '\u{1F3B5} Welcome Town School Goodbye Song \u{1F3B5}', teacher: 'It’s time to go — wave goodbye and sing along together!',
@@ -1109,7 +1252,9 @@ export const LESSON_3_SCENES: Scene[] = classroomLook([
     scene: { id: 'wt3-numbers-11-20', kind: 'numbers-learn', bg: bgL1Party, who: 'mia', from: 11, to: 20, teacher: 'New numbers! Tap each one, listen and say it: eleven, twelve, thirteen…' },
   },
   { id: 'wt3-how-old', kind: 'meet', focus: ['How old'], bg: leoStory(3), who: 'leo', cardSide: 'left', teacher: 'Present: listen to Leo. Show seven fingers and say: I am seven!', line: 'How old are you? I am seven!', repeat: 'I am seven!' },
+  { id: 'wt3-birthday', kind: 'meet', focus: ['birthday'], bg: '/lep1/scenes/bg-l4-birthday-party.jpg', who: 'mia', cardSide: 'left', teacher: 'Present: a birthday! Point to the cake. Today Mia is six.', line: 'It’s my birthday! I am six today!', repeat: 'Happy birthday!' },
   { id: 'wt3-echo', kind: 'echo', bg: bgL1Peers, who: 'pip', textSide: 'top', teacher: 'Guided: say the question with Pip.', word: 'How old are you?' },
+  { id: 'wt3-echo-age', kind: 'echo', bg: bgL1Circle, who: 'leo', textSide: 'top', teacher: 'Guided: answer like Leo — a whole sentence, loud and proud.', word: 'I am seven years old.' },
   /* B — MEMORISE THE NUMBERS */
   {
     id: 'wt3-number-tap', kind: 'prea1', teacher: 'Guided: Number Tap! Pip says a number from 1 to 20 — tap it and say it.',
@@ -1118,6 +1263,19 @@ export const LESSON_3_SCENES: Scene[] = classroomLook([
   {
     id: 'wt3-count-balloons', kind: 'prea1', teacher: 'Guided: count to 20! Pop the balloons one by one and count with Pip.',
     scene: { id: 'wt3-count-balloons', kind: 'count-balloons', bg: '/lep1/scenes/bg-l4-plain-sky.jpg', who: 'pip', total: 20, teacher: 'Twenty balloons! Pop them one by one and count with Pip!' },
+  },
+  {
+    id: 'wt3-number-train', kind: 'prea1', teacher: 'Guided: look at the number train — say each number — then one car is empty. Which number is missing?',
+    scene: {
+        id: 'wt3-number-train', kind: 'train-recall', bg: bgL1Circle, teacher: 'Guided: look at the number train — say each number — then one car is empty. Which number is missing?',
+      question: 'Choo choo! One car is empty. Which number is missing?',
+      cars: [
+        { word: 'TWELVE', emoji: '1\u{FE0F}\u{20E3}2\u{FE0F}\u{20E3}' },
+        { word: 'FIFTEEN', emoji: '1\u{FE0F}\u{20E3}5\u{FE0F}\u{20E3}' },
+        { word: 'EIGHTEEN', emoji: '1\u{FE0F}\u{20E3}8\u{FE0F}\u{20E3}' },
+        { word: 'TWENTY', emoji: '2\u{FE0F}\u{20E3}0\u{FE0F}\u{20E3}' },
+      ],
+    },
   },
   {
     id: 'wt3-count-jump', kind: 'prea1', teacher: 'Brain break: count and move with Pip!',
@@ -1140,10 +1298,35 @@ export const LESSON_3_SCENES: Scene[] = classroomLook([
     },
   },
   {
+    id: 'wt3-candle-cake', kind: 'prea1', teacher: 'Guided: listen to the age, tap that many candles, then say it: She is six!',
+    scene: {
+      id: 'wt3-candle-cake', kind: 'candle-cake', bg: '/lep1/scenes/bg-l4-cake-stage.jpg', who: 'mia', teacher: 'Listen to the age, then put that many candles on the cake!',
+      rounds: [
+        { asker: 'mia', target: 6, prompt: 'I am six! Put six candles on my cake!', celebrate: 'Six candles! Mia is six!' },
+        { asker: 'leo', target: 7, prompt: 'I am seven! Put seven candles on my cake!', celebrate: 'Seven candles! Leo is seven!' },
+        { asker: 'pip', target: 8, prompt: 'I am eight! Put eight candles on my cake!', celebrate: 'Eight candles! Pip is eight!' },
+        { asker: 'pip', target: 0, isStudent: true, prompt: 'Your turn! How old are you? Put your candles on the cake and blow!', celebrate: 'Happy birthday to you!' },
+      ],
+    },
+  },
+  {
     id: 'wt3-age-match', kind: 'prea1', teacher: 'Reading: read each sentence and drag it to the right friend. Then read it aloud.',
     scene: {
       id: 'wt3-age-match', kind: 'age-sentence-match', bg: '/lep1/scenes/bg-l4-plain-sky.jpg', teacher: 'Read the sentence and drag it to the friend!',
       friends: [{ who: 'mia', age: 6 }, { who: 'leo', age: 7 }, { who: 'pip', age: 8 }],
+    },
+  },
+  {
+    id: 'wt3-age-quiz', kind: 'prea1', teacher: 'Free: tap a wobbly present and ASK “How old are you?” — then guess the friend’s age. At the end, tap your own age and say it.',
+    scene: {
+      id: 'wt3-age-quiz', kind: 'age-quiz', bg: '/lep1/scenes/bg-l4-birthday-party.jpg', teacher: 'Ask “How old are you?” and guess!',
+      friends: [
+        { who: 'mia', age: 6 },
+        { who: 'leo', age: 7 },
+        { who: 'pip', age: 8 },
+        { who: 'bella', age: 9 },
+      ],
+      studentAges: [5, 6, 7, 8, 9, 10],
     },
   },
   {
@@ -1205,6 +1388,18 @@ export const LESSON_3_SCENES: Scene[] = classroomLook([
       { who: 'student', line: 'This is Pip. He is eight.' },
     ],
   },
+  {
+    id: 'wt3-count-break-2', kind: 'prea1', teacher: 'Brain break: count and move — up to twenty!',
+    scene: {
+      id: 'wt3-count-break-2', kind: 'tpr-actions', mode: 'break', bg: bgL1Circle, who: 'mia', teacher: 'Count and move!',
+      rounds: [
+        { line: 'Clap eleven times! One, two, three…', emoji: '\u{1F44F}' },
+        { line: 'Stamp fifteen times!', emoji: '\u{1F9B6}' },
+        { line: 'Jump and count to twenty!', emoji: '\u{1F998}' },
+        { line: 'Show me your age with your fingers!', emoji: '\u{1F590}\u{FE0F}' },
+      ],
+    },
+  },
   { id: 'wt3-i-can', kind: 'meet', focus: ['How old'], bg: bgL1Circle, who: 'marigold', cardSide: 'left', teacher: 'Check: count to 20, then say it and get your passport stamp!', line: 'I can count to twenty. I can ask: How old are you? I am …', repeat: 'How old are you?' },
   {
     id: 'wt3-sticker', kind: 'prea1', teacher: 'Sticker time! The student opens the pack and puts the birthday sticker in their Sticker Book.',
@@ -1229,8 +1424,26 @@ export const LESSON_3_SCENES: Scene[] = classroomLook([
     },
   },
   {
-    id: 'wt3-quick-numbers', kind: 'prea1', teacher: 'Extra time (Guided): Number Tap again, faster! Tap 11 to 20 as Pip says them.',
-    scene: { id: 'wt3-quick-numbers', kind: 'numbers-review', bg: bgL1Circle, who: 'mia', from: 11, to: 20, teacher: 'Tap the number Mia says!' },
+    id: 'wt3-age-buzzer', kind: 'prea1', teacher: 'Extra time: Age Buzzer Show! Listen to the question, buzz the right friend, then say the sentence.',
+    scene: {
+      id: 'wt3-age-buzzer', kind: 'buzzer-show', bg: bgL1Stage, who: 'pip',
+      teacher: 'Who is it? Press the right buzzer, then say it!',
+      intro: 'How old are they? Press the buzzer!',
+      podiums: [{ x: 22.8, y: 72.5, by: 55.5 }, { x: 49.5, y: 72.5, by: 55.5 }, { x: 76.3, y: 72.5, by: 55.5 }],
+      faces: [
+        { label: 'Mia', name: 'Mia', img: spr('mia') },
+        { label: 'Leo', name: 'Leo', img: spr('leo') },
+        { label: 'Pip', name: 'Pip', img: spr('pip') },
+        { label: 'Bella', name: 'Bella', img: spr('bella') },
+      ],
+      rounds: [
+        { faces: [0, 1, 2], answer: 1, line: 'Who is seven?', reply: 'Yes! Leo is seven!', say: 'Leo is seven.' },
+        { faces: [3, 2, 0], answer: 2, line: 'Who is six?', reply: 'Yes! Mia is six!', say: 'Mia is six.' },
+        { faces: [1, 3, 2], answer: 1, line: 'Who is nine?', reply: 'Yes! Bella is nine!', say: 'Bella is nine.' },
+        { faces: [2, 0, 3], answer: 0, line: 'Who is eight?', reply: 'Yes! Pip is eight!', say: 'Pip is eight.' },
+      ],
+      doneLine: 'Age champion!',
+    },
   },
   {
     id: 'wt3-goodbye-song', kind: 'song', bg: bgL1Goodbye, title: '\u{1F3B5} Welcome Town School Goodbye Song \u{1F3B5}', teacher: 'It’s time to go — wave goodbye and sing along together!',
@@ -1267,6 +1480,8 @@ export const LESSON_4_TITLE = 'This Is My Friend!';
 export const LESSON_4_OBJECTIVE = 'I can introduce a friend — "This is my friend Leo." — answer "Nice to meet you!" and hold a 6-line conversation.';
 
 const bgPlay = `${W}/scenes/bg-playground-break-wide.png`;
+const bgParkEmpty = '/lep1/scenes/bg-u3l3-park-empty-wide.png';
+const bgPartyEmpty = '/lep1/scenes/bg-u8l3-party-empty-wide.png';
 
 /* Rebuilt 2026-10-12 to the approved Unit 1 plan (docs/a1-unit-1-welcome-town.md §5.4): the speaking lesson, the
  * child is the expert. Objective: I can introduce a friend — "This is my friend Leo." — answer "Nice to meet you!" and
@@ -1290,7 +1505,9 @@ export const LESSON_4_SCENES: Scene[] = classroomLook([
   /* Present */
   { id: 'wt4-this-is', kind: 'meet', focus: ['This is my friend'], bg: leoStory(6), who: 'pip', cardSide: 'left', teacher: 'Present: open your hand towards the friend and say: This is my friend Leo.', line: 'Mia, this is my friend Leo.', repeat: 'This is my friend Leo.' },
   { id: 'wt4-nice', kind: 'meet', focus: ['Nice to meet you'], bg: leoStory(6), who: 'mia', cardSide: 'right', teacher: 'Present: shake hands and say: Nice to meet you!', line: 'Hello, Leo! Nice to meet you.', repeat: 'Nice to meet you!' },
+  { id: 'wt4-this-is-she', kind: 'meet', focus: ['This is my friend'], bg: leoStory(6), who: 'leo', cardSide: 'left', teacher: 'Present: a girl friend — This is my friend Bella. She is nine.', line: 'Pip, this is my friend Bella. She is nine.', repeat: 'This is my friend Bella.' },
   { id: 'wt4-echo', kind: 'echo', bg: bgL1Peers, who: 'leo', textSide: 'top', teacher: 'Guided: the answer — say it with Leo.', word: 'Nice to meet you, too!' },
+  { id: 'wt4-echo-friend', kind: 'echo', bg: bgL1Peers, who: 'pip', textSide: 'top', teacher: 'Guided: point to a friend and say it with Pip.', word: 'This is my friend.' },
   /* Guided */
   {
     id: 'wt4-chat-chain', kind: 'chat-chain', bg: bgL1Circle, partner: 'bella', title: 'Chat with Bella',
@@ -1306,6 +1523,32 @@ export const LESSON_4_SCENES: Scene[] = classroomLook([
       { who: 'bella', line: 'I am nine! Oh, the bell! Goodbye!' },
       { who: 'student', line: 'Goodbye, Bella! See you!', wrong: ['I am happy.', 'What’s your name?'] },
     ],
+  },
+  {
+    id: 'wt4-photo', kind: 'prea1', teacher: 'Guided: Friends Photo! Pip introduces a friend; the student taps that friend to take the photo and says: This is my friend …! The friends swap places — listen to the name.',
+    scene: {
+      id: 'wt4-photo', kind: 'photo-snap', bg: bgParkEmpty, who: 'pip',
+      teacher: 'Listen! Take a photo of the friend Pip says.',
+      spots: [
+        { x: 16, y: 86, size: 15 },
+        { x: 38, y: 74, size: 13 },
+        { x: 62, y: 76, size: 13 },
+        { x: 84, y: 88, size: 15 },
+      ],
+      animals: [
+        { label: 'Leo', img: spr('leo'), say: 'This is my friend Leo!' },
+        { label: 'Mia', img: spr('mia'), say: 'This is my friend Mia!' },
+        { label: 'Bella', img: spr('bella'), say: 'This is my friend Bella!' },
+        { label: 'Willow', img: spr('willow'), say: 'This is my friend Willow!' },
+      ],
+      rounds: [
+        { target: 1, line: 'Snap! Take a photo of Mia!', place: [0, 1, 2, 3] },
+        { target: 0, line: 'Now take a photo of Leo!', place: [3, 2, 1, 0] },
+        { target: 3, line: 'Now Willow!', place: [1, 3, 0, 2] },
+        { target: 2, line: 'And Bella! Snap!', place: [2, 0, 3, 1] },
+      ],
+      doneLine: 'Great photos! These are my friends!',
+    },
   },
   {
     id: 'wt4-sing-back', kind: 'song', bg: bgL1Class, title: '\u{1F3B5} The Hello Song \u{1F3B5}', teacher: 'Guided: now the student leads the song and the teacher answers — then add a line: This is my friend …!',
@@ -1336,6 +1579,21 @@ export const LESSON_4_SCENES: Scene[] = classroomLook([
     },
   },
   {
+    id: 'wt4-hide-seek', kind: 'prea1', teacher: 'Free: hide and seek! The student ASKS "Is it Mia?" at each hiding place, then taps to look. Leo is hiding somewhere — when they find him: This is my friend Leo!',
+    scene: {
+      id: 'wt4-hide-seek', kind: 'lift-flap', bg: bgParkEmpty, who: 'pip',
+      teacher: 'Where is Leo? Ask at each place, then look!',
+      question: 'Where is my friend Leo?',
+      notYet: 'Not yet! Look in the other places first!',
+      spots: [
+        { x: 16, y: 74, size: 17, ask: 'Is it Leo?', reveal: 'No! This is Mia!', cover: { img: '/lep1/items/item-bench.png', label: 'bench' }, under: { img: spr('mia'), label: 'Mia' } },
+        { x: 40, y: 72, size: 14, ask: 'Is it Leo?', reveal: 'No! This is Bella!', cover: { img: '/lep1/items/item-gift.png', label: 'present' }, under: { img: spr('bella'), label: 'Bella' } },
+        { x: 62, y: 76, size: 16, ask: 'Is it Leo?', reveal: 'No! This is Willow!', cover: { img: '/lep1/items/item-slide.png', label: 'slide' }, under: { img: spr('willow'), label: 'Willow' } },
+        { x: 86, y: 62, size: 14, ask: 'Is it Leo?', reveal: 'Yes! This is my friend Leo!', target: true, under: { img: spr('leo'), label: 'Leo' } },
+      ],
+    },
+  },
+  {
     id: 'wt4-expert', kind: 'join-stage', bg: leoStory(6), teacher: 'Free: the student is the expert! Pip mixes up the names — the student corrects him and introduces everyone.', cast: ['pip', 'mia'],
     turns: [
       { who: 'pip', line: 'Look! This is my friend Bella!' },
@@ -1357,6 +1615,25 @@ export const LESSON_4_SCENES: Scene[] = classroomLook([
       ],
     },
   },
+  {
+    id: 'wt4-draw-path', kind: 'prea1', teacher: 'Guided: listen and draw! Draw a line from Pip to the friend he says. Pip walks the line and introduces them.',
+    scene: {
+      id: 'wt4-draw-path', kind: 'draw-path', bg: bgPartyEmpty, who: 'pip', walker: 'pip',
+      teacher: 'Draw a line from Pip to the friend he says!',
+      start: { x: 8, y: 88 },
+      spots: [
+        { label: 'Mia', img: spr('mia'), x: 30, y: 52, size: 10 },
+        { label: 'Leo', img: spr('leo'), x: 52, y: 60, size: 10 },
+        { label: 'Bella', img: spr('bella'), x: 72, y: 54, size: 10 },
+        { label: 'Willow', img: spr('willow'), x: 88, y: 80, size: 10 },
+      ],
+      rounds: [
+        { line: 'Take Pip to his friend Bella!', target: 2, reply: 'Hello, Bella! This is my friend Pip!' },
+        { line: 'Now take Pip to Leo!', target: 1, reply: 'Hi, Leo! Nice to meet you!' },
+        { line: 'Now take Pip to Willow!', target: 3, reply: 'Hello, Willow! Nice to meet you!' },
+      ],
+    },
+  },
   /* Reading */
   {
     id: 'wt4-reader', kind: 'reader', bg: bgL1Reading, title: 'Leo’s First Day', doneLine: 'A red hat, not a cap! Where is Leo’s cap? Find out in the storybook!',
@@ -1373,6 +1650,7 @@ export const LESSON_4_SCENES: Scene[] = classroomLook([
       { before: 'No, no! That is my red', after: '!', choices: ['hat', 'cap'], answer: 'hat', img: leoStory(8) },
     ],
   },
+  { id: 'wt4-jigsaw', kind: 'jigsaw-puzzle', bg: bgL1Reading, teacher: 'Reading: build the story picture, then tell it — Mia, this is my friend Leo! Nice to meet you!', image: leoStory(6), rows: 2, cols: 3 },
   /* Phonics: the sound → Letter Monsters → Blend & Read → tongue twister */
   {
     id: 'wt4-sound-f', kind: 'sound-model', bg: bgL1Reading, who: 'willow', letter: 'F', phoneme: '/f/', sound: 'f', soundSide: 'center',
@@ -1406,6 +1684,16 @@ export const LESSON_4_SCENES: Scene[] = classroomLook([
     ],
   },
   { id: 'wt4-twister', kind: 'tongue-twister', look: 'town', speeds: 2, bg: bgL1Reading, who: 'willow', focus: 'f', teacher: 'Reading: quick reading! Listen to Willow, then say it slow, then faster.', line: 'Fun Fred finds a frog.' },
+  {
+    id: 'wt4-meet-teacher', kind: 'join-stage', bg: bgL1Class, teacher: 'Free: the student introduces Pip to Miss Marigold, the new teacher.', cast: ['pip', 'marigold'],
+    turns: [
+      { who: 'pip', line: 'Who is that? I don’t know her!' },
+      { who: 'student', line: 'Miss Marigold, this is my friend Pip.' },
+      { who: 'marigold', line: 'Hello, Pip! Nice to meet you!' },
+      { who: 'pip', line: 'Nice to meet you, too!' },
+      { who: 'student', line: 'He is eight. He is happy!' },
+    ],
+  },
   /* Free: the unit conversation */
   {
     id: 'wt4-conversation', kind: 'join-stage', bg: bgL1Circle, teacher: 'Free: the 6-line conversation with the teacher — hello, name, how are you, this is my friend, nice to meet you, goodbye.', cast: ['marigold', 'leo'],
@@ -1454,6 +1742,17 @@ export const LESSON_4_SCENES: Scene[] = classroomLook([
     wheelAt: { left: '16%', top: '26%' },
   },
   {
+    id: 'wt4-break-2', kind: 'prea1', teacher: 'Brain break: a friends dance with Pip.',
+    scene: {
+      id: 'wt4-break-2', kind: 'tpr-actions', mode: 'break', bg: bgL1Party, who: 'pip', teacher: 'Dance with your friends!',
+      rounds: [
+        { line: 'Clap two times for your friend!', emoji: '\u{1F44F}' },
+        { line: 'Give a high five: Nice to meet you!', emoji: '\u{1F64C}' },
+        { line: 'Turn around and wave: Hello, friends!', emoji: '\u{1F44B}' },
+      ],
+    },
+  },
+  {
     id: 'wt4-goodbye-song', kind: 'song', bg: bgL1Goodbye, title: '\u{1F3B5} Welcome Town School Goodbye Song \u{1F3B5}', teacher: 'It’s time to go — wave goodbye and sing along together!',
     durationSeconds: 20, bigWord: 'Goodbye',
     songUrl: `${W}/audio/goodbye-song.mp3?v=3`,
@@ -1500,6 +1799,7 @@ export const LESSON_5_SCENES: Scene[] = classroomLook([
     ],
   },
   { id: 'wt5-predict', kind: 'meet', focus: ['cap'], bg: leoStory(4), who: 'leo', cardSide: 'left', teacher: 'Present: Leo’s cap is lost! Where is it? Let the student guess before reading: Is it in the tree? On the slide?', line: 'My red cap is lost! Where is it?', repeat: 'Where is it?' },
+  { id: 'wt5-echo-lost', kind: 'echo', bg: leoStory(4), who: 'leo', textSide: 'top', teacher: 'Guided: say it with Leo — a sad face, a sad voice.', word: 'My red cap is lost!' },
   { id: 'wt5-sight-words', kind: 'vocab-spot', bg: leoStory(9), teacher: 'Present: the last story words. Tap each arrow, listen and read the word.',
     items: [
       { label: 'Look!', sentence: 'Look! The cap is on the cat!', emoji: '\u{1F440}', left: '18%', top: '30%', color: '#B85CD1', who: 'mia' },
@@ -1508,11 +1808,26 @@ export const LESSON_5_SCENES: Scene[] = classroomLook([
       { label: 'see you', sentence: 'See you tomorrow!', emoji: '\u{1F44B}', left: '82%', top: '35%', color: '#4FA9E0', who: 'pip' },
     ],
   },
+  { id: 'wt5-thank-you', kind: 'meet', focus: ['Thank you'], bg: leoStory(10), who: 'leo', cardSide: 'left', teacher: 'Present: when friends help, we say Thank you! Hands on the heart and say it.', line: 'My cap! Thank you, friends!', repeat: 'Thank you!' },
   /* Reading: the whole book */
   {
-    id: 'wt5-book', kind: 'reader', bg: bgL1Reading, title: 'Leo’s First Day', doneLine: 'The end! Leo found his cap — and new friends!',
-    teacher: 'Reading: the whole book. Listen and follow the light on every page; the student reads the pages they know (1-8) on their own.',
-    pages: LEO_STORY,
+    id: 'wt5-book', kind: 'reader', bg: bgL1Reading, title: 'Leo’s First Day', doneLine: 'Where is the red cap? Let’s guess — then read on!',
+    teacher: 'Reading: the book, part 1. Listen and follow the light on every page; the student reads the pages they know on their own.',
+    pages: LEO_STORY.slice(0, 6),
+  },
+  {
+    id: 'wt5-guess', kind: 'choice', bg: leoStory(6), who: 'pip', prompt: 'Who has Leo’s red cap? Guess!',
+    teacher: 'Guided: stop and guess before page 7! Every guess is fine — the student says: I think … has the cap! Then read on and check.',
+    options: [
+      { label: 'Bella', emoji: '\u{1F430}', correct: true },
+      { label: 'Willow', emoji: '\u{1F426}', correct: true },
+      { label: 'the cat', emoji: '\u{1F431}', correct: true },
+    ],
+  },
+  {
+    id: 'wt5-book-2', kind: 'reader', bg: bgL1Reading, title: 'Leo’s First Day', doneLine: 'The end! Leo found his cap — and new friends!',
+    teacher: 'Reading: part 2 — was your guess right? Listen, then the student reads Mia’s and Leo’s lines.',
+    pages: LEO_STORY.slice(6),
   },
   /* Guided: understand the story */
   {
@@ -1522,6 +1837,26 @@ export const LESSON_5_SCENES: Scene[] = classroomLook([
       { items: [{ word: 'cap', img: I1('cap') }, { word: 'cat', img: I1('cat') }, { word: 'hat', img: I1('hat') }, { word: 'fan', img: I1('fan') }], missing: 0 },
       { items: [{ word: 'cat', img: I1('cat') }, { word: 'cap', img: I1('cap') }, { word: 'sun', img: I1('sun') }, { word: 'ten', img: I1('ten') }], missing: 0 },
     ],
+  },
+  {
+    id: 'wt5-whos-missing', kind: 'prea1', teacher: 'Guided: the story friends on the photo wall — lights off! Who is missing? Say: Bella is missing!',
+    scene: {
+      id: 'wt5-whos-missing', kind: 'whos-missing', bg: leoStory(10), who: 'pip',
+      teacher: 'Look at the story friends. Lights off! Who is missing?',
+      faces: [
+        { label: 'Leo', name: 'Leo', img: spr('leo'), at: [50, 26] as [number, number], w: 78, aspect: 419 / 538 },
+        { label: 'Mia', name: 'Mia', img: spr('mia'), at: [50, 26] as [number, number], w: 78, aspect: 500 / 579 },
+        { label: 'Bella', name: 'Bella', img: spr('bella'), at: [50, 36] as [number, number], w: 90, aspect: 353 / 646 },
+        { label: 'Willow', name: 'Willow', img: spr('willow'), at: [50, 26] as [number, number], w: 78, aspect: 492 / 617 },
+        { label: 'Pip', name: 'Pip', img: spr('pip'), at: [50, 26] as [number, number], w: 78, aspect: 441 / 581 },
+      ],
+      rounds: [
+        { wall: [0, 1, 2], missing: 2, options: [2, 3, 4] },
+        { wall: [4, 0, 3, 1], missing: 0, options: [1, 0, 2] },
+        { wall: [2, 3, 1, 4], missing: 3, options: [3, 4, 0] },
+      ],
+      doneLine: 'Everyone is back! Hello, friends!',
+    },
   },
   {
     id: 'wt5-story-order', kind: 'prea1', teacher: 'Guided: put the story pictures in order, then tell it: first, then, then, at the end!',
@@ -1562,6 +1897,19 @@ export const LESSON_5_SCENES: Scene[] = classroomLook([
     },
   },
   {
+    id: 'wt5-mystery-bag', kind: 'prea1', teacher: 'Guided: What is in the bag? Look at the shape — tap it — then say it with its colour: It’s a red cap!',
+    scene: {
+      id: 'wt5-mystery-bag', kind: 'mystery-bag', bg: bgL1Reading, who: 'leo',
+      question: 'What is in the bag?', doneText: 'You found all the story things!',
+      teacher: 'Look at the shape. What is in the bag? Tap it and say it!',
+      rounds: [
+        { img: I1('cap'), toyWord: 'CAP', colorWord: 'RED', colorHex: '#E53935', options: [{ toyWord: 'CAP', img: I1('cap') }, { toyWord: 'CAT', img: I1('cat') }, { toyWord: 'FAN', img: I1('fan') }] },
+        { img: I1('cat'), toyWord: 'CAT', colorWord: 'ORANGE', colorHex: '#FB8C00', options: [{ toyWord: 'HAT', img: I1('hat-green') }, { toyWord: 'CAT', img: I1('cat') }, { toyWord: 'CAP', img: I1('cap') }] },
+        { img: I1('book'), toyWord: 'BOOK', colorWord: 'BLUE', colorHex: '#1E88E5', options: [{ toyWord: 'CAT', img: I1('cat') }, { toyWord: 'SUN', img: I1('sun') }, { toyWord: 'BOOK', img: I1('book') }] },
+      ],
+    },
+  },
+  {
     id: 'wt5-act-out', kind: 'roleplay', bg: leoStory(2), teacher: 'Free: act it out! The student is Pip, then Leo. Say the lines with the face and the voice.', cast: ['pip', 'leo'],
     script: [
       { who: 'pip', line: 'Hello! My name is Pip. What’s your name?', repeat: true },
@@ -1582,6 +1930,17 @@ export const LESSON_5_SCENES: Scene[] = classroomLook([
         { line: 'Look! The cap is on the cat! Jump!', emoji: '\u{1F431}' },
       ],
     },
+  },
+  {
+    id: 'wt5-retell', kind: 'join-stage', bg: leoStory(9), teacher: 'Free: the student tells the story to Pip with the pictures — first, then, at the end. Help with one word at a time.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'I missed the story! Who is new?' },
+      { who: 'student', line: 'Leo is new. He is sad. His red cap is lost.' },
+      { who: 'pip', line: 'Oh no! And then?' },
+      { who: 'student', line: 'Bella says: Look! A red cap! But it’s Willow’s hat.' },
+      { who: 'pip', line: 'Where is the cap?' },
+      { who: 'student', line: 'The cap is on the cat! Leo is happy now.' },
+    ],
   },
   /* Phonics: /k/ → Sound Fish → blend a whole sentence → twister review */
   {
@@ -1613,6 +1972,7 @@ export const LESSON_5_SCENES: Scene[] = classroomLook([
     ],
   },
   { id: 'wt5-twister', kind: 'tongue-twister', look: 'town', speeds: 2, bg: bgL1Reading, who: 'mia', focus: 'c', teacher: 'Reading: quick reading! Listen to Mia, then say it slow, then faster.', line: 'Cool cat, cool cap.' },
+  { id: 'wt5-echo-thanks', kind: 'echo', bg: leoStory(10), who: 'leo', textSide: 'top', teacher: 'Guided: say it with Leo — a happy face, a happy voice!', word: 'Thank you! I am happy now!' },
   /* Free: my ending */
   {
     id: 'wt5-my-ending', kind: 'join-stage', bg: leoStory(10), teacher: 'Free: what does Leo say to the cat — and to Willow? The student makes up a new line.', cast: ['leo', 'pip'],
@@ -1643,6 +2003,18 @@ export const LESSON_5_SCENES: Scene[] = classroomLook([
         { emoji: '\u{1F4D6}', say: 'Read the story to your family.' },
         { emoji: '\u{1F9E2}', say: 'Hide a cap or a hat. Ask: Where is it?' },
         { emoji: '\u{1F3AD}', say: 'Act it out: you are Pip, they are Leo!' },
+      ],
+    },
+  },
+  {
+    id: 'wt5-act-break', kind: 'prea1', teacher: 'Brain break: act the story with your body — sad, look, find, happy!',
+    scene: {
+      id: 'wt5-act-break', kind: 'tpr-actions', mode: 'break', bg: leoStory(5), who: 'leo', teacher: 'Act the story!',
+      rounds: [
+        { line: 'Be sad like Leo: My cap is lost!', emoji: '\u{1F622}' },
+        { line: 'Look up and look down: Where is it?', emoji: '\u{1F440}' },
+        { line: 'Point: Look! The cap is on the cat!', emoji: '\u{1F449}' },
+        { line: 'Jump and smile: I am happy now!', emoji: '\u{1F604}' },
       ],
     },
   },
@@ -1686,6 +2058,7 @@ export const LESSON_6_SCENES: Scene[] = classroomLook([
       { word: 'goodbye', say: 'Goodbye, Leo! See you tomorrow!', img: leoStory(11) },
     ],
   },
+  { id: 'wt6-meet-coco', kind: 'meet', focus: ['Let’s play'], bg: bgL1Stage, who: 'pip', cardSide: 'left', teacher: 'Present: it’s Game Day! Today we play with everything from Unit 1 — and at the end a new friend, Coco, wants to meet the student.', line: 'It’s Game Day! Ready? Let’s play!', repeat: 'Let’s play!' },
   /* Word Board ★ — the signature: every square is a sentence to read or a question to answer */
   {
     id: 'wt6-board', kind: 'prea1', teacher: 'Guided: Word Board! Roll, hop, read the sentence on the square aloud — or answer its question. Ladders go up, slides go down.',
@@ -1718,6 +2091,21 @@ export const LESSON_6_SCENES: Scene[] = classroomLook([
     ],
   },
   {
+    id: 'wt6-shadows', kind: 'prea1', teacher: 'Guided: Who is it? Drag each friend onto their shadow, then introduce them: This is Leo. He is seven.',
+    scene: {
+      id: 'wt6-shadows', kind: 'shadow-match', bg: bgParkEmpty, who: 'pip',
+      teacher: 'Drag each friend to the shadow. Then say: This is …!',
+      items: [
+        { label: 'Leo', img: spr('leo'), line: 'This is Leo. He is seven.' },
+        { label: 'Mia', img: spr('mia'), line: 'This is Mia. She is six.' },
+        { label: 'Bella', img: spr('bella'), line: 'This is Bella. She is nine.' },
+        { label: 'Willow', img: spr('willow'), line: 'This is Willow. She is happy.' },
+        { label: 'Pip', img: spr('pip'), line: 'This is Pip. He is eight.' },
+      ],
+    },
+  },
+  { id: 'wt6-echo-quick', kind: 'echo', bg: bgL1Stage, who: 'pip', textSide: 'top', teacher: 'Guided: Game Day voice! Say the questions with Pip — slow, then fast.', word: 'How are you? How old are you?' },
+  {
     id: 'wt6-catch', kind: 'answer-race', look: 'gates', bg: bgL1Class, who: 'pip', racer: I1('pip-run'),
     title: 'Catch the answer! Run through the right gate!',
     teacher: 'Guided: Pip asks — the student taps the gate with the right answer, then says it.',
@@ -1743,6 +2131,19 @@ export const LESSON_6_SCENES: Scene[] = classroomLook([
     ],
   },
   {
+    id: 'wt6-sort', kind: 'sort-basket', bg: bgL1Circle, title: 'Question or answer?',
+    teacher: 'Reading: read each card aloud — is it a question (the voice goes up) or an answer? Put it in the right basket.',
+    baskets: [{ label: 'Question ?', emoji: '\u{2753}' }, { label: 'Answer', emoji: '\u{1F4AC}' }],
+    items: [
+      { word: 'What’s your name?', emoji: '\u{1F3F7}\u{FE0F}', basket: 0 },
+      { word: 'I am seven.', emoji: '\u{1F382}', basket: 1 },
+      { word: 'How are you?', emoji: '\u{1F60A}', basket: 0 },
+      { word: 'My name is Mia.', emoji: '\u{1F42D}', basket: 1 },
+      { word: 'How old are you?', emoji: '\u{1F522}', basket: 0 },
+      { word: 'I am happy.', emoji: '\u{1F604}', basket: 1 },
+    ],
+  },
+  {
     id: 'wt6-splat', kind: 'word-splat', bg: bgL1Reading, who: 'mia', title: 'Word Splat! Listen and splat the word!',
     teacher: 'Reading: Mia says a word — the student splats it and reads it aloud.',
     words: ['my', 'is', 'the', 'this', 'you', 'are', 'how', 'look', 'now', 'see'],
@@ -1750,10 +2151,38 @@ export const LESSON_6_SCENES: Scene[] = classroomLook([
     doneLine: 'Splat! You can read them all!',
   },
   {
+    id: 'wt6-letter-blocks', kind: 'letter-blocks', bg: bgL1Reading, mode: 'sounds', model: false,
+    prompt: 'Build the word — sound by sound!',
+    teacher: 'Reading: listen, put the sound blocks in order, blend them and read the word: c-a-p, cap!',
+    rounds: [
+      { blocks: ['c', 'a', 'p'], word: 'cap', img: I1('cap') },
+      { blocks: ['h', 'e', 'n'], word: 'hen', img: I1('hen') },
+      { blocks: ['f', 'i', 'sh'], word: 'fish', img: I1('fish') },
+      { blocks: ['t', 'o', 'p'], word: 'top', img: I1('top') },
+    ],
+  },
+  {
     id: 'wt6-twister-race', kind: 'tongue-twister', look: 'town', speeds: 3, bg: bgL1Reading, who: 'pip', focus: '',
     teacher: 'Reading: the Twister Race! Read all four — slow, faster, then super fast!',
     line: 'Happy Hen hops. Sad Sam sits. Ten tiny teddies. Fun Fred finds a frog.',
     lines: ['Happy Hen hops.', 'Sad Sam sits.', 'Ten tiny teddies.', 'Fun Fred finds a frog.'],
+  },
+  {
+    id: 'wt6-speed-read', kind: 'reader', bg: bgL1Reading, title: 'Speed Reading: Leo’s First Day', doneLine: 'Wow! Fast and clear — super reading!',
+    teacher: 'Reading: Game Day speed read! The student reads pages 1-4 on their own (🔊 only for help) — then once more, faster.',
+    pages: LEO_STORY.slice(0, 4),
+  },
+  {
+    id: 'wt6-odd', kind: 'prea1', teacher: 'Reading: which one is different? Say the words, listen to the first sound — tap the odd one and say why.',
+    scene: {
+      id: 'wt6-odd', kind: 'odd-one-out', bg: bgPartyEmpty, who: 'willow',
+      teacher: 'Say the words. Which one starts with a different sound?',
+      rounds: [
+        { items: [{ label: 'cap', img: I1('cap') }, { label: 'cat', img: I1('cat') }, { label: 'hat', img: I1('hat-green') }, { label: 'car', img: I1('car') }], odd: 2, line: 'Hat! Hat starts with H. Cap, cat and car start with C.' },
+        { items: [{ label: 'fish', img: I1('fish') }, { label: 'sun', img: I1('sun') }, { label: 'fan', img: I1('fan') }, { label: 'frog', img: I1('frog') }], odd: 1, line: 'Sun! Sun starts with S. Fish, fan and frog start with F.' },
+        { items: [{ label: 'ten', img: I1('ten') }, { label: 'top', img: I1('top') }, { label: 'teddy', img: I1('teddy') }, { label: 'hen', img: I1('hen') }], odd: 3, line: 'Hen! Hen starts with H. Ten, top and teddy start with T.' },
+      ],
+    },
   },
   {
     id: 'wt6-read-do', kind: 'read-do', bg: bgL1Party, title: 'Read and do!', cast: ['leo', 'mia', 'bella', 'willow'],
@@ -1789,6 +2218,11 @@ export const LESSON_6_SCENES: Scene[] = classroomLook([
     },
   },
   {
+    id: 'wt6-letter-match', kind: 'letter-match', bg: bgL1Reading, letters: ['P', 'L', 'M', 'B', 'W'],
+    prompt: 'Match the big and small letters — then say a friend’s name!',
+    teacher: 'Reading: match each capital letter to its small letter. P is for Pip, L for Leo, M for Mia, B for Bella, W for Willow — names start with a capital letter!',
+  },
+  {
     id: 'wt6-break', kind: 'prea1', teacher: 'Brain break: count, wave and move with Pip.',
     scene: {
       id: 'wt6-break', kind: 'tpr-actions', mode: 'break', bg: bgL1Circle, who: 'pip', teacher: 'Count, wave and move with Pip!',
@@ -1801,12 +2235,40 @@ export const LESSON_6_SCENES: Scene[] = classroomLook([
     },
   },
   {
+    id: 'wt6-trials', kind: 'prea1', teacher: 'Guided: the Game Day Trials! Three skills — read it, answer it, find it. Win all the badges to get the champion medal.',
+    scene: {
+      id: 'wt6-trials', kind: 'hero-trials', bg: bgL1Stage, who: 'pip',
+      teacher: 'Win the three badges: read it, answer it, find it!',
+      hero: { img: spr('pip'), name: 'Pip' }, medal: '\u{1F3C6}',
+      skills: [{ key: 'read', label: 'Read it', icon: '\u{1F4D6}' }, { key: 'answer', label: 'Answer it', icon: '\u{1F4AC}' }, { key: 'find', label: 'Find it', icon: '\u{1F50D}' }],
+      items: [
+        { skill: 'read', ask: 'Read and find: She is sad.', reply: 'Yes! She is sad.', options: [{ label: 'sad', img: feelSpr('mia-sad') }, { label: 'happy', img: feelSpr('pip-happy') }, { label: 'tired', img: feelSpr('leo-tired') }], answer: 0 },
+        { skill: 'read', ask: 'Read and find: He is tired.', reply: 'Yes! He is tired.', options: [{ label: 'angry', img: feelSpr('bella-angry') }, { label: 'tired', img: feelSpr('leo-tired') }, { label: 'sad', img: feelSpr('mia-sad') }], answer: 1 },
+        { skill: 'answer', ask: 'What’s your name?', reply: 'My name is Pip!', options: [{ label: 'a', text: 'I am six.' }, { label: 'b', text: 'Goodbye!' }, { label: 'c', text: 'My name is Pip.' }], answer: 2 },
+        { skill: 'answer', ask: 'Nice to meet you!', reply: 'Nice to meet you, too!', options: [{ label: 'a', text: 'Nice to meet you, too!' }, { label: 'b', text: 'I am sad.' }, { label: 'c', text: 'How old are you?' }], answer: 0 },
+        { skill: 'find', ask: 'Find Leo’s red cap!', reply: 'The red cap!', options: [{ label: 'hat', img: I1('hat-green') }, { label: 'cat', img: I1('cat') }, { label: 'cap', img: I1('cap') }], answer: 2 },
+        { skill: 'find', ask: 'Find Mia!', reply: 'This is Mia!', options: [{ label: 'Mia', img: spr('mia') }, { label: 'Bella', img: spr('bella') }, { label: 'Leo', img: spr('leo') }], answer: 0 },
+      ],
+      doneLine: 'Three badges! You are the Game Day champion!',
+    },
+  },
+  {
     id: 'wt6-blend', kind: 'sound-blend', bg: bgL1Reading, look: 'gumball',
     teacher: 'Reading: the Blend & Read challenge — blend the word, then read the whole sentence from the story.',
     rounds: [
       { word: 'pip', img: I1('pip-wave'), sentence: 'Hello! My name is Pip.' },
       { word: 'hen', img: I1('hen'), sentence: 'Happy Hen hops.' },
       { word: 'ten', img: I1('ten'), sentence: 'Ten tiny teddies.' },
+    ],
+  },
+  {
+    id: 'wt6-quiz-show', kind: 'join-stage', bg: bgL1Stage, teacher: 'Free: swap! Now the STUDENT is the quiz master and asks Pip the questions. Pip answers.', cast: ['pip'],
+    turns: [
+      { who: 'student', line: 'Hello, Pip! How are you?' },
+      { who: 'pip', line: 'I am happy! It’s Game Day!' },
+      { who: 'student', line: 'How old are you?' },
+      { who: 'pip', line: 'I am eight. And you?' },
+      { who: 'student', line: 'I am … years old.' },
     ],
   },
   /* Free: a new friend */
@@ -1823,6 +2285,7 @@ export const LESSON_6_SCENES: Scene[] = classroomLook([
       { who: 'student', line: 'Goodbye, Coco! See you!' },
     ],
   },
+  { id: 'wt6-echo-bye', kind: 'echo', bg: bgL1Circle, who: 'coco', textSide: 'top', teacher: 'Guided: say it with Coco — wave!', word: 'See you tomorrow, Coco!' },
   { id: 'wt6-i-can', kind: 'meet', focus: ['fast'], bg: bgL1Circle, who: 'marigold', cardSide: 'left', teacher: 'Check: say it and get your passport stamp!', line: 'I can talk, read and answer fast!', repeat: 'I can do it fast!' },
   {
     id: 'wt6-sticker', kind: 'prea1', teacher: 'Sticker time! The student opens the pack and puts the Game Day sticker in their Sticker Book.',
@@ -1843,6 +2306,28 @@ export const LESSON_6_SCENES: Scene[] = classroomLook([
         { emoji: '\u{1F3D3}', say: 'Play Question Ping-Pong with your family.' },
         { emoji: '\u{1F445}', say: 'Say a tongue twister three times, fast!' },
         { emoji: '\u{1F4D6}', say: 'Read a page of Leo’s story to someone.' },
+      ],
+    },
+  },
+  {
+    id: 'wt6-interview-leo', kind: 'join-stage', bg: bgL1Circle, teacher: 'Extra time (Free): the student interviews Leo — any questions from Unit 1. Leo answers.', cast: ['leo'],
+    turns: [
+      { who: 'student', line: 'Hello, Leo! How are you?' },
+      { who: 'leo', line: 'I am happy now! I have my cap!' },
+      { who: 'student', line: 'How old are you?' },
+      { who: 'leo', line: 'I am seven.' },
+      { who: 'student', line: 'Who is your friend?' },
+      { who: 'leo', line: 'Pip is my friend. And you!' },
+    ],
+  },
+  {
+    id: 'wt6-break-2', kind: 'prea1', teacher: 'Brain break: the Game Day victory dance!',
+    scene: {
+      id: 'wt6-break-2', kind: 'tpr-actions', mode: 'break', bg: bgL1Stage, who: 'pip', teacher: 'Victory dance!',
+      rounds: [
+        { line: 'Hands up! We are champions!', emoji: '\u{1F64C}' },
+        { line: 'Spin around and count to five!', emoji: '\u{1F483}' },
+        { line: 'High five a friend: Nice to meet you!', emoji: '\u{1F91A}' },
       ],
     },
   },
@@ -1926,6 +2411,12 @@ export const LESSON_7_SCENES: Scene[] = classroomLook([
       { prompt: 'She is sad.', answerLabel: 'Sad', who: 'marigold' },
     ],
   },
+  {
+    id: 'wt7-p1b-numbers', kind: 'prea1', teacher: 'Part 1b — Listening: numbers (5). Miss Marigold says a number from 1 to 20 — the student taps it. Pass: 4 of 5.',
+    scene: { id: 'wt7-p1b-numbers', kind: 'numbers-review', bg: bgL1Class, who: 'pip', from: 1, to: 20, teacher: 'Listen and tap the number!' },
+  },
+  { id: 'wt7-can-2', kind: 'meet', focus: ['feel'], bg: bgFeelingsW, who: 'mia', cardSide: 'left', teacher: 'Can-do: the student says how they feel and asks back — tick it.', line: 'I can say how I feel and ask: How are you?', repeat: 'I am happy. How are you?' },
+  { id: 'wt7-can-3', kind: 'meet', focus: ['old'], bg: leoStory(3), who: 'leo', cardSide: 'left', teacher: 'Can-do: the student counts to 20 and says their age — tick it.', line: 'I can count to twenty and say: I am seven years old!', repeat: 'I am … years old.' },
   /* Part 2 — Reading: yes or no? */
   {
     id: 'wt7-p2-read', kind: 'true-false', bg: bgL1Reading, img: leoStory(6), read: true,
@@ -1938,6 +2429,29 @@ export const LESSON_7_SCENES: Scene[] = classroomLook([
       { who: 'marigold', statement: 'Pip is tired.', isTrue: false },
     ],
   },
+  {
+    id: 'wt7-p2b-spell', kind: 'name-badge', bg: bgL1Party, who: 'marigold',
+    teacher: 'Part 2b — Spell the names (3). Pass: 2 of 3.',
+    rounds: [
+      { name: 'Bella', sprite: spr('bella'), choices: ['L', 'B', 'A', 'E'] },
+      { name: 'Willow', sprite: spr('willow'), choices: ['O', 'W', 'L', 'I'] },
+      { name: 'Leo', sprite: spr('leo'), choices: ['E', 'O', 'L', 'A'] },
+    ],
+  },
+  {
+    id: 'wt7-p2c-tick', kind: 'prea1', teacher: 'Part 2c — Reading sentences (5). Read the sentence, look at the picture — tick or cross? Pass: 4 of 5.',
+    scene: {
+      id: 'wt7-p2c-tick', kind: 'tick-cross', bg: bgL1Reading, who: 'pip', teacher: 'Read and look. Yes or no?',
+      rounds: [
+        { img: feelSpr('leo-tired'), sentence: 'He is tired.', isTrue: true },
+        { img: feelSpr('mia-sad'), sentence: 'She is happy.', isTrue: false },
+        { img: spr('bella'), sentence: 'Her name is Bella.', isTrue: true },
+        { img: I1('ten'), sentence: 'It is six.', isTrue: false },
+        { img: feelSpr('willow-hungry'), sentence: 'She is hungry.', isTrue: true },
+      ],
+    },
+  },
+  { id: 'wt7-can-1', kind: 'meet', focus: ['hello'], bg: bgL1Hello, who: 'pip', cardSide: 'left', teacher: 'Can-do: the student says it — tick it on the Unit 1 can-do card.', line: 'I can say hello, my name and goodbye!', repeat: 'Hello! My name is …' },
   /* Part 3 — Reading: the story */
   {
     id: 'wt7-p3-story', kind: 'grammar-gap', bg: bgL1Reading, title: 'Part 3 — The story',
@@ -1949,6 +2463,17 @@ export const LESSON_7_SCENES: Scene[] = classroomLook([
       { before: 'Look! The cap is on the', after: '!', choices: ['hat', 'cat'], answer: 'cat', img: leoStory(9) },
       { before: 'Goodbye, Leo! See you', after: '!', choices: ['tomorrow', 'fine'], answer: 'tomorrow', img: leoStory(11) },
     ],
+  },
+  {
+    id: 'wt7-break', kind: 'prea1', teacher: 'Brain break between the parts: stretch with Pip.',
+    scene: {
+      id: 'wt7-break', kind: 'tpr-actions', mode: 'break', bg: bgL1Circle, who: 'pip', teacher: 'Stretch with Pip!',
+      rounds: [
+        { line: 'Stretch up high: I am tired!', emoji: '\u{1F971}' },
+        { line: 'Shake it out: I am happy!', emoji: '\u{1F604}' },
+        { line: 'Count to five and breathe!', emoji: '\u{1F590}\u{FE0F}' },
+      ],
+    },
   },
   /* Part 4 — Speaking */
   {
@@ -1964,12 +2489,26 @@ export const LESSON_7_SCENES: Scene[] = classroomLook([
       { who: 'student', line: 'Nice to meet you, too! Goodbye!' },
     ],
   },
+  {
+    id: 'wt7-p4b-interview', kind: 'join-stage', bg: bgL1Peers, teacher: 'Part 4b — Asking (4 points: one for each question asked in full). The STUDENT asks Mia; Mia answers. Pass: 3 of 4.', cast: ['mia'],
+    turns: [
+      { who: 'student', line: 'Hello! What’s your name?' },
+      { who: 'mia', line: 'My name is Mia.' },
+      { who: 'student', line: 'How are you, Mia?' },
+      { who: 'mia', line: 'I am happy, thank you!' },
+      { who: 'student', line: 'How old are you?' },
+      { who: 'mia', line: 'I am six.' },
+      { who: 'student', line: 'Nice to meet you! Goodbye!' },
+    ],
+  },
   /* Part 5 — Reading aloud */
   {
     id: 'wt7-p5-read-aloud', kind: 'reader', bg: bgL1Reading, title: 'Part 5 — Read it aloud!', doneLine: 'You read it all by yourself!',
     teacher: 'Part 5 — Reading aloud (5 points: every word read, then fluency). Skip the listening: tap "My turn to read" at once. Pass: 4 of 5.',
     pages: [LEO_STORY[5], LEO_STORY[9]],
   },
+  { id: 'wt7-can-4', kind: 'meet', focus: ['friend'], bg: leoStory(7), who: 'bella', cardSide: 'left', teacher: 'Can-do: the student introduces a friend and reads a story page — tick it.', line: 'I can say: This is my friend. And I can read the story!', repeat: 'This is my friend …' },
+  { id: 'wt7-echo-champ', kind: 'echo', bg: bgL1Class, who: 'pip', textSide: 'top', teacher: 'Say it proudly with Pip!', word: 'I can do it! Unit 1 champion!' },
   { id: 'wt7-i-can', kind: 'meet', focus: ['Unit 1'], bg: bgL1Class, who: 'marigold', cardSide: 'left', teacher: 'Check: any part below 4 of 5? Play it again next lesson (Practise again). Then the trophy!', line: 'I can show everything from Unit 1!', repeat: 'I can do it!' },
   {
     id: 'wt7-sticker', kind: 'prea1', teacher: 'The Unit 1 trophy! The student opens the pack and puts the trophy sticker in their Sticker Book.',
@@ -1990,6 +2529,69 @@ export const LESSON_7_SCENES: Scene[] = classroomLook([
         { emoji: '\u{1F44B}', say: 'Say hello, your name and your age to a toy.' },
         { emoji: '\u{1F91D}', say: 'Say: This is my friend …' },
         { emoji: '\u{1F3C6}', say: 'Read Leo’s story and show your trophy!' },
+      ],
+    },
+  },
+  /* Practise again — for any part below the pass mark, or as extra time */
+  {
+    id: 'wt7-pa-match', kind: 'picture-match', prompt: 'Practise again: read and match',
+    teacher: 'Practise again (Part 2/3): read each sentence and drag it under its picture.',
+    items: [
+      { word: 'I am sad. My red cap is lost.', img: leoStory(4) },
+      { word: 'Mia, this is my friend Leo.', img: leoStory(6) },
+      { word: 'Look! The cap is on the cat!', img: leoStory(9) },
+      { word: 'Goodbye, friends!', img: leoStory(11) },
+    ],
+    bg: bgL1Circle,
+  },
+  {
+    id: 'wt7-pa-splat', kind: 'word-splat', bg: bgL1Reading, who: 'pip', title: 'Practise again: Word Splat!',
+    teacher: 'Practise again (reading): Pip says a word — splat it and read it.',
+    words: ['name', 'how', 'old', 'friend', 'this', 'my', 'you', 'are', 'see', 'look'],
+    rounds: ['name', 'old', 'friend', 'how', 'this', 'see'],
+    doneLine: 'Splat! Super reading!',
+  },
+  {
+    id: 'wt7-pa-build', kind: 'sentence-build', bg: bgL1Reading, teacher: 'Practise again (Part 3): put the words in order, then read the sentence.',
+    rounds: [
+      { words: ['How', 'old', 'are', 'you?'], emoji: '\u{1F382}' },
+      { words: ['This', 'is', 'my', 'friend', 'Mia.'], emoji: '\u{1F42D}' },
+      { words: ['I', 'am', 'happy', 'now!'], emoji: '\u{1F604}' },
+    ],
+  },
+  {
+    id: 'wt7-pa-memory', kind: 'memory', bg: bgL1Circle, teacher: 'Practise again (Part 4): find each question and its answer — read both aloud.',
+    pairs: [
+      { id: 'how', label: 'How are you?', match: 'I am tired.', emoji: '\u{1F971}' },
+      { id: 'old', label: 'How old are you?', match: 'I am nine.', emoji: '\u{1F522}' },
+      { id: 'meet', label: 'Nice to meet you!', match: 'Nice to meet you, too!', emoji: '\u{1F91D}' },
+      { id: 'bye', label: 'Goodbye, Bella!', match: 'Goodbye! See you!', emoji: '\u{1F44B}' },
+    ],
+  },
+  {
+    id: 'wt7-pa-chat', kind: 'chat-chain', bg: bgL1Circle, partner: 'willow', title: 'Practise again: chat with Willow',
+    intro: 'Hello! Let’s talk!',
+    teacher: 'Practise again (Part 4): Willow talks, the student picks the reply that fits and SAYS it, then taps “I said it”.',
+    turns: [
+      { who: 'willow', line: 'Hello! How are you?' },
+      { who: 'student', line: 'I am fine, thank you. How are you?', wrong: ['I am seven.', 'My name is Pip.'] },
+      { who: 'willow', line: 'I am hungry! How old are you?' },
+      { who: 'student', line: 'I am … years old.', wrong: ['Goodbye!', 'This is my friend.'] },
+      { who: 'willow', line: 'Who is this?' },
+      { who: 'student', line: 'This is my friend Leo.', wrong: ['I am sad.', 'How are you?'] },
+    ],
+  },
+  {
+    id: 'wt7-pa-quick', kind: 'prea1', teacher: 'Practise again (speaking): quick fire! Say the whole sentence before the ring runs out.',
+    scene: {
+      id: 'wt7-pa-quick', kind: 'rapid-recall', bg: bgL1Stage, who: 'pip', seconds: 6,
+      teacher: 'Say it before the ring runs out!',
+      cards: [
+        { img: spr('leo'), word: 'Leo', say: 'This is Leo. He is seven.' },
+        { img: spr('mia'), word: 'Mia', say: 'This is Mia. She is six.' },
+        { img: feelSpr('bella-angry'), word: 'angry', say: 'She is angry.' },
+        { img: I1('ten'), word: 'ten', say: 'Ten!' },
+        { img: spr('pip'), word: 'Pip', say: 'His name is Pip. He is eight.' },
       ],
     },
   },
