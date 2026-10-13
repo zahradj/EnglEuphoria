@@ -178,7 +178,8 @@ export function StoryVideoScene({ scene, onWin, onLose, onNext, sync }: { scene:
   const onTime = () => {
     const v = videoRef.current;
     if (!v || cp || done) return;
-    const t = v.currentTime;
+    // look a little ahead (timeupdate fires ~4×/s) so a question stops the film BEFORE the next scene shows
+    const t = v.currentTime + (scene.checkpoints.some((c, i) => c.afterPage === page && !solved.includes(i)) ? 0.45 : 0);
     let idx = 0;
     for (let i = 0; i < starts.length; i++) if (t >= starts[i]) idx = i;
     if (idx <= page) return;
@@ -295,8 +296,9 @@ export function StoryVideoScene({ scene, onWin, onLose, onNext, sync }: { scene:
         <div className="absolute inset-0 z-40 flex flex-col items-center justify-center gap-5 bg-black/45 px-4">
           <button onClick={() => cueSpeak(cp.question, cp.who)} className="flex items-center gap-3 rounded-full bg-white px-5 py-2 shadow-2xl active:scale-95">
             {CAST[cp.who] && <img src={CAST[cp.who].img} alt="" className="h-12 w-12 rounded-full object-cover" />}
-            <span className="text-3xl">🔊❓</span>
+            <span className="text-2xl font-black text-orange-700">🔊 {cp.question}</span>
           </button>
+          {cp.img && <img src={cp.img} alt="" draggable={false} className="h-[min(28vh,30vw)] w-auto rounded-3xl border-[6px] border-white object-contain shadow-2xl" />}
           <div className="flex flex-wrap justify-center gap-5">
             {cp.options.map((o) => (
               <button

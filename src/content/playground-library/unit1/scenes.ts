@@ -465,7 +465,8 @@ export type Scene =
        *  instead of the animated pictures; `atSec` marks where each page starts. */
       videoUrl?: string;
       pages: { img: string; line: string; who: CharKey; motion?: 'zoom-in' | 'zoom-out' | 'pan-left' | 'pan-right'; fx?: 'bubbles' | 'sparkles' | 'tear' | 'hearts'; holdMs?: number; atSec?: number; textPos?: 'top' | 'bottom' | 'left' | 'right' }[];
-      checkpoints: { afterPage: number; who: CharKey; question: string; answer: string; options: { label: string; img?: string; colorHex?: string; shape?: 'circle' | 'square' | 'triangle' }[] }[];
+      /** `img` (optional): the picture shown with the question (e.g. Leo holding the star for "What does Leo have?"). */
+      checkpoints: { afterPage: number; who: CharKey; question: string; answer: string; img?: string; options: { label: string; img?: string; colorHex?: string; shape?: 'circle' | 'square' | 'triangle' }[] }[];
       /** Small caption for the adult (default on). */
       captions?: boolean;
     }
@@ -2468,7 +2469,7 @@ export const LESSON_5_SCENES: Scene[] = [
   /* WHILE-STORY: the whole film — part 1, then part 2 straight away (picture questions pause it) */
   {
     id: 'l5-story', kind: 'story-video', bg: bgL5Play, videoUrl: `${A}/video/leo-story-u1l5.mp4?v=1`, title: "Leo's Lost Star",
-    teacher: 'The whole story in one film (owner 2026-10-13: "merge part 1 and 2 in one video"). Make the moves with the characters — wave, blow like the wind, sad face — answer the picture questions, and before each look in the search ask: is the star there? Say the refrain with the friends: "Is it under the hat? No!"',
+    teacher: 'The whole story in one film (owner 2026-10-13: "merge part 1 and 2 in one video"). The film stops after every scene for a picture question ("What does Leo have?") — the child says the answer ("A star!"), then taps it. Make the moves with the characters, and before each look in the search ask: is the star there? Say the refrain with the friends: "Is it under the hat? No!"',
     pages: [
       { img: bgL5Play, who: 'pip', line: 'This is Leo. He has a shiny star. He is happy!', motion: 'zoom-in', fx: 'sparkles', atSec: 0 },
       { img: bgL5Wind, who: 'pip', line: 'Whoosh! The wind blows. Oh no! Where is the star?', motion: 'pan-right', atSec: 8 },
@@ -2479,10 +2480,16 @@ export const LESSON_5_SCENES: Scene[] = [
       { img: bgL5Glow, who: 'willow', line: 'Look! Under the tree!', motion: 'zoom-in', fx: 'sparkles', atSec: 48 },
       { img: bgL5FoundW, who: 'leo', line: 'My star! I am happy! Thank you, friends!', motion: 'zoom-out', fx: 'hearts', atSec: 56 },
     ],
+    // Owner 2026-10-13: a picture question after EVERY scene of the film ("What does Leo have?" → a star / an ant / a mat / a hat).
     checkpoints: [
-      { afterPage: 2, who: 'pip', question: 'How is Leo?', answer: 'Sad', options: [{ label: 'Happy', img: getEmotionSprite('leo', 'happy') }, { label: 'Sad', img: getEmotionSprite('leo', 'sad') }, { label: 'Angry', img: getEmotionSprite('leo', 'angry') }] },
-      { afterPage: 4, who: 'bella', question: 'What is under the hat?', answer: 'A bat', options: [{ label: 'A star', img: itemStarGold }, { label: 'A bat', img: itemBat }, { label: 'An ant', img: itemAnt }] },
-      { afterPage: 6, who: 'willow', question: 'Where is the star?', answer: 'Under the tree', options: [{ label: 'Under the hat', img: itemHat }, { label: 'Under the tree', img: itemTree }, { label: 'In the bag', img: itemBag }] },
+      { afterPage: 0, who: 'pip', question: 'What does Leo have?', answer: 'A star', img: bgL5Play, options: [{ label: 'A star', img: itemStarGold }, { label: 'An ant', img: itemAnt }, { label: 'A mat', img: itemMat }, { label: 'A hat', img: itemHat }] },
+      { afterPage: 1, who: 'pip', question: 'What does the wind blow away?', answer: 'The star', img: bgL5Wind, options: [{ label: 'The hat', img: itemHat }, { label: 'The star', img: itemStarGold }, { label: 'The bat', img: itemBat }] },
+      { afterPage: 2, who: 'pip', question: 'How is Leo?', answer: 'Sad', img: bgL5SadW, options: [{ label: 'Happy', img: getEmotionSprite('leo', 'happy') }, { label: 'Sad', img: getEmotionSprite('leo', 'sad') }, { label: 'Angry', img: getEmotionSprite('leo', 'angry') }] },
+      { afterPage: 3, who: 'pip', question: 'Who says: "My name is Mia"?', answer: 'Mia', img: bgL5Friends, options: [{ label: 'Bella', img: getEmotionSprite('bella', 'happy') }, { label: 'Mia', img: getEmotionSprite('mia', 'happy') }, { label: 'Willow', img: getEmotionSprite('willow', 'happy') }] },
+      { afterPage: 4, who: 'bella', question: 'What is under the hat?', answer: 'A bat', img: bgL5HatW, options: [{ label: 'A star', img: itemStarGold }, { label: 'A bat', img: itemBat }, { label: 'An ant', img: itemAnt }] },
+      { afterPage: 5, who: 'mia', question: 'What is under the mat?', answer: 'An ant', img: bgL5MatW, options: [{ label: 'A bat', img: itemBat }, { label: 'A star', img: itemStarGold }, { label: 'An ant', img: itemAnt }] },
+      { afterPage: 6, who: 'willow', question: 'Where is the star?', answer: 'Under the tree', img: bgL5Glow, options: [{ label: 'Under the hat', img: itemHat }, { label: 'Under the tree', img: itemTree }, { label: 'In the bag', img: itemBag }] },
+      { afterPage: 7, who: 'leo', question: 'How is Leo now?', answer: 'Happy', img: bgL5FoundW, options: [{ label: 'Sad', img: getEmotionSprite('leo', 'sad') }, { label: 'Angry', img: getEmotionSprite('leo', 'angry') }, { label: 'Happy', img: getEmotionSprite('leo', 'happy') }] },
     ],
   },
 
