@@ -3613,5 +3613,97 @@
    "Elephant, snake and crocodile,",
    "Ask them, ask them, with a smile!"
   ]
+ },
+ "a1u3l3-space-counting-rocket": {
+  "publicPath": "public/space-mission/audio/counting-rocket-song-a1u3l3.mp3",
+  "bpm": 116,
+  "key": "C major",
+  "beatsPerLine": 4,
+  "barsPerLine": 2,
+  "introBars": 2,
+  "maxSeconds": 60,
+  "targetWords": [
+   "count",
+   "stars",
+   "up",
+   "go"
+  ],
+  "style": "Bright space-adventure kids counting song, 116 BPM in 4/4, C major, with bouncy synth bass, twinkly bells, light drums and hand claps, ONE clear happy young singer, every number sung slowly and very clearly (TEN, TWEN-ty, THIR-ty, FOR-ty...), a rocket whoosh only in the instrumental intro.",
+  "positiveStyles": [
+   "space",
+   "synth",
+   "bells",
+   "claps",
+   "clear kids vocals",
+   "116 BPM",
+   "happy",
+   "counting song"
+  ],
+  "negativeStyles": [
+   "lullaby",
+   "sleepy",
+   "slow",
+   "adult vocals",
+   "rap",
+   "dark",
+   "instrumental only",
+   "extra verses",
+   "mumbling",
+   "robot voice"
+  ],
+  "sections": [
+   {
+    "name": "Chorus",
+    "rhyme": "AA",
+    "lines": [
+     "Count by tens and up we go,",
+     "To the stars and moon, hello!"
+    ]
+   },
+   {
+    "name": "Verse 1",
+    "rhyme": "AA",
+    "lines": [
+     "Ten and twenty, thirty, more,",
+     "Forty, fifty, rockets roar!"
+    ]
+   },
+   {
+    "name": "Chorus 2",
+    "rhyme": "AA",
+    "lines": [
+     "Count by tens and up we go,",
+     "To the stars and moon, hello!"
+    ]
+   },
+   {
+    "name": "Verse 2",
+    "rhyme": "AA",
+    "lines": [
+     "Sixty, seventy, eighty, too,",
+     "Ninety, a hundred! Stars for you!"
+    ]
+   },
+   {
+    "name": "Chorus 3",
+    "rhyme": "AA",
+    "lines": [
+     "Count by tens and up we go,",
+     "To the stars and moon, hello!"
+    ]
+   }
+  ],
+  "lines": [
+   "Count by tens and up we go,",
+   "To the stars and moon, hello!",
+   "Ten and twenty, thirty, more,",
+   "Forty, fifty, rockets roar!",
+   "Count by tens and up we go,",
+   "To the stars and moon, hello!",
+   "Sixty, seventy, eighty, too,",
+   "Ninety, a hundred! Stars for you!",
+   "Count by tens and up we go,",
+   "To the stars and moon, hello!"
+  ]
  }
 }

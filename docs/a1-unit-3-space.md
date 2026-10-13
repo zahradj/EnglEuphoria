@@ -6,7 +6,7 @@ TPR games, ESL weather games, number games). In A1 the child reads **full senten
 bit more each lesson**, **phonics + a phonics game + Blend & Read + a tongue twister in every lesson**, **30-49 pages per
 lesson**, **no game twice in the unit**, and **no story videos** (Canva story GIFs only after a scenario and the owner's OK).
 
-**Status:** plan — waiting for the owner's OK. Nothing is built yet.
+**Status:** approved (owner, 2026-10-13: "go") — building.
 
 ## 1. Where we start
 
@@ -198,4 +198,4 @@ count to 100 in tens.
 
 No paid video. Database rows after the branch is merged (like Units 1-2).
 
-**Approval:** waiting for the owner.
+**Approval:** owner, 2026-10-13: "go"
