@@ -1137,3 +1137,12 @@
   .ad-root .ad-panel[data-variant='bare'] .ad-hearpick { gap: 16px; }
   .ad-root .ad-panel[data-variant='bare'] .ad-reader-word { font-size: 1.9rem; }
 }
+
+/* rule slide: the rule, stated plainly (3 lines + examples) */
+.ad-root .ad-rule-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.ad-root .ad-rule-row { display: grid; grid-template-columns: auto 1fr auto auto; gap: 12px; align-items: center; padding: 12px 16px; border-radius: 18px; background: rgba(255, 255, 255, 0.1); border: 2px solid rgba(246, 215, 122, 0.35); }
+.ad-root .ad-rule-row[data-said='true'] { border-color: rgba(110, 231, 183, 0.8); background: rgba(16, 185, 129, 0.16); }
+.ad-root .ad-rule-no { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; background: #f6d77a; color: #2e1065; }
+.ad-root .ad-rule-text { display: grid; gap: 2px; }
+.ad-root .ad-rule-text strong { font-size: clamp(18px, 2.2vw, 26px); }
+.ad-root .ad-rule-text em { font-style: normal; opacity: 0.9; font-size: clamp(16px, 1.9vw, 22px); }

@@ -35,7 +35,7 @@ describe('Academy library by level', () => {
     expect(screen.getByRole('tab', { name: /^A1/ }).getAttribute('aria-selected')).toBe('true');
     expect(screen.getByText('Sign Me Up')).toBeTruthy();
     expect(screen.getByText('Fake or Real?')).toBeTruthy();
-    expect(screen.getAllByText('Coming soon').length).toBe(9); // the other A1 seasons
+    expect(screen.getAllByText('Coming soon').length).toBe(8); // the other A1 seasons (Season 3 has its first lesson)
     fireEvent.click(screen.getByRole('tab', { name: /^C1/ }));
     expect(screen.queryByText('Sign Me Up')).toBeNull();
     expect(screen.getAllByText('Coming soon').length).toBe(16);

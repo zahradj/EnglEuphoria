@@ -8,13 +8,14 @@ import { SIGN_ME_UP } from '../lessons/signMeUp';
 import { PATTERN_LAB } from '../lessons/patternLab';
 import { SIGN_ME_UP_2 } from '../lessons/signMeUp2';
 import { PA1_S01_E1 } from '../lessons/pa1s01e1';
+import { FREE_TIME_CLUB_1 } from '../lessons/freeTimeClub1';
 
 const q = new URLSearchParams(window.location.search);
 const art = q.get('art') ?? (window as unknown as { __ACADEMY_ART__?: string }).__ACADEMY_ART__ ?? undefined;
 
 function Preview() {
   const [mode, setMode] = useState<string | null>(q.get('mode'));
-  if (mode === 'lesson') return <Deck script={q.get('lesson') === 'fake-or-real' ? PATTERN_LAB : q.get('lesson') === 'sign-me-up-2' ? SIGN_ME_UP_2 : q.get('lesson') === 'pa1-s01-e1' ? PA1_S01_E1 : SIGN_ME_UP} artBase={art} teacher={q.get('teacher') !== '0'} freeNext={q.get('teacher') !== '0'} />;
+  if (mode === 'lesson') return <Deck script={q.get('lesson') === 'fake-or-real' ? PATTERN_LAB : q.get('lesson') === 'sign-me-up-2' ? SIGN_ME_UP_2 : q.get('lesson') === 'pa1-s01-e1' ? PA1_S01_E1 : q.get('lesson') === 'free-time-club-1' ? FREE_TIME_CLUB_1 : SIGN_ME_UP} artBase={art} teacher={q.get('teacher') !== '0'} freeNext={q.get('teacher') !== '0'} />;
   if (mode === 'homework') return <HomeworkApp artBase={art} demo={q.get('demo') !== '0'} />;
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', gap: 14, alignItems: 'center', justifyContent: 'center', padding: 16, background: 'linear-gradient(160deg,#f5f3ff,#e9e0ff)', color: '#1e1b4b', fontFamily: 'system-ui, sans-serif' }}>
