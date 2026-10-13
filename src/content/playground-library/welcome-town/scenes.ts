@@ -538,6 +538,27 @@ export type Scene =
       pieces: { label: string; img: string; x: number; y: number; size: number }[];
       rounds: { ask: string; choices: string[]; answer: number; img?: string }[]; doneLine: string;
     }
+  | {
+      /** Draw That (DrawGuessScene.tsx, Pictionary / Gimkit "Draw That" redesigned): one player draws on a shared
+       *  canvas (strokes sync live), the other guesses from the picture options and SAYS it ("It's a frog!").
+       *  `drawer` per round: 'student' or 'teacher'; in a live class only the drawer's screen shows the secret. */
+      id: string; kind: 'draw-guess'; bg: string; teacher: string; title: string; who: CharKey;
+      rounds: { drawer: 'student' | 'teacher'; secret: number; options: { label: string; img: string; say: string }[] }[]; doneLine: string;
+    }
+  | {
+      /** Echo Cave (EchoCaveScene.tsx, Marco Polo / blind man's buff redesigned): a dark cave with `tunnels` openings
+       *  (3). A friend calls from one tunnel — the voice is panned left / centre / right — and the child taps where the
+       *  voice came from; a lantern shows the friend and the child greets them. `at` = tunnel index. */
+      id: string; kind: 'echo-cave'; bg: string; teacher: string; title: string; who: CharKey;
+      rounds: { voice: CharKey; img: string; line: string; at: number; reply: string }[]; doneLine: string;
+    }
+  | {
+      /** Treasure Islands (GridHuntScene.tsx, battleship redesigned): a sea grid (columns A-D, rows 1-4). Each right
+       *  answer earns a shot: the child SAYS the square ("B3!") and taps it — a splash or a treasure. `treasures` are
+       *  the squares to find ("B3"); questions repeat until every treasure is found. */
+      id: string; kind: 'grid-hunt'; bg: string; teacher: string; title: string; who: CharKey;
+      treasures: string[]; rounds: { ask: string; choices: string[]; answer: number; img?: string }[]; doneLine: string;
+    }
   | { id: string; kind: 'letter-game'; bg: string; who: CharKey; teacher: string; mode: 'name' | 'sound'; rounds: { letter: string; phoneme?: string; choices: string[] }[] }
   | { id: string; kind: 'jigsaw-puzzle'; bg: string; teacher: string; image: string; rows: number; cols: number }
   /** `cast`: the friends shown on the finale card (defaults to Welcome Town's
@@ -766,6 +787,17 @@ export const LESSON_1_SCENES: Scene[] = classroomLook([
       { target: 'willow', prompt: 'Knock, knock! Where is Willow?', helloLine: 'Hello! My name is Willow.', echoLine: 'Hello, Willow!' },
       { target: 'bella', prompt: 'Knock, knock! Where is Bella?', helloLine: 'Hi! My name is Bella.', echoLine: 'Hi, Bella!' },
     ],
+  },
+  {
+    id: 'wt-echo-cave', kind: 'echo-cave', bg: '/lep1/scenes/bg-u2l6-cave-empty-wide.png', who: 'pip', title: 'Echo Cave: who is calling?',
+    teacher: 'Game: a friend calls from a tunnel — left, middle or right (speakers or headphones help). The student listens, taps the tunnel and says hello back: Hello, Mia!',
+    rounds: [
+      { voice: 'mia', img: spr('mia'), at: 0, line: 'Hello! My name is Mia!', reply: 'You found me! Hello!' },
+      { voice: 'leo', img: spr('leo'), at: 2, line: 'Hi! My name is Leo!', reply: 'You found me! Hi!' },
+      { voice: 'bella', img: spr('bella'), at: 1, line: 'Hello! I’m Bella! What’s your name?', reply: 'Nice to meet you!' },
+      { voice: 'willow', img: spr('willow'), at: 0, line: 'Goodbye! My name is Willow!', reply: 'You found me! Goodbye!' },
+    ],
+    doneLine: 'You found all your friends!',
   },
   /* Free: the teacher asks, then the child asks */
   {
@@ -1148,6 +1180,37 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
     ],
   },
   {
+    id: 'wt2-draw-that', kind: 'draw-guess', bg: bgL1Class, who: 'pip', title: 'Draw That! How does it feel?',
+    teacher: 'Game: take turns. The drawer sees a secret feeling and draws the face (no words!); the other one taps the picture and says it: Happy! A happy face! In a live class each screen shows only its own role.',
+    rounds: [
+      { drawer: 'teacher', secret: 0, options: [
+        { label: 'happy', img: feelSpr('pip-happy'), say: 'Happy! A happy face!' },
+        { label: 'sad', img: feelSpr('mia-sad'), say: 'Sad! A sad face!' },
+        { label: 'angry', img: feelSpr('bella-angry'), say: 'Angry! An angry face!' },
+        { label: 'tired', img: feelSpr('leo-tired'), say: 'Tired! A tired face!' },
+      ] },
+      { drawer: 'student', secret: 1, options: [
+        { label: 'happy', img: feelSpr('pip-happy'), say: 'Happy! A happy face!' },
+        { label: 'sad', img: feelSpr('mia-sad'), say: 'Sad! A sad face!' },
+        { label: 'angry', img: feelSpr('bella-angry'), say: 'Angry! An angry face!' },
+        { label: 'tired', img: feelSpr('leo-tired'), say: 'Tired! A tired face!' },
+      ] },
+      { drawer: 'teacher', secret: 3, options: [
+        { label: 'happy', img: feelSpr('pip-happy'), say: 'Happy! A happy face!' },
+        { label: 'sad', img: feelSpr('mia-sad'), say: 'Sad! A sad face!' },
+        { label: 'angry', img: feelSpr('bella-angry'), say: 'Angry! An angry face!' },
+        { label: 'tired', img: feelSpr('leo-tired'), say: 'Tired! A tired face!' },
+      ] },
+      { drawer: 'student', secret: 2, options: [
+        { label: 'happy', img: feelSpr('pip-happy'), say: 'Happy! A happy face!' },
+        { label: 'sad', img: feelSpr('mia-sad'), say: 'Sad! A sad face!' },
+        { label: 'angry', img: feelSpr('bella-angry'), say: 'Angry! An angry face!' },
+        { label: 'tired', img: feelSpr('leo-tired'), say: 'Tired! A tired face!' },
+      ] },
+    ],
+    doneLine: 'Great drawing! Great guessing!',
+  },
+  {
     id: 'wt2-feelings-freeze', kind: 'prea1', teacher: 'Brain break: dance, then FREEZE with the face Pip says.',
     scene: {
       id: 'wt2-feelings-freeze', kind: 'tpr-actions', mode: 'break', bg: '/lep1/scenes/bg-u3l4-room-empty-wide.png', who: 'pip',
@@ -1447,6 +1510,22 @@ export const LESSON_3_SCENES: Scene[] = classroomLook([
       { who: 'marigold', line: 'I am fifty! Ha ha! How old is Pip?' },
       { who: 'student', line: 'He is eight!' },
     ],
+  },
+  {
+    id: 'wt3-treasure-islands', kind: 'grid-hunt', bg: '/lep1/scenes/bg-u10l2-beach-empty-wide.png', who: 'pip', title: 'Treasure Islands',
+    teacher: 'Game: answer to earn a dive. The student says a square — B three! — and taps it. Splash or treasure? Find all three treasures.',
+    treasures: ['B2', 'D3', 'A4'],
+    rounds: [
+      { ask: 'What comes after twelve?', choices: ['eleven', 'thirteen', 'twenty'], answer: 1 },
+      { ask: 'How old are you?', choices: ['I’m fine, thank you.', 'I’m seven years old.', 'My name is Pip.'], answer: 1 },
+      { ask: 'What comes before eleven?', choices: ['twelve', 'ten', 'seventeen'], answer: 1 },
+      { ask: 'Ten candles! How old is Pip?', choices: ['He’s ten.', 'He’s two.', 'He’s twelve.'], answer: 0 },
+      { ask: 'What comes after fifteen?', choices: ['fourteen', 'sixteen', 'sixty'], answer: 1 },
+      { ask: 'What comes before twenty?', choices: ['nineteen', 'eighteen', 'twelve'], answer: 0 },
+      { ask: 'What comes after seventeen?', choices: ['eighteen', 'seventy', 'sixteen'], answer: 0 },
+      { ask: 'How old is Mia? She’s …', choices: ['eight years old.', 'eight name.', 'eight fine.'], answer: 0 },
+    ],
+    doneLine: 'You found all the treasure!',
   },
   /* Reading */
   {

@@ -428,12 +428,29 @@ function applySlowPace(audio: HTMLAudioElement, rate: number = SPEECH_SPEED) {
  *  Web Audio detune alternative was removed). Resolves true once playback
  *  finishes, false on error or an autoplay-policy rejection — the caller
  *  falls back to speech synthesis in that case. */
-function playClipBlob(blob: Blob): Promise<boolean> {
+/** One shared AudioContext, created lazily, only for panned lines (Echo Cave). */
+let panCtx: AudioContext | null = null;
+/** Route one clip through a stereo panner (-1 = left … 1 = right). Best effort: any failure plays it centred. */
+function applyPan(audio: HTMLAudioElement, pan: number) {
+  try {
+    const Ctx = window.AudioContext ?? (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+    if (!Ctx) return;
+    panCtx = panCtx ?? new Ctx();
+    void panCtx.resume?.();
+    const src = panCtx.createMediaElementSource(audio);
+    const p = panCtx.createStereoPanner();
+    p.pan.value = Math.max(-1, Math.min(1, pan));
+    src.connect(p).connect(panCtx.destination);
+  } catch { /* centred */ }
+}
+
+function playClipBlob(blob: Blob, pan = 0): Promise<boolean> {
   return new Promise((resolve) => {
     const url = URL.createObjectURL(blob);
     const audio = new Audio(url);
     audio.preload = 'auto';
     applySlowPace(audio, SPEECH_SPEED_NATURAL);
+    if (pan) applyPan(audio, pan);
     currentAudioEl = audio;
     const finish = (ok: boolean) => {
       if (currentAudioEl === audio) currentAudioEl = null;
@@ -551,7 +568,9 @@ export function isSpeaking(): boolean {
 const ttsSafe = spokenText;
 
 /** Speak `text` as `character`. Utterances are sequenced. */
-export function speak(text: string, character: Character = 'teacher'): Promise<void> {
+/** `opts.pan` (-1 left … 1 right) places this one line in stereo space (Echo Cave); the other screen in a live
+ *  class hears it centred. */
+export function speak(text: string, character: Character = 'teacher', opts?: { pan?: number }): Promise<void> {
   if (typeof window === 'undefined') return Promise.resolve();
   const trimmed = text.trim();
   if (!trimmed) return Promise.resolve();
@@ -580,7 +599,7 @@ export function speak(text: string, character: Character = 'teacher'): Promise<v
     const blob = await blobPromise;
     if (relay && relayLeadMs) await waitUntil(sentAt + relayLeadMs);
     if (mySession !== sessionId) return;
-    const played = blob ? await playClipBlob(blob) : false;
+    const played = blob ? await playClipBlob(blob, opts?.pan ?? 0) : false;
     // A clip that was deliberately interrupted mid-playback (stopSpeaking()
     // called while playClipBlob's audio element was still playing — e.g. the
     // student tapped past a scene before its line finished) also resolves

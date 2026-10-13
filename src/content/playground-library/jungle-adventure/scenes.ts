@@ -205,6 +205,17 @@ export const LESSON_A1U2L1_SCENES: Scene[] = [
     doneLine: 'Super spying! You found every animal!',
   },
   {
+    id: 'ja-draw-that', kind: 'draw-guess', bg: bgWide, who: 'leo', title: 'Draw That! Which animal?',
+    teacher: 'Game: take turns. The drawer sees a secret animal and draws it (no words!); the other one taps the picture and says it: It’s a snake! In a live class each screen shows only its own role.',
+    rounds: [
+      { drawer: 'teacher', secret: 1, options: [{ label: 'elephant', img: ANIMALS.elephant.img, say: 'It’s an elephant!' }, { label: 'snake', img: ANIMALS.snake.img, say: 'It’s a snake!' }, { label: 'fish', img: ANIMALS.fish.img, say: 'It’s a fish!' }, { label: 'bird', img: ANIMALS.bird.img, say: 'It’s a bird!' }] },
+      { drawer: 'student', secret: 0, options: [{ label: 'frog', img: ANIMALS.frog.img, say: 'It’s a frog!' }, { label: 'lion', img: ANIMALS.lion.img, say: 'It’s a lion!' }, { label: 'snake', img: ANIMALS.snake.img, say: 'It’s a snake!' }, { label: 'fish', img: ANIMALS.fish.img, say: 'It’s a fish!' }] },
+      { drawer: 'teacher', secret: 2, options: [{ label: 'crocodile', img: ANIMALS.crocodile.img, say: 'It’s a crocodile!' }, { label: 'bird', img: ANIMALS.bird.img, say: 'It’s a bird!' }, { label: 'elephant', img: ANIMALS.elephant.img, say: 'It’s an elephant!' }, { label: 'frog', img: ANIMALS.frog.img, say: 'It’s a frog!' }] },
+      { drawer: 'student', secret: 3, options: [{ label: 'lion', img: ANIMALS.lion.img, say: 'It’s a lion!' }, { label: 'elephant', img: ANIMALS.elephant.img, say: 'It’s an elephant!' }, { label: 'frog', img: ANIMALS.frog.img, say: 'It’s a frog!' }, { label: 'fish', img: ANIMALS.fish.img, say: 'It’s a fish!' }] },
+    ],
+    doneLine: 'Great drawing! Great guessing!',
+  },
+  {
     id: 'ja-move-break', kind: 'prea1', teacher: 'Brain break: move like the animals with Pip.',
     scene: {
       id: 'ja-move-break', kind: 'tpr-actions', mode: 'break', bg: bgWide, who: 'pip', teacher: 'Move like the animals!',
@@ -598,6 +609,17 @@ export const LESSON_A1U2L2_SCENES: Scene[] = [
       { who: 'leo', line: 'I can run fast! What can you do?' },
       { who: 'student', line: 'I can … I can’t …' },
     ],
+  },
+  {
+    id: 'ja2-echo-cave', kind: 'echo-cave', bg: '/lep1/scenes/bg-u2l6-cave-empty-wide.png', who: 'leo', title: 'Echo Cave: who can do it?',
+    teacher: 'Game: a friend calls from a tunnel — left, middle or right (speakers or headphones help). The student listens, taps the tunnel and says it: Coco can swing!',
+    rounds: [
+      { voice: 'coco', img: it('coco-swing'), at: 2, line: 'I can swing! Find me!', reply: 'Yes! I’m Coco. I can swing!' },
+      { voice: 'willow', img: it('willow-fly'), at: 0, line: 'I can fly! Find me!', reply: 'Here I am! I can fly!' },
+      { voice: 'pip', img: it('pip-climb'), at: 1, line: 'I can climb! Find me!', reply: 'You found me! I can climb!' },
+      { voice: 'leo', img: it('leo-run'), at: 2, line: 'I can run fast! Find me!', reply: 'Here I am! I can run!' },
+    ],
+    doneLine: 'You found everyone! Who can swing? Coco can!',
   },
 
   /* Reading: The Jungle Rescue pages 4-5 */
@@ -1256,6 +1278,21 @@ export const LESSON_A1U2L4_SCENES: Scene[] = [
       { who: 'pip', line: 'And the snake?' },
       { who: 'student', line: 'It’s long. It’s green. It can climb. It can’t run.' },
     ],
+  },
+  {
+    id: 'ja4-waterfall-treasure', kind: 'grid-hunt', bg: bgWaterfall, who: 'leo', title: 'Waterfall Treasure',
+    teacher: 'Game: answer to earn a dive. The student says a square — C two! — and taps it. Splash or treasure? Find all three treasures.',
+    treasures: ['C1', 'A3', 'D4'],
+    rounds: [
+      { ask: 'Which animal has got a long nose?', choices: ['the frog', 'the elephant', 'the bird'], answer: 1 },
+      { ask: 'Which animal has got a long tail?', choices: ['the crocodile', 'the fish', 'the frog'], answer: 0 },
+      { ask: 'Has Coco got a long tail?', img: ANIMALS.monkey.img, choices: ['Yes, he has!', 'No, he hasn’t.'], answer: 0 },
+      { ask: 'Has the frog got a long tail?', img: ANIMALS.frog.img, choices: ['Yes, it has.', 'No, it hasn’t.'], answer: 1 },
+      { ask: 'Look! It’s got a long nose. What is it?', choices: ['It’s a snake.', 'It’s an elephant.', 'It’s a fish.'], answer: 1 },
+      { ask: 'Has the elephant got a long nose?', img: ANIMALS.elephant.img, choices: ['No, it hasn’t.', 'Yes, it has.'], answer: 1 },
+      { ask: 'Look! It’s got a long tail. What is it?', img: ANIMALS.crocodile.img, choices: ['It’s a crocodile.', 'It’s a bird.', 'It’s a frog.'], answer: 0 },
+    ],
+    doneLine: 'You found all the treasure!',
   },
   /* Phonics: sh → Sound Mole → Blend & Read → tongue twister */
   {

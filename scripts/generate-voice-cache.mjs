@@ -818,6 +818,17 @@ const WT_EXTRACTORS = {
     const p = (s.pieces ?? [])[i];
     return [[s.who, q.ask], ['teacher', `${q.choices[q.answer]} ${p ? `${/^[aeiou]/i.test(p.label) ? 'An' : 'A'} ${p.label}!` : ''}`]];
   })],
+  // DrawGuessScene / EchoCaveScene / GridHuntScene (welcome-town/scene-components).
+  'draw-guess': (s) => [[s.who, s.doneLine], [s.who, 'You draw! Don’t say it! Your teacher guesses.'], [s.who, 'Your teacher draws! What is it? Guess and say it!'], [s.who, 'Not yet! Look again!'],
+    ...(s.rounds ?? []).flatMap((r) => (r.options ?? []).map((o) => ['teacher', o.say]))],
+  'echo-cave': (s) => [[s.who, s.doneLine], [s.who, 'Shh! Listen! Who is calling? Where is the voice?'], [s.who, 'Not this tunnel! Listen again!'],
+    ...(s.rounds ?? []).flatMap((r) => [[r.voice, r.line], [r.voice, r.reply]])],
+  'grid-hunt': (s) => {
+    const num = ['one', 'two', 'three', 'four']; const tr = (s.treasures ?? []).map((t) => t.toUpperCase());
+    const cells = ['A', 'B', 'C', 'D'].flatMap((c) => [1, 2, 3, 4].map((n) => `${c}${n}`));
+    return [[s.who, s.doneLine], ...cells.map((c) => [s.who, `${({ A: 'Ay', B: 'Bee', C: 'See', D: 'Dee' })[c[0]]} ${num[Number(c[1]) - 1]}! ${tr.includes(c) ? 'Treasure!' : 'Splash!'}`]),
+      ...(s.rounds ?? []).flatMap((q) => [[s.who, q.ask], ['teacher', `${q.choices[q.answer]} Dive! Say a square!`]])];
+  },
   'hot-coconut': (s) => [[s.who, s.doneLine], ...(s.rounds ?? []).flatMap((q) => {
     const n = (s.seats ?? []).length || 1; const at = ((q.stop % n) + n) % n;
     return [[s.who, `${at === 0 ? 'Your turn!' : `Help ${s.seats[at].name}!`} ${q.ask}`], ['teacher', q.choices[q.answer]]];

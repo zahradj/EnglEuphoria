@@ -206,19 +206,19 @@ These are playground and party games that teachers still use for English. Source
 | Simon Says | exists (`simon-touch`, `campfire-says`) **+ Red Light, Green Light**: move on "green", freeze on "red", and the child's runner advances | instructions, can | ★ new mode of `campfire-says` | ★ New | X |
 | Musical Chairs ⚠️ | **Musical Islands**: animals hop between lily pads while the music plays; when it stops, the child says where each animal is. Nobody is "out" | prepositions, "The frog is on the…" | ★ new `musical-islands` | ★ New | L, X |
 | Telephone / Chinese Whispers | **Whisper Tube**: Pip whispers a sentence down a tube to Mia, a word gets mixed up, and the child hears both and fixes the wrong word | listening for detail | `true-false` + 2-voice audio | ★ New | L |
-| Pictionary | **Draw That** (Gimkit): the teacher (or child) draws on a shared canvas and the other guesses in a sentence; drawing syncs live | "It's a…" / "It's got…" | ★ new `draw-guess` (synced canvas) | ★ New | S |
+| Pictionary | **Draw That** (Gimkit): the teacher (or child) draws on a shared canvas and the other guesses in a sentence; drawing syncs live | "It's a…" / "It's got…" | `draw-guess` (U1 L2 `wt2-draw-that` feelings faces, U2 L1 `ja-draw-that` animals; shared play: the drawer's screen alone sees the secret) | ✓ built | S |
 | 20 Questions / Guess Who | exists: `secret-card` (Guess the Animal / Guess My Friend) | yes/no questions | `secret-card` | ✓ built | S |
 | Go Fish (card game) | **Go Fish! with Pip**: the child holds picture cards and asks "Have you got a frog?"; Pip answers "Yes, here you are! / No — go fish!"; pairs fly to the table | have got, animals, food | `go-fish` (U2 L6; rules in goFishRules.ts + test) | ✓ built | S |
 | Dominoes | **Sentence Dominoes**: a tile with a picture and half a sentence; snap the next tile whose half finishes the sentence, so the chain grows across the table | sentence halves | `dominoes` (U1 L4, U2 L5) | ✓ built | C, P |
 | Hopscotch | **Number Hop**: a painted hopscotch; Pip throws a pebble on a square and the child says the number or sentence on each square Pip hops | numbers 1-20, routines | `stepping-stones` re-skin | ⇄ re-skin | X |
 | Hot and Cold | **Treasure Radar**: the child taps the beach to search; the screen tints from blue ("cold") to red ("hot") and Pip says "Warmer! Hotter!" | listening for direction words | ★ new `hot-cold` | ★ New | L, X |
-| Battleship | **Treasure Islands**: a 4×4 sea grid (A-D, 1-4); the child calls "B3!" and a chest or a splash appears. A1 mode: answer a question to get each shot | letters + numbers, questions | ★ new `grid-hunt` | ★ New | R |
+| Battleship | **Treasure Islands**: a 4×4 sea grid (A-D, 1-4); the child calls "B3!" and a chest or a splash appears. A1 mode: answer a question to get each shot | letters + numbers, questions | `grid-hunt` (U1 L3 `wt3-treasure-islands` numbers/ages, U2 L4 `ja4-waterfall-treasure` long nose/tail) | ✓ built | R |
 | Kim's Game | exists: `whats-missing` / `whos-missing` | "The cap is missing!" | ✓ built | ✓ built | W, R |
 | Pass the Parcel | **Pass the Present**: a gift with 4 layers of paper; each right answer tears one layer off, and the prize sticker is inside | any review | `pass-parcel` (U1 L7, U2 L7) | ✓ built | R |
 | Jenga | **Wobbly Tower**: tap a block to pull it out; the question is on it, and a right answer means the block slides out cleanly. The tower never falls on a child's turn | review questions | ★ new `tower-pull` | ★ New | R |
 | Word Search / Crossword | **Picture Crossword**: picture clues; type or tap letters, and the word lights up and is said | spelling | ★ new `crossword` (Wordwall) | ★ New | P |
 | Rock-Paper-Scissors | **Who starts?**: a quick hand game decides the first turn in duel games; say "Rock, paper, scissors, go!" | chant | UI helper in duel games | ★ New | — |
-| Marco Polo / Blind Man's Buff ⚠️ | **Echo Cave**: eyes closed (a dark screen); a friend calls from left / right / up / down, and the child points where the voice comes from (stereo pan) | here/there, left/right | ★ new `echo-cave` | ★ New | L |
+| Marco Polo / Blind Man's Buff ⚠️ | **Echo Cave**: eyes closed (a dark screen); a friend calls from left / right / up / down, and the child points where the voice comes from (stereo pan) | names, can (who is calling?) | `echo-cave` (U1 L1 `wt-echo-cave` hello/my name is, U2 L2 `ja2-echo-cave` I can…); left/middle/right stereo pan, hint glow after 2 misses | ✓ built | L |
 
 ## 12. Modern platform mechanics to borrow (2026 research)
 
@@ -246,7 +246,7 @@ Sources: Wordwall templates (34+ interactives: Maze Chase, Airplane, Whack-a-mol
 1. **Sticker Bingo**, **Tic-Tac-Toe Duel**, **Pass the Present**, **I Spy binoculars**. These reuse existing art and kinds, are quick to build and fit any unit.
 2. **Save the Balloon**, **Sentence Dominoes**, **Go Fish!**, **Hot Coconut**. Each is one new kind with simple art.
 3. **Jungle Jeopardy**, **Treasure Chests**, **Rising River**, **Build the Town**. These are the game-frame and review layer for L6 and L7.
-4. **Draw That** (synced canvas), **Echo Cave** (stereo audio), **Treasure Islands** (grid). These are technically new.
+4. ✓ **Draw That** (synced canvas), **Echo Cave** (stereo audio), **Treasure Islands** (grid). These are technically new.
 
 ---
 
