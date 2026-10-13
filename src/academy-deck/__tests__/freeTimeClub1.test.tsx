@@ -34,6 +34,7 @@ const minutes = (s: Slide): number => {
     case 'hunt': return 0.8 + s.targets.length * 0.5;
     case 'explore': return 1 + s.spots.length * 0.6;
     case 'sort': return 0.8 + s.items.length * 0.4;
+    case 'story': return 0.4 + s.beats.reduce((n, b) => n + b.lines.length, 0) * 0.4;
     case 'phonechat': return 0.4 + s.steps.length * 0.65;
     case 'spell': return 0.8 + 0.2 * s.target.length;
     case 'say': return 2;
@@ -130,7 +131,7 @@ describe('A1 S3 E1 The Missing Poster: sequencing and the owner rules (modelling
 
   it('ORIGINALITY (owner 2026-10-14): new scene, new games, and none of the Season 1 opening pattern (badge-convo opening, brief card, who-said, border booth, padlock, find-the-wrong-line)', () => {
     const kinds = new Set(slides.map((x) => x.kind));
-    ['explore', 'sort', 'hunt', 'phonechat', 'shadow', 'hearpick', 'rule'].forEach((k) => expect(kinds.has(k as never), k).toBe(true));
+    ['story', 'explore', 'sort', 'hunt', 'phonechat', 'shadow', 'hearpick', 'rule'].forEach((k) => expect(kinds.has(k as never), k).toBe(true));
     ['brief', 'whosaid', 'border', 'padlock', 'findwrong', 'factcheck', 'card', 'numwall', 'lockers'].forEach((k) => expect(kinds.has(k as never), `must not use ${k}`).toBe(false));
     expect(slides.some((x) => x.bg === 'fair-night')).toBe(true);
     expect(new Set(slides.map((x) => x.bg)).size).toBeGreaterThanOrEqual(5);
@@ -186,5 +187,15 @@ describe('A1 S3 E1 The Missing Poster: play-through', () => {
     expect(screen.getByText('I like music.')).toBeTruthy();
     expect(screen.getByText('I love games.')).toBeTruthy();
     expect(screen.getByText(/That is your hobby wall/)).toBeTruthy();
+  });
+
+  it('STORY: full scene plates, one subtitle per tap; after the last line the slide is done', () => {
+    open('story-welcome');
+    expect(screen.getByText(/Welcome to the Club Fair/)).toBeTruthy();
+    for (let i = 0; i < 4; i++) fireEvent.click(screen.getByRole('button', { name: /Next line/ }));
+    expect(screen.getByText(/Look! Five stalls/)).toBeTruthy();
+    const dock = screen.getAllByRole('button', { name: /Next/ }).filter((b) => b.getAttribute('aria-label') !== 'Next line');
+    expect(dock.length).toBe(1);
+    expect(dock[0]).toBeEnabled();
   });
 });

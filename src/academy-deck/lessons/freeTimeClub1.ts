@@ -92,15 +92,12 @@ export const FREE_TIME_CLUB_1: DeckScript = {
 
     // ---------- 2 · The Drop: the fair is the game ----------
     {
-      id: 'model-fair', kind: 'model', part: 2, stage: 'context', bg: FN, actors: [who('Vee', 'left'), who('Ava', 'center'), who('Theo', 'right')], trains: [1],
-      title: 'Welcome to the Club Fair',
-      lines: [
-        { who: 'Vee', text: 'Welcome to the Club Fair!', pic: FAIR },
-        { who: 'Ava', text: 'Hi! This is my club.', pic: CLUB },
-        { who: 'Ava', text: 'Oh no! My poster is gone!', pic: POSTER },
-        { who: 'Theo', text: 'Look! Five stalls. Ask them what they like!' },
+      id: 'story-welcome', kind: 'story', part: 2, stage: 'context', bg: FN, trains: [1], title: 'The Missing Poster',
+      beats: [
+        { plate: 'story-fair-1', lines: [{ who: 'Vee', text: 'Welcome to the Club Fair!' }, { who: 'Ava', text: 'Hi! This is my club.' }] },
+        { plate: 'story-fair-2', lines: [{ who: 'Ava', text: 'Oh no! My poster is gone!' }, { who: 'Theo', text: 'Three members by Friday. We need help!' }] },
+        { plate: 'story-fair-3', lines: [{ who: 'Theo', text: 'Look! Five stalls. Ask them what they like!' }] },
       ],
-      closing: 'Walk the fair. Tap every stall!',
     },
     {
       id: 'walk', kind: 'explore', part: 2, stage: 'context', bg: FN, trains: [1, 4],
@@ -304,9 +301,13 @@ export const FREE_TIME_CLUB_1: DeckScript = {
       hints: ['Say it like you teach a friend. Like and love, a thing or -ing.'],
     },
     {
+      id: 'story-clue', kind: 'story', part: 7, stage: 'review', bg: FN, trains: [1], title: 'Clue 1',
+      beats: [{ plate: 'story-fair-4', lines: [{ who: 'Ava', text: 'A torn corner! It starts with M. Who is it?' }] }],
+    },
+    {
       id: 'wrap', kind: 'wrap', part: 7, bg: FN, actors: [who('Vee', 'left', 'thumbs')], heading: 'The fair is open!', ticks: CRITERIA,
       homework: 'Homework: send Ava one voice note: “I like ___. I love ___.” Not yet is okay!',
-      clue: 'Clue 1 of 8: Ava’s poster is gone, but there is a torn corner on the art stall. It starts with the letter M. Who could it be?',
+      clue: 'Clue 1 of 8: a torn corner of the poster, with the letter M. Who could it be?',
     },
   ],
 };

@@ -13,6 +13,7 @@ import { BlendView, HearPickView, ReaderView } from './slides/reading';
 import { RuleView } from './slides/rule';
 import { ExploreView } from './slides/explore';
 import { SortView } from './slides/sort';
+import { StoryView } from './slides/story';
 import { playSfx } from './sfx';
 import { applyLane, laneOf, LANE_LABEL } from './lanes';
 import { BadgeView, BriefView, DialView, TitleView } from './slides/intro';
@@ -67,6 +68,7 @@ function SlideView({ slide }: { slide: Slide }) {
     case 'rule': return <RuleView slide={slide} />;
     case 'explore': return <ExploreView slide={slide} />;
     case 'sort': return <SortView slide={slide} />;
+    case 'story': return <StoryView slide={slide} />;
     case 'whosaid': return <WhoSaidView slide={slide} />;
     case 'hunt': return <HuntView slide={slide} />;
     case 'shadow': return <ShadowView slide={slide} />;

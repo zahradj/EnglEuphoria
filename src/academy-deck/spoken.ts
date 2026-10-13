@@ -67,6 +67,7 @@ export function viewLines(s: Slide): SpokenLine[] {
     case 'factcheck': return s.claims.flatMap((c) => line(lead(s), c.text));
     case 'blend': return s.rounds.flatMap((r) => line('Vee', r.word));
     case 'hearpick': return s.rounds.flatMap((r) => line('Vee', r.say));
+    case 'story': return s.beats.flatMap((b) => b.lines.flatMap((l) => line(l.who, l.text)));
     case 'sort': return s.items.flatMap((it) => s.bins.flatMap((b) => line('Vee', b.template.replace('{w}', it.word))));
     case 'explore': return s.spots.flatMap((p) => line(p.who, p.line));
     case 'rule': return s.lines.flatMap((l) => [...line('Vee', l.say), ...line('Vee', l.example)]);
