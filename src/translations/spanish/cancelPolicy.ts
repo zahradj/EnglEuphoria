@@ -1,4 +1,4 @@
-// Cancellation policy: students cancel up to 8 hours before a lesson, teachers need 5 days' notice.
+// Cancellation policy: students cancel up to 8 hours before a lesson, teachers need 48 hours' notice.
 // Namespaced `cx.` (messages) and `rp.` (the Refund & Cancellation Policy page). Every key must exist in all six
 // languages (cancelPolicy.test.ts checks it). English is the source and the fallback language.
 
@@ -9,7 +9,7 @@ export const cancelPolicyTranslations = {
   "cx.toast.tooLate": "Las clases deben cancelarse con al menos 8 horas de antelación. Cancelar ahora supondrá el cobro completo.",
   "cx.plan.cancel": "Cancelación gratuita (8 h de antelación)",
   "rp.title": "Política de reembolsos y cancelaciones",
-  "rp.desc": "Política de reembolsos y cancelaciones de EnglEuphoria: los estudiantes pueden cancelar hasta 8 horas antes de una clase; los profesores deben avisar con 5 días de antelación.",
+  "rp.desc": "Política de reembolsos y cancelaciones de EnglEuphoria: los estudiantes pueden cancelar hasta 8 horas antes de una clase; los profesores deben avisar con 48 horas de antelación.",
   "rp.updated": "13 de octubre de 2026",
   "rp.s1.title": "1. Resumen",
   "rp.s1.body": "EnglEuphoria funciona con un modelo de reservas basado en créditos. Los estudiantes compran créditos de clase y luego los canjean al reservar sesiones con los profesores. Esta Política regula cómo se gestionan las cancelaciones y los reembolsos.",
@@ -19,8 +19,8 @@ export const cancelPolicyTranslations = {
   "rp.s2.b2": "Cancelaciones realizadas <b>con menos de 8 horas</b> de antelación: la clase se considera definitiva. <b>No se concederá reembolso ni devolución de crédito.</b>",
   "rp.s2.b3": "<b>Ausencias:</b> los estudiantes que no asistan a una clase programada sin cancelarla pierden el crédito por completo.",
   "rp.s2.foot": "Este plazo protege a nuestros profesores, que reservan tiempo exclusivamente para tu reserva.",
-  "rp.s3.title": "3. Regla de cancelación para profesores (5 días)",
-  "rp.s3.body": "Los profesores deben cancelar o reprogramar una clase reservada con al menos <b>120 horas (5 días completos)</b> de antelación a su hora de inicio, para que los estudiantes puedan organizarse. Los profesores que cancelen más tarde pueden estar sujetos a una penalización por cancelación tardía.",
+  "rp.s3.title": "3. Regla de cancelación para profesores (48 horas)",
+  "rp.s3.body": "Los profesores deben cancelar o reprogramar una clase reservada con al menos <b>48 horas (2 días completos)</b> de antelación a su hora de inicio, para que los estudiantes puedan organizarse. Los profesores que cancelen más tarde pueden estar sujetos a una penalización por cancelación tardía.",
   "rp.s4.title": "4. Clases de prueba",
   "rp.s4.body": "<b>Las clases de prueba son de venta final y no reembolsables</b> bajo ninguna circunstancia. Las pruebas se ofrecen a una tarifa introductoria reducida precisamente porque no son reembolsables.",
   "rp.s5.title": "5. Compra de paquetes de créditos",

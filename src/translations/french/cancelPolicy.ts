@@ -1,4 +1,4 @@
-// Cancellation policy: students cancel up to 8 hours before a lesson, teachers need 5 days' notice.
+// Cancellation policy: students cancel up to 8 hours before a lesson, teachers need 48 hours' notice.
 // Namespaced `cx.` (messages) and `rp.` (the Refund & Cancellation Policy page). Every key must exist in all six
 // languages (cancelPolicy.test.ts checks it). English is the source and the fallback language.
 
@@ -9,7 +9,7 @@ export const cancelPolicyTranslations = {
   "cx.toast.tooLate": "Un cours doit être annulé au moins 8 heures à l’avance. Annuler maintenant entraînera la facturation complète.",
   "cx.plan.cancel": "Annulation gratuite (préavis de 8 h)",
   "rp.title": "Politique de remboursement et d’annulation",
-  "rp.desc": "Politique de remboursement et d’annulation d’EnglEuphoria : les élèves peuvent annuler jusqu’à 8 heures avant un cours ; les enseignants doivent respecter un préavis de 5 jours.",
+  "rp.desc": "Politique de remboursement et d’annulation d’EnglEuphoria : les élèves peuvent annuler jusqu’à 8 heures avant un cours ; les enseignants doivent respecter un préavis de 48 heures.",
   "rp.updated": "13 octobre 2026",
   "rp.s1.title": "1. Présentation",
   "rp.s1.body": "EnglEuphoria fonctionne avec un système de réservation par crédits. Les élèves achètent des crédits de cours, puis les utilisent pour réserver des séances avec les enseignants. La présente politique régit le traitement des annulations et des remboursements.",
@@ -19,8 +19,8 @@ export const cancelPolicyTranslations = {
   "rp.s2.b2": "Annulations effectuées <b>moins de 8 heures avant</b> le cours : le cours est considéré comme définitif. <b>Aucun remboursement ni restitution de crédit ne sera accordé.</b>",
   "rp.s2.b3": "<b>Absences :</b> les élèves qui ne se présentent pas à un cours programmé sans l’avoir annulé perdent intégralement le crédit.",
   "rp.s2.foot": "Ce délai protège nos enseignants, qui bloquent du temps exclusivement pour votre réservation.",
-  "rp.s3.title": "3. Règle d’annulation pour les enseignants (5 jours)",
-  "rp.s3.body": "Les enseignants doivent annuler ou reporter un cours réservé au moins <b>120 heures (5 jours entiers)</b> avant son heure de début, afin que les élèves puissent s’organiser. Les enseignants qui annulent plus tard peuvent se voir appliquer une pénalité d’annulation tardive.",
+  "rp.s3.title": "3. Règle d’annulation pour les enseignants (48 heures)",
+  "rp.s3.body": "Les enseignants doivent annuler ou reporter un cours réservé au moins <b>48 heures (2 jours entiers)</b> avant son heure de début, afin que les élèves puissent s’organiser. Les enseignants qui annulent plus tard peuvent se voir appliquer une pénalité d’annulation tardive.",
   "rp.s4.title": "4. Cours d’essai",
   "rp.s4.body": "<b>Les cours d’essai sont définitifs et non remboursables</b> en toute circonstance. Les essais sont proposés à un tarif d’introduction réduit précisément parce qu’ils ne sont pas remboursables.",
   "rp.s5.title": "5. Achat de packs de crédits",

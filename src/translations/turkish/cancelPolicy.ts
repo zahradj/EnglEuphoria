@@ -1,4 +1,4 @@
-// Cancellation policy: students cancel up to 8 hours before a lesson, teachers need 5 days' notice.
+// Cancellation policy: students cancel up to 8 hours before a lesson, teachers need 48 hours' notice.
 // Namespaced `cx.` (messages) and `rp.` (the Refund & Cancellation Policy page). Every key must exist in all six
 // languages (cancelPolicy.test.ts checks it). English is the source and the fallback language.
 
@@ -9,7 +9,7 @@ export const cancelPolicyTranslations = {
   "cx.toast.tooLate": "Dersler en az 8 saat önceden iptal edilmelidir. Şimdi iptal etmek ücretin tamamının tahsil edilmesine yol açar.",
   "cx.plan.cancel": "Ücretsiz iptal (8 saat önceden)",
   "rp.title": "İade ve İptal Politikası",
-  "rp.desc": "EnglEuphoria iade ve iptal politikası: öğrenciler dersten 8 saat öncesine kadar iptal edebilir; öğretmenler 5 gün önceden bildirmelidir.",
+  "rp.desc": "EnglEuphoria iade ve iptal politikası: öğrenciler dersten 8 saat öncesine kadar iptal edebilir; öğretmenler 48 saat önceden bildirmelidir.",
   "rp.updated": "13 Ekim 2026",
   "rp.s1.title": "1. Genel Bakış",
   "rp.s1.body": "EnglEuphoria kredi tabanlı bir rezervasyon modeliyle çalışır. Öğrenciler ders kredisi satın alır, ardından öğretmenlerle seans ayırırken bu kredileri kullanır. Bu Politika, iptallerin ve iadelerin nasıl ele alınacağını belirler.",
@@ -19,8 +19,8 @@ export const cancelPolicyTranslations = {
   "rp.s2.b2": "Dersten <b>8 saat içinde</b> yapılan iptaller: ders kesinleşmiş sayılır. <b>Herhangi bir iade veya kredi geri verilmez.</b>",
   "rp.s2.b3": "<b>Derse katılmama:</b> planlanmış bir derse iptal etmeden katılmayan öğrenciler krediyi tamamen kaybeder.",
   "rp.s2.foot": "Bu süre, yalnızca sizin rezervasyonunuz için zaman ayıran öğretmenlerimizi korur.",
-  "rp.s3.title": "3. Öğretmen İptal Kuralı (5 Gün)",
-  "rp.s3.body": "Öğretmenler, öğrencilerin plan yapabilmesi için rezerve edilmiş bir dersi başlama saatinden en az <b>120 saat (5 tam gün)</b> önce iptal etmeli veya ertelemelidir. Daha geç iptal eden öğretmenler geç iptal cezasına tabi olabilir.",
+  "rp.s3.title": "3. Öğretmen İptal Kuralı (48 Saat)",
+  "rp.s3.body": "Öğretmenler, öğrencilerin plan yapabilmesi için rezerve edilmiş bir dersi başlama saatinden en az <b>48 saat (2 tam gün)</b> önce iptal etmeli veya ertelemelidir. Daha geç iptal eden öğretmenler geç iptal cezasına tabi olabilir.",
   "rp.s4.title": "4. Deneme Dersleri",
   "rp.s4.body": "<b>Deneme dersleri kesin satıştır ve hiçbir koşulda iade edilmez.</b> Denemeler, tam da iade edilemedikleri için indirimli bir tanıtım fiyatıyla sunulur.",
   "rp.s5.title": "5. Kredi Paketi Satın Alımları",

@@ -4,7 +4,7 @@ import { LegalPageLayout } from './LegalPageLayout';
 const H2 = 'font-display text-2xl font-semibold mt-8 mb-3';
 const MAIL = <a href="mailto:billing@engleuphoria.com" className="text-indigo-400 hover:underline" />;
 
-/** Students cancel up to 8 hours before a lesson; teachers need 5 days' notice. Text lives in translations/<lang>/cancelPolicy.ts. */
+/** Students cancel up to 8 hours before a lesson; teachers need 48 hours' notice. Text lives in translations/<lang>/cancelPolicy.ts. */
 export default function RefundPolicyPage() {
   const { t } = useTranslation();
   const bold = { b: <strong /> };
@@ -12,7 +12,7 @@ export default function RefundPolicyPage() {
   return (
     <LegalPageLayout
       title={t('rp.title', 'Refund & Cancellation Policy')}
-      description={t('rp.desc', 'EnglEuphoria refund and cancellation policy: students can cancel up to 8 hours before a lesson; teachers must give 5 days’ notice.')}
+      description={t('rp.desc', 'EnglEuphoria refund and cancellation policy: students can cancel up to 8 hours before a lesson; teachers must give 48 hours’ notice.')}
       lastUpdated={t('rp.updated', 'October 13, 2026')}
     >
       <section>
@@ -34,8 +34,8 @@ export default function RefundPolicyPage() {
       </section>
 
       <section>
-        <h2 className={H2}>{t('rp.s3.title', '3. Teacher Cancellation Rule (5 Days)')}</h2>
-        <p><Trans i18nKey="rp.s3.body" defaults="Teachers must cancel or reschedule a booked lesson at least <b>120 hours (5 full days)</b> before its start time, so students can plan around it. Teachers who cancel later may be subject to a late-cancellation penalty." components={bold} /></p>
+        <h2 className={H2}>{t('rp.s3.title', '3. Teacher Cancellation Rule (48 Hours)')}</h2>
+        <p><Trans i18nKey="rp.s3.body" defaults="Teachers must cancel or reschedule a booked lesson at least <b>48 hours (2 full days)</b> before its start time, so students can plan around it. Teachers who cancel later may be subject to a late-cancellation penalty." components={bold} /></p>
       </section>
 
       <section>

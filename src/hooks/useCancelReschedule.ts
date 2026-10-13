@@ -16,7 +16,7 @@ interface CancelRescheduleResult {
 }
 
 // Students cancel up to 8 hours before a lesson (credit returned). Rescheduling still needs 5 days (120 hours).
-// Teachers' own rule is 5 days; see cancelSlotService.ts. The 8 hours here must match student_cancel_lesson in the database.
+// Teachers' own rule is 48 hours; see cancelSlotService.ts. The 8 hours here must match student_cancel_lesson in the database.
 export const CANCEL_POLICY_HOURS = 8;
 const POLICY_HOURS = 120;
 

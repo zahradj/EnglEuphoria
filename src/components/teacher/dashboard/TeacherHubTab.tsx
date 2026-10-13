@@ -263,7 +263,7 @@ export const TeacherHubTab = () => {
             <Tip>Don't fill silence. Wait 5 seconds. Then wait 5 more.</Tip>
             <Tip>Don't skip the Warm-Up, even when running late — it sets the emotional tone.</Tip>
             <Tip>Don't use childish framing in Success, or corporate language in Playground.</Tip>
-            <Tip>Don't cancel with less than 120 hours notice — the 5-Day Rule protects everyone.</Tip>
+            <Tip>Don't cancel with less than 48 hours notice — the 48-Hour Rule protects everyone.</Tip>
             <Tip>Don't share personal contact details or move lessons off-platform.</Tip>
           </CardContent>
         </Card>
@@ -310,8 +310,8 @@ export const TeacherHubTab = () => {
           </div>
         </CardHeader>
         <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-          <RuleCard icon={<Clock className="h-4 w-4" />} title="The 5-Day Rule"
-            body="Teachers: cancel or reschedule at least 120 hours (5 days) before the session. Students may cancel up to 8 hours before; a lesson you cancel yourself is always refunded to the student." />
+          <RuleCard icon={<Clock className="h-4 w-4" />} title="The 48-Hour Rule"
+            body="Teachers: cancel or reschedule at least 48 hours (2 days) before the session. Students may cancel up to 8 hours before; a lesson you cancel yourself is always refunded to the student." />
           <RuleCard icon={<Users className="h-4 w-4" />} title="Role Separation"
             body="Playground Specialists teach only Playground. Mentors teach Academy and Success. Never cross without approval." />
           <RuleCard icon={<Handshake className="h-4 w-4" />} title="Platform Integrity"

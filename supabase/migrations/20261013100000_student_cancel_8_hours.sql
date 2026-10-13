@@ -1,5 +1,5 @@
 -- Cancellation policy (owner, 2026-10-13): a student can cancel a paid lesson up to 8 hours before it starts and the
--- credit is returned; inside 8 hours the lesson is final. Teachers keep the 5-day (120 hour) rule. Rescheduling by a
+-- credit is returned; inside 8 hours the lesson is final. Teachers' rule is 48 hours (app-side). Rescheduling by a
 -- student is unchanged (student_reschedule_lesson still needs 120 hours' notice).
 --
 -- Same function as in 20261002150000_playground_hour_lessons_two_credits.sql, with the window changed from 120 to 8 hours.

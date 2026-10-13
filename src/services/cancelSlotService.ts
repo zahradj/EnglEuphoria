@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
  * Cancellation rules across all hubs (workspace-wide):
  *
  *  - Teacher may cancel a single booked occurrence at any time, but the
- *    UI surfaces the 5-day rule (120 hours) so the teacher knows when a
+ *    UI surfaces the 48-hour rule so the teacher knows when a
  *    student's credit will be forfeited vs. refunded.
  *  - Cancelling an entire weekly series only removes FUTURE occurrences
  *    (>= now). Past occurrences are immutable history.
@@ -15,7 +15,7 @@ import { supabase } from "@/integrations/supabase/client";
  *    all future bookings in the same series.
  */
 
-export const FIVE_DAY_RULE_HOURS = 120;
+export const TEACHER_NOTICE_HOURS = 48;
 
 // Teacher-side consequence: cancelling a paid lesson inside 48 hours of its
 // start incurs a penalty fee (enforced server-side in teacher_cancel_slot,
@@ -28,8 +28,8 @@ export function hoursUntil(start: string | Date): number {
   return ms / (1000 * 60 * 60);
 }
 
-export function isWithinFiveDayRule(start: string | Date): boolean {
-  return hoursUntil(start) < FIVE_DAY_RULE_HOURS;
+export function isWithinTeacherNotice(start: string | Date): boolean {
+  return hoursUntil(start) < TEACHER_NOTICE_HOURS;
 }
 
 export function isWithinPenaltyWindow(start: string | Date): boolean {

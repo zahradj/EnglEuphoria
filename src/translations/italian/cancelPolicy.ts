@@ -1,4 +1,4 @@
-// Cancellation policy: students cancel up to 8 hours before a lesson, teachers need 5 days' notice.
+// Cancellation policy: students cancel up to 8 hours before a lesson, teachers need 48 hours' notice.
 // Namespaced `cx.` (messages) and `rp.` (the Refund & Cancellation Policy page). Every key must exist in all six
 // languages (cancelPolicy.test.ts checks it). English is the source and the fallback language.
 
@@ -9,7 +9,7 @@ export const cancelPolicyTranslations = {
   "cx.toast.tooLate": "Le lezioni devono essere annullate con almeno 8 ore di anticipo. Annullare ora comporterà l’addebito completo.",
   "cx.plan.cancel": "Cancellazione gratuita (8 ore di preavviso)",
   "rp.title": "Politica di rimborso e cancellazione",
-  "rp.desc": "Politica di rimborso e cancellazione di EnglEuphoria: gli studenti possono annullare fino a 8 ore prima di una lezione; gli insegnanti devono dare 5 giorni di preavviso.",
+  "rp.desc": "Politica di rimborso e cancellazione di EnglEuphoria: gli studenti possono annullare fino a 8 ore prima di una lezione; gli insegnanti devono dare 48 ore di preavviso.",
   "rp.updated": "13 ottobre 2026",
   "rp.s1.title": "1. Panoramica",
   "rp.s1.body": "EnglEuphoria funziona con un modello di prenotazione a crediti. Gli studenti acquistano crediti lezione e poi li utilizzano per prenotare sessioni con gli insegnanti. La presente Politica disciplina la gestione di annullamenti e rimborsi.",
@@ -19,8 +19,8 @@ export const cancelPolicyTranslations = {
   "rp.s2.b2": "Annullamenti effettuati <b>entro 8 ore</b> dalla lezione: la lezione è considerata definitiva. <b>Non verrà concesso alcun rimborso né restituzione del credito.</b>",
   "rp.s2.b3": "<b>Assenze:</b> gli studenti che non si presentano a una lezione programmata senza annullarla perdono interamente il credito.",
   "rp.s2.foot": "Questo termine tutela i nostri insegnanti, che riservano del tempo esclusivamente per la tua prenotazione.",
-  "rp.s3.title": "3. Regola di annullamento per gli insegnanti (5 giorni)",
-  "rp.s3.body": "Gli insegnanti devono annullare o riprogrammare una lezione prenotata con almeno <b>120 ore (5 giorni interi)</b> di anticipo rispetto all’orario di inizio, affinché gli studenti possano organizzarsi. Gli insegnanti che annullano più tardi possono essere soggetti a una penale per annullamento tardivo.",
+  "rp.s3.title": "3. Regola di annullamento per gli insegnanti (48 ore)",
+  "rp.s3.body": "Gli insegnanti devono annullare o riprogrammare una lezione prenotata con almeno <b>48 ore (2 giorni interi)</b> di anticipo rispetto all’orario di inizio, affinché gli studenti possano organizzarsi. Gli insegnanti che annullano più tardi possono essere soggetti a una penale per annullamento tardivo.",
   "rp.s4.title": "4. Lezioni di prova",
   "rp.s4.body": "<b>Le lezioni di prova sono vendita definitiva e non rimborsabili</b> in nessuna circostanza. Le prove sono offerte a una tariffa introduttiva scontata proprio perché non sono rimborsabili.",
   "rp.s5.title": "5. Acquisto di pacchetti di crediti",
