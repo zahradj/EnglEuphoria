@@ -192,7 +192,7 @@ export interface ExploreSlide extends SlideBase {
   spots: { id: string; x: number; y: number; art: TeachArt; who: CastName; line: string; label: string }[];
 }
 /** Sort (free practice, owner 2026-10-14): the student's own opinions. Tap a picture, then tap a bin ("I like…" / "I love…"); the sentence is built, shown and spoken. There is no wrong answer; done when every picture is placed. */
-export interface SortSlide extends SlideBase {
+export interface SortSlide extends Omit<SlideBase, 'items'> {
   kind: 'sort';
   prompt: string;
   bins: { id: string; label: string; /** the sentence made when an item goes in: {w} is the item's word */ template: string }[];
