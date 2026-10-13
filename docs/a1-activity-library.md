@@ -101,7 +101,7 @@ S speaking · G game break · P phonics/reading · R review/boss · X extra time
 | Sand Prints / Photo Snap | `sand-prints` / `photo-snap` | ⇄ Pre-A1 | Follow tracks / take the photo | — | G |
 | Rapid Recall | `rapid-recall` | ⇄ Pre-A1 | 3-second flash, say it | beat-the-clock boss | R |
 | Picture Maze | `picture-maze` | ⇄ Pre-A1 | Walk the hedge maze to the thing you hear (Wordwall Maze Chase) | "Find the animal that can fly!" | G |
-| **Airplane** | — | ★ New | Fly into the right cloud (Wordwall Airplane) | — | G |
+| **Airplane** | — | ✓ built (`glider`, Jungle Glider) | Fly into the right cloud (Wordwall Airplane) | — | G |
 | Answer Race | `answer-race` (looks `gates` / `race` / `raft`) | A1 | Each right answer moves your car / runner / raft (Blooket Racing) | questions + read cards | G, R |
 | **Tower Defense** | — | ★ New | Right answers build towers that stop the monsters (Blooket Tower Defense) | — | R |
 | **Floor Is Lava** | — | ★ New | Jump to the right platform before the lava rises (Gimkit) | — | G |
@@ -205,17 +205,17 @@ These are playground and party games that teachers still use for English. Source
 | I Spy | **I Spy with my binoculars**: a painted scene; the voice gives a clue ("I spy something small and green"), and the child moves the binocular circle and taps | descriptions | `i-spy` (U2 L1) | ✓ built | L |
 | Simon Says | exists (`simon-touch`, `campfire-says`) **+ Red Light, Green Light**: move on "green", freeze on "red", and the child's runner advances | instructions, can | ★ new mode of `campfire-says` | ★ New | X |
 | Musical Chairs ⚠️ | **Musical Islands**: animals hop between lily pads while the music plays; when it stops, the child says where each animal is. Nobody is "out" | prepositions, "The frog is on the…" | ★ new `musical-islands` | ★ New | L, X |
-| Telephone / Chinese Whispers | **Whisper Tube**: Pip whispers a sentence down a tube to Mia, a word gets mixed up, and the child hears both and fixes the wrong word | listening for detail | `true-false` + 2-voice audio | ★ New | L |
+| Telephone / Chinese Whispers | **Whisper Tube**: Pip whispers a sentence down a tube to Mia, a word gets mixed up, and the child hears both and fixes the wrong word | listening for detail | `whisper-tube` (U1 L4 `wt4-whisper-tube` introductions, U2 L4 `ja4-whisper-tube` has got…); the child taps the wrong word, then picks the right one | ✓ built | L |
 | Pictionary | **Draw That** (Gimkit): the teacher (or child) draws on a shared canvas and the other guesses in a sentence; drawing syncs live | "It's a…" / "It's got…" | `draw-guess` (U1 L2 `wt2-draw-that` feelings faces, U2 L1 `ja-draw-that` animals; shared play: the drawer's screen alone sees the secret) | ✓ built | S |
 | 20 Questions / Guess Who | exists: `secret-card` (Guess the Animal / Guess My Friend) | yes/no questions | `secret-card` | ✓ built | S |
 | Go Fish (card game) | **Go Fish! with Pip**: the child holds picture cards and asks "Have you got a frog?"; Pip answers "Yes, here you are! / No — go fish!"; pairs fly to the table | have got, animals, food | `go-fish` (U2 L6; rules in goFishRules.ts + test) | ✓ built | S |
 | Dominoes | **Sentence Dominoes**: a tile with a picture and half a sentence; snap the next tile whose half finishes the sentence, so the chain grows across the table | sentence halves | `dominoes` (U1 L4, U2 L5) | ✓ built | C, P |
 | Hopscotch | **Number Hop**: a painted hopscotch; Pip throws a pebble on a square and the child says the number or sentence on each square Pip hops | numbers 1-20, routines | `stepping-stones` re-skin | ⇄ re-skin | X |
-| Hot and Cold | **Treasure Radar**: the child taps the beach to search; the screen tints from blue ("cold") to red ("hot") and Pip says "Warmer! Hotter!" | listening for direction words | ★ new `hot-cold` | ★ New | L, X |
+| Hot and Cold | **Treasure Radar**: the child taps the picture to search; the screen tints from blue ("cold") to red ("hot") and the friend says "Cold! Warm! Hot! Very hot!" | listening for direction words | `hot-cold` (U1 L5 `wt5-cap-radar` find Leo's red cap, U2 L3 `ja3-help-radar` who can help Kip?); Cold / Warm / Hot / Very hot, hint glow after 6 taps | ✓ built | L, X |
 | Battleship | **Treasure Islands**: a 4×4 sea grid (A-D, 1-4); the child calls "B3!" and a chest or a splash appears. A1 mode: answer a question to get each shot | letters + numbers, questions | `grid-hunt` (U1 L3 `wt3-treasure-islands` numbers/ages, U2 L4 `ja4-waterfall-treasure` long nose/tail) | ✓ built | R |
 | Kim's Game | exists: `whats-missing` / `whos-missing` | "The cap is missing!" | ✓ built | ✓ built | W, R |
 | Pass the Parcel | **Pass the Present**: a gift with 4 layers of paper; each right answer tears one layer off, and the prize sticker is inside | any review | `pass-parcel` (U1 L7, U2 L7) | ✓ built | R |
-| Jenga | **Wobbly Tower**: tap a block to pull it out; the question is on it, and a right answer means the block slides out cleanly. The tower never falls on a child's turn | review questions | ★ new `tower-pull` | ★ New | R |
+| Jenga | **Wobbly Tower**: tap a block to pull it out; the question is on it, and a right answer means the block slides out cleanly. The tower never falls on a child's turn | review questions | `tower-pull` (U1 L6 `wt6-wobbly-tower`, U2 L6 `ja6-wobbly-tower`); pulled blocks are stacked on top, no layer is ever emptied | ✓ built | R |
 | Word Search / Crossword | **Picture Crossword**: picture clues; type or tap letters, and the word lights up and is said | spelling | ★ new `crossword` (Wordwall) | ★ New | P |
 | Rock-Paper-Scissors | **Who starts?**: a quick hand game decides the first turn in duel games; say "Rock, paper, scissors, go!" | chant | UI helper in duel games | ★ New | — |
 | Marco Polo / Blind Man's Buff ⚠️ | **Echo Cave**: eyes closed (a dark screen); a friend calls from left / right / up / down, and the child points where the voice comes from (stereo pan) | names, can (who is calling?) | `echo-cave` (U1 L1 `wt-echo-cave` hello/my name is, U2 L2 `ja2-echo-cave` I can…); left/middle/right stereo pan, hint glow after 2 misses | ✓ built | L |
@@ -226,7 +226,7 @@ Sources: Wordwall templates (34+ interactives: Maze Chase, Airplane, Whack-a-mol
 
 | Platform mechanic | Our version | A1 language | Build on | Status | Slot |
 |---|---|---|---|---|---|
-| Wordwall Airplane | **Jungle Glider**: Coco glides; tap or steer into the cloud with the right answer, and wrong clouds puff away gently | sentence ↔ picture | ★ new `glider` | ★ New | G |
+| Wordwall Airplane | **Jungle Glider**: Coco glides; tap or steer into the cloud with the right answer, and wrong clouds puff away gently | sentence ↔ picture | `glider` (U1 L2 `wt2-glider` feelings, U2 L2 `ja2-glider` can; tap a cloud to steer, no timer) | ✓ built | G |
 | Wordwall Balloon Pop | **Balloon Match**: balloons carry words and float to their pictures; pop when matched | word ↔ sentence | `count-balloons` → universal | ⇄ upgrade | C, G |
 | Wordwall Anagram / Duolingo ABC word puzzle | **Letter Bubbles**: scrambled letter bubbles; drag them into order and the word is said and read in a sentence | spelling | `letter-blocks` letters mode | ⇄ upgrade | P |
 | Wordwall Labyrinth / Maze Chase | exists (`picture-maze`); **+ chase mode**: a friendly bee follows slowly and the child must reach the answer first | answers | `picture-maze` | ⇄ upgrade | G |

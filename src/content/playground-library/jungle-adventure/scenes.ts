@@ -573,6 +573,18 @@ export const LESSON_A1U2L2_SCENES: Scene[] = [
       ],
     },
   },
+  {
+    id: 'ja2-glider', kind: 'glider', bg: bgWide, who: 'leo', pilot: it('coco-cheer'), title: 'Coco’s Jungle Glider',
+    teacher: 'Game: listen to the sentence and tap the cloud with the right animal — Coco glides into it. The student says the sentence too.',
+    rounds: [
+      { ask: 'It can fly.', choices: [{ label: 'fish', img: ANIMALS.fish.img }, { label: 'bird', img: ANIMALS.bird.img }, { label: 'elephant', img: ANIMALS.elephant.img }], answer: 1, say: 'A bird! It can fly.' },
+      { ask: 'It can swim.', choices: [{ label: 'fish', img: ANIMALS.fish.img }, { label: 'lion', img: ANIMALS.lion.img }, { label: 'monkey', img: ANIMALS.monkey.img }], answer: 0, say: 'A fish! It can swim.' },
+      { ask: 'It can climb.', choices: [{ label: 'snake', img: ANIMALS.snake.img }, { label: 'frog', img: ANIMALS.frog.img }, { label: 'monkey', img: ANIMALS.monkey.img }], answer: 2, say: 'A monkey! It can climb.' },
+      { ask: 'It can jump.', choices: [{ label: 'elephant', img: ANIMALS.elephant.img }, { label: 'frog', img: ANIMALS.frog.img }, { label: 'fish', img: ANIMALS.fish.img }], answer: 1, say: 'A frog! It can jump.' },
+      { ask: 'It can’t fly. It can run fast.', choices: [{ label: 'bird', img: ANIMALS.bird.img }, { label: 'fish', img: ANIMALS.fish.img }, { label: 'lion', img: ANIMALS.lion.img }], answer: 2, say: 'A lion! It can run fast.' },
+    ],
+    doneLine: 'Super gliding! Coco says thank you!',
+  },
   /* 12 Free (less controlled): the teacher asks, the child answers in two sentences */
   {
     id: 'ja2-qa-stage', kind: 'join-stage', bg: bgFriends,
@@ -912,6 +924,16 @@ export const LESSON_A1U2L3_SCENES: Scene[] = [
       { who: 'student', line: 'Can a monkey climb?', wrong: ['A monkey climb?', 'Monkey can?'] },
       { who: 'coco', line: 'Yes, it can! I can climb!' },
     ],
+  },
+  {
+    id: 'ja3-help-radar', kind: 'hot-cold', bg: bgWide, who: 'leo', title: 'Treasure Radar: who can help Kip?',
+    teacher: 'Warm-up game: a jungle friend is hiding. The student taps to search and listens — Cold! Warm! Hot! When the friend pops out, they say what it can do.',
+    rounds: [
+      { label: 'elephant', img: ANIMALS.elephant.img, x: 80, y: 62, find: 'Who can help Kip? Find the elephant!', say: 'Here I am! I can lift Kip!' },
+      { label: 'monkey', img: ANIMALS.monkey.img, x: 88, y: 25, find: 'Where is the monkey? Find it!', say: 'Here I am! I can climb!' },
+      { label: 'bird', img: ANIMALS.bird.img, x: 14, y: 22, find: 'Where is the bird? Find it!', say: 'Here I am! I can fly!' },
+    ],
+    doneLine: 'You found all the friends!',
   },
   {
     id: 'ja3-coconut', kind: 'hot-coconut', bg: bgWide, who: 'coco', title: 'Hot Coconut! Pass it — then answer!',
@@ -1269,6 +1291,17 @@ export const LESSON_A1U2L4_SCENES: Scene[] = [
       ],
       doneLine: 'All the animals are back! Hello, jungle!',
     },
+  },
+  {
+    id: 'ja4-whisper-tube', kind: 'whisper-tube', bg: bgWide, who: 'leo', title: 'Jungle Whisper Tube',
+    teacher: 'Listening game: a friend whispers a sentence down the tube; the other friend gets ONE word wrong. The student taps the wrong word, picks the right one and says the whole sentence.',
+    rounds: [
+      { from: 'pip', to: 'mia', fromImg: it('pip-wave'), toImg: it('mia-wave'), said: 'The elephant has got a long nose.', heard: 'The elephant has got a long rose.', choices: ['toes'] },
+      { from: 'mia', to: 'leo', fromImg: it('mia-wave'), toImg: it('leo-wave'), said: 'The crocodile has got a long tail.', heard: 'The crocodile has got a long nail.', choices: ['sail'] },
+      { from: 'leo', to: 'coco', fromImg: it('leo-wave'), toImg: it('coco-cheer'), said: 'The snake is long and green.', heard: 'The snake is long and clean.', choices: ['queen'] },
+      { from: 'coco', to: 'pip', fromImg: it('coco-cheer'), toImg: it('pip-wave'), said: 'I’ve got a long tail!', heard: 'I’ve got a long towel!', choices: ['table'] },
+    ],
+    doneLine: 'Great listening! No more mix-ups!',
   },
   {
     id: 'ja4-photo-talk', kind: 'join-stage', bg: jungleRescue(3), teacher: 'Free: look at the picture — the student talks about the elephant AND the snake, 4 sentences each if they can.', cast: ['pip'],
@@ -1853,6 +1886,21 @@ export const LESSON_A1U2L6_SCENES: Scene[] = [
       ],
       doneLine: 'Super hunter! You found them all!',
     },
+  },
+  {
+    id: 'ja6-wobbly-tower', kind: 'tower-pull', bg: bgWaterfall, who: 'leo', title: 'Wobbly Jungle Tower',
+    teacher: 'Game: the student picks a block and answers its question. Right — the block slides out and goes on top. Wrong — the tower wobbles, try again. It never falls!',
+    rounds: [
+      { ask: 'What is it? It’s big and grey.', choices: ['It’s a frog.', 'It’s an elephant.', 'It’s a bird.'], answer: 1 },
+      { ask: 'Can a fish swim?', choices: ['Yes, it can.', 'No, it can’t.'], answer: 0 },
+      { ask: 'Can a fish fly?', choices: ['Yes, it can.', 'No, it can’t.'], answer: 1 },
+      { ask: 'The monkey can …', choices: ['climb.', 'long.', 'green.'], answer: 0 },
+      { ask: 'The crocodile has got a long …', choices: ['nose.', 'tail.', 'wing.'], answer: 1 },
+      { ask: 'Who can lift Kip?', choices: ['The bird.', 'The fish.', 'The elephant.'], answer: 2 },
+      { ask: 'Has the elephant got a long nose?', choices: ['Yes, it has.', 'No, it hasn’t.'], answer: 0 },
+      { ask: 'What can you do?', choices: ['I can run!', 'It’s got a tail.', 'It’s green.'], answer: 0 },
+    ],
+    doneLine: 'Look! Our tower is so tall! Well done!',
   },
   {
     id: 'ja6-reveal', kind: 'prea1', teacher: 'Guided: Tile Reveal! Tiles open one by one — listen to the clue and guess early. Then say two sentences about it.',

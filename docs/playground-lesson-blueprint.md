@@ -401,13 +401,13 @@ in §11). Still no game twice in a unit.
 
 | Slot | Best for | Games (✓ built · ★ to build) |
 |---|---|---|
-| Warm-up / discovery | L1-L5 openers after Remember? | ✓ Mystery Bag · ✓ Tile Reveal · ✓ Lift the Flap · ✓ What's / Who's Missing (Kim's Game) · ✓ I Spy binoculars (`i-spy`) · ★ Treasure Radar (hot and cold) |
-| Listening for detail | L1-L3 | ✓ Listen & Tap · ✓ Tick or Cross · ✓ Draw the Path · ✓ Photo Snap · ✓ Sticker Bingo (`sticker-bingo`) · ★ Musical Islands · ★ Whisper Tube (telephone) · ✓ Echo Cave (`echo-cave`, find the voice: left/middle/right) |
-| Guided practice | L1-L4 | ✓ Catch & Sort · ✓ Shadow Match · ✓ Picture Maze · ✓ Claw Machine · ✓ Read & Do · ✓ Field Guide · ✓ Sentence Dominoes (`dominoes`) · ★ Balloon Match · ★ Jungle Glider |
+| Warm-up / discovery | L1-L5 openers after Remember? | ✓ Mystery Bag · ✓ Tile Reveal · ✓ Lift the Flap · ✓ What's / Who's Missing (Kim's Game) · ✓ I Spy binoculars (`i-spy`) · ✓ Treasure Radar (`hot-cold`, hot and cold) |
+| Listening for detail | L1-L3 | ✓ Listen & Tap · ✓ Tick or Cross · ✓ Draw the Path · ✓ Photo Snap · ✓ Sticker Bingo (`sticker-bingo`) · ★ Musical Islands · ✓ Whisper Tube (`whisper-tube`, telephone) · ✓ Echo Cave (`echo-cave`, find the voice: left/middle/right) |
+| Guided practice | L1-L4 | ✓ Catch & Sort · ✓ Shadow Match · ✓ Picture Maze · ✓ Claw Machine · ✓ Read & Do · ✓ Field Guide · ✓ Sentence Dominoes (`dominoes`) · ★ Balloon Match · ✓ Jungle Glider (`glider`, Wordwall Airplane) |
 | Free speaking | L2-L4, L6 | ✓ Secret Card (20 questions) · ✓ Chat Chain · ✓ Flip & Say · ✓ Charades · ✓ Go Fish! (`go-fish`) · ✓ Hot Coconut (`hot-coconut`, hot potato) · ✓ Draw That (`draw-guess`, Pictionary on a shared canvas) |
 | Phonics / reading | every lesson | ✓ Letter Blocks · ✓ Word Splat · ✓ Letter Monsters / Moles / Fishing · ✓ Letter Game · ✓ Save the Balloon (`save-balloon`, hangman ⚠️) · ★ Letter Bubbles (anagram) · ★ Picture Crossword |
 | Game break / arcade | any | ✓ Obstacle Run · ✓ Brick Crush · ✓ Stepping Stones · ✓ Number Hop (stepping-stones look) · ★ Red Light, Green Light |
-| Review / L6 Game Day | L6 | ✓ Word Board (snakes & ladders) · ✓ Answer Race · ✓ Hero Trials · ✓ Tic-Tac-Toe Duel (`tic-tac-toe`) · ✓ Pass the Present (`pass-parcel`) · ★ Wobbly Tower (Jenga) · ✓ Treasure Chests (`chest-quest`) · ★ Team Flags |
+| Review / L6 Game Day | L6 | ✓ Word Board (snakes & ladders) · ✓ Answer Race · ✓ Hero Trials · ✓ Tic-Tac-Toe Duel (`tic-tac-toe`) · ✓ Pass the Present (`pass-parcel`) · ✓ Wobbly Tower (`tower-pull`, Jenga) · ✓ Treasure Chests (`chest-quest`) · ★ Team Flags |
 | Boss Test / unit frame | L7 | ✓ Answer Race · ✓ Hero Trials · ✓ Jungle Jeopardy (`quiz-board`) · ✓ Rising River (`rising-river`, floor is lava, co-op) · ✓ Treasure Islands (`grid-hunt`, battleship A-D × 1-4; first placed in L3/L4 practice) · ✓ Build the Town (`world-builder`; keeping it across lessons is still to build) |
 | Extra time | any | ✓ Home Hunt · ✓ brain breaks · ★ Pet Pal |
 

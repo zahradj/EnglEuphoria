@@ -561,6 +561,16 @@ export type Scene =
       id: string; kind: 'grid-hunt'; bg: string; teacher: string; title: string; who: CharKey;
       treasures: string[]; rounds: { ask: string; choices: string[]; answer: number; img?: string }[]; doneLine: string;
     }
+  | { id: string; kind: 'hot-cold'; bg: string; teacher: string; title: string; who: CharKey;
+      /** The picture hides at (x, y) % of the 16:9 art; the child searches by tapping, the voice says Cold / Warm / Hot. */
+      rounds: { label: string; img: string; x: number; y: number; find: string; say: string }[]; doneLine: string; }
+  | { id: string; kind: 'whisper-tube'; bg: string; teacher: string; title: string; who: CharKey;
+      /** `from` whispers `said` down the tube, `to` hears `heard` (one word changed); the child taps the wrong word and fixes it. */
+      rounds: { from: CharKey; to: CharKey; fromImg: string; toImg: string; said: string; heard: string; choices?: string[] }[]; doneLine: string; }
+  | { id: string; kind: 'glider'; bg: string; teacher: string; title: string; who: CharKey; pilot: string;
+      rounds: { ask: string; choices: { label: string; img?: string }[]; answer: number; say?: string }[]; doneLine: string; }
+  | { id: string; kind: 'tower-pull'; bg: string; teacher: string; title: string; who: CharKey;
+      rounds: { ask: string; choices: string[]; answer: number; img?: string }[]; doneLine: string; }
   | { id: string; kind: 'letter-game'; bg: string; who: CharKey; teacher: string; mode: 'name' | 'sound'; rounds: { letter: string; phoneme?: string; choices: string[] }[] }
   | { id: string; kind: 'jigsaw-puzzle'; bg: string; teacher: string; image: string; rows: number; cols: number }
   /** `cast`: the friends shown on the finale card (defaults to Welcome Town's
@@ -1173,6 +1183,18 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
     },
   },
   {
+    id: 'wt2-glider', kind: 'glider', bg: bgParkEmpty, who: 'pip', pilot: spr('pip'), title: 'Pip’s Glider: how do they feel?',
+    teacher: 'Game: listen to the sentence and tap the cloud with the right face — Pip flies into it. The student says the sentence too.',
+    rounds: [
+      { ask: 'I am tired.', choices: [{ label: 'happy', img: feelSpr('pip-happy') }, { label: 'tired', img: feelSpr('leo-tired') }, { label: 'angry', img: feelSpr('bella-angry') }], answer: 1, say: 'Tired! I am tired.' },
+      { ask: 'I am happy!', choices: [{ label: 'sad', img: feelSpr('mia-sad') }, { label: 'hungry', img: feelSpr('willow-hungry') }, { label: 'happy', img: feelSpr('pip-happy') }], answer: 2, say: 'Happy! I am happy!' },
+      { ask: 'She is sad.', choices: [{ label: 'sad', img: feelSpr('mia-sad') }, { label: 'angry', img: feelSpr('bella-angry') }, { label: 'tired', img: feelSpr('leo-tired') }], answer: 0, say: 'Sad! She is sad.' },
+      { ask: 'I am hungry!', choices: [{ label: 'tired', img: feelSpr('leo-tired') }, { label: 'hungry', img: feelSpr('willow-hungry') }, { label: 'happy', img: feelSpr('pip-happy') }], answer: 1, say: 'Hungry! I am hungry!' },
+      { ask: 'She is angry!', choices: [{ label: 'happy', img: feelSpr('pip-happy') }, { label: 'sad', img: feelSpr('mia-sad') }, { label: 'angry', img: feelSpr('bella-angry') }], answer: 2, say: 'Angry! She is angry!' },
+    ],
+    doneLine: 'Super flying! You know your feelings!',
+  },
+  {
     id: 'wt2-answer', kind: 'join-stage', bg: bgCircleW, teacher: 'Free: how does the student really feel today? Then they ask the teacher, and tell how Pip is.', cast: ['marigold', 'pip'],
     turns: [
       { who: 'marigold', line: 'How are you today?' },
@@ -1783,6 +1805,17 @@ export const LESSON_4_SCENES: Scene[] = classroomLook([
     },
   },
   {
+    id: 'wt4-whisper-tube', kind: 'whisper-tube', bg: bgParkEmpty, who: 'pip', title: 'Whisper Tube',
+    teacher: 'Listening game: a friend whispers a sentence down the tube; the other friend gets ONE word wrong. The student taps the wrong word, picks the right one and says the whole sentence.',
+    rounds: [
+      { from: 'pip', to: 'mia', fromImg: spr('pip'), toImg: spr('mia'), said: 'This is Leo. He is my friend.', heard: 'This is Leo. He is my fish.', choices: ['frog'] },
+      { from: 'mia', to: 'bella', fromImg: spr('mia'), toImg: spr('bella'), said: 'Nice to meet you!', heard: 'Nice to eat you!', choices: ['seat'] },
+      { from: 'bella', to: 'willow', fromImg: spr('bella'), toImg: spr('willow'), said: 'She is seven years old.', heard: 'She is seven pears old.', choices: ['bears'] },
+      { from: 'willow', to: 'leo', fromImg: spr('willow'), toImg: spr('leo'), said: 'How are you, Pip?', heard: 'How are you, Pig?', choices: ['Leo'] },
+    ],
+    doneLine: 'Great listening! No more mix-ups!',
+  },
+  {
     id: 'wt4-expert', kind: 'join-stage', bg: leoStory(6), teacher: 'Free: the student is the expert! Pip mixes up the names — the student corrects him and introduces everyone.', cast: ['pip', 'mia'],
     turns: [
       { who: 'pip', line: 'Look! This is my friend Bella!' },
@@ -2096,6 +2129,16 @@ export const LESSON_5_SCENES: Scene[] = classroomLook([
         { img: leoStory(10), sentence: 'Leo is happy now.', isTrue: true },
       ],
     },
+  },
+  {
+    id: 'wt5-cap-radar', kind: 'hot-cold', bg: bgL1Class, who: 'pip', title: 'Treasure Radar: where is it?',
+    teacher: 'Warm-up game: something is hidden in the classroom. The student taps to search and listens — Cold! Warm! Hot! When it pops out, they say the sentence.',
+    rounds: [
+      { label: 'red cap', img: I1('cap'), x: 24, y: 47, find: 'Where is Leo’s red cap? Find it!', say: 'Here it is! It’s Leo’s red cap!' },
+      { label: 'book', img: I1('book'), x: 90, y: 72, find: 'Where is the book? Find it!', say: 'Here it is! It’s a book!' },
+      { label: 'bag', img: I1('bag'), x: 7, y: 80, find: 'Where is Leo’s bag? Find it!', say: 'Here it is! It’s Leo’s bag!' },
+    ],
+    doneLine: 'You found everything! Thank you!',
   },
   {
     id: 'wt5-mystery-bag', kind: 'prea1', teacher: 'Guided: What is in the bag? Look at the shape — tap it — then say it with its colour: It’s a red cap!',
@@ -2452,6 +2495,21 @@ export const LESSON_6_SCENES: Scene[] = classroomLook([
         { items: [{ label: 'ten', img: I1('ten') }, { label: 'top', img: I1('top') }, { label: 'teddy', img: I1('teddy') }, { label: 'hen', img: I1('hen') }], odd: 3, line: 'Hen! Hen starts with H. Ten, top and teddy start with T.' },
       ],
     },
+  },
+  {
+    id: 'wt6-wobbly-tower', kind: 'tower-pull', bg: bgPartyEmpty, who: 'pip', title: 'Wobbly Tower',
+    teacher: 'Game: the student picks a block and answers its question. Right — the block slides out and goes on top. Wrong — the tower wobbles, try again. It never falls!',
+    rounds: [
+      { ask: 'What’s your name?', choices: ['My name is Pip.', 'I am fine.', 'Goodbye!'], answer: 0 },
+      { ask: 'How are you?', choices: ['I am seven.', 'I am happy!', 'This is Mia.'], answer: 1 },
+      { ask: 'How old are you?', choices: ['I am tired.', 'Nice to meet you!', 'I’m eight years old.'], answer: 2 },
+      { ask: 'This is Mia. … ?', choices: ['Nice to meet you!', 'How old are you?', 'Goodbye, Mia!'], answer: 0 },
+      { ask: 'What comes after fourteen?', choices: ['fifteen', 'forty', 'thirteen'], answer: 0 },
+      { ask: 'Leo’s cap is lost. He is …', choices: ['happy.', 'sad.', 'hungry.'], answer: 1 },
+      { ask: 'Bella finds the cap. Leo says …', choices: ['Thank you!', 'I am angry!', 'Hello, Leo!'], answer: 0 },
+      { ask: 'It’s time to go home. Say …', choices: ['Hello!', 'Goodbye!', 'How are you?'], answer: 1 },
+    ],
+    doneLine: 'Look! Our tower is so tall! Well done!',
   },
   {
     id: 'wt6-read-do', kind: 'read-do', bg: bgL1Party, title: 'Read and do!', cast: ['leo', 'mia', 'bella', 'willow'],

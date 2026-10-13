@@ -829,6 +829,14 @@ const WT_EXTRACTORS = {
     return [[s.who, s.doneLine], ...cells.map((c) => [s.who, `${({ A: 'Ay', B: 'Bee', C: 'See', D: 'Dee' })[c[0]]} ${num[Number(c[1]) - 1]}! ${tr.includes(c) ? 'Treasure!' : 'Splash!'}`]),
       ...(s.rounds ?? []).flatMap((q) => [[s.who, q.ask], ['teacher', `${q.choices[q.answer]} Dive! Say a square!`]])];
   },
+  // HotColdScene / WhisperTubeScene / GliderScene / TowerPullScene (welcome-town/scene-components).
+  'hot-cold': (s) => [[s.who, s.doneLine], [s.who, 'Cold!'], [s.who, 'Warm!'], [s.who, 'Hot!'], [s.who, 'Very hot!'],
+    ...(s.rounds ?? []).flatMap((r) => [[s.who, r.find], [s.who, r.say]])],
+  'whisper-tube': (s) => [[s.who, s.doneLine], [s.who, 'Listen again! Which word is wrong?'],
+    ...(s.rounds ?? []).flatMap((r) => [[r.from, r.said], [r.to, r.heard], [r.to, r.said]])],
+  'glider': (s) => [[s.who, s.doneLine], [s.who, 'Puff! Try again!'], ...(s.rounds ?? []).flatMap((r) => [[s.who, r.ask], ['teacher', r.say ?? r.ask]])],
+  'tower-pull': (s) => [[s.who, s.doneLine], [s.who, 'Pick a block! Answer and pull it out!'], [s.who, 'Careful! Try again!'],
+    ...(s.rounds ?? []).flatMap((r) => [[s.who, r.ask], ['teacher', r.choices[r.answer]]])],
   'hot-coconut': (s) => [[s.who, s.doneLine], ...(s.rounds ?? []).flatMap((q) => {
     const n = (s.seats ?? []).length || 1; const at = ((q.stop % n) + n) % n;
     return [[s.who, `${at === 0 ? 'Your turn!' : `Help ${s.seats[at].name}!`} ${q.ask}`], ['teacher', q.choices[q.answer]]];
