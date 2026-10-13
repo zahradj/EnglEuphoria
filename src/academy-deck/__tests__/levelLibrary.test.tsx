@@ -90,3 +90,20 @@ describe('Academy library by level', () => {
     expect(screen.queryByRole('tab', { name: /Upper/ })).toBeNull();
   });
 });
+
+describe('A1 curriculum in the library', () => {
+  it('lists all 10 A1 seasons x 8 lessons, each with its goal, Mission, Release and clue from the lesson blueprint', async () => {
+    const { groupAcademyLibrary } = await import('../library/levels');
+    const a1 = groupAcademyLibrary([], false).find((g) => g.id === 'a1')!;
+    expect(a1.seasons).toHaveLength(10);
+    a1.seasons.forEach((s) => {
+      expect(s.slots, s.title).toHaveLength(8);
+      s.slots.forEach((x) => {
+        expect(x.plan?.objective, `${s.title} E${x.episode}`).toMatch(/^I can /);
+        expect(x.plan?.mission).toBeTruthy();
+        expect(x.plan?.release).toBeTruthy();
+        expect(x.plan?.clue).toBeTruthy();
+      });
+    });
+  });
+});
