@@ -642,6 +642,17 @@ export const LESSON_A1U2L2_SCENES: Scene[] = [
       { word: 'lunch', sounds: ['l', 'u', 'n', 'ch'], img: it('lunchbox'), sentence: 'It is my lunch.' },
     ],
   },
+  {
+    id: 'ja2-balloon', kind: 'save-balloon', bg: bgWide, who: 'coco', balloonImg: it('coco-cheer'), title: 'Save the Balloon! Spell the word!',
+    teacher: 'Reading: listen to the sentence, look at the picture — tap the letters to spell the word (ch is two letters!). Every right letter lifts Coco’s balloon.',
+    rounds: [
+      { word: 'chips', img: it('chip'), sentence: 'Lunch! Chips for all!' },
+      { word: 'chick', img: it('chick'), sentence: 'Look! A chick. It is small.' },
+      { word: 'fish', img: it('fish'), sentence: 'A fish can swim.' },
+      { word: 'lunch', img: it('lunchbox'), sentence: 'It is my lunch.' },
+    ],
+    doneLine: 'Coco’s balloon is over the hill! Super spelling!',
+  },
   { id: 'ja2-twister', kind: 'tongue-twister', look: 'town', speeds: 2, bg: bgWide, who: 'coco', focus: 'ch', teacher: 'Reading: quick reading! Listen to Coco, then say it slow, then faster.', line: 'Chip the chimp chews chips.' },
   /* 16 Guided: quick fire */
   {
@@ -879,6 +890,25 @@ export const LESSON_A1U2L3_SCENES: Scene[] = [
       { who: 'student', line: 'Can a monkey climb?', wrong: ['A monkey climb?', 'Monkey can?'] },
       { who: 'coco', line: 'Yes, it can! I can climb!' },
     ],
+  },
+  {
+    id: 'ja3-coconut', kind: 'hot-coconut', bg: bgWide, who: 'coco', title: 'Hot Coconut! Pass it — then answer!',
+    teacher: 'Free: tap Pass! — where the coconut stops, the student answers the “Can it…?” question: Yes, it can! / No, it can’t!',
+    seats: [
+      { name: 'You', img: '' },
+      { name: 'Coco', img: it('coco-cheer') },
+      { name: 'Leo', img: it('leo-run') },
+      { name: 'Willow', img: it('willow-fly') },
+      { name: 'Pip', img: wtSpr('pip') },
+    ],
+    rounds: [
+      { ask: 'Can a fish fly?', choices: ['Yes, it can.', 'No, it can’t.'], answer: 1, stop: 2 },
+      { ask: 'Can a monkey climb?', choices: ['Yes, it can.', 'No, it can’t.'], answer: 0, stop: 0 },
+      { ask: 'Can an elephant swim?', choices: ['Yes, it can.', 'No, it can’t.'], answer: 0, stop: 3 },
+      { ask: 'Can a snake run?', choices: ['Yes, it can.', 'No, it can’t.'], answer: 1, stop: 1 },
+      { ask: 'Can a bird fly?', choices: ['Yes, it can.', 'No, it can’t.'], answer: 0, stop: 0 },
+    ],
+    doneLine: 'Hot coconut champion!',
   },
   { id: 'ja3-meet-kip', kind: 'meet', focus: ['help'], bg: jungleRescue(5), who: 'pip', cardSide: 'left', teacher: 'Present: Kip needs help! Ask with Pip — the voice goes up.', line: 'Kip is on a rock! Can a bird help? Can a fish help?', repeat: 'Can it help?' },
   /* Reading: The Jungle Rescue pages 5-7 */
@@ -1462,6 +1492,19 @@ export const LESSON_A1U2L5_SCENES: Scene[] = [
     ],
   },
   {
+    id: 'ja5-dominoes', kind: 'dominoes', bg: bgWide, who: 'pip', title: 'Story Dominoes!',
+    teacher: 'Reading: look at the story picture at the end of the chain — find the domino with its sentence, read it aloud and play it.',
+    start: { img: jungleRescue(2), label: 'Coco' },
+    steps: [
+      { text: 'Hi! I am Coco. I am a monkey.', img: jungleRescue(5), label: 'Kip on the rock' },
+      { text: 'Kip is on a rock. Help!', img: jungleRescue(6), label: 'Willow' },
+      { text: 'I can fly. But I am small.', img: jungleRescue(7), label: 'the fish' },
+      { text: 'I can swim. I can’t lift Kip!', img: jungleRescue(10), label: 'the elephant' },
+      { text: 'The elephant lifts Kip with its long nose.', img: jungleRescue(12), label: 'lunch' },
+    ],
+    doneLine: 'You told the whole story! Super reading!',
+  },
+  {
     id: 'ja5-move-break', kind: 'prea1', teacher: 'Brain break: act the story with your body!',
     scene: {
       id: 'ja5-move-break', kind: 'tpr-actions', mode: 'break', bg: bgWide, who: 'pip', teacher: 'Act the story!',
@@ -1693,6 +1736,19 @@ export const LESSON_A1U2L6_SCENES: Scene[] = [
         { word: 'BIRD', img: it('bird'), emoji: '\u{1F426}' },
       ],
     },
+  },
+  {
+    id: 'ja6-go-fish', kind: 'go-fish', bg: bgWide, who: 'coco', friendImg: it('coco-cheer'), title: 'Go Fish with Coco!',
+    teacher: 'Free: the student asks “Have you got a frog?” and Coco answers; then Coco asks and the student answers truthfully: Yes, I have. / No, I haven’t. Go fish!',
+    cards: [
+      { label: 'frog', img: it('frog') }, { label: 'bird', img: it('bird') }, { label: 'lion', img: it('lion') },
+      { label: 'monkey', img: it('coco-cheer') }, { label: 'snake', img: it('snake') }, { label: 'elephant', img: it('elephant'), article: 'an' },
+      { label: 'fish', img: it('fish') },
+    ],
+    childHand: ['frog', 'bird', 'lion', 'monkey'],
+    friendHand: ['frog', 'snake', 'elephant'],
+    pond: ['snake', 'bird', 'elephant', 'lion', 'fish', 'monkey', 'fish'],
+    doneLine: 'No more cards! Super asking and answering!',
   },
   {
     id: 'ja6-charades', kind: 'prea1', teacher: 'Free: Jungle Charades! Guess what the friend can do — then the student acts and the teacher guesses: “You can swing!”',

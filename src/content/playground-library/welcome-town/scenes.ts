@@ -473,6 +473,41 @@ export type Scene =
       guide?: string;
       rounds: { clue: string; spot: { left: number; top: number; r: number }; answer: string }[]; doneLine: string;
     }
+  | {
+      /** Save the Balloon (SaveBalloonScene.tsx, classic hangman redesigned — nobody is ever in danger): Pip's hot-air
+       *  balloon must float over the hill. Each round the child spells `word` (picture `img`, clue `sentence` said first)
+       *  by tapping letter tiles; every right letter lights the burner and the balloon rises; a wrong letter only puffs
+       *  a little smoke and the balloon dips — try again. `extra` = distractor letters (default: 3 from the word's
+       *  neighbours). The finished word is read in its sentence. */
+      id: string; kind: 'save-balloon'; bg: string; teacher: string; title: string; who: CharKey; balloonImg?: string;
+      rounds: { word: string; img: string; sentence: string; extra?: string[] }[]; doneLine: string;
+    }
+  | {
+      /** Sentence Dominoes (DominoesScene.tsx, classic dominoes redesigned): the chain starts with a picture tile
+       *  (`start`). Each next domino = [sentence | picture]: the child picks, from the tiles in hand, the one whose
+       *  SENTENCE matches the picture at the end of the chain; it snaps on and its picture becomes the new end.
+       *  `steps[i].text` describes the picture before it (start for i = 0). */
+      id: string; kind: 'dominoes'; bg: string; teacher: string; title: string; who: CharKey;
+      start: { img: string; label: string }; steps: { text: string; img: string; label: string }[]; doneLine: string;
+    }
+  | {
+      /** Go Fish! (GoFishScene.tsx, the card game redesigned): picture cards; every card is in the game exactly twice.
+       *  The child asks the friend "Have you got a frog?" — "Yes! Here you are." (a pair) or "No! Go fish!" (draw from
+       *  the pond). Then the friend asks and the child answers Yes / No truthfully. The game ends when the child's hand
+       *  is empty. `cards` = the picture set; hands and `pond` list card labels in order (no pairs dealt). */
+      id: string; kind: 'go-fish'; bg: string; teacher: string; title: string; who: CharKey; friendImg: string;
+      cards: { label: string; img: string; article?: string }[];
+      childHand: string[]; friendHand: string[]; pond: string[]; doneLine: string;
+    }
+  | {
+      /** Hot Coconut (HotCoconutScene.tsx, classic hot potato redesigned — no forfeits, nobody is out): the friends
+       *  sit in a circle with a seat for the child; a coconut hops from seat to seat to a drum beat and stops. Whoever
+       *  holds it gets the round's question; the child answers (for themself or to help the friend). `stops[i]` = the
+       *  seat index (0 = the child) where round i stops. */
+      id: string; kind: 'hot-coconut'; bg: string; teacher: string; title: string; who: CharKey; coconutImg?: string;
+      seats: { name: string; img: string }[];
+      rounds: { ask: string; choices: string[]; answer: number; stop: number }[]; doneLine: string;
+    }
   | { id: string; kind: 'letter-game'; bg: string; who: CharKey; teacher: string; mode: 'name' | 'sound'; rounds: { letter: string; phoneme?: string; choices: string[] }[] }
   | { id: string; kind: 'jigsaw-puzzle'; bg: string; teacher: string; image: string; rows: number; cols: number }
   /** `cast`: the friends shown on the finale card (defaults to Welcome Town's
@@ -570,6 +605,9 @@ const bgL1Goodbye = `${W}/scenes/bg-express-goodbye-wide.png`;
 const bgL1Party = `${W}/scenes/bg-party-door-wide.png`;
 const bgL1Reading = `${W}/scenes/bg-classroom-reading-wide.png`;
 const spr = (who: CharKey) => `${W}/sprites/${who}-wave.png`;
+const I1 = (n: string) => `/lep1/items/item-${n}.png`;
+const bgParkEmpty = '/lep1/scenes/bg-u3l3-park-empty-wide.png';
+const bgPartyEmpty = '/lep1/scenes/bg-u8l3-party-empty-wide.png';
 /** The party door on bg-party-door-wide.png (percent of the 1376×768 art). */
 const PARTY_DOOR = { left: 21.4, top: 17, width: 19.8, height: 63 };
 
@@ -1148,6 +1186,17 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
     },
   },
   {
+    id: 'wt2-balloon', kind: 'save-balloon', bg: bgParkEmpty, who: 'pip', balloonImg: spr('pip'), title: 'Save the Balloon! Spell the word!',
+    teacher: 'Reading: listen to the sentence, look at the picture — tap the letters to spell the word. Every right letter lifts Pip’s balloon over the hill!',
+    rounds: [
+      { word: 'cat', img: I1('cat'), sentence: 'Look! A cat!' },
+      { word: 'sad', img: feelSpr('mia-sad'), sentence: 'She is sad.' },
+      { word: 'hat', img: I1('hat-green'), sentence: 'My hat is green.' },
+      { word: 'bag', img: I1('bag'), sentence: 'This is my bag.' },
+    ],
+    doneLine: 'The balloon is over the hill! Super spelling!',
+  },
+  {
     id: 'wt2-blend', kind: 'sound-blend', bg: bgL1Reading, look: 'slide',
     teacher: 'Reading: say each sound, blend, find the picture — then read the sentence from Leo’s story.',
     rounds: [
@@ -1511,8 +1560,6 @@ export const LESSON_4_TITLE = 'This Is My Friend!';
 export const LESSON_4_OBJECTIVE = 'I can introduce a friend — "This is my friend Leo." — answer "Nice to meet you!" and hold a 6-line conversation.';
 
 const bgPlay = `${W}/scenes/bg-playground-break-wide.png`;
-const bgParkEmpty = '/lep1/scenes/bg-u3l3-park-empty-wide.png';
-const bgPartyEmpty = '/lep1/scenes/bg-u8l3-party-empty-wide.png';
 
 /* Rebuilt 2026-10-12 to the approved Unit 1 plan (docs/a1-unit-1-welcome-town.md §5.4): the speaking lesson, the
  * child is the expert. Objective: I can introduce a friend — "This is my friend Leo." — answer "Nice to meet you!" and
@@ -1633,6 +1680,19 @@ export const LESSON_4_SCENES: Scene[] = classroomLook([
       { who: 'student', line: 'This is my friend Leo. He is seven.' },
       { who: 'mia', line: 'Nice to meet you, Leo!' },
     ],
+  },
+  {
+    id: 'wt4-dominoes', kind: 'dominoes', bg: bgL1Class, who: 'pip', title: 'Friend Dominoes!',
+    teacher: 'Reading: look at the friend at the end of the chain — find the domino that introduces them, read it aloud and play it.',
+    start: { img: spr('leo'), label: 'Leo' },
+    steps: [
+      { text: 'This is Leo. He is seven.', img: spr('mia'), label: 'Mia' },
+      { text: 'This is Mia. She is six.', img: spr('bella'), label: 'Bella' },
+      { text: 'This is Bella. She is nine.', img: spr('pip'), label: 'Pip' },
+      { text: 'This is Pip. He is eight.', img: spr('willow'), label: 'Willow' },
+      { text: 'This is Willow. Nice to meet you!', img: I1('gift'), label: 'present' },
+    ],
+    doneLine: 'The chain is finished! You know all the friends!',
   },
   {
     id: 'wt4-move-break', kind: 'prea1', teacher: 'Brain break: wave, shake hands and move with Pip.',
@@ -1816,7 +1876,6 @@ const story5 = (n: number) => `${W}/scenes/bg-wt5-story-${n}-wide.png`;
 /* Rebuilt 2026-10-12 to the approved Unit 1 plan (docs/a1-unit-1-welcome-town.md §5.5): the storybook lesson.
  * Objective: I can read the story "Leo's First Day" with help, answer questions about it and act it out.
  * (The stills film of the book follows once its scenario is approved — CLAUDE.md "scenario first".) */
-const I1 = (n: string) => `/lep1/items/item-${n}.png`;
 export const LESSON_5_SCENES: Scene[] = classroomLook([
   { id: 'wt5-title', kind: 'title-card', bg: leoStory(10), level: 'A1', unit: 'Unit 1', lessonLabel: 'Lesson 5', title: 'Storybook: Leo’s First Day', subtitle: 'Read the whole story — where is Leo’s red cap?', cta: '\u{1F4D6} LET’S READ!' },
   {
@@ -2153,6 +2212,26 @@ export const LESSON_6_SCENES: Scene[] = classroomLook([
     },
   },
   { id: 'wt6-echo-quick', kind: 'echo', bg: bgL1Stage, who: 'pip', textSide: 'top', teacher: 'Guided: Game Day voice! Say the questions with Pip — slow, then fast.', word: 'How are you? How old are you?' },
+  {
+    id: 'wt6-coconut', kind: 'hot-coconut', bg: bgParkEmpty, who: 'pip', title: 'Hot Coconut! Pass it — then answer!',
+    teacher: 'Free: tap Pass! — the coconut hops around the circle. Where it stops, the student answers: for themself, or to help a friend. Full sentences!',
+    seats: [
+      { name: 'You', img: '' },
+      { name: 'Mia', img: spr('mia') },
+      { name: 'Leo', img: spr('leo') },
+      { name: 'Bella', img: spr('bella') },
+      { name: 'Willow', img: spr('willow') },
+      { name: 'Pip', img: spr('pip') },
+    ],
+    rounds: [
+      { ask: 'How old are you?', choices: ['I am six.', 'I am happy.'], answer: 0, stop: 1 },
+      { ask: 'What’s your name?', choices: ['Nice to meet you!', 'My name is …'], answer: 1, stop: 0 },
+      { ask: 'How are you?', choices: ['I am fine, thank you.', 'Goodbye!'], answer: 0, stop: 4 },
+      { ask: 'Who is this? Point to a friend!', choices: ['This is my friend.', 'I am eight.'], answer: 0, stop: 2 },
+      { ask: 'Goodbye!', choices: ['Goodbye! See you!', 'How old are you?'], answer: 0, stop: 0 },
+    ],
+    doneLine: 'Great passing! Great answers!',
+  },
   {
     id: 'wt6-catch', kind: 'answer-race', look: 'gates', bg: bgL1Class, who: 'pip', racer: I1('pip-run'),
     title: 'Catch the answer! Run through the right gate!',

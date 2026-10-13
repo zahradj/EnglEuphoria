@@ -798,6 +798,19 @@ const WT_EXTRACTORS = {
   'tic-tac-toe': (s) => [[s.who, s.doneLine], [s.who, "Let's play! Tap a square and answer."], ...(s.squares ?? []).flatMap((q) => [[s.who, q.ask], ...(q.choices ?? []).map((c) => ['teacher', c])])],
   'pass-parcel': (s) => [[s.who, s.doneLine], ...(s.rounds ?? []).flatMap((q) => [[s.who, q.ask], ...(q.choices ?? []).map((c) => ['teacher', c])])],
   'i-spy': (s) => [[s.who, s.doneLine], ...(s.rounds ?? []).flatMap((q) => [[s.who, q.clue], [s.who, q.answer]])],
+  // SaveBalloonScene / DominoesScene / GoFishScene / HotCoconutScene (welcome-town/scene-components).
+  'save-balloon': (s) => [[s.who, s.doneLine], ...(s.rounds ?? []).flatMap((q) => [[s.who, q.sentence], [s.who, `${q.word}! ${q.sentence}`]])],
+  'dominoes': (s) => [[s.who, s.doneLine], [s.who, 'Look! What is it? Find the sentence!'], [s.who, 'Now this picture! Find the sentence!'], ...(s.steps ?? []).map((t) => ['teacher', t.text])],
+  'go-fish': (s) => {
+    const art = (l) => (s.cards ?? []).find((c) => c.label === l)?.article ?? (/^[aeiou]/i.test(l) ? 'an' : 'a');
+    return [[s.who, s.doneLine], [s.who, 'Let’s play Go Fish! Tap a card and ask me!'], [s.who, 'Yes! Here you are.'], [s.who, 'No! Go fish!'], [s.who, 'Look at your cards!'],
+      ['teacher', 'Yes, I have. Here you are.'], ['teacher', 'No, I haven’t. Go fish!'],
+      ...(s.cards ?? []).flatMap((c) => [['teacher', `Have you got ${art(c.label)} ${c.label}?`], [s.who, `Have you got ${art(c.label)} ${c.label}?`]])];
+  },
+  'hot-coconut': (s) => [[s.who, s.doneLine], ...(s.rounds ?? []).flatMap((q) => {
+    const n = (s.seats ?? []).length || 1; const at = ((q.stop % n) + n) % n;
+    return [[s.who, `${at === 0 ? 'Your turn!' : `Help ${s.seats[at].name}!`} ${q.ask}`], ['teacher', q.choices[q.answer]]];
+  })],
   'spin-wheel': (s) => (s.items ?? []).map((it) => ['teacher', it.label]),
   'picture-match': (s) => (s.items ?? []).map((it) => ['teacher', it.word]),
   // welcome-town/WhereGames.tsx — every line those games can say.

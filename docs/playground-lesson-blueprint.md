@@ -403,9 +403,9 @@ in §11). Still no game twice in a unit.
 |---|---|---|
 | Warm-up / discovery | L1-L5 openers after Remember? | ✓ Mystery Bag · ✓ Tile Reveal · ✓ Lift the Flap · ✓ What's / Who's Missing (Kim's Game) · ✓ I Spy binoculars (`i-spy`) · ★ Treasure Radar (hot and cold) |
 | Listening for detail | L1-L3 | ✓ Listen & Tap · ✓ Tick or Cross · ✓ Draw the Path · ✓ Photo Snap · ✓ Sticker Bingo (`sticker-bingo`) · ★ Musical Islands · ★ Whisper Tube (telephone) · ★ Echo Cave |
-| Guided practice | L1-L4 | ✓ Catch & Sort · ✓ Shadow Match · ✓ Picture Maze · ✓ Claw Machine · ✓ Read & Do · ✓ Field Guide · ★ Sentence Dominoes · ★ Balloon Match · ★ Jungle Glider |
-| Free speaking | L2-L4, L6 | ✓ Secret Card (20 questions) · ✓ Chat Chain · ✓ Flip & Say · ✓ Charades · ★ Go Fish! · ★ Hot Coconut (hot potato) · ★ Draw That (Pictionary) |
-| Phonics / reading | every lesson | ✓ Letter Blocks · ✓ Word Splat · ✓ Letter Monsters / Moles / Fishing · ✓ Letter Game · ★ Save the Balloon (hangman ⚠️) · ★ Letter Bubbles (anagram) · ★ Picture Crossword |
+| Guided practice | L1-L4 | ✓ Catch & Sort · ✓ Shadow Match · ✓ Picture Maze · ✓ Claw Machine · ✓ Read & Do · ✓ Field Guide · ✓ Sentence Dominoes (`dominoes`) · ★ Balloon Match · ★ Jungle Glider |
+| Free speaking | L2-L4, L6 | ✓ Secret Card (20 questions) · ✓ Chat Chain · ✓ Flip & Say · ✓ Charades · ✓ Go Fish! (`go-fish`) · ✓ Hot Coconut (`hot-coconut`, hot potato) · ★ Draw That (Pictionary) |
+| Phonics / reading | every lesson | ✓ Letter Blocks · ✓ Word Splat · ✓ Letter Monsters / Moles / Fishing · ✓ Letter Game · ✓ Save the Balloon (`save-balloon`, hangman ⚠️) · ★ Letter Bubbles (anagram) · ★ Picture Crossword |
 | Game break / arcade | any | ✓ Obstacle Run · ✓ Brick Crush · ✓ Stepping Stones · ✓ Number Hop (stepping-stones look) · ★ Red Light, Green Light |
 | Review / L6 Game Day | L6 | ✓ Word Board (snakes & ladders) · ✓ Answer Race · ✓ Hero Trials · ✓ Tic-Tac-Toe Duel (`tic-tac-toe`) · ✓ Pass the Present (`pass-parcel`) · ★ Wobbly Tower (Jenga) · ★ Treasure Chests · ★ Team Flags |
 | Boss Test / unit frame | L7 | ✓ Answer Race · ✓ Hero Trials · ★ Jungle Jeopardy (quiz board) · ★ Rising River (floor is lava, co-op) · ★ Treasure Islands (battleship) · ★ Build the Town (persists) |
