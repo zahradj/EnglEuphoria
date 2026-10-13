@@ -545,6 +545,7 @@ const UNIT1_EXTRACTORS = {
   'cafe-order': (s) => [...(s.rounds ?? []).flatMap((r) => [[r.customer, r.line], [r.customer, r.reply], [r.customer, `Oh no! ${r.line}`]]), ...(s.menu ?? []).map((m) => [s.who, m.word]), [s.who, s.doneLine]],
   'feed-pip': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...(s.foods ?? []).map((f) => [s.who, `No, thank you! That's ${f.phrase}.`]), [s.who, s.doneLine]],
   'night-sounds': (s) => (s.animals ?? []).flatMap((a) => [[s.who, `${a.sound} ${a.sound} Who's there?`], [s.who, `Yes! It's a ${a.word}! ${a.sound}`], [s.who, `That's a ${a.word}. ${a.sound}`]]),
+  'wind-catch': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...(s.things ?? []).map((t) => [s.who, `That's the ${t.label}! Listen again!`]), [s.who, s.doneLine]],
   'duck-feed': (s) => [
     ...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]),
     ...(s.ducks ?? []).map((d) => [s.who, `No, that's ${d.name}! Try again!`]),

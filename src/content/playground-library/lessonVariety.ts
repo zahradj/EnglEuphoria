@@ -64,6 +64,7 @@ export const GRANDFATHERED: readonly string[] = ['5-1'];
 export const ASSESSMENT_LESSONS: readonly string[] = ['1-7', '2-7', '3-7', '4-7', '5-7', '6-7', '7-7', '8-7', '9-7', '5-8', '10-8'];
 
 export const LESSON_PROFILE: Record<string, LessonProfile> = {
+  '1-5': { settings: ['play meadow', 'windy sky'], look: "Leo's sunny play meadow with a big tree; the windy sky where the story things float (Wind Catch); a sad-to-happy story day" },
   '2-2': { settings: ['art studio', 'fruit market', 'meadow'], look: "Pip's sunny paint studio indoors, a striped market stall, the rainbow meadow; colour-mixing mission" },
   '2-3': { settings: ['town street', 'builder yard'], look: 'sunny Shape Town street with a clock tower, a house and a flag; a grassy builder yard where the friends build with shapes' },
   '3-3': { settings: ['workshop', 'park'], look: 'sunny outdoor park, kites in a blue sky' },
@@ -115,6 +116,19 @@ export const LESSON_PROFILE: Record<string, LessonProfile> = {
 };
 
 export const RESEARCH_LOG: Record<string, ResearchEntry> = {
+  '1-5': {
+    sources: ['Quebec MEES "Picture Walk" (pre-reading prediction)', 'JALT "Happily ever after: post-reading projects with picturebooks"', 'Universidad de Cuenca TPR Storytelling study (preschool)', 'Khan Academy Kids interactive books', 'Lingokids catch games'],
+    mechanics: [
+      'pre / while / post story stages: predict, pre-teach the words with pictures, watch with pauses and moves, then retell and act',
+      'Wind Catch (new): catch the story thing that is named as the wind carries it',
+      'lift-the-flap refrain search, story order, tick or cross, role-play the story',
+    ],
+    betterThan: [
+      'the whole film is watched in one go after the words were taught, so the first watch is understood',
+      'nothing in Wind Catch is timed or lost; every catch is named back with its first sound; the basket keeps what was caught; the game is the story (the wind took the star)',
+      'the lesson ends on the child talking: acting the story, answering Leo, then asking him',
+    ],
+  },
   '2-2': {
     sources: ['Lingokids', 'Khan Academy Kids', 'Cambridge (Pre A1 Starters / ELT)', '7ESL / TinyTap "Feed the colour monster"'],
     mechanics: [
