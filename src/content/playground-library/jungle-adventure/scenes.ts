@@ -1,79 +1,17 @@
 /* =============================================================================
- * Jungle Adventure — A1 Unit 2 Lesson 1: "Jungle Animals: Lion, Monkey, Bird"
+ * Jungle Adventure — A1 Unit 2 (plan: docs/a1-unit-2-jungle.md, owner-approved 2026-10-13: "Ok")
  *
- * Second Playground A1 unit (after Welcome Town's Unit 1 "Greetings &
- * Introductions"). Reuses Welcome Town's Scene type, CharKey/CAST/VOICE_KEY,
- * and SceneRenderer verbatim — Jungle Adventure is a new WORLD, not a new
- * engine; see src/curriculum/worlds/a1Worlds.ts for the world definition and
- * src/curriculum/roadmap/a1Roadmap.ts for this unit's grammar/vocab plan.
+ * Reuses Welcome Town's Scene type, CharKey/CAST/VOICE_KEY and SceneRenderer — Jungle Adventure is a new WORLD, not a
+ * new engine. Unit objective: describe a jungle animal in 4 sentences (what it is, looks like, can, can't), ask
+ * "Can it…?" and read the story "The Jungle Rescue" (one story for the unit, a few pages each lesson).
+ * Every lesson: sound → a phonics game (different each lesson) → Blend & Read → tongue twister; no game twice in the unit.
  *
- * Scope check against playground-curriculum-engine (this unit's seeded
- * bucket, index 1): topics ['animals','actions','movement','simple_present'],
- * grammarFocus ['simple present — affirmative','can for ability'],
- * vocabularyFocus ['run','jump','fly','swim','lion','monkey','bird','fish'].
- * That's a whole UNIT's worth of grammar+vocab, not one lesson's — split
- * deliberately across the unit rather than crammed into L1 (revision note,
- * see below).
- *
- * Progressive plan across the unit (per smart-lesson-architect §12 — new
- * grammar/vocab chunks get introduced one at a time, never stacked into a
- * single line):
- *   L1 (this lesson) — the identity chunk: "I am a ___" + the 3 nouns
- *     lion/monkey/bird, taught, practiced, and assessed. "I can ___" makes
- *     one light, untaught appearance late (roleplay, scene 13) — planted
- *     future knowledge per playground-curriculum-engine's knowledge-graph
- *     model, not drilled or tested here.
- *   L2 (future) — actually TEACHES "I can ___" + run/climb/fly (guided
- *     practice, assessment), REINFORCING the same three animals from L1
- *     rather than teaching new nouns alongside new grammar at once.
- *   L3+ (future) — combine "I am a ___. I can ___." in production
- *     (roleplay/speaking), add swim/jump + fish, review/assess.
- * A first pass of this file taught name+category+ability in one breath per
- * animal ("Hello! I am Leo. I am a lion! I can run fast!") — three new
- * chunks in a single line, flagged as overloaded and corrected to the
- * identity-only version below.
- *
- * Scene 3 originally re-reviewed "Hello!" (already the review target in
- * every earlier Welcome Town lesson) — replaced with a genuine new-content
- * beat instead: the setting word itself, "jungle", which every scene in
- * this lesson actually depends on.
- *
- * Cast: Leo (lion) and Willow (bird) are the SAME established Welcome Town
- * characters — both happen to already be the exact animals this lesson
- * teaches, so no new character was needed for them. Coco the Monkey is new
- * (added to welcome-town/scenes.ts's shared CAST) — no recorded voice yet,
- * routed to the 'teacher' voice like Marigold until one exists.
- *
- * Art: 7 jungle background images under public/jungle-adventure/scenes/,
- * generated via the Gemini API directly (gemini-3-pro-image-preview, same
- * pattern as supabase/functions/_shared/googleImageClient.ts) rather than
- * Higgsfield, with Welcome Town's own bg-classroom-wide.png passed in as a
- * reference image on every call. A first pass (Higgsfield/Nano Banana,
- * no reference image) came back in a soft painterly semi-3D style —
- * gradient shading, glossy highlights, drop shadows — that didn't match
- * Welcome Town's flat cel-shaded sticker look at all. The fix wasn't a
- * better-worded style description; it was generating a single title/hero
- * shot first (Leo, Coco, and Willow together) using the Welcome Town
- * reference for style AND Leo/Willow's existing character designs, then
- * using THAT image as a second reference for the remaining 6 — locking
- * Coco's brand-new design in from her first appearance instead of letting
- * it drift scene to scene. All 7 reused across multiple scenes the same
- * way Welcome Town's own backgrounds are (e.g. the jungle-path scene backs
- * vocab-spot, choice, drag-match, AND listen-tap, all reusing the same
- * hotspot coordinates for the same three animals).
- *
- * 16 scenes. Deliberate exception to activity-pattern-library's Hard
- * Variety Rule (max 2 consecutive same-`kind` scenes): the three `meet`
- * scenes (Leo, Coco, Willow) run back-to-back-to-back by explicit design
- * choice, so all three friends are introduced as a group before the lesson
- * moves to practice activities. Everything after that run holds the normal
- * 2-in-a-row cap. Kinds used: title-card, cinematic, echo, meet, vocab-spot, choice,
- * drag-match, join-stage, listen-tap, flipbook, roleplay, hello-doors,
- * true-false, finale — matches smart-lesson-architect's canonical 10-step
- * flow (Welcome → Review → New Language → Guided Practice → Interactive
- * Practice → Story → Speaking → Assessment → Review → Home Challenge).
- * Two distinct speaking-production beats now (join-stage at scene 10,
- * roleplay at scene 13) instead of clustering all production at the end.
+ * Lesson 1 (rebuilt 2026-10-13): 8 animals + how they look ("It's an elephant. It's big and grey."). Removed from the
+ * first version: the "Who says…?" page and the "pick any animal" page (A1 rule), "I am a lion" (Pre-A1 level).
+ * Research (mechanics only): Cambridge Pre A1 Starters word list ("animal" words) and can-do "give very basic
+ * descriptions … colour, size"; Kid's Box 1 wild animals (name → describe → ask); Khan Academy Kids / Lingokids safari
+ * games. Better: in Safari Snap the later rounds give only the DESCRIPTION ("It's small and blue!"), so the child wins
+ * by understanding the looks words, not just the name; the photos stay in the album.
  * ========================================================================= */
 
 import { CAST, VOICE_KEY, type CharKey, type Scene } from '../welcome-town/scenes';
@@ -89,182 +27,252 @@ const bgCocoVines = `${J}/scenes/bg-jungle-coco-vines.png`;
 const bgWillowNest = `${J}/scenes/bg-jungle-willow-nest.png`;
 const bgPathAnimals = `${J}/scenes/bg-jungle-path-animals.png`;
 const bgFriends = `${J}/scenes/bg-jungle-friends.png`;
+const WT = '/welcome-town';
+const wtSpr = (who: string) => `${WT}/sprites/${who}-wave.png`;
+const item = (n: string) => `/lep1/items/item-${n}.png`;
 
-// Shared hotspot coordinates for the three animals in bg-jungle-path-animals
-// — reused verbatim across vocab-spot/drag-match/listen-tap so "where the
-// word lives" matches "where the student already looked" (same discipline
-// Welcome Town Lesson 1 uses for its classroom hotspots).
-const LION_SPOT = { left: '18%', top: '68%' };
-const MONKEY_SPOT = { left: '50%', top: '50%' };
-const BIRD_SPOT = { left: '84%', top: '38%' };
+/** The Jungle Rescue — Canva pictures (scripts/canva-art-request.json, holder design pages 15-26). */
+export const jungleRescue = (n: number) => `${J}/scenes/bg-jungle-rescue-${n}-wide.png`;
 
-export const LESSON_A1U2L1_TITLE = 'Jungle Animals: Lion, Monkey, Bird';
-export const LESSON_A1U2L1_OBJECTIVE =
-  'Name three jungle animals (lion, monkey, bird) and say "I am a ___" for each one. (The roleplay near the end plants "I can run/climb/fly" as a preview — Lesson 2 is where it is actually taught, practiced, and assessed.)';
+/** The unit's reading strand (plan §4): Leo and Pip visit Coco; Kip is stuck on a rock; who can help? */
+export const JUNGLE_RESCUE: { img: string; lines: { who?: CharKey; text: string }[] }[] = [
+  { img: jungleRescue(1), lines: [{ text: 'Look! The jungle! It is big and green.' }] },
+  { img: jungleRescue(2), lines: [{ who: 'coco', text: 'Hi, Leo! Hi, Pip! I am Coco. I am a monkey.' }] },
+  { img: jungleRescue(3), lines: [{ text: 'Look! A snake. It is long. An elephant. It is big.' }] },
+  { img: jungleRescue(4), lines: [{ who: 'coco', text: 'I can climb! I can swing!' }, { who: 'pip', text: 'I can’t climb!' }] },
+  { img: jungleRescue(5), lines: [{ text: 'Kip is on a rock.' }, { text: 'Help! Help! I am stuck!' }] },
+  { img: jungleRescue(6), lines: [{ who: 'willow', text: 'I can fly. But I am small. I can’t help Kip.' }] },
+  { img: jungleRescue(7), lines: [{ who: 'pip', text: 'Can a fish help?' }, { text: 'I can swim. I can’t lift Kip!' }] },
+  { img: jungleRescue(8), lines: [{ text: 'I can swim! Can I help?' }, { text: 'No! Your teeth!' }] },
+  { img: jungleRescue(9), lines: [{ text: 'I am big. I can walk in the river.' }] },
+  { img: jungleRescue(10), lines: [{ text: 'The elephant lifts Kip with its long nose.' }] },
+  { img: jungleRescue(11), lines: [{ text: 'Thank you!' }, { who: 'coco', text: 'Thank you, Elephant!' }] },
+  { img: jungleRescue(12), lines: [{ who: 'leo', text: 'Lunch! Chips for all!' }, { who: 'coco', text: 'Thank you, friends!' }] },
+];
+
+export const LESSON_A1U2L1_TITLE = 'Jungle Animals';
+export const LESSON_A1U2L1_OBJECTIVE = 'I can name 8 jungle animals and say what they look like: "It\'s an elephant. It\'s big and grey."';
+
+const ANIMALS = {
+  elephant: { label: 'elephant', img: item('elephant'), say: 'It’s an elephant. It’s big and grey.' },
+  snake: { label: 'snake', img: item('snake'), say: 'It’s a snake. It’s long and green.' },
+  crocodile: { label: 'crocodile', img: item('alligator'), say: 'It’s a crocodile. It’s big and green.' },
+  monkey: { label: 'monkey', img: item('coco-cheer'), say: 'It’s a monkey. It’s brown.' },
+  frog: { label: 'frog', img: item('frog'), say: 'It’s a frog. It’s small and green.' },
+  bird: { label: 'bird', img: item('bird'), say: 'It’s a bird. It’s small and blue.' },
+  lion: { label: 'lion', img: item('lion'), say: 'It’s a lion. It’s big and yellow.' },
+  fish: { label: 'fish', img: item('fish'), say: 'It’s a fish. It’s small and orange.' },
+};
 
 export const LESSON_A1U2L1_SCENES: Scene[] = [
-  { id: 'ja-title', kind: 'title-card', bg: bgTitle, level: 'A1', unit: 'Unit 2', lessonLabel: 'Lesson 1', title: 'Jungle Adventure: Jungle Animals!', subtitle: 'Meet Leo, Coco, and Willow in the jungle', cta: '\u{1F334} LET’S GO!' },
+  { id: 'ja-title', kind: 'title-card', bg: bgTitle, level: 'A1', unit: 'Unit 2', lessonLabel: 'Lesson 1', title: 'Jungle Animals', subtitle: 'Who lives in the jungle? Big, small, long…', cta: '\u{1F334} LET’S GO!' },
   {
-    // Remember? (owner, 2026-10-07): a quick warm-up of Unit 1 · Lesson 4 · Speak & Meet!.
-    id: 'ja-recall-warmup', kind: 'recall-warmup', bg: '/jungle-adventure/scenes/bg-jungle-wide.png', who: 'pip', mode: 'click',
-    fromLabel: "Unit 1 · Lesson 4 · Speak & Meet!",
-    teacher: 'Warm-up from last lesson: Pip says it, the student finds the picture and says it too.',
+    // Remember? (owner, 2026-10-07): Unit 1 — introducing a friend (listen-only: the child hears, then clicks).
+    id: 'ja-recall-warmup', kind: 'recall-warmup', bg: bgWide, who: 'pip', mode: 'click', listen: true,
+    fromLabel: 'Unit 1 · Welcome Town',
+    teacher: 'Guided: listen — who is it? Click the friend, then say it too: This is my friend Leo!',
     items: [
-      { word: "nice to meet you", say: "Hello! Nice to meet you! Find it!", img: '/welcome-town/scenes/bg-express-hello-v2.png' },
-      { word: "my friend", say: "This is my friend! Find it!", img: '/welcome-town/scenes/bg-express-friend-v2.png' },
-      { word: "goodbye", say: "Goodbye! Find it!", img: '/welcome-town/scenes/bg-express-goodbye-v2.png' },
+      { word: 'Leo', say: 'This is my friend Leo. He is seven.', img: wtSpr('leo') },
+      { word: 'Mia', say: 'This is my friend Mia. She is six.', img: wtSpr('mia') },
+      { word: 'Willow', say: 'This is my friend Willow. She is happy.', img: wtSpr('willow') },
     ],
   },
-
+  /* Present: the animals (two small sets, then the looks) */
   {
-    id: 'ja-intro', kind: 'cinematic', bg: bgWide, title: 'A New Adventure', subtitle: 'Pip opens a mystery storybook', narrator: 'pip',
-    script: [
-      { who: 'pip', line: 'Wow, look at this book! I wonder what wild place this is...' },
-      { who: 'pip', line: 'Let’s turn the page and find out together!' },
-    ],
-    cta: '\u{1F392} OPEN THE BOOK!',
+    id: 'ja-animals-1', kind: 'prea1', teacher: 'Present: listen and say each animal — It’s an elephant! Show it with your arms.',
+    scene: {
+      id: 'ja-animals-1', kind: 'listen-repeat-cards', bg: bgWide, teacher: 'Listen and say it!',
+      cards: [
+        { who: 'pip', sentence: 'It’s an elephant.', img: ANIMALS.elephant.img, imgLabel: 'elephant' },
+        { who: 'pip', sentence: 'It’s a snake.', img: ANIMALS.snake.img, imgLabel: 'snake' },
+        { who: 'pip', sentence: 'It’s a crocodile.', img: ANIMALS.crocodile.img, imgLabel: 'crocodile' },
+        { who: 'pip', sentence: 'It’s a monkey.', img: ANIMALS.monkey.img, imgLabel: 'monkey' },
+      ],
+    },
   },
-
-  { id: 'ja-setting-jungle', kind: 'echo', bg: bgWide, who: 'pip', teacher: 'Shh... listen! Rustling leaves, buzzing bugs, chirping birds! We found a wild, green place. Say it with me...', word: 'Jungle!' },
-
-  { id: 'ja-meet-leo', kind: 'meet', focus: ['lion'], bg: bgLeoDen, who: 'leo', teacher: 'Tap Leo to hear him say hello!', line: 'Hello! I am Leo. I am a lion!', repeat: 'I am a lion!' },
-  { id: 'ja-meet-coco', kind: 'meet', focus: ['monkey'], bg: bgCocoVines, who: 'coco', teacher: 'Here comes a new friend! Tap Coco to say hi.', line: 'Hi! My name is Coco. I am a monkey!', repeat: 'I am a monkey!' },
-  { id: 'ja-meet-willow', kind: 'meet', focus: ['bird'], bg: bgWillowNest, who: 'willow', teacher: 'Willow lives in the jungle too! Tap her to say hi.', line: 'Tweet tweet! I am Willow. I am a bird!', repeat: 'I am a bird!' },
-
   {
-    id: 'ja-vocab-animals', kind: 'vocab-spot', bg: bgPathAnimals,
-    teacher: 'Look around the jungle path! Tap each animal to learn its name.',
+    id: 'ja-animals-2', kind: 'prea1', teacher: 'Present: four more — the frog, the bird, the lion and the fish. Listen and say.',
+    scene: {
+      id: 'ja-animals-2', kind: 'listen-repeat-cards', bg: bgWide, teacher: 'Listen and say it!',
+      cards: [
+        { who: 'pip', sentence: 'It’s a frog.', img: ANIMALS.frog.img, imgLabel: 'frog' },
+        { who: 'pip', sentence: 'It’s a bird.', img: ANIMALS.bird.img, imgLabel: 'bird' },
+        { who: 'pip', sentence: 'It’s a lion.', img: ANIMALS.lion.img, imgLabel: 'lion' },
+        { who: 'pip', sentence: 'It’s a fish.', img: ANIMALS.fish.img, imgLabel: 'fish' },
+      ],
+    },
+  },
+  {
+    id: 'ja-looks', kind: 'vocab-spot', bg: jungleRescue(3),
+    teacher: 'Present: how do they look? Tap each arrow, listen, then say the sentence: The elephant is big.',
     items: [
-      { label: 'Lion', sentence: 'This is a lion.', emoji: '\u{1F981}', ...LION_SPOT, color: '#C97A2F', who: 'leo' },
-      { label: 'Monkey', sentence: 'This is a monkey.', emoji: '\u{1F412}', ...MONKEY_SPOT, color: '#8B5A2B', who: 'coco' },
-      { label: 'Bird', sentence: 'This is a bird.', emoji: '\u{1F426}', ...BIRD_SPOT, color: '#4FA9E0', who: 'willow' },
+      { label: 'big', sentence: 'The elephant is big.', emoji: '\u{1F418}', left: '60%', top: '40%', color: '#64748B', who: 'pip' },
+      { label: 'long', sentence: 'The snake is long.', emoji: '\u{1F40D}', left: '78%', top: '16%', color: '#16A34A', who: 'pip' },
+      { label: 'small', sentence: 'Coco is small.', emoji: '\u{1F412}', left: '36%', top: '58%', color: '#B45309', who: 'pip' },
+      { label: 'grey', sentence: 'The elephant is grey.', emoji: '\u{1FA76}', left: '68%', top: '62%', color: '#475569', who: 'pip' },
     ],
   },
-
+  { id: 'ja-echo', kind: 'echo', bg: bgWide, who: 'pip', textSide: 'top', teacher: 'Guided: say it like Pip — loud, then quiet!', word: 'It’s big and grey.' },
   {
-    id: 'ja-choice-coco', kind: 'choice', bg: bgPathAnimals, who: 'pip',
-    teacher: 'Listen carefully, then tap the right answer!',
-    prompt: 'Coco said, "I am a monkey!" Which animal is Coco?',
-    options: [
-      { label: 'Lion', emoji: '\u{1F981}' },
-      { label: 'Monkey', emoji: '\u{1F412}', correct: true },
-      { label: 'Bird', emoji: '\u{1F426}' },
+    id: 'ja-shadows', kind: 'prea1', teacher: 'Guided: Shadow Match! Drag each animal onto its shadow (or tap it, then the shadow) and say it: It’s a snake!',
+    scene: {
+      id: 'ja-shadows', kind: 'shadow-match', bg: bgWide, who: 'pip',
+      teacher: 'Drag each animal onto its shadow. Say it!',
+      items: [
+        { label: 'elephant', img: ANIMALS.elephant.img, line: ANIMALS.elephant.say },
+        { label: 'snake', img: ANIMALS.snake.img, line: ANIMALS.snake.say },
+        { label: 'crocodile', img: ANIMALS.crocodile.img, line: ANIMALS.crocodile.say },
+        { label: 'monkey', img: ANIMALS.monkey.img, line: ANIMALS.monkey.say },
+        { label: 'frog', img: ANIMALS.frog.img, line: ANIMALS.frog.say },
+        { label: 'bird', img: ANIMALS.bird.img, line: ANIMALS.bird.say },
+      ],
+    },
+  },
+  {
+    id: 'ja-hello-song', kind: 'song', bg: bgFriends, title: '\u{1F3B5} The Hello Song \u{1F3B5}', teacher: 'Sing hello to the jungle friends — wave!',
+    durationSeconds: 20, bigWord: 'Hello',
+    songUrl: `${WT}/audio/hello-song.mp3?v=1`,
+    lineDurationsMs: [3640, 4120, 4320, 7982],
+    lyrics: [
+      { who: 'marigold', text: 'Hello, hello, hello to you!' },
+      { who: 'pip', text: 'Hi, hi, hi! And hi to you!' },
+      { who: 'marigold', text: 'What’s your name? What’s your name?' },
+      { who: 'pip', text: 'Say your name! Say your name!' },
     ],
   },
-
+  /* ★ Signature: Safari Snap — first the name, then only the looks */
   {
-    id: 'ja-drag-animals', kind: 'drag-match', bg: bgPathAnimals,
-    teacher: 'Listen, then drag each word onto the matching jungle animal!',
+    id: 'ja-safari-snap', kind: 'prea1', teacher: 'Guided → Free: Safari Snap! Listen and take the photo. The last rounds give only how it looks — listen well! Say a sentence with every photo.',
+    scene: {
+      id: 'ja-safari-snap', kind: 'photo-snap', bg: bgWide, who: 'pip',
+      teacher: 'Listen and take a photo of the animal! Say it with each photo.',
+      spots: [
+        { x: 30, y: 74, size: 16 },
+        { x: 56, y: 84, size: 15 },
+        { x: 82, y: 72, size: 15 },
+        { x: 22, y: 50, size: 11 },
+        { x: 63, y: 54, size: 11 },
+        { x: 84, y: 26, size: 9 },
+      ],
+      animals: [
+        { label: 'elephant', img: ANIMALS.elephant.img, say: ANIMALS.elephant.say },
+        { label: 'snake', img: ANIMALS.snake.img, say: ANIMALS.snake.say },
+        { label: 'crocodile', img: ANIMALS.crocodile.img, say: ANIMALS.crocodile.say },
+        { label: 'monkey', img: ANIMALS.monkey.img, say: ANIMALS.monkey.say },
+        { label: 'frog', img: ANIMALS.frog.img, say: ANIMALS.frog.say, scale: 0.7 },
+        { label: 'bird', img: ANIMALS.bird.img, say: ANIMALS.bird.say, scale: 0.7 },
+      ],
+      rounds: [
+        { target: 1, line: 'Take a photo of the snake!', place: [0, 1, 2, 3, 4, 5] },
+        { target: 2, line: 'Take a photo of the crocodile!', place: [2, 0, 1, 5, 3, 4] },
+        { target: 0, line: 'It’s big and grey! Take a photo!', place: [1, 2, 0, 4, 5, 3] },
+        { target: 5, line: 'It’s small and blue! Take a photo!', place: [0, 3, 2, 1, 4, 5] },
+        { target: 4, line: 'It’s small and green! Take a photo!', place: [2, 1, 0, 3, 5, 4] },
+        { target: 3, line: 'It’s brown! Take a photo!', place: [1, 0, 2, 4, 3, 5] },
+      ],
+      doneLine: 'Look at your jungle photos! Super safari!',
+    },
+  },
+  {
+    id: 'ja-move-break', kind: 'prea1', teacher: 'Brain break: move like the animals with Pip.',
+    scene: {
+      id: 'ja-move-break', kind: 'tpr-actions', mode: 'break', bg: bgWide, who: 'pip', teacher: 'Move like the animals!',
+      rounds: [
+        { line: 'Be a big elephant! Stomp, stomp!', emoji: '\u{1F418}' },
+        { line: 'Be a long snake! Wiggle, wiggle!', emoji: '\u{1F40D}' },
+        { line: 'Be a small frog! Hop, hop!', emoji: '\u{1F438}' },
+        { line: 'Be a monkey! Ooh ooh!', emoji: '\u{1F412}' },
+      ],
+    },
+  },
+  /* Reading: The Jungle Rescue, pages 1-3 */
+  {
+    id: 'ja-reader', kind: 'reader', bg: jungleRescue(1), title: 'The Jungle Rescue', doneLine: 'Leo and Pip are in the jungle! What happens next? Find out next time!',
+    teacher: 'Reading: listen while the words light up, then the student reads each page. Tap any word to hear it.',
+    pages: JUNGLE_RESCUE.slice(0, 3),
+  },
+  {
+    id: 'ja-read-match', kind: 'picture-match', prompt: 'Read and match',
+    teacher: 'Reading: read each sentence and drag it under its picture. Then read it aloud.',
     items: [
-      { label: 'Lion', color: '#C97A2F', who: 'leo', targetLeft: LION_SPOT.left, targetTop: LION_SPOT.top },
-      { label: 'Monkey', color: '#8B5A2B', who: 'coco', targetLeft: MONKEY_SPOT.left, targetTop: MONKEY_SPOT.top },
-      { label: 'Bird', color: '#4FA9E0', who: 'willow', targetLeft: BIRD_SPOT.left, targetTop: BIRD_SPOT.top },
+      { word: 'It is big and grey.', img: ANIMALS.elephant.img },
+      { word: 'It is long and green.', img: ANIMALS.snake.img },
+      { word: 'It is small and blue.', img: ANIMALS.bird.img },
+      { word: 'It is brown.', img: ANIMALS.monkey.img },
+    ],
+    bg: bgWide,
+  },
+  /* Phonics: short i → Brick Crush → Blend & Read → tongue twister */
+  {
+    id: 'ja-sound-i', kind: 'sound-model', bg: bgWide, who: 'pip', letter: 'I', phoneme: '/i/', sound: 'i', soundSide: 'center',
+    teacher: 'Present: /i/ — a short, quick sound, like a little “i!”. Insect, ink, igloo. Find the /i/ words.',
+    anchors: [
+      { word: 'insect', emoji: '\u{1F41B}', img: item('insect') },
+      { word: 'ink', emoji: '\u{1F58B}\u{FE0F}', img: item('ink') },
+      { word: 'igloo', emoji: '\u{1F9CA}', img: item('igloo') },
     ],
   },
-
   {
-    // Swapped from a same-label 'memory' match (redundant right after
-    // drag-match — both are recognition/matching, so back-to-back they were
-    // cosmetic variation, not real variety: activity-pattern-library's
-    // definition of "different `kind`, same underlying task"). Researched
-    // real ESL young-learner technique instead: animal-identity turn-taking
-    // speaking games (teach-this.com/vocabulary/animals,
-    // games4esl.com/esl-classroom-games/animal-games — "I am ___, who am
-    // I?" guessing/turn-taking format). Adapted to this lesson's actual
-    // controlled language (skip the riddle adjectives like "I am yellow" —
-    // not taught yet) via 'join-stage', already proven in Welcome Town for
-    // self-introduction turns: animals model "I am a ___", then the
-    // student produces it themselves — genuine speaking production,
-    // directly on-objective, not another recognition/matching rep.
-    id: 'ja-join-stage', kind: 'join-stage', bg: bgFriends,
-    teacher: 'Your turn! When it says YOU, pick an animal and say "I am a ___" yourself!',
-    cast: ['leo', 'coco', 'willow'],
+    id: 'ja-brick-i', kind: 'prea1', teacher: 'Reading: Brick Crush! Listen to the sound, then smash every brick with that letter — i, a or o.',
+    scene: { id: 'ja-brick-i', kind: 'brick-crush', bg: bgWide, teacher: 'Listen to the sound, then tap every brick with that letter.', who: 'pip', letters: ['I', 'A', 'O'], rows: 4, cols: 7, goal: 14, seconds: 60 },
+  },
+  {
+    id: 'ja-blend', kind: 'sound-blend', bg: bgWide,
+    teacher: 'Reading: say each sound, blend, find the picture — then read the sentence.',
+    rounds: [
+      { word: 'big', img: ANIMALS.elephant.img, sentence: 'An elephant. It is big.' },
+      { word: 'pig', img: item('pig'), sentence: 'It is a big pig.' },
+      { word: 'zip', img: item('zip'), sentence: 'Zip it, Pip!' },
+    ],
+  },
+  { id: 'ja-twister', kind: 'tongue-twister', look: 'town', speeds: 2, bg: bgWide, who: 'pip', focus: 'i', teacher: 'Reading: quick reading! Listen to Pip, then say it slow, then faster.', line: 'Six big pigs sit still.' },
+  /* Free: talk about an animal */
+  {
+    id: 'ja-free-talk', kind: 'join-stage', bg: bgFriends, teacher: 'Free: Coco asks — the student picks any animal and says two sentences about it, then asks Coco.', cast: ['coco', 'pip'],
     turns: [
-      { who: 'leo', line: 'I am a lion!' },
-      { who: 'coco', line: 'I am a monkey!' },
-      { who: 'willow', line: 'I am a bird!' },
-      { who: 'student', line: 'Now YOU! Pick an animal and say "I am a ___!"' },
+      { who: 'coco', line: 'Which animal do you like?' },
+      { who: 'student', line: 'I like the … It’s …' },
+      { who: 'coco', line: 'Oh! Is it big or small?' },
+      { who: 'student', line: 'It’s … and … . And you, Coco?' },
+      { who: 'coco', line: 'I like the frog. It’s small and green!' },
     ],
   },
-
+  { id: 'ja-i-can', kind: 'meet', focus: ['jungle'], bg: bgFriends, who: 'coco', cardSide: 'left', teacher: 'Check: say it and get your passport stamp!', line: 'I can name jungle animals and say how they look!', repeat: 'It’s big and grey!' },
   {
-    id: 'ja-listen-tap-can', kind: 'listen-tap', bg: bgPathAnimals,
-    teacher: 'Listen, then tap the animal that matches!',
-    targets: [
-      { label: 'Lion', ...LION_SPOT, color: '#C97A2F' },
-      { label: 'Monkey', ...MONKEY_SPOT, color: '#8B5A2B' },
-      { label: 'Bird', ...BIRD_SPOT, color: '#4FA9E0' },
-    ],
-    rounds: [
-      { prompt: 'I am a lion. Hear me roar!', answerLabel: 'Lion', who: 'leo' },
-      { prompt: 'I am a monkey. Hear me chatter!', answerLabel: 'Monkey', who: 'coco' },
-      { prompt: 'I am a bird. Hear me tweet!', answerLabel: 'Bird', who: 'willow' },
-    ],
+    id: 'ja-sticker', kind: 'prea1', teacher: 'Sticker time! The student opens the pack and puts the safari sticker in their Sticker Book.',
+    scene: {
+      id: 'ja-sticker', kind: 'sticker-reward', bg: bgFriends, who: 'pip', teacher: 'Sticker time!',
+      line: 'Super safari! Here is your sticker.',
+      sticker: { img: ANIMALS.elephant.img, label: 'Jungle explorer' },
+    },
   },
-
   {
-    id: 'ja-storybook', kind: 'flipbook', bg: bgWide, title: 'Three Jungle Friends',
-    pages: [
-      { who: 'pip', img: bgWide, text: 'Welcome to the jungle! Today we meet three animal friends.' },
-      { who: 'coco', img: bgCocoVines, text: 'This is Coco. Coco is a monkey!' },
-      { who: 'leo', img: bgLeoDen, text: 'This is Leo. Leo is a lion!' },
-      { who: 'willow', img: bgWillowNest, text: 'This is Willow. Willow is a bird!' },
-      { who: 'coco', img: bgFriends, text: 'Lion, monkey, and bird — three jungle friends together!' },
-    ],
-    checkpoints: [
-      { afterPage: 2, who: 'coco', question: 'What animal is Coco?', options: ['Monkey', 'Lion', 'Bird'], answer: 'Monkey' },
-      { afterPage: 3, who: 'leo', question: 'What animal is Leo?', options: ['Bird', 'Monkey', 'Lion'], answer: 'Lion' },
-    ],
+    id: 'ja-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
+    scene: {
+      id: 'ja-home-mission', kind: 'home-mission', bg: bgFriends, who: 'pip',
+      teacher: 'Home Mission: read the steps with the student.',
+      line: 'Your home mission!',
+      parentNote: 'Today your child learned 8 jungle animals and how they look (big, small, long, colours) and read the first pages of "The Jungle Rescue". Ask them to draw an animal and tell you about it.',
+      steps: [
+        { emoji: '\u{1F58D}\u{FE0F}', say: 'Draw a jungle animal.' },
+        { emoji: '\u{1F5E3}\u{FE0F}', say: 'Say two sentences: It’s a snake. It’s long.' },
+        { emoji: '\u{1F4D6}', say: 'Read page 1 of the story to your family.' },
+      ],
+    },
   },
-
   {
-    // By this point (scene 13 of 16) "I am a ___" has been drilled across
-    // 9 prior scenes — well past the point where one small new addition
-    // risks overload. Each character's well-known identity line is now
-    // followed by ONE new "I can ___" line (reusing the SAME already-known
-    // animals, no new nouns), matching this unit's own grammarFocus for
-    // "can for ability". This is deliberately PLANTED, not taught: per
-    // playground-curriculum-engine's knowledge-graph model, future
-    // knowledge can surface in a story/roleplay ahead of the lesson that
-    // formally teaches it. Lesson 2 owns the real guided practice and
-    // assessment of "can" — nothing later in THIS lesson (hello-doors,
-    // true-false) tests it, so assessment still matches what L1 actually
-    // teaches.
-    id: 'ja-roleplay', kind: 'roleplay', bg: bgFriends,
-    teacher: 'Story time! Listen to what Leo, Coco, and Willow can do, then repeat each line.',
-    cast: ['leo', 'coco', 'willow'],
-    script: [
-      { who: 'leo', line: 'Hello! I am Leo. I am a lion!', repeat: true },
-      { who: 'leo', line: 'I can run very fast!', repeat: true },
-      { who: 'coco', line: 'Hi! I am Coco. I am a monkey!', repeat: true },
-      { who: 'coco', line: 'I can climb trees!', repeat: true },
-      { who: 'willow', line: 'Tweet! I am Willow. I am a bird!', repeat: true },
-      { who: 'willow', line: 'I can fly high!', repeat: true },
+    id: 'ja-goodbye-song', kind: 'song', bg: bgFriends, title: '\u{1F3B5} Goodbye Song \u{1F3B5}', teacher: 'It’s time to go — wave goodbye and sing along together!',
+    durationSeconds: 20, bigWord: 'Goodbye',
+    songUrl: `${WT}/audio/goodbye-song.mp3?v=3`,
+    lineDurationsMs: [3600, 4120, 4020, 8322],
+    lyrics: [
+      { who: 'marigold', text: '\u{1F44B} Goodbye, goodbye, my new friend' },
+      { who: 'pip', text: '\u{1F44B} Goodbye, goodbye, see you again' },
+      { who: 'marigold', text: '\u{1F3EB} Welcome Town School is happy today' },
+      { who: 'pip', text: '\u{1F496} Byeeee, friends! See you soon!' },
     ],
   },
-
-  {
-    id: 'ja-hello-doors', kind: 'hello-doors', bg: bgWide,
-    teacher: 'Knock knock! Listen for the animal, then tap the right door!',
-    cast: ['leo', 'coco', 'willow'],
-    rounds: [
-      { target: 'leo', prompt: 'Who says "I am a lion"?', helloLine: 'I am Leo the lion!', echoLine: 'I am a lion!' },
-      { target: 'coco', prompt: 'Who says "I am a monkey"?', helloLine: 'I am Coco the monkey!', echoLine: 'I am a monkey!' },
-      { target: 'willow', prompt: 'Who says "I am a bird"?', helloLine: 'I am Willow the bird!', echoLine: 'I am a bird!' },
-    ],
-  },
-
-  {
-    id: 'ja-true-false', kind: 'true-false', bg: bgFriends,
-    teacher: 'Listen to each sentence. Is it TRUE or FALSE?',
-    rounds: [
-      { who: 'leo', statement: 'Leo is a lion.', isTrue: true },
-      { who: 'coco', statement: 'Coco is a bird.', isTrue: false },
-      { who: 'willow', statement: 'Willow is a bird.', isTrue: true },
-    ],
-  },
-
-  { id: 'ja-finale', kind: 'finale', bg: bgFriends, who: 'pip', line: 'You met Leo, Coco, and Willow, and learned lion, monkey, and bird! Look for a bird outside today! ✨\u{1F334}' },
+  { id: 'ja-finale', kind: 'finale', bg: bgFriends, who: 'pip', line: 'You can name 8 jungle animals and say how they look! See you in the jungle! \u{1F334}' },
 ];
 
 /* =============================================================================

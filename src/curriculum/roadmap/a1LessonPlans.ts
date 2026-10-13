@@ -104,13 +104,15 @@ export const A1_LESSON_PLANS: A1LessonPlan[] = [
   }),
 
   // ── Unit 2 · Jungle ───────────────────────────────────────────────────────────────────────────────
-  p(2, 1, 'Jungle Animals: Lion, Monkey, Bird', {
+  p(2, 1, 'Jungle Animals', {
     built: true,
-    objective: 'I can name three jungle animals and say "I am a… / It\'s a…".',
-    grammarFocus: ['It\'s a…', 'I am a…'], newVocabulary: ['jungle', 'monkey'], reviewTargets: ['lion', 'bird', 'This is…'],
-    phonicsFocus: [], communicationGoal: 'Name the animals I see.',
-    signatureGame: 'Jungle hello-doors (A1)', evidence: 'Hello-doors + true/false at the end.',
-    funHook: 'Coco the monkey hides behind the doors.', homeMission: 'Point to an animal picture and name it.',
+    objective: 'I can name 8 jungle animals and say what they look like: "It\'s an elephant. It\'s big and grey."',
+    grammarFocus: ['It\'s a / an…', 'It\'s big / small / long + colour'], newVocabulary: ['elephant', 'snake', 'crocodile', 'monkey', 'frog', 'big', 'small', 'long'],
+    reviewTargets: ['lion', 'bird', 'fish', 'colours', 'This is my friend…'],
+    phonicsFocus: ['short i (insect, ink, igloo → big, pig, zip)', 'twister: Six big pigs sit still.'],
+    communicationGoal: 'Name the animals I see and say what they look like.',
+    signatureGame: '★ Safari Snap (listen to the looks, take the photo)', evidence: 'Safari Snap: the child photographs the animal described and says two sentences about it; reads story pages 1-3.',
+    funHook: 'The last photo rounds give only the looks ("It\'s small and blue!").', homeMission: 'Draw a jungle animal and say two sentences about it.',
   }),
   p(2, 2, 'What Can Animals Do?', {
     objective: 'I can say what a jungle animal can and can\'t do: "A monkey can climb. It can\'t fly."',
