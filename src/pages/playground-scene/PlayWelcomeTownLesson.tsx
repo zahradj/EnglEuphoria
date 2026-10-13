@@ -59,7 +59,7 @@ interface PlayWelcomeTownLessonProps {
 /** Gem-eligible scene kinds — every activity kind that ever calls onWin(true)
  *  exactly once when completed. Kept in sync manually with SceneRenderer.tsx
  *  (title-card/cinematic never award a gem; finale is the end screen). */
-const GEM_KINDS = new Set<Scene['kind']>(['meet', 'echo', 'memory', 'vocab-spot', 'drag-match', 'drag-sticker', 'choice', 'listen-tap', 'true-false', 'roleplay', 'join-stage', 'hello-doors', 'flipbook', 'song', 'trace', 'word-build', 'sentence-build', 'letter-game', 'jigsaw-puzzle', 'spin-wheel', 'picture-match', 'first-sound', 'letter-match', 'letter-blocks', 'place-it', 'torch-hunt', 'where-castle', 'first-sound', 'letter-match', 'letter-blocks', 'whats-missing', 'sort-basket', 'grammar-gap', 'color-play', 'welcome-party', 'name-badge', 'prea1', 'feelings-survey', 'sound-blend', 'chat-chain']);
+const GEM_KINDS = new Set<Scene['kind']>(['meet', 'echo', 'memory', 'vocab-spot', 'drag-match', 'drag-sticker', 'choice', 'listen-tap', 'true-false', 'roleplay', 'join-stage', 'hello-doors', 'flipbook', 'song', 'trace', 'word-build', 'sentence-build', 'letter-game', 'jigsaw-puzzle', 'spin-wheel', 'picture-match', 'first-sound', 'letter-match', 'letter-blocks', 'place-it', 'torch-hunt', 'where-castle', 'first-sound', 'letter-match', 'letter-blocks', 'whats-missing', 'sort-basket', 'grammar-gap', 'color-play', 'welcome-party', 'name-badge', 'prea1', 'feelings-survey', 'sound-blend', 'chat-chain', 'reader', 'tongue-twister', 'read-do', 'answer-race', 'word-splat', 'field-guide', 'sticker-bingo', 'tic-tac-toe', 'pass-parcel', 'i-spy', 'save-balloon', 'dominoes', 'go-fish', 'hot-coconut', 'quiz-board', 'chest-quest', 'rising-river', 'world-builder', 'draw-guess', 'echo-cave', 'grid-hunt', 'draw-guess', 'echo-cave', 'grid-hunt', 'hot-cold', 'whisper-tube', 'glider', 'tower-pull', 'musical-islands', 'red-green', 'letter-bubbles', 'crossword', 'flag-race', 'balloon-match', 'pet-pal', 'rocket-maze', 'weather-report', 'food-survey', 'festival-cafe', 'build-dish']);
 
 /** Scene kinds that own real synced state (see `activityState` below)
  *  instead of relying on the generic scene_tap DOM-click-mirror. Whoever
@@ -85,7 +85,7 @@ const GEM_KINDS = new Set<Scene['kind']>(['meet', 'echo', 'memory', 'vocab-spot'
  *    channel to convert safely, deferred as its own follow-up. */
 const REAL_SYNC_KINDS = new Set<Scene['kind']>([
   'vocab-spot', 'meet', 'echo', 'memory', 'choice', 'listen-tap', 'true-false',
-  'frequency-ladder', 'roleplay', 'join-stage', 'hello-doors', 'flipbook',
+  'frequency-ladder', 'roleplay', 'join-stage', 'hello-doors', 'flipbook', 'reader', 'read-do', 'answer-race', 'word-splat', 'field-guide', 'sticker-bingo', 'tic-tac-toe', 'pass-parcel', 'i-spy', 'save-balloon', 'dominoes', 'go-fish', 'hot-coconut', 'quiz-board', 'chest-quest', 'rising-river', 'world-builder', 'draw-guess', 'echo-cave', 'grid-hunt', 'hot-cold', 'whisper-tube', 'glider', 'tower-pull', 'musical-islands', 'red-green', 'letter-bubbles', 'crossword', 'flag-race', 'balloon-match', 'pet-pal', 'rocket-maze', 'weather-report', 'food-survey', 'festival-cafe', 'build-dish',
   'sound-model', 'word-build', 'sentence-build', 'letter-game', 'spin-wheel', 'picture-match', 'recall-warmup',
   'first-sound', 'sound-blend', 'letter-match', 'letter-blocks', 'whats-missing', 'sort-basket', 'grammar-gap', 'color-play',
   'tongue-twister', 'place-it', 'torch-hunt', 'where-castle', 'welcome-party', 'name-badge', 'feelings-survey', 'chat-chain',

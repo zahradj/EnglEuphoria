@@ -50,6 +50,10 @@ import * as unit1Scenes from '../src/content/playground-library/unit1/scenes.ts'
 import * as wtScenes from '../src/content/playground-library/welcome-town/scenes.ts';
 import * as wtA2Scenes from '../src/content/playground-library/welcome-town-a2/scenes.ts';
 import * as magicCastleScenes from '../src/content/playground-library/magic-castle/scenes.ts';
+import * as jungleScenes from '../src/content/playground-library/jungle-adventure/scenes.ts';
+import * as spaceScenes from '../src/content/playground-library/space-mission/scenes.ts';
+import * as foodScenes from '../src/content/playground-library/food-festival/scenes.ts';
+import { surveyQuestion, surveyAnswer, surveyReport, CAFE_WRONG, CAFE_YES } from '../src/content/playground-library/welcome-town/scene-components/foodRules.ts';
 import { homeworkA1U9L1Lines } from '../src/content/playground-library/magic-castle/homework.ts';
 import { allQuestLines } from '../src/content/homework-quests/registry.ts';
 import { placementLines } from '../src/components/placement/placementLines.ts';
@@ -163,9 +167,10 @@ const CAST = unit1Scenes.CAST;
  *  exactly as safe to pre-generate as a verbatim field. Keep each one in
  *  sync with its renderer counterpart; a mismatch here bakes an audio clip
  *  that says something different from what the app actually displays. */
-const NUMBER_WORDS = ['ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX', 'SEVEN', 'EIGHT', 'NINE', 'TEN'];
+const NUMBER_WORDS = ['ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX', 'SEVEN', 'EIGHT', 'NINE', 'TEN', 'ELEVEN', 'TWELVE', 'THIRTEEN', 'FOURTEEN', 'FIFTEEN', 'SIXTEEN', 'SEVENTEEN', 'EIGHTEEN', 'NINETEEN', 'TWENTY'];
+const TENS_WORDS = { 30: 'THIRTY', 40: 'FORTY', 50: 'FIFTY', 60: 'SIXTY', 70: 'SEVENTY', 80: 'EIGHTY', 90: 'NINETY', 100: 'ONE HUNDRED' };
 function numberSpeech(n) {
-  const w = NUMBER_WORDS[n - 1];
+  const w = NUMBER_WORDS[n - 1] ?? TENS_WORDS[n];
   return w ? w.charAt(0) + w.slice(1).toLowerCase() : String(n);
 }
 function buildColorSentence(colorWord, exampleWord) {
@@ -196,7 +201,7 @@ const castName = (who) => CAST[who]?.name ?? who;
  *  for one scene instance. */
 const UNIT1_EXTRACTORS = {
   // Universal Sound Train (../SoundBlendScene.tsx): the whole word, teacher voice (single sounds are recorded files).
-  'sound-blend': (s) => (s.rounds ?? []).map((r) => ['teacher', r.word]),
+  'sound-blend': (s) => (s.rounds ?? []).flatMap((r) => [['teacher', r.word], ...(r.sentence ? [['teacher', r.sentence], ...r.sentence.split(/\s+/).map((w) => ['teacher', w.replace(/[^A-Za-z'’]/g, '')]).filter(([, w]) => w)] : [])]),
   cinematic: (s) => (s.script ?? []).map((l) => [l.who, l.line]),
   meet: (s) => {
     const out = [[s.who, s.line]];
@@ -279,9 +284,9 @@ const UNIT1_EXTRACTORS = {
     ...(s.rounds ?? []).map((r) => ['teacher', r.prompt]),
     ...(s.tiles ?? []).map((t) => [t.who, `Yes! ${castName(t.who)} is ${t.emotion}!`]),
   ],
-  'numbers-learn': (s) => { const out = []; for (let n = s.from; n <= s.to; n++) out.push([s.who, numberSpeech(n)]); return out; },
+  'numbers-learn': (s) => { const out = []; for (let n = s.from; n <= s.to; n += (s.step ?? 1)) out.push([s.who, numberSpeech(n)]); return out; },
   'numbers-review': (s) => { const out = []; for (let n = s.from; n <= s.to; n++) out.push([s.who, numberSpeech(n)]); return out; },
-  'count-balloons': (s) => { const out = []; for (let n = 1; n <= s.total; n++) out.push([s.who, numberSpeech(n)]); return out; },
+  'count-balloons': (s) => { const out = []; for (let n = 1; n <= s.total; n++) out.push([s.who, numberSpeech(n * (s.step ?? 1))]); return out; },
   'candle-cake': (s) => (s.rounds ?? []).flatMap((r) => [[r.asker, r.prompt], [r.asker, r.celebrate]]),
   'age-balloons': (s) => (s.friends ?? []).map((f) => [f.who, `${castName(f.who)} is ${f.age}!`]),
   'age-sentence-match': (s) => (s.friends ?? []).map((f) => [f.who, `${castName(f.who)} is ${f.age}!`]),
@@ -502,6 +507,15 @@ const UNIT1_EXTRACTORS = {
     const hint = { he: 'He is a boy!', she: 'She is a girl!', it: 'It is an animal!', they: 'They are all the friends!' };
     return [...(s.stops ?? []).flatMap((st) => [[s.who, st.line], [s.who, `${hint[st.pronoun]} Listen: ${st.line}`], [s.who, st.reply]]), [s.who, s.doneLine]];
   },
+  'word-board': (s) => [[s.who, s.ask ?? 'What is it? Say it!'], [s.who, 'Up the ladder!'], [s.who, 'Wheee! Down the slide!'], [s.who, s.doneLine], ...(s.words ?? []).map((w) => [s.who, w.say]), ...(s.words ?? []).filter((w) => w.text).map((w) => [s.who, w.text])],
+  'home-hunt': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.ask], [s.who, r.found]]), [s.who, s.doneLine]],
+  'picture-maze': (s) => [...(s.items ?? []).flatMap((it) => [[s.who, `Find the ${it.label}!`], [s.who, it.say], ...(s.items ?? []).filter((o) => o !== it).map((o) => [s.who, `That's the ${it.label}! Find the ${o.label}.`])]), [s.who, s.doneLine]],
+  'flip-say': (s) => [...(s.cards ?? []).map((c) => [s.who, c.say]), [s.who, s.doneLine]],
+  'obstacle-run': (s) => [
+    ...(s.stations ?? []).flatMap((st) => [[s.who, st.ask], [s.who, st.sentence],
+      ...(st.options ?? []).map((fi) => [s.friends?.[fi]?.voice, fi === st.answer ? `I can ${st.action}!` : `Oops! I can't ${st.action}!`])]),
+    [s.who, s.freePrompt], [s.who, s.doneLine],
+  ],
   'can-it': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.ask], [s.who, r.answer]]), [s.who, s.doneLine]],
   // Mirror CampfireSaysScene.tsx: each call + reply, the wrong-action line, the done line
   'campfire-says': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...['clap', 'play', 'sleep'].map((a) => [s.who, `Not ${a}! Listen again.`]), [s.who, s.doneLine]],
@@ -726,7 +740,7 @@ const WT_EXTRACTORS = {
   ],
   // welcome-town SentenceBuildScene: says the finished sentence in Pip's voice.
   'sentence-build': (s) => (s.rounds ?? []).map((r) => ['pip', r.words.join(' ')]),
-  'sound-blend': (s) => (s.rounds ?? []).map((r) => ['teacher', r.word]),
+  'sound-blend': (s) => (s.rounds ?? []).flatMap((r) => [['teacher', r.word], ...(r.sentence ? [['teacher', r.sentence], ...r.sentence.split(/\s+/).map((w) => ['teacher', w.replace(/[^A-Za-z'’]/g, '')]).filter(([, w]) => w)] : [])]),
   cinematic: (s) => (s.script ?? []).map((l) => [l.who, l.line]),
   meet: (s) => {
     const out = [[s.who, s.line]];
@@ -738,7 +752,7 @@ const WT_EXTRACTORS = {
     [it.who ?? 'teacher', it.sentence],
   ]),
   echo: (s) => [[s.who, s.word]],
-  memory: (s) => (s.pairs ?? []).map((p) => ['teacher', p.label]),
+  memory: (s) => (s.pairs ?? []).flatMap((p) => [['teacher', p.label], ...(p.match ? [['teacher', p.match]] : [])]),
   'drag-match': (s) => (s.items ?? []).map((it) => [it.who ?? 'teacher', it.label]),
   roleplay: (s) => (s.script ?? []).map((l) => [l.who, l.line]),
   'join-stage': (s) => (s.turns ?? []).filter((t) => t.who !== 'student').map((t) => [t.who, t.line]),
@@ -771,12 +785,95 @@ const WT_EXTRACTORS = {
   'word-build': (s) => (s.rounds ?? []).map((r) => ['pip', r.word]),
   finale: (s) => (s.line ? [[s.who, s.line]] : []),
   'tongue-twister': (s) => [[s.who, s.line]],
+  reader: (s) => (s.pages ?? []).flatMap((p) => (p.lines ?? []).flatMap((l) => [[l.who ?? 'teacher', l.text], ...l.text.split(/\s+/).map((w) => [l.who ?? 'teacher', w.replace(/[^A-Za-z'’-]/g, '')]).filter(([, w]) => w)])),
   // Verified against welcome-town/SceneRenderer.tsx call sites.
   // FeelingsSurveyScene.tsx: intro, "How are you, <name>?" + "<name> is <feeling>!" (host), "I am <feeling>!" (friend).
   'chat-chain': (s) => [[s.partner, s.intro], ...(s.turns ?? []).map((t) => [t.who === 'student' ? 'pip' : t.who, t.line])],
   'feelings-survey': (s) => [[s.who, s.intro], ...(s.friends ?? []).flatMap((f) => [[s.who, `How are you, ${f.name}?`], [f.who, `I am ${f.feeling}!`], [s.who, `${f.name} is ${f.feeling}!`]])],
   'listen-tap': (s) => (s.rounds ?? []).flatMap((r) => [[r.who ?? 'marigold', r.prompt], [r.who ?? 'marigold', `Yes! ${r.answerLabel}!`]]),
   'true-false': (s) => (s.rounds ?? []).map((r) => [r.who, r.statement]),
+  // ReadDoScene / AnswerRaceScene / WordSplatScene (welcome-town/scene-components).
+  'read-do': (s) => [['pip', s.doneLine], ...(s.rounds ?? []).flatMap((r) => [['teacher', r.text], [s.cast?.[r.to] ?? 'pip', r.reply]])],
+  'answer-race': (s) => [[s.who, s.doneLine], ...(s.rounds ?? []).flatMap((r) => [[s.who, r.ask], ...(r.choices ?? []).map((c) => ['teacher', c])])],
+  'field-guide': (s) => [[s.who, s.doneLine], [s.who, 'No! Look again!'], ...(s.animals ?? []).flatMap((a) => [[s.who, `What is it like? Let's write the ${a.name} card!`], ...(a.lines ?? []).flatMap((l) => [['teacher', l.frame.replace('___', l.answer)], ...(l.no ? [[s.who, l.no]] : [])])])],
+  'word-splat': (s) => [[s.who, s.doneLine], ...(s.words ?? []).map((w) => [s.who, w])],
+  // StickerBingoScene / TicTacToeScene / PassParcelScene / ISpyScene (welcome-town/scene-components).
+  'sticker-bingo': (s) => [[s.who, s.doneLine], [s.who, 'Bingo!'], ...(s.cells ?? []).map((c) => [s.who, c.say])],
+  'tic-tac-toe': (s) => [[s.who, s.doneLine], [s.who, "Let's play! Tap a square and answer."], ...(s.squares ?? []).flatMap((q) => [[s.who, q.ask], ...(q.choices ?? []).map((c) => ['teacher', c])])],
+  'pass-parcel': (s) => [[s.who, s.doneLine], ...(s.rounds ?? []).flatMap((q) => [[s.who, q.ask], ...(q.choices ?? []).map((c) => ['teacher', c])])],
+  'i-spy': (s) => [[s.who, s.doneLine], ...(s.rounds ?? []).flatMap((q) => [[s.who, q.clue], [s.who, q.answer]])],
+  // SaveBalloonScene / DominoesScene / GoFishScene / HotCoconutScene (welcome-town/scene-components).
+  'save-balloon': (s) => [[s.who, s.doneLine], ...(s.rounds ?? []).flatMap((q) => [[s.who, q.sentence], [s.who, `${q.word}! ${q.sentence}`]])],
+  'dominoes': (s) => [[s.who, s.doneLine], [s.who, 'Look! What is it? Find the sentence!'], [s.who, 'Now this picture! Find the sentence!'], ...(s.steps ?? []).map((t) => ['teacher', t.text])],
+  'go-fish': (s) => {
+    const art = (l) => (s.cards ?? []).find((c) => c.label === l)?.article ?? (/^[aeiou]/i.test(l) ? 'an' : 'a');
+    return [[s.who, s.doneLine], [s.who, 'Let’s play Go Fish! Tap a card and ask me!'], [s.who, 'Yes! Here you are.'], [s.who, 'No! Go fish!'], [s.who, 'Look at your cards!'],
+      ['teacher', 'Yes, I have. Here you are.'], ['teacher', 'No, I haven’t. Go fish!'],
+      ...(s.cards ?? []).flatMap((c) => [['teacher', `Have you got ${art(c.label)} ${c.label}?`], [s.who, `Have you got ${art(c.label)} ${c.label}?`]])];
+  },
+  // QuizBoardScene / ChestQuestScene / RisingRiverScene / WorldBuilderScene (welcome-town/scene-components).
+  'quiz-board': (s) => [[s.who, s.doneLine], [s.who, 'Pick a tile! Big points, big questions!'], [s.who, 'Boom! Double points!'], [s.who, 'Try again!'],
+    ...(s.categories ?? []).flatMap((c) => (c.tiles ?? []).flatMap((t) => [[s.who, t.ask], ['teacher', t.choices[t.answer]]]))],
+  'chest-quest': (s) => [[s.who, s.doneLine], [s.who, 'Double! Your coins are doubled!'], [s.who, 'A sticker!'],
+    ...(s.rounds ?? []).flatMap((q) => [[s.who, q.ask], ['teacher', `${q.choices[q.answer]} Pick a chest!`], ...(q.prizes ?? []).filter((p) => /^\d+$/.test(p)).map((p) => [s.who, `${p} coins!`])])],
+  'rising-river': (s) => [[s.who, s.doneLine], [s.who, 'Splash! Wet feet! Quick, try again!'], [s.who, 'Oh! The water is rising! Try again!'],
+    ...(s.rounds ?? []).flatMap((q) => [[s.who, q.ask], ['teacher', q.choices[q.answer]]])],
+  'world-builder': (s) => [[s.who, s.doneLine], [s.who, 'Try again!'], ...(s.rounds ?? []).flatMap((q, i) => {
+    const p = (s.pieces ?? [])[i];
+    return [[s.who, q.ask], ['teacher', `${q.choices[q.answer]} ${p ? `${/^[aeiou]/i.test(p.label) ? 'An' : 'A'} ${p.label}!` : ''}`]];
+  })],
+  // DrawGuessScene / EchoCaveScene / GridHuntScene (welcome-town/scene-components).
+  'draw-guess': (s) => [[s.who, s.doneLine], [s.who, 'You draw! Don’t say it! Your teacher guesses.'], [s.who, 'Your teacher draws! What is it? Guess and say it!'], [s.who, 'Look! I’m drawing! What is it? Guess and say it!'], [s.who, 'Not yet! Look again!'],
+    ...(s.rounds ?? []).flatMap((r) => (r.options ?? []).map((o) => ['teacher', o.say]))],
+  'echo-cave': (s) => [[s.who, s.doneLine], [s.who, 'Shh! Listen! Who is calling? Where is the voice?'], [s.who, 'Not this tunnel! Listen again!'],
+    ...(s.rounds ?? []).flatMap((r) => [[r.voice, r.line], [r.voice, r.reply]])],
+  'grid-hunt': (s) => {
+    const num = ['one', 'two', 'three', 'four']; const tr = (s.treasures ?? []).map((t) => t.toUpperCase());
+    const cells = ['A', 'B', 'C', 'D'].flatMap((c) => [1, 2, 3, 4].map((n) => `${c}${n}`));
+    return [[s.who, s.doneLine], ...cells.map((c) => [s.who, `${({ A: 'Ay', B: 'Bee', C: 'See', D: 'Dee' })[c[0]]} ${num[Number(c[1]) - 1]}! ${tr.includes(c) ? 'Treasure!' : 'Splash!'}`]),
+      ...(s.rounds ?? []).flatMap((q) => [[s.who, q.ask], ['teacher', `${q.choices[q.answer]} Dive! Say a square!`]])];
+  },
+  // HotColdScene / WhisperTubeScene / GliderScene / TowerPullScene (welcome-town/scene-components).
+  'hot-cold': (s) => [[s.who, s.doneLine], [s.who, 'Cold!'], [s.who, 'Warm!'], [s.who, 'Hot!'], [s.who, 'Very hot!'],
+    ...(s.rounds ?? []).flatMap((r) => [[s.who, r.find], [s.who, r.say]])],
+  'whisper-tube': (s) => [[s.who, s.doneLine], [s.who, 'Listen again! Which word is wrong?'],
+    ...(s.rounds ?? []).flatMap((r) => [[r.from, r.said], [r.to, r.heard], [r.to, r.said]])],
+  'glider': (s) => [[s.who, s.doneLine], [s.who, 'Puff! Try again!'], ...(s.rounds ?? []).flatMap((r) => [[s.who, r.ask], ['teacher', r.say ?? r.ask]])],
+  'tower-pull': (s) => [[s.who, s.doneLine], [s.who, 'Pick a block! Answer and pull it out!'], [s.who, 'Careful! Try again!'],
+    ...(s.rounds ?? []).flatMap((r) => [[s.who, r.ask], ['teacher', r.choices[r.answer]]])],
+  // MusicalIslandsScene / RedGreenScene / LetterBubblesScene / CrosswordScene (welcome-town/scene-components).
+  'musical-islands': (s) => [[s.who, s.doneLine], [s.who, 'Look again! Which lily pad?'], ...(s.rounds ?? []).flatMap((r) => [[s.who, r.ask], ['teacher', r.say]])],
+  'red-green': (s) => [[s.who, s.doneLine], [s.who, 'Oops! Red light! Freeze!'], ...(s.rounds ?? []).map((r) => [s.who, r.say])],
+  'letter-bubbles': (s) => [[s.who, s.doneLine], ...(s.words ?? []).flatMap((w) => [[s.who, `Spell it! ${w.word}!`], [s.who, w.word], ['teacher', w.say]])],
+  'crossword': (s) => [[s.who, s.doneLine], [s.who, 'What is it? Spell it!'], [s.who, 'Pick a picture!'], ...(s.words ?? []).flatMap((w) => [[s.who, w.word], ['teacher', w.say]])],
+  // FlagRaceScene / BalloonMatchScene / PetPalScene (welcome-town/scene-components).
+  'flag-race': (s) => [[s.who, s.doneLine], [s.who, 'Now ask your teacher!'],
+    ...(s.rounds ?? []).flatMap((r, i) => [...(i % 2 === 0 ? [[s.who, `Your turn! ${r.ask}`]] : []), [s.who, r.ask], ['teacher', r.choices[r.answer]]])],
+  'balloon-match': (s) => [[s.who, s.doneLine], [s.who, 'Read a balloon. Find its picture!'], ...(s.pairs ?? []).flatMap((p) => [[s.who, p.text], ['teacher', p.text]])],
+  'pet-pal': (s) => [[s.who, s.doneLine], [s.who, 'No, thank you! Listen again!'], ...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], ['teacher', r.say]])],
+  'rocket-maze': (s) => {
+    const SAY = { up: 'Go up!', down: 'Go down!', left: 'Go left!', right: 'Go right!' };
+    const out = [[s.who, s.doneLine], [s.who, 'Oops! A rock! Try again!'], ...Object.values(SAY).flatMap((l) => [['teacher', l], [s.who, l], [s.who, `Listen! ${l}`]])];
+    for (const m of s.missions ?? []) {
+      out.push(['teacher', m.win], [s.who, m.intro]);
+      if (m.mode === 'listen' && m.route?.length) out.push([s.who, `${m.intro} ${SAY[m.route[0]]}`]);
+    }
+    return out;
+  },
+  'weather-report': (s) => [[s.who, s.doneLine], [s.who, 'You are the weather reporter! Read the report.'], [s.who, 'Listen again!'], [s.who, 'Hmm, not for this weather!'],
+    ...(s.icons ?? []).map((i) => ['teacher', i.label]),
+    ...(s.planets ?? []).flatMap((p) => [[s.who, p.forecast], ['teacher', p.report]]),
+    ...(s.bag ?? []).flatMap((b) => [[s.who, b.line], ['teacher', b.say]])],
+  'food-survey': (s) => [[s.who, s.doneLine], [s.who, 'Ask your friends! Tap a box.'], [s.who, 'Now read the chart. Likes or doesn’t like?'], [s.who, 'Look at the chart again!'],
+    ...(s.friends ?? []).flatMap((fr, f) => (s.foods ?? []).flatMap((fd, c) => [['teacher', surveyQuestion(fd.label, fr.name)], [fr.who, surveyAnswer(!!s.answers?.[f]?.[c])]])),
+    ...(s.reports ?? []).map((r) => ['teacher', surveyReport(s.friends[r.friend].name, s.foods[r.food].label, !!s.answers?.[r.friend]?.[r.food])])],
+  'festival-cafe': (s) => [[s.who, s.doneLine], ...(s.menu ?? []).map((m) => ['teacher', m.label]),
+    ...(s.rounds ?? []).flatMap((r) => [[r.customer, r.line], [r.customer, r.reply], [r.customer, CAFE_WRONG], ...(r.offer ? [['teacher', r.offer.line], [r.customer, CAFE_YES]] : [])])],
+  'build-dish': (s) => [[s.who, s.doneLine], [s.who, 'Read the recipe. Then add it!'], [s.who, 'Read it again!'], [s.eater?.who, s.eater?.line], ...(s.steps ?? []).map((st) => ['teacher', st.text])],
+  'hot-coconut': (s) => [[s.who, s.doneLine], ...(s.rounds ?? []).flatMap((q) => {
+    const n = (s.seats ?? []).length || 1; const at = ((q.stop % n) + n) % n;
+    return [[s.who, `${at === 0 ? 'Your turn!' : `Help ${s.seats[at].name}!`} ${q.ask}`], ['teacher', q.choices[q.answer]]];
+  })],
   'spin-wheel': (s) => (s.items ?? []).map((it) => ['teacher', it.label]),
   'picture-match': (s) => (s.items ?? []).map((it) => ['teacher', it.word]),
   // welcome-town/WhereGames.tsx — every line those games can say.
@@ -830,6 +927,10 @@ const ENGINES = [
   { scenesModule: wtA2Scenes, extractors: WT_EXTRACTORS, resolveWho: (who) => wtScenes.VOICE_KEY[who] ?? who },
   // Magic Castle (A1 Unit 9) plays through welcome-town's renderer too.
   { scenesModule: magicCastleScenes, extractors: WT_EXTRACTORS, resolveWho: (who) => wtScenes.VOICE_KEY[who] ?? who },
+  // Jungle Adventure (A1 Unit 2) plays through welcome-town's renderer too.
+  { scenesModule: jungleScenes, extractors: WT_EXTRACTORS, resolveWho: (who) => wtScenes.VOICE_KEY[who] ?? who },
+  { scenesModule: spaceScenes, extractors: WT_EXTRACTORS, resolveWho: (who) => wtScenes.VOICE_KEY[who] ?? who },
+  { scenesModule: foodScenes, extractors: WT_EXTRACTORS, resolveWho: (who) => wtScenes.VOICE_KEY[who] ?? who },
 ];
 
 /** Homework games: every line they can say, already as (voice, text). */

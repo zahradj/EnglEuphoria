@@ -3425,5 +3425,388 @@
       "Clap, clap, clap and play, play, play!",
       "Sleep, sleep, sleep! Yes, I can!"
     ]
+  },
+  "a1u2l2-jungle-can": {
+    "publicPath": "public/jungle-adventure/audio/jungle-can-song-a1u2l2.mp3",
+    "bpm": 112,
+    "key": "F major",
+    "beatsPerLine": 4,
+    "barsPerLine": 2,
+    "introBars": 2,
+    "maxSeconds": 60,
+    "targetWords": [
+      "climb",
+      "swing",
+      "swim",
+      "fly",
+      "can't"
+    ],
+    "style": "Bright jungle-adventure kids song, 112 BPM in 4/4, F major, with marimba, bongos, shakers, ukulele and hand claps, ONE clear happy young singer, every word sung slowly and very clearly with crisp consonants: CAN and CAN'T clearly different (a strong T on CAN'T), a cheerful 'yes, it can!' and a playful 'no, it can't!'.",
+    "positiveStyles": [
+      "jungle",
+      "marimba",
+      "bongos",
+      "shakers",
+      "ukulele",
+      "hand claps",
+      "clear kids vocals",
+      "112 BPM",
+      "happy"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "sections": [
+      {
+        "name": "Chorus",
+        "rhyme": "AA",
+        "lines": [
+          "Climb and swing and swim and fly,",
+          "Jungle friends, let's try, let's try!"
+        ]
+      },
+      {
+        "name": "Verse 1",
+        "rhyme": "AA",
+        "lines": [
+          "A monkey can climb, yes, it can!",
+          "A monkey can't fly, no, it can't!"
+        ]
+      },
+      {
+        "name": "Verse 2",
+        "rhyme": "AA",
+        "lines": [
+          "A fish can swim, yes, it can!",
+          "A fish can't run, no, it can't!"
+        ]
+      },
+      {
+        "name": "Verse 3",
+        "rhyme": "AA",
+        "lines": [
+          "A lion can run, yes, it can!",
+          "A lion can't swing, no, it can't!"
+        ]
+      },
+      {
+        "name": "Chorus 2",
+        "rhyme": "AA",
+        "lines": [
+          "Climb and swing and swim and fly,",
+          "Jungle friends, let's try, let's try!"
+        ]
+      }
+    ],
+    "lines": [
+      "Climb and swing and swim and fly,",
+      "Jungle friends, let's try, let's try!",
+      "A monkey can climb, yes, it can!",
+      "A monkey can't fly, no, it can't!",
+      "A fish can swim, yes, it can!",
+      "A fish can't run, no, it can't!",
+      "A lion can run, yes, it can!",
+      "A lion can't swing, no, it can't!",
+      "Climb and swing and swim and fly,",
+      "Jungle friends, let's try, let's try!"
+    ]
+  },
+  "a1u2l3-jungle-can-it": {
+    "publicPath": "public/jungle-adventure/audio/can-it-song-a1u2l3.mp3",
+    "bpm": 112,
+    "key": "G major",
+    "beatsPerLine": 4,
+    "barsPerLine": 2,
+    "introBars": 2,
+    "maxSeconds": 60,
+    "targetWords": [
+      "elephant",
+      "snake",
+      "crocodile",
+      "can",
+      "can't"
+    ],
+    "style": "Bright jungle-adventure kids question-and-answer song, 112 BPM in 4/4, G major, with marimba, bongos, shakers, ukulele and hand claps, ONE clear happy young singer, every word sung slowly and very clearly with crisp consonants: each line is a question going UP ('Can an elephant swim?') then a cheerful answer ('Yes, it can!' / 'No, it can't!' with a strong T on CAN'T).",
+    "positiveStyles": [
+      "jungle",
+      "marimba",
+      "bongos",
+      "shakers",
+      "ukulele",
+      "hand claps",
+      "clear kids vocals",
+      "112 BPM",
+      "happy"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "sleepy",
+      "slow",
+      "music box",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "sections": [
+      {
+        "name": "Chorus",
+        "rhyme": "AA",
+        "lines": [
+          "Elephant, snake and crocodile,",
+          "Ask them, ask them, with a smile!"
+        ]
+      },
+      {
+        "name": "Verse 1",
+        "rhyme": "AA",
+        "lines": [
+          "Can an elephant swim? Yes, it can!",
+          "Can an elephant fly? No, it can't!"
+        ]
+      },
+      {
+        "name": "Verse 2",
+        "rhyme": "AA",
+        "lines": [
+          "Can a snake climb a tree? Yes, it can!",
+          "Can a snake run fast? No, it can't!"
+        ]
+      },
+      {
+        "name": "Verse 3",
+        "rhyme": "AA",
+        "lines": [
+          "Can a crocodile swim? Yes, it can!",
+          "Can a crocodile fly? No, it can't!"
+        ]
+      },
+      {
+        "name": "Chorus 2",
+        "rhyme": "AA",
+        "lines": [
+          "Elephant, snake and crocodile,",
+          "Ask them, ask them, with a smile!"
+        ]
+      }
+    ],
+    "lines": [
+      "Elephant, snake and crocodile,",
+      "Ask them, ask them, with a smile!",
+      "Can an elephant swim? Yes, it can!",
+      "Can an elephant fly? No, it can't!",
+      "Can a snake climb a tree? Yes, it can!",
+      "Can a snake run fast? No, it can't!",
+      "Can a crocodile swim? Yes, it can!",
+      "Can a crocodile fly? No, it can't!",
+      "Elephant, snake and crocodile,",
+      "Ask them, ask them, with a smile!"
+    ]
+  },
+  "a1u3l3-space-counting-rocket": {
+    "publicPath": "public/space-mission/audio/counting-rocket-song-a1u3l3.mp3",
+    "bpm": 116,
+    "key": "C major",
+    "beatsPerLine": 4,
+    "barsPerLine": 2,
+    "introBars": 2,
+    "maxSeconds": 60,
+    "targetWords": [
+      "count",
+      "stars",
+      "up",
+      "go"
+    ],
+    "style": "Bright space-adventure kids counting song, 116 BPM in 4/4, C major, with bouncy synth bass, twinkly bells, light drums and hand claps, ONE clear happy young singer, every number sung slowly and very clearly (TEN, TWEN-ty, THIR-ty, FOR-ty...), a rocket whoosh only in the instrumental intro.",
+    "positiveStyles": [
+      "space",
+      "synth",
+      "bells",
+      "claps",
+      "clear kids vocals",
+      "116 BPM",
+      "happy",
+      "counting song"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "sleepy",
+      "slow",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling",
+      "robot voice"
+    ],
+    "sections": [
+      {
+        "name": "Chorus",
+        "rhyme": "AA",
+        "lines": [
+          "Count by tens and up we go,",
+          "To the stars and moon, hello!"
+        ]
+      },
+      {
+        "name": "Verse 1",
+        "rhyme": "AA",
+        "lines": [
+          "Ten and twenty, thirty, more,",
+          "Forty, fifty, rockets roar!"
+        ]
+      },
+      {
+        "name": "Chorus 2",
+        "rhyme": "AA",
+        "lines": [
+          "Count by tens and up we go,",
+          "To the stars and moon, hello!"
+        ]
+      },
+      {
+        "name": "Verse 2",
+        "rhyme": "AA",
+        "lines": [
+          "Sixty, seventy, eighty, too,",
+          "Ninety, a hundred! Stars for you!"
+        ]
+      },
+      {
+        "name": "Chorus 3",
+        "rhyme": "AA",
+        "lines": [
+          "Count by tens and up we go,",
+          "To the stars and moon, hello!"
+        ]
+      }
+    ],
+    "lines": [
+      "Count by tens and up we go,",
+      "To the stars and moon, hello!",
+      "Ten and twenty, thirty, more,",
+      "Forty, fifty, rockets roar!",
+      "Count by tens and up we go,",
+      "To the stars and moon, hello!",
+      "Sixty, seventy, eighty, too,",
+      "Ninety, a hundred! Stars for you!",
+      "Count by tens and up we go,",
+      "To the stars and moon, hello!"
+    ]
+  },
+  "a1u4l3-food-do-you-like": {
+    "publicPath": "public/food-festival/audio/do-you-like-song-a1u4l3.mp3",
+    "bpm": 112,
+    "key": "G major",
+    "beatsPerLine": 4,
+    "barsPerLine": 2,
+    "introBars": 2,
+    "maxSeconds": 60,
+    "targetWords": [
+      "like",
+      "yes",
+      "do",
+      "soup",
+      "rice",
+      "pizza"
+    ],
+    "style": "Happy festival kids question-and-answer song, 112 BPM in 4/4, G major, with ukulele, light marimba, hand claps and a soft shaker, ONE clear happy young singer, every word sung slowly and very clearly, a cheerful \"Yes, I do!\" on every chorus, a playful \"Oh no, no, no!\" for the snails.",
+    "positiveStyles": [
+      "kids song",
+      "ukulele",
+      "marimba",
+      "claps",
+      "clear kids vocals",
+      "112 BPM",
+      "happy",
+      "call and response"
+    ],
+    "negativeStyles": [
+      "lullaby",
+      "sleepy",
+      "adult vocals",
+      "rap",
+      "dark",
+      "instrumental only",
+      "extra verses",
+      "mumbling",
+      "autotune"
+    ],
+    "sections": [
+      {
+        "name": "Chorus",
+        "rhyme": "AA",
+        "lines": [
+          "Do you like it? Yes, I do!",
+          "Pizza, pizza, me and you!"
+        ]
+      },
+      {
+        "name": "Verse 1",
+        "rhyme": "AA",
+        "lines": [
+          "Do you like soup? Yes, I do!",
+          "Soup for me and soup for you!"
+        ]
+      },
+      {
+        "name": "Chorus 2",
+        "rhyme": "AA",
+        "lines": [
+          "Do you like it? Yes, I do!",
+          "Pizza, pizza, me and you!"
+        ]
+      },
+      {
+        "name": "Verse 2",
+        "rhyme": "AA",
+        "lines": [
+          "Do you like rice? Yes, I do!",
+          "Rice for me and rice for you!"
+        ]
+      },
+      {
+        "name": "Verse 3",
+        "rhyme": "AA",
+        "lines": [
+          "Do you like snails? No, I don’t!",
+          "Snails for lunch? Oh no, no, no!"
+        ]
+      },
+      {
+        "name": "Chorus 3",
+        "rhyme": "AA",
+        "lines": [
+          "Do you like it? Yes, I do!",
+          "Pizza, pizza, me and you!"
+        ]
+      }
+    ],
+    "lines": [
+      "Do you like it? Yes, I do!",
+      "Pizza, pizza, me and you!",
+      "Do you like soup? Yes, I do!",
+      "Soup for me and soup for you!",
+      "Do you like it? Yes, I do!",
+      "Pizza, pizza, me and you!",
+      "Do you like rice? Yes, I do!",
+      "Rice for me and rice for you!",
+      "Do you like snails? No, I don’t!",
+      "Snails for lunch? Oh no, no, no!",
+      "Do you like it? Yes, I do!",
+      "Pizza, pizza, me and you!"
+    ]
   }
 }

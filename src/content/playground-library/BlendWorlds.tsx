@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
+import { BlendReadCard } from './BlendReadCard';
 import { type ActivitySync, isSharedFollower, useSyncedState } from './sceneActivitySync';
 import { seededOrder } from './PictureMatchScene';
 import { Burst, GAME_FONT, GameStyles, HudBar, ProgressPill, PromptChip, TitleRibbon } from './gameTheme';
@@ -29,8 +30,8 @@ import { blendSounds, type SoundBlendRound, type SoundBlendSceneData } from './S
 
 export type BlendLook = 'train' | 'frog' | 'slide' | 'gumball';
 
-interface BlendState { round: number; tapped: number[]; blended: boolean; wrong: string[]; solved: boolean; finished: boolean; totalWrong: number }
-const INITIAL: BlendState = { round: 0, tapped: [], blended: false, wrong: [], solved: false, finished: false, totalWrong: 0 };
+interface BlendState { round: number; tapped: number[]; blended: boolean; wrong: string[]; solved: boolean; finished: boolean; totalWrong: number; reading: boolean }
+const INITIAL: BlendState = { round: 0, tapped: [], blended: false, wrong: [], solved: false, finished: false, totalWrong: 0, reading: false };
 const sleep = (ms: number) => new Promise<void>((r) => window.setTimeout(r, ms));
 const I = '/lep1/items';
 
@@ -102,6 +103,7 @@ function useBlendGame(scene: SoundBlendSceneData, sync: ActivitySync | undefined
       await Promise.race([safeSpeak(current.word, 'teacher'), sleep(1600)]);
       await sleep(900);
       if (!alive.current) return true;
+      if (current.sentence) { setState((s) => ({ ...s, reading: true })); return true; }
       if (round + 1 < rounds.length) setState((s) => ({ ...INITIAL, round: s.round + 1, totalWrong: s.totalWrong }));
       else setState((s) => ({ ...s, finished: true }));
       return true;
@@ -114,7 +116,8 @@ function useBlendGame(scene: SoundBlendSceneData, sync: ActivitySync | undefined
   };
   const blendStep = step ?? (blended ? sounds.length : null);
   const hint = wrong.length >= 2 && !solved;
-  return { state, round, rounds, current, sounds, next, allTapped, blended, solved, finished, wrong, options, isMirror, tap, blend, pick, blendStep, nudge, hint, bursts };
+  const afterRead = () => setState((s) => (s.round + 1 < rounds.length ? { ...INITIAL, round: s.round + 1, totalWrong: s.totalWrong } : { ...s, reading: false, finished: true }));
+  return { state, round, rounds, current, sounds, next, allTapped, blended, solved, finished, wrong, options, isMirror, tap, blend, pick, blendStep, nudge, hint, bursts, afterRead };
 }
 
 type Game = ReturnType<typeof useBlendGame>;
@@ -157,6 +160,7 @@ function Shell({ game, title, icon, bg, color, prompts, children, onNext, blendL
         ) : null}
       </div>
       {game.bursts.map((b) => <Burst key={b.id} x={b.x} y={b.y} />)}
+      {game.state.reading && current.sentence && !finished && <BlendReadCard word={current.word} sentence={current.sentence} disabled={isMirror} onDone={game.afterRead} />}
     </div>
   );
 }

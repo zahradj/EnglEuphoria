@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { decide, speakingShare, starsFor } from './levelTestScoring';
+import { decide, decisionText, speakingShare, starsFor } from './levelTestScoring';
 
 // The rules of docs/assessment/prea1-assessment-plan.md (owner-approved 2026-10-12).
 const S = (lw: number, ls: number, snd: number, spk: number) => [
@@ -35,5 +35,24 @@ describe('level test scoring', () => {
     expect(decide('checkpoint', S(4, 4, 2, 4))).toBe('go_on_support'); // one section at 2
     expect(decide('checkpoint', S(2, 2, 4, 4))).toBe('review_first');
     expect(decide('checkpoint', S(3, 3, 3, 1))).toBe('review_first');
+  });
+  // A1: 5 sections (docs/assessment/a1-assessment-plan.md §4) — Final 20+ of 25, Halfway 17 / 14 of 25.
+  const A = (lw: number, ls: number, rw: number, snd: number, spk: number) => [
+    { key: 'words', stars: lw }, { key: 'sentences', stars: ls }, { key: 'reading', stars: rw }, { key: 'sounds', stars: snd }, { key: 'speaking', stars: spk },
+  ];
+  it('A1 final test: ready for A2 needs 20+ of 25, listening + speaking 4+, every section 3+', () => {
+    expect(decide('final', A(4, 4, 4, 4, 4), STRONG)).toBe('ready');
+    expect(decide('final', A(4, 4, 4, 3, 4), STRONG)).toBe('almost'); // 19 in all
+    expect(decide('final', A(5, 5, 2, 5, 5), STRONG)).toBe('almost');
+    expect(decide('final', A(5, 5, 2, 2, 5), STRONG)).toBe('not_yet');
+    expect(decisionText('ready', 'A1').label).toBe('Ready for A2');
+    expect(decisionText('ready').label).toBe('Ready for A1'); // Pre-A1 unchanged
+  });
+  it('A1 halfway check: go on 17+, with support 14+, else review first', () => {
+    expect(decide('checkpoint', A(4, 4, 3, 3, 3))).toBe('go_on'); // 17
+    expect(decide('checkpoint', A(3, 3, 3, 3, 4))).toBe('go_on_support'); // 16
+    expect(decide('checkpoint', A(4, 4, 2, 4, 4))).toBe('go_on_support');
+    expect(decide('checkpoint', A(3, 3, 3, 2, 2))).toBe('review_first');
+    expect(decisionText('go_on', 'A1').next).toMatch(/A1 Unit 6/);
   });
 });
