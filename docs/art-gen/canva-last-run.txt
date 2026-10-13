@@ -1,3 +1,5 @@
-cut out: public/magic-castle/stickers/crown.png (739, 656)
-+ public/magic-castle/stickers/crown.png (1024, 1024)
-1/1 saved
+cut out: public/magic-castle/stickers/boat.png (808, 860)
+cut out: public/magic-castle/stickers/tower.png (372, 990)
++ public/magic-castle/stickers/boat.png (1024, 1024)
++ public/magic-castle/stickers/tower.png (1024, 1024)
+2/2 saved
