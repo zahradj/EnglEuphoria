@@ -85,6 +85,10 @@ Whenever the owner says "create a lesson" / "proceed with creating the lesson", 
 5. **Design like an education UX/UI designer and game designer** (skill `.claude/skills/academy-game-ui`, research `docs/research/academy-game-ui.md`): every page and activity is built like a video game or story game — illustrated, animated, with motion where it helps — and must pass its "dullness test". Motion rules still hold: UI motion, sparkles, card flips, expression swaps and approved silent background loops are fine; never zoom/pan/loop-scale a story picture, never browser voices.
 6. Fill the hour (the blueprint's run of show), keep the cast to the blueprint's cast, and keep all other Academy rules (hub separation, voice, comfort).
 
+## Modelling and the rule — every Academy lesson (hard rule — owner, 2026-10-13)
+
+- "The modelling in the lesson is very important. Stating the rule is extremely important." Every Academy lesson: (1) the teacher **models** new language and the Mission task first (I do → we do → you do) before the student tries; (2) the **rule is stated plainly** (≤ 3 lines, an example each, read aloud, student repeats) BEFORE the practice games, even in E1 and for chunks; (3) the student **restates it** at the end (teach-back). A lesson plan or deck without a model step and a stated rule is not done. Checked in `academy-quality-gate` and `academy-session-builder`.
+
 ## Languages — every page is translated (hard rule — owner, 2026-10-09)
 
 - **Every new or edited page a student, parent or visitor sees is built with `t()` and translated into all six languages** (en, es, fr, ar, tr, it) — never hard-coded English. Put keys in `src/translations/<lang>/<area>.ts` (see `authUi.ts` for the pattern: `au.*` keys, English text as the `t()` default) and wire them into each language's `index.ts`; the parity test (`src/translations/authUi.test.ts`, copy it for a new area) fails if a language is missing a key or a `{{placeholder}}`.
