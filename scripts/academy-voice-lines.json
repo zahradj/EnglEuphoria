@@ -1329,6 +1329,10 @@
   },
   {
     "who": "Theo",
+    "text": "Three members by Friday. We need help!"
+  },
+  {
+    "who": "Theo",
     "text": "Look! Five stalls. Ask them what they like!"
   },
   {
@@ -1624,12 +1628,16 @@
     "text": "Teach-back · Tell Vee the rule in your own words. Then give one example."
   },
   {
+    "who": "Ava",
+    "text": "A torn corner! It starts with M. Who is it?"
+  },
+  {
     "who": "Vee",
     "text": "The fair is open!"
   },
   {
     "who": "Vee",
-    "text": "Clue 1 of 8: Ava’s poster is gone, but there is a torn corner on the art stall. It starts with the letter M. Who could it be?"
+    "text": "Clue 1 of 8: a torn corner of the poster, with the letter M. Who could it be?"
   },
   {
     "who": "Vee",
