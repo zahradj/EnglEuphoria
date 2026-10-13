@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import type { Scene } from '../scenes';
-import { safeSpeak } from '../../unit1/audio';
+import { safeSpeak, cueSpeak } from '../../unit1/audio';
 import * as sfx from '../../unit1/sfx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
 import { shuffledIndices } from './shared';
@@ -24,12 +24,23 @@ export function SentenceBuildScene({ scene, onNext, onWin, onLose, sync }: { sce
 
   useEffect(() => {
     if (isRemoteMirror || complete) return;
-    setState((s) => ({ ...s, filledCount: 0, wrongIdx: null, order: shuffledIndices(scene.rounds[round].words.length) }));
+    const cur = scene.rounds[round];
+    setState((s) => ({ ...s, filledCount: 0, wrongIdx: null, order: shuffledIndices(cur.words.length + (cur.extra?.length ?? 0)) }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [round, complete, isRemoteMirror]);
 
+  // Listen-and-build: Pip says the sentence first, then the child builds what they heard.
+  useEffect(() => {
+    if (!scene.listen || complete || !r) return;
+    const t = window.setTimeout(() => cueSpeak(r.words.join(' '), 'pip'), 600);
+    return () => window.clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [round, complete, scene.id]);
+
+  const tiles = r ? [...r.words, ...(r.extra ?? [])] : [];
+
   const tap = (wordIdx: number) => {
-    if (isRemoteMirror || complete || wrongIdx !== null) return;
+    if (isRemoteMirror || complete || !r || wrongIdx !== null) return;
     if (wordIdx === filledCount) {
       sfx.match();
       const nextCount = filledCount + 1;
@@ -73,12 +84,17 @@ export function SentenceBuildScene({ scene, onNext, onWin, onLose, sync }: { sce
       <div className="pointer-events-none absolute left-1/2 top-4 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-4 py-2 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-base">🔀 {scene.teacher} <span className="ml-1 opacity-70">({round + 1}/{total})</span></div>
       <div className={`relative z-10 flex w-full flex-col items-center px-4 ${side && side !== 'top' ? 'max-w-[440px]' : 'max-w-[600px]'}`}>
         <div className="w-full rounded-[2.25rem] bg-white/90 p-6 shadow-2xl ring-4 ring-white/60 backdrop-blur-sm">
-          {(r.img || r.emoji) && (
-            <div className="mb-4 flex justify-center">
+          {(r.img || r.emoji || scene.listen) && (
+            <div className="mb-4 flex items-center justify-center gap-3">
               {r.img ? (
-                <img src={r.img} alt="" className="h-20 w-20 rounded-2xl object-cover shadow-md sm:h-24 sm:w-24" />
-              ) : (
+                scene.listen
+                  ? <img src={r.img} alt="" className="h-28 max-w-[70%] rounded-2xl object-contain sm:h-36" />
+                  : <img src={r.img} alt="" className="h-20 w-20 rounded-2xl object-cover shadow-md sm:h-24 sm:w-24" />
+              ) : r.emoji ? (
                 <span className="text-6xl sm:text-7xl">{r.emoji}</span>
+              ) : null}
+              {scene.listen && (
+                <button onClick={() => cueSpeak(r.words.join(' '), 'pip')} aria-label="Hear it again" className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-[#FFD978] text-3xl shadow-lg active:scale-95">🔊</button>
               )}
             </div>
           )}
@@ -102,8 +118,9 @@ export function SentenceBuildScene({ scene, onNext, onWin, onLose, sync }: { sce
           <div className="mt-5 flex flex-wrap justify-center gap-3">
             {order.map((wordIdx, i) => {
               const used = wordIdx < filledCount;
+              if (tiles[wordIdx] === undefined) return null;
               return (
-                <button key={wordIdx} onClick={() => tap(wordIdx)} disabled={used} className={`rounded-2xl border-4 border-white px-5 py-3 text-lg font-black text-white shadow-xl transition active:scale-95 disabled:opacity-0 disabled:pointer-events-none sm:text-xl ${wrongIdx === wordIdx ? 'animate-[lep1-shake_0.4s_ease-out]' : ''}`} style={{ background: choiceGradients[i % choiceGradients.length] }}>{r.words[wordIdx]}</button>
+                <button key={wordIdx} onClick={() => tap(wordIdx)} disabled={used} className={`rounded-2xl border-4 border-white px-5 py-3 text-lg font-black text-white shadow-xl transition active:scale-95 disabled:opacity-0 disabled:pointer-events-none sm:text-xl ${wrongIdx === wordIdx ? 'animate-[lep1-shake_0.4s_ease-out]' : ''}`} style={{ background: choiceGradients[i % choiceGradients.length] }}>{tiles[wordIdx]}</button>
               );
             })}
           </div>

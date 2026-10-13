@@ -10,8 +10,6 @@ const PLAYERS: Record<string, ComponentType<{ onBack?: () => void }>> = {
   'time-hop': lazy(() => import('./timeHop/TimeHopGame')),
   'silly-sounds': lazy(() => import('./sillySounds/SillySoundsGame')),
   'always-or-now': lazy(() => import('./alwaysNow/AlwaysNowGame')),
-  'sign-me-up': lazy(() => import('./signMeUp/SignMeUpLesson')),
-  'sign-me-up-homework': lazy(() => import('./signMeUp/SignMeUpHomework')),
 };
 
 export function AcademyGamePlayer({ gameId, onBack }: { gameId: string; onBack?: () => void }) {

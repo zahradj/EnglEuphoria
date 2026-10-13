@@ -18,14 +18,18 @@ export const BALLOONS_SPRITE: Partial<Record<CharKey, string>> = {
 /** Rainbow spectrum used across every "count 1-10" activity (numbers tiles, balloon pop) — one fixed hue per digit, red through purple. */
 export const RAINBOW_10 = ['#ef4444', '#f97316', '#f59e0b', '#eab308', '#84cc16', '#22c55e', '#10b981', '#06b6d4', '#3b82f6', '#a855f7'];
 
-export const NUMBER_WORDS = ['ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX', 'SEVEN', 'EIGHT', 'NINE', 'TEN'];
+export const NUMBER_WORDS = ['ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX', 'SEVEN', 'EIGHT', 'NINE', 'TEN', 'ELEVEN', 'TWELVE', 'THIRTEEN', 'FOURTEEN', 'FIFTEEN', 'SIXTEEN', 'SEVENTEEN', 'EIGHTEEN', 'NINETEEN', 'TWENTY'];
 
 /** Natural-cased number word for TTS — a bare digit string like "5" sent to the
  *  voice pipeline is read inconsistently; the actual word reads clearly every time. */
 export function numberSpeech(n: number): string {
-  const w = NUMBER_WORDS[n - 1];
+  const w = NUMBER_WORDS[n - 1] ?? TENS_WORDS[n];
   return w ? w.charAt(0) + w.slice(1).toLowerCase() : String(n);
 }
+/** Counting in tens (A1 Unit 3 Space Mission): 30 … 100. */
+export const TENS_WORDS: Record<number, string> = { 30: 'THIRTY', 40: 'FORTY', 50: 'FIFTY', 60: 'SIXTY', 70: 'SEVENTY', 80: 'EIGHTY', 90: 'NINETY', 100: 'ONE HUNDRED' };
+/** The capital number word shown under a big number (1-20 and the tens). */
+export const numberWordCaps = (n: number): string => NUMBER_WORDS[n - 1] ?? TENS_WORDS[n] ?? String(n);
 
 /* ---------- Shared chrome ---------- */
 
@@ -406,7 +410,7 @@ export function TrainWagon({ color, moving, children, className = '', glow }: { 
         </defs>
         <rect x="6" y="12" width="108" height="78" rx="12" fill={`url(#${id})`} stroke={edge} strokeWidth="3" />
         <rect x="16" y="18" width="40" height="6" rx="3" fill="#fff" opacity="0.4" />
-        <rect x="16" y="26" width="88" height="56" rx="9" fill="#FFFBEB" stroke={edge} strokeWidth="2" />
+        <rect x="16" y="26" width="88" height="56" rx="9" fill={shade(color, 0.55)} stroke={edge} strokeWidth="2" />
         <rect x="0" y="88" width="120" height="10" rx="4" fill="#27272A" />
         <rect x="-10" y="90" width="14" height="5" rx="2" fill="#52525B" />
         <Wheel cx={30} cy={104} r={13} moving={moving} dur={0.5} />

@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { shuffled, useDeck } from '../ctx';
 import { useDragChip } from '../drag';
 import { COLOR, Bubble } from '../Stage';
+import { ChatWindow } from './chat';
 import type { CastName, ConvoSlide, FadeSlide, PhoneChatSlide, SaySlide, TeachArt, WhoSaidSlide } from '../types';
 import { Feedback, NOT_YET, Panel } from './shared';
 import { Icon } from '../Icon';
@@ -47,13 +48,10 @@ export function WhoSaidView({ slide }: { slide: WhoSaidSlide }) {
     const last = shown >= slide.replay.length;
     return (
       <Panel title={slide.replayTitle ?? 'Last time, at the desk…'} wide>
-        <div className="ad-convo-log" aria-live="polite">
-          {lines.map((l, i) => (
-            <p key={i} className="ad-line" data-me={l.who === 'Ava'} style={{ ['--who' as string]: COLOR[l.who] }}><b>{l.who}</b> {l.text}<Hear who={l.who} text={l.text} /></p>
-          ))}
-        </div>
+        <ChatWindow lines={lines} />
+        <p className="ad-hint-line"><Icon name="speaker" /> Listen to the message. Then say it out loud, like Ava or Theo!</p>
         <div className="ad-row">
-          <button type="button" className="ad-btn ad-btn-primary" onClick={() => (last ? setWatched(true) : setShown(shown + 1))}>{last ? 'Now you try ▸' : 'Next line ▸'}</button>
+          <button type="button" className="ad-btn ad-btn-primary" onClick={() => (last ? setWatched(true) : setShown(shown + 1))}>{last ? 'I said it. Now you try ▸' : 'I said it ▸'}</button>
         </div>
       </Panel>
     );

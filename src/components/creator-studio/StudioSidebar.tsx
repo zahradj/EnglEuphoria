@@ -14,7 +14,6 @@ const NAV: Array<{ key: CreatorStep; tKey: string; icon: React.ElementType; emoj
 
 
 
-  { key: 'playground-creator', tKey: 'nav.playground_creator', icon: Sparkles, emoji: '🧒', fallback: 'Playground Creator' },
   { key: 'academy-creator', tKey: 'nav.academy_creator', icon: GraduationCap, emoji: '🎓', fallback: 'Academy Creator' },
   { key: 'success-creator', tKey: 'nav.success_creator', icon: Briefcase, emoji: '💼', fallback: 'Success Creator' },
   { key: 'trial', tKey: 'nav.trial_creator', icon: Zap, emoji: '⚡' },
@@ -127,6 +126,27 @@ export const StudioSidebar: React.FC = () => {
               <span className="text-base leading-none">🎪</span>
               <Library className="h-4 w-4" />
               <span className="truncate">Playground Library</span>
+            </>
+          )}
+        </button>
+
+        {/* Academy Library — standalone page listing the Academy deck lessons. */}
+        <button
+          onClick={() => navigate('/academy-library')}
+          title={collapsed ? 'Academy Library' : undefined}
+          className={cn(
+            'w-full flex items-center rounded-lg text-sm font-medium transition-all text-start mt-2 border border-dashed border-violet-800/60',
+            collapsed ? 'justify-center px-0 py-2.5' : 'gap-3 px-3 py-2.5',
+            'text-violet-300 hover:bg-violet-900/20 hover:text-violet-200',
+          )}
+        >
+          {collapsed ? (
+            <Library className="h-5 w-5" />
+          ) : (
+            <>
+              <span className="text-base leading-none">🎓</span>
+              <Library className="h-4 w-4" />
+              <span className="truncate">Academy Library</span>
             </>
           )}
         </button>

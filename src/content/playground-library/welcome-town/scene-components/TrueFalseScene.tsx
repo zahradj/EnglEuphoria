@@ -21,7 +21,7 @@ export function TrueFalseScene({ scene, onNext, onWin, onLose, sync }: { scene: 
   useEffect(() => {
     if (complete) return;
     setState((s) => ({ ...s, picked: null, correct: false }));
-    cueSpeakOnce(r!.statement, voiceOf(r!.who));
+    if (!scene.read) cueSpeakOnce(r!.statement, voiceOf(r!.who));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [round, complete]);
 
@@ -44,7 +44,7 @@ export function TrueFalseScene({ scene, onNext, onWin, onLose, sync }: { scene: 
       <div className="absolute inset-0 flex items-center justify-center bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
         <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" />
         <Confetti count={50} />
-        <button onClick={onNext} className="relative z-10 animate-[lep1-slide-up_0.4s_ease-out] rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">Great listening! ⭐ Next</button>
+        <button onClick={onNext} className="relative z-10 animate-[lep1-slide-up_0.4s_ease-out] rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-10 py-4 text-xl font-black text-white shadow-2xl active:scale-95">{scene.read ? 'Great reading!' : 'Great listening!'} ⭐ Next</button>
       </div>
     );
   }
@@ -57,13 +57,19 @@ export function TrueFalseScene({ scene, onNext, onWin, onLose, sync }: { scene: 
           {scene.teacher} <span className="ml-1 opacity-60">({round + 1}/{total})</span>
         </div>
       </div>
-      <div className="absolute inset-x-0 top-1/3 z-10 flex justify-center px-6">
-        <div className="max-w-md rounded-3xl border-4 border-white bg-white/95 px-6 py-5 text-center shadow-2xl">
-          <p className="text-2xl font-black text-orange-800">“{r!.statement}”</p>
-          <button onClick={() => cueSpeak(r!.statement, voiceOf(r!.who))} className="mt-2 text-sm font-semibold text-neutral-500 underline decoration-dotted active:scale-95">🔊 Hear it again</button>
+      {scene.img && (
+        // Reading version: the picture to check the sentences against (Cambridge Starters R&W Part 2).
+        <div className="absolute left-1/2 top-[17%] z-10 h-[34%] -translate-x-1/2 overflow-hidden rounded-3xl border-4 border-white shadow-2xl" style={{ aspectRatio: '16 / 9' }}>
+          <img src={scene.img} alt="" className="h-full w-full object-cover" />
+        </div>
+      )}
+      <div className={`absolute inset-x-0 z-10 flex justify-center px-6 ${scene.img ? 'top-[54%]' : 'top-1/3'}`}>
+        <div className="max-w-xl rounded-3xl border-4 border-white bg-white/95 px-6 py-4 text-center shadow-2xl">
+          <p className="text-2xl font-black text-orange-800">{scene.read ? '📖 ' : ''}“{r!.statement}”</p>
+          <button onClick={() => cueSpeak(r!.statement, voiceOf(r!.who))} className="mt-2 text-sm font-semibold text-neutral-500 underline decoration-dotted active:scale-95">🔊 {scene.read ? 'Help: hear it' : 'Hear it again'}</button>
         </div>
       </div>
-      <div className="absolute inset-x-0 bottom-10 z-20 flex justify-center gap-6 px-4">
+      <div className={`absolute inset-x-0 z-20 flex justify-center gap-6 px-4 ${scene.img ? 'bottom-4' : 'bottom-10'}`}>
         <button
           onClick={() => answer(true)} disabled={correct}
           className={`grid h-24 w-32 place-items-center rounded-3xl border-8 bg-white text-2xl font-black text-emerald-600 shadow-2xl transition active:scale-95 sm:h-28 sm:w-40 ${picked === 'true' && !correct ? 'animate-[lep1-shake_0.4s_ease-in-out] border-red-400' : picked === 'true' && correct ? 'border-green-400' : 'border-white'}`}

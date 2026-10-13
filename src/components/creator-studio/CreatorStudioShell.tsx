@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import i18n from '@/lib/i18n';
 import { CreatorProvider, useCreator } from './CreatorContext';
 import { StudioSidebar } from './StudioSidebar';
@@ -31,7 +31,6 @@ import { TrialCreator } from './steps/TrialCreator';
 import { StoryCreator } from './steps/StoryCreator';
 import { CharacterCreator } from './characters/CharacterCreator';
 import { GameStudioDashboard } from './steps/GameStudioDashboard';
-import PlaygroundCreator from '@/pages/PlaygroundCreator';
 import AcademyCreator from '@/pages/AcademyCreator';
 import SuccessCreator from '@/pages/SuccessCreator';
 // Unified Lesson Generator was removed — each hub now owns its own faster
@@ -40,6 +39,9 @@ import LessonTestingPage from '@/pages/content-creator/LessonTestingPage';
 import PlacementAudioWarmPage from '@/pages/admin/PlacementAudioWarmPage';
 import VocabGamesAnalytics from '@/pages/content-creator/VocabGamesAnalytics';
 import CertificateDesigner from '@/pages/content-creator/CertificateDesigner';
+
+/** The old Playground Creator was retired (owner, 2026-10-12): its menu entry and links open the Playground Library. */
+const PlaygroundLibraryRedirect: React.FC = () => <Navigate to="/playground-library" replace />;
 
 const StudioBody: React.FC = () => {
   useForceEnglishLocale();
@@ -72,7 +74,7 @@ const StudioBody: React.FC = () => {
 
   const Step =
     currentStep === 'blueprint' ? BlueprintEngine
-    : currentStep === 'playground-creator' ? PlaygroundCreator
+    : currentStep === 'playground-creator' ? PlaygroundLibraryRedirect
     : currentStep === 'academy-creator' ? AcademyCreator
     : currentStep === 'success-creator' ? SuccessCreator
     : currentStep === 'trial' ? TrialCreator

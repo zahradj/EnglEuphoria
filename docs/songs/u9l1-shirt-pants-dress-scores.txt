@@ -1,0 +1,15 @@
+
+=== docs/songs/u9l1-shirt-pants-dress-take1.mp3  length=20.1s  score=0.77  missing=4  extra=5
+heard: shirt shirt white red shirt hats hats my blue pants dress dress a yellow dress shirt pants dress will ring
+line starts (s): [np.float64(0.0), np.float64(7.1), np.float64(8.4), np.float64(12.8)]
+lineDurationsMs: [7080, 1360, 4400, 7222]
+
+=== docs/songs/u9l1-shirt-pants-dress-take2.mp3  length=20.1s  score=1.00  missing=0  extra=0
+heard: shirt shirt my red shirt pants pants my blue pants dress dress a yellow dress shirt pants dress hooray
+line starts (s): [np.float64(0.0), np.float64(3.8), np.float64(8.7), np.float64(12.8)]
+lineDurationsMs: [3800, 4860, 4100, 7302]
+
+=== docs/songs/u9l1-shirt-pants-dress-take3.mp3  length=20.1s  score=1.00  missing=0  extra=0
+heard: shirt shirt my red shirt pants pants my blue pants dress dress a yellow dress shirt pants dress hooray
+line starts (s): [np.float64(0.0), np.float64(3.9), np.float64(8.4), np.float64(12.7)]
+lineDurationsMs: [3860, 4500, 4340, 7362]

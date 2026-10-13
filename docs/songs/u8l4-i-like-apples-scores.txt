@@ -1,0 +1,10 @@
+
+=== docs/songs/u8l4-i-like-apples-take1.mp3  length=20.1s  score=1.00  missing=0  extra=0
+heard: i like apples crunch crunch crunch i like bananas yum yum yum i like pizza i like cake do you like apples yes i do
+line starts (s): [np.float64(0.0), np.float64(4.2), np.float64(8.7), np.float64(13.1)]
+lineDurationsMs: [4220, 4460, 4420, 6962]
+
+=== docs/songs/u8l4-i-like-apples-take2.mp3  length=20.1s  score=1.00  missing=0  extra=0
+heard: i like apples crunch crunch crunch i like bananas yum yum yum i like pizza i like cake do you like apples yes i do
+line starts (s): [np.float64(0.0), np.float64(4.3), np.float64(8.3), np.float64(13.1)]
+lineDurationsMs: [4320, 4000, 4780, 6962]

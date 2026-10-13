@@ -1,8 +1,8 @@
-# Academy games & activities catalogue — 148 entries, one-to-one, ages 11–18, A1–B2
+# Academy games & activities catalogue — 148 entries, one-to-one, ages 13–18, A1–B2
 
 Companion to `docs/academy-lesson-system.md` (§5 says how to choose from this list per segment of the 60-minute Live Session). Owner rules that apply to every entry: no browser TTS (recorded voices only), no public leaderboards, comfort first, mechanics borrowed never content, Variety Rule (no more than 2 of the same kind in a row).
 
-Scope: 60-min one-to-one online lessons, teacher + one student (11-18), shared interactive stage.
+Scope: 60-min one-to-one online lessons, teacher + one student (13-18), shared interactive stage.
 Legend. **Fmt**: D = digital-native (needs assets/shared canvas), C = conversation-only (no assets), D/C = works both ways. **Comfort**: Low = low-stakes, Med = medium, High = higher-pressure (use sparingly, opt-in, never first). Skills: V vocab, G grammar, R reading, L listening, S speaking, W writing, P pronunciation, Sp spelling.
 Sourcing caveat: web search was NOT run in this session. Entries are built from established ESL/game-design knowledge of the named sources (TEFL Lemon, ESL Games Plus, British Council TeachingEnglish, Busy Teacher, ISLCollective, Wordwall/Kahoot templates, Cambly/Preply teacher practice, classic party/board/video games). Source column = inspiration, not a verified citation. Every source attribution is therefore [U] (uncorroborated this session) unless the game is a well-known classic whose origin is obvious. Mechanics only are borrowed, never content.
 

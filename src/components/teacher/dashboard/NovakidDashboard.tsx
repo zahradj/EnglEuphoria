@@ -5,6 +5,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useQuery } from '@tanstack/react-query';
 import { TeacherWelcomeHero } from './TeacherWelcomeHero';
 import { DeviceCheckBanner } from './DeviceCheckBanner';
+import { PushPrompt } from '@/components/notifications/PushPrompt';
 import { NextLessonCard } from './NextLessonCard';
 import { MonthlyStatsCard } from './MonthlyStatsCard';
 import { LessonsListCard } from './LessonsListCard';
@@ -126,6 +127,7 @@ export const NovakidDashboard: React.FC<NovakidDashboardProps> = ({ teacherId, p
 
       <div className="space-y-6">
         <KpiPulseCard />
+        <PushPrompt />
         <DeviceCheckBanner />
         <NextLessonCard />
         <MonthlyStatsCard

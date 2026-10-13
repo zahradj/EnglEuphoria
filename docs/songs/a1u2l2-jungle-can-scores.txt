@@ -1,0 +1,14 @@
+
+=== docs/songs/a1u2l2-jungle-can-take1.mp3  length=47.3s  score=0.93  missing=5  extra=5
+heard: climb and swing and swim and fly jungle friends let's try let's try a monkey can climb yes he can a monkey can fly no he can't a fish can't swim yes it can a fish can't run no it can't a lion can't run yes it can a lion can't swing no it can't climb and swing and swim and fly jungle friends let's try let's try
+line starts (s): [np.float64(8.4), np.float64(10.6), np.float64(16.7), np.float64(19.2), np.float64(25.3), np.float64(27.8), np.float64(34.3), np.float64(36.5), np.float64(38.9), np.float64(40.8)]
+lineDurationsMs: [10580, 6160, 2440, 6160, 2500, 6460, 2200, 2360, 1980, 6415]
+
+=== docs/songs/a1u2l2-jungle-can-take2.mp3  length=47.3s  score=0.20  missing=55  extra=47
+heard: let's try let's try a monkey can't climb yes he can a monkey can't fly no he can't a fish can't swim yes he can when a fish can't run no we can't a lion can't run yes he can a lion can't swing no we can time and swing and swim and fly jungle friends let's try let's try
+line starts (s): [np.float64(17.7), np.float64(40.6), None, None, None, None, None, None, None, None]
+
+=== docs/songs/a1u2l2-jungle-can-take3.mp3  length=47.3s  score=0.93  missing=5  extra=5
+heard: climb and swing and swim and fly jungle friends let's try let's try a monkey can climb yes it can a monkey can fly no it can't a fish can swim yes it can a fish can run no it can't a lion can run yes it can a lion can sing no it can't slime and swing and swim and fly jungle friends let's try let's try
+line starts (s): [np.float64(8.2), np.float64(10.5), np.float64(16.6), np.float64(19.0), np.float64(25.2), np.float64(27.6), np.float64(34.0), np.float64(36.2), np.float64(43.1), np.float64(44.7)]
+lineDurationsMs: [10460, 6120, 2400, 6170, 2400, 6420, 2200, 6940, 1600, 2545]

@@ -4,6 +4,8 @@ import { seededOrder } from './PictureMatchScene';
 import { Burst, GAME_FONT, GameStyles, HudBar, LocoIcon, ProgressPill, PromptChip, SkyBackdrop, TitleRibbon, TrainCar } from './gameTheme';
 import { playLetterPhonic, safeSpeak } from './unit1/audio';
 import * as sfx from './unit1/sfx';
+import { type BlendLook, BlendWorldScene } from './BlendWorlds';
+import { BlendReadCard } from './BlendReadCard';
 
 /**
  * `sound-blend` ("Blend It! — the Sound Train") — the universal phonics slide (lesson blueprint slot 14),
@@ -27,6 +29,9 @@ export interface SoundBlendRound {
   sounds?: string[];
   img?: string;
   emoji?: string;
+  /** Blend & Read (A1): a sentence from the lesson's story that contains `word`; after the picture is found the word
+   *  flies into it and the child reads the whole sentence (BlendReadCard). */
+  sentence?: string;
 }
 
 export interface SoundBlendSceneData {
@@ -38,6 +43,9 @@ export interface SoundBlendSceneData {
   /** Instruction banner override. */
   prompt?: string;
   bg?: string;
+  /** Which world plays the routine (owner 2026-10-11: vary it): the Sound Train (default), Frog Hop,
+   *  Slide Down or Gumball Blender (BlendWorlds.tsx). Same steps, same voices, same sync. */
+  look?: BlendLook;
 }
 
 interface BlendState {
@@ -50,16 +58,25 @@ interface BlendState {
   solved: boolean;
   finished: boolean;
   totalWrong: number;
+  /** Blend & Read: the sentence card is open. */
+  reading: boolean;
 }
 
-const INITIAL: BlendState = { round: 0, tapped: [], blended: false, wrong: [], solved: false, finished: false, totalWrong: 0 };
+const INITIAL: BlendState = { round: 0, tapped: [], blended: false, wrong: [], solved: false, finished: false, totalWrong: 0, reading: false };
 const CAR_COLORS = ['#f97316', '#8b5cf6', '#06b6d4', '#22c55e', '#ec4899'];
 const sleep = (ms: number) => new Promise<void>((r) => window.setTimeout(r, ms));
 
 /** The sounds of a round (explicit, or one letter per car). Exported for the voice baker and homework. */
 export const blendSounds = (r: SoundBlendRound): string[] => r.sounds ?? r.word.toLowerCase().split('');
 
-export function SoundBlendScene({ scene, onNext, onWin, onResult, sync }: {
+type BlendProps = Parameters<typeof TrainBlendScene>[0];
+export function SoundBlendScene(props: BlendProps) {
+  const look = props.scene.look;
+  if (look && look !== 'train') return <BlendWorldScene look={look} scene={props.scene} onNext={props.onNext} onWin={props.onWin} sync={props.sync} />;
+  return <TrainBlendScene {...props} />;
+}
+
+function TrainBlendScene({ scene, onNext, onWin, onResult, sync }: {
   scene: SoundBlendSceneData;
   onNext: () => void;
   onWin: (gem: boolean) => void;
@@ -134,6 +151,7 @@ export function SoundBlendScene({ scene, onNext, onWin, onResult, sync }: {
       await safeSpeak(current.word, 'teacher');
       await sleep(900);
       if (!alive.current) return;
+      if (current.sentence) { setState((s) => ({ ...s, reading: true })); return; }
       if (round + 1 < rounds.length) setState((s) => ({ ...INITIAL, round: s.round + 1, totalWrong: s.totalWrong }));
       else setState((s) => ({ ...s, finished: true }));
     } else {
@@ -252,6 +270,10 @@ export function SoundBlendScene({ scene, onNext, onWin, onResult, sync }: {
       </div>
 
       {bursts.map((b) => <Burst key={b.id} x={b.x} y={b.y} />)}
+      {state.reading && current.sentence && !finished && (
+        <BlendReadCard word={current.word} sentence={current.sentence} disabled={isMirror}
+          onDone={() => setState((s) => (s.round + 1 < rounds.length ? { ...INITIAL, round: s.round + 1, totalWrong: s.totalWrong } : { ...s, reading: false, finished: true }))} />
+      )}
     </div>
   );
 }

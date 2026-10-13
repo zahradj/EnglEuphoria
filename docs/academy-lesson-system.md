@@ -1,4 +1,4 @@
-# Academy lesson system — "Seasons" (one-on-one, 60 min, ages 11–18, A1 → C1)
+# Academy lesson system — "Seasons" (one-on-one, 60 min, ages 13–18, A1 → C1)
 
 Status: **proposal for owner approval** (2026-10-08). Nothing here is built yet. It extends `docs/research/academy-lesson-design.md` (evidence base), `docs/academy-learning-science.md` (**the scientific techniques, how each is built in, and how we measure acquisition**) and `docs/research/academy-teen-games.md` (teen game rules).
 Evidence labels: **[V]** seen in a source this session · **[K]** established literature/knowledge, re-check before quoting · **[RT]** rule of thumb · **[U]** unverified. Web fetching was mostly blocked, so many items are from search summaries.
@@ -48,6 +48,10 @@ Lessons use only the **Academy characters from the cast vault** (`cast_vault_cha
 ### 2.1b The unit is a progressive stack (owner rule, 2026-10-08)
 
 Inside every Season each lesson **adds to everything before it**: lesson 1 teaches something; lesson 2 = lesson 1 + lesson 2; lesson 3 = lessons 1 and 2 + lesson 3; and so on up to the Finale, which integrates all seven earlier lessons with no new language. Practically: Remember? revisits every earlier lesson of the unit (not only the last), the Mission and the Release must use language from all earlier lessons, and input texts use at least 95 % words already met. It is written into every lesson blueprint as `buildsOn` (earlier lesson ids, items known before and after, structures known before and after, the stack label, what must be reused) and enforced by `lessonBlueprint.test.ts`.
+
+### 2.1c Vocabulary rule (owner rule, 2026-10-12)
+
+After **every** vocabulary introduction (each teach page set) the student plays **two different memorising games** before anything new is taught: e.g. a drag-match and a flip-memory with pictures, or a number game (Locker Pop, Number Train) and a flip-memory. It is `VOCAB_GAMES_RULE` / `vocabGames` in `lessonBlueprint.ts`, a `mustHave` line of The Drop and of Notice & Build, and a player test. **Every lesson plan chooses its two games from the menu** (`VOCAB_GAME_MENU` in `src/curriculum/academy/vocabGames.ts`, 20 games, research in `docs/research/academy-memory-games-list.md`): the first is a *recognise* game, the second a *deepen* game, different games, both suited to the level. Each blueprint carries `vocabGames.menu` and three `suggested` picks (`suggestVocabGames`, rotating by lesson number); the plan may swap any pick for another menu game (`validateVocabGamePicks` checks it). Games marked `planned` must be built in the lesson player before a lesson uses them. Budget about 2 minutes per word set; if a lesson then no longer fits the hour, split the lesson (fewer word sets each) instead of dropping the games.
 
 ### 2.2 Spiral across Seasons
 
@@ -202,7 +206,7 @@ Remember? retention score trend · Mistake Bank fixed-ratio · hints per session
 3. **`LessonBlueprint` fields:** `season`, `episode_type`, `skills[]`, `can_do[]`, `skin_options[]`, `release`, `recycle_from[]`; validator: strands coverage, zero new language in E7/E8, ≤ 14 words/session, no more than two same-kind in a row.
 4. **Academy roadmap data** (`cefrRoadmap.ts` returns an empty scaffold for Academy today): fill A1 first.
 5. **Comfort dock, Remember? step, Mistake Bank, per-skill levels, portfolio, Daily 10** (reuse `srs.ts`).
-6. **Theme tokens** for Explorer/Studio; align `supabase/functions/_shared/prompts/academy.ts` (ages 10–17, 13-type whitelist, "no sticker/reward language") with the real kinds, ages 11–18, and the Season System.
+6. **Theme tokens** for Explorer/Studio; align `supabase/functions/_shared/prompts/academy.ts` (ages 10–17, 13-type whitelist, "no sticker/reward language") with the real kinds, ages 13–18, and the Season System.
 7. **Skills to update when approved:** `smart-lesson-architect`, `lesson-quality-gate`, `activity-pattern-library`, `generate-lesson` (Academy section), and the Remember rule in `CLAUDE.md` for Academy.
 
 ## 11. Owner decisions

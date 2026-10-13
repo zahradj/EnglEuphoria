@@ -122,6 +122,12 @@ export function resolvePlaygroundLessonRoute(
   if (fmt === 'jungle-rich') {
     return `/playground-scene/jungle-lesson-${lessonNum}`;
   }
+  if (fmt === 'food-rich') {
+    return `/playground-scene/food-lesson-${lessonNum}`;
+  }
+  if (fmt === 'space-rich') {
+    return `/playground-scene/space-lesson-${lessonNum}`;
+  }
   if (fmt === 'castle-rich') {
     return `/playground-scene/castle-lesson-${lessonNum}`;
   }

@@ -1,4 +1,5 @@
 // Helpers used by more than one scene. Anything used by a single scene lives next to it.
+import { motion } from 'framer-motion';
 import type { CharKey } from '../scenes';
 import { VOICE_KEY } from '../scenes';
 
@@ -127,6 +128,33 @@ export function MagicLayer() {
       {['8%', '88%', '14%', '80%'].map((left, i) => (
         <span key={`sp-${i}`} className="absolute text-2xl" style={{ left, top: i < 2 ? '18%' : '70%', animation: `lep1-twinkle ${1800 + i * 400}ms ease-in-out ${i * 300}ms infinite` }}>✨</span>
       ))}
+    </div>
+  );
+}
+
+/* ---------- QuestionCard: the answer card used by the review games (quiz board, chests, river, town) ----------
+ * One question, its optional picture and 2-3 answer buttons; a wrong pick wobbles (the scene decides the rest). */
+export function QuestionCard({ ask, choices, img, wrong, onPick, onHear, disabled = false, tone = 'sky', className = '' }: {
+  ask: string; choices: string[]; img?: string; wrong: number; onPick: (i: number) => void; onHear: () => void;
+  disabled?: boolean; tone?: 'sky' | 'amber' | 'emerald' | 'pink'; className?: string;
+}) {
+  const grad = { sky: 'from-sky-400 to-sky-600', amber: 'from-amber-400 to-orange-600', emerald: 'from-emerald-400 to-emerald-600', pink: 'from-pink-400 to-pink-600' }[tone];
+  return (
+    <div className={`rounded-[3vh] border-[0.6vh] border-white bg-white/95 p-[2vh] text-center shadow-2xl ${className}`}>
+      <div className="mb-[1.4vh] flex items-center justify-center gap-3">
+        {img && <img src={img} alt="" draggable={false} className="h-[min(10vh,6.6vw)] w-auto object-contain" />}
+        <button type="button" onClick={onHear} className="font-black text-[#3b2410]" style={{ fontSize: 'min(4.2vh, 2.9vw)' }}>
+          {ask} <span className="text-[0.7em]">🔊</span>
+        </button>
+      </div>
+      <div className="flex flex-wrap justify-center gap-[1.2vw]">
+        {choices.map((c, i) => (
+          <motion.button key={i} type="button" onClick={() => onPick(i)} disabled={disabled} whileTap={{ scale: 0.93 }}
+            animate={wrong === i ? { x: [0, -10, 10, -6, 0] } : { x: 0 }} transition={{ duration: 0.45 }}
+            className={`rounded-[2vh] border-[0.4vh] border-white bg-gradient-to-b ${grad} px-[2vw] py-[1.1vh] font-black text-white shadow-[0_0.7vh_0_rgba(0,0,0,0.25)]`}
+            style={{ fontSize: 'min(3.4vh, 2.3vw)' }}>{c}</motion.button>
+        ))}
+      </div>
     </div>
   );
 }

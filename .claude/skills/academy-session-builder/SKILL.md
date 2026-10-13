@@ -45,6 +45,13 @@ Core 51 min is never skipped (Check-in 5 and Energiser 4 are the flex). If the e
 
 Level scaling: A1 teacher talk <= 40 %, scaffolds full; B1 task-first; C1 seminar/pitch, authentic text, mediation, register work (see season-system).
 
+## Vocabulary rule (owner, 2026-10-12)
+
+After **every** vocabulary introduction (every `teach` slide / Notice & Build word set) put **TWO different memorising games**: e.g. drag-match + flip-memory (pictures and words), or a number game (Locker Pop, Number Train) + flip-memory. Never one, never the same kind twice, no new teaching in between. **Choose the two games from `VOCAB_GAME_MENU`** (`src/curriculum/academy/vocabGames.ts`; the blueprint lists `vocabGames.menu` + `suggested`): first a *recognise* game, then a *deepen* game, different, suited to the level, built games only (a `planned` one must be built first). Validate with `validateVocabGamePicks`. `deck.test.tsx` ("RULE: after every vocabulary introduction…") enforces the two-different-games rule in the player. Budget the extra ~2 min per word set honestly: if the lesson no longer fits the hour, split the lesson, do not drop the games.
+
+## Sequencing (owner 2026-10-13; research `docs/research/academy-lesson-sequencing.md`)
+Teaching episodes (E1, E2, E3 partly) = **PPP with gradual release**: context -> model (I do) -> rule (<= 3 lines) -> controlled practice (we do) -> free practice -> produce (you do: Mission Take 1, feedback, Take 2, Release) -> teach-back. Task-first episodes (E4, E6, E8) = pre-task -> task -> language focus; E3 may run test-teach-test / guided discovery. Set `stage` on deck slides; `STAGE_ORDER` is checked in the lesson test. Every lesson has some Authentic use (Mission, Release), some Restricted use (games) and some Clarification (rule), after Scrivener's ARC checklist.
+
 ## Required parts of every session plan
 
 00. **Cast:** use only the Academy cast from the vault (`src/curriculum/academy/cast.ts`; blueprint field `cast`). Vee is the mentor voice (Remember? card, clue hand-over, Wrap: mistakes are normal); the Season lead and one helper student play the parts the blueprint gives them, following their vault traits (Ava asks, Theo listens, Mia = peer, traits to be defined). No invented characters.
@@ -54,7 +61,7 @@ Level scaling: A1 teacher talk <= 40 %, scaffolds full; B1 task-first; C1 semina
 1. **Last-Time card** (30-60 s): 3 bullet "what we did" (from the previous SessionPlan), 1 sentence the student produced ("Best Line"), 1 thing to remember today. Generated, never typed ad hoc.
 2. **Remember? list**: item ids from the SRS due list (calendar days), mistakes from the Mistake Bank first, 8-12 items, >= 60 % production.
 3. **Input**: spec (kind, words, CEFR, known-word %), glosses, audio file ids (recorded voices only), comprehension check.
-4. **Notice & Build**: exact examples, the <= 3-line rule text, 2 mechanics (from selector) + reasons.
+4. **Notice & Build**: the teacher MODEL (I do, we do, you do; owner 2026-10-13: "modelling is very important"), exact examples, the <= 3-line rule text STATED plainly before the practice (also in E1, also for chunks; "stating the rule is extremely important"), 2 mechanics (from selector) + reasons. The Mission also opens with a teacher model; the Wrap has a teach-back where the student restates the rule.
 5. **Mission**: scenario, roles, success criteria in student words, dial variants (Chill/Normal/Push), planning time, Take 2 constraint, error-log categories.
 6. **Release**: product spec, rubric id, private-first flow.
 7. **Wrap**: can-dos to tick (<= 4), homework, Daily-10 pack id, next-session teaser (the next clue).

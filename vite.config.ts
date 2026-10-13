@@ -19,6 +19,8 @@ export default defineConfig(() => ({
       devOptions: { enabled: false },
       manifest: false, // keep existing public/manifest.json
       workbox: {
+        // Push notification handlers (public/push-sw.js) live inside the same service worker.
+        importScripts: ["push-sw.js"],
         navigateFallback: "/index.html",
         navigateFallbackDenylist: [/^\/~oauth/, /^\/api\//],
         globPatterns: ["**/*.{js,css,html,ico,png,svg,webmanifest,woff2}"],
