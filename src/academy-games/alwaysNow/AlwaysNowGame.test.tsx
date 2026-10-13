@@ -4,15 +4,15 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 vi.mock('@/content/playground-library/unit1/audio', () => ({ safeSpeak: vi.fn().mockResolvedValue(undefined) }));
 
 import { AlwaysNowGame } from './AlwaysNowGame';
-import { CUES, FUNNY, GATES, RECALLS, STATIVES, gateAnswer, gateSentence, recallSentence } from './nowData';
+import { CUES, FUNNY, GATES, JUDGES, MONSTERS, RECALLS, STATIVES, gateAnswer, gateSentence, recallSentence } from './nowData';
 
 const speak = vi.fn().mockResolvedValue(undefined);
 beforeEach(() => { window.localStorage.clear(); speak.mockClear(); });
 const open = (n: string) => fireEvent.click(screen.getByRole('button', { name: new RegExp(n) }));
-const unlockAll = () => window.localStorage.setItem('eg.playgroundGames.v2', JSON.stringify({ 'always-or-now': { stageStars: [3, 3, 3, 3, 3, 0], unlocked: 5 } }));
+const unlockAll = () => window.localStorage.setItem('eg.playgroundGames.v2', JSON.stringify({ 'always-or-now': { stageStars: [3, 3, 3, 3, 3, 3, 3, 0], unlocked: 7 } }));
 
 describe('Always or Now', () => {
-  it('map: six stops, only the first open, one is the funny one', () => {
+  it('map: eight stops, only the first open, one is the funny one', () => {
     render(<AlwaysNowGame seed={4} speak={speak} />);
     expect(screen.getByText('Always or Now')).toBeTruthy();
     expect((screen.getByRole('button', { name: /Cue Sort/ }) as HTMLButtonElement).disabled).toBe(false);
@@ -30,7 +30,7 @@ describe('Always or Now', () => {
     await waitFor(() => expect(speak.mock.calls.length).toBeGreaterThan(1));
   });
 
-  it.each([['Scene Check', GATES], ['Funny Reporter', FUNNY]] as const)('%s: the right form fills the blank and the whole sentence is said', async (stop, source) => {
+  it.each([['Scene Check', GATES], ['Funny Reporter', FUNNY], ['Monster Contrast', MONSTERS]] as const)('%s: the right form fills the blank and the whole sentence is said', async (stop, source) => {
     unlockAll();
     render(<AlwaysNowGame seed={4} speak={speak} />);
     open(stop);
@@ -39,6 +39,22 @@ describe('Always or Now', () => {
     expect(round).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: gateAnswer(round) }));
     await waitFor(() => expect(speak).toHaveBeenCalledWith(gateSentence(round)));
+  });
+
+  it('Silly Judge: a wrong verb is fixed, a right one is confirmed', async () => {
+    unlockAll();
+    render(<AlwaysNowGame seed={4} speak={speak} />);
+    open('Silly Judge');
+    await screen.findByText(/Is the verb right\? ·/);
+    for (let n = 0; n < 2; n++) {
+      const round = JUDGES.find((j) => document.body.textContent!.includes(j.text))!;
+      expect(round).toBeTruthy();
+      fireEvent.click(screen.getByRole('button', { name: round.ok ? 'The verb is right' : 'Fix the verb' }));
+      if (!round.ok) fireEvent.click(await screen.findByRole('button', { name: round.rightForm }));
+      await waitFor(() => expect(speak).toHaveBeenCalledWith(round.fixed));
+      speak.mockClear();
+      await waitFor(() => expect(screen.getByText(new RegExp(`${n + 2} of`))).toBeTruthy(), { timeout: 4000 });
+    }
   });
 
   it('No -ing Club: the state-verb sentence is the right one', async () => {

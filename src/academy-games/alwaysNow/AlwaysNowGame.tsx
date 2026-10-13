@@ -8,7 +8,7 @@ import { MAX_BOX } from '../verbForge/verbMemory';
 import { ForgeButton, Sparks, useSparks } from '../verbForge/forgeUi';
 import { RECALLS, TENSE } from './nowData';
 import { readNowVault, summarizeNow, type StageProps, type Vault } from './nowMemory';
-import { FunnyStage, RecallStage, SceneStage, SortStage, SpellStage, StativeStage } from './nowStages';
+import { FunnyStage, JudgeStage, MonsterStage, RecallStage, SceneStage, SortStage, SpellStage, StativeStage } from './nowStages';
 
 export const ALWAYS_NOW_ID = 'always-or-now';
 
@@ -16,6 +16,8 @@ const STOPS = [
   { id: 'sort', title: 'Cue Sort', blurb: 'Always or Now? Sort the cue words.', how: 'Cue', Stage: SortStage },
   { id: 'scene', title: 'Scene Check', blurb: 'Read the cue, choose the tense.', how: 'Use', Stage: SceneStage },
   { id: 'funny', title: 'Funny Reporter', blurb: 'Silly breaking news: a cow on a piano!', how: 'Fun', Stage: FunnyStage },
+  { id: 'monster', title: 'Monster Contrast', blurb: 'Zog usually eats rocks, but today a sock!', how: 'Fun', Stage: MonsterStage },
+  { id: 'judge', title: 'Silly Judge', blurb: 'Is the verb right? Fix the silly sentences.', how: 'Fun', Stage: JudgeStage },
   { id: 'spell', title: 'Spell It', blurb: 'watches, studies, running, making.', how: 'Spell', Stage: SpellStage },
   { id: 'state', title: 'No -ing Club', blurb: 'know, like, want: no -ing allowed.', how: 'Trap', Stage: StativeStage },
   { id: 'recall', title: 'Recall', blurb: 'Type the right form from memory.', how: 'Recall', Stage: RecallStage },
@@ -24,7 +26,7 @@ const STOPS = [
 const METHOD = [
   ['Cue', 'Cue words decide: always, every day = habit. now, Look! = happening now.'],
   ['Use', 'Read the cue in a sentence, then choose the form.'],
-  ['Laugh', 'Silly scenes are easier to remember.'],
+  ['Laugh', 'Silly news, monsters and a judge: funny is easier to remember.'],
   ['Spell', '-s / -es / -ies and -ing: three small rules.'],
   ['Return', 'Come back tomorrow. The Vault brings back weak sentences.'],
 ] as const;

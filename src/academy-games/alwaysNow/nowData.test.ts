@@ -4,11 +4,11 @@ import { join } from 'node:path';
 vi.mock('@/integrations/supabase/client', () => ({ supabase: {}, supabaseUrl: '', supabaseAnonKey: '' }));
 import { cacheFileName } from '@/content/playground-library/unit1/audio';
 import { ACADEMY_GAMES } from '../academyGamesCatalog';
-import { FUNNY, GATES, RECALLS, SORT_CUES, SPELLS, STATIVES, gateAnswer, nowLines, spellOptions } from './nowData';
+import { FUNNY, GATES, JUDGES, MONSTERS, RECALLS, SORT_CUES, SPELLS, STATIVES, gateAnswer, nowLines, spellOptions } from './nowData';
 
 describe('Always or Now data', () => {
   it('every gate and funny round has exactly one right answer from its cue', () => {
-    for (const g of [...GATES, ...FUNNY]) {
+    for (const g of [...GATES, ...FUNNY, ...MONSTERS]) {
       expect(g.text, g.id).toContain('___');
       expect(g.text.toLowerCase(), g.id).toContain(g.cue.toLowerCase());
       expect(g.simple, g.id).not.toBe(g.continuous);
@@ -17,6 +17,15 @@ describe('Always or Now data', () => {
     }
     expect(GATES.filter((g) => g.tense === 'simple').length).toBe(GATES.filter((g) => g.tense === 'continuous').length);
     expect(FUNNY.length).toBeGreaterThanOrEqual(8);
+  });
+
+  it('Silly Judge: wrong sentences differ from their fix by the verb form only', () => {
+    expect(JUDGES.some((j) => j.ok)).toBe(true);
+    expect(JUDGES.some((j) => !j.ok)).toBe(true);
+    for (const j of JUDGES) {
+      if (j.ok) expect(j.fixed).toBe(j.text);
+      else { expect(j.fixed).not.toBe(j.text); expect(j.text.replace(j.wrongForm, j.rightForm)).toBe(j.fixed); }
+    }
   });
 
   it('spelling answers follow the rules and options are three different spellings', () => {

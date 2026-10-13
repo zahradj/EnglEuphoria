@@ -76,6 +76,18 @@ export const FUNNY: GateRound[] = [
   g('f10', 'My brother is a champion.', 'Every week, my brother ___ a banana race.', 'win', 'wins', 'is winning', 'simple', 'Every week'),
 ];
 
+/** Monster Contrast: the habit and the "right now" side by side. `context` is the other half of the contrast (shown, not spoken). */
+export const MONSTERS: GateRound[] = [
+  g('m1', 'Zog usually eats rocks.', 'But today he ___ a sock.', 'eat', 'eats', 'is eating', 'continuous', 'today'),
+  g('m2', 'Right now Mimi is painting her face green.', 'But every day she ___ it blue.', 'paint', 'paints', 'is painting', 'simple', 'every day'),
+  g('m3', 'Blob always sleeps in the bath.', 'But right now he ___ in the fridge.', 'sleep', 'sleeps', 'is sleeping', 'continuous', 'right now'),
+  g('m4', 'At the moment Pip is dancing on the roof.', 'But usually she ___ in the garden.', 'dance', 'dances', 'is dancing', 'simple', 'usually'),
+  g('m5', 'Grub often drinks soup with a straw.', 'But at the moment he ___ it with a spoon.', 'drink', 'drinks', 'is drinking', 'continuous', 'at the moment'),
+  g('m6', 'Look! Fizz is jumping over the car.', 'But on Mondays she ___ under it.', 'jump', 'jumps', 'is jumping', 'simple', 'on Mondays'),
+  g('m7', 'Rex never wears socks.', 'But now he ___ four hats.', 'wear', 'wears', 'is wearing', 'continuous', 'now'),
+  g('m8', 'Listen! Moxie is singing in the kitchen.', 'But every night she ___ in the shower.', 'sing', 'sings', 'is singing', 'simple', 'every night'),
+];
+
 export const gateAnswer = (r: GateRound) => (r.tense === 'simple' ? r.simple : r.continuous);
 export const gateSentence = (r: GateRound) => r.text.replace('___', gateAnswer(r));
 
@@ -144,11 +156,28 @@ export const RECALLS: RecallRound[] = [
 ];
 export const recallSentence = (r: RecallRound) => r.text.replace('___', r.answer);
 
+/* ---------------------------------------------------------------- Silly Judge */
+
+export interface JudgeRound { id: string; text: string; ok: boolean; /** the corrected sentence (= text when ok) */ fixed: string; wrongForm: string; rightForm: string; tense: Tense; cue: string }
+const jd = (id: string, text: string, ok: boolean, fixed: string, wrongForm: string, rightForm: string, tense: Tense, cue: string): JudgeRound => ({ id, text, ok, fixed, wrongForm, rightForm, tense, cue });
+
+export const JUDGES: JudgeRound[] = [
+  jd('j1', 'Look! The cat sleeps on the roof.', false, 'Look! The cat is sleeping on the roof.', 'sleeps', 'is sleeping', 'continuous', 'Look!'),
+  jd('j2', 'Every day, the fish swims to school.', true, 'Every day, the fish swims to school.', 'swims', 'swims', 'simple', 'Every day'),
+  jd('j3', 'Right now my teacher dances on the table.', false, 'Right now my teacher is dancing on the table.', 'dances', 'is dancing', 'continuous', 'Right now'),
+  jd('j4', 'My robot always makes pancakes at night.', true, 'My robot always makes pancakes at night.', 'makes', 'makes', 'simple', 'always'),
+  jd('j5', 'Listen! The tree is singing a song.', true, 'Listen! The tree is singing a song.', 'is singing', 'is singing', 'continuous', 'Listen!'),
+  jd('j6', 'Every Monday, the dragon is taking a bath.', false, 'Every Monday, the dragon takes a bath.', 'is taking', 'takes', 'simple', 'Every Monday'),
+  jd('j7', 'At the moment, a banana drives my car.', false, 'At the moment, a banana is driving my car.', 'drives', 'is driving', 'continuous', 'At the moment'),
+  jd('j8', 'The monkeys usually eat their breakfast with spoons.', true, 'The monkeys usually eat their breakfast with spoons.', 'eat', 'eat', 'simple', 'usually'),
+];
+
 /** Every line the game says aloud (baked as recorded clips, voice 'teacher'). */
 export function nowLines(): string[] {
   const out = new Set<string>();
   for (const c of SORT_CUES) out.add(c.text);
-  for (const r of [...GATES, ...FUNNY]) out.add(gateSentence(r));
+  for (const r of [...GATES, ...FUNNY, ...MONSTERS]) out.add(gateSentence(r));
+  for (const r of JUDGES) out.add(r.fixed);
   for (const r of SPELLS) out.add(spellSentence(r));
   for (const r of STATIVES) out.add(r.right);
   for (const r of RECALLS) out.add(recallSentence(r));

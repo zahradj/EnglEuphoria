@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { isDue, review, writeVaultFor, type StageProps } from './nowMemory';
 import { ForgeButton, StopHeader, rng, shuffled } from '../verbForge/forgeUi';
 import {
-  FUNNY, GATES, RECALLS, SORT_CUES, SPELLS, STATIVES, TENSE, gateAnswer, gateSentence, recallSentence, spellOptions, spellSentence,
+  FUNNY, GATES, JUDGES, MONSTERS, RECALLS, SORT_CUES, SPELLS, STATIVES, TENSE, gateAnswer, gateSentence, recallSentence, spellOptions, spellSentence,
   type GateRound, type Tense,
 } from './nowData';
 
@@ -131,6 +131,63 @@ export function SceneStage(p: StageProps) { return <SentenceStage {...p} title="
 /* ------------------------------------------------------------------ 3 · Funny Reporter */
 
 export function FunnyStage(p: StageProps) { return <SentenceStage {...p} title="Funny Reporter" sub="Silly news" source={FUNNY} count={8} funny />; }
+
+/* ------------------------------------------------------------------ Monster Contrast */
+
+export function MonsterStage(p: StageProps) { return <SentenceStage {...p} title="Monster Contrast" sub="Habit vs right now" source={MONSTERS} count={8} funny />; }
+
+/* ------------------------------------------------------------------ Silly Judge */
+
+export function JudgeStage({ seed, spark, nudge, say, onDone }: StageProps) {
+  const rounds = useMemo(() => shuffled(JUDGES, rng(seed + 17)), [seed]);
+  const [i, setI] = useState(0);
+  const [step, setStep] = useState<'judge' | 'fix' | 'done'>('judge');
+  const [wrong, setWrong] = useState<string[]>([]);
+  const [mistakes, setMistakes] = useState(0);
+  const r = rounds[i];
+  const color = TENSE[r.tense].hex;
+  const next = async () => {
+    await wait(1400);
+    if (i + 1 >= rounds.length) { onDone({ mistakes, units: rounds.length }); return; }
+    setI(i + 1); setStep('judge'); setWrong([]);
+  };
+  const judge = async (saysRight: boolean, el: Element) => {
+    if (step !== 'judge') return;
+    if (saysRight === r.ok) {
+      spark(el);
+      if (r.ok) { setStep('done'); await say(r.fixed); await next(); } else setStep('fix');
+    } else { setMistakes((m) => m + 1); nudge(); }
+  };
+  const options = useMemo(() => shuffled([r.wrongForm, r.rightForm].filter((x, k, a) => a.indexOf(x) === k), rng(seed + i)), [r, seed, i]);
+  const fix = async (o: string, el: Element) => {
+    if (step !== 'fix' || wrong.includes(o)) return;
+    if (o === r.rightForm) { spark(el); setStep('done'); await say(r.fixed); await next(); }
+    else { setWrong((x) => [...x, o]); setMistakes((m) => m + 1); nudge(); }
+  };
+  return (
+    <div>
+      <StopHeader title="Silly Judge" sub={`Is the verb right? · ${i + 1} of ${rounds.length}`} done={i} total={rounds.length} />
+      <div className="rounded-3xl border border-white/15 bg-white/[.07] p-5 text-center text-2xl font-extrabold leading-relaxed text-white sm:text-3xl">
+        {step === 'done' ? r.fixed : r.text}
+      </div>
+      <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
+        {step === 'judge' && (
+          <>
+            <ForgeButton index={0} onClick={(el) => void judge(true, el)}>The verb is right</ForgeButton>
+            <ForgeButton index={1} onClick={(el) => void judge(false, el)}>Fix the verb</ForgeButton>
+          </>
+        )}
+        {step === 'fix' && options.map((o, k) => (
+          <ForgeButton key={`${r.id}-${o}`} index={k} ariaLabel={o} tone={wrong.includes(o) ? 'wrong' : 'idle'} disabled={wrong.includes(o)} onClick={(el) => void fix(o, el)}>{o}</ForgeButton>
+        ))}
+      </div>
+      <p className="mt-3 min-h-[40px] text-center text-sm font-bold text-amber-100">
+        {step === 'fix' && <span>Which form does <b style={{ color }}>{r.cue}</b> need?</span>}
+        {step === 'done' && <span><b style={{ color }}>{r.cue}</b> → {TENSE[r.tense].label}. {r.ok ? 'It was right already: silly, but correct!' : 'Fixed!'}</span>}
+      </p>
+    </div>
+  );
+}
 
 /* ------------------------------------------------------------------ 4 · Spell It */
 
