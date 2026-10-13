@@ -191,14 +191,16 @@ export const LESSON_A1U2L1_SCENES: Scene[] = [
     },
   },
   {
-    id: 'ja-i-spy', kind: 'i-spy', bg: `${J}/scenes/bg-jungle-actions.png`, who: 'pip',
-    teacher: 'Guided: I Spy! Listen to the clue, move the binoculars to the animal — then say it: It’s a frog!',
+    // Hidden-object picture made for this game (Canva, 2026-10-13): eight animals, each partly hidden.
+    id: 'ja-i-spy', kind: 'i-spy', bg: `${J}/scenes/bg-jungle-ispy-wide.png`, who: 'pip', guide: item('pip-binoculars'),
+    teacher: 'Guided: I Spy! Pip gives a clue — the student moves the binoculars to the animal, then says it: It’s a frog!',
     rounds: [
-      { clue: 'I spy something small and green!', spot: { left: 60, top: 77, r: 5 }, answer: 'It’s a frog!' },
-      { clue: 'I spy something big and yellow!', spot: { left: 45, top: 62, r: 7 }, answer: 'It’s a lion!' },
-      { clue: 'I spy something small and blue!', spot: { left: 67, top: 28, r: 5 }, answer: 'It’s a bird!' },
-      { clue: 'I spy something brown!', spot: { left: 16, top: 33, r: 6 }, answer: 'It’s a monkey!' },
-      { clue: 'I spy something small and orange!', spot: { left: 82, top: 84, r: 5 }, answer: 'It’s a fish!' },
+      { clue: 'I spy something small and green!', spot: { left: 47, top: 78, r: 4 }, answer: 'It’s a frog!' },
+      { clue: 'I spy something big and grey!', spot: { left: 82, top: 42, r: 8 }, answer: 'It’s an elephant!' },
+      { clue: 'I spy something small and blue!', spot: { left: 80.7, top: 15, r: 3.5 }, answer: 'It’s a bird!' },
+      { clue: 'I spy something long and green — in a tree!', spot: { left: 46.5, top: 18, r: 6 }, answer: 'It’s a snake!' },
+      { clue: 'I spy something big and yellow!', spot: { left: 27, top: 43, r: 6 }, answer: 'It’s a lion!' },
+      { clue: 'I spy something small and orange!', spot: { left: 63, top: 85, r: 4 }, answer: 'It’s a fish!' },
     ],
     doneLine: 'Super spying! You found every animal!',
   },

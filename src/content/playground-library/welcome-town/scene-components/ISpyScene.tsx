@@ -17,7 +17,8 @@ import { CLAY_BUTTON, THICK_WORDS, useArtBox } from '../../unit1/scene-component
  * words; the binoculars give a real searching feel; no timer, a glow hint after a few tries. */
 
 type Spy = Extract<Scene, { kind: 'i-spy' }>;
-const LENS = 11; // lens radius, % of the picture width
+const LENS = 10; // lens radius, % of the picture width
+const SPREAD = 0.42; // lens centres sit ±SPREAD×LENS from the aim point: one wide figure-8 view, the aim point clear
 const START = { x: 50, y: 50 };
 
 export function ISpyScene({ scene, onNext, onWin, onLose, sync }: { scene: Spy; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; sync?: ActivitySync }) {
@@ -60,7 +61,7 @@ export function ISpyScene({ scene, onNext, onWin, onLose, sync }: { scene: Spy; 
   const look = (p: { x: number; y: number }) => {
     if (!r || found || done) return;
     // both lenses sit side by side around p; the thing must be inside one of them
-    const inside = [-0.55, 0.55].some((k) => Math.hypot(r.spot.left - (p.x + k * LENS), (r.spot.top - p.y) * (9 / 16)) < LENS * 0.95);
+    const inside = [-SPREAD, SPREAD].some((k) => Math.hypot(r.spot.left - (p.x + k * LENS), (r.spot.top - p.y) * (9 / 16)) < LENS * 0.95);
     if (inside) {
       sfx.match(); sfx.reveal();
       setState((s) => ({ ...s, lens: p, found: true }));
@@ -81,7 +82,7 @@ export function ISpyScene({ scene, onNext, onWin, onLose, sync }: { scene: Spy; 
 
   const p = live ?? lens;
   const hint = !found && (Number(state.misses) || 0) >= 4;
-  const lx = [p.x - 0.55 * LENS, p.x + 0.55 * LENS];
+  const lx = [p.x - SPREAD * LENS, p.x + SPREAD * LENS];
   const ly = p.y * (9 / 16); // in the 100 × 56.25 viewBox
   const Rpx = (LENS / 100) * box.width;
   const lensMask = lx.map((x) => `radial-gradient(circle ${Rpx}px at ${(x / 100) * box.width}px ${(p.y / 100) * box.height}px, transparent 97%, #000 100%)`).join(', ');
@@ -113,20 +114,26 @@ export function ISpyScene({ scene, onNext, onWin, onLose, sync }: { scene: Spy; 
                 </linearGradient>
               </defs>
               {lx.map((x, i) => (
-                <g key={i}>
-                  <circle cx={x} cy={ly} r={LENS} fill={`url(#ispy-glass-${scene.id})`} />
+                <mask key={`m${i}`} id={`ispy-ring-${scene.id}-${i}`}>
+                  <rect width="100" height="56.25" fill="white" />
+                  <circle cx={lx[1 - i]} cy={ly} r={LENS} fill="black" />
+                </mask>
+              ))}
+              {lx.map((x, i) => <circle key={`g${i}`} cx={x} cy={ly} r={LENS} fill={`url(#ispy-glass-${scene.id})`} mask={`url(#ispy-ring-${scene.id}-${i})`} />)}
+              {lx.map((x, i) => (
+                <g key={i} mask={`url(#ispy-ring-${scene.id}-${i})`}>
                   <circle cx={x} cy={ly} r={LENS + 1.15} fill="none" stroke={`url(#ispy-body-${scene.id})`} strokeWidth="2.3" />
                   <circle cx={x} cy={ly} r={LENS + 2.25} fill="none" stroke="#163010" strokeWidth="0.35" />
                   <circle cx={x} cy={ly} r={LENS + 0.05} fill="none" stroke={found ? '#FCD34D' : '#c9a24a'} strokeWidth={found ? 0.9 : 0.35} />
-                  {/* glass shine */}
-                  <path d={`M ${x - LENS * 0.62} ${ly - LENS * 0.32} A ${LENS * 0.72} ${LENS * 0.72} 0 0 1 ${x - LENS * 0.18} ${ly - LENS * 0.7}`} fill="none" stroke="#fff" strokeOpacity="0.55" strokeWidth="0.7" strokeLinecap="round" />
-                  <circle cx={x - LENS * 0.1} cy={ly - LENS * 0.72} r="0.45" fill="#fff" fillOpacity="0.6" />
                 </g>
               ))}
+              {/* glass shine (left lens only, upper-left) */}
+              <path d={`M ${lx[0] - LENS * 0.62} ${ly - LENS * 0.32} A ${LENS * 0.72} ${LENS * 0.72} 0 0 1 ${lx[0] - LENS * 0.18} ${ly - LENS * 0.7}`} fill="none" stroke="#fff" strokeOpacity="0.55" strokeWidth="0.7" strokeLinecap="round" />
+              <circle cx={lx[0] - LENS * 0.1} cy={ly - LENS * 0.72} r="0.45" fill="#fff" fillOpacity="0.6" />
               {/* bridge + focus wheel */}
-              <rect x={p.x - 3.4} y={ly - 2.3} width="6.8" height="4.6" rx="1.6" fill={`url(#ispy-body-${scene.id})`} stroke="#163010" strokeWidth="0.3" />
-              <rect x={p.x - 1.5} y={ly - 3.6} width="3" height="2.2" rx="0.6" fill="#c9a24a" stroke="#7a5a1a" strokeWidth="0.2" />
-              {[-1, -0.5, 0, 0.5, 1].map((k) => <line key={k} x1={p.x + k} y1={ly - 3.4} x2={p.x + k} y2={ly - 1.6} stroke="#7a5a1a" strokeWidth="0.18" />)}
+              <rect x={p.x - 3} y={ly - LENS - 2.6} width="6" height="3.2" rx="1.4" fill={`url(#ispy-body-${scene.id})`} stroke="#163010" strokeWidth="0.3" />
+              <rect x={p.x - 1.5} y={ly - LENS - 3.9} width="3" height="2" rx="0.6" fill="#c9a24a" stroke="#7a5a1a" strokeWidth="0.2" />
+              {[-1, -0.5, 0, 0.5, 1].map((k) => <line key={k} x1={p.x + k} y1={ly - LENS - 3.7} x2={p.x + k} y2={ly - LENS - 2.1} stroke="#7a5a1a" strokeWidth="0.18" />)}
             </svg>
           </>
         )}
@@ -135,11 +142,12 @@ export function ISpyScene({ scene, onNext, onWin, onLose, sync }: { scene: Spy; 
             animate={reduce ? {} : { opacity: [0.3, 1, 0.3] }} transition={{ duration: 1.4, repeat: Infinity }} />
         )}
         {found && r && !reduce && [0, 1, 2, 3, 4, 5, 6, 7].map((k) => (
-          <motion.span key={`${round}-${k}`} className="pointer-events-none absolute -translate-x-1/2 -translate-y-1/2" style={{ left: `${r.spot.left}%`, top: `${r.spot.top}%`, fontSize: 'min(4vh, 2.6vw)' }}
-            initial={{ x: 0, y: 0, opacity: 1, scale: 0.4 }} animate={{ x: Math.cos((k / 8) * Math.PI * 2) * 90, y: Math.sin((k / 8) * Math.PI * 2) * 90, opacity: 0, scale: 1.2 }} transition={{ duration: 0.9, ease: 'easeOut' }}>✨</motion.span>
+          <span key={`${round}-${k}`} className="pointer-events-none absolute -translate-x-1/2 -translate-y-1/2" style={{ left: `${r.spot.left}%`, top: `${r.spot.top}%`, fontSize: 'min(4vh, 2.6vw)' }}>
+            <motion.span className="block" initial={{ x: 0, y: 0, opacity: 1, scale: 0.4 }} animate={{ x: Math.cos((k / 8) * Math.PI * 2) * 90, y: Math.sin((k / 8) * Math.PI * 2) * 90, opacity: 0, scale: 1.2 }} transition={{ duration: 0.9, ease: 'easeOut' }}>✨</motion.span>
+          </span>
         ))}
         {found && r && (
-          <motion.div className="pointer-events-none absolute -translate-x-1/2 -translate-y-1/2 rounded-full border-[5px] border-white" style={{ left: `${r.spot.left}%`, top: `${r.spot.top}%`, width: `${r.spot.r * 2}%`, aspectRatio: '1', boxShadow: '0 0 0 4px #FFD34E, 0 0 30px 10px rgba(255,211,78,.7)' }}
+          <motion.div className="pointer-events-none absolute rounded-full border-[5px] border-white" style={{ left: `${r.spot.left - r.spot.r}%`, top: `${r.spot.top - r.spot.r * (16 / 9)}%`, width: `${r.spot.r * 2}%`, height: `${r.spot.r * 2 * (16 / 9)}%`, boxShadow: '0 0 0 4px #FFD34E, 0 0 30px 10px rgba(255,211,78,.7)' }}
             initial={reduce ? false : { scale: 0.4, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ type: 'spring', stiffness: 260, damping: 14 }} />
         )}
       </div>
@@ -156,11 +164,11 @@ export function ISpyScene({ scene, onNext, onWin, onLose, sync }: { scene: Spy; 
         </button>
       )}
       {scene.guide && !done && r && (
-        <div className="pointer-events-none absolute bottom-[2%] left-[1%] z-30 flex items-end">
+        <div className="pointer-events-none absolute bottom-[2%] right-[1%] z-30 flex flex-row-reverse items-end">
           <motion.img src={scene.guide} alt="" draggable={false} className="w-[min(30vh,20vw)] drop-shadow-[0_1vh_1vh_rgba(0,0,0,0.35)]"
             animate={reduce ? {} : { rotate: [0, -2, 2, 0] }} transition={{ duration: 3, repeat: Infinity }} />
-          <motion.div key={round} className="relative mb-[22vh] -ml-[2vw] max-w-[min(46vh,30vw)] rounded-[2.4vh] border-[0.5vh] border-white bg-white/95 px-4 py-2 font-black text-[#3b2410] shadow-2xl"
-            style={{ fontSize: 'min(3.4vh, 2.3vw)' }} initial={reduce ? false : { scale: 0, originX: 0, originY: 1 }} animate={{ scale: 1 }}>
+          <motion.div key={round} className="relative mb-[22vh] -mr-[2vw] max-w-[min(46vh,30vw)] rounded-[2.4vh] border-[0.5vh] border-white bg-white/95 px-4 py-2 font-black text-[#3b2410] shadow-2xl"
+            style={{ fontSize: 'min(3.4vh, 2.3vw)' }} initial={reduce ? false : { scale: 0, originX: 1, originY: 1 }} animate={{ scale: 1 }}>
             {r.clue}
           </motion.div>
         </div>
