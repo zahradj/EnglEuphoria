@@ -1,0 +1,12 @@
+
+=== docs/songs/a1u3l3-space-counting-rocket-take1.mp3  length=45.5s  score=0.83  missing=15  extra=2
+heard: count by s and up we go to the stars and moon hello and more rockets roar count by s and up we go to the stars and moon hello stars for you count by tens and up we go to the stars and hello
+line starts (s): [np.float64(7.8), np.float64(10.2), np.float64(16.9), np.float64(19.6), np.float64(24.5), np.float64(27.0), None, np.float64(36.3), np.float64(37.4), np.float64(39.4)]
+
+=== docs/songs/a1u3l3-space-counting-rocket-take2.mp3  length=45.5s  score=0.77  missing=21  extra=1
+heard: count by tens and up we go to the stars and moon hello ten and twenty thirty more forty fifty rackets roar count by tens and up we go to the stars and moon hello stars for you
+line starts (s): [np.float64(7.8), np.float64(10.1), np.float64(16.3), np.float64(18.5), np.float64(24.5), np.float64(26.7), None, np.float64(36.1), None, None]
+
+=== docs/songs/a1u3l3-space-counting-rocket-take3.mp3  length=45.5s  score=0.82  missing=16  extra=2
+heard: count by s and up we go to the stars and moon hello and more rockets roar count by s and up we go to the stars and moon hello stars for you count by up we go to the stars and moon hello
+line starts (s): [np.float64(3.8), np.float64(7.5), np.float64(13.3), np.float64(18.4), np.float64(21.0), np.float64(24.2), None, np.float64(34.8), np.float64(37.3), np.float64(40.8)]
