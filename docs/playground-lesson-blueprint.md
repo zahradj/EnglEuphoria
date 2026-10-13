@@ -392,6 +392,25 @@ favourite…") are not used.
 **Games:** any Pre-A1 game can run in an A1 lesson as `{ kind: 'prea1', scene: … }`; A1-only games live in the Welcome Town
 renderer. No signature game twice in a unit (`a1LessonPlans.test.ts` checks the plans; `lessonVariety` checks the lessons).
 
+**A1 game menu — where each game goes (owner, 2026-10-13: "extend the games list … old ones with modern designs").**
+Full list with sources: `docs/a1-activity-library.md` (§10 built since, §11 classic games redesigned, §12 platform
+mechanics). Pick from this menu by slot and lesson type; ✓ = built (can go in a lesson now), ★ = to build (only after it
+is built, tested and screenshot-checked). Classic games keep their mechanic but get the modern look: painted Canva set,
+cut-out stickers, juicy UI motion (`game-animation`), recorded voices, nobody "out", no scary or unkind original (⚠️ rows
+in §11). Still no game twice in a unit.
+
+| Slot | Best for | Games (✓ built · ★ to build) |
+|---|---|---|
+| Warm-up / discovery | L1-L5 openers after Remember? | ✓ Mystery Bag · ✓ Tile Reveal · ✓ Lift the Flap · ✓ What's / Who's Missing (Kim's Game) · ✓ I Spy binoculars (`i-spy`) · ★ Treasure Radar (hot and cold) |
+| Listening for detail | L1-L3 | ✓ Listen & Tap · ✓ Tick or Cross · ✓ Draw the Path · ✓ Photo Snap · ✓ Sticker Bingo (`sticker-bingo`) · ★ Musical Islands · ★ Whisper Tube (telephone) · ★ Echo Cave |
+| Guided practice | L1-L4 | ✓ Catch & Sort · ✓ Shadow Match · ✓ Picture Maze · ✓ Claw Machine · ✓ Read & Do · ✓ Field Guide · ★ Sentence Dominoes · ★ Balloon Match · ★ Jungle Glider |
+| Free speaking | L2-L4, L6 | ✓ Secret Card (20 questions) · ✓ Chat Chain · ✓ Flip & Say · ✓ Charades · ★ Go Fish! · ★ Hot Coconut (hot potato) · ★ Draw That (Pictionary) |
+| Phonics / reading | every lesson | ✓ Letter Blocks · ✓ Word Splat · ✓ Letter Monsters / Moles / Fishing · ✓ Letter Game · ★ Save the Balloon (hangman ⚠️) · ★ Letter Bubbles (anagram) · ★ Picture Crossword |
+| Game break / arcade | any | ✓ Obstacle Run · ✓ Brick Crush · ✓ Stepping Stones · ✓ Number Hop (stepping-stones look) · ★ Red Light, Green Light |
+| Review / L6 Game Day | L6 | ✓ Word Board (snakes & ladders) · ✓ Answer Race · ✓ Hero Trials · ✓ Tic-Tac-Toe Duel (`tic-tac-toe`) · ✓ Pass the Present (`pass-parcel`) · ★ Wobbly Tower (Jenga) · ★ Treasure Chests · ★ Team Flags |
+| Boss Test / unit frame | L7 | ✓ Answer Race · ✓ Hero Trials · ★ Jungle Jeopardy (quiz board) · ★ Rising River (floor is lava, co-op) · ★ Treasure Islands (battleship) · ★ Build the Town (persists) |
+| Extra time | any | ✓ Home Hunt · ✓ brain breaks · ★ Pet Pal |
+
 **A1 checklist (before "done", with `lesson-quality-gate`):**
 - [ ] the lesson matches its plan (objective, grammar, words, game, evidence, home mission)
 - [ ] one structure per sentence page, each with its own matching picture

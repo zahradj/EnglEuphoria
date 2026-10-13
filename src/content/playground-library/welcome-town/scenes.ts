@@ -442,6 +442,35 @@ export type Scene =
       id: string; kind: 'word-splat'; bg: string; teacher: string; title: string; who: CharKey;
       words: string[]; rounds: string[]; doneLine: string;
     }
+  | {
+      /** Sticker Bingo (StickerBingoScene.tsx, classic Bingo redesigned): a 3×3 card of pictures. The voice says a
+       *  SENTENCE (`cells[i].say`); the child stamps that picture with a sticker. `calls` = cell indexes in calling order
+       *  (each line of three that fills glows "Bingo!"); the card is won when every call is stamped. */
+      id: string; kind: 'sticker-bingo'; bg: string; teacher: string; title: string; who: CharKey;
+      cells: { label: string; img: string; say: string }[]; calls: number[]; doneLine: string;
+    }
+  | {
+      /** Tic-Tac-Toe Duel (TicTacToeScene.tsx, classic noughts & crosses redesigned): the child vs a friend (`who`,
+       *  token `opponentImg`). To claim a square the child answers its question; then the friend takes a square (the
+       *  friend never completes a line, so the child can always win). Three in a row wins; a full board starts a new one. */
+      id: string; kind: 'tic-tac-toe'; bg: string; teacher: string; title: string; who: CharKey; opponentImg: string;
+      squares: { ask: string; choices: string[]; answer: number; img?: string }[]; doneLine: string;
+    }
+  | {
+      /** Pass the Present (PassParcelScene.tsx, classic pass-the-parcel redesigned): a present wrapped in one layer per
+       *  round. Each right answer tears one layer off; inside the last layer is the `prize` sticker. No timer, no "out". */
+      id: string; kind: 'pass-parcel'; bg: string; teacher: string; title: string; who: CharKey;
+      rounds: { ask: string; choices: string[]; answer: number; img?: string }[];
+      prize: { img: string; label: string }; doneLine: string;
+    }
+  | {
+      /** I Spy (ISpyScene.tsx, the classic "I spy with my little eye" redesigned): a painted scene seen through
+       *  binoculars. The voice gives a clue (`clue`, e.g. "I spy something small and green!"); the child moves the
+       *  binoculars (drag, or tap to jump them) until the thing (`spot`, % of the picture, r = radius in % of width) is in
+       *  the lenses, it lights up, and the answer (`answer`) is said and repeated by the child. */
+      id: string; kind: 'i-spy'; bg: string; teacher: string; who: CharKey;
+      rounds: { clue: string; spot: { left: number; top: number; r: number }; answer: string }[]; doneLine: string;
+    }
   | { id: string; kind: 'letter-game'; bg: string; who: CharKey; teacher: string; mode: 'name' | 'sound'; rounds: { letter: string; phoneme?: string; choices: string[] }[] }
   | { id: string; kind: 'jigsaw-puzzle'; bg: string; teacher: string; image: string; rows: number; cols: number }
   /** `cast`: the friends shown on the finale card (defaults to Welcome Town's
@@ -2091,6 +2120,23 @@ export const LESSON_6_SCENES: Scene[] = classroomLook([
     ],
   },
   {
+    id: 'wt6-bingo', kind: 'sticker-bingo', bg: bgL1Stage, who: 'pip', title: 'Sticker Bingo! Listen and stamp!',
+    teacher: 'Guided: Pip says a sentence — the student stamps the picture, then says the sentence too. Three in a row: Bingo!',
+    cells: [
+      { label: 'happy', img: feelSpr('pip-happy'), say: 'He is happy.' },
+      { label: 'sad', img: feelSpr('mia-sad'), say: 'She is sad.' },
+      { label: 'tired', img: feelSpr('leo-tired'), say: 'He is tired.' },
+      { label: 'cap', img: I1('cap'), say: 'Leo’s cap is red.' },
+      { label: 'ten', img: I1('ten'), say: 'I am ten.' },
+      { label: 'hungry', img: feelSpr('willow-hungry'), say: 'She is hungry.' },
+      { label: 'cat', img: I1('cat'), say: 'The cap is on the cat.' },
+      { label: 'angry', img: feelSpr('bella-angry'), say: 'She is angry.' },
+      { label: 'cake', img: I1('cake'), say: 'Happy birthday! I am seven.' },
+    ],
+    calls: [4, 1, 7, 0, 2, 6, 5],
+    doneLine: 'Bingo! You stamped them all!',
+  },
+  {
     id: 'wt6-shadows', kind: 'prea1', teacher: 'Guided: Who is it? Drag each friend onto their shadow, then introduce them: This is Leo. He is seven.',
     scene: {
       id: 'wt6-shadows', kind: 'shadow-match', bg: bgParkEmpty, who: 'pip',
@@ -2270,6 +2316,22 @@ export const LESSON_6_SCENES: Scene[] = classroomLook([
       { who: 'pip', line: 'I am eight. And you?' },
       { who: 'student', line: 'I am … years old.' },
     ],
+  },
+  {
+    id: 'wt6-tic-tac-toe', kind: 'tic-tac-toe', bg: bgL1Stage, who: 'pip', opponentImg: spr('pip'), title: 'Tic-Tac-Toe with Pip!',
+    teacher: 'Free: the student plays Pip. Tap a square, answer its question — a star! Three stars in a row wins. Say every answer aloud.',
+    squares: [
+      { ask: 'How are you?', choices: ['I am happy.', 'I am seven.'], answer: 0 },
+      { ask: 'What’s your name?', choices: ['Goodbye!', 'My name is Leo.'], answer: 1 },
+      { ask: 'How old are you?', choices: ['I am eight.', 'I am sad.'], answer: 0 },
+      { ask: 'This is my friend Mia.', choices: ['See you!', 'Nice to meet you!'], answer: 1 },
+      { ask: 'Goodbye, Pip!', choices: ['Goodbye! See you!', 'How are you?'], answer: 0 },
+      { ask: 'Is she sad?', choices: ['He is tired.', 'Yes, she is sad.'], answer: 1, img: feelSpr('mia-sad') },
+      { ask: 'How many? Count!', choices: ['Ten!', 'Six!'], answer: 0, img: I1('ten') },
+      { ask: 'Where is the cap?', choices: ['It’s on the cat!', 'It’s a hat.'], answer: 0, img: I1('cat') },
+      { ask: 'Hello! I’m new.', choices: ['Hello! What’s your name?', 'I am hungry.'], answer: 0 },
+    ],
+    doneLine: 'Three in a row! You win, champion!',
   },
   /* Free: a new friend */
   {
@@ -2594,6 +2656,19 @@ export const LESSON_7_SCENES: Scene[] = classroomLook([
         { img: spr('pip'), word: 'Pip', say: 'His name is Pip. He is eight.' },
       ],
     },
+  },
+  {
+    id: 'wt7-pa-parcel', kind: 'pass-parcel', bg: bgL1Party, who: 'pip', title: 'Pass the Present!',
+    teacher: 'Practise again (all parts): every right answer tears one layer off the present. What is inside?',
+    rounds: [
+      { ask: 'How are you?', choices: ['I am fine, thank you.', 'I am eight.', 'My name is Mia.'], answer: 0 },
+      { ask: 'What’s your name?', choices: ['Nice to meet you!', 'My name is Bella.', 'See you!'], answer: 1 },
+      { ask: 'How old are you?', choices: ['I am tired.', 'Goodbye!', 'I am nine.'], answer: 2 },
+      { ask: 'This is my friend Leo.', choices: ['Nice to meet you, Leo!', 'I am hungry.', 'How are you?'], answer: 0 },
+      { ask: 'Where is Leo’s cap?', choices: ['It’s on the cat!', 'It’s on the bed!', 'It’s a hat!'], answer: 0, img: leoStory(9) },
+    ],
+    prize: { img: feelSpr('pip-happy'), label: 'Super friend sticker' },
+    doneLine: 'You opened the present! Super friend!',
   },
   {
     id: 'wt7-goodbye-song', kind: 'song', bg: bgExpressGoodbyeW, title: '\u{1F3B5} Welcome Town School Goodbye Song \u{1F3B5}', teacher: 'It’s time to go — wave goodbye and sing along together!',

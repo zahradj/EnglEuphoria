@@ -191,6 +191,18 @@ export const LESSON_A1U2L1_SCENES: Scene[] = [
     },
   },
   {
+    id: 'ja-i-spy', kind: 'i-spy', bg: `${J}/scenes/bg-jungle-actions.png`, who: 'pip',
+    teacher: 'Guided: I Spy! Listen to the clue, move the binoculars to the animal — then say it: It’s a frog!',
+    rounds: [
+      { clue: 'I spy something small and green!', spot: { left: 60, top: 77, r: 5 }, answer: 'It’s a frog!' },
+      { clue: 'I spy something big and yellow!', spot: { left: 45, top: 62, r: 7 }, answer: 'It’s a lion!' },
+      { clue: 'I spy something small and blue!', spot: { left: 67, top: 28, r: 5 }, answer: 'It’s a bird!' },
+      { clue: 'I spy something brown!', spot: { left: 16, top: 33, r: 6 }, answer: 'It’s a monkey!' },
+      { clue: 'I spy something small and orange!', spot: { left: 82, top: 84, r: 5 }, answer: 'It’s a fish!' },
+    ],
+    doneLine: 'Super spying! You found every animal!',
+  },
+  {
     id: 'ja-move-break', kind: 'prea1', teacher: 'Brain break: move like the animals with Pip.',
     scene: {
       id: 'ja-move-break', kind: 'tpr-actions', mode: 'break', bg: bgWide, who: 'pip', teacher: 'Move like the animals!',
@@ -1106,6 +1118,23 @@ export const LESSON_A1U2L4_SCENES: Scene[] = [
     },
   },
   {
+    id: 'ja4-bingo', kind: 'sticker-bingo', bg: bgWide, who: 'coco', title: 'Jungle Bingo! Listen and stamp!',
+    teacher: 'Guided: Coco describes an animal — the student stamps it and says the animal: It’s an elephant! Three in a row: Bingo!',
+    cells: [
+      { label: 'elephant', img: it('elephant'), say: 'It’s big and grey. It’s got a long nose.' },
+      { label: 'bird', img: it('bird'), say: 'It’s small and blue. It can fly.' },
+      { label: 'snake', img: it('snake'), say: 'It’s long and green. It can’t run.' },
+      { label: 'crocodile', img: it('alligator'), say: 'It’s got a long tail. It can swim.' },
+      { label: 'monkey', img: it('coco-cheer'), say: 'It’s brown. It can climb and swing.' },
+      { label: 'frog', img: it('frog'), say: 'It’s small and green. It can jump.' },
+      { label: 'lion', img: it('lion'), say: 'It’s big and yellow. It can run.' },
+      { label: 'fish', img: it('fish'), say: 'It’s orange. It can’t walk.' },
+      { label: 'chick', img: it('chick'), say: 'It’s small and yellow. It can’t swim.' },
+    ],
+    calls: [3, 0, 5, 7, 2, 6, 8],
+    doneLine: 'Bingo! Super listening!',
+  },
+  {
     id: 'ja4-sing-back', kind: 'song', bg: bgWide, title: '\u{1F3B5} Ask Them! \u{1F3B5}',
     teacher: 'Sing-back: the student sings the questions, the teacher sings the answers — then swap!',
     durationSeconds: 47, bigWord: 'Can it?', songUrl: SONG_A1U2L3, lineDurationsMs: SONG_A1U2L3_MS, lyrics: SONG_A1U2L3_LYRICS,
@@ -1777,6 +1806,22 @@ export const LESSON_A1U2L6_SCENES: Scene[] = [
     ],
   },
   {
+    id: 'ja6-tic-tac-toe', kind: 'tic-tac-toe', bg: bgObstacle, who: 'coco', opponentImg: it('coco-cheer'), title: 'Tic-Tac-Toe with Coco!',
+    teacher: 'Free: the student plays Coco. Tap a square, answer its question — a star! Three stars in a row wins. Say every answer aloud.',
+    squares: [
+      { ask: 'Can a bird fly?', choices: ['Yes, it can.', 'No, it can’t.'], answer: 0, img: it('bird') },
+      { ask: 'Can a fish run?', choices: ['Yes, it can.', 'No, it can’t.'], answer: 1, img: it('fish') },
+      { ask: 'What’s it got?', choices: ['A long nose.', 'A long tail.'], answer: 0, img: it('elephant') },
+      { ask: 'Is it big?', choices: ['No. It’s small.', 'Yes. It’s big.'], answer: 0, img: it('frog') },
+      { ask: 'What can a monkey do?', choices: ['It can fly.', 'It can climb.'], answer: 1, img: it('coco-cheer') },
+      { ask: 'What colour is it?', choices: ['It’s green.', 'It’s grey.'], answer: 0, img: it('snake') },
+      { ask: 'Can a crocodile swim?', choices: ['Yes, it can.', 'No, it can’t.'], answer: 0, img: it('alligator') },
+      { ask: 'Who can help Kip?', choices: ['The fish.', 'The elephant.'], answer: 1 },
+      { ask: 'Can a lion swing?', choices: ['No, it can’t.', 'Yes, it can.'], answer: 0, img: it('lion') },
+    ],
+    doneLine: 'Three in a row! Jungle champion!',
+  },
+  {
     id: 'ja6-free-chat', kind: 'join-stage', bg: jungleRescue(12), teacher: 'Free: Kip wants to meet the student (Coco speaks for her little brother). The student says hello, asks and answers.', cast: ['coco', 'pip'],
     turns: [
       { who: 'coco', line: 'This is my brother Kip. Say hello!' },
@@ -2109,6 +2154,19 @@ export const LESSON_A1U2L7_SCENES: Scene[] = [
         { img: it('frog'), word: 'frog', say: 'It can jump. It’s small.' },
       ],
     },
+  },
+  {
+    id: 'ja7-pa-parcel', kind: 'pass-parcel', bg: bgWaterfall, who: 'coco', title: 'Pass the Present!',
+    teacher: 'Practise again (all parts): every right answer tears one layer off the present. What is inside?',
+    rounds: [
+      { ask: 'Can an elephant fly?', choices: ['Yes, it can.', 'No, it can’t.', 'It’s grey.'], answer: 1, img: it('elephant') },
+      { ask: 'What is it? It’s long and green.', choices: ['It’s a snake.', 'It’s a lion.', 'It’s a bird.'], answer: 0 },
+      { ask: 'What can a frog do?', choices: ['It can swing.', 'It can jump.', 'It can’t jump.'], answer: 1, img: it('frog') },
+      { ask: 'Why can’t Willow help Kip?', choices: ['She is small.', 'She is big.', 'She can swim.'], answer: 0, img: jungleRescue(6) },
+      { ask: 'How does the elephant lift Kip?', choices: ['With its long tail.', 'With its long nose.', 'With its teeth.'], answer: 1, img: jungleRescue(10) },
+    ],
+    prize: { img: it('banana-trophy'), label: 'Golden banana' },
+    doneLine: 'You opened the present! Golden banana!',
   },
   {
     id: 'ja7-goodbye-song', kind: 'song', bg: bgFriends, title: '\u{1F3B5} Goodbye Song \u{1F3B5}', teacher: 'It’s time to go — wave goodbye and sing along together!',

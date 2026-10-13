@@ -198,11 +198,11 @@ These are playground and party games that teachers still use for English. Source
 | Classic | Modern design (our version) | A1 language | Build on | Status | Slot |
 |---|---|---|---|---|---|
 | Hangman ⚠️ | **Save the Balloon**: a hot-air balloon with Pip in it. A wrong letter lets one sandbag drop, never a person in danger. The word fills tile by tile, and the balloon lands when it's solved | spelling unit words, then read the sentence | `name-badge` + a balloon layer | ★ New | P |
-| Bingo | **Sticker Bingo**: a 3×3 card of pictures; the voice says a SENTENCE, the child stamps it with a sticker that pops; the line glows and confetti falls | "She is sad." / "It can fly." | `feelings-bingo` → universal, A1 mode = sentences | ⇄ upgrade | L, R |
-| Tic-Tac-Toe / Four in a Row | **Noughts & Crosses Duel**: the child vs Pip. To place your token, answer the question on the square; tokens drop with a bounce (Baamboozle Tic Tac Toe / Four in a Row) | any Q&A | ★ new `tic-tac-toe` | ★ New | R, X |
+| Bingo | **Sticker Bingo**: a 3×3 card of pictures; the voice says a SENTENCE, the child stamps it with a sticker that pops; the line glows and confetti falls | "She is sad." / "It can fly." | `sticker-bingo` (U1 L6, U2 L4) | ✓ built | L, R |
+| Tic-Tac-Toe / Four in a Row | **Noughts & Crosses Duel**: the child vs Pip. To place your token, answer the question on the square; tokens drop with a bounce (Baamboozle Tic Tac Toe / Four in a Row) | any Q&A | `tic-tac-toe` (U1 L6, U2 L6) | ✓ built | R, X |
 | Snakes & Ladders | Word Board / House Board (exists) **+ skins**: jungle vines (ladders) and slides, a castle, space | read the square | `word-board` | ✓ built | R |
 | Hot Potato | **Hot Coconut**: a coconut passes between the friends while the music plays; when it stops, whoever holds it gets the question and the child answers for them. Timer ring, no forfeit | questions of the unit | ★ new `hot-potato` | ★ New | S, X |
-| I Spy | **I Spy with my binoculars**: a painted scene; the voice gives a clue ("I spy something small and green"), and the child moves the binocular circle and taps | descriptions | `torch-hunt` with a binocular mask | ⇄ re-skin | L |
+| I Spy | **I Spy with my binoculars**: a painted scene; the voice gives a clue ("I spy something small and green"), and the child moves the binocular circle and taps | descriptions | `i-spy` (U2 L1) | ✓ built | L |
 | Simon Says | exists (`simon-touch`, `campfire-says`) **+ Red Light, Green Light**: move on "green", freeze on "red", and the child's runner advances | instructions, can | ★ new mode of `campfire-says` | ★ New | X |
 | Musical Chairs ⚠️ | **Musical Islands**: animals hop between lily pads while the music plays; when it stops, the child says where each animal is. Nobody is "out" | prepositions, "The frog is on the…" | ★ new `musical-islands` | ★ New | L, X |
 | Telephone / Chinese Whispers | **Whisper Tube**: Pip whispers a sentence down a tube to Mia, a word gets mixed up, and the child hears both and fixes the wrong word | listening for detail | `true-false` + 2-voice audio | ★ New | L |
@@ -214,7 +214,7 @@ These are playground and party games that teachers still use for English. Source
 | Hot and Cold | **Treasure Radar**: the child taps the beach to search; the screen tints from blue ("cold") to red ("hot") and Pip says "Warmer! Hotter!" | listening for direction words | ★ new `hot-cold` | ★ New | L, X |
 | Battleship | **Treasure Islands**: a 4×4 sea grid (A-D, 1-4); the child calls "B3!" and a chest or a splash appears. A1 mode: answer a question to get each shot | letters + numbers, questions | ★ new `grid-hunt` | ★ New | R |
 | Kim's Game | exists: `whats-missing` / `whos-missing` | "The cap is missing!" | ✓ built | ✓ built | W, R |
-| Pass the Parcel | **Pass the Present**: a gift with 4 layers of paper; each right answer tears one layer off, and the prize sticker is inside | any review | `trophy-chest` re-skin | ⇄ re-skin | R |
+| Pass the Parcel | **Pass the Present**: a gift with 4 layers of paper; each right answer tears one layer off, and the prize sticker is inside | any review | `pass-parcel` (U1 L7, U2 L7) | ✓ built | R |
 | Jenga | **Wobbly Tower**: tap a block to pull it out; the question is on it, and a right answer means the block slides out cleanly. The tower never falls on a child's turn | review questions | ★ new `tower-pull` | ★ New | R |
 | Word Search / Crossword | **Picture Crossword**: picture clues; type or tap letters, and the word lights up and is said | spelling | ★ new `crossword` (Wordwall) | ★ New | P |
 | Rock-Paper-Scissors | **Who starts?**: a quick hand game decides the first turn in duel games; say "Rock, paper, scissors, go!" | chant | UI helper in duel games | ★ New | — |

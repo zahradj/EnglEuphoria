@@ -793,6 +793,11 @@ const WT_EXTRACTORS = {
   'answer-race': (s) => [[s.who, s.doneLine], ...(s.rounds ?? []).flatMap((r) => [[s.who, r.ask], ...(r.choices ?? []).map((c) => ['teacher', c])])],
   'field-guide': (s) => [[s.who, s.doneLine], [s.who, 'No! Look again!'], ...(s.animals ?? []).flatMap((a) => [[s.who, `What is it like? Let's write the ${a.name} card!`], ...(a.lines ?? []).flatMap((l) => [['teacher', l.frame.replace('___', l.answer)], ...(l.no ? [[s.who, l.no]] : [])])])],
   'word-splat': (s) => [[s.who, s.doneLine], ...(s.words ?? []).map((w) => [s.who, w])],
+  // StickerBingoScene / TicTacToeScene / PassParcelScene / ISpyScene (welcome-town/scene-components).
+  'sticker-bingo': (s) => [[s.who, s.doneLine], [s.who, 'Bingo!'], ...(s.cells ?? []).map((c) => [s.who, c.say])],
+  'tic-tac-toe': (s) => [[s.who, s.doneLine], [s.who, "Let's play! Tap a square and answer."], ...(s.squares ?? []).flatMap((q) => [[s.who, q.ask], ...(q.choices ?? []).map((c) => ['teacher', c])])],
+  'pass-parcel': (s) => [[s.who, s.doneLine], ...(s.rounds ?? []).flatMap((q) => [[s.who, q.ask], ...(q.choices ?? []).map((c) => ['teacher', c])])],
+  'i-spy': (s) => [[s.who, s.doneLine], ...(s.rounds ?? []).flatMap((q) => [[s.who, q.clue], [s.who, q.answer]])],
   'spin-wheel': (s) => (s.items ?? []).map((it) => ['teacher', it.label]),
   'picture-match': (s) => (s.items ?? []).map((it) => ['teacher', it.word]),
   // welcome-town/WhereGames.tsx — every line those games can say.
