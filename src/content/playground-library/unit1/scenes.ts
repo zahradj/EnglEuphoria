@@ -4848,11 +4848,17 @@ export const LESSON_U2L5_SCENES: Scene[] = [
       { img: bgU2L5Crab, who: 'pip', line: 'A little crab is gray and sad. Shelly gives him a purple circle.', motion: 'zoom-in', fx: 'bubbles' , atSec: 64 },
       { img: bgU2L5Crab, who: 'willow', line: 'Thank you, Shelly! Now they are friends.', motion: 'zoom-out', fx: 'hearts' , atSec: 72 },
     ],
+    // Owner 2026-10-13: a picture question after every scene of the film.
     checkpoints: [
-      { afterPage: 1, who: 'pip', question: 'What color is Shelly?', answer: 'Gray', options: [{ label: 'Red', colorHex: '#EF4444' }, { label: 'Gray', colorHex: '#9CA3AF' }, { label: 'Blue', colorHex: '#3B82F6' }] },
-      { afterPage: 4, who: 'leo', question: 'What shape is the yellow scale?', answer: 'Triangle', options: [{ label: 'Circle', shape: 'circle', colorHex: '#FACC15' }, { label: 'Square', shape: 'square', colorHex: '#FACC15' }, { label: 'Triangle', shape: 'triangle', colorHex: '#FACC15' }] },
-      { afterPage: 5, who: 'pip', question: 'What color is the circle from Pip?', answer: 'Green', options: [{ label: 'Red', shape: 'circle', colorHex: '#EF4444' }, { label: 'Green', shape: 'circle', colorHex: '#22C55E' }, { label: 'Blue', shape: 'circle', colorHex: '#3B82F6' }] },
-      { afterPage: 8, who: 'pip', question: 'What does Shelly give the crab?', answer: 'A purple circle', options: [{ label: 'A red square', shape: 'square', colorHex: '#EF4444' }, { label: 'A purple circle', shape: 'circle', colorHex: '#A855F7' }, { label: 'A blue triangle', shape: 'triangle', colorHex: '#3B82F6' }] },
+      { afterPage: 0, who: 'pip', question: 'What is Shelly?', answer: 'A fish', img: bgU2L5Sea, options: [{ label: 'A cat', img: `${A}/items/item-cat.png` }, { label: 'A fish', img: `${A}/items/item-shelly.png` }, { label: 'A frog', img: `${A}/items/item-frog.png` }] },
+      { afterPage: 1, who: 'pip', question: 'What color is Shelly?', answer: 'Gray', img: bgU2L5Sad, options: [{ label: 'Red', colorHex: '#EF4444' }, { label: 'Gray', colorHex: '#9CA3AF' }, { label: 'Blue', colorHex: '#3B82F6' }] },
+      { afterPage: 2, who: 'bella', question: 'What does Bella give Shelly?', answer: 'A red circle', img: bgU2L5Red, options: [{ label: 'A red square', shape: 'square', colorHex: '#EF4444' }, { label: 'A blue circle', shape: 'circle', colorHex: '#3B82F6' }, { label: 'A red circle', shape: 'circle', colorHex: '#EF4444' }] },
+      { afterPage: 3, who: 'mia', question: 'What color is the square from Mia?', answer: 'Blue', img: bgU2L5Blue, options: [{ label: 'Blue', shape: 'square', colorHex: '#3B82F6' }, { label: 'Red', shape: 'square', colorHex: '#EF4444' }, { label: 'Yellow', shape: 'square', colorHex: '#FACC15' }] },
+      { afterPage: 4, who: 'leo', question: 'What shape is the yellow scale?', answer: 'Triangle', img: bgU2L5Yellow, options: [{ label: 'Circle', shape: 'circle', colorHex: '#FACC15' }, { label: 'Square', shape: 'square', colorHex: '#FACC15' }, { label: 'Triangle', shape: 'triangle', colorHex: '#FACC15' }] },
+      { afterPage: 5, who: 'pip', question: 'What color is the circle from Pip?', answer: 'Green', img: bgU2L5Green, options: [{ label: 'Red', shape: 'circle', colorHex: '#EF4444' }, { label: 'Green', shape: 'circle', colorHex: '#22C55E' }, { label: 'Blue', shape: 'circle', colorHex: '#3B82F6' }] },
+      { afterPage: 6, who: 'willow', question: 'Who gives Shelly the orange square?', answer: 'Willow', img: bgU2L5Orange, options: [{ label: 'Mia', img: getEmotionSprite('mia', 'happy') }, { label: 'Bella', img: getEmotionSprite('bella', 'happy') }, { label: 'Willow', img: getEmotionSprite('willow', 'happy') }] },
+      { afterPage: 7, who: 'willow', question: 'How many colors does Shelly have now?', answer: '6', img: bgU2L5Rainbow, options: [{ label: '2' }, { label: '6' }, { label: '4' }] },
+      { afterPage: 8, who: 'pip', question: 'What does Shelly give the crab?', answer: 'A purple circle', img: bgU2L5Crab, options: [{ label: 'A red square', shape: 'square', colorHex: '#EF4444' }, { label: 'A purple circle', shape: 'circle', colorHex: '#A855F7' }, { label: 'A blue triangle', shape: 'triangle', colorHex: '#3B82F6' }] },
     ],
   },
 
@@ -8390,7 +8396,19 @@ export const LESSON_U4L5_SCENES: Scene[] = [
       { img: bgU4L5PipHands, who: 'pip', line: 'I can do it! Clap, clap! I clap my hands!', atSec: 47 },
       { img: bgU4L5Park, who: 'pip', line: 'From head to toe — we can do it!', atSec: 50.5 },
     ],
-    checkpoints: [],
+    // Owner 2026-10-13: a picture question after every scene of the film.
+    checkpoints: [
+      { afterPage: 0, who: 'pip', question: 'Who wants to copy the animals?', answer: 'Pip', img: bgU4L5Park, options: [{ label: 'Leo', img: getEmotionSprite('leo', 'happy') }, { label: 'Pip', img: getEmotionSprite('pip', 'happy') }, { label: 'Mia', img: getEmotionSprite('mia', 'happy') }] },
+      { afterPage: 2, who: 'pip', question: 'What does the tiger turn?', answer: 'His head', img: bgU4L5Tiger, options: [{ label: 'His head', img: bgU4L5PipHead }, { label: 'His arms', img: bgU4L5PipArms }, { label: 'His feet', img: bgU4L5PipFeet }] },
+      { afterPage: 3, who: 'pip', question: 'Which animal does Pip copy?', answer: 'The tiger', img: bgU4L5PipHead, options: [{ label: 'The monkey', img: bgU4L5Monkey }, { label: 'The tiger', img: bgU4L5Tiger }, { label: 'The elephant', img: bgU4L5Elephant }] },
+      { afterPage: 5, who: 'pip', question: 'What does the monkey wave?', answer: 'His arms', img: bgU4L5Monkey, options: [{ label: 'His feet', img: bgU4L5PipFeet }, { label: 'His hands', img: bgU4L5PipHands }, { label: 'His arms', img: bgU4L5PipArms }] },
+      { afterPage: 6, who: 'pip', question: 'Which animal does Pip copy?', answer: 'The monkey', img: bgU4L5PipArms, options: [{ label: 'The monkey', img: bgU4L5Monkey }, { label: 'The seal', img: bgU4L5Seal }, { label: 'The tiger', img: bgU4L5Tiger }] },
+      { afterPage: 8, who: 'pip', question: 'What does the elephant stomp?', answer: 'His feet', img: bgU4L5Elephant, options: [{ label: 'His head', img: bgU4L5PipHead }, { label: 'His feet', img: bgU4L5PipFeet }, { label: 'His hands', img: bgU4L5PipHands }] },
+      { afterPage: 9, who: 'pip', question: 'Which animal does Pip copy?', answer: 'The elephant', img: bgU4L5PipFeet, options: [{ label: 'The tiger', img: bgU4L5Tiger }, { label: 'The seal', img: bgU4L5Seal }, { label: 'The elephant', img: bgU4L5Elephant }] },
+      { afterPage: 11, who: 'pip', question: 'What does the seal clap?', answer: 'Her hands', img: bgU4L5Seal, options: [{ label: 'Her hands', img: bgU4L5PipHands }, { label: 'Her feet', img: bgU4L5PipFeet }, { label: 'Her head', img: bgU4L5PipHead }] },
+      { afterPage: 12, who: 'pip', question: 'Which animal does Pip copy?', answer: 'The seal', img: bgU4L5PipHands, options: [{ label: 'The elephant', img: bgU4L5Elephant }, { label: 'The monkey', img: bgU4L5Monkey }, { label: 'The seal', img: bgU4L5Seal }] },
+      { afterPage: 13, who: 'pip', question: 'Who stomps his feet?', answer: 'The elephant', img: bgU4L5Park, options: [{ label: 'The seal', img: bgU4L5Seal }, { label: 'The elephant', img: bgU4L5Elephant }, { label: 'The tiger', img: bgU4L5Tiger }] },
+    ],
   },
 
   /* 5-7 The moves, move, signature game */
@@ -9620,7 +9638,18 @@ export const LESSON_U5L5_SCENES: Scene[] = [
       { img: bgU5L5Hug, who: 'pip', line: 'Good night, Dad! I love you!', atSec: 42 },
       { img: bgU5L5Night, who: 'pip', line: 'Just me and my dad. The best day!', atSec: 45.5 },
     ],
-    checkpoints: [],
+    // Owner 2026-10-13: a picture question after every scene of the film.
+    checkpoints: [
+      { afterPage: 0, who: 'pip', question: 'Who is Pip with today?', answer: 'Dad', img: bgU5L5Gate, options: [{ label: 'Grandpa', img: `${A}/items/item-family-grandpa.png` }, { label: 'Dad', img: `${A}/items/item-family-dad.png` }, { label: 'Mia', img: getEmotionSprite('mia', 'happy') }] },
+      { afterPage: 1, who: 'pip', question: 'What does Dad throw?', answer: 'A ball', img: bgU5L5BallA, options: [{ label: 'A book', img: `${A}/items/item-book.png` }, { label: 'A cake', img: `${A}/items/item-cake.png` }, { label: 'A ball', img: `${A}/items/item-ball.png` }] },
+      { afterPage: 4, who: 'pip', question: 'What do they do?', answer: 'We play ball', img: bgU5L5BallC, options: [{ label: 'We play ball', img: bgU5L5BallC }, { label: 'We read a book', img: bgU5L5BookB }, { label: 'We feed the ducks', img: bgU5L5DucksC }] },
+      { afterPage: 5, who: 'pip', question: 'What do they feed?', answer: 'The ducks', img: bgU5L5DucksA, options: [{ label: 'The ducks', img: `${A}/items/item-farm-duck.png` }, { label: 'The cow', img: `${A}/items/item-cow.png` }, { label: 'The cat', img: `${A}/items/item-cat.png` }] },
+      { afterPage: 8, who: 'pip', question: 'How many ducks?', answer: '4', img: bgU5L5DucksC, options: [{ label: '2' }, { label: '3' }, { label: '4' }] },
+      { afterPage: 9, who: 'pip', question: 'What do they eat?', answer: 'Ice cream', img: bgU5L5IceCream, options: [{ label: 'Pizza', img: `${A}/items/item-pizza.png` }, { label: 'Ice cream', img: `${A}/items/item-ice-cream.png` }, { label: 'Bread', img: `${A}/items/item-bread.png` }] },
+      { afterPage: 12, who: 'pip', question: 'What do they do at home?', answer: 'We read a book', img: bgU5L5BookB, options: [{ label: 'We feed the ducks', img: bgU5L5DucksC }, { label: 'We play ball', img: bgU5L5BallC }, { label: 'We read a book', img: bgU5L5BookB }] },
+      { afterPage: 13, who: 'pip', question: 'How is Pip?', answer: 'Happy', img: bgU5L5Hug, options: [{ label: 'Happy', img: getEmotionSprite('pip', 'happy') }, { label: 'Sad', img: getEmotionSprite('pip', 'sad') }, { label: 'Angry', img: getEmotionSprite('pip', 'angry') }] },
+      { afterPage: 14, who: 'pip', question: 'Is it day or night?', answer: 'Night', img: bgU5L5Night, options: [{ label: 'Day', img: `${A}/items/item-sun.png` }, { label: 'Night', img: `${A}/items/item-moon.png` }] },
+    ],
   },
 
   /* 5-7 The words, move, signature game */
@@ -11084,7 +11113,17 @@ export const LESSON_U6L5_SCENES: Scene[] = [
       { img: bgU6L5RedC, who: 'willow', line: 'Welcome home, Pip!', atSec: 42.5 },
       { img: bgU6L5Bedroom, who: 'pip', line: 'This is my bedroom. I love my house!', atSec: 46.5 },
     ],
-    checkpoints: [],
+    // Owner 2026-10-13: a picture question after every scene of the film.
+    checkpoints: [
+      { afterPage: 0, who: 'pip', question: 'What does Pip have?', answer: 'A ball', img: bgU6L5ParkB, options: [{ label: 'A kite', img: `${A}/items/item-kite.png` }, { label: 'A ball', img: `${A}/items/item-ball.png` }, { label: 'A book', img: `${A}/items/item-book.png` }] },
+      { afterPage: 1, who: 'pip', question: 'What does Pip look for?', answer: 'His house', img: bgU6L5StreetB, options: [{ label: 'His house', img: `${A}/items/item-house.png` }, { label: 'His ball', img: `${A}/items/item-ball.png` }, { label: 'His cat', img: `${A}/items/item-cat.png` }] },
+      { afterPage: 2, who: 'pip', question: "What color is Pip's door?", answer: 'Red', img: bgU6L5StreetC, options: [{ label: 'Blue', img: `${A}/items/item-u6l5-door-blue.png` }, { label: 'Yellow', img: `${A}/items/item-u6l5-door-yellow.png` }, { label: 'Red', img: `${A}/items/item-u6l5-door-red.png` }] },
+      { afterPage: 4, who: 'pip', question: 'What color is this door?', answer: 'Blue', img: bgU6L5BlueB, options: [{ label: 'Red', img: `${A}/items/item-u6l5-door-red.png` }, { label: 'Blue', img: `${A}/items/item-u6l5-door-blue.png` }, { label: 'Yellow', img: `${A}/items/item-u6l5-door-yellow.png` }] },
+      { afterPage: 6, who: 'pip', question: 'Who lives here?', answer: 'A cat', img: bgU6L5YellowB, options: [{ label: 'A dog', img: `${A}/items/item-dog.png` }, { label: 'A duck', img: `${A}/items/item-farm-duck.png` }, { label: 'A cat', img: `${A}/items/item-cat.png` }] },
+      { afterPage: 8, who: 'pip', question: 'What color is this door?', answer: 'Red', img: bgU6L5RedB, options: [{ label: 'Red', img: `${A}/items/item-u6l5-door-red.png` }, { label: 'Yellow', img: `${A}/items/item-u6l5-door-yellow.png` }, { label: 'Blue', img: `${A}/items/item-u6l5-door-blue.png` }] },
+      { afterPage: 9, who: 'pip', question: 'Where is Pip now?', answer: 'Home', img: bgU6L5RedC, options: [{ label: 'The park', img: bgU6L5ParkB }, { label: 'Home', img: `${A}/items/item-house.png` }, { label: 'The street', img: bgU6L5StreetB }] },
+      { afterPage: 10, who: 'pip', question: 'What is this?', answer: 'A bed', img: bgU6L5Bedroom, options: [{ label: 'A sofa', img: `${A}/items/item-sofa.png` }, { label: 'A table', img: `${A}/items/item-table.png` }, { label: 'A bed', img: `${A}/items/item-bed.png` }] },
+    ],
   },
 
   /* 5-7 The words, move, signature game */
@@ -12681,7 +12720,15 @@ export const LESSON_U7L5_SCENES: Scene[] = [
       { img: bgU7L5Barn4, who: 'pip', line: "It's a duck!", atSec: 41 },
       { img: bgU7L5Yard, who: 'pip', line: 'Grandpa had a farm, E-I-E-I-O!', atSec: 46 },
     ],
-    checkpoints: [],
+    // Owner 2026-10-13: a picture question after every scene of the film.
+    checkpoints: [
+      { afterPage: 0, who: 'pip', question: 'Who has a farm?', answer: 'Grandpa', img: bgU7L5GateB, options: [{ label: 'Grandpa', img: `${A}/items/item-family-grandpa.png` }, { label: 'Dad', img: `${A}/items/item-family-dad.png` }, { label: 'Mia', img: getEmotionSprite('mia', 'happy') }] },
+      { afterPage: 3, who: 'pip', question: 'What says moo?', answer: 'A cow', img: bgU7L5Barn1, options: [{ label: 'A pig', img: `${A}/items/item-pig.png` }, { label: 'A cow', img: `${A}/items/item-cow.png` }, { label: 'A sheep', img: `${A}/items/item-sheep.png` }] },
+      { afterPage: 5, who: 'pip', question: 'What says oink?', answer: 'A pig', img: bgU7L5Barn2, options: [{ label: 'A sheep', img: `${A}/items/item-sheep.png` }, { label: 'A duck', img: `${A}/items/item-farm-duck.png` }, { label: 'A pig', img: `${A}/items/item-pig.png` }] },
+      { afterPage: 7, who: 'pip', question: 'What says baa?', answer: 'A sheep', img: bgU7L5Barn3, options: [{ label: 'A sheep', img: `${A}/items/item-sheep.png` }, { label: 'A cow', img: `${A}/items/item-cow.png` }, { label: 'A duck', img: `${A}/items/item-farm-duck.png` }] },
+      { afterPage: 9, who: 'pip', question: 'What says quack?', answer: 'A duck', img: bgU7L5Barn4, options: [{ label: 'A pig', img: `${A}/items/item-pig.png` }, { label: 'A duck', img: `${A}/items/item-farm-duck.png` }, { label: 'A cow', img: `${A}/items/item-cow.png` }] },
+      { afterPage: 10, who: 'pip', question: 'How many animals?', answer: '4', img: bgU7L5Yard, options: [{ label: '4' }, { label: '2' }, { label: '3' }] },
+    ],
   },
 
   /* 5-7 The words, move, signature game */
@@ -13944,7 +13991,17 @@ export const LESSON_U8L5_SCENES: Scene[] = [
       { img: u8l5Page(8), who: 'mia', line: 'Look! I am a butterfly!', atSec: 36 },
       { img: u8l5Page(9), who: 'pip', line: 'Hello, butterfly! You are beautiful!', atSec: 41 },
     ],
-    checkpoints: [],
+    // Owner 2026-10-13: a picture question after every scene of the film.
+    checkpoints: [
+      { afterPage: 1, who: 'pip', question: 'Who is this?', answer: 'A caterpillar', img: u8l5Page(2), options: [{ label: 'A butterfly', img: `${A}/items/item-butterfly.png` }, { label: 'A caterpillar', img: `${A}/items/item-caterpillar.png` }, { label: 'A frog', img: `${A}/items/item-frog.png` }] },
+      { afterPage: 2, who: 'pip', question: 'What does it eat?', answer: 'Apples', img: u8l5Page(3), options: [{ label: 'Apples', img: `${A}/items/item-apple.png` }, { label: 'Bread', img: `${A}/items/item-bread.png` }, { label: 'Cake', img: `${A}/items/item-cake.png` }] },
+      { afterPage: 3, who: 'pip', question: 'What does it eat now?', answer: 'Bread', img: u8l5Page(4), options: [{ label: 'Cake', img: `${A}/items/item-cake.png` }, { label: 'Banana', img: `${A}/items/item-banana.png` }, { label: 'Bread', img: `${A}/items/item-bread.png` }] },
+      { afterPage: 4, who: 'pip', question: 'What does it eat now?', answer: 'Cake', img: u8l5Page(5), options: [{ label: 'Apples', img: `${A}/items/item-apple.png` }, { label: 'Cake', img: `${A}/items/item-cake.png` }, { label: 'Pizza', img: `${A}/items/item-pizza.png` }] },
+      { afterPage: 6, who: 'pip', question: 'What is red?', answer: 'The apple', img: u8l5Page(6), options: [{ label: 'The bread', img: `${A}/items/item-bread.png` }, { label: 'The cake', img: `${A}/items/item-cake.png` }, { label: 'The apple', img: `${A}/items/item-apple.png` }] },
+      { afterPage: 7, who: 'pip', question: 'Is it day or night?', answer: 'Night', img: u8l5Page(7), options: [{ label: 'Night', img: `${A}/items/item-moon.png` }, { label: 'Day', img: `${A}/items/item-sun.png` }] },
+      { afterPage: 8, who: 'pip', question: 'What is it now?', answer: 'A butterfly', img: u8l5Page(8), options: [{ label: 'A caterpillar', img: `${A}/items/item-caterpillar.png` }, { label: 'A bird', img: `${A}/items/item-bird.png` }, { label: 'A butterfly', img: `${A}/items/item-butterfly.png` }] },
+      { afterPage: 9, who: 'pip', question: 'Who says hello to the butterfly?', answer: 'Pip', img: u8l5Page(9), options: [{ label: 'Leo', img: getEmotionSprite('leo', 'happy') }, { label: 'Pip', img: getEmotionSprite('pip', 'happy') }, { label: 'Mia', img: getEmotionSprite('mia', 'happy') }] },
+    ],
   },
 
   /* 5-6 The words, move */
@@ -15182,7 +15239,18 @@ export const LESSON_U9L5_SCENES: Scene[] = [
       { img: u9l5Page(9), who: 'pip', line: 'I like my shoes!', atSec: 39 },
       { img: u9l5Page(9), who: 'mia', line: 'Me too!', atSec: 42 },
     ],
-    checkpoints: [],
+    // Owner 2026-10-13: a picture question after every scene of the film.
+    checkpoints: [
+      { afterPage: 0, who: 'pip', question: "What color are Pip's new shoes?", answer: 'White', img: u9l5Page(1), options: [{ label: 'Red', colorHex: '#EF4444' }, { label: 'White', colorHex: '#F8FAFC' }, { label: 'Blue', colorHex: '#3B82F6' }] },
+      { afterPage: 1, who: 'pip', question: 'What does Pip step on?', answer: 'Apples', img: u9l5Page(2), options: [{ label: 'Bananas', img: `${A}/items/item-banana.png` }, { label: 'Apples', img: `${A}/items/item-apple.png` }, { label: 'Cake', img: `${A}/items/item-cake.png` }] },
+      { afterPage: 2, who: 'pip', question: 'What color are the shoes now?', answer: 'Red', img: u9l5Page(3), options: [{ label: 'Red', colorHex: '#EF4444' }, { label: 'Blue', colorHex: '#3B82F6' }, { label: 'Yellow', colorHex: '#FACC15' }] },
+      { afterPage: 3, who: 'pip', question: 'What does Pip step in?', answer: 'Blue paint', img: u9l5Page(4), options: [{ label: 'Red paint', img: `${A}/items/item-splash-red.png` }, { label: 'Yellow paint', img: `${A}/items/item-splash-yellow.png` }, { label: 'Blue paint', img: `${A}/items/item-splash-blue.png` }] },
+      { afterPage: 4, who: 'pip', question: 'What color are the shoes now?', answer: 'Blue', img: u9l5Page(5), options: [{ label: 'Blue', colorHex: '#3B82F6' }, { label: 'Red', colorHex: '#EF4444' }, { label: 'Green', colorHex: '#22C55E' }] },
+      { afterPage: 5, who: 'pip', question: 'What does Pip step in?', answer: 'Mud', img: u9l5Page(6), options: [{ label: 'Water', img: `${A}/items/item-water.png` }, { label: 'Mud', colorHex: '#7C4A1E' }, { label: 'Paint', img: `${A}/items/item-splash-blue.png` }] },
+      { afterPage: 7, who: 'bella', question: "What colour are Pip's shoes now?", answer: 'Brown', img: u9l5Page(7), options: [{ label: 'White', colorHex: '#F8FAFC' }, { label: 'Red', colorHex: '#EF4444' }, { label: 'Brown', colorHex: '#7C4A1E' }] },
+      { afterPage: 8, who: 'pip', question: 'What makes the shoes white again?', answer: 'Water', img: u9l5Page(8), options: [{ label: 'Water', img: `${A}/items/item-water.png` }, { label: 'Mud', colorHex: '#7C4A1E' }, { label: 'Paint', img: `${A}/items/item-splash-blue.png` }] },
+      { afterPage: 10, who: 'pip', question: 'Who likes the shoes too?', answer: 'Mia', img: u9l5Page(9), options: [{ label: 'Bella', img: getEmotionSprite('bella', 'happy') }, { label: 'Leo', img: getEmotionSprite('leo', 'happy') }, { label: 'Mia', img: getEmotionSprite('mia', 'happy') }] },
+    ],
   },
 
   /* 5-6 The words, move */
@@ -16437,7 +16505,21 @@ export const LESSON_U10L5_SCENES: Scene[] = [
       { img: u10l5Page(11), who: 'bella', line: 'The bear wakes up. It can dance!', atSec: 47 },
       { img: u10l5Page(12), who: 'bella', line: 'They can dance too! Hooray!', atSec: 52 },
     ],
-    checkpoints: [],
+    // Owner 2026-10-13: a picture question after every scene of the film.
+    checkpoints: [
+      { afterPage: 0, who: 'bella', question: 'What do they have?', answer: 'A map', img: u10l5Page(1), options: [{ label: 'A book', img: `${A}/items/item-book.png` }, { label: 'A map', img: `${A}/items/item-map.png` }, { label: 'A ball', img: `${A}/items/item-ball.png` }] },
+      { afterPage: 1, who: 'bella', question: 'What can they do?', answer: 'Walk', img: u10l5Page(2), options: [{ label: 'Walk', img: `${A}/items/item-pip-walk.png` }, { label: 'Jump', img: `${A}/items/item-pip-jump.png` }, { label: 'Run', img: `${A}/items/item-pip-run.png` }] },
+      { afterPage: 2, who: 'bella', question: 'What can the frog do?', answer: 'Jump', img: u10l5Page(3), options: [{ label: 'Swim', img: `${A}/items/item-fish-swim.png` }, { label: 'Jump', img: `${A}/items/item-frog-jump.png` }, { label: 'Fly', img: `${A}/items/item-bird-fly.png` }] },
+      { afterPage: 4, who: 'bella', question: 'Who can jump too?', answer: 'Pip', img: u10l5Page(4), options: [{ label: 'Pip', img: getEmotionSprite('pip', 'happy') }, { label: 'Mia', img: getEmotionSprite('mia', 'happy') }, { label: 'Leo', img: getEmotionSprite('leo', 'happy') }] },
+      { afterPage: 5, who: 'bella', question: 'What can the fish do?', answer: 'Swim', img: u10l5Page(5), options: [{ label: 'Fly', img: `${A}/items/item-bird-fly.png` }, { label: 'Jump', img: `${A}/items/item-frog-jump.png` }, { label: 'Swim', img: `${A}/items/item-fish-swim.png` }] },
+      { afterPage: 6, who: 'bella', question: 'Who can swim too?', answer: 'Mia', img: u10l5Page(6), options: [{ label: 'Leo', img: getEmotionSprite('leo', 'happy') }, { label: 'Mia', img: getEmotionSprite('mia', 'happy') }, { label: 'Pip', img: getEmotionSprite('pip', 'happy') }] },
+      { afterPage: 7, who: 'bella', question: 'What can the bird do?', answer: 'Fly', img: u10l5Page(7), options: [{ label: 'Fly', img: `${A}/items/item-bird-fly.png` }, { label: 'Swim', img: `${A}/items/item-fish-swim.png` }, { label: 'Jump', img: `${A}/items/item-frog-jump.png` }] },
+      { afterPage: 8, who: 'bella', question: 'What can Leo do?', answer: 'Run', img: u10l5Page(8), options: [{ label: 'Fly', img: `${A}/items/item-willow-fly.png` }, { label: 'Run', img: `${A}/items/item-leo-run.png` }, { label: 'Swim', img: `${A}/items/item-fish-swim.png` }] },
+      { afterPage: 9, who: 'leo', question: 'Where are they now?', answer: 'A cave', img: u10l5Page(9), options: [{ label: 'A river', img: u10l5Page(5) }, { label: 'Tall grass', img: u10l5Page(2) }, { label: 'A cave', img: u10l5Page(9) }] },
+      { afterPage: 11, who: 'bella', question: 'What can the bear do?', answer: 'Sleep', img: u10l5Page(10), options: [{ label: 'Sleep', img: u10l5Page(10) }, { label: 'Swim', img: `${A}/items/item-fish-swim.png` }, { label: 'Fly', img: `${A}/items/item-bird-fly.png` }] },
+      { afterPage: 12, who: 'bella', question: 'What can the bear do now?', answer: 'Dance', img: u10l5Page(11), options: [{ label: 'Sleep', img: u10l5Page(10) }, { label: 'Run', img: `${A}/items/item-leo-run.png` }, { label: 'Dance', img: u10l5Page(12) }] },
+      { afterPage: 13, who: 'bella', question: 'Who dances with the friends?', answer: 'The bear', img: u10l5Page(12), options: [{ label: 'The frog', img: `${A}/items/item-frog-happy.png` }, { label: 'The bear', img: `${A}/items/item-bear-bruno.png` }, { label: 'The fish', img: `${A}/items/item-goldfish.png` }] },
+    ],
   },
 
   /* 5-6 The words, move */

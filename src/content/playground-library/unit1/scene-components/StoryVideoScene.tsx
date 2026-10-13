@@ -59,8 +59,11 @@ function Fx({ fx }: { fx?: Page['fx'] }) {
   return null;
 }
 
+/** A story picture used as an answer (wide scene art, not a sticker): shown in a wide card, filling it. */
+const isScenePic = (o: Option) => !!o.img && o.img.includes('/scenes/');
+
 function OptionFace({ o }: { o: Option }) {
-  if (o.img) return <img src={o.img} alt={o.label} className="h-full w-full object-contain" draggable={false} />;
+  if (o.img) return <img src={o.img} alt={o.label} className={`h-full w-full ${isScenePic(o) ? 'rounded-2xl object-cover' : 'object-contain'}`} draggable={false} />;
   if (o.shape) return <ShapeIcon shape={o.shape} fill={o.colorHex ?? '#FEFBDD'} />;
   if (o.colorHex) return <span className="block h-full w-full rounded-full border-4 border-white shadow-inner" style={{ backgroundColor: o.colorHex }} />;
   return <span className="text-2xl font-black">{o.label}</span>;
@@ -305,7 +308,7 @@ export function StoryVideoScene({ scene, onWin, onLose, onNext, sync }: { scene:
                 key={o.label}
                 onClick={() => answer(o)}
                 aria-label={o.label}
-                className={`grid h-32 w-32 place-items-center rounded-3xl border-8 bg-white p-3 shadow-2xl transition active:scale-95 sm:h-36 sm:w-36 ${wrong === o.label ? 'animate-[lep1-shake_0.4s_ease-in-out] border-red-400' : 'border-white'}`}
+                className={`grid place-items-center rounded-3xl border-8 bg-white shadow-2xl transition active:scale-95 ${isScenePic(o) ? 'h-32 w-52 p-1 sm:h-36 sm:w-60' : 'h-32 w-32 p-3 sm:h-36 sm:w-36'} ${wrong === o.label ? 'animate-[lep1-shake_0.4s_ease-in-out] border-red-400' : 'border-white'}`}
               >
                 <OptionFace o={o} />
               </button>
