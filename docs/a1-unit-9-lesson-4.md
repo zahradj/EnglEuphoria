@@ -1,6 +1,21 @@
 # A1 Unit 9 Lesson 4 — "There Is / There Are in My Room!" (Magic Castle) — plan
 
-**Status:** draft for the owner's OK (2026-10-13). Nothing is built or generated yet.
+**Status:** approved (owner, 2026-10-13: "yes") — **built 2026-10-13** (`LESSON_A1U9L4_SCENES` in
+`src/content/playground-library/magic-castle/scenes.ts`, route `/playground-scene/castle-lesson-4`, homework
+`src/content/homework-quests/magic-castle-u9l4.ts`, after-merge SQL `scripts/sql/a1-unit9-lesson4-after-merge.sql`).
+
+### Changes made while building (for the owner)
+
+- **Pictures:** Gemini made the empty tower room, then its credits ran out. The three story pages are that room plus the
+  castle's own cut-out stickers, placed by `scripts/compose-tower-story.py` (one base picture, so room, light and cast
+  match on every page). Crown, boat and tower stickers: Canva. No rug or plant sticker was needed: the armchair goes
+  "in front of the fireplace" and the box "in front of the door".
+- **Sounds:** no new recording needed — oa (coat, goat, boat) is our recorded long o, and ow (cow, crown, tower) is our
+  recorded ou ("out").
+- **Song:** "In Wim's Tower", take 2 (score 0.96; the only "miss" is the name: "It's Wim's" heard as "it swims") —
+  please listen once.
+- **35 pages**; the two Design My Room pages are the same signature game, listen round (controlled) and free round
+  (production).
 
 **From the blueprint** (`src/curriculum/roadmap/a1LessonPlans.ts`, p(9, 4)):
 - **Objective:** I can describe a room and say whose things are: "There are two lamps. Whose crown is it? It's Wim's."

@@ -1378,3 +1378,390 @@ export const LESSON_A1U9L3_SCENES: Scene[] = [
   },
   { id: 'mc3-finale', kind: 'finale', bg: bgLampFound, who: 'wim', look: 'card', cast: ['wim', 'catcat', 'pip'], line: 'You found Wim’s magic lamp! You learned sofa, armchair, mirror, bookcase, clock and desk, and you can say where things are: in, on, under, next to and behind. Tonight, hide a toy and ask: "Where is it?" ✨\u{1FA94}' },
 ];
+
+/* =============================================================================
+ * A1 Unit 9 Lesson 4: "There Is / There Are in My Room!" (docs/a1-unit-9-lesson-4.md, owner OK 2026-10-13: "yes")
+ * Objective: I can describe a room and say whose things are: "There are two lamps. Whose crown is it? It's Wim's."
+ * Setting: Wim's round tower room at sunset (new: L1 kitchen, L2 bedroom, L3 sitting room). Story frame: Cat-cat mixed
+ * up everybody's things — tidy the tower and give each thing back (new plot shape: a tidy-up + lost property).
+ * Sequence (Present → Practice → Produce, three mini-cycles): There is / There are → between / in front of →
+ * Whose…? It's Wim's. → reading → phonics oa / ow → free practice (Design My Room ★ free) → produce (my real room).
+ * Art: the empty tower room (Gemini, castle art as reference); story pages 1-3 are that room + the castle's own cut-out
+ * stickers, composed by scripts/compose-tower-story.py; the crown sticker is Canva. Song: "In Wim's Tower" take 2.
+ * ========================================================================= */
+
+const bgTowerEmpty = `${M}/scenes/bg-castle-tower-empty.png`;
+const towerPage = (n: 1 | 2 | 3) => `${M}/scenes/bg-castle-tower-p${n}.png`;
+const LEP = (n: string) => `/lep1/items/item-${n}.png`;
+const CROWN = `${STK}/crown.png`;
+const SONG_A1U9L4 = `${M}/audio/in-wims-tower-song-a1u9l4.mp3?v=1`;
+/** Take 2 (score 0.96): a 2-bar intro, then 16 lines of 2 bars at 112 BPM — the plan's own times (kids-song-writer). */
+const SONG_A1U9L4_MS = [8572, ...Array(15).fill(4286)];
+const TOWER_CHORUS = [
+  { who: 'wim' as CharKey, text: 'Up in the tower, what can you see?' },
+  { who: 'catcat' as CharKey, text: 'There is, there are, for you and me!' },
+];
+const SONG_A1U9L4_LYRICS: { who: CharKey; text: string }[] = [
+  ...TOWER_CHORUS,
+  { who: 'wim', text: 'There is a bed, a big, big bed,' },
+  { who: 'wim', text: 'Between the lamps, the blue and red.' },
+  ...TOWER_CHORUS,
+  { who: 'catcat', text: 'There is a rug, a blue, blue rug,' },
+  { who: 'catcat', text: 'In front of the door, give it a hug!' },
+  { who: 'wim', text: 'There are two windows, one and two,' },
+  { who: 'wim', text: 'Between them, look, the sky is blue!' },
+  ...TOWER_CHORUS,
+  { who: 'catcat', text: 'Whose is the crown between the lamps?' },
+  { who: 'catcat', text: 'It’s Wim’s, it’s Wim’s! He jumps and stamps!' },
+  ...TOWER_CHORUS,
+];
+/** The tower-room furniture (castle stickers); w = width in % of the room picture. */
+const ROOM = {
+  bed: { label: 'bed', img: `${STK}/bed.png`, w: 22 },
+  lamp: { label: 'lamp', img: `${STK}/lamp.png`, w: 6.5 },
+  armchair: { label: 'armchair', img: `${STK}/armchair.png`, w: 13 },
+  desk: { label: 'desk', img: `${STK}/desk.png`, w: 13 },
+  bookcase: { label: 'bookcase', img: `${STK}/bookcase.png`, w: 8.5 },
+  chair: { label: 'chair', img: `${STK}/chair.png`, w: 6.5 },
+  box: { label: 'box', img: `${STK}/box.png`, w: 10 },
+};
+/** Spots on the empty tower room (bottom-centre of the sticker, % of the 16:9 picture), named by the room's fixed parts. */
+const TOWER_SPOTS = [
+  { where: 'between the windows', left: 50, top: 80 },
+  { where: 'in front of the door', left: 12, top: 93 },
+  { where: 'next to the door', left: 27, top: 82 },
+  { where: 'under the window', left: 37, top: 79 },
+  { where: 'next to the fireplace', left: 72, top: 82 },
+  { where: 'in front of the fireplace', left: 86, top: 95 },
+];
+const TOWER_STORY = [
+  { img: towerPage(1), lines: [{ who: 'wim' as CharKey, text: 'This is my tower room.' }, { who: 'wim' as CharKey, text: 'There is a big bed. There are two lamps.' }] },
+  { img: towerPage(2), lines: [{ who: 'wim' as CharKey, text: 'Oh no! Where is my crown?' }, { who: 'catcat' as CharKey, text: 'It’s in front of the door!' }] },
+  { img: towerPage(3), lines: [{ who: 'wim' as CharKey, text: 'Thank you! Whose ball is it?' }, { who: 'catcat' as CharKey, text: 'It’s my ball. It’s Cat-cat’s ball!' }] },
+];
+
+export const LESSON_A1U9L4_TITLE = 'There Is / There Are in My Room!';
+export const LESSON_A1U9L4_OBJECTIVE =
+  'I can describe a room and say whose things are: "There are two lamps. Whose crown is it? It\'s Wim\'s."';
+
+export const LESSON_A1U9L4_SCENES: Scene[] = [
+  /* WARM-UP */
+  { id: 'mc4-title', kind: 'title-card', bg: towerPage(1), level: 'A1', unit: 'Unit 9', lessonLabel: 'Lesson 4', title: 'There Is / There Are in My Room!', subtitle: 'Tidy Wim’s tower — and find out whose things they are', cta: '\u{1F3F0} LET’S GO UP!' },
+  {
+    id: 'mc4-recall-warmup', kind: 'recall-warmup', bg: bgHuntLiving, who: 'mia', mode: 'click',
+    fromLabel: 'Unit 9 · Lesson 3 · Where Is the Magic Lamp?',
+    teacher: 'Remember? Mia says where the lamp is — the student clicks the picture and says the sentence too.',
+    items: [
+      { word: 'under', say: 'The lamp is under the table.', img: bgHuntKitchen },
+      { word: 'next to', say: 'The lamp is next to the sofa.', img: bgHuntLiving },
+      { word: 'on', say: 'The lamp is on the chair.', img: bgHuntDining },
+      { word: 'behind', say: 'The lamp is behind the bed.', img: bgHuntBedroom },
+    ],
+  },
+  {
+    id: 'mc4-intro', kind: 'cinematic', bg: towerPage(2), title: 'Wim’s Tower Room', subtitle: 'Cat-cat mixed up everybody’s things!', narrator: 'wim',
+    script: [
+      { who: 'wim', line: 'Welcome to my tower room! Oh no… what a mess!' },
+      { who: 'catcat', line: 'Hee hee! Let’s tidy up — and find out whose things they are!' },
+    ],
+    cta: '\u{1F9F9} LET’S TIDY UP!',
+    look: 'card',
+  },
+
+  /* PRESENT 1 — There is / There are */
+  {
+    id: 'mc4-vocab-there', kind: 'vocab-spot', bg: towerPage(1),
+    teacher: 'Present: tap each arrow. One thing — There is… More than one — There are… Hold up fingers for how many!',
+    items: [
+      { label: 'Bed', sentence: 'There is a big bed.', emoji: '\u{1F6CF}\u{FE0F}', left: '50%', top: '66%', color: '#C0392B', who: 'wim' },
+      { label: 'Lamps', sentence: 'There are two lamps.', emoji: '\u{1FA94}', left: '67%', top: '66%', color: '#D4A017', who: 'catcat' },
+      { label: 'Windows', sentence: 'There are two windows.', emoji: '\u{1FA9F}', left: '33%', top: '30%', color: '#3B7FC9', who: 'wim' },
+      { label: 'Door', sentence: 'There is one door.', emoji: '\u{1F6AA}', left: '12%', top: '50%', color: '#8B5A2B', who: 'catcat' },
+      { label: 'Armchair', sentence: 'There is an armchair.', emoji: '\u{1FA91}', left: '86%', top: '82%', color: '#2E7D32', who: 'wim' },
+    ],
+  },
+  { id: 'mc4-meet-there-are', kind: 'meet', focus: ['There are'], bg: towerPage(1), who: 'wim', cardSide: 'right', teacher: 'Present: one bed — There is. Two lamps — There are! Show one finger, then two.', line: 'There is one bed. There are two lamps!', repeat: 'There are two lamps.' },
+  { id: 'mc4-echo-windows', kind: 'echo', bg: towerPage(1), who: 'catcat', textSide: 'top', teacher: 'Guided: say it with Cat-cat — point to the two windows.', word: 'There are two windows.' },
+
+  /* CONTROLLED PRACTICE 1 — There is / There are */
+  {
+    id: 'mc4-tic-tac-toe', kind: 'tic-tac-toe', bg: towerPage(1), who: 'catcat', opponentImg: stickerCatcat, title: 'Tower Tic-Tac-Toe!',
+    teacher: 'Game: look at Wim’s room, answer to claim a square — then Cat-cat takes one. Three in a row wins!',
+    squares: [
+      { ask: 'How many lamps?', choices: ['There are two lamps.', 'There is two lamps.', 'There are two lamp.'], answer: 0, img: `${STK}/lamp.png` },
+      { ask: 'How many beds?', choices: ['There are one bed.', 'There is one bed.', 'There is one beds.'], answer: 1, img: `${STK}/bed.png` },
+      { ask: 'How many windows?', choices: ['There is two windows.', 'There are two windows.', 'There are two window.'], answer: 1 },
+      { ask: 'Is there an armchair?', choices: ['Yes, there is.', 'Yes, there are.', 'Yes, it is.'], answer: 0, img: `${STK}/armchair.png` },
+      { ask: 'How many doors?', choices: ['There is one door.', 'There are one door.', 'There is one doors.'], answer: 0 },
+      { ask: 'Is there a sofa?', choices: ['No, there isn’t.', 'No, there aren’t.', 'No, it isn’t a sofa.'], answer: 0 },
+      { ask: 'There ___ two lamps.', choices: ['is', 'are', 'am'], answer: 1 },
+      { ask: 'There ___ a big bed.', choices: ['are', 'am', 'is'], answer: 2 },
+      { ask: 'There ___ a cat!', choices: ['is', 'are', 'be'], answer: 0, img: stickerCatcat },
+    ],
+    doneLine: 'Three in a row! Super sentences!',
+  },
+  {
+    id: 'mc4-hot-ball', kind: 'hot-coconut', bg: towerPage(1), who: 'wim', coconutImg: LEP('ball'), title: 'Hot Ball! Pass it — then answer!',
+    teacher: 'Game: tap Pass! — where the ball stops, answer about Wim’s room. On the student’s seat, answer about YOUR room (both answers are fine if true).',
+    seats: [
+      { name: 'You', img: '' },
+      { name: 'Wim', img: stickerWim },
+      { name: 'Cat-cat', img: stickerCatcat },
+      { name: 'Pip', img: LEP('pip-wave') },
+      { name: 'Mia', img: LEP('mia-wave') },
+    ],
+    rounds: [
+      { ask: 'Is there a bed in your room?', choices: ['Yes, there is.', 'No, there isn’t.'], answer: 0, stop: 0 },
+      { ask: 'Wim, how many lamps are there?', choices: ['There are two lamps.', 'There is a lamp.'], answer: 0, stop: 1 },
+      { ask: 'Cat-cat, is there a sofa in the tower?', choices: ['Yes, there is.', 'No, there isn’t.'], answer: 1, stop: 2 },
+      { ask: 'How many windows are there in your room?', choices: ['There is one window.', 'There are two windows.'], answer: 0, stop: 0 },
+      { ask: 'Pip, how many windows are there in the tower?', choices: ['There are two windows.', 'There is two windows.'], answer: 0, stop: 3 },
+    ],
+    doneLine: 'Hot, hot, hot! Great answers!',
+  },
+  {
+    id: 'mc4-song', kind: 'song', bg: towerPage(1), title: '\u{1F3B5} In Wim’s Tower \u{1F3B5}',
+    teacher: 'The lesson song: hold up one finger on “there is”, two on “there are”; point between the lamps; jump and stamp at the end. The student already knows the words.',
+    durationSeconds: 73, bigWord: 'There is, there are!', songUrl: SONG_A1U9L4, lineDurationsMs: SONG_A1U9L4_MS, lyrics: SONG_A1U9L4_LYRICS,
+  },
+
+  /* PRESENT 2 — between / in front of */
+  { id: 'mc4-meet-between', kind: 'meet', focus: ['between'], bg: towerPage(1), who: 'catcat', cardSide: 'right', teacher: 'Present: between = in the middle of two things. Hold your hands apart and put your head between them!', line: 'Look! The bed is between the lamps!', repeat: 'The bed is between the lamps.' },
+  { id: 'mc4-meet-in-front', kind: 'meet', focus: ['in front of'], bg: towerPage(1), who: 'wim', cardSide: 'left', teacher: 'Present: in front of — the armchair, then the fireplace behind it. Stand in front of your chair!', line: 'The armchair is in front of the fireplace.', repeat: 'It’s in front of the fireplace.' },
+
+  /* CONTROLLED PRACTICE 2 — ★ Design My Room (listen) + Rising River */
+  {
+    id: 'mc4-design-listen', kind: 'design-room', mode: 'listen', bg: bgTowerEmpty, who: 'wim', title: 'Wim’s Room: listen and put it there!',
+    teacher: 'Guided (signature, listen mode): Wim says where each thing goes. The student taps the thing, then the place. Only the right PLACE works — there are always other spots!',
+    things: [ROOM.bed, ROOM.armchair, ROOM.lamp, ROOM.box, ROOM.chair, ROOM.desk, ROOM.bookcase],
+    spots: TOWER_SPOTS,
+    rounds: [
+      { line: 'Put the bed between the windows.', thing: 0, spot: 0 },
+      { line: 'Put the armchair in front of the fireplace.', thing: 1, spot: 5 },
+      { line: 'Put the lamp next to the door.', thing: 2, spot: 2 },
+      { line: 'Put the box in front of the door.', thing: 3, spot: 1 },
+      { line: 'Put the chair next to the fireplace.', thing: 4, spot: 4 },
+    ],
+    doneLine: 'What a lovely room! Thank you!',
+  },
+  {
+    id: 'mc4-river', kind: 'rising-river', bg: bgCastleGarden, who: 'wim', title: 'Build the bridge to the tower!',
+    teacher: 'Together: every right answer lays a plank. A wrong answer — the water rises a little. Get the friends across!',
+    friends: [stickerWim, stickerCatcat, LEP('pip-wave')],
+    rounds: [
+      { ask: 'Where is the bed?', choices: ['It’s between the lamps.', 'It’s in front of the lamps.'], answer: 0, img: towerPage(1) },
+      { ask: 'Where is the armchair?', choices: ['It’s between the fireplace.', 'It’s in front of the fireplace.'], answer: 1, img: towerPage(1) },
+      { ask: 'Where is the crown?', choices: ['It’s in front of the door.', 'It’s between the door.'], answer: 0, img: towerPage(2) },
+      { ask: 'Where is Cat-cat?', choices: ['She’s between the bed and the lamp.', 'She’s on the lamp.'], answer: 0, img: towerPage(2) },
+    ],
+    doneLine: 'Everyone is across! Up to the tower!',
+  },
+
+  /* PRESENT 3 — Whose…? It’s Wim’s. */
+  { id: 'mc4-meet-whose', kind: 'meet', focus: ['Whose'], bg: towerPage(2), who: 'wim', cardSide: 'right', teacher: 'Present: Whose…? = who has it? Point to the crown, then to Wim: It’s Wim’s! (name + s).', line: 'Whose crown is it? It’s my crown. It’s Wim’s!', repeat: 'It’s Wim’s crown.' },
+  { id: 'mc4-echo-whose', kind: 'echo', bg: towerPage(3), who: 'catcat', textSide: 'top', teacher: 'Guided: ask and answer like Cat-cat — point to the ball, then to Cat-cat.', word: 'Whose ball is it? It’s Cat-cat’s ball!' },
+
+  /* CONTROLLED PRACTICE 3 — Lost Property Box + dominoes */
+  {
+    id: 'mc4-lost-property', kind: 'lost-property', bg: bgTowerEmpty, who: 'wim', title: 'Cat-cat’s Lost Property Box', boxImg: `${STK}/box.png`,
+    teacher: 'Guided: a thing pops out of the box and Wim asks “Whose … is it?”. The student taps the owner, then says the sentence: It’s Wim’s crown.',
+    owners: [
+      { name: 'Wim', who: 'wim', img: stickerWim },
+      { name: 'Cat-cat', who: 'catcat', img: stickerCatcat },
+      { name: 'Pip', who: 'pip', img: LEP('pip-wave') },
+      { name: 'Mia', who: 'mia', img: LEP('mia-wave') },
+    ],
+    items: [
+      { label: 'crown', img: CROWN, owner: 0 },
+      { label: 'ball', img: LEP('ball'), owner: 1 },
+      { label: 'book', img: LEP('book'), owner: 3 },
+      { label: 'hat', img: LEP('hat'), owner: 2 },
+      { label: 'teddy', img: LEP('teddy'), owner: 3 },
+    ],
+    doneLine: 'Everything is back! Thank you!',
+  },
+  {
+    id: 'mc4-dominoes', kind: 'dominoes', bg: bgTowerEmpty, who: 'catcat', title: 'Whose Dominoes!',
+    teacher: 'Reading: look at the picture at the end of the chain — find the domino that says whose it is, read it aloud and play it.',
+    start: { img: CROWN, label: 'crown' },
+    steps: [
+      { text: 'It’s Wim’s crown.', img: LEP('ball'), label: 'ball' },
+      { text: 'It’s Cat-cat’s ball.', img: LEP('book'), label: 'book' },
+      { text: 'It’s Mia’s book.', img: LEP('hat'), label: 'hat' },
+      { text: 'It’s Pip’s hat.', img: LEP('teddy'), label: 'teddy' },
+      { text: 'It’s Mia’s teddy.', img: stickerWim, label: 'Wim' },
+    ],
+    doneLine: 'The chain is finished! Everyone has their things!',
+  },
+  {
+    id: 'mc4-move-break', kind: 'prea1', teacher: 'Brain break: between, in front of — move!',
+    scene: {
+      id: 'mc4-move-break', kind: 'tpr-actions', mode: 'break', bg: bgTowerEmpty, who: 'pip', teacher: 'Move with Pip!',
+      rounds: [
+        { line: 'Put your hands in front of your face!', emoji: '\u{1F648}' },
+        { line: 'Put your nose between your hands!', emoji: '\u{1F44F}' },
+        { line: 'Jump in front of your chair!', emoji: '\u{1FA91}' },
+      ],
+    },
+  },
+
+  /* READING — Wim’s Tower Room */
+  {
+    id: 'mc4-reader', kind: 'reader', bg: towerPage(1), title: 'Wim’s Tower Room', doneLine: 'Wim has his crown, and Cat-cat has her ball!',
+    teacher: 'Reading: listen while the words light up, then the student reads Wim’s and Cat-cat’s lines. Tap any word to hear it.',
+    pages: TOWER_STORY,
+  },
+  {
+    id: 'mc4-read-choose', kind: 'grammar-gap', bg: towerPage(3), title: 'Read and Choose',
+    teacher: 'Reading: read the sentence from the story and choose the missing word. Then read it all.',
+    rounds: [
+      { before: 'There', after: 'two lamps.', choices: ['are', 'is'], answer: 'are', img: towerPage(1) },
+      { before: 'There is a big', after: '.', choices: ['bed', 'beds'], answer: 'bed', img: towerPage(1) },
+      { before: 'It’s', after: 'of the door!', choices: ['in front', 'between'], answer: 'in front', img: towerPage(2) },
+      { before: '', after: 'ball is it?', choices: ['Whose', 'Where'], answer: 'Whose', img: towerPage(3) },
+      { before: 'It’s', after: 'ball!', choices: ['Cat-cat’s', 'Cat-cat'], answer: 'Cat-cat’s', img: towerPage(3) },
+    ],
+  },
+
+  /* PHONICS — oa / ow */
+  {
+    id: 'mc4-sound-oa', kind: 'sound-model', bg: bgTowerEmpty, who: 'wim', letter: 'OA', phoneme: '/oʊ/', sound: 'oa', soundSide: 'center',
+    teacher: 'Present: o and a together say one sound — oa, like “oh!” Coat, goat, boat.',
+    anchors: [
+      { word: 'coat', emoji: '\u{1F9E5}', img: LEP('coat-blue') },
+      { word: 'goat', emoji: '\u{1F410}', img: LEP('goat') },
+      { word: 'boat', emoji: '\u{26F5}', img: `${STK}/boat.png` },
+    ],
+  },
+  {
+    id: 'mc4-sound-ow', kind: 'sound-model', bg: bgTowerEmpty, who: 'catcat', letter: 'OW', phoneme: '/aʊ/', sound: 'ow', soundSide: 'center',
+    teacher: 'Present: o and w together — ow, like when it hurts: “Ow!” Cow, crown, tower.',
+    anchors: [
+      { word: 'cow', emoji: '\u{1F404}', img: LEP('cow') },
+      { word: 'crown', emoji: '\u{1F451}', img: CROWN },
+      { word: 'tower', emoji: '\u{1F3F0}', img: `${STK}/tower.png` },
+    ],
+  },
+  {
+    id: 'mc4-sound-sort', kind: 'prea1', teacher: 'Guided: Sound Sort! Listen to each word — oa or ow? Drag it to its basket and say it.',
+    scene: {
+      id: 'mc4-sound-sort', kind: 'sound-sort', bg: bgTowerEmpty, teacher: 'Listen! oa or ow?',
+      targets: [{ letter: 'oa', phoneme: '/oʊ/', who: 'pip' }, { letter: 'ow', phoneme: '/aʊ/', who: 'mia' }],
+      items: [
+        { word: 'coat', img: LEP('coat-blue'), emoji: '\u{1F9E5}', letter: 'oa' },
+        { word: 'cow', img: LEP('cow'), emoji: '\u{1F404}', letter: 'ow' },
+        { word: 'goat', img: LEP('goat'), emoji: '\u{1F410}', letter: 'oa' },
+        { word: 'crown', img: CROWN, emoji: '\u{1F451}', letter: 'ow' },
+        { word: 'boat', img: `${STK}/boat.png`, emoji: '\u{26F5}', letter: 'oa' },
+        { word: 'tower', img: `${STK}/tower.png`, emoji: '\u{1F3F0}', letter: 'ow' },
+      ],
+    },
+  },
+  {
+    id: 'mc4-balloon', kind: 'save-balloon', bg: bgCastleExterior, who: 'catcat', balloonImg: stickerCatcat, title: 'Save the Balloon! Spell it!',
+    teacher: 'Reading: listen to the sentence, look at the picture — tap the letters to spell the word. Every right letter lifts Cat-cat over the castle!',
+    rounds: [
+      { word: 'coat', img: LEP('coat-blue'), sentence: 'There is a blue coat.' },
+      { word: 'goat', img: LEP('goat'), sentence: 'There is a goat on the boat.' },
+      { word: 'cow', img: LEP('cow'), sentence: 'There is a cow in front of the tower.' },
+      { word: 'crown', img: CROWN, sentence: 'It’s Wim’s crown.' },
+    ],
+    doneLine: 'Cat-cat is over the castle! Super spelling!',
+  },
+  { id: 'mc4-twister', kind: 'tongue-twister', look: 'town', speeds: 2, bg: bgTowerEmpty, who: 'wim', focus: 'oa', teacher: 'Reading: quick reading! Listen to Wim, then say it slow, then faster.', line: 'A goat in a coat on a boat by the tower.' },
+
+  /* FREE PRACTICE — ★ Design My Room (free) + Guess my room */
+  {
+    id: 'mc4-design-free', kind: 'design-room', mode: 'free', pick: 5, bg: bgTowerEmpty, who: 'wim', title: 'Design YOUR tower room!',
+    teacher: 'Free (signature, evidence): the student places 5 things anywhere (tap a placed thing to take it back). Then they describe the room aloud in 4 sentences — There is… / There are two… / The … is between… — and tap “I said it!”.',
+    things: [ROOM.bed, ROOM.lamp, ROOM.lamp, ROOM.armchair, ROOM.desk, ROOM.bookcase, ROOM.chair, ROOM.box],
+    spots: TOWER_SPOTS,
+    doneLine: 'What a super room! You are a castle designer!',
+  },
+  {
+    id: 'mc4-guess-room', kind: 'join-stage', bg: bgTowerEmpty, teacher: 'Free: Guess my room! The student thinks of their own room; Wim (the teacher) guesses. Then swap: the student asks “Is there a… in your room?”.', cast: ['wim'],
+    turns: [
+      { who: 'wim', line: 'Is there a bed in your room?' },
+      { who: 'student', line: 'Yes, there is.' },
+      { who: 'wim', line: 'Are there two windows?' },
+      { who: 'student', line: 'No, there aren’t. There is one window.' },
+      { who: 'student', line: 'Is there a crown in your room, Wim?' },
+      { who: 'wim', line: 'Yes, there is! It’s on my head!' },
+    ],
+  },
+
+  /* PRODUCE — my real room */
+  {
+    id: 'mc4-my-room', kind: 'join-stage', bg: towerPage(3), teacher: 'Produce (evidence): the student describes their OWN room in 4 sentences, then says whose two things are (It’s my sister’s…).', cast: ['catcat'],
+    turns: [
+      { who: 'catcat', line: 'Tell me about your room!' },
+      { who: 'student', line: 'There is a … in my room.' },
+      { who: 'student', line: 'There are two …' },
+      { who: 'student', line: 'The … is between the … and the …' },
+      { who: 'student', line: 'The … is in front of the …' },
+      { who: 'catcat', line: 'Whose … is it?' },
+      { who: 'student', line: 'It’s my … ’s …' },
+    ],
+  },
+
+  /* CHECK AND GOODBYE */
+  { id: 'mc4-i-can', kind: 'meet', focus: ['room'], bg: towerPage(3), who: 'wim', cardSide: 'right', teacher: 'Check: the student designed the room with 5 things and said 4 sentences about their own room — then the passport stamp!', line: 'I can describe my room and say whose things are!', repeat: 'There are two lamps. It’s Wim’s crown.' },
+  {
+    id: 'mc4-sticker', kind: 'prea1', teacher: 'Sticker time! The student opens the pack and puts the crown sticker in their Sticker Book.',
+    scene: {
+      id: 'mc4-sticker', kind: 'sticker-reward', bg: towerPage(3), who: 'pip', teacher: 'Sticker time!',
+      line: 'Super room designer! Here is your sticker.',
+      sticker: { img: CROWN, label: 'Castle designer' },
+    },
+  },
+  {
+    id: 'mc4-pet-pal', kind: 'pet-pal', bg: bgCastleGarden, who: 'pip', title: 'Pet Pal: Biscuit visits the castle',
+    teacher: 'Routine (1 minute): Biscuit the puppy says what he wants. The student listens, taps it and says it. It goes on his shelf and he grows.',
+    pet: { name: 'Biscuit', img: LEP('dog') },
+    earlier: [{ label: 'star', img: LEP('star-gold') }, { label: 'apple', img: LEP('apple') }, { label: 'ball', img: LEP('ball-red') }, { label: 'key', img: LEP('key') }],
+    rounds: [{ line: 'Whose bed is it? It’s my bed! Can I have a little bed, please?', choices: [{ label: 'bed', img: `${STK}/bed.png` }, { label: 'crown', img: CROWN }, { label: 'lamp', img: `${STK}/lamp.png` }], answer: 0, say: 'A bed! It’s Biscuit’s bed!' }],
+    doneLine: 'Biscuit is so happy! See you next time!',
+  },
+  {
+    id: 'mc4-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
+    scene: {
+      id: 'mc4-home-mission', kind: 'home-mission', bg: towerPage(1), who: 'pip',
+      teacher: 'Home Mission: read the steps with the student.',
+      line: 'Your home mission!',
+      parentNote: 'Today your child learned to describe a room ("There is a bed. There are two lamps. The bed is between the lamps.") and to say whose things are ("Whose book is it? It\'s Mia\'s."). Ask them to show you their room in English.',
+      steps: [
+        { emoji: '\u{1F6CF}\u{FE0F}', say: 'Show your room: say 4 sentences.' },
+        { emoji: '\u{2753}', say: 'Pick up a family thing: Whose … is it?' },
+        { emoji: '\u{1F3E0}', say: 'Answer: It’s Mum’s … / It’s Dad’s …' },
+      ],
+    },
+  },
+
+  /* EXTRA TIME */
+  {
+    id: 'mc4-quick', kind: 'prea1', teacher: 'Extra time: quick fire! Say the whole sentence before the ring runs out.',
+    scene: {
+      id: 'mc4-quick', kind: 'rapid-recall', bg: bgTowerEmpty, who: 'pip', seconds: 6,
+      teacher: 'Say it before the ring runs out!',
+      cards: [
+        { img: `${STK}/lamp.png`, word: 'two lamps', say: 'There are two lamps.' },
+        { img: `${STK}/bed.png`, word: 'a bed', say: 'There is a bed.' },
+        { img: CROWN, word: 'Wim', say: 'It’s Wim’s crown.' },
+        { img: LEP('ball'), word: 'Cat-cat', say: 'It’s Cat-cat’s ball.' },
+        { img: `${STK}/armchair.png`, word: 'armchair', say: 'There is an armchair.' },
+        { img: LEP('book'), word: 'Mia', say: 'It’s Mia’s book.' },
+      ],
+    },
+  },
+  {
+    id: 'mc4-goodbye-song', kind: 'song', bg: towerPage(3), title: '\u{1F3B5} Goodbye Song \u{1F3B5}', teacher: 'It’s time to go — wave goodbye and sing along together!',
+    durationSeconds: 20, bigWord: 'Goodbye', songUrl: '/welcome-town/audio/goodbye-song.mp3?v=3', lineDurationsMs: [3600, 4120, 4020, 8322],
+    lyrics: [
+      { who: 'marigold', text: '\u{1F44B} Goodbye, goodbye, my new friend' },
+      { who: 'pip', text: '\u{1F44B} Goodbye, goodbye, see you again' },
+      { who: 'marigold', text: '\u{1F3EB} Welcome Town School is happy today' },
+      { who: 'pip', text: '\u{1F496} Byeeee, friends! See you soon!' },
+    ],
+  },
+  { id: 'mc4-finale', kind: 'finale', bg: towerPage(3), who: 'wim', line: 'My tower is tidy and everyone has their things! Next time: the hidden treasure room! \u{1F4D6}' },
+];
