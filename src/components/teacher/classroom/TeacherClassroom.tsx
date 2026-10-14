@@ -1677,6 +1677,7 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
         isTrial={isTrial}
         trialCefr={trialCefr}
         lessonTitle={activeLessonTitle}
+        academyLessonId={(displayedSlides as { type?: string; deckLessonRef?: { lessonId?: string } }[] | undefined)?.find((sl) => sl?.type === 'academy_deck')?.deckLessonRef?.lessonId}
         classSummary={{
           // Time with the student: from Start Lesson to now (owner, 2026-10-07) — a late student's
           // 25-minute lesson reads 25 min, not the booked length. Falls back to the class clock.

@@ -54,3 +54,6 @@ Fail a plan with student talk or speaking minutes below the level's targets in `
 
 ## Recall and spacing check (owner rule 2026-10-14)
 Fail a plan or lesson with no Remember? list taken from `recallPlan`, no progress line (builds on / unlocks), or a Daily 10 that ignores the spacing calendar (`docs/academy-recall-spacing-progression.md`).
+
+## Checklist check (owner rule 2026-10-14)
+Fail a lesson whose success criteria are not 1-5 observable "I can ..." lines the teacher can mark in `LessonChecklistPanel`, or a Season whose final lesson has no unit assessment (six strands + Release rubric) feeding the lesson report (`docs/academy-lesson-checklist.md`).
