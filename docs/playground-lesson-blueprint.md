@@ -308,6 +308,19 @@ activity — just to memorise. Make it universal."*
   gate). A1/A2 lessons whose opener was already an authored review game
   (Magic Castle `mc2-review-rooms`, `mc3-warmup-match`) are listed there.
 
+## 3f+. Words → matching → a game (hard rule, all Playground lessons — owner, 2026-10-13)
+
+"Each time after illustrating vocabulary, there should be a matching activity … For the pre-A, listen and match. For
+A1, read and match … after the matching, another activity or another game to remember the words fully."
+
+- Right after every page that shows new words (`listen-repeat-cards`, `meet`, `vocab-spot`…) comes a **matching page**:
+  - **Pre-A1: Listen and Match** (`listen-match`) — only sounds, no written words: coloured speakers play "A bat!",
+    the child taps a speaker, then its picture. The matched speaker stays on the picture.
+  - **A1: Read and Match** (`picture-match`) — the written words go under their pictures.
+- Then **one more game with the same words** (any game of the lesson's slot) before the lesson moves on.
+- `listen-match` is a routine kind (`ROUTINE_KINDS`), so it may come in every lesson.
+- First lesson built this way: Pre-A1 U1L5 (story words → Listen and Match → Wind Catch → the film).
+
 ## 3g. A1 lessons — themed worlds, the plan first, sentences and questions (all A1 lessons)
 
 Owner (2026-10-12): A1 is ten themed worlds (Welcome Town, Jungle, Space, Food Festival, Monster Town, Ocean, Hero City,

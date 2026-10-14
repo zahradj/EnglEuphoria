@@ -389,7 +389,7 @@ const UNIT1_EXTRACTORS = {
   'sticker-reward': (s) => [[s.who, 'You earned a sticker!'], [s.who, s.line]],
   'home-mission': (s) => [[s.who, s.line], [s.who, 'Mission accepted!']],
   // Mirrors LiftFlapScene.tsx's liftFlapLines().
-  'lift-flap': (s) => [[s.who, s.question], [s.who, s.notYet], ...(s.spots ?? []).flatMap((p) => [[s.who, p.ask], [s.who, p.reveal]])],
+  'lift-flap': (s) => [[s.who, s.question], [s.who, s.notYet], ...(s.guided ? [[s.who, 'What is it?']] : []), ...(s.spots ?? []).flatMap((p) => [[s.who, p.ask], [s.who, p.reveal], ...(s.guided ? [[s.who, `${s.question} ${p.ask}`], [s.who, p.say ?? p.reveal.replace(/^(No|Yes)!\s*/i, '')]] : [])])],
   // Mirrors DrawPathScene.tsx's drawPathLines().
   'draw-path': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), [s.who, `Start at ${({ pip: 'Pip', mia: 'Mia', bella: 'Bella', willow: 'Willow', leo: 'Leo' })[s.walker] ?? s.walker}!`]],
   // Mirror SimonTouchScene.tsx's simonTouchLines() / BodyStackScene.tsx's bodyStackLines().
@@ -547,6 +547,7 @@ const UNIT1_EXTRACTORS = {
   'cafe-order': (s) => [...(s.rounds ?? []).flatMap((r) => [[r.customer, r.line], [r.customer, r.reply], [r.customer, `Oh no! ${r.line}`]]), ...(s.menu ?? []).map((m) => [s.who, m.word]), [s.who, s.doneLine]],
   'feed-pip': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...(s.foods ?? []).map((f) => [s.who, `No, thank you! That's ${f.phrase}.`]), [s.who, s.doneLine]],
   'night-sounds': (s) => (s.animals ?? []).flatMap((a) => [[s.who, `${a.sound} ${a.sound} Who's there?`], [s.who, `Yes! It's a ${a.word}! ${a.sound}`], [s.who, `That's a ${a.word}. ${a.sound}`]]),
+  'listen-match': (s) => [[s.who, s.prompt], [s.who, s.doneLine], [s.who, 'Listen again!'], ...(s.items ?? []).map((it) => [it.who ?? s.who, it.say])],
   'wind-catch': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...(s.things ?? []).map((t) => [s.who, `That's the ${t.label}! Listen again!`]), [s.who, s.doneLine]],
   'duck-feed': (s) => [
     ...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]),
@@ -842,6 +843,9 @@ const WT_EXTRACTORS = {
     ...(s.rounds ?? []).flatMap((r) => [[s.who, r.find], [s.who, r.say]])],
   'whisper-tube': (s) => [[s.who, s.doneLine], [s.who, 'Listen again! Which word is wrong?'],
     ...(s.rounds ?? []).flatMap((r) => [[r.from, r.said], [r.to, r.heard], [r.to, r.said]])],
+  'answer-mirror': (s) => [[s.who, 'How are you?'], [s.who, 'Look at the mirror! How are you?'], [s.who, s.doneLine], ...(s.rounds ?? []).flatMap((r) => (r.choices ?? []).map((a) => [r.who, s.answers?.[a]?.line]).filter((x) => x[1]))],
+  'feelings-camera': (s) => [[s.who, s.doneLine], ...(s.friends ?? []).flatMap((f) => [[s.who, `How is ${f.name}?`], [s.who, `${f.pronoun} is ${f.feeling}.`]])],
+  'feelings-runner': (s) => [[s.who, s.doneLine], ...(s.rounds ?? []).flatMap((r) => [[s.who, r.ask], ...(r.choices ?? []).map((c) => [s.who, c.sentence])])],
   'glider': (s) => [[s.who, s.doneLine], [s.who, 'Puff! Try again!'], ...(s.rounds ?? []).flatMap((r) => [[s.who, r.ask], ['teacher', r.say ?? r.ask]])],
   'tower-pull': (s) => [[s.who, s.doneLine], [s.who, 'Pick a block! Answer and pull it out!'], [s.who, 'Careful! Try again!'],
     ...(s.rounds ?? []).flatMap((r) => [[s.who, r.ask], ['teacher', r.choices[r.answer]]])],

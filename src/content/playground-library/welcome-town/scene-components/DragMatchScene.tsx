@@ -193,7 +193,7 @@ export function DragMatchScene({ scene, onNext, onWin, onLose }: { scene: Extrac
         <div
           key={`placed-${i}`}
           className="pointer-events-none absolute z-20 -translate-x-1/2 -translate-y-1/2 grid place-items-center rounded-2xl px-7 py-5 shadow-xl ring-4 ring-white"
-          style={{ left: item.targetLeft, top: item.targetTop, background: item.color, animation: 'lep1-pop 0.4s ease-out' }}
+          style={{ left: item.targetLeft, top: item.labelTop ?? item.targetTop, background: item.color, animation: 'lep1-pop 0.4s ease-out' }}
         >
           <span className="text-xl font-black uppercase tracking-wide text-white sm:text-2xl">{item.label}</span>
         </div>
