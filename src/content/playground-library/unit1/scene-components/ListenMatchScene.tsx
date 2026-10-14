@@ -107,7 +107,12 @@ export function ListenMatchScene({ scene, onWin, onNext, sync }: { scene: Listen
       initial={reduce ? false : { scale: 0, y: 80 }} animate={{ scale: 1, y: 0 }} transition={{ type: 'spring', stiffness: 260, damping: 14 }}
       style={{ fontSize: 'min(3.4vh, 2.4vw)' }}>🔊</motion.span>
   );
-  const pic = (it: ListenMatch['items'][number], cls: string) => <img src={it.img} alt="" draggable={false} className={cls} style={{ filter: STICKER_FILTER }} />;
+  /** Stickers sit in the frame with their outline; a full scene picture (a story or word-page background) fills the
+   *  frame instead, so it is never shown tiny with empty bands around it. */
+  const isScenePic = (src: string) => /\/scenes\/|\/bg-/.test(src);
+  const pic = (it: ListenMatch['items'][number], cls: string) => isScenePic(it.img)
+    ? <img src={it.img} alt="" draggable={false} className="h-full w-full rounded-[1.4vh] object-cover" />
+    : <img src={it.img} alt="" draggable={false} className={cls} style={{ filter: STICKER_FILTER }} />;
 
   /* ---- the four designs ---- */
   const cols = n > 4 ? 3 : 2;
@@ -142,7 +147,7 @@ export function ListenMatchScene({ scene, onWin, onNext, sync }: { scene: Listen
               </span>
               <span className="block h-[3vh] w-[0.3vh] bg-slate-700/70" />
               {/* the picture hangs on the string */}
-              <span className={`flex h-[min(13vh,9vw)] w-[min(13vh,9vw)] items-center justify-center rounded-[2vh] border-[0.5vh] bg-white/85 shadow-xl ${ok ? 'border-emerald-400' : 'border-white'}`}>
+              <span className={`flex ${isScenePic(it.img) ? 'h-[min(15vh,10.5vw)] w-[min(24vh,17vw)] p-[0.4vh]' : 'h-[min(13vh,9vw)] w-[min(13vh,9vw)]'} items-center justify-center rounded-[2vh] border-[0.5vh] bg-white/85 shadow-xl ${ok ? 'border-emerald-400' : 'border-white'}`}>
                 {pic(it, 'h-[84%] w-[84%] object-contain')}
               </span>
               {ok && badge(i, 'bottom-[-1vh] right-[-1vh]')}

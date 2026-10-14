@@ -332,6 +332,10 @@ A1, read and match … after the matching, another activity or another game to r
 - **A1: the Read and Match comes right after the opening words** (owner 2026-10-13, applied 2026-10-14 to A1 Units
   1-4 Lessons 1-5 and Unit 9 Lesson 4): words lessons match words or sentences to stickers, story lessons match story
   sentences to the story pictures. Checked in `readMatchVariety.test.ts` (a matching page within the first 15 pages).
+- **Pre-A1: every lesson that teaches words on a listen-repeat-cards page has a Listen and Match** (checked in
+  `listenMatchVariety.test.ts`). A full scene picture fills its frame in every design, so it is never shown tiny.
+  Still waiting for pictures a child can tell apart by sound alone: U2L5 (sea story), U3L5 (in/on/under places),
+  U4L1 (body-part close-ups), U6L5 (house questions), U9L5 (shoe colours).
 - First lesson built this way: Pre-A1 U1L5 (story words → Listen and Match → Wind Catch → the film).
 
 ## 3g. A1 lessons — themed worlds, the plan first, sentences and questions (all A1 lessons)

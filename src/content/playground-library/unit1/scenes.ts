@@ -5984,6 +5984,18 @@ export const LESSON_U3L2_SCENES: Scene[] = [
     ],
   },
   {
+    // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
+    id: 'u3l2-listen-match', kind: 'listen-match', look: 'balloons', bg: bgU3L2Cake, who: 'leo',
+    teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
+    prompt: 'Listen and match!', doneLine: 'Great listening!',
+    items: [
+      { label: 'one teddy', img: itemTeddy, say: "It's a teddy bear!", who: 'leo' },
+      { label: 'many teddies', img: itemTeddies, say: 'They are teddy bears!', who: 'leo' },
+      { label: 'one train', img: itemTrain, say: "It's a train!", who: 'willow' },
+      { label: 'many trains', img: itemTrains, say: 'They are trains!', who: 'willow' },
+    ],
+  },
+  {
     id: 'u3l2-plural-sort', kind: 'plural-sort', bg: bgU3L1Room, who: 'pip',
     teacher: 'One or many? Drag each picture: one finger (It is) or two hands (They are).',
     items: [
@@ -8332,6 +8344,17 @@ export const LESSON_U4L4_SCENES: Scene[] = [
     ],
   },
   {
+    // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
+    id: 'u4l4-listen-match', kind: 'listen-match', look: 'cards', bg: bgU4L4Garden, who: 'pip',
+    teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
+    prompt: 'Listen and match!', doneLine: 'Great listening!',
+    items: [
+      { label: 'two eyes', img: bgU4L4PipEyes, say: 'I have two eyes!', who: 'pip' },
+      { label: 'ten fingers', img: bgU4L4PipFingers, say: 'I have ten fingers!', who: 'pip' },
+      { label: 'big feet', img: bgU4L4BoFeet, say: 'Bo has big feet!', who: 'pip' },
+    ],
+  },
+  {
     id: 'u4l4-move-say', kind: 'tpr-actions', bg: bgU4L4Garden, who: 'pip',
     teacher: 'Say it with Pip, then show it with your body.',
     rounds: [
@@ -9382,6 +9405,18 @@ export const LESSON_U5L3_SCENES: Scene[] = [
     ],
   },
   {
+    // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
+    id: 'u5l3-listen-match', kind: 'listen-match', look: 'cards', bg: bgU5L3Living, who: 'pip',
+    teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
+    prompt: 'Listen and match!', doneLine: 'Great listening!',
+    items: [
+      { label: 'grandma', img: bgU5L3Grandma, say: 'Grandma!', who: 'pip' },
+      { label: 'grandpa', img: bgU5L3Grandpa, say: 'Grandpa!', who: 'pip' },
+      { label: 'mom', img: `${A}/scenes/bg-u5l1-mom-solo.png`, say: 'Mom!', who: 'pip' },
+      { label: 'dad', img: `${A}/scenes/bg-u5l1-dad-solo.png`, say: 'Dad!', who: 'pip' },
+    ],
+  },
+  {
     id: 'u5l3-move-say', kind: 'tpr-actions', bg: bgU5L3Living, who: 'pip',
     teacher: 'Stand up! Say it with Pip, then do it.',
     rounds: [
@@ -9594,6 +9629,18 @@ export const LESSON_U5L4_SCENES: Scene[] = [
       { who: 'pip', sentence: 'This is my grandpa.', img: bgU5L3Grandpa, imgLabel: 'This is my grandpa.' },
       { who: 'pip', sentence: 'This is my mom.', img: `${A}/scenes/bg-u5l1-mom-solo.png`, imgLabel: 'This is my mom.' },
       { who: 'pip', sentence: 'This is my sister.', img: bgU5L2Sister, imgLabel: 'This is my sister.' },
+    ],
+  },
+  {
+    // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
+    id: 'u5l4-listen-match', kind: 'listen-match', look: 'balloons', bg: bgU5L4Picnic, who: 'pip',
+    teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
+    prompt: 'Listen and match!', doneLine: 'Great listening!',
+    items: [
+      { label: 'family', img: bgU5L4Picnic, say: 'This is my family.', who: 'pip' },
+      { label: 'grandpa', img: bgU5L3Grandpa, say: 'This is my grandpa.', who: 'pip' },
+      { label: 'mom', img: `${A}/scenes/bg-u5l1-mom-solo.png`, say: 'This is my mom.', who: 'pip' },
+      { label: 'sister', img: bgU5L2Sister, say: 'This is my sister.', who: 'pip' },
     ],
   },
   {
@@ -9883,6 +9930,18 @@ export const LESSON_U5L5_SCENES: Scene[] = [
     ],
   },
   {
+    // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
+    id: 'u5l5-listen-match', kind: 'listen-match', look: 'doors', bg: bgU5L5Gate, who: 'pip',
+    teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
+    prompt: 'Listen and match!', doneLine: 'Great listening!',
+    items: [
+      { label: 'ball', img: bgU5L5BallA, say: 'We play ball.', who: 'pip' },
+      { label: 'ducks', img: bgU5L5DucksC, say: 'We feed the ducks.', who: 'pip' },
+      { label: 'ice cream', img: bgU5L5IceCream, say: 'We eat ice cream.', who: 'pip' },
+      { label: 'book', img: bgU5L5BookB, say: 'We read a book.', who: 'pip' },
+    ],
+  },
+  {
     id: 'u5l5-move-say', kind: 'tpr-actions', bg: bgU5L5Gate, who: 'pip',
     teacher: 'Stand up! Do it with Pip and say it.',
     rounds: [
@@ -10128,6 +10187,18 @@ export const LESSON_U5L6_SCENES: Scene[] = [
       { who: 'pip', sentence: 'Who is this? This is my brother.', img: famBrother, imgLabel: 'This is my brother.' },
       { who: 'pip', sentence: 'Who is this? This is the baby.', img: famBaby, imgLabel: 'This is the baby.' },
       { who: 'pip', sentence: 'Who is this? This is me, Pip!', img: famPip, imgLabel: 'This is me!' },
+    ],
+  },
+  {
+    // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
+    id: 'u5l6-listen-match', kind: 'listen-match', look: 'lilypads', bg: bgU5L6Stage, who: 'pip',
+    teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
+    prompt: 'Listen and match!', doneLine: 'Great listening!',
+    items: [
+      { label: 'grandma', img: famGrandma, say: 'This is my grandma.', who: 'pip' },
+      { label: 'brother', img: famBrother, say: 'This is my brother.', who: 'pip' },
+      { label: 'baby', img: famBaby, say: 'This is the baby.', who: 'pip' },
+      { label: 'me', img: famPip, say: 'This is me, Pip!', who: 'pip' },
     ],
   },
   {
@@ -10880,6 +10951,18 @@ export const LESSON_U6L3_SCENES: Scene[] = [
       { who: 'pip', sentence: 'The table is in the kitchen.', img: itemTable, imgLabel: 'In the kitchen!' },
       { who: 'pip', sentence: 'The sofa is in the living room.', img: itemSofa, imgLabel: 'In the living room!' },
       { who: 'pip', sentence: 'The chair is in the kitchen.', img: itemChair, imgLabel: 'In the kitchen!' },
+    ],
+  },
+  {
+    // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
+    id: 'u6l3-listen-match', kind: 'listen-match', look: 'balloons', bg: bgU6L3House, who: 'pip',
+    teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
+    prompt: 'Listen and match!', doneLine: 'Great listening!',
+    items: [
+      { label: 'bed', img: itemBed, say: 'A bed!', who: 'pip' },
+      { label: 'table', img: itemTable, say: 'A table!', who: 'pip' },
+      { label: 'sofa', img: itemSofa, say: 'A sofa!', who: 'pip' },
+      { label: 'chair', img: itemChair, say: 'A chair!', who: 'pip' },
     ],
   },
   {
@@ -11679,6 +11762,17 @@ export const LESSON_U5L1_SCENES: Scene[] = [
   {
     id: 'u5l1-vocab-family', kind: 'listen-repeat-cards', bg: bgU5L1FamilyHome, teacher: 'Listen, then repeat!', bare: true, textSide: 'top',
     cards: [{ who: 'pip', sentence: 'Family! This is my family!', img: bgU5L1FamilyHome, imgLabel: 'Family' }],
+  },
+  {
+    // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
+    id: 'u5l1-listen-match', kind: 'listen-match', look: 'doors', bg: bgU5L1FamilyHome, who: 'pip',
+    teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
+    prompt: 'Listen and match!', doneLine: 'Great listening!',
+    items: [
+      { label: 'mom', img: bgU5L1MomSolo, say: 'Mom!', who: 'pip' },
+      { label: 'dad', img: bgU5L1DadSolo, say: 'Dad!', who: 'pip' },
+      { label: 'family', img: bgU5L1FamilyHome, say: 'Family! This is my family!', who: 'pip' },
+    ],
   },
   {
     id: 'u5l1-song', kind: 'song', bg: bgU5L1FamilyHome, title: '\u{1F3B5} My Family Song \u{1F3B5}', teacher: 'Sing and point! Point to Mom on "mom", Dad on "dad", and give yourself a hug on "me".',
@@ -16575,6 +16669,17 @@ export const LESSON_U10L3_SCENES: Scene[] = [
     ],
   },
   {
+    // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
+    id: 'u10l3-listen-match', kind: 'listen-match', look: 'balloons', bg: bgU10L3CampEmpty, who: 'pip',
+    teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
+    prompt: 'Listen and match!', doneLine: 'Great listening!',
+    items: [
+      { label: 'clap', img: pose('pip', 'clap'), say: 'Clap! I clap my hands!', who: 'pip' },
+      { label: 'play', img: pose('mia', 'play'), say: 'Play! I play with my ball!', who: 'mia' },
+      { label: 'sleep', img: pose('leo', 'sleep'), say: 'Sleep! Shh, I sleep.', who: 'leo' },
+    ],
+  },
+  {
     id: 'u10l3-move', kind: 'tpr-actions', bg: bgU10L3CampEmpty, who: 'pip',
     teacher: 'Stand up! Do each action with Pip and say the word.',
     rounds: [
@@ -16771,6 +16876,17 @@ export const LESSON_U10L4_SCENES: Scene[] = [
       { who: 'leo', sentence: 'Can you jump? Yes, I can!', img: gifJump, imgLabel: 'Yes, I can!' },
       { who: 'mia', sentence: 'Can you swim? Yes, I can!', img: gifSwim, imgLabel: 'Yes, I can!' },
       { who: 'pip', sentence: "Can you fly? No, I can't!", img: itemBird, imgLabel: "No, I can't!" },
+    ],
+  },
+  {
+    // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
+    id: 'u10l4-listen-match', kind: 'listen-match', look: 'doors', bg: bgU10L4CircusEmpty, who: 'leo',
+    teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
+    prompt: 'Listen and match!', doneLine: 'Great listening!',
+    items: [
+      { label: 'jump', img: gifJump, say: 'Jump! I can jump!', who: 'leo' },
+      { label: 'swim', img: gifSwim, say: 'Swim! I can swim!', who: 'mia' },
+      { label: 'run', img: gifRun, say: 'Run! I can run!', who: 'pip' },
     ],
   },
   {
