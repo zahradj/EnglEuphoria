@@ -1,5 +1,6 @@
 export const lessonsPageTranslations = {
   'pk.eyebrow': 'الدروس',
+  'pk.tab': 'الدروس',
   'pk.title': 'دروس عائلتك',
   'pk.subtitle': 'اختر طفلًا ثم باقة. تذهب الدروس مباشرة إلى هذا الطفل.',
   'pk.secure': 'دفع إلكتروني آمن',

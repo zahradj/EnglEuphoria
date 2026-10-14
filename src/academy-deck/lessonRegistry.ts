@@ -74,9 +74,35 @@ export const ACADEMY_DECK_LESSONS: AcademyDeckLesson[] = [
     homework: null,
     parts: 8,
   },
+  {
+    id: 'free-time-club-1',
+    season: 3,
+    lesson: 1,
+    title: 'Club Fair · Cold Open',
+    blurb: 'Free Time Club: watch the Club Fair story, meet the hobby words, learn the rule I like… and I love…, and tell Theo which club you would join.',
+    level: 'A1',
+    minutes: 60,
+    cover: '/academy-art/bg/club-lobby.webp',
+    gradient: 'linear-gradient(135deg,#2e1065 0%,#7c3aed 50%,#14b8a6 100%)',
+    homework: null,
+    parts: 8,
+  },
+  {
+    id: 'free-time-club-2',
+    season: 3,
+    lesson: 2,
+    title: 'Hobby Wall · Word Lab',
+    blurb: 'Free Time Club: 14 hobby words with pictures, the rule play / go / like + -ing, many matching games, and your own hobby card for Ava.',
+    level: 'A1',
+    minutes: 60,
+    cover: '/academy-art/bg/club-stage.webp',
+    gradient: 'linear-gradient(135deg,#1e1b4b 0%,#6d28d9 50%,#14b8a6 100%)',
+    homework: null,
+    parts: 8,
+  },
 ];
 
 /** Blueprint id of each deck lesson (src/curriculum/academy). The library numbers lessons in the order they were built (Sign Me Up = Lesson 1, Fake or Real? = Lesson 2); the blueprint episodes are E2 and E3. */
-export const ACADEMY_DECK_BLUEPRINT_IDS: Record<string, string> = { 'pa1-s01-e1': 'PA1-S01-E1', 'sign-me-up': 'A1-S01-E2', 'sign-me-up-2': 'A1-S01-E2', 'fake-or-real': 'A1-S01-E3' };
+export const ACADEMY_DECK_BLUEPRINT_IDS: Record<string, string> = { 'pa1-s01-e1': 'PA1-S01-E1', 'sign-me-up': 'A1-S01-E2', 'sign-me-up-2': 'A1-S01-E2', 'fake-or-real': 'A1-S01-E3', 'free-time-club-1': 'A1-S03-E1', 'free-time-club-2': 'A1-S03-E2' };
 
 export const getAcademyDeckLesson = (id: string | undefined) => ACADEMY_DECK_LESSONS.find((l) => l.id === id);

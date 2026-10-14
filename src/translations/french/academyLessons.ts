@@ -17,4 +17,12 @@ export const academyLessonsTranslations = {
   'al.plannedLong': "Les leçons de cette saison sont en cours de planification.",
   'al.slots': "Leçons prévues",
   'al.episodeShort': "É{{n}}",
+  'al.goal': "Objectif",
+  'al.newLang': "Nouveau langage",
+  'al.items': "{{n}} éléments",
+  'al.noNew': "Aucun : seulement ce que tu sais déjà",
+  'al.pattern': "Structure",
+  'al.mission': "Mission",
+  'al.release': "Production",
+  'al.clue': "Indice débloqué par",
 };

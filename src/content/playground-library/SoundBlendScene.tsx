@@ -5,6 +5,7 @@ import { Burst, GAME_FONT, GameStyles, HudBar, LocoIcon, ProgressPill, PromptChi
 import { playLetterPhonic, safeSpeak } from './unit1/audio';
 import * as sfx from './unit1/sfx';
 import { type BlendLook, BlendWorldScene } from './BlendWorlds';
+import { BlendReadCard } from './BlendReadCard';
 
 /**
  * `sound-blend` ("Blend It! — the Sound Train") — the universal phonics slide (lesson blueprint slot 14),
@@ -28,6 +29,9 @@ export interface SoundBlendRound {
   sounds?: string[];
   img?: string;
   emoji?: string;
+  /** Blend & Read (A1): a sentence from the lesson's story that contains `word`; after the picture is found the word
+   *  flies into it and the child reads the whole sentence (BlendReadCard). */
+  sentence?: string;
 }
 
 export interface SoundBlendSceneData {
@@ -54,9 +58,11 @@ interface BlendState {
   solved: boolean;
   finished: boolean;
   totalWrong: number;
+  /** Blend & Read: the sentence card is open. */
+  reading: boolean;
 }
 
-const INITIAL: BlendState = { round: 0, tapped: [], blended: false, wrong: [], solved: false, finished: false, totalWrong: 0 };
+const INITIAL: BlendState = { round: 0, tapped: [], blended: false, wrong: [], solved: false, finished: false, totalWrong: 0, reading: false };
 const CAR_COLORS = ['#f97316', '#8b5cf6', '#06b6d4', '#22c55e', '#ec4899'];
 const sleep = (ms: number) => new Promise<void>((r) => window.setTimeout(r, ms));
 
@@ -145,6 +151,7 @@ function TrainBlendScene({ scene, onNext, onWin, onResult, sync }: {
       await safeSpeak(current.word, 'teacher');
       await sleep(900);
       if (!alive.current) return;
+      if (current.sentence) { setState((s) => ({ ...s, reading: true })); return; }
       if (round + 1 < rounds.length) setState((s) => ({ ...INITIAL, round: s.round + 1, totalWrong: s.totalWrong }));
       else setState((s) => ({ ...s, finished: true }));
     } else {
@@ -263,6 +270,10 @@ function TrainBlendScene({ scene, onNext, onWin, onResult, sync }: {
       </div>
 
       {bursts.map((b) => <Burst key={b.id} x={b.x} y={b.y} />)}
+      {state.reading && current.sentence && !finished && (
+        <BlendReadCard word={current.word} sentence={current.sentence} disabled={isMirror}
+          onDone={() => setState((s) => (s.round + 1 < rounds.length ? { ...INITIAL, round: s.round + 1, totalWrong: s.totalWrong } : { ...s, reading: false, finished: true }))} />
+      )}
     </div>
   );
 }

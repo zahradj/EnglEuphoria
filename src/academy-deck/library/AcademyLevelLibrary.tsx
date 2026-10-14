@@ -89,13 +89,40 @@ export function AcademyLevelLibrary({ lessons, renderLesson, gridClassName = 'gr
                     ? <div className={`${gridClassName} p-3`}>{s.lessons.map((l) => <div key={l.id}>{renderLesson(l)}</div>)}</div>
                     : <p className="p-4 text-sm opacity-70">{s.planned ? t('al.plannedLong', 'The lessons of this season are being planned.') : t('al.soonLong', 'The lessons of this season are being built.')}</p>}
                   {planned.length > 0 && (
-                    <ul className="flex flex-wrap gap-2 px-3 pb-3" aria-label={t('al.slots', 'Planned lessons')}>
-                      {planned.map((x) => (
-                        <li key={x.episode} className="rounded-full px-3 py-1 text-xs font-semibold opacity-70 ring-1 ring-current/20" data-slot="planned">
-                          {t('al.episodeShort', 'E{{n}}', { n: x.episode }).replace('{{n}}', String(x.episode))} · {x.name}
-                        </li>
-                      ))}
-                    </ul>
+                    showSteps
+                      ? (
+                        <ul className="space-y-2 px-3 pb-3" aria-label={t('al.slots', 'Planned lessons')}>
+                          {planned.map((x) => (
+                            <li key={x.episode} data-slot="planned">
+                              <details className="rounded-xl ring-1 ring-current/15">
+                                <summary className="cursor-pointer px-3 py-2 text-sm font-semibold">
+                                  {t('al.episodeShort', 'E{{n}}', { n: x.episode }).replace('{{n}}', String(x.episode))} · {x.name}
+                                  {x.plan && <span className="ms-2 text-xs font-normal opacity-70">{x.plan.objective}</span>}
+                                </summary>
+                                {x.plan && (
+                                  <dl className="grid gap-x-3 gap-y-1 px-3 pb-3 text-xs sm:grid-cols-[8rem_1fr]">
+                                    <dt className="font-bold opacity-70">{t('al.goal', 'Goal')}</dt><dd>{x.plan.objective}</dd>
+                                    <dt className="font-bold opacity-70">{t('al.newLang', 'New language')}</dt><dd>{x.plan.newItems > 0 ? `${t('al.items', '{{n}} items', { n: x.plan.newItems }).replace('{{n}}', String(x.plan.newItems))} · ${x.plan.focus}` : t('al.noNew', 'None: only what you already know')}</dd>
+                                    {x.plan.structures.length > 0 && (<><dt className="font-bold opacity-70">{t('al.pattern', 'Pattern')}</dt><dd>{x.plan.structures.join(', ')}</dd></>)}
+                                    <dt className="font-bold opacity-70">{t('al.mission', 'Mission')}</dt><dd>{x.plan.mission}</dd>
+                                    <dt className="font-bold opacity-70">{t('al.release', 'Release')}</dt><dd>{x.plan.release}</dd>
+                                    <dt className="font-bold opacity-70">{t('al.clue', 'Clue unlocked by')}</dt><dd>{x.plan.clue}</dd>
+                                  </dl>
+                                )}
+                              </details>
+                            </li>
+                          ))}
+                        </ul>
+                      )
+                      : (
+                        <ul className="flex flex-wrap gap-2 px-3 pb-3" aria-label={t('al.slots', 'Planned lessons')}>
+                          {planned.map((x) => (
+                            <li key={x.episode} className="rounded-full px-3 py-1 text-xs font-semibold opacity-70 ring-1 ring-current/20" data-slot="planned">
+                              {t('al.episodeShort', 'E{{n}}', { n: x.episode }).replace('{{n}}', String(x.episode))} · {x.name}
+                            </li>
+                          ))}
+                        </ul>
+                      )
                   )}
                 </>
               )}

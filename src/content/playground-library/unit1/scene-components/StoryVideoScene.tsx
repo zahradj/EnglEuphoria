@@ -59,8 +59,11 @@ function Fx({ fx }: { fx?: Page['fx'] }) {
   return null;
 }
 
+/** A story picture used as an answer (wide scene art, not a sticker): shown in a wide card, filling it. */
+const isScenePic = (o: Option) => !!o.img && o.img.includes('/scenes/');
+
 function OptionFace({ o }: { o: Option }) {
-  if (o.img) return <img src={o.img} alt={o.label} className="h-full w-full object-contain" draggable={false} />;
+  if (o.img) return <img src={o.img} alt={o.label} className={`h-full w-full ${isScenePic(o) ? 'rounded-2xl object-cover' : 'object-contain'}`} draggable={false} />;
   if (o.shape) return <ShapeIcon shape={o.shape} fill={o.colorHex ?? '#FEFBDD'} />;
   if (o.colorHex) return <span className="block h-full w-full rounded-full border-4 border-white shadow-inner" style={{ backgroundColor: o.colorHex }} />;
   return <span className="text-2xl font-black">{o.label}</span>;
@@ -178,7 +181,8 @@ export function StoryVideoScene({ scene, onWin, onLose, onNext, sync }: { scene:
   const onTime = () => {
     const v = videoRef.current;
     if (!v || cp || done) return;
-    const t = v.currentTime;
+    // look a little ahead (timeupdate fires ~4×/s) so a question stops the film BEFORE the next scene shows
+    const t = v.currentTime + (scene.checkpoints.some((c, i) => c.afterPage === page && !solved.includes(i)) ? 0.45 : 0);
     let idx = 0;
     for (let i = 0; i < starts.length; i++) if (t >= starts[i]) idx = i;
     if (idx <= page) return;
@@ -295,15 +299,16 @@ export function StoryVideoScene({ scene, onWin, onLose, onNext, sync }: { scene:
         <div className="absolute inset-0 z-40 flex flex-col items-center justify-center gap-5 bg-black/45 px-4">
           <button onClick={() => cueSpeak(cp.question, cp.who)} className="flex items-center gap-3 rounded-full bg-white px-5 py-2 shadow-2xl active:scale-95">
             {CAST[cp.who] && <img src={CAST[cp.who].img} alt="" className="h-12 w-12 rounded-full object-cover" />}
-            <span className="text-3xl">🔊❓</span>
+            <span className="text-2xl font-black text-orange-700">🔊 {cp.question}</span>
           </button>
+          {cp.img && <img src={cp.img} alt="" draggable={false} className="h-[min(28vh,30vw)] w-auto rounded-3xl border-[6px] border-white object-contain shadow-2xl" />}
           <div className="flex flex-wrap justify-center gap-5">
             {cp.options.map((o) => (
               <button
                 key={o.label}
                 onClick={() => answer(o)}
                 aria-label={o.label}
-                className={`grid h-32 w-32 place-items-center rounded-3xl border-8 bg-white p-3 shadow-2xl transition active:scale-95 sm:h-36 sm:w-36 ${wrong === o.label ? 'animate-[lep1-shake_0.4s_ease-in-out] border-red-400' : 'border-white'}`}
+                className={`grid place-items-center rounded-3xl border-8 bg-white shadow-2xl transition active:scale-95 ${isScenePic(o) ? 'h-32 w-52 p-1 sm:h-36 sm:w-60' : 'h-32 w-32 p-3 sm:h-36 sm:w-36'} ${wrong === o.label ? 'animate-[lep1-shake_0.4s_ease-in-out] border-red-400' : 'border-white'}`}
               >
                 <OptionFace o={o} />
               </button>

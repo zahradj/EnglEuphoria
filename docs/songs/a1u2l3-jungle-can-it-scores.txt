@@ -1,0 +1,13 @@
+
+=== docs/songs/a1u2l3-jungle-can-it-take1.mp3  length=47.3s  score=0.72  missing=24  extra=9
+heard: can an elephant swim yes it can can an elephant fly no it can't can a snake run fast no it can't can a snake run fast no it can't tenet crocodile swim yes it can tenet crocodile fly no it can elephants making crocodile ask them ask them with a smile
+line starts (s): [None, None, np.float64(16.5), np.float64(19.4), np.float64(25.4), np.float64(27.8), np.float64(34.6), np.float64(36.7), np.float64(39.4), np.float64(40.5)]
+
+=== docs/songs/a1u2l3-jungle-can-it-take2.mp3  length=47.3s  score=0.56  missing=28  extra=34
+heard: elvents they get grok they go i'll ask them i'll ask them with a smile can an elephant swim yes they can can an elephant fly no they can can it stay country yes it can can it stay front that's no it can't can it park it out soon yes it can can it park it out wide no it can't now let's take it crocodile ask them ask them miss what
+line starts (s): [None, np.float64(10.9), np.float64(16.9), np.float64(19.2), np.float64(27.0), np.float64(27.9), np.float64(34.2), np.float64(36.5), np.float64(39.6), np.float64(40.9)]
+
+=== docs/songs/a1u2l3-jungle-can-it-take3.mp3  length=47.3s  score=0.93  missing=5  extra=5
+heard: elephants snake and crocodile ask them ask them with a smile can an elephant swim yes it can can an elephant fly no it can't can a snake run a tree yes it can can a snake run fast no it can't can a crocodile swim yes it can can a crocodile fly no it can't elephants they can crocodile ask them ask them with a smile
+line starts (s): [np.float64(9.3), np.float64(10.5), np.float64(16.8), np.float64(19.0), np.float64(25.1), np.float64(27.5), np.float64(33.6), np.float64(36.2), np.float64(39.6), np.float64(40.9)]
+lineDurationsMs: [10460, 6300, 2200, 6100, 2460, 6120, 2560, 3360, 1340, 6355]

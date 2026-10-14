@@ -73,6 +73,11 @@ Variety Rule → if nothing fits, do the Research Step.
    in order and eyeball-check rules 1-2. This takes under a minute and is
    the single check that was skipped when Lesson 3 first shipped.
 
+5. **Pre-A1 extra practice: no game twice in a unit** (owner 2026-10-12). An extra-practice game (`EXTRA_PRACTICE` in
+   `unit1/extraPractice.ts`) is used once per unit and never repeats a game the unit's lessons already have; choose it
+   for the lesson's purpose (L1-L3 listening, L4 sentence frame, L5 Home Hunt, L6 Word Board review). Enforced by
+   `unit1/pictureMaze.test.ts`.
+
 ## Required Research Step
 
 Run this whenever either is true: (a) the target purpose has only 1-2
@@ -171,6 +176,10 @@ Run `checkSlotGames(slot, scenes)` before calling a lesson done.
 | Peekaboo Toys: toys peek out of the box / onto the bed / from under the chair; tap the one in the place you hear | ESL hide-and-seek "where is the toy?", Lingokids prepositions | `peek-pop` (L5) |
 | Toy Grabber: steer a claw to the toy the voice names ("Get the blue ball!"), press the button; never slips | claw-machine kids apps (Yateland), fairground toy grabbers | `claw-machine` (L6) |
 | Ring Toss: tap the prize to throw a spinning ring; rings stay on the pegs (also for sounds: "the P word") | fairground ring toss, Wordwall one-tap review | `ring-toss` (L6) |
+| Word Board: snakes & ladders, roll 1-3, say the picture you land on; ladders up, a fun slide down (review routine) | Abridge Academy one-to-one snakes & ladders | `word-board` (extra practice) |
+| Home Hunt: mission card ("Find something red!", "Act like a horse!"), run, show the camera, say it; timer never fails | Twinkl online ESL scavenger hunt, TPR | `home-hunt` (extra practice) |
+| Picture Maze: Canva-painted hedge maze (`/lep1/maze/hedge.png`, `path.png`), 3 pictures at the ends; hear "Find the cow!", tap the glowing step next to the walker (or arrow keys) to walk there; wrong picture = gentle redirect | printable picture mazes (Twinkl, eslvault, Tools for Educators maze maker) | `picture-maze` (extra practice) |
+| Flip & Say: face-down cards, pick any, it flips, say the sentence; all cards gold = win | Wordwall flip tiles / speaking cards (JALT) | `flip-say` (extra practice) |
 
 **Every game must pass the `game-animation` skill's juice audit** (living world, springs, squash & stretch, bursts, gentle wrong, celebration) — a correct but flat game fails.
 
@@ -228,6 +237,8 @@ do (`real`). Wrong yes: it tries and comically flops with a "?", then shows the 
 Data: `animals` {word, img}, `rounds` {animal, action, can, real, ask, answer}. Teaches can / can't as cause and effect.
 
 **Pre-A1 children cannot read.** Never make reading the only way into a task: speak every prompt, give picture answers, keep printed text as a small caption for the adult.
+
+**Extended list (2026-10-13):** `docs/a1-activity-library.md` §11 (classic games redesigned: Sticker Bingo, Tic-Tac-Toe Duel, Save the Balloon, Hot Coconut, Go Fish!, Sentence Dominoes, Treasure Islands…) and §12 (Wordwall / Blooket / Gimkit / Kahoot / Baamboozle mechanics made child-safe). Check them before inventing a new kind.
 
 ## Playground hub — A1/A2 Welcome Town (`.../welcome-town/scenes.ts`, `.../welcome-town-a2/scenes.ts`)
 

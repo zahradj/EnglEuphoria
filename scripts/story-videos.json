@@ -71,17 +71,12 @@
   "out": "public/lep1/video/clips/u1l5-leo",
   "films": [
    {
-    "film": "public/lep1/video/leo-story-u1l5-a",
+    "film": "public/lep1/video/leo-story-u1l5",
     "beats": [
      "01-play",
      "02-wind",
      "03-sad",
-     "04-friends"
-    ]
-   },
-   {
-    "film": "public/lep1/video/leo-story-u1l5-b",
-    "beats": [
+     "04-friends",
      "05-hat",
      "06-mat",
      "07-glow",

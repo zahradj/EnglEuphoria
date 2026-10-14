@@ -85,6 +85,16 @@ Whenever the owner says "create a lesson" / "proceed with creating the lesson", 
 5. **Design like an education UX/UI designer and game designer** (skill `.claude/skills/academy-game-ui`, research `docs/research/academy-game-ui.md`): every page and activity is built like a video game or story game — illustrated, animated, with motion where it helps — and must pass its "dullness test". Motion rules still hold: UI motion, sparkles, card flips, expression swaps and approved silent background loops are fine; never zoom/pan/loop-scale a story picture, never browser voices.
 6. Fill the hour (the blueprint's run of show), keep the cast to the blueprint's cast, and keep all other Academy rules (hub separation, voice, comfort).
 
+## Modelling and the rule — every Academy lesson (hard rule — owner, 2026-10-13)
+
+- "The modelling in the lesson is very important. Stating the rule is extremely important." Every Academy lesson: (1) the teacher **models** new language and the Mission task first (I do → we do → you do) before the student tries; (2) the **rule is stated plainly** (≤ 3 lines, an example each, read aloud, student repeats) BEFORE the practice games, even in E1 and for chunks; (3) the student **restates it** at the end (teach-back). A lesson plan or deck without a model step and a stated rule is not done. Checked in `academy-quality-gate` and `academy-session-builder`.
+
+## Full scene plates, stories as plates, no repetition (hard rule — owner, 2026-10-14)
+
+- **Every Academy page is a full-bleed scene plate** (a painted place with the cast in it or around it), not a panel on a flat colour; panels are small and glass. **Every story is told as a sequence of full scene plates** (3-5 per story, Canva, 16:9, cast references, ~35 % purple, `story` slide kind, subtitles + recorded voices, cross-fade only, never zoom/pan), written as a scenario in `docs/scenarios/` first.
+- "I don't want the same thing repeated; be creative and original; make the student happy, having fun, interacting, never bored." Every lesson has its own place, look, story frame, **signature game** and fun hook, registered in `src/academy-deck/lessonProfiles.ts`; `lessonVariety.test.ts` (deploy gate) fails an un-grandfathered lesson that reuses the previous lesson's main scene, the Season 1 opening/games, three same games in a row, or has fewer than five different games. Design decisions (context, environment, layout, rewards) follow `docs/academy-experience-design.md` ("be the Academy expert and decide what is best for the student").
+- Adapt ideas from the Playground **by reading and re-implementing in Academy files only** (hub separation); nothing childish (no mascots, pets, stickers, hearts).
+
 ## Languages — every page is translated (hard rule — owner, 2026-10-09)
 
 - **Every new or edited page a student, parent or visitor sees is built with `t()` and translated into all six languages** (en, es, fr, ar, tr, it) — never hard-coded English. Put keys in `src/translations/<lang>/<area>.ts` (see `authUi.ts` for the pattern: `au.*` keys, English text as the `t()` default) and wire them into each language's `index.ts`; the parity test (`src/translations/authUi.test.ts`, copy it for a new area) fails if a language is missing a key or a `{{placeholder}}`.
@@ -96,3 +106,12 @@ Whenever the owner says "create a lesson" / "proceed with creating the lesson", 
 ## Clothes and characters (hard rule — owner, 2026-10-11)
 
 - **Don't dress male characters in girls' clothes.** Pip and Leo are boys: never a dress or a skirt on them — not in a lesson game, a homework level, a picture, a mock-up or a song line. Dress-up games give a boy no dress piece (it isn't on his rail); a dress is worn only by a girl (Mia, Bella, Willow) or shown as a thing (laundry, a shop). Lines to the child stay neutral (no "twirl in your dress"). `src/content/homework-quests/noDressForBoys.test.ts` fails otherwise.
+
+## Words → matching → a game (hard rule — owner, 2026-10-13)
+
+- **Every time new words are shown, a matching activity follows**: Pre-A1 = **listen and match** (`listen-match`, sounds only, no written words); A1 = **read and match** (`picture-match`). Then **another game** with the same words, so they stick. Blueprint §3f+.
+
+## A1 lessons — length and story GIFs (hard rule — owner, 2026-10-13)
+
+- **Every A1 lesson has 30-49 pages** ("A1 lessons can be from 30 to 49 pages"): real practice, not padding — and still no game twice in a unit. `a1LessonLength.test.ts` (deploy gate) fails otherwise.
+- **No story videos in A1** ("just use GIF videos"): stories use Canva GIFs of the approved story pictures, made only after the written scenario, a preview GIF and the owner's OK.

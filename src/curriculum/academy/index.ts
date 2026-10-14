@@ -102,3 +102,4 @@ export * from './cast';
 export { validateItems, expectedCounts, coverageByLevel, normalizeItem } from './validateItems';
 export { STRUCTURES, STRUCTURE_FLOOR } from './structureLevels';
 export { validateRoadmap, summarize, ITEM_BUDGET_BAND, CUMULATIVE_ITEM_TARGET, MAX_ITEMS_PER_SEASON } from './validateRoadmap';
+export * from './a1s02';

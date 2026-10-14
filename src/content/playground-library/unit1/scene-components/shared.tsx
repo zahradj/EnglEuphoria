@@ -18,14 +18,18 @@ export const BALLOONS_SPRITE: Partial<Record<CharKey, string>> = {
 /** Rainbow spectrum used across every "count 1-10" activity (numbers tiles, balloon pop) — one fixed hue per digit, red through purple. */
 export const RAINBOW_10 = ['#ef4444', '#f97316', '#f59e0b', '#eab308', '#84cc16', '#22c55e', '#10b981', '#06b6d4', '#3b82f6', '#a855f7'];
 
-export const NUMBER_WORDS = ['ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX', 'SEVEN', 'EIGHT', 'NINE', 'TEN'];
+export const NUMBER_WORDS = ['ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX', 'SEVEN', 'EIGHT', 'NINE', 'TEN', 'ELEVEN', 'TWELVE', 'THIRTEEN', 'FOURTEEN', 'FIFTEEN', 'SIXTEEN', 'SEVENTEEN', 'EIGHTEEN', 'NINETEEN', 'TWENTY'];
 
 /** Natural-cased number word for TTS — a bare digit string like "5" sent to the
  *  voice pipeline is read inconsistently; the actual word reads clearly every time. */
 export function numberSpeech(n: number): string {
-  const w = NUMBER_WORDS[n - 1];
+  const w = NUMBER_WORDS[n - 1] ?? TENS_WORDS[n];
   return w ? w.charAt(0) + w.slice(1).toLowerCase() : String(n);
 }
+/** Counting in tens (A1 Unit 3 Space Mission): 30 … 100. */
+export const TENS_WORDS: Record<number, string> = { 30: 'THIRTY', 40: 'FORTY', 50: 'FIFTY', 60: 'SIXTY', 70: 'SEVENTY', 80: 'EIGHTY', 90: 'NINETY', 100: 'ONE HUNDRED' };
+/** The capital number word shown under a big number (1-20 and the tens). */
+export const numberWordCaps = (n: number): string => NUMBER_WORDS[n - 1] ?? TENS_WORDS[n] ?? String(n);
 
 /* ---------- Shared chrome ---------- */
 

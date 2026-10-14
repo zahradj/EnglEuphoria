@@ -13,24 +13,26 @@ const slides = PA1_S01_E1.slides;
 const ep = PA1_S01.episodes[0];
 const at = (id: string) => slides.findIndex((s) => s.id === id);
 
+// Slow-beginner estimate (listen, repeat, hesitate, try again): deliberately generous per slide, so a lesson that passes is not padded on paper.
 const minutes = (s: Slide): number => {
   switch (s.kind) {
     case 'title': return 0.2;
     case 'brief': return 0.8;
     case 'badge': return 1;
     case 'dial': return 0.4;
-    case 'teach': return s.pages.length * 0.4;
-    case 'model': return s.lines.length * 0.22;
-    case 'convo': return 0.4 + s.steps.length * 0.35;
-    case 'spell': return 0.6 + 0.12 * s.target.length;
-    case 'memory': return 0.5 + s.pairs.length * 0.3;
-    case 'match': return 0.4 + s.pairs.length * (s.mode === 'listen' ? 0.25 : 0.2);
-    case 'build': return 1;
-    case 'hearpick': return 0.4 + s.rounds.length * 0.4;
-    case 'blend': return 0.4 + s.rounds.length * 0.5;
-    case 'reader': return 0.4 + s.lines.length * 0.5;
-    case 'fade': return 0.3 + s.lines.length * 0.5;
-    case 'say': return s.open ? 1.6 : 2;
+    case 'teach': return s.pages.length * 0.6;
+    case 'model': return s.lines.length * 0.35;
+    case 'whosaid': return 0.6 + s.items.length * 0.4 + (s.replay?.length ?? 0) * 0.3;
+    case 'convo': return 0.6 + s.steps.length * 0.5;
+    case 'spell': return 0.8 + 0.2 * s.target.length;
+    case 'memory': return 0.8 + s.pairs.length * 0.4;
+    case 'match': return 0.6 + s.pairs.length * 0.35;
+    case 'build': return s.rounds.length * 1.2;
+    case 'hearpick': return 0.5 + s.rounds.length * 0.5;
+    case 'blend': return 0.5 + s.rounds.length * 0.7;
+    case 'reader': return 0.6 + s.lines.length * 0.7;
+    case 'fade': return 0.6 + s.lines.length * 0.6;
+    case 'say': return 2;
     case 'wrap': return 3.2;
     default: return 1;
   }
@@ -63,13 +65,15 @@ describe('Pre-A1 S01 E1: Season spec and run of show', () => {
     expect(PA1_S01_E1.partGoals).toHaveLength(8);
   });
 
-  it('TIME: every Pre-A1 part fills its time (60-115 %) and the lesson fits the hour, with no allowance', () => {
+  it('TIME: with the slow-beginner estimate every part fills its time (70-125 %) and the lesson totals 57-64 minutes (an hour, with no allowance)', () => {
     const per = PRE_A1_PARTS.map((_, i) => slides.filter((s) => s.part === i).reduce((a, s) => a + minutes(s), 0));
     per.forEach((m, i) => {
-      expect(m, `${PRE_A1_PARTS[i].name}: ${m.toFixed(1)} min`).toBeGreaterThanOrEqual(PRE_A1_PARTS[i].minutes * 0.6);
-      expect(m, `${PRE_A1_PARTS[i].name}: ${m.toFixed(1)} min`).toBeLessThanOrEqual(PRE_A1_PARTS[i].minutes * 1.15);
+      expect(m, `${PRE_A1_PARTS[i].name}: ${m.toFixed(1)} min`).toBeGreaterThanOrEqual(PRE_A1_PARTS[i].minutes * 0.7);
+      expect(m, `${PRE_A1_PARTS[i].name}: ${m.toFixed(1)} min`).toBeLessThanOrEqual(PRE_A1_PARTS[i].minutes * 1.25);
     });
-    expect(per.reduce((a, b) => a + b, 0)).toBeLessThanOrEqual(60);
+    const total = per.reduce((a, b) => a + b, 0);
+    expect(total, `total ${total.toFixed(1)} min`).toBeGreaterThanOrEqual(57);
+    expect(total, `total ${total.toFixed(1)} min`).toBeLessThanOrEqual(64.5);
   });
 
   it('RULE: after every vocabulary introduction come two different memorising games; no two neighbouring slides share a game', () => {

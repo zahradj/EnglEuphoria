@@ -8,6 +8,9 @@ import { useToast } from "@/hooks/use-toast";
 import { useStudentLevel } from "@/hooks/useStudentLevel";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
+import { FamilyPacksStrip } from "@/components/pricing/FamilyPacksStrip";
+import { euroLabel } from "@/lib/packCatalog";
 
 interface PaymentPlansGridProps {
   /** Optional override; defaults to current student's hub. */
@@ -88,6 +91,7 @@ export const PaymentPlansGrid: React.FC<PaymentPlansGridProps> = ({ hubOverride,
   const hub: AudienceLevel = hubOverride ?? (studentLevel as AudienceLevel) ?? "academy";
   const theme = HUB_THEME[hub];
   const { toast } = useToast();
+  const { t } = useTranslation();
   const [packs, setPacks] = useState<CreditPack[]>([]);
   const [loading, setLoading] = useState(true);
   const [buyingId, setBuyingId] = useState<string | null>(null);
@@ -206,11 +210,11 @@ export const PaymentPlansGrid: React.FC<PaymentPlansGridProps> = ({ hubOverride,
 
                 <div className="mt-3 flex items-baseline justify-center gap-2">
                   <span className={cn("text-3xl font-extrabold", theme.priceText)}>
-                    €{pack.price_eur.toFixed(0)}
+                    {euroLabel(pack.price_eur)}
                   </span>
                   {hasDiscount && (
                     <span className="line-through text-base text-muted-foreground">
-                      €{pack.original_price_eur.toFixed(0)}
+                      {euroLabel(pack.original_price_eur)}
                     </span>
                   )}
                 </div>
@@ -219,7 +223,7 @@ export const PaymentPlansGrid: React.FC<PaymentPlansGridProps> = ({ hubOverride,
                 </p>
                 {hasDiscount && (
                   <p className="text-xs font-semibold text-emerald-600 mt-1">
-                    Save €{pack.savings_eur.toFixed(0)}
+                    Save {euroLabel(pack.savings_eur)}
                   </p>
                 )}
               </CardHeader>
@@ -270,6 +274,15 @@ export const PaymentPlansGrid: React.FC<PaymentPlansGridProps> = ({ hubOverride,
           );
         })}
       </div>
+
+      {/* Family packs are bought by a parent from the family dashboard; a student can switch the account to a family one. */}
+      <FamilyPacksStrip
+        hub={hub}
+        cta={{
+          label: t("lp.pricing.family.ctaSwitch", "Switch to a family account"),
+          onClick: () => window.dispatchEvent(new CustomEvent("student-dashboard:open-tab", { detail: { tab: "profile" } })),
+        }}
+      />
     </div>
   );
 };
