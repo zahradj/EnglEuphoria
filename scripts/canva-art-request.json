@@ -1,17 +1,7 @@
 [
   {
-    "url": "https://export-download.canva.com/ndgiM/DAHYA1ndgiM/-1/0/0042-790900737391462946.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261014%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261014T044330Z&X-Amz-Expires=75045&X-Amz-Signature=82123646ae5170fc6c8fff234349764abbb81631dec1db166ed9579aa1e58d6b&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2015%20Oct%202026%2001%3A34%3A15%20GMT",
-    "out": "public/lep1/scenes/bg-a1u5-story-6-wide.png",
-    "sticker": false
-  },
-  {
-    "url": "https://export-download.canva.com/ndgiM/DAHYA1ndgiM/-1/0/0043-790900737391462946.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261014%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261014T115139Z&X-Amz-Expires=47189&X-Amz-Signature=65d7e20c483a948a9e7b7a4d4c298164d11ea8b227b8a4bd66310dde74322c1d&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2015%20Oct%202026%2000%3A58%3A08%20GMT",
-    "out": "public/lep1/scenes/bg-a1u5-story-7-wide.png",
-    "sticker": false
-  },
-  {
-    "url": "https://export-download.canva.com/ndgiM/DAHYA1ndgiM/-1/0/0044-790900737391462946.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261014%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261014T131546Z&X-Amz-Expires=41554&X-Amz-Signature=90c62d01ed1b7d02cb6e0680c9a317dcabd40fe53db0e170fdf20eba234cd28a&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2015%20Oct%202026%2000%3A48%3A20%20GMT",
-    "out": "public/lep1/scenes/bg-a1u5-stage-wide.png",
+    "url": "https://export-download.canva.com/ndgiM/DAHYA1ndgiM/-1/0/0045-4661744614812742868.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261014%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261014T084231Z&X-Amz-Expires=61440&X-Amz-Signature=aa3456dd0d6eab0299b516d80b53bf7453573d4c64684a9d49cd67ccad5aa4af&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2015%20Oct%202026%2001%3A46%3A31%20GMT",
+    "out": "public/lep1/scenes/bg-a1u5-show-wide.png",
     "sticker": false
   }
 ]
