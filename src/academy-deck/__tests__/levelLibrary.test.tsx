@@ -49,8 +49,8 @@ describe('Academy library by level', () => {
     const g = groupAcademyLibrary(ACADEMY_DECK_LESSONS, true);
     expect(g.map((x) => x.id)).toEqual(['pre-a1', 'a1', 'a1-upper', 'a2', 'b1', 'b2', 'c1']);
     expect(g[0].seasons.map((s) => s.title)).toEqual(['Hello, letters', 'First sounds', 'Numbers and age', 'My things', 'People and places']);
-    // Season P1 has its first lesson (Cold Open); P2 and P3 are still planned
-    expect(g[0].seasons.map((s) => s.planned)).toEqual([false, true, true, true, true]);
+    // P1 and P2 each have their first lesson (Cold Open); P3-P5 are still planned
+    expect(g[0].seasons.map((s) => s.planned)).toEqual([false, false, true, true, true]);
     expect(g[0].seasons.every((s) => s.no === null)).toBe(true);
     expect(g[0].seasons[0].lessons.map((l) => l.id)).toEqual(['pa1-s01-e1']);
     expect(g[0].seasons[0].slots.map((x) => [x.episode, x.built])).toEqual([[1, true], [2, false], [3, false], [4, false], [5, false], [6, false], [7, false], [8, false]]);

@@ -35,6 +35,11 @@ export const LESSON_PROFILES: LessonProfile[] = [
   { id: 'sign-me-up', setting: 'the club sign-up desk', mainPlate: 'club-signup-desk', look: 'club lobby', frame: 'sign up', signature: 'padlock', funHook: 'padlock code', evidence: 'sign-up card', homeMission: 'homework quest', grandfathered: 'Season 1 lesson built before the variety gate.' },
   { id: 'sign-me-up-2', setting: 'the club sign-up desk', mainPlate: 'club-signup-desk', look: 'club lobby', frame: 'sign up (three lanes)', signature: 'padlock', funHook: 'lanes', evidence: 'sign-up card', homeMission: 'voice note', grandfathered: 'Season 1 sample built before the variety gate.' },
   { id: 'fake-or-real', setting: 'the detective wall', mainPlate: 'detective-wall', look: 'detective wall', frame: 'detective', signature: 'factcheck', funHook: 'fact-check a profile', evidence: 'written profile check', homeMission: 'write three sentences', grandfathered: 'Season 1 lesson built before the variety gate.' },
+  {
+    id: 'pa1-s02-e1', setting: 'a phone whose message is missing its letters', mainPlate: 'phone-profile-closeup', look: 'night-time phone close-up, purple glow (bus-stop plate pending owner approval)', frame: 'restore the message: each sound brings a letter back',
+    signature: 'blend', funHook: 'slide the sounds together to restore the message letter by letter; loot sound tiles and craft words',
+    evidence: 'the student blends in, it, pin and tin and says “This is a pin.” to Theo (Take 2), then teaches the rule back', homeMission: 'send Vee one voice note: This is a pin. This is a tin.',
+  },
   { id: 'pa1-s01-e1', setting: 'the Name Wall', mainPlate: 'name-wall', look: 'name wall', frame: 'letters', signature: 'reader', funHook: 'read names', evidence: 'says hello and name', homeMission: 'say hello to one person', grandfathered: 'Pre-A1 lesson built before the variety gate.' },
 ];
 

@@ -88,6 +88,11 @@ Games used (none three times in a row): listen-and-click, sound-blend slider, lo
 **Daily 10 and homework:** 10 minutes — hear-and-pick /i/ /n/, blend slider with *in, it, pin, tin*, memory pairs of the four pictures, one 2-minute voice note "This is a pin." Spaced at 1, 3, 7 days.
 **Teacher notes:** never use browser voices; recorded voices only; no on-picture text except our labels; story plates cross-fade, never zoom or pan.
 
+## 2b. Built (2026-10-14) and what is still a plan
+- **Built:** the lesson deck `src/academy-deck/lessons/pa1s02e1.ts` (library id `pa1-s02-e1`), 35 slides on the Pre-A1 run of show, with the rules stated before the practice (`rule` slides), the teach-back (Wrap), a decodability check, a time check and an 80-response check (`pa1s02e1.test.tsx`).
+- **Games actually in the deck:** hear-and-pick, blend slider, memory pairs, listen-and-match, reader page, build and spell. The new catalogue games named above (Whack-a-Word, Pairs Bingo, Tile Stacker, Simon Says Sounds, Spot the Sound, Sound Bingo, Rhythm Lane) are **not built yet**; the deck uses the existing slide kinds as stand-ins and the signature game is the blend slider.
+- **Placeholders:** pictures are card and letter-tile placeholders on the existing phone close-up plate; the bus-stop plate, the story plates and the sounds /i/ and /n/ recordings wait for the owner's written approval of this plan and scenario.
+
 ## 3. What has to exist before the deck
 1. Owner approval of this plan and a **story scenario** in `docs/scenarios/` (3 plates: bus stop, phone in hand, message).
 2. Art (Canva only, ~35 % purple, cut-out stickers on transparent backgrounds): bus-stop plate, phone-screen plate, picture cards phone, pin, tin, map, letter tiles in the Season's style.
