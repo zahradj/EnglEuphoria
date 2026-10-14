@@ -15,6 +15,7 @@ vi.mock('../LessonPlayerModal', () => ({ LessonPlayerModal: () => null }));
 vi.mock('../SceneLessonPlayerModal', () => ({ SceneLessonPlayerModal: () => null }));
 vi.mock('@/components/student/RecentLessonReports', () => ({ RecentLessonReports: () => null }));
 
+import '@/lib/i18n';
 import { KidsWorldMap } from '../KidsWorldMap';
 import { buildQuestCards, readyQuestForLesson } from '@/lib/homeworkQuestCards';
 

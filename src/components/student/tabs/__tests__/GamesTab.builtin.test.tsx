@@ -22,6 +22,7 @@ vi.mock('@/components/games/GamePlayerView', () => ({
   GamePlayerView: ({ gameId }: { gameId: string }) => <div>Player open for {gameId}</div>,
 }));
 
+import '@/lib/i18n';
 import { GamesTab } from '../GamesTab';
 import { LIBRARY_GAMES } from '@/content/playground-library/gamesCatalog';
 
@@ -37,7 +38,7 @@ describe('Student Game Library tab: built-in Playground games', () => {
     expect(screen.queryByText('No games yet')).toBeNull();
     // Every built-in Playground game counts, even with an empty database library.
     expect(LIBRARY_GAMES.length).toBeGreaterThan(0);
-    expect(screen.getByText(`${LIBRARY_GAMES.length} games available`)).toBeTruthy();
+    expect(screen.getByText(`Games available: ${LIBRARY_GAMES.length}`)).toBeTruthy();
   });
 
   it('opens the game inside the tab and can go back to the library', async () => {

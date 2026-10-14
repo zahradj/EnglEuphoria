@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -28,6 +29,7 @@ export default function ArcadeHome() {
   const { user } = useAuth();
   const { studentLevel } = useStudentLevel();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const hub: Hub = studentLevel === 'playground' ? 'playground' : studentLevel === 'academy' ? 'academy' : 'success';
   const theme = HUB_THEME[hub];
   const profile = ARCADE_HUB_PROFILES[hub];
@@ -45,25 +47,25 @@ export default function ArcadeHome() {
       <div className="mx-auto max-w-5xl space-y-6">
         <header className="flex items-center justify-between gap-4 flex-wrap">
           <div>
-            <Badge className={`${theme.chip} text-white mb-2`}>{theme.label} Arcade</Badge>
-            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">Gamer Arcade</h1>
+            <Badge className={`${theme.chip} text-white mb-2`}>{t('st.arc.badge', { hub: theme.label, defaultValue: '{{hub}} Arcade' })}</Badge>
+            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">{t('st.arc.title', 'Gamer Arcade')}</h1>
             <p className="text-muted-foreground mt-1 text-sm">
-              Curriculum-driven games. Every round reinforces what you're learning.
+              {t('st.arc.sub', "Curriculum-driven games. Every round reinforces what you're learning.")}
             </p>
           </div>
-          <Button variant="outline" onClick={() => navigate(-1)}>Back</Button>
+          <Button variant="outline" onClick={() => navigate(-1)}>{t('st.arc.back', 'Back')}</Button>
         </header>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <StatCard label="Games" value={availableGames.length} />
-          <StatCard label="Speaking" value={speakingGames} />
-          <StatCard label="Multiplayer" value={multiplayerGames} />
-          <StatCard label="Max / lesson" value={`${profile.max_games_per_lesson} • ${profile.max_minutes_per_lesson}min`} />
+          <StatCard label={t('st.arc.games', 'Games')} value={availableGames.length} />
+          <StatCard label={t('st.arc.speaking', 'Speaking')} value={speakingGames} />
+          <StatCard label={t('st.arc.multi', 'Multiplayer')} value={multiplayerGames} />
+          <StatCard label={t('st.arc.max', 'Max / lesson')} value={`${profile.max_games_per_lesson} • ${t('st.cal.min', { n: profile.max_minutes_per_lesson, defaultValue: '{{n}} min' })}`} />
         </div>
 
         {hub === 'playground' && (
           <section>
-            <h2 className="text-xl font-semibold mb-3">Bonus practice</h2>
+            <h2 className="text-xl font-semibold mb-3">{t('st.arc.bonus', 'Bonus practice')}</h2>
             <Card
               onClick={() => navigate('/arcade/alphabet')}
               className={`p-5 cursor-pointer transition hover:shadow-lg ring-1 ${theme.ring} bg-gradient-to-br from-orange-100 to-yellow-100`}
@@ -73,9 +75,9 @@ export default function ArcadeHome() {
                   Aa
                 </div>
                 <div className="flex-1">
-                  <div className="font-bold text-lg">Alphabet Arcade</div>
+                  <div className="font-bold text-lg">{t('st.arc.alphabet', 'Alphabet Arcade')}</div>
                   <div className="text-sm text-muted-foreground">
-                    Letters, sounds & phonics — 3 mini-games rotated every lesson.
+                    {t('st.arc.alphabetDesc', 'Letters, sounds & phonics — 3 mini-games rotated every lesson.')}
                   </div>
                 </div>
                 <Badge className="bg-orange-500">New</Badge>
@@ -85,7 +87,7 @@ export default function ArcadeHome() {
         )}
 
         <section>
-          <h2 className="text-xl font-semibold mb-3">Choose a mode</h2>
+          <h2 className="text-xl font-semibold mb-3">{t('st.arc.mode', 'Choose a mode')}</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {SECTIONS.map((s) => {
               const Icon = s.icon;
@@ -99,8 +101,8 @@ export default function ArcadeHome() {
                   <div className={`w-10 h-10 rounded-xl ${theme.chip} text-white flex items-center justify-center mb-3`}>
                     <Icon size={20} />
                   </div>
-                  <div className="font-semibold mb-1">{s.title}</div>
-                  <div className="text-sm text-muted-foreground">{s.desc}</div>
+                  <div className="font-semibold mb-1">{t('st.arc.sec.' + s.id + '.title', s.title)}</div>
+                  <div className="text-sm text-muted-foreground">{t('st.arc.sec.' + s.id + '.desc', s.desc)}</div>
                 </Card>
               );
             })}
@@ -108,7 +110,7 @@ export default function ArcadeHome() {
         </section>
 
         <section>
-          <h2 className="text-xl font-semibold mb-3">All games for your hub</h2>
+          <h2 className="text-xl font-semibold mb-3">{t('st.arc.all', 'All games for your hub')}</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {availableGames.map((g) => (
               <Card key={g.id} className="p-4">
@@ -123,8 +125,8 @@ export default function ArcadeHome() {
                   {g.skill_focus.map((s) => (
                     <Badge key={s} variant="outline" className="text-[10px]">{s}</Badge>
                   ))}
-                  {g.supports_speaking && <Badge className="text-[10px] bg-rose-500 hover:bg-rose-500">mic</Badge>}
-                  {g.supports_multiplayer && <Badge className="text-[10px] bg-indigo-500 hover:bg-indigo-500">multi</Badge>}
+                  {g.supports_speaking && <Badge className="text-[10px] bg-rose-500 hover:bg-rose-500">{t('st.arc.mic', 'mic')}</Badge>}
+                  {g.supports_multiplayer && <Badge className="text-[10px] bg-indigo-500 hover:bg-indigo-500">{t('st.arc.multiBadge', 'multi')}</Badge>}
                 </div>
               </Card>
             ))}
@@ -132,7 +134,7 @@ export default function ArcadeHome() {
         </section>
 
         <p className="text-xs text-center text-muted-foreground pt-4">
-          Games reinforce your lessons — they never replace them. Your bravery counts more than your score.
+          {t('st.arc.footer', 'Games reinforce your lessons — they never replace them. Your bravery counts more than your score.')}
         </p>
       </div>
     </div>
