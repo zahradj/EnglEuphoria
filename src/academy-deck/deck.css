@@ -1165,6 +1165,8 @@
 .ad-root .ad-plate[data-phase='out'] { z-index: 0; }
 @keyframes ad-plate-in { from { opacity: 0; } to { opacity: 1; } }
 /* teen HUD: XP and a combo that a miss softly resets (no hearts, no game over, no ranking) */
+.ad-root .ad-say-tally { position: absolute; z-index: 6; inset-inline-start: 14px; top: 80px; display: flex; gap: 6px; align-items: center; padding: 4px 12px; border-radius: 999px; background: rgba(15, 118, 110, 0.85); color: #ccfbf1; font-weight: 900; font-size: 0.95rem; border: 1.5px solid rgba(153, 246, 228, 0.6); pointer-events: none; }
+.ad-root .ad-dock-say { background: linear-gradient(160deg, #14b8a6, #0f766e); color: #fff !important; border-color: #115e59; }
 .ad-root .ad-xp { position: absolute; z-index: 6; inset-inline-start: 14px; top: 44px; display: flex; gap: 8px; align-items: center; pointer-events: none; }
 .ad-root .ad-xp-num { padding: 4px 12px; border-radius: 999px; background: rgba(30, 27, 75, 0.82); color: #fde68a; font-weight: 900; font-size: 0.95rem; letter-spacing: 0.02em; border: 1.5px solid rgba(253, 230, 138, 0.55); animation: ad-xp-pop 0.35s cubic-bezier(0.2, 1.6, 0.4, 1); }
 .ad-root .ad-xp-combo { padding: 4px 10px; border-radius: 999px; background: linear-gradient(135deg, #7c3aed, #14b8a6); color: #fff; font-weight: 900; font-size: 0.95rem; animation: ad-xp-pop 0.35s cubic-bezier(0.2, 1.6, 0.4, 1); }

@@ -13,11 +13,11 @@
 ## 2. Skills balance (design targets for live practice time)
 | Skill | Share |
 |---|---|
-| Letters and sounds / blending | 30 % |
-| Reading (decodable) | 25 % |
-| Vocabulary | 20 % |
+| Letters and sounds / blending | 25 % |
+| Reading (decodable) | 20 % |
+| Vocabulary | 15 % |
 | Listening | 10 % |
-| Speaking (chunks) | 15 % |
+| Speaking (chunks, repeat and say) | 30 % |
 
 ## 3. Season sequence
 | Season | Title · theme | Chunk | Sounds | New items | Release |

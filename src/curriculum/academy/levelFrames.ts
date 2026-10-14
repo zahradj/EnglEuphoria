@@ -14,7 +14,7 @@ export interface LevelFrame {
   method: string;
   supports: string;
   inputText: string;
-  /** design targets for the share of live practice time by skill, summing to ~100 */
+  /** design targets for the share of live practice time by skill, summing to 100; speaking is the largest share at every level (owner 2026-10-14: speaking practice is very important) */
   skills: Record<string, number>;
   assessment: string[];
   moveUp: string[];
@@ -34,7 +34,7 @@ export const LEVEL_FRAMES: LevelFrame[] = [
     method: 'Blending is the spine: every lesson has a 3-5 minute blend routine and a decodable reading text. Chunks first ("My name is ___"), analysed later. 8 new items per session at most. Teen scenes (phone, lockers, bus stop), never childish.',
     supports: 'Home-language hint on, audio 0.8x, pictures on every word, no timers, "Not yet" wording, private rehearsal, type-instead-of-speak.',
     inputText: 'Decodable lines of 3-6 words, texts of 5 lines.',
-    skills: { 'Letters and sounds / blending': 30, 'Reading (decodable)': 25, 'Vocabulary': 20, 'Listening': 10, 'Speaking (chunks)': 15 },
+    skills: { 'Letters and sounds / blending': 25, 'Reading (decodable)': 20, 'Vocabulary': 15, 'Listening': 10, 'Speaking (chunks, repeat and say)': 30 },
     assessment: ['Remember? at the start of every lesson', 'Season checkpoint in E8 (hear-and-pick letters, sound-to-letter, read-and-match, build own name, say a chunk)', 'Pre-A1 exit task: read a 5-sentence profile and answer 5 questions; say 5 sentences about yourself'],
     moveUp: ['Reads 5-sentence decodable profile with at most 2 hints', 'Says and writes own name, age and 5 chunks intelligibly', 'Knows all 26 letter names and the sounds taught so far'],
     l1Priorities: ['Short /i/ vs /iː/ (Arabic, Spanish, Italian)', 'Final /n/ (French nasalisation)', 'Left-to-right letter-by-letter reading (Arabic readers)', 'Aspirated /p/ /t/'],
@@ -51,7 +51,7 @@ export const LEVEL_FRAMES: LevelFrame[] = [
     method: 'Model first (I do / we do / you do), rule stated plainly before practice, student teach-back. Mission with Take 1 / Take 2. Eight-episode Season: Cold Open, Word Lab, Pattern Lab, On Air, Deep Dive, Side Quest, Remix, Finale.',
     supports: 'Maximum: full sentence frames, home-language hint, audio 0.8x.',
     inputText: '~30-60 words [target].',
-    skills: { 'Speaking': 25, 'Listening': 20, 'Vocabulary': 20, 'Reading': 15, 'Grammar in use': 10, 'Writing': 5, 'Pronunciation': 5 },
+    skills: { 'Speaking': 35, 'Listening': 20, 'Vocabulary': 15, 'Reading': 10, 'Grammar in use': 10, 'Writing': 5, 'Pronunciation': 5 },
     assessment: ['Remember? every lesson (spaced)', 'E8 checkpoint each Season', 'Level check in Season 12 (E8)', 'Release (a thing the student makes) every Season'],
     moveUp: ['Level check passed (about 70 % with production weighted)', 'Release for Seasons 1-12 in the portfolio', 'Can ask and answer 10 personal-detail questions without frames'],
     l1Priorities: ['Plural endings /s/ /z/ /iz/', '/θ/ vs /s/ (listen first)', 'be-verb omission (Arabic, Turkish)', 'Subject pronoun dropping (Spanish, Italian, Turkish)', 'False friends'],
@@ -68,7 +68,7 @@ export const LEVEL_FRAMES: LevelFrame[] = [
     method: 'Still model-and-rule, with half frames; one structure per Season (two at most); present perfect held to B1; going to and will in separate Seasons.',
     supports: 'Half frames, tiered hints, audio 0.9x on request.',
     inputText: '~80-150 words [target].',
-    skills: { 'Speaking': 25, 'Listening': 20, 'Reading': 15, 'Vocabulary': 15, 'Grammar in use': 10, 'Writing': 10, 'Pronunciation': 5 },
+    skills: { 'Speaking': 35, 'Listening': 15, 'Reading': 15, 'Vocabulary': 10, 'Grammar in use': 10, 'Writing': 10, 'Pronunciation': 5 },
     assessment: ['Remember? every lesson', 'E8 checkpoint each Season', 'Big Remix every 2nd Season', 'Level check at Season 14'],
     moveUp: ['Level check passed', 'Narrates a past event and a plan in 6+ sentences', 'Handles a routine exchange (shop, travel, appointment) without frames'],
     l1Priorities: ['Past -ed endings /t/ /d/ /id/', 'Irregular verb forms', 'Article use', 'Question word order (Turkish, Arabic)', 'Stress in compound nouns'],
@@ -85,7 +85,7 @@ export const LEVEL_FRAMES: LevelFrame[] = [
     method: 'Task-first (Mission before the rule); mediation starts: every Season has one task; present perfect split by sub-use.',
     supports: 'First words of a frame; hints on request.',
     inputText: '~150-300 words [target].',
-    skills: { 'Speaking': 25, 'Reading': 20, 'Listening': 15, 'Writing': 15, 'Vocabulary': 10, 'Grammar in use': 5, 'Mediation': 5, 'Pronunciation': 5 },
+    skills: { 'Speaking': 35, 'Reading': 15, 'Listening': 15, 'Writing': 15, 'Vocabulary': 5, 'Grammar in use': 5, 'Mediation': 5, 'Pronunciation': 5 },
     assessment: ['Remember? every lesson', 'E8 checkpoint each Season', 'Big Remix every 2nd Season', 'Level check at Season 18', 'Rubrics for speaking and writing (CEFR-style, own wording)'],
     moveUp: ['Level check passed', 'Speaks 90 seconds on a familiar topic with reasons', 'Writes a 120-word text with linking', 'Completes a mediation task (relay/summarise)'],
     l1Priorities: ['Weak forms and connected speech', 'Present perfect vs past simple (Spanish, French, Italian transfer)', 'Prepositions', 'Spelling of common words'],
@@ -102,7 +102,7 @@ export const LEVEL_FRAMES: LevelFrame[] = [
     method: 'Student-led tasks, opinion defence, summarising and mediation every Season; supports off by default (optional).',
     supports: 'None by default; optional on request.',
     inputText: '~300-500 words [target].',
-    skills: { 'Speaking': 25, 'Reading': 20, 'Writing': 15, 'Listening': 15, 'Mediation': 10, 'Vocabulary': 5, 'Grammar in use': 5, 'Pronunciation': 5 },
+    skills: { 'Speaking': 35, 'Reading': 15, 'Writing': 15, 'Listening': 15, 'Mediation': 10, 'Vocabulary': 5, 'Pronunciation': 5 },
     assessment: ['Remember? every lesson', 'E8 checkpoint each Season', 'Big Remix', 'Level check at Season 18', 'Speaking and writing rubrics with annotated samples'],
     moveUp: ['Level check passed', 'Holds a 3-minute structured talk with counter-arguments', 'Writes a 200-word argument with cohesion', 'Mediates a text of 300+ words'],
     l1Priorities: ['Stress and rhythm in longer utterances', 'Collocations and false friends', 'Register control', 'Article nuance'],
@@ -119,7 +119,7 @@ export const LEVEL_FRAMES: LevelFrame[] = [
     method: 'Language Lab (E3) notices register, collocation and stance in authentic text; E4 is a seminar, pitch or interview; mediation every Season.',
     supports: 'Off.',
     inputText: '~500-800 words [target].',
-    skills: { 'Speaking': 25, 'Reading': 20, 'Writing': 20, 'Listening': 15, 'Mediation': 10, 'Vocabulary': 5, 'Pronunciation': 5 },
+    skills: { 'Speaking': 35, 'Reading': 15, 'Writing': 20, 'Listening': 15, 'Mediation': 10, 'Pronunciation': 5 },
     assessment: ['Remember? every lesson', 'E8 checkpoint each Season', 'Big Remix', 'Level check at Season 18', 'Rubrics (accuracy, range, fluency, coherence)'],
     moveUp: ['Level check passed', 'Delivers a 5-minute seminar or pitch', 'Writes a 300-word structured text', 'Mediates a technical or abstract text'],
     l1Priorities: ['Prosody and focus', 'Collocation precision', 'Register shifts', 'Cohesion in long texts'],

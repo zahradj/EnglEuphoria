@@ -36,6 +36,19 @@ export const ACADEMY_DECK_LESSONS: AcademyDeckLesson[] = [
     parts: 8,
   },
   {
+    id: 'pa1-s02-e1',
+    season: 2,
+    lesson: 1,
+    title: 'First sounds · Cold Open',
+    blurb: 'Pre-A1: a message arrives with its letters missing. Learn the sounds i and n, blend in, it, pin and tin, read two lines and say “This is a pin.”',
+    level: 'Pre-A1',
+    minutes: 60,
+    cover: '/academy-art/bg/phone-profile-closeup.webp',
+    gradient: 'linear-gradient(135deg,#1e1b4b 0%,#6d28d9 55%,#14b8a6 100%)',
+    homework: null,
+    parts: 8,
+  },
+  {
     id: 'sign-me-up',
     season: 1,
     lesson: 1,
@@ -103,6 +116,6 @@ export const ACADEMY_DECK_LESSONS: AcademyDeckLesson[] = [
 ];
 
 /** Blueprint id of each deck lesson (src/curriculum/academy). The library numbers lessons in the order they were built (Sign Me Up = Lesson 1, Fake or Real? = Lesson 2); the blueprint episodes are E2 and E3. */
-export const ACADEMY_DECK_BLUEPRINT_IDS: Record<string, string> = { 'pa1-s01-e1': 'PA1-S01-E1', 'sign-me-up': 'A1-S01-E2', 'sign-me-up-2': 'A1-S01-E2', 'fake-or-real': 'A1-S01-E3', 'free-time-club-1': 'A1-S03-E1', 'free-time-club-2': 'A1-S03-E2' };
+export const ACADEMY_DECK_BLUEPRINT_IDS: Record<string, string> = { 'pa1-s01-e1': 'PA1-S01-E1', 'pa1-s02-e1': 'PA1-S02-E1', 'sign-me-up': 'A1-S01-E2', 'sign-me-up-2': 'A1-S01-E2', 'fake-or-real': 'A1-S01-E3', 'free-time-club-1': 'A1-S03-E1', 'free-time-club-2': 'A1-S03-E2' };
 
 export const getAcademyDeckLesson = (id: string | undefined) => ACADEMY_DECK_LESSONS.find((l) => l.id === id);

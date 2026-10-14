@@ -30,7 +30,7 @@ import { BePickView, BuildView, FactCheckView, WriteView } from './slides/patter
 import { ConvoView, FadeView, PhoneChatView, SayView, WhoSaidView } from './slides/talk';
 import { audioBaseFor, hasClip, loadManifest, playLine, stopLine } from './audio';
 import { openLines, slideLines } from './spoken';
-import { partsOf, type DeckScript, type Slide, type Stats, type Vars } from './types';
+import { partsOf, SAY_IT_KINDS, type DeckScript, type Slide, type Stats, type Vars } from './types';
 
 class Guard extends Component<{ children: ReactNode; onSkip: () => void; id: string }, { err: string | null; n: number }> {
   state = { err: null as string | null, n: 0 };
@@ -132,7 +132,7 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
   const [solved, setSolved] = useState<Record<string, boolean>>({});
   const [vars, setVarsState] = useState<Vars>({ num: '427', numw: 'four hundred twenty-seven' });
   const [stamps, setStamps] = useState<string[]>([]);
-  const [stats, setStats] = useState<Stats>({ right: 0, wrong: 0, hints: 0, skipped: [] });
+  const [stats, setStats] = useState<Stats>({ right: 0, wrong: 0, hints: 0, skipped: [], spoken: 0 });
   const [tiers, setTiers] = useState<Record<string, number>>({});
   const [toast, setToast] = useState<string | null>(null);
   const [minute, setMinute] = useState(false);
@@ -254,6 +254,10 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
     playSfx(comboRef.current % 5 === 0 ? 'combo' : 'right', sfxRef.current);
     react('happy');
   }, [react]);
+  const sayIt = useCallback(() => {
+    setStats((s) => ({ ...s, spoken: (s.spoken ?? 0) + 1 }));
+    playSfx('right', sfxRef.current);
+  }, []);
   const wrong = useCallback(() => {
     wrongBySlide.current[curId.current] = (wrongBySlide.current[curId.current] ?? 0) + 1;
     setStats((s) => ({ ...s, wrong: s.wrong + 1 }));
@@ -356,6 +360,9 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
           </ol>
           <span className="ad-count">{index + 1}/{script.slides.length}</span>
         </header>
+        {!homework && (stats.spoken ?? 0) > 0 && (
+          <div className="ad-say-tally" role="status" aria-label={`Spoken aloud: ${stats.spoken}`}><Icon name="chat" /> {stats.spoken}</div>
+        )}
         {!homework && stats.right > 0 && (
           <div className="ad-xp" role="status" aria-label={`${stats.right * 10} XP${combo >= 3 ? `, combo ${combo}` : ''}`}>
             <span className="ad-xp-num" key={stats.right}>{stats.right * 10} XP</span>
@@ -376,6 +383,7 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
         )}
         <nav className="ad-dock" aria-label="Lesson controls">
           {!follow && <button type="button" className="ad-dockbtn" onClick={() => go(index - 1)} disabled={index === 0}>◀ Back</button>}
+          {!homework && SAY_IT_KINDS.includes(cur.kind) && (<button type="button" className="ad-dockbtn ad-dock-say" onClick={sayIt} aria-label="Say it aloud, then tap"><Icon name="chat" /> Say it ✓</button>)}
           <button type="button" className="ad-dockbtn" onClick={hint}>{artBase ? <img className="ad-dockico" src={`${artBase}/objects/btn-hint.webp`} alt="" aria-hidden="true" /> : <Icon name="bulb" />} Hint</button>
           <button type="button" className="ad-dockbtn" onClick={() => setMinute(true)}>{artBase ? <img className="ad-dockico" src={`${artBase}/objects/btn-pause.webp`} alt="" aria-hidden="true" /> : <Icon name="pause" />} <span className="ad-long">I need a minute</span><span className="ad-short">Minute</span></button>
           <button type="button" className="ad-dockbtn" onClick={() => setMenu(!menu)} aria-expanded={menu}>{artBase ? <img className="ad-dockico" src={`${artBase}/objects/btn-gear.webp`} alt="" aria-hidden="true" /> : <Icon name="gear" />} More</button>

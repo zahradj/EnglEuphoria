@@ -10,6 +10,7 @@ import { SKIN_LIBRARY } from './skins';
 import { buildAllLessonBlueprints } from './lessonBlueprint';
 import { ACADEMY_ITEMS } from './items';
 import { castIn } from './cast';
+import { nodesOfPreA1, nodesOfRoadmap } from './recall';
 import { validateItems } from './validateItems';
 import { STRUCTURES, STRUCTURE_FLOOR } from './structureLevels';
 import { CUMULATIVE_ITEM_TARGET, LEVEL_ORDER, summarize, validateRoadmap } from './validateRoadmap';
@@ -80,6 +81,9 @@ export const ACADEMY_LESSON_BLUEPRINTS = buildAllLessonBlueprints(ACADEMY_ROADMA
 export const ACADEMY_ROADMAP_ISSUES = validateRoadmap(ACADEMY_ROADMAP, STRUCTURE_FLOOR);
 export const ACADEMY_ROADMAP_SUMMARY = summarize(ACADEMY_ROADMAP);
 export { ACADEMY_ITEMS };
+/** The lesson tracks the recall plan walks: Pre-A1 (P1-P5) and the roadmap (A1-C1). */
+export const ACADEMY_RECALL_NODES = nodesOfRoadmap(ACADEMY_LESSON_BLUEPRINTS);
+export const PRE_A1_RECALL_NODES = nodesOfPreA1();
 /** The items a lesson introduces, joined to its blueprint (E1-E6 only; E7/E8 introduce nothing). */
 export function lessonItems(lessonId: string) {
   const bp = ACADEMY_LESSON_BLUEPRINTS.find((b) => b.id === lessonId);
@@ -97,6 +101,9 @@ export * from './lessonBlueprint';
 export * from './vocabGames';
 export * from './ladder';
 export * from './preA1';
+export * from './recall';
+export * from './practiceGap';
+export * from './speaking';
 export type { ItemMode, ItemSeed, SeasonItems, IntroducingEpisodeKey, ItemKind as ItemSeedKind } from './itemTypes';
 export { INTRODUCING_EPISODE_KEYS } from './itemTypes';
 export * from './cast';

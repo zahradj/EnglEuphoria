@@ -13,6 +13,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { SIGN_ME_UP } from '../src/academy-deck/lessons/signMeUp.ts';
 import { PA1_S01_E1 } from '../src/academy-deck/lessons/pa1s01e1.ts';
+import { PA1_S02_E1 } from '../src/academy-deck/lessons/pa1s02e1.ts';
 import { SIGN_ME_UP_2 } from '../src/academy-deck/lessons/signMeUp2.ts';
 import { applyLane } from '../src/academy-deck/lanes.ts';
 import { PATTERN_LAB } from '../src/academy-deck/lessons/patternLab.ts';
@@ -32,6 +33,7 @@ const decks = [
   { name: FREE_TIME_CLUB_1.lessonId, slides: FREE_TIME_CLUB_1.slides },
   { name: FREE_TIME_CLUB_2.lessonId, slides: FREE_TIME_CLUB_2.slides },
   { name: PA1_S01_E1.lessonId, slides: PA1_S01_E1.slides },
+  { name: PA1_S02_E1.lessonId, slides: PA1_S02_E1.slides },
   { name: `${SIGN_ME_UP.lessonId} homework`, slides: SIGN_ME_UP_QUEST.flatMap((c) => c.slides) },
 ];
 
