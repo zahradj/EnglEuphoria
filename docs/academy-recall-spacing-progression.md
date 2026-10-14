@@ -49,4 +49,4 @@ Spacing only works if the student comes back on schedule. The gap manager (`src/
 | A weak strand hidden by a good average | The Finale reports six strands; the weak one gets extra Daily 10 time and returns in the next Season |
 | Knowledge that never meets the next topic | Each Season recycles the two before it (`recycleFrom`) and the Remember? continues across Seasons; Big Remix every second Season |
 
-Teacher view (to build): a gap report per student: days since the last lesson, Daily 10 rate, recall accuracy, and the mode chosen with its reasons. The thresholds are starting values [target]; tune them with real students' data.
+Teacher view (**built 2026-10-14**, `gapReport()` in `src/curriculum/academy/gapReport.ts` and the card `src/academy-deck/teacher/GapReportCard.tsx`; not yet placed on a teacher page because the student data is not saved anywhere yet): a gap report per student: days since the last lesson, Daily 10 rate, recall accuracy, and the mode chosen with its reasons. The thresholds are starting values [target]; tune them with real students' data.

@@ -104,6 +104,7 @@ export * from './preA1';
 export * from './recall';
 export * from './practiceGap';
 export * from './dailyTen';
+export * from './gapReport';
 export * from './speaking';
 export type { ItemMode, ItemSeed, SeasonItems, IntroducingEpisodeKey, ItemKind as ItemSeedKind } from './itemTypes';
 export { INTRODUCING_EPISODE_KEYS } from './itemTypes';
