@@ -1,6 +1,6 @@
 # Scenario: A1 Unit 5 story *Bibi's Bad Day*, pages 1-3, three Canva story GIFs
 
-**Status: waiting for the owner's OK.** Nothing has been drawn or exported yet.
+**Status: approved (owner, 2026-10-14: "go") — making the frames.**
 
 Owner, 2026-10-14: *"You can use GIFs, video GIFs."* A1 has no story videos; stories move with Canva GIFs made from the
 approved story pictures, after a written scenario and the owner's OK (CLAUDE.md "A1 lessons — length and story GIFs").
@@ -42,4 +42,4 @@ Skill: `.claude/skills/kids-video-scenario`. Same method as `a1u1-leos-first-day
 `docs/scenarios/a1u5-bibis-bad-day-preview.gif` shows the 3 pages in book order, each held for its reading time, a corner label naming the action.
 
 ## Approval
-- Owner: _waiting_
+- Owner: 2026-10-14, "go"
