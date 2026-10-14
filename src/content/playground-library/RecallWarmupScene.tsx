@@ -113,24 +113,28 @@ export function RecallWarmupScene({ scene, onNext, sync }: { scene: Recall; onNe
       {item && <button onClick={() => cueSpeak(item.say, scene.who)} aria-label="Hear it again" className="absolute right-3 top-16 z-30 rounded-full bg-white/90 px-4 py-2 text-lg font-black text-orange-700 shadow-lg active:scale-95">🔊</button>}
 
       {!done && (
-        <div key={scene.mode === 'shadow' ? 'board' : idx} className="absolute inset-x-0 bottom-[12%] top-[34%] z-10 flex flex-wrap items-center justify-center gap-[3vw] px-6 [@media(max-height:500px)]:top-[36%]">
+        <div key={scene.mode === 'shadow' ? 'board' : idx} className="absolute inset-x-0 bottom-[12%] top-[34%] z-10 flex items-center justify-center gap-[2%] px-6 [@media(max-height:500px)]:top-[36%]">
           {shownIdx.map((i, k) => {
             const it = scene.items[i];
             const got = foundSet.has(i);
             const glow = misses >= 2 && i === idx;
             const wide = isScene(it.img);
+            // Sized from the stage, never the browser window: all the choices always share ONE row and each takes an equal
+            // slice of it, so a third picture can never wrap below the stage and disappear.
+            const slice = Math.floor(92 / Math.max(1, shownIdx.length));
             return (
               <motion.button key={i} onClick={() => { void pick(i); }} aria-label={it.word}
-                className="relative"
+                className="relative min-w-0 flex-1 basis-0"
+                style={{ maxWidth: `${Math.min(slice, wide ? 34 : 26)}%` }}
                 initial={{ y: 60, opacity: 0 }}
                 animate={wrong === i ? { x: [0, -10, 10, -6, 6, 0], y: 0, opacity: 1 } : { y: [0, -5, 0], opacity: 1 }}
                 transition={wrong === i ? { duration: 0.4 } : { y: { duration: 2 + k * 0.3, repeat: Infinity, ease: 'easeInOut' }, opacity: { duration: 0.3, delay: k * 0.08 } }}
                 whileTap={{ scale: 0.92 }}>
                 {glow && <span className="absolute -inset-3 animate-pulse rounded-[28px] bg-yellow-300/80 blur-md" />}
                 {wide ? (
-                  <img src={it.img} alt="" draggable={false} className="relative h-[min(30vh,20vw)] w-[min(53vh,36vw)] rounded-[22px] object-cover shadow-[0_10px_22px_rgba(0,0,0,0.35)] [@media(max-height:500px)]:h-[26vh] [@media(max-height:500px)]:w-[46vh]" />
+                  <img src={it.img} alt="" draggable={false} className="relative aspect-[16/9] w-full rounded-[22px] object-cover shadow-[0_10px_22px_rgba(0,0,0,0.35)]" />
                 ) : (
-                  <img src={it.img} alt="" draggable={false} className="relative h-[min(30vh,22vw)] w-[min(30vh,22vw)] object-contain transition-[filter] duration-500 [@media(max-height:500px)]:h-[27vh] [@media(max-height:500px)]:w-[27vh]"
+                  <img src={it.img} alt="" draggable={false} className="relative aspect-square w-full object-contain transition-[filter] duration-500"
                     style={{ filter: scene.mode === 'shadow' && !got ? 'brightness(0) opacity(0.6) drop-shadow(0 0 3px #fff) drop-shadow(0 0 2px #fff)' : STICKER_FILTER }} />
                 )}
                 {got && scene.mode === 'shadow' && <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 rounded-full bg-white/90 px-3 text-base font-black text-emerald-700 shadow">{it.word}</span>}
@@ -141,10 +145,11 @@ export function RecallWarmupScene({ scene, onNext, sync }: { scene: Recall; onNe
       )}
 
       {done && (
-        <div className="absolute inset-x-0 top-[34%] z-10 flex flex-wrap justify-center gap-3 px-6">
+        <div className="absolute inset-x-0 top-[34%] z-10 flex items-center justify-center gap-[2%] px-6">
           {scene.items.map((it, i) => (
             <motion.img key={i} src={it.img} alt={it.word} draggable={false} initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: i * 0.1, type: 'spring' }}
-              className={isScene(it.img) ? 'h-[16vh] w-[28vh] rounded-2xl object-cover shadow-lg' : 'h-[18vh] w-[18vh] object-contain'} style={isScene(it.img) ? undefined : { filter: STICKER_FILTER }} />
+              style={{ maxWidth: `${Math.floor(90 / Math.max(1, scene.items.length))}%`, ...(isScene(it.img) ? {} : { filter: STICKER_FILTER }) }}
+              className={isScene(it.img) ? 'min-w-0 flex-1 basis-0 aspect-[16/9] rounded-2xl object-cover shadow-lg' : 'min-w-0 flex-1 basis-0 aspect-square max-w-[18%] object-contain'} />
           ))}
         </div>
       )}
