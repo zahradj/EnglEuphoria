@@ -24,7 +24,7 @@ checking *after* (practice → produce). It is PPP with the story in the middle.
 | 1-3 | Warm-up | Title · Hello song · Remember? (Lesson 4 words) | routine, recall |
 | 4 | **Pre-story** (predict) | Intro: "Look! This is Leo. What does he have? A star! What can happen?" | prediction from the cover |
 | 5 | **Present** | Story words with pictures: star, hat, bat, mat, ant, tree | the child knows every word before the film |
-| 6 | **Practice** (match) | ★ NEW **Listen and Match** — coloured speakers, no written words: tap a speaker, hear "A bat!", tap the bat | owner 2026-10-13: after the words, a listen-and-match |
+| 6 | **Practice** (match) | ★ NEW **Listen and Match** — coloured speakers, no written words: tap a speaker, hear "A bat!", tap the bat. Design: `doors` (the four Listen and Match designs rotate lesson by lesson — owner 2026-10-14) | owner 2026-10-13: after the words, a listen-and-match |
 | 7 | **Practice** (game) | ★ **Wind Catch** — the story things fly on the wind; catch the one Leo names; the star last | a second game with the same words |
 | 8 | **While-story** | The film — ONE 64-second film; 3 picture questions pause it | one story, not cut in half |
 | 9 | **Practice** (game) | **Where's the star?** (guided lift-the-flap) — "Where is my star? Is it under the hat?" Only the hat lights up; the child taps it, the bat pops out, Leo asks "What is it?" and the child answers "It's a bat!"; then the mat, the bag, the tree | the refrain, in order (owner: "the activity must be organized") |
