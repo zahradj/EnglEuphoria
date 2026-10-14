@@ -14,22 +14,31 @@ Status: **draft for owner approval.** No picture, recording or deck is made unti
 | Release | **My phone-screen album**: six labelled things, each read and said |
 | Video-game mechanic | loot and crafting (collect sound tiles, craft words), a rhythm lane for tapping sounds in order |
 
-## 2. E1 "Cold Open" — I can meet the phone screen, hear i and n, and blend in, it, pin, tin
-New items (≤ 8): phone, pin, tin, map, "This is a ___." (5) + sounds i, n (2). Letter names I, N.
+## 2. E1 "Cold Open" — one-to-one, 60 minutes (teacher + one student, live)
 
-Run of show (Pre-A1: 5 / 10 / 8 / 10 / 8 / 8 / 6 / 5 minutes):
-| Part | Min | What happens | Game / mechanic (no game three times in a row) |
-|---|---|---|---|
-| Check-in | 5 | feeling, goal, no new language | — |
-| Remember? | 10 | the eight P1 sounds-and-words: s a t p, sat, tap, "My name is" with Vee | listen-and-click (look: click) |
-| The Drop | 8 | story plate 1–3 (bus stop, phone, message with missing letters), meaning first, recorded voices, subtitles | story plates, cross-fade only |
-| Learn set 1 | 10 | sounds i, n: hear, say, blend in, it, pin | **sound-blend slider**, then **loot-and-craft** (collect tiles, craft "pin") |
-| Read | 8 | decodable reader page: "It is a pin. It is a tin." with tap-to-hear | reader page (picture match) |
-| Learn set 2 | 8 | words phone, map, tin as pictures; "This is a ___." | **listen and match** (design rotated by unit + lesson), then **memory pairs** |
-| Mission | 6 | Take 1: say "This is a pin." for two photos; feedback; Take 2 | speak with Theo, private rehearsal on |
-| Wrap | 5 | can-dos, Daily 10, next clue (a message arrives with its first letters missing) | — |
+**Objective (I can…):** meet the phone screen, hear and say the sounds /i/ and /n/, blend *in, it, pin, tin*, and say "This is a pin." for a picture.
+**Exit task (built backwards from this):** the student blends and reads three words (*pin, tin, it*) and says "This is a ___." for two pictures, with at most one hint.
+**New items (≤ 8):** *phone, pin, tin, map*, "This is a ___." (5) + sounds /i/, /n/ (2). Letter names I, N. Nothing else is new.
+**Format:** one teacher and one student share the screen; the deck is the stage, the teacher drives and can hand control to the student. Home-language hint on, audio 0.8×, pictures on every word, no timers, "Not yet" wording, private rehearsal and type-instead-of-speak stay on. Teacher talk ≤ 40 % of the hour; after every question the teacher waits 4–5 seconds.
 
-Fun hook / signature game: **"Restore the message"** — each correct blend lights a missing letter in a message from Vee until it reads "It is a pin." Rhythm lane (tap the sounds /i/ /n/ in order) as the optional bonus.
+| # | Min | Part | Teacher does | Student does | 1:1 technique / wait cue |
+|---|---|---|---|---|---|
+| 1 | 0–5 | **Check-in** | Greets by name; "How are you?" with a feeling card; shows today's goal (the message with missing letters); no new language | Points to a feeling card; says "Hello" | Student chooses the order of two warm-up tiles (agency) |
+| 2 | 5–15 | **Remember?** (10) | Plays last lesson's words (*sat, tap, at*, "My name is ___") by ear: says a word, student finds it among three pictures | Listens, clicks the picture; then says "My name is ___" to Vee on screen | Teacher plays *with* the student: teacher "misses" one on purpose and the student corrects it; wait 5 s; wrong = gentle replay, never "no" |
+| 3 | 15–23 | **The Drop** (8) | Tells the story in three plates with recorded voices and subtitles; pauses on plate 3 and asks "What is it?" in the home-language hint | Watches and listens, points to the phone and the missing letters | Gist only; teacher shares one personal line about a message she/he received; wait 5 s |
+| 4 | 23–33 | **Learn set 1** (10): sounds /i/ and /n/ | **I do:** says /i/ (mouth shown), then /n/, then slides "i-n → in". **We do:** both say it, student chooses the next tile. **You do:** student blends *in, it, pin, tin* alone | Hears, repeats, blends with the slider, then crafts *pin* from tiles (loot and craft) | **Rule, stated plainly (read aloud, student repeats):** "Sounds go together: i + n = in. Slide the sounds, then say the word." Minimal pair *it/in* heard twice; hint ladder: replay → show the mouth → first sound given |
+| 5 | 33–41 | **Read** (8) | Reads the reader page aloud first ("It is a pin. It is a tin."); then the student reads it; tap-to-hear on every word | Reads two short lines; matches each line to its picture | Teacher listens, corrects only the blend, not accent (comprehensibility first); wait 5 s |
+| 6 | 41–49 | **Learn set 2** (8): *phone, map, tin* + "This is a ___." | **I do:** points and says "This is a map." **We do:** swaps the word together. **You do:** student says it alone | Listen and match (3 pictures), then memory pairs | **Rule (≤ 3 lines):** "Point and say: This is a ___. Put the word in the box." Two different games after the word set, designs rotated by unit + lesson |
+| 7 | 49–55 | **Mission** (6) | Models the whole task first with Theo's photo; then listens | **Take 1:** says "This is a pin." for two photos from Theo; feedback (one thing done well, one to try); **Take 2:** again | Private rehearsal first; teacher plays Theo; student may type instead of speak |
+| 8 | 55–60 | **Wrap** (5) | Student **teaches back** the rule ("Slide the sounds, then say the word") to Vee; shows can-dos and the next clue (a message arrives with its first letters missing); assigns Daily 10 and a 2-minute voice note | Teaches back, ticks the can-dos, chooses a feeling | Reward moment: the message is restored; no streak pressure |
+
+Fun hook / signature game: **"Restore the message"** — every correct blend lights a missing letter in Vee's message until it reads "It is a pin." Rhythm lane (tap /i/ /n/ in order) is an optional bonus for a student who finishes early; a student who is struggling skips it (chill track: fewer items, more modelling).
+Games used (none three times in a row): listen-and-click, sound-blend slider, loot and craft, reader page, listen and match, memory pairs. **Video-game mechanic:** loot and crafting.
+
+**Supports and differentiation:** home-language hint, slower audio, mouth pictures for /i/ vs /iː/ (Arabic and Spanish speakers often merge *it/eat*: use the minimal pair *in* and *an* instead for now), more modelling or fewer items if the Mission needs two hints. Stretch: add *dim* and *pit* from the decodable list.
+**Assessment (formative, no stakes):** the exit task in the Mission; the teacher notes blend accuracy, hints used and comfort; items that miss go to the Daily 10.
+**Daily 10 and homework:** 10 minutes — hear-and-pick /i/ /n/, blend slider with *in, it, pin, tin*, memory pairs of the four pictures, one 2-minute voice note "This is a pin." Spaced at 1, 3, 7 days.
+**Teacher notes:** never use browser voices; recorded voices only; no on-picture text except our labels; story plates cross-fade, never zoom or pan.
 
 ## 3. What has to exist before the deck
 1. Owner approval of this plan and a **story scenario** in `docs/scenarios/` (3 plates: bus stop, phone in hand, message).
