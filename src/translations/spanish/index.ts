@@ -27,6 +27,7 @@ import { pushNotificationsTranslations } from './pushNotifications';
 import { lessonsPageTranslations } from './lessonsPage';
 import { lessonResumeTranslations } from './lessonResume';
 import { classroomMediaTranslations } from './classroomMedia';
+import { studentScreensTranslations } from './studentScreens';
 import { academyLessonsTranslations } from './academyLessons';
 
 export const spanishTranslations = {
@@ -58,5 +59,6 @@ export const spanishTranslations = {
   ...lessonsPageTranslations,
   ...lessonResumeTranslations,
   ...classroomMediaTranslations,
+  ...studentScreensTranslations,
   ...academyLessonsTranslations,
 };

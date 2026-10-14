@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from "react";
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -34,6 +35,7 @@ interface Lesson {
 }
 
 export const UpcomingClassesTab = () => {
+  const { t } = useTranslation();
   const [upcomingLessons, setUpcomingLessons] = useState<Lesson[]>([]);
   const [completedLessons, setCompletedLessons] = useState<Lesson[]>([]);
   const [loading, setLoading] = useState(true);
@@ -94,7 +96,7 @@ export const UpcomingClassesTab = () => {
       setCompletedLessons(formattedLessons.filter(l => l.status === 'completed'));
     } catch (error) {
       console.error('Error fetching lessons:', error);
-      toast({ title: "Error", description: "Failed to load your lessons.", variant: "destructive" });
+      toast({ title: t('st.lessons.error', 'Error'), description: t('st.lessons.loadFail', 'Failed to load your lessons.'), variant: "destructive" });
     } finally {
       setLoading(false);
     }
@@ -111,7 +113,7 @@ export const UpcomingClassesTab = () => {
     if (lesson.room_link) {
       window.location.href = lesson.room_link;
     } else {
-      toast({ title: "Room Link Not Available", description: "The classroom link is not available yet.", variant: "destructive" });
+      toast({ title: t('st.lessons.roomUnavailable', 'Room Link Not Available'), description: t('st.lessons.roomUnavailableDesc', 'The classroom link is not available yet.'), variant: "destructive" });
     }
   };
 
@@ -136,7 +138,7 @@ export const UpcomingClassesTab = () => {
   if (loading) {
     return (
       <div className="space-y-6">
-        <h1 className="text-2xl font-bold text-foreground">My Lessons</h1>
+        <h1 className="text-2xl font-bold text-foreground">{t('st.lessons.title', 'My Lessons')}</h1>
         <div className="flex items-center justify-center py-12">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
         </div>
@@ -147,10 +149,10 @@ export const UpcomingClassesTab = () => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-foreground">My Lessons</h1>
+        <h1 className="text-2xl font-bold text-foreground">{t('st.lessons.title', 'My Lessons')}</h1>
         <Button className="bg-primary hover:bg-primary/90">
           <Calendar className="h-4 w-4 mr-2" />
-          Schedule New Lesson
+          {t('st.lessons.scheduleNew', 'Schedule New Lesson')}
         </Button>
       </div>
 
@@ -166,7 +168,7 @@ export const UpcomingClassesTab = () => {
           </TabsTrigger>
           <TabsTrigger value="calendar" className="flex items-center gap-2">
             <CalendarDays className="h-4 w-4" />
-            Calendar
+            {t('st.lessons.calendar', 'Calendar')}
           </TabsTrigger>
         </TabsList>
 
@@ -175,11 +177,11 @@ export const UpcomingClassesTab = () => {
             <Card className="glass-card-hub">
               <CardContent className="p-8 text-center">
                 <Calendar className="h-16 w-16 text-muted-foreground/30 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-foreground mb-2">No Upcoming Lessons</h3>
-                <p className="text-muted-foreground mb-4">You don't have any lessons scheduled at the moment.</p>
+                <h3 className="text-lg font-semibold text-foreground mb-2">{t('st.lessons.noUpcoming', 'No Upcoming Lessons')}</h3>
+                <p className="text-muted-foreground mb-4">{t('st.lessons.noUpcomingDesc', "You don't have any lessons scheduled at the moment.")}</p>
                 <Button className="bg-primary hover:bg-primary/90">
                   <Calendar className="h-4 w-4 mr-2" />
-                  Schedule Your First Lesson
+                  {t('st.lessons.scheduleFirst', 'Schedule Your First Lesson')}
                 </Button>
               </CardContent>
             </Card>
@@ -223,20 +225,20 @@ export const UpcomingClassesTab = () => {
                         <DropdownMenuTrigger asChild>
                           <Button variant="outline" size="sm" className="gap-1">
                             <MoreVertical className="h-4 w-4" />
-                            Manage
+                            {t('st.lessons.manage', 'Manage')}
                           </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                           <DropdownMenuItem onClick={() => openManagement(lesson, 'reschedule')}>
                             <CalendarClock className="h-4 w-4 mr-2" />
-                            Reschedule
+                            {t('st.lessons.reschedule', 'Reschedule')}
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             onClick={() => openManagement(lesson, 'cancel')}
                             className="text-destructive focus:text-destructive"
                           >
                             <XCircle className="h-4 w-4 mr-2" />
-                            Cancel Lesson
+                            {t('st.lessons.cancelLesson', 'Cancel Lesson')}
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
@@ -262,8 +264,8 @@ export const UpcomingClassesTab = () => {
             <Card className="glass-card-hub">
               <CardContent className="p-8 text-center">
                 <CheckCircle className="h-16 w-16 text-muted-foreground/30 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-foreground mb-2">No Completed Lessons</h3>
-                <p className="text-muted-foreground mb-4">Your completed lessons will appear here.</p>
+                <h3 className="text-lg font-semibold text-foreground mb-2">{t('st.lessons.noCompleted', 'No Completed Lessons')}</h3>
+                <p className="text-muted-foreground mb-4">{t('st.lessons.completedAppear', 'Your completed lessons will appear here.')}</p>
               </CardContent>
             </Card>
           ) : (

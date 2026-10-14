@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import React from 'react';
+import '@/lib/i18n';
 
 const state = vi.hoisted(() => ({ available: 10, loading: false, family: false }));
 
@@ -21,7 +22,7 @@ beforeEach(() => { state.available = 10; state.loading = false; state.family = f
 describe('credit balance on the student dashboard', () => {
   it('shows the number of 30-minute lessons left', () => {
     render(<CreditBalance />);
-    expect(screen.getByText('10 lessons left')).toBeTruthy();
+    expect(screen.getByText('Lessons left: 10')).toBeTruthy();
     expect(screen.getByText(/25 minutes each/)).toBeTruthy();
     expect(screen.queryByText(/hour/i)).toBeNull();
     expect(screen.getByRole('link', { name: /buy more/i }).getAttribute('href')).toBe('/pricing');

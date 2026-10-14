@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -18,6 +19,7 @@ const STORAGE_KEY = 'profileCompletionBannerDismissedAt';
  *  • the student dismissed it (persisted in localStorage + student_profiles).
  */
 export function ProfileCompletionBanner() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { user } = useAuth();
   const theme = useStudentHubTheme();
@@ -75,7 +77,7 @@ export function ProfileCompletionBanner() {
   return (
     <div
       role="region"
-      aria-label="Profile completion reward"
+      aria-label={t('st.profile.reward', 'Profile completion reward')}
       className={cn(
         'relative mb-4 overflow-hidden rounded-2xl border p-4 backdrop-blur-sm',
         theme.panelBorder,
@@ -89,10 +91,10 @@ export function ProfileCompletionBanner() {
           </div>
           <div>
             <p className="text-sm font-semibold text-foreground">
-              Complete your profile to earn 50 XP
+              {t('st.profile.earnXp', 'Complete your profile to earn 50 XP')}
             </p>
             <p className="text-xs text-muted-foreground">
-              Add an avatar and phone number — takes less than a minute.
+              {t('st.profile.addAvatar', 'Add an avatar and phone number — takes less than a minute.')}
             </p>
           </div>
         </div>
@@ -102,14 +104,14 @@ export function ProfileCompletionBanner() {
             onClick={() => navigate('/dashboard/settings')}
             className={cn('rounded-full', theme.buttonPrimary)}
           >
-            Complete profile
+            {t('st.profile.complete', 'Complete profile')}
           </Button>
           <Button
             type="button"
             variant="ghost"
             size="icon"
             onClick={dismiss}
-            aria-label="Dismiss"
+            aria-label={t('st.profile.dismiss', 'Dismiss')}
             className="h-8 w-8 rounded-full text-muted-foreground hover:text-foreground"
           >
             <X className="h-4 w-4" />
