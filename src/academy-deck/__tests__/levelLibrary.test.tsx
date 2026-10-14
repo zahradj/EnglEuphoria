@@ -9,10 +9,10 @@ import { ACADEMY_SEASONS } from '../../curriculum/academy';
 afterEach(cleanup);
 
 describe('Academy library by level', () => {
-  it('has the five levels and every roadmap season of each level (10 / 12 / 16 / 16 / 16)', () => {
+  it('has the five levels and every roadmap season of each level (12 / 14 / 18 / 18 / 18)', () => {
     expect([...ACADEMY_LEVELS]).toEqual(['A1', 'A2', 'B1', 'B2', 'C1']);
     const g = groupAcademyLessons(ACADEMY_DECK_LESSONS);
-    expect(g.map((x) => x.seasons.length)).toEqual([10, 12, 16, 16, 16]);
+    expect(g.map((x) => x.seasons.length)).toEqual([12, 14, 18, 18, 18]);
     expect(g[0].seasons[0].title).toBe('Who Are You?');
   });
 
@@ -35,27 +35,30 @@ describe('Academy library by level', () => {
     expect(screen.getByRole('tab', { name: /^A1/ }).getAttribute('aria-selected')).toBe('true');
     expect(screen.getByText('Sign Me Up')).toBeTruthy();
     expect(screen.getByText('Fake or Real?')).toBeTruthy();
-    expect(screen.getAllByText('Coming soon').length).toBe(8); // the other A1 seasons (Season 3 has its first lesson)
+    expect(screen.getAllByText('Coming soon').length).toBe(10); // the other A1 seasons (Season 3 has its first lesson)
     fireEvent.click(screen.getByRole('tab', { name: /^C1/ }));
     expect(screen.queryByText('Sign Me Up')).toBeNull();
-    expect(screen.getAllByText('Coming soon').length).toBe(16);
+    expect(screen.getAllByText('Coming soon').length).toBe(18);
     // the first season of a level opens by itself; its header toggles it
     expect(screen.getByText('The lessons of this season are being built.')).toBeTruthy();
     fireEvent.click(screen.getAllByRole('button', { name: /Coming soon/ })[0]);
     expect(screen.queryByText('The lessons of this season are being built.')).toBeNull();
   });
 
-  it('LADDER VIEW (teachers and creators): tabs are the lean ladder steps, Pre-A1 first with planned seasons, A1 Upper holds Seasons 7-10', () => {
+  it('LADDER VIEW (teachers and creators): tabs are the lean ladder steps, Pre-A1 first with planned seasons, A1 Upper holds Seasons 7-12', () => {
     const g = groupAcademyLibrary(ACADEMY_DECK_LESSONS, true);
     expect(g.map((x) => x.id)).toEqual(['pre-a1', 'a1', 'a1-upper', 'a2', 'b1', 'b2', 'c1']);
-    expect(g[0].seasons.map((s) => s.title)).toEqual(['Hello, letters', 'First sounds', 'Numbers and age']);
+    expect(g[0].seasons.map((s) => s.title)).toEqual(['Hello, letters', 'First sounds', 'Numbers and age', 'My things', 'People and places']);
     // Season P1 has its first lesson (Cold Open); P2 and P3 are still planned
-    expect(g[0].seasons.map((s) => s.planned)).toEqual([false, true, true]);
+    expect(g[0].seasons.map((s) => s.planned)).toEqual([false, true, true, true, true]);
     expect(g[0].seasons.every((s) => s.no === null)).toBe(true);
     expect(g[0].seasons[0].lessons.map((l) => l.id)).toEqual(['pa1-s01-e1']);
     expect(g[0].seasons[0].slots.map((x) => [x.episode, x.built])).toEqual([[1, true], [2, false], [3, false], [4, false], [5, false], [6, false], [7, false], [8, false]]);
+    // every Pre-A1 Season lists its 8 planned lessons and an overview; so does every roadmap Season
+    expect(g[0].seasons.every((x) => x.slots.length === 8 && !!x.overview)).toBe(true);
+    expect(g.slice(1).every((x) => x.seasons.every((y) => !!y.overview && y.slots.length === 8))).toBe(true);
     expect(g[1].seasons.map((s) => s.no)).toEqual([1, 2, 3, 4, 5, 6]);
-    expect(g[2].seasons.map((s) => s.no)).toEqual([7, 8, 9, 10]);
+    expect(g[2].seasons.map((s) => s.no)).toEqual([7, 8, 9, 10, 11, 12]);
     expect(g.reduce((n, x) => n + x.count, 0)).toBe(ACADEMY_DECK_LESSONS.length);
     // students keep plain levels (no Pre-A1, no Upper tab)
     expect(groupAcademyLibrary(ACADEMY_DECK_LESSONS, false).map((x) => x.id)).toEqual(['a1', 'a2', 'b1', 'b2', 'c1']);
@@ -92,10 +95,10 @@ describe('Academy library by level', () => {
 });
 
 describe('A1 curriculum in the library', () => {
-  it('lists all 10 A1 seasons x 8 lessons, each with its goal, Mission, Release and clue from the lesson blueprint', async () => {
+  it('lists all 12 A1 seasons x 8 lessons, each with its goal, Mission, Release and clue from the lesson blueprint', async () => {
     const { groupAcademyLibrary } = await import('../library/levels');
     const a1 = groupAcademyLibrary([], false).find((g) => g.id === 'a1')!;
-    expect(a1.seasons).toHaveLength(10);
+    expect(a1.seasons).toHaveLength(12);
     a1.seasons.forEach((s) => {
       expect(s.slots, s.title).toHaveLength(8);
       s.slots.forEach((x) => {

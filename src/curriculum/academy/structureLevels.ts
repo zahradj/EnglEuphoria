@@ -1,7 +1,10 @@
 // Academy roadmap v2 — grammar structure catalogue with the earliest level for PRODUCTIVE use.
 //
-// STATUS: placements are recalled from the English Grammar Profile (Cambridge), Pearson GSE Grammar objectives and
-// Cambridge exam lists, NOT re-checked against the sources on 2026-10-08 (they could not be opened that day).
+// STATUS (2026-10-14): placements were first recalled from memory (2026-10-08). On 2026-10-14 they were cross-checked against the
+// open CEFR-J Grammar Profile (Tono Laboratory, TUFS; github.com/openlanguageprofiles/olp-en-cefrj), whose rows also list the
+// Core Inventory, English Grammar Profile (EGP) and Pearson GSE levels. englishprofile.org itself, coe.int and pearson.com's GSE
+// toolkit could not be opened (Cloudflare / no route), so EGP and GSE values come second-hand from that dataset.
+// Result and method: docs/research/academy-curriculum-primary-source-check.md.
 // 'known'      = established, recalled from memory.
 // 'unverified' = one of the least certain placements; check in the EGP online search and the GSE Grammar PDF before locking.
 // Sources to check: englishprofile.org/english-grammar-profile · pearson.com/english/about/gse/learning-objectives.html
@@ -14,6 +17,11 @@
 //  - past perfect only after past simple and past continuous are secure;
 //  - phrasal verbs are taught as recycled vocabulary, not as a grammar unit.
 import type { AcademyLevel, Confidence } from './types';
+import { A1_NEW_STRUCTURES } from './structures/a1';
+import { A2_NEW_STRUCTURES } from './structures/a2';
+import { B1_NEW_STRUCTURES } from './structures/b1';
+import { B2_NEW_STRUCTURES } from './structures/b2';
+import { C1_NEW_STRUCTURES } from './structures/c1';
 
 export interface StructureInfo {
   label: string;
@@ -23,6 +31,7 @@ export interface StructureInfo {
 }
 
 export const STRUCTURES: Record<string, StructureInfo> = {
+  ...A1_NEW_STRUCTURES, ...A2_NEW_STRUCTURES, ...B1_NEW_STRUCTURES, ...B2_NEW_STRUCTURES, ...C1_NEW_STRUCTURES,
   // ---------------------------------------------------------------- A1
   'be-present': { label: 'be (am/is/are): statements, questions, negatives', floor: 'A1', confidence: 'known' },
   'possessive-adjectives': { label: 'possessive adjectives (my/your/his/her/our/their)', floor: 'A1', confidence: 'known' },
@@ -43,32 +52,32 @@ export const STRUCTURES: Record<string, StructureInfo> = {
   'demonstratives': { label: 'this / that / these / those', floor: 'A1', confidence: 'known' },
   'how-much-many': { label: 'how much / how many and prices', floor: 'A1', confidence: 'known' },
   'present-continuous-now': { label: 'present continuous for actions happening now', floor: 'A1', confidence: 'known' },
-  'wh-questions': { label: 'wh-questions and question word order', floor: 'A1', confidence: 'known' },
+  'wh-questions': { label: 'wh-questions and question word order', floor: 'A1', confidence: 'known', note: 'CEFR-J: What/How A1.1, Why A1.2, Where A1.3. Taught as chunks from Season 1; Season 10 adds full word order' },
   // ---------------------------------------------------------------- A2
-  'past-be': { label: 'past simple of be (was/were)', floor: 'A2', confidence: 'unverified', note: 'A1 late / A2 early in some sources' },
+  'past-be': { label: 'past simple of be (was/were)', floor: 'A2', confidence: 'known', note: 'CEFR-J A1.3-A2.1, EGP A1: may appear as a chunk late in A1; productive floor A2 kept (first past Season)' },
   'past-simple-regular': { label: 'past simple: regular verbs (-ed)', floor: 'A2', confidence: 'known' },
   'past-simple-irregular': { label: 'past simple: irregular verbs, questions and negatives', floor: 'A2', confidence: 'known' },
   'comparatives-superlatives': { label: 'comparatives and superlatives', floor: 'A2', confidence: 'known' },
   'going-to': { label: 'be going to (plans and intentions)', floor: 'A2', confidence: 'known' },
   'should': { label: 'should / shouldn\'t for advice', floor: 'A2', confidence: 'known' },
-  'too-enough': { label: 'too / enough', floor: 'A2', confidence: 'known' },
+  'too-enough': { label: 'too / enough', floor: 'A2', confidence: 'known', note: 'too + adjective GSE A2; "enough" with adjectives CEFR-J B2.1 / EGP B1-C1: teach "not big enough" as a chunk, full use at B1' },
   'must-mustnt': { label: "must / mustn't (rules)", floor: 'A2', confidence: 'known' },
   'have-to': { label: 'have to (obligation)', floor: 'A2', confidence: 'known', note: "don't have to vs mustn't contrast is B1" },
-  'quantifiers-much-many': { label: 'much / many / a few / a little / a lot of', floor: 'A2', confidence: 'known' },
+  'quantifiers-much-many': { label: 'much / many / a few / a little / a lot of', floor: 'A2', confidence: 'known', note: 'much A2.2; "a few / a little" EGP B1-B2: keep to much / many / a lot of at A2' },
   'infinitive-purpose': { label: 'infinitive of purpose (to + verb)', floor: 'A2', confidence: 'known' },
   'prepositions-movement': { label: 'prepositions of movement and transport phrases', floor: 'A2', confidence: 'known' },
-  'will-decisions-predictions': { label: 'will for decisions, offers and simple predictions', floor: 'A2', confidence: 'unverified', note: 'sequence with going to differs by source' },
+  'will-decisions-predictions': { label: 'will for decisions, offers and simple predictions', floor: 'A2', confidence: 'known', note: 'CEFR-J will A2.2 (decisions, offers); promises/predictions B1.1, so B1 Season 10 is a new sub-use, not a repeat' },
   'past-continuous': { label: 'past continuous (was/were + -ing)', floor: 'A2', confidence: 'known' },
   'linking-so-because': { label: 'so / because / then (linking sentences)', floor: 'A2', confidence: 'known' },
   'adverbs-manner': { label: 'adverbs of manner (-ly)', floor: 'A2', confidence: 'known' },
   'suggestions': { label: "let's / shall we / how about + -ing (suggestions)", floor: 'A2', confidence: 'known' },
   // ---------------------------------------------------------------- B1
   'present-perfect-experience': { label: 'present perfect: experience (ever/never/been)', floor: 'B1', confidence: 'unverified', note: 'A2 late / B1; teach for production at B1' },
-  'used-to': { label: 'used to', floor: 'B1', confidence: 'unverified' },
+  'used-to': { label: 'used to', floor: 'B1', confidence: 'known', note: 'CEFR-J B1.1, EGP B1, GSE B1' },
   'present-perfect-for-since': { label: 'present perfect: for / since / how long', floor: 'B1', confidence: 'known' },
   'present-perfect-vs-past-simple': { label: 'present perfect vs past simple', floor: 'B1', confidence: 'known' },
   'zero-first-conditional': { label: 'zero and first conditional', floor: 'B1', confidence: 'unverified', note: 'zero conditional A2 late / B1' },
-  'second-conditional': { label: 'second conditional', floor: 'B1', confidence: 'unverified' },
+  'second-conditional': { label: 'second conditional', floor: 'B1', confidence: 'known', note: 'CEFR-J B1.2, GSE B2' },
   'passive-simple': { label: 'passive: present and past simple', floor: 'B1', confidence: 'known' },
   'defining-relative-clauses': { label: 'defining relative clauses (who/which/that/where)', floor: 'B1', confidence: 'known' },
   'question-tags': { label: 'question tags', floor: 'B1', confidence: 'known' },
@@ -76,15 +85,15 @@ export const STRUCTURES: Record<string, StructureInfo> = {
   'present-continuous-future': { label: 'present continuous for future arrangements', floor: 'B1', confidence: 'unverified', note: 'possibly A2 in EGP; taught at B1 after "now" use is automatic' },
   'will-promises-predictions': { label: 'will for promises and predictions', floor: 'B1', confidence: 'unverified' },
   'gerund-infinitive': { label: 'verb patterns: gerund vs infinitive (common verbs)', floor: 'B1', confidence: 'known' },
-  'reported-statements': { label: 'reported speech: statements (say/tell, basic backshift)', floor: 'B1', confidence: 'unverified', note: 'B1 late / B2' },
-  'past-perfect': { label: 'past perfect', floor: 'B1', confidence: 'unverified', note: 'B1 late; not required for production in Preliminary for Schools [U]' },
+  'reported-statements': { label: 'reported speech: statements (say/tell, basic backshift)', floor: 'B1', confidence: 'known', note: 'CEFR-J say A2.2, tell B1.2, EGP B2 for backshift: keep to present-to-past backshift; past perfect backshift only after the past-perfect Season' },
+  'past-perfect': { label: 'past perfect', floor: 'B1', confidence: 'known', note: 'B1 late; not required for production in Preliminary for Schools [U]' },
   'wish-past-simple': { label: 'wish + past simple', floor: 'B1', confidence: 'unverified' },
   'obligation-contrast': { label: "mustn't vs don't have to (contrast)", floor: 'B1', confidence: 'known' },
   'linking-although': { label: 'although / even though / while (contrast)', floor: 'B1', confidence: 'known' },
   'phrasal-verbs-separable': { label: 'common phrasal verbs (separable / inseparable) as vocabulary', floor: 'B1', confidence: 'known' },
   // ---------------------------------------------------------------- B2
-  'present-perfect-continuous': { label: 'present perfect continuous', floor: 'B2', confidence: 'unverified', note: 'B1 late / B2' },
-  'third-conditional': { label: 'third conditional', floor: 'B2', confidence: 'known' },
+  'present-perfect-continuous': { label: 'present perfect continuous', floor: 'B2', confidence: 'known', note: 'CEFR-J B2.1, GSE B2, Core Inventory B1-B2' },
+  'third-conditional': { label: 'third conditional', floor: 'B2', confidence: 'known', note: 'GSE B2, Core Inventory B1-C1, EGP C1' },
   'wish-past-perfect': { label: 'wish / if only + past perfect', floor: 'B2', confidence: 'known' },
   'passive-extended': { label: 'passive: all tenses and modal passives', floor: 'B2', confidence: 'known' },
   'reported-questions-commands': { label: 'reported questions, commands, reporting verbs', floor: 'B2', confidence: 'known' },
@@ -94,7 +103,7 @@ export const STRUCTURES: Record<string, StructureInfo> = {
   'hedging-stance': { label: 'hedging and stance (arguably, I\'d suggest, to some extent)', floor: 'B2', confidence: 'known' },
   'linking-however-despite': { label: 'however / despite / in spite of / whereas', floor: 'B2', confidence: 'known' },
   'causative-have-get': { label: 'have / get something done', floor: 'B2', confidence: 'known', note: 'B1/B2' },
-  'embedded-questions': { label: 'embedded (indirect) questions', floor: 'B2', confidence: 'known', note: 'B1/B2' },
+  'embedded-questions': { label: 'embedded (indirect) questions', floor: 'B1', confidence: 'known', note: 'CEFR-J know/wonder + wh- A2.1-B1.1, ask/tell + wh- B1.1: teach before reported questions (B2 Season 4 relies on it); full use B2' },
   'conditionals-extended': { label: 'unless / as long as / provided that / suppose', floor: 'B2', confidence: 'known' },
   'gerund-infinitive-meaning': { label: 'verbs that change meaning (remember/stop/try + -ing or to)', floor: 'B2', confidence: 'known' },
   'articles-nuance': { label: 'articles: generic reference, zero article, fixed uses', floor: 'B2', confidence: 'known' },

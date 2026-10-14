@@ -98,8 +98,8 @@ export interface LevelPlan {
   cambridgeCumulativeHours?: string;
 }
 
-/** Approved sizing (owner, 2026-10-08): seasons per level. 8 sessions each = 560 sessions A1 -> C1. */
-export const SEASONS_PER_LEVEL: Record<AcademyLevel, number> = { A1: 10, A2: 12, B1: 16, B2: 16, C1: 16 };
+/** Sizing: owner-approved 2026-10-08 (10/12/16/16/16 = 70 Seasons), grown by two Seasons per level on 2026-10-14 (owner: "add more seasons") = 80 Seasons, 640 sessions A1 -> C1. */
+export const SEASONS_PER_LEVEL: Record<AcademyLevel, number> = { A1: 12, A2: 14, B1: 18, B2: 18, C1: 18 };
 export const SESSIONS_PER_SEASON = 8;
 /** Hard cap on NEW items (words + chunks) a single session may introduce. Academy's own constant; not shared with any other hub. */
 export const MAX_ITEMS_PER_SESSION = 14;

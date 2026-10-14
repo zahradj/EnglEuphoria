@@ -4,16 +4,16 @@ import { describe, expect, it } from 'vitest';
 import { ACADEMY_ROADMAP, ACADEMY_ROADMAP_ISSUES, ACADEMY_ROADMAP_SUMMARY, ACADEMY_SEASONS, STRUCTURES, validateRoadmap } from '..';
 
 describe('Academy roadmap v2', () => {
-  it('has the approved sizing: 70 Seasons, 560 sessions', () => {
+  it('has the sizing (approved 70 Seasons, grown to 80 on 2026-10-14): 80 Seasons, 640 sessions', () => {
     expect(ACADEMY_ROADMAP.map((p) => [p.level, p.seasons.length])).toEqual([
-      ['A1', 10],
-      ['A2', 12],
-      ['B1', 16],
-      ['B2', 16],
-      ['C1', 16],
+      ['A1', 12],
+      ['A2', 14],
+      ['B1', 18],
+      ['B2', 18],
+      ['C1', 18],
     ]);
-    expect(ACADEMY_ROADMAP_SUMMARY.seasons).toBe(70);
-    expect(ACADEMY_ROADMAP_SUMMARY.sessions).toBe(560);
+    expect(ACADEMY_ROADMAP_SUMMARY.seasons).toBe(80);
+    expect(ACADEMY_ROADMAP_SUMMARY.sessions).toBe(640);
   });
 
   it('passes every validator rule (errors only; warnings are listed by the report script)', () => {
