@@ -90,7 +90,7 @@ const REAL_SYNC_KINDS = new Set<Scene['kind']>([
   'sound-model', 'word-build', 'sentence-build', 'letter-game', 'spin-wheel', 'picture-match', 'recall-warmup',
   'first-sound', 'sound-blend', 'letter-match', 'letter-blocks', 'whats-missing', 'sort-basket', 'grammar-gap', 'color-play',
   'tongue-twister', 'place-it', 'torch-hunt', 'where-castle', 'welcome-party', 'name-badge', 'feelings-survey', 'chat-chain',
-, 'answer-mirror', 'feelings-camera', 'feelings-runner']);
+  'answer-mirror', 'feelings-camera', 'feelings-runner']);
 
 const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcomeTownLessonProps>(function PlayWelcomeTownLesson(
   { scenes, sessionKey, embedded = false, skin, pageTitle, pageDescription, onFinaleReached, unitNumber, lessonNumber, role, roomId, hideInternalNav = false, onNavState, persistedSceneIdx, onSceneIdxPersist, persistedInteractionUnlocked, onInteractionUnlockedPersist },
