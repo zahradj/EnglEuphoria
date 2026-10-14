@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
 const ResetPassword = () => {
+  const { t } = useTranslation();
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -54,9 +56,9 @@ const ResetPassword = () => {
   }, []);
 
   const passwordRequirements = [
-    { test: (pwd: string) => pwd.length >= 6, text: "At least 6 characters" },
-    { test: (pwd: string) => /[A-Z]/.test(pwd), text: "One uppercase letter" },
-    { test: (pwd: string) => /[0-9]/.test(pwd), text: "One number" },
+    { test: (pwd: string) => pwd.length >= 6, text: t('st.auth.req6', 'At least 6 characters') },
+    { test: (pwd: string) => /[A-Z]/.test(pwd), text: t('st.auth.reqUpper', 'One uppercase letter') },
+    { test: (pwd: string) => /[0-9]/.test(pwd), text: t('st.auth.reqNumber', 'One number') },
   ];
 
   const getPasswordStrength = (): number => {
@@ -68,8 +70,8 @@ const ResetPassword = () => {
 
     if (getPasswordStrength() < 2) {
       toast({
-        title: "Password Too Weak",
-        description: "Password must meet at least 2 security requirements.",
+        title: t('st.auth.weak', 'Password Too Weak'),
+        description: t('st.auth.weakDesc', 'Password must meet at least 2 security requirements.'),
         variant: "destructive"
       });
       return;
@@ -77,8 +79,8 @@ const ResetPassword = () => {
 
     if (password !== confirmPassword) {
       toast({
-        title: "Passwords Don't Match",
-        description: "Please make sure both passwords are identical.",
+        title: t('st.auth.mismatch', "Passwords Don't Match"),
+        description: t('st.auth.mismatchDesc', 'Please make sure both passwords are identical.'),
         variant: "destructive"
       });
       return;
@@ -92,22 +94,22 @@ const ResetPassword = () => {
 
       if (error) {
         toast({
-          title: "Reset Failed",
-          description: error.message || "Failed to reset password.",
+          title: t('st.auth.resetFailed', 'Reset Failed'),
+          description: error.message || t('st.auth.resetFailedDesc', 'Failed to reset password.'),
           variant: "destructive"
         });
       } else {
         toast({
-          title: "Password Reset Successful! ✅",
-          description: "Your password has been updated. You can now log in.",
+          title: t('st.auth.resetOk', 'Password Reset Successful! ✅'),
+          description: t('st.auth.resetOkDesc', 'Your password has been updated. You can now log in.'),
         });
         await supabase.auth.signOut();
         setTimeout(() => navigate('/login'), 2000);
       }
     } catch (error: any) {
       toast({
-        title: "Reset Error",
-        description: error.message || "An unexpected error occurred.",
+        title: t('st.auth.resetError', 'Reset Error'),
+        description: error.message || t('st.auth.unexpected', 'An unexpected error occurred.'),
         variant: "destructive"
       });
     } finally {
@@ -122,7 +124,7 @@ const ResetPassword = () => {
         <Card className="w-full max-w-md shadow-2xl bg-white/95 backdrop-blur-sm border-0">
           <CardContent className="flex flex-col items-center justify-center py-16 gap-4">
             <Loader2 className="h-10 w-10 animate-spin text-purple-500" />
-            <p className="text-gray-600 text-sm">Verifying your reset link...</p>
+            <p className="text-gray-600 text-sm">{t('st.auth.verifying', 'Verifying your reset link...')}</p>
           </CardContent>
         </Card>
       </div>
@@ -138,15 +140,15 @@ const ResetPassword = () => {
             <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
               <AlertTriangle className="h-8 w-8 text-red-500" />
             </div>
-            <h2 className="text-xl font-bold text-gray-800">Link Expired or Invalid</h2>
+            <h2 className="text-xl font-bold text-gray-800">{t('st.auth.expired', 'Link Expired or Invalid')}</h2>
             <p className="text-gray-600 text-sm max-w-xs">
-              This password reset link has expired or is invalid. Please request a new one.
+              {t('st.auth.expiredDesc', 'This password reset link has expired or is invalid. Please request a new one.')}
             </p>
             <Button
               onClick={() => navigate('/login')}
               className="mt-4 bg-purple-500/90 hover:bg-purple-600/90"
             >
-              Back to Login
+              {t('st.auth.backLogin', 'Back to Login')}
             </Button>
           </CardContent>
         </Card>
@@ -171,7 +173,7 @@ const ResetPassword = () => {
               </div>
             </div>
             <CardTitle className="text-3xl font-bold text-gray-800">
-              Reset Password 🔐
+              {t('st.auth.resetTitle', 'Reset Password 🔐')}
             </CardTitle>
           </CardHeader>
           
@@ -179,22 +181,22 @@ const ResetPassword = () => {
             <form onSubmit={handleResetPassword} className="space-y-4">
               <div>
                 <label className="text-sm font-medium text-gray-700 mb-2 block">
-                  New Password
+                  {t('st.set.newPw', 'New Password')}
                 </label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Lock className="absolute start-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                   <Input
                     type={showPassword ? "text" : "password"}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Enter new password"
-                    className="pl-10 pr-10 h-11"
+                    placeholder={t('st.auth.enterNew', 'Enter new password')}
+                    className="ps-10 pe-10 h-11"
                   />
                   <Button
                     type="button"
                     variant="ghost"
                     size="sm"
-                    className="absolute right-0 top-0 h-11 px-3 hover:bg-transparent"
+                    className="absolute end-0 top-0 h-11 px-3 hover:bg-transparent"
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? (
@@ -219,22 +221,22 @@ const ResetPassword = () => {
 
               <div>
                 <label className="text-sm font-medium text-gray-700 mb-2 block">
-                  Confirm Password
+                  {t('st.auth.confirm', 'Confirm Password')}
                 </label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <Lock className="absolute start-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                   <Input
                     type={showConfirmPassword ? "text" : "password"}
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    placeholder="Confirm new password"
-                    className="pl-10 pr-10 h-11"
+                    placeholder={t('st.auth.confirmNew', 'Confirm new password')}
+                    className="ps-10 pe-10 h-11"
                   />
                   <Button
                     type="button"
                     variant="ghost"
                     size="sm"
-                    className="absolute right-0 top-0 h-11 px-3 hover:bg-transparent"
+                    className="absolute end-0 top-0 h-11 px-3 hover:bg-transparent"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   >
                     {showConfirmPassword ? (
@@ -251,8 +253,8 @@ const ResetPassword = () => {
                 disabled={loading}
                 className="w-full h-12 text-lg font-semibold bg-purple-500/90 hover:bg-purple-600/90 transition-all duration-200"
               >
-                {loading ? "Resetting..." : "Reset Password"}
-                {!loading && <ArrowRight className="ml-2 h-5 w-5" />}
+                {loading ? t('st.auth.resetting', 'Resetting...') : t('st.auth.resetBtn', 'Reset Password')}
+                {!loading && <ArrowRight className="ms-2 h-5 w-5 rtl:rotate-180" />}
               </Button>
             </form>
             
@@ -262,7 +264,7 @@ const ResetPassword = () => {
                 onClick={() => navigate('/login')}
                 className="text-sm text-gray-600 hover:text-purple-600"
               >
-                ← Back to Login
+                <span className="inline-block rtl:rotate-180">←</span> {t('st.auth.backLogin', 'Back to Login')}
               </Button>
             </div>
           </CardContent>

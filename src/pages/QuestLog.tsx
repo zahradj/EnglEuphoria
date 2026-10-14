@@ -7,6 +7,7 @@
  */
 
 import { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Compass, Star, RotateCcw, Timer, Target, Cloud, HardDrive } from 'lucide-react';
 import { Card } from '@/components/ui/card';
@@ -49,6 +50,7 @@ function fmtMinutes(ms: number): string {
 }
 
 export default function QuestLog() {
+  const { t, i18n } = useTranslation();
   const localEntries = useMemo<Entry[]>(() => {
     const store = readLocalStore();
     return Object.entries(store).flatMap(([unitId, b]) =>
@@ -110,9 +112,9 @@ export default function QuestLog() {
       <div className="min-h-screen grid place-items-center p-6">
         <div className="text-center max-w-md">
           <Compass className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-          <h1 className="text-2xl font-bold mb-2">No quests yet</h1>
+          <h1 className="text-2xl font-bold mb-2">{t('st.ql.none', 'No quests yet')}</h1>
           <p className="text-muted-foreground">
-            Complete a Language Engine slot inside a lesson and it will show up here.
+            {t('st.ql.noneDesc', 'Complete a Language Engine slot inside a lesson and it will show up here.')}
           </p>
         </div>
       </div>
@@ -127,17 +129,17 @@ export default function QuestLog() {
       <header className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold flex items-center gap-2">
-            <Compass className="h-7 w-7 text-purple-500" /> Quest Log
+            <Compass className="h-7 w-7 text-purple-500" /> {t('st.ql.title', 'Quest Log')}
           </h1>
           <p className="text-muted-foreground text-sm mt-1">
-            {totalRuns} completed · {Math.round(avgAcc * 100)}% avg accuracy
+            {t('st.ql.summary', { n: totalRuns, pct: Math.round(avgAcc * 100), defaultValue: '{{n}} completed · {{pct}}% avg accuracy' })}
           </p>
         </div>
         <Badge variant="outline" className="gap-1.5">
           {source === 'cloud' ? (
-            <><Cloud className="h-3 w-3" /> Synced</>
+            <><Cloud className="h-3 w-3" /> {t('st.ql.synced', 'Synced')}</>
           ) : (
-            <><HardDrive className="h-3 w-3" /> Local only</>
+            <><HardDrive className="h-3 w-3" /> {t('st.ql.local', 'Local only')}</>
           )}
         </Badge>
       </header>
@@ -149,7 +151,7 @@ export default function QuestLog() {
         return (
           <Card className="p-4">
             <h2 className="font-semibold mb-3 flex items-center gap-2">
-              <Star className="h-4 w-4 text-yellow-500" /> Vault Stickers
+              <Star className="h-4 w-4 text-yellow-500" /> {t('st.ql.stickers', 'Vault Stickers')}
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {achievements.map((a) => (
@@ -181,8 +183,8 @@ export default function QuestLog() {
                 <div className="flex-1 p-4 flex items-center gap-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="font-semibold">{ENGINE_LABEL[run.engine]}</span>
-                      <Badge variant="outline">Unit {unitId.slice(0, 6)}</Badge>
+                      <span className="font-semibold">{t('st.ql.engine.' + run.engine, ENGINE_LABEL[run.engine])}</span>
+                      <Badge variant="outline">{t('st.unit.unitN', { n: unitId.slice(0, 6), defaultValue: 'Unit {{n}}' })}</Badge>
                     </div>
                     <div className="flex items-center gap-4 text-xs text-muted-foreground">
                       <span className="flex items-center gap-1">
@@ -192,12 +194,12 @@ export default function QuestLog() {
                         <Timer className="h-3 w-3" /> {fmtMinutes(run.durationMs)}
                       </span>
                       <span>
-                        {run.correct}/{run.attempts} correct
+                        {t('st.ql.correct', { c: run.correct, a: run.attempts, defaultValue: '{{c}}/{{a}} correct' })}
                       </span>
-                      <span>{new Date(run.ts).toLocaleDateString()}</span>
+                      <span>{new Date(run.ts).toLocaleDateString(i18n.language)}</span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-1" aria-label={`${pct}% accuracy`}>
+                  <div className="flex items-center gap-1" aria-label={t('st.ql.accuracy', { pct: pct, defaultValue: '{{pct}}% accuracy' })}>
                     {[1, 2, 3].map((s) => (
                       <Star
                         key={s}
@@ -211,7 +213,7 @@ export default function QuestLog() {
                   </div>
                   <Button size="sm" variant="outline" asChild>
                     <Link to={`/play/${unitId}`}>
-                      <RotateCcw className="h-4 w-4 mr-1.5" /> Replay
+                      <RotateCcw className="h-4 w-4 me-1.5" /> {t('st.ql.replay', 'Replay')}
                     </Link>
                   </Button>
                 </div>

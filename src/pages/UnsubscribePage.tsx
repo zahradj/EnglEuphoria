@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 import { supabase, supabaseUrl, supabaseAnonKey } from '@/integrations/supabase/client';
 import { Card, CardContent } from '@/components/ui/card';
@@ -11,6 +12,7 @@ const SUPABASE_URL = supabaseUrl;
 const SUPABASE_ANON_KEY = supabaseAnonKey;
 
 const UnsubscribePage: React.FC = () => {
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
   const [status, setStatus] = useState<UnsubStatus>('loading');
@@ -78,16 +80,16 @@ const UnsubscribePage: React.FC = () => {
           {status === 'loading' && (
             <>
               <Loader2 className="h-12 w-12 animate-spin mx-auto mb-4 text-primary" />
-              <p className="text-muted-foreground">Validating your request...</p>
+              <p className="text-muted-foreground">{t('st.unsub.validating', 'Validating your request...')}</p>
             </>
           )}
 
           {status === 'valid' && (
             <>
               <MailX className="h-12 w-12 mx-auto mb-4 text-primary" />
-              <h2 className="text-xl font-semibold text-foreground mb-2">Unsubscribe from Emails</h2>
+              <h2 className="text-xl font-semibold text-foreground mb-2">{t('st.unsub.title', 'Unsubscribe from Emails')}</h2>
               <p className="text-muted-foreground mb-6">
-                Are you sure you want to unsubscribe from EnglEuphoria app emails?
+                {t('st.unsub.ask', 'Are you sure you want to unsubscribe from EnglEuphoria app emails?')}
               </p>
               <Button
                 onClick={handleUnsubscribe}
@@ -95,9 +97,9 @@ const UnsubscribePage: React.FC = () => {
                 className="w-full"
               >
                 {processing ? (
-                  <><Loader2 className="h-4 w-4 animate-spin mr-2" /> Processing...</>
+                  <><Loader2 className="h-4 w-4 animate-spin me-2" /> {t('st.sp.processing', 'Processing...')}</>
                 ) : (
-                  'Confirm Unsubscribe'
+                  t('st.unsub.confirm', 'Confirm Unsubscribe')
                 )}
               </Button>
             </>
@@ -106,9 +108,9 @@ const UnsubscribePage: React.FC = () => {
           {status === 'success' && (
             <>
               <CheckCircle2 className="h-12 w-12 mx-auto mb-4 text-green-500" />
-              <h2 className="text-xl font-semibold text-foreground mb-2">Unsubscribed</h2>
+              <h2 className="text-xl font-semibold text-foreground mb-2">{t('st.unsub.done', 'Unsubscribed')}</h2>
               <p className="text-muted-foreground">
-                You've been successfully unsubscribed from EnglEuphoria app emails.
+                {t('st.unsub.doneDesc', "You've been successfully unsubscribed from EnglEuphoria app emails.")}
               </p>
             </>
           )}
@@ -116,9 +118,9 @@ const UnsubscribePage: React.FC = () => {
           {status === 'already_unsubscribed' && (
             <>
               <CheckCircle2 className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-              <h2 className="text-xl font-semibold text-foreground mb-2">Already Unsubscribed</h2>
+              <h2 className="text-xl font-semibold text-foreground mb-2">{t('st.unsub.already', 'Already Unsubscribed')}</h2>
               <p className="text-muted-foreground">
-                You've already been unsubscribed from these emails.
+                {t('st.unsub.alreadyDesc', "You've already been unsubscribed from these emails.")}
               </p>
             </>
           )}
@@ -126,9 +128,9 @@ const UnsubscribePage: React.FC = () => {
           {status === 'invalid' && (
             <>
               <XCircle className="h-12 w-12 mx-auto mb-4 text-destructive" />
-              <h2 className="text-xl font-semibold text-foreground mb-2">Invalid Link</h2>
+              <h2 className="text-xl font-semibold text-foreground mb-2">{t('st.unsub.invalid', 'Invalid Link')}</h2>
               <p className="text-muted-foreground">
-                This unsubscribe link is invalid or has expired.
+                {t('st.unsub.invalidDesc', 'This unsubscribe link is invalid or has expired.')}
               </p>
             </>
           )}
@@ -136,9 +138,9 @@ const UnsubscribePage: React.FC = () => {
           {status === 'error' && (
             <>
               <XCircle className="h-12 w-12 mx-auto mb-4 text-destructive" />
-              <h2 className="text-xl font-semibold text-foreground mb-2">Something Went Wrong</h2>
+              <h2 className="text-xl font-semibold text-foreground mb-2">{t('st.unsub.error', 'Something Went Wrong')}</h2>
               <p className="text-muted-foreground">
-                We couldn't process your request. Please try again later.
+                {t('st.unsub.errorDesc', "We couldn't process your request. Please try again later.")}
               </p>
             </>
           )}
