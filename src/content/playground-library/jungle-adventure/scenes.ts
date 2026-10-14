@@ -246,7 +246,7 @@ export const LESSON_A1U2L1_SCENES: Scene[] = [
     pages: JUNGLE_RESCUE.slice(0, 3),
   },
   {
-    id: 'ja-read-match', kind: 'picture-match', prompt: 'Read and match',
+    id: 'ja-read-match', kind: 'picture-match', look: 'chalk', prompt: 'Read and match',
     teacher: 'Reading: read each sentence and drag it under its picture. Then read it aloud.',
     items: [
       { word: 'It is big and grey.', img: ANIMALS.elephant.img },
@@ -2403,7 +2403,7 @@ export const LESSON_A1U2L7_SCENES: Scene[] = [
   },
   /* Practise again — for any part below the pass mark, or as extra time */
   {
-    id: 'ja7-pa-match', kind: 'picture-match', prompt: 'Practise again: read and match',
+    id: 'ja7-pa-match', kind: 'picture-match', look: 'frames', prompt: 'Practise again: read and match',
     teacher: 'Practise again (Part 2): read each sentence and drag it under its animal.',
     items: [
       { word: 'It’s got a long nose.', img: it('elephant') },

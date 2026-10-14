@@ -413,7 +413,7 @@ export const LESSON_A1U9L1_SCENES: Scene[] = [
     // shows the same room the student already met under that name. Crop
     // boxes checked against the art: left room ≈ 5.5-52% x, right room ≈
     // 55.5-94.5% x, both ≈ 17-86% y of the 1376×768 images.
-    id: 'mc-match-rooms', kind: 'picture-match',
+    id: 'mc-match-rooms', kind: 'picture-match', look: 'polaroids',
     prompt: 'Match the rooms!',
     studentOnly: true,
     teacher: 'Self-check: the student drags each room name under its picture on their own — no help needed. Afterwards point to a picture and ask: "What room is this?"',
@@ -896,7 +896,7 @@ export const LESSON_A1U9L2_SCENES: Scene[] = [
   {
     // Written-word self-check, cropped from the very picture the words were
     // taught on (crop boxes measured on the 1376×768 tour art).
-    id: 'mc2-match', kind: 'picture-match',
+    id: 'mc2-match', kind: 'picture-match', look: 'chalk',
     prompt: 'Match the words!',
     studentOnly: true,
     teacher: 'Self-check: the student drags each word under its picture on their own. Afterwards point to a picture and ask: "What is this?"',
@@ -1116,7 +1116,7 @@ export const LESSON_A1U9L3_SCENES: Scene[] = [
   {
     // Warm-up retrieval of Lessons 1-2 before anything new: the furniture
     // the lamp will hide in/on/under in today's games.
-    id: 'mc3-warmup-match', kind: 'picture-match',
+    id: 'mc3-warmup-match', kind: 'picture-match', look: 'cards',
     prompt: 'Remember these? Match the words!',
     teacher: 'Warm-up: the student matches each word to its picture. Point to each one and ask "What is this?"',
     items: [
@@ -1246,7 +1246,7 @@ export const LESSON_A1U9L3_SCENES: Scene[] = [
   {
     // Reading self-check: each picture is cropped from the hunt rooms around
     // the lamp; the student matches the "where" word.
-    id: 'mc3-where-match', kind: 'picture-match',
+    id: 'mc3-where-match', kind: 'picture-match', look: 'frames',
     prompt: 'Where is the lamp? Match the words!',
     studentOnly: true,
     teacher: 'Self-check: the student matches each word to the picture on their own. Afterwards point to a picture and ask: "Where is the lamp?"',

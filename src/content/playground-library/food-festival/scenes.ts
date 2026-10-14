@@ -255,7 +255,7 @@ export const LESSON_A1U4L1_SCENES: Scene[] = [
     pages: CILLA_RECIPE.slice(0, 3),
   },
   {
-    id: 'ff-read-match', kind: 'picture-match', prompt: 'Read and match',
+    id: 'ff-read-match', kind: 'picture-match', look: 'frames', prompt: 'Read and match',
     teacher: 'Reading: read each sentence and drag it under its picture. Then read it aloud.',
     items: [
       { word: 'I have soup for lunch.', img: FOOD.soup.img },
@@ -1824,7 +1824,7 @@ export const LESSON_A1U4L7_SCENES: Scene[] = [
   },
   /* Practise again — for any part below the pass mark, or as extra time */
   {
-    id: 'ff7-pa-match', kind: 'picture-match', prompt: 'Practise again: read and match',
+    id: 'ff7-pa-match', kind: 'picture-match', look: 'chalk', prompt: 'Practise again: read and match',
     teacher: 'Practise again (Part 2): read each sentence and drag it under its picture.',
     items: [
       { word: 'Would you like some soup?', img: FOOD.soup.img },

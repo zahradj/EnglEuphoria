@@ -325,6 +325,10 @@ A1, read and match … after the matching, another activity or another game to r
   so a lesson never shares its look with the lesson before or with the same lesson of the previous unit
   (`listenMatchVariety.test.ts`, deploy gate). Any game used in many lessons follows the same rule: several designs,
   rotated.
+- **The A1 Read and Match changes its design too**: `picture-match` has four looks — `cards`, `frames` (framed
+  pictures on a wall, brass name plates, wooden word tags), `polaroids` (taped photos, sticky-note words), `chalk`
+  (chalkboard tiles) — by (unit + lesson) mod 4; a second one in the same lesson takes the next look
+  (`readMatchVariety.test.ts`, deploy gate).
 - First lesson built this way: Pre-A1 U1L5 (story words → Listen and Match → Wind Catch → the film).
 
 ## 3g. A1 lessons — themed worlds, the plan first, sentences and questions (all A1 lessons)

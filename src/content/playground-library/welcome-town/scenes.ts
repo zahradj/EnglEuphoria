@@ -954,7 +954,7 @@ export const LESSON_1_SCENES: Scene[] = classroomLook([
     pages: LEO_STORY.slice(0, 3),
   },
   {
-    id: 'wt-read-match', kind: 'picture-match', prompt: 'Read and match',
+    id: 'wt-read-match', kind: 'picture-match', look: 'polaroids', prompt: 'Read and match',
     teacher: 'Reading: the student reads each sentence and drags it under its picture, then reads it aloud.',
     items: [
       { word: 'Leo is new.', img: leoStory(1) },
@@ -3180,7 +3180,7 @@ export const LESSON_7_SCENES: Scene[] = classroomLook([
   },
   /* Practise again — for any part below the pass mark, or as extra time */
   {
-    id: 'wt7-pa-match', kind: 'picture-match', prompt: 'Practise again: read and match',
+    id: 'wt7-pa-match', kind: 'picture-match', look: 'cards', prompt: 'Practise again: read and match',
     teacher: 'Practise again (Part 2/3): read each sentence and drag it under its picture.',
     items: [
       { word: 'I am sad. My red cap is lost.', img: leoStory(4) },

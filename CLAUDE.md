@@ -113,7 +113,7 @@ Whenever the owner says "create a lesson" / "proceed with creating the lesson", 
 
 ## Vary the design of a repeated game (hard rule — owner, 2026-10-14)
 
-- "Change the design of the games to prevent repetition — make it a rule." A game that comes in many lessons (Listen and Match, Read and Match, Remember?…) must have **several designs** (`look` / `mode`), and a lesson's design must **differ from the lesson right before it and from the same lesson of the unit before**. Listen and Match has four (`cards`, `balloons`, `doors`, `lilypads`, rotated by unit + lesson); `listenMatchVariety.test.ts` (deploy gate) fails otherwise — add a design or change the rotation, never the check. Blueprint §3f+.
+- "Change the design of the games to prevent repetition — make it a rule." A game that comes in many lessons (Listen and Match, Read and Match, Remember?…) must have **several designs** (`look` / `mode`), and a lesson's design must **differ from the lesson right before it and from the same lesson of the unit before**. Listen and Match has four (`cards`, `balloons`, `doors`, `lilypads`) and Read and Match has four (`cards`, `frames`, `polaroids`, `chalk`), both rotated by unit + lesson; `listenMatchVariety.test.ts` and `readMatchVariety.test.ts` (deploy gate) fail otherwise — add a design or change the rotation, never the check. Blueprint §3f+.
 
 ## A1 lessons — length and story GIFs (hard rule — owner, 2026-10-13)
 

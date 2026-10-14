@@ -206,7 +206,7 @@ export const LESSON_A1U3L1_SCENES: Scene[] = [
     pages: LOST_ROBOT.slice(0, 3),
   },
   {
-    id: 'sm-read-match', kind: 'picture-match', prompt: 'Read and match',
+    id: 'sm-read-match', kind: 'picture-match', look: 'cards', prompt: 'Read and match',
     teacher: 'Reading: read each sentence and drag it under its picture. Then read it aloud.',
     items: [
       { word: 'This is my rocket.', img: item('rocket') },
@@ -1758,7 +1758,7 @@ export const LESSON_A1U3L7_SCENES: Scene[] = [
   },
   /* Practise again — for any part below the pass mark, or as extra time */
   {
-    id: 'sm7-pa-match', kind: 'picture-match', prompt: 'Practise again: read and match',
+    id: 'sm7-pa-match', kind: 'picture-match', look: 'polaroids', prompt: 'Practise again: read and match',
     teacher: 'Practise again (Part 2): read each sentence and drag it under its picture.',
     items: [
       { word: 'It’s cold and snowy.', img: item('planet-ice') },
