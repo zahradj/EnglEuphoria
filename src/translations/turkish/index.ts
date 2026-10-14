@@ -6,6 +6,7 @@ import { parentReportTranslations } from './parentReport';
 import { waitingRoomTranslations } from './waitingRoom';
 import { pushNotificationsTranslations } from './pushNotifications';
 import { lessonsPageTranslations } from './lessonsPage';
+import { lessonResumeTranslations } from './lessonResume';
 import { academyLessonsTranslations } from './academyLessons';
 
 export const turkishTranslations = {
@@ -17,6 +18,7 @@ export const turkishTranslations = {
   ...waitingRoomTranslations,
   ...pushNotificationsTranslations,
   ...lessonsPageTranslations,
+  ...lessonResumeTranslations,
   ...academyLessonsTranslations,
   welcome: "Hoş geldiniz",
   all: "Hepsi",
