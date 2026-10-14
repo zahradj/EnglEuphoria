@@ -1082,6 +1082,8 @@ export type Scene =
       /** Listen and Match (owner 2026-10-13: after every word presentation a matching activity — Pre-A1 listens and
        *  matches, sounds only). Speakers (no text) play `say`; the child taps a speaker, then its picture. */
       id: string; kind: 'listen-match'; bg: string; teacher: string; who: CharKey; prompt: string; doneLine: string;
+      /** The design (owner 2026-10-14: vary a repeated game): rotates by unit + lesson so neighbours differ — listenMatchVariety.test.ts. */
+      look?: 'cards' | 'balloons' | 'doors' | 'lilypads';
       items: { label: string; img: string; say: string; who?: CharKey }[];
     }
   | {
@@ -1439,7 +1441,7 @@ export const LESSON_1_SCENES: Scene[] = [
   { id: 'echo-nice', kind: 'echo', bg: sceneBellaBigTree, who: 'bella', teacher: 'Repeat after Bella: Nice to meet you!', word: 'Nice to meet you!' },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words).
-    id: 'u1l1-listen-match', kind: 'listen-match', bg: bgBigTree, who: 'pip',
+    id: 'u1l1-listen-match', kind: 'listen-match', look: 'doors', bg: bgBigTree, who: 'pip',
     teacher: "Listen and match! Tap a speaker — a friend says hello — then tap that friend. The child says it too: I am Pip!",
     prompt: 'Listen and match!', doneLine: "You know all your friends!",
     items: [
@@ -1648,7 +1650,7 @@ export const LESSON_2_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words).
-    id: 'u1l2-listen-match', kind: 'listen-match', bg: bgMeetWillowGroup, who: 'pip',
+    id: 'u1l2-listen-match', kind: 'listen-match', look: 'lilypads', bg: bgMeetWillowGroup, who: 'pip',
     teacher: "Listen and match! A friend says their name — the child taps that friend and says it: My name is Willow!",
     prompt: 'Listen and match!', doneLine: "You know every name!",
     items: [
@@ -1891,7 +1893,7 @@ export const LESSON_3_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words).
-    id: 'u1l3-listen-match', kind: 'listen-match', bg: bgFeelingsMeadow, who: 'pip',
+    id: 'u1l3-listen-match', kind: 'listen-match', look: 'cards', bg: bgFeelingsMeadow, who: 'pip',
     teacher: "Listen and match! Tap a speaker — Happy! Sad! Angry! — then tap the friend with that face. The child says the word.",
     prompt: 'Listen and match!', doneLine: "Happy, sad, angry — you know them all!",
     items: [
@@ -2202,7 +2204,7 @@ export const LESSON_4_SCENES: Scene[] = [
   { id: 'l4-pip-age', kind: 'meet', focus: ['six'], bg: bgL4PipSix, who: 'pip', teacher: 'Pip is SIX! Repeat with Pip: I am six.', line: 'Hi friends! I am Pip. I am six!', repeat: 'I am six.' },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words).
-    id: 'u1l4-listen-match', kind: 'listen-match', bg: bgL4Party, who: 'pip',
+    id: 'u1l4-listen-match', kind: 'listen-match', look: 'balloons', bg: bgL4Party, who: 'pip',
     teacher: "Listen and match! A friend says their age — the child taps that friend: I am five → Bella! Then says it.",
     prompt: 'Listen and match!', doneLine: "You know how old your friends are!",
     items: [
@@ -2480,7 +2482,7 @@ export const LESSON_5_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13: after the words, a matching activity — Pre-A1 listens and matches (sounds only, no words).
-    id: 'l5-listen-match', kind: 'listen-match', bg: bgL5Empty, who: 'leo',
+    id: 'l5-listen-match', kind: 'listen-match', look: 'doors', bg: bgL5Empty, who: 'leo',
     teacher: 'Listen and match! Tap a speaker, listen, then tap the picture. No words on the screen — only sounds. The child says each word after it sticks.',
     prompt: 'Listen and match!',
     doneLine: 'Great listening!',
@@ -2926,7 +2928,7 @@ export const LESSON_6_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words).
-    id: 'u1l6-listen-match', kind: 'listen-match', bg: bgFeelingsMeadow, who: 'pip',
+    id: 'u1l6-listen-match', kind: 'listen-match', look: 'lilypads', bg: bgFeelingsMeadow, who: 'pip',
     teacher: "Listen and match! He is happy. She is sad. — the child taps the right friend and says the sentence.",
     prompt: 'Listen and match!', doneLine: "He, she — super!",
     items: [
@@ -3447,7 +3449,7 @@ export const LESSON_U2L1_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
-    id: 'u2l1-listen-match', kind: 'listen-match', bg: bgU2L1CHero, who: 'bella',
+    id: 'u2l1-listen-match', kind: 'listen-match', look: 'lilypads', bg: bgU2L1CHero, who: 'bella',
     teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
     prompt: 'Listen and match!', doneLine: 'Great listening!',
     items: [
@@ -3860,7 +3862,7 @@ export const LESSON_U2L2_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
-    id: 'u2l2-listen-match', kind: 'listen-match', bg: bgU2L2Studio, who: 'willow',
+    id: 'u2l2-listen-match', kind: 'listen-match', look: 'cards', bg: bgU2L2Studio, who: 'willow',
     teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
     prompt: 'Listen and match!', doneLine: 'Great listening!',
     items: [
@@ -4239,7 +4241,7 @@ export const LESSON_U2L3_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
-    id: 'u2l3-listen-match', kind: 'listen-match', bg: bgU2L3Town, who: 'bella',
+    id: 'u2l3-listen-match', kind: 'listen-match', look: 'balloons', bg: bgU2L3Town, who: 'bella',
     teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
     prompt: 'Listen and match!', doneLine: 'Great listening!',
     items: [
@@ -4566,7 +4568,7 @@ export const LESSON_U2L4_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
-    id: 'u2l4-listen-match', kind: 'listen-match', bg: bgU2L4Party, who: 'pip',
+    id: 'u2l4-listen-match', kind: 'listen-match', look: 'doors', bg: bgU2L4Party, who: 'pip',
     teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
     prompt: 'Listen and match!', doneLine: 'Great listening!',
     items: [
@@ -5288,7 +5290,7 @@ export const LESSON_U2L6_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
-    id: 'u2l6-listen-match', kind: 'listen-match', bg: bgU2L6Map, who: 'bella',
+    id: 'u2l6-listen-match', kind: 'listen-match', look: 'cards', bg: bgU2L6Map, who: 'bella',
     teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
     prompt: 'Listen and match!', doneLine: 'Great listening!',
     items: [
@@ -5673,7 +5675,7 @@ export const LESSON_U3L1_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
-    id: 'u3l1-listen-match', kind: 'listen-match', bg: bgU3L1Play, who: 'bella',
+    id: 'u3l1-listen-match', kind: 'listen-match', look: 'cards', bg: bgU3L1Play, who: 'bella',
     teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
     prompt: 'Listen and match!', doneLine: 'Great listening!',
     items: [
@@ -6286,7 +6288,7 @@ export const LESSON_U3L3_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
-    id: 'u3l3-listen-match', kind: 'listen-match', bg: bgU3L3ParkEmpty, who: 'pip',
+    id: 'u3l3-listen-match', kind: 'listen-match', look: 'doors', bg: bgU3L3ParkEmpty, who: 'pip',
     teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
     prompt: 'Listen and match!', doneLine: 'Great listening!',
     items: [
@@ -6620,7 +6622,7 @@ export const LESSON_U3L4_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
-    id: 'u3l4-listen-match', kind: 'listen-match', bg: bgU3L4ShowTell, who: 'pip',
+    id: 'u3l4-listen-match', kind: 'listen-match', look: 'lilypads', bg: bgU3L4ShowTell, who: 'pip',
     teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
     prompt: 'Listen and match!', doneLine: 'Great listening!',
     items: [
@@ -7176,7 +7178,7 @@ export const LESSON_U3L6_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
-    id: 'u3l6-listen-match', kind: 'listen-match', bg: bgU3L6Fair, who: 'leo',
+    id: 'u3l6-listen-match', kind: 'listen-match', look: 'balloons', bg: bgU3L6Fair, who: 'leo',
     teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
     prompt: 'Listen and match!', doneLine: 'Great listening!',
     items: [
@@ -7814,7 +7816,7 @@ export const LESSON_U4L2_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
-    id: 'u4l2-listen-match', kind: 'listen-match', bg: bgU4L2MiaFace, who: 'mia',
+    id: 'u4l2-listen-match', kind: 'listen-match', look: 'doors', bg: bgU4L2MiaFace, who: 'mia',
     teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
     prompt: 'Listen and match!', doneLine: 'Great listening!',
     items: [
@@ -8088,7 +8090,7 @@ export const LESSON_U4L3_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
-    id: 'u4l3-listen-match', kind: 'listen-match', bg: bgU4L3Bella, who: 'bella',
+    id: 'u4l3-listen-match', kind: 'listen-match', look: 'lilypads', bg: bgU4L3Bella, who: 'bella',
     teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
     prompt: 'Listen and match!', doneLine: 'Great listening!',
     items: [
@@ -8606,7 +8608,7 @@ export const LESSON_U4L5_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
-    id: 'u4l5-listen-match', kind: 'listen-match', bg: bgU4L5Lawn, who: 'pip',
+    id: 'u4l5-listen-match', kind: 'listen-match', look: 'balloons', bg: bgU4L5Lawn, who: 'pip',
     teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
     prompt: 'Listen and match!', doneLine: 'Great listening!',
     items: [
@@ -8866,7 +8868,7 @@ export const LESSON_U4L6_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
-    id: 'u4l6-listen-match', kind: 'listen-match', bg: bgU4L6Room, who: 'leo',
+    id: 'u4l6-listen-match', kind: 'listen-match', look: 'doors', bg: bgU4L6Room, who: 'leo',
     teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
     prompt: 'Listen and match!', doneLine: 'Great listening!',
     items: [
@@ -9119,7 +9121,7 @@ export const LESSON_U5L2_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
-    id: 'u5l2-listen-match', kind: 'listen-match', bg: bgU5L2Garden, who: 'pip',
+    id: 'u5l2-listen-match', kind: 'listen-match', look: 'lilypads', bg: bgU5L2Garden, who: 'pip',
     teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
     prompt: 'Listen and match!', doneLine: 'Great listening!',
     items: [
@@ -10373,7 +10375,7 @@ export const LESSON_U6L1_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
-    id: 'u6l1-listen-match', kind: 'listen-match', bg: bgU6L1House, who: 'pip',
+    id: 'u6l1-listen-match', kind: 'listen-match', look: 'lilypads', bg: bgU6L1House, who: 'pip',
     teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
     prompt: 'Listen and match!', doneLine: 'Great listening!',
     items: [
@@ -10631,7 +10633,7 @@ export const LESSON_U6L2_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
-    id: 'u6l2-listen-match', kind: 'listen-match', bg: bgU6L2Room, who: 'pip',
+    id: 'u6l2-listen-match', kind: 'listen-match', look: 'cards', bg: bgU6L2Room, who: 'pip',
     teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
     prompt: 'Listen and match!', doneLine: 'Great listening!',
     items: [
@@ -11115,7 +11117,7 @@ export const LESSON_U6L4_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
-    id: 'u6l4-listen-match', kind: 'listen-match', bg: bgU6L4Bedroom, who: 'pip',
+    id: 'u6l4-listen-match', kind: 'listen-match', look: 'doors', bg: bgU6L4Bedroom, who: 'pip',
     teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
     prompt: 'Listen and match!', doneLine: 'Great listening!',
     items: [
@@ -11952,7 +11954,7 @@ export const LESSON_U6L6_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
-    id: 'u6l6-listen-match', kind: 'listen-match', bg: bgU6L6GameNight, who: 'pip',
+    id: 'u6l6-listen-match', kind: 'listen-match', look: 'cards', bg: bgU6L6GameNight, who: 'pip',
     teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
     prompt: 'Listen and match!', doneLine: 'Great listening!',
     items: [
@@ -12162,7 +12164,7 @@ export const LESSON_U7L1_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
-    id: 'u7l1-listen-match', kind: 'listen-match', bg: bgU7L1Shop, who: 'pip',
+    id: 'u7l1-listen-match', kind: 'listen-match', look: 'cards', bg: bgU7L1Shop, who: 'pip',
     teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
     prompt: 'Listen and match!', doneLine: 'Great listening!',
     items: [
@@ -12384,7 +12386,7 @@ export const LESSON_U7L2_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
-    id: 'u7l2-listen-match', kind: 'listen-match', bg: bgU7L2Farm, who: 'pip',
+    id: 'u7l2-listen-match', kind: 'listen-match', look: 'balloons', bg: bgU7L2Farm, who: 'pip',
     teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
     prompt: 'Listen and match!', doneLine: 'Great listening!',
     items: [
@@ -12598,7 +12600,7 @@ export const LESSON_U7L3_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
-    id: 'u7l3-listen-match', kind: 'listen-match', bg: bgU7L3Pond, who: 'pip',
+    id: 'u7l3-listen-match', kind: 'listen-match', look: 'doors', bg: bgU7L3Pond, who: 'pip',
     teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
     prompt: 'Listen and match!', doneLine: 'Great listening!',
     items: [
@@ -12811,7 +12813,7 @@ export const LESSON_U7L4_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
-    id: 'u7l4-listen-match', kind: 'listen-match', bg: bgU7L4Fair, who: 'pip',
+    id: 'u7l4-listen-match', kind: 'listen-match', look: 'lilypads', bg: bgU7L4Fair, who: 'pip',
     teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
     prompt: 'Listen and match!', doneLine: 'Great listening!',
     items: [
@@ -13052,7 +13054,7 @@ export const LESSON_U7L5_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
-    id: 'u7l5-listen-match', kind: 'listen-match', bg: bgU7L5Barn4, who: 'pip',
+    id: 'u7l5-listen-match', kind: 'listen-match', look: 'cards', bg: bgU7L5Barn4, who: 'pip',
     teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
     prompt: 'Listen and match!', doneLine: 'Great listening!',
     items: [
@@ -13284,7 +13286,7 @@ export const LESSON_U7L6_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
-    id: 'u7l6-listen-match', kind: 'listen-match', bg: bgU7L6Night, who: 'pip',
+    id: 'u7l6-listen-match', kind: 'listen-match', look: 'balloons', bg: bgU7L6Night, who: 'pip',
     teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
     prompt: 'Listen and match!', doneLine: 'Great listening!',
     items: [
@@ -13505,7 +13507,7 @@ export const LESSON_U8L1_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
-    id: 'u8l1-listen-match', kind: 'listen-match', bg: bgU8L1PicnicEmpty, who: 'pip',
+    id: 'u8l1-listen-match', kind: 'listen-match', look: 'balloons', bg: bgU8L1PicnicEmpty, who: 'pip',
     teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
     prompt: 'Listen and match!', doneLine: 'Great listening!',
     items: [
@@ -13720,7 +13722,7 @@ export const LESSON_U8L2_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
-    id: 'u8l2-listen-match', kind: 'listen-match', bg: bgU8L2CafeEmpty, who: 'pip',
+    id: 'u8l2-listen-match', kind: 'listen-match', look: 'doors', bg: bgU8L2CafeEmpty, who: 'pip',
     teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
     prompt: 'Listen and match!', doneLine: 'Great listening!',
     items: [
@@ -13938,7 +13940,7 @@ export const LESSON_U8L3_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
-    id: 'u8l3-listen-match', kind: 'listen-match', bg: bgU8L3PartyEmpty, who: 'pip',
+    id: 'u8l3-listen-match', kind: 'listen-match', look: 'lilypads', bg: bgU8L3PartyEmpty, who: 'pip',
     teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
     prompt: 'Listen and match!', doneLine: 'Great listening!',
     items: [
@@ -14383,7 +14385,7 @@ export const LESSON_U8L5_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
-    id: 'u8l5-listen-match', kind: 'listen-match', bg: bgU8L5Garden, who: 'mia',
+    id: 'u8l5-listen-match', kind: 'listen-match', look: 'balloons', bg: bgU8L5Garden, who: 'mia',
     teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
     prompt: 'Listen and match!', doneLine: 'Great listening!',
     items: [
@@ -14596,7 +14598,7 @@ export const LESSON_U8L6_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
-    id: 'u8l6-listen-match', kind: 'listen-match', bg: bgU8L6Board, who: 'pip',
+    id: 'u8l6-listen-match', kind: 'listen-match', look: 'doors', bg: bgU8L6Board, who: 'pip',
     teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
     prompt: 'Listen and match!', doneLine: 'Great listening!',
     items: [
@@ -14818,7 +14820,7 @@ export const LESSON_U9L1_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
-    id: 'u9l1-listen-match', kind: 'listen-match', bg: bgU9L1LaundryEmpty, who: 'pip',
+    id: 'u9l1-listen-match', kind: 'listen-match', look: 'doors', bg: bgU9L1LaundryEmpty, who: 'pip',
     teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
     prompt: 'Listen and match!', doneLine: 'Great listening!',
     items: [
@@ -15032,7 +15034,7 @@ export const LESSON_U9L2_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
-    id: 'u9l2-listen-match', kind: 'listen-match', bg: bgU9L2HallEmpty, who: 'pip',
+    id: 'u9l2-listen-match', kind: 'listen-match', look: 'lilypads', bg: bgU9L2HallEmpty, who: 'pip',
     teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
     prompt: 'Listen and match!', doneLine: 'Great listening!',
     items: [
@@ -15256,7 +15258,7 @@ export const LESSON_U9L3_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
-    id: 'u9l3-listen-match', kind: 'listen-match', bg: bgU9L3Shop, who: 'bella',
+    id: 'u9l3-listen-match', kind: 'listen-match', look: 'cards', bg: bgU9L3Shop, who: 'bella',
     teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
     prompt: 'Listen and match!', doneLine: 'Great listening!',
     items: [
@@ -15459,7 +15461,7 @@ export const LESSON_U9L4_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
-    id: 'u9l4-listen-match', kind: 'listen-match', bg: bgU9L4Stage, who: 'mia',
+    id: 'u9l4-listen-match', kind: 'listen-match', look: 'balloons', bg: bgU9L4Stage, who: 'mia',
     teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
     prompt: 'Listen and match!', doneLine: 'Great listening!',
     items: [
@@ -15918,7 +15920,7 @@ export const LESSON_U9L6_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
-    id: 'u9l6-listen-match', kind: 'listen-match', bg: bgU9L6PlayroomEmpty, who: 'pip',
+    id: 'u9l6-listen-match', kind: 'listen-match', look: 'lilypads', bg: bgU9L6PlayroomEmpty, who: 'pip',
     teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
     prompt: 'Listen and match!', doneLine: 'Great listening!',
     items: [
@@ -16133,7 +16135,7 @@ export const LESSON_U10L1_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
-    id: 'u10l1-listen-match', kind: 'listen-match', bg: bgU10L1TrackEmpty, who: 'pip',
+    id: 'u10l1-listen-match', kind: 'listen-match', look: 'lilypads', bg: bgU10L1TrackEmpty, who: 'pip',
     teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
     prompt: 'Listen and match!', doneLine: 'Great listening!',
     items: [
@@ -16361,7 +16363,7 @@ export const LESSON_U10L2_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
-    id: 'u10l2-listen-match', kind: 'listen-match', bg: bgU10L2BeachEmpty, who: 'pip',
+    id: 'u10l2-listen-match', kind: 'listen-match', look: 'cards', bg: bgU10L2BeachEmpty, who: 'pip',
     teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
     prompt: 'Listen and match!', doneLine: 'Great listening!',
     items: [
@@ -17008,7 +17010,7 @@ export const LESSON_U10L5_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
-    id: 'u10l5-listen-match', kind: 'listen-match', bg: bgU10L5Trail, who: 'bella',
+    id: 'u10l5-listen-match', kind: 'listen-match', look: 'lilypads', bg: bgU10L5Trail, who: 'bella',
     teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
     prompt: 'Listen and match!', doneLine: 'Great listening!',
     items: [
@@ -17238,7 +17240,7 @@ export const LESSON_U10L6_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
-    id: 'u10l6-listen-match', kind: 'listen-match', bg: bgU10L6GamesEmpty, who: 'pip',
+    id: 'u10l6-listen-match', kind: 'listen-match', look: 'cards', bg: bgU10L6GamesEmpty, who: 'pip',
     teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
     prompt: 'Listen and match!', doneLine: 'Great listening!',
     items: [
@@ -17451,7 +17453,7 @@ export const LESSON_U10L7_SCENES: Scene[] = [
   },
   {
     // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
-    id: 'u10l7-listen-match', kind: 'listen-match', bg: bgU10L7AcademyEmpty, who: 'mia',
+    id: 'u10l7-listen-match', kind: 'listen-match', look: 'balloons', bg: bgU10L7AcademyEmpty, who: 'mia',
     teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
     prompt: 'Listen and match!', doneLine: 'Great listening!',
     items: [

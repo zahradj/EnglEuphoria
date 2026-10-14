@@ -111,6 +111,10 @@ Whenever the owner says "create a lesson" / "proceed with creating the lesson", 
 
 - **Every time new words are shown, a matching activity follows**: Pre-A1 = **listen and match** (`listen-match`, sounds only, no written words); A1 = **read and match** (`picture-match`). Then **another game** with the same words, so they stick. Blueprint §3f+.
 
+## Vary the design of a repeated game (hard rule — owner, 2026-10-14)
+
+- "Change the design of the games to prevent repetition — make it a rule." A game that comes in many lessons (Listen and Match, Read and Match, Remember?…) must have **several designs** (`look` / `mode`), and a lesson's design must **differ from the lesson right before it and from the same lesson of the unit before**. Listen and Match has four (`cards`, `balloons`, `doors`, `lilypads`, rotated by unit + lesson); `listenMatchVariety.test.ts` (deploy gate) fails otherwise — add a design or change the rotation, never the check. Blueprint §3f+.
+
 ## A1 lessons — length and story GIFs (hard rule — owner, 2026-10-13)
 
 - **Every A1 lesson has 30-49 pages** ("A1 lessons can be from 30 to 49 pages"): real practice, not padding — and still no game twice in a unit. `a1LessonLength.test.ts` (deploy gate) fails otherwise.

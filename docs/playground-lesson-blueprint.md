@@ -319,6 +319,12 @@ A1, read and match … after the matching, another activity or another game to r
   - **A1: Read and Match** (`picture-match`) — the written words go under their pictures.
 - Then **one more game with the same words** (any game of the lesson's slot) before the lesson moves on.
 - `listen-match` is a routine kind (`ROUTINE_KINDS`), so it may come in every lesson.
+- **The matching game changes its design** (owner 2026-10-14: "change the design of the games to prevent repetition —
+  make it a rule"): `listen-match` has four looks — `cards` (picture grid), `balloons` (pictures float on balloons),
+  `doors` (a row of doors, the right one swings open), `lilypads` (pictures on a pond) — assigned by (unit + lesson) mod 4,
+  so a lesson never shares its look with the lesson before or with the same lesson of the previous unit
+  (`listenMatchVariety.test.ts`, deploy gate). Any game used in many lessons follows the same rule: several designs,
+  rotated.
 - First lesson built this way: Pre-A1 U1L5 (story words → Listen and Match → Wind Catch → the film).
 
 ## 3g. A1 lessons — themed worlds, the plan first, sentences and questions (all A1 lessons)
