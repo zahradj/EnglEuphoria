@@ -89,6 +89,12 @@ Whenever the owner says "create a lesson" / "proceed with creating the lesson", 
 
 - "The modelling in the lesson is very important. Stating the rule is extremely important." Every Academy lesson: (1) the teacher **models** new language and the Mission task first (I do → we do → you do) before the student tries; (2) the **rule is stated plainly** (≤ 3 lines, an example each, read aloud, student repeats) BEFORE the practice games, even in E1 and for chunks; (3) the student **restates it** at the end (teach-back). A lesson plan or deck without a model step and a stated rule is not done. Checked in `academy-quality-gate` and `academy-session-builder`.
 
+## Full scene plates, stories as plates, no repetition (hard rule — owner, 2026-10-14)
+
+- **Every Academy page is a full-bleed scene plate** (a painted place with the cast in it or around it), not a panel on a flat colour; panels are small and glass. **Every story is told as a sequence of full scene plates** (3-5 per story, Canva, 16:9, cast references, ~35 % purple, `story` slide kind, subtitles + recorded voices, cross-fade only, never zoom/pan), written as a scenario in `docs/scenarios/` first.
+- "I don't want the same thing repeated; be creative and original; make the student happy, having fun, interacting, never bored." Every lesson has its own place, look, story frame, **signature game** and fun hook, registered in `src/academy-deck/lessonProfiles.ts`; `lessonVariety.test.ts` (deploy gate) fails an un-grandfathered lesson that reuses the previous lesson's main scene, the Season 1 opening/games, three same games in a row, or has fewer than five different games. Design decisions (context, environment, layout, rewards) follow `docs/academy-experience-design.md` ("be the Academy expert and decide what is best for the student").
+- Adapt ideas from the Playground **by reading and re-implementing in Academy files only** (hub separation); nothing childish (no mascots, pets, stickers, hearts).
+
 ## Languages — every page is translated (hard rule — owner, 2026-10-09)
 
 - **Every new or edited page a student, parent or visitor sees is built with `t()` and translated into all six languages** (en, es, fr, ar, tr, it) — never hard-coded English. Put keys in `src/translations/<lang>/<area>.ts` (see `authUi.ts` for the pattern: `au.*` keys, English text as the `t()` default) and wire them into each language's `index.ts`; the parity test (`src/translations/authUi.test.ts`, copy it for a new area) fails if a language is missing a key or a `{{placeholder}}`.

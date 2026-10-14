@@ -1,4 +1,4 @@
-// A1-S03-E1 "Club Fair" (Free Time Club, Cold Open): reads the blueprint, the sequencing law (model, rule, controlled, free, produce), the owner's modelling + rule requirement and the vocabulary-games rule.
+// A1-S03-E1 "The Missing Poster" (Free Time Club, Cold Open, version 2): blueprint, the sequencing law (context, model, rule, controlled, free, produce), modelling + the stated rule, originality (new scene and games), vocabulary games, time, and play-throughs of the new Explore and Sort games.
 import { afterEach, describe, expect, it } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { Deck } from '../Deck';
@@ -31,6 +31,11 @@ const minutes = (s: Slide): number => {
     case 'fade': return 0.6 + s.lines.length * 0.6;
     case 'write': return 1 + s.rows.length * 1.2;
     case 'shadow': return 0.5 + s.rounds.length * 0.5;
+    case 'hunt': return 0.8 + s.targets.length * 0.5;
+    case 'explore': return 1 + s.spots.length * 0.6;
+    case 'sort': return 0.8 + s.items.length * 0.4;
+    case 'story': return 0.4 + s.beats.reduce((n, b) => n + b.lines.length, 0) * 0.4;
+    case 'phonechat': return 0.4 + s.steps.length * 0.65;
     case 'spell': return 0.8 + 0.2 * s.target.length;
     case 'say': return 2;
     case 'wrap': return 3.2;
@@ -38,7 +43,7 @@ const minutes = (s: Slide): number => {
   }
 };
 
-describe('A1 S3 E1 Club Fair: blueprint', () => {
+describe('A1 S3 E1 The Missing Poster: blueprint', () => {
   it('reads the Academy blueprint: id, cast, 14 receptive items, Season title, clue 1', () => {
     expect(FREE_TIME_CLUB_1.lessonId).toBe(bp.id);
     expect([...FREE_TIME_CLUB_1.cast].sort()).toEqual(bp.cast.appears.map((c) => c.name).sort());
@@ -66,12 +71,12 @@ describe('A1 S3 E1 Club Fair: blueprint', () => {
   });
 });
 
-describe('A1 S3 E1 Club Fair: sequencing and the owner rules (modelling, the rule)', () => {
+describe('A1 S3 E1 The Missing Poster: sequencing and the owner rules (modelling, the rule)', () => {
   it('ORDER LAW: the stages never go backwards for the new language: model, rule, controlled, free, produce', () => {
-    const staged = slides.filter((s) => s.stage && (STAGE_ORDER as string[]).includes(s.stage) && s.part >= 3 && s.part <= 4);
+    const staged = slides.filter((s) => s.stage && (STAGE_ORDER as string[]).includes(s.stage) && s.part >= 2 && s.part <= 4);
     const order = staged.map((s) => STAGE_ORDER.indexOf(s.stage!));
     expect(order).toEqual([...order].sort((a, b) => a - b));
-    expect(staged.map((s) => s.stage)).toEqual(expect.arrayContaining(['model', 'rule', 'controlled', 'free']));
+    expect(staged.map((s) => s.stage)).toEqual(expect.arrayContaining(['context', 'model', 'rule', 'controlled', 'free']));
   });
 
   it('MODELLING: the lesson models the language (model slide) before the rule, and models the Mission task before Take 1', () => {
@@ -87,7 +92,7 @@ describe('A1 S3 E1 Club Fair: sequencing and the owner rules (modelling, the rul
       expect(rule.lines.length).toBeLessThanOrEqual(3);
       rule.lines.forEach((l) => expect(l.example).toMatch(/^I (like|love)/));
     }
-    const firstPracticeOfLike = slides.findIndex((s) => ['hear-hobby', 'this-or-that', 'build-like', 'build-badge'].includes(s.id));
+    const firstPracticeOfLike = slides.findIndex((s) => ['match-hobby', 'hear-hobby', 'shadow-hobby', 'sort-like', 'build-badge'].includes(s.id));
     expect(idx('rule-like')).toBeLessThan(firstPracticeOfLike);
     expect(slides[idx('teach-back')].kind).toBe('say');
     expect(idx('teach-back')).toBeGreaterThan(idx('say-take2'));
@@ -124,12 +129,21 @@ describe('A1 S3 E1 Club Fair: sequencing and the owner rules (modelling, the rul
     expect(bonus, `bonus ${bonus.toFixed(1)} min`).toBeLessThanOrEqual(15);
   });
 
-  it('VOCABULARY GAMES: the club words and the hobby words each get drag-match, listen/hear, memory and shadow games, and every bonus game is marked so the teacher can skip it', () => {
-    const kinds = (ids: string[]) => ids.map((id) => slides[idx(id)].kind);
-    expect(kinds(['match-club-drag', 'shadow-club', 'mem-hobby', 'shadow-hobby', 'match-like'])).toEqual(['match', 'shadow', 'memory', 'shadow', 'match']);
+  it('ORIGINALITY (owner 2026-10-14): new scene, new games, and none of the Season 1 opening pattern (badge-convo opening, brief card, who-said, border booth, padlock, find-the-wrong-line)', () => {
+    const kinds = new Set(slides.map((x) => x.kind));
+    ['story', 'explore', 'sort', 'hunt', 'phonechat', 'shadow', 'hearpick', 'rule'].forEach((k) => expect(kinds.has(k as never), k).toBe(true));
+    ['brief', 'whosaid', 'border', 'padlock', 'findwrong', 'factcheck', 'card', 'numwall', 'lockers'].forEach((k) => expect(kinds.has(k as never), `must not use ${k}`).toBe(false));
+    expect(slides.some((x) => x.bg === 'fair-night')).toBe(true);
+    expect(new Set(slides.map((x) => x.bg)).size).toBeGreaterThanOrEqual(5);
+    expect(slides[1].kind).not.toBe('convo');
+  });
+
+  it('VOCABULARY GAMES: the club words and the hobby words each get drag-match, listen/hear, memory and shadow games; every bonus game is marked so the teacher can skip it', () => {
     slides.filter((s) => s.flex).forEach((s) => expect(s.note, s.id).toMatch(/Bonus game/));
-    expect(slides.filter((s) => s.kind === 'match' && (s.mode ?? 'drag') === 'drag').length).toBeGreaterThanOrEqual(3);
-    expect(slides.length).toBeGreaterThanOrEqual(35);
+    expect(slides.filter((s) => s.kind === 'match' && (s.mode ?? 'drag') === 'drag').length).toBeGreaterThanOrEqual(2);
+    expect(slides.filter((s) => s.kind === 'memory').length).toBeGreaterThanOrEqual(2);
+    expect(slides.length).toBeGreaterThanOrEqual(30);
+    expect(slides.length).toBeLessThanOrEqual(49);
   });
 
   it('every spoken line can be baked (no variables or blanks) except the learner-filled model lines', () => {
@@ -137,7 +151,7 @@ describe('A1 S3 E1 Club Fair: sequencing and the owner rules (modelling, the rul
   });
 });
 
-describe('A1 S3 E1 Club Fair: play-through', () => {
+describe('A1 S3 E1 The Missing Poster: play-through', () => {
   const open = (id: string) => render(<Deck script={FREE_TIME_CLUB_1} teacher slide={idx(id)} />);
 
   it('RULE slide: each line is said, then the slide is done and Next unlocks', () => {
@@ -152,5 +166,36 @@ describe('A1 S3 E1 Club Fair: play-through', () => {
     open('hear-hobby');
     fireEvent.click(screen.getByRole('button', { name: 'I love music.' }));
     expect(screen.getByText(/Not yet/)).toBeTruthy();
+  });
+
+  it('EXPLORE: tapping every stall hears its line, shows the bubble and finishes the slide', () => {
+    open('walk');
+    const spots = screen.getAllByRole('button', { name: /stall/ });
+    expect(spots).toHaveLength(5);
+    spots.forEach((b) => fireEvent.click(b));
+    expect(screen.getByText(/visited every stall/)).toBeTruthy();
+    expect(screen.getByRole('button', { name: /Next/ })).toBeEnabled();
+  });
+
+  it('SORT: tap a picture, tap a box, the sentence is built; no wrong answer; all placed finishes the slide', () => {
+    open('sort-like');
+    const words = ['music', 'games', 'drawing', 'football', 'films'];
+    words.forEach((w, i) => {
+      fireEvent.click(screen.getByRole('button', { name: w }));
+      fireEvent.click(screen.getAllByRole('button', { name: i % 2 ? 'I love…' : 'I like…' })[0]);
+    });
+    expect(screen.getByText('I like music.')).toBeTruthy();
+    expect(screen.getByText('I love games.')).toBeTruthy();
+    expect(screen.getByText(/That is your hobby wall/)).toBeTruthy();
+  });
+
+  it('STORY: full scene plates, one subtitle per tap; after the last line the slide is done', () => {
+    open('story-welcome');
+    expect(screen.getByText(/Welcome to the Club Fair/)).toBeTruthy();
+    for (let i = 0; i < 4; i++) fireEvent.click(screen.getByRole('button', { name: /Next line/ }));
+    expect(screen.getByText(/Look! Five stalls/)).toBeTruthy();
+    const dock = screen.getAllByRole('button', { name: /Next/ }).filter((b) => b.getAttribute('aria-label') !== 'Next line');
+    expect(dock.length).toBe(1);
+    expect(dock[0]).toBeEnabled();
   });
 });

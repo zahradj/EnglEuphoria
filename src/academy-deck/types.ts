@@ -184,11 +184,31 @@ export interface HearPickSlide extends SlideBase { kind: 'hearpick'; prompt: str
 export interface ReaderSlide extends SlideBase { kind: 'reader'; prompt: string; lines: { text: string; art: TeachArt }[] }
 /** The rule, stated plainly (owner 2026-10-13): at most 3 lines, each with an example; the guide reads it, the student repeats it and taps "I said it". */
 export interface RuleSlide extends SlideBase { kind: 'rule'; title: string; lines: { rule: string; /** spoken version of the rule (symbols like + are not read) */ say: string; example: string }[] }
+/** Explore (owner 2026-10-14: new scenes and games): the scene plate is the game. Tap each hotspot (a stall, a poster) to hear the character say its line; a picture pops out and the line shows in a bubble. Done when every spot has been visited. */
+export interface ExploreSlide extends SlideBase {
+  kind: 'explore';
+  prompt: string;
+  /** x and y are percentages of the scene plate (the centre of the hotspot) */
+  spots: { id: string; x: number; y: number; art: TeachArt; who: CastName; line: string; label: string }[];
+}
+/** Sort (free practice, owner 2026-10-14): the student's own opinions. Tap a picture, then tap a bin ("I like…" / "I love…"); the sentence is built, shown and spoken. There is no wrong answer; done when every picture is placed. */
+export interface SortSlide extends Omit<SlideBase, 'items'> {
+  kind: 'sort';
+  prompt: string;
+  bins: { id: string; label: string; /** the sentence made when an item goes in: {w} is the item's word */ template: string }[];
+  items: { id: string; art: TeachArt; word: string }[];
+}
+/** Story (owner 2026-10-14: stories as full scene plates): each beat is ONE full-bleed generated scene with the cast painted into it (public/academy-art/bg/<plate>.webp); the lines show as film subtitles and are spoken; the plates cross-fade (never zoom or pan). Done when the last line has been seen. */
+export interface StorySlide extends SlideBase {
+  kind: 'story';
+  title: string;
+  beats: { plate: string; lines: { who: CastName; text: string }[] }[];
+}
 export interface WrapSlide extends SlideBase { kind: 'wrap'; heading: string; ticks: string[]; homework: string; clue: string }
 
 export type Slide =
   | TitleSlide | BriefSlide | BadgeSlide | DialSlide | LaneSlide | WhoSaidSlide | LockersSlide | NumTrainSlide | PadlockSlide | ConvoSlide | SpellSlide
-  | MatchSlide | CountUpSlide | BePickSlide | BuildSlide | FactCheckSlide | WriteSlide | HuntSlide | ShadowSlide | TeachSlide | ModelSlide | FindWrongSlide | BorderSlide | MemorySlide | NumWallSlide | PhoneChatSlide | FadeSlide | CardSlide | SaySlide | WrapSlide | BlendSlide | HearPickSlide | ReaderSlide | RuleSlide;
+  | MatchSlide | CountUpSlide | BePickSlide | BuildSlide | FactCheckSlide | WriteSlide | HuntSlide | ShadowSlide | TeachSlide | ModelSlide | FindWrongSlide | BorderSlide | MemorySlide | NumWallSlide | PhoneChatSlide | FadeSlide | CardSlide | SaySlide | WrapSlide | BlendSlide | HearPickSlide | ReaderSlide | RuleSlide | ExploreSlide | SortSlide | StorySlide;
 
 export interface DeckScript {
   lessonId: string;
