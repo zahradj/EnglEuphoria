@@ -110,7 +110,14 @@ export function ListenMatchScene({ scene, onWin, onNext, sync }: { scene: Listen
   /** Stickers sit in the frame with their outline; a full scene picture (a story or word-page background) fills the
    *  frame instead, so it is never shown tiny with empty bands around it. */
   const isScenePic = (src: string) => /\/scenes\/|\/bg-/.test(src);
-  const pic = (it: ListenMatch['items'][number], cls: string) => isScenePic(it.img)
+  const pic = (it: ListenMatch['items'][number], cls: string) => it.crop
+    ? (
+      // only the part of the 16:9 picture that carries the word, filling the frame
+      <svg viewBox={`${it.crop.x * 16 / 9} ${it.crop.y} ${it.crop.w * 16 / 9} ${it.crop.h}`} preserveAspectRatio="xMidYMid slice" className="h-full w-full rounded-[1.4vh]" aria-hidden="true">
+        <image href={it.img} x={0} y={0} width={100 * 16 / 9} height={100} preserveAspectRatio="none" />
+      </svg>
+    )
+    : isScenePic(it.img)
     ? <img src={it.img} alt="" draggable={false} className="h-full w-full rounded-[1.4vh] object-cover" />
     : <img src={it.img} alt="" draggable={false} className={cls} style={{ filter: STICKER_FILTER }} />;
 
@@ -147,7 +154,9 @@ export function ListenMatchScene({ scene, onWin, onNext, sync }: { scene: Listen
               </span>
               <span className="block h-[3vh] w-[0.3vh] bg-slate-700/70" />
               {/* the picture hangs on the string */}
-              <span className={`flex ${isScenePic(it.img) ? 'h-[min(15vh,10.5vw)] w-[min(24vh,17vw)] p-[0.4vh]' : 'h-[min(13vh,9vw)] w-[min(13vh,9vw)]'} items-center justify-center rounded-[2vh] border-[0.5vh] bg-white/85 shadow-xl ${ok ? 'border-emerald-400' : 'border-white'}`}>
+              <span className={`flex ${it.crop ? 'p-[0.4vh]' : isScenePic(it.img) ? 'h-[min(15vh,10.5vw)] w-[min(24vh,17vw)] p-[0.4vh]' : 'h-[min(13vh,9vw)] w-[min(13vh,9vw)]'} items-center justify-center rounded-[2vh] border-[0.5vh] bg-white/85 shadow-xl ${ok ? 'border-emerald-400' : 'border-white'}`}
+                // a cropped picture keeps the crop's own shape (a tall Leo stays tall), about 18vh on its long side
+                style={it.crop ? (((it.crop.w * 16) / 9) / it.crop.h < 1 ? { height: 'min(18vh,13vw)', aspectRatio: `${((it.crop.w * 16) / 9) / it.crop.h}` } : { width: 'min(24vh,17vw)', aspectRatio: `${((it.crop.w * 16) / 9) / it.crop.h}` }) : undefined}>
                 {pic(it, 'h-[84%] w-[84%] object-contain')}
               </span>
               {ok && badge(i, 'bottom-[-1vh] right-[-1vh]')}

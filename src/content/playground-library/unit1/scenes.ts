@@ -1084,7 +1084,9 @@ export type Scene =
       id: string; kind: 'listen-match'; bg: string; teacher: string; who: CharKey; prompt: string; doneLine: string;
       /** The design (owner 2026-10-14: vary a repeated game): rotates by unit + lesson so neighbours differ — listenMatchVariety.test.ts. */
       look?: 'cards' | 'balloons' | 'doors' | 'lilypads';
-      items: { label: string; img: string; say: string; who?: CharKey }[];
+      /** crop (percent of a 16:9 scene picture: left x, top y, width w, height h) shows only the part that carries the
+       *  word — Leo's pose, Pip's shoes — so a picture reused from a word page reads clearly at card size. */
+      items: { label: string; img: string; say: string; who?: CharKey; crop?: { x: number; y: number; w: number; h: number } }[];
     }
   | {
       /** Wind Catch (U1L5 signature, docs/prea1-u1l5-leos-lost-star-plan.md): the wind that took Leo's star carries the
@@ -6879,6 +6881,17 @@ export const LESSON_U3L5_SCENES: Scene[] = [
     ],
   },
   {
+    // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
+    id: 'u3l5-listen-match', kind: 'listen-match', look: 'cards', bg: bgU3L5Room, who: 'bella',
+    teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
+    prompt: 'Listen and match!', doneLine: 'Great listening!',
+    items: [
+      { label: 'in', img: bgU3L5BallBox, say: 'In! The ball is in the box.', who: 'bella', crop: { x: 28, y: 38, w: 48, h: 50 } },
+      { label: 'on', img: bgU3L5TeddyBed, say: 'On! The teddy is on the bed.', who: 'mia', crop: { x: 0, y: 25, w: 52, h: 60 } },
+      { label: 'under', img: bgU3L5CarChair, say: 'Under! The car is under the chair.', who: 'leo', crop: { x: 50, y: 30, w: 50, h: 58 } },
+    ],
+  },
+  {
     id: 'u3l5-move-say', kind: 'tpr-actions', bg: bgU3L5Room, who: 'pip',
     teacher: 'Stand up! Say it with Pip, then do it before the ring runs out.',
     rounds: [
@@ -7538,6 +7551,17 @@ export const LESSON_U4L1_SCENES: Scene[] = [
       { who: 'leo', sentence: 'Shoulders! Touch your shoulders.', img: bgU4L1LeoShoulders, imgLabel: 'Shoulders!' },
       { who: 'leo', sentence: 'Knees! Touch your knees.', img: bgU4L1LeoKnees, imgLabel: 'Knees!' },
       { who: 'leo', sentence: 'Toes! Touch your toes.', img: bgU4L1LeoToes, imgLabel: 'Toes!' },
+    ],
+  },
+  {
+    // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
+    id: 'u4l1-listen-match', kind: 'listen-match', look: 'balloons', bg: bgU4L1Studio, who: 'leo',
+    teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
+    prompt: 'Listen and match!', doneLine: 'Great listening!',
+    items: [
+      { label: 'head', img: bgU4L1LeoHead, say: 'Head! Touch your head.', who: 'leo', crop: { x: 32, y: 8, w: 36, h: 92 } },
+      { label: 'shoulders', img: bgU4L1LeoShoulders, say: 'Shoulders! Touch your shoulders.', who: 'leo', crop: { x: 32, y: 8, w: 36, h: 92 } },
+      { label: 'toes', img: bgU4L1LeoToes, say: 'Toes! Touch your toes.', who: 'leo', crop: { x: 32, y: 8, w: 36, h: 92 } },
     ],
   },
   {
@@ -15795,6 +15819,18 @@ export const LESSON_U9L5_SCENES: Scene[] = [
       { who: 'pip', sentence: 'My shoes are red!', img: u9l5Page(3), imgLabel: 'red' },
       { who: 'pip', sentence: 'My shoes are blue!', img: u9l5Page(5), imgLabel: 'blue' },
       { who: 'pip', sentence: 'My shoes are brown!', img: u9l5Page(7), imgLabel: 'brown' },
+    ],
+  },
+  {
+    // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
+    id: 'u9l5-listen-match', kind: 'listen-match', look: 'doors', bg: bgU9L5GardenEmpty, who: 'pip',
+    teacher: 'Listen and match! Tap a speaker, hear the word, then tap its picture. The child says each word after it sticks.',
+    prompt: 'Listen and match!', doneLine: 'Great listening!',
+    items: [
+      { label: 'white', img: u9l5Page(1), say: 'My shoes are white!', who: 'pip', crop: { x: 28, y: 68, w: 34, h: 30 } },
+      { label: 'red', img: u9l5Page(3), say: 'My shoes are red!', who: 'pip', crop: { x: 28, y: 68, w: 34, h: 30 } },
+      { label: 'blue', img: u9l5Page(5), say: 'My shoes are blue!', who: 'pip', crop: { x: 28, y: 68, w: 34, h: 30 } },
+      { label: 'brown', img: u9l5Page(7), say: 'My shoes are brown!', who: 'pip', crop: { x: 28, y: 68, w: 34, h: 30 } },
     ],
   },
   {
