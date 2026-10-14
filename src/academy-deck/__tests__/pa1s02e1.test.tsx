@@ -136,6 +136,19 @@ describe('Pre-A1 S02 E1: play-through', () => {
     expect(screen.getByText(/Not yet/)).toBeTruthy();
   });
 
+  it('SAY IT: game slides have a "Say it" button; tapping it counts a spoken answer (speaking practice)', () => {
+    open('blend-in');
+    expect(screen.queryByRole('status', { name: /Spoken aloud/ })).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: /Say it aloud/ }));
+    fireEvent.click(screen.getByRole('button', { name: /Say it aloud/ }));
+    expect(screen.getByRole('status', { name: 'Spoken aloud: 2' })).toBeTruthy();
+  });
+
+  it('there is no "Say it" button on a title slide', () => {
+    open('title');
+    expect(screen.queryByRole('button', { name: /Say it aloud/ })).toBeNull();
+  });
+
   it('READER: the first page can be read line by line and matched to its picture', () => {
     open('read-1');
     expect(screen.getByRole('button', { name: /Hear the line/ })).toBeTruthy();

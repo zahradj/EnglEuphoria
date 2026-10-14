@@ -34,4 +34,5 @@ shadow (say it together with the model) → repeat (alone after the model) → c
 
 ## 5. Where it stands
 - Done: targets, ladder, checker (`speakingProblems`), level frames, rule in `CLAUDE.md`, gate check.
-- Not yet: the "Say it" check in the player; the speaking minutes of the already-built decks have not been re-measured (Pre-A1 P2 lesson 1 has about 6–7 explicit speaking minutes against a target of 12 until the "Say it" check counts the read-aloud rounds).
+- Done 2026-10-14: a "Say it ✓" button in the lesson player on every game slide (teach, hear-and-pick, blend, reader, match, memory, build, spell, convo); the student says the answer aloud and taps it, a teal 🗣 tally shows the count and it is returned in the deck's finish stats (`stats.spoken`). It is a self-report that the teacher confirms by ear in the one-to-one lesson; no recording is made.
+- Not yet: counting `stats.spoken` against the level targets in the teacher panel and the parent report; the speaking minutes of the already-built decks have not been re-measured (Pre-A1 P2 lesson 1 has about 6–7 explicit speaking minutes against a target of 12 until the "Say it" check counts the read-aloud rounds).
