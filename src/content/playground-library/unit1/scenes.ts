@@ -789,6 +789,8 @@ export type Scene =
        *  asks "Where is the star? Is it under the hat?", only that place can be tapped, the thing pops out, the child
        *  answers ("It's a bat!", `say`; default = `reveal` without its "No!"), then the model line and the next place. */
       guided?: boolean;
+      /** Guided: the follow-up once the thing pops out (default "What is it?"; "Who is it?" for friends, "Can it fly?"…). */
+      whatPrompt?: string;
       spots: { x: number; y: number; size: number; ask: string; reveal: string; say?: string; target?: boolean; cover?: { img: string; label: string }; under: { img: string; label: string } }[];
     }
   | {
@@ -9747,14 +9749,14 @@ export const LESSON_U5L5_SCENES: Scene[] = [
   },
   {
     // Hide and seek with Dad: every spot hides a D word until Dad is found.
-    id: 'u5l5-where-dad', kind: 'lift-flap', bg: bgU5L5Home, who: 'pip',
+    id: 'u5l5-where-dad', kind: 'lift-flap', bg: bgU5L5Home, who: 'pip', guided: true,
     teacher: 'Hide and seek! The child asks each question ("Is he behind the door?") and taps to look. Say the D word that pops out: dog, doll, duck!',
     question: 'Where is my dad?',
     notYet: 'Not yet! Look in the other places first!',
     spots: [
-      { x: 8, y: 42, size: 13, ask: 'Is he behind the door?', reveal: "No! It's a dog! D, d, dog!", under: { img: itemDog, label: 'dog' } },
-      { x: 12, y: 76, size: 13, ask: 'Is he in the toy box?', reveal: "No! It's a doll! D, d, doll!", under: { img: itemDoll, label: 'doll' } },
-      { x: 93, y: 40, size: 11, ask: 'Is he behind the curtain?', reveal: "No! It's a duck! D, d, duck!", under: { img: itemDuck, label: 'duck' } },
+      { x: 8, y: 42, size: 13, ask: 'Is he behind the door?', reveal: "No! It's a dog! D, d, dog!", say: "It's a dog!", under: { img: itemDog, label: 'dog' } },
+      { x: 12, y: 76, size: 13, ask: 'Is he in the toy box?', reveal: "No! It's a doll! D, d, doll!", say: "It's a doll!", under: { img: itemDoll, label: 'doll' } },
+      { x: 93, y: 40, size: 11, ask: 'Is he behind the curtain?', reveal: "No! It's a duck! D, d, duck!", say: "It's a duck!", under: { img: itemDuck, label: 'duck' } },
       { x: 63, y: 62, size: 22, ask: 'Is he behind the armchair?', reveal: "Yes! Here he is! It's Dad!", target: true, under: { img: famDad, label: 'Dad' } },
     ],
   },
@@ -11273,7 +11275,7 @@ export const LESSON_U6L5_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'u6l5-where-cat', kind: 'lift-flap', bg: bgU6L5Street, who: 'pip',
+    id: 'u6l5-where-cat', kind: 'lift-flap', bg: bgU6L5Street, who: 'pip', guided: true,
     teacher: 'Extra time: hide and seek on the street! The child asks each question ("Is it behind the tree?") and taps to look.',
     question: 'Where is the cat?',
     notYet: 'Not yet! Look in the other places first!',
@@ -12804,7 +12806,7 @@ export const LESSON_U7L5_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'u7l5-behind-door', kind: 'lift-flap', bg: bgU7L5Barn0, who: 'pip',
+    id: 'u7l5-behind-door', kind: 'lift-flap', bg: bgU7L5Barn0, who: 'pip', guided: true,
     teacher: "Who's behind the door? The child asks at each door (\"Is it behind this door?\") and taps to open it.",
     question: 'Where is the duck?',
     notYet: 'Not yet! Look behind the other doors first!',
@@ -14062,7 +14064,7 @@ export const LESSON_U8L5_SCENES: Scene[] = [
 
   /* 9-11 More games */
   {
-    id: 'u8l5-where-caterpillar', kind: 'lift-flap', bg: bgU8L5Garden, who: 'pip',
+    id: 'u8l5-where-caterpillar', kind: 'lift-flap', bg: bgU8L5Garden, who: 'pip', guided: true,
     teacher: 'Where is the caterpillar? The child asks at each leaf ("Is it under this leaf?") and taps to look.',
     question: 'Where is the caterpillar?',
     notYet: 'Not yet! Look under the other leaves first!',
@@ -16575,7 +16577,7 @@ export const LESSON_U10L5_SCENES: Scene[] = [
 
   /* 9-11 More games */
   {
-    id: 'u10l5-where-bear', kind: 'lift-flap', bg: bgU10L5Trail, who: 'leo',
+    id: 'u10l5-where-bear', kind: 'lift-flap', bg: bgU10L5Trail, who: 'leo', guided: true,
     teacher: 'Where is the bear? The child asks at each place ("Is it in the bush?") and taps to look. Say what each animal can do.',
     question: 'Where is the bear?',
     notYet: 'Not yet! Look in the other places first!',

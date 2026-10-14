@@ -32,6 +32,8 @@ export function LiftFlapScene({ scene, onWin, onNext, sync }: { scene: Lift; onW
   const step = Math.max(0, Math.min(scene.spots.length - 1, Number(state.step) || 0));
   const saying = guided && !!state.saying;
   const cur = scene.spots[step];
+  /** The follow-up after the thing pops out: "What is it?" by default, "Who is it?" for friends, "Can it fly?"… */
+  const what = scene.whatPrompt ?? LIFT_WHAT;
   const liftedSet = useMemo(() => new Set(lifted), [lifted]);
   const targetIdx = scene.spots.findIndex((s) => s.target);
   const othersLeft = scene.spots.filter((s, i) => !s.target && !liftedSet.has(i)).length;
@@ -65,7 +67,7 @@ export function LiftFlapScene({ scene, onWin, onNext, sync }: { scene: Lift; onW
       sfx.pop(); sfx.match();
       setState((st) => ({ ...st, lifted: [...st.lifted, i], found: !!s.target || st.found }));
       if (s.target) { await sayWithin(s.reveal, scene.who); sfx.gem(); onWin(true); setState((st) => ({ ...st, busy: false })); return; }
-      await sayWithin(LIFT_WHAT, scene.who);
+      await sayWithin(what, scene.who);
       setState((st) => ({ ...st, busy: false, saying: true }));
       return;
     }
@@ -88,9 +90,9 @@ export function LiftFlapScene({ scene, onWin, onNext, sync }: { scene: Lift; onW
     <div className="absolute inset-0 overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
       {found && <Confetti count={60} />}
       <div className="pointer-events-none absolute left-1/2 top-3 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-base font-black text-orange-700 shadow-xl sm:text-xl">
-        {found ? `🎉 ${scene.spots[targetIdx]?.reveal ?? ''}` : guided && cur ? (saying ? `🗣️ ${LIFT_WHAT} Say it!` : `🔍 ${scene.question} ${cur.ask}`) : `🔍 ${scene.question}`}
+        {found ? `🎉 ${scene.spots[targetIdx]?.reveal ?? ''}` : guided && cur ? (saying ? `🗣️ ${what} Say it!` : `🔍 ${scene.question} ${cur.ask}`) : `🔍 ${scene.question}`}
       </div>
-      <button onClick={() => cueSpeak(guided && cur ? (saying ? LIFT_WHAT : `${scene.question} ${cur.ask}`) : scene.question, scene.who)} className="absolute right-3 top-3 z-30 rounded-full bg-white/95 px-3 py-2 text-sm font-black text-orange-700 shadow-lg active:scale-95">🔊 Again</button>
+      <button onClick={() => cueSpeak(guided && cur ? (saying ? what : `${scene.question} ${cur.ask}`) : scene.question, scene.who)} className="absolute right-3 top-3 z-30 rounded-full bg-white/95 px-3 py-2 text-sm font-black text-orange-700 shadow-lg active:scale-95">🔊 Again</button>
 
       {scene.spots.map((s, i) => {
         const up = liftedSet.has(i);
@@ -136,7 +138,7 @@ export function LiftFlapScene({ scene, onWin, onNext, sync }: { scene: Lift; onW
         <div className="absolute inset-x-0 bottom-[5%] z-30 flex flex-col items-center gap-2">
           <div className="flex items-center gap-3 rounded-3xl bg-white/95 px-5 py-2 shadow-2xl">
             <img src={cur.under.img} alt="" draggable={false} className="h-16 w-16 object-contain" />
-            <span className="text-2xl font-black text-orange-700">🗣️ {LIFT_WHAT}</span>
+            <span className="text-2xl font-black text-orange-700">🗣️ {what}</span>
             <button onClick={() => { sfx.click(); cueSpeak(liftSay(cur), scene.who); }} className="rounded-full bg-orange-100 px-3 py-1 text-lg font-black text-orange-700 active:scale-95">🔊 Help</button>
           </div>
           <button onClick={() => void said()} className={`${CLAY_BUTTON} px-8 py-2 text-xl`}>✓ I said it!</button>
@@ -155,7 +157,7 @@ export function LiftFlapScene({ scene, onWin, onNext, sync }: { scene: Lift; onW
 /** Every voiced line, for the clip baker (scripts/generate-voice-cache.mjs mirrors this). */
 export function liftFlapLines(scene: Lift) {
   return [
-    [scene.who, scene.question], [scene.who, scene.notYet], [scene.who, LIFT_WHAT],
+    [scene.who, scene.question], [scene.who, scene.notYet], [scene.who, scene.whatPrompt ?? LIFT_WHAT],
     ...scene.spots.flatMap((s) => [[scene.who, s.ask], [scene.who, s.reveal], [scene.who, `${scene.question} ${s.ask}`], [scene.who, liftSay(s)]]),
   ] as [string, string][];
 }

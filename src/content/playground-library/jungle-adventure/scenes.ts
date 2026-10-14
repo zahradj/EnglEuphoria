@@ -919,14 +919,14 @@ export const LESSON_A1U2L3_SCENES: Scene[] = [
   {
     id: 'ja3-who-helps', kind: 'prea1', teacher: 'Free: who can fly up to Kip? The student ASKS at each hiding place “Can it fly?”, then taps to look and answers “No, it can’t!” / “Yes, it can!”.',
     scene: {
-      id: 'ja3-who-helps', kind: 'lift-flap', bg: bgWide, who: 'pip',
+      id: 'ja3-who-helps', kind: 'lift-flap', bg: bgWide, who: 'pip', guided: true, whatPrompt: 'Can it fly?',
       teacher: 'Ask: Can it fly? Then look!',
       question: 'Who can fly?',
       notYet: 'Not yet! Look in the other places first!',
       spots: [
-        { x: 18, y: 76, size: 13, ask: 'Can it fly?', reveal: 'A frog! No, it can’t fly. It can jump.', cover: { img: it('stone'), label: 'rock' }, under: { img: it('frog'), label: 'frog' } },
-        { x: 40, y: 70, size: 12, ask: 'Can it fly?', reveal: 'A snake! No, it can’t fly.', cover: { img: it('leaf'), label: 'leaf' }, under: { img: it('snake'), label: 'snake' } },
-        { x: 62, y: 76, size: 13, ask: 'Can it fly?', reveal: 'A fish! No, it can’t fly. It can swim.', cover: { img: it('gift'), label: 'box' }, under: { img: it('fish'), label: 'fish' } },
+        { x: 18, y: 76, size: 13, ask: 'Can it fly?', reveal: 'A frog! No, it can’t fly. It can jump.', say: 'No, it can’t fly.', cover: { img: it('stone'), label: 'rock' }, under: { img: it('frog'), label: 'frog' } },
+        { x: 40, y: 70, size: 12, ask: 'Can it fly?', reveal: 'A snake! No, it can’t fly.', say: 'No, it can’t fly.', cover: { img: it('leaf'), label: 'leaf' }, under: { img: it('snake'), label: 'snake' } },
+        { x: 62, y: 76, size: 13, ask: 'Can it fly?', reveal: 'A fish! No, it can’t fly. It can swim.', say: 'No, it can’t fly.', cover: { img: it('gift'), label: 'box' }, under: { img: it('fish'), label: 'fish' } },
         { x: 84, y: 64, size: 20, ask: 'Can it fly?', reveal: 'A bird! Yes, it can! It can fly!', target: true, cover: { img: it('tree'), label: 'tree' }, under: { img: it('bird'), label: 'bird' } },
       ],
     },

@@ -2009,7 +2009,7 @@ export const LESSON_4_SCENES: Scene[] = classroomLook([
   {
     id: 'wt4-hide-seek', kind: 'prea1', teacher: 'Free: hide and seek! The student ASKS "Is it Mia?" at each hiding place, then taps to look. Leo is hiding somewhere — when they find him: This is my friend Leo!',
     scene: {
-      id: 'wt4-hide-seek', kind: 'lift-flap', bg: bgParkEmpty, who: 'pip',
+      id: 'wt4-hide-seek', kind: 'lift-flap', bg: bgParkEmpty, who: 'pip', guided: true, whatPrompt: 'Who is it?',
       teacher: 'Where is Leo? Ask at each place, then look!',
       question: 'Where is my friend Leo?',
       notYet: 'Not yet! Look in the other places first!',

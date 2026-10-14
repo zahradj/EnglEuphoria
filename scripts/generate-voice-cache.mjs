@@ -389,7 +389,7 @@ const UNIT1_EXTRACTORS = {
   'sticker-reward': (s) => [[s.who, 'You earned a sticker!'], [s.who, s.line]],
   'home-mission': (s) => [[s.who, s.line], [s.who, 'Mission accepted!']],
   // Mirrors LiftFlapScene.tsx's liftFlapLines().
-  'lift-flap': (s) => [[s.who, s.question], [s.who, s.notYet], ...(s.guided ? [[s.who, 'What is it?']] : []), ...(s.spots ?? []).flatMap((p) => [[s.who, p.ask], [s.who, p.reveal], ...(s.guided ? [[s.who, `${s.question} ${p.ask}`], [s.who, p.say ?? p.reveal.replace(/^(No|Yes)!\s*/i, '')]] : [])])],
+  'lift-flap': (s) => [[s.who, s.question], [s.who, s.notYet], ...(s.guided ? [[s.who, s.whatPrompt ?? 'What is it?']] : []), ...(s.spots ?? []).flatMap((p) => [[s.who, p.ask], [s.who, p.reveal], ...(s.guided ? [[s.who, `${s.question} ${p.ask}`], [s.who, p.say ?? p.reveal.replace(/^(No|Yes)!\s*/i, '')]] : [])])],
   // Mirrors DrawPathScene.tsx's drawPathLines().
   'draw-path': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), [s.who, `Start at ${({ pip: 'Pip', mia: 'Mia', bella: 'Bella', willow: 'Willow', leo: 'Leo' })[s.walker] ?? s.walker}!`]],
   // Mirror SimonTouchScene.tsx's simonTouchLines() / BodyStackScene.tsx's bodyStackLines().
