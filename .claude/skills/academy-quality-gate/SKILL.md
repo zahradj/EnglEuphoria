@@ -42,3 +42,6 @@ Blocking issues: <list>   Open questions for the owner: <list>   Unverified fact
 ## Owner-facing summary rule
 
 Report faithfully: what was verified, what was not (web sources, sizing assumptions, thresholds not yet piloted), and what remains to build. Never say "ready" for something that has not run in front of a student.
+
+## Research and games check (owner rule 2026-10-14, CLAUDE.md "Research for every unit and every lesson")
+Fail the unit/lesson if: (1) no `docs/research/academy-<unit-or-lesson>-research.md` with dated sources (Oxford, Cambridge, British Council, Pearson GSE, apps/platforms) and verified/unverified marks; (2) no games list from `docs/academy-games-catalog.md`; (3) no video-game mechanic from `docs/academy-video-game-mechanics.md` named with what the student does in English.
