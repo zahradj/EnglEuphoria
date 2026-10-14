@@ -1,5 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { motion, useReducedMotion } from 'framer-motion';
+import { Bursts, FloatText, useBursts } from './unit1/scene-components/gameFx';
+import { Confetti } from './unit1/fx';
 import { type ActivitySync, useSyncedState } from './sceneActivitySync';
 import { cueSpeak } from './unit1/audio';
 import * as sfx from './unit1/sfx';
@@ -148,6 +151,24 @@ export function PictureMatchScene({ scene, onNext, onWin, onLose, sync }: {
   const wrongTimer = useRef<number | null>(null);
   // Local-only drag ghost (position isn't broadcast; `holding` is).
   const [drag, setDrag] = useState<{ tile: number; x: number; y: number } | null>(null);
+  /* game feel (owner 2026-10-14: "work on the aesthetic design of the activities") — local only, never synced */
+  const reduce = useReducedMotion();
+  const rootRef = useRef<HTMLDivElement>(null);
+  const [bursts, fire] = useBursts();
+  const [plus, setPlus] = useState<{ x: number; y: number } | null>(null);
+  /** Pieces pop in one after another (CSS `scale`, so it never fights a transform). */
+  const popIn = (i: number) => (reduce ? {} : { animation: `pm-pop 0.5s cubic-bezier(.34,1.56,.64,1) ${0.1 + i * 0.08}s both` });
+  /** Burst + "+⭐" over the slot that was just filled. */
+  const celebrate = (slot: number) => {
+    const root = rootRef.current; const el = root?.querySelector(`[data-match-slot="${slot}"]`);
+    if (!root || !el) return;
+    const R = root.getBoundingClientRect(); const r = el.getBoundingClientRect();
+    if (!R.width) return;
+    const x = ((r.left + r.width / 2 - R.left) / R.width) * 100; const y = ((r.top + r.height / 2 - R.top) / R.height) * 100;
+    if (!reduce) fire(x, y, 'stars');
+    setPlus({ x, y: y - 8 });
+    window.setTimeout(() => setPlus(null), 900);
+  };
 
   useEffect(() => {
     setState(INITIAL);
@@ -157,6 +178,13 @@ export function PictureMatchScene({ scene, onNext, onWin, onLose, sync }: {
   }, [scene.id]);
 
   const done = placed.length >= n;
+  // each star of the reward row pops with a sound as it lands
+  useEffect(() => {
+    if (!done || reduce) return;
+    const ts = items.map((_, k) => window.setTimeout(() => sfx.pop(), (0.2 + k * 0.18) * 1000 + 150));
+    return () => ts.forEach((t) => window.clearTimeout(t));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [done]);
   useEffect(() => {
     if (done && !gemDone.current && !isMirror) {
       gemDone.current = true;
@@ -172,6 +200,7 @@ export function PictureMatchScene({ scene, onNext, onWin, onLose, sync }: {
     const itemIdx = order[tile];
     if (itemIdx === slot) {
       sfx.match();
+      celebrate(slot);
       cueSpeak(items[slot].word, 'teacher');
       setState((s) => ({ ...s, placed: [...s.placed, slot], holding: null, wrongSlot: null }));
     } else {
@@ -242,9 +271,9 @@ export function PictureMatchScene({ scene, onNext, onWin, onLose, sync }: {
     const pictureAspect = item.crop ? ((item.crop.w * (item.imgAspect ?? 16 / 9)) / item.crop.h) : 4 / 3;
     const cardAspect = pictureAspect * PICTURE_SHARE;
     return (
-      <div key={slot} className="flex min-h-0 min-w-0 items-center justify-center" style={{ containerType: 'size' }}>
+      <div key={slot} className="flex min-h-0 min-w-0 items-center justify-center" style={{ containerType: 'size', ...popIn(slot) }}>
         <div
-          className={`relative flex flex-col overflow-hidden ${look.card} ring-4 transition ${
+          className={`relative flex flex-col overflow-hidden ${look.card} ring-4 transition duration-300 ${isPlaced && !reduce ? 'animate-[pm-yay_0.6s_ease-out]' : ''} ${
             isPlaced ? 'ring-emerald-400' : isWrong ? 'ring-red-400' : isTarget ? 'ring-orange-300' : scene.look && scene.look !== 'cards' ? 'ring-transparent' : 'ring-white'
           }`}
           style={{ width: `min(100cqw, calc(100cqh * ${cardAspect}))`, aspectRatio: cardAspect, transform: isPolaroid ? `rotate(${slot % 2 ? 2.2 : -2.2}deg)` : undefined }}
@@ -283,9 +312,15 @@ export function PictureMatchScene({ scene, onNext, onWin, onLose, sync }: {
 
   return (
     <div
+      ref={rootRef}
       className="absolute inset-0 overflow-hidden bg-cover bg-center select-none"
       style={scene.bg ? { backgroundImage: `url(${scene.bg})` } : { background: look.bg }}
     >
+      <style>{`@keyframes pm-pop { 0% { scale: 0.2; opacity: 0; } 70% { scale: 1.06; opacity: 1; } 100% { scale: 1; opacity: 1; } }
+        @keyframes pm-yay { 0% { scale: 1; } 35% { scale: 1.07; } 65% { scale: 0.97; } 100% { scale: 1; } }`}</style>
+      <Bursts items={bursts} />
+      <FloatText show={!!plus} x={plus?.x ?? 50} y={plus?.y ?? 50}>+⭐</FloatText>
+      {done && !reduce && <Confetti count={60} />}
       {/* Pictures */}
       <div
         className="absolute inset-x-[3%] top-[3%] bottom-[21%] grid gap-x-[2.5%] gap-y-[3.5%]"
@@ -305,7 +340,7 @@ export function PictureMatchScene({ scene, onNext, onWin, onLose, sync }: {
             👀 Your student is matching on their own — each answer appears here live
           </div>
         ) : scene.prompt && !done ? (
-          <div className={`shrink-0 text-[clamp(0.85rem,calc(2.4*var(--svh,1vh)),1.25rem)] font-extrabold uppercase tracking-wide ${look.prompt}`}>{scene.prompt}</div>
+          <div className={`shrink-0 text-[clamp(0.85rem,calc(2.4*var(--svh,1vh)),1.25rem)] font-extrabold uppercase tracking-wide ${look.prompt} rounded-full bg-white/85 px-[1.2em] py-[0.25em] shadow-md`}>{scene.prompt}</div>
         ) : null}
         <div className="flex max-w-full flex-wrap items-center justify-center gap-x-[calc(1.2*var(--svw,1vw))] gap-y-2">
         {order.map((itemIdx, tile) => {
@@ -319,7 +354,7 @@ export function PictureMatchScene({ scene, onNext, onWin, onLose, sync }: {
               onPointerDown={onTilePointerDown(tile)}
               disabled={isMirror || matched}
               aria-label={items[itemIdx].word}
-              style={{ touchAction: 'none' }}
+              style={{ touchAction: 'none', ...popIn(n + tile) }}
               className={`${look.pill.split(' ')[0]} px-[1.2em] py-[0.5em] text-center text-[clamp(0.9rem,calc(2.9*var(--svh,1vh)),1.6rem)] font-bold leading-none whitespace-nowrap shadow-[0_4px_14px_rgba(15,23,42,0.14)] transition ${
                 matched
                   ? 'hidden'
@@ -327,7 +362,7 @@ export function PictureMatchScene({ scene, onNext, onWin, onLose, sync }: {
                     ? 'scale-105 bg-orange-500 text-white ring-4 ring-orange-200'
                     : isMirror
                       ? 'bg-white/70 text-slate-500 shadow-none ring-1 ring-slate-200'
-                      : `${look.pill.split(' ').slice(1).join(' ')} hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(15,23,42,0.18)]`
+                      : `${look.pill.split(' ').slice(1).join(' ')} active:scale-90 hover:-translate-y-0.5 hover:shadow-[0_8px_20px_rgba(15,23,42,0.18)]`
               } ${isDragging ? 'opacity-30' : ''} ${isMirror ? 'cursor-default' : 'cursor-grab active:cursor-grabbing'}`}
             >
               {items[itemIdx].word}
@@ -335,9 +370,18 @@ export function PictureMatchScene({ scene, onNext, onWin, onLose, sync }: {
           );
         })}
         {done && (
-          <button type="button" onClick={onNext} className="rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-xl font-black text-white shadow-2xl active:scale-95">
-            Well done! Next ⭐
-          </button>
+          <div className="flex items-center gap-[1.2vw]">
+            {/* stars count up one by one, then Next arrives last */}
+            {items.map((_, k) => (
+              <motion.span key={k} className="drop-shadow-[0_0.4vh_0.4vh_rgba(0,0,0,0.3)]" style={{ fontSize: 'min(5vh,3.6vw)' }}
+                initial={reduce ? false : { scale: 0, rotate: -40, y: 16 }} animate={{ scale: 1, rotate: 0, y: 0 }}
+                transition={{ type: 'spring', stiffness: 320, damping: 12, delay: 0.2 + k * 0.18 }}>⭐</motion.span>
+            ))}
+            <motion.button type="button" onClick={onNext} className="ms-[1vw] rounded-full bg-gradient-to-r from-orange-500 to-pink-500 px-8 py-3 text-xl font-black text-white shadow-2xl"
+              initial={reduce ? false : { scale: 0 }} animate={reduce ? {} : { scale: [0, 1.12, 1] }} transition={{ delay: 0.4 + n * 0.18, duration: 0.55 }} whileTap={{ scale: 0.92 }}>
+              Well done! Next ⭐
+            </motion.button>
+          </div>
         )}
         </div>
       </div>
