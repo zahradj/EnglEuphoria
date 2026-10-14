@@ -1,6 +1,6 @@
 # Scenario: A1 Unit 5 story *Bibi's Bad Day*, pages 1-3, three Canva story GIFs
 
-**Status: approved (owner, 2026-10-14: "go"). GIF 2 (yawn) and GIF 3 (tremble) are in the lesson; GIF 1 (wave) is not yet: two Canva edits of the tiny figure either changed nothing or re-framed the whole picture (it would jump), so page 1 stays still.**
+**Status: approved (owner, 2026-10-14: "go"). All three GIFs are in the lesson. GIF 1: the wave frame is the Canva edit with only Bibi pasted onto the original page (tail kept), so nothing else in the town moves.**
 
 Owner, 2026-10-14: *"You can use GIFs, video GIFs."* A1 has no story videos; stories move with Canva GIFs made from the
 approved story pictures, after a written scenario and the owner's OK (CLAUDE.md "A1 lessons — length and story GIFs").
