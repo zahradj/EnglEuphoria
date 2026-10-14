@@ -87,3 +87,30 @@ describe('Practice gaps: what changes when the student does not practise', () =>
     expect(nudgeFor(0)).toMatchObject({ size: 'rescue', minutes: 5 });
   });
 });
+
+import { LEVEL_FRAMES } from '../levelFrames';
+import { SPEAKING_LADDER, SPEAKING_TARGETS, speakingProblems } from '..';
+
+describe('Speaking practice is the largest share at every level', () => {
+  it('every level frame gives speaking the biggest share, at least 30 %, and the shares add up to 100', () => {
+    LEVEL_FRAMES.forEach((f) => {
+      const entries = Object.entries(f.skills);
+      expect(entries.reduce((a, [, v]) => a + v, 0), f.level).toBe(100);
+      const speak = entries.filter(([k]) => k.startsWith('Speaking')).reduce((a, [, v]) => a + v, 0);
+      expect(speak, f.level).toBeGreaterThanOrEqual(30);
+      expect(speak, f.level).toBe(Math.max(...entries.map(([, v]) => v)));
+    });
+  });
+  it('targets rise with the level and the ladder has five steps from shadowing to free speech', () => {
+    expect(SPEAKING_LADDER.map((s) => s.step)).toEqual(['shadow', 'repeat', 'controlled', 'guided', 'free']);
+    const lv = ['Pre-A1', 'A1', 'A2', 'B1', 'B2', 'C1'] as const;
+    lv.slice(1).forEach((l, i) => {
+      expect(SPEAKING_TARGETS[l].studentTalkShare).toBeGreaterThanOrEqual(SPEAKING_TARGETS[lv[i]].studentTalkShare);
+      expect(SPEAKING_TARGETS[l].speakingMinutes).toBeGreaterThanOrEqual(SPEAKING_TARGETS[lv[i]].speakingMinutes);
+    });
+  });
+  it('a plan that talks too little, or never reaches its ladder step, is reported', () => {
+    expect(speakingProblems({ level: 'A1', studentTalkShare: 0.5, speakingMinutes: 16, tasks: [{ step: 'shadow', minutes: 3 }, { step: 'repeat', minutes: 3 }, { step: 'controlled', minutes: 4 }, { step: 'guided', minutes: 3 }, { step: 'guided', minutes: 3 }] })).toEqual([]);
+    expect(speakingProblems({ level: 'B1', studentTalkShare: 0.3, speakingMinutes: 8, tasks: [{ step: 'repeat', minutes: 8 }] }).length).toBe(4);
+  });
+});
