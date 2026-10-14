@@ -4,6 +4,7 @@ import { cueSpeak } from '../audio';
 import * as sfx from '../sfx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
 import { STICKER_TILTS, StickerButton, sayWithin } from './shared';
+import { CalmBg } from './gameFx';
 
 /* ---------- The Mystery Bag ----------
  * The ESL "feely bag / mystery bag" game (games4esl.com and eslkidsgames
@@ -103,7 +104,9 @@ export function MysteryBagScene({ scene, onWin, onLose, onNext, sync }: { scene:
   }
 
   return (
-    <div className="absolute inset-0 overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
+    <div className="absolute inset-0 overflow-hidden">
+      {/* busy picture calmed down so the floating pieces are the clearest thing (owner 2026-10-14) */}
+      <CalmBg img={scene.bg} />
       <div className="pointer-events-none absolute left-1/2 top-3 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-base font-black text-orange-700 shadow-xl sm:text-xl">
         {revealed ? `🎉 ${colorToyLine(r.colorWord, r.toyWord)}` : `🎒 ${question}`}
         <span className="ml-2 rounded-full bg-orange-100 px-2 py-0.5 text-sm text-orange-600">{round + 1}/{total}</span>

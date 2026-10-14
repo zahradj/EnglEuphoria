@@ -389,7 +389,7 @@ const UNIT1_EXTRACTORS = {
   'sticker-reward': (s) => [[s.who, 'You earned a sticker!'], [s.who, s.line]],
   'home-mission': (s) => [[s.who, s.line], [s.who, 'Mission accepted!']],
   // Mirrors LiftFlapScene.tsx's liftFlapLines().
-  'lift-flap': (s) => [[s.who, s.question], [s.who, s.notYet], ...(s.guided ? [[s.who, 'What is it?']] : []), ...(s.spots ?? []).flatMap((p) => [[s.who, p.ask], [s.who, p.reveal], ...(s.guided ? [[s.who, `${s.question} ${p.ask}`], [s.who, p.say ?? p.reveal.replace(/^(No|Yes)!\s*/i, '')]] : [])])],
+  'lift-flap': (s) => [[s.who, s.question], [s.who, s.notYet], ...(s.guided ? [[s.who, s.whatPrompt ?? 'What is it?']] : []), ...(s.spots ?? []).flatMap((p) => [[s.who, p.ask], [s.who, p.reveal], ...(s.guided ? [[s.who, `${s.question} ${p.ask}`], [s.who, p.say ?? p.reveal.replace(/^(No|Yes)!\s*/i, '')]] : [])])],
   // Mirrors DrawPathScene.tsx's drawPathLines().
   'draw-path': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), [s.who, `Start at ${({ pip: 'Pip', mia: 'Mia', bella: 'Bella', willow: 'Willow', leo: 'Leo' })[s.walker] ?? s.walker}!`]],
   // Mirror SimonTouchScene.tsx's simonTouchLines() / BodyStackScene.tsx's bodyStackLines().
@@ -736,6 +736,9 @@ const UNIT1_EXTRACTORS = {
  *  call sites. Character keys here are the story's CharKey (e.g.
  *  'marigold') and must be normalized through `voiceOf` before use — see
  *  `resolveWho` below. */
+/** Reader picture questions (owner 2026-10-14): the question and "Yes! <answer>" in the asker's voice. */
+const readerChecks = (s) => (s.noChecks ? [] : (s.pages ?? []).flatMap((p) => (p.check ? [[p.check.who ?? 'teacher', p.check.question], [p.check.who ?? 'teacher', `Yes! ${p.check.answer}`]] : [])));
+
 const WT_EXTRACTORS = {
   // Universal "Remember?" warm-up (RecallWarmupScene.tsx's recallWarmupLines()) — was missing here, so A1/A2
   // warm-up lines were never baked and the audit could not see them.
@@ -790,7 +793,7 @@ const WT_EXTRACTORS = {
   'word-build': (s) => (s.rounds ?? []).map((r) => ['pip', r.word]),
   finale: (s) => (s.line ? [[s.who, s.line]] : []),
   'tongue-twister': (s) => [[s.who, s.line]],
-  reader: (s) => (s.pages ?? []).flatMap((p) => (p.lines ?? []).flatMap((l) => [[l.who ?? 'teacher', l.text], ...l.text.split(/\s+/).map((w) => [l.who ?? 'teacher', w.replace(/[^A-Za-z'’-]/g, '')]).filter(([, w]) => w)])),
+  reader: (s) => [...readerChecks(s), ...(s.pages ?? []).flatMap((p) => (p.lines ?? []).flatMap((l) => [[l.who ?? 'teacher', l.text], ...l.text.split(/\s+/).map((w) => [l.who ?? 'teacher', w.replace(/[^A-Za-z'’-]/g, '')]).filter(([, w]) => w)]))],
   // Verified against welcome-town/SceneRenderer.tsx call sites.
   // FeelingsSurveyScene.tsx: intro, "How are you, <name>?" + "<name> is <feeling>!" (host), "I am <feeling>!" (friend).
   'chat-chain': (s) => [[s.partner, s.intro], ...(s.turns ?? []).map((t) => [t.who === 'student' ? 'pip' : t.who, t.line])],

@@ -16,7 +16,7 @@
  * (`food-survey`), Festival Café ★ (`festival-cafe`), Build a Pizza (`build-dish`).
  * ========================================================================= */
 
-import { CAST, VOICE_KEY, type CharKey, type Scene } from '../welcome-town/scenes';
+import { CAST, VOICE_KEY, type CharKey, type ReaderPage, type Scene } from '../welcome-town/scenes';
 
 export type { CharKey, Scene };
 export { CAST, VOICE_KEY };
@@ -38,19 +38,19 @@ const PICO = item('pico');
 const BISCUIT = item('dog');
 
 /** The unit's reading strand (plan §4). */
-export const CILLA_RECIPE: { img: string; lines: { who?: CharKey; text: string }[] }[] = [
-  { img: cillaPage(1), lines: [{ text: 'Look! The Food Festival! There are a lot of stalls.' }] },
-  { img: cillaPage(2), lines: [{ who: 'cilla', text: 'Hello! I am Chef Cilla. I like cooking!' }] },
-  { img: cillaPage(3), lines: [{ who: 'cilla', text: 'Let’s make a big pizza for the festival!' }] },
-  { img: cillaPage(4), lines: [{ who: 'cilla', text: 'Oh no! Where is the cheese?' }] },
-  { img: cillaPage(5), lines: [{ text: 'Look! Little crumbs. Biscuit can help!' }] },
-  { img: cillaPage(6), lines: [{ text: 'It is Pico the Mouse! He has the cheese.' }] },
-  { img: cillaPage(7), lines: [{ who: 'leo', text: 'Would you like some grapes, Pico?' }, { who: 'pico', text: 'No, thank you.' }] },
-  { img: cillaPage(8), lines: [{ who: 'mia', text: 'Would you like some bread?' }, { who: 'pico', text: 'No, thank you.' }] },
-  { img: cillaPage(9), lines: [{ who: 'pip', text: 'Do you like pizza, Pico?' }, { who: 'pico', text: 'Yes, I do! I like pizza!' }] },
-  { img: cillaPage(10), lines: [{ who: 'cilla', text: 'Would you like some pizza?' }, { who: 'pico', text: 'Yes, please!' }] },
-  { img: cillaPage(11), lines: [{ who: 'pico', text: 'Here is the cheese.' }, { who: 'cilla', text: 'Thank you, Pico!' }] },
-  { img: cillaPage(12), lines: [{ text: 'Let’s eat! Yum! We all like pizza!' }] },
+export const CILLA_RECIPE: ReaderPage[] = [
+  { img: cillaPage(1), lines: [{ text: 'Look! The Food Festival! There are a lot of stalls.' }], check: { who: 'pip', question: 'Where are they?', answer: 'The Food Festival', options: [{ label: 'The Food Festival' }, { label: 'The jungle' }, { label: 'Space' }] } },
+  { img: cillaPage(2), lines: [{ who: 'cilla', text: 'Hello! I am Chef Cilla. I like cooking!' }], check: { who: 'pip', question: 'Who is this?', answer: 'Chef Cilla', options: [{ label: 'Pico', img: item('pico') }, { label: 'Chef Cilla', img: item('cilla') }, { label: 'Biscuit', img: item('dog') }] } },
+  { img: cillaPage(3), lines: [{ who: 'cilla', text: 'Let’s make a big pizza for the festival!' }], check: { who: 'pip', question: 'What do they make?', answer: 'A pizza', options: [{ label: 'A pizza', img: item('pizza') }, { label: 'Soup', img: item('soup') }, { label: 'A cake', img: item('cake') }] } },
+  { img: cillaPage(4), lines: [{ who: 'cilla', text: 'Oh no! Where is the cheese?' }], check: { who: 'leo', question: 'What is lost?', answer: 'The cheese', options: [{ label: 'The bread', img: item('bread') }, { label: 'The cheese', img: item('cheese') }, { label: 'The grapes', img: item('grapes') }] } },
+  { img: cillaPage(5), lines: [{ text: 'Look! Little crumbs. Biscuit can help!' }], check: { who: 'pip', question: 'Who can help?', answer: 'Biscuit', options: [{ label: 'Biscuit', img: item('dog') }, { label: 'Chef Cilla', img: item('cilla') }, { label: 'Pico', img: item('pico') }] } },
+  { img: cillaPage(6), lines: [{ text: 'It is Pico the Mouse! He has the cheese.' }], check: { who: 'pip', question: 'Who has the cheese?', answer: 'Pico', options: [{ label: 'Chef Cilla', img: item('cilla') }, { label: 'Pico', img: item('pico') }, { label: 'Biscuit', img: item('dog') }] } },
+  { img: cillaPage(7), lines: [{ who: 'leo', text: 'Would you like some grapes, Pico?' }, { who: 'pico', text: 'No, thank you.' }], check: { who: 'mia', question: 'Does Pico want grapes?', answer: 'No', options: [{ label: 'Yes' }, { label: 'No' }] } },
+  { img: cillaPage(8), lines: [{ who: 'mia', text: 'Would you like some bread?' }, { who: 'pico', text: 'No, thank you.' }], check: { who: 'pip', question: 'Does Pico want bread?', answer: 'No', options: [{ label: 'No' }, { label: 'Yes' }] } },
+  { img: cillaPage(9), lines: [{ who: 'pip', text: 'Do you like pizza, Pico?' }, { who: 'pico', text: 'Yes, I do! I like pizza!' }], check: { who: 'leo', question: 'What does Pico like?', answer: 'Pizza', options: [{ label: 'Bread', img: item('bread') }, { label: 'Grapes', img: item('grapes') }, { label: 'Pizza', img: item('pizza') }] } },
+  { img: cillaPage(10), lines: [{ who: 'cilla', text: 'Would you like some pizza?' }, { who: 'pico', text: 'Yes, please!' }], check: { who: 'pip', question: 'What does Pico say?', answer: 'Yes, please!', options: [{ label: 'Yes, please!' }, { label: 'No, thank you.' }] } },
+  { img: cillaPage(11), lines: [{ who: 'pico', text: 'Here is the cheese.' }, { who: 'cilla', text: 'Thank you, Pico!' }], check: { who: 'pip', question: 'What does Pico give?', answer: 'The cheese', options: [{ label: 'The cheese', img: item('cheese') }, { label: 'The pizza', img: item('pizza') }, { label: 'The milk', img: item('milk') }] } },
+  { img: cillaPage(12), lines: [{ text: 'Let’s eat! Yum! We all like pizza!' }], check: { who: 'pip', question: 'What do they all like?', answer: 'Pizza', options: [{ label: 'Soup', img: item('soup') }, { label: 'Pizza', img: item('pizza') }, { label: 'Salad', img: item('salad') }] } },
 ];
 
 const helloSong = (id: string, bg: string): Scene => ({
@@ -176,6 +176,20 @@ export const LESSON_A1U4L1_SCENES: Scene[] = [
   },
   { id: 'ff-meet-lunch', kind: 'meet', focus: ['lunch'], bg: cillaPage(3), who: 'cilla', cardSide: 'right', teacher: 'Present: Cilla says her lunch. The student says their own: I have … for lunch.', line: 'I have salad for lunch. Yum!', repeat: 'I have salad for lunch.' },
   { id: 'ff-echo', kind: 'echo', bg: bgMarket, who: 'pip', textSide: 'top', teacher: 'Guided: say it like Pip — loud, then quiet!', word: 'I have soup for lunch.' },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game.
+  {
+    id: 'ff-food-match', kind: 'picture-match', look: 'frames', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each word and drags it under its picture (or taps the word, then the picture), then reads it aloud.',
+    items: [
+      { word: 'rice', img: FOOD.rice.img },
+      { word: 'soup', img: FOOD.soup.img },
+      { word: 'salad', img: FOOD.salad.img },
+      { word: 'sandwich', img: FOOD.sandwich.img },
+      { word: 'pasta', img: FOOD.pasta.img },
+      { word: 'cheese', img: FOOD.cheese.img },
+    ],
+    bg: bgMarket,
+  },
   {
     id: 'ff-mystery-bag', kind: 'prea1', teacher: 'Guided: What is in the bag? Look at the shape, tap the food — then say it with a meal: I have rice for dinner!',
     scene: {
@@ -255,7 +269,7 @@ export const LESSON_A1U4L1_SCENES: Scene[] = [
     pages: CILLA_RECIPE.slice(0, 3),
   },
   {
-    id: 'ff-read-match', kind: 'picture-match', prompt: 'Read and match',
+    id: 'ff-read-match', kind: 'picture-match', look: 'polaroids', prompt: 'Read and match',
     teacher: 'Reading: read each sentence and drag it under its picture. Then read it aloud.',
     items: [
       { word: 'I have soup for lunch.', img: FOOD.soup.img },
@@ -418,6 +432,18 @@ export const LESSON_A1U4L2_SCENES: Scene[] = [
   { id: 'ff2-meet-dont', kind: 'meet', focus: ['don’t'], bg: cillaPage(3), who: 'leo', cardSide: 'left', teacher: 'Present: thumbs down — I don’t like washing up! Make a funny face. Then say it.', line: 'I like eating. I don’t like washing up!', repeat: 'I don’t like washing up!' },
   { id: 'ff2-echo', kind: 'echo', bg: bgCafe, who: 'pip', textSide: 'top', teacher: 'Guided: thumbs up, then thumbs down — say it like Pip!', word: 'I like cooking. I don’t like washing up.' },
   { id: 'ff2-echo-2', kind: 'echo', bg: bgCafe, who: 'leo', textSide: 'top', teacher: 'Guided: say it with Leo — a big yummy voice for “eating”!', word: 'I like eating!' },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game.
+  {
+    id: 'ff2-doing-match', kind: 'picture-match', look: 'polaroids', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each word and drags it under its picture (or taps the word, then the picture), then reads it aloud.',
+    items: [
+      { word: 'cooking', img: DOING.cooking.img },
+      { word: 'eating', img: DOING.eating.img },
+      { word: 'baking', img: DOING.baking.img },
+      { word: 'washing up', img: DOING.washing.img },
+    ],
+    bg: bgCafe,
+  },
   {
     id: 'ff2-red-green', kind: 'red-green', bg: bgCafe, who: 'cilla', runner: item('pip-run'), title: 'Red Light, Green Light: kitchen jobs!',
     teacher: 'Listening race: on green, the student taps the kitchen job they hear and Pip runs on (they can mime it too!). On red — freeze! Do not tap until it turns green.',
@@ -651,6 +677,18 @@ export const LESSON_A1U4L3_SCENES: Scene[] = [
   { id: 'ff3-meet-yes', kind: 'meet', focus: ['Yes'], bg: cillaPage(9), who: 'pico', cardSide: 'right', teacher: 'Present: the happy answer — nod and say it with Pico.', line: 'Yes, I do! I like pizza!', repeat: 'Yes, I do!' },
   { id: 'ff3-meet-no', kind: 'meet', focus: ['No'], bg: cillaPage(7), who: 'pico', cardSide: 'right', teacher: 'Present: the other answer — shake your head, kindly: No, I don’t.', line: 'No, I don’t. I don’t like grapes.', repeat: 'No, I don’t.' },
   { id: 'ff3-echo', kind: 'echo', bg: bgCafe, who: 'pip', textSide: 'top', teacher: 'Guided: ask like Pip, answer like Pico!', word: 'Do you like soup? Yes, I do!' },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game.
+  {
+    id: 'ff3-like-match', kind: 'picture-match', look: 'chalk', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each sentence and drags it under its picture (or taps it, then the picture), then reads it aloud.',
+    items: [
+      { word: 'I like pizza.', img: FOOD.pizza.img },
+      { word: 'I don’t like grapes.', img: FOOD.grapes.img },
+      { word: 'I like soup.', img: FOOD.soup.img },
+      { word: 'I don’t like cheese.', img: FOOD.cheese.img },
+    ],
+    bg: bgCafe,
+  },
   {
     id: 'ff3-tick-cross', kind: 'prea1', teacher: 'Guided: Tick or Cross! Listen: does the friend like it? Tick or cross. (Pass: 4 of 5.)',
     scene: {
@@ -911,6 +949,18 @@ export const LESSON_A1U4L4_SCENES: Scene[] = [
       ],
     },
   },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game.
+  {
+    id: 'ff4-offer-match', kind: 'picture-match', look: 'cards', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each sentence and drags it under its picture (or taps it, then the picture), then reads it aloud.',
+    items: [
+      { word: 'Would you like some juice?', img: FOOD.juice.img },
+      { word: 'Would you like some bread?', img: FOOD.bread.img },
+      { word: 'Would you like some rice?', img: FOOD.rice.img },
+      { word: 'Would you like some salad?', img: FOOD.salad.img },
+    ],
+    bg: bgMarket,
+  },
   {
     id: 'ff4-bingo', kind: 'sticker-bingo', bg: bgMarket, who: 'pip', title: 'Food Bingo! Listen and stamp!',
     teacher: 'Guided: Pip says who likes what — the student stamps the food, then says the sentence too. Three in a row: Bingo!',
@@ -1156,6 +1206,17 @@ export const LESSON_A1U4L5_SCENES: Scene[] = [
   { id: 'ff5-meet-pico', kind: 'meet', focus: ['please'], bg: cillaPage(10), who: 'pico', cardSide: 'right', teacher: 'Present: Pico’s happy answer — say it with him.', line: 'Yes, please! I like pizza!', repeat: 'Yes, please!' },
   { id: 'ff5-echo-thanks', kind: 'echo', bg: cillaPage(11), who: 'cilla', textSide: 'top', teacher: 'Guided: a happy voice — thank Pico!', word: 'Thank you, Pico!' },
   { id: 'ff5-echo-eat', kind: 'echo', bg: cillaPage(12), who: 'pip', textSide: 'top', teacher: 'Guided: the happy end — say it all together!', word: 'Let’s eat! We all like pizza!' },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game.
+  {
+    id: 'ff5-story-match', kind: 'picture-match', look: 'frames', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each sentence and drags it under its picture (or taps it, then the picture), then reads it aloud.',
+    items: [
+      { word: 'Where is the cheese?', img: cillaPage(4), crop: { x: 0, y: 0, w: 100, h: 100 }, imgAspect: 16 / 9 },
+      { word: 'Yes, please! I like pizza!', img: cillaPage(10), crop: { x: 0, y: 0, w: 100, h: 100 }, imgAspect: 16 / 9 },
+      { word: 'Thank you, Pico!', img: cillaPage(11), crop: { x: 0, y: 0, w: 100, h: 100 }, imgAspect: 16 / 9 },
+    ],
+    bg: bgMarket,
+  },
   {
     id: 'ff5-radar', kind: 'hot-cold', bg: bgMarket, who: 'cilla', title: 'Treasure Radar: find the cheese!',
     teacher: 'Game: things are hidden at the festival. The student taps to search and listens — Cold! Warm! Hot! When it pops out, they say the sentence.',
@@ -1824,7 +1885,7 @@ export const LESSON_A1U4L7_SCENES: Scene[] = [
   },
   /* Practise again — for any part below the pass mark, or as extra time */
   {
-    id: 'ff7-pa-match', kind: 'picture-match', prompt: 'Practise again: read and match',
+    id: 'ff7-pa-match', kind: 'picture-match', look: 'chalk', prompt: 'Practise again: read and match',
     teacher: 'Practise again (Part 2): read each sentence and drag it under its picture.',
     items: [
       { word: 'Would you like some soup?', img: FOOD.soup.img },

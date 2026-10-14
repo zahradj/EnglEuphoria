@@ -14,7 +14,7 @@
  * by understanding the looks words, not just the name; the photos stay in the album.
  * ========================================================================= */
 
-import { CAST, VOICE_KEY, type CharKey, type Scene } from '../welcome-town/scenes';
+import { CAST, VOICE_KEY, type CharKey, type ReaderPage, type Scene } from '../welcome-town/scenes';
 
 export type { CharKey, Scene };
 export { CAST, VOICE_KEY };
@@ -35,19 +35,19 @@ const item = (n: string) => `/lep1/items/item-${n}.png`;
 export const jungleRescue = (n: number) => `${J}/scenes/bg-jungle-rescue-${n}-wide.png`;
 
 /** The unit's reading strand (plan §4): Leo and Pip visit Coco; Kip is stuck on a rock; who can help? */
-export const JUNGLE_RESCUE: { img: string; lines: { who?: CharKey; text: string }[] }[] = [
-  { img: jungleRescue(1), lines: [{ text: 'Look! The jungle! It is big and green.' }] },
-  { img: jungleRescue(2), lines: [{ who: 'coco', text: 'Hi, Leo! Hi, Pip! I am Coco. I am a monkey.' }] },
-  { img: jungleRescue(3), lines: [{ text: 'Look! A snake. It is long. An elephant. It is big.' }] },
-  { img: jungleRescue(4), lines: [{ who: 'coco', text: 'I can climb! I can swing!' }, { who: 'pip', text: 'I can’t climb!' }] },
-  { img: jungleRescue(5), lines: [{ text: 'Kip is on a rock.' }, { text: 'Help! Help! I am stuck!' }] },
-  { img: jungleRescue(6), lines: [{ who: 'willow', text: 'I can fly. But I am small. I can’t help Kip.' }] },
-  { img: jungleRescue(7), lines: [{ who: 'pip', text: 'Can a fish help?' }, { text: 'I can swim. I can’t lift Kip!' }] },
-  { img: jungleRescue(8), lines: [{ text: 'I can swim! Can I help?' }, { text: 'No! Your teeth!' }] },
-  { img: jungleRescue(9), lines: [{ text: 'I am big. I can walk in the river.' }] },
-  { img: jungleRescue(10), lines: [{ text: 'The elephant lifts Kip with its long nose.' }] },
-  { img: jungleRescue(11), lines: [{ text: 'Thank you!' }, { who: 'coco', text: 'Thank you, Elephant!' }] },
-  { img: jungleRescue(12), lines: [{ who: 'leo', text: 'Lunch! Chips for all!' }, { who: 'coco', text: 'Thank you, friends!' }] },
+export const JUNGLE_RESCUE: ReaderPage[] = [
+  { img: jungleRescue(1), lines: [{ text: 'Look! The jungle! It is big and green.' }], check: { who: 'pip', question: 'What is the jungle like?', answer: 'Big and green', options: [{ label: 'Big and green' }, { label: 'Small and blue' }, { label: 'Long and red' }] } },
+  { img: jungleRescue(2), lines: [{ who: 'coco', text: 'Hi, Leo! Hi, Pip! I am Coco. I am a monkey.' }], check: { who: 'pip', question: 'What is Coco?', answer: 'A monkey', options: [{ label: 'A lion', img: item('lion') }, { label: 'A monkey', img: item('coco-cheer') }, { label: 'A frog', img: item('frog') }] } },
+  { img: jungleRescue(3), lines: [{ text: 'Look! A snake. It is long. An elephant. It is big.' }], check: { who: 'pip', question: 'What is long?', answer: 'The snake', options: [{ label: 'The snake', img: item('snake') }, { label: 'The elephant', img: item('elephant') }, { label: 'The bird', img: item('bird') }] } },
+  { img: jungleRescue(4), lines: [{ who: 'coco', text: 'I can climb! I can swing!' }, { who: 'pip', text: 'I can’t climb!' }], check: { who: 'leo', question: 'Who can climb?', answer: 'Coco', options: [{ label: 'Pip', img: item('pip-wave') }, { label: 'Coco', img: item('coco-cheer') }, { label: 'Leo', img: item('leo-wave') }] } },
+  { img: jungleRescue(5), lines: [{ text: 'Kip is on a rock.' }, { text: 'Help! Help! I am stuck!' }], check: { who: 'pip', question: 'Where is Kip?', answer: 'On a rock', options: [{ label: 'On a rock', img: item('stone') }, { label: 'In a tree', img: item('tree') }, { label: 'On a log', img: item('log') }] } },
+  { img: jungleRescue(6), lines: [{ who: 'willow', text: 'I can fly. But I am small. I can’t help Kip.' }], check: { who: 'pip', question: 'What can Willow do?', answer: 'Fly', options: [{ label: 'Swim', img: item('fish-swim') }, { label: 'Fly', img: item('willow-fly') }, { label: 'Climb', img: item('pip-climb') }] } },
+  { img: jungleRescue(7), lines: [{ who: 'pip', text: 'Can a fish help?' }, { text: 'I can swim. I can’t lift Kip!' }], check: { who: 'leo', question: 'What can the fish do?', answer: 'Swim', options: [{ label: 'Fly', img: item('willow-fly') }, { label: 'Run', img: item('leo-run') }, { label: 'Swim', img: item('fish-swim') }] } },
+  { img: jungleRescue(8), lines: [{ text: 'I can swim! Can I help?' }, { text: 'No! Your teeth!' }], check: { who: 'pip', question: 'Who has big teeth?', answer: 'The crocodile', options: [{ label: 'The crocodile', img: item('alligator') }, { label: 'The frog', img: item('frog') }, { label: 'The bird', img: item('bird') }] } },
+  { img: jungleRescue(9), lines: [{ text: 'I am big. I can walk in the river.' }], check: { who: 'pip', question: 'Who is big?', answer: 'The elephant', options: [{ label: 'The bird', img: item('bird') }, { label: 'The elephant', img: item('elephant') }, { label: 'The frog', img: item('frog') }] } },
+  { img: jungleRescue(10), lines: [{ text: 'The elephant lifts Kip with its long nose.' }], check: { who: 'pip', question: 'What does the elephant lift Kip with?', answer: 'Its nose', options: [{ label: 'Its nose' }, { label: 'Its ear' }, { label: 'Its foot' }] } },
+  { img: jungleRescue(11), lines: [{ text: 'Thank you!' }, { who: 'coco', text: 'Thank you, Elephant!' }], check: { who: 'leo', question: 'Who helps Kip?', answer: 'The elephant', options: [{ label: 'The snake', img: item('snake') }, { label: 'The fish', img: item('fish') }, { label: 'The elephant', img: item('elephant') }] } },
+  { img: jungleRescue(12), lines: [{ who: 'leo', text: 'Lunch! Chips for all!' }, { who: 'coco', text: 'Thank you, friends!' }], check: { who: 'pip', question: 'What do they eat?', answer: 'Chips', options: [{ label: 'Chips', img: item('chip') }, { label: 'Bananas', img: item('banana') }, { label: 'Cheese', img: item('cheese') }] } },
 ];
 
 export const LESSON_A1U2L1_TITLE = 'Jungle Animals';
@@ -116,6 +116,20 @@ export const LESSON_A1U2L1_SCENES: Scene[] = [
   { id: 'ja-meet-snake', kind: 'meet', focus: ['long'], bg: jungleRescue(3), who: 'pip', cardSide: 'left', teacher: 'Present: show “long” with your arms — wide, wide, wide! Then say it.', line: 'Look! A snake! It’s long and green.', repeat: 'It’s long!' },
   { id: 'ja-echo', kind: 'echo', bg: bgWide, who: 'pip', textSide: 'top', teacher: 'Guided: say it like Pip — loud, then quiet!', word: 'It’s big and grey.' },
   { id: 'ja-echo-2', kind: 'echo', bg: bgWide, who: 'coco', textSide: 'top', teacher: 'Guided: say it with Coco — a long, long voice for “long”!', word: 'It’s long and green.' },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game.
+  {
+    id: 'ja-animal-match', kind: 'picture-match', look: 'chalk', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each word and drags it under its picture (or taps the word, then the picture), then reads it aloud.',
+    items: [
+      { word: 'elephant', img: ANIMALS.elephant.img },
+      { word: 'snake', img: ANIMALS.snake.img },
+      { word: 'crocodile', img: ANIMALS.crocodile.img },
+      { word: 'frog', img: ANIMALS.frog.img },
+      { word: 'bird', img: ANIMALS.bird.img },
+      { word: 'lion', img: ANIMALS.lion.img },
+    ],
+    bg: bgWide,
+  },
   {
     id: 'ja-shadows', kind: 'prea1', teacher: 'Guided: Shadow Match! Drag each animal onto its shadow (or tap it, then the shadow) and say it: It’s a snake!',
     scene: {
@@ -246,7 +260,7 @@ export const LESSON_A1U2L1_SCENES: Scene[] = [
     pages: JUNGLE_RESCUE.slice(0, 3),
   },
   {
-    id: 'ja-read-match', kind: 'picture-match', prompt: 'Read and match',
+    id: 'ja-read-match', kind: 'picture-match', look: 'cards', prompt: 'Read and match',
     teacher: 'Reading: read each sentence and drag it under its picture. Then read it aloud.',
     items: [
       { word: 'It is big and grey.', img: ANIMALS.elephant.img },
@@ -899,6 +913,18 @@ export const LESSON_A1U2L3_SCENES: Scene[] = [
   { id: 'ja3-model-no', kind: 'meet', focus: ['No, it can’t'], bg: jungleRescue(7), who: 'pip', cardSide: 'left', teacher: 'Present: thumbs down and a head shake for “No, it can’t!” — a strong T at the end.', line: 'Can a fish fly? No, it can’t!', repeat: 'No, it can’t!' },
   { id: 'ja3-echo', kind: 'echo', bg: bgWide, who: 'pip', textSide: 'top', teacher: 'Guided: ask like Pip — the voice goes UP at the end.', word: 'Can it swim?' },
   { id: 'ja3-echo-answers', kind: 'echo', bg: bgWide, who: 'coco', textSide: 'top', teacher: 'Guided: thumbs up for the first, thumbs down for the second — say both with Coco.', word: 'Yes, it can! No, it can’t!' },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game.
+  {
+    id: 'ja3-can-match', kind: 'picture-match', look: 'frames', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each sentence and drags it under its picture (or taps it, then the picture), then reads it aloud.',
+    items: [
+      { word: 'A bird can fly.', img: ANIMALS.bird.img },
+      { word: 'A fish can swim.', img: ANIMALS.fish.img },
+      { word: 'A frog can jump.', img: ANIMALS.frog.img },
+      { word: 'A monkey can climb.', img: ANIMALS.monkey.img },
+    ],
+    bg: bgWide,
+  },
   {
     id: 'ja3-can-it', kind: 'prea1', teacher: 'Guided: Can It? Pip asks; the student answers with a thumbs up “Yes, it can!” or thumbs down “No, it can’t!” — then watch what happens.',
     scene: {
@@ -919,14 +945,14 @@ export const LESSON_A1U2L3_SCENES: Scene[] = [
   {
     id: 'ja3-who-helps', kind: 'prea1', teacher: 'Free: who can fly up to Kip? The student ASKS at each hiding place “Can it fly?”, then taps to look and answers “No, it can’t!” / “Yes, it can!”.',
     scene: {
-      id: 'ja3-who-helps', kind: 'lift-flap', bg: bgWide, who: 'pip',
+      id: 'ja3-who-helps', kind: 'lift-flap', bg: bgWide, who: 'pip', guided: true, whatPrompt: 'Can it fly?',
       teacher: 'Ask: Can it fly? Then look!',
       question: 'Who can fly?',
       notYet: 'Not yet! Look in the other places first!',
       spots: [
-        { x: 18, y: 76, size: 13, ask: 'Can it fly?', reveal: 'A frog! No, it can’t fly. It can jump.', cover: { img: it('stone'), label: 'rock' }, under: { img: it('frog'), label: 'frog' } },
-        { x: 40, y: 70, size: 12, ask: 'Can it fly?', reveal: 'A snake! No, it can’t fly.', cover: { img: it('leaf'), label: 'leaf' }, under: { img: it('snake'), label: 'snake' } },
-        { x: 62, y: 76, size: 13, ask: 'Can it fly?', reveal: 'A fish! No, it can’t fly. It can swim.', cover: { img: it('gift'), label: 'box' }, under: { img: it('fish'), label: 'fish' } },
+        { x: 18, y: 76, size: 13, ask: 'Can it fly?', reveal: 'A frog! No, it can’t fly. It can jump.', say: 'No, it can’t fly.', cover: { img: it('stone'), label: 'rock' }, under: { img: it('frog'), label: 'frog' } },
+        { x: 40, y: 70, size: 12, ask: 'Can it fly?', reveal: 'A snake! No, it can’t fly.', say: 'No, it can’t fly.', cover: { img: it('leaf'), label: 'leaf' }, under: { img: it('snake'), label: 'snake' } },
+        { x: 62, y: 76, size: 13, ask: 'Can it fly?', reveal: 'A fish! No, it can’t fly. It can swim.', say: 'No, it can’t fly.', cover: { img: it('gift'), label: 'box' }, under: { img: it('fish'), label: 'fish' } },
         { x: 84, y: 64, size: 20, ask: 'Can it fly?', reveal: 'A bird! Yes, it can! It can fly!', target: true, cover: { img: it('tree'), label: 'tree' }, under: { img: it('bird'), label: 'bird' } },
       ],
     },
@@ -1219,6 +1245,18 @@ export const LESSON_A1U2L4_SCENES: Scene[] = [
   { id: 'ja4-model-coco', kind: 'meet', focus: ['long tail'], bg: bgCocoVines, who: 'coco', cardSide: 'left', teacher: 'Present: Coco has got a long tail too! Point to it and say the sentence.', line: 'Look! I’ve got a long tail! I can swing!', repeat: 'It’s got a long tail.' },
   { id: 'ja4-echo', kind: 'echo', bg: bgWide, who: 'pip', textSide: 'top', teacher: 'Guided: say it like Pip — a long, long tail!', word: 'It’s got a long tail.' },
   { id: 'ja4-echo-nose', kind: 'echo', bg: jungleRescue(10), who: 'pip', textSide: 'top', teacher: 'Guided: make a long nose with your arm and say it with Pip!', word: 'It’s got a long nose.' },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game.
+  {
+    id: 'ja4-got-match', kind: 'picture-match', look: 'polaroids', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each sentence and drags it under its picture (or taps it, then the picture), then reads it aloud.',
+    items: [
+      { word: 'It’s got a long nose.', img: ANIMALS.elephant.img },
+      { word: 'It’s got a long tail.', img: ANIMALS.crocodile.img },
+      { word: 'It’s long and green.', img: ANIMALS.snake.img },
+      { word: 'It can fly.', img: ANIMALS.bird.img },
+    ],
+    bg: bgWide,
+  },
   /* ★ Animal Riddle: four clues, the child guesses */
   {
     id: 'ja4-riddle', kind: 'prea1', teacher: 'Guided: Animal Riddle! Listen to the four clues and pick the animal. Then say the four sentences yourself.',
@@ -1578,6 +1616,17 @@ export const LESSON_A1U2L5_SCENES: Scene[] = [
     pages: JUNGLE_RESCUE.slice(8, 12),
   },
   { id: 'ja5-echo-thanks', kind: 'echo', bg: jungleRescue(11), who: 'coco', textSide: 'top', teacher: 'Guided: say it with Coco — a big, happy thank you!', word: 'Thank you, Elephant!' },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game.
+  {
+    id: 'ja5-story-match', kind: 'picture-match', look: 'chalk', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each sentence and drags it under its picture (or taps it, then the picture), then reads it aloud.',
+    items: [
+      { word: 'Help! I am stuck!', img: jungleRescue(5), crop: { x: 0, y: 0, w: 100, h: 100 }, imgAspect: 16 / 9 },
+      { word: 'I can fly. But I am small.', img: jungleRescue(6), crop: { x: 0, y: 0, w: 100, h: 100 }, imgAspect: 16 / 9 },
+      { word: 'Thank you, Elephant!', img: jungleRescue(11), crop: { x: 0, y: 0, w: 100, h: 100 }, imgAspect: 16 / 9 },
+    ],
+    bg: bgWide,
+  },
   {
     id: 'ja5-story-order', kind: 'prea1', teacher: 'Guided: put the story pictures in order, then tell it: first, then, then, at the end!',
     scene: {
@@ -2035,7 +2084,7 @@ export const LESSON_A1U2L6_SCENES: Scene[] = [
     lines: ['Six big pigs sit still.', 'Chip the chimp chews chips.', 'A duck on a rock eats a snack.', 'Shy fish swish and splash.'],
   },
   {
-    id: 'ja6-speed-read', kind: 'reader', bg: bgWide, title: 'Speed Reading: The Jungle Rescue', doneLine: 'Wow! Fast and clear — super reading!',
+    id: 'ja6-speed-read', kind: 'reader', noChecks: true, bg: bgWide, title: 'Speed Reading: The Jungle Rescue', doneLine: 'Wow! Fast and clear — super reading!',
     teacher: 'Reading: Game Day speed read! The student reads pages 9-12 on their own (🔊 only for help) — then once more, faster.',
     pages: JUNGLE_RESCUE.slice(8, 12),
   },
@@ -2403,7 +2452,7 @@ export const LESSON_A1U2L7_SCENES: Scene[] = [
   },
   /* Practise again — for any part below the pass mark, or as extra time */
   {
-    id: 'ja7-pa-match', kind: 'picture-match', prompt: 'Practise again: read and match',
+    id: 'ja7-pa-match', kind: 'picture-match', look: 'frames', prompt: 'Practise again: read and match',
     teacher: 'Practise again (Part 2): read each sentence and drag it under its animal.',
     items: [
       { word: 'It’s got a long nose.', img: it('elephant') },

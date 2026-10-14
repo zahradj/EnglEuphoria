@@ -6,7 +6,7 @@ import * as sfx from '../sfx';
 import { Confetti } from '../fx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
 import { CLAY_BUTTON, STICKER_FILTER, THICK_WORDS, sayWithin } from './shared';
-import { Bursts, useBursts, useShake } from './gameFx';
+import { Bursts, CalmBg, useBursts, useShake } from './gameFx';
 
 /* ---------- Line Up! (Pre-A1 Unit 5 Lesson 2) ----------
  * The family lines up for the photo, biggest to smallest. "Who is the
@@ -70,7 +70,9 @@ export function SizeLineScene({ scene, onWin, onNext, sync }: { scene: Line; onW
 
   const tallest = Math.max(...scene.members.map((m) => m.height));
   return (
-    <motion.div className="absolute inset-0 select-none overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }} animate={shakeCtl}>
+    <motion.div className="absolute inset-0 select-none overflow-hidden" animate={shakeCtl}>
+      {/* busy picture calmed down so the floating pieces are the clearest thing (owner 2026-10-14) */}
+      <CalmBg img={scene.bg} strength="strong" />
       {done && <Confetti count={60} />}
       <div className="pointer-events-none absolute inset-x-0 top-16 z-30 flex flex-col items-center gap-1 px-14">
         <span className="text-center font-black leading-tight text-white" style={{ ...THICK_WORDS, fontSize: 'clamp(1.4rem, calc(3.6*var(--svw,1vw)), 3rem)' }}>{prompt}</span>

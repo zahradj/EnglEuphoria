@@ -4,6 +4,7 @@ import { safeSpeak } from '../audio';
 import * as sfx from '../sfx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
 import { STICKER_TILTS, StickerButton, TrainEngine, TrainTrack, TrainWagon } from './shared';
+import { CalmBg } from './gameFx';
 
 const WAGON_COLORS = ['#3B82F6', '#22C55E', '#F59E0B', '#A855F7', '#14B8A6', '#EC4899'];
 
@@ -53,7 +54,9 @@ export function TrainRecallScene({ scene, onWin, onLose, onNext, sync }: { scene
   };
 
   return (
-    <div className="absolute inset-0 overflow-hidden" style={{ backgroundImage: `url(${scene.bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+    <div className="absolute inset-0 overflow-hidden">
+      {/* busy picture calmed down so the floating pieces are the clearest thing (owner 2026-10-14) */}
+      <CalmBg img={scene.bg} strength="strong" />
       <div className="pointer-events-none absolute inset-x-0 top-4 z-30 flex justify-center px-4">
         <div className="max-w-lg rounded-2xl bg-white/95 px-5 py-3 text-center text-base font-bold text-orange-800 shadow-xl backdrop-blur sm:text-lg">
           {phase === 'ask' || phase === 'done' ? (scene.question ?? 'Choo choo! Which toy is missing?') : scene.teacher}
