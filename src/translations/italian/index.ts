@@ -7,6 +7,7 @@ import { waitingRoomTranslations } from './waitingRoom';
 import { pushNotificationsTranslations } from './pushNotifications';
 import { lessonsPageTranslations } from './lessonsPage';
 import { lessonResumeTranslations } from './lessonResume';
+import { classroomMediaTranslations } from './classroomMedia';
 import { academyLessonsTranslations } from './academyLessons';
 
 export const italianTranslations = {
@@ -19,6 +20,7 @@ export const italianTranslations = {
   ...pushNotificationsTranslations,
   ...lessonsPageTranslations,
   ...lessonResumeTranslations,
+  ...classroomMediaTranslations,
   ...academyLessonsTranslations,
   welcome: "Benvenuto",
   all: "Tutti",

@@ -169,6 +169,18 @@ export class RealTimeVideoService {
     return false;
   }
 
+  getPeerConnections(): Map<string, RTCPeerConnection> {
+    return this.webrtcService.getPeerConnections();
+  }
+
+  /** The student's camera came back mid-call: keep our stream in step and send the new track to the peers. */
+  async publishLocalVideoTrack(track: MediaStreamTrack): Promise<void> {
+    if (!this.localStream) return;
+    this.localStream.getVideoTracks().filter((t) => t !== track).forEach((t) => this.localStream!.removeTrack(t));
+    if (!this.localStream.getTracks().includes(track)) this.localStream.addTrack(track);
+    await this.webrtcService.publishLocalVideoTrack(track, this.localStream);
+  }
+
   getLocalStream(): MediaStream | null {
     return this.localStream;
   }

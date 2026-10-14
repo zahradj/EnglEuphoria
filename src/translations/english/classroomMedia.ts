@@ -1,0 +1,22 @@
+// Live-class camera / connection messages. Namespaced `cm.` — all six languages (classroomMedia.test.ts).
+export const classroomMediaTranslations = {
+  'cm.camera.title': "Your camera isn't on",
+  'cm.camera.denied': 'The browser is blocking your camera. Click the lock icon in the address bar, allow the camera, then try again.',
+  'cm.camera.inUse': 'Another app or tab is using your camera. Close it, then try again.',
+  'cm.camera.notFound': 'No camera was found. Check that it is plugged in and switched on, then try again.',
+  'cm.camera.lost': 'Your camera stopped working. Try again.',
+  'cm.camera.unknown': 'Your camera is not working. Try again.',
+  'cm.camera.retry': 'Try again',
+  'cm.camera.retrying': 'Trying…',
+  'cm.camera.back': 'Your camera is back!',
+  'cm.camera.still': 'Still no camera. Your lesson can go on with sound only.',
+  'cm.peer.student': 'The student',
+  'cm.peer.teacher': 'Your teacher',
+  'cm.peer.noCamera': "{{who}}'s camera isn't working: {{reason}}.",
+  'cm.peer.poorLink': "{{who}}'s internet connection is weak, so the video may freeze.",
+  'cm.reason.denied': 'the browser is blocking it',
+  'cm.reason.inUse': 'another app is using it',
+  'cm.reason.notFound': 'no camera was found',
+  'cm.reason.lost': 'it stopped working',
+  'cm.reason.unknown': 'reason unknown',
+};

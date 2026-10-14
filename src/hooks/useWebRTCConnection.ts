@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { RealTimeVideoService, VideoParticipant } from '@/services/video/realTimeVideoService';
 import { toast } from 'sonner';
+import { classifyQuality, linkStatsFromReport, worstQuality, type LinkQuality } from '@/lib/classroom/mediaHealth';
 
 interface UseWebRTCConnectionProps {
   roomId: string;
@@ -18,6 +19,7 @@ export const useWebRTCConnection = ({
   const [participants, setParticipants] = useState<VideoParticipant[]>([]);
   const [isConnected, setIsConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
+  const [quality, setQuality] = useState<LinkQuality | null>(null);
   const connectingRef = useRef(false);
   const connectedRef = useRef(false);
   // Owned per-mount, not a shared module singleton — two classrooms
@@ -83,11 +85,41 @@ export const useWebRTCConnection = ({
     }
   }, [enabled, localStream, connect, disconnect]);
 
+  // Link quality (loss / round-trip / jitter) measured every 5 s while connected; the worst peer decides.
+  useEffect(() => {
+    if (!isConnected) { setQuality(null); return; }
+    let stopped = false;
+    const measure = async () => {
+      try {
+        const levels: LinkQuality[] = [];
+        for (const pc of serviceRef.current!.getPeerConnections().values()) {
+          const stats = linkStatsFromReport(await pc.getStats());
+          if (stats) levels.push(classifyQuality(stats));
+        }
+        if (!stopped) setQuality(worstQuality(levels));
+      } catch { /* stats are best-effort */ }
+    };
+    const id = window.setInterval(measure, 5000);
+    void measure();
+    return () => { stopped = true; window.clearInterval(id); };
+  }, [isConnected]);
+
+  /** The camera came back mid-call: send the new track to the other side. */
+  const publishVideoTrack = useCallback(async (track: MediaStreamTrack) => {
+    try {
+      await serviceRef.current!.publishLocalVideoTrack(track);
+    } catch (error) {
+      console.warn('Could not send the recovered camera to the call', error);
+    }
+  }, []);
+
   return {
     participants,
     isConnected,
     isConnecting,
+    quality,
     connect,
-    disconnect
+    disconnect,
+    publishVideoTrack
   };
 };
