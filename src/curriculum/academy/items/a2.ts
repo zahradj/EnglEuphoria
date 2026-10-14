@@ -98,4 +98,6 @@ export const A2_ITEMS: Record<string, SeasonItems> = {
     E5: [['record', 'A2', 'r', 'w'], ['original', 'A2', 'r', 'w'], ['lovely', 'A2', 'r', 'w'], ['excellent', 'A2', 'r', 'w'], ['recent', 'A2', 'r', 'w'], ['traditional', 'A2', 'r', 'w'], ['loudly', 'A2', 'r', 'w'], ['happily', 'A2', 'r', 'w'], ['attention', 'A2', 'r', 'w'], ['easily', 'A2', 'r', 'w'], ['background', 'A2', 'r', 'w']],
     E6: [['voice', 'A2', 'p', 'w'], ['loud', 'A2', 'p', 'w'], ['microphone', 'A2', 'p', 'w'], ['cookie', 'A2', 'p', 'w'], ['suit', 'A2', 'p', 'w'], ['sock', 'A2', 'p', 'w'], ['tie', 'A2', 'p', 'w'], ['gold', 'A2', 'p', 'w'], ['silver', 'A2', 'p', 'w'], ['print', 'A2', 'p', 'w'], ['teenage', 'A2', 'p', 'w'], ['kid', 'A2', 'p', 'w'], ['laughter', 'A2', 'p', 'w'], ['smile', 'A2', 'p', 'w']],
   },
+  'A2-S13': { E1: [], E2: [], E3: [], E4: [], E5: [], E6: [] },
+  'A2-S14': { E1: [], E2: [], E3: [], E4: [], E5: [], E6: [] },
 };
