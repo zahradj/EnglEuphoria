@@ -1,3 +1,4 @@
+import { TEACHER_ADVANCES, useHideTeacherOnlyButtons } from '@/lib/teacherAdvancesOnly';
 import { PREA1_REAL_SYNC_KINDS } from '@/content/playground-library/prea1SyncKinds';
 import { SHARED_PLAY_KINDS, useSceneScopedState } from '@/content/playground-library/sceneActivitySync';
 import { SceneCrashGuard } from '@/content/playground-library/SceneCrashGuard';
@@ -635,27 +636,15 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
   }, []);
   const registerWin = useCallback((didGem: boolean) => { if (didGem) setGems((g) => g + 1); }, []);
 
-  const studentCanAdvanceViaActivity = isSynced && role === 'student' && interactionUnlocked;
+  // Only the teacher changes the slide in a live class (owner, 2026-10-14): a student's own "Next" buttons are
+  // hidden and do nothing — see teacherAdvancesOnly.ts. The teacher's goNext below still serves the teacher.
+  const guidedStudent = isSynced && role === 'student';
   const goNext = useCallback(() => {
-    if (canNavigate) {
-      stopSpeaking(); setSceneIdx((i) => Math.min(SCENES.length - 1, i + 1));
-      return;
-    }
-    if (studentCanAdvanceViaActivity && roomId) {
-      stopSpeaking(); setSceneIdx((i) => Math.min(SCENES.length - 1, i + 1));
-      // If this goNext() is running as part of a click that was just
-      // mirrored to the teacher (justMirroredTapRef), the teacher will
-      // independently reach goNext() by replaying that same click — an
-      // extra advance request here would double-advance the teacher while
-      // this student only advances once. Only send it when goNext() was
-      // reached some other way (no click to mirror it through).
-      if (justMirroredTapRef.current) {
-        justMirroredTapRef.current = false;
-      } else {
-        void whiteboardService.sendSceneAdvanceRequest(roomId, { senderId: 'student' });
-      }
-    }
-  }, [SCENES.length, canNavigate, studentCanAdvanceViaActivity, roomId]);
+    if (!canNavigate) return;
+    stopSpeaking(); setSceneIdx((i) => Math.min(SCENES.length - 1, i + 1));
+  }, [SCENES.length, canNavigate]);
+  const sceneOnNext = guidedStudent ? TEACHER_ADVANCES : goNext;
+  useHideTeacherOnlyButtons(sceneRootRef, guidedStudent, String(sceneIdx));
 
   useEffect(() => {
     if (!isSynced || role !== 'teacher' || !roomId) return;
@@ -748,7 +737,7 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
                 scene={scene}
                 onWin={registerWin}
                 onLose={loseHeart}
-                onNext={goNext}
+                onNext={sceneOnNext}
                 onRestart={restart}
                 gemsCollected={gems}
                 heartsRemaining={hearts}

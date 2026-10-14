@@ -1,3 +1,4 @@
+import { TEACHER_ADVANCES, useHideTeacherOnlyButtons } from '@/lib/teacherAdvancesOnly';
 import { SHARED_PLAY_KINDS, useSceneScopedState } from '@/content/playground-library/sceneActivitySync';
 import { SceneCrashGuard } from '@/content/playground-library/SceneCrashGuard';
 import { useRecordClassroomCompletion } from '@/hooks/useRecordClassroomCompletion';
@@ -680,33 +681,15 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
   }, []);
   const registerWin = useCallback((didGem: boolean) => { if (didGem) setGems((g) => g + 1); }, []);
 
-  // An unlocked student completing the activity (e.g. a flipbook's own
-  // "Next" reaching the end) can't just move its own sceneIdx — the teacher
-  // stays the single source of truth. Advance locally right away so it
-  // doesn't feel stuck, and ask the teacher to advance too; the teacher's
-  // own goNext() then re-broadcasts via the existing sceneIdx pipe, which
-  // reaches this same student again as an idempotent confirmation.
-  const studentCanAdvanceViaActivity = isSynced && role === 'student' && effectiveUnlocked;
+  // Only the teacher changes the slide in a live class (owner, 2026-10-14): a student's own "Next" buttons are
+  // hidden and do nothing — see teacherAdvancesOnly.ts. The teacher's goNext below still serves the teacher.
+  const guidedStudent = isSynced && role === 'student';
   const goNext = useCallback(() => {
-    if (canNavigate) {
-      stopSpeaking(); setSceneIdx((i) => Math.min(SCENES.length - 1, i + 1));
-      return;
-    }
-    if (studentCanAdvanceViaActivity && roomId) {
-      stopSpeaking(); setSceneIdx((i) => Math.min(SCENES.length - 1, i + 1));
-      // If this goNext() is running as part of a click that was just
-      // mirrored to the teacher (justMirroredTapRef), the teacher will
-      // independently reach goNext() by replaying that same click — an
-      // extra advance request here would double-advance the teacher while
-      // this student only advances once. Only send it when goNext() was
-      // reached some other way (no click to mirror it through).
-      if (justMirroredTapRef.current) {
-        justMirroredTapRef.current = false;
-      } else {
-        void whiteboardService.sendSceneAdvanceRequest(roomId, { senderId: 'student' });
-      }
-    }
-  }, [SCENES.length, canNavigate, studentCanAdvanceViaActivity, roomId]);
+    if (!canNavigate) return;
+    stopSpeaking(); setSceneIdx((i) => Math.min(SCENES.length - 1, i + 1));
+  }, [SCENES.length, canNavigate]);
+  const sceneOnNext = guidedStudent ? TEACHER_ADVANCES : goNext;
+  useHideTeacherOnlyButtons(sceneRootRef, guidedStudent, String(sceneIdx));
 
   // Teacher: a permitted student finishing the activity asks us to advance —
   // do so through the normal goNext() so it re-broadcasts as usual.
@@ -818,7 +801,7 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
                 scene={scene}
                 onWin={registerWin}
                 onLose={loseHeart}
-                onNext={goNext}
+                onNext={sceneOnNext}
                 onRestart={restart}
                 gemsCollected={gems}
                 heartsRemaining={hearts}

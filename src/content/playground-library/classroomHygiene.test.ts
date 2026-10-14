@@ -91,4 +91,12 @@ describe('classroom hygiene', () => {
       expect(src, `${f} must not keep the old pause-on-tap state`).not.toContain('tookOver');
     }
   });
+  it('only the teacher changes the slide: the student player gives scenes a do-nothing onNext and never asks the teacher to advance', () => {
+    for (const f of ['src/pages/playground-scene/PlayUnitLesson.tsx', 'src/pages/playground-scene/PlayWelcomeTownLesson.tsx']) {
+      const src = read(f);
+      expect(src, `${f} must hand a guided student TEACHER_ADVANCES`).toMatch(/guidedStudent \? TEACHER_ADVANCES : goNext/);
+      expect(src, `${f} must hide the scenes' own Next buttons for a guided student`).toContain('useHideTeacherOnlyButtons');
+      expect(src, `${f}: a student must not send advance requests`).not.toMatch(/sendSceneAdvanceRequest\(roomId, \{ senderId: 'student'/);
+    }
+  });
 });
