@@ -45,3 +45,6 @@ Report faithfully: what was verified, what was not (web sources, sizing assumpti
 
 ## Research and games check (owner rule 2026-10-14, CLAUDE.md "Research for every unit and every lesson")
 Fail the unit/lesson if: (1) no `docs/research/academy-<unit-or-lesson>-research.md` with dated sources (Oxford, Cambridge, British Council, Pearson GSE, apps/platforms) and verified/unverified marks; (2) no games list from `docs/academy-games-catalog.md`; (3) no video-game mechanic from `docs/academy-video-game-mechanics.md` named with what the student does in English.
+
+## Lesson plan check (owner rule 2026-10-14, CLAUDE.md "A lesson plan comes before every lesson")
+Fail if: no approved plan from `docs/academy-lesson-plan-template.md`; the plan is not one-to-one and exactly 60 minutes; no response counts / practice ladder / error loop / mastery check (>= 80 student responses per hour); no traceability table (every activity -> objective or student need); no games from the catalogue (incl. section 13) or no video-game mechanic.

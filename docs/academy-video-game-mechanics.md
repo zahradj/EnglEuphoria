@@ -18,3 +18,12 @@ Owner rule 2026-10-14: every Academy unit (Season) and lesson names at least one
 | Speedrun vs own best | Platformer | Repeats a route of items against his or her own record (no leaderboards) | fluency, recall | Med |
 | Skill tree | RPG progression | Sees can-do skills unlock and level up after each Season | motivation, portfolio | Low |
 | Stealth (quiet path) | Stealth | Picks polite/indirect phrases to pass guards | politeness, modals | Low |
+| Falling-tile stacker | Tetris-style | Places falling letter/word tiles to build a word or sentence | spelling, word order | Med |
+| Maze collector | Pac-Man-style | Collects only words that fit a category and avoids others (no ghosts) | vocabulary sets, grammar sorting | Low |
+| Wave defender | Space Invaders-style | Answers audio or gaps to clear waves, with accuracy mode | listening, grammar | Med |
+| Stepping stones | Frogger-style | Crosses by choosing the right forms | grammar, collocations | Low |
+| Whack-a-word | Whack-a-mole | Taps only the sound or word heard | sound discrimination | Med |
+| Sequence memory | Simon | Repeats a growing sequence of sounds/words | listening, pronunciation, memory | Low |
+| Board quest | Snakes and Ladders / party board | Answers to climb, co-op | any review | Low |
+
+Sources for the retro rows: [Adapting arcade games for learning, CHI 2013](https://people.csail.mit.edu/ccai/website/publications/Cai_Adapting.pdf) (Tetris and Pac-Man vocabulary drills; seen in a search result, not read in full) and general knowledge [K]. See also games 149-168 in `docs/academy-games-catalog.md` section 13.

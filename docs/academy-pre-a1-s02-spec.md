@@ -14,6 +14,13 @@ Status: **draft for owner approval.** No picture, recording or deck is made unti
 | Release | **My phone-screen album**: six labelled things, each read and said |
 | Video-game mechanic | loot and crafting (collect sound tiles, craft words), a rhythm lane for tapping sounds in order |
 
+## 1b. Student need (lesson-plan step 1)
+- **Who:** a 13–18 student with zero or near-zero English who has finished P1 (letter names A–Z, sounds s a t p, "My name is ___", reads *at, sat, tap*). May read Arabic script or a Latin script with different sound rules.
+- **What is hard:** English short /i/ is merged with /iː/ by Arabic, Spanish and Italian speakers (*in/eat*), and /n/ at the end of a word is often dropped or nasalised by French speakers; the spelling-to-sound link is brand new, so blending needs many repetitions. Source: `docs/research/academy-curriculum-teen-sla-and-l1-gaps.md` (search-based, partly unverified).
+- **What they want:** to read real things at once (a phone message, a caption) without feeling like a child; success they can see in the first hour.
+- **Comfort:** private rehearsal, type-instead-of-speak, no timers, own-best only.
+- **Objective this serves:** blend and read *in, it, pin, tin* and say "This is a ___." — the first step to reading a phone message.
+
 ## 2. E1 "Cold Open" — one-to-one, 60 minutes (teacher + one student, live)
 
 **Objective (I can…):** meet the phone screen, hear and say the sounds /i/ and /n/, blend *in, it, pin, tin*, and say "This is a pin." for a picture.
@@ -48,6 +55,30 @@ Rule for this lesson: **the student responds, not listens.** The hour holds **at
 **Error-driven loop:** every missed item is logged and returns **three times** in the same lesson, after 2, 5 and 9 other items (expanding spacing), and once more in the Wrap. **Mastery check:** by the end of Learn set 1 the student blends 8 of 10 words with at most one hint; if not, the teacher takes the **chill track** (fewer items, more modelling) instead of moving on. **Fluency round** (Learn set 2 and Wrap): read *in, it, pin, tin, an, at* in order, then again, trying to beat the first time; the aim is smooth sounding, not speed.
 **Interleaving:** old (s a t p) and new (i n) sounds are mixed in every set; blocks of one sound are used only for the first six items.
 **After the hour:** the Daily 10 repeats the same items on days 1, 3 and 7 (about 40 more responses), so each item reaches **10+ encounters in 7 days**.
+
+### Gamified practice menu (games from `docs/academy-games-catalog.md`, incl. section 13; research: `docs/research/academy-pa1s02e1-research.md`)
+| Where | Game (catalogue #) | Skill drilled | Why this game |
+|---|---|---|---|
+| Remember? | Memory Pairs sound-picture (158) | recall of P1 items | spaced retrieval as a quiet pairs game |
+| Learn set 1, warm | **Whack-a-Word** (151): tap /i/ or /n/ as it is heard | sound discrimination | many fast, low-stakes reps of the target contrast |
+| Learn set 1 | **Pairs Bingo with minimal pairs** (168): in / an | /i/ vs /a/ | the L1 trap (short /i/) in a game |
+| Learn set 1 | **Tile Stacker** (152, slow-fall): build *pin, tin* from falling tiles + loot-and-craft | blending and spelling | turns blending into building |
+| Learn set 1 | **Simon Says Sounds** (157): /s/ /i/ /t/ ... growing sequence | sound order, memory | prepares blending left to right |
+| Read | Reader page (picture match) | decoding in a line | real reading at once |
+| Learn set 2 | **Listen and Match** (rotated design) then **Spot the Sound** (167) in the phone-screen scene (find things that start with /p/ /t/ /m/) | vocabulary, first sounds | two different games per word set |
+| Wrap | Fluency round (own best) and Sound Bingo (150) as the exit ticket | blend speed, retention | no leaderboard, shows progress |
+
+### Traceability (every activity serves the objective or a need)
+| Activity | Objective / need served |
+|---|---|
+| Memory Pairs (Remember?) | need: spaced retrieval of P1 sounds before adding new ones |
+| Whack-a-Word, Pairs Bingo | objective: hear and say /i/ /n/; need: Arabic/Spanish/Italian short-/i/ trap |
+| Tile Stacker, loot and craft, Simon Says Sounds | objective: blend *in, it, pin, tin* |
+| Reader page | objective + student want: read real text at once |
+| Listen and Match, Spot the Sound | objective: *phone, pin, tin, map* and "This is a ___." |
+| Mission with Theo | exit task: say "This is a ___." for two photos |
+| Fluency round, Sound Bingo | success criteria: 8/10 blends, own-best progress |
+Cut rule: anything not in this table is cut. Rhythm Lane stays optional (bonus), not required.
 
 Fun hook / signature game: **"Restore the message"** — every correct blend lights a missing letter in Vee's message until it reads "It is a pin." Rhythm lane (tap /i/ /n/ in order) is an optional bonus for a student who finishes early; a student who is struggling skips it (chill track: fewer items, more modelling).
 Games used (none three times in a row): listen-and-click, sound-blend slider, loot and craft, reader page, listen and match, memory pairs. **Video-game mechanic:** loot and crafting.

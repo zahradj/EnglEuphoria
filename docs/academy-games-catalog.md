@@ -1,4 +1,4 @@
-# Academy games & activities catalogue — 148 entries, one-to-one, ages 13–18, A1–B2
+# Academy games & activities catalogue — 168 entries, one-to-one, ages 13–18, A1–B2
 
 Companion to `docs/academy-lesson-system.md` (§5 says how to choose from this list per segment of the 60-minute Live Session). Owner rules that apply to every entry: no browser TTS (recorded voices only), no public leaderboards, comfort first, mechanics borrowed never content, Variety Rule (no more than 2 of the same kind in a row).
 
@@ -206,6 +206,33 @@ Universal 1:1 conversions: (a) teacher plays AGAINST student (teacher deliberate
 | 148 | Exit Emoji + Goal for Next Time | D | Gives feedback | S | A1-B2 | Private | Low | Exit ticket |
 
 ---
+## 13. Classic and retro games (added 2026-10-14)
+
+Research 2026-10-14 (search summaries only; pages not fully read): [eslactive.com game pages](https://eslactive.com/games/page/2/) list ESL versions of Hangman, Bingo, Pictionary, Concentration/Memory, Guess Who, Anagrams and Charades; [Adapting arcade games for learning (CHI 2013)](https://people.csail.mit.edu/ccai/website/publications/Cai_Adapting.pdf) built a Tetris vocabulary drill and argues arcade games are simple to adapt; a 2015 study of arcade-style games in Portuguese and French classes reported perceived vocabulary gains ([repositorio.esepf.pt](https://repositorio.esepf.pt/handle/20.500.11796/2265)); [Twinkl teen phonics blending games](https://www.twinkl.co.za/resource/esl-shopping-centre-phonics-blending-game-powerpoint-teens-a1-a2-t-e-1677581067) show picture-matching by blending for A1 teens. Rows below are our own adaptations of the **mechanic only**, 1:1 and non-competitive (student vs own best, or teacher co-op). Source marks: [S] seen in a search result, [K] well-known classic, no page checked.
+
+| # | Name | Fmt | What the student does | Skills | CEFR | 1:1 adaptation | Comfort | Source |
+|---|---|---|---|---|---|---|---|---|
+| 149 | Sound Hangman | D/C | Guesses letters of a word the teacher hides; every right letter lights a tile and is said aloud | V,Sp,P | Pre-A1-A2 | Teacher and student share lives; no "dead" figure: the picture is a phone that loses signal bars | Low | Hangman [S] |
+| 150 | Sound Bingo | D | Listens and marks the sound, number or picture on a card | L,V | Pre-A1-A2 | Student vs own best card; teacher calls then swaps | Low | Bingo [S] |
+| 151 | Whack-a-Word | D | Taps only the tile that matches the sound or word heard | L,P | Pre-A1-B1 | No clock pressure option; own-best streak | Med | Whack-a-mole [K] |
+| 152 | Tile Stacker | D | Falling letter/word tiles are placed to build a word or sentence (Tetris-style) | V,G,Sp | A1-B2 | Slow-fall mode; teacher pauses to model | Med | Tetris vocabulary drill, CHI 2013 [S] |
+| 153 | Word Snake | D | Steers a snake through letters in the right order to spell a word | Sp,V | A1-B1 | Speed set by the student | Med | Snake [K] |
+| 154 | Pac-Collect | D | Collects only the words that fit a category (sounds, tenses, topic) and avoids the others | V,G | A1-B2 | No ghosts: wrong items just bounce | Low | Pac-Man [S] |
+| 155 | Space Defender | D | Shoots the word that answers the audio or the gap in a sentence | L,G | A1-B2 | Pauses between waves; accuracy mode | Med | Space Invaders / arcade [K] |
+| 156 | River Hop | D | Hops across stones that carry the correct forms to reach the other bank | G,V | A1-B1 | Wrong stone = gentle splash, retry | Low | Frogger [K] |
+| 157 | Simon Says Sounds | D/C | Repeats a growing sequence of sounds or words in order | L,P,V | Pre-A1-B1 | Teacher also tries and sometimes errs; own-best length | Low | Simon / Simon Says [K] |
+| 158 | Memory Pairs (sound-picture) | D | Flips cards to match a sound, word and picture | V,L | Pre-A1-B1 | Co-op; own-best moves | Low | Concentration / Memory [S] |
+| 159 | Battleship Grid | D | Calls a grid square with the target form ("B3: Is it a pin?") to find hidden pictures | S,G | A1-B1 | Teacher hides, student searches, then swap | Low | Battleship [K] |
+| 160 | Guess Who? (photos) | D/C | Narrows down a hidden person or object by yes/no questions | S,G | A1-B1 | Roles swap; teacher asks badly on purpose | Low | Guess Who [S] |
+| 161 | Anagram Race | D | Rearranges letters into the word of a picture | Sp,V | A1-B2 | Own-best time; hints = first letter | Low | Anagrams / Bananagrams [S] |
+| 162 | Charades with Photos | D/C | Mimes or describes a photo's action; the teacher guesses with the target chunk | V,S | A1-B1 | Teacher guesses wrong sometimes | Med | Charades [S] |
+| 163 | Pictionary Sketch | D | Draws a word on the shared canvas; the teacher guesses and says the sentence | V,S | A1-B2 | Teacher draws too; stickers allowed | Low | Pictionary [S] |
+| 164 | Snakes and Ladders Quest | D | Answers a question to climb a ladder; a slip is a short retry task | any | A1-B2 | Co-op board, no dice rivalry | Low | Snakes and Ladders [K] |
+| 165 | Treasure Hunt Trail | D | Follows picture clues across the scene, saying each target sentence | S,R | A1-B1 | Teacher gives the clue then the student sets one | Low | Treasure hunt [K] |
+| 166 | Rhythm Lane | D | Taps stressed syllables or sounds in time with a beat | P,L | Pre-A1-B2 | Slow tempo by default | Med | Rhythm games [K] |
+| 167 | Spot the Sound | D | Finds all pictures that start with a given sound in a busy scene | L,V,P | Pre-A1-A2 | Scene calmed (CalmBg); own-best | Low | I Spy [K] |
+| 168 | Pairs Bingo (minimal pairs) | D | Hears one of two near-words (in/an) and marks the right one | L,P | Pre-A1-B1 | Teacher co-op | Low | Bingo + minimal pairs [K] |
+
 ## Top 15 for shy teens
 1. Codenames Duet (co-op) 2. Connections 3. Escape Room with teacher as guide 4. Visual Novel Reader / Interactive Fiction 5. Wordle / Spelling Bee 6. Comic Strip Maker 7. Meme Maker / Caption This 8. Chat Message Sim 9. Opinion Line (slider, no voice pressure) 10. Photo Story-Talk 11. Boss Battle Review (co-op) 12. Card Trading Collection 13. Reverse Teacher (student is expert) 14. Shadowing with private recordings 15. Can-Do Self-Check and Exit Emoji (private).
 
