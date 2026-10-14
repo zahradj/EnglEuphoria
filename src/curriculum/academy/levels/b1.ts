@@ -206,7 +206,7 @@ export const B1_SEASONS: RawSeason[] = [
       'I can change pronouns and time words when I report.',
     ],
     functions: ['reporting speech', 'passing on messages', 'clarifying what was said'],
-    structures: ['reported-statements'],
+    structures: [{ id: 'reported-statements', use: 'present-to-past backshift only; past perfect backshift waits for the next Season' }, { id: 'embedded-questions', use: 'as polite chunks: Could you tell me where ...? (first met here, full use in B2)' }],
     lexicalFields: ['communication verbs (say, tell, ask)', 'messages and social media', 'gossip and rumours'],
     items: 75,
     pron: ['reporting verbs: said /sɛd/, told /təʊld/', 'sentence rhythm in reported clauses'],

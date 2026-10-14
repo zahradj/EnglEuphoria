@@ -2,7 +2,7 @@
 // A step is a stretch of Seasons of one CEFR level (core or "Upper"), or the planned Pre-A1 step that has no Seasons in the roadmap data yet.
 // Moving between the lean and the full ladder is changing ACTIVE_LADDER_PROFILE (or passing a profile); no lesson is touched.
 // Rationale, sources and workload: docs/academy-ladder-plan.md and docs/academy-level-ladder.md. Imports nothing outside src/curriculum/academy/.
-import type { AcademyLevel } from './types';
+import { SESSIONS_PER_SEASON, type AcademyLevel } from './types';
 
 export type LadderStage = 'pre' | 'core' | 'upper';
 export type LadderProfileId = 'lean' | 'full';
@@ -30,7 +30,7 @@ export interface LadderStep {
 
 /** Seasons per CEFR level in the approved roadmap (src/curriculum/academy/levels). */
 const SEASONS_PER_LEVEL: Record<AcademyLevel, number> = { A1: 10, A2: 12, B1: 16, B2: 16, C1: 16 };
-export const SESSIONS_PER_SEASON = 8;
+// SESSIONS_PER_SEASON (8) is exported from ./types; imported here, not re-exported, so `export *` in index.ts stays unambiguous.
 
 /** Working titles of the Pre-A1 Seasons (first 3 = Pre-A1 Lite). */
 export const PRE_A1_SEASON_TITLES = ['Hello, letters', 'First sounds', 'Numbers and age', 'My things', 'People and places', 'My day'];
