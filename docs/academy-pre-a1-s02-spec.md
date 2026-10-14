@@ -32,6 +32,23 @@ Status: **draft for owner approval.** No picture, recording or deck is made unti
 | 7 | 49–55 | **Mission** (6) | Models the whole task first with Theo's photo; then listens | **Take 1:** says "This is a pin." for two photos from Theo; feedback (one thing done well, one to try); **Take 2:** again | Private rehearsal first; teacher plays Theo; student may type instead of speak |
 | 8 | 55–60 | **Wrap** (5) | Student **teaches back** the rule ("Slide the sounds, then say the word") to Vee; shows can-dos and the next clue (a message arrives with its first letters missing); assigns Daily 10 and a 2-minute voice note | Teaches back, ticks the can-dos, chooses a feeling | Reward moment: the message is restored; no streak pressure |
 
+### Intensive practice (the core of the hour)
+Rule for this lesson: **the student responds, not listens.** The hour holds **at least 80 student responses** (say, pick, blend, read, tap), counted by the deck in the teacher's panel, and every new item is met **at least 6 times in 4 different ways** (hear, say, blend/build, read, match, use) before the Mission. Timings do not change; the teacher talk shrinks to make room.
+
+| Part | Student responses | Practice design |
+|---|---|---|
+| Remember? | 12 | Spaced retrieval of P1 items, shuffled (interleaved with the new sound /i/ heard as a teaser) |
+| The Drop | 3 | Gist questions only |
+| Learn set 1 | 30 | **Guided → semi-independent → independent ladder:** 6 hear-and-pick (/i/ vs /n/ vs /a/), 4 say-after-me, 8 blend-slider words (*in, it, pin, tin, an, at, sat, tap*: old and new mixed), 6 craft-a-word from tiles, 6 "restore a missing letter" items. Errorless first (2 choices), then 3 choices, then free |
+| Read | 14 | Each of 4 words read **twice** (once with tap-to-hear support, once without), then two lines read, then 4 picture matches |
+| Learn set 2 | 16 | 8 listen-and-match rounds (3 pictures, growing to 4), 8 memory-pairs turns; the first and last rounds are timed against the student's **own best** (no leaderboard) |
+| Mission | 8 | Take 1 on four photos (not two), feedback, Take 2 on the two weakest |
+| Wrap | 4 | Teach-back of the rule, exit-ticket blend, two Daily 10 previews |
+
+**Error-driven loop:** every missed item is logged and returns **three times** in the same lesson, after 2, 5 and 9 other items (expanding spacing), and once more in the Wrap. **Mastery check:** by the end of Learn set 1 the student blends 8 of 10 words with at most one hint; if not, the teacher takes the **chill track** (fewer items, more modelling) instead of moving on. **Fluency round** (Learn set 2 and Wrap): read *in, it, pin, tin, an, at* in order, then again, trying to beat the first time; the aim is smooth sounding, not speed.
+**Interleaving:** old (s a t p) and new (i n) sounds are mixed in every set; blocks of one sound are used only for the first six items.
+**After the hour:** the Daily 10 repeats the same items on days 1, 3 and 7 (about 40 more responses), so each item reaches **10+ encounters in 7 days**.
+
 Fun hook / signature game: **"Restore the message"** — every correct blend lights a missing letter in Vee's message until it reads "It is a pin." Rhythm lane (tap /i/ /n/ in order) is an optional bonus for a student who finishes early; a student who is struggling skips it (chill track: fewer items, more modelling).
 Games used (none three times in a row): listen-and-click, sound-blend slider, loot and craft, reader page, listen and match, memory pairs. **Video-game mechanic:** loot and crafting.
 
