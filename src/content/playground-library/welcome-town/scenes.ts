@@ -187,7 +187,7 @@ export type Scene =
   // character's face — omit for the default centered layout.
   | { id: string; kind: 'meet'; bg: string; who: CharKey; teacher: string; line: string; repeat: string; cardSide?: 'left' | 'right'; /** Dialogue-plate look: 'chalk' for classroom scenes, default 'paper'. 'word' = vocabulary page: no
        *  plate — the word (big) and the line sit right on the picture's open side (owner 2026-10-09: "remove that green box"). */ look?: 'paper' | 'chalk' | 'word'; /** Vocabulary in `line` to highlight after the voice has read it. */ focus?: string[];
-      /** look 'word': the big word (default focus[0]) and an optional small line above it (e.g. "👦 + 👧 ="). */ word?: string; wordNote?: string }
+      /** look 'word': the big word (default focus[0]) and an optional small line above it (e.g. "👦 + 👧 ="). */ word?: string; wordNote?: string; /** One word at a time (owner 2026-10-14): wordNote first ("👦 a boy"), then the word pops ("He"), then the line. */ oneAtATime?: boolean }
   | {
       id: string; kind: 'echo'; bg: string; who: CharKey; teacher: string; word: string;
       /** Which side of the frame is empty enough for the big bare word —
@@ -232,6 +232,7 @@ export type Scene =
     }
   | { id: string; kind: 'drag-match'; bg: string; teacher: string; items: {
       label: string; color: string; targetLeft: string; targetTop: string;
+      /** Where the matched word shows (default targetTop) — e.g. on a character's body when targetTop is its feet. */ labelTop?: string;
       /** Optional real footprint of the target object, as percentages of
        *  the scene (same convention as targetLeft/targetTop). When set,
        *  a drop is scored against a rectangle of this size around the
@@ -697,6 +698,26 @@ export type Scene =
       rounds: { name: string; sprite?: string; choices: string[] }[];
     }
   | {
+      /** Magic Mirror (AnswerMirrorScene.tsx, A1 U1 L2): the mirror shows "you" with a feeling, Pip asks "How are you?",
+       *  the child picks the answer bubble (`answers[rounds[n].answer]`) and says it. `who` per round = the answer voice. */
+      id: string; kind: 'answer-mirror'; bg: string; teacher: string; title: string; who: CharKey; askerImg: string; mirrorNote: string;
+      answers: { feeling: string; img: string; line: string }[];
+      rounds: { who: CharKey; answer: number; choices: number[] }[]; doneLine: string;
+    }
+  | {
+      /** Feelings Camera (FeelingsCameraScene.tsx, A1 U1 L2): a photo of a friend, "How is Mia?" — the child builds
+       *  "She is hungry." (He/She, then the feeling) and says it; the photo goes into the album. */
+      id: string; kind: 'feelings-camera'; bg: string; teacher: string; title: string; who: CharKey;
+      friends: { name: string; img: string; pronoun: 'He' | 'She'; feeling: string }[];
+      feelings: { feeling: string; img: string }[]; doneLine: string;
+    }
+  | {
+      /** Feelings Runner (FeelingsRunnerScene.tsx, A1 U1 L2 video game): friends run towards Pip in three lanes; the
+       *  sentence ("She is hungry!") decides which one to tap; caught friends join the team (`team` = their pictures). */
+      id: string; kind: 'feelings-runner'; bg: string; teacher: string; title: string; who: CharKey; runner: string; team: string[];
+      rounds: { ask: string; choices: { img: string; sentence: string }[]; answer: number }[]; doneLine: string;
+    }
+  | {
       /** Feelings Survey (A1 ★ "Find Someone Who"): pick a friend, ask "How are you, <name>?", hear the answer,
        *  tap the matching face on the clipboard; the host reads the chart back. `img` = neutral picture shown
        *  until the row is filled (`feelImg` after). See scene-components/FeelingsSurveyScene.tsx. */
@@ -1159,43 +1180,6 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
       { word: 'goodbye', say: 'Find: Goodbye, Leo!', img: leoStory(11) },
     ],
   },
-  /* PRESENT 1 — feelings + How are you? I am … */
-  {
-    id: 'wt2-vocab-feelings', kind: 'vocab-spot', bg: bgFeelingsW,
-    teacher: 'Present: tap each arrow, hear how the friend feels, make the face and say it.',
-    items: [
-      { label: 'Happy', sentence: 'I am happy.', emoji: '\u{1F60A}', left: '29.8%', top: '54.5%', color: '#FE6A2F', who: 'pip' },
-      { label: 'Tired', sentence: 'I am tired.', emoji: '\u{1F62A}', left: '40.4%', top: '55.6%', color: '#C97A2F', who: 'leo' },
-      { label: 'Sad', sentence: 'I am sad.', emoji: '\u{1F622}', left: '51.1%', top: '57.9%', color: '#B85CD1', who: 'mia' },
-      { label: 'Angry', sentence: 'I am angry.', emoji: '\u{1F620}', left: '61.8%', top: '56.8%', color: '#E76FA5', who: 'bella' },
-      { label: 'Hungry', sentence: 'I am hungry.', emoji: '\u{1F924}', left: '72.5%', top: '57.9%', color: '#4FA9E0', who: 'willow' },
-    ],
-  },
-  {
-    id: 'wt2-howareyou', kind: 'meet', focus: ['How are you'], bg: bgCircleW, who: 'marigold',
-    teacher: 'Present: listen to the question and the answer. Then say it: I am fine, thank you!',
-    line: 'How are you today? I am fine, thank you!', repeat: 'How are you?',
-  },
-  { id: 'wt2-echo-howareyou', kind: 'echo', bg: bgCircleW, who: 'pip', textSide: 'top', teacher: 'Guided: say the question with Pip.', word: 'How are you?' },
-  { id: 'wt2-echo-tired', kind: 'echo', bg: bgCircleW, who: 'pip', textSide: 'top', teacher: 'Guided: say it with a big yawn — then the same with "He".', word: 'She is tired.' },
-  /* CONTROLLED PRACTICE 1 — I am … */
-  {
-    id: 'wt2-feelings-mirror', kind: 'listen-tap', bg: bgFeelingsW, teacher: 'Guided: listen — how does the friend feel? Tap them, then say it: I am hungry!',
-    targets: [
-      { label: 'Happy', left: '29.8%', top: '54.5%', color: '#FE6A2F' },
-      { label: 'Tired', left: '40.4%', top: '55.6%', color: '#C97A2F' },
-      { label: 'Sad', left: '51.1%', top: '57.9%', color: '#B85CD1' },
-      { label: 'Angry', left: '61.8%', top: '56.8%', color: '#E76FA5' },
-      { label: 'Hungry', left: '72.5%', top: '57.9%', color: '#4FA9E0' },
-    ],
-    rounds: [
-      { prompt: 'I want my lunch! I am …', answerLabel: 'Hungry', who: 'willow' },
-      { prompt: 'Yawn! I want my bed! I am …', answerLabel: 'Tired', who: 'leo' },
-      { prompt: 'Oh no! My cap is lost! I am …', answerLabel: 'Sad', who: 'mia' },
-      { prompt: 'Hooray! A party! I am …', answerLabel: 'Happy', who: 'pip' },
-      { prompt: 'Grr! My tower fell down! I am …', answerLabel: 'Angry', who: 'bella' },
-    ],
-  },
   {
     id: 'wt2-hello-song', kind: 'song', bg: bgL1Class, title: '\u{1F3B5} The Hello Song \u{1F3B5}', teacher: 'Guided: sing and show — wave on hello, point to yourself on name. Then ask: How are you?',
     durationSeconds: 20, bigWord: 'Hello',
@@ -1208,12 +1192,141 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
       { who: 'pip', text: 'Say your name! Say your name!' },
     ],
   },
-  /* PRESENT 2 — He is … / She is … */
+
+  /* PRESENT 1 — the feelings + read and match */
   {
-    id: 'wt2-he-she', kind: 'meet', look: 'word', word: 'He / She', wordNote: '\u{1F466} boy = he · \u{1F467} girl = she', focus: ['He', 'She'], bg: bgHeSheTogetherW, who: 'pip',
-    teacher: 'Present: point to Pip — he! Point to Mia — she! Say it.',
-    line: 'He is happy. She is happy. They are happy!', repeat: 'She is happy!',
+    id: 'wt2-vocab-feelings', kind: 'vocab-spot', bg: bgFeelingsW,
+    teacher: 'Present: tap each arrow, hear how the friend feels, make the face and say it.',
+    items: [
+      { label: 'Happy', sentence: 'I am happy.', emoji: '\u{1F60A}', left: '29.8%', top: '54.5%', color: '#FE6A2F', who: 'pip' },
+      { label: 'Tired', sentence: 'I am tired.', emoji: '\u{1F62A}', left: '40.4%', top: '55.6%', color: '#C97A2F', who: 'leo' },
+      { label: 'Sad', sentence: 'I am sad.', emoji: '\u{1F622}', left: '51.1%', top: '57.9%', color: '#B85CD1', who: 'mia' },
+      { label: 'Angry', sentence: 'I am angry.', emoji: '\u{1F620}', left: '61.8%', top: '56.8%', color: '#E76FA5', who: 'bella' },
+      { label: 'Hungry', sentence: 'I am hungry.', emoji: '\u{1F924}', left: '72.5%', top: '57.9%', color: '#4FA9E0', who: 'willow' },
+    ],
   },
+  {
+    // Owner 2026-10-14: after the feelings words, a matching game (A1 = read and match) — the whole friend is the target.
+    id: 'wt2-feelings-match', kind: 'drag-match', bg: bgFeelingsW, teacher: 'Guided: read and match! Drag each word onto the friend who feels that way — anywhere on the friend. Say it: I am tired!',
+    items: [
+      { label: 'Hungry', color: '#4FA9E0', who: 'willow', targetLeft: '72%', targetTop: '82%', labelTop: '72%', targetWidth: '11%', targetHeight: '27%' },
+      { label: 'Angry', color: '#E76FA5', who: 'bella', targetLeft: '62%', targetTop: '82%', labelTop: '66%', targetWidth: '8.5%', targetHeight: '40%' },
+      { label: 'Sad', color: '#B85CD1', who: 'mia', targetLeft: '52.5%', targetTop: '82%', labelTop: '72%', targetWidth: '11%', targetHeight: '29%' },
+      { label: 'Happy', color: '#FE6A2F', who: 'pip', targetLeft: '30.5%', targetTop: '79%', labelTop: '64%', targetWidth: '12%', targetHeight: '37%' },
+      { label: 'Tired', color: '#C97A2F', who: 'leo', targetLeft: '41.8%', targetTop: '81%', labelTop: '64%', targetWidth: '11%', targetHeight: '43%' },
+    ],
+  },
+
+  /* PRESENT 1b — How are you? I am … */
+  {
+    id: 'wt2-howareyou', kind: 'meet', focus: ['How are you'], bg: bgCircleW, who: 'marigold',
+    teacher: 'Present: listen to the question and the answer. Then say it: I am fine, thank you!',
+    line: 'How are you today? I am fine, thank you!', repeat: 'How are you?',
+  },
+  { id: 'wt2-echo-howareyou', kind: 'echo', bg: bgCircleW, who: 'pip', textSide: 'top', teacher: 'Guided: say the question with Pip.', word: 'How are you?' },
+  {
+    // Owner 2026-10-14 (replaces "She is tired" echo): the student ANSWERS "How are you?" — I am tired. I am happy. I am angry.
+    id: 'wt2-how-are-you', kind: 'answer-mirror', bg: bgCircleW, who: 'pip', askerImg: spr('pip'),
+    title: 'Magic Mirror: How are you?', mirrorNote: 'This is you!',
+    teacher: 'Guided: the mirror shows the student with a feeling. Pip asks "How are you?" — the student taps the answer that matches the face and SAYS it: I am tired.',
+    answers: [
+      { feeling: 'happy', img: feelSpr('pip-happy'), line: 'I am happy.' },
+      { feeling: 'tired', img: feelSpr('leo-tired'), line: 'I am tired.' },
+      { feeling: 'sad', img: feelSpr('mia-sad'), line: 'I am sad.' },
+      { feeling: 'angry', img: feelSpr('bella-angry'), line: 'I am angry.' },
+      { feeling: 'hungry', img: feelSpr('willow-hungry'), line: 'I am hungry.' },
+    ],
+    rounds: [
+      { who: 'leo', answer: 1, choices: [0, 1, 3] },
+      { who: 'pip', answer: 0, choices: [2, 4, 0] },
+      { who: 'bella', answer: 3, choices: [3, 1, 2] },
+      { who: 'mia', answer: 2, choices: [0, 2, 4] },
+      { who: 'willow', answer: 4, choices: [4, 3, 1] },
+    ],
+    doneLine: 'Great answers! Now you can say how you are!',
+  },
+
+  /* CONTROLLED PRACTICE 1 — I am … */
+  {
+    id: 'wt2-glider', kind: 'glider', bg: bgParkEmpty, who: 'pip', pilot: spr('pip'), title: 'Pip’s Glider: how do you feel?',
+    teacher: 'Game: listen to the sentence and tap the cloud with the right face — Pip flies into it. The student says the sentence too.',
+    rounds: [
+      { ask: 'I am tired.', choices: [{ label: 'happy', img: feelSpr('pip-happy') }, { label: 'tired', img: feelSpr('leo-tired') }, { label: 'angry', img: feelSpr('bella-angry') }], answer: 1, say: 'Tired! I am tired.' },
+      { ask: 'I am happy!', choices: [{ label: 'sad', img: feelSpr('mia-sad') }, { label: 'hungry', img: feelSpr('willow-hungry') }, { label: 'happy', img: feelSpr('pip-happy') }], answer: 2, say: 'Happy! I am happy!' },
+      { ask: 'I am sad.', choices: [{ label: 'sad', img: feelSpr('mia-sad') }, { label: 'angry', img: feelSpr('bella-angry') }, { label: 'tired', img: feelSpr('leo-tired') }], answer: 0, say: 'Sad! I am sad.' },
+      { ask: 'I am hungry!', choices: [{ label: 'tired', img: feelSpr('leo-tired') }, { label: 'hungry', img: feelSpr('willow-hungry') }, { label: 'happy', img: feelSpr('pip-happy') }], answer: 1, say: 'Hungry! I am hungry!' },
+      { ask: 'I am angry!', choices: [{ label: 'happy', img: feelSpr('pip-happy') }, { label: 'sad', img: feelSpr('mia-sad') }, { label: 'angry', img: feelSpr('bella-angry') }], answer: 2, say: 'Angry! I am angry!' },
+    ],
+    doneLine: 'Super flying! You know your feelings!',
+  },
+  {
+    id: 'wt2-feelings-mirror', kind: 'listen-tap', bg: bgFeelingsW, teacher: 'Guided: listen — "I am hungry." Tap the hungry friend, then say it: I am hungry!',
+    targets: [
+      { label: 'Happy', left: '29.8%', top: '54.5%', color: '#FE6A2F' },
+      { label: 'Tired', left: '40.4%', top: '55.6%', color: '#C97A2F' },
+      { label: 'Sad', left: '51.1%', top: '57.9%', color: '#B85CD1' },
+      { label: 'Angry', left: '61.8%', top: '56.8%', color: '#E76FA5' },
+      { label: 'Hungry', left: '72.5%', top: '57.9%', color: '#4FA9E0' },
+    ],
+    rounds: [
+      { prompt: 'I am hungry.', answerLabel: 'Hungry', who: 'willow' },
+      { prompt: 'I am tired.', answerLabel: 'Tired', who: 'leo' },
+      { prompt: 'I am sad.', answerLabel: 'Sad', who: 'mia' },
+      { prompt: 'I am happy.', answerLabel: 'Happy', who: 'pip' },
+      { prompt: 'I am angry.', answerLabel: 'Angry', who: 'bella' },
+    ],
+  },
+  {
+    id: 'wt2-draw-that', kind: 'draw-guess', bg: bgL1Class, who: 'pip', title: 'Draw That! How does it feel?',
+    teacher: 'Game: take turns. The drawer sees a secret feeling and draws the face (no words!); the other one taps the picture and says it: Happy! A happy face! In a live class each screen shows only its own role.',
+    rounds: [
+      { drawer: 'teacher', secret: 0, options: [
+        { label: 'happy', img: feelSpr('pip-happy'), say: 'Happy! A happy face!' },
+        { label: 'sad', img: feelSpr('mia-sad'), say: 'Sad! A sad face!' },
+        { label: 'angry', img: feelSpr('bella-angry'), say: 'Angry! An angry face!' },
+        { label: 'tired', img: feelSpr('leo-tired'), say: 'Tired! A tired face!' },
+      ], doodle: ['M 300 300 a 200 200 0 1 0 400 0 a 200 200 0 1 0 -400 0', 'M 410 250 Q 440 215 470 250', 'M 530 250 Q 560 215 590 250', 'M 395 340 Q 500 450 605 340'] },
+      { drawer: 'student', secret: 1, options: [
+        { label: 'happy', img: feelSpr('pip-happy'), say: 'Happy! A happy face!' },
+        { label: 'sad', img: feelSpr('mia-sad'), say: 'Sad! A sad face!' },
+        { label: 'angry', img: feelSpr('bella-angry'), say: 'Angry! An angry face!' },
+        { label: 'tired', img: feelSpr('leo-tired'), say: 'Tired! A tired face!' },
+      ] },
+      { drawer: 'teacher', secret: 3, options: [
+        { label: 'happy', img: feelSpr('pip-happy'), say: 'Happy! A happy face!' },
+        { label: 'sad', img: feelSpr('mia-sad'), say: 'Sad! A sad face!' },
+        { label: 'angry', img: feelSpr('bella-angry'), say: 'Angry! An angry face!' },
+        { label: 'tired', img: feelSpr('leo-tired'), say: 'Tired! A tired face!' },
+      ], doodle: ['M 300 300 a 200 200 0 1 0 400 0 a 200 200 0 1 0 -400 0', 'M 405 255 Q 440 280 475 255', 'M 525 255 Q 560 280 595 255', 'M 480 385 a 20 20 0 1 0 40 0 a 20 20 0 1 0 -40 0', 'M 720 120 L 780 120 L 720 180 L 780 180', 'M 800 60 L 840 60 L 800 100 L 840 100'] },
+      { drawer: 'student', secret: 2, options: [
+        { label: 'happy', img: feelSpr('pip-happy'), say: 'Happy! A happy face!' },
+        { label: 'sad', img: feelSpr('mia-sad'), say: 'Sad! A sad face!' },
+        { label: 'angry', img: feelSpr('bella-angry'), say: 'Angry! An angry face!' },
+        { label: 'tired', img: feelSpr('leo-tired'), say: 'Tired! A tired face!' },
+      ] },
+    ],
+    doneLine: 'Great drawing! Great guessing!',
+  },
+
+  /* PRESENT 2 — He is … / She is … / They are … (one picture each) */
+  {
+    // Owner 2026-10-14: page 9 split — one picture per word: He …
+    id: 'wt2-he', kind: 'meet', look: 'word', oneAtATime: true, cardSide: 'right', word: 'He', wordNote: '\u{1F466} a boy', focus: ['He'], bg: bgHeIntroPipW, who: 'pip',
+    teacher: 'Present: point to Pip — a boy. Then "he". He is happy! The student says it.',
+    line: 'Pip is a boy. He is happy!', repeat: 'He is happy!',
+  },
+  {
+    id: 'wt2-she', kind: 'meet', look: 'word', oneAtATime: true, cardSide: 'left', word: 'She', wordNote: '\u{1F467} a girl', focus: ['She'], bg: bgHeIntroMiaW, who: 'mia',
+    teacher: 'Present: point to Mia — a girl. Then "she". She is happy! The student says it.',
+    line: 'Mia is a girl. She is happy!', repeat: 'She is happy!',
+  },
+  {
+    id: 'wt2-they', kind: 'meet', look: 'word', oneAtATime: true, word: 'They', wordNote: 'Pip + Mia', focus: ['They'], bg: bgHeSheTogetherW, who: 'pip',
+    teacher: 'Present: point to Pip and Mia together — two friends = they. They are happy! The student says it.',
+    line: 'Pip and Mia. They are happy!', repeat: 'They are happy!',
+  },
+
+  /* CONTROLLED PRACTICE 2 — He / She is … */
   {
     id: 'wt2-he-she-say', kind: 'prea1', teacher: 'Guided: look at the friend and say the sentence with He or She: He is happy. She is sad.',
     scene: {
@@ -1226,7 +1339,16 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
       ],
     },
   },
-  /* CONTROLLED PRACTICE 2 — He / She is … */
+  {
+    id: 'wt2-read-drag', kind: 'drag-match', bg: bgFeelingsW, teacher: 'Reading: read each sentence and drag it onto the friend. Then read it aloud.',
+    items: [
+      { label: 'He is happy.', color: '#FE6A2F', who: 'pip', targetLeft: '29.8%', targetTop: '54.5%' },
+      { label: 'He is tired.', color: '#C97A2F', who: 'leo', targetLeft: '40.4%', targetTop: '55.6%' },
+      { label: 'She is sad.', color: '#B85CD1', who: 'mia', targetLeft: '51.1%', targetTop: '57.9%' },
+      { label: 'She is angry.', color: '#E76FA5', who: 'bella', targetLeft: '61.8%', targetTop: '56.8%' },
+      { label: 'She is hungry.', color: '#4FA9E0', who: 'willow', targetLeft: '72.5%', targetTop: '57.9%' },
+    ],
+  },
   {
     id: 'wt2-feelings-claw', kind: 'prea1', teacher: 'Guided: Feelings Grabber! Listen, grab the right friend, then say: He is … / She is …',
     scene: {
@@ -1249,57 +1371,64 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
     },
   },
   {
-    id: 'wt2-feelings-wheel', kind: 'prea1', teacher: 'Guided: spin the wheel! When it stops, the student says the friend’s feeling in a sentence: She is happy!',
-    scene: {
-      id: 'wt2-feelings-wheel', kind: 'feelings-wheel', bg: bgFeelingsW, teacher: 'Spin! Say how the friend feels.',
-      slots: [
-        { who: 'mia', emotion: 'happy', label: 'She is happy' },
-        { who: 'leo', emotion: 'sad', label: 'He is sad' },
-        { who: 'bella', emotion: 'angry', label: 'She is angry' },
-        { who: 'pip', emotion: 'happy', label: 'He is happy' },
-      ],
-    },
-  },
-  {
-    id: 'wt2-glider', kind: 'glider', bg: bgParkEmpty, who: 'pip', pilot: spr('pip'), title: 'Pip’s Glider: how do they feel?',
-    teacher: 'Game: listen to the sentence and tap the cloud with the right face — Pip flies into it. The student says the sentence too.',
-    rounds: [
-      { ask: 'I am tired.', choices: [{ label: 'happy', img: feelSpr('pip-happy') }, { label: 'tired', img: feelSpr('leo-tired') }, { label: 'angry', img: feelSpr('bella-angry') }], answer: 1, say: 'Tired! I am tired.' },
-      { ask: 'I am happy!', choices: [{ label: 'sad', img: feelSpr('mia-sad') }, { label: 'hungry', img: feelSpr('willow-hungry') }, { label: 'happy', img: feelSpr('pip-happy') }], answer: 2, say: 'Happy! I am happy!' },
-      { ask: 'She is sad.', choices: [{ label: 'sad', img: feelSpr('mia-sad') }, { label: 'angry', img: feelSpr('bella-angry') }, { label: 'tired', img: feelSpr('leo-tired') }], answer: 0, say: 'Sad! She is sad.' },
-      { ask: 'I am hungry!', choices: [{ label: 'tired', img: feelSpr('leo-tired') }, { label: 'hungry', img: feelSpr('willow-hungry') }, { label: 'happy', img: feelSpr('pip-happy') }], answer: 1, say: 'Hungry! I am hungry!' },
-      { ask: 'She is angry!', choices: [{ label: 'happy', img: feelSpr('pip-happy') }, { label: 'sad', img: feelSpr('mia-sad') }, { label: 'angry', img: feelSpr('bella-angry') }], answer: 2, say: 'Angry! She is angry!' },
+    // Owner 2026-10-14 (replaces the feelings wheel): the student SAYS "He is tired. She is happy." — builds it, then says it.
+    id: 'wt2-feelings-camera', kind: 'feelings-camera', bg: '/lep1/scenes/bg-u3l4-room-empty-wide.png', who: 'pip', title: 'Feelings Camera: He or She?',
+    teacher: 'Guided: click! A photo of a friend. Pip asks "How is Mia?" — the student taps He or She, then the feeling, and SAYS the sentence: She is sad.',
+    friends: [
+      { name: 'Leo', img: feelSpr('leo-tired'), pronoun: 'He', feeling: 'tired' },
+      { name: 'Mia', img: feelSpr('mia-sad'), pronoun: 'She', feeling: 'sad' },
+      { name: 'Pip', img: feelSpr('pip-happy'), pronoun: 'He', feeling: 'happy' },
+      { name: 'Willow', img: feelSpr('willow-hungry'), pronoun: 'She', feeling: 'hungry' },
+      { name: 'Bella', img: feelSpr('bella-angry'), pronoun: 'She', feeling: 'angry' },
     ],
-    doneLine: 'Super flying! You know your feelings!',
+    feelings: [
+      { feeling: 'happy', img: feelSpr('pip-happy') },
+      { feeling: 'tired', img: feelSpr('leo-tired') },
+      { feeling: 'sad', img: feelSpr('mia-sad') },
+      { feeling: 'angry', img: feelSpr('bella-angry') },
+      { feeling: 'hungry', img: feelSpr('willow-hungry') },
+    ],
+    doneLine: 'Look at our album! You can say how your friends feel!',
   },
   {
-    id: 'wt2-feelings-freeze', kind: 'prea1', teacher: 'Brain break: dance, then FREEZE with the face Pip says.',
-    scene: {
-      id: 'wt2-feelings-freeze', kind: 'tpr-actions', mode: 'break', bg: '/lep1/scenes/bg-u3l4-room-empty-wide.png', who: 'pip',
-      teacher: 'Dance, then FREEZE with the face Pip says.',
-      rounds: [
-        { line: 'Dance, dance! Freeze! Show me happy!', emoji: '\u{1F60A}' },
-        { line: 'Dance, dance! Freeze! Show me tired!', emoji: '\u{1F62A}' },
-        { line: 'Dance, dance! Freeze! Show me sad!', emoji: '\u{1F622}' },
-        { line: 'Dance, dance! Freeze! Show me hungry!', emoji: '\u{1F924}' },
-      ],
-    },
+    id: 'wt2-feelings-survey', kind: 'feelings-survey', bg: bgCircleW, who: 'pip',
+    title: 'Pip’s Feelings Survey',
+    intro: 'Let’s ask our friends: How are you? Tap a friend!',
+    teacher: 'Free: the student taps a friend and ASKS out loud "How are you, Leo?", then taps "I asked!". The friend answers; the student marks the face. At the end the student says one: "Leo is hungry."',
+    friends: [
+      { who: 'leo', name: 'Leo', feeling: 'hungry', img: spr('leo') },
+      { who: 'mia', name: 'Mia', feeling: 'happy', img: spr('mia') },
+      { who: 'bella', name: 'Bella', feeling: 'tired', img: spr('bella') },
+      { who: 'willow', name: 'Willow', feeling: 'sad', img: spr('willow') },
+    ],
+    faces: [
+      { feeling: 'happy', emoji: '\u{1F60A}', color: '#FE6A2F' },
+      { feeling: 'tired', emoji: '\u{1F62A}', color: '#C97A2F' },
+      { feeling: 'sad', emoji: '\u{1F622}', color: '#B85CD1' },
+      { feeling: 'angry', emoji: '\u{1F620}', color: '#E76FA5' },
+      { feeling: 'hungry', emoji: '\u{1F924}', color: '#4FA9E0' },
+    ],
   },
-  /* READING — Leo’s story + sentences */
+  {
+    // Owner 2026-10-14 ("remove all of the brain breaks … replace it with a video game"): Feelings Runner.
+    id: 'wt2-feelings-runner', kind: 'feelings-runner', bg: bgParkEmpty, who: 'pip', runner: spr('pip'),
+    title: 'Feelings Runner: catch the friend!',
+    teacher: 'Game: friends run towards Pip. Listen — "She is hungry!" — and tap that friend; they join Pip’s team. A wrong friend says their own sentence. The student says each sentence too.',
+    team: [feelSpr('leo-tired'), feelSpr('willow-hungry'), feelSpr('mia-sad'), feelSpr('bella-angry')],
+    rounds: [
+      { ask: 'He is tired!', answer: 1, choices: [{ img: feelSpr('mia-sad'), sentence: 'She is sad!' }, { img: feelSpr('leo-tired'), sentence: 'He is tired!' }, { img: feelSpr('willow-hungry'), sentence: 'She is hungry!' }] },
+      { ask: 'She is hungry!', answer: 2, choices: [{ img: feelSpr('bella-angry'), sentence: 'She is angry!' }, { img: feelSpr('mia-sad'), sentence: 'She is sad!' }, { img: feelSpr('willow-hungry'), sentence: 'She is hungry!' }] },
+      { ask: 'She is sad!', answer: 0, choices: [{ img: feelSpr('mia-sad'), sentence: 'She is sad!' }, { img: feelSpr('bella-angry'), sentence: 'She is angry!' }, { img: feelSpr('leo-tired'), sentence: 'He is tired!' }] },
+      { ask: 'She is angry!', answer: 1, choices: [{ img: feelSpr('willow-hungry'), sentence: 'She is hungry!' }, { img: feelSpr('bella-angry'), sentence: 'She is angry!' }, { img: feelSpr('mia-sad'), sentence: 'She is sad!' }] },
+    ],
+    doneLine: 'The whole team is running with Pip! Great listening!',
+  },
+
+  /* READING — Leo’s story */
   {
     id: 'wt2-reader', kind: 'reader', bg: bgL1Reading, title: 'Leo’s First Day', doneLine: 'Poor Leo! Where is his red cap? Find out next time!',
     teacher: 'Reading: page 3 again, then the new pages. Listen while the words light up, then the student reads Leo’s line: I am sad.',
     pages: LEO_STORY.slice(2, 5),
-  },
-  {
-    id: 'wt2-read-drag', kind: 'drag-match', bg: bgFeelingsW, teacher: 'Reading: read each sentence and drag it onto the friend. Then read it aloud.',
-    items: [
-      { label: 'He is happy.', color: '#FE6A2F', who: 'pip', targetLeft: '29.8%', targetTop: '54.5%' },
-      { label: 'He is tired.', color: '#C97A2F', who: 'leo', targetLeft: '40.4%', targetTop: '55.6%' },
-      { label: 'She is sad.', color: '#B85CD1', who: 'mia', targetLeft: '51.1%', targetTop: '57.9%' },
-      { label: 'She is angry.', color: '#E76FA5', who: 'bella', targetLeft: '61.8%', targetTop: '56.8%' },
-      { label: 'She is hungry.', color: '#4FA9E0', who: 'willow', targetLeft: '72.5%', targetTop: '57.9%' },
-    ],
   },
   {
     id: 'wt2-reveal', kind: 'prea1', teacher: 'Reading: Tile Reveal! Who is hiding — and how does the friend feel? Guess early, then read the sentence.',
@@ -1313,6 +1442,7 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
       ],
     },
   },
+
   /* PHONICS — the sound → Sound Pop → spelling → Blend & Read → tongue twister */
   {
     id: 'wt2-sound-a', kind: 'sound-model', bg: bgL1Reading, who: 'mia', letter: 'A', phoneme: '/a/', sound: 'a', soundSide: 'center',
@@ -1361,57 +1491,7 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
     ],
   },
   { id: 'wt2-twister', kind: 'tongue-twister', look: 'town', speeds: 2, bg: bgL1Reading, who: 'mia', focus: 's|a', teacher: 'Reading: quick reading! Listen to Mia, then say it slow, then faster.', line: 'Sad Sam sits.' },
-  /* FREE PRACTICE — the student asks, draws and guesses */
-  {
-    id: 'wt2-feelings-survey', kind: 'feelings-survey', bg: bgCircleW, who: 'pip',
-    title: 'Pip’s Feelings Survey',
-    intro: 'Let’s ask our friends: How are you? Tap a friend!',
-    teacher: 'Free: the student taps a friend and ASKS out loud "How are you, Leo?", then taps "I asked!". The friend answers; the student marks the face. At the end the student says one: "Leo is hungry."',
-    friends: [
-      { who: 'leo', name: 'Leo', feeling: 'hungry', img: spr('leo') },
-      { who: 'mia', name: 'Mia', feeling: 'happy', img: spr('mia') },
-      { who: 'bella', name: 'Bella', feeling: 'tired', img: spr('bella') },
-      { who: 'willow', name: 'Willow', feeling: 'sad', img: spr('willow') },
-    ],
-    faces: [
-      { feeling: 'happy', emoji: '\u{1F60A}', color: '#FE6A2F' },
-      { feeling: 'tired', emoji: '\u{1F62A}', color: '#C97A2F' },
-      { feeling: 'sad', emoji: '\u{1F622}', color: '#B85CD1' },
-      { feeling: 'angry', emoji: '\u{1F620}', color: '#E76FA5' },
-      { feeling: 'hungry', emoji: '\u{1F924}', color: '#4FA9E0' },
-    ],
-  },
-  {
-    id: 'wt2-draw-that', kind: 'draw-guess', bg: bgL1Class, who: 'pip', title: 'Draw That! How does it feel?',
-    teacher: 'Game: take turns. The drawer sees a secret feeling and draws the face (no words!); the other one taps the picture and says it: Happy! A happy face! In a live class each screen shows only its own role.',
-    rounds: [
-      { drawer: 'teacher', secret: 0, options: [
-        { label: 'happy', img: feelSpr('pip-happy'), say: 'Happy! A happy face!' },
-        { label: 'sad', img: feelSpr('mia-sad'), say: 'Sad! A sad face!' },
-        { label: 'angry', img: feelSpr('bella-angry'), say: 'Angry! An angry face!' },
-        { label: 'tired', img: feelSpr('leo-tired'), say: 'Tired! A tired face!' },
-      ], doodle: ['M 300 300 a 200 200 0 1 0 400 0 a 200 200 0 1 0 -400 0', 'M 410 250 Q 440 215 470 250', 'M 530 250 Q 560 215 590 250', 'M 395 340 Q 500 450 605 340'] },
-      { drawer: 'student', secret: 1, options: [
-        { label: 'happy', img: feelSpr('pip-happy'), say: 'Happy! A happy face!' },
-        { label: 'sad', img: feelSpr('mia-sad'), say: 'Sad! A sad face!' },
-        { label: 'angry', img: feelSpr('bella-angry'), say: 'Angry! An angry face!' },
-        { label: 'tired', img: feelSpr('leo-tired'), say: 'Tired! A tired face!' },
-      ] },
-      { drawer: 'teacher', secret: 3, options: [
-        { label: 'happy', img: feelSpr('pip-happy'), say: 'Happy! A happy face!' },
-        { label: 'sad', img: feelSpr('mia-sad'), say: 'Sad! A sad face!' },
-        { label: 'angry', img: feelSpr('bella-angry'), say: 'Angry! An angry face!' },
-        { label: 'tired', img: feelSpr('leo-tired'), say: 'Tired! A tired face!' },
-      ], doodle: ['M 300 300 a 200 200 0 1 0 400 0 a 200 200 0 1 0 -400 0', 'M 405 255 Q 440 280 475 255', 'M 525 255 Q 560 280 595 255', 'M 480 385 a 20 20 0 1 0 40 0 a 20 20 0 1 0 -40 0', 'M 720 120 L 780 120 L 720 180 L 780 180', 'M 800 60 L 840 60 L 800 100 L 840 100'] },
-      { drawer: 'student', secret: 2, options: [
-        { label: 'happy', img: feelSpr('pip-happy'), say: 'Happy! A happy face!' },
-        { label: 'sad', img: feelSpr('mia-sad'), say: 'Sad! A sad face!' },
-        { label: 'angry', img: feelSpr('bella-angry'), say: 'Angry! An angry face!' },
-        { label: 'tired', img: feelSpr('leo-tired'), say: 'Tired! A tired face!' },
-      ] },
-    ],
-    doneLine: 'Great drawing! Great guessing!',
-  },
+
   /* PRODUCE — real answers about me and my friends */
   {
     id: 'wt2-answer', kind: 'join-stage', bg: bgCircleW, teacher: 'Free: how does the student really feel today? Then they ask the teacher, and tell how Pip is.', cast: ['marigold', 'pip'],
@@ -1432,6 +1512,7 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
       { who: 'pip', line: 'I am happy! Thank you!' },
     ],
   },
+
   /* CHECK AND GOODBYE */
   { id: 'wt2-i-can', kind: 'meet', focus: ['How are you'], bg: bgCircleW, who: 'marigold', cardSide: 'left', teacher: 'Check: say it and get your passport stamp!', line: 'I can ask: How are you? I can say: I am happy. She is tired.', repeat: 'How are you?' },
   {
@@ -1464,6 +1545,7 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
       ],
     },
   },
+
   /* EXTRA TIME */
   {
     id: 'wt2-pronoun-sort', kind: 'pronoun-sort', bg: bgFeelingsW, teacher: 'Extra time (Guided): drag each friend to He, She or They — then say it: She is sad!',
@@ -1491,16 +1573,16 @@ export const LESSON_2_SCENES: Scene[] = classroomLook([
     },
   },
   {
-    id: 'wt2-feelings-break-2', kind: 'prea1', teacher: 'Extra time: brain break — show the feeling with your face and body.',
-    scene: {
-      id: 'wt2-feelings-break-2', kind: 'tpr-actions', mode: 'break', bg: bgCircleW, who: 'pip', teacher: 'Show me!',
-      rounds: [
-        { line: 'Show me tired! Yawn!', emoji: '\u{1F971}' },
-        { line: 'Show me hungry! Rub your tummy!', emoji: '\u{1F60B}' },
-        { line: 'Show me happy! Jump!', emoji: '\u{1F604}' },
-        { line: 'Show me fine! Thumbs up!', emoji: '\u{1F44D}' },
-      ],
-    },
+    // Owner 2026-10-14: no brain breaks — I Spy (binoculars) with the lesson's sentences instead.
+    id: 'wt2-i-spy', kind: 'i-spy', bg: bgFeelingsW, who: 'pip',
+    teacher: 'Extra time (Guided): I Spy! Pip gives a clue — the student moves the binoculars to the friend and says the sentence: He is tired.',
+    rounds: [
+      { clue: 'I spy a friend who is tired.', spot: { left: 41.8, top: 60, r: 6 }, answer: 'Leo! He is tired.' },
+      { clue: 'I spy a friend who is hungry.', spot: { left: 72, top: 70, r: 5 }, answer: 'Willow! She is hungry.' },
+      { clue: 'I spy a friend who is angry.', spot: { left: 62, top: 63, r: 4.5 }, answer: 'Bella! She is angry.' },
+      { clue: 'I spy a friend who is happy.', spot: { left: 30.5, top: 60, r: 6 }, answer: 'Pip! He is happy.' },
+    ],
+    doneLine: 'You spied them all!',
   },
   {
     id: 'wt2-goodbye-song', kind: 'song', bg: bgExpressGoodbyeW, title: '\u{1F3B5} Welcome Town School Goodbye Song \u{1F3B5}', teacher: 'It’s time to go — wave goodbye and sing along together!',
