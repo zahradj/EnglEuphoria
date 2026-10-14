@@ -33,7 +33,7 @@ For every lesson the system can say: *builds on* (the previous lesson's goal), *
 `docs/academy-lesson-plan-template.md` step 4 now requires: the Remember? list taken from `recallPlan`, a progress line (builds on / unlocks), and the Daily 10 calendar. `academy-quality-gate` fails a plan with no Remember? list.
 
 ## 6. What is not built yet
-- The deck player does not yet read the plan automatically: each lesson's Remember? slides are still written by hand from the plan's list (the Pre-A1 lessons already open with a Remember? part).
+- **Done (2026-10-14):** `src/academy-deck/recallSlides.ts` builds a Remember? hear-and-pick game from `recallPlan` (one item per earlier lesson in turn); Pre-A1 Season 2 lesson 1 uses it (`rem-recall`). Other decks still have hand-written Remember? slides; replace them with `recallRounds` when each lesson is rebuilt.
 - The Daily 10 trainer does not yet schedule items by this calendar; the data is ready.
 - Per-student scheduling (items a student finds hard return sooner) needs the diagnostics service; the plan above is the default for everyone.
 
