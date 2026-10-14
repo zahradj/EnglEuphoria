@@ -15,7 +15,7 @@
  * Planet Weather Report ★ (`weather-report`).
  * ========================================================================= */
 
-import { CAST, VOICE_KEY, type CharKey, type Scene } from '../welcome-town/scenes';
+import { CAST, VOICE_KEY, type CharKey, type ReaderPage, type Scene } from '../welcome-town/scenes';
 
 export type { CharKey, Scene };
 export { CAST, VOICE_KEY };
@@ -42,19 +42,19 @@ export const numCard = (n: number) => {
 };
 
 /** The unit's reading strand (plan §4). */
-export const LOST_ROBOT: { img: string; lines: { who?: CharKey; text: string }[] }[] = [
-  { img: lostRobot(1), lines: [{ text: 'Look! The stars! There are a lot of stars.' }] },
-  { img: lostRobot(2), lines: [{ who: 'nova', text: 'Hello! I am Captain Nova. This is my rocket.' }] },
-  { img: lostRobot(3), lines: [{ text: 'Count the stars! Ten, twenty, thirty, forty!' }] },
-  { img: lostRobot(4), lines: [{ who: 'nova', text: 'Oh no! Where is Beep? Beep is my robot. He is lost!' }] },
-  { img: lostRobot(5), lines: [{ text: 'Go up! Go left! The moon is above the rocket.' }] },
-  { img: lostRobot(6), lines: [{ text: 'It is hot and sunny. Beep is not here.' }] },
-  { img: lostRobot(7), lines: [{ text: 'It is windy! Up, up goes Biscuit’s hat!' }] },
-  { img: lostRobot(8), lines: [{ text: 'It is cold and snowy. Look! Little tracks.' }] },
-  { img: lostRobot(9), lines: [{ text: 'Beep, beep! It is below us. Go down! Go right!' }] },
-  { img: lostRobot(10), lines: [{ who: 'beep', text: 'I am cold. I am lost!' }] },
-  { img: lostRobot(11), lines: [{ text: 'Biscuit finds Beep! Thank you, Biscuit!' }] },
-  { img: lostRobot(12), lines: [{ text: 'Ten, nine, eight… Go! Up, up, up! Beep is home.' }] },
+export const LOST_ROBOT: ReaderPage[] = [
+  { img: lostRobot(1), lines: [{ text: 'Look! The stars! There are a lot of stars.' }], check: { who: 'pip', question: 'What do they see?', answer: 'Stars', options: [{ label: 'The moon', img: item('moon') }, { label: 'Stars', img: item('star-gold') }, { label: 'The sun', img: item('sun') }] } },
+  { img: lostRobot(2), lines: [{ who: 'nova', text: 'Hello! I am Captain Nova. This is my rocket.' }], check: { who: 'pip', question: 'Who is this?', answer: 'Captain Nova', options: [{ label: 'Captain Nova', img: item('nova') }, { label: 'Beep', img: item('beep') }, { label: 'Biscuit', img: item('dog') }] } },
+  { img: lostRobot(3), lines: [{ text: 'Count the stars! Ten, twenty, thirty, forty!' }], check: { who: 'pip', question: 'How many stars?', answer: 'Forty', options: [{ label: 'Twenty' }, { label: 'Forty' }, { label: 'Thirty' }] } },
+  { img: lostRobot(4), lines: [{ who: 'nova', text: 'Oh no! Where is Beep? Beep is my robot. He is lost!' }], check: { who: 'leo', question: 'Who is lost?', answer: 'Beep', options: [{ label: 'Biscuit', img: item('dog') }, { label: 'Captain Nova', img: item('nova') }, { label: 'Beep', img: item('beep') }] } },
+  { img: lostRobot(5), lines: [{ text: 'Go up! Go left! The moon is above the rocket.' }], check: { who: 'pip', question: 'What is above the rocket?', answer: 'The moon', options: [{ label: 'The moon', img: item('moon') }, { label: 'The sun', img: item('sun') }, { label: 'A star', img: item('star-gold') }] } },
+  { img: lostRobot(6), lines: [{ text: 'It is hot and sunny. Beep is not here.' }], check: { who: 'pip', question: 'What is the weather?', answer: 'Hot and sunny', options: [{ label: 'Hot and sunny', img: item('planet-sun') }, { label: 'Rainy', img: item('planet-rain') }, { label: 'Cold and snowy', img: item('planet-ice') }] } },
+  { img: lostRobot(7), lines: [{ text: 'It is windy! Up, up goes Biscuit’s hat!' }], check: { who: 'leo', question: 'What goes up?', answer: 'The hat', options: [{ label: 'The rocket', img: item('rocket') }, { label: 'The hat', img: item('hat') }, { label: 'A star', img: item('star-gold') }] } },
+  { img: lostRobot(8), lines: [{ text: 'It is cold and snowy. Look! Little tracks.' }], check: { who: 'pip', question: 'What is the weather?', answer: 'Cold and snowy', options: [{ label: 'Hot and sunny', img: item('planet-sun') }, { label: 'Windy', img: item('planet-wind') }, { label: 'Cold and snowy', img: item('planet-ice') }] } },
+  { img: lostRobot(9), lines: [{ text: 'Beep, beep! It is below us. Go down! Go right!' }], check: { who: 'pip', question: 'Where is Beep?', answer: 'Below us', options: [{ label: 'Below us' }, { label: 'Above us' }, { label: 'In the rocket' }] } },
+  { img: lostRobot(10), lines: [{ who: 'beep', text: 'I am cold. I am lost!' }], check: { who: 'pip', question: 'How is Beep?', answer: 'Cold', options: [{ label: 'Hot' }, { label: 'Cold' }, { label: 'Hungry' }] } },
+  { img: lostRobot(11), lines: [{ text: 'Biscuit finds Beep! Thank you, Biscuit!' }], check: { who: 'leo', question: 'Who finds Beep?', answer: 'Biscuit', options: [{ label: 'Biscuit', img: item('dog') }, { label: 'Captain Nova', img: item('nova') }, { label: 'Leo', img: item('leo-run') }] } },
+  { img: lostRobot(12), lines: [{ text: 'Ten, nine, eight… Go! Up, up, up! Beep is home.' }], check: { who: 'pip', question: 'Where is Beep now?', answer: 'Home', options: [{ label: 'Lost' }, { label: 'On the moon' }, { label: 'Home' }] } },
 ];
 
 const helloSong = (id: string, bg: string): Scene => ({

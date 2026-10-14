@@ -14,7 +14,7 @@
  * by understanding the looks words, not just the name; the photos stay in the album.
  * ========================================================================= */
 
-import { CAST, VOICE_KEY, type CharKey, type Scene } from '../welcome-town/scenes';
+import { CAST, VOICE_KEY, type CharKey, type ReaderPage, type Scene } from '../welcome-town/scenes';
 
 export type { CharKey, Scene };
 export { CAST, VOICE_KEY };
@@ -35,19 +35,19 @@ const item = (n: string) => `/lep1/items/item-${n}.png`;
 export const jungleRescue = (n: number) => `${J}/scenes/bg-jungle-rescue-${n}-wide.png`;
 
 /** The unit's reading strand (plan §4): Leo and Pip visit Coco; Kip is stuck on a rock; who can help? */
-export const JUNGLE_RESCUE: { img: string; lines: { who?: CharKey; text: string }[] }[] = [
-  { img: jungleRescue(1), lines: [{ text: 'Look! The jungle! It is big and green.' }] },
-  { img: jungleRescue(2), lines: [{ who: 'coco', text: 'Hi, Leo! Hi, Pip! I am Coco. I am a monkey.' }] },
-  { img: jungleRescue(3), lines: [{ text: 'Look! A snake. It is long. An elephant. It is big.' }] },
-  { img: jungleRescue(4), lines: [{ who: 'coco', text: 'I can climb! I can swing!' }, { who: 'pip', text: 'I can’t climb!' }] },
-  { img: jungleRescue(5), lines: [{ text: 'Kip is on a rock.' }, { text: 'Help! Help! I am stuck!' }] },
-  { img: jungleRescue(6), lines: [{ who: 'willow', text: 'I can fly. But I am small. I can’t help Kip.' }] },
-  { img: jungleRescue(7), lines: [{ who: 'pip', text: 'Can a fish help?' }, { text: 'I can swim. I can’t lift Kip!' }] },
-  { img: jungleRescue(8), lines: [{ text: 'I can swim! Can I help?' }, { text: 'No! Your teeth!' }] },
-  { img: jungleRescue(9), lines: [{ text: 'I am big. I can walk in the river.' }] },
-  { img: jungleRescue(10), lines: [{ text: 'The elephant lifts Kip with its long nose.' }] },
-  { img: jungleRescue(11), lines: [{ text: 'Thank you!' }, { who: 'coco', text: 'Thank you, Elephant!' }] },
-  { img: jungleRescue(12), lines: [{ who: 'leo', text: 'Lunch! Chips for all!' }, { who: 'coco', text: 'Thank you, friends!' }] },
+export const JUNGLE_RESCUE: ReaderPage[] = [
+  { img: jungleRescue(1), lines: [{ text: 'Look! The jungle! It is big and green.' }], check: { who: 'pip', question: 'What is the jungle like?', answer: 'Big and green', options: [{ label: 'Big and green' }, { label: 'Small and blue' }, { label: 'Long and red' }] } },
+  { img: jungleRescue(2), lines: [{ who: 'coco', text: 'Hi, Leo! Hi, Pip! I am Coco. I am a monkey.' }], check: { who: 'pip', question: 'What is Coco?', answer: 'A monkey', options: [{ label: 'A lion', img: item('lion') }, { label: 'A monkey', img: item('coco-cheer') }, { label: 'A frog', img: item('frog') }] } },
+  { img: jungleRescue(3), lines: [{ text: 'Look! A snake. It is long. An elephant. It is big.' }], check: { who: 'pip', question: 'What is long?', answer: 'The snake', options: [{ label: 'The snake', img: item('snake') }, { label: 'The elephant', img: item('elephant') }, { label: 'The bird', img: item('bird') }] } },
+  { img: jungleRescue(4), lines: [{ who: 'coco', text: 'I can climb! I can swing!' }, { who: 'pip', text: 'I can’t climb!' }], check: { who: 'leo', question: 'Who can climb?', answer: 'Coco', options: [{ label: 'Pip', img: item('pip-wave') }, { label: 'Coco', img: item('coco-cheer') }, { label: 'Leo', img: item('leo-wave') }] } },
+  { img: jungleRescue(5), lines: [{ text: 'Kip is on a rock.' }, { text: 'Help! Help! I am stuck!' }], check: { who: 'pip', question: 'Where is Kip?', answer: 'On a rock', options: [{ label: 'On a rock', img: item('stone') }, { label: 'In a tree', img: item('tree') }, { label: 'On a log', img: item('log') }] } },
+  { img: jungleRescue(6), lines: [{ who: 'willow', text: 'I can fly. But I am small. I can’t help Kip.' }], check: { who: 'pip', question: 'What can Willow do?', answer: 'Fly', options: [{ label: 'Swim', img: item('fish-swim') }, { label: 'Fly', img: item('willow-fly') }, { label: 'Climb', img: item('pip-climb') }] } },
+  { img: jungleRescue(7), lines: [{ who: 'pip', text: 'Can a fish help?' }, { text: 'I can swim. I can’t lift Kip!' }], check: { who: 'leo', question: 'What can the fish do?', answer: 'Swim', options: [{ label: 'Fly', img: item('willow-fly') }, { label: 'Run', img: item('leo-run') }, { label: 'Swim', img: item('fish-swim') }] } },
+  { img: jungleRescue(8), lines: [{ text: 'I can swim! Can I help?' }, { text: 'No! Your teeth!' }], check: { who: 'pip', question: 'Who has big teeth?', answer: 'The crocodile', options: [{ label: 'The crocodile', img: item('alligator') }, { label: 'The frog', img: item('frog') }, { label: 'The bird', img: item('bird') }] } },
+  { img: jungleRescue(9), lines: [{ text: 'I am big. I can walk in the river.' }], check: { who: 'pip', question: 'Who is big?', answer: 'The elephant', options: [{ label: 'The bird', img: item('bird') }, { label: 'The elephant', img: item('elephant') }, { label: 'The frog', img: item('frog') }] } },
+  { img: jungleRescue(10), lines: [{ text: 'The elephant lifts Kip with its long nose.' }], check: { who: 'pip', question: 'What does the elephant lift Kip with?', answer: 'Its nose', options: [{ label: 'Its nose' }, { label: 'Its ear' }, { label: 'Its foot' }] } },
+  { img: jungleRescue(11), lines: [{ text: 'Thank you!' }, { who: 'coco', text: 'Thank you, Elephant!' }], check: { who: 'leo', question: 'Who helps Kip?', answer: 'The elephant', options: [{ label: 'The snake', img: item('snake') }, { label: 'The fish', img: item('fish') }, { label: 'The elephant', img: item('elephant') }] } },
+  { img: jungleRescue(12), lines: [{ who: 'leo', text: 'Lunch! Chips for all!' }, { who: 'coco', text: 'Thank you, friends!' }], check: { who: 'pip', question: 'What do they eat?', answer: 'Chips', options: [{ label: 'Chips', img: item('chip') }, { label: 'Bananas', img: item('banana') }, { label: 'Cheese', img: item('cheese') }] } },
 ];
 
 export const LESSON_A1U2L1_TITLE = 'Jungle Animals';
@@ -2035,7 +2035,7 @@ export const LESSON_A1U2L6_SCENES: Scene[] = [
     lines: ['Six big pigs sit still.', 'Chip the chimp chews chips.', 'A duck on a rock eats a snack.', 'Shy fish swish and splash.'],
   },
   {
-    id: 'ja6-speed-read', kind: 'reader', bg: bgWide, title: 'Speed Reading: The Jungle Rescue', doneLine: 'Wow! Fast and clear — super reading!',
+    id: 'ja6-speed-read', kind: 'reader', noChecks: true, bg: bgWide, title: 'Speed Reading: The Jungle Rescue', doneLine: 'Wow! Fast and clear — super reading!',
     teacher: 'Reading: Game Day speed read! The student reads pages 9-12 on their own (🔊 only for help) — then once more, faster.',
     pages: JUNGLE_RESCUE.slice(8, 12),
   },

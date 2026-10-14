@@ -16,7 +16,7 @@
  * (`food-survey`), Festival Café ★ (`festival-cafe`), Build a Pizza (`build-dish`).
  * ========================================================================= */
 
-import { CAST, VOICE_KEY, type CharKey, type Scene } from '../welcome-town/scenes';
+import { CAST, VOICE_KEY, type CharKey, type ReaderPage, type Scene } from '../welcome-town/scenes';
 
 export type { CharKey, Scene };
 export { CAST, VOICE_KEY };
@@ -38,19 +38,19 @@ const PICO = item('pico');
 const BISCUIT = item('dog');
 
 /** The unit's reading strand (plan §4). */
-export const CILLA_RECIPE: { img: string; lines: { who?: CharKey; text: string }[] }[] = [
-  { img: cillaPage(1), lines: [{ text: 'Look! The Food Festival! There are a lot of stalls.' }] },
-  { img: cillaPage(2), lines: [{ who: 'cilla', text: 'Hello! I am Chef Cilla. I like cooking!' }] },
-  { img: cillaPage(3), lines: [{ who: 'cilla', text: 'Let’s make a big pizza for the festival!' }] },
-  { img: cillaPage(4), lines: [{ who: 'cilla', text: 'Oh no! Where is the cheese?' }] },
-  { img: cillaPage(5), lines: [{ text: 'Look! Little crumbs. Biscuit can help!' }] },
-  { img: cillaPage(6), lines: [{ text: 'It is Pico the Mouse! He has the cheese.' }] },
-  { img: cillaPage(7), lines: [{ who: 'leo', text: 'Would you like some grapes, Pico?' }, { who: 'pico', text: 'No, thank you.' }] },
-  { img: cillaPage(8), lines: [{ who: 'mia', text: 'Would you like some bread?' }, { who: 'pico', text: 'No, thank you.' }] },
-  { img: cillaPage(9), lines: [{ who: 'pip', text: 'Do you like pizza, Pico?' }, { who: 'pico', text: 'Yes, I do! I like pizza!' }] },
-  { img: cillaPage(10), lines: [{ who: 'cilla', text: 'Would you like some pizza?' }, { who: 'pico', text: 'Yes, please!' }] },
-  { img: cillaPage(11), lines: [{ who: 'pico', text: 'Here is the cheese.' }, { who: 'cilla', text: 'Thank you, Pico!' }] },
-  { img: cillaPage(12), lines: [{ text: 'Let’s eat! Yum! We all like pizza!' }] },
+export const CILLA_RECIPE: ReaderPage[] = [
+  { img: cillaPage(1), lines: [{ text: 'Look! The Food Festival! There are a lot of stalls.' }], check: { who: 'pip', question: 'Where are they?', answer: 'The Food Festival', options: [{ label: 'The Food Festival' }, { label: 'The jungle' }, { label: 'Space' }] } },
+  { img: cillaPage(2), lines: [{ who: 'cilla', text: 'Hello! I am Chef Cilla. I like cooking!' }], check: { who: 'pip', question: 'Who is this?', answer: 'Chef Cilla', options: [{ label: 'Pico', img: item('pico') }, { label: 'Chef Cilla', img: item('cilla') }, { label: 'Biscuit', img: item('dog') }] } },
+  { img: cillaPage(3), lines: [{ who: 'cilla', text: 'Let’s make a big pizza for the festival!' }], check: { who: 'pip', question: 'What do they make?', answer: 'A pizza', options: [{ label: 'A pizza', img: item('pizza') }, { label: 'Soup', img: item('soup') }, { label: 'A cake', img: item('cake') }] } },
+  { img: cillaPage(4), lines: [{ who: 'cilla', text: 'Oh no! Where is the cheese?' }], check: { who: 'leo', question: 'What is lost?', answer: 'The cheese', options: [{ label: 'The bread', img: item('bread') }, { label: 'The cheese', img: item('cheese') }, { label: 'The grapes', img: item('grapes') }] } },
+  { img: cillaPage(5), lines: [{ text: 'Look! Little crumbs. Biscuit can help!' }], check: { who: 'pip', question: 'Who can help?', answer: 'Biscuit', options: [{ label: 'Biscuit', img: item('dog') }, { label: 'Chef Cilla', img: item('cilla') }, { label: 'Pico', img: item('pico') }] } },
+  { img: cillaPage(6), lines: [{ text: 'It is Pico the Mouse! He has the cheese.' }], check: { who: 'pip', question: 'Who has the cheese?', answer: 'Pico', options: [{ label: 'Chef Cilla', img: item('cilla') }, { label: 'Pico', img: item('pico') }, { label: 'Biscuit', img: item('dog') }] } },
+  { img: cillaPage(7), lines: [{ who: 'leo', text: 'Would you like some grapes, Pico?' }, { who: 'pico', text: 'No, thank you.' }], check: { who: 'mia', question: 'Does Pico want grapes?', answer: 'No', options: [{ label: 'Yes' }, { label: 'No' }] } },
+  { img: cillaPage(8), lines: [{ who: 'mia', text: 'Would you like some bread?' }, { who: 'pico', text: 'No, thank you.' }], check: { who: 'pip', question: 'Does Pico want bread?', answer: 'No', options: [{ label: 'No' }, { label: 'Yes' }] } },
+  { img: cillaPage(9), lines: [{ who: 'pip', text: 'Do you like pizza, Pico?' }, { who: 'pico', text: 'Yes, I do! I like pizza!' }], check: { who: 'leo', question: 'What does Pico like?', answer: 'Pizza', options: [{ label: 'Bread', img: item('bread') }, { label: 'Grapes', img: item('grapes') }, { label: 'Pizza', img: item('pizza') }] } },
+  { img: cillaPage(10), lines: [{ who: 'cilla', text: 'Would you like some pizza?' }, { who: 'pico', text: 'Yes, please!' }], check: { who: 'pip', question: 'What does Pico say?', answer: 'Yes, please!', options: [{ label: 'Yes, please!' }, { label: 'No, thank you.' }] } },
+  { img: cillaPage(11), lines: [{ who: 'pico', text: 'Here is the cheese.' }, { who: 'cilla', text: 'Thank you, Pico!' }], check: { who: 'pip', question: 'What does Pico give?', answer: 'The cheese', options: [{ label: 'The cheese', img: item('cheese') }, { label: 'The pizza', img: item('pizza') }, { label: 'The milk', img: item('milk') }] } },
+  { img: cillaPage(12), lines: [{ text: 'Let’s eat! Yum! We all like pizza!' }], check: { who: 'pip', question: 'What do they all like?', answer: 'Pizza', options: [{ label: 'Soup', img: item('soup') }, { label: 'Pizza', img: item('pizza') }, { label: 'Salad', img: item('salad') }] } },
 ];
 
 const helloSong = (id: string, bg: string): Scene => ({

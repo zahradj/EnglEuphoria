@@ -422,7 +422,8 @@ export type Scene =
       /** The Reader (ReaderScene.tsx): the unit's serial story, read-along then the child reads; `lines` of a page are
        *  spoken in their speaker's voice, every word tappable. */
       id: string; kind: 'reader'; bg: string; title: string; teacher: string; doneLine: string;
-      pages: { img: string; lines: { who?: CharKey; text: string }[] }[];
+      pages: ReaderPage[];
+      /** Speed reading / read-aloud pages: no picture questions. */ noChecks?: boolean;
     }
   | {
       /** Read & Do (ReadDoScene.tsx, A1 U1L6): an instruction card to READ (not spoken; 🔊 = help), e.g. "Give Leo the
@@ -795,18 +796,22 @@ const L1_FACES = [
 /* Leo's First Day — the Unit 1 serial story (docs/a1-unit-1-welcome-town.md §4): one picture per page, read a bit
  * more each lesson in the Reader. Canva art, cast from public/welcome-town/refs/cast-ref.png. */
 export const leoStory = (n: number) => `${W}/scenes/bg-leo-story-${n}-wide.png`;
-export const LEO_STORY: { img: string; lines: { who?: CharKey; text: string }[] }[] = [
-  { img: leoStory(1), lines: [{ text: 'This is Leo. Leo is new in Welcome Town.' }] },
-  { img: leoStory(2), lines: [{ who: 'pip', text: 'Hello! My name is Pip. What’s your name?' }] },
-  { img: leoStory(3), lines: [{ who: 'leo', text: 'Hi, Pip! My name is Leo.' }] },
-  { img: leoStory(4), lines: [{ who: 'pip', text: 'How are you, Leo?' }, { who: 'leo', text: 'I am sad. My red cap is lost.' }] },
-  { img: leoStory(5), lines: [{ who: 'pip', text: 'Come on, Leo! Let’s find it!' }] },
-  { img: leoStory(6), lines: [{ who: 'pip', text: 'Mia, this is my friend Leo.' }, { who: 'mia', text: 'Hello, Leo! Nice to meet you.' }] },
-  { img: leoStory(7), lines: [{ who: 'bella', text: 'Hi, Leo! I’m Bella. Look! A red cap!' }] },
-  { img: leoStory(8), lines: [{ who: 'willow', text: 'No, no! That is my red hat!' }] },
-  { img: leoStory(9), lines: [{ who: 'mia', text: 'Look! The cap is on the cat!' }] },
-  { img: leoStory(10), lines: [{ who: 'leo', text: 'My cap! Thank you, friends! I am happy now!' }] },
-  { img: leoStory(11), lines: [{ who: 'pip', text: 'Goodbye, Leo! See you tomorrow!' }, { who: 'leo', text: 'Goodbye, friends!' }] },
+/** A picture question after a story page (owner 2026-10-14: a question after every scene, like the Pre-A1 films):
+ *  asked once the child has read the page; `options` are pictures with their words (A1 reads). */
+export type ReaderCheck = { who?: CharKey; question: string; answer: string; options: { label: string; img?: string }[] };
+export type ReaderPage = { img: string; lines: { who?: CharKey; text: string }[]; check?: ReaderCheck };
+export const LEO_STORY: ReaderPage[] = [
+  { img: leoStory(1), lines: [{ text: 'This is Leo. Leo is new in Welcome Town.' }], check: { who: 'pip', question: 'Who is new in Welcome Town?', answer: 'Leo', options: [{ label: 'Leo', img: spr('leo') }, { label: 'Pip', img: spr('pip') }, { label: 'Mia', img: spr('mia') }] } },
+  { img: leoStory(2), lines: [{ who: 'pip', text: 'Hello! My name is Pip. What’s your name?' }], check: { who: 'mia', question: 'Who says hello to Leo?', answer: 'Pip', options: [{ label: 'Bella', img: spr('bella') }, { label: 'Pip', img: spr('pip') }, { label: 'Willow', img: spr('willow') }] } },
+  { img: leoStory(3), lines: [{ who: 'leo', text: 'Hi, Pip! My name is Leo.' }], check: { who: 'pip', question: 'What is his name?', answer: 'Leo', options: [{ label: 'Pip', img: spr('pip') }, { label: 'Leo', img: spr('leo') }, { label: 'Mia', img: spr('mia') }] } },
+  { img: leoStory(4), lines: [{ who: 'pip', text: 'How are you, Leo?' }, { who: 'leo', text: 'I am sad. My red cap is lost.' }], check: { who: 'pip', question: 'What is lost?', answer: 'A red cap', options: [{ label: 'A red cap', img: '/lep1/items/item-cap.png' }, { label: 'A hat', img: '/lep1/items/item-hat.png' }, { label: 'A ball', img: '/lep1/items/item-ball.png' }] } },
+  { img: leoStory(5), lines: [{ who: 'pip', text: 'Come on, Leo! Let’s find it!' }], check: { who: 'leo', question: 'Who helps Leo?', answer: 'Pip', options: [{ label: 'Mia', img: spr('mia') }, { label: 'Pip', img: spr('pip') }, { label: 'Bella', img: spr('bella') }] } },
+  { img: leoStory(6), lines: [{ who: 'pip', text: 'Mia, this is my friend Leo.' }, { who: 'mia', text: 'Hello, Leo! Nice to meet you.' }], check: { who: 'pip', question: 'Who meets Leo?', answer: 'Mia', options: [{ label: 'Mia', img: spr('mia') }, { label: 'Willow', img: spr('willow') }, { label: 'Bella', img: spr('bella') }] } },
+  { img: leoStory(7), lines: [{ who: 'bella', text: 'Hi, Leo! I’m Bella. Look! A red cap!' }], check: { who: 'pip', question: 'What does Bella see?', answer: 'A red cap', options: [{ label: 'A ball', img: '/lep1/items/item-ball.png' }, { label: 'A cat', img: '/lep1/items/item-cat.png' }, { label: 'A red cap', img: '/lep1/items/item-cap.png' }] } },
+  { img: leoStory(8), lines: [{ who: 'willow', text: 'No, no! That is my red hat!' }], check: { who: 'pip', question: 'Whose hat is it?', answer: 'Willow', options: [{ label: 'Bella', img: spr('bella') }, { label: 'Willow', img: spr('willow') }, { label: 'Leo', img: spr('leo') }] } },
+  { img: leoStory(9), lines: [{ who: 'mia', text: 'Look! The cap is on the cat!' }], check: { who: 'pip', question: 'Where is the cap?', answer: 'On the cat', options: [{ label: 'On the cat', img: '/lep1/items/item-cat.png' }, { label: 'On the hat', img: '/lep1/items/item-hat.png' }, { label: 'In the box', img: '/lep1/items/item-toybox.png' }] } },
+  { img: leoStory(10), lines: [{ who: 'leo', text: 'My cap! Thank you, friends! I am happy now!' }], check: { who: 'pip', question: 'How is Leo now?', answer: 'Happy', options: [{ label: 'Sad' }, { label: 'Happy' }, { label: 'Angry' }] } },
+  { img: leoStory(11), lines: [{ who: 'pip', text: 'Goodbye, Leo! See you tomorrow!' }, { who: 'leo', text: 'Goodbye, friends!' }], check: { who: 'pip', question: 'What do they say?', answer: 'Goodbye!', options: [{ label: 'Hello!' }, { label: 'Thank you!' }, { label: 'Goodbye!' }] } },
 ];
 
 /* Rebuilt 2026-10-12 to the approved Unit 1 plan (docs/a1-unit-1-welcome-town.md §5.1; owner: "some activities don't
@@ -2746,7 +2751,7 @@ export const LESSON_6_SCENES: Scene[] = classroomLook([
     lines: ['Happy Hen hops.', 'Sad Sam sits.', 'Ten tiny teddies.', 'Fun Fred finds a frog.'],
   },
   {
-    id: 'wt6-speed-read', kind: 'reader', bg: bgL1Reading, title: 'Speed Reading: Leo’s First Day', doneLine: 'Wow! Fast and clear — super reading!',
+    id: 'wt6-speed-read', kind: 'reader', noChecks: true, bg: bgL1Reading, title: 'Speed Reading: Leo’s First Day', doneLine: 'Wow! Fast and clear — super reading!',
     teacher: 'Reading: Game Day speed read! The student reads pages 1-4 on their own (🔊 only for help) — then once more, faster.',
     pages: LEO_STORY.slice(0, 4),
   },

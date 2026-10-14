@@ -1438,6 +1438,17 @@ export const LESSON_1_SCENES: Scene[] = [
   { id: 'meet-bella', kind: 'meet', focus: ['Nice to meet you'], bg: sceneBellaBigTree, who: 'bella', teacher: 'A bunny hops over. Tap Bella to say hi!', line: 'Hello! I am Bella. Nice to meet you!', repeat: 'Nice to meet you!' },
   { id: 'echo-nice', kind: 'echo', bg: sceneBellaBigTree, who: 'bella', teacher: 'Repeat after Bella: Nice to meet you!', word: 'Nice to meet you!' },
   {
+    // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words).
+    id: 'u1l1-listen-match', kind: 'listen-match', bg: bgBigTree, who: 'pip',
+    teacher: "Listen and match! Tap a speaker — a friend says hello — then tap that friend. The child says it too: I am Pip!",
+    prompt: 'Listen and match!', doneLine: "You know all your friends!",
+    items: [
+      { label: 'Pip', img: getEmotionSprite('pip', 'happy'), say: "Hello! I am Pip!", who: 'pip' },
+      { label: 'Mia', img: getEmotionSprite('mia', 'happy'), say: "Hi! My name is Mia!", who: 'mia' },
+      { label: 'Bella', img: getEmotionSprite('bella', 'happy'), say: "Hello! I am Bella!", who: 'bella' },
+    ],
+  },
+  {
     id: 'who', kind: 'who-said-it', bg: bgHideSeek, teacher: 'Listen! Who is talking? Tap the friend.',
     rounds: [
       { line: 'Hi! My name is Mia!', who: 'mia' },
@@ -1634,6 +1645,18 @@ export const LESSON_2_SCENES: Scene[] = [
     ],
     newcomer: { who: 'willow', xPct: 83, yPct: 60 },
     question: 'What is your name?', answer: 'My name is Willow!', phonics: '/w/ /w/ Willow!',
+  },
+  {
+    // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words).
+    id: 'u1l2-listen-match', kind: 'listen-match', bg: bgMeetWillowGroup, who: 'pip',
+    teacher: "Listen and match! A friend says their name — the child taps that friend and says it: My name is Willow!",
+    prompt: 'Listen and match!', doneLine: "You know every name!",
+    items: [
+      { label: 'Willow', img: getEmotionSprite('willow', 'happy'), say: "Hello! My name is Willow!", who: 'willow' },
+      { label: 'Pip', img: getEmotionSprite('pip', 'happy'), say: "My name is Pip!", who: 'pip' },
+      { label: 'Mia', img: getEmotionSprite('mia', 'happy'), say: "My name is Mia!", who: 'mia' },
+      { label: 'Bella', img: getEmotionSprite('bella', 'happy'), say: "My name is Bella!", who: 'bella' },
+    ],
   },
   {
     id: 'l2-model-w', kind: 'sound-model', bg: bgNameCarnivalBridge, who: 'pip', letter: 'W', phoneme: '/w/', sound: 'wuh', teacher: 'At the water bridge, Pip models /w/ before practice.',
@@ -1864,6 +1887,17 @@ export const LESSON_3_SCENES: Scene[] = [
       { who: 'pip', emotion: 'happy', label: 'Happy.' },
       { who: 'mia', emotion: 'sad', label: 'Sad.' },
       { who: 'bella', emotion: 'angry', label: 'Angry.' },
+    ],
+  },
+  {
+    // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words).
+    id: 'u1l3-listen-match', kind: 'listen-match', bg: bgFeelingsMeadow, who: 'pip',
+    teacher: "Listen and match! Tap a speaker — Happy! Sad! Angry! — then tap the friend with that face. The child says the word.",
+    prompt: 'Listen and match!', doneLine: "Happy, sad, angry — you know them all!",
+    items: [
+      { label: 'Happy', img: getEmotionSprite('pip', 'happy'), say: "Happy!", who: 'pip' },
+      { label: 'Sad', img: getEmotionSprite('mia', 'sad'), say: "Sad!", who: 'mia' },
+      { label: 'Angry', img: getEmotionSprite('bella', 'angry'), say: "Angry!", who: 'bella' },
     ],
   },
   {
@@ -2166,6 +2200,18 @@ export const LESSON_4_SCENES: Scene[] = [
   { id: 'l4-leo-age', kind: 'meet', focus: ['seven'], bg: bgL4LeoSeven, who: 'leo', teacher: 'Leo is SEVEN! Repeat with Leo: I am seven.', line: 'Hi! I am Leo. I am seven!', repeat: 'I am seven.' },
   { id: 'l4-willow-age', kind: 'meet', focus: ['four'], bg: bgL4WillowFour, who: 'willow', teacher: 'Willow is FOUR! Repeat with Willow: I am four.', line: 'Hello! I am Willow. I am four!', repeat: 'I am four.' },
   { id: 'l4-pip-age', kind: 'meet', focus: ['six'], bg: bgL4PipSix, who: 'pip', teacher: 'Pip is SIX! Repeat with Pip: I am six.', line: 'Hi friends! I am Pip. I am six!', repeat: 'I am six.' },
+  {
+    // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words).
+    id: 'u1l4-listen-match', kind: 'listen-match', bg: bgL4Party, who: 'pip',
+    teacher: "Listen and match! A friend says their age — the child taps that friend: I am five → Bella! Then says it.",
+    prompt: 'Listen and match!', doneLine: "You know how old your friends are!",
+    items: [
+      { label: 'Bella', img: getEmotionSprite('bella', 'happy'), say: "I am five!", who: 'bella' },
+      { label: 'Mia', img: getEmotionSprite('mia', 'happy'), say: "I am six!", who: 'mia' },
+      { label: 'Leo', img: getEmotionSprite('leo', 'happy'), say: "I am seven!", who: 'leo' },
+      { label: 'Willow', img: getEmotionSprite('willow', 'happy'), say: "I am four!", who: 'willow' },
+    ],
+  },
   { id: 'l4-echo-question', kind: 'echo', bg: bgL4Party, who: 'pip', teacher: 'Say it with Pip! Point to a friend and ask the big question.', word: 'How old are you?', hearWord: 'How old are you?' },
   { id: 'l4-echo-i-am-five', kind: 'echo', bg: bgL4Party, who: 'bella', teacher: 'Bella answers. Repeat two times, then say YOUR age.', word: 'I am five.', hearWord: 'I am five.' },
   { id: 'l4-numbers-learn', kind: 'numbers-learn', bg: bgL4PlainParty, who: 'pip', from: 1, to: 10, teacher: "Let's count together! Tap each number to hear Pip say it. Press Next when the student can say them all." },
@@ -2876,6 +2922,18 @@ export const LESSON_6_SCENES: Scene[] = [
       { who: 'bella', emotion: 'sad', pronoun: 'She', sentence: 'Bella is sad. She is sad.' },
       { who: 'pip', emotion: 'angry', pronoun: 'He', sentence: 'Pip is angry. He is angry.' },
       { who: 'mia', emotion: 'happy', pronoun: 'She', sentence: 'Mia is happy. She is happy.' },
+    ],
+  },
+  {
+    // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words).
+    id: 'u1l6-listen-match', kind: 'listen-match', bg: bgFeelingsMeadow, who: 'pip',
+    teacher: "Listen and match! He is happy. She is sad. — the child taps the right friend and says the sentence.",
+    prompt: 'Listen and match!', doneLine: "He, she — super!",
+    items: [
+      { label: 'Leo', img: getEmotionSprite('leo', 'happy'), say: "He is happy.", who: 'leo' },
+      { label: 'Bella', img: getEmotionSprite('bella', 'sad'), say: "She is sad.", who: 'bella' },
+      { label: 'Pip', img: getEmotionSprite('pip', 'angry'), say: "He is angry.", who: 'pip' },
+      { label: 'Mia', img: getEmotionSprite('mia', 'happy'), say: "She is happy.", who: 'mia' },
     ],
   },
   {

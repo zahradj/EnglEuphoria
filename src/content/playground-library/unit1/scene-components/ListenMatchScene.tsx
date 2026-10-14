@@ -94,12 +94,12 @@ export function ListenMatchScene({ scene, onWin, onNext, sync }: { scene: Listen
       </div>
 
       {/* the pictures */}
-      <div className="absolute inset-x-[12%] top-[19%] bottom-[26%] z-20 grid gap-[1.4vh]" style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`, gridTemplateRows: `repeat(${Math.ceil(scene.items.length / cols)}, minmax(0, 1fr))` }}>
+      <div className={`absolute top-[19%] bottom-[26%] z-20 grid gap-[1.4vh] ${scene.items.length <= 4 ? 'inset-x-[24%]' : 'inset-x-[12%]'}`} style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`, gridTemplateRows: `repeat(${Math.ceil(scene.items.length / cols)}, minmax(0, 1fr))` }}>
         {scene.items.map((it, i) => {
           const ok = matchedSet.has(i);
           return (
             <motion.button key={`${it.label}-${i}`} type="button" onClick={() => void pick(i)} aria-label={it.label}
-              className={`relative flex min-h-0 items-center justify-center rounded-[3vh] border-[0.6vh] shadow-xl transition-colors ${ok ? 'border-emerald-400 bg-emerald-50/80' : picked >= 0 ? 'border-amber-300 bg-white/70' : 'border-white/70 bg-white/55'}`}
+              className={`relative flex min-h-0 items-center justify-center rounded-[3vh] border-[0.6vh] shadow-xl transition-colors ${ok ? 'border-emerald-400 bg-emerald-50/90' : picked >= 0 ? 'border-amber-300 bg-white/85' : 'border-white/80 bg-white/75'}`}
               animate={state.wrong === i ? { x: [0, -12, 12, -7, 0] } : ok && !reduce ? { scale: [1, 1.08, 1] } : {}}
               transition={{ duration: 0.45 }}>
               <img src={it.img} alt="" draggable={false} className="h-[82%] w-[82%] object-contain" style={{ filter: STICKER_FILTER }} />
