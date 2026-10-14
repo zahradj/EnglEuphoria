@@ -29,7 +29,7 @@ export interface LadderStep {
 }
 
 /** Seasons per CEFR level in the approved roadmap (src/curriculum/academy/levels). */
-const SEASONS_PER_LEVEL: Record<AcademyLevel, number> = { A1: 10, A2: 12, B1: 16, B2: 16, C1: 16 };
+const SEASONS_PER_LEVEL: Record<AcademyLevel, number> = { A1: 12, A2: 14, B1: 18, B2: 18, C1: 18 };
 // SESSIONS_PER_SEASON (8) is exported from ./types; imported here, not re-exported, so `export *` in index.ts stays unambiguous.
 
 /** Working titles of the Pre-A1 Seasons (first 3 = Pre-A1 Lite). */
@@ -45,24 +45,24 @@ export const LADDER_PROFILES: Record<LadderProfileId, LadderStep[]> = {
   lean: [
     step('pre-a1', 'Pre-A1', 'Pre-A1', 'pre', null, null, 3, true),
     step('a1', 'A1', 'A1', 'core', 'A1', [1, 6], 0, true),
-    step('a1-upper', 'A1 Upper', 'A1', 'upper', 'A1', [7, 10], 0, false),
-    step('a2', 'A2', 'A2', 'core', 'A2', [1, 12], 0, true),
-    step('b1', 'B1', 'B1', 'core', 'B1', [1, 16], 0, true),
-    step('b2', 'B2', 'B2', 'core', 'B2', [1, 16], 0, true),
-    step('c1', 'C1', 'C1', 'core', 'C1', [1, 16], 0, true),
+    step('a1-upper', 'A1 Upper', 'A1', 'upper', 'A1', [7, 12], 0, false),
+    step('a2', 'A2', 'A2', 'core', 'A2', [1, 14], 0, true),
+    step('b1', 'B1', 'B1', 'core', 'B1', [1, 18], 0, true),
+    step('b2', 'B2', 'B2', 'core', 'B2', [1, 18], 0, true),
+    step('c1', 'C1', 'C1', 'core', 'C1', [1, 18], 0, true),
   ],
   full: [
     step('pre-a1', 'Pre-A1', 'Pre-A1', 'pre', null, null, 6, true),
     step('a1', 'A1', 'A1', 'core', 'A1', [1, 6], 0, true),
-    step('a1-upper', 'A1 Upper', 'A1', 'upper', 'A1', [7, 10], 0, false),
+    step('a1-upper', 'A1 Upper', 'A1', 'upper', 'A1', [7, 12], 0, false),
     step('a2', 'A2', 'A2', 'core', 'A2', [1, 6], 0, true),
-    step('a2-upper', 'A2 Upper', 'A2', 'upper', 'A2', [7, 12], 0, true),
+    step('a2-upper', 'A2 Upper', 'A2', 'upper', 'A2', [7, 14], 0, true),
     step('b1', 'B1', 'B1', 'core', 'B1', [1, 8], 0, true),
-    step('b1-upper', 'B1 Upper', 'B1', 'upper', 'B1', [9, 16], 0, true),
+    step('b1-upper', 'B1 Upper', 'B1', 'upper', 'B1', [9, 18], 0, true),
     step('b2', 'B2', 'B2', 'core', 'B2', [1, 8], 0, true),
-    step('b2-upper', 'B2 Upper', 'B2', 'upper', 'B2', [9, 16], 0, true),
+    step('b2-upper', 'B2 Upper', 'B2', 'upper', 'B2', [9, 18], 0, true),
     step('c1', 'C1', 'C1', 'core', 'C1', [1, 8], 0, true),
-    step('c1-upper', 'C1 Upper', 'C1', 'upper', 'C1', [9, 16], 0, false),
+    step('c1-upper', 'C1 Upper', 'C1', 'upper', 'C1', [9, 18], 0, false),
   ],
 };
 

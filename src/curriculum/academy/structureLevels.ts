@@ -17,6 +17,11 @@
 //  - past perfect only after past simple and past continuous are secure;
 //  - phrasal verbs are taught as recycled vocabulary, not as a grammar unit.
 import type { AcademyLevel, Confidence } from './types';
+import { A1_NEW_STRUCTURES } from './structures/a1';
+import { A2_NEW_STRUCTURES } from './structures/a2';
+import { B1_NEW_STRUCTURES } from './structures/b1';
+import { B2_NEW_STRUCTURES } from './structures/b2';
+import { C1_NEW_STRUCTURES } from './structures/c1';
 
 export interface StructureInfo {
   label: string;
@@ -26,6 +31,7 @@ export interface StructureInfo {
 }
 
 export const STRUCTURES: Record<string, StructureInfo> = {
+  ...A1_NEW_STRUCTURES, ...A2_NEW_STRUCTURES, ...B1_NEW_STRUCTURES, ...B2_NEW_STRUCTURES, ...C1_NEW_STRUCTURES,
   // ---------------------------------------------------------------- A1
   'be-present': { label: 'be (am/is/are): statements, questions, negatives', floor: 'A1', confidence: 'known' },
   'possessive-adjectives': { label: 'possessive adjectives (my/your/his/her/our/their)', floor: 'A1', confidence: 'known' },
