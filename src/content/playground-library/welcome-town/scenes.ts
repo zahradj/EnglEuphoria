@@ -625,6 +625,12 @@ export type Scene =
       /** The lab owner (Professor Glob), shown by the machine while the child pulls the lever. */
       host?: { name: string; img: string };
       rounds: { reason: string; img: string; feeling: number; choices: number[] }[]; doneLine: string; }
+  | { id: string; kind: 'monster-builder'; bg: string; teacher: string; title: string; who: CharKey;
+      /** ★ Monster Builder (A1 U5L2, docs/a1-unit-5-monster-town.md §5.2): a blank monster body; the child hears
+       *  "She's got three eyes and long horns." and builds it from the part trays (eyes 1-3, horns, mouth), then taps
+       *  Check — every part must match the sentence. `body` sticker is square; parts sit at % of it. */
+      body: string; eye: string; horns: { label: string; img: string }[]; mouths: { label: string; img: string }[];
+      rounds: { line: string; eyes: 1 | 2 | 3; horns: number; mouth: number; name: string }[]; doneLine: string; }
   | { id: string; kind: 'festival-cafe'; bg: string; teacher: string; title: string; who: CharKey;
       /** `order` = menu indexes the tray must hold exactly; `offer` = the polite offer the child then SAYS (its item is
        *  added to the tray when the customer says "Yes, please!"). */
