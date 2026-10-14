@@ -1,16 +1,18 @@
-import { useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CalendarCheck, Flame } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { summary } from '../curriculum/academy';
 import { loadPractice } from './practiceStore';
+import { syncPractice } from '@/services/academyPracticeService';
 
 /** My Lessons banner: how many words are due in today's Daily 10 and a button to play it. Hidden until the student has finished a lesson. */
 export function Daily10Banner({ today = new Date().toISOString().slice(0, 10) }: { today?: string }) {
   const navigate = useNavigate();
   const { user } = useAuth();
   const key = (user as { id?: string } | null)?.id ?? 'device';
-  const data = useMemo(() => loadPractice(key), [key]);
+  const [data, setData] = useState(() => loadPractice(key));
+  useEffect(() => { if (key !== 'device') void syncPractice(key).then(setData); }, [key]);
   if (data.items.length === 0) return null;
   const counts = summary(data.items, today);
   const doneToday = data.daily10Days.includes(today);

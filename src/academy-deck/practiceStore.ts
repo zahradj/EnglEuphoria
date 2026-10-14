@@ -54,3 +54,22 @@ export function reportInput(d: PracticeData, level: GapReportInput['level'], tod
     spokenLastLesson: last?.spoken,
   };
 }
+
+/**
+ * Merge two practice records (this device and the database) without losing anything: per Daily 10 item the state with the later last practice wins
+ * (a higher box on a tie), lessons keep the later play of each, Daily 10 days are the union.
+ */
+export function mergePractice(a: PracticeData, b: PracticeData): PracticeData {
+  const items = new Map<string, DailyItem>();
+  for (const s of [...a.items, ...b.items]) {
+    const cur = items.get(s.item);
+    const better = !cur || (s.lastOn ?? '') > (cur.lastOn ?? '') || ((s.lastOn ?? '') === (cur.lastOn ?? '') && s.box > cur.box);
+    if (better) items.set(s.item, s);
+  }
+  const lessons = new Map<string, PracticeData['lessons'][number]>();
+  for (const l of [...a.lessons, ...b.lessons]) {
+    const cur = lessons.get(l.id);
+    if (!cur || l.on > cur.on || (l.on === cur.on && l.spoken > cur.spoken)) lessons.set(l.id, l);
+  }
+  return { items: [...items.values()], lessons: [...lessons.values()], daily10Days: [...new Set([...a.daily10Days, ...b.daily10Days])].sort() };
+}

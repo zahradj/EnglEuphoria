@@ -5,6 +5,7 @@ import { ACADEMY_RECALL_NODES, PRE_A1_RECALL_NODES } from '../../curriculum/acad
 import { Deck } from '../Deck';
 import { ACADEMY_DECK_BLUEPRINT_IDS } from '../lessonRegistry';
 import { loadPractice, recordLesson, savePractice } from '../practiceStore';
+import { syncPractice } from '@/services/academyPracticeService';
 import { loadDeckScript } from '../lessonScripts';
 import type { DeckScript } from '../types';
 
@@ -19,6 +20,7 @@ export default function GenericDeckLesson({ id, onBack }: { id: string; onBack?:
     if (node) {
       const key = (user as { id?: string } | null)?.id ?? 'device';
       savePractice(key, recordLesson(loadPractice(key), id, node.items, new Date().toISOString().slice(0, 10), spoken));
+      if (key !== 'device') void syncPractice(key);
     }
     onBack?.();
   };

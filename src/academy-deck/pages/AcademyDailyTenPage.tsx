@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
@@ -6,6 +6,7 @@ import { summary } from '../../curriculum/academy';
 import { Deck } from '../Deck';
 import { buildDailyTenDeck } from '../dailyTenDeck';
 import { loadPractice, recordDaily10, savePractice } from '../practiceStore';
+import { syncPractice } from '@/services/academyPracticeService';
 
 const todayISO = () => new Date().toISOString().slice(0, 10);
 
@@ -19,6 +20,8 @@ export default function AcademyDailyTenPage() {
   const [done, setDone] = useState(false);
   const deck = useMemo(() => buildDailyTenDeck(data.items, today), [data.items, today]);
   const wrongBySlide = useRef<Record<string, number>>({});
+  // bring in what this student practised on other devices (fails soft)
+  useEffect(() => { if (key !== 'device') void syncPractice(key).then(setData); }, [key]);
   const counts = summary(data.items, today);
 
   const finish = () => {
@@ -28,6 +31,7 @@ export default function AcademyDailyTenPage() {
     savePractice(key, next);
     setData(next);
     setDone(true);
+    if (key !== 'device') void syncPractice(key);
   };
 
   const back = () => navigate('/dashboard/academy?tab=lessons');
