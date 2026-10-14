@@ -7,7 +7,7 @@ twister in every lesson**, **30-49 pages per lesson**, **no game twice in the un
 GIFs only after a scenario and the owner's OK). Every activity gets the **aesthetic pass** (CLAUDE.md, 2026-10-14), and
 after new words always comes **Read and Match**, then another game.
 
-**Status:** draft for the owner — waiting for approval (say "next" to approve, or tell me what to change).
+**Status:** approved (owner, 2026-10-14: "go") — building.
 
 ## 1. Where we start
 
@@ -219,4 +219,4 @@ with family photos · L7 show your medal and describe a friend.
 No paid video. Database rows after the branch is merged (the Supabase connector is not connected in this session, so
 the rows wait until it is).
 
-**Approval:** waiting for the owner.
+**Approval:** owner, 2026-10-14: "go"
