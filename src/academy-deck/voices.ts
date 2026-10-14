@@ -5,7 +5,7 @@ import type { CastName } from './types';
 
 export const ACADEMY_VOICES: Record<CastName, string> = {
   Vee: 'TX3LPaxmHKxFdv7VOQHJ', // Liam
-  Ava: 'MF3mGyEYCl7XYWbV9V6O', // Elli
+  Ava: 'cgSgspJ2msm6clMCkdW9', // Jessica (owner 2026-10-12: Ava sounded like a man; a clearly young female American voice)
   Theo: 'bIHbv24MWmeRgasZH58o', // Will
   Mia: 'XrExE9yKIg1WjnnlVkGX', // Matilda
 };

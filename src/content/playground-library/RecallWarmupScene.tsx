@@ -31,12 +31,15 @@ export interface RecallWarmupSceneData {
   fromLabel: string;
   /** 3-5 words from the lesson before: `say` is Pip's prompt ("Find the brother!"). */
   items: { word: string; say: string; img: string }[];
+  /** Listen-only: the banner hides `say` (the child must hear it, not read it) and shows RECALL_LISTEN; 🔊 replays it. */
+  listen?: boolean;
 }
 type Recall = RecallWarmupSceneData;
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 export const RECALL_INTRO = 'Do you remember? Listen and find it!';
 export const RECALL_TRY = 'Try again!';
 export const RECALL_DONE = 'You remember! Great job!';
+export const RECALL_LISTEN = '👂 Listen! Who is it?';
 export const recallYes = (word: string) => `Yes! ${cap(word)}!`;
 const isScene = (img: string) => img.includes('/scenes/');
 
@@ -104,7 +107,7 @@ export function RecallWarmupScene({ scene, onNext, sync }: { scene: Recall; onNe
       <div className="pointer-events-none absolute inset-x-0 top-16 z-30 flex flex-col items-center gap-1 px-14">
         <span className="rounded-full bg-white/90 px-4 py-1 text-sm font-black text-violet-700 shadow">🧠 Remember? · {scene.fromLabel}</span>
         <span className="text-center font-black leading-tight text-white" style={{ ...THICK_WORDS, fontSize: 'clamp(1.4rem, calc(3.4*var(--svw,1vw)), 2.8rem)' }}>
-          {item ? item.say : RECALL_DONE}
+          {item ? (scene.listen ? RECALL_LISTEN : item.say) : RECALL_DONE}
         </span>
       </div>
       {item && <button onClick={() => cueSpeak(item.say, scene.who)} aria-label="Hear it again" className="absolute right-3 top-16 z-30 rounded-full bg-white/90 px-4 py-2 text-lg font-black text-orange-700 shadow-lg active:scale-95">🔊</button>}

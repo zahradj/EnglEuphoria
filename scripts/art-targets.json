@@ -1489,5 +1489,13 @@
       "public/welcome-town/sprites/willow-wave.png"
     ],
     "prompt": "A single sticker: Willow the blue bird with a green scarf, HUNGRY: holding an EMPTY yellow bowl in both wings in front of her (the whole bowl visible), looking at it with a hopeful, hungry face, mouth open a little. Cute kawaii cartoon picture-book style exactly like the reference character: same character, same face, same colours and proportions, thick closed dark-brown outline all the way around the body, soft flat colours. Full body, front view, centred, the whole character visible with empty space around it. Plain pure white background, no shadow on the ground, no floor, no text, no other objects."
+  },
+  {
+    "out": "public/magic-castle/scenes/bg-castle-tower-empty.png",
+    "refs": [
+      "public/magic-castle/scenes/bg-castle-study-empty.png",
+      "public/magic-castle/scenes/bg-castle-bedroom-tour.png"
+    ],
+    "prompt": "A round wizard's tower room inside the same castle, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, flat warm colours, soft shading), warm sunset light. Curved stone walls, a wooden plank floor, two tall arched windows on the back wall with an orange sunset sky, a wooden door with an arched top on the left wall, a small stone fireplace on the right wall. The room is COMPLETELY EMPTY: no furniture, no rug, no people, no animals, no objects on the floor. The whole lower half of the picture is clear empty floor. Wide 16:9 view, eye level, no text."
   }
 ]

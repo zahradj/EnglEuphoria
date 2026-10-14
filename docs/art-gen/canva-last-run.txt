@@ -1,8 +1,5 @@
-+ public/lep1/items/tmp-sheet-gumball.png (1536, 1024) raw
-+ public/lep1/items/tmp-sheet-pipslide.png (1536, 1024) raw
-+ public/lep1/items/tmp-sheet-frog.png (1536, 1024) raw
-+ public/lep1/items/tmp-sheet-slide.png (1920, 1080) raw
-+ public/lep1/scenes/bg-game-river-wide.png (1376, 768)
-+ public/lep1/scenes/bg-game-sweetshop-wide.png (1376, 768)
-+ public/lep1/scenes/bg-game-playground-wide.png (1376, 768)
-7/7 saved
++ public/academy-art/bg/story-fair-1.png (1376, 768)
++ public/academy-art/bg/story-fair-2.png (1376, 768)
++ public/academy-art/bg/story-fair-3.png (1376, 768)
++ public/academy-art/bg/story-fair-4.png (1376, 768)
+4/4 saved

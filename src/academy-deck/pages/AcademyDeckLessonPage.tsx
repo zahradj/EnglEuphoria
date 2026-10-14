@@ -3,10 +3,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { getAcademyDeckLesson } from '../lessonRegistry';
+import { hasDeckScript } from '../lessonScripts';
 import { useAuth } from '@/contexts/AuthContext';
 
 const SignMeUpLesson = lazy(() => import('@/academy-games/signMeUp/SignMeUpLesson'));
 const SignMeUpHomework = lazy(() => import('@/academy-games/signMeUp/SignMeUpHomework'));
+const FakeOrRealLesson = lazy(() => import('./FakeOrRealLesson'));
+const GenericDeckLesson = lazy(() => import('./GenericDeckLesson'));
 
 /** Full-screen player for one Academy deck lesson (or its homework quest). Students come from My Lessons, creators from the Academy Library. */
 export default function AcademyDeckLessonPage({ homework = false }: { homework?: boolean }) {
@@ -17,8 +20,9 @@ export default function AcademyDeckLessonPage({ homework = false }: { homework?:
   const lesson = getAcademyDeckLesson(id);
   const role = (user as { role?: string } | null)?.role;
   const isCreator = role === 'content_creator' || role === 'admin';
-  const back = () => navigate(isCreator ? '/academy-library' : '/dashboard/academy?tab=lessons');
-  const Player = id === 'sign-me-up' ? (homework ? SignMeUpHomework : SignMeUpLesson) : null;
+  const back = () => navigate(isCreator ? '/academy-library' : role === 'teacher' ? '/teacher-dashboard' : '/dashboard/academy?tab=lessons');
+  const generic = !homework && !!id && id !== 'sign-me-up' && id !== 'fake-or-real' && hasDeckScript(id);
+  const Player = id === 'sign-me-up' ? (homework ? SignMeUpHomework : SignMeUpLesson) : id === 'fake-or-real' && !homework ? FakeOrRealLesson : null;
 
   return (
     <div className="relative min-h-screen bg-[#f5f3ff]">
@@ -29,11 +33,11 @@ export default function AcademyDeckLessonPage({ homework = false }: { homework?:
       >
         <ArrowLeft className="h-4 w-4 rtl:rotate-180" /> {t('al.back', 'Back to lessons')}
       </button>
-      {!lesson || !Player ? (
+      {!lesson || (!Player && !generic) ? (
         <p className="p-10 text-center font-bold">{t('al.missing', 'This lesson isn’t available.')}</p>
       ) : (
         <Suspense fallback={<div className="flex items-center justify-center p-16 text-muted-foreground"><Loader2 className="h-6 w-6 animate-spin" /></div>}>
-          <Player onBack={back} />
+          {generic ? <GenericDeckLesson id={id!} onBack={back} /> : Player && <Player onBack={back} />}
         </Suspense>
       )}
     </div>

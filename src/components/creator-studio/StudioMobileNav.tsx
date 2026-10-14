@@ -11,7 +11,7 @@ import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
 const NAV: Array<{ key: CreatorStep; tKey: string; icon: React.ElementType; emoji: string; fallback?: string }> = [
   { key: 'blueprint', tKey: 'nav.blueprint', icon: Map, emoji: '🗺️' },
   
-  { key: 'playground-creator', tKey: 'nav.playground_creator', icon: Sparkles, emoji: '🧒', fallback: 'Playground' },
+  { key: 'playground-creator', tKey: 'nav.playground_library', icon: Sparkles, emoji: '🧒', fallback: 'Playground' },
   { key: 'academy-creator', tKey: 'nav.academy_creator', icon: GraduationCap, emoji: '🎓', fallback: 'Academy' },
   { key: 'success-creator', tKey: 'nav.success_creator', icon: Briefcase, emoji: '💼', fallback: 'Success' },
   { key: 'trial', tKey: 'nav.trial_creator', icon: Zap, emoji: '⚡' },

@@ -88,6 +88,40 @@ export const ACADEMY_GAMES: AcademyGame[] = [
       'Recall: type the past from the present, and the present from the past. Slips come back in the Memory Vault.',
     ],
   },
+  {
+    id: 'silly-sounds',
+    title: 'Silly Sounds Circus',
+    tagline: 'Funny phonics: through rhymes with blue, the k in knife is silent, and a robot teacher knows everything. Hear the sound, catch the silent letter, fix the silly spelling.',
+    skill: 'Phonics · Pronunciation · Spelling',
+    levels: ['A1', 'A2', 'B1'],
+    minutes: '15–20 min',
+    gradient: 'linear-gradient(135deg,#701a75 0%,#c026d3 50%,#f59e0b 100%)',
+    cover: '/academy/games/silly-sounds-cover.jpg',
+    method: 'Ears first (rhymes, odd vowel) → silent letters → silly spelling sentences → say it next to the parrot (private, never scored).',
+    howToPlay: [
+      'Rhyme Roulette: hear a word and pick the one that rhymes, whatever the spelling.',
+      'Odd One Out: hear four words and find the different vowel sound.',
+      'Silent Ninja: tap the letter nobody says (knife, island, listen).',
+      'Spelling Doctor and Parrot Echo: fix silly sentences, then record yourself. Your voice stays on your device and is never scored.',
+    ],
+  },
+  {
+    id: 'always-or-now',
+    title: 'Always or Now?',
+    tagline: 'Present simple or present continuous? Let the cue words decide, spell -s and -ing correctly, avoid the state-verb trap, and laugh at silly breaking news.',
+    skill: 'Grammar · Tenses',
+    levels: ['A1', 'A2', 'B1'],
+    minutes: '20 min',
+    gradient: 'linear-gradient(135deg,#134e4a 0%,#0f766e 45%,#db2777 100%)',
+    cover: '/academy/games/always-or-now-cover.jpg',
+    method: 'Cue words first → choose the tense in a sentence → silly scenes → spelling rules → state-verb trap → type it from memory (spaced review).',
+    howToPlay: [
+      'Cue Sort: always, every day (habit) or now, Look! (happening now)?',
+      'Scene Check: read the cue in a sentence and choose the form.',
+      'Funny Reporter: the same job, with silly breaking news.',
+      'Spell It, No -ing Club and Recall: -s / -ing spelling, state verbs (know, like, want), and typed answers that come back in the Memory Vault.',
+    ],
+  },
 ];
 
 export const getAcademyGame = (id: string | undefined) => ACADEMY_GAMES.find((g) => g.id === id);

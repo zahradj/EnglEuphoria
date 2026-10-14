@@ -5,6 +5,7 @@
 //
 // A blueprint is the *plan* for a session: objective, language load, run of show with the cognitive job of each segment, supports,
 // comfort, recap source. It does not choose the concrete game (academy-activity-selector does) and contains no lesson content.
+import { VOCAB_GAME_MENU, suggestVocabGames, type VocabGamePicks } from './vocabGames';
 import { ACADEMY_CAST_NAMES, CAST_ROLES, GENERIC_HELPER_PART, type AcademyCastName } from './cast';
 import {
   EPISODE_ORDER,
@@ -158,6 +159,13 @@ export const EPISODES: Record<EpisodeType, EpisodeMeta> = {
 };
 
 /**
+ * Vocabulary rule (owner, 2026-10-12): after EVERY vocabulary introduction the student plays TWO different memorising games
+ * (e.g. drag-match + flip-memory with pictures, or a number game + flip-memory) before anything new is taught.
+ * Enforced in the lesson player by src/academy-deck/__tests__/deck.test.tsx ("RULE: after every vocabulary introduction…").
+ */
+export const VOCAB_GAMES_RULE = { gamesPerWordSet: 2, differentKinds: true, before: 'anything new is taught' } as const;
+
+/**
  * Fixed run of show. Core segments are never skipped; flex segments are the teacher's call.
  * `mustHave` = what a lesson plan must contain in that part for the lesson to be effective (research-based, 2026-10-10:
  * docs/academy-effective-lesson-plan.md; evidence logs docs/research/academy-fast-progress-evidence-A.md and -B.md).
@@ -177,12 +185,12 @@ export const RUN_OF_SHOW = [
   {
     name: 'The Drop', minutes: 10, core: true,
     technique: 'comprehensible input with MODELLING: meaning first, then the language in use',
-    mustHave: ['every new word is met first on its own page: a moving picture, its meaning, an example and a clue, BEFORE any game uses it', 'the cast MODEL the target language in use, line by line, with the pattern card (the frame stays, the part that changes is coloured), BEFORE the student produces it', 'nothing is asked that was not first shown or taught', 'a quick understanding check, and a student choice (skin)'],
+    mustHave: ['every new word is met first on its own page: a moving picture, its meaning, an example and a clue, BEFORE any game uses it', 'the cast MODEL the target language in use, line by line, with the pattern card (the frame stays, the part that changes is coloured), BEFORE the student produces it', 'nothing is asked that was not first shown or taught', 'after EVERY word set that is introduced come TWO different memorising games (VOCAB_GAMES_RULE) before anything new is taught', 'a quick understanding check, and a student choice (skin)'],
   },
   {
     name: 'Notice & Build', minutes: 10, core: true,
     technique: 'controlled practice with immediate feedback; noticing then a short explicit rule',
-    mustHave: ['each game trains one named success criterion; no screen without a criterion', 'the rule, if any, is 3 lines or fewer and comes after examples', 'beginners (A1-A2) can choose answers by picture, not only by reading; the meaning cue fades in later retrieval', 'no two neighbouring games of the same kind'],
+    mustHave: ['each game trains one named success criterion; no screen without a criterion', 'after every vocabulary introduction, two different memorising games (e.g. drag-match + flip-memory) help the student remember the words', 'the rule, if any, is 3 lines or fewer and comes after examples', 'beginners (A1-A2) can choose answers by picture, not only by reading; the meaning cue fades in later retrieval', 'no two neighbouring games of the same kind'],
   },
   {
     name: 'Energiser', minutes: 4, core: false,
@@ -207,7 +215,21 @@ export const RUN_OF_SHOW = [
 ] as const;
 
 /**
- * Recommended rhythm (research-based proposal 2026-10-10; frequency and structure are the strongest levers we control).
+ * Pre-A1 run of show (owner 2026-10-12, docs/academy-pre-a1-curriculum.md §3): slower, with a Read part (blending and a decodable text).
+ * Eight parts as well, so slides keep part indexes 0-7; the deck player mirrors it (PRE_A1_PARTS) and a test keeps them equal.
+ */
+export const PRE_A1_RUN_OF_SHOW = [
+  { name: 'Check-in', minutes: 5, core: false, technique: 'low-anxiety start; goal shown; no new language', mustHave: ['a greeting and the day\'s goal with pictures', 'no new language'] },
+  { name: 'Remember?', minutes: 10, core: true, technique: 'retrieval of the last two lessons, production-light', mustHave: ['letters, sounds and words from the last two lessons come back as hear-and-pick or flip memory', 'every item gets feedback'] },
+  { name: 'The Drop', minutes: 8, core: true, technique: 'picture scene with meaning first', mustHave: ['a short picture scene or story that shows the new words in use', 'nothing is asked that was not first shown'] },
+  { name: 'Learn', minutes: 10, core: true, technique: 'a few new items, then two different memorising games', mustHave: ['at most 4 new items taught on their own pages', 'two different memorising games follow (VOCAB_GAMES_RULE)'] },
+  { name: 'Read', minutes: 8, core: true, technique: 'blending and a short decodable text with tap-to-hear', mustHave: ['a blending routine (letters slide together into a word)', 'a reading page whose words are blendable from the sounds taught or are taught whole words', 'every word can be tapped to hear it'] },
+  { name: 'Learn more', minutes: 8, core: true, technique: 'a second small set, then two different games', mustHave: ['at most 4 new items', 'two different memorising games follow'] },
+  { name: 'Mission', minutes: 6, core: true, technique: 'use the language with a cast member: tiles or speech, Take 1, feedback, Take 2', mustHave: ['the student chooses the help', 'Take 1, feedback, short Take 2', 'type-instead-of-speak stays available'] },
+  { name: 'Wrap', minutes: 5, core: true, technique: 'can-do ticks, Daily 10, next clue', mustHave: ['can-do ticks tied to the success criteria', 'the Daily 10 is assigned and the next clue is shown'] },
+] as const;
+
+/** Recommended rhythm (research-based proposal 2026-10-10; frequency and structure are the strongest levers we control).
  * A guideline for planning and sales copy, never a promise of a level by a date.
  */
 export const RECOMMENDED_RHYTHM = {
@@ -293,6 +315,13 @@ export interface AcademyLessonBlueprint {
   release: { job: string; privateFirst: true; seasonRelease?: string };
   clue: { no: number; of: 8; unlockedBy: string };
   supports: (typeof LEVEL_SUPPORTS)[AcademyLevel];
+  /** every vocabulary introduction is followed by two different memorising games */
+  vocabGames: typeof VOCAB_GAMES_RULE & {
+    /** the games the lesson plan may choose from (ids in VOCAB_GAME_MENU) */
+    menu: readonly string[];
+    /** suggested picks for word sets 1-3 of this lesson; the plan may swap any for another menu game (validateVocabGamePicks) */
+    suggested: VocabGamePicks[];
+  };
   comfort: readonly string[];
   /** minimum fun ingredients to include when the session content is written */
   funIngredientsMin: 5;
@@ -462,6 +491,7 @@ export function buildLessonBlueprint(s: SeasonOutline, episodeIndex: number, pre
     release: { job: meta.jobs.release, privateFirst: true, seasonRelease: type === 'finale' ? s.release : undefined },
     clue: { no: meta.no, of: 8, unlockedBy: meta.clueUnlockedBy },
     supports: LEVEL_SUPPORTS[s.level],
+    vocabGames: { ...VOCAB_GAMES_RULE, menu: VOCAB_GAME_MENU.map((g) => g.id), suggested: [0, 1, 2].map((i) => suggestVocabGames(s.level, meta.no, i)) },
     comfort: COMFORT_CONTROLS,
     funIngredientsMin: 5,
     mediation: type === 'finale' || type === 'deep-dive' ? s.mediation : undefined,

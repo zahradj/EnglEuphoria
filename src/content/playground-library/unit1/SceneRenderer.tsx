@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { displayScene } from '../stageLabel';
 import type { Scene } from './scenes';
 import { type ActivitySync } from '../sceneActivitySync';
 import { SpinWheelScene } from '../SpinWheelScene';
@@ -66,6 +67,8 @@ import { RapidRecallScene } from './scene-components/RapidRecallScene';
 import { StickerRewardScene } from './scene-components/StickerRewardScene';
 import { HomeMissionScene } from './scene-components/HomeMissionScene';
 import { LiftFlapScene } from './scene-components/LiftFlapScene';
+import { WindCatchScene } from './scene-components/WindCatchScene';
+import { ListenMatchScene } from './scene-components/ListenMatchScene';
 import { DrawPathScene } from './scene-components/DrawPathScene';
 import { TileRevealScene } from './scene-components/TileRevealScene';
 import { TidyUpScene } from './scene-components/TidyUpScene';
@@ -104,6 +107,18 @@ import { WearingShowScene } from './scene-components/WearingShowScene';
 import { ShoePainterScene } from './scene-components/ShoePainterScene';
 import { DressStudioScene } from './scene-components/DressStudioScene';
 import { ActionRunScene } from './scene-components/ActionRunScene';
+import { TalentShowScene } from './scene-components/TalentShowScene';
+import { CampfireSaysScene } from './scene-components/CampfireSaysScene';
+import { CanItScene } from './scene-components/CanItScene';
+import { ObstacleRunScene } from './scene-components/ObstacleRunScene';
+import { WordBoardScene } from './scene-components/WordBoardScene';
+import { HomeHuntScene } from './scene-components/HomeHuntScene';
+import { FlipSayScene } from './scene-components/FlipSayScene';
+import { PictureMazeScene } from './scene-components/PictureMazeScene';
+import { BearHuntTrailScene } from './scene-components/BearHuntTrailScene';
+import { CharadesScene } from './scene-components/CharadesScene';
+import { HeroTrialsScene } from './scene-components/HeroTrialsScene';
+import { LevelTestScene } from './scene-components/LevelTestScene';
 import { SoundMoleScene } from './scene-components/SoundMoleScene';
 import { LetterMonstersScene } from './scene-components/LetterMonstersScene';
 import { SoundFishScene } from './scene-components/SoundFishScene';
@@ -239,10 +254,15 @@ export function SceneRenderer(props: {
   heartsRemaining: number;
   lessonNumber?: number;
   activitySync?: ActivitySync;
+  /** Live class: which screen this is and the class booking (level tests save the result from the teacher's screen). */
+  role?: 'teacher' | 'student';
+  roomId?: string;
+  activityUnlocked?: boolean;
 }) {
-  const { scene, lessonNumber } = props;
+  const { lessonNumber } = props;
+  const scene = displayScene(props.scene);
   const teacherTip = lessonNumber === 3 ? L3_TEACHER_TIPS[scene.id] : undefined;
-  const instruction = (scene as { teacher?: string }).teacher;
+  const instruction = (props.scene as { teacher?: string }).teacher;
   const tipOverlay = (instruction || teacherTip) ? <TeacherTip key={scene.id} instruction={instruction} tip={teacherTip} /> : null;
   const content = (() => {
   switch (scene.kind) {
@@ -296,6 +316,8 @@ export function SceneRenderer(props: {
     case 'sticker-reward': return <StickerRewardScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'home-mission': return <HomeMissionScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'lift-flap': return <LiftFlapScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
+    case 'listen-match': return <ListenMatchScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
+    case 'wind-catch': return <WindCatchScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'draw-path': return <DrawPathScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} sync={props.activitySync} />;
     case 'simon-touch': return <SimonTouchScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} sync={props.activitySync} />;
     case 'body-stack': return <BodyStackScene scene={scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} sync={props.activitySync} />;
@@ -325,6 +347,18 @@ export function SceneRenderer(props: {
     case 'sound-mole': return <SoundMoleScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'letter-monsters': return <LetterMonstersScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'sound-fish': return <SoundFishScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
+    case 'can-it': return <CanItScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
+    case 'obstacle-run': return <ObstacleRunScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
+    case 'word-board': return <WordBoardScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
+    case 'home-hunt': return <HomeHuntScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
+    case 'picture-maze': return <PictureMazeScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
+    case 'flip-say': return <FlipSayScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
+    case 'level-test': return <LevelTestScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} role={props.role} roomId={props.roomId} />;
+    case 'hero-trials': return <HeroTrialsScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
+    case 'charades': return <CharadesScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
+    case 'bear-hunt-trail': return <BearHuntTrailScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
+    case 'campfire-says': return <CampfireSaysScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
+    case 'talent-show': return <TalentShowScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'action-run': return <ActionRunScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'dress-studio': return <DressStudioScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;
     case 'shoe-painter': return <ShoePainterScene scene={scene} onWin={props.onWin} onNext={props.onNext} sync={props.activitySync} />;

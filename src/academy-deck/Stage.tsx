@@ -7,11 +7,11 @@ const hue = (id: string) => Array.from(id).reduce((a, c) => (a * 31 + c.charCode
 export const COLOR: Record<CastName, string> = { Vee: '#38bdf8', Ava: '#a78bfa', Theo: '#34d399', Mia: '#fb923c' };
 
 /** The full-bleed scene plate behind a slide. A calm gradient shows if the picture is missing. */
-export function Plate({ id, artBase }: { id: string; artBase?: string }) {
+export function Plate({ id, artBase, phase }: { id: string; artBase?: string; /** in: fades in over the old scene; out: the old scene fading away underneath */ phase?: 'in' | 'out' }) {
   const [failed, setFailed] = useState(false);
   const h = 250 + (hue(id) % 50);
   return (
-    <div className="ad-plate" aria-hidden="true" data-plate={id}>
+    <div className="ad-plate" aria-hidden="true" data-plate={id} data-phase={phase}>
       {artBase && !failed ? <img src={`${artBase}/bg/${id}.webp`} alt="" draggable={false} onError={() => setFailed(true)} /> : <div className="ad-plate-ph" style={{ background: `linear-gradient(160deg, hsl(${h} 80% 94%), hsl(${h + 20} 70% 85%))` }} />}
       {/* living scene: a soft light shaft drifts across and dust motes float (a light layer over the picture; the picture itself never moves) */}
       <span className="ad-ray" />

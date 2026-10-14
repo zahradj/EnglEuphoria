@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
+import { BlendReadCard } from './BlendReadCard';
 import { type ActivitySync, isSharedFollower, useSyncedState } from './sceneActivitySync';
 import { seededOrder } from './PictureMatchScene';
 import { Burst, GAME_FONT, GameStyles, HudBar, ProgressPill, PromptChip, TitleRibbon } from './gameTheme';
@@ -29,8 +30,8 @@ import { blendSounds, type SoundBlendRound, type SoundBlendSceneData } from './S
 
 export type BlendLook = 'train' | 'frog' | 'slide' | 'gumball';
 
-interface BlendState { round: number; tapped: number[]; blended: boolean; wrong: string[]; solved: boolean; finished: boolean; totalWrong: number }
-const INITIAL: BlendState = { round: 0, tapped: [], blended: false, wrong: [], solved: false, finished: false, totalWrong: 0 };
+interface BlendState { round: number; tapped: number[]; blended: boolean; wrong: string[]; solved: boolean; finished: boolean; totalWrong: number; reading: boolean }
+const INITIAL: BlendState = { round: 0, tapped: [], blended: false, wrong: [], solved: false, finished: false, totalWrong: 0, reading: false };
 const sleep = (ms: number) => new Promise<void>((r) => window.setTimeout(r, ms));
 const I = '/lep1/items';
 
@@ -102,6 +103,7 @@ function useBlendGame(scene: SoundBlendSceneData, sync: ActivitySync | undefined
       await Promise.race([safeSpeak(current.word, 'teacher'), sleep(1600)]);
       await sleep(900);
       if (!alive.current) return true;
+      if (current.sentence) { setState((s) => ({ ...s, reading: true })); return true; }
       if (round + 1 < rounds.length) setState((s) => ({ ...INITIAL, round: s.round + 1, totalWrong: s.totalWrong }));
       else setState((s) => ({ ...s, finished: true }));
       return true;
@@ -114,7 +116,8 @@ function useBlendGame(scene: SoundBlendSceneData, sync: ActivitySync | undefined
   };
   const blendStep = step ?? (blended ? sounds.length : null);
   const hint = wrong.length >= 2 && !solved;
-  return { state, round, rounds, current, sounds, next, allTapped, blended, solved, finished, wrong, options, isMirror, tap, blend, pick, blendStep, nudge, hint, bursts };
+  const afterRead = () => setState((s) => (s.round + 1 < rounds.length ? { ...INITIAL, round: s.round + 1, totalWrong: s.totalWrong } : { ...s, reading: false, finished: true }));
+  return { state, round, rounds, current, sounds, next, allTapped, blended, solved, finished, wrong, options, isMirror, tap, blend, pick, blendStep, nudge, hint, bursts, afterRead };
 }
 
 type Game = ReturnType<typeof useBlendGame>;
@@ -157,6 +160,7 @@ function Shell({ game, title, icon, bg, color, prompts, children, onNext, blendL
         ) : null}
       </div>
       {game.bursts.map((b) => <Burst key={b.id} x={b.x} y={b.y} />)}
+      {game.state.reading && current.sentence && !finished && <BlendReadCard word={current.word} sentence={current.sentence} disabled={isMirror} onDone={game.afterRead} />}
     </div>
   );
 }
@@ -226,7 +230,7 @@ function FrogHop({ scene, onNext, onWin, sync }: WorldProps) {
             transition={isWrong ? { duration: 0.5 } : { x: { type: 'spring', stiffness: 120, damping: 14 }, opacity: { duration: 0.3 }, y: { duration: 2.6 + j * 0.3, repeat: Infinity } }}>
             {g.hint && isRight && <span className="pointer-events-none absolute inset-[8%] animate-pulse rounded-full bg-yellow-300/70 blur-xl" />}
             <img src={`${I}/item-lilypad.png`} alt="" draggable={false} className="pointer-events-none absolute inset-0 h-full w-full object-contain" />
-            <span className="absolute left-1/2 top-1/2 h-[42%] w-[42%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white p-[1cqh] shadow-lg"><PictureFace r={o} /></span>
+            <span className="absolute left-1/2 top-1/2 h-[42%] w-[42%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-b from-lime-200 to-emerald-300 p-[1cqh] shadow-lg"><PictureFace r={o} /></span>
           </motion.button>
         );
       })}
@@ -326,7 +330,7 @@ function SlideDown({ scene, onNext, onWin, sync }: WorldProps) {
         const isWrong = g.wrong.includes(o.word);
         return (
           <motion.button key={`${g.round}-${o.word}`} type="button" aria-label={o.word} onClick={() => void g.pick(o.word, SAND[j].x, SAND[j].y - 12)} disabled={g.isMirror || g.solved || isWrong}
-            className="absolute z-20 rounded-[2.5cqh] bg-white p-[1.2cqh] shadow-[0_1cqh_0_#d6a35c,0_1.5cqh_2cqh_rgba(0,0,0,0.3)]"
+            className="absolute z-20 rounded-[2.5cqh] bg-gradient-to-b from-amber-200 to-orange-300 p-[1.2cqh] shadow-[0_1cqh_0_#d6a35c,0_1.5cqh_2cqh_rgba(0,0,0,0.3)]"
             style={{ left: `${SAND[j].x}%`, top: `${SAND[j].y}%`, width: '22cqh', aspectRatio: '1', translate: '-50% -50%', border: `0.7cqh solid ${g.solved && isRight ? '#22c55e' : isWrong ? '#ef4444' : '#fde68a'}` }}
             initial={reduce ? false : { y: 140, opacity: 0, rotate: -10 }}
             animate={isWrong ? { x: [0, -10, 10, 0], opacity: 0.45, y: 0, rotate: 0 } : g.solved && isRight ? { scale: [1, 1.25, 1.1], y: 0, opacity: 1, rotate: 0 } : { y: 0, opacity: 1, rotate: 0 }}
@@ -401,7 +405,7 @@ function GumballBlender({ scene, onNext, onWin, sync }: WorldProps) {
             {/* the capsule: the coloured bottom stays, the picture pops up when it is the right one */}
             <motion.img src={`${I}/item-capsule-${CAPS[j]}.png`} alt="" draggable={false} className="pointer-events-none absolute inset-0 h-full w-full object-contain" animate={open && !reduce ? { y: '20%', opacity: 0.6 } : {}} />
             <motion.span className="absolute left-1/2 top-[36%] h-[38%] w-[38%] -translate-x-1/2 -translate-y-1/2" animate={open && !reduce ? { y: '-80%', scale: 2 } : {}} transition={{ type: 'spring', stiffness: 260, damping: 12 }}>
-              <span className="block h-full w-full rounded-full bg-white/85 p-[0.6cqh] shadow"><PictureFace r={o} /></span>
+              <span className="block h-full w-full rounded-full bg-gradient-to-b from-sky-200 to-sky-400 p-[0.6cqh] shadow"><PictureFace r={o} /></span>
             </motion.span>
           </motion.button>
         );

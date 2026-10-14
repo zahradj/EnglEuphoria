@@ -56,8 +56,20 @@
     "text": "Point to the flag."
   },
   {
+    "who": "Vee",
+    "text": "Match each picture with its word. Drag the word onto the picture."
+  },
+  {
+    "who": "Vee",
+    "text": "Memory! Flip two cards: find each picture and its word. Hear it, then say it."
+  },
+  {
     "who": "Theo",
     "text": "What do you like?"
+  },
+  {
+    "who": "Theo",
+    "text": "Now introduce yourself! Read the little paragraph, then say it in your own words."
   },
   {
     "who": "Theo",
@@ -108,12 +120,16 @@
     "text": "What does “nationality” mean?"
   },
   {
-    "who": "Theo",
-    "text": "Hi! What is your name?"
+    "who": "Vee",
+    "text": "Grab and drag: match each help phrase with its picture."
   },
   {
-    "who": "Theo",
-    "text": "Nice to meet you!"
+    "who": "Vee",
+    "text": "Memory! Find each help phrase and its picture."
+  },
+  {
+    "who": "Vee",
+    "text": "Let’s count! Listen, then fill the gaps. 1 to 10, 11 to 20, then by tens."
   },
   {
     "who": "Vee",
@@ -121,15 +137,7 @@
   },
   {
     "who": "Vee",
-    "text": "My number is one."
-  },
-  {
-    "who": "Vee",
     "text": "two"
-  },
-  {
-    "who": "Vee",
-    "text": "My number is two."
   },
   {
     "who": "Vee",
@@ -137,15 +145,7 @@
   },
   {
     "who": "Vee",
-    "text": "My number is three."
-  },
-  {
-    "who": "Vee",
     "text": "four"
-  },
-  {
-    "who": "Vee",
-    "text": "My number is four."
   },
   {
     "who": "Vee",
@@ -153,15 +153,7 @@
   },
   {
     "who": "Vee",
-    "text": "My number is five."
-  },
-  {
-    "who": "Vee",
     "text": "six"
-  },
-  {
-    "who": "Vee",
-    "text": "My number is six."
   },
   {
     "who": "Vee",
@@ -169,15 +161,7 @@
   },
   {
     "who": "Vee",
-    "text": "My number is seven."
-  },
-  {
-    "who": "Vee",
     "text": "eight"
-  },
-  {
-    "who": "Vee",
-    "text": "My number is eight."
   },
   {
     "who": "Vee",
@@ -185,111 +169,7 @@
   },
   {
     "who": "Vee",
-    "text": "My number is nine."
-  },
-  {
-    "who": "Vee",
     "text": "ten"
-  },
-  {
-    "who": "Vee",
-    "text": "My number is ten."
-  },
-  {
-    "who": "Vee",
-    "text": "Locker Pop! Read the number word and open that locker."
-  },
-  {
-    "who": "Vee",
-    "text": "Spain, Spanish"
-  },
-  {
-    "who": "Vee",
-    "text": "I am from Spain. I am Spanish."
-  },
-  {
-    "who": "Vee",
-    "text": "Italy, Italian"
-  },
-  {
-    "who": "Vee",
-    "text": "I am from Italy. I am Italian."
-  },
-  {
-    "who": "Vee",
-    "text": "Brazil, Brazilian"
-  },
-  {
-    "who": "Vee",
-    "text": "I am from Brazil. I am Brazilian."
-  },
-  {
-    "who": "Vee",
-    "text": "France, French"
-  },
-  {
-    "who": "Vee",
-    "text": "I am from France. I am French."
-  },
-  {
-    "who": "Vee",
-    "text": "Germany, German"
-  },
-  {
-    "who": "Vee",
-    "text": "I am from Germany. I am German."
-  },
-  {
-    "who": "Vee",
-    "text": "Japan, Japanese"
-  },
-  {
-    "who": "Vee",
-    "text": "I am from Japan. I am Japanese."
-  },
-  {
-    "who": "Vee",
-    "text": "America, American"
-  },
-  {
-    "who": "Vee",
-    "text": "I am from America. I am American."
-  },
-  {
-    "who": "Theo",
-    "text": "How do you spell it?"
-  },
-  {
-    "who": "Ava",
-    "text": "A-V-A."
-  },
-  {
-    "who": "Theo",
-    "text": "Where are you from?"
-  },
-  {
-    "who": "Ava",
-    "text": "I am from Spain. I am Spanish."
-  },
-  {
-    "who": "Theo",
-    "text": "Your member number is four, two, seven."
-  },
-  {
-    "who": "Ava",
-    "text": "Sorry, can you say it again?"
-  },
-  {
-    "who": "Theo",
-    "text": "Four… two… seven."
-  },
-  {
-    "who": "Ava",
-    "text": "My number is four, two, seven."
-  },
-  {
-    "who": "Theo",
-    "text": "Number Train! Put each number word on its carriage."
   },
   {
     "who": "Vee",
@@ -333,6 +213,178 @@
   },
   {
     "who": "Vee",
+    "text": "thirty"
+  },
+  {
+    "who": "Vee",
+    "text": "forty"
+  },
+  {
+    "who": "Vee",
+    "text": "fifty"
+  },
+  {
+    "who": "Vee",
+    "text": "sixty"
+  },
+  {
+    "who": "Vee",
+    "text": "seventy"
+  },
+  {
+    "who": "Vee",
+    "text": "eighty"
+  },
+  {
+    "who": "Vee",
+    "text": "ninety"
+  },
+  {
+    "who": "Vee",
+    "text": "one hundred"
+  },
+  {
+    "who": "Vee",
+    "text": "Listen and match: hear the number, then tap the right number card."
+  },
+  {
+    "who": "Vee",
+    "text": "My number is one."
+  },
+  {
+    "who": "Vee",
+    "text": "My number is two."
+  },
+  {
+    "who": "Vee",
+    "text": "My number is three."
+  },
+  {
+    "who": "Vee",
+    "text": "My number is four."
+  },
+  {
+    "who": "Vee",
+    "text": "My number is five."
+  },
+  {
+    "who": "Vee",
+    "text": "My number is six."
+  },
+  {
+    "who": "Vee",
+    "text": "My number is seven."
+  },
+  {
+    "who": "Vee",
+    "text": "My number is eight."
+  },
+  {
+    "who": "Vee",
+    "text": "My number is nine."
+  },
+  {
+    "who": "Vee",
+    "text": "My number is ten."
+  },
+  {
+    "who": "Vee",
+    "text": "Locker Pop! Read the number word and open that locker."
+  },
+  {
+    "who": "Vee",
+    "text": "Memory! Match each number word with its dots."
+  },
+  {
+    "who": "Vee",
+    "text": "Spain, Spanish"
+  },
+  {
+    "who": "Vee",
+    "text": "I am from Spain. I am Spanish."
+  },
+  {
+    "who": "Vee",
+    "text": "Italy, Italian"
+  },
+  {
+    "who": "Vee",
+    "text": "I am from Italy. I am Italian."
+  },
+  {
+    "who": "Vee",
+    "text": "Brazil, Brazilian"
+  },
+  {
+    "who": "Vee",
+    "text": "I am from Brazil. I am Brazilian."
+  },
+  {
+    "who": "Vee",
+    "text": "France, French"
+  },
+  {
+    "who": "Vee",
+    "text": "I am from France. I am French."
+  },
+  {
+    "who": "Vee",
+    "text": "Who is from where? Drag each country and nationality onto its character."
+  },
+  {
+    "who": "Vee",
+    "text": "Memory! Find each flag and its nationality word."
+  },
+  {
+    "who": "Vee",
+    "text": "Spanish"
+  },
+  {
+    "who": "Vee",
+    "text": "Italian"
+  },
+  {
+    "who": "Vee",
+    "text": "Brazilian"
+  },
+  {
+    "who": "Vee",
+    "text": "French"
+  },
+  {
+    "who": "Theo",
+    "text": "How do you spell it?"
+  },
+  {
+    "who": "Ava",
+    "text": "A-V-A."
+  },
+  {
+    "who": "Theo",
+    "text": "Where are you from?"
+  },
+  {
+    "who": "Ava",
+    "text": "I am from Spain. I am Spanish."
+  },
+  {
+    "who": "Theo",
+    "text": "Your member number is four hundred twenty-seven."
+  },
+  {
+    "who": "Ava",
+    "text": "Sorry, can you say it again?"
+  },
+  {
+    "who": "Theo",
+    "text": "Four hundred… twenty-seven."
+  },
+  {
+    "who": "Ava",
+    "text": "My number is four hundred twenty-seven."
+  },
+  {
+    "who": "Vee",
     "text": "twenty-one"
   },
   {
@@ -366,10 +418,6 @@
   {
     "who": "Vee",
     "text": "twenty-nine"
-  },
-  {
-    "who": "Vee",
-    "text": "thirty"
   },
   {
     "who": "Vee",
@@ -409,10 +457,6 @@
   },
   {
     "who": "Vee",
-    "text": "forty"
-  },
-  {
-    "who": "Vee",
     "text": "forty-one"
   },
   {
@@ -446,10 +490,6 @@
   {
     "who": "Vee",
     "text": "forty-nine"
-  },
-  {
-    "who": "Vee",
-    "text": "fifty"
   },
   {
     "who": "Vee",
@@ -489,10 +529,6 @@
   },
   {
     "who": "Vee",
-    "text": "sixty"
-  },
-  {
-    "who": "Vee",
     "text": "sixty-one"
   },
   {
@@ -526,10 +562,6 @@
   {
     "who": "Vee",
     "text": "sixty-nine"
-  },
-  {
-    "who": "Vee",
-    "text": "seventy"
   },
   {
     "who": "Vee",
@@ -569,10 +601,6 @@
   },
   {
     "who": "Vee",
-    "text": "eighty"
-  },
-  {
-    "who": "Vee",
     "text": "eighty-one"
   },
   {
@@ -606,10 +634,6 @@
   {
     "who": "Vee",
     "text": "eighty-nine"
-  },
-  {
-    "who": "Vee",
-    "text": "ninety"
   },
   {
     "who": "Vee",
@@ -649,7 +673,75 @@
   },
   {
     "who": "Vee",
-    "text": "one hundred"
+    "text": "two hundred"
+  },
+  {
+    "who": "Vee",
+    "text": "three hundred"
+  },
+  {
+    "who": "Vee",
+    "text": "four hundred"
+  },
+  {
+    "who": "Vee",
+    "text": "five hundred"
+  },
+  {
+    "who": "Vee",
+    "text": "six hundred"
+  },
+  {
+    "who": "Vee",
+    "text": "seven hundred"
+  },
+  {
+    "who": "Vee",
+    "text": "eight hundred"
+  },
+  {
+    "who": "Vee",
+    "text": "nine hundred"
+  },
+  {
+    "who": "Vee",
+    "text": "The locker is one hundred."
+  },
+  {
+    "who": "Vee",
+    "text": "Open locker two hundred."
+  },
+  {
+    "who": "Vee",
+    "text": "Open locker four hundred."
+  },
+  {
+    "who": "Vee",
+    "text": "four hundred twenty-seven"
+  },
+  {
+    "who": "Vee",
+    "text": "My number is four hundred twenty-seven."
+  },
+  {
+    "who": "Theo",
+    "text": "Locker Pop: big numbers! Listen and open the locker."
+  },
+  {
+    "who": "Theo",
+    "text": "Number Train! Put each number word on its carriage: two-digit and three-digit numbers."
+  },
+  {
+    "who": "Vee",
+    "text": "one hundred eighty"
+  },
+  {
+    "who": "Vee",
+    "text": "five hundred three"
+  },
+  {
+    "who": "Vee",
+    "text": "two hundred forty-five"
   },
   {
     "who": "Theo",
@@ -657,7 +749,7 @@
   },
   {
     "who": "Theo",
-    "text": "four, two, seven"
+    "text": "four hundred twenty-seven"
   },
   {
     "who": "Vee",
@@ -692,8 +784,12 @@
     "text": "Sorry, can you say it again?"
   },
   {
-    "who": "Theo",
-    "text": "Spell Ava’s name. Drag each letter onto the badge."
+    "who": "Vee",
+    "text": "Match each word or question with its picture. Drag it onto the picture."
+  },
+  {
+    "who": "Vee",
+    "text": "Memory! Find each picture and its word."
   },
   {
     "who": "Theo",
@@ -713,11 +809,7 @@
   },
   {
     "who": "Theo",
-    "text": "I am from Germany."
-  },
-  {
-    "who": "Theo",
-    "text": "I am from Japan."
+    "text": "I am from Italy."
   },
   {
     "who": "Theo",
@@ -725,35 +817,7 @@
   },
   {
     "who": "Theo",
-    "text": "Your member number is four two seven!"
-  },
-  {
-    "who": "Vee",
-    "text": "Memory! Find each flag and its nationality word."
-  },
-  {
-    "who": "Vee",
-    "text": "Spanish"
-  },
-  {
-    "who": "Vee",
-    "text": "Italian"
-  },
-  {
-    "who": "Vee",
-    "text": "Brazilian"
-  },
-  {
-    "who": "Vee",
-    "text": "French"
-  },
-  {
-    "who": "Vee",
-    "text": "German"
-  },
-  {
-    "who": "Vee",
-    "text": "Japanese"
+    "text": "Your member number is four hundred twenty-seven!"
   },
   {
     "who": "Vee",
@@ -805,6 +869,1410 @@
   },
   {
     "who": "Vee",
+    "text": "Welcome back! Today you sign up at the club desk and win three stamps."
+  },
+  {
+    "who": "Vee",
+    "text": "Where do you want to start today?"
+  },
+  {
+    "who": "Vee",
+    "text": "Listen. Tap the picture for what you hear."
+  },
+  {
+    "who": "Vee",
+    "text": "Hello!"
+  },
+  {
+    "who": "Vee",
+    "text": "My name is Ava."
+  },
+  {
+    "who": "Vee",
+    "text": "I am 13."
+  },
+  {
+    "who": "Theo",
+    "text": "Introduce yourself to Theo. Read the little paragraph, then say it."
+  },
+  {
+    "who": "Theo",
+    "text": "Your member number is four, two, seven."
+  },
+  {
+    "who": "Vee",
+    "text": "Match each number word with its dots. Drag the word onto the picture."
+  },
+  {
+    "who": "Vee",
+    "text": "Listen. Tap the picture for the number you hear."
+  },
+  {
+    "who": "Vee",
+    "text": "Bonus! Tens: open the locker for the number word."
+  },
+  {
+    "who": "Vee",
+    "text": "Who is from where? Drag each word onto its picture: the flag is the country, the person is the nationality."
+  },
+  {
+    "who": "Vee",
+    "text": "Spain"
+  },
+  {
+    "who": "Vee",
+    "text": "Italy"
+  },
+  {
+    "who": "Vee",
+    "text": "Which flag is which? Drag each word onto its flag."
+  },
+  {
+    "who": "Theo",
+    "text": "Spell Ava’s name on the badge. Tap the letters."
+  },
+  {
+    "who": "Theo",
+    "text": "I am Italian."
+  },
+  {
+    "who": "Theo",
+    "text": "I am Spanish."
+  },
+  {
+    "who": "Vee",
+    "text": "Number Train! Put each number word on its carriage."
+  },
+  {
+    "who": "Vee",
+    "text": "Bonus Number Train! Tens and big numbers."
+  },
+  {
+    "who": "Theo",
+    "text": "Theo says your member number. Open the drawer with the code."
+  },
+  {
+    "who": "Theo",
+    "text": "four, two, seven"
+  },
+  {
+    "who": "Theo",
+    "text": "Open the drawer. The code is one number."
+  },
+  {
+    "who": "Theo",
+    "text": "seven"
+  },
+  {
+    "who": "Theo",
+    "text": "Bonus! Open the drawer with the big number."
+  },
+  {
+    "who": "Vee",
+    "text": "Fake or Real?"
+  },
+  {
+    "who": "Vee",
+    "text": "Welcome back, detective! A fake profile of Ava is online. Today you check the facts."
+  },
+  {
+    "who": "Theo",
+    "text": "Spell YOUR name on the detective badge."
+  },
+  {
+    "who": "Vee",
+    "text": "I am"
+  },
+  {
+    "who": "Vee",
+    "text": "You are"
+  },
+  {
+    "who": "Vee",
+    "text": "You are Spanish."
+  },
+  {
+    "who": "Vee",
+    "text": "She is"
+  },
+  {
+    "who": "Vee",
+    "text": "She is from Spain."
+  },
+  {
+    "who": "Vee",
+    "text": "He is"
+  },
+  {
+    "who": "Vee",
+    "text": "He is Italian."
+  },
+  {
+    "who": "Theo",
+    "text": "Pick am, is or are for each person."
+  },
+  {
+    "who": "Theo",
+    "text": "I am 13."
+  },
+  {
+    "who": "Theo",
+    "text": "You are Spanish."
+  },
+  {
+    "who": "Theo",
+    "text": "She is from Spain."
+  },
+  {
+    "who": "Theo",
+    "text": "He is Italian."
+  },
+  {
+    "who": "Vee",
+    "text": "Memory! Find each character and the sentence about them."
+  },
+  {
+    "who": "Vee",
+    "text": "She is Spanish."
+  },
+  {
+    "who": "Vee",
+    "text": "He is French."
+  },
+  {
+    "who": "Theo",
+    "text": "The profile says: She is 15. She is Italian."
+  },
+  {
+    "who": "Ava",
+    "text": "No! I am not 15. I am 13."
+  },
+  {
+    "who": "Ava",
+    "text": "I am not Italian. I am Spanish."
+  },
+  {
+    "who": "Theo",
+    "text": "You are 13. You are from Spain."
+  },
+  {
+    "who": "Vee",
+    "text": "Are you from Italy, Ava?"
+  },
+  {
+    "who": "Ava",
+    "text": "No, I am not."
+  },
+  {
+    "who": "Vee",
+    "text": "Is he Italian?"
+  },
+  {
+    "who": "Ava",
+    "text": "Yes, he is. He is from Italy."
+  },
+  {
+    "who": "Vee",
+    "text": "Is he 16?"
+  },
+  {
+    "who": "Ava",
+    "text": "No, he is not. He is 15."
+  },
+  {
+    "who": "Vee",
+    "text": "I am not"
+  },
+  {
+    "who": "Vee",
+    "text": "I am not Italian."
+  },
+  {
+    "who": "Vee",
+    "text": "She is not"
+  },
+  {
+    "who": "Vee",
+    "text": "She is not 15."
+  },
+  {
+    "who": "Vee",
+    "text": "Are you…?"
+  },
+  {
+    "who": "Vee",
+    "text": "Are you 13?"
+  },
+  {
+    "who": "Vee",
+    "text": "Is she…?"
+  },
+  {
+    "who": "Vee",
+    "text": "Is she Spanish?"
+  },
+  {
+    "who": "Vee",
+    "text": "Yes, I am."
+  },
+  {
+    "who": "Vee",
+    "text": "Are you Spanish? Yes, I am."
+  },
+  {
+    "who": "Ava",
+    "text": "Build the sentence. Tap the words in the right order."
+  },
+  {
+    "who": "Ava",
+    "text": "She is Spanish."
+  },
+  {
+    "who": "Ava",
+    "text": "He is from Italy."
+  },
+  {
+    "who": "Ava",
+    "text": "I am not Spanish."
+  },
+  {
+    "who": "Ava",
+    "text": "Are you 13?"
+  },
+  {
+    "who": "Ava",
+    "text": "Is he Italian?"
+  },
+  {
+    "who": "Vee",
+    "text": "Detective time! The fake profile has 3 mistakes with am, is, are or not. Tap them."
+  },
+  {
+    "who": "Theo",
+    "text": "Pick am, is or are: now with not and questions."
+  },
+  {
+    "who": "Theo",
+    "text": "I am not Italian."
+  },
+  {
+    "who": "Theo",
+    "text": "She is not 15."
+  },
+  {
+    "who": "Theo",
+    "text": "Are you 13?"
+  },
+  {
+    "who": "Theo",
+    "text": "Is she Spanish?"
+  },
+  {
+    "who": "Theo",
+    "text": "Are you Italian?"
+  },
+  {
+    "who": "Theo",
+    "text": "Is Theo Italian?"
+  },
+  {
+    "who": "Theo",
+    "text": "Are you 15?"
+  },
+  {
+    "who": "Theo",
+    "text": "Is he 16?"
+  },
+  {
+    "who": "Vee",
+    "text": "Is each sentence true? Check it on Ava’s real card."
+  },
+  {
+    "who": "Vee",
+    "text": "She is 13."
+  },
+  {
+    "who": "Vee",
+    "text": "She is Italian."
+  },
+  {
+    "who": "Vee",
+    "text": "She is 15."
+  },
+  {
+    "who": "Vee",
+    "text": "She is not French."
+  },
+  {
+    "who": "Vee",
+    "text": "Memory! Find each flag and the sentence about its country."
+  },
+  {
+    "who": "Vee",
+    "text": "He is from Italy."
+  },
+  {
+    "who": "Vee",
+    "text": "I am Brazilian."
+  },
+  {
+    "who": "Vee",
+    "text": "He is from Japan."
+  },
+  {
+    "who": "Vee",
+    "text": "You are American."
+  },
+  {
+    "who": "Ava",
+    "text": "Hi, detective! Are you ready?"
+  },
+  {
+    "who": "Ava",
+    "text": "Is Theo 16?"
+  },
+  {
+    "who": "Ava",
+    "text": "Ask me about Theo!"
+  },
+  {
+    "who": "Ava",
+    "text": "Yes, he is! And you? How old are you?"
+  },
+  {
+    "who": "Theo",
+    "text": "Sentence duel! Build each sentence for the case. No timer, take your time."
+  },
+  {
+    "who": "Theo",
+    "text": "He is not 16."
+  },
+  {
+    "who": "Theo",
+    "text": "She is not Italian."
+  },
+  {
+    "who": "Theo",
+    "text": "I am not 15."
+  },
+  {
+    "who": "Theo",
+    "text": "Are you from Italy?"
+  },
+  {
+    "who": "Theo",
+    "text": "Yes, he is."
+  },
+  {
+    "who": "Theo",
+    "text": "Take 1 · Check in with Theo. Say who you are, one thing that is not true, and ask him a question."
+  },
+  {
+    "who": "Theo",
+    "text": "Take 2 · Theo asks YOU: “Are you Spanish?” Answer, then ask him about Ava."
+  },
+  {
+    "who": "Vee",
+    "text": "Case solved?"
+  },
+  {
+    "who": "Vee",
+    "text": "Homework: write three sentences about a friend: one with is, one with is not, and one question."
+  },
+  {
+    "who": "Vee",
+    "text": "Clue 3 of 8: The fake profile says “She is 15. She is Italian.” But Ava is 13 and Spanish. Who is 15 and Italian? Theo! Someone mixed up their facts."
+  },
+  {
+    "who": "Vee",
+    "text": "The Missing Poster"
+  },
+  {
+    "who": "Ava",
+    "text": "SOS! My club poster is gone!"
+  },
+  {
+    "who": "Ava",
+    "text": "Thanks! How old are you?"
+  },
+  {
+    "who": "Ava",
+    "text": "See you at the fair tonight!"
+  },
+  {
+    "who": "Vee",
+    "text": "Find the hidden numbers on the stall signs: three, seven, ten."
+  },
+  {
+    "who": "Vee",
+    "text": "Ava needs members. Which number do you hear? Tap it."
+  },
+  {
+    "who": "Ava",
+    "text": "I am from Spain."
+  },
+  {
+    "who": "Ava",
+    "text": "My name is Theo."
+  },
+  {
+    "who": "Vee",
+    "text": "Welcome to the Club Fair!"
+  },
+  {
+    "who": "Ava",
+    "text": "Hi! This is my club."
+  },
+  {
+    "who": "Ava",
+    "text": "Oh no! My poster is gone!"
+  },
+  {
+    "who": "Theo",
+    "text": "Three members by Friday. We need help!"
+  },
+  {
+    "who": "Theo",
+    "text": "Look! Five stalls. Ask them what they like!"
+  },
+  {
+    "who": "Vee",
+    "text": "Walk the fair. Tap every glowing stall."
+  },
+  {
+    "who": "Theo",
+    "text": "I like music."
+  },
+  {
+    "who": "Theo",
+    "text": "I like playing games."
+  },
+  {
+    "who": "Ava",
+    "text": "I love drawing!"
+  },
+  {
+    "who": "Vee",
+    "text": "I like watching films."
+  },
+  {
+    "who": "Theo",
+    "text": "I like football."
+  },
+  {
+    "who": "Vee",
+    "text": "Who needs members?"
+  },
+  {
+    "who": "Vee",
+    "text": "Who loves drawing?"
+  },
+  {
+    "who": "Ava",
+    "text": "club"
+  },
+  {
+    "who": "Ava",
+    "text": "Ava has a club."
+  },
+  {
+    "who": "Ava",
+    "text": "member"
+  },
+  {
+    "who": "Ava",
+    "text": "Ava needs three members."
+  },
+  {
+    "who": "Ava",
+    "text": "poster"
+  },
+  {
+    "who": "Ava",
+    "text": "Look at the poster!"
+  },
+  {
+    "who": "Ava",
+    "text": "Friday"
+  },
+  {
+    "who": "Ava",
+    "text": "Three members by Friday."
+  },
+  {
+    "who": "Ava",
+    "text": "Listen. Tap the picture for what you hear."
+  },
+  {
+    "who": "Ava",
+    "text": "Memory! Find each picture and its word."
+  },
+  {
+    "who": "Vee",
+    "text": "club"
+  },
+  {
+    "who": "Vee",
+    "text": "member"
+  },
+  {
+    "who": "Vee",
+    "text": "poster"
+  },
+  {
+    "who": "Vee",
+    "text": "Friday"
+  },
+  {
+    "who": "Theo",
+    "text": "Drag each club word onto its picture."
+  },
+  {
+    "who": "Theo",
+    "text": "club"
+  },
+  {
+    "who": "Theo",
+    "text": "fair"
+  },
+  {
+    "who": "Theo",
+    "text": "member"
+  },
+  {
+    "who": "Theo",
+    "text": "poster"
+  },
+  {
+    "who": "Theo",
+    "text": "Friday"
+  },
+  {
+    "who": "Ava",
+    "text": "I love drawing."
+  },
+  {
+    "who": "Vee",
+    "text": "The rule: I like…"
+  },
+  {
+    "who": "Vee",
+    "text": "I like, and then a thing."
+  },
+  {
+    "who": "Vee",
+    "text": "I like music."
+  },
+  {
+    "who": "Vee",
+    "text": "I like, and then a word with i n g."
+  },
+  {
+    "who": "Vee",
+    "text": "I like playing games."
+  },
+  {
+    "who": "Vee",
+    "text": "Love is stronger than like."
+  },
+  {
+    "who": "Vee",
+    "text": "I love drawing."
+  },
+  {
+    "who": "Ava",
+    "text": "play"
+  },
+  {
+    "who": "Ava",
+    "text": "I like playing games."
+  },
+  {
+    "who": "Ava",
+    "text": "watch"
+  },
+  {
+    "who": "Ava",
+    "text": "I like watching films."
+  },
+  {
+    "who": "Ava",
+    "text": "listen to"
+  },
+  {
+    "who": "Ava",
+    "text": "I like listening to music."
+  },
+  {
+    "who": "Ava",
+    "text": "draw"
+  },
+  {
+    "who": "Ava",
+    "text": "Match each hobby word with its picture. Drag it onto the picture."
+  },
+  {
+    "who": "Vee",
+    "text": "Which sentence do you hear? Tap it."
+  },
+  {
+    "who": "Ava",
+    "text": "Memory! Find each hobby picture and its word."
+  },
+  {
+    "who": "Vee",
+    "text": "play"
+  },
+  {
+    "who": "Vee",
+    "text": "watch"
+  },
+  {
+    "who": "Vee",
+    "text": "listen to"
+  },
+  {
+    "who": "Vee",
+    "text": "draw"
+  },
+  {
+    "who": "Vee",
+    "text": "Whose shadow is it? Pick the hobby word."
+  },
+  {
+    "who": "Theo",
+    "text": "Your hobby wall: like or love? Tap a picture, then a box."
+  },
+  {
+    "who": "Vee",
+    "text": "I love music."
+  },
+  {
+    "who": "Vee",
+    "text": "I like games."
+  },
+  {
+    "who": "Vee",
+    "text": "I love games."
+  },
+  {
+    "who": "Vee",
+    "text": "I like drawing."
+  },
+  {
+    "who": "Vee",
+    "text": "I like football."
+  },
+  {
+    "who": "Vee",
+    "text": "I love football."
+  },
+  {
+    "who": "Vee",
+    "text": "I like films."
+  },
+  {
+    "who": "Vee",
+    "text": "I love films."
+  },
+  {
+    "who": "Ava",
+    "text": "Hello! What is your name?"
+  },
+  {
+    "who": "Theo",
+    "text": "Hello! I am Theo."
+  },
+  {
+    "who": "Ava",
+    "text": "What do you like?"
+  },
+  {
+    "who": "Theo",
+    "text": "I like music. I love playing games."
+  },
+  {
+    "who": "Ava",
+    "text": "Great! Join my club!"
+  },
+  {
+    "who": "Ava",
+    "text": "Warm up, together: build your lines. Tap the words in the right order."
+  },
+  {
+    "who": "Ava",
+    "text": "Hello, I am Ava."
+  },
+  {
+    "who": "Ava",
+    "text": "I love playing games."
+  },
+  {
+    "who": "Ava",
+    "text": "Take 1 · Ava asks: What do you like? Say your name and two things."
+  },
+  {
+    "who": "Theo",
+    "text": "Take 2 · Start with hello for Theo, then say what you like and love."
+  },
+  {
+    "who": "Ava",
+    "text": "Voice note · Tell Ava which club you would join. Try without help first."
+  },
+  {
+    "who": "Vee",
+    "text": "Rule check! Which sentence has a word with -ing? Tap it."
+  },
+  {
+    "who": "Vee",
+    "text": "Teach-back · Tell Vee the rule in your own words. Then give one example."
+  },
+  {
+    "who": "Ava",
+    "text": "A torn corner! It starts with M. Who is it?"
+  },
+  {
+    "who": "Vee",
+    "text": "The fair is open!"
+  },
+  {
+    "who": "Vee",
+    "text": "Clue 1 of 8: a torn corner of the poster, with the letter M. Who could it be?"
+  },
+  {
+    "who": "Vee",
+    "text": "Hobby Wall"
+  },
+  {
+    "who": "Vee",
+    "text": "Day two at the Club Fair! Today you learn lots of hobbies and say which verb goes with them."
+  },
+  {
+    "who": "Vee",
+    "text": "Remember last time? Which sentence do you hear? Tap it."
+  },
+  {
+    "who": "Ava",
+    "text": "Remember the hobby words? Drag each word onto its picture."
+  },
+  {
+    "who": "Theo",
+    "text": "Build the sentence. Tap the words in the right order."
+  },
+  {
+    "who": "Theo",
+    "text": "I love drawing."
+  },
+  {
+    "who": "Vee",
+    "text": "Day two at the Club Fair!"
+  },
+  {
+    "who": "Ava",
+    "text": "Look at the hobby wall. What do you like?"
+  },
+  {
+    "who": "Theo",
+    "text": "I play basketball and tennis."
+  },
+  {
+    "who": "Ava",
+    "text": "I go swimming and running."
+  },
+  {
+    "who": "Theo",
+    "text": "I like cooking and reading."
+  },
+  {
+    "who": "Vee",
+    "text": "Join the club, Theo?"
+  },
+  {
+    "who": "Vee",
+    "text": "Who plays basketball?"
+  },
+  {
+    "who": "Vee",
+    "text": "Who goes swimming?"
+  },
+  {
+    "who": "Theo",
+    "text": "I play tennis."
+  },
+  {
+    "who": "Ava",
+    "text": "I go swimming."
+  },
+  {
+    "who": "Theo",
+    "text": "I like cooking."
+  },
+  {
+    "who": "Vee",
+    "text": "The rule: play, go, like"
+  },
+  {
+    "who": "Vee",
+    "text": "Play, and then a sport or a game."
+  },
+  {
+    "who": "Vee",
+    "text": "I play tennis."
+  },
+  {
+    "who": "Vee",
+    "text": "Go, and then a word with i n g."
+  },
+  {
+    "who": "Vee",
+    "text": "I go swimming."
+  },
+  {
+    "who": "Vee",
+    "text": "Like, and then a word with i n g, for any hobby."
+  },
+  {
+    "who": "Vee",
+    "text": "I like cooking."
+  },
+  {
+    "who": "Ava",
+    "text": "basketball"
+  },
+  {
+    "who": "Ava",
+    "text": "I play basketball."
+  },
+  {
+    "who": "Ava",
+    "text": "tennis"
+  },
+  {
+    "who": "Ava",
+    "text": "I play tennis."
+  },
+  {
+    "who": "Ava",
+    "text": "football"
+  },
+  {
+    "who": "Ava",
+    "text": "games"
+  },
+  {
+    "who": "Vee",
+    "text": "football"
+  },
+  {
+    "who": "Vee",
+    "text": "basketball"
+  },
+  {
+    "who": "Vee",
+    "text": "tennis"
+  },
+  {
+    "who": "Vee",
+    "text": "games"
+  },
+  {
+    "who": "Theo",
+    "text": "Drag each word onto its picture."
+  },
+  {
+    "who": "Theo",
+    "text": "football"
+  },
+  {
+    "who": "Theo",
+    "text": "basketball"
+  },
+  {
+    "who": "Theo",
+    "text": "tennis"
+  },
+  {
+    "who": "Theo",
+    "text": "music"
+  },
+  {
+    "who": "Theo",
+    "text": "drawing"
+  },
+  {
+    "who": "Theo",
+    "text": "swimming"
+  },
+  {
+    "who": "Theo",
+    "text": "I go swimming."
+  },
+  {
+    "who": "Theo",
+    "text": "running"
+  },
+  {
+    "who": "Theo",
+    "text": "I go running."
+  },
+  {
+    "who": "Theo",
+    "text": "dancing"
+  },
+  {
+    "who": "Theo",
+    "text": "I go dancing."
+  },
+  {
+    "who": "Theo",
+    "text": "Drag each hobby word onto its picture."
+  },
+  {
+    "who": "Vee",
+    "text": "I go dancing."
+  },
+  {
+    "who": "Vee",
+    "text": "I go running."
+  },
+  {
+    "who": "Ava",
+    "text": "Whose shadow is it? Pick the hobby word."
+  },
+  {
+    "who": "Vee",
+    "text": "swimming"
+  },
+  {
+    "who": "Vee",
+    "text": "running"
+  },
+  {
+    "who": "Vee",
+    "text": "dancing"
+  },
+  {
+    "who": "Vee",
+    "text": "singing"
+  },
+  {
+    "who": "Vee",
+    "text": "I like singing."
+  },
+  {
+    "who": "Vee",
+    "text": "cooking"
+  },
+  {
+    "who": "Vee",
+    "text": "reading"
+  },
+  {
+    "who": "Vee",
+    "text": "I like reading."
+  },
+  {
+    "who": "Vee",
+    "text": "photos"
+  },
+  {
+    "who": "Vee",
+    "text": "I like taking photos."
+  },
+  {
+    "who": "Theo",
+    "text": "Whose shadow is it? Pick the hobby word."
+  },
+  {
+    "who": "Ava",
+    "text": "Drag each sentence onto the picture it tells about."
+  },
+  {
+    "who": "Ava",
+    "text": "I like cooking."
+  },
+  {
+    "who": "Ava",
+    "text": "I like reading."
+  },
+  {
+    "who": "Ava",
+    "text": "Hello! What do you play?"
+  },
+  {
+    "who": "Theo",
+    "text": "Hello! I am Theo. I play tennis."
+  },
+  {
+    "who": "Ava",
+    "text": "What do you go?"
+  },
+  {
+    "who": "Theo",
+    "text": "I go swimming. I like cooking."
+  },
+  {
+    "who": "Ava",
+    "text": "Warm up, together: build your hobby lines. Tap the words in the right order."
+  },
+  {
+    "who": "Ava",
+    "text": "I go running."
+  },
+  {
+    "who": "Theo",
+    "text": "Tennis or basketball?"
+  },
+  {
+    "who": "Theo",
+    "text": "Swimming or running?"
+  },
+  {
+    "who": "Theo",
+    "text": "Cooking or reading?"
+  },
+  {
+    "who": "Ava",
+    "text": "Take 1 · Ava asks: What do you play? What do you like? Say your name and your hobbies."
+  },
+  {
+    "who": "Theo",
+    "text": "Take 2 · Start with hello for Ava, then say what you play, what you go and what you like."
+  },
+  {
+    "who": "Ava",
+    "text": "Voice note · Tell Ava your hobbies. Try without help first."
+  },
+  {
+    "who": "Vee",
+    "text": "Rule check! Which sentence uses go? Tap it."
+  },
+  {
+    "who": "Vee",
+    "text": "Teach-back · Tell Vee the rule in your own words. Then give one example for each."
+  },
+  {
+    "who": "Vee",
+    "text": "The hobby wall is full!"
+  },
+  {
+    "who": "Vee",
+    "text": "Clue 2 of 8: Under the smudge on the poster you can read: “plays tennis, goes swimming”. Who is it? Not Ava, and not Theo…"
+  },
+  {
+    "who": "Vee",
+    "text": "Hello, letters"
+  },
+  {
+    "who": "Vee",
+    "text": "Hi! This is the Name Wall. Every letter you learn lights up a tile."
+  },
+  {
+    "who": "Theo",
+    "text": "How are you?"
+  },
+  {
+    "who": "Vee",
+    "text": "A"
+  },
+  {
+    "who": "Vee",
+    "text": "A, B."
+  },
+  {
+    "who": "Vee",
+    "text": "B"
+  },
+  {
+    "who": "Vee",
+    "text": "B, C."
+  },
+  {
+    "who": "Vee",
+    "text": "C"
+  },
+  {
+    "who": "Vee",
+    "text": "C, D."
+  },
+  {
+    "who": "Vee",
+    "text": "D"
+  },
+  {
+    "who": "Vee",
+    "text": "D, E."
+  },
+  {
+    "who": "Vee",
+    "text": "Which letter do you hear? Tap it."
+  },
+  {
+    "who": "Vee",
+    "text": "Memory! Match each big letter with its small letter."
+  },
+  {
+    "who": "Vee",
+    "text": "a"
+  },
+  {
+    "who": "Vee",
+    "text": "b"
+  },
+  {
+    "who": "Vee",
+    "text": "c"
+  },
+  {
+    "who": "Vee",
+    "text": "d"
+  },
+  {
+    "who": "Vee",
+    "text": "One more time! Which letter do you hear?"
+  },
+  {
+    "who": "Ava",
+    "text": "Hi!"
+  },
+  {
+    "who": "Theo",
+    "text": "Hello! My name is Theo."
+  },
+  {
+    "who": "Ava",
+    "text": "Hi, Theo. I am Ava."
+  },
+  {
+    "who": "Vee",
+    "text": "I am Vee. Bye!"
+  },
+  {
+    "who": "Ava",
+    "text": "Bye, Vee!"
+  },
+  {
+    "who": "Vee",
+    "text": "Hello, Ava!"
+  },
+  {
+    "who": "Vee",
+    "text": "Hi!"
+  },
+  {
+    "who": "Vee",
+    "text": "Hi, Theo!"
+  },
+  {
+    "who": "Vee",
+    "text": "Bye!"
+  },
+  {
+    "who": "Vee",
+    "text": "Bye, Vee!"
+  },
+  {
+    "who": "Theo",
+    "text": "My name is Ava."
+  },
+  {
+    "who": "Theo",
+    "text": "My name is Theo."
+  },
+  {
+    "who": "Theo",
+    "text": "I am Ava."
+  },
+  {
+    "who": "Theo",
+    "text": "I am Vee."
+  },
+  {
+    "who": "Theo",
+    "text": "Match each sentence with its picture. Drag it onto the picture."
+  },
+  {
+    "who": "Theo",
+    "text": "Hello!"
+  },
+  {
+    "who": "Ava",
+    "text": "I am Theo."
+  },
+  {
+    "who": "Vee",
+    "text": "E"
+  },
+  {
+    "who": "Vee",
+    "text": "E, F."
+  },
+  {
+    "who": "Vee",
+    "text": "F"
+  },
+  {
+    "who": "Vee",
+    "text": "F, G."
+  },
+  {
+    "who": "Vee",
+    "text": "G"
+  },
+  {
+    "who": "Vee",
+    "text": "G, H."
+  },
+  {
+    "who": "Vee",
+    "text": "Which letter do you hear?"
+  },
+  {
+    "who": "Vee",
+    "text": "e"
+  },
+  {
+    "who": "Vee",
+    "text": "f"
+  },
+  {
+    "who": "Vee",
+    "text": "g"
+  },
+  {
+    "who": "Vee",
+    "text": "Read the line. Which picture is it? Tap a word to hear it."
+  },
+  {
+    "who": "Vee",
+    "text": "Hello, Ava."
+  },
+  {
+    "who": "Vee",
+    "text": "Hello"
+  },
+  {
+    "who": "Vee",
+    "text": "Ava"
+  },
+  {
+    "who": "Vee",
+    "text": "My name is Theo."
+  },
+  {
+    "who": "Vee",
+    "text": "My"
+  },
+  {
+    "who": "Vee",
+    "text": "name"
+  },
+  {
+    "who": "Vee",
+    "text": "is"
+  },
+  {
+    "who": "Vee",
+    "text": "Theo"
+  },
+  {
+    "who": "Vee",
+    "text": "Bye, Vee."
+  },
+  {
+    "who": "Vee",
+    "text": "Bye"
+  },
+  {
+    "who": "Vee",
+    "text": "Vee"
+  },
+  {
+    "who": "Vee",
+    "text": "I am Ava."
+  },
+  {
+    "who": "Vee",
+    "text": "I"
+  },
+  {
+    "who": "Vee",
+    "text": "am"
+  },
+  {
+    "who": "Theo",
+    "text": "Spell Ava’s name on the wall. Tap the letters."
+  },
+  {
+    "who": "Vee",
+    "text": "Which name do you hear? Tap it."
+  },
+  {
+    "who": "Theo",
+    "text": "One more page. Read the line. Which picture is it?"
+  },
+  {
+    "who": "Vee",
+    "text": "Hi, Theo."
+  },
+  {
+    "who": "Vee",
+    "text": "Hi"
+  },
+  {
+    "who": "Vee",
+    "text": "I am Vee."
+  },
+  {
+    "who": "Theo",
+    "text": "Bye!"
+  },
+  {
+    "who": "Theo",
+    "text": "Memory! Find each picture and its greeting."
+  },
+  {
+    "who": "Ava",
+    "text": "Build your hello. Tap the words in the right order."
+  },
+  {
+    "who": "Ava",
+    "text": "Hello, Ava."
+  },
+  {
+    "who": "Ava",
+    "text": "I am Ava."
+  },
+  {
+    "who": "Theo",
+    "text": "Now spell YOUR name on the wall."
+  },
+  {
+    "who": "Theo",
+    "text": "Take 1 · Say hello to Theo and tell him your name."
+  },
+  {
+    "who": "Theo",
+    "text": "Take 2 · Say hello, your name and bye."
+  },
+  {
+    "who": "Vee",
+    "text": "Exit check · Listen. Tap the picture for what you hear."
+  },
+  {
+    "who": "Vee",
+    "text": "The wall lights up!"
+  },
+  {
+    "who": "Vee",
+    "text": "Homework: say hello and your name to one person today. Not yet is okay!"
+  },
+  {
+    "who": "Vee",
+    "text": "Clue 1 of 8: The wall flashes the letter A. Whose name starts with A? Ava!"
+  },
+  {
+    "who": "Vee",
     "text": "Shadow match! Which number is hiding?"
   },
   {
@@ -818,6 +2286,14 @@
   {
     "who": "Vee",
     "text": "Shadow match! Which nationality is hiding?"
+  },
+  {
+    "who": "Vee",
+    "text": "German"
+  },
+  {
+    "who": "Vee",
+    "text": "Japanese"
   },
   {
     "who": "Vee",
@@ -894,5 +2370,77 @@
   {
     "who": "Vee",
     "text": "Your number is five, eight, three!"
+  },
+  {
+    "who": "Vee",
+    "text": "H"
+  },
+  {
+    "who": "Vee",
+    "text": "J"
+  },
+  {
+    "who": "Vee",
+    "text": "K"
+  },
+  {
+    "who": "Vee",
+    "text": "L"
+  },
+  {
+    "who": "Vee",
+    "text": "M"
+  },
+  {
+    "who": "Vee",
+    "text": "N"
+  },
+  {
+    "who": "Vee",
+    "text": "O"
+  },
+  {
+    "who": "Vee",
+    "text": "P"
+  },
+  {
+    "who": "Vee",
+    "text": "Q"
+  },
+  {
+    "who": "Vee",
+    "text": "R"
+  },
+  {
+    "who": "Vee",
+    "text": "S"
+  },
+  {
+    "who": "Vee",
+    "text": "T"
+  },
+  {
+    "who": "Vee",
+    "text": "U"
+  },
+  {
+    "who": "Vee",
+    "text": "V"
+  },
+  {
+    "who": "Vee",
+    "text": "W"
+  },
+  {
+    "who": "Vee",
+    "text": "X"
+  },
+  {
+    "who": "Vee",
+    "text": "Y"
+  },
+  {
+    "who": "Vee",
+    "text": "Z"
   }
 ]

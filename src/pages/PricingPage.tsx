@@ -1,3 +1,5 @@
+import { FamilyPacksStrip } from '@/components/pricing/FamilyPacksStrip';
+import { euroLabel } from '@/lib/packCatalog';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
@@ -26,6 +28,8 @@ const LEVEL_LABEL: Record<string, string> = {
   academy: 'Academy',
   professional: 'Success',
 };
+
+const FAMILY_HUBS = ['playground', 'academy', 'professional'] as const;
 
 export default function PricingPage() {
   const { user } = useAuth();
@@ -192,7 +196,7 @@ export default function PricingPage() {
                     <Card key={pack.id} className="relative flex flex-col">
                       {hasSavings && (
                         <Badge className="absolute -top-2 right-4 bg-emerald-500 hover:bg-emerald-500">
-                          Save €{pack.savings_eur.toFixed(0)}
+                          Save {euroLabel(pack.savings_eur)}
                         </Badge>
                       )}
                       <CardHeader>
@@ -205,10 +209,10 @@ export default function PricingPage() {
                       <CardContent className="flex-1 flex flex-col">
                         <div className="mb-4">
                           <div className="flex items-baseline gap-2">
-                            <span className="text-3xl font-bold">€{pack.price_eur.toFixed(0)}</span>
+                            <span className="text-3xl font-bold">{euroLabel(pack.price_eur)}</span>
                             {hasSavings && (
                               <span className="text-sm text-muted-foreground line-through">
-                                €{pack.original_price_eur.toFixed(0)}
+                                {euroLabel(pack.original_price_eur)}
                               </span>
                             )}
                           </div>
@@ -253,6 +257,12 @@ export default function PricingPage() {
                   );
                 })}
               </div>
+              {(FAMILY_HUBS as readonly string[]).includes(level) && (
+                <FamilyPacksStrip
+                  hub={level as (typeof FAMILY_HUBS)[number]}
+                  cta={{ label: user ? 'Open the family dashboard' : 'Create a family account', to: user ? '/parent' : '/parent-signup' }}
+                />
+              )}
             </div>
           ))}
       </div>

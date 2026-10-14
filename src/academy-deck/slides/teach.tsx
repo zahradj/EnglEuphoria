@@ -8,6 +8,7 @@ import { sayable } from '../spoken';
 import { COLOR, Bubble } from '../Stage';
 import type { ModelSlide, TeachArt, TeachSlide } from '../types';
 import { Traveller, WavingFlag } from './anim';
+import { Bearer } from './bearer';
 import { Panel } from './shared';
 
 /** The animated picture for a word, an option or a chat sticker. `again` restarts the animation; `size` sm = small (options, stickers). */
@@ -50,6 +51,7 @@ export function Art({ art, again = 0, size = 'md' }: { art: TeachArt; again?: nu
     );
   }
   if (art.type === 'action') return <div className={`ad-art ad-art-action ad-art-${size}`} key={again}><ActionArt id={art.id} label={art.id} /></div>;
+  if (art.type === 'bearer') return <div className={`ad-art ad-art-bearer ad-art-${size}`} key={again}><Bearer code={art.code} who={art.who} label={`${art.who} holding the flag of ${art.code}`} size={size === 'sm' ? 'sm' : 'md'} /></div>;
   if (art.type === 'pair') {
     return (
       <div className={`ad-art ad-art-pair ad-art-${size}`} key={again}>
@@ -131,7 +133,7 @@ export function TeachView({ slide }: { slide: TeachSlide }) {
 }
 
 /** Modelling: watch the characters do it. Each line shows its pattern card: the frame stays, the coloured part changes. */
-function ChatAvatar({ who }: { who: string }) {
+export function ChatAvatar({ who }: { who: string }) {
   const { artBase } = useDeck();
   const [bad, setBad] = useState(false);
   return (

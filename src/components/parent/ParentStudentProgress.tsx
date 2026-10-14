@@ -5,6 +5,7 @@ import { BookOpen, Trophy, Zap, Calendar, TrendingUp } from "lucide-react";
 import { format } from "date-fns";
 import { ParentTeacherFeedbackCard } from "./ParentTeacherFeedbackCard";
 import { LearningPlanCard } from "@/components/student/LearningPlanCard";
+import { ParentTestReportCard } from "./ParentTestReportCard";
 
 interface Student {
   student_id: string;
@@ -135,6 +136,7 @@ export function ParentStudentProgress({
             </dl>
           </section>
 
+          {activeStudentId && <ParentTestReportCard studentId={activeStudentId} />}
           {activeStudentId && <LearningPlanCard studentId={activeStudentId} />}
           {activeStudentId && <ParentTeacherFeedbackCard studentId={activeStudentId} />}
         </>

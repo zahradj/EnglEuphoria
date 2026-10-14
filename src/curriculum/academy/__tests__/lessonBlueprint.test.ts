@@ -1,6 +1,6 @@
 // Deploy gate for the Academy LESSON blueprints (one per 60-minute Live Session). Fix the data, never the check.
 import { describe, expect, it } from 'vitest';
-import { ACADEMY_CAST_NAMES, ACADEMY_LESSON_BLUEPRINTS, ACADEMY_SEASONS, MAX_ITEMS_PER_SESSION, allocateItems, EPISODES, RECOMMENDED_RHYTHM, RUN_OF_SHOW } from '..';
+import { ACADEMY_CAST_NAMES, ACADEMY_LESSON_BLUEPRINTS, ACADEMY_SEASONS, MAX_ITEMS_PER_SESSION, allocateItems, EPISODES, RECOMMENDED_RHYTHM, RUN_OF_SHOW, VOCAB_GAMES_RULE, VOCAB_GAME_MENU, validateVocabGamePicks, suggestVocabGames } from '..';
 
 describe('Academy lesson blueprints', () => {
   it('has one blueprint per session: 560, unique ids, correct order', () => {
@@ -154,6 +154,35 @@ describe('Academy cast (owner rule: lessons use only the Academy characters from
       expect(new Set(b.cast.appears.map((a) => a.name)).size).toBe(b.cast.appears.length);
       b.cast.appears.forEach((a) => expect(ACADEMY_CAST_NAMES).toContain(a.name));
       expect(b.cast.appears.some((a) => a.name === 'Vee')).toBe(true);
+    }
+  });
+
+  it('VOCABULARY RULE (owner 2026-10-12): every blueprint asks for two different memorising games after each vocabulary introduction', () => {
+    expect(VOCAB_GAMES_RULE.gamesPerWordSet).toBe(2);
+    for (const b of ACADEMY_LESSON_BLUEPRINTS) {
+      expect(b.vocabGames.gamesPerWordSet, b.id).toBe(VOCAB_GAMES_RULE.gamesPerWordSet);
+      expect(b.vocabGames.menu, b.id).toEqual(VOCAB_GAME_MENU.map((g) => g.id));
+      expect(b.vocabGames.suggested, b.id).toHaveLength(3);
+      b.vocabGames.suggested.forEach((p) => expect(validateVocabGamePicks(b.level, p), `${b.id} ${JSON.stringify(p)}`).toEqual([]));
+      expect(b.runOfShow.find((s) => s.name === 'The Drop')!.mustHave.join(' ')).toMatch(/TWO different memorising games/);
+    }
+  });
+
+  it('GAME MENU: every game has a role and levels; built games name their lesson-player slide kind; picks are validated; suggestions rotate and use built games only', () => {
+    expect(VOCAB_GAME_MENU.length).toBeGreaterThanOrEqual(15);
+    expect(new Set(VOCAB_GAME_MENU.map((g) => g.id)).size).toBe(VOCAB_GAME_MENU.length);
+    VOCAB_GAME_MENU.filter((g) => g.status === 'built').forEach((g) => expect(g.slideKind, g.id).toBeTruthy());
+    expect(validateVocabGamePicks('A1', { first: 'drag-match', second: 'category-sort' })).toEqual([]);
+    expect(validateVocabGamePicks('A1', { first: 'drag-match', second: 'drag-match' })).toContain('the two games must be different');
+    expect(validateVocabGamePicks('A1', { first: 'category-sort', second: 'kims-game' }).join()).toMatch(/not a recognition game/);
+    expect(validateVocabGamePicks('C1', { first: 'snap', second: 'connections' })).toEqual([]);
+    expect(validateVocabGamePicks('A1', { first: 'snap', second: 'connections' }).join()).toMatch(/does not suit A1/);
+    expect(validateVocabGamePicks('A1', { first: 'nope', second: 'kims-game' })).toContain('unknown game: nope');
+    const a = suggestVocabGames('A1', 1, 0);
+    const b = suggestVocabGames('A1', 2, 0);
+    expect(a).not.toEqual(b);
+    for (const p of [a, b, suggestVocabGames('A2', 5, 2)]) {
+      [p.first, p.second].forEach((id) => expect(VOCAB_GAME_MENU.find((g) => g.id === id)!.status).toBe('built'));
     }
   });
 });

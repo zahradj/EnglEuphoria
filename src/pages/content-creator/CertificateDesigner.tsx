@@ -18,6 +18,19 @@ import { Upload, Save, RotateCcw, ImageIcon } from "lucide-react";
 
 const HUBS: HubKey[] = ["playground", "academy", "success"];
 
+/** The saved picture address always points at the live site (it is read by the share-image function too). */
+const SITE = "https://www.engleuphoria.com";
+/** In the preview, load our own pictures from the site being used (a preview build has them before the live site). */
+const previewUrl = (u: string | null) => (u && u.startsWith(SITE) ? window.location.origin + u.slice(SITE.length) : u);
+
+/** Finished illustrated certificates made in Canva (public/certificates), one per hub × level. Owner, 2026-10-12:
+ *  Playground = yellow → orange shades + white, each level its own style, 1 medal for Pre-A1, 2 for A1, 3 for A2. */
+const ILLUSTRATED_ART: Partial<Record<`${HubKey}:${CefrLevel}`, { file: string; primary: string; accent: string; text: string; heading: string; textShift: number }>> = {
+  "playground:Pre-A1": { file: "/certificates/playground-pre-a1.png", primary: "#FE6A2F", accent: "#FFF4D6", text: "#7A3B0E", heading: "LITTLE EXPLORER CERTIFICATE", textShift: 0 },
+  "playground:A1": { file: "/certificates/playground-a1.png", primary: "#E8590C", accent: "#FFE9A8", text: "#6B3A00", heading: "RISING STAR CERTIFICATE", textShift: -62 },
+  "playground:A2": { file: "/certificates/playground-a2.png", primary: "#C2410C", accent: "#FFD8A8", text: "#5C1900", heading: "SUPER CHAMPION CERTIFICATE", textShift: -30 },
+};
+
 interface TemplateRow {
   id?: string;
   hub: HubKey;
@@ -79,21 +92,36 @@ export default function CertificateDesigner() {
     return () => { cancel = true; };
   }, [hub, level]);
 
+  const artMode = (row.design_config?.artMode as "wash" | "full" | undefined) ?? "wash";
+  const preset = ILLUSTRATED_ART[`${hub}:${level}`];
+  const usePreset = () => {
+    if (!preset) return;
+    setRow((r) => ({
+      ...r,
+      background_url: `${SITE}${preset.file}`,
+      primary_color: preset.primary, accent_color: preset.accent, text_color: preset.text,
+      heading: preset.heading,
+      design_config: { ...r.design_config, artMode: "full", textShift: preset.textShift },
+    }));
+  };
+
   const svg = useMemo(() => renderCertificateSVG({
     hub,
     cefrLevel: level,
-    title: `${level} Mastery`,
-    subtitle: "12 quests · 88% accuracy",
+    title: artMode === "full" ? (level === "Pre-A1" ? "Explorer Graduation" : `${level} English`) : `${level} Mastery`,
+    subtitle: artMode === "full" ? (level === "Pre-A1" ? "Pre-A1 English · Units 1–10" : `${level} English · course complete`) : "12 quests · 88% accuracy",
     recipientName: "Alex Learner",
     awardedAt: new Date().toISOString(),
     logoUrl: row.logo_url || undefined,
-    backgroundUrl: row.background_url || undefined,
+    backgroundUrl: previewUrl(row.background_url) || undefined,
     heading: row.heading || undefined,
     subheading: row.subheading || undefined,
     primaryOverride: row.primary_color || undefined,
     accentOverride: row.accent_color || undefined,
     textOverride: row.text_color || undefined,
-  }), [hub, level, row]);
+    artMode,
+    textShift: Number(row.design_config?.textShift) || 0,
+  }), [hub, level, row, artMode]);
 
   const dataUrl = `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
 
@@ -109,9 +137,10 @@ export default function CertificateDesigner() {
   const save = async () => {
     setSaving(true);
     const payload = { ...row, hub, cefr_level: level, template_type: "engine_mastery" as const };
-    const { error } = await supabase.from("certificate_templates").upsert(payload, {
-      onConflict: "hub,cefr_level,template_type" as any,
-    });
+    // Match on the row id (set when the design was loaded): the table's unique rule is on COALESCE(hub, cefr_level, type),
+    // which an onConflict on the plain columns cannot use. No id yet → a new row.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- design_config is Json in the generated types
+    const { error } = await supabase.from("certificate_templates").upsert(payload as any);
     setSaving(false);
     if (error) { toast.error(error.message); return; }
     toast.success("Certificate design saved");
@@ -208,6 +237,19 @@ export default function CertificateDesigner() {
                         </div>
                       </div>
 
+                      <div className="space-y-2 rounded border border-slate-800 p-3">
+                        <label className="flex items-center gap-2 text-xs text-slate-300">
+                          <input type="checkbox" checked={artMode === "full"}
+                            onChange={(e) => setRow((r) => ({ ...r, design_config: { ...r.design_config, artMode: e.target.checked ? "full" : "wash" } }))} />
+                          Illustrated certificate — show the background picture at full strength, text inside its white panel
+                        </label>
+                        {preset && (
+                          <Button size="sm" variant="outline" onClick={usePreset} className="border-amber-500/60 text-amber-300">
+                            Use the {HUB_LABEL[hub]} {level} illustration
+                          </Button>
+                        )}
+                      </div>
+
                       <div className="flex gap-2 pt-2">
                         <Button onClick={save} disabled={saving} className="bg-amber-500 hover:bg-amber-600 text-slate-950">
                           <Save className="h-4 w-4 mr-1.5" /> {saving ? "Saving…" : "Save design"}
@@ -228,7 +270,9 @@ export default function CertificateDesigner() {
                 </CardHeader>
                 <CardContent>
                   <div className="rounded-lg overflow-hidden border border-slate-800 bg-white">
-                    <img src={dataUrl} alt="Certificate preview" className="w-full h-auto block" />
+                    {/* inline SVG (not <img>): an <img> SVG may not load its background picture. Text is escaped by the renderer. */}
+                    <div role="img" aria-label="Certificate preview" className="w-full [&>svg]:block [&>svg]:h-auto [&>svg]:w-full"
+                      dangerouslySetInnerHTML={{ __html: svg.replace(/^<\?xml[^>]*>\s*/, "") }} />
                   </div>
                 </CardContent>
               </Card>

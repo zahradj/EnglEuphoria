@@ -47,7 +47,7 @@ function MoleHole({ i, pic, img, word, bonked, nope, reduce, onTap }: { i: numbe
               transition={bonked ? { duration: 0.75, times: [0, 0.45, 1], ease: 'easeIn' } : { duration: 0.42, ease: 'easeOut' }}>
               {/* the picture sign on its little stick */}
               <motion.div className="relative -mb-[14%] flex flex-col items-center" animate={nope ? { rotate: [0, -14, 12, -8, 0] } : reduce ? {} : { rotate: [-3, 3, -3] }} transition={nope ? { duration: 0.5 } : { duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}>
-                <div className="rounded-2xl border-[5px] border-amber-700 bg-white p-1 shadow-[0_6px_0_#92400e,0_10px_16px_rgba(0,0,0,0.35)]">
+                <div className="rounded-2xl border-[5px] border-amber-700 bg-gradient-to-b from-yellow-200 to-amber-300 p-1 shadow-[0_6px_0_#92400e,0_10px_16px_rgba(0,0,0,0.35)]">
                   {img && <img src={img} alt="" draggable={false} className="object-contain" style={{ width: `calc(min(11vh, 7.6vw) * ${h.s})`, height: `calc(min(11vh, 7.6vw) * ${h.s})` }} />}
                 </div>
                 <span className="h-[3vh] w-2 rounded-b bg-amber-800" />

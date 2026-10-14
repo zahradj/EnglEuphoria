@@ -3,12 +3,15 @@ import { shuffled, useDeck } from '../ctx';
 import { useDragChip } from '../drag';
 import { hasFlag } from '../../academy-player/drawn';
 import { Traveller, WavingFlag } from './anim';
+import { Bearer } from './bearer';
+import { Art } from './teach';
+import { Hear } from '../Hear';
 import type { BorderSlide, MemorySlide } from '../types';
 import { Feedback, NOT_YET, Panel } from './shared';
 
 /** Border control: a traveller arrives ("I am from Italy."). Drag the traveller onto the right nationality passport. */
 export function BorderView({ slide }: { slide: BorderSlide }) {
-  const { right, wrong, done, award, seed, speak } = useDeck();
+  const { right, wrong, done, award, seed, speak, artBase } = useDeck();
   const [round, setRound] = useState(0);
   const [held, setHeld] = useState(false);
   const [slip, setSlip] = useState(false);
@@ -44,25 +47,38 @@ export function BorderView({ slide }: { slide: BorderSlide }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [finished]);
   return (
-    <Panel title={slide.prompt} wide>
+    <Panel title={slide.prompt} wide variant="booth">
       {!finished ? (
         <>
-          <div className="ad-traveller" data-held={held} key={round}>
-            <button type="button" className="ad-traveller-card" aria-label={`Traveller: ${cur.says}`} {...drag.bind('traveller')}>
-              {hasFlag(cur.flag) ? <Traveller code={cur.flag} label={`A traveller with the flag of ${cur.flag}`} /> : null}
-              <span className="ad-traveller-says">“{cur.says}”</span>
-            </button>
-          </div>
-          <div className="ad-passports">
-            {opts.map((o) => (
-              <button key={o} type="button" className="ad-passport" data-drop={o} data-stamped={stamped === o} onClick={() => held && drop(o)} aria-label={`Passport: ${o}`}>
-                {slide.flags?.[o] && <span className="ad-passport-flag"><WavingFlag code={slide.flags[o]} label={`Flag for ${o}`} /></span>}
-                <svg className="ad-passport-emblem" viewBox="0 0 60 60" aria-hidden="true"><circle cx="30" cy="30" r="22" fill="none" stroke="#f6d77a" strokeWidth="2.5" /><ellipse cx="30" cy="30" rx="9" ry="22" fill="none" stroke="#f6d77a" strokeWidth="2" /><path d="M8 30h44M12 19h36M12 41h36" stroke="#f6d77a" strokeWidth="2" fill="none" /><path d="M30 4l2.2 5h5.3l-4.3 3.2 1.7 5.1-4.9-3.2-4.9 3.2 1.7-5.1L22.5 9h5.3z" fill="#f6d77a" transform="translate(0 -3) scale(.9) translate(3 0)" /></svg>
-                <span className="ad-passport-title">PASSPORT</span>
-                <b>{o}</b>
-                {stamped === o && <span className="ad-stamp-ok">APPROVED</span>}
+          <div className="ad-booth" data-held={held} data-stamped={!!stamped}>
+            <div className="ad-booth-traveller" key={round}>
+              <button type="button" className="ad-booth-card" aria-label={`Traveller: ${cur.says}`} {...drag.bind('traveller')}>
+                {cur.who ? (
+                  <Bearer code={cur.flag} who={cur.who} label={`${cur.who} holding the flag of ${cur.flag}`} size="lg" />
+                ) : hasFlag(cur.flag) ? (
+                  <Traveller code={cur.flag} label={`A traveller with the flag of ${cur.flag}`} />
+                ) : null}
               </button>
-            ))}
+              <p className="ad-booth-bubble" aria-live="polite">
+                <span>{cur.says}</span>
+                <Hear who={slide.actors?.[0]?.who ?? cur.who ?? 'Theo'} text={cur.says} />
+              </p>
+            </div>
+            <div className="ad-passports">
+              {opts.map((o) => (
+                <button key={o} type="button" className="ad-passport" data-drop={o} data-stamped={stamped === o} onClick={() => held && drop(o)} aria-label={`Passport: ${o}`}>
+                  <span className="ad-passport-title">PASSPORT</span>
+                  {slide.flags?.[o] && <span className="ad-passport-flag"><WavingFlag code={slide.flags[o]} label={`Flag for ${o}`} /></span>}
+                  <b>{o}</b>
+                  {stamped === o && (
+                    <span className="ad-stamp-ok">
+                      {artBase && <img className="ad-stamp-img" src={`${artBase}/objects/stamp.webp`} alt="" aria-hidden="true" draggable={false} />}
+                      APPROVED
+                    </span>
+                  )}
+                </button>
+              ))}
+            </div>
           </div>
           {slip && <Feedback kind="try">{NOT_YET} Where is the traveller from? Which nationality is that?</Feedback>}
           <p className="ad-hint-line">Traveller {round + 1} of {slide.rounds.length}. Drag the traveller onto the right passport (or tap the traveller, then a passport).</p>
@@ -77,7 +93,7 @@ export function BorderView({ slide }: { slide: BorderSlide }) {
 /** Memory: flip two cards, match each flag with its nationality word. No timers, no penalty. */
 export function MemoryView({ slide }: { slide: MemorySlide }) {
   const { right, wrong, done, seed, speak } = useDeck();
-  const cards = useMemo(() => shuffled(slide.pairs.flatMap((p, i) => [{ k: `f${i}`, pair: i, flag: p.flag, text: '' }, { k: `t${i}`, pair: i, flag: '', text: p.text }]), seed), [slide.pairs, seed]);
+  const cards = useMemo(() => shuffled(slide.pairs.flatMap((p, i) => [{ k: `f${i}`, pair: i, flag: p.flag ?? '', art: p.art, text: '' }, { k: `t${i}`, pair: i, flag: '', art: undefined, text: p.text }]), seed), [slide.pairs, seed]);
   const [open, setOpen] = useState<string[]>([]);
   const [matched, setMatched] = useState<number[]>([]);
   useEffect(() => {
@@ -104,10 +120,10 @@ export function MemoryView({ slide }: { slide: MemorySlide }) {
         {cards.map((c) => {
           const up = open.includes(c.k) || matched.includes(c.pair);
           return (
-            <button key={c.k} type="button" className="ad-mem" data-up={up} data-matched={matched.includes(c.pair)} disabled={up || open.length === 2} onClick={() => { if (c.text) void speak('Vee', c.text); setOpen([...open, c.k]); }} aria-label={up ? (c.flag ? `Flag ${c.flag}` : c.text) : 'Hidden card'}>
+            <button key={c.k} type="button" className="ad-mem" data-up={up} data-matched={matched.includes(c.pair)} disabled={up || open.length === 2} onClick={() => { if (c.text) void speak('Vee', c.text); setOpen([...open, c.k]); }} aria-label={up ? (c.flag ? `Flag ${c.flag}` : c.art ? `Picture of ${slide.pairs[c.pair].text}` : c.text) : 'Hidden card'}>
               <span className="ad-mem-inner">
                 <span className="ad-mem-face ad-mem-back" aria-hidden="true">★</span>
-                <span className="ad-mem-face ad-mem-front">{c.flag && hasFlag(c.flag) ? <WavingFlag code={c.flag} label={`Flag ${c.flag}`} /> : <b>{c.text}</b>}</span>
+                <span className="ad-mem-face ad-mem-front">{c.art ? <Art art={c.art} size="sm" /> : c.flag && hasFlag(c.flag) ? <WavingFlag code={c.flag} label={`Flag ${c.flag}`} /> : <b>{c.text}</b>}</span>
               </span>
             </button>
           );

@@ -104,7 +104,7 @@ export function NumTrainView({ slide }: { slide: NumTrainSlide }) {
   );
 }
 
-/** Padlock: the clue is in WORDS ("four, two, seven"); set the dials to the digits. */
+/** Padlock: the clue is a big number in WORDS ("four hundred twenty-seven"); set the three dials to its digits (4, 2, 7). */
 export function PadlockView({ slide }: { slide: PadlockSlide }) {
   const { right, wrong, done, award, artBase } = useDeck();
   const [dials, setDials] = useState<number[]>(() => slide.code.split('').map(() => 0));
@@ -138,7 +138,7 @@ export function PadlockView({ slide }: { slide: PadlockSlide }) {
           ))}
         </div>
       </div>
-      {opened && <div className="ad-drawer"><div className="ad-drawer-card"><Icon name="idcard" className="ad-icon-big" /> <b>Member card</b><span>{slide.code.split('').join('-')}</span></div></div>}
+      {opened && <div className="ad-drawer"><div className="ad-drawer-card"><Icon name="idcard" className="ad-icon-big" /> <b>Member card</b><span>{slide.code}</span></div></div>}
       {opened ? <Feedback kind="ok">Click! {slide.reward}</Feedback> : slip ? <Feedback kind="try">{NOT_YET} Read the clue words one by one.</Feedback> : null}
       <div className="ad-row"><button type="button" className="ad-btn ad-btn-primary" disabled={opened} onClick={tryOpen}><Icon name="unlock" /> Open</button></div>
     </Panel>

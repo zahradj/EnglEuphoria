@@ -24,6 +24,7 @@ export function CountBalloonsScene({ scene, onNext, onWin, sync }: { scene: Extr
   const [state, setState] = useSyncedState(sync, { popped: [] as number[], gemDone: false });
   const { popped, gemDone } = state;
   const poppedSet = useMemo(() => new Set(popped), [popped]);
+  const step = Math.max(1, scene.step ?? 1);
   const count = popped.length;
   const finished = count >= scene.total;
 
@@ -32,7 +33,7 @@ export function CountBalloonsScene({ scene, onNext, onWin, sync }: { scene: Extr
     sfx.pop();
     const nextPopped = [...popped, i];
     setState((s) => ({ ...s, popped: nextPopped }));
-    await safeSpeak(numberSpeech(nextPopped.length), scene.who);
+    await safeSpeak(numberSpeech(nextPopped.length * step), scene.who);
     if (nextPopped.length >= scene.total && !gemDone) { sfx.gem(); onWin(true); setState((s) => ({ ...s, gemDone: true })); }
   };
 
@@ -40,12 +41,12 @@ export function CountBalloonsScene({ scene, onNext, onWin, sync }: { scene: Extr
     <div className="absolute inset-0 overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
       <div className="absolute left-1/2 top-4 z-20 flex -translate-x-1/2 flex-col items-center gap-1.5 px-4 text-center">
-        <span className="w-fit rounded-full bg-white/90 px-4 py-1 text-xs font-black uppercase tracking-widest text-orange-700 shadow">Pop & Count · 1 → {scene.total}</span>
+        <span className="w-fit rounded-full bg-white/90 px-4 py-1 text-xs font-black uppercase tracking-widest text-orange-700 shadow">Pop & Count · {step} → {scene.total * step}</span>
         <span className="max-w-lg rounded-full bg-white/95 px-5 py-2 text-sm font-bold text-orange-800 shadow-xl backdrop-blur sm:text-base">{scene.teacher}</span>
       </div>
       <div className="pointer-events-none absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 text-center font-black text-white/90 drop-shadow-[0_4px_10px_rgba(0,0,0,0.35)]">
-        <span className="text-7xl sm:text-8xl">{count}</span>
-        <span className="text-3xl sm:text-4xl">/{scene.total}</span>
+        <span className="text-7xl sm:text-8xl">{count * step}</span>
+        <span className="text-3xl sm:text-4xl">/{scene.total * step}</span>
       </div>
       {Array.from({ length: scene.total }).map((_, i) => {
         const perRow = Math.min(5, scene.total);
