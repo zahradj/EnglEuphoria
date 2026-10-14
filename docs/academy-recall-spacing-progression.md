@@ -34,7 +34,7 @@ For every lesson the system can say: *builds on* (the previous lesson's goal), *
 
 ## 6. What is not built yet
 - **Done (2026-10-14):** `src/academy-deck/recallSlides.ts` builds a Remember? hear-and-pick game from `recallPlan` (one item per earlier lesson in turn); Pre-A1 Season 2 lesson 1 uses it (`rem-recall`). Other decks still have hand-written Remember? slides; replace them with `recallRounds` when each lesson is rebuilt.
-- The Daily 10 trainer does not yet schedule items by this calendar; the data is ready.
+- **Done (2026-10-14):** the Daily 10 scheduler (`src/curriculum/academy/dailyTen.ts`): each item sits in a box 0-5; a right answer pushes its next practice to day 1, 3, 7, 14, 30 after the last good answer, a wrong one sends it back to tomorrow; today's pack is the ten most urgent items (fading ones first); tasks are recognise → say → use, so speaking starts early. `src/academy-deck/dailyTenDeck.ts` turns the pack into a short deck (hear-and-pick, then say-it-aloud). Not wired yet: saving each student's item states (database or browser) and a student-facing Daily 10 screen/route; the existing Sign Me Up homework quest keeps its own fixed chests.
 - Per-student scheduling (items a student finds hard return sooner) needs the diagnostics service; the plan above is the default for everyone.
 
 ## 7. When the student does not practise (owner, 2026-10-14: "each curriculum has a gap… students don't remember because of the lack of practice")
