@@ -251,22 +251,19 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
           : !interactionUnlocked;
   const usesRealSync = scene.kind === 'prea1' ? PREA1_REAL_SYNC_KINDS.has(scene.scene.kind) : REAL_SYNC_KINDS.has(scene.kind);
 
-  // TAKE OVER. With "Interaction On", most activities give the floor to the student and the teacher's own
-  // screen becomes a live mirror (only the shared games in SHARED_PLAY_KINDS let both play at once). So a
-  // teacher who tries to click would silently get nothing. Instead the teacher's screen says so, and one tap on
-  // the activity pauses the student and hands the activity to the teacher. The pause is for this scene only:
-  // moving on resumes the student automatically (unless the teacher pressed Pause themselves).
+  // TEACHER ON A MIRRORED ACTIVITY. With "Interaction On", most activities give the floor to the student and the
+  // teacher's own screen becomes a live mirror (the shared games in SHARED_PLAY_KINDS and the always-unlocked
+  // kinds let both play at once). A tap by the teacher on a mirror NEVER pauses the student: interaction stays on
+  // until the teacher presses Pause themselves (owner, 2026-10-14). The tap only explains how to take over.
   const teacherMirrored = isSynced && role === 'teacher' && !sharedPlay && !studentDriven && interactionUnlocked && usesRealSync;
-  const [tookOver, setTookOver] = useState(false);
-  const takeOver = useCallback(() => { setTookOver(true); setInteractionUnlocked(false); }, [setInteractionUnlocked]);
-  useEffect(() => { if (interactionUnlocked) setTookOver(false); }, [interactionUnlocked]);
-  const takeoverSceneRef = useRef(sceneIdx);
-  useEffect(() => {
-    if (takeoverSceneRef.current === sceneIdx) return;
-    takeoverSceneRef.current = sceneIdx;
-    if (tookOver && role === 'teacher') { setTookOver(false); setInteractionUnlocked(true); }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sceneIdx]);
+  const [takeOverHint, setTakeOverHint] = useState(false);
+  const takeOverHintTimer = useRef<number | undefined>(undefined);
+  const takeOver = useCallback(() => {
+    setTakeOverHint(true);
+    window.clearTimeout(takeOverHintTimer.current);
+    takeOverHintTimer.current = window.setTimeout(() => setTakeOverHint(false), 3500);
+  }, []);
+  useEffect(() => () => window.clearTimeout(takeOverHintTimer.current), []);
 
   // Scene-tagged: the render right after a scene change must never see the previous scene's state.
   const [activityState, setActivityStateLocal] = useSceneScopedState(scene.id);
@@ -772,17 +769,17 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
             <button
               type="button"
               onClick={takeOver}
-              aria-label="Take over: pause the student and play this activity yourself"
+              aria-label="The student is playing. Press Pause to play this activity yourself."
               className="absolute inset-0 z-40 cursor-pointer bg-transparent"
             >
               <span className="pointer-events-none absolute left-1/2 top-3 -translate-x-1/2 rounded-full bg-emerald-600 px-4 py-1.5 text-xs font-bold text-white shadow-lg ring-2 ring-white/70">
-                ✋ Student is playing — tap anywhere to take over
+                ✋ Student is playing — press ⏸ Pause to take over
               </span>
             </button>
           )}
-          {isSynced && role === 'teacher' && tookOver && !interactionUnlocked && (
-            <div className="pointer-events-none absolute left-1/2 top-3 z-40 -translate-x-1/2 rounded-full bg-amber-600/90 px-3 py-1 text-xs font-bold text-white shadow-lg backdrop-blur">
-              🎮 You're in control — the student is paused
+          {isSynced && role === 'teacher' && teacherMirrored && takeOverHint && (
+            <div className="pointer-events-none absolute left-1/2 top-14 z-50 -translate-x-1/2 rounded-full bg-amber-600/95 px-4 py-1.5 text-xs font-bold text-white shadow-lg backdrop-blur">
+              To play this yourself, press ⏸ Pause (Interaction On) — the student stays on until you do
             </div>
           )}
           {isSynced && role === 'teacher' && interactionUnlocked && !studentDriven && !teacherMirrored && (
