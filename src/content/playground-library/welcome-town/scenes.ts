@@ -622,6 +622,8 @@ export type Scene =
        *  of the hatch ("because it's dark"); the child picks the feeling that fits (`choices` index `feelings`), the
        *  monster's face changes, and the child SAYS the whole sentence (moodSentence in moodRules.ts). */
       monster: { name: string; img: string }; feelings: { feeling: string; img: string }[];
+      /** The lab owner (Professor Glob), shown by the machine while the child pulls the lever. */
+      host?: { name: string; img: string };
       rounds: { reason: string; img: string; feeling: number; choices: number[] }[]; doneLine: string; }
   | { id: string; kind: 'festival-cafe'; bg: string; teacher: string; title: string; who: CharKey;
       /** `order` = menu indexes the tray must hold exactly; `offer` = the polite offer the child then SAYS (its item is

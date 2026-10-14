@@ -153,6 +153,19 @@ export function MoodMachineScene({ scene, onNext, onWin, onLose, sync }: { scene
         )}
       </AnimatePresence>
 
+      {/* the lab owner stands by the machine while the child pulls the lever */}
+      <AnimatePresence>
+        {scene.host && phase === 'pull' && !done && (
+          <motion.div key="host" className="pointer-events-none absolute bottom-[4%] end-[3%] z-20 flex flex-col items-center"
+            initial={reduce ? false : { x: 80, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: 80, opacity: 0 }} transition={{ type: 'spring', stiffness: 220, damping: 18 }}>
+            <motion.img src={scene.host.img} alt={scene.host.name} draggable={false}
+              animate={reduce ? {} : { y: [0, -6, 0] }} transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
+              className="h-[min(38vh,22vw)] w-auto object-contain drop-shadow-[0_12px_16px_rgba(30,10,60,0.45)]" />
+            <span className="-mt-[0.6vh] rounded-full bg-teal-600 px-3 py-0.5 font-black text-white shadow-lg" style={{ fontSize: 'min(2.4vh,1.6vw)' }}>{scene.host.name}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* the lever */}
       {!done && phase === 'pull' && (
         <motion.button type="button" onClick={pull} aria-label="Pull the lever"

@@ -174,7 +174,7 @@ export const LESSON_A1U5L1_SCENES: Scene[] = [
   {
     id: 'mt-mood-machine', kind: 'mood-machine', bg: bgLab, who: 'glob', title: 'Monster Mood Machine',
     teacher: 'You do (the new game ★): the student pulls the lever, looks at the picture that comes out (the reason), picks how Bibi feels — and SAYS the whole sentence: "Bibi is scared because it’s dark." Then 🎤.',
-    monster: { name: 'Bibi', img: BIBI.happy },
+    monster: { name: 'Bibi', img: BIBI.happy }, host: { name: 'Professor Glob', img: GLOB },
     feelings: [...NEW_FEELINGS, { feeling: 'sad', img: BIBI.sad }, { feeling: 'tired', img: BIBI.tired }, { feeling: 'happy', img: BIBI.happy }],
     rounds: [
       { reason: 'it’s dark', img: whyPlate('dark'), feeling: 0, choices: [0, 6, 1] },
