@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from 'react-i18next';
 import { List, CalendarDays } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useThemeMode } from "@/hooks/useThemeMode";
@@ -28,6 +29,7 @@ type ViewMode = "list" | "calendar";
  *  original quick-pick date+time list and a full month-grid overview of a
  *  teacher's open slots — same underlying data and booking flow either way. */
 export const StudentBookingCalendar = (props: StudentBookingCalendarProps) => {
+  const { t } = useTranslation();
   const [view, setView] = useState<ViewMode>("list");
   const { resolvedTheme } = useThemeMode();
   const isDark = resolvedTheme === "dark";
@@ -49,7 +51,7 @@ export const StudentBookingCalendar = (props: StudentBookingCalendarProps) => {
             onClick={() => setView("list")}
           >
             <List className="w-3.5 h-3.5 mr-1.5" />
-            List
+            {t('st.cal.list', 'List')}
           </Button>
           <Button
             type="button"
@@ -59,7 +61,7 @@ export const StudentBookingCalendar = (props: StudentBookingCalendarProps) => {
             onClick={() => setView("calendar")}
           >
             <CalendarDays className="w-3.5 h-3.5 mr-1.5" />
-            Whole Calendar
+            {t('st.cal.whole', 'Whole Calendar')}
           </Button>
         </div>
       </div>

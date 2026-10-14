@@ -151,6 +151,27 @@ export class WebRTCVideoService {
     await this.initiateConnectionToUser(remoteUserId);
   }
 
+  getPeerConnections(): Map<string, RTCPeerConnection> {
+    return this.peerManager.getPeerConnections();
+  }
+
+  /**
+   * Send a camera track that appeared AFTER the call started (the student fixed their camera) to everyone already in it.
+   * An existing video sender just swaps its track; otherwise the track is added and the call is renegotiated.
+   */
+  async publishLocalVideoTrack(track: MediaStreamTrack, stream: MediaStream): Promise<void> {
+    for (const [userId, pc] of this.peerManager.getPeerConnections()) {
+      const sender = pc.getSenders().find((s) => s.track?.kind === 'video') ?? pc.getSenders().find((s) => !s.track && pc.getTransceivers().some((t) => t.sender === s && t.receiver.track.kind === 'video'));
+      if (sender) {
+        await sender.replaceTrack(track);
+        continue;
+      }
+      pc.addTrack(track, stream);
+      const offer = await this.peerManager.createOffer(userId);
+      this.sendBroadcast('offer', { fromUserId: this.userId!, targetUserId: userId, data: offer });
+    }
+  }
+
   private async initiateConnectionToUser(targetUserId: string) {
 
     // Create peer connection with ICE candidate relay

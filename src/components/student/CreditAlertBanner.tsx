@@ -1,4 +1,5 @@
 import { AlertTriangle, Coins, Mail, ShoppingCart } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
@@ -25,6 +26,7 @@ export function creditAlertLevel(available: number): CreditAlertLevel {
  * payments are switched on the same button opens the packs to buy.
  */
 export function CreditAlertBanner({ studentId }: { studentId?: string | null }) {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const navigate = useNavigate();
   const id = studentId ?? user?.id ?? null;
@@ -39,15 +41,15 @@ export function CreditAlertBanner({ studentId }: { studentId?: string | null }) 
   ) : ONLINE_PAYMENTS_ENABLED ? (
     <div className="flex shrink-0 flex-wrap gap-2">
       <Button size="sm" onClick={() => navigate('/pricing')} className="gap-1.5">
-        <ShoppingCart className="h-4 w-4" /> Buy online
+        <ShoppingCart className="h-4 w-4" /> {t('st.credit.buyOnline', 'Buy online')}
       </Button>
       <Button size="sm" variant="outline" asChild className="gap-1.5 bg-transparent">
-        <a href={contactToBuyHref({ studentEmail: user?.email })}><Mail className="h-4 w-4" /> Contact us to buy</a>
+        <a href={contactToBuyHref({ studentEmail: user?.email })}><Mail className="h-4 w-4" /> {t('st.credit.contact', 'Contact us to buy')}</a>
       </Button>
     </div>
   ) : (
     <Button size="sm" asChild className="gap-1.5 shrink-0">
-      <a href={contactToBuyHref({ studentEmail: user?.email })}><Mail className="h-4 w-4" /> Contact us to buy</a>
+      <a href={contactToBuyHref({ studentEmail: user?.email })}><Mail className="h-4 w-4" /> {t('st.credit.contact', 'Contact us to buy')}</a>
     </Button>
   );
 
@@ -63,14 +65,14 @@ export function CreditAlertBanner({ studentId }: { studentId?: string | null }) 
         {empty ? <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0" /> : <Coins className="mt-0.5 h-5 w-5 shrink-0" />}
         <div>
           <p className="font-bold">
-            {empty ? 'You have used all your lessons' : `Only ${availableCredits} lesson${availableCredits === 1 ? '' : 's'} left`}
+            {empty ? t('st.credit.usedAll', 'You have used all your lessons') : t('st.credit.lessonsLeft', { n: availableCredits, defaultValue: 'Lessons left: {{n}}' })}
           </p>
           <p className="text-sm opacity-90">
             {empty
               ? ONLINE_PAYMENTS_ENABLED
-                ? 'Buy a credit pack online, or contact us to buy, to book your next lesson.'
-                : 'You can book your next lesson once you buy more credits. Contact us and your new credits will appear here as soon as they are added.'
-              : 'Each lesson is 25 minutes. Top up so your next lesson is never blocked.'}
+                ? t('st.credit.emptyOnline', 'Buy a credit pack online, or contact us to buy, to book your next lesson.')
+                : t('st.credit.emptyOffline', 'You can book your next lesson once you buy more credits. Contact us and your new credits will appear here as soon as they are added.')
+              : t('st.credit.lowNote', 'Each lesson is 25 minutes. Top up so your next lesson is never blocked.')}
           </p>
         </div>
       </div>

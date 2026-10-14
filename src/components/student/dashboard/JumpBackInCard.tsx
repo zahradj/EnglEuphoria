@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { PlayCircle, ChevronRight } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
@@ -18,6 +19,7 @@ const HUB_BTN: Record<Hub, string> = {
  * in-progress curriculum lesson for the student.
  */
 export const JumpBackInCard: React.FC<{ hub: Hub }> = ({ hub }) => {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const navigate = useNavigate();
   const [lesson, setLesson] = useState<{ id: string; title: string } | null>(null);
@@ -38,7 +40,7 @@ export const JumpBackInCard: React.FC<{ hub: Hub }> = ({ hub }) => {
       const d: any = data;
       setLesson({
         id: d.lesson_id,
-        title: d.curriculum_lessons?.title || 'Continue your lesson',
+        title: d.curriculum_lessons?.title || t('st.continueLesson', 'Continue your lesson'),
       });
     })();
     return () => {
@@ -63,7 +65,7 @@ export const JumpBackInCard: React.FC<{ hub: Hub }> = ({ hub }) => {
       </div>
       <div className="flex-1 min-w-0">
         <div className="text-[10px] uppercase tracking-wider text-muted-foreground font-semibold">
-          Jump back in
+          {t('st.jumpBack', 'Jump back in')}
         </div>
         <div className="text-sm font-semibold truncate">{lesson.title}</div>
       </div>

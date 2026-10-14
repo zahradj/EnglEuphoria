@@ -1,5 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { logger } from "@/utils/logger";
+import { cameraIssueFromError, type CameraIssueCode } from "@/lib/classroom/mediaHealth";
 
 // Module-level constants (computed once)
 const IS_SECURE_CONTEXT =
@@ -65,6 +66,10 @@ export function useLocalMedia() {
   const [isCameraOff, setIsCameraOff] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Joined without a working camera (blocked / busy / unplugged / stopped): named so the student can fix it and the teacher is told.
+  const [cameraIssue, setCameraIssue] = useState<CameraIssueCode | null>(null);
+  // Bumps whenever the video track is replaced in place, so consumers can react.
+  const [mediaVersion, setMediaVersion] = useState(0);
   const mediaRef = useRef<MediaStream | null>(null);
   const joinAttemptRef = useRef(false);
 
@@ -142,6 +147,7 @@ export function useLocalMedia() {
 
       let userStream: MediaStream | null = null;
       let lastMediaError: unknown = null;
+      let joinedCameraIssue: CameraIssueCode | null = null;
 
       for (let attemptIndex = 0; attemptIndex < joinAttempts.length; attemptIndex += 1) {
         try {
@@ -176,6 +182,7 @@ export function useLocalMedia() {
         try {
           userStream = await navigator.mediaDevices.getUserMedia({ video: false, audio: getGenericAudioConstraints() });
           logger.warn("Camera unavailable — joined with microphone only", { lastErrorName });
+          joinedCameraIssue = cameraIssueFromError(lastErrorName);
         } catch (audioOnlyError) {
           lastMediaError = audioOnlyError;
         }
@@ -202,6 +209,9 @@ export function useLocalMedia() {
       setIsMuted(false);
       setIsConnected(true);
       setError(null);
+      setCameraIssue(joinedCameraIssue);
+      // A camera that stops later (unplugged, taken by another app) is reported too.
+      userStream.getVideoTracks().forEach((t) => t.addEventListener("ended", () => setCameraIssue("lost")));
 
       logger.info("Successfully connected to media");
     } catch (err) {
@@ -245,6 +255,7 @@ export function useLocalMedia() {
     setIsCameraOff(false);
     setIsMuted(false);
     setError(null);
+    setCameraIssue(null);
 
     logger.info("Successfully left video call");
   }, []);
@@ -323,6 +334,38 @@ export function useLocalMedia() {
     }
   }, []);
 
+  /**
+   * Try to get the camera back (the student fixed the permission / closed the other app / plugged it in).
+   * Adds the new video track to the live stream and returns it so the caller can send it to the peers; null if it still fails
+   * (the reason is updated, so the message stays accurate).
+   */
+  const retryCamera = useCallback(async (): Promise<MediaStreamTrack | null> => {
+    const current = mediaRef.current;
+    if (!current || !IS_BROWSER_SUPPORTED) return null;
+    try {
+      const { cameraId } = await getValidatedSavedDevices();
+      const video = cameraId ? { ...getGenericVideoConstraints(), deviceId: { ideal: cameraId } } : getGenericVideoConstraints();
+      const camStream = await navigator.mediaDevices.getUserMedia({ video });
+      const track = camStream.getVideoTracks()[0];
+      if (!track) return null;
+      current.getVideoTracks().forEach((t) => {
+        current.removeTrack(t);
+        t.stop();
+      });
+      current.addTrack(track);
+      track.addEventListener("ended", () => setCameraIssue("lost"));
+      setIsCameraOff(false);
+      setCameraIssue(null);
+      setMediaVersion((v) => v + 1);
+      logger.info("Camera recovered");
+      return track;
+    } catch (err) {
+      setCameraIssue(cameraIssueFromError(err instanceof Error ? err.name : undefined));
+      logger.warn("retryCamera failed", err);
+      return null;
+    }
+  }, []);
+
   /** Same idea for the microphone. */
   const switchMicrophone = useCallback(async (deviceId: string): Promise<boolean> => {
     if (!deviceId) return false;
@@ -383,5 +426,8 @@ export function useLocalMedia() {
     toggleCamera,
     switchCamera,
     switchMicrophone,
+    cameraIssue,
+    retryCamera,
+    mediaVersion,
   };
 }

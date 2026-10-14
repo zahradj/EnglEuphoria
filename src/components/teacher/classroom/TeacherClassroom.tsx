@@ -10,6 +10,10 @@ import { useLocalMedia } from "@/hooks/useLocalMedia";
 import { TalkTimeMeter } from "@/components/classroom/TalkTimeMeter";
 import { useStudentContext } from "@/hooks/useStudentContext";
 import { useWebRTCConnection } from "@/hooks/useWebRTCConnection";
+import { CameraIssueBanner } from "@/components/classroom/media/CameraIssueBanner";
+import { PeerMediaNotice } from "@/components/classroom/media/PeerMediaNotice";
+import { buildMediaStatus } from "@/lib/classroom/mediaHealth";
+import { mediaStatusStore } from "@/lib/classroom/mediaStatusStore";
 import { ClassroomTopBar } from "./ClassroomTopBar";
 import { CommunicationZone } from "./CommunicationZone";
 import { MainStage, type MainStageHandle } from "@/components/classroom/stage/MainStage";
@@ -642,12 +646,25 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
   useEffect(() => { media.join(); return () => { media.leave(); }; }, []);
 
   // WebRTC peer connection
-  const { participants, isConnected: rtcConnected, connect: rtcConnect, disconnect: rtcDisconnect } = useWebRTCConnection({
+  const { participants, isConnected: rtcConnected, connect: rtcConnect, disconnect: rtcDisconnect, quality: rtcQuality, publishVideoTrack: rtcPublishVideoTrack } = useWebRTCConnection({
     roomId: webrtcRoom,
     userId: user?.id || sessionStorage.getItem('demo-teacher-id') || '',
     localStream: media.stream,
     enabled: media.isConnected
   });
+
+  // Tell the other side about a camera problem / weak connection (rides on the heartbeat), and clear it when we leave.
+  useEffect(() => {
+    mediaStatusStore.setOwn(buildMediaStatus({ cameraIssue: media.cameraIssue, quality: rtcQuality }));
+  }, [media.cameraIssue, rtcQuality]);
+  useEffect(() => () => mediaStatusStore.reset(), []);
+  // "Try again": get the camera back, then send it to the call.
+  const retryCamera = async (): Promise<boolean> => {
+    const track = await media.retryCamera();
+    if (!track) return false;
+    await rtcPublishVideoTrack(track);
+    return true;
+  };
 
   // Share the call streams with lesson content (the Live Stage frame shows
   // whoever is dragged onto it from the video tiles).
@@ -1163,6 +1180,11 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
         </div>
       )}
 
+      {/* Camera problem (with Try again) and what is wrong on the other side */}
+      <div className="pointer-events-none fixed left-1/2 top-3 z-[125] flex -translate-x-1/2 flex-col items-center gap-2 px-3">
+        <div className="pointer-events-auto"><CameraIssueBanner issue={media.cameraIssue} onRetry={retryCamera} /></div>
+        <div className="pointer-events-auto"><PeerMediaNotice peerRole="student" /></div>
+      </div>
 
       {/* Teacher-only: live diagnostics for realtime + WebRTC, plus a
           "send to support" action that attaches this lesson/sync state on
