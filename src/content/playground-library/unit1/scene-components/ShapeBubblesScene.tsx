@@ -6,7 +6,7 @@ import * as sfx from '../sfx';
 import { Confetti } from '../fx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
 import { CLAY_BUTTON, ShapeIcon, THICK_WORDS, sayWithin } from './shared';
-import { Bursts, useBursts } from './gameFx';
+import { Bursts, CalmBg, useBursts } from './gameFx';
 
 /* ---------- Bubble Pop (Pre-A1 Unit 2 Lesson 3) ----------
  * Big soap bubbles float in place over Shape Town, each holding a shape.
@@ -89,7 +89,9 @@ export function ShapeBubblesScene({ scene, onWin, onNext, sync }: { scene: Bubbl
   };
 
   return (
-    <div className="absolute inset-0 select-none overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
+    <div className="absolute inset-0 select-none overflow-hidden">
+      {/* busy picture calmed down so the floating pieces are the clearest thing (owner 2026-10-14) */}
+      <CalmBg img={scene.bg} strength="strong" />
       <div className="absolute inset-0 bg-sky-900/10" />
       {done && <Confetti count={60} />}
       <div className="pointer-events-none absolute inset-x-0 top-16 z-30 flex flex-col items-center gap-1 px-14">

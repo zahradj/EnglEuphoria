@@ -6,7 +6,7 @@ import * as sfx from '../sfx';
 import { Confetti } from '../fx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
 import { CLAY_BUTTON, STICKER_FILTER, THICK_WORDS, sayWithin } from './shared';
-import { Bursts, FloatText, useBursts } from './gameFx';
+import { Bursts, CalmBg, FloatText, useBursts } from './gameFx';
 
 /* ---------- Listen and Match (`listen-match`, Pre-A1 — owner 2026-10-13) ----------
  * The owner's rule: every time new words are shown, a matching activity follows — Pre-A1 listens and matches (no
@@ -259,11 +259,11 @@ export function ListenMatchScene({ scene, onWin, onNext, sync }: { scene: Listen
 
   const board = look === 'balloons' ? balloons : look === 'doors' ? doors : look === 'lilypads' ? lilypads : cards;
   return (
-    <div ref={rootRef} className="absolute inset-0 select-none overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
+    <div ref={rootRef} className="absolute inset-0 select-none overflow-hidden">
+      {/* the lesson's place, calmed down so the floating pictures are the clearest thing on screen */}
+      <CalmBg img={scene.bg} strength={look === 'cards' || look === 'doors' ? 'soft' : 'strong'} />
       <style>{`@keyframes lm-pop { 0% { scale: 0.2; opacity: 0; } 70% { scale: 1.08; opacity: 1; } 100% { scale: 1; opacity: 1; } }
         @keyframes lm-wave { 0% { scale: 0.9; opacity: 0.85; } 100% { scale: 1.9; opacity: 0; } }`}</style>
-      {/* a soft vignette keeps the eye on the board without dimming the picture */}
-      <div className="pointer-events-none absolute inset-0" style={{ background: 'radial-gradient(ellipse at 50% 45%, rgba(30,27,75,0) 45%, rgba(30,27,75,0.38) 100%)' }} />
       <Bursts items={bursts} />
       <FloatText show={!!plus} x={plus?.x ?? 50} y={plus?.y ?? 50}>+⭐</FloatText>
       {/* the lesson's character watches, breathes, cheers on a right answer and tilts on a wrong one */}

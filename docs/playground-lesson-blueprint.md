@@ -337,6 +337,9 @@ A1, read and match … after the matching, another activity or another game to r
   A `crop` on an item shows only the part of a scene picture that carries the word (Leo's pose in U4L1, Pip's shoes
   in U9L5, the toy and its place in U3L5). Story phrases are matched to their story moments (U2L5
   "Here you are!" = the boat, U6L5 "No, it isn't!" = the blue and the yellow door). Every Pre-A1 word lesson now has one.
+- **Aesthetic pass on every activity** (owner 2026-10-14): colours, look, layout, icons and game feel are designed, not
+  left at defaults; floating pieces over a busy picture sit on `CalmBg` (blurred, veiled picture) — see CLAUDE.md
+  "Aesthetic pass on every activity" and `.claude/skills/game-animation` §5b.
 - First lesson built this way: Pre-A1 U1L5 (story words → Listen and Match → Wind Catch → the film).
 
 ## 3g. A1 lessons — themed worlds, the plan first, sentences and questions (all A1 lessons)

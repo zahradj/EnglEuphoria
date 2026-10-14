@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, useReducedMotion } from 'framer-motion';
-import { Bursts, FloatText, useBursts } from './unit1/scene-components/gameFx';
+import { Bursts, CalmBg, FloatText, useBursts } from './unit1/scene-components/gameFx';
 import { Confetti } from './unit1/fx';
 import { type ActivitySync, useSyncedState } from './sceneActivitySync';
 import { cueSpeak } from './unit1/audio';
@@ -314,8 +314,9 @@ export function PictureMatchScene({ scene, onNext, onWin, onLose, sync }: {
     <div
       ref={rootRef}
       className="absolute inset-0 overflow-hidden bg-cover bg-center select-none"
-      style={scene.bg ? { backgroundImage: `url(${scene.bg})` } : { background: look.bg }}
+      style={scene.bg ? undefined : { background: look.bg }}
     >
+      {scene.bg && <CalmBg img={scene.bg} />}
       <style>{`@keyframes pm-pop { 0% { scale: 0.2; opacity: 0; } 70% { scale: 1.06; opacity: 1; } 100% { scale: 1; opacity: 1; } }
         @keyframes pm-yay { 0% { scale: 1; } 35% { scale: 1.07; } 65% { scale: 0.97; } 100% { scale: 1; } }`}</style>
       <Bursts items={bursts} />
