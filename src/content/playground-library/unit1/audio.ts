@@ -738,6 +738,8 @@ const PHONICS_ZIP_CLIP: Record<string, string> = {
 };
 const zipUrl = (file: string) => `/phonics-sounds/phonics-zip/${file}.mp3`;
 for (const [key, file] of Object.entries(PHONICS_ZIP_CLIP)) PHONIC_CLIP[key] = zipUrl(file);
+// ea (tea, sea, leaf — A1 U5L2) is the same long /iː/ as ee: reuse the recorded ee.
+PHONIC_CLIP.ea = PHONIC_CLIP.ee;
 
 // Long-vowel variants (phonics-master's double-underscore recordings), kept under
 // a distinct key since e.g. 'a' is already the SHORT /æ/ sound above.

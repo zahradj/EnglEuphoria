@@ -22,6 +22,8 @@ import { BUILDER_WRONG, builderHint } from './monsterRules';
 type Builder = Extract<Scene, { kind: 'monster-builder' }>;
 
 const EYE_SPOTS: Record<1 | 2 | 3, number[]> = { 1: [50], 2: [38, 62], 3: [30, 50, 70] };
+/** Horn widths (% of the monster box) by tray index: the short pair is wider and flatter than the long pair. */
+const HORN_W = [56, 60];
 
 export function MonsterBuilderScene({ scene, onNext, onWin, onLose, sync }: { scene: Builder; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; sync?: ActivitySync }) {
   const reduce = useReducedMotion();
@@ -103,25 +105,25 @@ export function MonsterBuilderScene({ scene, onNext, onWin, onLose, sync }: { sc
             {horns >= 0 && scene.horns[horns] && (
               <motion.img key={`h${horns}`} src={scene.horns[horns].img} alt="" draggable={false}
                 initial={reduce ? false : { y: -40, scale: 0.6, opacity: 0 }} animate={{ y: 0, scale: 1, opacity: 1 }} exit={{ opacity: 0 }}
-                className="absolute left-[22%] w-[56%] object-contain" style={{ bottom: '74%' }} />
+                className="absolute object-contain" style={{ bottom: '70%', width: `${HORN_W[horns] ?? 56}%`, left: `${50 - (HORN_W[horns] ?? 56) / 2}%` }} />
             )}
           </AnimatePresence>
-          <img src={scene.body} alt="" draggable={false} className="absolute inset-0 h-full w-full object-contain drop-shadow-[0_14px_18px_rgba(30,10,60,0.45)]" />
+          <img src={scene.body} alt="" draggable={false} className="absolute left-[9%] top-[18%] w-[82%] object-contain drop-shadow-[0_14px_18px_rgba(30,10,60,0.45)]" />
           <AnimatePresence>
             {eyes > 0 && EYE_SPOTS[eyes as 1 | 2 | 3].map((x, i) => (
               <motion.img key={`e${eyes}-${i}`} src={scene.eye} alt="" draggable={false}
                 initial={reduce ? false : { scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} transition={{ type: 'spring', stiffness: 380, damping: 14, delay: i * 0.06 }}
-                className="absolute w-[17%] -translate-x-1/2 object-contain" style={{ left: `${x}%`, top: '24%' }} />
+                className="absolute w-[16%] object-contain" style={{ left: `${x - 8}%`, top: '30%' }} />
             ))}
           </AnimatePresence>
           <AnimatePresence>
             {mouth >= 0 && scene.mouths[mouth] && (
               <motion.img key={`m${mouth}`} src={scene.mouths[mouth].img} alt="" draggable={false}
                 initial={reduce ? false : { scaleX: 0 }} animate={{ scaleX: 1 }} exit={{ opacity: 0 }}
-                className="absolute left-[33%] w-[34%] object-contain" style={{ top: '44%' }} />
+                className="absolute left-[33%] w-[34%] object-contain" style={{ top: '49%' }} />
             )}
           </AnimatePresence>
-          {ok && <span className="absolute -bottom-[4%] left-1/2 -translate-x-1/2 rounded-full bg-violet-600 px-4 py-1 font-black text-white shadow-lg" style={{ fontSize: 'min(3vh,2vw)' }}>{round.name}</span>}
+          {ok && <span className="absolute top-[6%] start-0 rotate-[-6deg] rounded-full bg-violet-600 px-4 py-1 font-black text-white shadow-lg" style={{ fontSize: 'min(3vh,2vw)' }}>{round.name}</span>}
         </motion.div>
       )}
 

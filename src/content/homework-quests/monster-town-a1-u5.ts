@@ -49,3 +49,41 @@ export const QUEST_MONSTER_FEELINGS_A1_U5L1: HomeworkQuest = {
     chest('You did it! Feelings expert!'),
   ],
 };
+
+/** Lesson 2 "What Do They Look Like? Tall, Short, Big, Small" */
+export const QUEST_MONSTER_LOOKS_A1_U5L2: HomeworkQuest = {
+  id: 'monster-looks-a1-u5l2', title: 'Monster Looks Quest', subtitle: 'What Do They Look Like? · A1 Unit 5 · Lesson 2', level: 'A1', lessonKey: 'monster-rich-5-2',
+  theme: theme(`${S}/bg-a1u5-home-wide.png`), voice: 'teacher', praise,
+  levels: [
+    { kind: 'picture-choice', name: 'Who Is It?', icon: '👀', intro: 'Listen. Tap the right monster!', img: `${S}/bg-a1u5-home-wide.png`,
+      rounds: [
+        { line: 'He’s got three eyes.', answer: 'Big Bob', options: [{ label: 'Big Bob', src: it('big-bob') }, { label: 'Bea', src: it('bea') }, { label: 'Bibi', src: it('bibi-happy') }] },
+        { line: 'He’s got one big eye.', answer: 'Professor Glob', options: [{ label: 'Bibi', src: it('bibi-happy') }, { label: 'Professor Glob', src: it('glob') }, { label: 'Big Bob', src: it('big-bob') }] },
+        { line: 'She’s got a yellow bow.', answer: 'Bea', options: [{ label: 'Big Bob', src: it('big-bob') }, { label: 'Bibi', src: it('bibi-happy') }, { label: 'Bea', src: it('bea') }] },
+      ] },
+    { kind: 'true-false', name: 'Tall or Short?', icon: '📏', intro: 'Look and listen. True or false?',
+      rounds: [
+        { img: page(5), aspect: 16 / 9, line: 'Big Bob is very tall.', isTrue: true },
+        { img: page(5), aspect: 16 / 9, line: 'Bibi is tall.', isTrue: false },
+        { img: `${S}/bg-a1u5-family-photo-wide.png`, aspect: 16 / 9, line: 'Bibi has got a little sister.', isTrue: true },
+      ] },
+    { kind: 'sentence-builder', name: 'She’s Got…', icon: '🧱', intro: 'Listen. Build what you hear!',
+      rounds: [
+        { img: it('mb-horns-long'), line: 'She has got long horns.', extra: ['short'] },
+        { img: it('bea'), line: 'She has got a little sister.', extra: ['brother'] },
+      ] },
+    { kind: 'reading', name: 'The Story', icon: '📖', intro: 'Read the story. Then answer from memory!', img: page(4),
+      sentences: ['It is dark. Bibi is scared!', 'The lesson is long. Bibi is bored.', 'Big Bob has got three eyes. He is very tall.'],
+      questions: [
+        { q: 'Why is Bibi bored?', options: ['The lesson is long.', 'It is a party.', 'It is dark.'], answer: 'The lesson is long.' },
+        { q: 'How many eyes has Big Bob got?', options: ['one', 'two', 'three'], answer: 'three' },
+      ] },
+    { kind: 'twister', name: 'Sea Twister', icon: '🌀', intro: 'Build my tongue twister before the sand runs out!', img: `${S}/bg-a1u5-home-wide.png`, line: 'Sea monsters eat peas at the beach.', seconds: 50, focus: 'ea', sayIt: 'Now say it slow, then faster!' },
+    { kind: 'sound-blend', name: 'Blend It!', icon: '🧱', intro: 'Tap each sound, then Blend!', img: `${S}/bg-a1u5-home-wide.png`,
+      rounds: [
+        { word: 'tea', sounds: ['t', 'ea'], picture: it('tea') },
+        { word: 'seal', sounds: ['s', 'ea', 'l'], picture: it('seal') },
+      ] },
+    chest('You did it! Monster expert!', `${S}/bg-a1u5-home-wide.png`),
+  ],
+};

@@ -413,7 +413,7 @@ const UNIT1_EXTRACTORS = {
     [s.who, s.doneLine],
   ],
   'size-line': (s) => [
-    [s.who, 'Who is the biggest?'], [s.who, 'Who is next?'], [s.who, 'Not yet! Who is bigger?'], [s.who, s.lastLine],
+    [s.who, s.firstLine ?? 'Who is the biggest?'], [s.who, 'Who is next?'], [s.who, s.wrongLine ?? 'Not yet! Who is bigger?'], [s.who, s.lastLine],
     ...(s.members ?? []).map((m) => [s.who, m.reply]),
     [s.who, s.doneLine],
   ],
