@@ -37,16 +37,13 @@ describe('Listen and Match: the design varies (no two neighbouring lessons look 
 });
 
 /* Owner 2026-10-13: "every time new words are shown, a matching activity follows" — Pre-A1 listens and matches. Every
- * Pre-A1 lesson that teaches words on a listen-repeat-cards page must have a Listen and Match. These five still wait
- * for pictures a non-reader can tell apart by sound alone (house questions, the sea story); take a lesson off this list when its pictures exist. */
-const WAITING_FOR_PICTURES = new Set(['2-5', '6-5']);
+ * Pre-A1 lesson that teaches words on a listen-repeat-cards page must have a Listen and Match (no exceptions left). */
 describe('Pre-A1: a Listen and Match follows the words', () => {
   const kindOf = (s: AnyScene) => (s.kind === 'prea1' ? s.scene?.kind : s.kind);
   const teaching = lessons.filter((x) => x.l <= 6 && x.scenes.some((s) => kindOf(s) === 'listen-repeat-cards'));
   it('finds the teaching lessons', () => { expect(teaching.length).toBeGreaterThan(40); });
   it.each(teaching.map((x) => [x.name, x.u, x.l] as const))('%s has a Listen and Match', (_n, u, l) => {
     const has = !!lookOf(u, l);
-    if (WAITING_FOR_PICTURES.has(`${u}-${l}`)) return;
     expect(has, `U${u}L${l}: add a Listen and Match after the word page`).toBe(true);
   });
 });

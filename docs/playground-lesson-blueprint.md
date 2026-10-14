@@ -335,8 +335,8 @@ A1, read and match … after the matching, another activity or another game to r
 - **Pre-A1: every lesson that teaches words on a listen-repeat-cards page has a Listen and Match** (checked in
   `listenMatchVariety.test.ts`). A full scene picture fills its frame in every design, so it is never shown tiny.
   A `crop` on an item shows only the part of a scene picture that carries the word (Leo's pose in U4L1, Pip's shoes
-  in U9L5, the toy and its place in U3L5). Still waiting for pictures a child can tell apart by sound alone: U2L5 (sea
-  story phrases) and U6L5 (house questions).
+  in U9L5, the toy and its place in U3L5). Story phrases are matched to their story moments (U2L5
+  "Here you are!" = the boat, U6L5 "No, it isn't!" = the blue and the yellow door). Every Pre-A1 word lesson now has one.
 - First lesson built this way: Pre-A1 U1L5 (story words → Listen and Match → Wind Catch → the film).
 
 ## 3g. A1 lessons — themed worlds, the plan first, sentences and questions (all A1 lessons)

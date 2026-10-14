@@ -118,7 +118,7 @@ export function ListenMatchScene({ scene, onWin, onNext, sync }: { scene: Listen
       </svg>
     )
     : isScenePic(it.img)
-    ? <img src={it.img} alt="" draggable={false} className="h-full w-full rounded-[1.4vh] object-cover" />
+    ? <img src={it.img} alt="" draggable={false} className={`${cls.replace('object-contain', 'object-cover')} rounded-[1.4vh]`} />
     : <img src={it.img} alt="" draggable={false} className={cls} style={{ filter: STICKER_FILTER }} />;
 
   /* ---- the four designs ---- */

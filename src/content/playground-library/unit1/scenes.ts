@@ -4929,6 +4929,18 @@ export const LESSON_U2L5_SCENES: Scene[] = [
     ],
   },
   {
+    // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
+    id: 'u2l5-listen-match', kind: 'listen-match', look: 'lilypads', bg: bgU2L5Sea, who: 'pip',
+    teacher: 'Listen and match! Tap a speaker, hear the line from the story, then tap its picture. The child says it after it sticks.',
+    prompt: 'Listen and match!', doneLine: 'Great listening!',
+    items: [
+      { label: 'ship', img: itemShip, say: "It's a ship!", who: 'pip' },
+      { label: 'fish', img: bgU2L5Sad, say: 'This is Shelly. She is a fish.', who: 'pip' },
+      { label: 'here you are', img: bgU2L5Red, say: 'Here you are!', who: 'bella' },
+      { label: 'thank you', img: bgU2L5Crab, say: 'Thank you!', who: 'willow' },
+    ],
+  },
+  {
     id: 'u2l5-model-sh', kind: 'sound-model', bg: bgU2L5Sea, who: 'mia', letter: 'Sh', phoneme: '/sh/', sound: 'shh',
     teacher: 'S and H together say /sh/ — like Shelly! Ship, shell, shoe!',
     anchors: [
@@ -11497,6 +11509,18 @@ export const LESSON_U6L5_SCENES: Scene[] = [
       { who: 'pip', sentence: 'Is this my house?', img: bgU6L5BlueA, imgLabel: 'Is this my house?' },
       { who: 'pip', sentence: "No, it isn't!", img: bgU6L5BlueB, imgLabel: "No, it isn't!" },
       { who: 'pip', sentence: 'Yes, it is!', img: bgU6L5RedB, imgLabel: 'Yes, it is!' },
+    ],
+  },
+  {
+    // Owner 2026-10-13/14: after the words, Listen and Match (sounds only, no written words), then the next game.
+    id: 'u6l5-listen-match', kind: 'listen-match', look: 'lilypads', bg: bgU6L5Street, who: 'pip',
+    teacher: 'Listen and match! Tap a speaker, hear the line from the story, then tap its picture. The child says it after it sticks.',
+    prompt: 'Listen and match!', doneLine: 'Great listening!',
+    items: [
+      { label: 'where', img: bgU6L5StreetC, say: "Where's my house?", who: 'pip' },
+      { label: 'blue', img: bgU6L5BlueB, say: "The blue house? No, it isn't!", who: 'pip' },
+      { label: 'yellow', img: bgU6L5YellowB, say: "The yellow house? No, it isn't!", who: 'pip' },
+      { label: 'red', img: bgU6L5RedC, say: 'The red house! Yes, it is!', who: 'pip' },
     ],
   },
   {
