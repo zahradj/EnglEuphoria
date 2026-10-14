@@ -53,7 +53,9 @@ import * as magicCastleScenes from '../src/content/playground-library/magic-cast
 import * as jungleScenes from '../src/content/playground-library/jungle-adventure/scenes.ts';
 import * as spaceScenes from '../src/content/playground-library/space-mission/scenes.ts';
 import * as foodScenes from '../src/content/playground-library/food-festival/scenes.ts';
+import * as monsterScenes from '../src/content/playground-library/monster-town/scenes.ts';
 import { surveyQuestion, surveyAnswer, surveyReport, CAFE_WRONG, CAFE_YES } from '../src/content/playground-library/welcome-town/scene-components/foodRules.ts';
+import { moodSentence, moodReason, moodAsk, MOOD_PULL, MOOD_WRONG } from '../src/content/playground-library/welcome-town/scene-components/moodRules.ts';
 import { placeSentence, roomSentences, whoseQuestion, ownerSentence, OWNER_YES, OWNER_NO, ROOM_AGAIN, ROOM_FREE_START, ROOM_DESCRIBE } from '../src/content/playground-library/welcome-town/scene-components/roomRules.ts';
 import { homeworkA1U9L1Lines } from '../src/content/playground-library/magic-castle/homework.ts';
 import { allQuestLines } from '../src/content/homework-quests/registry.ts';
@@ -875,6 +877,8 @@ const WT_EXTRACTORS = {
     ...(s.icons ?? []).map((i) => ['teacher', i.label]),
     ...(s.planets ?? []).flatMap((p) => [[s.who, p.forecast], ['teacher', p.report]]),
     ...(s.bag ?? []).flatMap((b) => [[s.who, b.line], ['teacher', b.say]])],
+  'mood-machine': (s) => [[s.who, s.doneLine], [s.who, MOOD_PULL], [s.who, MOOD_WRONG],
+    ...(s.rounds ?? []).flatMap((r) => [[s.who, `${moodReason(r.reason)} ${moodAsk(s.monster?.name ?? '')}`], ['teacher', moodSentence(s.monster?.name ?? '', s.feelings?.[r.feeling]?.feeling ?? '', r.reason)]])],
   'food-survey': (s) => [[s.who, s.doneLine], [s.who, 'Ask your friends! Tap a box.'], [s.who, 'Now read the chart. Likes or doesn’t like?'], [s.who, 'Look at the chart again!'],
     ...(s.friends ?? []).flatMap((fr, f) => (s.foods ?? []).flatMap((fd, c) => [['teacher', surveyQuestion(fd.label, fr.name)], [fr.who, surveyAnswer(!!s.answers?.[f]?.[c])]])),
     ...(s.reports ?? []).map((r) => ['teacher', surveyReport(s.friends[r.friend].name, s.foods[r.food].label, !!s.answers?.[r.friend]?.[r.food])])],
@@ -949,6 +953,7 @@ const ENGINES = [
   { scenesModule: jungleScenes, extractors: WT_EXTRACTORS, resolveWho: (who) => wtScenes.VOICE_KEY[who] ?? who },
   { scenesModule: spaceScenes, extractors: WT_EXTRACTORS, resolveWho: (who) => wtScenes.VOICE_KEY[who] ?? who },
   { scenesModule: foodScenes, extractors: WT_EXTRACTORS, resolveWho: (who) => wtScenes.VOICE_KEY[who] ?? who },
+  { scenesModule: monsterScenes, extractors: WT_EXTRACTORS, resolveWho: (who) => wtScenes.VOICE_KEY[who] ?? who },
 ];
 
 /** Homework games: every line they can say, already as (voice, text). */

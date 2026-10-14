@@ -60,7 +60,7 @@ import type { ColorPlaySceneData } from '../ColorPlayScene';
 
 const W = '/welcome-town';
 
-export type CharKey = 'pip' | 'marigold' | 'mia' | 'bella' | 'willow' | 'leo' | 'coco' | 'wim' | 'catcat' | 'nova' | 'beep' | 'cilla' | 'pico';
+export type CharKey = 'pip' | 'marigold' | 'mia' | 'bella' | 'willow' | 'leo' | 'coco' | 'wim' | 'catcat' | 'nova' | 'beep' | 'cilla' | 'pico' | 'bibi' | 'glob';
 
 /** Every one of these maps onto an audio.ts voice already built for that
  *  exact character (pip/mia/bella/willow/leo are the same characters as the
@@ -86,6 +86,9 @@ export const VOICE_KEY: Record<CharKey, 'pip' | 'mia' | 'bella' | 'willow' | 'le
   // Unit 4 (Food Festival): Chef Cilla and Pico the Mouse — teacher voice until they have their own recorded voices.
   cilla: 'teacher',
   pico: 'teacher',
+  // Unit 5 (Monster Town): Bibi the Tiny Monster (a girl) and Professor Glob — teacher voice until they have their own.
+  bibi: 'teacher',
+  glob: 'teacher',
 };
 
 /** No `img` field — every character appears painted directly into a scene's
@@ -109,6 +112,8 @@ export const CAST: Record<CharKey, { name: string; emoji: string; color: string 
   beep: { name: 'Beep', emoji: '\u{1F916}', color: '#64748B' },
   cilla: { name: 'Chef Cilla', emoji: '\u{1F469}\u{200D}\u{1F373}', color: '#E63946' },
   pico: { name: 'Pico', emoji: '\u{1F42D}', color: '#94A3B8' },
+  bibi: { name: 'Bibi', emoji: '\u{1F47E}', color: '#8B5CF6' },
+  glob: { name: 'Professor Glob', emoji: '\u{1F9D0}', color: '#14B8A6' },
 };
 
 const bgWide = `${W}/scenes/bg-classroom-wide.png`;
@@ -612,6 +617,12 @@ export type Scene =
        *  the chart for each `reports` card and picks likes / doesn't like. */
       friends: { name: string; who: CharKey; img: string }[]; foods: { label: string; img: string }[];
       answers: boolean[][]; reports: { friend: number; food: number }[]; doneLine: string; }
+  | { id: string; kind: 'mood-machine'; bg: string; teacher: string; title: string; who: CharKey;
+      /** ★ Monster Mood Machine (A1 U5L1, docs/a1-unit-5-monster-town.md §5.1): pull the lever, a REASON picture comes out
+       *  of the hatch ("because it's dark"); the child picks the feeling that fits (`choices` index `feelings`), the
+       *  monster's face changes, and the child SAYS the whole sentence (moodSentence in moodRules.ts). */
+      monster: { name: string; img: string }; feelings: { feeling: string; img: string }[];
+      rounds: { reason: string; img: string; feeling: number; choices: number[] }[]; doneLine: string; }
   | { id: string; kind: 'festival-cafe'; bg: string; teacher: string; title: string; who: CharKey;
       /** `order` = menu indexes the tray must hold exactly; `offer` = the polite offer the child then SAYS (its item is
        *  added to the tray when the customer says "Yes, please!"). */

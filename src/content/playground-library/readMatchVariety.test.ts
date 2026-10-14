@@ -3,6 +3,7 @@ import * as WT from './welcome-town/scenes';
 import * as JA from './jungle-adventure/scenes';
 import * as SM from './space-mission/scenes';
 import * as FF from './food-festival/scenes';
+import * as MT from './monster-town/scenes';
 import * as MC from './magic-castle/scenes';
 // Same list as PICTURE_MATCH_LOOKS in PictureMatchScene.tsx (not imported: the component pulls in the Supabase client).
 const PICTURE_MATCH_LOOKS = ['cards', 'frames', 'polaroids', 'chalk'];
@@ -13,7 +14,7 @@ const PICTURE_MATCH_LOOKS = ['cards', 'frames', 'polaroids', 'chalk'];
  * Rule: CLAUDE.md "Vary the design of a repeated game". Designs: PictureMatchScene.tsx. */
 type AnyScene = { id: string; kind: string; look?: string };
 const lessons = new Map<string, AnyScene[]>();
-for (const mod of [WT, JA, SM, FF, MC] as unknown as Record<string, unknown>[]) {
+for (const mod of [WT, JA, SM, FF, MT, MC] as unknown as Record<string, unknown>[]) {
   for (const [name, v] of Object.entries(mod)) {
     if (!Array.isArray(v)) continue;
     const m = /^LESSON_A1U(\d+)L(\d+)_SCENES$/.exec(name) ?? (mod === (WT as unknown) ? /^LESSON_()(\d+)_SCENES$/.exec(name) : null);
@@ -41,7 +42,7 @@ describe('Read and Match: the design varies between neighbouring lessons', () =>
  * teaching lesson (L1-L5) of the rebuilt A1 units opens with its words, so a Read and Match (or the drag-to-character
  * match) must come early, within the first 15 pages. L6 (review) and L7 (Boss Test) recycle words and are not checked. */
 describe('A1: a Read and Match follows the opening words', () => {
-  const teaching = [1, 2, 3, 4].flatMap((u) => [1, 2, 3, 4, 5].map((l) => [u, l] as const)).concat([[9, 4]]);
+  const teaching = [1, 2, 3, 4].flatMap((u) => [1, 2, 3, 4, 5].map((l) => [u, l] as const)).concat([[5, 1], [9, 4]]);
   it.each(teaching)('U%sL%s has a matching page in its first 15 pages', (u, l) => {
     const scenes = lessons.get(`${u}-${l}`);
     expect(scenes, `U${u}L${l} not found`).toBeTruthy();
