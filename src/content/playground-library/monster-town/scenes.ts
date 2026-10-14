@@ -32,6 +32,9 @@ const SONG_GOODBYE = `${WT}/audio/goodbye-song.mp3?v=3`;
 
 /** Bibi's Bad Day — Canva story pictures (scripts/canva-art-request.json); pages 4-12 come with Lessons 2-5. */
 export const bibiPage = (n: number) => `${S}/bg-a1u5-story-${n}-wide.png`;
+/** Story GIFs (owner-approved scenario docs/scenarios/a1u5-bibis-bad-day-gifs.md, 2026-10-14 "go"): two Canva frames of
+ *  the same picture as an animated WebP. Only the Reader uses them; picture tasks keep the stills. */
+const bibiGif = (n: number) => `/lep1/gifs/a1u5-story-${n}.webp`;
 
 /** Bibi the Tiny Monster (a girl) — one cut-out sticker per feeling. */
 export const BIBI = {
@@ -46,8 +49,8 @@ const BISCUIT = item('dog');
 /** The unit's reading strand (plan §4). */
 export const BIBI_BAD_DAY: ReaderPage[] = [
   { img: bibiPage(1), lines: [{ text: 'This is Monster Town. Look! A tiny monster.' }], check: { who: 'pip', question: 'Where are they?', answer: 'Monster Town', options: [{ label: 'Monster Town' }, { label: 'The jungle' }, { label: 'Space' }] } },
-  { img: bibiPage(2), lines: [{ text: 'This is Bibi. Bibi is tired because it is early.' }], check: { who: 'pip', question: 'How is Bibi?', answer: 'Tired', options: [{ label: 'Excited', img: BIBI.excited }, { label: 'Tired', img: BIBI.tired }, { label: 'Angry', img: BIBI.angry }] } },
-  { img: bibiPage(3), lines: [{ text: 'It is dark. Bibi is scared!' }], check: { who: 'mia', question: 'Why is Bibi scared?', answer: 'It is dark.', options: [{ label: 'It is a party.' }, { label: 'It is dark.' }, { label: 'It is hot.' }] } },
+  { img: bibiGif(2), lines: [{ text: 'This is Bibi. Bibi is tired because it is early.' }], check: { who: 'pip', question: 'How is Bibi?', answer: 'Tired', options: [{ label: 'Excited', img: BIBI.excited }, { label: 'Tired', img: BIBI.tired }, { label: 'Angry', img: BIBI.angry }] } },
+  { img: bibiGif(3), lines: [{ text: 'It is dark. Bibi is scared!' }], check: { who: 'mia', question: 'Why is Bibi scared?', answer: 'It is dark.', options: [{ label: 'It is a party.' }, { label: 'It is dark.' }, { label: 'It is hot.' }] } },
 ];
 
 const helloSong = (id: string, bg: string): Scene => ({
