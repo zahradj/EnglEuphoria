@@ -16,6 +16,7 @@ import { CreditBalance } from "@/components/student/CreditBalance";
 import { PushPrompt } from "@/components/notifications/PushPrompt";
 import { useClaimReferral } from "@/hooks/useClaimReferral";
 import { useStudentLevel, StudentLevel } from "@/hooks/useStudentLevel";
+import { HelpAssistant } from "@/components/student/help/HelpAssistant";
 import { useThemeMode } from "@/hooks/useThemeMode";
 import { PlacementGatekeeper } from "@/components/student/PlacementGatekeeper";
 import { HubBootSkeleton } from "@/components/student/HubBootSkeleton";
@@ -347,6 +348,7 @@ const StudentDashboard = () => {
             onTabChange={(tab: StudentNavTab) => setActiveTab(tab)}
           />
           <InstallPrompt />
+          <HelpAssistant hub={studentLevel} />
         </div>
       </SidebarHoverShell>
       </PlacementGatekeeper>

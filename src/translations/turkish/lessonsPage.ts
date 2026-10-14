@@ -1,5 +1,6 @@
 export const lessonsPageTranslations = {
   'pk.eyebrow': 'Dersler',
+  'pk.tab': 'Dersler',
   'pk.title': 'Aileniz için dersler',
   'pk.subtitle': 'Bir çocuk, sonra bir paket seçin. Dersler doğrudan o çocuğa gider.',
   'pk.secure': 'Güvenli online ödeme',

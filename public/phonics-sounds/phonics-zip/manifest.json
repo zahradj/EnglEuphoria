@@ -1,0 +1,202 @@
+{
+  "source": "C:/Users/engle/Downloads/phonics.zip (supplied by the owner, 2026-10-13)",
+  "status": "Every isolated Playground phonics sound plays from this set (PHONICS_ZIP_CLIP in unit1/audio.ts); the older phonics-master clips remain only for wh, au, ing and the long a/e/i/o/u. 192 kbps mono MP3. Accent not verified by ear; owner: clarity matters most.",
+  "sounds": [
+    {
+      "file": "ai_01.mp3",
+      "sound": "/eɪ/ (ai)"
+    },
+    {
+      "file": "oa_01.mp3",
+      "sound": "/oʊ/ (oa)"
+    },
+    {
+      "file": "igh_01.mp3",
+      "sound": "/aɪ/ (igh)"
+    },
+    {
+      "file": "ee_01.mp3",
+      "sound": "/i/ (ee)"
+    },
+    {
+      "file": "or_01.mp3",
+      "sound": "/ɔr/ (or)"
+    },
+    {
+      "file": "oi_01.mp3",
+      "sound": "/ɔɪ/ (oi)"
+    },
+    {
+      "file": "yoo_01.mp3",
+      "sound": "/ju/ (ue)"
+    },
+    {
+      "file": "ng_01.mp3",
+      "sound": "/ŋ/ (ng)"
+    },
+    {
+      "file": "kw_01.mp3",
+      "sound": "/kw/ (qu)"
+    },
+    {
+      "file": "k.mp3",
+      "sound": "/k/ (ck)"
+    },
+    {
+      "file": "th.mp3",
+      "sound": "/θ/ (th, unvoiced)"
+    },
+    {
+      "file": "th_voiced.mp3",
+      "sound": "/ð/ (th, voiced)"
+    },
+    {
+      "file": "short-oo_01.mp3",
+      "sound": "/ʊ/ (short oo)"
+    },
+    {
+      "file": "air_01.mp3",
+      "sound": "/ɛr/ (air)"
+    },
+    {
+      "file": "eer_01.mp3",
+      "sound": "/ɪr/ (ear)"
+    },
+    {
+      "file": "zh_01.mp3",
+      "sound": "/ʒ/ (vision)"
+    },
+    {
+      "file": "ngk.mp3",
+      "sound": "/ŋk/ (nk)"
+    },
+    {
+      "file": "uh_01.mp3",
+      "sound": "/ə/ (schwa)"
+    },
+    {
+      "file": "ul_01_01.mp3",
+      "sound": "/əl/ (-le)"
+    },
+    {
+      "file": "gz.mp3",
+      "sound": "/gz/ (exam)"
+    },
+    {
+      "file": "a.mp3",
+      "sound": "/æ/"
+    },
+    {
+      "file": "b_01.mp3",
+      "sound": "/b/"
+    },
+    {
+      "file": "d.mp3",
+      "sound": "/d/"
+    },
+    {
+      "file": "e.mp3",
+      "sound": "/ɛ/"
+    },
+    {
+      "file": "f_01.mp3",
+      "sound": "/f/"
+    },
+    {
+      "file": "g-1.mp3",
+      "sound": "/g/"
+    },
+    {
+      "file": "h.mp3",
+      "sound": "/h/"
+    },
+    {
+      "file": "i.mp3",
+      "sound": "/ɪ/"
+    },
+    {
+      "file": "j_01.mp3",
+      "sound": "/dʒ/"
+    },
+    {
+      "file": "l_01.mp3",
+      "sound": "/l/"
+    },
+    {
+      "file": "m.mp3",
+      "sound": "/m/"
+    },
+    {
+      "file": "n.mp3",
+      "sound": "/n/"
+    },
+    {
+      "file": "o.mp3",
+      "sound": "/ɑ/"
+    },
+    {
+      "file": "p.mp3",
+      "sound": "/p/"
+    },
+    {
+      "file": "r.mp3",
+      "sound": "/r/"
+    },
+    {
+      "file": "s.mp3",
+      "sound": "/s/"
+    },
+    {
+      "file": "t.mp3",
+      "sound": "/t/"
+    },
+    {
+      "file": "u.mp3",
+      "sound": "/ʌ/"
+    },
+    {
+      "file": "v_01.mp3",
+      "sound": "/v/"
+    },
+    {
+      "file": "w_01.mp3",
+      "sound": "/w/"
+    },
+    {
+      "file": "y_01.mp3",
+      "sound": "/j/"
+    },
+    {
+      "file": "z_01.mp3",
+      "sound": "/z/"
+    },
+    {
+      "file": "ks_01.mp3",
+      "sound": "/ks/ (x)"
+    },
+    {
+      "file": "sh_01.mp3",
+      "sound": "/ʃ/"
+    },
+    {
+      "file": "ch_01.mp3",
+      "sound": "/tʃ/"
+    },
+    {
+      "file": "ar_01.mp3",
+      "sound": "/ɑr/"
+    },
+    {
+      "file": "er_01.mp3",
+      "sound": "/ɝ/"
+    },
+    {
+      "file": "ou_01.mp3",
+      "sound": "/aʊ/"
+    },
+    {
+      "file": "long-oo_01.mp3",
+      "sound": "/u/ (long oo)"
+    }
+  ]
+}

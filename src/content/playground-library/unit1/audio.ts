@@ -721,14 +721,33 @@ for (const pair of ['sh', 'th', 'ch', 'wh', 'ar', 'au', 'er', 'ing', 'ou']) {
 // ck (duck, rock — A1 U2L3) is the same /k/ sound: reuse the recorded k.
 PHONIC_CLIP.ck = PHONIC_CLIP.k;
 
+// Every isolated phonics sound now plays from the owner's phonics.zip (192 kbps mono, public/phonics-sounds/phonics-zip, see
+// manifest.json there). The older phonics-master clips (48 kbps Vorbis, public/lep1/audio/letters/phon-*.ogg) stay on disk
+// and are used only for the few sounds the zip does not have: wh, au, ing and the long a / e / i / o / u. Accent was not checked
+// by ear: the owner said clarity matters most. To go back to an old clip, delete its key here.
+const PHONICS_ZIP_CLIP: Record<string, string> = {
+  // single letters (c uses the /k/ clip, q the /kw/ clip, x the /ks/ clip)
+  a: 'a', b: 'b_01', c: 'k', d: 'd', e: 'e', f: 'f_01', g: 'g-1', h: 'h', i: 'i', j: 'j_01', k: 'k', l: 'l_01', m: 'm', n: 'n', o: 'o',
+  p: 'p', q: 'kw_01', r: 'r', s: 's', t: 't', u: 'u', v: 'v_01', w: 'w_01', x: 'ks_01', y: 'y_01', z: 'z_01',
+  // digraphs and teams that were already available
+  sh: 'sh_01', ch: 'ch_01', th: 'th', ar: 'ar_01', er: 'er_01', ou: 'ou_01', oo: 'short-oo_01',
+  // sounds that were missing before
+  ai: 'ai_01', oa: 'oa_01', ie: 'igh_01', ee: 'ee_01', or: 'or_01', oi: 'oi_01', ue: 'yoo_01', ng: 'ng_01', qu: 'kw_01', ck: 'k',
+  'th-unvoiced': 'th', 'th-voiced': 'th_voiced', 'oo-short': 'short-oo_01',
+  air: 'air_01', ear: 'eer_01', zh: 'zh_01', nk: 'ngk', schwa: 'uh_01', ul: 'ul_01_01', gz: 'gz',
+};
+const zipUrl = (file: string) => `/phonics-sounds/phonics-zip/${file}.mp3`;
+for (const [key, file] of Object.entries(PHONICS_ZIP_CLIP)) PHONIC_CLIP[key] = zipUrl(file);
+
 // Long-vowel variants (phonics-master's double-underscore recordings), kept under
 // a distinct key since e.g. 'a' is already the SHORT /æ/ sound above.
 const LONG_VOWEL_CLIP: Record<string, string> = Object.fromEntries(
   ['a', 'e', 'i', 'o', 'u', 'oo'].map((v) => [v, `/lep1/audio/letters/phon-${v}-long.ogg`]),
 );
-// Vowel digraphs (A1 U9L4) reuse the same recordings: oa (coat, boat, goat) IS the long o /oʊ/; ow as taught there
-// (cow, crown, tower) IS the ou /aʊ/ of "out". (ow in snow/bow = long o is not taught with this key.)
-PHONIC_CLIP.oa = LONG_VOWEL_CLIP.o;
+LONG_VOWEL_CLIP.oo = zipUrl('long-oo_01'); // the zip has a clearer long /uː/ (the other long vowels are not in the zip)
+// Vowel digraphs (A1 U9L4): oa (coat, boat, goat) is the long o /oʊ/ and uses the zip's oa clip (set above, same sound as
+// the old long-o clip but clearer); ow as taught there (cow, crown, tower) IS the ou /aʊ/ of "out", so it follows the ou
+// clip. (ow in snow/bow = long o is not taught with this key.)
 PHONIC_CLIP.ow = PHONIC_CLIP.ou;
 
 // Real recorded encouragement/instruction phrases from the same phonics-master

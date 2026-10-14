@@ -1,4 +1,4 @@
-import { useState, useRef, MouseEvent as ReactMouseEvent } from 'react';
+import { useMemo, useState, useRef, MouseEvent as ReactMouseEvent } from 'react';
 import { Check, Sparkles, Clock, Shield, Cpu, UserCheck, Timer } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -8,6 +8,8 @@ import { useThemeMode } from '@/hooks/useThemeMode';
 import { useTranslation } from 'react-i18next';
 import { Price } from '@/components/locale/Price';
 import { CurrencySwitcher } from '@/components/locale/CurrencySwitcher';
+import { FamilyPacksStrip } from '@/components/pricing/FamilyPacksStrip';
+import { findPack, usePackCatalog } from '@/lib/packCatalog';
 
 
 type AudienceLevel = 'playground' | 'academy' | 'professional';
@@ -23,11 +25,9 @@ interface PackTier {
   isMastery: boolean;
 }
 
-const PER_SESSION: Record<AudienceLevel, number> = {
-  playground: 7.5,
-  academy: 15,
-  professional: 20,
-};
+/** Prices are NOT written here any more: they come from the lesson-pack catalogue (database first, see lib/packCatalog.ts),
+ *  so this page always shows what the student pays at checkout. */
+const NO_PRICE: Record<AudienceLevel, number> = { playground: 0, academy: 0, professional: 0 };
 
 const packTiers: PackTier[] = [
   {
@@ -38,9 +38,9 @@ const packTiers: PackTier[] = [
     },
     labelKey: 'lp.pricing.label.tryItOut',
     sessions: 5,
-    price: { playground: 37.5, academy: 75, professional: 100 },
-    originalPrice: { playground: 37.5, academy: 75, professional: 100 },
-    savings: { playground: 0, academy: 0, professional: 0 },
+    price: NO_PRICE,
+    originalPrice: NO_PRICE,
+    savings: NO_PRICE,
     popular: false,
     isMastery: false,
   },
@@ -52,9 +52,9 @@ const packTiers: PackTier[] = [
     },
     labelKey: 'lp.pricing.label.mostPopular',
     sessions: 10,
-    price: { playground: 75, academy: 150, professional: 195 },
-    originalPrice: { playground: 85, academy: 165, professional: 200 },
-    savings: { playground: 10, academy: 15, professional: 5 },
+    price: NO_PRICE,
+    originalPrice: NO_PRICE,
+    savings: NO_PRICE,
     popular: true,
     isMastery: false,
   },
@@ -66,9 +66,9 @@ const packTiers: PackTier[] = [
     },
     labelKey: 'lp.pricing.label.bestValue',
     sessions: 20,
-    price: { playground: 150, academy: 300, professional: 390 },
-    originalPrice: { playground: 170, academy: 330, professional: 400 },
-    savings: { playground: 20, academy: 30, professional: 10 },
+    price: NO_PRICE,
+    originalPrice: NO_PRICE,
+    savings: NO_PRICE,
     popular: false,
     isMastery: true,
   },
@@ -96,8 +96,23 @@ export function PricingSection() {
   const [level, setLevel] = useState<AudienceLevel>('playground');
   const { resolvedTheme } = useThemeMode();
   const isDark = resolvedTheme === 'dark';
-  const perSession = PER_SESSION[level];
   const { t } = useTranslation();
+  const { packs } = usePackCatalog();
+  const tiers = useMemo(
+    () =>
+      packTiers.map((tier) => {
+        const at = (hub: AudienceLevel) => findPack(packs, hub, tier.sessions);
+        return {
+          ...tier,
+          price: { playground: at('playground').price, academy: at('academy').price, professional: at('professional').price },
+          originalPrice: { playground: at('playground').originalPrice, academy: at('academy').originalPrice, professional: at('professional').originalPrice },
+          savings: { playground: at('playground').savings, academy: at('academy').savings, professional: at('professional').savings },
+        };
+      }),
+    [packs],
+  );
+  // the base rate is the price of one lesson in the biggest regular pack
+  const perSession = findPack(packs, level, 20).price / 20;
 
   return (
     <section id="pricing" className={`py-24 relative overflow-hidden transition-colors duration-300 ${
@@ -177,10 +192,17 @@ export function PricingSection() {
         </motion.div>
 
         <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto" style={{ perspective: '1200px' }}>
-          {packTiers.map((pack, index) => (
+          {tiers.map((pack, index) => (
             <PricingCard key={pack.labelKey} pack={pack} index={index} level={level} isDark={isDark} />
           ))}
         </div>
+
+        <FamilyPacksStrip
+          hub={level}
+          dark={isDark}
+          renderPrice={(n) => <Price usd={n} />}
+          cta={{ label: t('lp.pricing.family.cta', 'Create a family account'), to: '/parent-signup' }}
+        />
 
         <motion.div
           initial={{ opacity: 0 }}
