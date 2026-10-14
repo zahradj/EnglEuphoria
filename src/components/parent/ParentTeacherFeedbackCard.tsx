@@ -1,3 +1,4 @@
+import { AcademyChecklistSummary, type SavedAcademyChecklist } from '@/academy-deck/teacher/AcademyChecklistSummary';
 import { useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { supabase } from '@/integrations/supabase/client';
@@ -10,6 +11,7 @@ interface Props {
 }
 
 interface FeedbackContent {
+  academy_checklist?: SavedAcademyChecklist;
   areas_for_improvement?: string[];
   quick_notes?: string;
   skill_scores?: Record<string, number>;
@@ -118,6 +120,8 @@ export function ParentTeacherFeedbackCard({ studentId }: Props) {
             </div>
           </div>
         )}
+
+        <AcademyChecklistSummary data={data.content.academy_checklist} />
 
         {notes && (
           <div>
