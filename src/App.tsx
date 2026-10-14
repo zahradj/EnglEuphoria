@@ -260,6 +260,7 @@ const PlayA2Unit1Lesson3 = lazy(() => import("./pages/playground-scene/PlayA2Uni
 const AcademyLibraryPage = lazy(() => import("./academy-deck/pages/AcademyLibraryPage"));
 const AcademyDeckLessonPage = lazy(() => import("./academy-deck/pages/AcademyDeckLessonPage"));
 const AcademyDailyTenPage = lazy(() => import("./academy-deck/pages/AcademyDailyTenPage"));
+const AcademyPracticeReportsPage = lazy(() => import("./academy-deck/pages/AcademyPracticeReportsPage"));
 const PlaygroundLibraryPage = lazy(() => import("./pages/playground-library/PlaygroundLibraryPage"));
 const PlaygroundLibraryPublic = lazy(() => import("./pages/playground-library/PlaygroundLibraryPublic"));
 const PlaygroundGameRunner = lazy(() => import("./pages/PlaygroundGameRunner"));
@@ -926,6 +927,11 @@ const App = () => {
                       <Route path="/academy-lesson/:id" element={
                         <ImprovedProtectedRoute requiredRole={["student", "teacher", "content_creator", "admin"]}>
                           <Suspense fallback={<LoadingFallback />}><AcademyDeckLessonPage /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      <Route path="/academy-practice-reports" element={
+                        <ImprovedProtectedRoute requiredRole={["teacher", "content_creator", "admin"]}>
+                          <Suspense fallback={<LoadingFallback />}><AcademyPracticeReportsPage /></Suspense>
                         </ImprovedProtectedRoute>
                       } />
                       <Route path="/academy-daily-10" element={
