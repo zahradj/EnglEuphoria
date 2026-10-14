@@ -18,6 +18,7 @@ import { applyLane } from '../src/academy-deck/lanes.ts';
 import { PATTERN_LAB } from '../src/academy-deck/lessons/patternLab.ts';
 import { FREE_TIME_CLUB_1 } from '../src/academy-deck/lessons/freeTimeClub1.ts';
 import { FREE_TIME_CLUB_2 } from '../src/academy-deck/lessons/freeTimeClub2.ts';
+import { LAST_WEEKEND_1 } from '../src/academy-deck/lessons/lastWeekend1.ts';
 import { SIGN_ME_UP_QUEST } from '../src/academy-deck/homework/signMeUpQuest.ts';
 import { slideLines, ALPHABET } from '../src/academy-deck/spoken.ts';
 import { ACADEMY_VOICES } from '../src/academy-deck/voices.ts';
@@ -31,6 +32,7 @@ const decks = [
   { name: PATTERN_LAB.lessonId, slides: PATTERN_LAB.slides },
   { name: FREE_TIME_CLUB_1.lessonId, slides: FREE_TIME_CLUB_1.slides },
   { name: FREE_TIME_CLUB_2.lessonId, slides: FREE_TIME_CLUB_2.slides },
+  { name: LAST_WEEKEND_1.lessonId, slides: LAST_WEEKEND_1.slides },
   { name: PA1_S01_E1.lessonId, slides: PA1_S01_E1.slides },
   { name: `${SIGN_ME_UP.lessonId} homework`, slides: SIGN_ME_UP_QUEST.flatMap((c) => c.slides) },
 ];

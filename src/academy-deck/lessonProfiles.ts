@@ -32,6 +32,11 @@ export const LESSON_PROFILES: LessonProfile[] = [
     signature: 'match', funHook: 'many matching games, hobby card for Ava', evidence: 'the student writes and says: I play ___, I go ___, I like ___', homeMission: 'send Ava one voice note: I play ___. I go ___. I like ___.',
     grandfathered: 'Hobby Wall still uses the Season 1 opening and games; rebuild it in the Missing Poster style (new setting, new games, story plates).',
   },
+  {
+    id: 'last-weekend-1', setting: 'the school weekend gallery at golden hour', mainPlate: 'weekend-gallery', look: 'golden-hour corridor, photos on strings, fairy lights', frame: 'memory mystery: where was Ava last weekend?',
+    signature: 'explore', funHook: 'walk the photo wall and tap each photo to hear where Ava was; sort the places you were at',
+    evidence: 'the student says and writes “I think Ava was at the ___. I was at the ___.” (Take 2, write, voice note)', homeMission: 'send Ava one voice note: I think you were at the ___.',
+  },
   { id: 'sign-me-up', setting: 'the club sign-up desk', mainPlate: 'club-signup-desk', look: 'club lobby', frame: 'sign up', signature: 'padlock', funHook: 'padlock code', evidence: 'sign-up card', homeMission: 'homework quest', grandfathered: 'Season 1 lesson built before the variety gate.' },
   { id: 'sign-me-up-2', setting: 'the club sign-up desk', mainPlate: 'club-signup-desk', look: 'club lobby', frame: 'sign up (three lanes)', signature: 'padlock', funHook: 'lanes', evidence: 'sign-up card', homeMission: 'voice note', grandfathered: 'Season 1 sample built before the variety gate.' },
   { id: 'fake-or-real', setting: 'the detective wall', mainPlate: 'detective-wall', look: 'detective wall', frame: 'detective', signature: 'factcheck', funHook: 'fact-check a profile', evidence: 'written profile check', homeMission: 'write three sentences', grandfathered: 'Season 1 lesson built before the variety gate.' },

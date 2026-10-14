@@ -1961,6 +1961,382 @@
   },
   {
     "who": "Vee",
+    "text": "The Photo Wall"
+  },
+  {
+    "who": "Ava",
+    "text": "Help! I posted 20 photos. I do not remember my weekend!"
+  },
+  {
+    "who": "Ava",
+    "text": "Come to the gallery. Let us chat about them."
+  },
+  {
+    "who": "Theo",
+    "text": "Do you like weekends?"
+  },
+  {
+    "who": "Theo",
+    "text": "Do you take photos?"
+  },
+  {
+    "who": "Ava",
+    "text": "Which sentence do you hear? Tap it."
+  },
+  {
+    "who": "Vee",
+    "text": "Ava is taking a photo."
+  },
+  {
+    "who": "Vee",
+    "text": "Theo is looking at the wall."
+  },
+  {
+    "who": "Vee",
+    "text": "Whose shadow is it? Pick the word."
+  },
+  {
+    "who": "Vee",
+    "text": "photo"
+  },
+  {
+    "who": "Vee",
+    "text": "swim"
+  },
+  {
+    "who": "Vee",
+    "text": "run"
+  },
+  {
+    "who": "Ava",
+    "text": "Ava is taking a photo."
+  },
+  {
+    "who": "Ava",
+    "text": "Theo is looking at the photos."
+  },
+  {
+    "who": "Vee",
+    "text": "Welcome to the Photo Gallery!"
+  },
+  {
+    "who": "Ava",
+    "text": "Look at my photos from last weekend."
+  },
+  {
+    "who": "Ava",
+    "text": "But I do not remember last weekend!"
+  },
+  {
+    "who": "Theo",
+    "text": "Not one thing? Look, a lake!"
+  },
+  {
+    "who": "Theo",
+    "text": "A tent, a crowd, a wedding. Where were you?"
+  },
+  {
+    "who": "Vee",
+    "text": "Walk the photo wall. Tap every glowing photo."
+  },
+  {
+    "who": "Theo",
+    "text": "Ava was at the lake."
+  },
+  {
+    "who": "Theo",
+    "text": "Ava and I were on the hill."
+  },
+  {
+    "who": "Vee",
+    "text": "You camped there at night."
+  },
+  {
+    "who": "Ava",
+    "text": "Look at the crowd!"
+  },
+  {
+    "who": "Vee",
+    "text": "It was a wedding!"
+  },
+  {
+    "who": "Vee",
+    "text": "What does Ava not remember?"
+  },
+  {
+    "who": "Vee",
+    "text": "Was Ava at the lake?"
+  },
+  {
+    "who": "Ava",
+    "text": "lake"
+  },
+  {
+    "who": "Ava",
+    "text": "Ava was at the lake."
+  },
+  {
+    "who": "Ava",
+    "text": "hill"
+  },
+  {
+    "who": "Ava",
+    "text": "We were on the hill."
+  },
+  {
+    "who": "Ava",
+    "text": "camp"
+  },
+  {
+    "who": "Ava",
+    "text": "We camped on the hill."
+  },
+  {
+    "who": "Ava",
+    "text": "crowd"
+  },
+  {
+    "who": "Vee",
+    "text": "lake"
+  },
+  {
+    "who": "Vee",
+    "text": "hill"
+  },
+  {
+    "who": "Vee",
+    "text": "camp"
+  },
+  {
+    "who": "Vee",
+    "text": "crowd"
+  },
+  {
+    "who": "Theo",
+    "text": "Drag each place word onto its picture."
+  },
+  {
+    "who": "Theo",
+    "text": "lake"
+  },
+  {
+    "who": "Theo",
+    "text": "hill"
+  },
+  {
+    "who": "Theo",
+    "text": "camp"
+  },
+  {
+    "who": "Theo",
+    "text": "crowd"
+  },
+  {
+    "who": "Ava",
+    "text": "Last weekend I was at the lake."
+  },
+  {
+    "who": "Theo",
+    "text": "We were on the hill."
+  },
+  {
+    "who": "Theo",
+    "text": "We camped there at night."
+  },
+  {
+    "who": "Vee",
+    "text": "The rule: the past"
+  },
+  {
+    "who": "Vee",
+    "text": "Last weekend and yesterday mean the past."
+  },
+  {
+    "who": "Vee",
+    "text": "Last weekend I was at the lake."
+  },
+  {
+    "who": "Vee",
+    "text": "Am and is become was. Are becomes were."
+  },
+  {
+    "who": "Vee",
+    "text": "We were at the wedding."
+  },
+  {
+    "who": "Vee",
+    "text": "A verb with e d at the end tells us the past."
+  },
+  {
+    "who": "Vee",
+    "text": "We camped on the hill."
+  },
+  {
+    "who": "Ava",
+    "text": "fishing"
+  },
+  {
+    "who": "Ava",
+    "text": "Fishing was fun."
+  },
+  {
+    "who": "Ava",
+    "text": "wedding"
+  },
+  {
+    "who": "Ava",
+    "text": "The wedding was big."
+  },
+  {
+    "who": "Ava",
+    "text": "celebrate"
+  },
+  {
+    "who": "Ava",
+    "text": "We celebrated at the wedding."
+  },
+  {
+    "who": "Ava",
+    "text": "surprise"
+  },
+  {
+    "who": "Ava",
+    "text": "The party was a surprise."
+  },
+  {
+    "who": "Ava",
+    "text": "joke"
+  },
+  {
+    "who": "Ava",
+    "text": "Theo made a joke."
+  },
+  {
+    "who": "Ava",
+    "text": "Match each word with its picture. Drag it onto the picture."
+  },
+  {
+    "who": "Ava",
+    "text": "Memory! Find each event picture and its word."
+  },
+  {
+    "who": "Vee",
+    "text": "fishing"
+  },
+  {
+    "who": "Vee",
+    "text": "wedding"
+  },
+  {
+    "who": "Vee",
+    "text": "celebrate"
+  },
+  {
+    "who": "Vee",
+    "text": "joke"
+  },
+  {
+    "who": "Vee",
+    "text": "surprise"
+  },
+  {
+    "who": "Theo",
+    "text": "Your own weekend: were you there? Tap a picture, then a box."
+  },
+  {
+    "who": "Vee",
+    "text": "I was at the lake."
+  },
+  {
+    "who": "Vee",
+    "text": "I was not at the lake."
+  },
+  {
+    "who": "Vee",
+    "text": "I was at the hill."
+  },
+  {
+    "who": "Vee",
+    "text": "I was not at the hill."
+  },
+  {
+    "who": "Vee",
+    "text": "I was at the camp."
+  },
+  {
+    "who": "Vee",
+    "text": "I was not at the camp."
+  },
+  {
+    "who": "Vee",
+    "text": "I was at the wedding."
+  },
+  {
+    "who": "Vee",
+    "text": "I was not at the wedding."
+  },
+  {
+    "who": "Ava",
+    "text": "Theo, where was I last weekend?"
+  },
+  {
+    "who": "Theo",
+    "text": "I think you were at the lake."
+  },
+  {
+    "who": "Ava",
+    "text": "Why do you think that?"
+  },
+  {
+    "who": "Theo",
+    "text": "Look! This is the lake photo."
+  },
+  {
+    "who": "Ava",
+    "text": "Good guess!"
+  },
+  {
+    "who": "Ava",
+    "text": "I think Ava was on the hill."
+  },
+  {
+    "who": "Theo",
+    "text": "Take 1 · Theo asks: Where was Ava? Say your guess."
+  },
+  {
+    "who": "Theo",
+    "text": "Take 2 · Start with hello for Theo, then say where you think Ava was and why."
+  },
+  {
+    "who": "Ava",
+    "text": "Voice note · Tell Ava where you think she was last weekend. Try without help first."
+  },
+  {
+    "who": "Vee",
+    "text": "Rule check! Which sentence is about the past? Tap it."
+  },
+  {
+    "who": "Vee",
+    "text": "We were at the lake."
+  },
+  {
+    "who": "Vee",
+    "text": "They camped on the hill."
+  },
+  {
+    "who": "Ava",
+    "text": "Half a photo! Someone in a purple hoodie was at the lake. Who is it?"
+  },
+  {
+    "who": "Vee",
+    "text": "The wall is open!"
+  },
+  {
+    "who": "Vee",
+    "text": "Clue 1 of 8: half a photo at the lake, with a purple hoodie. Who could it be?"
+  },
+  {
+    "who": "Vee",
     "text": "Hello, letters"
   },
   {
