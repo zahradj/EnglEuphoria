@@ -906,6 +906,9 @@ export type Scene =
       id: string; kind: 'size-line'; bg: string; teacher: string; who: CharKey;
       members: { label: string; img: string; height: number; reply: string }[];
       floorOrder?: number[];
+      /** Override the first question and the gentle wrong line (default: "Who is the biggest?" / "Not yet! Who is bigger?"),
+       *  e.g. tall / short in A1 U5L2. */
+      firstLine?: string; wrongLine?: string;
       lastLine: string;
       doneLine: string;
     }

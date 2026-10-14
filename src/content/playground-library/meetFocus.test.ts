@@ -6,12 +6,13 @@ import * as castle from './magic-castle/scenes';
 import * as jungle from './jungle-adventure/scenes';
 import * as space from './space-mission/scenes';
 import * as food from './food-festival/scenes';
+import * as monster from './monster-town/scenes';
 import { splitFocus } from './FocusLine';
 
 type MeetScene = { id: string; kind: 'meet'; line: string; focus?: string[] };
 
 /** Every scene array exported by the lesson files. */
-const allScenes = [unit1, welcomeTown, a2, castle, jungle, space, food]
+const allScenes = [unit1, welcomeTown, a2, castle, jungle, space, food, monster]
   .flatMap((mod) => Object.values(mod as Record<string, unknown>))
   .filter((v): v is Array<{ kind?: string }> => Array.isArray(v) && v.length > 0 && typeof (v[0] as { kind?: unknown })?.kind === 'string')
   .flat();

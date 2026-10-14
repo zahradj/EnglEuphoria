@@ -125,6 +125,9 @@ export function resolvePlaygroundLessonRoute(
   if (fmt === 'food-rich') {
     return `/playground-scene/food-lesson-${lessonNum}`;
   }
+  if (fmt === 'monster-rich') {
+    return `/playground-scene/monster-lesson-${lessonNum}`;
+  }
   if (fmt === 'space-rich') {
     return `/playground-scene/space-lesson-${lessonNum}`;
   }

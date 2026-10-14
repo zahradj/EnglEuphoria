@@ -3,6 +3,7 @@ import { type ActivitySync, isSharedFollower, useSyncedState } from './sceneActi
 import { Burst, GAME_FONT, GameStyles, HudBar, MarketBackdrop, ProgressPill, PromptChip, TitleRibbon } from './gameTheme';
 import { safeSpeak } from './unit1/audio';
 import * as sfx from './unit1/sfx';
+import { CalmBg } from './unit1/scene-components/gameFx';
 
 /**
  * `sort-basket` ("Market Sort") — reusable vocabulary + categorising game, shared by
@@ -48,8 +49,11 @@ export interface SortBasketSceneData {
   intro?: boolean;
   /** Banner name; defaults to "Market Sort". */
   title?: string;
-  /** Optional background art. The scene draws its own market, but the lesson players read `bg` on every scene. */
+  /** Optional background art. The market look draws its own stall; the potions look shows `bg` calmed behind the flasks. */
   bg?: string;
+  /** Design (owner 2026-10-14: a repeated game gets several designs). 'market' (default): woven baskets at a stall.
+   *  'potions': glass potion flasks on the scene picture (Monster Town, Professor Glob's lab). */
+  look?: 'market' | 'potions';
 }
 
 interface SortState {
@@ -70,6 +74,7 @@ interface SortState {
 const INITIAL: SortState = { idx: 0, wrong: [], totalWrong: 0, introIdx: -1, introDone: false, flying: false, finished: false };
 const sleep = (ms: number) => new Promise<void>((r) => window.setTimeout(r, ms));
 const BASKET_COLORS = ['#c2410c', '#15803d', '#1d4ed8'];
+const POTION_COLORS = ['#8B5CF6', '#14B8A6', '#F59E0B'];
 
 export function SortBasketScene({ scene, onNext, onWin, onResult, sync }: {
   scene: SortBasketSceneData;
@@ -215,7 +220,8 @@ export function SortBasketScene({ scene, onNext, onWin, onResult, sync }: {
   const sortedCount = (b: number) => items.slice(0, idx + (flying || finished ? 1 : 0)).filter((it) => it.basket === b).length;
   const hint = wrong.length >= 2 && !flying;
   const basketW = `min(${Math.min(26, 90 / n - 3)}cqw, 36cqh)`;
-  const title = scene.title ?? 'Market Sort';
+  const potions = scene.look === 'potions';
+  const title = scene.title ?? (potions ? 'Potion Sort' : 'Market Sort');
   const prompt = finished ? 'All sorted! Great job!'
     : !introDone ? 'Listen to the baskets…'
       : flying ? 'Yes!'
@@ -230,10 +236,10 @@ export function SortBasketScene({ scene, onNext, onWin, onResult, sync }: {
         @keyframes sb-arrive { 0% { transform: translateX(-60cqw) rotate(-14deg); opacity: 0; } 70% { transform: translateX(1.2cqw) rotate(3deg); opacity: 1; } 100% { transform: none; opacity: 1; } }
         @keyframes sb-drop { 0% { transform: translate(0,0) scale(1); opacity: 1; } 100% { transform: translate(var(--fx), 24cqh) scale(.35); opacity: 0; } }
       `}</style>
-      <MarketBackdrop />
+      {potions && scene.bg ? <CalmBg img={scene.bg} /> : <MarketBackdrop />}
 
       <HudBar
-        left={<TitleRibbon text={title} icon={<span style={{ fontSize: '4.4cqh', lineHeight: 1 }} aria-hidden="true">🧺</span>} />}
+        left={<TitleRibbon text={title} icon={<span style={{ fontSize: '4.4cqh', lineHeight: 1 }} aria-hidden="true">{potions ? '🧪' : '🧺'}</span>} />}
         centre={<PromptChip>{prompt}</PromptChip>}
         right={<ProgressPill done={Math.min(items.length, idx + (flying || finished ? 1 : 0))} total={items.length} color="#16a34a" label="sorted" />}
       />
@@ -276,7 +282,7 @@ export function SortBasketScene({ scene, onNext, onWin, onResult, sync }: {
           const isHint = hint && !finished && item && i === item.basket;
           const hot = introIdx === i;
           const count = sortedCount(i);
-          const color = BASKET_COLORS[i % BASKET_COLORS.length];
+          const color = (potions ? POTION_COLORS : BASKET_COLORS)[i % 3];
           return (
             <button
               key={`${scene.id}-${i}`}
@@ -300,10 +306,23 @@ export function SortBasketScene({ scene, onNext, onWin, onResult, sync }: {
                   <span className="absolute right-[6%] top-0 rounded-full bg-white px-[1cqh] font-black text-emerald-800 shadow" style={{ fontSize: '3.2cqh', lineHeight: 1.3 }}>{count}</span>
                 )}
               </div>
-              {/* woven basket body */}
+              {/* potions: the flask's neck and cork */}
+              {potions && (
+                <div className="flex flex-col items-center">
+                  <div style={{ width: '7cqh', height: '2.2cqh', background: '#A16207', borderRadius: '0.8cqh 0.8cqh 0.3cqh 0.3cqh', boxShadow: 'inset 0 -0.5cqh 0 rgba(0,0,0,.25)' }} />
+                  <div style={{ width: '9cqh', height: '3.4cqh', background: 'linear-gradient(90deg, rgba(255,255,255,.55), rgba(255,255,255,.2) 40%, rgba(255,255,255,.5))', border: '0.4cqh solid rgba(255,255,255,.85)', borderBottom: 'none' }} />
+                </div>
+              )}
+              {/* woven basket body / glass flask body */}
               <div
                 className="relative w-full"
-                style={{
+                style={potions ? {
+                  height: '17cqh',
+                  background: `linear-gradient(180deg, rgba(255,255,255,.45) 0, rgba(255,255,255,.25) 28%, ${color} 28%, ${color} 55%, #2E1065 140%)`,
+                  borderRadius: '4cqh 4cqh 8cqh 8cqh',
+                  boxShadow: `0 1.2cqh 0 rgba(46,16,101,.35), inset 1.4cqh 0 0 rgba(255,255,255,.18), ${hot || isHint ? '0 0 3cqh rgba(253,224,71,.9)' : '0 0 2cqh rgba(255,255,255,.35)'}`,
+                  outline: hot || isHint ? '0.7cqh solid #facc15' : '0.5cqh solid rgba(255,255,255,.9)',
+                } : {
                   height: '17cqh',
                   background: `repeating-linear-gradient(90deg, rgba(0,0,0,.12) 0, rgba(0,0,0,.12) 0.5cqw, transparent 0.5cqw, transparent 2cqw), repeating-linear-gradient(0deg, rgba(255,255,255,.14) 0, rgba(255,255,255,.14) 1cqh, transparent 1cqh, transparent 3cqh), linear-gradient(180deg, ${color}, #451a03)`,
                   borderRadius: '1.5cqh 1.5cqh 7cqh 7cqh',

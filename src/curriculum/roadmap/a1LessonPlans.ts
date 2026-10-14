@@ -289,7 +289,7 @@ export const A1_LESSON_PLANS: A1LessonPlan[] = [
   }),
 
   // ── Unit 5 · Monster Town ─────────────────────────────────────────────────────────────────────────
-  p(5, 1, 'How Do You Feel? Happy, Sad, Tired', {
+  p(5, 1, 'How Do You Feel? Scared, Bored, Excited!', {
     objective: 'I can say how someone feels and why: "He\'s scared because it\'s dark."',
     grammarFocus: ['He\'s / She\'s + feeling', 'because… (chunk)'], newVocabulary: ['scared', 'excited', 'bored', 'surprised', 'because'],
     reviewTargets: ['happy', 'sad', 'tired', 'How are you?'], phonicsFocus: ['ee (green, feet, sleep)'],

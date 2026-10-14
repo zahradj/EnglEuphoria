@@ -6,6 +6,7 @@ import * as MC from './magic-castle/scenes';
 import * as JA from './jungle-adventure/scenes';
 import * as SM from './space-mission/scenes';
 import * as FF from './food-festival/scenes';
+import * as MT from './monster-town/scenes';
 
 /* Owner 2026-10-14: "fix the audio of the instructions in Unit 9 Lesson 4" — the lesson was never on the voice bot's
  * list (scripts/voice-bake-targets.txt), so 184 of its 249 lines had no recorded clip and stayed silent on the live
@@ -13,7 +14,7 @@ import * as FF from './food-festival/scenes';
 const targets = new Set(
   readFileSync('scripts/voice-bake-targets.txt', 'utf8').split('\n').map((l) => l.trim()).filter((l) => l && !l.startsWith('#')),
 );
-const lessons = [WT, A2, MC, JA, SM, FF].flatMap((m) => Object.keys(m).filter((k) => /^LESSON_.*_SCENES$/.test(k)));
+const lessons = [WT, A2, MC, JA, SM, FF, MT].flatMap((m) => Object.keys(m).filter((k) => /^LESSON_.*_SCENES$/.test(k)));
 
 describe('voice bot covers every A1/A2 lesson', () => {
   it.each(lessons)('%s is in scripts/voice-bake-targets.txt', (name) => {
