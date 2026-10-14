@@ -8,7 +8,7 @@ describe('Pre-A1 Seasons (lean ladder: P1-P3)', () => {
   it('there is one Season spec per planned Season, titled as the ladder says', () => {
     const step = ladderSteps('lean').find((s) => s.id === 'pre-a1')!;
     expect(PA1_SEASONS.map((s) => s.title)).toEqual(step.plannedTitles);
-    expect(PA1_SEASONS.map((s) => s.seasonNo)).toEqual([1, 2, 3]);
+    expect(PA1_SEASONS.map((s) => s.seasonNo)).toEqual([1, 2, 3, 4, 5]);
   });
 
   it.each(PA1_SEASONS.map((s) => [s.id, s] as const))('%s: 8 episodes in order, at most 8 new items each, and E7/E8 introduce nothing', (_id, s) => {

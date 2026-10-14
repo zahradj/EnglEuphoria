@@ -32,18 +32,18 @@ export interface LadderStep {
 const SEASONS_PER_LEVEL: Record<AcademyLevel, number> = { A1: 12, A2: 14, B1: 18, B2: 18, C1: 18 };
 // SESSIONS_PER_SEASON (8) is exported from ./types; imported here, not re-exported, so `export *` in index.ts stays unambiguous.
 
-/** Working titles of the Pre-A1 Seasons (first 3 = Pre-A1 Lite). */
+/** Working titles of the Pre-A1 Seasons (first 5 = Pre-A1 Lite since 2026-10-14; all 6 = Full). */
 export const PRE_A1_SEASON_TITLES = ['Hello, letters', 'First sounds', 'Numbers and age', 'My things', 'People and places', 'My day'];
 
 const step = (id: string, label: string, cefr: LadderStep['cefr'], stage: LadderStage, level: AcademyLevel | null, seasons: [number, number] | null, plannedSeasons: number, officialCefr: boolean): LadderStep => ({ id, label, cefr, stage, level, seasons, plannedSeasons, plannedTitles: PRE_A1_SEASON_TITLES.slice(0, level === null ? plannedSeasons : 0), officialCefr, runOfShow: stage === 'pre' ? 'pre-a1' : 'standard' });
 
 /**
- * lean (active): Pre-A1 Lite (3 Seasons to write), A1 split into A1 (Seasons 1-6) and A1 Upper (7-10), the other levels unsplit until A1 has real students and data.
+ * lean (active): Pre-A1 Lite (5 Seasons, P1-P5 planned in preA1.ts), A1 split into A1 (Seasons 1-6) and A1 Upper (7-10), the other levels unsplit until A1 has real students and data.
  * full: Pre-A1 Full (6 Seasons) and every level split into core + Upper (halves of the existing Seasons).
  */
 export const LADDER_PROFILES: Record<LadderProfileId, LadderStep[]> = {
   lean: [
-    step('pre-a1', 'Pre-A1', 'Pre-A1', 'pre', null, null, 3, true),
+    step('pre-a1', 'Pre-A1', 'Pre-A1', 'pre', null, null, 5, true),
     step('a1', 'A1', 'A1', 'core', 'A1', [1, 6], 0, true),
     step('a1-upper', 'A1 Upper', 'A1', 'upper', 'A1', [7, 12], 0, false),
     step('a2', 'A2', 'A2', 'core', 'A2', [1, 14], 0, true),

@@ -149,5 +149,72 @@ export const PA1_S03: PreA1Season = {
   ],
 };
 
-/** The planned Pre-A1 Seasons of the lean ladder (P1-P3), in order. P1 keeps its original spec (PA1_S01) above. */
-export const PA1_SEASONS: readonly PreA1Season[] = [PA1_S01, PA1_S02, PA1_S03];
+
+/** Pre-A1 Season P4 "My things" (the school bag): sounds o c b g, "It is a / an ___.", captions and labels. */
+export const PA1_S04: PreA1Season = {
+  id: 'PA1-S04',
+  step: 'pre-a1',
+  seasonNo: 4,
+  title: 'My things',
+  theme: 'The School Bag',
+  cast: ['Theo', 'Vee', 'Ava'],
+  canDo: [
+    'I can hear and say the sounds o, c, b, g and blend words such as cap, bag, dog, top.',
+    'I can say and read "It is a ___." and "It is an ___." for things in a school bag.',
+    'I can read labels and short captions of up to six words and match them to pictures.',
+  ],
+  chunk: 'It is a / an ___.',
+  release: 'My bag label sheet: eight things in my bag, each labelled, read and said',
+  sounds: ['o', 'c', 'b', 'g'],
+  soundsSoFar: ['s', 'a', 't', 'p', 'i', 'n', 'm', 'd', 'o', 'c', 'b', 'g'],
+  sightWords: ['I', 'am', 'is', 'the', 'my', 'a', 'an', 'this', 'you', 'it'],
+  decodable: ['cap', 'cat', 'cab', 'cot', 'bag', 'big', 'dog', 'dig', 'got', 'gap', 'gas', 'mop', 'pop', 'pot', 'top', 'on', 'not', 'bin', 'tin', 'pin', 'Dan', 'Tom', 'Bob'],
+  games: ['sound-blend slider', 'tile stacker', 'whack-a-word', 'listen and match', 'read and match', 'odd one out', 'treasure hunt trail'],
+  videoGameMechanic: 'Inventory management: pack the bag by reading labels (loot and crafting, with a stepping-stones route)',
+  episodes: [
+    E(1, 'cold-open', 'Cold Open', 'I can meet the school bag, hear o and c, and blend cap, cat, cot, on.', ['bag', 'cap', 'book', 'pen', 'It is a ___.'], 'A bag has been packed with labels missing.', 'Name three things from the bag', ['O', 'C'], ['o', 'c']),
+    E(2, 'word-lab', 'Word Lab', 'I can hear b and g and blend big, bag, dog, bin.', ['dog', 'bin', 'box', 'pot', 'top', 'mop'], 'Two labels have swapped first sounds.', 'Craft five labels from sound tiles', ['B', 'G'], ['b', 'g']),
+    E(3, 'pattern-lab', 'Pattern Lab', 'I can choose a or an: It is a bag. It is an apple.', ['It is a ___.', 'It is an ___.', 'a bag', 'an apple'], 'One label has the wrong a/an.', 'Fix four labels'),
+    E(4, 'on-air', 'On Air', 'I can ask and answer: What is it? It is a ___. Is it a ___?', ['What is it?', 'It is a ___.', 'Is it your ___?', 'Yes, it is.'], 'Theo cannot find his phone in the bag.', 'Help Theo find three things with questions'),
+    E(5, 'deep-dive', 'Deep Dive', 'I can read a six-line list of things in a bag and match lines to pictures.', ['on', 'in', 'not'], 'The list shows who owns the red bag.', 'Read the list aloud, then answer five picture questions'),
+    E(6, 'side-quest', 'Side Quest', 'I can choose my skin and label my own bag.', [], 'Your own bag appears.', 'Choose a skin and label four things'),
+    E(7, 'remix', 'Remix', 'I can mix twelve sounds, a/an and the labels.', [], 'The bag spills; sort it.', 'Boss round: twelve quick reads'),
+    E(8, 'finale', 'Finale', 'I can show my label sheet: eight things, each read and said.', [], 'The bag belongs to Vee.', 'Present the sheet to Theo'),
+  ],
+};
+
+/** Pre-A1 Season P5 "People and places" (the world map): sounds e u h r, "I am from ___.", countries and nationalities as whole words. */
+export const PA1_S05: PreA1Season = {
+  id: 'PA1-S05',
+  step: 'pre-a1',
+  seasonNo: 5,
+  title: 'People and places',
+  theme: 'The World Map',
+  cast: ['Ava', 'Vee', 'Theo'],
+  canDo: [
+    'I can hear and say the sounds e, u, h, r and blend words such as hen, run, red, bus.',
+    'I can say and read "I am from ___." and "He / She is from ___." for people on a map.',
+    'I can read a three-sentence profile of a person and answer questions about it.',
+  ],
+  chunk: 'I am from ___. He / She is from ___.',
+  release: 'My world-map card: me and three friends, each with a country, read and said',
+  sounds: ['e', 'u', 'h', 'r'],
+  soundsSoFar: ['s', 'a', 't', 'p', 'i', 'n', 'm', 'd', 'o', 'c', 'b', 'g', 'e', 'u', 'h', 'r'],
+  sightWords: ['I', 'am', 'is', 'the', 'my', 'a', 'an', 'this', 'you', 'it', 'he', 'she', 'from', 'are'],
+  decodable: ['hen', 'hut', 'hat', 'hit', 'him', 'ran', 'run', 'red', 'rug', 'sun', 'bus', 'bed', 'pen', 'net', 'men', 'hug', 'tub', 'bun', 'he', 'Ben', 'Sam', 'Ron'],
+  games: ['sound-blend slider', 'pairs bingo (minimal pairs)', 'listen and match', 'read and match', 'guess who (map)', 'memory pairs', 'battleship grid (map squares)'],
+  videoGameMechanic: 'World-map exploration: unlock countries on the map by reading profiles (quest log + detective board)',
+  episodes: [
+    E(1, 'cold-open', 'Cold Open', 'I can meet the world map, hear e and u, and blend hen, run, bus, red.', ['map', 'friend', 'country', 'from'], 'A pin on the map has no name.', 'Name four pins on the map', ['E', 'U'], ['e', 'u']),
+    E(2, 'word-lab', 'Word Lab', 'I can hear h and r and blend hat, hit, ran, rug.', ['he', 'she', 'boy', 'girl', 'man', 'woman'], 'Two people swap their names.', 'Craft six labels', ['H', 'R'], ['h', 'r']),
+    E(3, 'pattern-lab', 'Pattern Lab', 'I can say I am from ___ and He / She is from ___.', ['I am from ___.', 'He is from ___.', 'She is from ___.', 'Where are you from?'], 'One card gives the wrong country.', 'Fix four cards'),
+    E(4, 'on-air', 'On Air', 'I can ask and answer: Where are you from? I am from ___.', ['Where are you from?', 'Nice to meet you.', 'Me too.', 'Where is he from?'], 'Ava meets a new student at the map.', 'Ask three friends on the map where they are from'),
+    E(5, 'deep-dive', 'Deep Dive', 'I can read a three-sentence profile and answer questions.', ['Spain', 'France', 'Italy', 'Turkey'], 'A profile has one fact missing.', 'Read the profile, answer five picture questions'),
+    E(6, 'side-quest', 'Side Quest', 'I can choose my skin and add my own friends to the map.', [], 'Your own pin appears.', 'Choose a skin and add three friends'),
+    E(7, 'remix', 'Remix', 'I can mix sixteen sounds, the chunks and the people.', [], 'The map lights up all at once.', 'Boss round: fourteen quick reads'),
+    E(8, 'finale', 'Finale', 'I can show my world-map card: me and three friends.', [], 'The map was made by Theo.', 'Present the card to Vee'),
+  ],
+};
+
+/** The planned Pre-A1 Seasons of the lean ladder (P1-P5), in order. P1 keeps its original spec (PA1_S01) above. */
+export const PA1_SEASONS: readonly PreA1Season[] = [PA1_S01, PA1_S02, PA1_S03, PA1_S04, PA1_S05];
