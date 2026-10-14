@@ -252,7 +252,7 @@ export const LESSON_A1U5L1_SCENES: Scene[] = [
   {
     id: 'mt-why-sort', kind: 'sort-basket', look: 'potions', bg: bgLab, title: 'Why? Read and sort',
     teacher: 'Reading: read each card aloud — how does Bibi feel? Put it in the right basket and say the whole sentence: She’s scared because it is dark.',
-    baskets: [{ label: 'scared', emoji: '\u{1F628}' }, { label: 'bored', emoji: '\u{1F971}' }, { label: 'excited', emoji: '\u{1F929}' }],
+    baskets: [{ label: 'scared', img: BIBI.scared }, { label: 'bored', img: BIBI.bored }, { label: 'excited', img: BIBI.excited }],
     items: [
       { word: 'It is dark.', img: item('moon'), basket: 0 },
       { word: 'The lesson is long.', img: item('clock'), basket: 1 },
