@@ -22,12 +22,12 @@
 
 | Season | Title · theme | Cast | Structures (E3 / E6) | Functions | Release | Items |
 |---|---|---|---|---|---|---|
-| A1-S01 | **Who Are You?** · Online profiles and meeting people | Ava | be (am/is/are): statements, questions, negatives / possessive adjectives (my/your/his/her/our/their) | greeting and leave-taking; introducing yourself; asking for personal information; spelling | My profile card plus a 30-second voice introduction | 80 |
-| A1-S02 · Big Remix | **My Room, My Stuff** · Rooms, gadgets and where things are | Theo | there is / there are / prepositions of place (in/on/under/next to/behind) | describing a place; saying where things are; asking where something is | A voice-note tour of my room | 80 |
+| A1-S01 | **Who Are You?** · Online profiles and meeting people | Ava | be (am/is/are): statements, questions, negatives (with who / what / where / how questions as chunks (What's your name? Where are you from?)) / possessive adjectives (my/your/his/her/our/their) | greeting and leave-taking; introducing yourself; asking for personal information; spelling | My profile card plus a 30-second voice introduction | 80 |
+| A1-S02 · Big Remix | **My Room, My Stuff** · Rooms, gadgets and where things are | Theo | there is / there are (with a / an / the and plural -s nouns) / prepositions of place (in/on/under/next to/behind) | describing a place; saying where things are; asking where something is | A voice-note tour of my room | 80 |
 | A1-S03 | **Free Time Club** · Hobbies and the Club Fair | Ava | present simple (I/you/we/they): statements and negatives / like/love/hate + -ing | talking about likes and dislikes; talking about hobbies; asking about interests | A 45-second pitch for a club I would start | 80 |
 | A1-S04 · Big Remix | **Café Night** · Food, drinks and ordering | Mia | some / any with countable and uncountable nouns / I'd like ... / Would you like ...? (as a chunk first) ⚠ | ordering food and drink; asking for and giving prices; polite requests | A short café role-play with my own menu | 80 |
 | A1-S05 | **A Day in My Life** · Daily routines and the school day | Mia | present simple he/she/it (-s) and questions with does / adverbs of frequency (always/usually/sometimes/never) | describing routines; telling the time; saying how often you do things | A short vlog script and recording of my day | 80 |
-| A1-S06 · Big Remix | **Family and Friends** · People close to me | Theo | have got / has got / possessive 's | talking about family; describing people; talking about possessions | My family or friends tree with a spoken description of three people | 80 |
+| A1-S06 · Big Remix | **Family and Friends** · People close to me | Theo | have got / has got / possessive 's (with object pronouns (him / her / them)) | talking about family; describing people; talking about possessions | My family or friends tree with a spoken description of three people | 80 |
 | A1-S07 | **Treasure Map Town** · Places in town and giving directions | Vee | imperatives (instructions, directions) / prepositions of movement (to/into/out of/along/across) | giving directions; asking where a place is; giving simple instructions | A voice guide that leads a friend to a hidden place on a map | 80 |
 | A1-S08 · Big Remix | **Can Do!** · Talents and abilities | Theo | can / can't for ability / and / but / because (simple linking) | talking about ability; asking for and giving help; simple linking of ideas | A talent card: what I can and cannot do, with one demonstration | 80 |
 | A1-S09 | **Market Day** · Clothes, shopping and money | Ava | this / that / these / those / how much / how many and prices | shopping; asking for and giving prices; choosing between things | A market role-play: buying and selling with prices | 80 |
@@ -92,7 +92,7 @@
 
 | Season | Title · theme | Cast | Structures (E3 / E6) | Functions | Release | Items |
 |---|---|---|---|---|---|---|
-| A2-S01 | **Last Weekend** · Telling a story about the past | Ava | past simple of be (was/were) ⚠ / past simple: regular verbs (-ed) | describing past events; saying where you were; sequencing events (first, then, after that) | A voice note telling the story of my last weekend | 69 |
+| A2-S01 | **Last Weekend** · Telling a story about the past | Ava | past simple of be (was/were) / past simple: regular verbs (-ed) | describing past events; saying where you were; sequencing events (first, then, after that) | A voice note telling the story of my last weekend | 69 |
 | A2-S02 · Big Remix | **Travel Trouble** · Journeys that went wrong | Theo | past simple: irregular verbs, questions and negatives | narrating past events; asking about past events; describing a problem while travelling | A postcard or message about a trip that went wrong | 69 |
 | A2-S03 | **Gadget Wars** · Comparing technology | Mia | comparatives and superlatives | comparing; recommending; giving a reason | A written review comparing two things I own or want | 69 |
 | A2-S04 · Big Remix | **Plans and Dreams** · Plans for next week and next summer | Vee, Ava | be going to (plans and intentions) | talking about plans; asking about plans; giving reasons for plans | My plan for next summer, spoken and as a short written list | 69 |
@@ -100,7 +100,7 @@
 | A2-S06 · Big Remix | **House Rules** · Rules at home, at school and in games | Mia | must / mustn't (rules) / have to (obligation) | talking about rules; saying what is necessary; prohibiting | A short guide to the rules of a place or game I know well | 69 |
 | A2-S07 | **Food Cultures** · What people eat around the world | Vee | much / many / a few / a little / a lot of | talking about quantity; giving instructions for a recipe; comparing food customs | A short recipe video script and recording of a dish I know | 69 |
 | A2-S08 · Big Remix | **Getting Around** · Transport and city life | Ava | infinitive of purpose (to + verb) / prepositions of movement and transport phrases | giving travel directions; explaining purpose; buying a ticket | A route guide for a visitor, spoken and as a simple map | 69 |
-| A2-S09 | **Tomorrow's World** · Predictions and quick decisions | Vee, Mia | will for decisions, offers and simple predictions ⚠ | making predictions; making offers and quick decisions; agreeing and disagreeing simply | A one-minute predictions podcast clip: my world in 2040 | 69 |
+| A2-S09 | **Tomorrow's World** · Predictions and quick decisions | Vee, Mia | will for decisions, offers and simple predictions | making predictions; making offers and quick decisions; agreeing and disagreeing simply | A one-minute predictions podcast clip: my world in 2040 | 69 |
 | A2-S10 · Big Remix | **Storm Warning** · Weather and an adventure that went wrong | Ava, Theo, Mia, Vee | past continuous (was/were + -ing) / so / because / then (linking sentences) | describing a scene in the past; giving reasons and results; telling a short story | An eyewitness account: what was happening when the storm started | 69 |
 | A2-S11 | **Dream Jobs** · Jobs, skills and how people do things | Theo | adverbs of manner (-ly) | talking about jobs; describing how things are done; answering simple interview questions | A short job-interview role-play: me as the candidate | 69 |
 | A2-S12 · Big Remix · **level check** | **Event Planners** · Organising a school festival | Vee, Ava, Theo | let's / shall we / how about + -ing (suggestions) | making suggestions; accepting and refusing politely; writing an invitation | A festival invitation plus a one-minute pitch for the committee | 69 |
@@ -175,18 +175,18 @@
 | Season | Title · theme | Cast | Structures (E3 / E6) | Functions | Release | Items |
 |---|---|---|---|---|---|---|
 | B1-S01 | **Have You Ever...?** · Experiences and bucket lists | Vee | present perfect: experience (ever/never/been) ⚠ | talking about life experiences; asking follow-up questions; showing interest and surprise | My bucket list: three things I have done and three I want to do | 75 |
-| B1-S02 · Big Remix | **Then and Now** · Memories and how things have changed | Theo | used to ⚠ | talking about past habits; comparing past and present; reminiscing | A "then and now" photo story: how my life or my town has changed | 75 |
+| B1-S02 · Big Remix | **Then and Now** · Memories and how things have changed | Theo | used to | talking about past habits; comparing past and present; reminiscing | A "then and now" photo story: how my life or my town has changed | 75 |
 | B1-S03 | **Still Going** · Things that began in the past and continue now | Ava, Mia | present perfect: for / since / how long | talking about duration; interviewing someone; giving a short personal profile | An interview with a friend about a long-term hobby or friendship, recorded | 75 |
 | B1-S04 · Big Remix | **Breaking News** · Recent events and news stories | Ava | present perfect vs past simple | reporting news; giving details of a past event; announcing results | A 60-second audio news bulletin | 75 |
 | B1-S05 | **If This, Then That** · Rules, systems and game design | Mia | zero and first conditional ⚠ | explaining rules; predicting consequences; giving warnings and instructions | The rules of a game I designed, explained step by step | 75 |
-| B1-S06 · Big Remix | **What If...?** · Imaginary situations and dilemmas | Vee | second conditional ⚠ | talking about imaginary situations; giving opinions; agreeing and disagreeing | A spoken debate: three "what if" dilemmas and my answers | 75 |
+| B1-S06 · Big Remix | **What If...?** · Imaginary situations and dilemmas | Vee | second conditional | talking about imaginary situations; giving opinions; agreeing and disagreeing | A spoken debate: three "what if" dilemmas and my answers | 75 |
 | B1-S07 | **Made in the World** · How things are made and where they come from | Theo | passive: present and past simple | describing a process; giving factual information; sequencing steps | A short 'how it is made' explainer clip | 75 |
 | B1-S08 · Big Remix | **Who's Who** · Describing people, places and things precisely | Mia | defining relative clauses (who/which/that/where) | describing and defining; adding detail; clarifying | A "guess who / what" game I wrote and played with a partner | 75 |
 | B1-S09 | **Case Closed** · Mystery and deduction | Vee, Ava, Theo | modals of deduction (must / might / can't) ⚠ | speculating; expressing certainty and doubt; explaining a theory | A detective briefing: my theory of the case with evidence | 75 |
 | B1-S10 · Big Remix | **Plans and Promises** · Arrangements and commitments | Vee, Mia, Theo | present continuous for future arrangements (future arrangements) ⚠ / will for promises and predictions (promises and predictions) ⚠ | arranging to meet; making promises; predicting | A trip plan with arrangements and promises, as an invitation and short call | 75 |
 | B1-S11 | **Learning Machines** · Technology, AI and how we learn | Vee | verb patterns: gerund vs infinitive (common verbs) | giving opinions; recommending; comparing options | A short review of a learning tool, with a recommendation | 75 |
-| B1-S12 · Big Remix | **Word on the Street** · Reporting what people said | Ava, Theo, Mia | reported speech: statements (say/tell, basic backshift) ⚠ | reporting speech; passing on messages; clarifying what was said | A story told through other people's words: what they said and what I replied | 75 |
-| B1-S13 | **Before the Storm** · Narrative writing: what had already happened | Ava, Theo, Mia, Vee | past perfect ⚠ | narrating; sequencing past events; creating suspense | A short story of 150-200 words with a twist, written and read aloud | 75 |
+| B1-S12 · Big Remix | **Word on the Street** · Reporting what people said | Ava, Theo, Mia | reported speech: statements (say/tell, basic backshift) | reporting speech; passing on messages; clarifying what was said | A story told through other people's words: what they said and what I replied | 75 |
+| B1-S13 | **Before the Storm** · Narrative writing: what had already happened | Ava, Theo, Mia, Vee | past perfect | narrating; sequencing past events; creating suspense | A short story of 150-200 words with a twist, written and read aloud | 75 |
 | B1-S14 · Big Remix | **Wish List** · Wishes, regrets and imagining change | Ava | wish + past simple ⚠ | expressing wishes; expressing feelings; giving encouragement | A short blog post: three things I wish were different and why | 75 |
 | B1-S15 | **Study Abroad** · Rules, expectations and cultures | Vee, Mia, Theo | mustn't vs don't have to (contrast) / although / even though / while (contrast) | explaining rules and customs; giving advice; contrasting ideas | An advice email for a new exchange student | 75 |
 | B1-S16 · Big Remix · **level check** | **Teen Talk Show** · Hosting a show: everything at B1 | Vee | question tags / common phrasal verbs (separable / inseparable) as vocabulary | hosting and interviewing; checking information; agreeing and disagreeing | A five-minute talk-show episode recorded with a guest | 75 |
@@ -298,7 +298,7 @@
 
 | Season | Title · theme | Cast | Structures (E3 / E6) | Functions | Release | Items |
 |---|---|---|---|---|---|---|
-| B2-S01 | **Been There, Doing That** · Long-term projects and ongoing effort | Vee | present perfect continuous ⚠ | describing ongoing activity; reporting progress; explaining causes of results | A progress report on a project I have been working on, spoken and written | 80 |
+| B2-S01 | **Been There, Doing That** · Long-term projects and ongoing effort | Vee | present perfect continuous | describing ongoing activity; reporting progress; explaining causes of results | A progress report on a project I have been working on, spoken and written | 80 |
 | B2-S02 · Big Remix | **What Might Have Been** · Regrets and alternative histories | Theo | third conditional / wish / if only + past perfect | expressing regret; speculating about the past; criticising tactfully | A short reflective essay or talk: a decision I would change and why | 80 |
 | B2-S03 | **Passive Power** · Systems, processes and who is responsible | Ava | passive: all tenses and modal passives | describing processes; reporting facts; avoiding blame | A report on how a system works or who is responsible for a problem | 80 |
 | B2-S04 · Big Remix | **Reporting It** · Reporting conversations and interviews | Mia | reported questions, commands, reporting verbs | reporting questions and requests; summarising an interview; conveying attitude with reporting verbs | A written report of an interview I conducted | 80 |
@@ -540,24 +540,17 @@
 
 ## Validator
 
-Errors: 0 · Warnings: 20
+Errors: 0 · Warnings: 13
 
 
-**Unverified grammar placements (20) — check in the English Grammar Profile / GSE Grammar before locking:**
+**Unverified grammar placements (13) — check in the English Grammar Profile / GSE Grammar before locking:**
 - A1-S04: Placement of "would-like" is unverified [U].
-- A2-S01: Placement of "past-be" is unverified [U].
-- A2-S09: Placement of "will-decisions-predictions" is unverified [U].
 - B1-S01: Placement of "present-perfect-experience" is unverified [U].
-- B1-S02: Placement of "used-to" is unverified [U].
 - B1-S05: Placement of "zero-first-conditional" is unverified [U].
-- B1-S06: Placement of "second-conditional" is unverified [U].
 - B1-S09: Placement of "modals-deduction" is unverified [U].
 - B1-S10: Placement of "present-continuous-future" is unverified [U].
 - B1-S10: Placement of "will-promises-predictions" is unverified [U].
-- B1-S12: Placement of "reported-statements" is unverified [U].
-- B1-S13: Placement of "past-perfect" is unverified [U].
 - B1-S14: Placement of "wish-past-simple" is unverified [U].
-- B2-S01: Placement of "present-perfect-continuous" is unverified [U].
 - C1-S02: Placement of "mixed-conditionals" is unverified [U].
 - C1-S12: Placement of "ellipsis-advanced" is unverified [U].
 - C1-S13: Placement of "discourse-markers-advanced" is unverified [U].
