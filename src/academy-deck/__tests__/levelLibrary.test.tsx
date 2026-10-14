@@ -54,6 +54,9 @@ describe('Academy library by level', () => {
     expect(g[0].seasons.every((s) => s.no === null)).toBe(true);
     expect(g[0].seasons[0].lessons.map((l) => l.id)).toEqual(['pa1-s01-e1']);
     expect(g[0].seasons[0].slots.map((x) => [x.episode, x.built])).toEqual([[1, true], [2, false], [3, false], [4, false], [5, false], [6, false], [7, false], [8, false]]);
+    // every Pre-A1 Season lists its 8 planned lessons and an overview; so does every roadmap Season
+    expect(g[0].seasons.every((x) => x.slots.length === 8 && !!x.overview)).toBe(true);
+    expect(g.slice(1).every((x) => x.seasons.every((y) => !!y.overview && y.slots.length === 8))).toBe(true);
     expect(g[1].seasons.map((s) => s.no)).toEqual([1, 2, 3, 4, 5, 6]);
     expect(g[2].seasons.map((s) => s.no)).toEqual([7, 8, 9, 10]);
     expect(g.reduce((n, x) => n + x.count, 0)).toBe(ACADEMY_DECK_LESSONS.length);

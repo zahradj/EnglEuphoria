@@ -1,6 +1,6 @@
 // The Academy library is organised like the Playground library: level (A1 A2 B1 B2 C1) → season (= unit, from the Academy roadmap) → lessons.
 // Seasons come from the roadmap (src/curriculum/academy); a season with no built lesson yet is listed as "coming soon".
-import { ACADEMY_LESSON_BLUEPRINTS, ACADEMY_SEASONS, PA1_S01, ladderSteps, type LadderStep } from '../../curriculum/academy';
+import { ACADEMY_LESSON_BLUEPRINTS, ACADEMY_SEASONS, PA1_SEASONS, ladderSteps, type LadderStep } from '../../curriculum/academy';
 import { ACADEMY_DECK_BLUEPRINT_IDS, type AcademyDeckLesson } from '../lessonRegistry';
 
 export const ACADEMY_LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1'] as const;
@@ -40,6 +40,12 @@ export interface LessonSlot {
   /** the lesson blueprint's plan (A1 and above), shown to teachers and creators */
   plan?: { id: string; objective: string; newItems: number; focus: string; structures: string[]; mission: string; release: string; clue: string };
 }
+/** What a season is about, for the creator's and teacher's library. */
+export interface SeasonOverview {
+  theme: string; hook?: string; canDo: string[]; structures: string[]; release: string; newItems: number;
+  /** Pre-A1: the sounds taught and the video-game mechanic borrowed */
+  sounds?: string[]; mechanic?: string;
+}
 export interface LibrarySeason {
   key: string;
   /** number shown as "Season N"; null for a planned Pre-A1 season (shown by its title only) */
@@ -47,6 +53,8 @@ export interface LibrarySeason {
   title: string;
   lessons: AcademyDeckLesson[];
   slots: LessonSlot[];
+  /** the season's plan (A1 and above, and Pre-A1), shown to teachers and creators above the lessons */
+  overview?: SeasonOverview;
   /** true for a season that is not in the roadmap data yet (Pre-A1) */
   planned: boolean;
 }
@@ -61,10 +69,19 @@ export interface LibraryGroup {
   count: number;
 }
 
-/** Lesson slots of Pre-A1 Season P1 (the Season spec lives in src/curriculum/academy/preA1.ts). */
-function preA1Slots(lessons: AcademyDeckLesson[]): LessonSlot[] {
+/** Lesson slots of a Pre-A1 Season (the Season specs live in src/curriculum/academy/preA1.ts). */
+function preA1Slots(seasonIdx: number, lessons: AcademyDeckLesson[]): LessonSlot[] {
+  const sp = PA1_SEASONS[seasonIdx];
+  if (!sp) return [];
   const built = new Set(lessons.map((l) => ACADEMY_DECK_BLUEPRINT_IDS[l.id]).filter(Boolean));
-  return PA1_S01.episodes.map((e) => ({ episode: e.no, name: e.name, built: built.has(`${PA1_S01.id}-E${e.no}`) }));
+  return sp.episodes.map((e) => ({
+    episode: e.no, name: e.name, built: built.has(`${sp.id}-E${e.no}`),
+    plan: { id: `${sp.id}-E${e.no}`, objective: e.objective, newItems: e.newItems.length, focus: [...e.letters.map((l) => `letter ${l}`), ...e.sounds.map((x) => `sound /${x}/`), ...e.newItems].join(', '), structures: e.no === 3 ? [sp.chunk] : [], mission: e.mission ?? e.objective, release: sp.release, clue: e.clue },
+  }));
+}
+function preA1Overview(seasonIdx: number): SeasonOverview | undefined {
+  const sp = PA1_SEASONS[seasonIdx];
+  return sp && { theme: sp.theme, canDo: [...sp.canDo], structures: [sp.chunk], release: sp.release, newItems: sp.episodes.reduce((n, e) => n + e.newItems.length, 0), sounds: [...sp.sounds], mechanic: 'videoGameMechanic' in sp ? sp.videoGameMechanic : undefined };
 }
 
 function slotsOf(level: AcademyLevel, no: number, lessons: AcademyDeckLesson[]): LessonSlot[] {
@@ -82,7 +99,9 @@ function slotsOf(level: AcademyLevel, no: number, lessons: AcademyDeckLesson[]):
 export function groupAcademyLibrary(lessons: AcademyDeckLesson[], showSteps: boolean): LibraryGroup[] {
   const seasonOf = (level: AcademyLevel, no: number, title: string): LibrarySeason => {
     const ls = lessons.filter((l) => l.level === level && l.season === no).sort((a, b) => a.lesson - b.lesson);
-    return { key: `${level}-${no}`, no, title, lessons: ls, slots: slotsOf(level, no, ls), planned: false };
+    const sp = ACADEMY_SEASONS.find((x) => x.level === level && x.no === no);
+    const overview = sp && { theme: sp.theme, hook: sp.hook, canDo: sp.canDo, structures: sp.structures.map((x) => x.label), release: sp.release, newItems: sp.newItemBudget };
+    return { key: `${level}-${no}`, no, title, lessons: ls, slots: slotsOf(level, no, ls), overview, planned: false };
   };
   if (!showSteps) {
     return ACADEMY_LEVELS.map((level) => {
@@ -95,7 +114,7 @@ export function groupAcademyLibrary(lessons: AcademyDeckLesson[], showSteps: boo
       ? ACADEMY_SEASONS.filter((s) => s.level === st.level && s.no >= st.seasons![0] && s.no <= st.seasons![1]).map((s) => seasonOf(st.level!, s.no, s.title))
       : st.plannedTitles.map((title, i) => {
           const ls = lessons.filter((l) => l.level === 'Pre-A1' && l.season === i + 1).sort((a, b) => a.lesson - b.lesson);
-          return { key: `${st.id}-p${i + 1}`, no: null, title, lessons: ls, slots: i === 0 ? preA1Slots(ls) : [], planned: ls.length === 0 };
+          return { key: `${st.id}-p${i + 1}`, no: null, title, lessons: ls, slots: preA1Slots(i, ls), overview: preA1Overview(i), planned: ls.length === 0 };
         });
     return { id: st.id, label: st.label, stage: st.stage, cefr: st.cefr, seasons, count: seasons.reduce((n, s) => n + s.lessons.length, 0) };
   });
