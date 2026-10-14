@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState, lazy, Suspense } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useStudentLevel } from '@/hooks/useStudentLevel';
@@ -45,6 +46,7 @@ const ZONE_CHIP: Record<AcademyZoneId, string> = {
 /** Playground: the Homework Quests of the lessons this student has FINISHED - nothing else.
  *  A quest appears here when its lesson is done; there are no locked cards for lessons not yet played. */
 function HomeworkQuestsSection() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { lessons, loading } = usePlaygroundLessons();
 
@@ -55,15 +57,15 @@ function HomeworkQuestsSection() {
   if (cards.length === 0) {
     return (
       <div className="rounded-2xl border border-dashed border-border/60 bg-card/40 p-8 text-center text-muted-foreground">
-        <p className="text-sm font-semibold">No homework yet</p>
-        <p className="mt-1 text-xs">Finish a lesson on the map and its homework quest appears here.</p>
+        <p className="text-sm font-semibold">{t('st.hw.none', 'No homework yet')}</p>
+        <p className="mt-1 text-xs">{t('st.hw.noneDesc', 'Finish a lesson on the map and its homework quest appears here.')}</p>
       </div>
     );
   }
 
   return (
-    <section className="space-y-3" aria-label="Homework quests">
-      <h2 className="text-lg font-bold">Homework quests</h2>
+    <section className="space-y-3" aria-label={t('st.hw.quests', 'Homework quests')}>
+      <h2 className="text-lg font-bold">{t('st.hw.quests', 'Homework quests')}</h2>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {cards.map(({ quest, lesson, lessonPath, ready }) => (
           <div key={quest.id} className="flex flex-col gap-3 rounded-2xl border bg-card p-4 ring-1 ring-border/60">
@@ -72,14 +74,14 @@ function HomeworkQuestsSection() {
               <div className="min-w-0">
                 <h3 className="text-sm font-bold leading-tight">{quest.title}</h3>
                 <p className="mt-0.5 text-xs text-muted-foreground">{quest.subtitle}</p>
-                {ready && <Badge className="mt-1.5 bg-emerald-600 px-1.5 py-0 text-[10px] text-white">Ready to play</Badge>}
+                {ready && <Badge className="mt-1.5 bg-emerald-600 px-1.5 py-0 text-[10px] text-white">{t('st.hw.ready', 'Ready to play')}</Badge>}
               </div>
             </div>
             <button
               onClick={() => navigate(`/homework-quest/${quest.id}`)}
               className="mt-auto inline-flex items-center justify-center gap-1.5 rounded-full bg-orange-500 px-4 py-2 text-xs font-extrabold text-white shadow active:scale-95"
             >
-              <Play className="h-3.5 w-3.5" /> Start quest
+              <Play className="h-3.5 w-3.5" /> {t('st.hw.start', 'Start quest')}
             </button>
           </div>
         ))}
@@ -89,6 +91,7 @@ function HomeworkQuestsSection() {
 }
 
 export function HomeworkTab() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const { studentLevel } = useStudentLevel();
   const accent = HUB_ACCENT[studentLevel || 'playground'];
@@ -155,7 +158,7 @@ export function HomeworkTab() {
     return (
       <div className="space-y-4">
         <Button variant="ghost" onClick={() => setActive(null)} className="gap-2">
-          <ArrowLeft className="w-4 h-4" /> Back to homework
+          <ArrowLeft className="w-4 h-4" /> {t('st.hw.back', 'Back to homework')}
         </Button>
         <div className="rounded-2xl border bg-card p-4 sm:p-6">
           <Suspense fallback={<div className="p-10 text-center text-muted-foreground"><Loader2 className="w-6 h-6 animate-spin inline" /></div>}>
@@ -175,7 +178,7 @@ export function HomeworkTab() {
         </h1>
         <p className="text-muted-foreground mt-1">
           {studentLevel === 'playground'
-            ? 'Finish a lesson and its homework appears here.'
+            ? t('st.hw.finish', 'Finish a lesson and its homework appears here.')
             : 'Assigned by your teacher and synced to your Academy Journey zones.'}
         </p>
       </div>
@@ -230,7 +233,7 @@ export function HomeworkTab() {
         studentLevel === 'playground' ? null : <div className="rounded-2xl border border-dashed border-border/60 bg-card/40 backdrop-blur-xl p-8 text-center text-muted-foreground">
           {zoneParam
             ? `Nothing for ${ZONE_LABEL[zoneParam]} right now.`
-            : 'No homework assigned yet. Check back after your next lesson.'}
+            : t('st.hw.noAssigned', 'No homework assigned yet. Check back after your next lesson.')}
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">

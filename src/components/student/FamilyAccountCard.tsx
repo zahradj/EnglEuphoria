@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Heart, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -21,6 +22,7 @@ import { supabase } from '@/integrations/supabase/client';
  * plain students only.
  */
 export const FamilyAccountCard: React.FC = () => {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
@@ -49,12 +51,12 @@ export const FamilyAccountCard: React.FC = () => {
         sessionStorage.removeItem('auth_redirect_done');
         localStorage.removeItem('auth_resolved_role');
       } catch { /* storage can be unavailable */ }
-      toast({ title: 'Your family account is ready', description: 'Taking you to your family dashboard…' });
+      toast({ title: t('st.fam.ready', 'Your family account is ready'), description: t('st.fam.taking', 'Taking you to your family dashboard…') });
       window.location.assign('/parent');
     } catch (err) {
       toast({
-        title: 'Could not switch your account',
-        description: err instanceof Error ? err.message : 'Please try again.',
+        title: t('st.fam.fail', 'Could not switch your account'),
+        description: err instanceof Error ? err.message : t('st.fam.again', 'Please try again.'),
         variant: 'destructive',
       });
       setBusy(false);
@@ -67,36 +69,35 @@ export const FamilyAccountCard: React.FC = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Heart className="h-5 w-5 text-rose-500" />
-            Family account
+            {t('st.fam.title', 'Family account')}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-3">
           <p className="text-sm text-muted-foreground">
-            Are you a parent or guardian? Switch this account to a family account to add your children and follow each
-            one's lessons from a single login.
+            {t('st.fam.intro', "Are you a parent or guardian? Switch this account to a family account to add your children and follow each one's lessons from a single login.")}
           </p>
-          <Button variant="outline" onClick={() => setOpen(true)}>Switch to a family account</Button>
+          <Button variant="outline" onClick={() => setOpen(true)}>{t('st.fam.switch', 'Switch to a family account')}</Button>
         </CardContent>
       </Card>
 
       <Dialog open={open} onOpenChange={(next) => { if (!busy) setOpen(next); }}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Switch to a family account?</DialogTitle>
+            <DialogTitle>{t('st.fam.switchQ', 'Switch to a family account?')}</DialogTitle>
             <DialogDescription>
-              You'll sign in to the family dashboard, where you add your children and see their progress.
+              {t('st.fam.dialogDesc', "You'll sign in to the family dashboard, where you add your children and see their progress.")}
             </DialogDescription>
           </DialogHeader>
           <ul className="list-disc space-y-1.5 pl-5 text-sm text-muted-foreground">
-            <li>Your own lessons and progress stay saved, but they won't open from this login after you switch.</li>
-            <li>To keep learning yourself, add yourself as a learner in your family.</li>
-            <li>You need to have no upcoming lessons booked on this account.</li>
+            <li>{t('st.fam.li1', "Your own lessons and progress stay saved, but they won't open from this login after you switch.")}</li>
+            <li>{t('st.fam.li2', 'To keep learning yourself, add yourself as a learner in your family.')}</li>
+            <li>{t('st.fam.li3', 'You need to have no upcoming lessons booked on this account.')}</li>
           </ul>
           <DialogFooter className="gap-2 sm:gap-0">
-            <Button variant="outline" onClick={() => setOpen(false)} disabled={busy}>Not now</Button>
+            <Button variant="outline" onClick={() => setOpen(false)} disabled={busy}>{t('st.fam.notNow', 'Not now')}</Button>
             <Button onClick={handleSwitch} disabled={busy}>
               {busy && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Switch to a family account
+              {t('st.fam.switch', 'Switch to a family account')}
             </Button>
           </DialogFooter>
         </DialogContent>

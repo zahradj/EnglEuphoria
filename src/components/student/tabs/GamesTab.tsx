@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState, lazy, Suspense } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/contexts/AuthContext';
 import { useStudentLevel } from '@/hooks/useStudentLevel';
 import { useCEFRProgress } from '@/hooks/useCEFRProgress';
@@ -52,6 +53,7 @@ function GameCard({
 }) {
   const theme = HUB_THEME[hub];
   const completed = game.progress?.status === 'completed';
+  const { t } = useTranslation();
   return (
     <button
       onClick={onPlay}
@@ -70,7 +72,7 @@ function GameCard({
         )}
         {completed && (
           <div className="absolute top-2 right-2 bg-white/95 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
-            <CheckCircle2 className="w-3 h-3" /> Completed
+            <CheckCircle2 className="w-3 h-3" /> {t('st.games.completed', 'Completed')}
           </div>
         )}
       </div>
@@ -135,6 +137,7 @@ function Row({
 }
 
 export function GamesTab() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const { studentLevel, hubReady } = useStudentLevel();
   const cefr = useCEFRProgress();
@@ -197,7 +200,7 @@ export function GamesTab() {
     return (
       <div className="space-y-4">
         <Button variant="ghost" onClick={() => setBuiltInGameId(null)} className="gap-2">
-          <ArrowLeft className="w-4 h-4" /> Back to library
+          <ArrowLeft className="w-4 h-4" /> {t('st.games.back', 'Back to library')}
         </Button>
         <AcademyGamePlayer gameId={builtInGameId} onBack={() => setBuiltInGameId(null)} />
       </div>
@@ -208,7 +211,7 @@ export function GamesTab() {
     return (
       <div className="space-y-4">
         <Button variant="ghost" onClick={() => setBuiltInGameId(null)} className="gap-2">
-          <ArrowLeft className="w-4 h-4" /> Back to library
+          <ArrowLeft className="w-4 h-4" /> {t('st.games.back', 'Back to library')}
         </Button>
         <Suspense
           fallback={
@@ -227,7 +230,7 @@ export function GamesTab() {
     return (
       <div className="space-y-4">
         <Button variant="ghost" onClick={() => setActiveGame(null)} className="gap-2">
-          <ArrowLeft className="w-4 h-4" /> Back to library
+          <ArrowLeft className="w-4 h-4" /> {t('st.games.back', 'Back to library')}
         </Button>
         <div className={cn('rounded-2xl border bg-card p-4 sm:p-6 ring-1', theme.ring)}>
           <Suspense
@@ -265,7 +268,7 @@ export function GamesTab() {
   if (!hub) {
     return (
       <div className="rounded-2xl border border-border/60 bg-card/40 p-8 text-center text-muted-foreground">
-        Pick a learning hub to see your games.
+        {t('st.games.pickHub', 'Pick a learning hub to see your games.')}
       </div>
     );
   }
@@ -277,21 +280,21 @@ export function GamesTab() {
       <header className="flex items-center justify-between gap-4 flex-wrap">
         <div>
           <h1 className={cn('text-3xl font-bold flex items-center gap-2', theme.accent)}>
-            <Gamepad2 className="w-7 h-7" /> Game Library
+            <Gamepad2 className="w-7 h-7" /> {t('st.games.title', 'Game Library')}
           </h1>
           <p className="text-muted-foreground text-sm mt-1">
-            Earn XP. Master English. Play games made for the {hub} hub.
+            {t('st.games.tagline', { hub: hub, defaultValue: 'Earn XP. Master English. Play games made for the {{hub}} hub.' })}
           </p>
         </div>
         <Badge className={cn('text-xs px-2.5 py-1', theme.chip)}>
-          {games.length + builtIns.length + academyBuiltIns.length} games available
+          {t('st.games.available', { n: games.length + builtIns.length + academyBuiltIns.length, defaultValue: 'Games available: {{n}}' })}
         </Badge>
       </header>
 
       {builtIns.length > 0 && (
         <section>
           <h2 className="flex items-center gap-2 text-lg font-bold mb-3">
-            <Sparkles className="w-5 h-5" /> Featured game
+            <Sparkles className="w-5 h-5" /> {t('st.games.featured1', 'Featured game')}
           </h2>
           <GamesGrid compact onPlay={(id) => setBuiltInGameId(id)} />
         </section>
@@ -300,7 +303,7 @@ export function GamesTab() {
       {academyBuiltIns.length > 0 && (
         <section>
           <h2 className="flex items-center gap-2 text-lg font-bold mb-3">
-            <Sparkles className="w-5 h-5" /> Featured games
+            <Sparkles className="w-5 h-5" /> {t('st.games.featuredN', 'Featured games')}
           </h2>
           <AcademyGamesGrid onPlay={(id) => setBuiltInGameId(id)} />
         </section>
@@ -309,44 +312,44 @@ export function GamesTab() {
       {noGamesAtAll ? (builtIns.length > 0 || academyBuiltIns.length > 0 ? null : (
         <div className="rounded-2xl border border-dashed border-border/60 bg-card/40 p-12 text-center">
           <Gamepad2 className="w-12 h-12 mx-auto text-muted-foreground mb-3" />
-          <h3 className="font-semibold text-lg mb-1">No games yet</h3>
+          <h3 className="font-semibold text-lg mb-1">{t('st.games.none', 'No games yet')}</h3>
           <p className="text-sm text-muted-foreground">
-            Your teacher hasn't published any {hub} games yet. Check back soon!
+            {t('st.games.noneDesc', { hub: hub, defaultValue: "Your teacher hasn't published any {{hub}} games yet. Check back soon!" })}
           </p>
         </div>
       )) : (
         <>
           <Row
-            title="Continue Playing"
+            title={t('st.games.continue', 'Continue Playing')}
             icon={Play}
             games={sections.continuePlaying}
             hub={hub}
             onPlay={startPlay}
-            empty="Start a game to see it here."
+            empty={t('st.games.emptyContinue', 'Start a game to see it here.')}
           />
           <Row
-            title="Recent Games"
+            title={t('st.games.recent', 'Recent Games')}
             icon={Sparkles}
             games={sections.recent}
             hub={hub}
             onPlay={startPlay}
-            empty="No recent play yet."
+            empty={t('st.games.emptyRecent', 'No recent play yet.')}
           />
           <Row
-            title="Recommended for you"
+            title={t('st.games.recommended', 'Recommended for you')}
             icon={Sparkles}
             games={sections.recommended}
             hub={hub}
             onPlay={startPlay}
-            empty="You've tried them all — nice work!"
+            empty={t('st.games.emptyRec', "You've tried them all — nice work!")}
           />
           <Row
-            title="Completed"
+            title={t('st.games.completed', 'Completed')}
             icon={Trophy}
             games={sections.completed}
             hub={hub}
             onPlay={startPlay}
-            empty="No completed games yet. You've got this!"
+            empty={t('st.games.emptyDone', "No completed games yet. You've got this!")}
           />
         </>
       )}

@@ -1,4 +1,5 @@
 import { ClipboardCheck } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { LearningPlanCard } from '@/components/student/LearningPlanCard';
 import { RecentLessonReports } from '@/components/student/RecentLessonReports';
 import { useStudentLevel } from '@/hooks/useStudentLevel';
@@ -15,6 +16,7 @@ const HUB_ACCENT: Record<string, string> = {
  * (This used to sit on the dashboard home page, which made the first page long.)
  */
 export function LessonReportsTab() {
+  const { t } = useTranslation();
   const { studentLevel } = useStudentLevel();
   const hubId = studentLevel === 'academy' || studentLevel === 'professional' ? studentLevel : 'playground';
   return (
@@ -22,9 +24,9 @@ export function LessonReportsTab() {
       <div>
         <h1 className={cn('text-3xl font-bold flex items-center gap-2', HUB_ACCENT[hubId])}>
           <ClipboardCheck className="w-7 h-7" />
-          Lesson Reports
+          {t('st.reports.title', 'Lesson Reports')}
         </h1>
-        <p className="text-muted-foreground mt-1">What your teacher wrote about your recent classes.</p>
+        <p className="text-muted-foreground mt-1">{t('st.reports.sub', 'What your teacher wrote about your recent classes.')}</p>
       </div>
       <LearningPlanCard ctaHref="/dashboard?tab=billing" />
       <RecentLessonReports hubId={hubId} limit={20} />

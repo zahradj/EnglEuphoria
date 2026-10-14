@@ -630,9 +630,9 @@ export const LESSON_A1U9L1_SCENES: Scene[] = [
     teacher: 'Wim’s magic sound is CH! Say /ch/ /ch/ like a train: ch-ch-ch! Tap each magic box to find a CH word.',
     anchors: [
       { word: 'chair', emoji: '\u{1FA91}', img: `${M}/stickers/chair.png` },
-      { word: 'kitchen', emoji: '\u{1F373}' },
-      { word: 'cheese', emoji: '\u{1F9C0}' },
-      { word: 'chick', emoji: '\u{1F424}' },
+      { word: 'kitchen', emoji: '\u{1F373}', img: `${M}/stickers/kitchen.png` },
+      { word: 'cheese', emoji: '\u{1F9C0}', img: `${M}/stickers/cheese.png` },
+      { word: 'chick', emoji: '\u{1F424}', img: `${M}/stickers/chick.png` },
     ],
   },
   {
@@ -960,9 +960,9 @@ export const LESSON_A1U9L2_SCENES: Scene[] = [
     teacher: 'Now the W sound! Make a little circle with your lips: /w/ /w/. Tap each box to find a W word.',
     anchors: [
       { word: 'window', emoji: '\u{1FA9F}', img: `${M}/stickers/window.png` },
-      { word: 'wand', emoji: '\u{1FA84}' },
-      { word: 'wizard', emoji: '\u{1F9D9}' },
-      { word: 'web', emoji: '\u{1F578}️' },
+      { word: 'wand', emoji: '\u{1FA84}', img: `${M}/stickers/wand.png` },
+      { word: 'wizard', emoji: '\u{1F9D9}', img: `${M}/stickers/wizard.png` },
+      { word: 'web', emoji: '\u{1F578}️', img: `${M}/stickers/web.png` },
     ],
   },
   { id: 'mc2-ph-trace-w', kind: 'trace', bg: bgWim, who: 'wim', letter: 'W', phoneme: '/w/', word: 'window', teacher: 'Trace the letter W! Say /w/ /w/ /w/ as you draw.' },

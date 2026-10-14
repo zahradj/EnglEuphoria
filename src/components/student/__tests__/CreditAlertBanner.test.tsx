@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import React from 'react';
+import '@/lib/i18n';
 
 const state = vi.hoisted(() => ({ available: 5, loading: false, family: false }));
 
@@ -48,7 +49,7 @@ describe('credit alert on every student dashboard', () => {
     state.available = 1;
     render(<CreditAlertBanner />);
     expect(screen.getByRole('alert').getAttribute('data-credit-alert')).toBe('low');
-    expect(screen.getByText('Only 1 lesson left')).toBeTruthy();
+    expect(screen.getByText('Lessons left: 1')).toBeTruthy();
   });
 });
 

@@ -8,9 +8,7 @@ import { join } from 'node:path';
  * have an emoji are listed below; the list may only shrink. A NEW anchor without `img` fails the build.
  * (Pre-A1 `unit1` anchors already all have pictures.)
  */
-const KNOWN_EMOJI_ONLY = new Set([
-  'kitchen', 'cheese', 'chick', 'wand', 'wizard', 'web',   // Magic Castle CH + W
-]);
+const KNOWN_EMOJI_ONLY = new Set<string>([]);
 
 function anchorsWithoutPicture(): string[] {
   const dir = join(process.cwd(), 'src/content/playground-library');

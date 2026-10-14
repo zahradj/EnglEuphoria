@@ -28,29 +28,29 @@ describe('Academy level ladder (data)', () => {
     }
   });
 
-  it('Pre-A1 is the planned step with no roadmap Seasons yet: Lite = 3 Seasons (lean), Full = 6', () => {
-    expect(getLadderStep('pre-a1', 'lean')).toMatchObject({ level: null, seasons: null, plannedSeasons: 3 });
+  it('Pre-A1 is the planned step with no roadmap Seasons yet: Lite = 5 Seasons (lean), Full = 6', () => {
+    expect(getLadderStep('pre-a1', 'lean')).toMatchObject({ level: null, seasons: null, plannedSeasons: 5 });
     expect(getLadderStep('pre-a1', 'full')?.plannedSeasons).toBe(6);
   });
 
   it('Pre-A1 has one working title per planned Season, and no other step has planned Seasons', () => {
     for (const p of PROFILES) for (const s of ladderSteps(p)) expect(s.plannedTitles.length, `${p} ${s.id}`).toBe(s.plannedSeasons);
-    expect(getLadderStep('pre-a1', 'lean')?.plannedTitles).toEqual(['Hello, letters', 'First sounds', 'Numbers and age']);
+    expect(getLadderStep('pre-a1', 'lean')?.plannedTitles).toEqual(['Hello, letters', 'First sounds', 'Numbers and age', 'My things', 'People and places']);
   });
 
-  it('A1 is split in both ladders (A1 = Seasons 1-6, A1 Upper = 7-10) and Upper labels are marked official or ours', () => {
+  it('A1 is split in both ladders (A1 = Seasons 1-6, A1 Upper = 7-12) and Upper labels are marked official or ours', () => {
     for (const p of PROFILES) {
       expect(getLadderStep('a1', p)?.seasons).toEqual([1, 6]);
-      expect(getLadderStep('a1-upper', p)?.seasons).toEqual([7, 10]);
+      expect(getLadderStep('a1-upper', p)?.seasons).toEqual([7, 12]);
     }
     expect(getLadderStep('a1-upper')?.officialCefr).toBe(false); // A1+ is not an official CEFR level
     expect(getLadderStep('a2-upper', 'full')?.officialCefr).toBe(true); // A2+ is
     expect(getLadderStep('c1-upper', 'full')?.officialCefr).toBe(false);
   });
 
-  it('totals: lean = 7 steps / 73 Seasons / 584 sessions; full = 11 steps / 76 Seasons / 608 sessions (the existing roadmap is 70 Seasons)', () => {
-    expect(ladderTotals('lean')).toEqual({ steps: 7, seasons: 73, sessions: 584 });
-    expect(ladderTotals('full')).toEqual({ steps: 11, seasons: 76, sessions: 608 });
-    expect(ACADEMY_SEASONS.length).toBe(70);
+  it('totals: lean = 7 steps / 85 Seasons / 680 sessions; full = 11 steps / 86 Seasons / 688 sessions (the roadmap is 80 Seasons since 2026-10-14)', () => {
+    expect(ladderTotals('lean')).toEqual({ steps: 7, seasons: 85, sessions: 680 });
+    expect(ladderTotals('full')).toEqual({ steps: 11, seasons: 86, sessions: 688 });
+    expect(ACADEMY_SEASONS.length).toBe(80);
   });
 });

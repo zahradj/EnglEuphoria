@@ -7,6 +7,7 @@
  */
 
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Dialog,
   DialogContent,
@@ -25,11 +26,6 @@ import {
 } from '@/lib/unitProgressReport';
 import { supabase } from '@/integrations/supabase/client';
 
-function fmtMinutes(ms: number): string {
-  const mins = Math.max(1, Math.round(ms / 60000));
-  return `${mins} min`;
-}
-
 const HUB_ACCENT: Record<UnitReport['hub'], string> = {
   playground: 'from-orange-400 to-yellow-300',
   academy: 'from-purple-500 to-indigo-400',
@@ -44,6 +40,7 @@ export function UnitProgressReport({
   onClose: () => void;
 }) {
   const pct = Math.round(report.accuracy * 100);
+  const { t } = useTranslation();
   return (
     <Dialog open onOpenChange={(o) => !o && onClose()}>
       <DialogContent className="max-w-2xl print-report print:shadow-none print:border-0 print:max-w-full print:p-0">
@@ -53,13 +50,13 @@ export function UnitProgressReport({
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-2xl">
               <Trophy className="h-6 w-6" />
-              Unit Complete!
+              {t('st.unit.complete', 'Unit Complete!')}
             </DialogTitle>
             <DialogDescription className="text-white/90">
-              {report.unitTitle ?? `Unit ${report.unitId}`} · {report.hub} · {report.cefr}
+              {report.unitTitle ?? t('st.unit.unitN', { n: report.unitId, defaultValue: 'Unit {{n}}' })} · {report.hub} · {report.cefr}
             </DialogDescription>
           </DialogHeader>
-          <div className="flex items-center gap-1 mt-3" aria-label={`${report.stars} of 3 stars`}>
+          <div className="flex items-center gap-1 mt-3" aria-label={t('st.unit.stars', { n: report.stars, defaultValue: '{{n}} of 3 stars' })}>
             {[1, 2, 3].map((i) => (
               <Star
                 key={i}
@@ -72,13 +69,13 @@ export function UnitProgressReport({
         <div className="space-y-5 pt-4">
           {report.studentName && (
             <p className="text-sm text-muted-foreground">
-              Great work, <span className="font-semibold text-foreground">{report.studentName}</span>!
+              {t('st.unit.greatWork', 'Great work,')} <span className="font-semibold text-foreground">{report.studentName}</span>!
             </p>
           )}
 
           <div>
             <div className="flex items-center justify-between mb-1 text-sm">
-              <span className="font-medium">Overall accuracy</span>
+              <span className="font-medium">{t('st.unit.accuracy', 'Overall accuracy')}</span>
               <span className="font-bold">{pct}%</span>
             </div>
             <Progress value={pct} />
@@ -87,31 +84,31 @@ export function UnitProgressReport({
           <div className="grid grid-cols-3 gap-3 text-center">
             <StatCard
               icon={<BookOpen className="h-4 w-4" />}
-              label="Lessons"
+              label={t('st.unit.lessons', 'Lessons')}
               value={`${report.lessonsCompleted}/${report.lessonsTotal}`}
             />
             <StatCard
               icon={<Sparkles className="h-4 w-4" />}
-              label="Words mastered"
+              label={t('st.unit.words', 'Words mastered')}
               value={report.masteredWords.length}
             />
             <StatCard
               icon={<Timer className="h-4 w-4" />}
-              label="Time practiced"
-              value={fmtMinutes(report.totalDurationMs)}
+              label={t('st.unit.time', 'Time practiced')}
+              value={t('st.unit.min', { n: Math.max(1, Math.round(report.totalDurationMs / 60000)), defaultValue: '{{n}} min' })}
             />
           </div>
 
           {report.engineRuns && report.engineRuns.length > 0 && (
-            <Section title="Immersive Quests">
+            <Section title={t('st.unit.quests', 'Immersive Quests')}>
               <div className="rounded-xl border border-purple-200 bg-gradient-to-br from-purple-50 to-indigo-50 dark:from-purple-950/30 dark:to-indigo-950/30 p-3">
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2 text-sm font-semibold text-purple-900 dark:text-purple-100">
                     <Compass className="h-4 w-4" />
-                    {report.engineRuns.length} quest{report.engineRuns.length === 1 ? '' : 's'} completed
+                    {t('st.unit.questsDone', { n: report.engineRuns.length, defaultValue: 'Quests completed: {{n}}' })}
                   </div>
                   <div className="text-sm font-bold text-purple-900 dark:text-purple-100">
-                    {Math.round((report.engineAccuracy ?? 0) * 100)}% avg
+                    {t('st.unit.avg', { n: Math.round((report.engineAccuracy ?? 0) * 100), defaultValue: '{{n}}% avg' })}
                   </div>
                 </div>
                 <div className="flex flex-wrap gap-1.5">
@@ -131,7 +128,7 @@ export function UnitProgressReport({
           )}
 
           {report.masteredWords.length > 0 && (
-            <Section title="You mastered">
+            <Section title={t('st.unit.youMastered', 'You mastered')}>
               <div className="flex flex-wrap gap-1.5">
                 {report.masteredWords.map((w) => (
                   <Badge key={w} variant="secondary" className="bg-emerald-100 text-emerald-900 dark:bg-emerald-900/40 dark:text-emerald-100">
@@ -143,7 +140,7 @@ export function UnitProgressReport({
           )}
 
           {report.weakWords.length > 0 && (
-            <Section title="Keep practicing">
+            <Section title={t('st.unit.keepPracticing', 'Keep practicing')}>
               <div className="flex flex-wrap gap-1.5">
                 {report.weakWords.map((w) => (
                   <Badge key={w} variant="outline">
@@ -156,10 +153,10 @@ export function UnitProgressReport({
 
           <div className="flex flex-wrap justify-end gap-2 pt-2 print:hidden">
             <Button variant="outline" onClick={() => window.print()}>
-              <Printer className="h-4 w-4 mr-1.5" /> Print
+              <Printer className="h-4 w-4 mr-1.5" /> {t('st.unit.print', 'Print')}
             </Button>
             <ShareButton report={report} />
-            <Button onClick={onClose}>Continue</Button>
+            <Button onClick={onClose}>{t('st.unit.continue', 'Continue')}</Button>
           </div>
         </div>
       </DialogContent>
@@ -197,6 +194,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 }
 
 function ShareButton({ report }: { report: UnitReport }) {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const onShare = async () => {
     setLoading(true);
@@ -204,7 +202,7 @@ function ShareButton({ report }: { report: UnitReport }) {
       const { data: auth } = await supabase.auth.getUser();
       const userId = auth.user?.id;
       if (!userId) {
-        toast.error('Sign in to share your report');
+        toast.error(t('st.unit.signIn', 'Sign in to share your report'));
         return;
       }
       const { data, error } = await supabase
@@ -250,13 +248,13 @@ function ShareButton({ report }: { report: UnitReport }) {
         })
         .then(({ data: r }) => {
           const sent = (r as { sent?: number } | null)?.sent ?? 0;
-          if (sent > 0) toast.success(`Sent to ${sent} parent${sent === 1 ? '' : 's'}`);
+          if (sent > 0) toast.success(t('st.unit.sent', { n: sent, defaultValue: 'Sent to parents: {{n}}' }));
         })
         .catch(() => {});
 
-      toast.success('Share link copied!', { description: url });
+      toast.success(t('st.unit.copied', 'Share link copied!'), { description: url });
     } catch (e) {
-      toast.error('Could not create share link', {
+      toast.error(t('st.unit.shareFail', 'Could not create share link'), {
         description: e instanceof Error ? e.message : String(e),
       });
     } finally {
@@ -266,7 +264,7 @@ function ShareButton({ report }: { report: UnitReport }) {
   return (
     <Button variant="outline" onClick={onShare} disabled={loading}>
       <Share2 className="h-4 w-4 mr-1.5" />
-      {loading ? 'Sharing…' : 'Share with parent'}
+      {loading ? t('st.unit.sharing', 'Sharing…') : t('st.unit.share', 'Share with parent')}
     </Button>
   );
 }

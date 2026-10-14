@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Video, Clock, Zap, Rocket, CalendarPlus, CalendarX, CalendarClock } from 'lucide-react';
@@ -57,6 +58,7 @@ function toRelativePath(link: string): string {
 }
 
 export const JoinLessonHero: React.FC<JoinLessonHeroProps> = ({ hubId, isDark = false }) => {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const navigate = useNavigate();
   const [lesson, setLesson] = useState<UpcomingLesson | null>(null);
@@ -179,10 +181,10 @@ export const JoinLessonHero: React.FC<JoinLessonHeroProps> = ({ hubId, isDark = 
           </div>
           <div className="flex-1">
             <p className={cn('font-semibold', isDark ? 'text-white' : 'text-gray-800')}>
-              No upcoming lessons
+              {t('st.hero.none', 'No upcoming lessons')}
             </p>
             <p className={cn('text-sm mt-0.5', isDark ? 'text-white/60' : 'text-gray-500')}>
-              Book your next {theme.label} session to start learning!
+              {t('st.hero.bookNext', { hub: theme.label, defaultValue: 'Book your next {{hub}} session to start learning!' })}
             </p>
           </div>
           <Button
@@ -194,7 +196,7 @@ export const JoinLessonHero: React.FC<JoinLessonHeroProps> = ({ hubId, isDark = 
               `bg-gradient-to-r ${isDark ? theme.darkButtonGradient : theme.buttonGradient}`
             )}
           >
-            Book a Lesson
+            {t('st.hero.book', 'Book a Lesson')}
           </Button>
         </div>
       </div>
@@ -277,7 +279,7 @@ export const JoinLessonHero: React.FC<JoinLessonHeroProps> = ({ hubId, isDark = 
                 className="font-semibold px-5 rounded-xl bg-white/95 hover:bg-white text-gray-800 shadow"
               >
                 <CalendarPlus className="w-4 h-4 mr-2" />
-                Book a Lesson
+                {t('st.hero.book', 'Book a Lesson')}
               </Button>
             </div>
           </div>
@@ -291,7 +293,7 @@ export const JoinLessonHero: React.FC<JoinLessonHeroProps> = ({ hubId, isDark = 
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-white/90 hover:text-white bg-white/10 hover:bg-white/20 backdrop-blur-sm transition"
               >
                 <CalendarClock className="w-3.5 h-3.5" />
-                Reschedule
+                {t('st.hero.reschedule', 'Reschedule')}
               </button>
               <button
                 type="button"
@@ -299,7 +301,7 @@ export const JoinLessonHero: React.FC<JoinLessonHeroProps> = ({ hubId, isDark = 
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-white/90 hover:text-white bg-white/10 hover:bg-red-500/40 backdrop-blur-sm transition"
               >
                 <CalendarX className="w-3.5 h-3.5" />
-                Cancel
+                {t('st.hero.cancel', 'Cancel')}
               </button>
             </div>
           )}

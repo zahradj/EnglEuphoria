@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -49,6 +50,7 @@ export const LearningPathTab = () => {
   const { user } = useAuth();
   const { studentLevel } = useStudentLevel();
   const hub = toCoreHub(studentLevel);
+  const { t } = useTranslation();
 
   const { data, isLoading } = useQuery({
     queryKey: ['learning-path', user?.id, hub],
@@ -121,7 +123,7 @@ export const LearningPathTab = () => {
         <Card>
           <CardContent className="flex items-center justify-center py-12">
             <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-            <span className="ml-3 text-muted-foreground">Loading your learning path...</span>
+            <span className="ml-3 text-muted-foreground">{t('st.path.loading', 'Loading your learning path...')}</span>
           </CardContent>
         </Card>
       </div>
@@ -142,14 +144,14 @@ export const LearningPathTab = () => {
         <div>
           <h1 className="text-2xl font-bold flex items-center gap-2">
             <Target className="h-6 w-6 text-primary" />
-            Your Path to Fluency
+            {t('st.path.title', 'Your Path to Fluency')}
           </h1>
           <p className="text-muted-foreground mt-1">
             {level
               ? data?.fromTrial
-                ? `Level ${level} · set by your teacher in your trial lesson${prior && prior.start_unit > 1 ? ` · starting at Unit ${prior.start_unit}` : ''}`
-                : `Level ${level}`
-              : 'Your level appears here after your trial lesson or placement test.'}
+                ? `${t('st.path.levelTrial', { level: level, defaultValue: 'Level {{level}} · set by your teacher in your trial lesson' })}${prior && prior.start_unit > 1 ? ` · ${t('st.path.startUnit', { n: prior.start_unit, defaultValue: 'starting at Unit {{n}}' })}` : ''}`
+                : t('st.path.level', { level: level, defaultValue: 'Level {{level}}' })
+              : t('st.path.noLevel', 'Your level appears here after your trial lesson or placement test.')}
           </p>
         </div>
         {level && (
@@ -169,9 +171,9 @@ export const LearningPathTab = () => {
               <Trophy className="h-5 w-5" />
             </div>
             <div>
-              <div className="text-xs font-semibold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">Level complete</div>
-              <div className="font-semibold">You finished every {level} lesson!</div>
-              <div className="text-xs text-muted-foreground">Your teacher will move you up to the next level.</div>
+              <div className="text-xs font-semibold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">{t('st.path.complete', 'Level complete')}</div>
+              <div className="font-semibold">{t('st.path.finishedAll', { level: level, defaultValue: 'You finished every {{level}} lesson!' })}</div>
+              <div className="text-xs text-muted-foreground">{t('st.path.moveUp', 'Your teacher will move you up to the next level.')}</div>
             </div>
           </CardContent>
         </Card>
@@ -183,12 +185,12 @@ export const LearningPathTab = () => {
             </div>
             <div className="min-w-0">
               <div className="text-xs font-semibold uppercase tracking-wider text-primary">
-                {upNext.status === 'next' ? 'Up next in your class' : 'Up next · coming soon'}
+                {upNext.status === 'next' ? t('st.path.upNextClass', 'Up next in your class') : t('st.path.upNextSoon', 'Up next · coming soon')}
               </div>
               <div className="font-semibold truncate">{upNext.l.title}</div>
               <div className="text-xs text-muted-foreground">
-                {level} · Unit {upNext.u}{upNextUnit?.unitTitle ? ` (${upNextUnit.unitTitle})` : ''} · Lesson {upNext.l.lesson}
-                {upNext.status === 'next_soon' && ' — this lesson is being made. Your classes review earlier lessons until it opens.'}
+                {t('st.path.unitLesson', { level: level, u: upNext.u, title: upNextUnit?.unitTitle ? ` (${upNextUnit.unitTitle})` : '', l: upNext.l.lesson, defaultValue: '{{level}} · Unit {{u}}{{title}} · Lesson {{l}}' })}
+                {upNext.status === 'next_soon' && ' — ' + t('st.path.beingMade', 'this lesson is being made. Your classes review earlier lessons until it opens.')}
               </div>
             </div>
           </CardContent>
@@ -200,28 +202,28 @@ export const LearningPathTab = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Trophy className="h-5 w-5 text-yellow-500" />
-            Your Progress Journey{level ? ` · ${level}` : ''}
+            {t('st.path.progressTitle', 'Your Progress Journey')}{level ? ` · ${level}` : ''}
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             <div className="flex justify-between text-sm">
-              <span>Level progress</span>
-              <span>{progressPct}% Complete</span>
+              <span>{t('st.path.levelProgress', 'Level progress')}</span>
+              <span>{t('st.path.pctComplete', { n: progressPct, defaultValue: '{{n}}% Complete' })}</span>
             </div>
             <Progress value={progressPct} className="h-3" />
             <div className="grid grid-cols-3 gap-4 mt-4">
               <div className="text-center">
                 <div className="text-lg font-bold text-primary">{UNITS_PER_LEVEL}</div>
-                <div className="text-xs text-muted-foreground">Units</div>
+                <div className="text-xs text-muted-foreground">{t('st.path.units', 'Units')}</div>
               </div>
               <div className="text-center">
                 <div className="text-lg font-bold text-blue-600">{doneCount} / {slots.length}</div>
-                <div className="text-xs text-muted-foreground">Lessons done</div>
+                <div className="text-xs text-muted-foreground">{t('st.path.lessonsDone', 'Lessons done')}</div>
               </div>
               <div className="text-center">
                 <div className="text-lg font-bold text-purple-600">{builtCount}</div>
-                <div className="text-xs text-muted-foreground">Lessons ready</div>
+                <div className="text-xs text-muted-foreground">{t('st.path.lessonsReady', 'Lessons ready')}</div>
               </div>
             </div>
           </div>
@@ -232,16 +234,16 @@ export const LearningPathTab = () => {
       <div className="space-y-4">
         <h2 className="text-xl font-semibold flex items-center gap-2">
           <Calendar className="h-5 w-5 text-blue-600" />
-          Your Learning Journey
+          {t('st.path.journey', 'Your Learning Journey')}
         </h2>
 
         {!level ? (
           <Card>
             <CardContent className="text-center py-12">
               <Sparkles className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">Your path starts after your trial lesson</h3>
+              <h3 className="text-lg font-semibold mb-2">{t('st.path.startsAfter', 'Your path starts after your trial lesson')}</h3>
               <p className="text-muted-foreground">
-                Your teacher will set your level in your trial class, and your lessons will appear here.
+                {t('st.path.teacherSets', 'Your teacher will set your level in your trial class, and your lessons will appear here.')}
               </p>
             </CardContent>
           </Card>
@@ -267,23 +269,23 @@ export const LearningPathTab = () => {
                       </div>
                       <div>
                         <div className="text-lg">
-                          Unit {unit.unitNumber}{unit.unitTitle ? `: ${unit.unitTitle}` : ''}
+                          {t('st.path.unit', { n: unit.unitNumber, defaultValue: 'Unit {{n}}' })}{unit.unitTitle ? `: ${unit.unitTitle}` : ''}
                         </div>
                         <div className="text-sm text-muted-foreground font-normal">
                           {unitSlots.length
-                            ? `${unitSlots.length} lessons${anyBuilt ? '' : ' · coming soon'}`
-                            : 'Coming soon'}
+                            ? (anyBuilt ? t('st.path.nLessons', { n: unitSlots.length, defaultValue: 'Lessons: {{n}}' }) : t('st.path.nLessonsSoon', { n: unitSlots.length, defaultValue: 'Lessons: {{n}} · coming soon' }))
+                            : t('st.path.soon', 'Coming soon')}
                         </div>
                       </div>
                     </CardTitle>
                     {allKnown ? (
-                      <Badge variant="outline" className="text-emerald-700 border-emerald-300">Known (from trial)</Badge>
+                      <Badge variant="outline" className="text-emerald-700 border-emerald-300">{t('st.path.knownTrial', 'Known (from trial)')}</Badge>
                     ) : allDone ? (
-                      <Badge variant="outline" className="text-green-600 border-green-300">Done</Badge>
+                      <Badge variant="outline" className="text-green-600 border-green-300">{t('st.path.done', 'Done')}</Badge>
                     ) : isCurrentUnit ? (
-                      <Badge className="bg-primary">Current</Badge>
+                      <Badge className="bg-primary">{t('st.path.current', 'Current')}</Badge>
                     ) : !anyBuilt ? (
-                      <Badge variant="outline" className="text-muted-foreground">Coming soon</Badge>
+                      <Badge variant="outline" className="text-muted-foreground">{t('st.path.soon', 'Coming soon')}</Badge>
                     ) : null}
                   </div>
                 </CardHeader>
@@ -308,13 +310,13 @@ export const LearningPathTab = () => {
                               </div>
                               <div>
                                 <div className="font-medium text-sm">{l.title}</div>
-                                <div className="text-xs text-muted-foreground">Lesson {l.lesson}</div>
+                                <div className="text-xs text-muted-foreground">{t('st.path.lesson', { n: l.lesson, defaultValue: 'Lesson {{n}}' })}</div>
                               </div>
                             </div>
-                            {next && <Badge className="bg-primary">{status === 'next' ? 'Up next' : 'Up next · soon'}</Badge>}
-                            {status === 'done' && <Badge variant="outline" className="text-green-600 border-green-300">Done</Badge>}
-                            {status === 'known' && <Badge variant="outline" className="text-emerald-700 border-emerald-300">Known</Badge>}
-                            {status === 'coming_soon' && <Badge variant="outline" className="text-muted-foreground">Coming soon</Badge>}
+                            {next && <Badge className="bg-primary">{status === 'next' ? t('st.path.upNext', 'Up next') : t('st.path.upNextShort', 'Up next · soon')}</Badge>}
+                            {status === 'done' && <Badge variant="outline" className="text-green-600 border-green-300">{t('st.path.done', 'Done')}</Badge>}
+                            {status === 'known' && <Badge variant="outline" className="text-emerald-700 border-emerald-300">{t('st.path.known', 'Known')}</Badge>}
+                            {status === 'coming_soon' && <Badge variant="outline" className="text-muted-foreground">{t('st.path.soon', 'Coming soon')}</Badge>}
                           </div>
                         );
                       })}
@@ -331,9 +333,9 @@ export const LearningPathTab = () => {
       <Card className="bg-gradient-to-r from-primary to-primary/80 text-primary-foreground">
         <CardContent className="text-center py-6">
           <Zap className="h-8 w-8 mx-auto mb-2 text-yellow-300" />
-          <h3 className="text-lg font-bold mb-2">You're Doing Amazing!</h3>
+          <h3 className="text-lg font-bold mb-2">{t('st.path.amazing', "You're Doing Amazing!")}</h3>
           <p className="opacity-90">
-            Every lesson brings you closer to English fluency. 🚀
+            {t('st.path.closer', 'Every lesson brings you closer to English fluency. 🚀')}
           </p>
         </CardContent>
       </Card>

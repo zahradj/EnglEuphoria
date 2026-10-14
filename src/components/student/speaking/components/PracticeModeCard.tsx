@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -31,6 +32,7 @@ export const PracticeModeCard: React.FC<PracticeModeCardProps> = ({
   isLiveChat = false,
   onStartPractice
 }) => {
+  const { t } = useTranslation();
   return (
     <Card className={`group cursor-pointer hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-2 ${borderColor} hover:scale-[1.02] bg-gradient-to-br from-background to-muted/20`}>
       <CardHeader className="text-center pb-4 relative overflow-hidden">
@@ -52,7 +54,7 @@ export const PracticeModeCard: React.FC<PracticeModeCardProps> = ({
           <div className="absolute top-2 right-2">
             <div className="flex items-center gap-1 bg-red-100 text-red-600 px-2 py-1 rounded-full text-xs font-medium">
               <div className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse" />
-              LIVE
+              {t('st.sp.live', 'LIVE')}
             </div>
           </div>
         )}
@@ -75,8 +77,8 @@ export const PracticeModeCard: React.FC<PracticeModeCardProps> = ({
               <div className="flex-1 min-w-0">
                 <div className="font-medium text-sm truncate">{scenario.name}</div>
                 <div className="text-xs text-muted-foreground">
-                  {scenario.expected_duration ? `${Math.floor(scenario.expected_duration / 60)}min` : '5min'} • 
-                  Level {scenario.cefr_level}
+                  {scenario.expected_duration ? t('st.cal.min', { n: Math.floor(scenario.expected_duration / 60), defaultValue: '{{n}} min' }) : t('st.cal.min', { n: 5, defaultValue: '{{n}} min' })} • 
+                  {t('st.sp.levelN', { n: scenario.cefr_level, defaultValue: 'Level {{n}}' })}
                 </div>
               </div>
               <div className="flex items-center gap-2 flex-shrink-0">
@@ -95,7 +97,7 @@ export const PracticeModeCard: React.FC<PracticeModeCardProps> = ({
         {scenarios.length > 3 && (
           <div className="text-center pt-2">
             <span className="text-xs text-muted-foreground bg-muted px-3 py-1 rounded-full">
-              +{scenarios.length - 3} more scenarios
+              {t('st.sp.moreScenarios', { n: scenarios.length - 3, defaultValue: '+{{n}} more scenarios' })}
             </span>
           </div>
         )}

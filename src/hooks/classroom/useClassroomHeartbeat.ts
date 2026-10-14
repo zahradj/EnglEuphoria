@@ -1,5 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { mediaStatusStore } from '@/lib/classroom/mediaStatusStore';
+
+// tick_heartbeat gained an optional media-status argument (migration 20261014120000). Until that migration is installed the
+// 3-argument call fails; then we fall back to the original 2-argument call and remember it, so the heartbeat never breaks.
+let heartbeatTakesMediaStatus = true;
 
 interface Args {
   sessionId: string | null;
@@ -40,6 +45,15 @@ export function useClassroomHeartbeat({
     const tick = async () => {
       if (stoppedRef.current) return;
       try {
+        if (heartbeatTakesMediaStatus) {
+          const { error } = await (supabase as any).rpc('tick_heartbeat', {
+            p_session_id: sessionId,
+            p_role: role,
+            p_media_status: mediaStatusStore.getOwn(),
+          });
+          if (!error) return;
+          heartbeatTakesMediaStatus = false;
+        }
         await supabase.rpc('tick_heartbeat', {
           p_session_id: sessionId,
           p_role: role,
@@ -78,6 +92,9 @@ export function useClassroomHeartbeat({
           filter: `id=eq.${sessionId}`,
         },
         (payload: any) => {
+          // The peer's camera / connection status rides on the same row update.
+          const peerStatus = payload?.new?.[role === 'teacher' ? 'student_media_status' : 'teacher_media_status'];
+          mediaStatusStore.setPeer(typeof peerStatus === 'string' ? peerStatus : null);
           const v = payload?.new?.[peerField];
           if (v) {
             peerLastPingAtRef.current = v;

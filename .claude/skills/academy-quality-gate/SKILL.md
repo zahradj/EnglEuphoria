@@ -42,3 +42,15 @@ Blocking issues: <list>   Open questions for the owner: <list>   Unverified fact
 ## Owner-facing summary rule
 
 Report faithfully: what was verified, what was not (web sources, sizing assumptions, thresholds not yet piloted), and what remains to build. Never say "ready" for something that has not run in front of a student.
+
+## Research and games check (owner rule 2026-10-14, CLAUDE.md "Research for every unit and every lesson")
+Fail the unit/lesson if: (1) no `docs/research/academy-<unit-or-lesson>-research.md` with dated sources (Oxford, Cambridge, British Council, Pearson GSE, apps/platforms) and verified/unverified marks; (2) no games list from `docs/academy-games-catalog.md`; (3) no video-game mechanic from `docs/academy-video-game-mechanics.md` named with what the student does in English.
+
+## Lesson plan check (owner rule 2026-10-14, CLAUDE.md "A lesson plan comes before every lesson")
+Fail if: no approved plan from `docs/academy-lesson-plan-template.md`; the plan is not one-to-one and exactly 60 minutes; no response counts / practice ladder / error loop / mastery check (>= 80 student responses per hour); no traceability table (every activity -> objective or student need); no games from the catalogue (incl. section 13) or no video-game mechanic.
+
+## Speaking check (owner rule 2026-10-14)
+Fail a plan with student talk or speaking minutes below the level's targets in `src/curriculum/academy/speaking.ts` (`speakingProblems`), a lesson that never reaches its ladder step, no spoken Mission/Release, or no voice note in the Daily 10 (`docs/academy-speaking-practice.md`).
+
+## Recall and spacing check (owner rule 2026-10-14)
+Fail a plan or lesson with no Remember? list taken from `recallPlan`, no progress line (builds on / unlocks), or a Daily 10 that ignores the spacing calendar (`docs/academy-recall-spacing-progression.md`).

@@ -167,6 +167,13 @@ export class PeerConnectionManager {
     this.connections.clear();
   }
 
+  /** The live RTCPeerConnections, by remote user (quality stats, adding a late camera track). */
+  getPeerConnections(): Map<string, RTCPeerConnection> {
+    const out = new Map<string, RTCPeerConnection>();
+    this.connections.forEach((c, id) => out.set(id, c.pc));
+    return out;
+  }
+
   getRemoteStream(userId: string): MediaStream | undefined {
     return this.connections.get(userId)?.stream;
   }

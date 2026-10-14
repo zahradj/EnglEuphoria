@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -32,6 +33,7 @@ export const LiveAIConversation: React.FC<LiveAIConversationProps> = ({
   onBack,
   onComplete
 }) => {
+  const { t } = useTranslation();
   const [messages, setMessages] = useState<LiveAIMessage[]>([]);
   const [currentMessage, setCurrentMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -91,8 +93,8 @@ export const LiveAIConversation: React.FC<LiveAIConversationProps> = ({
     } catch (error) {
       console.error('Failed to initialize session:', error);
       toast({
-        title: "Error",
-        description: "Failed to start AI conversation. Please try again.",
+        title: t('st.bill.error', 'Error'),
+        description: t('st.sp.liveStartErr', 'Failed to start AI conversation. Please try again.'),
         variant: "destructive"
       });
     }
@@ -138,8 +140,8 @@ export const LiveAIConversation: React.FC<LiveAIConversationProps> = ({
     } catch (error) {
       console.error('Error sending message:', error);
       toast({
-        title: "Error",
-        description: "Failed to get AI response. Please try again.",
+        title: t('st.bill.error', 'Error'),
+        description: t('st.sp.liveReplyErr', 'Failed to get AI response. Please try again.'),
         variant: "destructive"
       });
     } finally {
@@ -211,8 +213,8 @@ export const LiveAIConversation: React.FC<LiveAIConversationProps> = ({
     } catch (error) {
       console.error('Error ending session:', error);
       toast({
-        title: "Error",
-        description: "Failed to save session. Please try again.",
+        title: t('st.bill.error', 'Error'),
+        description: t('st.sp.liveSaveErr', 'Failed to save session. Please try again.'),
         variant: "destructive"
       });
     }
@@ -238,7 +240,7 @@ export const LiveAIConversation: React.FC<LiveAIConversationProps> = ({
           onClick={handleEndSession}
           disabled={!sessionStarted}
         >
-          End Session
+          {t('st.sp.end', 'End Session')}
         </Button>
       </div>
 
@@ -246,7 +248,7 @@ export const LiveAIConversation: React.FC<LiveAIConversationProps> = ({
         <CardHeader className="pb-4">
           <CardTitle className="flex items-center space-x-2">
             <MessageCircle className="h-5 w-5 text-primary" />
-            <span>Live AI Conversation</span>
+            <span>{t('st.sp.liveTitle', 'Live AI Conversation')}</span>
             {scenario && <span className="text-sm font-normal">- {scenario.name}</span>}
           </CardTitle>
         </CardHeader>
@@ -311,7 +313,7 @@ export const LiveAIConversation: React.FC<LiveAIConversationProps> = ({
               <Input
                 value={currentMessage}
                 onChange={(e) => setCurrentMessage(e.target.value)}
-                placeholder="Type your message or use voice..."
+                placeholder={t('st.sp.liveType', 'Type your message or use voice...')}
                 onKeyPress={(e) => e.key === 'Enter' && sendMessage(currentMessage)}
                 disabled={isLoading}
               />
@@ -345,7 +347,7 @@ export const LiveAIConversation: React.FC<LiveAIConversationProps> = ({
           
           {isProcessing && (
             <div className="text-sm text-muted-foreground text-center">
-              Processing voice input...
+              {t('st.sp.liveProcessing', 'Processing voice input...')}
             </div>
           )}
           

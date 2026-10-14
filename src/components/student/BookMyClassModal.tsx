@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar, X, Loader2, CheckCircle, Sparkles, Link2, AlertTriangle, CreditCard, Repeat } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -77,6 +78,7 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
   const { user } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { totalCredits, trialAvailable, loading: creditsLoading } = usePackageValidation(user?.id || null);
   const { resolvedTheme } = useThemeMode();
   const isDark = resolvedTheme === 'dark';
@@ -94,6 +96,11 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
 
   const hasCredits = totalCredits > 0 || trialAvailable;
   const config = HUB_CONFIG[selectedHub];
+  const hubText = {
+    playground: { description: t('st.book.hub.playground.desc', 'Fun lessons — 25 minutes each'), bookLabel: t('st.book.hub.playground.book', 'Book a Class') },
+    academy: { description: t('st.book.hub.academy.desc', 'Focused lessons — 25 minutes each'), bookLabel: t('st.book.hub.academy.book', 'Book a Slot') },
+    professional: { description: t('st.book.hub.professional.desc', 'Professional coaching — 25 minutes each'), bookLabel: t('st.book.hub.professional.book', 'Schedule a Session') },
+  }[selectedHub];
   // One rule for every hub: a credit is 30 minutes. The student picks a 30-minute
   // lesson (1 credit) or a 60-minute lesson (2 credits: one 60-minute slot or two
   // back-to-back 30-minute slots, booked atomically). See lib/booking/lessonSlots.ts.
@@ -245,8 +252,8 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
     if (slotIds.length === 0 || !slot.teacherId || !slot.startTime) {
       console.error('[BookMyClassModal] Invalid booking payload', { slot, userId: user.id });
       toast({
-        title: 'Invalid booking',
-        description: 'This slot is missing required information. Please refresh and try again.',
+        title: t('st.book.invalid', 'Invalid booking'),
+        description: t('st.book.invalidDesc', 'This slot is missing required information. Please refresh and try again.'),
         variant: 'destructive',
       });
       return;
@@ -261,10 +268,10 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
     // Trial bookings bypass the credit gate
     if (!isTrial && totalCredits < requiredCredits) {
       toast({
-        title: 'Not enough credits',
+        title: t('st.book.noCredits', 'Not enough credits'),
         description: useRecurring
-          ? `Weekly series needs ${requiredCredits} credits (you have ${totalCredits}). Add more credits or pick fewer weeks.`
-          : `You need ${requiredCredits} credit${requiredCredits === 1 ? '' : 's'} to book this session (you have ${totalCredits}). ${ONLINE_PAYMENTS_ENABLED ? 'Redirecting to purchase...' : 'Contact us to buy more credits.'}`,
+          ? t('st.book.seriesNeeds', { required: requiredCredits, have: totalCredits, defaultValue: 'Weekly series needs {{required}} credits (you have {{have}}). Add more credits or pick fewer weeks.' })
+          : t('st.book.needCredits', { required: requiredCredits, have: totalCredits, defaultValue: 'Credits needed for this session: {{required}} (you have {{have}}).' }) + ' ' + (ONLINE_PAYMENTS_ENABLED ? t('st.book.redirecting', 'Redirecting to purchase...') : t('st.book.contactMore', 'Contact us to buy more credits.')),
         variant: 'destructive',
       });
       if (ONLINE_PAYMENTS_ENABLED) {
@@ -362,10 +369,10 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
       window.dispatchEvent(new Event('availability-changed'));
 
       toast({
-        title: useRecurring ? '🎉 Weekly series booked!' : '🎉 Class booked!',
+        title: useRecurring ? t('st.book.seriesBooked', '🎉 Weekly series booked!') : t('st.book.classBooked', '🎉 Class booked!'),
         description: useRecurring
-          ? `Booked ${bookedCount} of ${repeatWeeks} weekly sessions${skippedCount ? ` (${skippedCount} skipped — teacher unavailable)` : ''}.`
-          : `Success! Your ${lessonMinutes}-minute ${config.label} session has been booked.`,
+          ? t('st.book.bookedOf', { booked: bookedCount, total: repeatWeeks, defaultValue: 'Booked {{booked}} of {{total}} weekly sessions.' }) + (skippedCount ? ' ' + t('st.book.skipped', { n: skippedCount, defaultValue: '({{n}} skipped — teacher unavailable)' }) : '')
+          : t('st.book.success', { minutes: lessonMinutes, hub: config.label, defaultValue: 'Success! Your {{minutes}}-minute {{hub}} session has been booked.' }),
       });
 
       setTimeout(() => {
@@ -376,8 +383,8 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
     } catch (err: any) {
       console.error('Booking Error Detail:', err, { slotIds, studentId: user.id });
       toast({
-        title: 'Booking failed',
-        description: err?.message || 'Something went wrong. Please try again.',
+        title: t('st.book.failed', 'Booking failed'),
+        description: err?.message || t('st.book.wrong', 'Something went wrong. Please try again.'),
         variant: 'destructive',
       });
       await fetchSlots();
@@ -424,7 +431,7 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
             <DialogHeader>
               <DialogTitle className="flex items-center gap-3 text-white text-xl font-bold">
                 <span className="text-2xl">{config.icon}</span>
-                {config.bookLabel}
+                {hubText.bookLabel}
                 {!creditsLoading && (
                   <Badge className={cn(
                     "ml-2 text-xs font-medium",
@@ -433,19 +440,19 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
                       : "bg-red-500/30 text-white border-red-400/30"
                   )}>
                     <CreditCard className="w-3 h-3 mr-1" />
-                    {trialAvailable ? '🎁 Free Trial Available' : `${totalCredits} credit${totalCredits !== 1 ? 's' : ''} remaining`}
+                    {trialAvailable ? t('st.book.trial', '🎁 Free Trial Available') : t('st.book.creditsLeft', { n: totalCredits, defaultValue: 'Credits remaining: {{n}}' })}
                   </Badge>
                 )}
                 <button
                   onClick={onClose}
                   className="ml-auto p-1 rounded-full hover:bg-white/20 transition-colors"
-                  aria-label="Close"
+                  aria-label={t('st.book.close', 'Close')}
                 >
                   <X className="w-5 h-5 text-white" />
                 </button>
               </DialogTitle>
               <p className="text-white/80 text-sm mt-1">
-                {config.description} • {lessonMinutes} minutes per session
+                {hubText.description} • {t('st.book.minPerSession', { n: lessonMinutes, defaultValue: '{{n}} minutes per session' })}
               </p>
             </DialogHeader>
           </div>
@@ -458,14 +465,14 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
                 "bg-primary/10 text-primary border-primary/20"
               )}>
                 <span>{config.icon}</span>
-                {config.label} • {lessonMinutes} min sessions
+                {config.label} • {t('st.book.minSessions', { n: lessonMinutes, defaultValue: '{{n}} min sessions' })}
               </div>
             </div>
 
             {/* Every hub: choose a 30-minute lesson (1 credit) or a one-hour lesson (2 credits) */}
             {!booked && (
               <div className="mb-5 flex flex-wrap items-center gap-2">
-                <span className="text-sm font-medium text-muted-foreground">Lesson length:</span>
+                <span className="text-sm font-medium text-muted-foreground">{t('st.book.length', 'Lesson length:')}</span>
                 {LESSON_LENGTHS.map((m) => (
                   <button
                     key={m}
@@ -478,10 +485,10 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
                         : "bg-background text-foreground border-border hover:bg-muted"
                     )}
                   >
-                    {lessonLengthLabel(m)}
+                    {m === 30 ? t('st.book.len30', '25 min · 1 lesson') : t('st.book.len60', '2 lessons back to back')}
                   </button>
                 ))}
-                <span className="basis-full text-xs text-muted-foreground">Each lesson is 25 minutes.{trialAvailable ? ' Your free trial lesson is a single 25-minute lesson.' : ''}</span>
+                <span className="basis-full text-xs text-muted-foreground">{t('st.book.eachLesson', 'Each lesson is 25 minutes.')}{trialAvailable ? ' ' + t('st.book.trialSingle', 'Your free trial lesson is a single 25-minute lesson.') : ''}</span>
               </div>
             )}
 
@@ -495,9 +502,9 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
               )}>
                 <AlertTriangle className="w-5 h-5 text-destructive mt-0.5 shrink-0" />
                 <div className="flex-1">
-                  <p className="font-semibold text-destructive">No credits available</p>
+                  <p className="font-semibold text-destructive">{t('st.book.noCreditsTitle', 'No credits available')}</p>
                   <p className="text-sm text-destructive/80 mt-1">
-                    You need at least 1 credit to book a session. {ONLINE_PAYMENTS_ENABLED ? 'Buy a credit pack online, or contact us to buy, to continue.' : 'Contact us to buy more credits — they appear here as soon as they are added.'}
+                    {t('st.book.atLeast', 'You need at least 1 credit to book a session.')} {ONLINE_PAYMENTS_ENABLED ? t('st.book.buyOnlineDesc', 'Buy a credit pack online, or contact us to buy, to continue.') : t('st.book.buyOfflineDesc', 'Contact us to buy more credits — they appear here as soon as they are added.')}
                   </p>
                 </div>
                 <Button
@@ -506,11 +513,11 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
                   className="shrink-0 border-destructive/30 text-destructive hover:bg-destructive/10"
                   onClick={() => { if (ONLINE_PAYMENTS_ENABLED) { onClose(); navigate('/student?tab=packages'); } else { window.location.href = contactToBuyHref({ studentEmail: user?.email }); } }}
                 >
-                  {ONLINE_PAYMENTS_ENABLED ? 'Buy online' : 'Contact us'}
+                  {ONLINE_PAYMENTS_ENABLED ? t('st.book.buyOnline', 'Buy online') : t('st.book.contactUs', 'Contact us')}
                 </Button>
                 {ONLINE_PAYMENTS_ENABLED && (
                   <Button size="sm" variant="ghost" asChild className="shrink-0 text-destructive hover:bg-destructive/10">
-                    <a href={contactToBuyHref({ studentEmail: user?.email })}>Contact us to buy</a>
+                    <a href={contactToBuyHref({ studentEmail: user?.email })}>{t('st.book.contactToBuy', 'Contact us to buy')}</a>
                   </Button>
                 )}
               </div>
@@ -526,9 +533,9 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
               )}>
                 <Sparkles className="w-5 h-5 text-emerald-600 mt-0.5 shrink-0" />
                 <div className="flex-1">
-                  <p className="font-semibold text-emerald-700">🎁 Your First Lesson is Free!</p>
+                  <p className="font-semibold text-emerald-700">{t('st.book.firstFree', '🎁 Your First Lesson is Free!')}</p>
                   <p className="text-sm text-emerald-600/80 mt-1">
-                    Book your free trial lesson at no cost. Pick a time and start learning!
+                    {t('st.book.freeDesc', 'Book your free trial lesson at no cost. Pick a time and start learning!')}
                   </p>
                 </div>
               </div>
@@ -552,9 +559,9 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
                     <div className="absolute inset-0 -m-4 rounded-full bg-gradient-to-r from-emerald-400/30 to-cyan-400/30 blur-xl" />
                     <CheckCircle className="relative w-20 h-20 text-emerald-500" />
                   </motion.div>
-                  <h3 className="text-2xl font-bold text-foreground">Booking Confirmed! 🎉</h3>
+                  <h3 className="text-2xl font-bold text-foreground">{t('st.book.confirmed', 'Booking Confirmed! 🎉')}</h3>
                   <p className="text-muted-foreground max-w-sm">
-                    Your {lessonMinutes}-minute {config.label} session is booked.
+                    {t('st.book.isBooked', { minutes: lessonMinutes, hub: config.label, defaultValue: 'Your {{minutes}}-minute {{hub}} session is booked.' })}
                   </p>
                   {meetingLink && (
                     <div className={cn(
@@ -563,14 +570,14 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
                     )}>
                       <p className="text-xs text-muted-foreground mb-1 flex items-center gap-1">
                         <Link2 className="w-3 h-3" />
-                        Your classroom link
+                        {t('st.book.link', 'Your classroom link')}
                       </p>
                       <p className="text-sm font-mono text-foreground break-all">{meetingLink}</p>
                     </div>
                   )}
                   <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <Sparkles className="w-4 h-4 text-yellow-500" />
-                    Keep up the great work!
+                    {t('st.book.keepUp', 'Keep up the great work!')}
                   </div>
                 </motion.div>
               ) : loadingSlots ? (
@@ -582,7 +589,7 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
                   className="flex flex-col items-center justify-center py-16 gap-4"
                 >
                   <Loader2 className="w-12 h-12 animate-spin text-primary" />
-                  <p className="text-muted-foreground">Loading available slots...</p>
+                  <p className="text-muted-foreground">{t('st.book.loading', 'Loading available slots...')}</p>
                 </motion.div>
               ) : displaySlots.length === 0 ? (
                 <motion.div
@@ -594,15 +601,15 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
                 >
                   <Calendar className="w-12 h-12 text-muted-foreground/60" />
                   <h3 className="text-lg font-semibold text-foreground">
-                    No {config.label} teachers available right now
+                    {t('st.book.noTeachers', { hub: config.label, defaultValue: 'No {{hub}} teachers available right now' })}
                   </h3>
                   <p className="text-sm text-muted-foreground max-w-sm">
                     {teacherId
-                      ? `This teacher has no upcoming ${lessonMinutes}-minute openings yet. Try again later.`
-                      : `No ${lessonMinutes}-minute slots are open in this hub yet. Please check back soon.`}
+                      ? t('st.book.teacherNone', { minutes: lessonMinutes, defaultValue: 'This teacher has no upcoming {{minutes}}-minute openings yet. Try again later.' })
+                      : t('st.book.hubNone', { minutes: lessonMinutes, defaultValue: 'No {{minutes}}-minute slots are open in this hub yet. Please check back soon.' })}
                   </p>
                   <Button variant="outline" size="sm" onClick={fetchSlots} disabled={loadingSlots}>
-                    Refresh availability
+                    {t('st.book.refresh', 'Refresh availability')}
                   </Button>
                 </motion.div>
               ) : (
@@ -627,11 +634,11 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
                         </div>
                         <div>
                           <Label htmlFor="repeat-weekly" className="text-sm font-semibold cursor-pointer">
-                            Book this slot every week
+                            {t('st.book.weekly', 'Book this slot every week')}
                           </Label>
                           <p className="text-xs text-muted-foreground mt-0.5">
-                            Same teacher, same weekday & time. Uses {creditsPerLesson} credit{creditsPerLesson === 1 ? '' : 's'} per week.
-                            {trialAvailable && ' (Disabled while a free trial is available.)'}
+                            {t('st.book.weeklyDesc', { n: creditsPerLesson, defaultValue: 'Same teacher, same weekday & time. Credits used per week: {{n}}.' })}
+                            {trialAvailable && ' ' + t('st.book.weeklyDisabled', '(Disabled while a free trial is available.)')}
                           </p>
                         </div>
                       </div>
@@ -645,7 +652,7 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
 
                     {repeatWeekly && !trialAvailable && (
                       <div className="mt-3 flex flex-wrap items-center gap-2 pl-12">
-                        <span className="text-xs text-muted-foreground">For:</span>
+                        <span className="text-xs text-muted-foreground">{t('st.book.for', 'For:')}</span>
                         {([4, 8, 12] as const).map((n) => (
                           <button
                             key={n}
@@ -658,11 +665,11 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
                                 : "bg-background text-foreground border-border hover:bg-muted"
                             )}
                           >
-                            {n} weeks
+                            {t('st.book.nWeeks', { n: n, defaultValue: '{{n}} weeks' })}
                           </button>
                         ))}
                         <Badge variant="outline" className="ml-auto text-xs">
-                          Needs {repeatWeeks * creditsPerLesson} credits · you have {totalCredits}
+                          {t('st.book.needsHave', { need: repeatWeeks * creditsPerLesson, have: totalCredits, defaultValue: 'Needs {{need}} credits · you have {{have}}' })}
                         </Badge>
                       </div>
                     )}
@@ -683,7 +690,7 @@ export const BookMyClassModal: React.FC<BookMyClassModalProps> = ({
                       disabled={loadingSlots}
                       className="text-muted-foreground text-xs"
                     >
-                      Refresh availability
+                      {t('st.book.refresh', 'Refresh availability')}
                     </Button>
                   </div>
                 </motion.div>

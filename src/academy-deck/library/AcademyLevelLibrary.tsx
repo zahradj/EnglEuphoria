@@ -85,6 +85,16 @@ export function AcademyLevelLibrary({ lessons, renderLesson, gridClassName = 'gr
               </button>
               {isOpen && (
                 <>
+                  {showSteps && s.overview && (
+                    <dl className="grid gap-x-3 gap-y-1 border-b border-current/10 px-4 py-3 text-xs sm:grid-cols-[8rem_1fr]" data-season-overview>
+                      <dt className="font-bold opacity-70">{t('al.theme', 'Theme')}</dt><dd>{s.overview.theme}{s.overview.hook ? ` · ${s.overview.hook}` : ''}</dd>
+                      <dt className="font-bold opacity-70">{t('al.canDo', 'I can…')}</dt><dd>{s.overview.canDo.join(' · ')}</dd>
+                      <dt className="font-bold opacity-70">{t('al.pattern', 'Pattern')}</dt><dd>{s.overview.structures.join(' · ')}</dd>
+                      <dt className="font-bold opacity-70">{t('al.release', 'Release')}</dt><dd>{s.overview.release}</dd>
+                      <dt className="font-bold opacity-70">{t('al.newLang', 'New language')}</dt><dd>{t('al.items', '{{n}} items', { n: s.overview.newItems }).replace('{{n}}', String(s.overview.newItems))}{s.overview.sounds?.length ? ` · ${t('al.sounds', 'sounds')}: ${s.overview.sounds.join(' ')}` : ''}</dd>
+                      {s.overview.mechanic && (<><dt className="font-bold opacity-70">{t('al.gameMechanic', 'Video-game mechanic')}</dt><dd>{s.overview.mechanic}</dd></>)}
+                    </dl>
+                  )}
                   {s.lessons.length > 0
                     ? <div className={`${gridClassName} p-3`}>{s.lessons.map((l) => <div key={l.id}>{renderLesson(l)}</div>)}</div>
                     : <p className="p-4 text-sm opacity-70">{s.planned ? t('al.plannedLong', 'The lessons of this season are being planned.') : t('al.soonLong', 'The lessons of this season are being built.')}</p>}
@@ -107,6 +117,7 @@ export function AcademyLevelLibrary({ lessons, renderLesson, gridClassName = 'gr
                                     <dt className="font-bold opacity-70">{t('al.mission', 'Mission')}</dt><dd>{x.plan.mission}</dd>
                                     <dt className="font-bold opacity-70">{t('al.release', 'Release')}</dt><dd>{x.plan.release}</dd>
                                     <dt className="font-bold opacity-70">{t('al.clue', 'Clue unlocked by')}</dt><dd>{x.plan.clue}</dd>
+                                    {x.plan.remember && x.plan.remember.length > 0 && (<><dt className="font-bold opacity-70">{t('al.remember', 'Remember? (spaced)')}</dt><dd><ul className="list-disc ps-4">{x.plan.remember.map((r) => <li key={r}>{r}</li>)}</ul></dd></>)}
                                   </dl>
                                 )}
                               </details>

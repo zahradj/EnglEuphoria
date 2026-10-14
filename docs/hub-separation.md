@@ -7,8 +7,8 @@
 
 | Hub | Curriculum blueprint | Lesson blueprint | Skills | Docs |
 |---|---|---|---|---|
-| **Playground** (ages 4–9) | existing, **untouched** by Academy work | existing, **untouched** | `playground-*`, `smart-lesson-architect`, `lesson-quality-gate`, `generate-lesson`, `lesson-variety-engine`, … (unchanged) | existing |
-| **Academy** (ages 13–18, A1 → C1) | `src/curriculum/academy/` — 70 Seasons (`levels/a1.ts` … `c1.ts`), generated `docs/academy-roadmap-v2.md` | `src/curriculum/academy/lessonBlueprint.ts` — 560 session blueprints | `.claude/skills/academy-*` (9 skills) | `docs/academy-*.md`, `docs/research/academy-*.md` |
+| **Playground** (ages 4–12) | existing, **untouched** by Academy work | existing, **untouched** | `playground-*`, `smart-lesson-architect`, `lesson-quality-gate`, `generate-lesson`, `lesson-variety-engine`, … (unchanged) | existing |
+| **Academy** (ages 13–18, A1 → C1) | `src/curriculum/academy/` — 80 Seasons (`levels/a1.ts` … `c1.ts`; 70 until 2026-10-14), generated `docs/academy-roadmap-v2.md` | `src/curriculum/academy/lessonBlueprint.ts` — 640 session blueprints | `.claude/skills/academy-*` (9 skills) | `docs/academy-*.md`, `docs/research/academy-*.md` |
 | **Success** (adults) | to be created when the owner asks — its own, never shared | its own | its own | its own |
 
 ## Rules

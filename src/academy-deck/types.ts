@@ -228,4 +228,6 @@ export interface DeckScript {
 }
 
 export type Vars = Record<string, string>;
-export interface Stats { right: number; wrong: number; hints: number; skipped: string[] }
+export interface Stats { right: number; wrong: number; hints: number; skipped: string[]; /** times the student tapped "Say it" after saying an answer aloud (speaking practice, docs/academy-speaking-practice.md) */ spoken?: number }
+/** Slide kinds where the student can say the answer aloud and tap "Say it" (owner 2026-10-14: speaking practice in every lesson). */
+export const SAY_IT_KINDS: readonly string[] = ['teach', 'hearpick', 'blend', 'reader', 'match', 'memory', 'build', 'spell', 'convo'];

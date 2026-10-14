@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { SpeakingProgress, SpeakingScenario } from '@/types/speaking';
 import { speakingPracticeService } from '@/services/speakingPracticeService';
 const isSupabaseConfigured = () => true; // Always configured in Engleuphoria deployments
@@ -22,6 +23,7 @@ import { SpeakingGoals } from './SpeakingGoals';
 import { SpeakingLevelIndicator } from './SpeakingLevelIndicator';
 
 export const SpeakingPracticeTab = () => {
+  const { t } = useTranslation();
   const [progress, setProgress] = useState<SpeakingProgress | null>(null);
   const [scenarios, setScenarios] = useState<SpeakingScenario[]>([]);
   const [selectedScenario, setSelectedScenario] = useState<SpeakingScenario | null>(null);
@@ -57,7 +59,7 @@ export const SpeakingPracticeTab = () => {
       
     } catch (err) {
       console.error('Error loading speaking practice data:', err);
-      setError('Failed to load speaking practice data. Please try again.');
+      setError(t('st.sp.loadFail', 'Failed to load speaking practice data. Please try again.'));
     } finally {
       setIsLoading(false);
     }
@@ -125,8 +127,8 @@ export const SpeakingPracticeTab = () => {
     setSelectedScenario(null);
     
     toast({
-      title: "Great job! 🎉",
-      description: `You earned ${sessionData.xp_earned} XP for completing "${sessionData.scenario_name}"!`
+      title: t('st.sp.great', 'Great job! 🎉'),
+      description: t('st.sp.earnedXp', { xp: sessionData.xp_earned, name: sessionData.scenario_name, defaultValue: 'You earned {{xp}} XP for completing "{{name}}"!' })
     });
   };
 
@@ -139,7 +141,7 @@ export const SpeakingPracticeTab = () => {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-        <span className="ml-2">Loading speaking practice...</span>
+        <span className="ml-2">{t('st.sp.loading', 'Loading speaking practice...')}</span>
       </div>
     );
   }
@@ -179,9 +181,9 @@ export const SpeakingPracticeTab = () => {
 
   const practiceModesConfig = [
     {
-      title: '🎙️ Live AI Chat',
+      title: t('st.sp.mode.live', '🎙️ Live AI Chat'),
       icon: MessageCircle,
-      description: 'Have real-time conversations with AI tutors adapted to your level',
+      description: t('st.sp.mode.liveDesc', 'Have real-time conversations with AI tutors adapted to your level'),
       scenarios: scenarios, // All scenarios for live chat
       borderColor: 'hover:border-red-300',
       iconBgColor: 'bg-red-100',
@@ -190,9 +192,9 @@ export const SpeakingPracticeTab = () => {
       isLiveChat: true
     },
     {
-      title: '🎭 Role Play',
+      title: t('st.sp.mode.role', '🎭 Role Play'),
       icon: MessageCircle,
-      description: 'Practice real-life conversations like ordering food or meeting new people',
+      description: t('st.sp.mode.roleDesc', 'Practice real-life conversations like ordering food or meeting new people'),
       scenarios: getPracticeTypeScenarios('role_play'),
       borderColor: 'hover:border-blue-300',
       iconBgColor: 'bg-blue-100',
@@ -200,9 +202,9 @@ export const SpeakingPracticeTab = () => {
       titleColor: 'text-blue-700'
     },
     {
-      title: '🧠 Picture Talk',
+      title: t('st.sp.mode.picture', '🧠 Picture Talk'),
       icon: Image,
-      description: 'Describe pictures and practice your vocabulary and speaking skills',
+      description: t('st.sp.mode.pictureDesc', 'Describe pictures and practice your vocabulary and speaking skills'),
       scenarios: getPracticeTypeScenarios('picture_talk'),
       borderColor: 'hover:border-green-300',
       iconBgColor: 'bg-green-100',
@@ -210,9 +212,9 @@ export const SpeakingPracticeTab = () => {
       titleColor: 'text-green-700'
     },
     {
-      title: '❓ Random Questions',
+      title: t('st.sp.mode.random', '❓ Random Questions'),
       icon: HelpCircle,
-      description: 'Answer fun questions about yourself, your day, and your interests',
+      description: t('st.sp.mode.randomDesc', 'Answer fun questions about yourself, your day, and your interests'),
       scenarios: getPracticeTypeScenarios('random_questions'),
       borderColor: 'hover:border-purple-300',
       iconBgColor: 'bg-purple-100',
@@ -230,7 +232,7 @@ export const SpeakingPracticeTab = () => {
           <Alert className="bg-gradient-to-r from-yellow-50 to-orange-50 border-yellow-300 animate-fade-in">
             <AlertCircle className="h-4 w-4 text-yellow-600" />
             <AlertDescription className="text-yellow-800">
-              You're currently using demo mode. Your progress is saved locally and AI features may be limited.
+              {t('st.sp.demo', "You're currently using demo mode. Your progress is saved locally and AI features may be limited.")}
             </AlertDescription>
           </Alert>
         )}
@@ -260,10 +262,10 @@ export const SpeakingPracticeTab = () => {
         <div className="animate-fade-in animation-delay-600">
           <div className="mb-6">
             <h2 className="text-2xl font-bold text-center mb-2 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              Choose Your Practice Mode
+              {t('st.sp.chooseMode', 'Choose Your Practice Mode')}
             </h2>
             <p className="text-center text-muted-foreground">
-              Select the type of speaking practice that matches your learning goals
+              {t('st.sp.chooseModeDesc', 'Select the type of speaking practice that matches your learning goals')}
             </p>
           </div>
           
@@ -299,7 +301,7 @@ export const SpeakingPracticeTab = () => {
                 <div className="w-6 h-6 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center">
                   <span className="text-xs text-white">💡</span>
                 </div>
-                Quick Tips for Better Practice
+                {t('st.sp.tips', 'Quick Tips for Better Practice')}
               </h3>
               <div className="grid md:grid-cols-3 gap-4 text-sm">
                 <div className="flex items-start gap-3">
@@ -307,8 +309,8 @@ export const SpeakingPracticeTab = () => {
                     🎯
                   </div>
                   <div>
-                    <div className="font-medium text-blue-700">Set Goals</div>
-                    <div className="text-muted-foreground">Practice for at least 5 minutes daily</div>
+                    <div className="font-medium text-blue-700">{t('st.sp.tipGoals', 'Set Goals')}</div>
+                    <div className="text-muted-foreground">{t('st.sp.tipGoalsDesc', 'Practice for at least 5 minutes daily')}</div>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
@@ -316,8 +318,8 @@ export const SpeakingPracticeTab = () => {
                     🎤
                   </div>
                   <div>
-                    <div className="font-medium text-green-700">Speak Clearly</div>
-                    <div className="text-muted-foreground">Use a quiet environment with good audio</div>
+                    <div className="font-medium text-green-700">{t('st.sp.tipClear', 'Speak Clearly')}</div>
+                    <div className="text-muted-foreground">{t('st.sp.tipClearDesc', 'Use a quiet environment with good audio')}</div>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
@@ -325,8 +327,8 @@ export const SpeakingPracticeTab = () => {
                     📈
                   </div>
                   <div>
-                    <div className="font-medium text-purple-700">Track Progress</div>
-                    <div className="text-muted-foreground">Review your speaking analytics regularly</div>
+                    <div className="font-medium text-purple-700">{t('st.sp.tipTrack', 'Track Progress')}</div>
+                    <div className="text-muted-foreground">{t('st.sp.tipTrackDesc', 'Review your speaking analytics regularly')}</div>
                   </div>
                 </div>
               </div>

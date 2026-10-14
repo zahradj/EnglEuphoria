@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
@@ -22,6 +23,7 @@ export const SpeakingLevelIndicator: React.FC<SpeakingLevelIndicatorProps> = ({
   currentLevel,
   speakingXP
 }) => {
+  const { t } = useTranslation();
   const level = levelData[currentLevel as keyof typeof levelData] || levelData.A1;
   const [minXP, maxXP] = level.xpRange;
   const progressInLevel = Math.max(0, speakingXP - minXP);
@@ -38,22 +40,22 @@ export const SpeakingLevelIndicator: React.FC<SpeakingLevelIndicatorProps> = ({
               {currentLevel}
             </div>
             <div>
-              <h3 className="font-semibold text-lg">{level.name} Speaker</h3>
-              <p className="text-sm text-muted-foreground">CEFR Level {currentLevel}</p>
+              <h3 className="font-semibold text-lg">{t('st.sp.speaker', { name: t('st.sp.lvl.' + currentLevel, level.name), defaultValue: '{{name}} Speaker' })}</h3>
+              <p className="text-sm text-muted-foreground">{t('st.sp.cefr', { level: currentLevel, defaultValue: 'CEFR Level {{level}}' })}</p>
             </div>
           </div>
           
           {level.next && (
             <Badge variant="outline" className="bg-primary/5 border-primary/20 text-primary">
               <Target className="h-3 w-3 mr-1" />
-              Next: {level.next}
+              {t('st.sp.next', { level: level.next, defaultValue: 'Next: {{level}}' })}
             </Badge>
           )}
         </div>
 
         <div className="space-y-3">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-muted-foreground">Level Progress</span>
+            <span className="text-muted-foreground">{t('st.sp.levelProgress', 'Level Progress')}</span>
             <span className="font-medium">
               {progressInLevel.toLocaleString()} / {xpNeededForLevel.toLocaleString()} XP
             </span>
@@ -68,7 +70,7 @@ export const SpeakingLevelIndicator: React.FC<SpeakingLevelIndicatorProps> = ({
             <div className="flex items-center justify-center gap-2 p-3 bg-gradient-to-r from-primary/5 to-secondary/5 rounded-lg">
               <ArrowUp className="h-4 w-4 text-primary" />
               <span className="text-sm font-medium">
-                {xpToNextLevel.toLocaleString()} XP to reach {level.next}
+                {t('st.sp.toReach', { n: xpToNextLevel.toLocaleString(), level: level.next, defaultValue: '{{n}} XP to reach {{level}}' })}
               </span>
             </div>
           )}
@@ -77,7 +79,7 @@ export const SpeakingLevelIndicator: React.FC<SpeakingLevelIndicatorProps> = ({
             <div className="flex items-center justify-center gap-2 p-3 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-lg">
               <Award className="h-4 w-4 text-yellow-600" />
               <span className="text-sm font-medium text-yellow-700">
-                🎉 Congratulations! You've reached mastery level!
+                {t('st.sp.mastery', "🎉 Congratulations! You've reached mastery level!")}
               </span>
             </div>
           )}
