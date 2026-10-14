@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from 'react-i18next';
 import { Calendar } from "@/components/ui/calendar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -33,6 +34,7 @@ export const StudentBookingCalendarList = ({
   onBookLesson,
   isLoading = false
 }: StudentBookingCalendarListProps) => {
+  const { t, i18n } = useTranslation();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [selectedSlot, setSelectedSlot] = useState<TimeSlot | null>(null);
   const [localSlots, setLocalSlots] = useState<TimeSlot[]>(availableSlots);
@@ -134,7 +136,7 @@ export const StudentBookingCalendarList = ({
         <div className={glassPanel}>
           <h3 className="flex items-center gap-2 text-lg font-semibold mb-4">
             <CalendarIcon className="w-5 h-5 text-primary" />
-            Select a Date
+            {t('st.cal.selectDate', 'Select a Date')}
           </h3>
           <Calendar
             mode="single"
@@ -152,18 +154,18 @@ export const StudentBookingCalendarList = ({
           <div className="text-center py-12 space-y-4">
             <CalendarIcon className="w-16 h-16 mx-auto text-muted-foreground" />
             <div>
-              <h2 className="text-xl font-semibold mb-2">No Available Slots Yet</h2>
+              <h2 className="text-xl font-semibold mb-2">{t('st.cal.noSlots', 'No Available Slots Yet')}</h2>
               <p className="text-muted-foreground max-w-md mx-auto">
-                We couldn't find open times for your hub right now. Try a different date, or check back soon.
+                {t('st.cal.noSlotsDesc', "We couldn't find open times for your hub right now. Try a different date, or check back soon.")}
               </p>
             </div>
             <div className="flex gap-2 justify-center flex-wrap">
               <Button onClick={() => window.location.reload()}>
                 <RefreshCcw className="w-4 h-4 mr-2" />
-                Refresh
+                {t('st.cal.refresh', 'Refresh')}
               </Button>
               <Button variant="outline" onClick={() => navigate('/student')}>
-                Back to Dashboard
+                {t('st.cal.back', 'Back to Dashboard')}
               </Button>
             </div>
           </div>
@@ -178,7 +180,7 @@ export const StudentBookingCalendarList = ({
       <div className={glassPanel}>
         <h3 className="flex items-center gap-2 text-lg font-semibold mb-4">
           <CalendarIcon className="w-5 h-5 text-primary" />
-          Select a Date
+          {t('st.cal.selectDate', 'Select a Date')}
         </h3>
         <Calendar
           mode="single"
@@ -211,7 +213,7 @@ export const StudentBookingCalendarList = ({
         )}>
           <p className="text-sm text-muted-foreground">
             <span className="inline-block w-3 h-3 bg-primary rounded-full mr-2" />
-            Dates with available lessons
+            {t('st.cal.legend', 'Dates with available lessons')}
           </p>
         </div>
       </div>
@@ -220,10 +222,10 @@ export const StudentBookingCalendarList = ({
       <div className={glassPanel}>
         <h3 className="flex items-center gap-2 text-lg font-semibold mb-4">
           <Clock className="w-5 h-5 text-primary" />
-          Available Times
+          {t('st.cal.times', 'Available Times')}
           {selectedDate && (
             <Badge variant="outline" className="ml-2 text-xs">
-              {selectedDate.toLocaleDateString()}
+              {selectedDate.toLocaleDateString(i18n.language)}
             </Badge>
           )}
         </h3>
@@ -231,18 +233,18 @@ export const StudentBookingCalendarList = ({
         {!selectedDate ? (
           <div className="text-center py-8 text-muted-foreground space-y-2">
             <CalendarIcon className="w-12 h-12 mx-auto mb-4 opacity-50" />
-            <p className="font-medium">Select a date to see available times</p>
-            <p className="text-sm">Dates with available slots are highlighted</p>
+            <p className="font-medium">{t('st.cal.pickDate', 'Select a date to see available times')}</p>
+            <p className="text-sm">{t('st.cal.highlighted', 'Dates with available slots are highlighted')}</p>
           </div>
         ) : selectedDateSlots.length === 0 ? (
           <div className="text-center py-8 text-muted-foreground space-y-3">
             <Clock className="w-12 h-12 mx-auto mb-4 opacity-50" />
             <div>
-              <p className="font-medium">No available lessons for this date</p>
-              <p className="text-sm mt-2">Try selecting another highlighted date</p>
+              <p className="font-medium">{t('st.cal.noLessonsDate', 'No available lessons for this date')}</p>
+              <p className="text-sm mt-2">{t('st.cal.tryOther', 'Try selecting another highlighted date')}</p>
             </div>
             <Button variant="outline" size="sm" onClick={() => setSelectedDate(undefined)}>
-              View All Dates
+              {t('st.cal.viewAll', 'View All Dates')}
             </Button>
           </div>
         ) : (
@@ -300,7 +302,7 @@ export const StudentBookingCalendarList = ({
                         {formatTime(selectedSlot.startTime)} – {formatTime(selectedSlot.endTime)}
                       </span>
                       <Badge variant="secondary" className="ml-1 text-xs">
-                        {selectedSlot.duration}min
+                        {t('st.cal.min', { n: selectedSlot.duration, defaultValue: '{{n}} min' })}
                       </Badge>
                     </div>
                   </div>
@@ -310,11 +312,11 @@ export const StudentBookingCalendarList = ({
                     className="ml-4 bg-indigo-600 hover:bg-indigo-700 text-white shadow-[0_0_15px_rgba(99,102,241,0.3)]"
                   >
                     {isLoading ? (
-                      <span className="animate-pulse">Booking…</span>
+                      <span className="animate-pulse">{t('st.cal.booking', 'Booking…')}</span>
                     ) : (
                       <>
                         <CheckCircle className="w-4 h-4 mr-2" />
-                        Book Now
+                        {t('st.cal.bookNow', 'Book Now')}
                       </>
                     )}
                   </Button>

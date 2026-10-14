@@ -1,5 +1,6 @@
 
 import React from "react";
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -40,6 +41,7 @@ const HUB_COLOR_MAP: Record<string, {
 };
 
 export const TeachersTab = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { studentLevel } = useStudentLevel();
   const hubId = studentLevel || 'playground';
@@ -53,9 +55,9 @@ export const TeachersTab = () => {
       <div className={cn('bg-gradient-to-r rounded-lg p-6 text-white', colors.headerGradient)}>
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold mb-2">Find Your Perfect Teacher</h2>
+            <h2 className="text-2xl font-bold mb-2">{t('st.teach.title', 'Find Your Perfect Teacher')}</h2>
             <p className={colors.headerTextMuted}>
-              Browse qualified teachers and book your next lesson
+              {t('st.teach.sub', 'Browse qualified teachers and book your next lesson')}
             </p>
           </div>
           <Users className="h-12 w-12 text-white/60" />
@@ -72,8 +74,8 @@ export const TeachersTab = () => {
                 <Search className={cn('h-6 w-6', colors.iconColor)} />
               </div>
               <div className="flex-1">
-                <h3 className="font-semibold text-lg">Browse All Teachers</h3>
-                <p className="text-muted-foreground text-sm">Search by specialization, accent, or rating</p>
+                <h3 className="font-semibold text-lg">{t('st.teach.browse', 'Browse All Teachers')}</h3>
+                <p className="text-muted-foreground text-sm">{t('st.teach.browseDesc', 'Search by specialization, accent, or rating')}</p>
               </div>
               <ArrowRight className="h-5 w-5 text-muted-foreground" />
             </div>
@@ -88,8 +90,8 @@ export const TeachersTab = () => {
                 <Clock className={cn('h-6 w-6', colors.iconColor)} />
               </div>
               <div className="flex-1">
-                <h3 className="font-semibold text-lg">Quick Book</h3>
-                <p className="text-muted-foreground text-sm">Find available teachers for today</p>
+                <h3 className="font-semibold text-lg">{t('st.teach.quick', 'Quick Book')}</h3>
+                <p className="text-muted-foreground text-sm">{t('st.teach.quickDesc', 'Find available teachers for today')}</p>
               </div>
               <ArrowRight className="h-5 w-5 text-muted-foreground" />
             </div>
@@ -102,20 +104,20 @@ export const TeachersTab = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Star className="h-5 w-5 text-yellow-500" />
-            Featured Teachers
+            {t('st.teach.featured', 'Featured Teachers')}
           </CardTitle>
         </CardHeader>
         <CardContent>
           {featuredTeachers.length === 0 ? (
             <div className="text-center py-12">
               <Users className="h-16 w-16 text-muted-foreground/30 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">No Teachers Found</h3>
-              <p className="text-muted-foreground mb-6">You haven't connected with any teachers yet.</p>
+              <h3 className="text-lg font-semibold mb-2">{t('st.teach.none', 'No Teachers Found')}</h3>
+              <p className="text-muted-foreground mb-6">{t('st.teach.noneDesc', "You haven't connected with any teachers yet.")}</p>
               <Button 
                 onClick={() => navigate(`/find-teacher?hub=${hubId}`)}
                 className={cn('px-8 text-white bg-gradient-to-r', colors.headerGradient)}
               >
-                Discover Teachers
+                {t('st.teach.discover', 'Discover Teachers')}
               </Button>
             </div>
           ) : (
@@ -130,14 +132,14 @@ export const TeachersTab = () => {
                     </div>
                     <div>
                       <h4 className="font-semibold">{teacher.name}</h4>
-                      <p className="text-sm text-muted-foreground">{teacher.accent} accent</p>
+                      <p className="text-sm text-muted-foreground">{t('st.teach.accent', { accent: teacher.accent, defaultValue: '{{accent}} accent' })}</p>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-1 mb-2">
                     <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                     <span className="text-sm font-medium">{teacher.rating}</span>
-                    <span className="text-sm text-muted-foreground">({teacher.reviews} reviews)</span>
+                    <span className="text-sm text-muted-foreground">{t('st.teach.reviews', { n: teacher.reviews, defaultValue: '({{n}} reviews)' })}</span>
                   </div>
 
                   <div className="flex flex-wrap gap-1 mb-3">
@@ -149,7 +151,7 @@ export const TeachersTab = () => {
                   </div>
 
                   <div className="flex justify-between items-center text-sm mb-3">
-                    <span className="text-muted-foreground">{teacher.experience} years exp.</span>
+                    <span className="text-muted-foreground">{t('st.teach.exp', { n: teacher.experience, defaultValue: '{{n}} years exp.' })}</span>
                     <span className={cn('font-semibold', colors.statColor)}>{teacher.rate}</span>
                   </div>
 
@@ -158,7 +160,7 @@ export const TeachersTab = () => {
                     size="sm"
                     onClick={() => navigate(`/find-teacher?hub=${hubId}`)}
                   >
-                    View Profile
+                    {t('st.teach.profile', 'View Profile')}
                   </Button>
                 </div>
               ))}
@@ -172,21 +174,21 @@ export const TeachersTab = () => {
         <Card>
           <CardContent className="p-4 text-center">
             <div className={cn('text-2xl font-bold mb-1', colors.statColor)}>50+</div>
-            <div className="text-sm text-muted-foreground">Qualified Teachers</div>
+            <div className="text-sm text-muted-foreground">{t('st.teach.statTeachers', 'Qualified Teachers')}</div>
           </CardContent>
         </Card>
         
         <Card>
           <CardContent className="p-4 text-center">
             <div className={cn('text-2xl font-bold mb-1', colors.statColor)}>4.8</div>
-            <div className="text-sm text-muted-foreground">Average Rating</div>
+            <div className="text-sm text-muted-foreground">{t('st.teach.statRating', 'Average Rating')}</div>
           </CardContent>
         </Card>
         
         <Card>
           <CardContent className="p-4 text-center">
             <div className={cn('text-2xl font-bold mb-1', colors.statColor)}>95%</div>
-            <div className="text-sm text-muted-foreground">Student Satisfaction</div>
+            <div className="text-sm text-muted-foreground">{t('st.teach.statSat', 'Student Satisfaction')}</div>
           </CardContent>
         </Card>
       </div>
