@@ -114,7 +114,7 @@ export function BuzzerShowScene({ scene, onWin, onNext, sync }: { scene: Show; o
                   transition={wrong === i ? { duration: 0.4 } : { type: 'spring', stiffness: 170, damping: 14, delay: i * 0.08 }}>
                   {lit && <span className="absolute -inset-5 animate-pulse rounded-full bg-yellow-300/70 blur-xl" />}
                   <img src={face.img} alt={face.label} draggable={false}
-                    className={`relative aspect-square w-full rounded-full border-[0.5vh] object-contain shadow-[0_6px_14px_rgba(0,0,0,0.3)] ${lit ? 'border-yellow-300 bg-yellow-100' : 'border-amber-400 bg-amber-50'}`} />
+                    className={`relative aspect-square w-full rounded-full border-[0.5vh] object-contain shadow-[0_6px_14px_rgba(0,0,0,0.3)] ${lit ? 'border-yellow-200 bg-gradient-to-b from-yellow-300 to-orange-400' : 'border-amber-300 bg-gradient-to-b from-sky-400 to-indigo-500'}`} />
                 </motion.div>
               </div>
               <div className="absolute z-20 h-[13%] w-[15%] -translate-x-1/2 -translate-y-1/2" style={{ left: `${p.x}%`, top: `${p.by}%` }}>

@@ -5,6 +5,7 @@ import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRe
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import type { Scene } from '@/content/playground-library/unit1/scenes';
+import { PREA1_REAL_SYNC_KINDS } from '@/content/playground-library/prea1SyncKinds';
 import { SceneRenderer, Hearts, MAX_HEARTS, Lep1Keyframes } from '@/content/playground-library/unit1/SceneRenderer';
 import { stopSpeaking, unlockAudio, setSpeechRelay, setSpeechDedupe, playRelayedSpeech, setSpeechRelayLead, collectSceneLines, warmReadyClip } from '@/content/playground-library/unit1/audio';
 import { whiteboardService } from '@/services/whiteboardService';
@@ -39,19 +40,7 @@ const ALWAYS_UNLOCKED_SCENE_KINDS = new Set([
  *  channel fundamentally can't represent (both sides would stomp on each
  *  other's state). Also excludes title-card/cinematic/finale (no branching
  *  state) and song (audio-clock-driven, not tap-driven). */
-const REAL_SYNC_KINDS = new Set<string>([
-  'meet', 'sound-model', 'echo', 'video-check', 'sentence-build', 'who-said-it',
-  'listen-repeat-cards', 'roleplay', 'join-stage', 'alphabet-blocks',
-  'trophy-chest', 'color-model', 'color-quiz', 'color-spot', 'shape-model', 'toy-model',
-  'train-recall', 'color-spy', 'color-simon', 'color-mix', 'shape-builder', 'secret-card', 'listen-colour', 'shape-fishing', 'pattern-train', 'tick-cross', 'story-order', 'story-video', 'odd-one-out', 'shape-torch', 'mystery-bag', 'tpr-actions', 'rapid-recall', 'sticker-reward', 'home-mission', 'lift-flap', 'draw-path', 'tile-reveal', 'tidy-up', 'color-monsters', 'peek-pop', 'claw-machine', 'ring-toss', 'simon-touch', 'body-stack', 'face-builder', 'sound-pick', 'sand-prints', 'shape-magic', 'shape-peek', 'shape-sorter', 'shape-bubbles', 'monster-maker', 'count-parts', 'robo-copy', 'move-match', 'part-peek', 'family-photo', 'size-line', 'cookie-faces', 'whos-missing', 'family-tree', 'duck-feed', 'buzzer-show', 'house-hide', 'moving-day', 'house-builder', 'whose-room', 'door-knock', 'house-board', 'photo-snap', 'farm-wash', 'animal-parade', 'animal-riddle', 'farm-verse', 'recall-warmup', 'shadow-match', 'stepping-stones', 'flipbook',
-  'name-gate', 'meet-group', 'friend-pop', 'feelings-tap', 'feelings-wheel',
-  'x-is-feeling', 'he-she-model', 'feelings-dice', 'he-she-say', 'i-am-feeling',
-  'feeling-quiz', 'feelings-bingo',
-  'numbers-learn', 'numbers-review', 'candle-cake', 'count-balloons',
-  'age-balloons', 'meet-greet', 'age-quiz', 'spin-wheel', 'picture-match',
-  'first-sound', 'letter-match', 'letter-blocks', 'whats-missing', 'sort-basket', 'grammar-gap', 'color-play',
-  'gather', 'voice-stage',
-]);
+const REAL_SYNC_KINDS = PREA1_REAL_SYNC_KINDS;
 
 export interface PlayUnitLessonHandle {
   goNext: () => void;

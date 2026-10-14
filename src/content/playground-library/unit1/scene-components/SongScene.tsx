@@ -7,6 +7,7 @@ export function SongScene({ scene, onNext, onWin }: { scene: Extract<Scene, { ki
   const [status, setStatus] = useState<'idle' | 'playing' | 'done' | 'error'>('idle');
   const [idx, setIdx] = useState(-1);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
   const rafRef = useRef<number | null>(null);
   const totalLines = scene.lyrics.length;
   const totalDuration = scene.durationSeconds ?? 30;
@@ -17,6 +18,8 @@ export function SongScene({ scene, onNext, onWin }: { scene: Extract<Scene, { ki
     audioRef.current = audio;
     audio.src = scene.songUrl;
     audio.currentTime = 0;
+    const video = videoRef.current;
+    if (video) { video.currentTime = 0; video.play().catch(() => {}); }
     audio.onended = () => { setStatus('done'); setIdx(totalLines - 1); if (rafRef.current) cancelAnimationFrame(rafRef.current); onWin(true); };
     try {
       await audio.play();
@@ -44,17 +47,46 @@ export function SongScene({ scene, onNext, onWin }: { scene: Extract<Scene, { ki
           i = Math.min(totalLines - 1, Math.floor(t / perLine));
         }
         setIdx(i);
+        // Keep the song video in step with the sung audio (the audio is the clock).
+        const v = videoRef.current;
+        if (v && Math.abs(v.currentTime - t) > 0.25 && t < (v.duration || Infinity)) v.currentTime = t;
         if (!audioRef.current.paused && !audioRef.current.ended) rafRef.current = requestAnimationFrame(tick);
       };
       rafRef.current = requestAnimationFrame(tick);
     } catch { setStatus('error'); }
   }, [scene.songUrl, scene.lineDurationsMs, totalDuration, totalLines]);
 
-  useEffect(() => () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); if (audioRef.current) { audioRef.current.pause(); audioRef.current.src = ''; } }, []);
+  useEffect(() => () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); if (audioRef.current) { audioRef.current.pause(); audioRef.current.src = ''; } videoRef.current?.pause(); }, []);
 
   const current = idx >= 0 ? scene.lyrics[idx] : null;
   const isPlaying = status === 'playing';
   const isDone = status === 'done';
+
+  if (scene.videoUrl) {
+    return (
+      <div className="absolute inset-0 overflow-hidden bg-black">
+        <video ref={videoRef} src={scene.videoUrl} poster={scene.bg} muted playsInline preload="auto" className="absolute inset-0 h-full w-full object-contain" />
+        <div className="absolute left-1/2 top-4 -translate-x-1/2 rounded-full bg-white/85 px-5 py-2 text-lg font-black text-[#FE6A2F] shadow-lg backdrop-blur-md ring-2 ring-white/70">{scene.title}</div>
+        {(current || status === 'error') && (
+          <div className="absolute inset-x-0 bottom-20 flex justify-center px-4" style={{ zIndex: 15 }}>
+            <div key={idx} className="max-w-5xl rounded-3xl bg-white/90 px-6 py-3 text-center font-black leading-tight text-slate-800 shadow-2xl ring-4 ring-[#FE6A2F]/40"
+              style={{ fontSize: 'clamp(18px, min(calc(3.2*var(--svw,1vw)), 5vh), 40px)', animation: 'lep1-lyricPop 0.4s ease-out' }}>
+              {status === 'error' ? 'Sing it together — clap the beat!' : current?.text}
+            </div>
+          </div>
+        )}
+        {isDone && <div className="absolute inset-x-0 top-1/3 text-center text-4xl font-black text-white drop-shadow-lg">Amazing singing! 🎉</div>}
+        <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-3">
+          {(status === 'idle' || status === 'done' || status === 'error') && (
+            <button onClick={playSong} className="rounded-full bg-[#FE6A2F] px-6 py-3 text-lg font-black text-white shadow-xl transition hover:scale-105 active:scale-95">
+              {status === 'done' ? '🔁 Sing Again' : status === 'error' ? '🔁 Try the music again' : '▶️ Play the Song'}
+            </button>
+          )}
+          {(isDone || status === 'error') && <button onClick={onNext} className="rounded-full bg-emerald-500 px-6 py-3 text-lg font-black text-white shadow-xl transition hover:scale-105 active:scale-95">Continue ➜</button>}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="absolute inset-0 overflow-hidden" style={{ backgroundImage: `url(${scene.bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>

@@ -6,3 +6,4 @@ run 5: 2026-10-02T22:47:39Z forced-choice, English vowels only
 run 6: 2026-10-03T09:53:48Z new Pre-A1 U2 L2 clips
 run 7: 2026-10-03T10:57:12Z new Pre-A1 U2 L3 clips
 run 8: 2026-10-03T11:19:12Z cookie/present re-record
+run 9: 2026-10-10T21:05:05Z Sound Lab minimal pairs (3 voices)

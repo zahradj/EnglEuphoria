@@ -1,0 +1,15 @@
+
+=== docs/songs/u6l5-song-v1-take1.mp3  length=20.1s  score=0.95  missing=3  extra=0
+heard: home home time to go home my house my house where's my house a red door red door my house has a red door blue door blue door no it isn't
+line starts (s): [np.float64(0.0), np.float64(4.3), np.float64(9.1), np.float64(14.6)]
+lineDurationsMs: [4280, 4780, 5560, 5442]
+
+=== docs/songs/u6l5-song-v1-take2.mp3  length=20.1s  score=0.97  missing=1  extra=1
+heard: home home time to go home my house my house where's my house a red door a red door my house as a red door a blue door a blue door no it isn't
+line starts (s): [np.float64(0.0), np.float64(4.4), np.float64(9.8), np.float64(14.8)]
+lineDurationsMs: [4380, 5380, 5000, 5302]
+
+=== docs/songs/u6l5-song-v1-take3.mp3  length=20.1s  score=1.00  missing=0  extra=0
+heard: home home time to go home my house my house where's my house a red door a red door my house has a red door a blue door a blue door no it isn't
+line starts (s): [np.float64(0.0), np.float64(4.1), np.float64(9.2), np.float64(14.5)]
+lineDurationsMs: [4080, 5080, 5380, 5522]

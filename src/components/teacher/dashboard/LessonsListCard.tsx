@@ -37,6 +37,10 @@ interface Lesson {
   studentFeedback: { thumbsUp: boolean; suggestion: string | null } | null;
   /** Slot length in minutes (class_bookings.duration). */
   durationMin: number;
+  /** The student's first-ever (free trial) lesson: its report is always required. */
+  isTrial: boolean;
+  /** The teacher reported a technical problem for this lesson, so no feedback report is needed. */
+  techProblem: boolean;
   /** The teacher's own session report for this lesson, if submitted. */
   report: { rating: number | null; notes: string | null; outcome: string | null } | null;
 }
@@ -44,7 +48,14 @@ interface Lesson {
 /** Outcome badge for a lesson that has actually ended (Past / No Feedback
  *  tabs) — separate from the "Needs Feedback" flag, which is about whether a
  *  wrap-up report exists, not whether the lesson itself succeeded. */
-const OutcomeBadge: React.FC<{ rawStatus: BookingStatus; faultParty: Lesson['faultParty'] }> = ({ rawStatus, faultParty }) => {
+const OutcomeBadge: React.FC<{ rawStatus: BookingStatus; faultParty: Lesson['faultParty']; techProblem?: boolean }> = ({ rawStatus, faultParty, techProblem }) => {
+  if (rawStatus !== 'failed_technical' && techProblem) {
+    return (
+      <Badge className="text-xs bg-rose-100 text-rose-700 hover:bg-rose-100 border-rose-200">
+        Technical issue — no report needed
+      </Badge>
+    );
+  }
   if (rawStatus === 'failed_technical') {
     const who =
       faultParty === 'teacher' ? 'your side' : faultParty === 'student' ? "student's side" : faultParty === 'both' ? 'both sides' : 'unknown side';
@@ -123,8 +134,11 @@ const LessonItem: React.FC<LessonItemProps> = ({ lesson, onOpenFeedback, onWrite
               {soonLabel}
             </span>
           )}
+          {lesson.isTrial && (
+            <Badge className="text-xs bg-violet-100 text-violet-700 hover:bg-violet-100 border-violet-200">Trial</Badge>
+          )}
           {(lesson.status === 'completed' || lesson.status === 'needs-feedback') && (
-            <OutcomeBadge rawStatus={lesson.rawStatus} faultParty={lesson.faultParty} />
+            <OutcomeBadge rawStatus={lesson.rawStatus} faultParty={lesson.faultParty} techProblem={lesson.techProblem} />
           )}
         </div>
         <p className="text-xs font-medium text-muted-foreground truncate">{lesson.title}</p>
@@ -175,7 +189,7 @@ const LessonItem: React.FC<LessonItemProps> = ({ lesson, onOpenFeedback, onWrite
           onClick={(e) => { e.stopPropagation(); onWriteFeedback?.(lesson); }}
         >
           <MessageSquare className="w-4 h-4" />
-          Write feedback
+          {lesson.isTrial ? 'Write trial report' : 'Write feedback'}
         </Button>
       )}
 
@@ -233,14 +247,17 @@ export const LessonsListCard: React.FC = () => {
     // wrap-up report (LessonWrapUpDialog.tsx is skipped for those sessions),
     // so it's excluded from the ENDED_NEEDING_REPORT set below.
     const ENDED_STATUSES = new Set(['completed', 'failed_technical', 'ended_early', 'student_absent', 'teacher_absent']);
-    const ENDED_NEEDING_REPORT = new Set(['completed', 'failed_technical']);
+    // A technical failure (either side) needs no feedback report — the lesson didn't happen. A trial
+    // lesson that did happen always needs one, even if it ended early.
+    const ENDED_NEEDING_REPORT = new Set(['completed']);
+    const TECH_FLAGS = new Set(['teacher_tech_issue', 'student_tech_issue']);
     const NEVER_HAPPENED = NEVER_HAPPENED_STATUSES;
 
     const loadLessons = async () => {
       try {
         const { data, error } = await supabase
           .from('class_bookings')
-          .select('id, classroom_id, scheduled_at, duration, ended_at, status, technical_fault_party, hub_type, notes, student_id')
+          .select('id, classroom_id, scheduled_at, duration, ended_at, status, technical_fault_party, hub_type, notes, student_id, booking_type')
           .eq('teacher_id', user.id)
           .order('scheduled_at', { ascending: true });
 
@@ -285,6 +302,21 @@ export const LessonsListCard: React.FC = () => {
           }
         }
 
+        // Lessons where the teacher said "a technical problem stopped it": no report is needed for those.
+        const techSet = new Set<string>();
+        if (bookingIds.length) {
+          const { data: incidents } = await supabase
+            .from('lesson_incident_reports')
+            .select('room_id, flags, outcome')
+            .in('room_id', bookingIds)
+            .eq('reporter_id', user.id);
+          for (const inc of (incidents ?? []) as { room_id: string; flags: string[] | null; outcome: string | null }[]) {
+            if (inc.outcome === 'not_completed' && Array.isArray(inc.flags) && inc.flags.some((f) => TECH_FLAGS.has(f))) {
+              techSet.add(inc.room_id);
+            }
+          }
+        }
+
         // The student's 👍/👎 about each lesson (keyed by booking id).
         const studentFeedbackMap = new Map<string, Lesson['studentFeedback']>();
         if (bookingIds.length) {
@@ -304,8 +336,12 @@ export const LessonsListCard: React.FC = () => {
           const scheduledAt = new Date(row.scheduled_at);
           const rawStatus: BookingStatus = row.status;
           let status: Lesson['status'] = 'upcoming';
+          const isTrial = String(row.booking_type ?? '').toLowerCase() === 'trial';
+          const techProblem = rawStatus === 'failed_technical' || techSet.has(row.id);
           if (ENDED_STATUSES.has(rawStatus)) {
-            status = ENDED_NEEDING_REPORT.has(rawStatus) && !feedbackSet.has(row.id) ? 'needs-feedback' : 'completed';
+            const needsReport = (ENDED_NEEDING_REPORT.has(rawStatus) || (isTrial && rawStatus === 'ended_early'))
+              && !feedbackSet.has(row.id) && !techProblem;
+            status = needsReport ? 'needs-feedback' : 'completed';
           } else if (!NEVER_HAPPENED.has(rawStatus)) {
             // Still 'scheduled'/'confirmed' but the teacher ended it (ended_at
             // stamped by End Class) or its slot is over: the booking only
@@ -315,7 +351,7 @@ export const LessonsListCard: React.FC = () => {
             const durationMin = Number(row.duration) > 0 ? Number(row.duration) : 30;
             const slotOver = scheduledAt.getTime() + (durationMin + 5) * 60_000 < Date.now();
             if (row.ended_at || slotOver) {
-              status = feedbackSet.has(row.id) ? 'completed' : 'needs-feedback';
+              status = feedbackSet.has(row.id) || techProblem ? 'completed' : 'needs-feedback';
             }
           }
           return {
@@ -331,6 +367,8 @@ export const LessonsListCard: React.FC = () => {
             studentId: row.student_id ?? null,
             hubType: row.hub_type ?? null,
             studentFeedback: studentFeedbackMap.get(row.id) ?? null,
+            isTrial,
+            techProblem,
             report: reportMap.get(row.id) ?? null,
             durationMin: Number(row.duration) > 0 ? Number(row.duration) : 30,
           };

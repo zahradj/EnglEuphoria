@@ -1,0 +1,15 @@
+
+=== docs/songs/u10l6-i-can-do-it-all-take1.mp3  length=20.1s  score=0.89  missing=3  extra=3
+heard: run and jump and walk walk walk swim and dance and sing sing sing clap and play and sing sing sing act it out yes i can
+line starts (s): [np.float64(0.0), np.float64(3.6), np.float64(7.9), np.float64(12.0)]
+lineDurationsMs: [3600, 4300, 4120, 8042]
+
+=== docs/songs/u10l6-i-can-do-it-all-take2.mp3  length=20.1s  score=0.85  missing=4  extra=4
+heard: right and jump and walk walk walk swim and dance and sing sing sing clap and play and sing sing sing act it out yes i can
+line starts (s): [np.float64(0.8), np.float64(3.9), np.float64(8.2), np.float64(12.4)]
+lineDurationsMs: [3860, 4340, 4180, 7682]
+
+=== docs/songs/u10l6-i-can-do-it-all-take3.mp3  length=20.1s  score=0.91  missing=3  extra=2
+heard: run and jump and walk walk walk swim and dance and sing sing sing love and play sleep sleep sleep light it out yes i can
+line starts (s): [np.float64(0.0), np.float64(3.8), np.float64(8.7), np.float64(12.8)]
+lineDurationsMs: [3760, 4980, 4060, 7262]

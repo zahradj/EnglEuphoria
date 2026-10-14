@@ -36,6 +36,31 @@ describe('classroom: a snapshot from another scene can never crash the student v
     expect(sync.setState).toHaveBeenCalledWith({ n: 2 });
   });
 
+  it('taking over keeps the activity where it was (no restart from zero)', () => {
+    const initial = { round: 0, found: [] as number[] };
+    const setState = vi.fn();
+    // The teacher's screen mirrors the student, who is on round 2 with two found.
+    const { result, rerender } = renderHook(({ sync }) => useSyncedState(sync, initial), {
+      initialProps: { sync: { isSynced: true, isAuthority: false, state: { round: 2, found: [4, 7] }, setState } as ActivitySync },
+    });
+    expect(result.current[0]).toEqual({ round: 2, found: [4, 7] });
+    // Teacher takes over: this screen becomes the driver.
+    rerender({ sync: { isSynced: true, isAuthority: true, state: { round: 2, found: [4, 7] }, setState } });
+    expect(result.current[0]).toEqual({ round: 2, found: [4, 7] }); // used to snap back to { round: 0, found: [] }
+    act(() => result.current[1]((prev) => ({ ...prev, round: prev.round + 1 })));
+    expect(setState).toHaveBeenLastCalledWith({ round: 3, found: [4, 7] });
+  });
+
+  it('handing the floor back to a mirror still shows the latest snapshot', () => {
+    const initial = { n: 0 };
+    const { result, rerender } = renderHook(({ sync }) => useSyncedState(sync, initial), {
+      initialProps: { sync: { isSynced: true, isAuthority: true, state: null, setState: () => {} } as ActivitySync },
+    });
+    act(() => result.current[1]({ n: 5 }));
+    rerender({ sync: { isSynced: true, isAuthority: false, state: { n: 5 }, setState: () => {} } });
+    expect(result.current[0]).toEqual({ n: 5 });
+  });
+
   it('scene-scoped state is hidden the instant the scene changes (no stale previous-scene state for a render)', () => {
     const seen: unknown[] = [];
     const { result, rerender } = renderHook(({ id }) => { const r = useSceneScopedState(id); seen.push(r[0]); return r; }, { initialProps: { id: 'scene-a' } });

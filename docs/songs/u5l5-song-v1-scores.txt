@@ -1,0 +1,14 @@
+
+=== docs/songs/u5l5-song-v1-take1.mp3  length=20.1s  score=0.46  missing=16  extra=14
+heard: dab dab to see i'm my dad a boo a boo dab dab a boo a boo i catch the ball dab dabs we feed the dots
+line starts (s): [np.float64(2.8), np.float64(3.9), np.float64(7.4), np.float64(14.1)]
+lineDurationsMs: [3920, 3440, 6700, 6002]
+
+=== docs/songs/u5l5-song-v1-take2.mp3  length=20.1s  score=0.76  missing=7  extra=7
+heard: yeah yeah just me and my dad a ball a ball dad goes a ball a ball a ball i catch the ball dumps dumps we feed the dumps
+line starts (s): [np.float64(2.8), np.float64(4.2), np.float64(8.4), np.float64(14.8)]
+lineDurationsMs: [4200, 4160, 6440, 5262]
+
+=== docs/songs/u5l5-song-v1-take3.mp3  length=20.1s  score=0.21  missing=23  extra=21
+heard: yeah yeah just me and my dad oh oh oh oh dad goes above oh oh oh oh i guess above dust dust we need a dust
+line starts (s): [np.float64(1.8), np.float64(14.7), None, None]

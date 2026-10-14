@@ -1,0 +1,127 @@
+/**
+ * The Academy hub's built-in games (they ship with the app, no teacher publishing step): shown in the student's
+ * Game Library when the student is in the Academy hub, and playable from there. Data only (no React), so the
+ * voice-baking script, the tests and the library can all read it.
+ */
+export interface AcademyGame {
+  id: string;
+  title: string;
+  tagline: string;
+  skill: string;
+  levels: string[];
+  minutes: string;
+  /** CSS gradient behind the cover. */
+  gradient: string;
+  /** 16:9 cover picture. */
+  cover: string;
+  /** The memory method the game is built on, in one line. */
+  method: string;
+  howToPlay: string[];
+}
+
+export const ACADEMY_GAMES: AcademyGame[] = [
+  {
+    id: 'verb-forge',
+    title: 'Verb Forge',
+    tagline: 'Forge the three forms of regular and irregular verbs: base, past simple and past participle. Remember them faster with families, recall and a Memory Vault.',
+    skill: 'Grammar · Irregular verbs',
+    levels: ['A2', 'B1'],
+    minutes: '12–18 min',
+    gradient: 'linear-gradient(135deg,#4c1d95 0%,#9333ea 45%,#ea580c 100%)',
+    cover: '/academy/games/verb-forge-cover.jpg',
+    method: 'Group by family → hear it → type it from memory → use it in a sentence → come back tomorrow (spaced review).',
+    howToPlay: [
+      'Pattern Forge: look at the three forms and name the pattern (A–A–A, A–B–B, A–B–C, A–B–A or regular).',
+      'Family Forge: learn verbs in sound families such as sing–sang–sung.',
+      'Memory Forge: type the forms from memory. Slips go to the Memory Vault and come back later.',
+      'Sentence Forge: choose the form that fits the sentence (past time or "have").',
+    ],
+  },
+  {
+    id: 'sound-lab',
+    title: 'Sound Lab',
+    tagline: 'Train your ears to hear the sounds that change a word: ship or sheep, pack or back, ban or van, think or sink. Crack four locks, in three voices.',
+    skill: 'Pronunciation · Listening',
+    levels: ['A1', 'A2', 'B1'],
+    minutes: '15–20 min',
+    gradient: 'linear-gradient(135deg,#134e4a 0%,#0e7490 50%,#1e3a8a 100%)',
+    cover: '/academy/games/sound-lab-cover.jpg',
+    method: 'Ears first: listen in three voices → pick the word you hear → same or different? → say it (private, never scored).',
+    howToPlay: [
+      'Listen: hear the two sounds of the lock in three different voices.',
+      'Pick the pin: hear one word and choose which word it was.',
+      'Same or different? Hear two words and decide if they are the same word.',
+      'Say it: record yourself and compare with the model. Your voice stays on your device and is never scored.',
+    ],
+  },
+  {
+    id: 'twister-lab',
+    title: 'Twister Lab',
+    tagline: 'Tongue twisters, step by step: hear them chunk by chunk, build them, spell them from memory, then record yourself three ways. Clear first, fast later.',
+    skill: 'Pronunciation · Spelling',
+    levels: ['A1', 'A2', 'B1'],
+    minutes: '15–20 min',
+    gradient: 'linear-gradient(135deg,#831843 0%,#be185d 50%,#f59e0b 100%)',
+    cover: '/academy/games/twister-lab-cover.jpg',
+    method: 'Hear it in chunks → build it → write it from memory and fix the spelling → say it slowly, normally, then faster (private, never scored).',
+    howToPlay: [
+      'Listen: hear the twister slowly, chunk by chunk, then at speed, in two voices.',
+      'Build it: tap the chunks in the right order.',
+      'Spell it: type the twister from memory. You see every word checked, with the letters to fix.',
+      'Say it: record three takes and listen to yourself. Your voice stays on your device and is never scored.',
+    ],
+  },
+  {
+    id: 'time-hop',
+    title: 'Time Hop',
+    tagline: 'Hop between present and past. Learn every verb as a pair (go – went), the four rules for regular verbs, and the time words that tell you which form to use.',
+    skill: 'Grammar · Verbs',
+    levels: ['A1', 'A2'],
+    minutes: '15–20 min',
+    gradient: 'linear-gradient(135deg,#312e81 0%,#4338ca 50%,#0891b2 100%)',
+    cover: '/academy/games/time-hop-cover.jpg',
+    method: 'Learn as pairs → learn the -ed spelling rules → read the time word → type it from memory in both directions → come back tomorrow (spaced review).',
+    howToPlay: [
+      'Twin Match: match each present word with its past twin (go – went).',
+      'Past Rules: choose the right spelling of regular verbs (walked, liked, studied, stopped).',
+      'Time Gate: "every day" or "yesterday"? Choose the form the time word asks for.',
+      'Recall: type the past from the present, and the present from the past. Slips come back in the Memory Vault.',
+    ],
+  },
+  {
+    id: 'silly-sounds',
+    title: 'Silly Sounds Circus',
+    tagline: 'Funny phonics: through rhymes with blue, the k in knife is silent, and a robot teacher knows everything. Hear the sound, catch the silent letter, fix the silly spelling.',
+    skill: 'Phonics · Pronunciation · Spelling',
+    levels: ['A1', 'A2', 'B1'],
+    minutes: '15–20 min',
+    gradient: 'linear-gradient(135deg,#701a75 0%,#c026d3 50%,#f59e0b 100%)',
+    cover: '/academy/games/silly-sounds-cover.jpg',
+    method: 'Ears first (rhymes, odd vowel) → silent letters → silly spelling sentences → say it next to the parrot (private, never scored).',
+    howToPlay: [
+      'Rhyme Roulette: hear a word and pick the one that rhymes, whatever the spelling.',
+      'Odd One Out: hear four words and find the different vowel sound.',
+      'Silent Ninja: tap the letter nobody says (knife, island, listen).',
+      'Spelling Doctor and Parrot Echo: fix silly sentences, then record yourself. Your voice stays on your device and is never scored.',
+    ],
+  },
+  {
+    id: 'always-or-now',
+    title: 'Always or Now?',
+    tagline: 'Present simple or present continuous? Let the cue words decide, spell -s and -ing correctly, avoid the state-verb trap, and laugh at silly breaking news.',
+    skill: 'Grammar · Tenses',
+    levels: ['A1', 'A2', 'B1'],
+    minutes: '20 min',
+    gradient: 'linear-gradient(135deg,#134e4a 0%,#0f766e 45%,#db2777 100%)',
+    cover: '/academy/games/always-or-now-cover.jpg',
+    method: 'Cue words first → choose the tense in a sentence → silly scenes → spelling rules → state-verb trap → type it from memory (spaced review).',
+    howToPlay: [
+      'Cue Sort: always, every day (habit) or now, Look! (happening now)?',
+      'Scene Check: read the cue in a sentence and choose the form.',
+      'Funny Reporter: the same job, with silly breaking news.',
+      'Spell It, No -ing Club and Recall: -s / -ing spelling, state verbs (know, like, want), and typed answers that come back in the Memory Vault.',
+    ],
+  },
+];
+
+export const getAcademyGame = (id: string | undefined) => ACADEMY_GAMES.find((g) => g.id === id);

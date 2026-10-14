@@ -1,0 +1,15 @@
+
+=== docs/songs/u10l4-what-can-you-do-take1.mp3  length=20.1s  score=1.00  missing=0  extra=0
+heard: can you jump yes i can can you swim yes i can can you fly no i can't what can you do i can dance
+line starts (s): [np.float64(0.0), np.float64(4.8), np.float64(8.9), np.float64(13.1)]
+lineDurationsMs: [4840, 4080, 4180, 6962]
+
+=== docs/songs/u10l4-what-can-you-do-take2.mp3  length=20.1s  score=0.92  missing=2  extra=2
+heard: can you turn yes i can can you zoom yes i can can you fly no i can't what can you do i can dance
+line starts (s): [np.float64(0.0), np.float64(4.6), np.float64(8.7), np.float64(13.1)]
+lineDurationsMs: [4560, 4140, 4360, 7002]
+
+=== docs/songs/u10l4-what-can-you-do-take3.mp3  length=20.1s  score=0.96  missing=1  extra=1
+heard: can you jump yes i can can you swim yes i can can you fly no i can what can you do i can dance
+line starts (s): [np.float64(0.0), np.float64(4.6), np.float64(8.8), np.float64(12.9)]
+lineDurationsMs: [4620, 4140, 4100, 7202]

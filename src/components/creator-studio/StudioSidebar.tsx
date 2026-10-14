@@ -14,7 +14,6 @@ const NAV: Array<{ key: CreatorStep; tKey: string; icon: React.ElementType; emoj
 
 
 
-  { key: 'playground-creator', tKey: 'nav.playground_creator', icon: Sparkles, emoji: '🧒', fallback: 'Playground Creator' },
   { key: 'academy-creator', tKey: 'nav.academy_creator', icon: GraduationCap, emoji: '🎓', fallback: 'Academy Creator' },
   { key: 'success-creator', tKey: 'nav.success_creator', icon: Briefcase, emoji: '💼', fallback: 'Success Creator' },
   { key: 'trial', tKey: 'nav.trial_creator', icon: Zap, emoji: '⚡' },
@@ -131,9 +130,7 @@ export const StudioSidebar: React.FC = () => {
           )}
         </button>
 
-        {/* Academy Library — standalone, Academy-branded page (same pattern as
-            Playground Library above) for the growing catalog of Academy units,
-            built lesson by lesson. */}
+        {/* Academy Library — standalone page listing the Academy deck lessons. */}
         <button
           onClick={() => navigate('/academy-library')}
           title={collapsed ? 'Academy Library' : undefined}
@@ -147,7 +144,7 @@ export const StudioSidebar: React.FC = () => {
             <Library className="h-5 w-5" />
           ) : (
             <>
-              <span className="text-base leading-none">🏫</span>
+              <span className="text-base leading-none">🎓</span>
               <Library className="h-4 w-4" />
               <span className="truncate">Academy Library</span>
             </>

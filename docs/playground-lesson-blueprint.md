@@ -123,6 +123,33 @@ Rules:
 - Bonus games use only words already taught in this lesson or earlier.
 - The Variety Rule still applies: no more than 2 of the same kind in a row,
   counting the extra block.
+
+### 3b+. Extra practice block — every lesson has 22-25 pages (owner, 2026-10-12)
+
+Owner: *"17 pages are not enough for 30-minute classes … use the games list and create extra practice … the maximum
+pages could be 25"* and *"there is no goodbye song at the end"*. So:
+
+- **Every lesson (not the 6-page tests) has about 20 pages and never more than 25.** A lesson that is shorter gets an
+  **extra practice block before the sticker** (part of the lesson, not optional), written in
+  `src/content/playground-library/unit1/extraPractice.ts` (`EXTRA_PRACTICE['U-L']`); teacher notes start "Extra practice:".
+- **No game twice in a unit** (owner, 2026-10-12: "don't repeat the games in the same unit, be smart on how to use them
+  and when"): an extra-practice game is used once per unit and never repeats a game a lesson of that unit already has
+  (`pictureMaze.test.ts` checks it). Pick by purpose:
+
+| Lesson | Purpose | Extra practice that fits |
+|---|---|---|
+| L1-L3 new words | listen, notice, recognise | Picture Maze (`picture-maze`), Stepping Stones, Image Reveal, Shadow Match, Catch & Sort, Pattern Train, Quick Fire, What's Missing? |
+| L4 sentence frame | say the sentence, ask | Flip & Say (`flip-say`), role-play, Secret Card, Spin & Say |
+| L5 story | take the words home | Home Hunt (`home-hunt`) |
+| L6 unit review | recall the whole unit | Word Board (`word-board`), Odd One Out, Memory Train |
+
+  Long games (Word Board, Home Hunt, Picture Maze: 3-5 minutes each) fill time better than extra pages.
+- Words: only this lesson and the lessons before it in the unit; the lesson's own pictures and its empty backgrounds.
+- **Every lesson ends with a goodbye song** before the finale (the shared Pre-A1 goodbye song, `goodbyeSong()`), the
+  unit tests and level tests too.
+- Research (mechanics only): Abridge Academy "Top five interactive games for online teaching" (snakes & ladders review
+  board), Twinkl "Vocabulary games for online ESL students" (home scavenger hunt), JALT "Using Wordwall warm-up and
+  review activities" (flip tiles, speaking cards, random wheel).
 - The finale (celebration) and goodbye song come after the extra block, so
   the lesson always **exits on a high**.
 
@@ -147,7 +174,7 @@ How each skeleton slide is built with the real scene kinds (see
 | 10-11 | Q→A, role swap | `join-stage` |
 | 12 | Memory match | `memory`, `train-recall` |
 | 13 | Personal choice | `join-stage` with a real object, `secret-card` |
-| 14 | Phonics micro-moment | `sound-model` + `trace` or `dash` |
+| 14 | Phonics micro-moment | **`sound-blend` (Blend It! / Sound Train) — universal, every Playground lesson (owner 2026-10-10)**: tap each sound (recorded letter sounds), Blend!, find the picture. Pre-A1 may add `sound-model` + `trace`/`dash` before it. Pre-A1 starts blending at Unit 1 Lesson 4 with words of taught sounds only (`scripts/plan-blend-rollout.py`) |
 | 15 | Quick-fire flashcards (3 s) | `rapid-recall` |
 | 16 | Story payoff | `story-video` (part 2) |
 | 17-18 | Sing-back / show your favourite | `song`, `join-stage` |
@@ -281,6 +308,118 @@ activity — just to memorise. Make it universal."*
   gate). A1/A2 lessons whose opener was already an authored review game
   (Magic Castle `mc2-review-rooms`, `mc3-warmup-match`) are listed there.
 
+## 3g. A1 lessons — themed worlds, the plan first, sentences and questions (all A1 lessons)
+
+Owner (2026-10-12): A1 is ten themed worlds (Welcome Town, Jungle, Space, Food Festival, Monster Town, Ocean, Hero City,
+Dino Valley, Magic Castle, Gadget Lab), strengthened with the A1 Movers grammar spine and a fun layer
+(`docs/a1-playground-roadmap.md`). Every A1 lesson keeps the 22-slide skeleton above and adds these rules.
+
+**Start from the lesson plan, never from memory.** Each of the 70 slots has a plan in
+`src/curriculum/roadmap/a1LessonPlans.ts` (`getA1LessonPlan(unit, lesson)`): the "I can…" objective, grammar, new words
+(3-6), recycled language, phonics, signature game, evidence, fun hook and home mission. The unit's goal and grammar step are
+in `a1Roadmap.ts`; the unit's own objective file (e.g. `docs/a1-unit-2-jungle.md`) gives the progression. The database row
+(`curriculum_lessons`: description + `ai_metadata.blueprint_ref`) is synced from the same file
+(`scripts/a1-lesson-plans-sql.ts`). If a lesson needs to change, change the plan first, then the lesson.
+
+**What A1 adds to the 22 slides (Pre-A1 → A1 = words → sentences and questions):**
+
+| Slot | Pre-A1 | A1 upgrade |
+|---|---|---|
+| 2 | Pip greeting | **Remember?** warm-up of the lesson before (§3f) |
+| 4-5 | word cards, echo | **word pages** (character on one side, the word big on the open side) — one word per page, then echo |
+| 8 | implicit grammar model | **the sentence page**: one new structure per page, with its own picture that shows exactly that sentence ("A monkey can climb. It can't fly."). No rule, no grammar words |
+| 9-10 | spinner, teacher asks | answers are **full sentences**; the teacher accepts a short answer, then models the full one |
+| 11 | role-swap (optional) | **the child asks** — required in A1 (A1 = asking as well as answering) |
+| 13 | personal choice | a **personal sentence** about the child's own life |
+| 14 | phonics micro-moment | digraph / blend / vowel team of the plan + **read one short sentence** with it |
+| song | — | the lesson's song comes **after the words and a first game** (CLAUDE.md), never at the start |
+| 16 | story payoff | the payoff uses the lesson's sentence |
+| 19 | Vault sticker | sticker **+ Explorer Passport stamp**, earned by saying the lesson's "I can…" sentence |
+| 20 | Home Mission | the plan's home mission (a real-life use of the sentence) |
+
+**Enough guided practice, then free practice (owner, 2026-10-12: "make sure that the student practises enough guided
+practice and free practice").** Every A1 lesson climbs the same ladder, and no step is skipped:
+
+| Stage | What the child does | Slots | Minimum |
+|---|---|---|---|
+| Present | hears and sees the new words / the sentence (word pages, sentence page, watch & copy) | 3-5, 8 | — |
+| **Guided practice** (controlled) | uses the language **with support**: a model to copy, choices to pick from, a sentence frame to fill ("A ___ can ___."), drag / match / listen-and-tap, chorus and echo; the answer is fixed and the game checks it | 6-9, the first game, the song | **3 activities** (≈ 8-10 min), at least one where the child says the full sentence |
+| **Free practice** (less controlled → free) | uses the language **without the model**: own sentences about own life (slot 13), describing a picture or animal in their own words, asking the teacher questions (slot 11), choosing and explaining, role-play, the "child is the expert" moment; more than one right answer | 10-13, 16, the signature game's last round | **2 activities** (≈ 6-8 min), each ending in the child's own spoken sentences |
+| Check | the lesson's evidence page from its plan (what proves the objective) | before the sticker | 1 |
+
+The teacher note on each scene says which stage it is (`teacher` starts with "Guided:" or "Free:"), and the lesson-quality
+gate counts them. A lesson whose only speaking is repeating is not done.
+
+**Lesson 7 is the evaluation lesson** (the unit Boss Test, `docs/assessment/a1-assessment-plan.md`): review games first,
+then the Boss Test (words, sentences, reading & sounds, speaking rated by the teacher, 80 % per part), then the compass piece,
+the teaser of the next world and the sticker. After Unit 5 comes the **A1 Halfway Check** and after Unit 10 the **A1 Final
+Test**, which decides whether the child is ready for A2 (teacher confirms, admin approves the level change).
+
+**The unit arc decides the lesson type** (same in every world):
+
+| Lesson | Type | What changes |
+|---|---|---|
+| L1, L2 | new language | 3-6 new words + one new structure; the signature game must need the new language to win |
+| L3 | listening | built around the unit song: no new grammar, listening for detail (Cambridge format tasks: listen & colour, yes / no, question → answer). **Never "who said it?"** — naming the cartoon who spoke trains nothing (owner, 2026-10-12) |
+| L4 | speaking | **the child is the expert**: the child describes / asks / instructs, the world's local friend makes a mistake the child corrects; ends in a free mini-conversation |
+| L5 | story | the whole book in the Reader + **story GIFs** (Canva GIF loops of the story pictures — no story videos in A1, owner 2026-10-13; scenario + preview GIF + owner OK first), pause questions, retell |
+| L6 | extra practice | two games, accuracy over speed, everything recycled |
+| L7 | Boss Test | 80 % per part, Practise-again pack; a **Golden Compass piece** (Units 2-10) and a 5-second **teaser** of the next world |
+
+**Length (owner, 2026-10-13: "A1 lessons can be from 30 to 49 pages"):** every A1 lesson has **30-49 pages**. The extra
+pages are real teaching, never padding: one model page per new word or chunk (one idea per page), echo pages, more
+guided and free practice, reading games, speaking stages, brain breaks and an Extra-time block — and still **no game
+twice in a unit** (the Boss Test may reuse formats). Checked by `a1LessonLength.test.ts`.
+
+**No story videos in A1 (owner, 2026-10-13: "In A1 no need for story videos, just use GIF videos"):** A1 stories use
+Canva GIFs made from the approved story pictures (flip-book of poses, picture-to-picture), never generated video. Every
+GIF follows the scenario rule: written scenario (`docs/scenarios/`) → quick preview GIF → owner OK → into the lesson.
+
+**Fun layer in every A1 lesson** (research in the roadmap §4b): at least **2 real choices** that need the target language
+(which friend, which path, which animal), **1 surprise** after the words are taught, a move or song break every 8-10
+minutes, and rewards only for using English (never for taps). No leaderboards, no lives that block, no timer on first
+meeting a word.
+
+**A1 reads sentences, not just CVC words — the story is the spine (owner, 2026-10-12).** Every A1 unit has one serial
+story (Unit 1: *Leo's First Day*, `docs/a1-unit-1-welcome-town.md`). Each lesson reads its episode in the **Reader**
+(read-along, words light up, then the child reads; tap a word for help); L5 reads the whole book. Sight words come 3-4 per
+lesson. **Blend & Read** (every lesson): the blending words come from the story and the blended word flies into a story
+sentence that the child reads. **Tongue twister** (every lesson, after Blend & Read) on the lesson's sound, following the
+A1 ladder (easy in Unit 1 → contrast twisters, fast and timed in Unit 10; ladder in the Unit 1 doc §6).
+**Every page must name the part of the objective it trains**; pages with no language goal ("any answer is right — my
+favourite…") are not used.
+
+**Games:** any Pre-A1 game can run in an A1 lesson as `{ kind: 'prea1', scene: … }`; A1-only games live in the Welcome Town
+renderer. No signature game twice in a unit (`a1LessonPlans.test.ts` checks the plans; `lessonVariety` checks the lessons).
+
+**A1 game menu — where each game goes (owner, 2026-10-13: "extend the games list … old ones with modern designs").**
+Full list with sources: `docs/a1-activity-library.md` (§10 built since, §11 classic games redesigned, §12 platform
+mechanics). Pick from this menu by slot and lesson type; ✓ = built (can go in a lesson now), ★ = to build (only after it
+is built, tested and screenshot-checked). Classic games keep their mechanic but get the modern look: painted Canva set,
+cut-out stickers, juicy UI motion (`game-animation`), recorded voices, nobody "out", no scary or unkind original (⚠️ rows
+in §11). Still no game twice in a unit.
+
+| Slot | Best for | Games (✓ built · ★ to build) |
+|---|---|---|
+| Warm-up / discovery | L1-L5 openers after Remember? | ✓ Mystery Bag · ✓ Tile Reveal · ✓ Lift the Flap · ✓ What's / Who's Missing (Kim's Game) · ✓ I Spy binoculars (`i-spy`) · ✓ Treasure Radar (`hot-cold`, hot and cold) |
+| Listening for detail | L1-L3 | ✓ Listen & Tap · ✓ Tick or Cross · ✓ Draw the Path · ✓ Photo Snap · ✓ Sticker Bingo (`sticker-bingo`) · ✓ Musical Islands (`musical-islands`) · ✓ Whisper Tube (`whisper-tube`, telephone) · ✓ Echo Cave (`echo-cave`, find the voice: left/middle/right) |
+| Guided practice | L1-L4 | ✓ Catch & Sort · ✓ Shadow Match · ✓ Picture Maze · ✓ Claw Machine · ✓ Read & Do · ✓ Field Guide · ✓ Sentence Dominoes (`dominoes`) · ✓ Balloon Match (`balloon-match`) · ✓ Jungle Glider (`glider`, Wordwall Airplane) |
+| Free speaking | L2-L4, L6 | ✓ Secret Card (20 questions) · ✓ Chat Chain · ✓ Flip & Say · ✓ Charades · ✓ Go Fish! (`go-fish`) · ✓ Hot Coconut (`hot-coconut`, hot potato) · ✓ Draw That (`draw-guess`, Pictionary on a shared canvas) |
+| Phonics / reading | every lesson | ✓ Letter Blocks · ✓ Word Splat · ✓ Letter Monsters / Moles / Fishing · ✓ Letter Game · ✓ Save the Balloon (`save-balloon`, hangman ⚠️) · ✓ Letter Bubbles (`letter-bubbles`, anagram) · ✓ Picture Crossword (`crossword`) |
+| Game break / arcade | any | ✓ Obstacle Run · ✓ Brick Crush · ✓ Stepping Stones · ✓ Number Hop (stepping-stones look) · ✓ Red Light, Green Light (`red-green`) |
+| Review / L6 Game Day | L6 | ✓ Word Board (snakes & ladders) · ✓ Answer Race · ✓ Hero Trials · ✓ Tic-Tac-Toe Duel (`tic-tac-toe`) · ✓ Pass the Present (`pass-parcel`) · ✓ Wobbly Tower (`tower-pull`, Jenga) · ✓ Treasure Chests (`chest-quest`) · ✓ Team Flags (`flag-race`) |
+| Boss Test / unit frame | L7 | ✓ Answer Race · ✓ Hero Trials · ✓ Jungle Jeopardy (`quiz-board`) · ✓ Rising River (`rising-river`, floor is lava, co-op) · ✓ Treasure Islands (`grid-hunt`, battleship A-D × 1-4; first placed in L3/L4 practice) · ✓ Build the Town (`world-builder`; keeping it across lessons is still to build) |
+| Extra time | any | ✓ Home Hunt · ✓ brain breaks · ✓ Pet Pal (`pet-pal`, routine after the sticker reward in every lesson; Biscuit's shelf grows across the units) |
+
+**A1 checklist (before "done", with `lesson-quality-gate`):**
+- [ ] the lesson matches its plan (objective, grammar, words, game, evidence, home mission)
+- [ ] one structure per sentence page, each with its own matching picture
+- [ ] the child answers in full sentences AND asks at least one question
+- [ ] at least 3 guided-practice and 2 free-practice activities, marked "Guided:" / "Free:" in the teacher notes
+- [ ] Remember? warm-up, song after the words + first game, sticker + passport stamp, home mission
+- [ ] 2 choices + 1 surprise; L4 has the child-is-expert moment; L7 has the compass piece and the teaser
+- [ ] DB row: real title, `contentFormat`, unpublished until merged (lesson hand-off rule)
+
 ---
 
 ## 4. Built-in Learning Loops
@@ -298,7 +437,8 @@ activity — just to memorise. Make it universal."*
 | Learner profile | Adjustment |
 |---|---|
 | Shy / new | Skip slide 11 role-swap, double slide 7 drag rounds |
-| Advanced (A1+) | Unlock bonus *"I like ___ but I don't like ___"* slide |
+| Advanced (A1+) | Unlock bonus *"I like ___ but I don't like ___"* slide; in A1 lessons, the optional "challenge" round (one more sentence, no hints) |
+| A1 child who can't read yet | Every A1 prompt is spoken; the reading sentence on slot 14 is read together (finger under the words), never a gate |
 | Age 4–5 | Drop slides 14 (phonics) + 18 (reflection), extend song |
 | Low attention day | Pip offers a 10 s stretch break (no XP loss) |
 

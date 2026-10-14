@@ -19,10 +19,12 @@ export const YES_LINE = 'Yes, it is!';
 export const NO_LINE = "No, it isn't!";
 type AskKind = 'color' | 'shape' | 'toy' | 'size' | 'person';
 const aAn = (w: string) => (/^[aeiou]/i.test(w) ? 'an' : 'a');
+/** Lower-case a card word but keep "T-shirt" (a letter name + hyphen) as it is written. */
+const lc = (w: string) => (/^[A-Z]-/.test(w) ? w : w.toLowerCase());
 export function askLine(kind: AskKind, word: string) {
   // People are asked by name, no article: "Is it Grandma?" (Unit 5 Lesson 4 family cards).
   if (kind === 'person') return `Is it ${word}?`;
-  const w = word.toLowerCase();
+  const w = lc(word);
   if (kind === 'color' || kind === 'size') return `Is it ${w}?`;
   return `Is it ${aAn(w)} ${w}?`;
 }
@@ -30,7 +32,7 @@ type Card = Extract<Scene, { kind: 'secret-card' }>['cards'][number];
 /** "It's a red circle!" for shapes; "It's a big red ball!" for toys. */
 export function foundLine(c: Card) {
   if (c.person && c.word) return `You found it! It's ${c.word}!`;
-  const parts = c.word ? [c.size, c.colorWord.toLowerCase(), c.word.toLowerCase()].filter(Boolean).join(' ') : `${c.colorWord.toLowerCase()} ${c.shape}`;
+  const parts = c.word ? [c.size, c.colorWord.toLowerCase(), lc(c.word)].filter(Boolean).join(' ') : `${c.colorWord.toLowerCase()} ${c.shape}`;
   return `You found it! It's ${aAn(parts)} ${parts}!`;
 }
 /** Does a card have this colour / shape / toy / size? */
@@ -126,6 +128,7 @@ export function SecretCardScene({ scene, onWin, onNext, sync }: { scene: Extract
     setState((s) => ({ ...s, round: next, gemDone: s.gemDone || awardGem }));
   };
 
+  const people = scene.cards.length > 0 && scene.cards.every((c) => c.person);
   if (!secret) {
     return (
       <div className="absolute inset-0 flex items-center justify-center bg-cover bg-center pb-24" style={{ backgroundImage: `url(${scene.bg})` }}>
@@ -143,7 +146,7 @@ export function SecretCardScene({ scene, onWin, onNext, sync }: { scene: Extract
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent to-black/20" />
 
       <div className="pointer-events-none absolute left-1/2 top-3 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-base font-black text-orange-700 shadow-xl sm:text-xl">
-        {phase === 'found' ? `🎉 ${foundLine(secret)}` : secret.person ? '👪 Who is it? Ask Pip!' : secret.word ? '🧸 Guess the secret toy. Ask!' : '🃏 Pip has a secret card. Ask Pip!'}
+        {phase === 'found' ? `🎉 ${foundLine(secret)}` : secret.person ? '👪 Who is it? Ask Pip!' : secret.word ? '🃏 Guess the secret card. Ask!' : '🃏 Pip has a secret card. Ask Pip!'}
         <span className="ml-2 rounded-full bg-orange-100 px-2 py-0.5 text-sm text-orange-600">{round + 1}/{total}</span>
       </div>
       <button onClick={() => cueSpeak(SECRET_INTRO, scene.who)} className="absolute right-3 top-3 z-30 rounded-full bg-white/95 px-3 py-2 text-sm font-black text-orange-700 shadow-lg active:scale-95">🔊 Again</button>
@@ -165,8 +168,9 @@ export function SecretCardScene({ scene, onWin, onNext, sync }: { scene: Extract
         </div>
       )}
 
-      {/* The six cards (right two thirds — Pip is painted on the left). */}
-      <div className="absolute right-[3%] top-[14%] z-20 grid w-[50%] grid-cols-3 gap-3">
+      {/* The six cards (right two thirds — Pip is painted on the left). Friend cards (A1 Guess My Friend) are drawn big,
+          with the name to read under each one. */}
+      <div className={`absolute right-[3%] z-20 grid grid-cols-3 ${people ? 'top-[16%] w-[58%] gap-x-2 gap-y-1' : 'top-[14%] w-[50%] gap-3'}`}>
         {scene.cards.map((c, i) => {
           const gone = outSet.has(i);
           const isSecret = phase === 'found' && i === secretIdx;
@@ -175,17 +179,18 @@ export function SecretCardScene({ scene, onWin, onNext, sync }: { scene: Extract
             <motion.div
               key={`${round}-${i}`}
               aria-label={c.person ? c.word : c.word ? [c.size, c.colorWord.toLowerCase(), c.word].filter(Boolean).join(' ') : `${c.colorWord.toLowerCase()} ${c.shape}`}
-              className="grid aspect-[4/3] place-items-center"
+              className={people ? 'flex flex-col items-center' : 'grid aspect-[4/3] place-items-center'}
               initial={{ scale: 0, rotate: -12 }}
               animate={isSecret ? { scale: [1.25, 1.4, 1.25], y: [0, -14, 0] } : gone ? { scale: 0.7, opacity: 0.22, rotate: 0 } : { scale: 1, opacity: 1, rotate: 0, y: [0, -5, 0] }}
               transition={isSecret ? { duration: 0.8, repeat: Infinity } : gone ? { duration: 0.4 } : { scale: { type: 'spring', stiffness: 260, damping: 14, delay: i * 0.07 }, y: { duration: 2.2 + (i % 3) * 0.3, repeat: Infinity, ease: 'easeInOut' } }}
               style={{ filter: gone ? 'grayscale(1)' : undefined }}
             >
               {/* Each card is a die-cut sticker (no white frame); small toys are drawn small. */}
-              <span className="relative block h-[12vh] w-[12vh] max-w-full" style={{ filter: STICKER_FILTER, transform: `rotate(${STICKER_TILTS[i % STICKER_TILTS.length]}deg) scale(${scale})` }}>
+              <span className={`relative block max-w-full ${people ? 'h-[21vh] w-[21vh]' : 'h-[12vh] w-[12vh]'}`} style={{ filter: STICKER_FILTER, transform: `rotate(${STICKER_TILTS[i % STICKER_TILTS.length]}deg) scale(${scale})` }}>
                 {isSecret && <span className="absolute -inset-3 rounded-full bg-yellow-300/70 blur-xl" />}
                 {c.img ? <img src={c.img} alt="" draggable={false} className="relative h-full w-full object-contain" /> : <ShapeIcon shape={c.shape} fill={c.colorHex} />}
               </span>
+              {people && <span className="-mt-1 rounded-full bg-white/95 px-3 py-0.5 font-black text-orange-700 shadow" style={{ fontSize: 'min(2.6vh, 1.7vw)' }}>{c.word}</span>}
             </motion.div>
           );
         })}

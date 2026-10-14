@@ -428,12 +428,29 @@ function applySlowPace(audio: HTMLAudioElement, rate: number = SPEECH_SPEED) {
  *  Web Audio detune alternative was removed). Resolves true once playback
  *  finishes, false on error or an autoplay-policy rejection — the caller
  *  falls back to speech synthesis in that case. */
-function playClipBlob(blob: Blob): Promise<boolean> {
+/** One shared AudioContext, created lazily, only for panned lines (Echo Cave). */
+let panCtx: AudioContext | null = null;
+/** Route one clip through a stereo panner (-1 = left … 1 = right). Best effort: any failure plays it centred. */
+function applyPan(audio: HTMLAudioElement, pan: number) {
+  try {
+    const Ctx = window.AudioContext ?? (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+    if (!Ctx) return;
+    panCtx = panCtx ?? new Ctx();
+    void panCtx.resume?.();
+    const src = panCtx.createMediaElementSource(audio);
+    const p = panCtx.createStereoPanner();
+    p.pan.value = Math.max(-1, Math.min(1, pan));
+    src.connect(p).connect(panCtx.destination);
+  } catch { /* centred */ }
+}
+
+function playClipBlob(blob: Blob, pan = 0): Promise<boolean> {
   return new Promise((resolve) => {
     const url = URL.createObjectURL(blob);
     const audio = new Audio(url);
     audio.preload = 'auto';
     applySlowPace(audio, SPEECH_SPEED_NATURAL);
+    if (pan) applyPan(audio, pan);
     currentAudioEl = audio;
     const finish = (ok: boolean) => {
       if (currentAudioEl === audio) currentAudioEl = null;
@@ -551,7 +568,9 @@ export function isSpeaking(): boolean {
 const ttsSafe = spokenText;
 
 /** Speak `text` as `character`. Utterances are sequenced. */
-export function speak(text: string, character: Character = 'teacher'): Promise<void> {
+/** `opts.pan` (-1 left … 1 right) places this one line in stereo space (Echo Cave); the other screen in a live
+ *  class hears it centred. */
+export function speak(text: string, character: Character = 'teacher', opts?: { pan?: number }): Promise<void> {
   if (typeof window === 'undefined') return Promise.resolve();
   const trimmed = text.trim();
   if (!trimmed) return Promise.resolve();
@@ -580,7 +599,7 @@ export function speak(text: string, character: Character = 'teacher'): Promise<v
     const blob = await blobPromise;
     if (relay && relayLeadMs) await waitUntil(sentAt + relayLeadMs);
     if (mySession !== sessionId) return;
-    const played = blob ? await playClipBlob(blob) : false;
+    const played = blob ? await playClipBlob(blob, opts?.pan ?? 0) : false;
     // A clip that was deliberately interrupted mid-playback (stopSpeaking()
     // called while playClipBlob's audio element was still playing — e.g. the
     // student tapped past a scene before its line finished) also resolves
@@ -699,6 +718,8 @@ const NAME_CLIP: Record<string, string> = Object.fromEntries(
 for (const pair of ['sh', 'th', 'ch', 'wh', 'ar', 'au', 'er', 'ing', 'ou']) {
   PHONIC_CLIP[pair] = `/lep1/audio/letters/phon-${pair}.ogg`;
 }
+// ck (duck, rock — A1 U2L3) is the same /k/ sound: reuse the recorded k.
+PHONIC_CLIP.ck = PHONIC_CLIP.k;
 
 // Every isolated phonics sound now plays from the owner's phonics.zip (192 kbps mono, public/phonics-sounds/phonics-zip, see
 // manifest.json there). The older phonics-master clips (48 kbps Vorbis, public/lep1/audio/letters/phon-*.ogg) stay on disk
@@ -724,6 +745,10 @@ const LONG_VOWEL_CLIP: Record<string, string> = Object.fromEntries(
   ['a', 'e', 'i', 'o', 'u', 'oo'].map((v) => [v, `/lep1/audio/letters/phon-${v}-long.ogg`]),
 );
 LONG_VOWEL_CLIP.oo = zipUrl('long-oo_01'); // the zip has a clearer long /uː/ (the other long vowels are not in the zip)
+// Vowel digraphs (A1 U9L4): oa (coat, boat, goat) is the long o /oʊ/ and uses the zip's oa clip (set above, same sound as
+// the old long-o clip but clearer); ow as taught there (cow, crown, tower) IS the ou /aʊ/ of "out", so it follows the ou
+// clip. (ow in snow/bow = long o is not taught with this key.)
+PHONIC_CLIP.ow = PHONIC_CLIP.ou;
 
 // Real recorded encouragement/instruction phrases from the same phonics-master
 // archive, for scenes that currently rely on TTS or sfx-only feedback.
@@ -769,8 +794,17 @@ async function playPhonicsClip(clip: string | undefined, label: string): Promise
   }
 }
 
+/** Initial consonant blends (A1 Unit 4: gr, pl, sn, fr…) have no clip of their own: they are played as their two (or
+ *  three) recorded single sounds one after the other — g, r — which is how a blend is taught ("blend the sounds"). */
+const BLENDS = new Set(['bl', 'br', 'cl', 'cr', 'dr', 'fl', 'fr', 'gl', 'gr', 'pl', 'pr', 'sk', 'sl', 'sm', 'sn', 'sp', 'st', 'sw', 'tr', 'tw', 'spl', 'spr', 'str']);
+async function playBlend(blend: string): Promise<void> {
+  for (const l of blend.split('')) await playPhonicsClip(PHONIC_CLIP[l], l);
+}
+
 export function playLetterPhonic(letter: string): Promise<void> {
-  return playPhonicsClip(PHONIC_CLIP[letter.toLowerCase()], letter);
+  const k = letter.toLowerCase();
+  if (!PHONIC_CLIP[k] && BLENDS.has(k)) return playBlend(k);
+  return playPhonicsClip(PHONIC_CLIP[k], letter);
 }
 
 export function playLetterName(letter: string): Promise<void> {

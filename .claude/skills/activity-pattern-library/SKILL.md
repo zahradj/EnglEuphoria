@@ -73,6 +73,11 @@ Variety Rule → if nothing fits, do the Research Step.
    in order and eyeball-check rules 1-2. This takes under a minute and is
    the single check that was skipped when Lesson 3 first shipped.
 
+5. **Pre-A1 extra practice: no game twice in a unit** (owner 2026-10-12). An extra-practice game (`EXTRA_PRACTICE` in
+   `unit1/extraPractice.ts`) is used once per unit and never repeats a game the unit's lessons already have; choose it
+   for the lesson's purpose (L1-L3 listening, L4 sentence frame, L5 Home Hunt, L6 Word Board review). Enforced by
+   `unit1/pictureMaze.test.ts`.
+
 ## Required Research Step
 
 Run this whenever either is true: (a) the target purpose has only 1-2
@@ -171,12 +176,75 @@ Run `checkSlotGames(slot, scenes)` before calling a lesson done.
 | Peekaboo Toys: toys peek out of the box / onto the bed / from under the chair; tap the one in the place you hear | ESL hide-and-seek "where is the toy?", Lingokids prepositions | `peek-pop` (L5) |
 | Toy Grabber: steer a claw to the toy the voice names ("Get the blue ball!"), press the button; never slips | claw-machine kids apps (Yateland), fairground toy grabbers | `claw-machine` (L6) |
 | Ring Toss: tap the prize to throw a spinning ring; rings stay on the pegs (also for sounds: "the P word") | fairground ring toss, Wordwall one-tap review | `ring-toss` (L6) |
+| Word Board: snakes & ladders, roll 1-3, say the picture you land on; ladders up, a fun slide down (review routine) | Abridge Academy one-to-one snakes & ladders | `word-board` (extra practice) |
+| Home Hunt: mission card ("Find something red!", "Act like a horse!"), run, show the camera, say it; timer never fails | Twinkl online ESL scavenger hunt, TPR | `home-hunt` (extra practice) |
+| Picture Maze: Canva-painted hedge maze (`/lep1/maze/hedge.png`, `path.png`), 3 pictures at the ends; hear "Find the cow!", tap the glowing step next to the walker (or arrow keys) to walk there; wrong picture = gentle redirect | printable picture mazes (Twinkl, eslvault, Tools for Educators maze maker) | `picture-maze` (extra practice) |
+| Flip & Say: face-down cards, pick any, it flips, say the sentence; all cards gold = win | Wordwall flip tiles / speaking cards (JALT) | `flip-say` (extra practice) |
 
 **Every game must pass the `game-animation` skill's juice audit** (living world, springs, squash & stretch, bursts, gentle wrong, celebration) — a correct but flat game fails.
 
+### Phonics sound games (Oct 2026, owner: "add phonic games like Unit 1 in all lessons")
+
+Every Pre-A1 lesson has a sound game (Unit 1's balloon pops, then these). They rotate so neighbouring lessons differ
+(`scripts/plan-phonics-games.py` plans them; never c and k in one game). All three play the recorded letter SOUND
+(`playLetterPhonic`) and show PICTURES, so the child must hear the first sound — no reading. Painted Canva art
+(owner 2026-10-11: "improve the illustration and the animation, they look flat"): never code-drawn characters.
+
+| Kind | Mechanic | Art | Source (mechanic only) |
+|---|---|---|---|
+| `sound-mole` | moles pop out of 6 holes holding picture signs; bonk the ones that start with the sound (3 per sound) | meadow `bg-game-meadow`, `item-mole-*` (peek / laugh when wrong / dizzy when bonked), hole front rim drawn on top so moles rise OUT of the ground | whack-a-mole phonics, Starfall first sounds |
+| `letter-monsters` | 2-3 monsters with a letter on the tummy; feed each picture to the monster its word starts with | monster land `bg-game-monsterland`, `item-monster-<colour>[-open]` (swap to open mouth, chomp squash, crumbs, happy hop) | ESL "Hungry Monsters", Phonics Farm |
+| `sound-fish` | painted fish swim (flip at turns, bob, bubbles) carrying pictures; catch the one with the sound | pond `bg-game-pond`, `item-fish-<colour>`, `item-fish-bucket` (line drops, fish lifted out, arcs into the bucket) | Boom "Fishing Phonics", magnet fishing |
+
+Game feel used: anticipation (mouth opens / line drops first), squash and stretch, hit-stop on the hit, particles
+(soil, crumbs, splash, stars), idle life (breathing, swaying signs, bobbing fish), gentle wrong answers (the mole laughs,
+the monster shakes its head, the fish darts away; the word is said), reduced motion respected.
+
+### Blending games — four worlds, one routine (owner 2026-10-11: "vary the activities, do not just use the train")
+
+`sound-blend` (Blend It!, blueprint slot 14) takes `look`: `train` (default), `frog` (Frog Hop), `slide` (Slide Down),
+`gumball` (Gumball Blender) — `src/content/playground-library/BlendWorlds.tsx`. Same routine (say each sound in reading
+order → Blend! → find the picture out of three), same voices/sync/checks. Lessons rotate train → frog → slide → gumball
+(`scripts/plan-blend-rollout.py` continues the rotation for new lessons), so no two lessons in a row share a world.
+
+| look | Play | Source (mechanic only) |
+|---|---|---|
+| `frog` | a frog hops stone to stone (one sound per stone), then crosses again fast; jumps onto the lily pad with the picture | Teach Your Monster to Read "Stepping Stones"; drive-a-car-across-the-letters |
+| `slide` | Pip climbs one ladder step per sound, then slides down scooping the sound balls = slow sounds, fast word | "say it slowly, then fast", slinky stretch-and-blend |
+| `gumball` | letter gumballs drop into a machine (a sound each), the crank shakes it, three capsules roll out; open the right one | tap-the-sounds then reveal (Boom / Google Slides CVC blending decks) |
+
+### Beach Talent Show (`talent-show`, U10L2 signature, slot 2)
+
+The next act's MOVING SHADOW (a silhouette GIF made from the approved action GIF) plays behind a glowing paper screen; the
+child taps the act's ticket; drum-roll tremble → the screen rolls up → spotlights, the friend performs in colour and says
+"I can dance!", the beach audience claps; then the child says it. Teaches verbs + "I can …". Data: `acts` {word, gif,
+shadow, move: swim|dance|sing, who, line}, `rounds` {act, ask, reply}. Sources (mechanic only): silhouette "guess the
+action" (Lingokids / Khan Kids), shadow-puppet theatre, Cambridge Pre A1 "Can you …? Yes, I can".
+
+### Campfire Says (`campfire-says`, U10L3 signature, slot 3)
+
+Simon-Says with WHO + WHAT: the host calls a friend and an action ("Mia, play with the ball!"); the called friend
+steps into the campfire light, the child taps that friend's action picture (cut-out pose stickers), and the friend
+does it (clap sparkles, bouncing ball, "zzz"); the sky darkens as friends fall asleep; last round "Everybody, sleep!".
+Data: `fire` {x,y}, `friends` {who, name, x, idle, poses {clap, play, sleep}}, `rounds` {friend (-1 = everybody),
+action, line, reply}. Sources: Simon Says / TPR, Cambridge Pre A1 names + actions, Khan Kids follow-the-instructions.
+
+### Can It? (`can-it`, U10L4 signature, slot 4)
+
+"Can a fish walk?" — an animal (cut-out sticker) bounces into the circus ring; 👍 "Yes, it can!" / 👎 "No, it can't!".
+Right yes: the animal performs (swim wave, fly up, jump arcs, run). Right no: it shakes its head and shows what it CAN
+do (`real`). Wrong yes: it tries and comically flops with a "?", then shows the truth; the right button glows.
+Data: `animals` {word, img}, `rounds` {animal, action, can, real, ask, answer}. Teaches can / can't as cause and effect.
+
 **Pre-A1 children cannot read.** Never make reading the only way into a task: speak every prompt, give picture answers, keep printed text as a small caption for the adult.
 
+**Extended list (2026-10-13):** `docs/a1-activity-library.md` §11 (classic games redesigned: Sticker Bingo, Tic-Tac-Toe Duel, Save the Balloon, Hot Coconut, Go Fish!, Sentence Dominoes, Treasure Islands…) and §12 (Wordwall / Blooket / Gimkit / Kahoot / Baamboozle mechanics made child-safe). Check them before inventing a new kind.
+
 ## Playground hub — A1/A2 Welcome Town (`.../welcome-town/scenes.ts`, `.../welcome-town-a2/scenes.ts`)
+
+**Every Pre-A1 `kind` above is also available in A1/A2** through the wrapper `{ id, kind: 'prea1', teacher, scene: <Pre-A1 scene> }`
+(Welcome Town renderer delegates to the Pre-A1 renderer; sync via `prea1SyncKinds.ts`; voice bake reads it). First used in A1 U1 L1
+(2026-10-09: tpr-actions, buzzer-show, rapid-recall, sticker-reward, home-mission). For the Variety Rule, count the inner kind.
 
 A separate, smaller `Scene` type union from Pre-A1's (different file,
 different renderer — don't assume a Pre-A1 `kind` exists here or vice
@@ -187,7 +255,7 @@ versa). ~23 `kind`s as of the true-false addition below:
 | **Discovery / model** | `meet`, `sound-model` |
 | **Controlled / recognition practice** | `echo`, `trace`, `vocab-spot`, `drag-match`, `frequency-ladder`, `pronoun-sort`, `true-false`, `picture-match` |
 | **Interactive game practice** | `choice`, `listen-tap`, `memory`, `word-build`, `letter-game`, `jigsaw-puzzle`, `hello-doors` |
-| **Speaking production** | `roleplay`, `join-stage`, `spin-wheel` |
+| **Speaking production** | `roleplay`, `join-stage`, `spin-wheel`, `chat-chain` (A1 U1 L4: friend speaks, child picks the reply that fits and says it; the chat replays — Duolingo complete-the-chat / Novakid speech bubbles) |
 | **Story** | `flipbook` |
 | **Structural / closing** | `title-card`, `cinematic`, `song`, `finale` |
 
@@ -266,6 +334,28 @@ place two `spin-wheel` scenes back to back.
 - Badge numbers are the item order — keep the picture ↔ number ↔ `label`
   mapping exact (the quality gate checks it against the art).
 - `label` is exactly the target word/phrase the student should say.
+
+## Universal — Blend It! / Sound Train (`sound-blend`, every Playground scene library)
+
+`src/content/playground-library/SoundBlendScene.tsx`, registered in the Pre-A1 and the A1/A2 renderers, fully synced. **The
+phonics slide (blueprint slot 14) of every Playground lesson** (owner 2026-10-10: "on the phonics slide add a phonics game and
+sound blending, make this universal"). Each sound of a word rides in a train car with a sound button: tap each car (RECORDED
+letter sound, `playLetterPhonic`, never TTS) -> Blend! (cars roll together, sounds close together, then the word) -> pick the
+picture of the word out of three (the other rounds' pictures). 3-5 decodable words with pictures (`/lep1/items/item-<word>.png`);
+`sounds: ['sh','i','p']` for digraphs. Homework: the same game as the Homework Quest level `kind: 'sound-blend'`.
+
+**Pre-A1 (owner, 2026-10-11: "add blending sounds game for the student to start reading"):** every lesson from Unit 1
+Lesson 4 has a Blend It! page — the first lesson where the child knows a vowel (a, U1L3) and enough consonants (h m w n
+s b t) for real words. Words use ONLY sounds already modelled (o from U3L5, e from U4L1; no i/u yet), favour the newest
+sound, and come from pictures in `public/lep1/items` (word pictures are made nine at a time as one Canva sticker sheet,
+cut by `scripts/split-sticker-sheet.py`). Plan / insert with `scripts/plan-blend-rollout.py` (it keeps the letter
+timeline); for a NEW lesson add its letters to `TAUGHT` there and run `--apply`. The page goes right after the lesson's
+phonics page (or just before the sticker). `sound-blend` is a routine kind in `lessonVariety.ts`.
+
+```ts
+{ id: 'wt-blend', kind: 'sound-blend', bg: bgReading, teacher: 'Tap each car and say the sound, press Blend!, then find the picture.',
+  rounds: [{ word: 'hat', img: '/lep1/items/item-hat.png' }, { word: 'cat', img: '/lep1/items/item-cat.png' }, { word: 'mat', img: '/lep1/items/item-mat.png' }] }
+```
 
 ## Universal — Picture ↔ word match (`picture-match`, every Playground scene library)
 
@@ -381,3 +471,10 @@ mechanics from that category (`choice`, `listen-tap`, `hello-doors`) rather
 than picking one and running it 9 times, which is exactly the redesign
 `203d5a09` applied after the fact. Doing this check at design time, before
 writing any scene, is the entire point of consulting this skill first.
+
+## A1 roadmap and activity library (owner 2026-10-09)
+
+The A1 Playground (Welcome Town) plan lives in `docs/a1-playground-roadmap.md` (10 units x 7 lessons, can-do goals, key
+language, phonics, signature game per lesson). Every gamified activity we can use at A1 (built A1, universal, Pre-A1 games to
+port with an A1 mode, and new researched games) is in `docs/a1-activity-library.md`. Owner: "you can also use the same games
+from the Pre-A1". Check both before choosing activities for any A1 lesson.

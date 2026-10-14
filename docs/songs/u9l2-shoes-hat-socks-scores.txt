@@ -1,0 +1,15 @@
+
+=== docs/songs/u9l2-shoes-hat-socks-take1.mp3  length=20.1s  score=1.00  missing=0  extra=0
+heard: hat hat on my head socks socks on my feet shoes shoes on my feet hat socks shoes let's go play
+line starts (s): [np.float64(0.0), np.float64(4.2), np.float64(8.9), np.float64(13.8)]
+lineDurationsMs: [4160, 4720, 4920, 6262]
+
+=== docs/songs/u9l2-shoes-hat-socks-take2.mp3  length=20.1s  score=0.86  missing=3  extra=3
+heard: heh heh on my head socks socks on my feet shoes shoes on my feet heh socks shoes let's go play
+line starts (s): [np.float64(2.2), np.float64(4.4), np.float64(9.2), np.float64(16.1)]
+lineDurationsMs: [4400, 4820, 6840, 4002]
+
+=== docs/songs/u9l2-shoes-hat-socks-take3.mp3  length=20.1s  score=0.86  missing=3  extra=3
+heard: hair hair on my head socks socks on my feet shoes shoes on my feet socks socks shoes let's go play
+line starts (s): [np.float64(2.3), np.float64(4.3), np.float64(9.1), np.float64(15.6)]
+lineDurationsMs: [4340, 4780, 6500, 4442]

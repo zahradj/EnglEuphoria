@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { findMoveOptions, groupByDay, isSplitLesson, type CalendarRow } from './moveOptions';
-import { seriesMembers, isBookedRow } from '@/services/cancelSlotService';
+import { seriesMembers, isBookedRow, inviteStatus, inviteLinkFor } from '@/services/cancelSlotService';
 
 const at = (day: number, h: number, m = 0) => new Date(Date.UTC(2026, 9, day, h, m)).toISOString();
 const row = (id: string, start: string, duration: 30 | 60, hub: string | null = null): CalendarRow => ({
@@ -78,5 +78,17 @@ describe('weekly series removal', () => {
     expect(isBookedRow({ lesson_id: 'L', is_booked: true, student_id: 'S' })).toBe(true);
     expect(isBookedRow({ lesson_id: null, is_booked: true, student_id: 'S' })).toBe(true);
     expect(isBookedRow({ lesson_id: null, is_booked: false, student_id: null })).toBe(false);
+  });
+});
+
+describe('invitation link of an invited lesson', () => {
+  const now = new Date('2026-10-12T10:00:00Z');
+  it('is the same address the invitation email uses', () => {
+    expect(inviteLinkFor('tok')).toBe('https://engleuphoria.com/join-classroom/tok');
+  });
+  it('is active until it ends, expired after, cancelled when the lesson was cancelled', () => {
+    expect(inviteStatus({ expires_at: '2026-10-12T12:00:00Z', revoked_at: null }, now)).toBe('valid');
+    expect(inviteStatus({ expires_at: '2026-10-12T09:00:00Z', revoked_at: null }, now)).toBe('expired');
+    expect(inviteStatus({ expires_at: '2026-10-12T12:00:00Z', revoked_at: '2026-10-11T00:00:00Z' }, now)).toBe('cancelled');
   });
 });

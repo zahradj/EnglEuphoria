@@ -10,7 +10,7 @@ export const A1_PLAYGROUND_WORLDS: World[] = [
     palette: ['#FFD166', '#FFB703', '#FB8500', '#8ECAE6'],
     mascots: ['Pip the Penguin', 'Mayor Marigold'], musicMood: 'cheerful-marching',
     suggestedActivityTypes: ['multiple_choice', 'match_pairs', 'drag_drop', 'speaking_repeat'],
-    topicAffinity: ['greetings', 'introductions', 'classroom', 'colors', 'commands'],
+    topicAffinity: ['greetings', 'introductions', 'classroom', 'colors', 'commands', 'feelings'],
     displayOrder: 1,
   },
   {
@@ -20,7 +20,7 @@ export const A1_PLAYGROUND_WORLDS: World[] = [
     palette: ['#2A9D8F', '#E9C46A', '#F4A261', '#264653'],
     mascots: ['Rumi the Tiger Cub', 'Sky the Parrot'], musicMood: 'tribal-drums-upbeat',
     suggestedActivityTypes: ['drag_drop', 'sound_discrimination', 'match_pairs', 'speaking_describe'],
-    topicAffinity: ['animals', 'actions', 'movement', 'simple_present'],
+    topicAffinity: ['animals', 'actions', 'movement', 'simple_present', 'abilities'],
     displayOrder: 2,
   },
   {
@@ -30,7 +30,7 @@ export const A1_PLAYGROUND_WORLDS: World[] = [
     palette: ['#3D348B', '#7678ED', '#F7B801', '#F18701'],
     mascots: ['Captain Nova', 'Beep the Robot'], musicMood: 'synthwave-curious',
     suggestedActivityTypes: ['drag_drop', 'dictation_builder', 'listen_and_match', 'speaking_command'],
-    topicAffinity: ['numbers', 'directions', 'counting', 'locations', 'commands'],
+    topicAffinity: ['numbers', 'directions', 'counting', 'locations', 'commands', 'weather'],
     displayOrder: 3,
   },
   {
@@ -40,7 +40,7 @@ export const A1_PLAYGROUND_WORLDS: World[] = [
     palette: ['#E63946', '#F1FAEE', '#A8DADC', '#457B9D'],
     mascots: ['Chef Cilla', 'Pico the Mouse'], musicMood: 'mariachi-light',
     suggestedActivityTypes: ['drag_drop', 'match_pairs', 'speaking_dialogue', 'multiple_choice'],
-    topicAffinity: ['food', 'likes_dislikes', 'countables', 'ordering'],
+    topicAffinity: ['food', 'likes_dislikes', 'countables', 'ordering', 'meals'],
     displayOrder: 4,
   },
   {
@@ -50,7 +50,7 @@ export const A1_PLAYGROUND_WORLDS: World[] = [
     palette: ['#7209B7', '#3A0CA3', '#F72585', '#4CC9F0'],
     mascots: ['Professor Glob', 'Bibi the Tiny Monster'], musicMood: 'whimsical-organ',
     suggestedActivityTypes: ['visual_grammar', 'match_pairs', 'speaking_describe', 'drag_drop'],
-    topicAffinity: ['emotions', 'appearance', 'personality', 'describing_people'],
+    topicAffinity: ['emotions', 'appearance', 'personality', 'describing_people', 'clothes'],
     displayOrder: 5,
   },
   {
@@ -70,7 +70,7 @@ export const A1_PLAYGROUND_WORLDS: World[] = [
     palette: ['#D62828', '#003049', '#F77F00', '#FCBF49'],
     mascots: ['Captain Spark', 'Zippy the Sidekick'], musicMood: 'cinematic-power',
     suggestedActivityTypes: ['speaking_dialogue', 'multiple_choice', 'drag_drop', 'listen_and_match'],
-    topicAffinity: ['abilities', 'can_cant', 'helping', 'daily_actions'],
+    topicAffinity: ['abilities', 'can_cant', 'helping', 'daily_actions', 'health', 'rules'],
     displayOrder: 7,
   },
   {
@@ -80,7 +80,7 @@ export const A1_PLAYGROUND_WORLDS: World[] = [
     palette: ['#386641', '#6A994E', '#A7C957', '#F2E8CF'],
     mascots: ['Rexi the T-Rex', 'Tilly the Triceratops'], musicMood: 'epic-tribal',
     suggestedActivityTypes: ['drag_drop', 'match_pairs', 'visual_grammar', 'speaking_describe'],
-    topicAffinity: ['sizes', 'comparisons', 'adjectives', 'nature'],
+    topicAffinity: ['sizes', 'comparisons', 'adjectives', 'nature', 'past'],
     displayOrder: 8,
   },
   {
@@ -100,7 +100,7 @@ export const A1_PLAYGROUND_WORLDS: World[] = [
     palette: ['#00F5D4', '#00BBF9', '#9B5DE5', '#F15BB5'],
     mascots: ['Dr. Volt', 'Nano the Bot'], musicMood: 'electronic-bright',
     suggestedActivityTypes: ['dictation_builder', 'multiple_choice', 'drag_drop', 'speaking_instruct'],
-    topicAffinity: ['technology', 'instructions', 'routines', 'problem_solving'],
+    topicAffinity: ['technology', 'instructions', 'routines', 'problem_solving', 'time'],
     displayOrder: 10,
   },
 ];

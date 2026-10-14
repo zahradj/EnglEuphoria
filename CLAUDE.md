@@ -1,5 +1,14 @@
 # EnglEuphoria — project rules
 
+## Age bands (owner, 2026-10-12)
+
+- **Playground: ages 4–12. Academy: ages 13–18.** An Academy student has already met hello, numbers and countries at school, so A1 lessons revise fast and spend the time on what school did not teach; they are never childish.
+
+## Hub separation (hard rule — owner, 2026-10-08)
+
+- The **Playground, Academy and Success each own their own curriculum blueprint, lesson blueprint, skills and docs.** Never edit, import or reuse another hub's.
+- Academy work lives only in `src/curriculum/academy/`, `.claude/skills/academy-*`, `docs/academy-*` (see `docs/hub-separation.md`). Do not touch the Playground, and do not read or change the legacy Academy rows in the database.
+
 ## Voice (hard rule)
 
 - **Never use the browser's built-in text-to-speech** (`window.speechSynthesis`, `SpeechSynthesisUtterance`) for anything a student or teacher hears — not in the app, not in prototypes or mock-ups, not as a fallback. Device voices have the wrong accent and were rejected by the product owner.
@@ -42,9 +51,12 @@
 
 - **Pictures: Canva only** (Canva `generate-image`, reference images uploaded to Canva for character consistency; `remove-background` for stickers). **Never generate pictures with Higgsfield** — not backgrounds, not stickers, not "just this once".
 - **Gemini is allowed for pictures too** (owner, 2026-10-06: "yes, enable Gemini for picture"): the platform's `ai-image-generation` function through `scripts/art-targets.json` + `.github/workflows/bake-art.yml`, with an approved picture as the reference for character consistency. Still never Higgsfield for pictures.
-- **Videos: Higgsfield only** (story clips, game background loops — image-to-video from a Canva/approved picture).
+- **Videos: Higgsfield (AI image-to-video) or Canva (owner, 2026-10-11: "yes" — Canva GIF and MP4).** Higgsfield for AI motion clips (story clips, game background loops — image-to-video from a Canva/approved picture). Canva for animated GIF/MP4 made from our own approved Canva pictures (flip-book of poses, word cards popping in, picture-to-picture sequences): build the frames as pages of a Canva design and export `gif` or `mp4` (`export-design`), then fetch through the art bot like any picture.
+- **Canva GIFs/videos follow the scenario rule too** (owner, 2026-10-11): write the scenario (`docs/scenarios/`), and where possible show it to the owner as a quick preview GIF (the animatic) before it goes into a lesson; nothing ships without the owner's OK. No zoom/pan on stills, no on-picture text except our labels.
+- **Colour balance: about 35% purple** (owner, 2026-10-12: "from now on", in background images and all generated images), mixed with blue/teal, warm cream and wood tones and green plants; never a one-colour purple room. Put the line in every picture prompt; details in `docs/academy-art-bible.md` §4 (Academy). Older pictures are restyled one at a time with the owner's approval.
 - `scripts/generate-art.mjs` refuses the Higgsfield image path; the `higgsfield-video` edge function only allows video endpoints.
 - How to get a Canva picture into the repo (holder design, export, fetch bot): `docs/canva-art-pipeline.md`.
+- **No white backgrounds on pictures — everything is a cut-out sticker** (owner, 2026-10-12: "images without white background like stickers, it's the rule"). Every object, character and pose a child sees (items, characters, GIF/animation frames) has a transparent background: stickers via `scripts/split-sticker-sheet.py` / `cutout-stickers.py`, animated loops as cut-out animated WebP (white removed frame by frame, `public/lep1/gifs/*.webp`), never a picture sitting in a white box. Full scene backgrounds are the only pictures that fill their frame.
 
 ## Vary every lesson — research, then beat the best apps (hard rule — owner, 2026-10-04)
 
@@ -58,6 +70,31 @@
 - Vary the look: `mode: 'click'` (listen and click, three pictures) for colours and scene pictures; `mode: 'shadow'` (listen and match the shadow) only for sticker pictures with clearly different outlines.
 - `recallWarmup.test.ts` (deploy gate) fails if a lesson has none. It is a routine scene, not one of the lesson's games.
 
+## Lesson song placement (hard rule — owner, 2026-10-10)
+
+- The lesson's own song is **not** at the start of a Playground lesson. Order: title → Remember? warm-up → intro → (story) → the words (listen and say) → a first practice game → **the song** → more games. The child sings words they already know. (The shared hello/goodbye songs are not lesson songs.)
+
+## Academy lessons — how every one is created (hard rule — owner, 2026-10-09)
+
+Whenever the owner says "create a lesson" / "proceed with creating the lesson", or whenever you create or rebuild an Academy lesson:
+
+1. **Start from the Academy blueprints**, never from memory: the roadmap/curriculum blueprint (`src/curriculum/academy/levels/`, `types.ts`) and the lesson blueprint (`buildLessonBlueprint` / `ACADEMY_LESSON_BLUEPRINTS`: objective, cast, run of show, Mission, Release, clue, supports). The lesson's tests must read the blueprint.
+2. **Use the Academy skills and lists**: `academy-season-system`, `academy-session-builder`, `academy-activity-selector` (+ the 148-game catalogue `docs/academy-games-catalog.md`), `academy-assessment-designer` where there is a check, and run `academy-quality-gate` before reporting done.
+3. **Research the internet again for every lesson** (it is a one-to-one live lesson for teens): Oxford, Cambridge, British Council, Duolingo, Busuu and other English apps and one-to-one platforms. Take mechanics, never content; log sources, quality and limits in `docs/research/academy-<lesson>-research.md`.
+4. **Be creative and visual, not dry.** The player must look like a game or a film, not a worksheet: full-bleed scenes and pictures on every screen, large characters, cinematic transitions between parts, rich reactions. A lesson that is plain text on a flat background is not done.
+5. **Design like an education UX/UI designer and game designer** (skill `.claude/skills/academy-game-ui`, research `docs/research/academy-game-ui.md`): every page and activity is built like a video game or story game — illustrated, animated, with motion where it helps — and must pass its "dullness test". Motion rules still hold: UI motion, sparkles, card flips, expression swaps and approved silent background loops are fine; never zoom/pan/loop-scale a story picture, never browser voices.
+6. Fill the hour (the blueprint's run of show), keep the cast to the blueprint's cast, and keep all other Academy rules (hub separation, voice, comfort).
+
+## Modelling and the rule — every Academy lesson (hard rule — owner, 2026-10-13)
+
+- "The modelling in the lesson is very important. Stating the rule is extremely important." Every Academy lesson: (1) the teacher **models** new language and the Mission task first (I do → we do → you do) before the student tries; (2) the **rule is stated plainly** (≤ 3 lines, an example each, read aloud, student repeats) BEFORE the practice games, even in E1 and for chunks; (3) the student **restates it** at the end (teach-back). A lesson plan or deck without a model step and a stated rule is not done. Checked in `academy-quality-gate` and `academy-session-builder`.
+
+## Full scene plates, stories as plates, no repetition (hard rule — owner, 2026-10-14)
+
+- **Every Academy page is a full-bleed scene plate** (a painted place with the cast in it or around it), not a panel on a flat colour; panels are small and glass. **Every story is told as a sequence of full scene plates** (3-5 per story, Canva, 16:9, cast references, ~35 % purple, `story` slide kind, subtitles + recorded voices, cross-fade only, never zoom/pan), written as a scenario in `docs/scenarios/` first.
+- "I don't want the same thing repeated; be creative and original; make the student happy, having fun, interacting, never bored." Every lesson has its own place, look, story frame, **signature game** and fun hook, registered in `src/academy-deck/lessonProfiles.ts`; `lessonVariety.test.ts` (deploy gate) fails an un-grandfathered lesson that reuses the previous lesson's main scene, the Season 1 opening/games, three same games in a row, or has fewer than five different games. Design decisions (context, environment, layout, rewards) follow `docs/academy-experience-design.md` ("be the Academy expert and decide what is best for the student").
+- Adapt ideas from the Playground **by reading and re-implementing in Academy files only** (hub separation); nothing childish (no mascots, pets, stickers, hearts).
+
 ## Languages — every page is translated (hard rule — owner, 2026-10-09)
 
 - **Every new or edited page a student, parent or visitor sees is built with `t()` and translated into all six languages** (en, es, fr, ar, tr, it) — never hard-coded English. Put keys in `src/translations/<lang>/<area>.ts` (see `authUi.ts` for the pattern: `au.*` keys, English text as the `t()` default) and wire them into each language's `index.ts`; the parity test (`src/translations/authUi.test.ts`, copy it for a new area) fails if a language is missing a key or a `{{placeholder}}`.
@@ -65,3 +102,12 @@
 - Students switch language any time from the globe in the dashboard header (`LanguageSwitcher`, saved to `users.preferred_language`, applied on every device by `useStudentLanguageSync`).
 - Layout must work right-to-left (Arabic): use logical classes (`ps-/pe-/start-/end-/text-start`), flip direction arrows with `rtl:rotate-180`.
 - Lesson content stays English (it is what is being taught); the chrome, instructions, buttons and messages around it are translated.
+
+## Clothes and characters (hard rule — owner, 2026-10-11)
+
+- **Don't dress male characters in girls' clothes.** Pip and Leo are boys: never a dress or a skirt on them — not in a lesson game, a homework level, a picture, a mock-up or a song line. Dress-up games give a boy no dress piece (it isn't on his rail); a dress is worn only by a girl (Mia, Bella, Willow) or shown as a thing (laundry, a shop). Lines to the child stay neutral (no "twirl in your dress"). `src/content/homework-quests/noDressForBoys.test.ts` fails otherwise.
+
+## A1 lessons — length and story GIFs (hard rule — owner, 2026-10-13)
+
+- **Every A1 lesson has 30-49 pages** ("A1 lessons can be from 30 to 49 pages"): real practice, not padding — and still no game twice in a unit. `a1LessonLength.test.ts` (deploy gate) fails otherwise.
+- **No story videos in A1** ("just use GIF videos"): stories use Canva GIFs of the approved story pictures, made only after the written scenario, a preview GIF and the owner's OK.

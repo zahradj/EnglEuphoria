@@ -1,0 +1,14 @@
+
+=== docs/songs/u7l5-verse-sheep-take1.mp3  length=20.1s  score=0.63  missing=7  extra=19
+heard: grandpa had a farm the a e i o and on his farm he had a sheep the a e i o with a bar bar here and a bar bar there grandpa had a farm the a e i o
+line starts (s): [np.float64(0.0), np.float64(3.5), np.float64(8.5), np.float64(12.5)]
+lineDurationsMs: [3500, 4960, 4080, 7522]
+
+=== docs/songs/u7l5-verse-sheep-take2.mp3  length=20.1s  score=0.30  missing=19  extra=28
+heard: crap ahead of four e i e i o and on this farm we had a sheep e i e i o with a barfire and a barfire yeah crap ahead of four e i e i o
+line starts (s): [None, np.float64(4.0), np.float64(8.3), None]
+
+=== docs/songs/u7l5-verse-sheep-take3.mp3  length=20.1s  score=0.43  missing=14  extra=25
+heard: grandpa has harmed me i e i o and on his farm he had a sheet i e i e i o with a bar bar here and a bar bar there grandpa has harmed me i e i o
+line starts (s): [np.float64(0.0), np.float64(4.2), np.float64(8.4), np.float64(12.7)]
+lineDurationsMs: [4180, 4240, 4320, 7322]

@@ -1,0 +1,15 @@
+
+=== docs/songs/u8l5-hungry-caterpillar-take1.mp3  length=20.1s  score=0.96  missing=1  extra=1
+heard: pinto caterpillar munch munch munch i like apples i like bread i like cake now i am full look at me a butterfly
+line starts (s): [np.float64(0.9), np.float64(4.2), np.float64(8.5), np.float64(13.2)]
+lineDurationsMs: [4240, 4300, 4620, 6902]
+
+=== docs/songs/u8l5-hungry-caterpillar-take2.mp3  length=20.1s  score=0.88  missing=4  extra=1
+heard: little caterpillar munch munch munch i like apples i like bread i like cake nample look at me a butterfly
+line starts (s): [np.float64(0.0), np.float64(4.1), np.float64(8.6), 13.5]
+lineDurationsMs: [4080, 4560, 4860, 6562]
+
+=== docs/songs/u8l5-hungry-caterpillar-take3.mp3  length=20.1s  score=0.93  missing=2  extra=1
+heard: little caterpillar munch munch munch i like apples i like bread i like cake now i'm full look at me a butterfly
+line starts (s): [np.float64(0.0), np.float64(4.1), np.float64(8.6), np.float64(13.3)]
+lineDurationsMs: [4080, 4500, 4700, 6782]

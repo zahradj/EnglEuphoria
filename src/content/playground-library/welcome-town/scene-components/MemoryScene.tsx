@@ -17,7 +17,13 @@ export function MemoryScene({ scene, onNext, onWin, onLose, sync }: { scene: Ext
   // over the sync channel — only the LAYOUT (see `order` below) needs
   // syncing, not which cards exist.
   const baseCards = useMemo<Card[]>(() => scene.pairs.flatMap((p) =>
-    p.img
+    p.match
+      // Question ↔ answer (A1 U1L6): two different WORD cards — "How are you?" pairs with "I am fine."
+      ? [
+          { key: `${p.id}-q`, pairId: p.id, label: p.label, emoji: p.emoji, variant: 'word' as const },
+          { key: `${p.id}-a`, pairId: p.id, label: p.match, emoji: p.emoji, variant: 'word' as const },
+        ]
+      : p.img
       ? [
           { key: `${p.id}-word`, pairId: p.id, label: p.label, emoji: p.emoji, variant: 'word' as const },
           { key: `${p.id}-pic`, pairId: p.id, label: p.label, emoji: p.emoji, img: p.img, crop: p.crop, imgAspect: p.imgAspect, variant: 'pic' as const },

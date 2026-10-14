@@ -4,12 +4,14 @@ import * as welcomeTown from './welcome-town/scenes';
 import * as a2 from './welcome-town-a2/scenes';
 import * as castle from './magic-castle/scenes';
 import * as jungle from './jungle-adventure/scenes';
+import * as space from './space-mission/scenes';
+import * as food from './food-festival/scenes';
 import { splitFocus } from './FocusLine';
 
 type MeetScene = { id: string; kind: 'meet'; line: string; focus?: string[] };
 
 /** Every scene array exported by the lesson files. */
-const allScenes = [unit1, welcomeTown, a2, castle, jungle]
+const allScenes = [unit1, welcomeTown, a2, castle, jungle, space, food]
   .flatMap((mod) => Object.values(mod as Record<string, unknown>))
   .filter((v): v is Array<{ kind?: string }> => Array.isArray(v) && v.length > 0 && typeof (v[0] as { kind?: unknown })?.kind === 'string')
   .flat();
@@ -17,7 +19,7 @@ const meetScenes = allScenes.filter((s): s is MeetScene & { kind: 'meet' } => s.
 
 describe('vocabulary highlighted on the character-speaking (meet) scenes', () => {
   it('finds the meet scenes (guards against the test silently checking nothing)', () => {
-    expect(meetScenes.length).toBeGreaterThan(30);
+    expect(meetScenes.length).toBeGreaterThan(20) // A1 U1 L1-L3 now reveal vocabulary on one page (22-slide blueprint), fewer meet pages;
   });
 
   it('every meet scene names the vocabulary to highlight', () => {

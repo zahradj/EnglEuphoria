@@ -1,0 +1,14 @@
+
+=== docs/songs/u4l5-song3-take1.mp3  length=52.1s  score=0.99  missing=1  extra=1
+heard: head head turn your head turn your head a tiger said arms arms up so high wave your arms up to the sky feet feet stomp your feet stomp stomp stomp them to the beat hands hands clap your hands clap like a seal upon the sand i can do it i can do it i can do it yes i can i can do it i can do it head and arms and feet and hands
+line starts (s): [np.float64(8.7), np.float64(11.1), np.float64(12.9), np.float64(15.5), np.float64(19.5), np.float64(24.3), np.float64(28.8), np.float64(31.5), np.float64(36.7), np.float64(39.0), np.float64(40.9), np.float64(43.0)]
+lineDurationsMs: [11060, 1840, 2640, 3980, 4820, 4500, 2680, 5160, 2280, 1920, 2100, 9108]
+
+=== docs/songs/u4l5-song3-take2.mp3  length=52.1s  score=0.75  missing=28  extra=5
+heard: head head turn your head turn your head the tide you set arms arms up so high make your arms look to the sky i can do it i can do it i can do it yes i can i can do it i can do it head and arms and feet and hands
+line starts (s): [np.float64(7.7), np.float64(10.0), np.float64(15.8), np.float64(18.2), None, None, None, None, np.float64(39.4), np.float64(42.2), np.float64(44.0), np.float64(46.0)]
+
+=== docs/songs/u4l5-song3-take3.mp3  length=52.1s  score=0.95  missing=5  extra=3
+heard: head head turn your head turn your head the tiger said arms arms up so high wave your arms up to the sky feet feet stomp your feet stomp stomp stompin' to the beat hands hands clap your hands quap like a seal upon the sand i can do it i can do it i can do it yes i can i can do it i can do it headin' arms and feet and hands
+line starts (s): [np.float64(8.8), np.float64(11.1), np.float64(13.1), np.float64(16.6), np.float64(19.6), np.float64(27.0), np.float64(29.2), np.float64(33.2), np.float64(40.6), np.float64(43.0), np.float64(44.9), np.float64(47.5)]
+lineDurationsMs: [11120, 2000, 3520, 2980, 7360, 2220, 3980, 7460, 2340, 1880, 2660, 4568]

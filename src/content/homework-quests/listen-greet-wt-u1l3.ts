@@ -10,7 +10,7 @@ const spr = (f: string) => `${W}/sprites/${f}.png`;
 export const QUEST_LISTEN_GREET_WT_U1L3: HomeworkQuest = {
   id: 'listen-greet-wt-u1l3',
   title: 'Listening Game Quest',
-  subtitle: 'Listen & Greet! · A1 Unit 1 · Lesson 3',
+  subtitle: 'Listen to the Greetings Song · A1 Unit 1 · Lesson 3',
   level: 'A1',
   lessonKey: 'wt-rich-1-3',
   theme: { accent: '#0EA5E9', accent2: '#F59E0B', night: false, mapImg: `${W}/scenes/bg-classroom-door.png`, guide: spr('marigold-wave'), walker: spr('pip-wave') },
@@ -43,6 +43,8 @@ export const QUEST_LISTEN_GREET_WT_U1L3: HomeworkQuest = {
         { img: room, line: 'I am seven years old.', extra: ['sad'] },
         { img: room, line: 'This is the student.', extra: ['teacher'] },
       ] },
+    { kind: 'sound-blend', name: 'Sound Train', icon: '🚂', intro: 'Tap each sound. Then blend them and find the picture!', img: `${W}/scenes/bg-classroom-reading-wide.png`, voice: 'pip',
+      rounds: [{ word: 'sun', picture: '/lep1/items/item-sun.png' }, { word: 'hen', picture: '/lep1/items/item-hen.png' }, { word: 'pig', picture: '/lep1/items/item-pig.png' }, { word: 'cat', picture: '/lep1/items/item-cat.png' }] },
     { kind: 'treasure', name: 'Listening Box', icon: '/lep1/stickers/chest-closed.png', intro: 'Tap the box to open it!', img: room, closed: '/lep1/stickers/chest-closed.png', open: '/lep1/stickers/chest-open.png', win: 'You did it! Great listening today!' },
   ],
 };

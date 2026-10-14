@@ -600,11 +600,26 @@
  "u4l5-moves": {
   "lesson": "Pre-A1 Unit 4 Lesson 5 — From Head to Toe, story film 'Animal Moves' (page 4). Scenario docs/scenarios/u4l5-animal-moves.md (approved 2026-10-06). STRICT MODE: one clip at a time, each between two Canva key pictures (standing pose -> move pose), screened with review-clip.py, then frame-by-frame review with the owner.",
   "provider": "higgsfield",
-  "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+  "endpoint": "kling-video/v2.6/pro/image-to-video",
   "seconds": 5,
   "out": "public/lep1/video/clips/u4l5-moves",
   "style": "Keep exactly the soft 2D cartoon picture-book style and the same character as the first frame (bold dark outlines, soft flat colours). Smooth, slow, gentle animation for young children. The camera stays steady. No text, no new characters, no speech.",
   "beats": [
+   {
+    "id": "park-intro",
+    "image": "public/lep1/scenes/bg-u4l5-park-wide.png",
+    "line": "Look! The animals can move. Let's copy them!",
+    "action": "Pip and the animals stand in the park and blink; the grass and leaves move in the breeze",
+    "bodyWords": [
+     "animals"
+    ],
+    "leader": "Pip",
+    "prompt": "Pip and the animals stand still in the park and blink. The grass and leaves move in the breeze. The camera stays steady.",
+    "seconds": 5,
+    "ownerApproved": true,
+    "holdPose": true,
+    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next"
+   },
    {
     "id": "tiger-head",
     "image": "public/lep1/scenes/bg-u4l5-tiger-stand-wide.png",
@@ -618,7 +633,9 @@
     "action": "the tiger slowly turns his head to the side; his body and feet stay still",
     "prompt": "The tiger cub slowly turns his head to the side and looks to the right, smiling. His body, arms and feet stay still. Nobody else is in the picture. The camera stays steady.",
     "ownerApproved": true,
-    "approvedNote": "owner: \"Yes, approved\" 2026-10-06, after reading all 8 storyboard rows (line + action + start/end pictures); ordered ONE clip per run, each screened and shown before the next"
+    "approvedNote": "owner: \"Yes, approved\" 2026-10-06, after reading all 8 storyboard rows (line + action + start/end pictures); ordered ONE clip per run, each screened and shown before the next",
+    "review": "2026-10-09 clip 1 rejected by review-clip.py (POSE 0.59 < 0.75): the face warps at 0.75-2 s and the clip ends facing front, not turned. Waiting for the owner before any re-order. Retry 2026-10-09 on Kling 2.6 Pro (owner sent its docs): start picture + prompt only, sound off.",
+    "accepted": "owner 2026-10-09: \"Use kling\" — Kling 2.6 Pro clip accepted"
    },
    {
     "id": "pip-head",
@@ -724,13 +741,28 @@
     "prompt": "Pip the orange fox slowly brings his two paws together in front of his chest, hands meeting with a soft pat, two times. His feet and body stay in place. Nobody else is in the picture. The camera stays steady.",
     "ownerApproved": true,
     "approvedNote": "owner: \"Yes, approved\" 2026-10-06, after reading all 8 storyboard rows (line + action + start/end pictures); ordered ONE clip per run, each screened and shown before the next"
+   },
+   {
+    "id": "park-end",
+    "image": "public/lep1/scenes/bg-u4l5-park-wide.png",
+    "line": "From head to toe — we can do it!",
+    "action": "Pip and the animals stand in the park from head to toe, smile and blink; the leaves move in the breeze",
+    "bodyWords": [
+     "toe"
+    ],
+    "leader": "Pip",
+    "prompt": "Pip and the animals stand still in the park from head to toe, smile and blink. The leaves move in the breeze. The camera stays steady.",
+    "seconds": 5,
+    "ownerApproved": true,
+    "holdPose": true,
+    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next"
    }
   ]
  },
  "u5l5-dad": {
   "lesson": "Pre-A1 Unit 5 Lesson 5 — Just Me and My Dad, story film 'My Day with Dad' (page 5). Scenario docs/scenarios/u5l5-me-and-my-dad.md (approved 2026-10-07). STRICT MODE: one clip at a time, each between two Canva key pictures already in the stills film, screened with review-clip.py, then frame-by-frame review with the owner. The hug (14% of the picture changes) stays as stills.",
   "provider": "higgsfield",
-  "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+  "endpoint": "kling-video/v2.6/pro/image-to-video",
   "seconds": 5,
   "out": "public/lep1/video/clips/u5l5-dad",
   "style": "Keep exactly the soft 2D cartoon picture-book style and the same character as the first frame (bold dark outlines, soft flat colours). Smooth, slow, gentle animation for young children. The camera stays steady. No text, no new characters, no speech.",
@@ -747,9 +779,10 @@
     ],
     "leader": "Dad",
     "action": "Dad swings his arm forward and throws the red ball up into the air towards Pip; nobody moves their feet",
-    "prompt": "Dad, the father fox, swings his raised arm forward and throws the red ball, which flies slowly up into the air towards Pip. Nobody moves their feet. Nobody else is in the picture. The camera stays steady.",
+    "prompt": "Dad, the father fox, swings his raised arm forward and throws the red ball, which flies slowly up into the air towards Pip. Nobody moves their feet. There is only one ball. Nobody else is in the picture. The camera stays steady.",
     "ownerApproved": true,
-    "approvedNote": "owner: \"Yes start\" then \"Use the api\" 2026-10-07, after reading the 6-row storyboard; clip 1 (ball-throw) ordered alone, screened and shown before any other row"
+    "approvedNote": "owner: \"Yes start\" then \"Use the api\" 2026-10-07, after reading the 6-row storyboard; clip 1 (ball-throw) ordered alone, screened and shown before any other row",
+    "review": "2026-10-09 clip 1 (Kling 2.6 Pro) rejected: a second red ball appears at 2.0-2.25 s. Re-ordered once with \"There is only one ball.\""
    },
    {
     "id": "ball-catch",
@@ -763,7 +796,8 @@
     "leader": "Pip",
     "action": "the red ball drops into Pip's two paws and Pip catches it; Dad stays still",
     "prompt": "The red ball comes down slowly and Pip, the little fox, catches it in both paws and holds it. Dad stays still. Nobody moves their feet. The camera stays steady.",
-    "ownerApproved": false
+    "ownerApproved": true,
+    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next"
    },
    {
     "id": "ducks-bread",
@@ -778,7 +812,8 @@
     "leader": "Pip",
     "action": "Pip throws the small piece of bread onto the water to feed the four ducks, which swim towards it; Dad stays still",
     "prompt": "Pip, the little fox, gently throws the small piece of bread onto the water to feed the four ducks. The ducks swim slowly towards the bread. Dad stays still. Nobody moves their feet. The camera stays steady.",
-    "ownerApproved": false
+    "ownerApproved": true,
+    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next"
    },
    {
     "id": "icecream-lick",
@@ -792,7 +827,8 @@
     "leader": "Pip",
     "action": "Pip brings his ice cream cone to his mouth and licks it; Dad keeps holding his own cone",
     "prompt": "Pip, the little fox, brings his pink ice cream cone up to his mouth and licks it. Dad sits still and holds his cone. Nobody stands up. The camera stays steady.",
-    "ownerApproved": false
+    "ownerApproved": true,
+    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next"
    },
    {
     "id": "book-open",
@@ -806,7 +842,8 @@
     "leader": "Dad",
     "action": "Dad opens the picture book wide on his lap; Pip stays on Dad's lap",
     "prompt": "Dad, the father fox, slowly opens the picture book wide. Pip stays sitting on his lap and looks at the pages. Nobody stands up. The camera stays steady.",
-    "ownerApproved": false
+    "ownerApproved": true,
+    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next"
    },
    {
     "id": "gate-walk",
@@ -820,7 +857,428 @@
     "leader": "Pip and Dad",
     "action": "Pip and Dad take one step forward along the path, holding hands",
     "prompt": "Pip and Dad, the two foxes, walk one slow step forward along the path, holding hands. The gate and the flowers stay still. The camera stays steady.",
-    "ownerApproved": false
+    "ownerApproved": true,
+    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next"
+   },
+   {
+    "id": "ducks-count",
+    "image": "public/lep1/scenes/bg-u5l5-ducks-b-wide.png",
+    "line": "One, two, three, four ducks!",
+    "action": "the four ducks bob gently on the water and eat the bread; Pip and Dad stay still",
+    "bodyWords": [
+     "ducks"
+    ],
+    "leader": "ducks",
+    "prompt": "The four ducks bob gently on the water and peck at the bread. Pip and Dad stay still. The camera stays steady.",
+    "seconds": 5,
+    "ownerApproved": true,
+    "holdPose": true,
+    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next"
+   },
+   {
+    "id": "goodnight-hug",
+    "image": "public/lep1/scenes/bg-u5l5-hug-a-wide.png",
+    "line": "Good night, Dad! I love you!",
+    "action": "Pip and Dad hug at bedtime; nobody else moves",
+    "bodyWords": [
+     "dad"
+    ],
+    "leader": "Pip",
+    "prompt": "Pip, the little fox, and Dad, the father fox, hug softly at bedtime. The camera stays steady.",
+    "seconds": 5,
+    "ownerApproved": true,
+    "endImage": "public/lep1/scenes/bg-u5l5-hug-b-wide.png",
+    "allowedMoves": [
+     "hug",
+     "hugs"
+    ],
+    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next"
+   },
+   {
+    "id": "night-best",
+    "image": "public/lep1/scenes/bg-u5l5-night-wide.png",
+    "line": "Just me and my dad. The best day!",
+    "action": "at the end of the best day the stars twinkle and the night light glows over the sleeping house; nothing else moves",
+    "bodyWords": [
+     "day"
+    ],
+    "leader": "stars",
+    "prompt": "The stars twinkle softly and the night light glows over the house at the end of the day. Nothing else moves. The camera stays steady.",
+    "seconds": 5,
+    "ownerApproved": true,
+    "holdPose": true,
+    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next"
+   }
+  ]
+ },
+ "u6l5-house": {
+  "lesson": "Pre-A1 Unit 6 Lesson 5 — Where's My House?, story film 'Pip Finds His House' (page 4). Scenario docs/scenarios/u6l5-wheres-my-house.md (approved). STRICT MODE: one clip at a time, each between two Canva key pictures already in the stills film, screened with review-clip.py, then frame-by-frame review with the owner. The park look and the hug stay as stills (no word in the line names the move).",
+  "provider": "higgsfield",
+  "endpoint": "kling-video/v2.6/pro/image-to-video",
+  "seconds": 5,
+  "out": "public/lep1/video/clips/u6l5-house",
+  "style": "calm 2D cartoon, autumn sunset street, steady camera",
+  "beats": [
+   {
+    "id": "park-late",
+    "image": "public/lep1/scenes/bg-u6l5-park-a-wide.png",
+    "line": "Oh! It's late! Time to go home!",
+    "action": "Pip stops playing and looks up at the late orange sunset sky, the ball under his arm",
+    "bodyWords": [
+     "late"
+    ],
+    "leader": "Pip",
+    "prompt": "Pip, the little fox, stops playing and slowly looks up at the late orange sunset sky, holding the ball under his arm. Leaves drift down. The camera stays steady.",
+    "seconds": 5,
+    "ownerApproved": true,
+    "endImage": "public/lep1/scenes/bg-u6l5-park-b-wide.png",
+    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next"
+   },
+   {
+    "id": "street-where",
+    "image": "public/lep1/scenes/bg-u6l5-street-a-wide.png",
+    "endImage": "public/lep1/scenes/bg-u6l5-street-b-wide.png",
+    "line": "Oh no! Where's my house?",
+    "action": "Pip stops on the street of new houses and slowly puts one paw on his head, puzzled",
+    "bodyWords": [
+     "house"
+    ],
+    "leader": "Pip",
+    "prompt": "Pip, the little fox, stops on the street in front of the houses and slowly lifts one paw to the top of his head, looking puzzled. The houses stay still. The camera stays steady.",
+    "seconds": 5,
+    "ownerApproved": true,
+    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next"
+   },
+   {
+    "id": "street-think",
+    "image": "public/lep1/scenes/bg-u6l5-street-b-wide.png",
+    "line": "My house has a red door. A red door!",
+    "action": "a thought bubble showing Pip's house with its red door slowly appears above Pip; Pip stays still",
+    "bodyWords": [
+     "red door"
+    ],
+    "leader": "Pip",
+    "prompt": "Above Pip, the little fox, a soft thought bubble slowly appears, showing his house with a red door. Pip and the street stay still. The camera stays steady.",
+    "seconds": 5,
+    "ownerApproved": true,
+    "endImage": "public/lep1/scenes/bg-u6l5-street-c-wide.png",
+    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next"
+   },
+   {
+    "id": "blue-ask",
+    "image": "public/lep1/scenes/bg-u6l5-blue-a-wide.png",
+    "line": "Is this my house?",
+    "action": "Pip stands at the house with the blue door, paw raised, and blinks; leaves drift down",
+    "bodyWords": [
+     "house"
+    ],
+    "leader": "Pip",
+    "prompt": "Pip, the little fox, stands still at the house with the blue door, paw raised, and blinks. A few leaves drift down. The camera stays steady.",
+    "seconds": 5,
+    "ownerApproved": true,
+    "holdPose": true,
+    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next"
+   },
+   {
+    "id": "blue-no",
+    "image": "public/lep1/scenes/bg-u6l5-blue-a-wide.png",
+    "endImage": "public/lep1/scenes/bg-u6l5-blue-b-wide.png",
+    "line": "No, it isn't! The door is blue.",
+    "action": "Pip turns from the door to face us, shakes his head and points at the blue door",
+    "bodyWords": [
+     "blue",
+     "door"
+    ],
+    "leader": "Pip",
+    "prompt": "Pip, the little fox, turns from the blue door to face us, shakes his head no and points one paw at the blue door. The house and the blue door stay still. The camera stays steady.",
+    "seconds": 5,
+    "ownerApproved": true,
+    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next",
+    "review": "2026-10-09 clip 1 rejected: Pip kept his paw on the door and never pointed. Re-ordered once with a clearer prompt."
+   },
+   {
+    "id": "yellow-ask",
+    "image": "public/lep1/scenes/bg-u6l5-yellow-a-wide.png",
+    "line": "Is this my house?",
+    "action": "Pip looks at the house with the yellow door and blinks; the cat sleeps in the window, breathing slowly",
+    "bodyWords": [
+     "house"
+    ],
+    "leader": "Pip",
+    "prompt": "Pip, the little fox, looks at the house with the yellow door and blinks. The cat in the window sleeps, breathing slowly. The camera stays steady.",
+    "seconds": 5,
+    "ownerApproved": true,
+    "holdPose": true,
+    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next"
+   },
+   {
+    "id": "cat-wakes",
+    "image": "public/lep1/scenes/bg-u6l5-yellow-a-wide.png",
+    "endImage": "public/lep1/scenes/bg-u6l5-yellow-b-wide.png",
+    "line": "No, it isn't! A cat lives here. Meow!",
+    "action": "the sleepy cat in the window opens its eyes and looks at Pip; nothing else moves",
+    "bodyWords": [
+     "cat"
+    ],
+    "leader": "cat",
+    "prompt": "The sleepy cat in the window slowly opens its eyes and looks down at Pip. Pip and the yellow door stay still. The camera stays steady.",
+    "seconds": 5,
+    "ownerApproved": true,
+    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next"
+   },
+   {
+    "id": "red-ask",
+    "image": "public/lep1/scenes/bg-u6l5-red-a-wide.png",
+    "line": "A red door! Is this my house?",
+    "action": "Pip stands at the red door with his paw raised and blinks; the tree leaves rustle",
+    "bodyWords": [
+     "red door"
+    ],
+    "leader": "Pip",
+    "prompt": "Pip, the little fox, stands at the red door with his paw raised and blinks. The tree leaves rustle gently. The camera stays steady.",
+    "seconds": 5,
+    "ownerApproved": true,
+    "holdPose": true,
+    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next"
+   },
+   {
+    "id": "red-door-opens",
+    "image": "public/lep1/scenes/bg-u6l5-red-a-wide.png",
+    "endImage": "public/lep1/scenes/bg-u6l5-red-b-wide.png",
+    "line": "Knock, knock! … Yes, it is!",
+    "action": "after Pip's knock the red door slowly opens and Mom stands in the doorway smiling",
+    "bodyWords": [
+     "knock"
+    ],
+    "leader": "Mom",
+    "prompt": "After the knock, the red door slowly swings open and Mom, the fox mother in a purple dress, stands in the doorway smiling at Pip. Pip stays still. The camera stays steady.",
+    "seconds": 5,
+    "ownerApproved": true,
+    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next"
+   },
+   {
+    "id": "mom-hug",
+    "image": "public/lep1/scenes/bg-u6l5-red-b-wide.png",
+    "line": "Welcome home, Pip!",
+    "action": "Mom hugs Pip at the open door of his home",
+    "bodyWords": [
+     "home"
+    ],
+    "leader": "Mom",
+    "prompt": "Mom, the fox mother in a purple dress, bends down and hugs Pip at the open door of his home. Two separate faces: Pip rests his head on her shoulder. The camera stays steady.",
+    "seconds": 5,
+    "ownerApproved": true,
+    "endImage": "public/lep1/scenes/bg-u6l5-red-c-wide.png",
+    "allowedMoves": [
+     "hug",
+     "hugs"
+    ],
+    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next",
+    "review": "2026-10-09 clip 1 rejected: the two heads merged into one face during the hug. Re-ordered once with \"two separate faces\"."
+   },
+   {
+    "id": "bedroom-love",
+    "image": "public/lep1/scenes/bg-u6l5-bedroom-wide.png",
+    "line": "This is my bedroom. I love my house!",
+    "action": "Pip sits on his bed in his bedroom, smiles and blinks; the lamp light glows softly",
+    "bodyWords": [
+     "bedroom"
+    ],
+    "leader": "Pip",
+    "prompt": "Pip, the little fox, sits on his bed in his bedroom, smiles and blinks. The lamp light glows softly. The camera stays steady.",
+    "seconds": 5,
+    "ownerApproved": true,
+    "holdPose": true,
+    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next"
+   }
+  ]
+ },
+ "u7l5-barn": {
+  "lesson": "Pre-A1 Unit 7 Lesson 5 — Grandpa's Farm, story film 'Grandpa's Noisy Barn' (page 5). Scenario docs/scenarios/u7l5-old-macdonald.md (approved 2026-10-08). STRICT MODE: one clip at a time, each between two Canva key pictures already in the stills film (aligned to 3 px), screened with review-clip.py, then frame-by-frame review with the owner. The gate wave and the yard stay as stills.",
+  "provider": "higgsfield",
+  "endpoint": "kling-video/v2.6/pro/image-to-video",
+  "seconds": 5,
+  "out": "public/lep1/video/clips/u7l5-barn",
+  "style": "calm 2D cartoon, red barn at sunrise, steady camera",
+  "beats": [
+   {
+    "id": "gate-wave",
+    "image": "public/lep1/scenes/bg-u7l5-gate-a-wide.png",
+    "line": "This is Grandpa's farm! Good morning, Grandpa!",
+    "action": "Grandpa raises his paw and waves back at the viewer; Pip keeps his paw up",
+    "bodyWords": [
+     "Grandpa"
+    ],
+    "leader": "Grandpa",
+    "prompt": "Grandpa, the old fox in a straw hat and blue overalls, slowly raises one paw and waves at the viewer. Pip stays still. The mist drifts. The camera stays steady.",
+    "seconds": 5,
+    "ownerApproved": true,
+    "endImage": "public/lep1/scenes/bg-u7l5-gate-b-wide.png",
+    "allowedMoves": [
+     "waves"
+    ],
+    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next"
+   },
+   {
+    "id": "barn-listen",
+    "image": "public/lep1/scenes/bg-u7l5-barn-0-wide.png",
+    "line": "The animals are in the barn. Listen!",
+    "action": "Pip and Grandpa stand in front of the barn with four shut doors and blink; the grass moves in the breeze",
+    "bodyWords": [
+     "barn"
+    ],
+    "leader": "Pip",
+    "prompt": "Pip and Grandpa stand still in front of the red barn with four shut doors and blink. The grass moves in the breeze. The camera stays steady.",
+    "seconds": 5,
+    "ownerApproved": true,
+    "holdPose": true,
+    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next"
+   },
+   {
+    "id": "moo-sound",
+    "image": "public/lep1/scenes/bg-u7l5-barn-0-wide.png",
+    "line": "Moo! Moo! What animal is this?",
+    "action": "all four doors stay shut while Pip and Grandpa listen to the \"moo\" from behind the door; only the grass moves",
+    "bodyWords": [
+     "moo"
+    ],
+    "leader": "door",
+    "prompt": "All four stall doors of the red barn stay firmly shut and nothing comes out. Pip and Grandpa stand still and listen to the \"moo\" sound from the barn; only the grass moves in the breeze. The camera stays steady.",
+    "seconds": 5,
+    "ownerApproved": true,
+    "holdPose": true,
+    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next"
+   },
+   {
+    "id": "cow-door",
+    "image": "public/lep1/scenes/bg-u7l5-barn-0-wide.png",
+    "endImage": "public/lep1/scenes/bg-u7l5-barn-1-wide.png",
+    "line": "It's a cow!",
+    "action": "the first stall door swings open and the cow looks out; nothing else moves",
+    "bodyWords": [
+     "cow"
+    ],
+    "leader": "cow",
+    "prompt": "The first stall door of the red barn slowly swings open and the black-and-white cow leans out and looks at us. Pip, Grandpa and the other doors stay still. The camera stays steady.",
+    "seconds": 5,
+    "ownerApproved": true,
+    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next",
+    "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+    "note": "2026-10-09: Kling 2.6 opened the wrong door (no end picture); door rows use Kling 2.5 with the approved end picture so exactly this door opens."
+   },
+   {
+    "id": "oink-sound",
+    "image": "public/lep1/scenes/bg-u7l5-barn-1-wide.png",
+    "line": "Oink! Oink! What animal is this?",
+    "action": "all four doors stay shut while Pip and Grandpa listen to the \"oink\" from behind the door; only the grass moves",
+    "bodyWords": [
+     "oink"
+    ],
+    "leader": "door",
+    "prompt": "All four stall doors of the red barn stay firmly shut and nothing comes out. Pip and Grandpa stand still and listen to the \"oink\" sound from the barn; only the grass moves in the breeze. The camera stays steady.",
+    "seconds": 5,
+    "ownerApproved": true,
+    "holdPose": true,
+    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next"
+   },
+   {
+    "id": "pig-door",
+    "image": "public/lep1/scenes/bg-u7l5-barn-1-wide.png",
+    "endImage": "public/lep1/scenes/bg-u7l5-barn-2-wide.png",
+    "line": "It's a pig!",
+    "action": "the second stall door swings open and the pig looks out; nothing else moves",
+    "bodyWords": [
+     "pig"
+    ],
+    "leader": "pig",
+    "prompt": "The second stall door of the red barn slowly swings open and the pink pig leans out and looks at us. Pip, Grandpa and the other doors stay still. The camera stays steady.",
+    "seconds": 5,
+    "ownerApproved": true,
+    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next",
+    "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+    "note": "2026-10-09: Kling 2.6 opened the wrong door (no end picture); door rows use Kling 2.5 with the approved end picture so exactly this door opens."
+   },
+   {
+    "id": "baa-sound",
+    "image": "public/lep1/scenes/bg-u7l5-barn-2-wide.png",
+    "line": "Baa! Baa! What animal is this?",
+    "action": "all four doors stay shut while Pip and Grandpa listen to the \"baa\" from behind the door; only the grass moves",
+    "bodyWords": [
+     "baa"
+    ],
+    "leader": "door",
+    "prompt": "All four stall doors of the red barn stay firmly shut and nothing comes out. Pip and Grandpa stand still and listen to the \"baa\" sound from the barn; only the grass moves in the breeze. The camera stays steady.",
+    "seconds": 5,
+    "ownerApproved": true,
+    "holdPose": true,
+    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next"
+   },
+   {
+    "id": "sheep-door",
+    "image": "public/lep1/scenes/bg-u7l5-barn-2-wide.png",
+    "endImage": "public/lep1/scenes/bg-u7l5-barn-3-wide.png",
+    "line": "It's a sheep!",
+    "action": "the third stall door swings open and the sheep looks out; nothing else moves",
+    "bodyWords": [
+     "sheep"
+    ],
+    "leader": "sheep",
+    "prompt": "The third stall door of the red barn slowly swings open and the fluffy white sheep leans out and looks at us. Pip, Grandpa and the other doors stay still. The camera stays steady.",
+    "seconds": 5,
+    "ownerApproved": true,
+    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next",
+    "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+    "note": "2026-10-09: Kling 2.6 opened the wrong door (no end picture); door rows use Kling 2.5 with the approved end picture so exactly this door opens."
+   },
+   {
+    "id": "quack-sound",
+    "image": "public/lep1/scenes/bg-u7l5-barn-3-wide.png",
+    "line": "Quack! Quack! What animal is this?",
+    "action": "all four doors stay shut while Pip and Grandpa listen to the \"quack\" from behind the door; only the grass moves",
+    "bodyWords": [
+     "quack"
+    ],
+    "leader": "door",
+    "prompt": "All four stall doors of the red barn stay firmly shut and nothing comes out. Pip and Grandpa stand still and listen to the \"quack\" sound from the barn; only the grass moves in the breeze. The camera stays steady.",
+    "seconds": 5,
+    "ownerApproved": true,
+    "holdPose": true,
+    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next"
+   },
+   {
+    "id": "duck-door",
+    "image": "public/lep1/scenes/bg-u7l5-barn-3-wide.png",
+    "endImage": "public/lep1/scenes/bg-u7l5-barn-4-wide.png",
+    "line": "It's a duck!",
+    "action": "the fourth stall door swings open and the duck walks out onto the grass; nothing else moves",
+    "bodyWords": [
+     "duck"
+    ],
+    "leader": "duck",
+    "prompt": "The fourth stall door of the red barn slowly swings open and the white duck walks out onto the grass. Pip, Grandpa, the cow, the pig and the sheep stay still. The camera stays steady.",
+    "seconds": 5,
+    "ownerApproved": true,
+    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next",
+    "endpoint": "kling-video/v2.5-turbo/pro/image-to-video",
+    "note": "2026-10-09: Kling 2.6 opened the wrong door (no end picture); door rows use Kling 2.5 with the approved end picture so exactly this door opens."
+   },
+   {
+    "id": "yard-sing",
+    "image": "public/lep1/scenes/bg-u7l5-yard-wide.png",
+    "line": "Grandpa had a farm, E-I-E-I-O!",
+    "action": "everyone in the farmyard gently sway from side to side as they sing; nobody walks",
+    "bodyWords": [
+     "farm"
+    ],
+    "leader": "Grandpa",
+    "prompt": "Grandpa, Pip, the cow, the pig, the sheep and the duck sway gently from side to side as they sing in the farmyard. Nobody walks. The camera stays steady.",
+    "seconds": 5,
+    "ownerApproved": true,
+    "holdPose": true,
+    "allowedMoves": [
+     "sway"
+    ],
+    "approvedNote": "owner: \"Approve all\" 2026-10-09, after reading the every-shot storyboard (line + action per row); strict mode: one clip per run, screened and shown before the next"
    }
   ]
  }

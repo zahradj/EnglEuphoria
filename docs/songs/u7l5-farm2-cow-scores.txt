@@ -1,0 +1,15 @@
+
+=== docs/songs/u7l5-farm2-cow-take1.mp3  length=20.1s  score=0.74  missing=8  extra=12
+heard: a farm a farm grandpa had a farm and on his farm he had a gal e i e i o a cow a cow it's a cow moon moon with a moon moon here and a moon moon there
+line starts (s): [np.float64(0.0), np.float64(3.9), np.float64(8.1), np.float64(12.2)]
+lineDurationsMs: [3900, 4220, 4080, 7862]
+
+=== docs/songs/u7l5-farm2-cow-take2.mp3  length=20.1s  score=0.77  missing=7  extra=10
+heard: a farm a farm grandpa had a farm and all this army had a cow e i e i o a cow a cow it's a cow moo moo wake up moo moo here and a moo moo there
+line starts (s): [np.float64(0.0), np.float64(3.9), np.float64(8.3), np.float64(13.4)]
+lineDurationsMs: [3940, 4340, 5140, 6642]
+
+=== docs/songs/u7l5-farm2-cow-take3.mp3  length=20.1s  score=0.91  missing=2  extra=5
+heard: a farm a farm grandpa had a farm and on this farm he had a cally ai ai a cow a cow a cow it's a cow moo moo with a moo moo here and a moo moo there
+line starts (s): [np.float64(0.0), np.float64(4.7), np.float64(9.9), np.float64(13.0)]
+lineDurationsMs: [4660, 5240, 3120, 7042]

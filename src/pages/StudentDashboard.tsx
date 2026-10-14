@@ -13,6 +13,7 @@ import { SystemId } from "@/types/multiTenant";
 import { DashboardRouter } from "@/components/student/dashboards/DashboardRouter";
 import { CreditAlertBanner } from "@/components/student/CreditAlertBanner";
 import { CreditBalance } from "@/components/student/CreditBalance";
+import { PushPrompt } from "@/components/notifications/PushPrompt";
 import { useClaimReferral } from "@/hooks/useClaimReferral";
 import { useStudentLevel, StudentLevel } from "@/hooks/useStudentLevel";
 import { HelpAssistant } from "@/components/student/help/HelpAssistant";
@@ -224,7 +225,7 @@ const StudentDashboard = () => {
 
   const renderActiveTab = () => {
     const tabComponents = {
-      dashboard: () => (<>{systemId !== 'kids' && <><CreditAlertBanner /><CreditBalance /></>}<DashboardRouter systemId={systemId} studentName={studentName} /></>),
+      dashboard: () => (<><PushPrompt />{systemId !== 'kids' && <><CreditAlertBanner /><CreditBalance /></>}<DashboardRouter systemId={systemId} studentName={studentName} /></>),
       "learning-path": () => <MyPathTab />,
       lessons: () => (<><CreditAlertBanner /><CreditBalance /><MyLessonsTab /></>),
       homework: () => <HomeworkTab />,
