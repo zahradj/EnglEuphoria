@@ -329,6 +329,9 @@ A1, read and match … after the matching, another activity or another game to r
   pictures on a wall, brass name plates, wooden word tags), `polaroids` (taped photos, sticky-note words), `chalk`
   (chalkboard tiles) — by (unit + lesson) mod 4; a second one in the same lesson takes the next look
   (`readMatchVariety.test.ts`, deploy gate).
+- **A1: the Read and Match comes right after the opening words** (owner 2026-10-13, applied 2026-10-14 to A1 Units
+  1-4 Lessons 1-5 and Unit 9 Lesson 4): words lessons match words or sentences to stickers, story lessons match story
+  sentences to the story pictures. Checked in `readMatchVariety.test.ts` (a matching page within the first 15 pages).
 - First lesson built this way: Pre-A1 U1L5 (story words → Listen and Match → Wind Catch → the film).
 
 ## 3g. A1 lessons — themed worlds, the plan first, sentences and questions (all A1 lessons)

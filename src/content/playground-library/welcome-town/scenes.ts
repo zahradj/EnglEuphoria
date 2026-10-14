@@ -826,6 +826,18 @@ export const LESSON_1_SCENES: Scene[] = classroomLook([
   { id: 'wt-sentence-name', kind: 'meet', focus: ['name'], bg: bgL1Hello, who: 'pip', cardSide: 'left', teacher: 'Present: listen to Pip. Then say: My name is … (your name!)', line: 'My name is Pip. What’s your name?', repeat: 'My name is …' },
   { id: 'wt-echo-question', kind: 'echo', bg: bgL1Peers, who: 'pip', textSide: 'top', teacher: 'Guided: say the question with Pip — the voice goes up at the end.', word: 'What’s your name?' },
   { id: 'wt-echo-goodbye', kind: 'echo', bg: bgL1Goodbye, who: 'pip', textSide: 'top', teacher: 'Guided: wave and say it with Pip — loud, then quiet.', word: 'Goodbye! See you!' },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game.
+  {
+    id: 'wt-name-match', kind: 'picture-match', look: 'polaroids', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each sentence and drags it under its picture (or taps it, then the picture), then reads it aloud.',
+    items: [
+      { word: 'My name is Pip.', img: spr('pip') },
+      { word: 'My name is Mia.', img: spr('mia') },
+      { word: 'My name is Leo.', img: spr('leo') },
+      { word: 'My name is Bella.', img: spr('bella') },
+    ],
+    bg: bgL1Goodbye,
+  },
   /* Guided: when do we say hello / goodbye? */
   {
     id: 'wt-hello-goodbye-sort', kind: 'prea1', teacher: 'Guided: Hello or Goodbye? A friend arrives → catch it in Hello!; a friend leaves → Goodbye! Say it as you catch it.',
@@ -954,7 +966,7 @@ export const LESSON_1_SCENES: Scene[] = classroomLook([
     pages: LEO_STORY.slice(0, 3),
   },
   {
-    id: 'wt-read-match', kind: 'picture-match', look: 'polaroids', prompt: 'Read and match',
+    id: 'wt-read-match', kind: 'picture-match', look: 'chalk', prompt: 'Read and match',
     teacher: 'Reading: the student reads each sentence and drags it under its picture, then reads it aloud.',
     items: [
       { word: 'Leo is new.', img: leoStory(1) },
@@ -1644,6 +1656,20 @@ export const LESSON_3_SCENES: Scene[] = classroomLook([
     id: 'wt3-numbers-11-20', kind: 'prea1', teacher: 'Present: the new numbers 11 to 20. Stretch and clap the end: four-TEEN! Then twenty.',
     scene: { id: 'wt3-numbers-11-20', kind: 'numbers-learn', bg: bgL1Party, who: 'mia', from: 11, to: 20, teacher: 'New numbers! Tap each one, listen and say it: eleven, twelve, thirteen…' },
   },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game.
+  {
+    id: 'wt3-number-match', kind: 'picture-match', look: 'cards', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each word and drags it under its picture (or taps the word, then the picture), then reads it aloud.',
+    items: [
+      { word: 'eleven', emoji: '11' },
+      { word: 'thirteen', emoji: '13' },
+      { word: 'fifteen', emoji: '15' },
+      { word: 'sixteen', emoji: '16' },
+      { word: 'eighteen', emoji: '18' },
+      { word: 'twenty', emoji: '20' },
+    ],
+    bg: bgL1Party,
+  },
   /* CONTROLLED PRACTICE 1 — hear, find and say the numbers */
   {
     id: 'wt3-number-tap', kind: 'prea1', teacher: 'Guided: Number Tap! Pip says a number from 1 to 20 — tap it and say it.',
@@ -1941,6 +1967,18 @@ export const LESSON_4_SCENES: Scene[] = classroomLook([
   { id: 'wt4-this-is-she', kind: 'meet', focus: ['This is my friend'], bg: leoStory(6), who: 'leo', cardSide: 'left', teacher: 'Present: a girl friend — This is my friend Bella. She is nine.', line: 'Pip, this is my friend Bella. She is nine.', repeat: 'This is my friend Bella.' },
   { id: 'wt4-echo', kind: 'echo', bg: bgL1Peers, who: 'leo', textSide: 'top', teacher: 'Guided: the answer — say it with Leo.', word: 'Nice to meet you, too!' },
   { id: 'wt4-echo-friend', kind: 'echo', bg: bgL1Peers, who: 'pip', textSide: 'top', teacher: 'Guided: point to a friend and say it with Pip.', word: 'This is my friend.' },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game.
+  {
+    id: 'wt4-friend-match', kind: 'picture-match', look: 'frames', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each sentence and drags it under its picture (or taps it, then the picture), then reads it aloud.',
+    items: [
+      { word: 'This is my friend Leo.', img: spr('leo') },
+      { word: 'This is my friend Mia.', img: spr('mia') },
+      { word: 'This is my friend Bella.', img: spr('bella') },
+      { word: 'This is my friend Willow.', img: spr('willow') },
+    ],
+    bg: bgL1Peers,
+  },
   /* Guided */
   {
     id: 'wt4-chat-chain', kind: 'chat-chain', bg: bgL1Circle, partner: 'bella', title: 'Chat with Bella',
@@ -2294,6 +2332,17 @@ export const LESSON_5_SCENES: Scene[] = classroomLook([
     ],
   },
   { id: 'wt5-thank-you', kind: 'meet', focus: ['Thank you'], bg: leoStory(10), who: 'leo', cardSide: 'left', teacher: 'Present: when friends help, we say Thank you! Hands on the heart and say it.', line: 'My cap! Thank you, friends!', repeat: 'Thank you!' },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game.
+  {
+    id: 'wt5-story-match', kind: 'picture-match', look: 'polaroids', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each sentence and drags it under its picture (or taps it, then the picture), then reads it aloud.',
+    items: [
+      { word: 'My red cap is lost!', img: leoStory(4), crop: { x: 0, y: 0, w: 100, h: 100 }, imgAspect: 16 / 9 },
+      { word: 'Look! The cap!', img: leoStory(9), crop: { x: 0, y: 0, w: 100, h: 100 }, imgAspect: 16 / 9 },
+      { word: 'My cap! Thank you, friends!', img: leoStory(10), crop: { x: 0, y: 0, w: 100, h: 100 }, imgAspect: 16 / 9 },
+    ],
+    bg: bgL1Peers,
+  },
   /* Reading: the whole book */
   {
     id: 'wt5-book', kind: 'reader', bg: bgL1Reading, title: 'Leo’s First Day', doneLine: 'Where is the red cap? Let’s guess — then read on!',

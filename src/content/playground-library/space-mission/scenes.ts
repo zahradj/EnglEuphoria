@@ -145,6 +145,20 @@ export const LESSON_A1U3L1_SCENES: Scene[] = [
   { id: 'sm-meet-forty', kind: 'meet', focus: ['forty'], bg: lostRobot(3), who: 'nova', cardSide: 'left', teacher: 'Present: count the groups of ten stars with Nova — ten, twenty, thirty, forty. Then say the sentence.', line: 'Look! There are forty stars!', repeat: 'There are forty stars.' },
   { id: 'sm-echo', kind: 'echo', bg: lostRobot(3), who: 'pip', textSide: 'top', teacher: 'Guided: say it like Pip — loud, then quiet!', word: 'There are thirty stars.' },
   { id: 'sm-echo-2', kind: 'echo', bg: bgStation, who: 'leo', textSide: 'top', teacher: 'Guided: count with Leo — faster each time!', word: 'Ten, twenty, thirty, forty, fifty!' },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game.
+  {
+    id: 'sm-space-match', kind: 'picture-match', look: 'cards', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each word and drags it under its picture (or taps the word, then the picture), then reads it aloud.',
+    items: [
+      { word: 'a star', img: item('star-gold') },
+      { word: 'the moon', img: item('moon') },
+      { word: 'a rocket', img: item('rocket') },
+      { word: 'a planet', img: item('planet-ice') },
+      { word: 'a robot', img: item('beep') },
+      { word: 'fifty', img: numCard(50) },
+    ],
+    bg: bgStation,
+  },
   {
     id: 'sm-count-catch', kind: 'prea1', teacher: 'Guided: Count & Catch! Each star balloon is worth ten. Pop them in order and count: ten, twenty, thirty… one hundred!',
     scene: { id: 'sm-count-catch', kind: 'count-balloons', bg: bgDeep, who: 'pip', total: 10, step: 10, teacher: 'Every balloon is ten! Pop and count: ten, twenty, thirty…' },
@@ -206,7 +220,7 @@ export const LESSON_A1U3L1_SCENES: Scene[] = [
     pages: LOST_ROBOT.slice(0, 3),
   },
   {
-    id: 'sm-read-match', kind: 'picture-match', look: 'cards', prompt: 'Read and match',
+    id: 'sm-read-match', kind: 'picture-match', look: 'frames', prompt: 'Read and match',
     teacher: 'Reading: read each sentence and drag it under its picture. Then read it aloud.',
     items: [
       { word: 'This is my rocket.', img: item('rocket') },
@@ -387,6 +401,18 @@ export const LESSON_A1U3L2_SCENES: Scene[] = [
     ],
   },
   { id: 'sm2-meet-above', kind: 'meet', focus: ['above'], bg: lostRobot(5), who: 'nova', cardSide: 'left', teacher: 'Present: hands up high for “above”. Then say the sentence with Nova.', line: 'Look! The moon is above the rocket.', repeat: 'The moon is above the rocket.' },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game.
+  {
+    id: 'sm2-direction-match', kind: 'picture-match', look: 'frames', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each sentence and drags it under its picture (or taps it, then the picture), then reads it aloud.',
+    items: [
+      { word: 'Go up to the moon!', img: item('moon') },
+      { word: 'Go down to the planet!', img: item('planet-ice') },
+      { word: 'Go left to the star!', img: item('star-gold') },
+      { word: 'Go right to the rocket!', img: item('rocket') },
+    ],
+    bg: bgStation,
+  },
   /* ★ Signature: Rocket Maze — listen first, then the child gives the orders */
   {
     id: 'sm2-rocket-maze', kind: 'rocket-maze', bg: bgDeep, who: 'nova', rocketImg: item('rocket'), title: 'Rocket Maze: fly to the moon!',
@@ -648,6 +674,18 @@ export const LESSON_A1U3L3_SCENES: Scene[] = [
         { who: 'pip', sentence: 'Where is Beep? He’s below us.', img: item('beep'), imgLabel: 'Beep' },
       ],
     },
+  },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game.
+  {
+    id: 'sm3-answer-match', kind: 'picture-match', look: 'polaroids', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each sentence and drags it under its picture (or taps it, then the picture), then reads it aloud.',
+    items: [
+      { word: 'There are fifty.', img: numCard(50) },
+      { word: 'There are twenty.', img: numCard(20) },
+      { word: 'It’s above the rocket.', img: item('moon') },
+      { word: 'He’s below us.', img: item('beep') },
+    ],
+    bg: bgDeep,
   },
   {
     id: 'sm3-listen-colour', kind: 'prea1', teacher: 'Guided: Listen and Colour (Cambridge Starters format). Pick the paint, then tap the planet or star you hear. Big or small? Pass: 4 of 5.',
@@ -919,6 +957,19 @@ export const LESSON_A1U3L4_SCENES: Scene[] = [
       ],
     },
   },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game.
+  {
+    id: 'sm4-weather-match', kind: 'picture-match', look: 'chalk', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each sentence and drags it under its picture (or taps it, then the picture), then reads it aloud.',
+    items: [
+      { word: 'It’s sunny.', img: WEATHER.sunny.img },
+      { word: 'It’s windy.', img: WEATHER.windy.img },
+      { word: 'It’s cloudy.', img: WEATHER.cloudy.img },
+      { word: 'It’s rainy.', img: WEATHER.rainy.img },
+      { word: 'It’s snowy.', img: WEATHER.snowy.img },
+    ],
+    bg: bgStation,
+  },
   /* ★ Signature: Planet Weather Report */
   {
     id: 'sm4-weather-report', kind: 'weather-report', bg: bgStation, who: 'nova', title: 'Space Weather Report',
@@ -1155,6 +1206,17 @@ export const LESSON_A1U3L5_SCENES: Scene[] = [
   { id: 'sm5-meet-beep', kind: 'meet', focus: ['cold'], bg: lostRobot(10), who: 'beep', cardSide: 'right', teacher: 'Present: meet Beep at last! Shiver with him, then say his line.', line: 'Beep, beep! I am cold. I am lost!', repeat: 'I am cold!' },
   { id: 'sm5-echo-thanks', kind: 'echo', bg: lostRobot(11), who: 'nova', textSide: 'top', teacher: 'Guided: a happy voice! Say thank you to Biscuit.', word: 'Thank you, Biscuit!' },
   { id: 'sm5-meet-biscuit', kind: 'meet', focus: ['finds'], bg: lostRobot(11), who: 'pip', cardSide: 'left', teacher: 'Present: who is the hero? Point to Biscuit and say it.', line: 'Look! Biscuit finds Beep!', repeat: 'Biscuit finds Beep!' },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game.
+  {
+    id: 'sm5-story-match', kind: 'picture-match', look: 'cards', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each sentence and drags it under its picture (or taps it, then the picture), then reads it aloud.',
+    items: [
+      { word: 'Oh no! Beep is lost!', img: lostRobot(4), crop: { x: 0, y: 0, w: 100, h: 100 }, imgAspect: 16 / 9 },
+      { word: 'I am cold. I am lost!', img: lostRobot(10), crop: { x: 0, y: 0, w: 100, h: 100 }, imgAspect: 16 / 9 },
+      { word: 'Look! Biscuit finds Beep!', img: lostRobot(11), crop: { x: 0, y: 0, w: 100, h: 100 }, imgAspect: 16 / 9 },
+    ],
+    bg: bgStation,
+  },
   {
     id: 'sm5-story-order', kind: 'prea1', teacher: 'Guided: put the story pictures in order, then tell it: first, then, then, at the end!',
     scene: {

@@ -1482,6 +1482,18 @@ export const LESSON_A1U9L4_SCENES: Scene[] = [
   },
   { id: 'mc4-meet-there-are', kind: 'meet', focus: ['There are'], bg: towerPage(1), who: 'wim', cardSide: 'right', teacher: 'Present: one bed — There is. Two lamps — There are! Show one finger, then two.', line: 'There is one bed. There are two lamps!', repeat: 'There are two lamps.' },
   { id: 'mc4-echo-windows', kind: 'echo', bg: towerPage(1), who: 'catcat', textSide: 'top', teacher: 'Guided: say it with Cat-cat — point to the two windows.', word: 'There are two windows.' },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game.
+  {
+    id: 'mc4-there-match', kind: 'picture-match', look: 'frames', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each sentence and drags it under its picture (or taps it, then the picture), then reads it aloud.',
+    items: [
+      { word: 'There is one bed.', emoji: '🛏️' },
+      { word: 'There are two lamps.', emoji: '🪔🪔' },
+      { word: 'There are two windows.', emoji: '🪟🪟' },
+      { word: 'There are three chairs.', emoji: '🪑🪑🪑' },
+    ],
+    bg: towerPage(1),
+  },
 
   /* CONTROLLED PRACTICE 1 — There is / There are */
   {

@@ -36,3 +36,17 @@ describe('Read and Match: the design varies between neighbouring lessons', () =>
     if (lastUnit) expect(mine[0].look, `same design as U${u - 1}L${l}`).not.toBe(lastUnit);
   });
 });
+
+/* Owner 2026-10-13: "every time new words are shown, a matching activity follows" — A1 reads and matches. Every
+ * teaching lesson (L1-L5) of the rebuilt A1 units opens with its words, so a Read and Match (or the drag-to-character
+ * match) must come early, within the first 15 pages. L6 (review) and L7 (Boss Test) recycle words and are not checked. */
+describe('A1: a Read and Match follows the opening words', () => {
+  const teaching = [1, 2, 3, 4].flatMap((u) => [1, 2, 3, 4, 5].map((l) => [u, l] as const)).concat([[9, 4]]);
+  it.each(teaching)('U%sL%s has a matching page in its first 15 pages', (u, l) => {
+    const scenes = lessons.get(`${u}-${l}`);
+    expect(scenes, `U${u}L${l} not found`).toBeTruthy();
+    const at = scenes!.findIndex((s) => s.kind === 'picture-match' || s.kind === 'drag-match');
+    expect(at, `U${u}L${l}: no Read and Match after the words`).toBeGreaterThanOrEqual(0);
+    expect(at, `U${u}L${l}: the first Read and Match is page ${at + 1}`).toBeLessThan(15);
+  });
+});

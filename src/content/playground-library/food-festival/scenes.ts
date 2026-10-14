@@ -176,6 +176,20 @@ export const LESSON_A1U4L1_SCENES: Scene[] = [
   },
   { id: 'ff-meet-lunch', kind: 'meet', focus: ['lunch'], bg: cillaPage(3), who: 'cilla', cardSide: 'right', teacher: 'Present: Cilla says her lunch. The student says their own: I have … for lunch.', line: 'I have salad for lunch. Yum!', repeat: 'I have salad for lunch.' },
   { id: 'ff-echo', kind: 'echo', bg: bgMarket, who: 'pip', textSide: 'top', teacher: 'Guided: say it like Pip — loud, then quiet!', word: 'I have soup for lunch.' },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game.
+  {
+    id: 'ff-food-match', kind: 'picture-match', look: 'frames', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each word and drags it under its picture (or taps the word, then the picture), then reads it aloud.',
+    items: [
+      { word: 'rice', img: FOOD.rice.img },
+      { word: 'soup', img: FOOD.soup.img },
+      { word: 'salad', img: FOOD.salad.img },
+      { word: 'sandwich', img: FOOD.sandwich.img },
+      { word: 'pasta', img: FOOD.pasta.img },
+      { word: 'cheese', img: FOOD.cheese.img },
+    ],
+    bg: bgMarket,
+  },
   {
     id: 'ff-mystery-bag', kind: 'prea1', teacher: 'Guided: What is in the bag? Look at the shape, tap the food — then say it with a meal: I have rice for dinner!',
     scene: {
@@ -255,7 +269,7 @@ export const LESSON_A1U4L1_SCENES: Scene[] = [
     pages: CILLA_RECIPE.slice(0, 3),
   },
   {
-    id: 'ff-read-match', kind: 'picture-match', look: 'frames', prompt: 'Read and match',
+    id: 'ff-read-match', kind: 'picture-match', look: 'polaroids', prompt: 'Read and match',
     teacher: 'Reading: read each sentence and drag it under its picture. Then read it aloud.',
     items: [
       { word: 'I have soup for lunch.', img: FOOD.soup.img },
@@ -418,6 +432,18 @@ export const LESSON_A1U4L2_SCENES: Scene[] = [
   { id: 'ff2-meet-dont', kind: 'meet', focus: ['don’t'], bg: cillaPage(3), who: 'leo', cardSide: 'left', teacher: 'Present: thumbs down — I don’t like washing up! Make a funny face. Then say it.', line: 'I like eating. I don’t like washing up!', repeat: 'I don’t like washing up!' },
   { id: 'ff2-echo', kind: 'echo', bg: bgCafe, who: 'pip', textSide: 'top', teacher: 'Guided: thumbs up, then thumbs down — say it like Pip!', word: 'I like cooking. I don’t like washing up.' },
   { id: 'ff2-echo-2', kind: 'echo', bg: bgCafe, who: 'leo', textSide: 'top', teacher: 'Guided: say it with Leo — a big yummy voice for “eating”!', word: 'I like eating!' },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game.
+  {
+    id: 'ff2-doing-match', kind: 'picture-match', look: 'polaroids', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each word and drags it under its picture (or taps the word, then the picture), then reads it aloud.',
+    items: [
+      { word: 'cooking', img: DOING.cooking.img },
+      { word: 'eating', img: DOING.eating.img },
+      { word: 'baking', img: DOING.baking.img },
+      { word: 'washing up', img: DOING.washing.img },
+    ],
+    bg: bgCafe,
+  },
   {
     id: 'ff2-red-green', kind: 'red-green', bg: bgCafe, who: 'cilla', runner: item('pip-run'), title: 'Red Light, Green Light: kitchen jobs!',
     teacher: 'Listening race: on green, the student taps the kitchen job they hear and Pip runs on (they can mime it too!). On red — freeze! Do not tap until it turns green.',
@@ -651,6 +677,18 @@ export const LESSON_A1U4L3_SCENES: Scene[] = [
   { id: 'ff3-meet-yes', kind: 'meet', focus: ['Yes'], bg: cillaPage(9), who: 'pico', cardSide: 'right', teacher: 'Present: the happy answer — nod and say it with Pico.', line: 'Yes, I do! I like pizza!', repeat: 'Yes, I do!' },
   { id: 'ff3-meet-no', kind: 'meet', focus: ['No'], bg: cillaPage(7), who: 'pico', cardSide: 'right', teacher: 'Present: the other answer — shake your head, kindly: No, I don’t.', line: 'No, I don’t. I don’t like grapes.', repeat: 'No, I don’t.' },
   { id: 'ff3-echo', kind: 'echo', bg: bgCafe, who: 'pip', textSide: 'top', teacher: 'Guided: ask like Pip, answer like Pico!', word: 'Do you like soup? Yes, I do!' },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game.
+  {
+    id: 'ff3-like-match', kind: 'picture-match', look: 'chalk', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each sentence and drags it under its picture (or taps it, then the picture), then reads it aloud.',
+    items: [
+      { word: 'I like pizza.', img: FOOD.pizza.img },
+      { word: 'I don’t like grapes.', img: FOOD.grapes.img },
+      { word: 'I like soup.', img: FOOD.soup.img },
+      { word: 'I don’t like cheese.', img: FOOD.cheese.img },
+    ],
+    bg: bgCafe,
+  },
   {
     id: 'ff3-tick-cross', kind: 'prea1', teacher: 'Guided: Tick or Cross! Listen: does the friend like it? Tick or cross. (Pass: 4 of 5.)',
     scene: {
@@ -911,6 +949,18 @@ export const LESSON_A1U4L4_SCENES: Scene[] = [
       ],
     },
   },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game.
+  {
+    id: 'ff4-offer-match', kind: 'picture-match', look: 'cards', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each sentence and drags it under its picture (or taps it, then the picture), then reads it aloud.',
+    items: [
+      { word: 'Would you like some juice?', img: FOOD.juice.img },
+      { word: 'Would you like some bread?', img: FOOD.bread.img },
+      { word: 'Would you like some rice?', img: FOOD.rice.img },
+      { word: 'Would you like some salad?', img: FOOD.salad.img },
+    ],
+    bg: bgMarket,
+  },
   {
     id: 'ff4-bingo', kind: 'sticker-bingo', bg: bgMarket, who: 'pip', title: 'Food Bingo! Listen and stamp!',
     teacher: 'Guided: Pip says who likes what — the student stamps the food, then says the sentence too. Three in a row: Bingo!',
@@ -1156,6 +1206,17 @@ export const LESSON_A1U4L5_SCENES: Scene[] = [
   { id: 'ff5-meet-pico', kind: 'meet', focus: ['please'], bg: cillaPage(10), who: 'pico', cardSide: 'right', teacher: 'Present: Pico’s happy answer — say it with him.', line: 'Yes, please! I like pizza!', repeat: 'Yes, please!' },
   { id: 'ff5-echo-thanks', kind: 'echo', bg: cillaPage(11), who: 'cilla', textSide: 'top', teacher: 'Guided: a happy voice — thank Pico!', word: 'Thank you, Pico!' },
   { id: 'ff5-echo-eat', kind: 'echo', bg: cillaPage(12), who: 'pip', textSide: 'top', teacher: 'Guided: the happy end — say it all together!', word: 'Let’s eat! We all like pizza!' },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game.
+  {
+    id: 'ff5-story-match', kind: 'picture-match', look: 'frames', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each sentence and drags it under its picture (or taps it, then the picture), then reads it aloud.',
+    items: [
+      { word: 'Where is the cheese?', img: cillaPage(4), crop: { x: 0, y: 0, w: 100, h: 100 }, imgAspect: 16 / 9 },
+      { word: 'Yes, please! I like pizza!', img: cillaPage(10), crop: { x: 0, y: 0, w: 100, h: 100 }, imgAspect: 16 / 9 },
+      { word: 'Thank you, Pico!', img: cillaPage(11), crop: { x: 0, y: 0, w: 100, h: 100 }, imgAspect: 16 / 9 },
+    ],
+    bg: bgMarket,
+  },
   {
     id: 'ff5-radar', kind: 'hot-cold', bg: bgMarket, who: 'cilla', title: 'Treasure Radar: find the cheese!',
     teacher: 'Game: things are hidden at the festival. The student taps to search and listens — Cold! Warm! Hot! When it pops out, they say the sentence.',

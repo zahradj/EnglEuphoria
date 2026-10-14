@@ -116,6 +116,20 @@ export const LESSON_A1U2L1_SCENES: Scene[] = [
   { id: 'ja-meet-snake', kind: 'meet', focus: ['long'], bg: jungleRescue(3), who: 'pip', cardSide: 'left', teacher: 'Present: show “long” with your arms — wide, wide, wide! Then say it.', line: 'Look! A snake! It’s long and green.', repeat: 'It’s long!' },
   { id: 'ja-echo', kind: 'echo', bg: bgWide, who: 'pip', textSide: 'top', teacher: 'Guided: say it like Pip — loud, then quiet!', word: 'It’s big and grey.' },
   { id: 'ja-echo-2', kind: 'echo', bg: bgWide, who: 'coco', textSide: 'top', teacher: 'Guided: say it with Coco — a long, long voice for “long”!', word: 'It’s long and green.' },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game.
+  {
+    id: 'ja-animal-match', kind: 'picture-match', look: 'chalk', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each word and drags it under its picture (or taps the word, then the picture), then reads it aloud.',
+    items: [
+      { word: 'elephant', img: ANIMALS.elephant.img },
+      { word: 'snake', img: ANIMALS.snake.img },
+      { word: 'crocodile', img: ANIMALS.crocodile.img },
+      { word: 'frog', img: ANIMALS.frog.img },
+      { word: 'bird', img: ANIMALS.bird.img },
+      { word: 'lion', img: ANIMALS.lion.img },
+    ],
+    bg: bgWide,
+  },
   {
     id: 'ja-shadows', kind: 'prea1', teacher: 'Guided: Shadow Match! Drag each animal onto its shadow (or tap it, then the shadow) and say it: It’s a snake!',
     scene: {
@@ -246,7 +260,7 @@ export const LESSON_A1U2L1_SCENES: Scene[] = [
     pages: JUNGLE_RESCUE.slice(0, 3),
   },
   {
-    id: 'ja-read-match', kind: 'picture-match', look: 'chalk', prompt: 'Read and match',
+    id: 'ja-read-match', kind: 'picture-match', look: 'cards', prompt: 'Read and match',
     teacher: 'Reading: read each sentence and drag it under its picture. Then read it aloud.',
     items: [
       { word: 'It is big and grey.', img: ANIMALS.elephant.img },
@@ -899,6 +913,18 @@ export const LESSON_A1U2L3_SCENES: Scene[] = [
   { id: 'ja3-model-no', kind: 'meet', focus: ['No, it can’t'], bg: jungleRescue(7), who: 'pip', cardSide: 'left', teacher: 'Present: thumbs down and a head shake for “No, it can’t!” — a strong T at the end.', line: 'Can a fish fly? No, it can’t!', repeat: 'No, it can’t!' },
   { id: 'ja3-echo', kind: 'echo', bg: bgWide, who: 'pip', textSide: 'top', teacher: 'Guided: ask like Pip — the voice goes UP at the end.', word: 'Can it swim?' },
   { id: 'ja3-echo-answers', kind: 'echo', bg: bgWide, who: 'coco', textSide: 'top', teacher: 'Guided: thumbs up for the first, thumbs down for the second — say both with Coco.', word: 'Yes, it can! No, it can’t!' },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game.
+  {
+    id: 'ja3-can-match', kind: 'picture-match', look: 'frames', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each sentence and drags it under its picture (or taps it, then the picture), then reads it aloud.',
+    items: [
+      { word: 'A bird can fly.', img: ANIMALS.bird.img },
+      { word: 'A fish can swim.', img: ANIMALS.fish.img },
+      { word: 'A frog can jump.', img: ANIMALS.frog.img },
+      { word: 'A monkey can climb.', img: ANIMALS.monkey.img },
+    ],
+    bg: bgWide,
+  },
   {
     id: 'ja3-can-it', kind: 'prea1', teacher: 'Guided: Can It? Pip asks; the student answers with a thumbs up “Yes, it can!” or thumbs down “No, it can’t!” — then watch what happens.',
     scene: {
@@ -1219,6 +1245,18 @@ export const LESSON_A1U2L4_SCENES: Scene[] = [
   { id: 'ja4-model-coco', kind: 'meet', focus: ['long tail'], bg: bgCocoVines, who: 'coco', cardSide: 'left', teacher: 'Present: Coco has got a long tail too! Point to it and say the sentence.', line: 'Look! I’ve got a long tail! I can swing!', repeat: 'It’s got a long tail.' },
   { id: 'ja4-echo', kind: 'echo', bg: bgWide, who: 'pip', textSide: 'top', teacher: 'Guided: say it like Pip — a long, long tail!', word: 'It’s got a long tail.' },
   { id: 'ja4-echo-nose', kind: 'echo', bg: jungleRescue(10), who: 'pip', textSide: 'top', teacher: 'Guided: make a long nose with your arm and say it with Pip!', word: 'It’s got a long nose.' },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game.
+  {
+    id: 'ja4-got-match', kind: 'picture-match', look: 'polaroids', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each sentence and drags it under its picture (or taps it, then the picture), then reads it aloud.',
+    items: [
+      { word: 'It’s got a long nose.', img: ANIMALS.elephant.img },
+      { word: 'It’s got a long tail.', img: ANIMALS.crocodile.img },
+      { word: 'It’s long and green.', img: ANIMALS.snake.img },
+      { word: 'It can fly.', img: ANIMALS.bird.img },
+    ],
+    bg: bgWide,
+  },
   /* ★ Animal Riddle: four clues, the child guesses */
   {
     id: 'ja4-riddle', kind: 'prea1', teacher: 'Guided: Animal Riddle! Listen to the four clues and pick the animal. Then say the four sentences yourself.',
@@ -1578,6 +1616,17 @@ export const LESSON_A1U2L5_SCENES: Scene[] = [
     pages: JUNGLE_RESCUE.slice(8, 12),
   },
   { id: 'ja5-echo-thanks', kind: 'echo', bg: jungleRescue(11), who: 'coco', textSide: 'top', teacher: 'Guided: say it with Coco — a big, happy thank you!', word: 'Thank you, Elephant!' },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game.
+  {
+    id: 'ja5-story-match', kind: 'picture-match', look: 'chalk', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each sentence and drags it under its picture (or taps it, then the picture), then reads it aloud.',
+    items: [
+      { word: 'Help! I am stuck!', img: jungleRescue(5), crop: { x: 0, y: 0, w: 100, h: 100 }, imgAspect: 16 / 9 },
+      { word: 'I can fly. But I am small.', img: jungleRescue(6), crop: { x: 0, y: 0, w: 100, h: 100 }, imgAspect: 16 / 9 },
+      { word: 'Thank you, Elephant!', img: jungleRescue(11), crop: { x: 0, y: 0, w: 100, h: 100 }, imgAspect: 16 / 9 },
+    ],
+    bg: bgWide,
+  },
   {
     id: 'ja5-story-order', kind: 'prea1', teacher: 'Guided: put the story pictures in order, then tell it: first, then, then, at the end!',
     scene: {
