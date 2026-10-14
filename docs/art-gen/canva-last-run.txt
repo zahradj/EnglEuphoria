@@ -1,7 +1,1 @@
-+ public/lep1/scenes/bg-a1u5-why-dark-wide.png (1376, 768)
-+ public/lep1/scenes/bg-a1u5-why-lesson-wide.png (1376, 768)
-+ public/lep1/scenes/bg-a1u5-why-party-wide.png (1376, 768)
-+ public/lep1/scenes/bg-a1u5-why-present-wide.png (1376, 768)
-+ public/lep1/scenes/bg-a1u5-why-rain-wide.png (1376, 768)
-+ public/lep1/scenes/bg-a1u5-why-thunder-wide.png (1376, 768)
-6/6 saved
+0/0 saved
