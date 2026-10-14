@@ -4,11 +4,11 @@
 
 | Level | Seasons | Lessons | Document |
 |---|---|---|---|
-| Pre-A1 | 3 | 24 | [pre-a1.md](./pre-a1.md) |
-| A1 | 10 | 80 | [a1.md](./a1.md) |
-| A2 | 12 | 96 | [a2.md](./a2.md) |
-| B1 | 16 | 128 | [b1.md](./b1.md) |
-| B2 | 16 | 128 | [b2.md](./b2.md) |
-| C1 | 16 | 128 | [c1.md](./c1.md) |
+| Pre-A1 | 5 | 40 | [pre-a1.md](./pre-a1.md) |
+| A1 | 12 | 96 | [a1.md](./a1.md) |
+| A2 | 14 | 112 | [a2.md](./a2.md) |
+| B1 | 18 | 144 | [b1.md](./b1.md) |
+| B2 | 18 | 144 | [b2.md](./b2.md) |
+| C1 | 18 | 144 | [c1.md](./c1.md) |
 
-Total: 584 live lessons.
+Total: 680 live lessons.

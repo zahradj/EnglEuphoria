@@ -1,6 +1,6 @@
 # Academy curriculum — Pre-A1
 
-> Generated. 3 Seasons × 8 = **24 live lessons** of 60 minutes (cumulative live hours from Pre-A1: **24**). Plan rule: every lesson has an approved one-to-one plan first (`docs/academy-lesson-plan-template.md`) with research logged in `docs/research/`.
+> Generated. 5 Seasons × 8 = **40 live lessons** of 60 minutes (cumulative live hours from Pre-A1: **40**). Plan rule: every lesson has an approved one-to-one plan first (`docs/academy-lesson-plan-template.md`) with research logged in `docs/research/`.
 
 ## 1. Level at a glance
 - **CEFR:** Pre-A1 is a level of the CEFR Companion Volume (2020) below A1 (confirmed by search; descriptor wording not opened).
@@ -25,6 +25,8 @@
 | PA1-S01 | **Hello, letters** · The Name Wall | My name is ___. | s a t p | 19 | The Name Wall: my name and three friends' names, read and said |
 | PA1-S02 | **First sounds** · The Phone | This is a ___. | i n m d | 21 | My phone-screen album: six labelled things I can read and say |
 | PA1-S03 | **Numbers and age** · The Lockers | I am ___. How old are you? | review | 26 | My locker card: my name, my age, my phone number, three friends' ages |
+| PA1-S04 | **My things** · The School Bag | It is a / an ___. | o c b g | 22 | My bag label sheet: eight things in my bag, each labelled, read and said |
+| PA1-S05 | **People and places** · The World Map | I am from ___. He / She is from ___. | e u h r | 22 | My world-map card: me and three friends, each with a country, read and said |
 
 Seasons P4–P6 (the Full ladder) are proposals only: `docs/academy-pre-a1-curriculum.md`.
 
