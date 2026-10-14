@@ -2,6 +2,7 @@
 // (lessonsPage.test.ts). English is the source and the fallback.
 export const lessonsPageTranslations = {
   'pk.eyebrow': 'Lessons',
+  'pk.tab': 'Lessons',
   'pk.title': 'Lessons for your family',
   'pk.subtitle': 'Choose a child, then a pack. The lessons go straight to that child.',
   'pk.secure': 'Secure online checkout',

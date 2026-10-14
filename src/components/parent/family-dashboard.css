@@ -10,15 +10,34 @@
   --fd-track: #ece8f7;
   --fd-shadow: 0 1px 0 rgba(35, 38, 89, 0.04), 0 14px 34px -18px rgba(35, 38, 89, 0.28);
 
+  /* The three hubs, each with a deep shade (white text stays readable), the brand colour, a light shade and a tint.
+     A family has children in different hubs, so the dashboard blends all three:
+       Playground  orange -> amber   Academy  purple -> blue   Success Hub  green -> teal */
+  --tri-pg-deep: #d9480f; --tri-pg: #fe6a2f; --tri-pg-light: #feaf15; --tri-pg-tint: #fff1e4;
+  --tri-ac-deep: #6b21a8; --tri-ac: #8b5cf6; --tri-ac-light: #3b82f6; --tri-ac-tint: #f1e6fd;
+  --tri-su-deep: #047857; --tri-su: #14b8a6; --tri-su-light: #34d399; --tri-su-tint: #e3f6ee;
+  /* deep shades, left to right (falls back to plain interpolation where `in oklch` is unsupported) */
+  --tri-bar: linear-gradient(100deg, var(--tri-pg-deep), var(--tri-ac-deep) 52%, var(--tri-su-deep));
+  --tri-bar: linear-gradient(100deg in oklch, var(--tri-pg-deep), var(--tri-ac-deep) 52%, var(--tri-su-deep));
+  /* bright shades, for thin accents on dark backgrounds */
+  --tri-glow: linear-gradient(100deg, var(--tri-pg-light), var(--tri-pg) 20%, var(--tri-ac) 52%, var(--tri-ac-light) 70%, var(--tri-su) 100%);
+  --tri-glow: linear-gradient(100deg in oklch, var(--tri-pg-light), var(--tri-pg) 20%, var(--tri-ac) 52%, var(--tri-ac-light) 70%, var(--tri-su) 100%);
+
   --fd-display: 'Outfit', 'Cairo', system-ui, sans-serif;
   --fd-body: 'Nunito', 'Tajawal', system-ui, sans-serif;
 
-  background: var(--fd-paper);
+  background-color: var(--fd-paper);
+  background-image:
+    radial-gradient(900px 420px at 100% -4%, rgba(254, 175, 21, 0.13), transparent 62%),
+    radial-gradient(820px 460px at -6% 24%, rgba(139, 92, 246, 0.10), transparent 62%),
+    radial-gradient(900px 520px at 70% 104%, rgba(20, 184, 166, 0.12), transparent 62%);
+  background-attachment: fixed;
   color: var(--fd-ink);
   font-family: var(--fd-body);
 }
 
 .dark .family-dash {
+  background-image: none;
   --fd-ink: #eceefd;
   --fd-ink-soft: #a3a7cf;
   --fd-paper: #0f1024;
@@ -48,9 +67,22 @@
   padding: clamp(1.25rem, 3vw, 2rem);
   color: #fff;
   background:
-    radial-gradient(520px 260px at 100% 110%, rgba(254, 106, 47, 0.55), transparent 70%),
-    linear-gradient(135deg, #232659 0%, #3d2a8a 55%, #6b21a8 100%);
+    radial-gradient(520px 280px at 100% -12%, rgba(254, 106, 47, 0.62), transparent 66%),
+    radial-gradient(420px 240px at 78% 118%, rgba(254, 175, 21, 0.30), transparent 70%),
+    radial-gradient(520px 320px at 46% 124%, rgba(139, 92, 246, 0.55), transparent 70%),
+    radial-gradient(460px 300px at -4% 112%, rgba(20, 184, 166, 0.55), transparent 66%),
+    linear-gradient(135deg, #1e2155 0%, #2f2578 55%, #43228f 100%);
   box-shadow: 0 24px 48px -28px rgba(35, 38, 89, 0.7);
+}
+/* the three hubs as a thin ribbon along the bottom edge */
+.fd-hero::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 5px;
+  background: var(--tri-glow);
+  pointer-events: none;
 }
 
 .fd-hero__eyebrow {
@@ -191,7 +223,9 @@
 .fd-tab:hover { color: var(--fd-ink); }
 .fd-tab[data-state='active'] {
   background: var(--fd-ink);
-  color: var(--fd-paper);
+  background-image: var(--tri-bar);
+  color: #fff;
+  box-shadow: 0 8px 18px -10px rgba(107, 33, 168, 0.8);
 }
 .fd-tab:focus-visible { outline: 3px solid #6b21a8; outline-offset: 2px; }
 

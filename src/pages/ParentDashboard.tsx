@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
-import { Users, TrendingUp, MessageSquare, Bell, CalendarDays, Gift } from 'lucide-react';
+import { Users, TrendingUp, MessageSquare, Bell, CalendarDays, Gift, Coins } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { ParentStudentList } from '@/components/parent/ParentStudentList';
@@ -20,9 +20,9 @@ import { useChildSnapshots } from '@/hooks/useChildSnapshots';
 import { useFamilyCredits } from '@/hooks/useFamilyCredits';
 import { useClaimReferral } from '@/hooks/useClaimReferral';
 import { ReferralTab } from '@/components/student/tabs/ReferralTab';
-import type { FamilyLearner } from '@/components/parent/FamilyPackList';
 import { MoveCreditsDialog } from '@/components/parent/MoveCreditsDialog';
-import { FamilyLessonsSummary } from '@/components/parent/FamilyLessonsSummary';
+import { FamilyLessonsTab } from '@/components/parent/FamilyLessonsTab';
+import { HelpAssistant } from '@/components/student/help/HelpAssistant';
 import '@/components/parent/family-dashboard.css';
 
 interface StudentRelationship {
@@ -42,6 +42,7 @@ interface StudentRelationship {
 
 const TABS = [
   { value: 'students', icon: Users, label: 'pd.tab.students' },
+  { value: 'lessons', icon: Coins, label: 'pk.tab', fallback: 'Lessons' },
   { value: 'calendar', icon: CalendarDays, label: 'pd.tab.calendar' },
   { value: 'progress', icon: TrendingUp, label: 'pd.tab.progress' },
   { value: 'messages', icon: MessageSquare, label: 'pd.tab.messages' },
@@ -54,10 +55,24 @@ const ParentDashboard: React.FC = () => {
   const { user } = useAuth();
   useClaimReferral(user?.id);
   const [selectedStudentId, setSelectedStudentId] = useState<string | null>(null);
-  const [tab, setTab] = useState<string>('students');
-  const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const tabFromUrl = params.get('tab');
+  const [tab, setTab] = useState<string>(TABS.some((x) => x.value === tabFromUrl) ? (tabFromUrl as string) : 'students');
+  /** The child whose "Buy lessons" button was pressed: the Lessons tab opens on them. */
+  const [buyChildId, setBuyChildId] = useState<string | null>(params.get('child'));
   const [moveFrom, setMoveFrom] = useState<string | null>(null);
   const [moveOpen, setMoveOpen] = useState(false);
+
+  // The help assistant's buttons ask a dashboard to open a tab; the family dashboard maps them to its own.
+  useEffect(() => {
+    const map: Record<string, string> = { billing: 'lessons', lessons: 'calendar', homework: 'progress', games: 'progress', path: 'progress', profile: 'students' };
+    const onOpen = (e: Event) => {
+      const wanted = (e as CustomEvent<{ tab?: string }>).detail?.tab;
+      if (wanted && map[wanted]) setTab(map[wanted]);
+    };
+    window.addEventListener('student-dashboard:open-tab', onOpen);
+    return () => window.removeEventListener('student-dashboard:open-tab', onOpen);
+  }, []);
 
   const { data: students = [], isLoading } = useQuery<StudentRelationship[]>({
     queryKey: ['parent-students', user?.id],
@@ -140,15 +155,10 @@ const ParentDashboard: React.FC = () => {
 
   const parentName = (user as any)?.full_name ?? (user as any)?.name ?? null;
 
-  const learners: FamilyLearner[] = children.map((c) => {
-    const hub = c.profile?.hub;
-    return {
-      studentId: c.studentId,
-      name: c.name,
-      hub: hub === 'academy' || hub === 'professional' ? hub : 'playground',
-    };
-  });
-  const startBuy = (studentId: string) => navigate(`/parent/lessons?child=${encodeURIComponent(studentId)}`);
+  const startBuy = (studentId: string) => {
+    setBuyChildId(studentId);
+    setTab('lessons');
+  };
   const startMove = (studentId: string) => {
     setMoveFrom(studentId);
     setMoveOpen(true);
@@ -210,7 +220,6 @@ const ParentDashboard: React.FC = () => {
 
           <TabsPrimitive.Content value="students" className="focus-visible:outline-none">
             <div className="grid gap-6">
-            <FamilyLessonsSummary learners={learners} credits={familyCredits} />
             <ParentStudentList
               children={children}
               onViewProgress={viewProgress}
@@ -220,6 +229,10 @@ const ParentDashboard: React.FC = () => {
               addChildAction={addChild('default')}
             />
             </div>
+          </TabsPrimitive.Content>
+
+          <TabsPrimitive.Content value="lessons" className="focus-visible:outline-none">
+            <FamilyLessonsTab focusId={buyChildId} />
           </TabsPrimitive.Content>
 
           <TabsPrimitive.Content value="calendar" className="focus-visible:outline-none">
@@ -255,6 +268,7 @@ const ParentDashboard: React.FC = () => {
           fromId={moveFrom}
         />
       </main>
+      <HelpAssistant hub="family" />
     </div>
   );
 };

@@ -1,5 +1,6 @@
 export const lessonsPageTranslations = {
   'pk.eyebrow': 'Cours',
+  'pk.tab': 'Cours',
   'pk.title': 'Des cours pour votre famille',
   'pk.subtitle': 'Choisissez un enfant, puis un pack. Les cours vont directement à cet enfant.',
   'pk.secure': 'Paiement en ligne sécurisé',
