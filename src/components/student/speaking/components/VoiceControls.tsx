@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { VoiceRecordingState } from '@/types/speaking';
 import { Mic, MicOff } from 'lucide-react';
@@ -15,6 +16,7 @@ export const VoiceControls: React.FC<VoiceControlsProps> = ({
   onVoiceInput,
   onEndSession
 }) => {
+  const { t } = useTranslation();
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-center gap-4">
@@ -32,23 +34,23 @@ export const VoiceControls: React.FC<VoiceControlsProps> = ({
           {recordingState.isRecording ? (
             <>
               <MicOff className="h-5 w-5 mr-2" />
-              Stop Recording
+              {t('st.sp.stopRec', 'Stop Recording')}
             </>
           ) : recordingState.isProcessing ? (
             <>
               <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-blue-600 mr-2"></div>
-              Processing...
+              {t('st.sp.processing', 'Processing...')}
             </>
           ) : (
             <>
               <Mic className="h-5 w-5 mr-2" />
-              Hold to Speak
+              {t('st.sp.hold', 'Hold to Speak')}
             </>
           )}
         </Button>
 
         <Button variant="outline" onClick={onEndSession}>
-          Finish Session
+          {t('st.sp.finish', 'Finish Session')}
         </Button>
       </div>
 
@@ -56,7 +58,7 @@ export const VoiceControls: React.FC<VoiceControlsProps> = ({
         <div className="text-center">
           <div className="flex justify-center items-center gap-2">
             <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
-            <span className="text-red-600 font-medium">Recording... Speak clearly!</span>
+            <span className="text-red-600 font-medium">{t('st.sp.recording', 'Recording... Speak clearly!')}</span>
           </div>
         </div>
       )}

@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { SpeakingProgress } from '@/types/speaking';
@@ -11,6 +12,7 @@ interface SpeakingStatsProps {
 }
 
 export const SpeakingStats: React.FC<SpeakingStatsProps> = ({ progress, todaysSpeakingTime }) => {
+  const { t } = useTranslation();
   const formatTime = (seconds: number) => {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
@@ -22,10 +24,10 @@ export const SpeakingStats: React.FC<SpeakingStatsProps> = ({ progress, todaysSp
 
   const getBadgeDisplay = (badge: string) => {
     const badgeMap: Record<string, { icon: string; name: string; color: string }> = {
-      'first_words': { icon: '🎯', name: 'First Words', color: 'bg-blue-100 text-blue-800' },
-      'speaking_streak': { icon: '🔥', name: 'Speaking Streak', color: 'bg-orange-100 text-orange-800' },
-      'confident_speaker': { icon: '🎖️', name: 'Confident Speaker', color: 'bg-purple-100 text-purple-800' },
-      'conversation_master': { icon: '💬', name: 'Conversation Master', color: 'bg-green-100 text-green-800' }
+      'first_words': { icon: '🎯', name: t('st.sp.badge.first_words', 'First Words'), color: 'bg-blue-100 text-blue-800' },
+      'speaking_streak': { icon: '🔥', name: t('st.sp.badge.speaking_streak', 'Speaking Streak'), color: 'bg-orange-100 text-orange-800' },
+      'confident_speaker': { icon: '🎖️', name: t('st.sp.badge.confident_speaker', 'Confident Speaker'), color: 'bg-purple-100 text-purple-800' },
+      'conversation_master': { icon: '💬', name: t('st.sp.badge.conversation_master', 'Conversation Master'), color: 'bg-green-100 text-green-800' }
     };
 
     const badgeInfo = badgeMap[badge] || { icon: '⭐', name: badge, color: 'bg-gray-100 text-gray-800' };
@@ -42,7 +44,7 @@ export const SpeakingStats: React.FC<SpeakingStatsProps> = ({ progress, todaysSp
         <CardContent className="pt-6">
           <div className="text-center text-gray-500">
             <Star className="h-12 w-12 mx-auto mb-4 opacity-50" />
-            <p>Start practicing to see your progress!</p>
+            <p>{t('st.sp.startPractice', 'Start practicing to see your progress!')}</p>
           </div>
         </CardContent>
       </Card>
@@ -59,7 +61,7 @@ export const SpeakingStats: React.FC<SpeakingStatsProps> = ({ progress, todaysSp
               <div className="p-1 bg-orange-100 rounded-full group-hover:animate-pulse">
                 <Flame className="h-3 w-3" />
               </div>
-              Speaking Streak
+              {t('st.sp.streak', 'Speaking Streak')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -67,7 +69,7 @@ export const SpeakingStats: React.FC<SpeakingStatsProps> = ({ progress, todaysSp
               {progress.current_streak}
             </div>
             <p className="text-xs text-orange-600/80 mt-1">
-              {progress.current_streak === 1 ? 'day' : 'days'} in a row 🔥
+              {t('st.sp.inRow', 'Days in a row 🔥')}
             </p>
           </CardContent>
         </Card>
@@ -79,7 +81,7 @@ export const SpeakingStats: React.FC<SpeakingStatsProps> = ({ progress, todaysSp
               <div className="p-1 bg-blue-100 rounded-full group-hover:animate-pulse">
                 <Clock className="h-3 w-3" />
               </div>
-              Total Practice
+              {t('st.sp.total', 'Total Practice')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -87,7 +89,7 @@ export const SpeakingStats: React.FC<SpeakingStatsProps> = ({ progress, todaysSp
               {formatTime(progress.total_speaking_time)}
             </div>
             <p className="text-xs text-blue-600/80 mt-1">
-              {progress.total_sessions} sessions completed ✨
+              {t('st.sp.sessions', { n: progress.total_sessions, defaultValue: 'Sessions completed: {{n}} ✨' })}
             </p>
           </CardContent>
         </Card>
@@ -99,7 +101,7 @@ export const SpeakingStats: React.FC<SpeakingStatsProps> = ({ progress, todaysSp
               <div className="p-1 bg-purple-100 rounded-full group-hover:animate-pulse">
                 <Star className="h-3 w-3" />
               </div>
-              Speaking XP
+              {t('st.sp.spXp', 'Speaking XP')}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -107,7 +109,7 @@ export const SpeakingStats: React.FC<SpeakingStatsProps> = ({ progress, todaysSp
               {progress.speaking_xp}
             </div>
             <p className="text-xs text-purple-600/80 mt-1">
-              Level {progress.current_cefr_level} 🎯
+              {t('st.sp.levelEmoji', { n: progress.current_cefr_level, defaultValue: 'Level {{n}} 🎯' })}
             </p>
           </CardContent>
         </Card>
@@ -119,7 +121,7 @@ export const SpeakingStats: React.FC<SpeakingStatsProps> = ({ progress, todaysSp
               <div className="p-1 bg-green-100 rounded-full group-hover:animate-pulse">
                 <Trophy className="h-3 w-3" />
               </div>
-              Today's Practice
+              {t('st.sp.today', "Today's Practice")}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -127,7 +129,7 @@ export const SpeakingStats: React.FC<SpeakingStatsProps> = ({ progress, todaysSp
               {formatTime(todaysSpeakingTime)}
             </div>
             <p className="text-xs text-green-600/80 mt-1">
-              Keep it up! 💪
+              {t('st.sp.keepUp', 'Keep it up! 💪')}
             </p>
           </CardContent>
         </Card>
@@ -141,7 +143,7 @@ export const SpeakingStats: React.FC<SpeakingStatsProps> = ({ progress, todaysSp
               <div className="p-2 bg-gradient-to-br from-yellow-100 to-orange-100 rounded-full">
                 <Award className="h-5 w-5 text-yellow-600" />
               </div>
-              Your Achievements
+              {t('st.sp.achievements', 'Your Achievements')}
               <Badge variant="secondary" className="ml-2">
                 {progress.badges_earned.length}
               </Badge>
