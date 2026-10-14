@@ -48,3 +48,6 @@ Fail the unit/lesson if: (1) no `docs/research/academy-<unit-or-lesson>-research
 
 ## Lesson plan check (owner rule 2026-10-14, CLAUDE.md "A lesson plan comes before every lesson")
 Fail if: no approved plan from `docs/academy-lesson-plan-template.md`; the plan is not one-to-one and exactly 60 minutes; no response counts / practice ladder / error loop / mastery check (>= 80 student responses per hour); no traceability table (every activity -> objective or student need); no games from the catalogue (incl. section 13) or no video-game mechanic.
+
+## Recall and spacing check (owner rule 2026-10-14)
+Fail a plan or lesson with no Remember? list taken from `recallPlan`, no progress line (builds on / unlocks), or a Daily 10 that ignores the spacing calendar (`docs/academy-recall-spacing-progression.md`).
