@@ -164,6 +164,42 @@ function WordPanel({ scene, color, speaking, nudge, onTap, action }: {
   scene: Extract<Scene, { kind: 'meet' }>; color: string; speaking: boolean; nudge: boolean; onTap: () => void; action?: ReactNode;
 }) {
   const word = scene.word ?? scene.focus?.[0] ?? scene.repeat;
+  // One word at a time (owner 2026-10-14, He / She / They pages): the note first ("a boy"), then the word pops ("He"),
+  // then the sentence. Local timers — both screens run the same steps from the same tap.
+  const [step, setStep] = useState(scene.oneAtATime ? 0 : 2);
+  useEffect(() => {
+    if (!scene.oneAtATime) return undefined;
+    const a = window.setTimeout(() => { sfx.pop(); setStep(1); }, 1300);
+    const b = window.setTimeout(() => setStep(2), 2600);
+    return () => { window.clearTimeout(a); window.clearTimeout(b); };
+  }, [scene.id, scene.oneAtATime]);
+  if (scene.oneAtATime) {
+    const centredRow = !scene.cardSide; // two friends in the picture: note and word side by side, above their heads
+    const at = scene.cardSide === 'right' ? 'right-[3%] w-[50%] top-[calc(26*var(--svh,1vh))]' : scene.cardSide === 'left' ? 'left-[3%] w-[50%] top-[calc(26*var(--svh,1vh))]' : 'left-1/2 -translate-x-1/2 w-[80%] top-[calc(21*var(--svh,1vh))]';
+    return (
+      <div className={`absolute z-20 flex flex-col items-center gap-[calc(1.4*var(--svh,1vh))] text-center ${at}`} style={{ fontFamily: WORD_FONT }}>
+        <div className={`flex items-center gap-[calc(2.4*var(--svh,1vh))] ${centredRow ? 'flex-row' : 'flex-col'}`}>
+        {scene.wordNote && (
+          <div className="font-black leading-none text-[#2b1e17]" style={{ fontSize: `calc(${centredRow ? 7 : 9}*var(--svh,1vh))`, ...OUTLINE(7), animation: 'lep1-slide-up 0.5s cubic-bezier(0.34,1.56,0.64,1)' }}>{scene.wordNote}{centredRow ? ' →' : ''}</div>
+        )}
+        {step >= 1 && (
+          <button onClick={onTap} aria-label={`Hear ${word} again`} className="flex items-center gap-[calc(2*var(--svh,1vh))] active:scale-95" style={{ animation: 'lep1-pop 0.5s ease-out' }}>
+            <span className="font-bold leading-none tracking-wide" style={{ fontSize: `calc(${centredRow ? 11 : 16}*var(--svh,1vh))`, color, ...OUTLINE(11), textShadow: `0 6px 0 ${color}33, 0 10px 22px rgba(0,0,0,0.18)` }}>{word}</span>
+            <span className={`flex h-[calc(9*var(--svh,1vh))] w-[calc(9*var(--svh,1vh))] shrink-0 items-center justify-center rounded-full bg-[#FFD978] text-[calc(4.4*var(--svh,1vh))] shadow-xl ring-4 ring-white ${nudge && !speaking ? 'animate-bounce' : ''}`}>
+              {speaking ? '🎶' : '🔊'}
+            </span>
+          </button>
+        )}
+        </div>
+        {step >= 2 && (
+          <button onClick={onTap} className="font-semibold leading-tight text-[#2b1e17] active:scale-[0.98]" style={{ fontSize: 'calc(5*var(--svh,1vh))', textWrap: 'balance' as never, ...OUTLINE(8), animation: 'lep1-slide-up 0.5s ease-out' }}>
+            <FocusLine line={scene.line} focus={scene.focus ?? [word]} color={color} reveal={!speaking} />
+          </button>
+        )}
+        {step >= 2 && action}
+      </div>
+    );
+  }
   // No side given (two characters in the picture): centred above their heads, the note on the word's line.
   const centred = !scene.cardSide;
   const side = scene.cardSide === 'right' ? 'right-[3%] top-[calc(20*var(--svh,1vh))] w-[46%]' : scene.cardSide === 'left' ? 'left-[3%] top-[calc(20*var(--svh,1vh))] w-[46%]'

@@ -17,6 +17,9 @@ const ROUTINES = new Set([
   'title-card', 'recall-warmup', 'cinematic', 'meet', 'vocab-spot', 'echo', 'listen-repeat-cards', 'numbers-learn',
   'song', 'reader', 'sound-model', 'sound-blend', 'tongue-twister', 'join-stage', 'roleplay', 'tpr-actions',
   'sticker-reward', 'home-mission', 'finale',
+  // Read and match (owner 2026-10-13/14: after every word presentation a matching page — A1 reads and matches, "like the
+  // one in the screenshot"): a routine, like Pre-A1's listen-match, so it may come after each new set of words.
+  'drag-match',
   'pet-pal', // a short collecting moment like the sticker reward: Biscuit grows across the units, so it is in every lesson
 ]);
 
