@@ -1,0 +1,371 @@
+# Academy compatibility audit (generated)
+
+> `scripts/academy-compat-audit.ts`. Reference: open CEFR-J vocabulary lists (Japanese-learner bias; not the Cambridge English Vocabulary Profile). Findings are flags for review, not verdicts.
+
+| Level | Seasons | Single words matched | Above level (ref > Season level) | Far below (2+ levels easier) | Declared-level mix of items |
+|---|---|---|---|---|---|
+| A1 | 12 | 618 | 105 | 0 | A1 940 |
+| A2 | 14 | 641 | 147 | 0 | A2 936, A1 22 |
+| B1 | 18 | 377 | 34 | 20 | B1 1346, A2 4 |
+| B2 | 18 | 863 | 19 | 126 | B2 1430 |
+| C1 | 18 | 533 | 25 | 148 | C1 1488, B2 9, B1 7 |
+
+## Structure floors
+No structure is placed above its level.
+
+## Pre-A1 decodables
+Every Pre-A1 decodable word (P2-P5) is blendable from the sounds taught so far.
+
+## Text load per level (design targets, `levelFrames.ts`)
+| Level | Input text | Supports |
+|---|---|---|
+| Pre-A1 | Decodable lines of 3-6 words, texts of 5 lines. | Home-language hint on, audio 0.8x, pictures on every word, no timers, "Not yet" wording, private rehearsal, type-instead-of-speak. |
+| A1 | ~30-60 words [target]. | Maximum: full sentence frames, home-language hint, audio 0.8x. |
+| A2 | ~80-150 words [target]. | Half frames, tiered hints, audio 0.9x on request. |
+| B1 | ~150-300 words [target]. | First words of a frame; hints on request. |
+| B2 | ~300-500 words [target]. | None by default; optional on request. |
+| C1 | ~500-800 words [target]. | Off. |
+
+## How to read this
+- **Age (13-18):** no wording from the unsafe list; childish words are limited to teen-normal uses (message stickers, anime/cartoon culture, bedtime screen limits). A "dollar" match is a false positive of the word check.
+- **Level:** A1 and A2 items that the open list places one level higher are mostly words teens meet early (*gym*, *passport*, *routine*); they are calibration questions for the Cambridge English Vocabulary Profile, not mismatches. At B2 and C1 many "new" items are 2+ levels easier than the Season: the one-item-once rule exhausts easy words, so these should be replaced by level-appropriate words or moved to recycling.
+- **Grammar:** no structure is placed above its level; ordering exceptions are in `docs/research/academy-curriculum-primary-source-check.md`.
+
+## Flags for review
+- A1-S01 E1 "online": reference level A2 is above A1
+- A1-S01 E1 "member": reference level A2 is above A1
+- A1-S01 E5 "country": reference level A2 is above A1
+- A1-S02 E1 "upstairs": reference level A2 is above A1
+- A1-S02 E1 "downstairs": reference level A2 is above A1
+- A1-S02 E5 "plant": reference level A2 is above A1
+- A1-S03 E1 "interest": reference level A2 is above A1
+- A1-S03 E1 "popular": reference level A2 is above A1
+- A1-S03 E3 "hate": reference level A2 is above A1
+- A1-S03 E5 "gym": reference level B1 is above A1
+- A1-S03 E5 "museum": reference level A2 is above A1
+- A1-S03 E6 "lose": reference level A2 is above A1
+- A1-S03 E6 "artist": reference level B1 is above A1
+- A1-S03 E6 "dancer": reference level A2 is above A1
+- A1-S03 E6 "chart": reference level A2 is above A1
+- A1-S03 E6 "film": reference level A2 is above A1
+- A1-S03 E6 "sound": reference level A2 is above A1
+- A1-S04 E1 "menu": reference level A2 is above A1
+- A1-S04 E1 "customer": reference level A2 is above A1
+- A1-S04 E1 "thirsty": reference level A2 is above A1
+- A1-S04 E4 "bill": reference level A2 is above A1
+- A1-S04 E5 "carrot": reference level A2 is above A1
+- A1-S04 E5 "onion": reference level A2 is above A1
+- A1-S04 E6 "salt": reference level A2 is above A1
+- A1-S04 E6 "euro": reference level A2 is above A1
+- A1-S04 E6 "dollar": childish:doll
+- A1-S04 E6 "pound": reference level B1 is above A1
+- A1-S05 E1 "routine": reference level B1 is above A1
+- A1-S05 E2 "relax": reference level A2 is above A1
+- A1-S05 E4 "sometimes": reference level B1 is above A1
+- A1-S05 E5 "geography": reference level B1 is above A1
+- A1-S05 E5 "exam": reference level A2 is above A1
+- A1-S06 E1 "teenager": reference level A2 is above A1
+- A1-S06 E1 "visitor": reference level A2 is above A1
+- A1-S06 E5 "blonde": reference level A2 is above A1
+- A1-S06 E5 "friendly": reference level B2 is above A1
+- A1-S06 E6 "actress": reference level B1 is above A1
+- A1-S07 E1 "road": reference level A2 is above A1
+- A1-S07 E1 "village": reference level A2 is above A1
+- A1-S07 E1 "north": reference level A2 is above A1
+- A1-S07 E1 "south": reference level A2 is above A1
+- A1-S07 E1 "east": reference level A2 is above A1
+- A1-S07 E1 "west": reference level A2 is above A1
+- A1-S07 E1 "follow": reference level A2 is above A1
+- A1-S07 E1 "center": reference level A2 is above A1
+- A1-S07 E2 "market": reference level A2 is above A1
+- A1-S07 E2 "university": reference level A2 is above A1
+- A1-S07 E4 "far": reference level A2 is above A1
+- A1-S07 E4 "opposite": reference level A2 is above A1
+- A1-S07 E5 "traffic": reference level A2 is above A1
+- A1-S07 E5 "journey": reference level A2 is above A1
+- A1-S07 E5 "across": reference level A2 is above A1
+- A1-S07 E6 "passport": reference level B1 is above A1
+- A1-S07 E6 "flight": reference level A2 is above A1
+- A1-S07 E6 "tourist": reference level A2 is above A1
+- A1-S07 E6 "capital": reference level A2 is above A1
+- A1-S07 E6 "kilometer": reference level A2 is above A1
+- A1-S07 E6 "meter": reference level A2 is above A1
+- A1-S07 E6 "mile": reference level B1 is above A1
+- A1-S07 E6 "space": reference level A2 is above A1
+- A1-S08 E1 "project": reference level B2 is above A1
+- A1-S08 E1 "success": reference level A2 is above A1
+- A1-S08 E5 "amazing": reference level B1 is above A1
+- A1-S08 E5 "fantastic": reference level A2 is above A1
+- A1-S08 E5 "perfect": reference level A2 is above A1
+- A1-S09 E1 "cheap": reference level A2 is above A1
+- A1-S09 E1 "enough": reference level A2 is above A1
+- A1-S09 E2 "sweater": reference level A2 is above A1
+- A1-S09 E2 "boot": reference level B1 is above A1
+- A1-S09 E5 "hundred": reference level A2 is above A1
+- A1-S09 E5 "thousand": reference level A2 is above A1
+- A1-S09 E5 "million": reference level A2 is above A1
+- A1-S09 E5 "cent": reference level A2 is above A1
+- A1-S09 E5 "cost": reference level A2 is above A1
+- A1-S09 E6 "style": reference level A2 is above A1
+- A1-S10 E1 "report": reference level A2 is above A1
+- A1-S10 E1 "blog": reference level B1 is above A1
+- A1-S10 E1 "website": reference level A2 is above A1
+- A1-S10 E1 "text": reference level A2 is above A1
+- A1-S10 E6 "send": reference level A2 is above A1
+- A1-S10 E6 "fall": reference level A2 is above A1
+- A1-S10 E6 "return": reference level A2 is above A1
+- A1-S11 E1 "stadium": reference level A2 is above A1
+- A1-S11 E2 "third": reference level A2 is above A1
+- A1-S11 E2 "fifth": reference level B1 is above A1
+- A1-S11 E2 "noon": reference level A2 is above A1
+- A1-S11 E2 "midnight": reference level A2 is above A1
+- A1-S11 E2 "decide": reference level A2 is above A1
+- A1-S11 E2 "skate": reference level A2 is above A1
+- A1-S11 E5 "next": reference level A2 is above A1
+- A1-S11 E5 "last": reference level A2 is above A1
+- A1-S11 E5 "weekday": reference level A2 is above A1
+- A1-S12 E1 "found": reference level B2 is above A1
+- A1-S12 E1 "wallet": reference level A2 is above A1
+- A1-S12 E1 "label": reference level B2 is above A1
+- A1-S12 E1 "sticker": childish:sticker
+- A1-S12 E1 "sticker": reference level B1 is above A1
+- A1-S12 E1 "belong": reference level A2 is above A1
+- A1-S12 E1 "tag": reference level B2 is above A1
+- A1-S12 E2 "purse": reference level B1 is above A1
+- A1-S12 E2 "sunglasses": reference level A2 is above A1
+- A1-S12 E2 "skateboard": reference level B2 is above A1
+- A1-S12 E2 "costume": reference level B2 is above A1
+- A1-S12 E2 "mask": reference level B2 is above A1
+- A1-S12 E2 "empty": reference level A2 is above A1
+- A1-S12 E2 "soft": reference level A2 is above A1
+- A1-S12 E2 "wooden": reference level A2 is above A1
+- A1-S12 E5 "a dirty sticker": childish:sticker
+- A2-S01 E2 "suddenly": reference level B1 is above A2
+- A2-S01 E2 "scared": reference level B1 is above A2
+- A2-S01 E2 "immediately": reference level B1 is above A2
+- A2-S01 E5 "prize": reference level B1 is above A2
+- A2-S01 E5 "score": reference level B1 is above A2
+- A2-S01 E5 "incredible": reference level B1 is above A2
+- A2-S01 E6 "beat": reference level B1 is above A2
+- A2-S01 E6 "celebrity": reference level B1 is above A2
+- A2-S01 E6 "airline": reference level B1 is above A2
+- A2-S02 E1 "sail": reference level B2 is above A2
+- A2-S02 E1 "ocean": reference level B1 is above A2
+- A2-S02 E1 "railway": reference level B1 is above A2
+- A2-S02 E1 "platform": reference level B1 is above A2
+- A2-S02 E2 "engine": reference level B1 is above A2
+- A2-S02 E5 "tourism": reference level B1 is above A2
+- A2-S02 E5 "route": reference level B2 is above A2
+- A2-S02 E5 "scary": reference level B1 is above A2
+- A2-S02 E6 "luggage": reference level B1 is above A2
+- A2-S02 E6 "souvenir": reference level B1 is above A2
+- A2-S02 E6 "cartoon": childish:cartoon
+- A2-S02 E6 "series": reference level B1 is above A2
+- A2-S02 E6 "chip": reference level B2 is above A2
+- A2-S03 E1 "laptop": reference level B2 is above A2
+- A2-S03 E1 "tablet": reference level B1 is above A2
+- A2-S03 E1 "device": reference level B1 is above A2
+- A2-S03 E1 "digital": reference level B1 is above A2
+- A2-S03 E1 "electronic": reference level B1 is above A2
+- A2-S03 E1 "network": reference level B1 is above A2
+- A2-S03 E5 "available": reference level B1 is above A2
+- A2-S03 E5 "recommend": reference level B1 is above A2
+- A2-S03 E6 "user": reference level B2 is above A2
+- A2-S03 E6 "data": reference level B2 is above A2
+- A2-S03 E6 "console": reference level B2 is above A2
+- A2-S03 E6 "clothing": reference level B2 is above A2
+- A2-S04 E2 "arrange": reference level B1 is above A2
+- A2-S04 E2 "guide": reference level B1 is above A2
+- A2-S04 E2 "cycle": reference level B1 is above A2
+- A2-S04 E2 "region": reference level B1 is above A2
+- A2-S04 E5 "ordinary": reference level B1 is above A2
+- A2-S04 E6 "backpack": reference level B1 is above A2
+- A2-S04 E6 "postcard": reference level B1 is above A2
+- A2-S04 E6 "recording": reference level B1 is above A2
+- A2-S04 E6 "lyrics": reference level B2 is above A2
+- A2-S04 E6 "goalkeeper": reference level B1 is above A2
+- A2-S04 E6 "designer": reference level B1 is above A2
+- A2-S04 E6 "architect": reference level B1 is above A2
+- A2-S05 E1 "flu": reference level B1 is above A2
+- A2-S05 E1 "finger": reference level B1 is above A2
+- A2-S05 E2 "skin": reference level B1 is above A2
+- A2-S05 E2 "cough": reference level B1 is above A2
+- A2-S05 E2 "injury": reference level B1 is above A2
+- A2-S05 E2 "pain": reference level B1 is above A2
+- A2-S05 E2 "virus": reference level B1 is above A2
+- A2-S05 E2 "disease": reference level B1 is above A2
+- A2-S05 E5 "stress": reference level B1 is above A2
+- A2-S05 E5 "energy": reference level B2 is above A2
+- A2-S05 E5 "protect": reference level B1 is above A2
+- A2-S05 E5 "active": reference level B1 is above A2
+- A2-S05 E6 "lift": reference level B1 is above A2
+- A2-S05 E6 "yoga": reference level B1 is above A2
+- A2-S05 E6 "eyesight": reference level B1 is above A2
+- A2-S05 E6 "nut": reference level B2 is above A2
+- A2-S05 E6 "vegetarian": reference level B1 is above A2
+- A2-S06 E1 "bin": reference level B1 is above A2
+- A2-S06 E1 "trash": reference level B1 is above A2
+- A2-S06 E2 "behave": reference level B1 is above A2
+- A2-S06 E2 "attend": reference level B1 is above A2
+- A2-S06 E5 "equipment": reference level B1 is above A2
+- A2-S06 E5 "instruction": reference level B1 is above A2
+- A2-S06 E5 "instructor": reference level B1 is above A2
+- A2-S06 E5 "serious": reference level B1 is above A2
+- A2-S06 E5 "formal": reference level B1 is above A2
+- A2-S06 E5 "informal": reference level B2 is above A2
+- A2-S06 E6 "compete": reference level B1 is above A2
+- A2-S06 E6 "foul": reference level B2 is above A2
+- A2-S06 E6 "profile": reference level B2 is above A2
+- A2-S06 E6 "connect": reference level B1 is above A2
+- A2-S06 E6 "stopwatch": reference level B2 is above A2
+- A2-S07 E1 "recipe": reference level B2 is above A2
+- A2-S07 E2 "amount": reference level B1 is above A2
+- A2-S07 E2 "taste": reference level B1 is above A2
+- A2-S07 E2 "peel": reference level B2 is above A2
+- A2-S07 E2 "grill": reference level B1 is above A2
+- A2-S07 E5 "typical": reference level B1 is above A2
+- A2-S07 E5 "variety": reference level B1 is above A2
+- A2-S07 E5 "normally": reference level B1 is above A2
+- A2-S07 E6 "farming": reference level B1 is above A2
+- A2-S07 E6 "reception": reference level B1 is above A2
+- A2-S07 E6 "media": reference level B2 is above A2
+- A2-S08 E1 "motorcycle": reference level B1 is above A2
+- A2-S08 E1 "van": reference level B1 is above A2
+- A2-S08 E1 "parking": reference level B1 is above A2
+- A2-S08 E1 "scooter": reference level B2 is above A2
+- A2-S08 E2 "distance": reference level B1 is above A2
+- A2-S08 E2 "onto": reference level B1 is above A2
+- A2-S08 E2 "narrow": reference level B1 is above A2
+- A2-S08 E5 "reduce": reference level B1 is above A2
+- A2-S08 E6 "vehicle": reference level B1 is above A2
+- A2-S08 E6 "link": reference level B1 is above A2
+- A2-S08 E6 "listener": reference level B2 is above A2
+- A2-S09 E1 "experiment": reference level B1 is above A2
+- A2-S09 E1 "lab": reference level B1 is above A2
+- A2-S09 E1 "professor": reference level B1 is above A2
+- A2-S09 E1 "chemistry": reference level B1 is above A2
+- A2-S09 E1 "microscope": reference level B2 is above A2
+- A2-S09 E1 "gadget": reference level C1 is above A2
+- A2-S09 E2 "climate": reference level B1 is above A2
+- A2-S09 E2 "environment": reference level B2 is above A2
+- A2-S09 E2 "electricity": reference level B1 is above A2
+- A2-S09 E5 "possibility": reference level B1 is above A2
+- A2-S09 E5 "progress": reference level B1 is above A2
+- A2-S09 E5 "rise": reference level B1 is above A2
+- A2-S09 E5 "definitely": reference level B1 is above A2
+- A2-S09 E6 "physics": reference level B1 is above A2
+- A2-S09 E6 "biology": reference level B1 is above A2
+- A2-S10 E1 "thunder": reference level B1 is above A2
+- A2-S10 E2 "react": reference level B1 is above A2
+- A2-S10 E5 "season": reference level B1 is above A2
+- A2-S10 E5 "disaster": reference level B1 is above A2
+- A2-S10 E5 "completely": reference level B1 is above A2
+- A2-S10 E6 "detective": reference level B1 is above A2
+- A2-S10 E6 "spider": reference level B1 is above A2
+- A2-S10 E6 "mosquito": reference level B1 is above A2
+- A2-S10 E6 "campsite": reference level B1 is above A2
+- A2-S11 E1 "journalist": reference level B1 is above A2
+- A2-S11 E1 "colleague": reference level B2 is above A2
+- A2-S11 E1 "employee": reference level B2 is above A2
+- A2-S11 E1 "employer": reference level B2 is above A2
+- A2-S11 E2 "able": reference level B1 is above A2
+- A2-S11 E2 "salary": reference level B2 is above A2
+- A2-S11 E5 "department": reference level B1 is above A2
+- A2-S11 E5 "conference": reference level B2 is above A2
+- A2-S11 E5 "charity": reference level B1 is above A2
+- A2-S11 E5 "lecture": reference level B1 is above A2
+- A2-S11 E6 "advertise": reference level B1 is above A2
+- A2-S11 E6 "programmer": reference level B2 is above A2
+- A2-S11 E6 "trainer": reference level B2 is above A2
+- A2-S11 E6 "huge": reference level B1 is above A2
+- A2-S11 E6 "pattern": reference level B1 is above A2
+- A2-S11 E6 "vet": reference level B1 is above A2
+- A2-S12 E1 "invitation": reference level B1 is above A2
+- A2-S12 E1 "comment": reference level B1 is above A2
+- A2-S12 E1 "arrangement": reference level B1 is above A2
+- A2-S12 E2 "refuse": reference level B1 is above A2
+- A2-S12 E2 "including": reference level B1 is above A2
+- A2-S12 E6 "loud": reference level B1 is above A2
+- A2-S12 E6 "microphone": reference level B2 is above A2
+- A2-S12 E6 "laughter": reference level B1 is above A2
+- B1-S01 E1 "expedition": reference level B2 is above B1
+- B1-S01 E1 "helicopter": reference level B2 is above B1
+- B1-S01 E6 "determined": reference level B2 is above B1
+- B1-S02 E1 "decade": reference level B2 is above B1
+- B1-S02 E6 "version": reference level B2 is above B1
+- B1-S02 E6 "watch cartoons": childish:cartoon
+- B1-S03 E1 "keen": reference level B2 is above B1
+- B1-S04 E2 "injured": reference level B2 is above B1
+- B1-S04 E2 "viewer": reference level B2 is above B1
+- B1-S04 E6 "reaction": reference level B2 is above B1
+- B1-S04 E6 "campaign": reference level B2 is above B1
+- B1-S05 E1 "ban": reference level B2 is above B1
+- B1-S05 E1 "cheat": reference level B2 is above B1
+- B1-S05 E5 "fixed": reference level B2 is above B1
+- B1-S06 E2 "donate": reference level B2 is above B1
+- B1-S06 E2 "profit": reference level B2 is above B1
+- B1-S06 E5 "servant": reference level B2 is above B1
+- B1-S07 E1 "grain": reference level B2 is above B1
+- B1-S07 E4 "mixture": reference level B2 is above B1
+- B1-S07 E5 "technical": reference level B2 is above B1
+- B1-S08 E6 "tail": reference level B2 is above B1
+- B1-S09 E2 "investigate": reference level B2 is above B1
+- B1-S09 E2 "odd": reference level B2 is above B1
+- B1-S09 E5 "ceiling": reference level B2 is above B1
+- B1-S10 E2 "planning": reference level B2 is above B1
+- B1-S10 E2 "organizer": reference level B2 is above B1
+- B1-S11 E6 "recommendation": reference level B2 is above B1
+- B1-S12 E1 "quote": reference level B2 is above B1
+- B1-S13 E2 "creepy": reference level B2 is above B1
+- B1-S13 E5 "plot": reference level B2 is above B1
+- B1-S13 E6 "cottage": reference level B2 is above B1
+- B1-S15 E1 "accommodation": reference level B2 is above B1
+- B1-S15 E2 "qualification": reference level B2 is above B1
+- B1-S18 E2 "earnings": reference level B2 is above B1
+- B1-S18 E2 "payment": reference level B2 is above B1
+- B2-S02 E1 "scenario": reference level C1 is above B2
+- B2-S02 E4 "speculation": reference level C1 is above B2
+- B2-S03 E2 "mechanism": reference level C1 is above B2
+- B2-S03 E5 "hypothesis": reference level C2 is above B2
+- B2-S03 E5 "fossil": reference level C1 is above B2
+- B2-S03 E6 "coverage": reference level C1 is above B2
+- B2-S04 E1 "cite": reference level C1 is above B2
+- B2-S07 E1 "sustainable": reference level C1 is above B2
+- B2-S08 E1 "diversity": reference level C1 is above B2
+- B2-S08 E1 "ethical": reference level C1 is above B2
+- B2-S08 E6 "voluntary": reference level C1 is above B2
+- B2-S14 E1 "fraction": reference level C1 is above B2
+- B2-S15 E5 "comprise": reference level C1 is above B2
+- B2-S16 E3 "hence": reference level C1 is above B2
+- B2-S17 E1 "lethargic": reference level C1 is above B2
+- B2-S17 E1 "bedtime": childish:bedtime
+- B2-S17 E2 "reassure": reference level C1 is above B2
+- B2-S17 E5 "scroll": reference level C2 is above B2
+- B2-S17 E5 "recharge": reference level C1 is above B2
+- B2-S17 E5 "set a screen limit before bedtime": childish:bedtime
+- B2-S17 E6 "reassurance": reference level C1 is above B2
+- C1-S01 E1 "rhetoric": reference level C2 is above C1
+- C1-S02 E6 "adhere": reference level C2 is above C1
+- C1-S03 E2 "accountability": reference level C2 is above C1
+- C1-S03 E5 "correlation": reference level C2 is above C1
+- C1-S03 E5 "methodology": reference level C2 is above C1
+- C1-S04 E1 "subsidy": reference level C2 is above C1
+- C1-S04 E4 "merit": reference level C2 is above C1
+- C1-S05 E1 "synthesis": reference level C2 is above C1
+- C1-S05 E1 "cognitive": reference level C2 is above C1
+- C1-S05 E2 "parameter": reference level C2 is above C1
+- C1-S05 E6 "proposition": reference level C2 is above C1
+- C1-S06 E3 "wholly": reference level C2 is above C1
+- C1-S07 E2 "induce": reference level C2 is above C1
+- C1-S08 E1 "ostensibly": reference level C2 is above C1
+- C1-S08 E2 "denounce": reference level C2 is above C1
+- C1-S12 E5 "echo": reference level C2 is above C1
+- C1-S12 E6 "practitioner": reference level C2 is above C1
+- C1-S13 E4 "mediate": reference level C2 is above C1
+- C1-S13 E4 "reconcile": reference level C2 is above C1
+- C1-S13 E6 "integration": reference level C2 is above C1
+- C1-S15 E1 "ironic": reference level C2 is above C1
+- C1-S15 E5 "embody": reference level C2 is above C1
+- C1-S16 E1 "tactical": reference level C2 is above C1
+- C1-S18 E1 "aptitude": reference level C2 is above C1
+- C1-S18 E2 "agile": reference level C2 is above C1
