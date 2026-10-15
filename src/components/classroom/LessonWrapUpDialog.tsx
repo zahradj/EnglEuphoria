@@ -15,7 +15,7 @@ import { toLevelMapHub } from '@/components/teacher/classroom/UnitKnowledgeCheck
 import { buildLearningPlan, UNITS_PER_LEVEL, type PlanUnitInfo } from '@/lib/learningPlan';
 import { HUB_SKILL_PROFILE, normalizeSkillHub, scoreToCefr } from '@/hooks/useStudentSkills';
 import { asPayoutCurrency, formatPay } from '@/lib/teacherPay';
-import { LessonChecklistCard, practiceLines, type ChecklistValue, type SceneLessonRef } from './LessonChecklistCard';
+import { LessonChecklistCard, clearChecklist, practiceLines, type ChecklistValue, type SceneLessonRef } from './LessonChecklistCard';
 
 /**
  * Session report — 3 short steps (redesigned from one long form):
@@ -485,6 +485,7 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
         throw feedbackErr;
       }
       lines.push(['💌', `Report saved${homework ? ' with homework' : ''} — ${name}'s family can see it`]);
+      if (showChecklist && checklist) { clearChecklist(bookingId); lines.push(['📋', `Lesson checklist saved in the report${checklist.verdict ? ` — ${{ nailed: 'Nailed it', almost: 'Almost there', practice: 'Needs more practice' }[checklist.verdict]}` : ''}`]); }
       if (isPlayground && d.parentNote.trim()) lines.push(['🔒', 'Private note saved for the parents only']);
 
       if (lessonId && studentId && sharedNotes) {

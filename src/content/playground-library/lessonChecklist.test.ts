@@ -19,6 +19,12 @@ describe('Playground lesson checklist', () => {
     expect(new Set(c!.items.map((i) => i.id)).size, 'one line per page').toBe(c!.items.length);
     for (const it of c!.items) expect(it.label.trim().length).toBeGreaterThan(1);
     expect(c!.items.some((i) => ['title-card', 'finale', 'song', 'sticker-reward'].includes(i.kind))).toBe(false);
+    // The report shows the lesson's core points, not every page (owner 2026-10-15): short, no repeats, all pages covered.
+    expect(c!.points.length, 'core points').toBeGreaterThanOrEqual(2);
+    expect(c!.points.length, 'core points').toBeLessThanOrEqual(14);
+    expect(new Set(c!.points.map((p) => p.label)).size, 'no repeated point').toBe(c!.points.length);
+    const covered = new Set(c!.points.flatMap((p) => p.pages));
+    for (const it of c!.items) expect(covered.has(it.id), `${it.id} belongs to a point`).toBe(true);
   });
   it('reads the rows the student saved', () => {
     const c = lessonChecklist('monster-rich', 5, 3)!;
@@ -30,7 +36,7 @@ describe('Playground lesson checklist', () => {
     ]);
     expect(st[a.id]).toEqual({ status: 'done', wrong: 0, recorded: true });
     expect(st[b.id]).toEqual({ status: 'help', wrong: 3, recorded: true });
-    expect(st[d.id].status).toBe('not-yet');
+    expect(st[d.id].status).toBe('unmarked');
     expect(c.isUnitTest).toBe(false);
     expect(lessonChecklist('monster-rich', 5, 9)).toBeNull();
   });
@@ -39,5 +45,7 @@ describe('Playground lesson checklist', () => {
     expect(suggestVerdict(['done', 'help', 'help', 'not-yet'])).toBe('almost');
     expect(suggestVerdict(['not-yet', 'help', 'not-yet'])).toBe('practice');
     expect(suggestVerdict([])).toBeNull();
+    expect(suggestVerdict(['unmarked', 'unmarked'])).toBeNull();
+    expect(suggestVerdict(['done', 'unmarked', 'unmarked', 'unmarked'])).toBe('nailed');
   });
 });

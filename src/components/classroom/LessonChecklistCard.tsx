@@ -9,13 +9,37 @@ import type { ChecklistPart, ItemStatus, Verdict } from '@/content/playground-li
  * so the lines come pre-ticked. The teacher can change any line and gives the lesson — or, on the unit's last lesson,
  * the unit test — a verdict: Nailed it / Almost there / Needs more practice.
  */
-export interface ChecklistLine { id: string; label: string; part: ChecklistPart; page: number; status: ItemStatus; wrong: number; recorded: boolean; reached: boolean }
+export interface ChecklistLine {
+  id: string; label: string; game?: string; part: ChecklistPart; page: number; status: ItemStatus; wrong: number; recorded: boolean; reached: boolean;
+  /** Page numbers of the activities that make up this point (the classroom pop-up highlights the point being worked on). */
+  pageNos?: number[];
+  /** Ticked by the teacher (in the classroom pop-up or the report): kept as is, never overwritten by saved rows. */
+  byTeacher?: boolean;
+}
 export interface ChecklistValue {
   lesson: { contentFormat: string; unitNumber: number; lessonNumber: number; title: string; objective: string; isUnitTest: boolean };
   lines: ChecklistLine[];
   verdict: Verdict | null;
   /** True once the teacher changed a line or the verdict (so a re-load keeps their choice). */
   edited: boolean;
+}
+
+/** The teacher's ticks for one class, kept in this browser until the report is sent (the classroom pop-up and the
+ *  report share them). */
+const storeKey = (bookingId?: string) => (bookingId ? `pg-checklist:${bookingId}` : null);
+export function loadChecklist(bookingId?: string): ChecklistValue | null {
+  const k = storeKey(bookingId);
+  if (!k) return null;
+  try { const raw = window.localStorage.getItem(k); return raw ? (JSON.parse(raw) as ChecklistValue) : null; } catch { return null; }
+}
+export function clearChecklist(bookingId?: string) {
+  const k = storeKey(bookingId);
+  if (k) try { window.localStorage.removeItem(k); } catch { /* noop */ }
+}
+function saveChecklist(bookingId: string | undefined, v: ChecklistValue) {
+  const k = storeKey(bookingId);
+  if (!k) return;
+  try { window.localStorage.setItem(k, JSON.stringify(v)); } catch { /* private mode: the report still has the in-memory list */ }
 }
 
 export interface SceneLessonRef { contentFormat?: string; unitNumber: number; lessonNumber: number }
@@ -25,15 +49,11 @@ const STATUS: { key: ItemStatus; emoji: string; label: string }[] = [
   { key: 'help', emoji: '\u{1F7E1}', label: 'Needed help' },
   { key: 'not-yet', emoji: '\u{2B55}', label: 'Not yet' },
 ];
-const PART_TITLE: Record<ChecklistPart, string> = {
-  'warm-up': 'Warm-up', words: 'New words', games: 'Games', reading: 'Reading', phonics: 'Phonics', speaking: 'Speaking',
-};
-const PART_ORDER: ChecklistPart[] = ['warm-up', 'words', 'games', 'reading', 'phonics', 'speaking'];
 
 /** Lines that go into the family's "Let's practise" list: reached in class but not done alone. */
 export function practiceLines(v: ChecklistValue | null): string[] {
   if (!v) return [];
-  return v.lines.filter((l) => l.reached && l.status !== 'done').map((l) => l.label).slice(0, 4);
+  return v.lines.filter((l) => l.reached && (l.status === 'help' || l.status === 'not-yet')).map((l) => l.label).slice(0, 4);
 }
 
 interface Props {
@@ -46,9 +66,14 @@ interface Props {
   accent: string;
   value: ChecklistValue | null;
   onChange: (v: ChecklistValue) => void;
+  /** Classroom pop-up: the page the class is on now (its line is highlighted). */
+  currentPage?: number | null;
+  /** Heading override (the classroom pop-up says "Checklist — tick as you go"). */
+  heading?: string;
 }
 
-export function LessonChecklistCard({ sceneLesson, sessionId, bookingId, pagesReached, accent, value, onChange }: Props) {
+export function LessonChecklistCard({ sceneLesson, sessionId, bookingId, pagesReached, accent, value, onChange: onChangeRaw, currentPage, heading }: Props) {
+  const onChange = (v: ChecklistValue) => { saveChecklist(bookingId, v); onChangeRaw(v); };
   const [loading, setLoading] = useState(!value);
   const [missing, setMissing] = useState(false);
   const [mod, setMod] = useState<typeof import('@/content/playground-library/lessonChecklist') | null>(null);
@@ -62,8 +87,10 @@ export function LessonChecklistCard({ sceneLesson, sessionId, bookingId, pagesRe
       setMod(m);
       const list = m.lessonChecklist(sceneLesson.contentFormat, sceneLesson.unitNumber, sceneLesson.lessonNumber);
       if (!list) { setMissing(true); setLoading(false); return; }
-      const sameLesson = value && value.lesson.contentFormat === list.contentFormat && value.lesson.unitNumber === list.unitNumber && value.lesson.lessonNumber === list.lessonNumber;
-      if (sameLesson && value.edited) { setLoading(false); return; }
+      // The teacher's earlier ticks for this class (pop-up in the classroom, or the report opened before).
+      const prior = value ?? loadChecklist(bookingId);
+      const samePrior = prior && prior.lesson.contentFormat === list.contentFormat && prior.lesson.unitNumber === list.unitNumber && prior.lesson.lessonNumber === list.lessonNumber ? prior : null;
+      const teacherLines = new Map((samePrior?.lines ?? []).filter((l) => l.byTeacher).map((l) => [l.id, l]));
       let rows: { slide_id: string; is_correct: boolean | null; selected_option_id: string | null; skill_tag: string | null }[] = [];
       if (sessionId) {
         const { data } = await supabase.from('quiz_responses').select('slide_id, is_correct, selected_option_id, skill_tag')
@@ -83,14 +110,23 @@ export function LessonChecklistCard({ sceneLesson, sessionId, bookingId, pagesRe
       const st = m.statusFromRows(list.items, rows);
       for (const [id, status] of Object.entries(testStatus)) st[id] = { status, wrong: 0, recorded: true };
       const lastPage = pagesReached && pagesReached > 0 ? pagesReached : Number.POSITIVE_INFINITY;
-      const lines: ChecklistLine[] = list.items.map((it) => ({
-        id: it.id, label: it.label, part: it.part, page: it.page, ...st[it.id],
-        // A line the student did is always "reached", even if the page counter says otherwise.
-        reached: it.page <= lastPage || st[it.id].recorded,
-      }));
+      // One line per core point of the lesson (owner: "only the core points … that the student got to finish or do").
+      const pageNo = new Map(list.items.map((it) => [it.id, it.page]));
+      const lines: ChecklistLine[] = list.points.map((pt) => {
+        const mine = teacherLines.get(pt.id);
+        const ps = m.pointStatus(pt.pages, st);
+        const pageNos = Array.from(new Set(pt.pages.map((id) => pageNo.get(id) ?? 0))).sort((a, b) => a - b);
+        return {
+          id: pt.id, label: pt.label, part: pt.part, page: pt.firstPage, pageNos, ...ps,
+          // A point the student worked on (or the teacher ticked) is always "reached", whatever the page counter says.
+          reached: pt.firstPage <= lastPage || ps.recorded || !!mine,
+          ...(mine ? { status: mine.status, byTeacher: true } : {}),
+        };
+      });
       // Suggest a result only when there is something to go on (saved rows); otherwise the teacher decides.
-      const verdict = lines.some((l) => l.recorded) ? m.suggestVerdict(lines.filter((l) => l.reached).map((l) => l.status)) : null;
-      onChange({ lesson: { contentFormat: list.contentFormat, unitNumber: list.unitNumber, lessonNumber: list.lessonNumber, title: list.title, objective: list.objective, isUnitTest: list.isUnitTest }, lines, verdict, edited: false });
+      const verdict = samePrior?.edited ? samePrior.verdict
+        : lines.some((l) => l.recorded || l.byTeacher) ? m.suggestVerdict(lines.filter((l) => l.reached).map((l) => l.status)) : null;
+      onChange({ lesson: { contentFormat: list.contentFormat, unitNumber: list.unitNumber, lessonNumber: list.lessonNumber, title: list.title, objective: list.objective, isUnitTest: list.isUnitTest }, lines, verdict, edited: !!samePrior?.edited });
       setLoading(false);
     })().catch(() => { if (!cancelled) { setMissing(true); setLoading(false); } });
     return () => { cancelled = true; };
@@ -104,6 +140,7 @@ export function LessonChecklistCard({ sceneLesson, sessionId, bookingId, pagesRe
     done: reached.filter((l) => l.status === 'done').length,
     help: reached.filter((l) => l.status === 'help').length,
     notYet: reached.filter((l) => l.status === 'not-yet').length,
+    open: reached.filter((l) => l.status === 'unmarked').length,
   }), [reached]);
   const auto = reached.filter((l) => l.recorded).length;
 
@@ -117,18 +154,22 @@ export function LessonChecklistCard({ sceneLesson, sessionId, bookingId, pagesRe
   }
 
   const setLine = (id: string, status: ItemStatus) => {
-    const lines = value.lines.map((l) => (l.id === id ? { ...l, status, reached: true } : l));
+    const lines = value.lines.map((l) => (l.id === id ? { ...l, status, reached: true, byTeacher: true } : l));
     const suggested = mod.suggestVerdict(lines.filter((l) => l.reached).map((l) => l.status));
     // (once the teacher ticks lines, the suggestion follows their ticks)
     onChange({ ...value, lines, verdict: value.edited ? value.verdict : suggested, edited: value.edited });
   };
   const setVerdict = (verdict: Verdict) => onChange({ ...value, verdict, edited: true });
 
+  const isNow = (l: ChecklistLine) => !!currentPage && (l.pageNos ?? [l.page]).includes(currentPage);
   const row = (l: ChecklistLine) => (
-    <div key={l.id} className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-border py-1.5 pl-3 pr-1.5">
+    <div key={l.id} data-now={isNow(l) || undefined}
+      className={`flex flex-wrap items-center justify-between gap-2 rounded-xl border py-1.5 pl-3 pr-1.5 ${isNow(l) ? 'border-2 bg-background shadow-md' : 'border-border'}`}
+      style={isNow(l) ? { borderColor: accent } : undefined}>
       <span className="min-w-0 flex-1 text-sm font-bold">
+        {isNow(l) && <span className="me-2 rounded-full px-2 py-0.5 text-[10px] font-extrabold text-white" style={{ background: accent }}>NOW</span>}
         {l.label}
-        {l.recorded && <span className="ms-2 rounded-full bg-sky-500/15 px-2 py-0.5 text-[10px] font-extrabold text-sky-700 dark:text-sky-300">auto{l.wrong ? ` · ${l.wrong} wrong ${l.wrong === 1 ? 'try' : 'tries'}` : ''}</span>}
+        {l.recorded && <span className="ms-2 rounded-full bg-sky-500/15 px-2 py-0.5 text-[10px] font-extrabold text-sky-700 dark:text-sky-300">from class{l.wrong ? ` · ${l.wrong} wrong ${l.wrong === 1 ? 'try' : 'tries'}` : ''}</span>}
       </span>
       <span className="flex gap-1">
         {STATUS.map((s) => {
@@ -149,13 +190,13 @@ export function LessonChecklistCard({ sceneLesson, sessionId, bookingId, pagesRe
     <section className="grid gap-3 rounded-2xl border-2 p-4" style={{ borderColor: accent, background: `${accent}0D` }}>
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
-          <h3 className="text-base font-extrabold">{value.lesson.isUnitTest ? 'Unit test checklist' : 'Lesson checklist'}</h3>
+          <h3 className="text-base font-extrabold">{heading ?? (value.lesson.isUnitTest ? 'Unit test checklist' : 'Lesson checklist')}</h3>
           <p className="text-xs text-muted-foreground">
             {value.lesson.contentFormat === 'lep1-rich' ? 'Pre-A1' : value.lesson.contentFormat.includes('a2') ? 'A2' : 'A1'} · Unit {value.lesson.unitNumber} · Lesson {value.lesson.lessonNumber} — {value.lesson.title}
           </p>
         </div>
         <span className="rounded-full bg-background px-3 py-1 text-xs font-extrabold shadow-sm">
-          ✅ {counts.done} · 🟡 {counts.help} · ⭕ {counts.notYet}
+          ✅ {counts.done} · 🟡 {counts.help} · ⭕ {counts.notYet}{counts.open ? ` · ${counts.open} to tick` : ''}
         </span>
       </div>
       {value.lesson.objective && <p className="rounded-xl bg-background/70 px-3 py-2 text-sm"><b>Goal:</b> {value.lesson.objective}</p>}
@@ -163,20 +204,11 @@ export function LessonChecklistCard({ sceneLesson, sessionId, bookingId, pagesRe
         {auto > 0 ? `${auto} line${auto === 1 ? '' : 's'} filled in from what the student did in class. ` : 'Nothing was saved from the student’s screen — tick what they did. '}
         Tap to change any line.
       </p>
-      {PART_ORDER.map((part) => {
-        const ls = reached.filter((l) => l.part === part);
-        if (!ls.length) return null;
-        return (
-          <div key={part} className="grid gap-1.5">
-            <div className="text-xs font-extrabold uppercase tracking-wide text-muted-foreground">{PART_TITLE[part]}</div>
-            {ls.map(row)}
-          </div>
-        );
-      })}
+      <div className="grid gap-1.5">{reached.map(row)}</div>
       {unreached.length > 0 && (
         <div className="grid gap-1.5">
           <button type="button" onClick={() => setShowUnreached((x) => !x)} className="justify-self-start text-xs font-extrabold text-muted-foreground underline">
-            {showUnreached ? 'Hide' : 'Show'} {unreached.length} part{unreached.length === 1 ? '' : 's'} the class didn’t reach
+            {showUnreached ? 'Hide' : 'Show'} {unreached.length} point{unreached.length === 1 ? '' : 's'} the class didn’t reach
           </button>
           {showUnreached && unreached.map(row)}
         </div>
