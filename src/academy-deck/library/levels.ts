@@ -1,6 +1,6 @@
 // The Academy library is organised like the Playground library: level (A1 A2 B1 B2 C1) → season (= unit, from the Academy roadmap) → lessons.
 // Seasons come from the roadmap (src/curriculum/academy); a season with no built lesson yet is listed as "coming soon".
-import { ACADEMY_LESSON_BLUEPRINTS, ACADEMY_RECALL_NODES, ACADEMY_SEASONS, PA1_SEASONS, PRE_A1_RECALL_NODES, MAX_REMEMBER_ITEMS_PRE_A1, ladderSteps, recallPlan, type LadderStep, type RecallNode, type RecallPlan } from '../../curriculum/academy';
+import { ACADEMY_LESSON_BLUEPRINTS, ACADEMY_RECALL_NODES, ACADEMY_SEASONS, PA1_SEASONS, PRE_A1_RECALL_NODES, MAX_REMEMBER_ITEMS_PRE_A1, readingOf, ladderSteps, recallPlan, type LadderStep, type RecallNode, type RecallPlan } from '../../curriculum/academy';
 import { ACADEMY_DECK_BLUEPRINT_IDS, type AcademyDeckLesson } from '../lessonRegistry';
 
 export const ACADEMY_LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1'] as const;
@@ -38,7 +38,7 @@ export function groupAcademyLessons(lessons: AcademyDeckLesson[]): LevelGroup[] 
 export interface LessonSlot {
   episode: number; name: string; built: boolean;
   /** the lesson blueprint's plan (A1 and above), shown to teachers and creators */
-  plan?: { id: string; objective: string; newItems: number; focus: string; structures: string[]; mission: string; release: string; clue: string; /** spaced "Remember?" plan: what returns from earlier lessons, and when */ remember?: string[] };
+  plan?: { id: string; objective: string; newItems: number; focus: string; structures: string[]; mission: string; release: string; clue: string; /** spaced "Remember?" plan: what returns from earlier lessons, and when */ remember?: string[]; /** Pre-A1 reading-first plan (owner 2026-10-15): words to activate, the message and the word bank */ reading?: { activate: string[]; from: string; lines: string[]; bank: string[] } };
 }
 /** What a season is about, for the creator's and teacher's library. */
 export interface SeasonOverview {
@@ -80,13 +80,19 @@ export function rememberLines(nodes: readonly RecallNode[], id: string, cap?: nu
 }
 
 /** Lesson slots of a Pre-A1 Season (the Season specs live in src/curriculum/academy/preA1.ts). */
+/** The reading-first plan of a Pre-A1 episode for the library (src/curriculum/academy/preA1Reading.ts). */
+function readingPlan(id: string): { activate: string[]; from: string; lines: string[]; bank: string[] } | undefined {
+  const r = readingOf(id);
+  return r && { activate: r.activate, from: r.message.from, lines: r.message.lines, bank: r.bank };
+}
+/** Lesson slots of a Pre-A1 Season (see above). */
 function preA1Slots(seasonIdx: number, lessons: AcademyDeckLesson[]): LessonSlot[] {
   const sp = PA1_SEASONS[seasonIdx];
   if (!sp) return [];
   const built = new Set(lessons.map((l) => ACADEMY_DECK_BLUEPRINT_IDS[l.id]).filter(Boolean));
   return sp.episodes.map((e) => ({
     episode: e.no, name: e.name, built: built.has(`${sp.id}-E${e.no}`),
-    plan: { id: `${sp.id}-E${e.no}`, objective: e.objective, newItems: e.newItems.length, focus: [...e.letters.map((l) => `letter ${l}`), ...e.sounds.map((x) => `sound /${x}/`), ...e.newItems].join(', '), structures: e.no === 3 ? [sp.chunk] : [], mission: e.mission ?? e.objective, release: sp.release, clue: e.clue, remember: rememberLines(PRE_A1_RECALL_NODES, `${sp.id}-E${e.no}`, MAX_REMEMBER_ITEMS_PRE_A1) },
+    plan: { id: `${sp.id}-E${e.no}`, objective: e.objective, newItems: e.newItems.length, focus: [...e.letters.map((l) => `letter ${l}`), ...e.sounds.map((x) => `sound /${x}/`), ...e.newItems].join(', '), structures: e.no === 3 ? [sp.chunk] : [], mission: e.mission ?? e.objective, release: sp.release, clue: e.clue, remember: rememberLines(PRE_A1_RECALL_NODES, `${sp.id}-E${e.no}`, MAX_REMEMBER_ITEMS_PRE_A1), reading: readingPlan(`${sp.id}-E${e.no}`) },
   }));
 }
 function preA1Overview(seasonIdx: number): SeasonOverview | undefined {

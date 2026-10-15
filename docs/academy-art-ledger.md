@@ -183,3 +183,40 @@ One Canva generation (LANDSCAPE_16_9, references: v-name card `MAHXiyPmEHA`, Vee
 
 Not in the repo yet: the owner downloads the page by hand (signed-URL commit blocked, Canva downloads blocked on the network). Cut into 10 by hand-set boxes (5 columns x 2 rows).
 Weaknesses: the teen is one boy with dark hair and a purple hoodie in 9 of 10 squares (consistent, but no cast variety); click (4) is a hand only, on a tablet. Gaps between squares are narrow (about 2-3% of the width), though clear. Pointing hand (6) and the slow-down hands (8) are slightly stylised; check fingers at full size before use. The flag target in 6 carries a small flag glyph; the clock in 8 has no numerals. No text, letters or numbers seen.
+
+## Pre-A1 S2 L1 "The Phone" (2026-10-15, owner approved the plan and the story scenario)
+
+| Picture | File | Canva media | Holder page |
+|---|---|---|---|
+| scene `bus-stop-night` | `bg/bus-stop-night.webp` | MAHYCEu_964 | 95 |
+| scene `phone-screen-glow` | `bg/phone-screen-glow.webp` | MAHYCNy2A9o | 96 |
+| story plate 1 (Vee, Theo, the phone) | `bg/story-pa1s02-1.webp` | MAHYCBxiW9M | 97 |
+| story plate 2 (the pin and the tin) | `bg/story-pa1s02-2.webp` | MAHYCAxZPkA | 98 |
+| story plate 3 (Ava arrives) | `bg/story-pa1s02-3.webp` | MAHYCIyzlSQ | 99 |
+| cards phone, pin, tin, map (cut-out stickers from one sheet) | `cards/p-phone.webp`, `p-pin`, `p-tin`, `p-map` | MAHYCKlTUeI | 100 |
+
+Purple share target is now about 25% (owner, 2026-10-15). Story plates 2 and 3 read below that by a rough hue count (navy and blue dominate); restyle only with the owner's approval.
+
+### Pre-A1 S2 L1 v2 plates (2026-10-15)
+The holder design reached Canva's 100-page limit, so holder pages 97-99 were reused: the three story plates are saved in the repo and recoverable by their Canva media ids above (MAHYCBxiW9M, MAHYCAxZPkA, MAHYCIyzlSQ).
+
+| Picture | File | Canva media | Holder page |
+|---|---|---|---|
+| scene `vault-corridor` (five round vault doors, the first glowing gold) | `bg/vault-corridor.webp` | MAHYCWjl1Fs | 97 |
+| scene `lockscreen-closeup` (lock screen, five empty key slots) | `bg/lockscreen-closeup.webp` | MAHYCV9JEuI | 98 |
+| scene `bus-stop-dawn` (the finale) | `bg/bus-stop-dawn.webp` | MAHYCQG_Dx8 | 99 |
+
+A new holder design is needed before more plates (page limit).
+
+
+## B1 Season 1 lesson 1 (2026-10-15)
+
+| picture | file | Canva media | holder page |
+|---|---|---|---|
+| scene `bucket-list-wall` (rooftop studio, wall of blank cards; main plate) | `bg/bucket-list-wall.webp` | MAHYFlM8PDc | 97 (reused) |
+| scene `trophy-case` (cabinet with six empty glowing slots) | `bg/trophy-case.webp` | MAHYFtktauU | 98 (reused) |
+| story plate 1 (Vee at the wall, Ava on the sofa) | `bg/story-b1s1-1.webp` | MAHYCnd2Ab0 | 99 (reused) |
+| story plate 2 (Ava shows photos to Theo) | `bg/story-b1s1-2.webp` | MAHYCguSgIg | 97 (reused) |
+| story plate 3 (Vee points at the viewer, Ava laughs, Theo grins) | `bg/story-b1s1-3.webp` | MAHYChMdb5g | 98 (reused) |
+
+The holder is full (100 pages), so pages 97-99 are reused; the pictures are recoverable by their media ids. Still to make: word-picture sticker sheet (`b-bucketlist, b-dare, b-giveitago, b-lifetime, b-tick, b-brave`).

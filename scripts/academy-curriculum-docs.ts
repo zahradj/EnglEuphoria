@@ -1,7 +1,7 @@
 // Generates docs/academy-curriculum/<level>.md (one curriculum per level) and an index, from the roadmap data + level frames.
 // Run: npx tsx scripts/academy-curriculum-docs.ts
 import { mkdirSync, writeFileSync } from 'node:fs';
-import { ACADEMY_ROADMAP, PA1_SEASONS } from '../src/curriculum/academy';
+import { ACADEMY_ROADMAP, PA1_SEASONS, PRE_A1_READING } from '../src/curriculum/academy';
 import { LEVEL_FRAMES } from '../src/curriculum/academy/levelFrames';
 
 const DIR = 'docs/academy-curriculum';
@@ -40,6 +40,12 @@ for (const f of LEVEL_FRAMES) {
     PA1_SEASONS.forEach((s) => out(`| ${s.id} | **${s.title}** · ${s.theme} | ${s.chunk} | ${s.sounds.join(' ') || 'review'} | ${s.episodes.reduce((a, e) => a + e.newItems.length, 0)} | ${s.release} |`));
     out();
     out('Seasons P4–P6 (the Full ladder) are proposals only: `docs/academy-pre-a1-curriculum.md`.');
+    out();
+    out('### Reading-first plan (owner 2026-10-15)');
+    out('Pre-A1 is extensive reading and the sounds: every lesson activates what the student knows ("I know it / New to me"), blends, reads a short message made only of what has been taught, and keeps words for a word bank that comes back on the spaced schedule. Rule: `CLAUDE.md`; note: `docs/academy-pre-a1-reading-first.md`. Data and check: `src/curriculum/academy/preA1Reading.ts`.');
+    out();
+    out('| Lesson | Activate | Message (from) | Word bank |'); out('|---|---|---|---|');
+    PRE_A1_READING.forEach((r) => out(`| ${r.id} | ${r.activate.join(', ')} | ${r.message.from}: “${r.message.lines.join(' ')}” | ${r.bank.join(', ')} |`));
   } else {
     out('| Season | Title · theme | Structures | Functions | New items | Release |'); out('|---|---|---|---|---|---|');
     seasons.forEach((s) => out(`| ${s.id}${s.bigRemix ? ' · Remix' : ''}${s.levelCheck ? ' · **level check**' : ''} | **${s.title}** · ${s.theme} | ${s.structures.map((x) => x.label).join('; ')} | ${s.functions.join('; ')} | ${s.newItemBudget} | ${s.release} |`));
