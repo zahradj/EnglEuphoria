@@ -374,3 +374,15 @@
 .ad-root[data-theme='scene'] .ad-plate-ph { background: linear-gradient(180deg, #cfe6ff 0%, #e9defa 55%, #fff1dc 100%) !important; }
 .ad-root[data-theme='scene'] .ad-story-sub { background: rgba(255, 255, 255, 0.9); }
 .ad-root[data-theme='scene'] .ad-story-sub * { text-shadow: none; }
+@media (max-height: 780px) and (min-width: 1101px) {
+  .ad-root[data-theme='scene'] .ad-lobby h1 { font-size: clamp(2rem, 8vh, 3.6rem); }
+  .ad-root[data-theme='scene'] .ad-lobby-hero { gap: 8px; }
+  .ad-root[data-theme='scene'] .ad-crew-one img { width: 54px; height: 54px; }
+  .ad-root[data-theme='scene'] .ad-start { min-height: 52px; padding: 8px 32px; font-size: 1.15rem; }
+  .ad-root[data-theme='scene'] .ad-lobby-card { padding: 12px 18px; }
+}
+.ad-root[data-theme='scene'] .ad-plate img { object-position: center 18%; }
+.ad-root[data-theme='scene'] .ad-story-sub, .ad-root[data-theme='scene'] .ad-story-sub * { text-shadow: none !important; }
+.ad-root[data-theme='scene'] .ad-story-sub { background: rgba(255, 255, 255, 0.92); }
+.ad-root[data-theme='scene'] .ad-story-plate img { object-position: center top; }
+.ad-root[data-theme='scene'] .ad-story-shade { background: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0) 20%, rgba(255, 255, 255, 0) 66%, rgba(40, 25, 90, 0.35) 100%); }

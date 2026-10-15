@@ -9,6 +9,10 @@
 - The **Playground, Academy and Success each own their own curriculum blueprint, lesson blueprint, skills and docs.** Never edit, import or reuse another hub's.
 - Academy work lives only in `src/curriculum/academy/`, `.claude/skills/academy-*`, `docs/academy-*` (see `docs/hub-separation.md`). Do not touch the Playground, and do not read or change the legacy Academy rows in the database.
 
+## Academy pictures are light, daytime, school, reserved (hard rule — owner, 2026-10-15)
+
+- "Regenerate the background images, make them light, not very dark; at school, during the day; all images age-appropriate and reserved." Every Academy background and story picture: **bright daytime school** (classroom, corridor, club room, library), big sunny windows, light wood, soft lilac accents (~25 % purple); no night, dusk, neon or gloomy scenes; modest school clothes; calm, reserved actions. Put "bright, light, airy, broad daylight, at school, age-appropriate, reserved" in every picture prompt. Existing dark plates are replaced one at a time. Details: `.claude/skills/academy-game-ui`.
+
 ## Voice (hard rule)
 
 - **Never use the browser's built-in text-to-speech** (`window.speechSynthesis`, `SpeechSynthesisUtterance`) for anything a student or teacher hears — not in the app, not in prototypes or mock-ups, not as a fallback. Device voices have the wrong accent and were rejected by the product owner.
