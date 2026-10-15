@@ -44,6 +44,7 @@ const ReviewModeration = lazy(() => import("@/pages/admin/ReviewModeration"));
 const TeacherKpiDashboard = lazy(() => import("@/pages/admin/TeacherKpiDashboard"));
 const TeacherScorecards = lazy(() => import("@/pages/admin/TeacherScorecards"));
 const TeacherKpiSelfView = lazy(() => import("@/pages/teacher/TeacherKpiSelfView"));
+const HowWeMeasure = lazy(() => import("@/pages/teacher/HowWeMeasure"));
 const KpiCardGallery = lazy(() => import("@/pages/teacher/KpiCardGallery"));
 const TeacherAuraDetail = lazy(() => import("@/pages/teacher/TeacherAuraDetail"));
 const BonusApprovalQueue = lazy(() => import("@/pages/admin/BonusApprovalQueue"));
@@ -1113,6 +1114,11 @@ const App = () => {
                       <Route path="/teacher/kpi" element={
                         <ImprovedProtectedRoute requiredRole="teacher">
                           <Suspense fallback={<LoadingFallback />}><TeacherKpiSelfView /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      <Route path="/teacher/how-we-measure" element={
+                        <ImprovedProtectedRoute requiredRole="teacher">
+                          <Suspense fallback={<LoadingFallback />}><HowWeMeasure /></Suspense>
                         </ImprovedProtectedRoute>
                       } />
                       <Route path="/teacher/kpi-gallery" element={

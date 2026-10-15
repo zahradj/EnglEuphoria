@@ -12,6 +12,7 @@ import { Sparkles, TrendingUp, TrendingDown, Trophy, Flame, ArrowRight, Target }
 import { calculateKpiBonus } from "@/lib/kpiBonus";
 import { useBonusPolicy } from "@/hooks/useBonusPolicy";
 import { cn } from "@/lib/utils";
+import { LEGACY_KPI_PAUSED } from "@/lib/legacyKpiPause";
 
 type Metric = {
   overall_kpi_score: number;
@@ -66,7 +67,7 @@ function Ring({ score, className }: { score: number; className: string }) {
   );
 }
 
-export function KpiPulseCard() {
+function LegacyKpiPulseCard() {
   const { user } = useAuth();
   const { policy } = useBonusPolicy();
   // Local teachers are paid in DZD, international in EUR.
@@ -284,6 +285,32 @@ export function KpiPulseCard() {
       </CardContent>
     </Card>
   );
+}
+
+/** The new, simpler dashboard card: points to the five-goal "My teaching" scorecard. No score, tier or bonus. */
+function TeachingPulseCard() {
+  return (
+    <Card className="border-border bg-card">
+      <CardContent className="flex flex-wrap items-center justify-between gap-3 p-5">
+        <div className="flex items-center gap-3">
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary"><Target className="h-5 w-5" /></div>
+          <div>
+            <p className="font-semibold text-foreground">My teaching</p>
+            <p className="text-sm text-muted-foreground">Five simple goals and one thing to focus on. It exists to help you grow.</p>
+          </div>
+        </div>
+        <div className="flex gap-2">
+          <Button asChild size="sm"><Link to="/teacher/kpi">See my goals <ArrowRight className="ml-1 h-4 w-4" /></Link></Button>
+          <Button asChild size="sm" variant="ghost"><Link to="/teacher/how-we-measure">How we measure</Link></Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+/** While the old composite score is paused (see lib/legacyKpiPause.ts) the dashboard shows the new card instead. */
+export function KpiPulseCard() {
+  return LEGACY_KPI_PAUSED ? <TeachingPulseCard /> : <LegacyKpiPulseCard />;
 }
 
 export default KpiPulseCard;
