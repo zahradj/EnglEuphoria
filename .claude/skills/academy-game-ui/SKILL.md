@@ -101,3 +101,7 @@ A game screen is **layers, each with its own motion, driven by one state**, not 
 6. **Scene lights**: moving god-rays, drifting bokeh, window shimmer on top of the still (never zoom or pan the still itself).
 7. **Entrances**: panels spring in, options stagger, characters walk in from their side; a slide change is a small transition, not a cut.
 8. **Honest limit**: flat expression pictures cannot do real lip-sync or arm movement. Real animated characters need either layered art (Canva `separate-image-layers`, a Rive/Spine rig) or approved Higgsfield loops through the video gate. Ask the owner before ordering either.
+
+## "Night" theme for B1 and up (owner 2026-10-15)
+
+The default Academy look (pastel lavender, white panels, purple ribbon titles) reads young and unfinished at B1. A lesson sets `theme: 'night'` on its `DeckScript` for: deep indigo and teal, one gold accent, dark glass panels, plain headings (no ribbons), clean glass answer tiles (no gold ovals), the teacher's lesson clock as a slim pill in the bottom bar (never a card over the lesson). While a plate is missing, the fallback is a deep-night gradient, never pastel. CSS: `.ad-root[data-theme='night']` in `src/academy-deck/deck.css`. Check every slide kind of the lesson in the real player (screenshots) before reporting it done; new slide kinds must be styled for the night theme too.

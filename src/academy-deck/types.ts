@@ -247,6 +247,8 @@ export interface DeckScript {
   partMinutes?: number[];
   /** v2 lock-screen lesson: the names of the locks (five), shown by the key HUD; slides carry `lock` and a `vault` slide opens each lock */
   locks?: string[];
+  /** a look for the whole lesson: 'night' = deep indigo and teal with a gold accent, dark glass panels and plain headings (B1 and up, owner 2026-10-15: the default pastel ribbons looked unprofessional) */
+  theme?: 'night';
   /** teacher view only: show the lesson clock (part target vs running time); never shown to the student */
   clock?: boolean;
   slides: Slide[];

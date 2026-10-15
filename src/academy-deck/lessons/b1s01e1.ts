@@ -52,6 +52,7 @@ export const B1_S01_E1: DeckScript = {
   criteria: CRITERIA,
   cast: ['Vee', 'Ava', 'Theo', 'Mia'],
   clock: true,
+  theme: 'night',
   // the required pages fill the hour: a long Drop (the story, six word pages, two memorising games, the gist), no wasted Energiser
   partMinutes: [5, 7, 15, 10, 4, 10, 5, 4],
   partGoals: [

@@ -65,18 +65,25 @@ export function CardView({ slide }: { slide: CardSlide }) {
 
 /** Wrap: stamps collected, can-do ticks (yes / almost / not yet), homework, and the clue for next time. */
 export function WrapView({ slide }: { slide: WrapSlide }) {
-  const { stamps, done, setVars } = useDeck();
+  const { stamps, done, setVars, vars } = useDeck();
+  const trophies = (vars.trophies ?? '').split(',').filter(Boolean);
   const [tick, setTick] = useState<Record<number, 'yes' | 'almost' | 'not yet'>>({});
   const [flip, setFlip] = useState(false);
   const all = Object.keys(tick).length === slide.ticks.length;
   const cycle = (i: number) => setTick({ ...tick, [i]: tick[i] === 'yes' ? 'almost' : tick[i] === 'almost' ? 'not yet' : 'yes' });
   return (
     <Panel title={slide.heading} wide>
-      <div className="ad-stamps" aria-label="Stamps collected">
-        {[['spell', 'abc', 'Spell'], ['number', 'numbers', 'Number'], ['passport', 'passport', 'Passport'], ['card', 'idcard', 'Card']].map(([id, icon, label]) => (
-          <span key={id} className="ad-stampbadge" data-got={stamps.includes(id)}><b><Icon name={icon} /></b><i>{label}</i></span>
-        ))}
-      </div>
+      {trophies.length > 0 ? (
+        <ul className="ad-trophies" aria-label={`Trophies earned: ${trophies.length}`}>
+          {trophies.map((v) => <li key={v} className="ad-trophy" data-on="true"><Icon name="star" /><span>{v}</span></li>)}
+        </ul>
+      ) : stamps.length > 0 && (
+        <div className="ad-stamps" aria-label="Stamps collected">
+          {[['spell', 'abc', 'Spell'], ['number', 'numbers', 'Number'], ['passport', 'passport', 'Passport'], ['card', 'idcard', 'Card']].map(([id, icon, label]) => (
+            <span key={id} className="ad-stampbadge" data-got={stamps.includes(id)}><b><Icon name={icon} /></b><i>{label}</i></span>
+          ))}
+        </div>
+      )}
       <p className="ad-hint-line">Tap each line: yes · almost · not yet. Honest is best!</p>
       <div className="ad-ticks">
         {slide.ticks.map((t, i) => (

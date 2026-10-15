@@ -1290,3 +1290,127 @@
 .ad-streak-n { padding: 4px 14px; border-radius: 999px; background: linear-gradient(180deg, #fde68a, #f59e0b); color: #3b2a00; font-weight: 900; font-size: 1.2rem; }
 .ad-streak-base { font-size: clamp(2rem, 5vw, 3rem); color: #fff; text-shadow: 0 0 18px rgba(253, 230, 138, 0.5); }
 .ad-streak-step { color: #ddd6fe; font-weight: 700; }
+
+/* ===== "night" theme (owner 2026-10-15): one professional look for B1 and up. Deep indigo and teal with a gold accent, dark glass panels, plain headings, no ribbons. Only lessons with theme: 'night'. ===== */
+.ad-root[data-theme='night'] { --ink: #f5f3ff; --violet: #8b5cf6; --violet-d: #ede9fe; --soft: rgba(255, 255, 255, 0.07); --line: rgba(196, 181, 253, 0.3); --gold: #f5c451; --teal: #2dd4bf; --muted: #b9b0e6; background: #0d0a24; color: #f5f3ff; }
+/* the picture, or while it is missing a calm deep-night gradient with a warm glow (never pastel) */
+.ad-root[data-theme='night'] .ad-plate-ph { background: radial-gradient(ellipse 60% 45% at 50% 38%, rgba(245, 196, 81, 0.16), transparent 70%), linear-gradient(165deg, #0d0a24 0%, #1d1250 46%, #0f3550 100%) !important; }
+.ad-root[data-theme='night'] .ad-ray, .ad-root[data-theme='night'] .ad-motes { opacity: 0.5; }
+/* top strip and dock: slim dark glass */
+.ad-root[data-theme='night'] .ad-strip { background: linear-gradient(180deg, rgba(8, 5, 30, 0.85), rgba(8, 5, 30, 0)); }
+.ad-root[data-theme='night'] .ad-lesson, .ad-root[data-theme='night'] .ad-count { color: #ddd6fe; }
+.ad-root[data-theme='night'] .ad-dock { background: rgba(10, 6, 36, 0.88); border-top: 1px solid rgba(255, 255, 255, 0.12); backdrop-filter: blur(10px); }
+.ad-root[data-theme='night'] .ad-dockbtn { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.22); color: #f5f3ff; }
+.ad-root[data-theme='night'] .ad-dockbtn:hover:not(:disabled) { border-color: var(--gold); }
+.ad-root[data-theme='night'] .ad-dock-say { background: linear-gradient(160deg, #0f766e, #14b8a6); border-color: #5eead4; color: #fff; }
+.ad-root[data-theme='night'] .ad-dock-next { background: linear-gradient(160deg, #f5c451, #e3a008); border-color: #fde68a; color: #2a1d00 !important; }
+.ad-root[data-theme='night'] .ad-dock-next:disabled { background: rgba(255, 255, 255, 0.1); color: rgba(255, 255, 255, 0.45) !important; border-color: rgba(255, 255, 255, 0.15); }
+.ad-root[data-theme='night'] .ad-dockico { filter: none; }
+.ad-root[data-theme='night'] .ad-menu { background: rgba(14, 9, 48, 0.96); border: 1px solid rgba(255, 255, 255, 0.18); color: #f5f3ff; }
+.ad-root[data-theme='night'] .ad-menu button { color: #f5f3ff; }
+/* panels: dark glass, plain heading */
+.ad-root[data-theme='night'] .ad-panel { background: linear-gradient(180deg, rgba(20, 13, 58, 0.86), rgba(13, 9, 40, 0.9)); border: 1px solid rgba(255, 255, 255, 0.16); border-radius: 20px; box-shadow: 0 22px 60px rgba(3, 1, 20, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08); backdrop-filter: blur(14px); color: #f5f3ff; }
+.ad-root[data-theme='night'] .ad-panel[data-variant='bare'] { background: transparent; border-color: transparent; box-shadow: none; backdrop-filter: none; }
+.ad-root[data-theme='night'] .ad-panel > .ad-prompt { width: auto; max-width: none; margin: 0 0 14px; padding: 0 0 10px; background: none; text-align: left; color: #fff; text-shadow: none; font-size: clamp(1.05rem, 2.1vw, 1.35rem); font-weight: 700; line-height: 1.3; border-bottom: 1px solid rgba(255, 255, 255, 0.14); }
+.ad-root[data-theme='night'] .ad-prompt { color: #fff; }
+.ad-root[data-theme='night'] .ad-prompt::before { color: var(--gold); }
+.ad-root[data-theme='night'] .ad-hint-line, .ad-root[data-theme='night'] .ad-panel[data-variant='bare'] .ad-hint-line { color: var(--muted); background: none; padding: 0; margin: 10px 0 0; text-align: left; width: auto; font-size: 0.9rem; }
+.ad-root[data-theme='night'] .ad-feedback { color: #fff; }
+.ad-root[data-theme='night'] .ad-feedback-ok { color: #5eead4; }
+.ad-root[data-theme='night'] .ad-feedback-try { color: #fdba74; }
+/* buttons, inputs, chips */
+.ad-root[data-theme='night'] .ad-btn { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.28); color: #f5f3ff; }
+.ad-root[data-theme='night'] .ad-btn:hover:not(:disabled) { border-color: var(--gold); }
+.ad-root[data-theme='night'] .ad-btn-primary, .ad-root[data-theme='night'] .ad-panel[data-variant='glass'] .ad-btn-primary { background: linear-gradient(160deg, #7c5cf0, #5b3fd0); border-color: #a78bfa; color: #fff !important; box-shadow: 0 4px 14px rgba(91, 63, 208, 0.45); }
+.ad-root[data-theme='night'] .ad-panel[data-variant='glass'] .ad-btn:not(.ad-btn-primary) { background: rgba(255, 255, 255, 0.08); color: #f5f3ff; border-color: rgba(255, 255, 255, 0.28); }
+.ad-root[data-theme='night'] .ad-input, .ad-root[data-theme='night'] .ad-textarea { background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 255, 255, 0.28); color: #fff; }
+.ad-root[data-theme='night'] .ad-input::placeholder, .ad-root[data-theme='night'] .ad-textarea::placeholder { color: rgba(255, 255, 255, 0.5); }
+.ad-root[data-theme='night'] .ad-chip { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); color: #fff !important; }
+.ad-root[data-theme='night'] .ad-chip:hover:not(:disabled) { border-color: var(--gold); }
+.ad-root[data-theme='night'] .ad-build-slot { border-color: rgba(255, 255, 255, 0.35); background: rgba(255, 255, 255, 0.05); color: #fff; }
+.ad-root[data-theme='night'] .ad-build-cue { background: rgba(255, 255, 255, 0.07); color: #ddd6fe; }
+.ad-root[data-theme='night'] .ad-model-say .ad-line, .ad-root[data-theme='night'] .ad-sayhidden { background: rgba(245, 196, 81, 0.1); border: 1px dashed rgba(245, 196, 81, 0.5); color: #fde68a; }
+.ad-root[data-theme='night'] .ad-option, .ad-root[data-theme='night'] .ad-tickrow { background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 255, 255, 0.24); color: #f5f3ff; box-shadow: none; }
+.ad-root[data-theme='night'] .ad-option:hover, .ad-root[data-theme='night'] .ad-tickrow:hover { border-color: var(--gold); }
+.ad-root[data-theme='night'] .ad-tickrow b { background: rgba(255, 255, 255, 0.14); color: #fff; }
+.ad-root[data-theme='night'] .ad-tickrow[data-v='yes'] b { background: #14b8a6; color: #04261f; }
+.ad-root[data-theme='night'] .ad-tickrow[data-v='almost'] b { background: #f5c451; color: #2a1d00; }
+.ad-root[data-theme='night'] .ad-tickrow[data-v='not yet'] b { background: #fb923c; color: #2a1200; }
+.ad-root[data-theme='night'] .ad-line { background: rgba(255, 255, 255, 0.08); color: #f5f3ff; }
+/* sort, hear-and-pick, memory, match */
+.ad-root[data-theme='night'] .ad-sort-item { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.3); color: #fff; box-shadow: none; }
+.ad-root[data-theme='night'] .ad-sort-item[data-on='true'] { border-color: var(--gold); box-shadow: 0 0 0 2px rgba(245, 196, 81, 0.5); }
+.ad-root[data-theme='night'] .ad-sort-bin { background: rgba(255, 255, 255, 0.05); border: 1.5px dashed rgba(255, 255, 255, 0.35); color: #f5f3ff; }
+.ad-root[data-theme='night'] .ad-sort-bin:hover { border-color: var(--gold); }
+.ad-root[data-theme='night'] .ad-hearpick { gap: 14px; }
+.ad-root[data-theme='night'] .ad-hp-tile { min-width: 120px; min-height: 64px; padding: 12px 22px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.3); background: rgba(255, 255, 255, 0.09); color: #fff; font-size: clamp(1.05rem, 2.3vw, 1.5rem); font-weight: 700; line-height: 1.25; transform: none !important; box-shadow: 0 6px 18px rgba(3, 1, 20, 0.4); max-width: min(100%, 560px); text-wrap: balance; }
+.ad-root[data-theme='night'] .ad-hp-tile:hover { border-color: var(--gold); background: rgba(245, 196, 81, 0.12); }
+.ad-root[data-theme='night'] .ad-hp-ear { background: linear-gradient(160deg, #7c5cf0, #5b3fd0); border: 1px solid #a78bfa; color: #fff; }
+.ad-root[data-theme='night'] .ad-mem-back { background: radial-gradient(circle at 50% 50%, rgba(245, 196, 81, 0.55) 0 7%, transparent 8%), linear-gradient(160deg, #26186a, #14103f); border: 1px solid rgba(255, 255, 255, 0.25); }
+.ad-root[data-theme='night'] .ad-mem-front { background: rgba(255, 255, 255, 0.95); color: #1e1b4b; }
+.ad-root[data-theme='night'] .ad-match-card, .ad-root[data-theme='night'] .ad-match-slot { background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 255, 255, 0.28); color: #fff; }
+/* the story's subtitle bar, the rule list and the teacher's clock */
+.ad-root[data-theme='night'] .ad-story-sub { background: rgba(10, 6, 36, 0.82); border: 1px solid rgba(255, 255, 255, 0.16); border-radius: 18px; backdrop-filter: blur(12px); }
+.ad-root[data-theme='night'] .ad-rule-row { background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.16); }
+.ad-root[data-theme='night'] .ad-trophy[data-on='true'] { color: #2a1d00; }
+.ad-root[data-theme='night'] .ad-xp { background: rgba(10, 6, 36, 0.8); border: 1px solid rgba(255, 255, 255, 0.2); color: #fde68a; }
+/* the lesson clock lives in the dock: one slim line, no card over the lesson */
+.ad-dock .ad-clock { position: static; display: flex; align-items: center; gap: 8px; max-width: none; margin-inline-end: auto; padding: 4px 10px; border-radius: 999px; font-size: 0.72rem; line-height: 1.2; box-shadow: none; background: rgba(255, 255, 255, 0.1); color: #ddd6fe; border: 1px solid rgba(255, 255, 255, 0.2); }
+.ad-dock .ad-clock svg { width: 14px; height: 14px; grid-row: auto; }
+.ad-dock .ad-clock-total { opacity: 0.85; }
+.ad-dock .ad-clock-hint { display: none; }
+.ad-dock .ad-clock:hover .ad-clock-hint, .ad-dock .ad-clock:focus-within .ad-clock-hint { display: block; position: absolute; bottom: 62px; left: 10px; max-width: 280px; padding: 6px 10px; border-radius: 10px; background: rgba(10, 6, 36, 0.96); color: #fff; }
+.ad-dock .ad-clock[data-state='behind'] { background: rgba(251, 146, 60, 0.22); border-color: #fb923c; }
+.ad-dock .ad-clock[data-state='ahead'] { background: rgba(45, 212, 191, 0.2); border-color: #2dd4bf; }
+@media (max-width: 760px) { .ad-dock .ad-clock-total { display: none; } }
+
+/* night, second pass: bubbles, word pages, answer tiles */
+.ad-root[data-theme='night'] .ad-chip-bubble { background: linear-gradient(160deg, rgba(36, 24, 100, 0.96), rgba(20, 14, 62, 0.96)) !important; color: #fff !important; border: 1px solid rgba(167, 139, 250, 0.7) !important; box-shadow: 0 8px 22px rgba(3, 1, 20, 0.5); }
+.ad-root[data-theme='night'] .ad-chip-bubble::after { background: #241864; border-right: 1px solid rgba(167, 139, 250, 0.7); border-bottom: 1px solid rgba(167, 139, 250, 0.7); }
+.ad-root[data-theme='night'] .ad-cm-bubble, .ad-root[data-theme='night'] .ad-msg { background: rgba(255, 255, 255, 0.1); color: #f5f3ff; border: 1px solid rgba(255, 255, 255, 0.25); }
+.ad-root[data-theme='night'] .ad-msg[data-me='true'] { background: #6d46e6; border-color: #a78bfa; }
+.ad-root[data-theme='night'] .ad-who-line { background: rgba(20, 184, 166, 0.14); border: 1px solid #14b8a6; color: #f5f3ff; }
+.ad-root[data-theme='night'] .ad-teach-art { background: radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.03)); border: 1px solid rgba(255, 255, 255, 0.2); }
+.ad-root[data-theme='night'] .ad-art-frame { color: rgba(196, 181, 253, 0.7); }
+.ad-root[data-theme='night'] .ad-teach-clue { background: rgba(245, 196, 81, 0.12); border: 1px solid rgba(245, 196, 81, 0.55); color: #fde68a; }
+.ad-root[data-theme='night'] .ad-pattern { background: rgba(255, 255, 255, 0.07); border: 1px dashed rgba(255, 255, 255, 0.4); }
+.ad-root[data-theme='night'] .ad-pattern-text { color: #fff; }
+.ad-root[data-theme='night'] .ad-pattern-tag { background: #6d46e6; }
+.ad-root[data-theme='night'] .ad-art-card img { box-shadow: 0 8px 18px rgba(3, 1, 20, 0.5); }
+.ad-root[data-theme='night'] .ad-match-art, .ad-root[data-theme='night'] .ad-match-card .ad-art { max-height: 92px; }
+/* answer tiles: clean glass rectangles instead of gold ovals, also on the "bare" panels (higher specificity than the bare-panel style) */
+.ad-root[data-theme='night'] .ad-panel[data-variant='bare'] .ad-hp-tile, .ad-root[data-theme='night'] .ad-panel .ad-hp-tile { min-width: 130px; min-height: 64px; padding: 12px 24px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.32); background: linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.06)); color: #fff; font-size: clamp(1.1rem, 2.4vw, 1.6rem); font-weight: 700; line-height: 1.25; box-shadow: 0 8px 22px rgba(3, 1, 20, 0.45); text-shadow: none; transform: none; max-width: min(100%, 620px); text-wrap: balance; }
+.ad-root[data-theme='night'] .ad-panel[data-variant='bare'] .ad-hp-tile:hover, .ad-root[data-theme='night'] .ad-panel .ad-hp-tile:hover { transform: translateY(-2px); border-color: #f5c451; background: rgba(245, 196, 81, 0.14); }
+.ad-root[data-theme='night'] .ad-panel[data-variant='bare'] .ad-hp-tile[data-bad='true'] { border-color: #fb923c; }
+.ad-root[data-theme='night'] .ad-panel[data-variant='bare'] .ad-hearpick { gap: 14px; padding: 12px 0 6px; flex-direction: row; }
+.ad-root[data-theme='night'] .ad-panel[data-variant='bare'] { background: linear-gradient(180deg, rgba(20, 13, 58, 0.82), rgba(13, 9, 40, 0.86)); border: 1px solid rgba(255, 255, 255, 0.16); box-shadow: 0 22px 60px rgba(3, 1, 20, 0.6); backdrop-filter: blur(14px); padding: 18px 22px; }
+.ad-root[data-theme='night'] .ad-panel[data-variant='bare'] .ad-hint-line { text-align: left; }
+
+/* night, third pass: speech bubbles, the example line on word pages, the picture-match grid */
+.ad-root[data-theme='night'] .ad-bubble { background: linear-gradient(160deg, rgba(36, 24, 100, 0.96), rgba(20, 14, 62, 0.96)); color: #fff; border: 1px solid color-mix(in srgb, var(--who, #8b5cf6) 70%, #fff 0%); box-shadow: 0 8px 22px rgba(3, 1, 20, 0.5); }
+.ad-root[data-theme='night'] .ad-bubble-text { color: #fff; }
+.ad-root[data-theme='night'] .ad-bubble-who { background: var(--who, #38bdf8); color: #06122b; }
+.ad-root[data-theme='night'] .ad-bubble::after { background: #241864; border-color: color-mix(in srgb, var(--who, #8b5cf6) 70%, #fff 0%); }
+.ad-root[data-theme='night'] .ad-teach-example { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.22); color: #f5f3ff; }
+.ad-root[data-theme='night'] .ad-teach-example mark { background: var(--gold); color: #2a1d00; border-radius: 6px; padding: 0 6px; }
+.ad-root[data-theme='night'] .ad-teach-word { color: #fff; }
+.ad-root[data-theme='night'] .ad-teach-meaning { color: #ddd6fe; }
+.ad-root[data-theme='night'] .ad-teach-count { color: var(--gold); }
+.ad-root[data-theme='night'] .ad-match { gap: 12px; }
+.ad-root[data-theme='night'] .ad-match-card { padding: 10px 14px; min-height: 0; }
+.ad-root[data-theme='night'] .ad-match-card svg, .ad-root[data-theme='night'] .ad-match-card .ad-art-frame svg { width: 52px; height: 52px; }
+.ad-root[data-theme='night'] .ad-match-card .ad-art-card img { max-width: 84px; }
+.ad-root[data-theme='night'] .ad-match-art { min-height: 0; }
+
+/* night, fourth pass: forge/streak tiles, feedback lines, wrap boxes, sentence chips */
+.ad-root[data-theme='night'] .ad-pk-tile { background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.07)); border: 1px solid rgba(255, 255, 255, 0.34); color: #fff; box-shadow: 0 8px 22px rgba(3, 1, 20, 0.45); font-weight: 700; }
+.ad-root[data-theme='night'] .ad-pk-tile:hover:not(:disabled) { border-color: #f5c451; background: rgba(245, 196, 81, 0.14); transform: translateY(-2px); }
+.ad-root[data-theme='night'] .ad-pk-tile::after { background: linear-gradient(100deg, transparent 30%, rgba(245, 196, 81, 0.28) 50%, transparent 70%); }
+.ad-root[data-theme='night'] .ad-pk-tile:disabled { opacity: 0.45; }
+.ad-root[data-theme='night'] .ad-fadeline { background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.22); color: #f5f3ff; }
+.ad-root[data-theme='night'] .ad-fadetext { color: #f5f3ff; }
+.ad-root[data-theme='night'] .ad-roundtag { background: rgba(255, 255, 255, 0.12); color: #ddd6fe; }
+.ad-root[data-theme='night'] .ad-homework, .ad-root[data-theme='night'] .ad-clue-card { background: rgba(255, 255, 255, 0.07); border: 1px solid rgba(255, 255, 255, 0.22); color: #f5f3ff; }
+.ad-root[data-theme='night'] .ad-homework *, .ad-root[data-theme='night'] .ad-clue-card * { color: inherit; }
+.ad-root[data-theme='night'] .ad-sort-pool { gap: 10px; }
+.ad-root[data-theme='night'] .ad-sort-item { min-width: 132px; max-width: 220px; padding: 10px 14px; text-align: left; font-weight: 600; line-height: 1.3; }
