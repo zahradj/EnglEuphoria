@@ -1,17 +1,7 @@
 [
   {
-    "url": "https://export-download.canva.com/ndgiM/DAHYA1ndgiM/-1/0/0069-4168600532392914582.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261014%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261014T184231Z&X-Amz-Expires=85959&X-Amz-Signature=d67ced216e2abb100d81b222f6234dc82e2fd6aa0eaa11b61588c4cdbde31aa3&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2015%20Oct%202026%2018%3A35%3A10%20GMT",
-    "out": "public/lep1/scenes/bg-a1u6-story-3-wide.png",
+    "url": "https://export-download.canva.com/ndgiM/DAHYA1ndgiM/-1/0/0072-5935137486877806414.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261015%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261015T020554Z&X-Amz-Expires=60037&X-Amz-Signature=ac21845f3f342402dc0b268f57310b8bb5a9d89c32950dbd729daa194f1442d9&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2015%20Oct%202026%2018%3A46%3A31%20GMT",
+    "out": "public/lep1/scenes/bg-a1u6-story-2-wide.png",
     "sticker": false
-  },
-  {
-    "url": "https://export-download.canva.com/ndgiM/DAHYA1ndgiM/-1/0/0070-5538820720425236353.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261015%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261015T093551Z&X-Amz-Expires=31679&X-Amz-Signature=a567d5fc49fad3e2e15c7ea06a511efea3f043183163f217d237f72c8a1c8f83&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2015%20Oct%202026%2018%3A23%3A50%20GMT",
-    "out": "public/lep1/items/item-coral.png",
-    "sticker": true
-  },
-  {
-    "url": "https://export-download.canva.com/ndgiM/DAHYA1ndgiM/-1/0/0071-5538820720425236353.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261014%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261014T193145Z&X-Amz-Expires=83784&X-Amz-Signature=8ceaa101e2937a2d2c1e8bbf6d17c933d8bba82aec230053962618f06844adde&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2015%20Oct%202026%2018%3A48%3A09%20GMT",
-    "out": "public/lep1/items/item-whisk.png",
-    "sticker": true
   }
 ]
