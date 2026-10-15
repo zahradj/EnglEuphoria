@@ -58,6 +58,15 @@ Better than the sources: the faces are the story's own stickers, every point is 
 
 Better than the sources: the doors close by themselves (attention stays on the question, not on bookkeeping), every answer is a full model sentence, the roles swap so the child both ASKS and ANSWERS, and the game can always be won with the language (`guessWho.test.ts` checks that every monster can be found by questions).
 
+## Lesson 7 — Boss Test: Monster Portrait!
+| Source (URL) | What it does | Taken (mechanic) | Quality / limits |
+|---|---|---|---|
+| Cambridge A1 Movers test format — https://www.cambridgeenglish.org/exams-and-tests/movers/test-format/ | Listening, Reading & Writing, Speaking (4 parts, 5-7 min, child alone with a friendly examiner) | the test parts (listen and tap, read yes / no, gap-fill story, speaking about a picture, asking questions); a calm one-to-one setting | official; search result, page not opened (unverified) |
+| Cambridge A1 Movers sample papers (British Council Hong Kong) — https://www.britishcouncil.hk/sites/default/files/movers-sample-papers-2018-vol1.pdf | real sample items: look and read yes / no, read the story and choose a word | Part 2 (yes / no about one big picture) and Part 3 (story gaps with 2 choices) | official samples; found earlier in this unit's research (unverified this lesson) |
+| Our own plan — docs/assessment/a1-assessment-plan.md | Boss Test = 4 sections, stars 1-5, Unit mastered / Practise again | 4 of 5 per part, practise-again games and quest | internal |
+
+Better than the sources: the test sits inside the unit's world (Monster Town, Bibi), a warm-up race comes first, a can-do card is ticked between the parts, and every part under the pass mark has its own practise-again game in the same lesson and in the homework quest.
+
 ## Games list (Unit 5 so far)
 | Lesson | Signature game | Other games |
 |---|---|---|
@@ -65,6 +74,7 @@ Better than the sources: the doors close by themselves (attention stays on the q
 | L2 | **Monster Builder** (new) | Read and Match (frames), Line Up (tall/short), Family Tree, Drag Match, Balloon Match, Sentence Build, Answer Race, Word Build (ea), Blend & Read (Slide) |
 | L3 | **Name That Feeling** game show | song "How Do You Feel?", Monster Whispers, Echo Hall, Peek-a-Boo Plates, Read & Check, Story Order, ee/ea Catch & Sort, Blend & Read (Gumball) |
 | L4 | **Monster Mix-Up** (new) | Read and Match (chalk), Dress-Up Studio, Washing Line, Shadows, Read and Do, Sound Pick (y at the end), Blend & Read (Frog) |
+| L7 | Boss Test (formats may repeat) | Feelings Race, listening trials, yes / no reading, Build the ee words, story gaps, Monster Portrait, reading aloud; practise again: Read and Match (frames), Sentence Build, Memory, Chat with Leo, Pass the Present |
 | L6 | **Guess Who** (new) | Charades, Draw That (feelings faces), Go Fish (clothes and party things), Monster Bingo, Save the Balloon (scarf, teeth, sleep), Tic-Tac-Toe, Hot Potato, Pass the Present, Dominoes, Twister Race, Blend & Read (Slide) |
 | L5 | **Feelings Meter** (new) | Read and Match (cards), Reader (pages 1-9, 10-12), Prediction pause, Story Quiz Board, Party Crossword, I Spy at the party, Word Splat (ee/ea/y), Blend & Read, tongue twister |
 
@@ -77,3 +87,4 @@ Better than the sources: the doors close by themselves (attention stays on the q
 | L3 | **game-show buzzer round** (Jeopardy/quiz show: buzz in, points, lights) + **rhythm game** (sing-along on the beat) | buzzes the face that matches the dialogue (*I'm bored. The lesson is long.*), sings the verse lines on the beat |
 | L5 | **level graph / progress track** (the world map line that shows where you have been) | taps Bibi's face for each story picture, the line grows, says *Bibi is sad because she is tiny.* |
 | L6 | **line-up deduction** (Guess Who / detective elimination: each clue closes doors until one suspect is left) | asks *Has your monster got long horns?*, hears *No! My monster hasn't got long horns.*, then hides a monster and answers Bibi's questions |
+| L7 | **boss battle + race** (a racing warm-up, then the boss: five rounds, a trophy and the Golden Compass piece) | answers the race cards, then each test part; describes their own monster in 4 sentences |

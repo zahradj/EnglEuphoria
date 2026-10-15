@@ -1819,3 +1819,250 @@ export const LESSON_A1U5L6_SCENES: Scene[] = [
   goodbyeSong('mt6-goodbye-song', bgGame),
   { id: 'mt6-finale', kind: 'finale', bg: bgGame, who: 'pip', line: 'What a game night! You asked and answered like a monster champion! \u{1F47E}' },
 ];
+
+/* =============================================================================
+ * A1 Unit 5 Lesson 7: "Boss Test: Monster Portrait!"
+ * Feelings Race warm-up, then five parts (4 of 5 each, docs/a1-unit-5-monster-town.md §5.7): listening (who feels
+ * what / looks / wearing), reading yes / no about the party picture, the story (5 gaps), speaking (a 4-sentence monster
+ * portrait + 2 questions about another monster), reading aloud. Practise-again games after the trophy.
+ * The A1 Halfway Check is its own lesson after this one (U5 · L8, docs/assessment/a1-assessment-plan.md).
+ * ========================================================================= */
+export const LESSON_A1U5L7_TITLE = 'Boss Test: Monster Portrait!';
+export const LESSON_A1U5L7_OBJECTIVE = 'I can show what I learned in Unit 5: feelings and why, looks (has got), clothes (is wearing) and the story.';
+
+export const LESSON_A1U5L7_SCENES: Scene[] = [
+  { id: 'mt7-title', kind: 'title-card', bg: bgStreet, level: 'A1', unit: 'Unit 5', lessonLabel: 'Lesson 7', title: 'Boss Test: Monster Portrait!', subtitle: 'Show everything you can do in Monster Town', cta: '\u{1F3C6} I’M READY!' },
+  {
+    // Remember? (owner, 2026-10-07): Lesson 6 — the Guess Who questions. Shadow mode (L6 used click): clothes stickers.
+    id: 'mt7-recall-warmup', kind: 'recall-warmup', bg: bgStreet, who: 'pip', mode: 'shadow', listen: true,
+    fromLabel: 'Unit 5 · Lesson 6 · Feelings Charades!',
+    teacher: 'Guided: listen — find the shadow, then ask the Guess Who question: Is your monster wearing a … ?',
+    items: [
+      { word: 'hat', say: 'Is your monster wearing a hat?', img: WEAR.hat },
+      { word: 'glasses', say: 'Is your monster wearing glasses?', img: WEAR.glasses },
+      { word: 'boots', say: 'Is your monster wearing boots?', img: WEAR.boots },
+      { word: 'scarf', say: 'Is your monster wearing a scarf?', img: WEAR.scarf },
+    ],
+  },
+  helloSong('mt7-hello-song', bgStreet),
+  {
+    id: 'mt7-intro', kind: 'cinematic', bg: bgStreet, title: 'The Boss Test', subtitle: 'A feelings race, then five parts', narrator: 'bibi',
+    script: [
+      { who: 'bibi', line: 'Welcome back to Monster Town!' },
+      { who: 'bibi', line: 'Listen, read, read my story, talk and read aloud!' },
+      { who: 'pip', line: 'First, the feelings race! Let’s go!' },
+    ],
+    cta: '\u{1F3C1} RACE!',
+  },
+  {
+    id: 'mt7-race', kind: 'answer-race', look: 'race', bg: bgStreet, who: 'pip', racer: BIBI.excited,
+    title: 'The Feelings Race! Every right answer moves Bibi!',
+    teacher: 'Warm-up: the student answers — every right answer moves Bibi. The last two cards are read, not heard.',
+    rounds: [
+      { ask: 'How do you feel at a party?', choices: ['I’m excited!', 'I’m wearing a hat.', 'It is dark.'], answer: 0 },
+      { ask: 'Why are you scared?', choices: ['Because it’s dark.', 'Because I’m happy.', 'Yes, I am.'], answer: 0 },
+      { ask: 'What has Big Bob got?', choices: ['He has got three eyes.', 'He is got three eyes.', 'He wearing eyes.'], answer: 0 },
+      { ask: 'What is Leo wearing?', choices: ['He is wearing a scarf.', 'He has wearing a scarf.', 'He is scarf.'], answer: 0, read: true },
+      { ask: 'Why is Bibi sad?', choices: ['She is sad because she is tiny.', 'She is sad because it is a party.', 'She sad tiny.'], answer: 0, read: true },
+    ],
+    doneLine: 'You won the feelings race! Now the Boss Test!',
+  },
+  /* Part 1 — Listening */
+  {
+    id: 'mt7-p1-listen', kind: 'prea1', teacher: 'Part 1 — Listening (5). One try each; 🔊 replays it. Pass: 4 of 5. The student works alone.',
+    scene: {
+      id: 'mt7-p1-listen', kind: 'hero-trials', bg: bgStreet, who: 'pip',
+      teacher: 'Listen and tap the picture. One try!',
+      hero: { img: BIBI.happy, name: 'Monster Expert' }, medal: item('medal-rainbow'),
+      skills: [
+        { key: 'feel', label: 'Feelings', icon: '\u{1F60A}' },
+        { key: 'look', label: 'Looks', icon: '\u{1F440}' },
+        { key: 'wear', label: 'Clothes', icon: '\u{1F9E3}' },
+      ],
+      items: [
+        { skill: 'feel', ask: 'She’s bored because the lesson is long.', reply: 'Bored!', answer: 2, options: [{ label: 'excited', img: BIBI.excited }, { label: 'scared', img: BIBI.scared }, { label: 'bored', img: BIBI.bored }] },
+        { skill: 'feel', ask: 'Surprise! She’s surprised!', reply: 'Surprised!', answer: 0, options: [{ label: 'surprised', img: BIBI.surprised }, { label: 'tired', img: BIBI.tired }, { label: 'sad', img: BIBI.sad }] },
+        { skill: 'look', ask: 'He’s very tall. He has got three eyes.', reply: 'Big Bob!', answer: 1, options: [{ label: 'Bea', img: item('bea') }, { label: 'Big Bob', img: item('big-bob') }, { label: 'Bibi', img: BIBI.happy }] },
+        { skill: 'wear', ask: 'She’s wearing glasses.', reply: 'Glasses!', answer: 0, options: [{ label: 'glasses', img: WEAR.glasses }, { label: 'boots', img: WEAR.boots }, { label: 'scarf', img: WEAR.scarf }] },
+        { skill: 'wear', ask: 'It’s cold. He’s wearing a scarf.', reply: 'A scarf!', answer: 2, options: [{ label: 'hat', img: WEAR.hat }, { label: 'coat', img: WEAR.coat }, { label: 'scarf', img: WEAR.scarf }] },
+      ],
+      doneLine: 'Listening done! Super ears!',
+    },
+  },
+  { id: 'mt7-can-1', kind: 'meet', focus: ['why'], bg: bibiPage(3), who: 'bibi', cardSide: 'right', teacher: 'Can-do: the student says 6 feelings and one reason with because — tick it on the Unit 5 can-do card.', line: 'I can say how I feel — and why!', repeat: 'I’m scared because it’s dark.' },
+  /* Part 2 — Reading: yes or no? */
+  {
+    id: 'mt7-p2-read', kind: 'true-false', bg: bgStreet, img: bibiPage(11), read: true,
+    teacher: 'Part 2 — Reading (5). Look at the party picture. Read: yes or no? Pass: 4 of 5.',
+    rounds: [
+      { who: 'bibi', statement: 'Bibi is excited.', isTrue: true },
+      { who: 'bibi', statement: 'There is a big cake.', isTrue: true },
+      { who: 'bibi', statement: 'Bibi is sad.', isTrue: false },
+      { who: 'bibi', statement: 'There are balloons.', isTrue: true },
+      { who: 'bibi', statement: 'Bibi is wearing glasses.', isTrue: false },
+    ],
+  },
+  {
+    id: 'mt7-p2b-tick', kind: 'prea1', teacher: 'Part 2b — Reading sentences (5). Read the sentence, look at the picture — tick or cross? Pass: 4 of 5.',
+    scene: {
+      id: 'mt7-p2b-tick', kind: 'tick-cross', bg: bgStreet, who: 'pip', teacher: 'Read and look. Yes or no?',
+      rounds: [
+        { img: BIBI.tired, sentence: 'She’s tired.', isTrue: true },
+        { img: WEAR.boots, sentence: 'He’s wearing a hat.', isTrue: false },
+        { img: item('big-bob'), sentence: 'He’s very tall.', isTrue: true },
+        { img: BIBI.scared, sentence: 'She’s happy.', isTrue: false },
+        { img: PART.hornsLong, sentence: 'Long horns!', isTrue: true },
+      ],
+    },
+  },
+  {
+    id: 'mt7-p2c-sounds', kind: 'letter-blocks', bg: bgStreet, mode: 'sounds', model: false,
+    prompt: 'Part 2c — Build the long ee words (3)',
+    teacher: 'Part 2c — Sounds (3). The student puts the sound blocks in order and reads the word: ee, ea, y. Pass: 2 of 3.',
+    rounds: [
+      { blocks: ['sh', 'ee', 'p'], word: 'sheep', img: item('sheep') },
+      { blocks: ['l', 'ea', 'f'], word: 'leaf', img: item('leaf') },
+      { blocks: ['t', 'ee', 'th'], word: 'teeth', img: PART.teeth },
+    ],
+  },
+  { id: 'mt7-can-2', kind: 'meet', focus: ['monsters'], bg: bibiPage(5), who: 'leo', cardSide: 'left', teacher: 'Can-do: the student says what a monster has got (eyes, horns, teeth) and tall / short / big / small — tick it.', line: 'I can say what monsters look like!', repeat: 'Big Bob has got three eyes.' },
+  /* Part 3 — Reading: the story */
+  {
+    id: 'mt7-p3-story', kind: 'grammar-gap', bg: bgStreet, title: 'Part 3 — The story',
+    teacher: 'Part 3 — Reading the story (5). Read and choose the missing word. Pass: 4 of 5.',
+    rounds: [
+      { before: 'Bibi is tired because it is', after: '.', choices: ['early', 'dark'], answer: 'early', img: bibiPage(2) },
+      { before: 'Big Bob has', after: 'three eyes.', choices: ['got', 'is'], answer: 'got', img: bibiPage(5) },
+      { before: 'Leo is', after: 'a green scarf.', choices: ['wearing', 'got'], answer: 'wearing', img: bibiPage(8) },
+      { before: 'Bibi is sad', after: 'she is tiny.', choices: ['because', 'and'], answer: 'because', img: bibiPage(7) },
+      { before: 'Bibi is', after: 'because it is a party for her!', choices: ['excited', 'bored'], answer: 'excited', img: bibiPage(11) },
+    ],
+  },
+  {
+    id: 'mt7-break', kind: 'prea1', teacher: 'Brain break between the parts: stretch and breathe.',
+    scene: {
+      id: 'mt7-break', kind: 'tpr-actions', mode: 'break', bg: bgStreet, who: 'pip', teacher: 'Stretch!',
+      rounds: [
+        { line: 'Stretch up tall like Big Bob!', emoji: '\u{1F64C}' },
+        { line: 'Now be tiny like Bibi!', emoji: '\u{1F90F}' },
+        { line: 'Breathe and count to five!', emoji: '\u{1F590}\u{FE0F}' },
+      ],
+    },
+  },
+  /* Part 4 — Speaking */
+  {
+    id: 'mt7-p4-portrait', kind: 'join-stage', bg: bgStreet, teacher: 'Part 4a — Speaking (3 points): the Monster Portrait. The student describes a monster (their own drawing or one from Guess Who) in 4 sentences: looks (has got), size or colour, clothes (is wearing), feeling + because. 1 point for has got / is wearing used right, 1 for the feeling with because, 1 for four sentences alone.', cast: ['bibi'],
+    turns: [
+      { who: 'bibi', line: 'Tell me about your monster!' },
+      { who: 'student', line: 'My monster is … . It has got … .' },
+      { who: 'student', line: 'It is wearing … .' },
+      { who: 'student', line: 'It is … because … .' },
+      { who: 'bibi', line: 'What a great monster!' },
+    ],
+  },
+  {
+    id: 'mt7-p4-ask', kind: 'join-stage', bg: bgGame, teacher: 'Part 4b — Speaking (2 points): the student asks Bibi 2 questions about HER secret monster (Has it got…? / Is it wearing…? / Is it…?). Pass for Part 4: 4 of 5 points.', cast: ['bibi'],
+    turns: [
+      { who: 'bibi', line: 'I have a secret monster. Ask me two questions!' },
+      { who: 'student', line: 'Has your monster got … ?' },
+      { who: 'bibi', line: 'Yes, it has!' },
+      { who: 'student', line: 'Is your monster wearing … ?' },
+      { who: 'bibi', line: 'No, it isn’t!' },
+    ],
+  },
+  { id: 'mt7-can-3', kind: 'meet', focus: ['describe'], bg: bibiPage(8), who: 'mia', cardSide: 'left', teacher: 'Can-do: the student describes a monster friend with has got and is wearing — tick it.', line: 'I can describe a monster friend!', repeat: 'He’s got long horns. He’s wearing a hat.' },
+  /* Part 5 — Reading aloud */
+  {
+    id: 'mt7-p5-read-aloud', kind: 'reader', bg: bgStreet, title: 'Part 5 — Read it aloud!', doneLine: 'You read it all by yourself!',
+    teacher: 'Part 5 — Reading aloud (5 points: every word read, then fluency). Skip the listening: tap “My turn to read” at once. Pass: 4 of 5.',
+    pages: [BIBI_BAD_DAY[6], BIBI_BAD_DAY[8]],
+  },
+  { id: 'mt7-can-4', kind: 'meet', focus: ['story'], bg: bibiPage(12), who: 'bibi', cardSide: 'left', teacher: 'Can-do: the student reads a page of the story and says how Bibi feels at the end — tick it.', line: 'I can read my story and say how I feel!', repeat: 'Bibi is happy. It is a good day!' },
+  { id: 'mt7-echo-champ', kind: 'echo', bg: bibiPage(12), who: 'bibi', textSide: 'top', teacher: 'Say it proudly with Bibi!', word: 'I can do it! Monster expert!' },
+  { id: 'mt7-i-can', kind: 'meet', focus: ['Unit 5'], bg: bibiPage(12), who: 'bibi', cardSide: 'left', teacher: 'Check: any part below 4 of 5? Play it again next lesson (Practise again). Then the trophy!', line: 'I can show everything from Unit 5!', repeat: 'I’m a monster expert!' },
+  {
+    id: 'mt7-sticker', kind: 'prea1', teacher: 'The Unit 5 trophy! The student opens the pack and puts the trophy sticker in their Sticker Book.',
+    scene: {
+      id: 'mt7-sticker', kind: 'sticker-reward', bg: bibiPage(12), who: 'pip', teacher: 'The Unit 5 trophy!',
+      line: 'You passed the Boss Test! Here is your Unit 5 trophy — and piece 4 of the Golden Compass!',
+      sticker: { img: item('medal-rainbow'), label: 'Golden Compass piece 4' },
+    },
+  },
+  petPal('mt7-pet-pal', 0, 'You are a monster expert! I want a medal too!', [{ label: 'medal', img: item('hero-medal') }, { label: 'hat', img: WEAR.hat }, { label: 'leaf', img: item('leaf') }], 0, 'A medal! I’m so happy!'),
+  {
+    id: 'mt7-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
+    scene: {
+      id: 'mt7-home-mission', kind: 'home-mission', bg: bgStreet, who: 'pip',
+      teacher: 'Home Mission: read the steps with the student.',
+      line: 'Your home mission!',
+      parentNote: 'Your child finished Unit 5: feelings and why ("I\'m scared because it\'s dark."), looks ("He has got three eyes."), clothes ("She is wearing glasses.") and the story "Bibi\'s Bad Day". Next comes the A1 Halfway Check. Ask your child to describe a friend to you in English.',
+      steps: [
+        { emoji: '\u{1F3C5}', say: 'Show your medal to your family.' },
+        { emoji: '\u{1F9D1}', say: 'Describe a friend: He has got… He is wearing…' },
+        { emoji: '\u{1F4D6}', say: 'Read Bibi’s story again.' },
+      ],
+    },
+  },
+  /* Practise again — for any part below the pass mark, or as extra time */
+  {
+    id: 'mt7-pa-match', kind: 'picture-match', look: 'frames', prompt: 'Practise again: read and match',
+    teacher: 'Practise again (Part 2): read each sentence and drag it under its picture.',
+    items: [
+      { word: 'She’s scared.', img: BIBI.scared },
+      { word: 'He’s very tall.', img: item('big-bob') },
+      { word: 'She’s wearing glasses.', img: WEAR.glasses },
+      { word: 'Long horns!', img: PART.hornsLong },
+    ],
+    bg: bgStreet,
+  },
+  {
+    id: 'mt7-pa-build', kind: 'sentence-build', bg: bgStreet, teacher: 'Practise again (Part 3): put the words in order, then read the sentence.',
+    rounds: [
+      { words: ['She', 'is', 'sad', 'because', 'she', 'is', 'tiny.'], emoji: '\u{1F622}' },
+      { words: ['He', 'has', 'got', 'three', 'eyes.'], emoji: '\u{1F440}' },
+      { words: ['Leo', 'is', 'wearing', 'a', 'scarf.'], emoji: '\u{1F9E3}' },
+    ],
+  },
+  {
+    id: 'mt7-pa-memory', kind: 'memory', bg: bgGame, teacher: 'Practise again (Part 4): find each question and its answer — read both aloud.',
+    pairs: [
+      { id: 'feel', label: 'How do you feel?', match: 'I’m happy!', emoji: '\u{1F604}' },
+      { id: 'why', label: 'Why are you scared?', match: 'Because it’s dark.', emoji: '\u{1F311}' },
+      { id: 'got', label: 'Has it got horns?', match: 'Yes, it has.', emoji: '\u{1F47E}' },
+      { id: 'wear', label: 'Is she wearing a hat?', match: 'No, she isn’t.', emoji: '\u{1F3A9}' },
+    ],
+  },
+  {
+    id: 'mt7-pa-chat', kind: 'chat-chain', bg: bgStreet, partner: 'leo', title: 'Practise again: chat with Leo',
+    intro: 'Hi! Let’s talk about monsters!',
+    teacher: 'Practise again (Part 4): Leo talks, the student picks the reply that fits and SAYS it, then taps “I said it”.',
+    turns: [
+      { who: 'leo', line: 'How are you today?' },
+      { who: 'student', line: 'I’m happy because it’s sunny!', wrong: ['I’m wearing happy.', 'I has got happy.'] },
+      { who: 'leo', line: 'What does your monster look like?' },
+      { who: 'student', line: 'It has got two big eyes.', wrong: ['It is got two eyes.', 'It wearing eyes.'] },
+      { who: 'leo', line: 'Ask me a question!' },
+      { who: 'student', line: 'Is your monster wearing a hat?', wrong: ['Your monster wearing a hat.', 'Has your monster wearing a hat?'] },
+    ],
+  },
+  {
+    id: 'mt7-pa-parcel', kind: 'pass-parcel', bg: bibiPage(12), who: 'bibi', title: 'Pass the Present!',
+    teacher: 'Practise again (all parts): every right answer tears one layer off the present. What is inside?',
+    rounds: [
+      { ask: 'Why is Bibi tired?', choices: ['Because it is early.', 'Because it is a party.', 'She tired.'], answer: 0, img: bibiPage(2) },
+      { ask: 'Who is Bea?', choices: ['Bibi’s sister.', 'Bibi’s teacher.', 'A big monster.'], answer: 0, img: bibiPage(6) },
+      { ask: 'Is Big Bob short?', choices: ['No, he isn’t. He’s tall.', 'Yes, he is.', 'He has short.'], answer: 0, img: bibiPage(5) },
+      { ask: 'What is Mia wearing?', choices: ['She is wearing glasses.', 'She has glasses wearing.', 'She is a scarf.'], answer: 0, img: bibiPage(8) },
+      { ask: 'How is Bibi at the end?', choices: ['She is happy.', 'She is scared.', 'She is bored.'], answer: 0, img: bibiPage(12) },
+    ],
+    prize: { img: BIBI.happy, label: 'Happy Bibi' },
+    doneLine: 'You opened the present! It’s happy Bibi!',
+  },
+  {
+    id: 'mt7-pa-twister', kind: 'tongue-twister', look: 'town', speeds: 3, bg: bibiPage(12), who: 'pip', focus: 'ee',
+    teacher: 'Practise again (sounds): the unit’s long ee — slow, faster, then monster speed!',
+    line: 'Happy Bibi eats three green peas.',
+  },
+  goodbyeSong('mt7-goodbye-song', bibiPage(12)),
+  { id: 'mt7-finale', kind: 'finale', bg: bibiPage(12), who: 'bibi', line: 'You finished Unit 5 and found piece 4 of the Golden Compass! Next: the Halfway Check… \u{1F9ED}' },
+];

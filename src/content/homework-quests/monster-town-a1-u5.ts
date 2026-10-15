@@ -232,3 +232,36 @@ export const QUEST_GAME_NIGHT_A1_U5L6: HomeworkQuest = {
     chest('You did it! Game night champion!', `${S}/bg-a1u5-gamenight-wide.png`),
   ],
 };
+
+/** Lesson 7 "Boss Test: Monster Portrait!" — the practise-again pack: one level per test part. */
+export const QUEST_MONSTER_PORTRAIT_A1_U5L7: HomeworkQuest = {
+  id: 'monster-portrait-a1-u5l7', title: 'Monster Expert Quest', subtitle: 'Boss Test: Monster Portrait! · A1 Unit 5 · Lesson 7', level: 'A1', lessonKey: 'monster-rich-5-7',
+  theme: theme(`${S}/bg-a1u5-street-wide.png`), voice: 'teacher', praise,
+  levels: [
+    { kind: 'picture-choice', name: 'Listen!', icon: '👂', intro: 'Listen. Tap the right picture!', img: `${S}/bg-a1u5-street-wide.png`,
+      rounds: [
+        { line: 'She’s surprised!', answer: 'surprised', options: [{ label: 'tired', src: it('bibi-tired') }, { label: 'surprised', src: it('bibi-surprised') }, { label: 'bored', src: it('bibi-bored') }] },
+        { line: 'He’s very tall. He has got three eyes.', answer: 'Big Bob', options: [{ label: 'Big Bob', src: it('big-bob') }, { label: 'Bea', src: it('bea') }, { label: 'Bibi', src: it('bibi-happy') }] },
+        { line: 'She’s wearing glasses.', answer: 'glasses', options: [{ label: 'boots', src: it('boots') }, { label: 'hat', src: it('hat') }, { label: 'glasses', src: it('glasses') }] },
+      ] },
+    { kind: 'true-false', name: 'Yes or No?', icon: '📖', intro: 'Look and read. True or false?',
+      rounds: [
+        { img: page(11), aspect: 16 / 9, line: 'Bibi is excited.', isTrue: true },
+        { img: page(11), aspect: 16 / 9, line: 'Bibi is wearing glasses.', isTrue: false },
+        { img: page(5), aspect: 16 / 9, line: 'Big Bob is very tall.', isTrue: true },
+      ] },
+    { kind: 'reading', name: 'The Story', icon: '📚', intro: 'Read the story. Then answer from memory!', img: page(12),
+      sentences: ['Bibi is tired because it is early.', 'Big Bob has got three eyes.', 'Bibi is sad because she is tiny.', 'Surprise! Bibi is excited because it is a party for her!'],
+      questions: [
+        { q: 'Why is Bibi tired?', options: ['It is early.', 'It is dark.', 'It is a party.'], answer: 'It is early.' },
+        { q: 'What has Big Bob got?', options: ['three eyes', 'a scarf', 'a cake'], answer: 'three eyes' },
+      ] },
+    { kind: 'sentence-builder', name: 'My Monster', icon: '🧱', intro: 'Listen. Build what you hear!',
+      rounds: [
+        { img: it('mb-horns-long'), line: 'My monster has got long horns.', extra: ['is'] },
+        { img: it('scarf'), line: 'It is wearing a green scarf.', extra: ['got'] },
+        { img: it('bibi-scared'), line: 'It is scared because it is dark.', extra: ['and'] },
+      ] },
+    chest('You did it! Monster expert!', `${S}/bg-a1u5-street-wide.png`),
+  ],
+};
