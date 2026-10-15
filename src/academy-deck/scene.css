@@ -368,3 +368,9 @@
 .ad-root[data-theme='scene'] .ad-kb { min-width: 32px; height: 38px; }
 .ad-root[data-theme='scene'] .ad-keys-kb { gap: 4px; }
 .ad-root[data-theme='scene'] .ad-wordle .ad-hint-line { margin-top: 4px; font-size: 0.85rem; }
+
+/* light, daytime school scenes: a soft white veil keeps the pills readable, never a dark shade */
+.ad-root[data-theme='scene'] .ad-plate::after { background: linear-gradient(180deg, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0) 22%, rgba(255, 255, 255, 0) 70%, rgba(255, 255, 255, 0.3) 100%); }
+.ad-root[data-theme='scene'] .ad-plate-ph { background: linear-gradient(180deg, #cfe6ff 0%, #e9defa 55%, #fff1dc 100%) !important; }
+.ad-root[data-theme='scene'] .ad-story-sub { background: rgba(255, 255, 255, 0.9); }
+.ad-root[data-theme='scene'] .ad-story-sub * { text-shadow: none; }
