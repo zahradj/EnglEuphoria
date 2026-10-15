@@ -143,14 +143,14 @@
 .ad-root[data-theme='scene'] .ad-pattern-text { color: var(--ink); }
 .ad-root[data-theme='scene'] .ad-pattern-tag { background: var(--violet); color: #fff; }
 .ad-root[data-theme='scene'] .ad-rule-row { background: #fff; border: 2px solid #fff; box-shadow: var(--shadow-s); }
-.ad-root[data-theme='scene'] .ad-passage { background: #fff; border: 2px solid #fff; box-shadow: var(--shadow-s); max-width: 720px; padding: 26px 28px 18px; gap: 12px; }
-.ad-root[data-theme='scene'] .ad-passage-line { color: var(--ink); font-size: 1.2rem; line-height: 1.6; gap: 2px 7px; font-weight: 600; }
-.ad-root[data-theme='scene'] .ad-passage-from { background: var(--violet); }
+.ad-root[data-theme='scene'] .ad-passage { background: #fff; border: 2px solid #fff; box-shadow: var(--shadow-s); width: 100%; max-width: 940px; padding: 14px 28px 12px; gap: 6px; flex-shrink: 0; }
+.ad-root[data-theme='scene'] .ad-passage-line { color: var(--ink); font-size: clamp(0.82rem, 1.85cqh, 0.95rem); line-height: 1.42; gap: 2px 6px; font-weight: 600; justify-content: flex-start; }
+.ad-root[data-theme='scene'] .ad-passage-from { background: var(--violet); position: static; justify-self: start; margin: 0 0 2px; }
 .ad-root[data-theme='scene'] .ad-pw { color: inherit; background: none; border: 0; padding: 0 1px; font: inherit; }
 .ad-root[data-theme='scene'] .ad-pw:hover { background: var(--gold-soft); border-radius: 6px; }
-.ad-root[data-theme='scene'] .ad-readq { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 22px; align-items: start; }
+.ad-root[data-theme='scene'] .ad-readq { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 20px; align-items: start; }
 .ad-root[data-theme='scene'] .ad-readq-text { background: #fff; border: 2px solid #fff; box-shadow: var(--shadow-s); color: var(--ink); max-height: none; margin: 0; max-width: none; }
-.ad-root[data-theme='scene'] .ad-readq-text p { font-size: 1.05rem; line-height: 1.6; font-weight: 600; }
+.ad-root[data-theme='scene'] .ad-readq-text p { font-size: clamp(0.84rem, 1.95cqh, 1rem); line-height: 1.5; font-weight: 600; margin: 0 0 6px; }
 .ad-root[data-theme='scene'] .ad-readq-q { max-width: none; margin: 0; }
 .ad-root[data-theme='scene'] .ad-readq-kind { color: var(--violet); opacity: 1; }
 .ad-root[data-theme='scene'] .ad-readq-ask { color: var(--ink); font-size: 1.25rem; font-weight: 800; }
@@ -252,8 +252,8 @@
 .ad-root[data-theme='scene'] .ad-panel::-webkit-scrollbar-thumb { background: rgba(109, 70, 230, 0.55); border-radius: 99px; border: 2px solid transparent; background-clip: padding-box; }
 .ad-root[data-theme='scene'] .ad-panel { padding: 18px 22px 20px; }
 .ad-root[data-theme='scene'] .ad-panel > .ad-prompt { padding: 10px 20px; margin-bottom: 14px; }
-.ad-root[data-theme='scene'] .ad-readq-text { max-height: calc(100cqh - 330px); overflow-y: auto; }
-.ad-root[data-theme='scene'] .ad-passage { max-height: calc(100cqh - 400px); overflow-y: auto; }
+.ad-root[data-theme='scene'] .ad-readq-text { max-height: calc(100cqh - 250px); overflow-y: auto; }
+.ad-root[data-theme='scene'] .ad-passage { max-height: calc(100cqh - 300px); overflow-y: auto; }
 /* characters never sit behind the card: the page keeps clear of them, and they stand smaller */
 .ad-root[data-theme='scene'] .ad-actor { height: 54%; }
 .ad-root[data-theme='scene']:has(.ad-actor) .ad-main { padding-inline: clamp(12px, 15vw, 250px); }
