@@ -85,22 +85,22 @@ export function FeelingsMeterScene({ scene, onNext, onWin, onLose, sync }: { sce
       <div className={`absolute z-10 ${SKIN.panel}`} style={{ left: '3%', right: '3%', top: `${G.top - 4}%`, bottom: `${100 - G.bottom - 4}%` }} />
       {/* row guide lines */}
       {scene.feelings.map((_, r) => (
-        <div key={`g${r}`} className="absolute z-10 border-t-2 border-dashed border-violet-200" style={{ left: `${G.left}%`, right: `${100 - G.right}%`, top: `${rowY(r)}%` }} />
+        <div key={`g${r}`} className="absolute z-10 border-t-2 border-dashed border-sky-200" style={{ left: `${G.left}%`, right: `${100 - G.right}%`, top: `${rowY(r)}%` }} />
       ))}
       {/* the faces on the side: tap one */}
       {scene.feelings.map((f, r) => (
         <motion.button key={f.label} type="button" onClick={() => tapFace(r)} aria-label={f.label} disabled={done}
           animate={miss === r && !reduce ? { x: [0, -8, 8, -5, 0] } : { x: 0 }}
-          className="absolute z-30 flex items-center gap-[0.4vw] rounded-full border-[0.35vh] border-[#F3DDB3] bg-gradient-to-b from-[#FFFBF3] to-[#F7E8CF] px-[0.6vw] py-[0.2vh] shadow-[0_0.5vh_0_#D6AE78,0_1vh_1.6vh_rgba(46,16,101,0.25)] hover:ring-[0.4vh] hover:ring-[#FDE68A]"
+          className="absolute z-30 flex items-center gap-[0.4vw] rounded-full border-[0.35vh] border-[#FDE3B0] bg-gradient-to-b from-[#FFFFFF] to-[#FEF6DA] px-[0.6vw] py-[0.2vh] shadow-[0_0.5vh_0_#F3C474,0_1vh_1.6vh_rgba(60,30,10,0.25)] hover:ring-[0.4vh] hover:ring-[#FDE68A]"
           style={{ left: '3.6%', top: `${rowY(r)}%`, y: '-50%', width: '11.5%', minHeight: 40 }}>
           <img src={f.img} alt="" draggable={false} className="h-[min(5.4vh,3.6vw)] w-auto object-contain" />
-          <span className="truncate font-black text-[#3B1E66]" style={{ fontSize: 'min(2.1vh,1.4vw)' }}>{f.label}</span>
+          <span className="truncate font-black text-[#2A1A05]" style={{ fontSize: 'min(2.1vh,1.4vw)' }}>{f.label}</span>
         </motion.button>
       ))}
       {/* the line and the dots */}
       <svg className="pointer-events-none absolute inset-0 z-20 h-full w-full" viewBox="0 0 100 100" preserveAspectRatio="none">
         {placed.length > 1 && (
-          <motion.polyline points={placed.map((p, k) => `${colX(k)},${rowY(p.feeling)}`).join(' ')} fill="none" stroke="#7C3AED" strokeWidth={0.7} strokeLinejoin="round" strokeLinecap="round"
+          <motion.polyline points={placed.map((p, k) => `${colX(k)},${rowY(p.feeling)}`).join(' ')} fill="none" stroke="#0EA5E9" strokeWidth={0.7} strokeLinejoin="round" strokeLinecap="round"
             vectorEffect="non-scaling-stroke" style={{ strokeWidth: 6 }} initial={false} />
         )}
       </svg>
@@ -108,7 +108,7 @@ export function FeelingsMeterScene({ scene, onNext, onWin, onLose, sync }: { sce
         <div key={`d${k}`} className="absolute z-20 -translate-x-1/2 -translate-y-1/2" style={{ left: `${colX(k)}%`, top: `${rowY(p.feeling)}%`, width: 'min(6.4vh,4.2vw)', height: 'min(6.4vh,4.2vw)' }}>
           <motion.img src={scene.feelings[p.feeling]?.img} alt="" draggable={false}
             initial={reduce ? false : { scale: 0, y: -30 }} animate={{ scale: 1, y: 0 }} transition={{ type: 'spring', stiffness: 380, damping: 14 }}
-            className="h-full w-full rounded-full border-[0.4vh] border-white bg-violet-100 object-contain shadow-lg" />
+            className="h-full w-full rounded-full border-[0.4vh] border-white bg-sky-100 object-contain shadow-lg" />
         </div>
       ))}
       {/* the current column glows */}
@@ -125,7 +125,7 @@ export function FeelingsMeterScene({ scene, onNext, onWin, onLose, sync }: { sce
       {/* the sentence of the last point */}
       {!done && last && (
         <div className="absolute inset-x-0 bottom-[3%] z-30 flex justify-center">
-          <button type="button" onClick={() => cueSpeak(last.line, 'teacher')} className="rounded-full border-[0.35vh] border-[#C4B5FD] bg-gradient-to-b from-[#8B5CF6] to-[#6D28D9] px-5 py-1.5 font-black text-white shadow-[0_0.6vh_0_#4C1D95,0_1.2vh_2vh_rgba(30,10,60,0.35)]" style={{ fontSize: 'min(2.8vh,1.9vw)' }}>
+          <button type="button" onClick={() => cueSpeak(last.line, 'teacher')} className="rounded-full border-[0.35vh] border-[#BAE6FD] bg-gradient-to-b from-[#38BDF8] to-[#0EA5E9] px-5 py-1.5 font-black text-white shadow-[0_0.6vh_0_#0369A1,0_1.2vh_2vh_rgba(60,30,10,0.35)]" style={{ fontSize: 'min(2.8vh,1.9vw)' }}>
             🎤 Say it: {last.line}
           </button>
         </div>

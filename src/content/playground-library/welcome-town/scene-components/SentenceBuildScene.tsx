@@ -101,12 +101,12 @@ export function SentenceBuildScene({ scene, onNext, onWin, onLose, sync }: { sce
               const isCurrent = i === filledCount;
               const color = isFilled ? (r.colors?.[i] ?? undefined) : undefined;
               const tone = isFilled
-                ? 'border-[#F3DDB3] bg-gradient-to-b from-[#FFFBF3] to-[#F7E8CF] shadow-[0_0.5vh_0_#D6AE78]'
+                ? 'border-[#FDE3B0] bg-gradient-to-b from-[#FFFFFF] to-[#FEF6DA] shadow-[0_0.5vh_0_#F3C474]'
                 : isCurrent
-                ? 'border-dashed border-[#F2C46D] bg-[#FEF6E0]'
-                : 'border-dashed border-[#D8CCEF] bg-[#F5F0FF]';
+                ? 'border-dashed border-[#FEAF15] bg-[#FEF6E0]'
+                : 'border-dashed border-[#BAE6FD] bg-[#F0F9FF]';
               return (
-                <div key={i} className={`grid min-w-[2.5rem] place-items-center rounded-2xl border-4 px-3 font-black shadow-md transition-colors ${tone}`} style={{ height: 62, fontSize: 26, color: isFilled ? (color ?? '#3B1E66') : 'transparent' }}>
+                <div key={i} className={`grid min-w-[2.5rem] place-items-center rounded-2xl border-4 px-3 font-black shadow-md transition-colors ${tone}`} style={{ height: 62, fontSize: 26, color: isFilled ? (color ?? '#2A1A05') : 'transparent' }}>
                   {isFilled ? w : ' '}
                 </div>
               );

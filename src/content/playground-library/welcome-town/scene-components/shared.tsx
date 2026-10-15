@@ -143,11 +143,11 @@ export function QuestionCard({ ask, choices, img, wrong, onPick, onHear, disable
   void tone;
   return (
     <div className={`relative p-[2.2vh] pt-[2.6vh] text-center ${SKIN.panel} ${className}`}>
-      <div className="absolute inset-x-[18%] -top-[0.5vh] h-[1vh] rounded-full bg-gradient-to-r from-[#F2C46D] via-[#FDE68A] to-[#F2C46D] shadow" />
+      <div className="absolute inset-x-[18%] -top-[0.5vh] h-[1vh] rounded-full bg-gradient-to-r from-[#FEAF15] via-[#FDE68A] to-[#FEAF15] shadow" />
       <div className="mb-[1.6vh] flex items-center justify-center gap-3">
-        {img && <img src={img} alt="" draggable={false} className="h-[min(11vh,7.4vw)] w-auto rounded-[1.4vh] object-contain drop-shadow-[0_0.6vh_0.6vh_rgba(46,16,101,0.25)]" />}
+        {img && <img src={img} alt="" draggable={false} className="h-[min(11vh,7.4vw)] w-auto rounded-[1.4vh] object-contain drop-shadow-[0_0.6vh_0.6vh_rgba(60,30,10,0.25)]" />}
         <button type="button" onClick={onHear} className={`font-black ${SKIN.ink}`} style={{ fontSize: 'min(4.2vh, 2.9vw)' }}>
-          {ask} <span className="ms-1 inline-grid h-[1.4em] w-[1.4em] place-items-center rounded-full bg-[#EDE4FF] align-middle text-[0.6em]">🔊</span>
+          {ask} <span className="ms-1 inline-grid h-[1.4em] w-[1.4em] place-items-center rounded-full bg-[#E0F2FE] align-middle text-[0.6em]">🔊</span>
         </button>
       </div>
       <div className="flex flex-wrap justify-center gap-[1.2vw]">

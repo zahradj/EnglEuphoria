@@ -1,29 +1,30 @@
 /**
- * One look for the Playground games (owner, 2026-10-15: "improve the aesthetic of the games, the frames, the colors").
+ * One look for the Playground games (owner, 2026-10-15: "improve the aesthetic of the games, the frames, the colors";
+ * then: "don't use the purple color a lot — use the branded colors, shades of the Playground").
  *
- * Before this, every game picked its own flat primaries (orange cards, royal-blue boards, red/yellow/green/blue buttons)
- * and plain white boxes, so the games clashed with the painted scenes and with each other. Every game now draws from the
- * same small kit, matched to the storybook art (~35 % purple, teal, warm cream and wood, gold trim):
+ * Every game draws from the Playground brand (src/index.css `.theme-playground`): bright orange #FE6A2F, sunshine
+ * yellow #FEAF15 on warm cream #FEFBDD, sky blue #38BDF8, and the kids' jungle green. Purple stays in the painted
+ * pictures only, never in the game chrome.
  *
- *  - `card`   cream "storybook card" with a warm lip underneath — tiles, picture cards, answer cards
- *  - `frame`  plum glass with a gold rim — boards, trays, tracks, game panels that hold other pieces
+ *  - `card`   warm cream "storybook card" with a sunny lip underneath — tiles, picture cards, answer cards
+ *  - `frame`  sky-blue glass with a sunshine rim — boards, trays, tracks, game panels that hold other pieces
  *  - `panel`  light cream glass — sentences and questions to read
- *  - `pill`   the instruction / title chip (plum glass, cream text, gold edge)
- *  - JEWELS   four answer colours that sit well together (violet, teal, berry, amber), each with a darker lip
- *  - `cardBack` the face-down side of a card (violet with a soft star pattern)
+ *  - `pill`   the instruction / title chip (Playground orange, white text)
+ *  - JEWELS   four answer colours from the brand (orange, sky, green, sunshine), each with a darker lip
+ *  - `cardBack` the face-down side of a card (sunny orange with a soft dot pattern)
  *
  * Tailwind only sees whole class strings, so every value below is written out in full (no string building).
  */
 
 export const SKIN = {
-  card: 'rounded-[2vh] border-[0.35vh] border-[#F3DDB3] bg-gradient-to-b from-[#FFFBF3] to-[#F7E8CF] shadow-[0_0.7vh_0_#D6AE78,0_1.6vh_2.6vh_rgba(46,16,101,0.28)]',
-  cardHover: 'hover:-translate-y-[0.4vh] hover:shadow-[0_1.1vh_0_#D6AE78,0_2.2vh_3vh_rgba(46,16,101,0.32)] transition-transform',
-  frame: 'rounded-[2.6vh] border-[0.45vh] border-[#F2C46D]/80 bg-gradient-to-b from-[#3B1E66]/90 to-[#22103F]/90 shadow-[inset_0_0.3vh_0_rgba(255,255,255,0.18),0_1.6vh_3.6vh_rgba(20,6,45,0.55)] backdrop-blur-md',
-  panel: 'rounded-[2.2vh] border-[0.35vh] border-white/90 bg-[#FFFBF3]/95 shadow-[0_1.2vh_2.8vh_rgba(46,16,101,0.3)]',
-  pill: 'rounded-full border-[0.3vh] border-[#F2C46D]/70 bg-[#2A1450]/85 font-black text-[#FFF4DC] shadow-[0_0.8vh_1.8vh_rgba(20,6,45,0.45)] backdrop-blur-sm',
-  ink: 'text-[#3B1E66]',
-  inkSoft: 'text-[#6B4E8C]',
-  cardBack: 'border-[0.4vh] border-[#F2C46D] bg-gradient-to-br from-[#8B5CF6] via-[#6D28D9] to-[#4C1D95] shadow-[inset_0_0.35vh_0_rgba(255,255,255,0.3),0_0.7vh_0_#3B1A78,0_1.6vh_2.6vh_rgba(30,10,60,0.35)]',
+  card: 'rounded-[2vh] border-[0.35vh] border-[#FDE3B0] bg-gradient-to-b from-[#FFFFFF] to-[#FEF6DA] shadow-[0_0.7vh_0_#F3C474,0_1.6vh_2.6vh_rgba(60,30,10,0.25)]',
+  cardHover: 'hover:-translate-y-[0.4vh] hover:shadow-[0_1.1vh_0_#F3C474,0_2.2vh_3vh_rgba(60,30,10,0.3)] transition-transform',
+  frame: 'rounded-[2.6vh] border-[0.45vh] border-[#FEAF15] bg-gradient-to-b from-[#38BDF8]/85 to-[#0284C7]/90 shadow-[inset_0_0.3vh_0_rgba(255,255,255,0.35),0_1.6vh_3.6vh_rgba(12,40,70,0.45)] backdrop-blur-md',
+  panel: 'rounded-[2.2vh] border-[0.35vh] border-[#FDE3B0] bg-[#FEFBDD]/95 shadow-[0_1.2vh_2.8vh_rgba(60,30,10,0.28)]',
+  pill: 'rounded-full border-[0.3vh] border-white/80 bg-[#FE6A2F]/95 font-black text-white shadow-[0_0.8vh_1.8vh_rgba(150,50,10,0.35)]',
+  ink: 'text-[#2A1A05]',
+  inkSoft: 'text-[#7A5A2E]',
+  cardBack: 'border-[0.4vh] border-white bg-gradient-to-br from-[#FFC24A] via-[#FE8A3D] to-[#FE6A2F] shadow-[inset_0_0.35vh_0_rgba(255,255,255,0.45),0_0.7vh_0_#C2410C,0_1.6vh_2.6vh_rgba(150,50,10,0.3)]',
   /** Right / wrong states for any card or button. */
   right: 'border-[#86EFAC] bg-gradient-to-b from-[#4ADE80] to-[#16A34A] text-white shadow-[0_0.7vh_0_#166534,0_1.4vh_2.4vh_rgba(22,101,52,0.35)]',
   wrong: 'border-[#FDA4AF] bg-gradient-to-b from-[#FB7185] to-[#E11D48] text-white shadow-[0_0.7vh_0_#9F1239,0_1.4vh_2.4vh_rgba(159,18,57,0.35)]',
@@ -32,19 +33,19 @@ export const SKIN = {
 /** Size of instruction text inside `SKIN.pill` (readable on a laptop and a phone). */
 export const PILL_FONT = 'clamp(0.85rem, min(2.4vh, 1.6vw), 1.35rem)';
 
-/** Answer colours, in order. Use `jewel(i)` so a game with 3-4 choices gets violet, teal, berry, amber. */
+/** Answer colours, in order. Use `jewel(i)` so a game with 3-4 choices gets orange, sky, green, sunshine. */
 export const JEWELS = [
-  'border-[0.35vh] border-[#C4B5FD] bg-gradient-to-b from-[#8B5CF6] to-[#6D28D9] text-white shadow-[inset_0_0.35vh_0_rgba(255,255,255,0.35),0_0.7vh_0_#4C1D95,0_1.4vh_2.2vh_rgba(30,10,60,0.35)]',
-  'border-[0.35vh] border-[#99F6E4] bg-gradient-to-b from-[#2DD4BF] to-[#0D9488] text-white shadow-[inset_0_0.35vh_0_rgba(255,255,255,0.35),0_0.7vh_0_#115E59,0_1.4vh_2.2vh_rgba(17,94,89,0.35)]',
-  'border-[0.35vh] border-[#FBCFE8] bg-gradient-to-b from-[#F472B6] to-[#DB2777] text-white shadow-[inset_0_0.35vh_0_rgba(255,255,255,0.35),0_0.7vh_0_#9D174D,0_1.4vh_2.2vh_rgba(157,23,77,0.35)]',
-  'border-[0.35vh] border-[#FDE68A] bg-gradient-to-b from-[#FBBF24] to-[#F59E0B] text-[#3B1E66] shadow-[inset_0_0.35vh_0_rgba(255,255,255,0.45),0_0.7vh_0_#B45309,0_1.4vh_2.2vh_rgba(180,83,9,0.35)]',
+  'border-[0.35vh] border-[#FFD0B5] bg-gradient-to-b from-[#FF8A4C] to-[#FE6A2F] text-white shadow-[inset_0_0.35vh_0_rgba(255,255,255,0.4),0_0.7vh_0_#C2410C,0_1.4vh_2.2vh_rgba(150,50,10,0.3)]',
+  'border-[0.35vh] border-[#BAE6FD] bg-gradient-to-b from-[#38BDF8] to-[#0EA5E9] text-white shadow-[inset_0_0.35vh_0_rgba(255,255,255,0.4),0_0.7vh_0_#0369A1,0_1.4vh_2.2vh_rgba(3,105,161,0.3)]',
+  'border-[0.35vh] border-[#BBF7D0] bg-gradient-to-b from-[#4ADE80] to-[#22C55E] text-white shadow-[inset_0_0.35vh_0_rgba(255,255,255,0.4),0_0.7vh_0_#15803D,0_1.4vh_2.2vh_rgba(21,128,61,0.3)]',
+  'border-[0.35vh] border-[#FEF08A] bg-gradient-to-b from-[#FFD24A] to-[#FEAF15] text-[#2A1A05] shadow-[inset_0_0.35vh_0_rgba(255,255,255,0.5),0_0.7vh_0_#B45309,0_1.4vh_2.2vh_rgba(180,83,9,0.3)]',
 ] as const;
 
 export const jewel = (i: number) => JEWELS[((i % JEWELS.length) + JEWELS.length) % JEWELS.length];
 
 /** Plain hex values of the same palette, for SVG fills, inline gradients and canvas drawing. */
 export const PALETTE = {
-  violet: '#7C3AED', violetDeep: '#4C1D95', teal: '#14B8A6', tealDeep: '#115E59',
-  berry: '#EC4899', berryDeep: '#9D174D', amber: '#F59E0B', amberDeep: '#B45309',
-  cream: '#FFFBF3', creamDeep: '#F7E8CF', gold: '#F2C46D', plum: '#2A1450', ink: '#3B1E66',
+  orange: '#FE6A2F', orangeDeep: '#C2410C', sky: '#38BDF8', skyDeep: '#0369A1',
+  green: '#22C55E', greenDeep: '#15803D', sun: '#FEAF15', sunDeep: '#B45309',
+  cream: '#FEFBDD', creamDeep: '#FEF6DA', white: '#FFFFFF', ink: '#2A1A05',
 } as const;

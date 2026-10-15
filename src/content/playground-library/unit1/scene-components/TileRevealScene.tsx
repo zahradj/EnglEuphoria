@@ -107,7 +107,7 @@ export function TileRevealScene({ scene, onWin, onLose, onNext, sync }: { scene:
       <LivingBg img={scene.bg} video={scene.bgVideo} />
       <div className={`pointer-events-none absolute left-1/2 top-3 z-30 max-w-[92%] -translate-x-1/2 px-5 py-2 text-center ${SKIN.pill}`} style={{ fontSize: PILL_FONT }}>
         {solved ? `🎉 ${r.line}` : `👀 ${QUESTION}`}
-        <span className="ml-2 rounded-full bg-[#F2C46D] px-2 py-0.5 text-sm text-[#3B1E66]">{round + 1}/{total}</span>
+        <span className="ml-2 rounded-full bg-[#FEAF15] px-2 py-0.5 text-sm text-[#2A1A05]">{round + 1}/{total}</span>
       </div>
       <button onClick={() => cueSpeak(solved ? r.line : QUESTION, scene.who)} className={`absolute end-3 top-3 z-30 px-3 py-2 text-sm active:scale-95 ${SKIN.pill}`}>🔊 Again</button>
 
@@ -123,7 +123,7 @@ export function TileRevealScene({ scene, onWin, onLose, onNext, sync }: { scene:
               initial={{ opacity: 0, scale: 0.6 }} animate={{ opacity: 1, scale: 1, rotate: 360 }} transition={{ rotate: { duration: 8, repeat: Infinity, ease: 'linear' }, opacity: { duration: 0.3 } }} />
           )}
           <div className={`relative h-full w-full overflow-hidden p-3 ${SKIN.frame}`}>
-            <div className="relative h-full w-full overflow-hidden rounded-[20px] bg-gradient-to-b from-[#FFFBF3] to-[#F7E8CF]">
+            <div className="relative h-full w-full overflow-hidden rounded-[20px] bg-gradient-to-b from-[#FFFFFF] to-[#FEF6DA]">
               <motion.img src={r.img} alt="" draggable={false} className="absolute inset-0 h-full w-full object-contain p-2" animate={solved ? { scale: [1, 1.12, 1], rotate: [0, -4, 4, 0] } : { scale: 1 }} transition={{ duration: 0.8 }} />
               <div className="absolute inset-0 grid" style={{ gridTemplateColumns: `repeat(${COLS}, 1fr)`, gridTemplateRows: `repeat(${ROWS}, 1fr)` }}>
                 {Array.from({ length: TILES }, (_, i) => (
@@ -132,8 +132,8 @@ export function TileRevealScene({ scene, onWin, onLose, onNext, sync }: { scene:
                       {!goneSet.has(i) && (
                         <motion.div
                           key={`${round}-${i}`}
-                          className="absolute inset-0 grid place-items-center border border-[#F2C46D]/45 text-2xl font-black text-[#FDE68A]/85"
-                          style={{ background: `linear-gradient(135deg, ${['#8B5CF6', '#7C3AED', '#14B8A6', '#6D28D9'][(i + Math.floor(i / COLS)) % 4]}, ${i % 3 ? '#4C1D95' : '#0F766E'})`, boxShadow: 'inset 0 3px 0 rgba(255,255,255,0.3), inset 0 -4px 0 rgba(0,0,0,0.18)' }}
+                          className="absolute inset-0 grid place-items-center border border-[#FEAF15]/45 text-2xl font-black text-[#FDE68A]/85"
+                          style={{ background: `linear-gradient(135deg, ${['#38BDF8', '#0EA5E9', '#14B8A6', '#0EA5E9'][(i + Math.floor(i / COLS)) % 4]}, ${i % 3 ? '#0369A1' : '#0F766E'})`, boxShadow: 'inset 0 3px 0 rgba(255,255,255,0.3), inset 0 -4px 0 rgba(0,0,0,0.18)' }}
                           initial={{ rotateY: 0 }}
                           exit={{ rotateY: 100, scale: 0.5, opacity: 0, y: -20, transition: { duration: 0.5, ease: 'easeIn' } }}
                         >

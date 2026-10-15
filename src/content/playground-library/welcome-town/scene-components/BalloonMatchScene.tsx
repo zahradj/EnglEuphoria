@@ -19,7 +19,7 @@ import { SKIN } from '../../gameSkin';
 
 type BalloonMatch = Extract<Scene, { kind: 'balloon-match' }>;
 /** Balloon colours from the shared game palette (gameSkin.ts): light / deep pairs for a soft round shine. */
-const COLORS: [string, string][] = [['#A78BFA', '#6D28D9'], ['#5EEAD4', '#0D9488'], ['#F9A8D4', '#DB2777'], ['#FCD34D', '#D97706'], ['#93C5FD', '#3B6FD4'], ['#FDA4AF', '#E0475B']];
+const COLORS: [string, string][] = [['#FFB089', '#FE6A2F'], ['#7DD3FC', '#0EA5E9'], ['#86EFAC', '#22C55E'], ['#FDE68A', '#FEAF15'], ['#FDA4AF', '#E0475B'], ['#5EEAD4', '#0D9488']];
 
 export function BalloonMatchScene({ scene, onNext, onWin, onLose, sync }: { scene: BalloonMatch; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; sync?: ActivitySync }) {
   const reduce = useReducedMotion();
@@ -95,12 +95,12 @@ export function BalloonMatchScene({ scene, onNext, onWin, onLose, sync }: { scen
                   animate={state.wrong === b ? { y: [0, 60, 0], x: [0, -8, 8, 0] } : reduce ? { y: isSel ? -6 : 0 } : { y: isSel ? [-10, -18, -10] : [0, -12, 0] }}
                   transition={state.wrong === b ? { duration: 0.6 } : { duration: 2.4 + (slot % 3) * 0.4, repeat: Infinity, ease: 'easeInOut' }}
                   exit={{ y: 260, scale: 0.4, opacity: 0, transition: { duration: 0.5 } }}>
-                  <span className={`relative flex aspect-[4/5] w-full items-center justify-center rounded-[50%] p-[7%] shadow-[inset_-1.2vh_-1.6vh_2.4vh_rgba(0,0,0,0.18),0_1.6vh_2.4vh_rgba(30,10,60,0.3)] ${isSel ? 'ring-[0.7vh] ring-[#FDE68A]' : ''}`}
+                  <span className={`relative flex aspect-[4/5] w-full items-center justify-center rounded-[50%] p-[7%] shadow-[inset_-1.2vh_-1.6vh_2.4vh_rgba(0,0,0,0.18),0_1.6vh_2.4vh_rgba(60,30,10,0.3)] ${isSel ? 'ring-[0.7vh] ring-[#FDE68A]' : ''}`}
                     style={{ background: `radial-gradient(circle at 32% 26%, rgba(255,255,255,0.75) 0 7%, ${COLORS[slot % COLORS.length][0]} 26%, ${COLORS[slot % COLORS.length][1]} 92%)` }}>
-                    <span className={`rounded-[1.4vh] bg-[#FFFBF3]/95 px-[0.6vw] py-[0.6vh] text-center font-black leading-tight shadow ${SKIN.ink}`} style={{ fontSize: 'min(2.6vh, 1.7vw)' }}>{p.text}</span>
+                    <span className={`rounded-[1.4vh] bg-[#FFFFFF]/95 px-[0.6vw] py-[0.6vh] text-center font-black leading-tight shadow ${SKIN.ink}`} style={{ fontSize: 'min(2.6vh, 1.7vw)' }}>{p.text}</span>
                   </span>
                   <span className="h-[1.4vh] w-[1.4vh] -mt-[0.4vh] rotate-45" style={{ background: COLORS[slot % COLORS.length][1] }} />
-                  <span className="h-[7vh] w-[0.25vh] bg-[#F7E8CF]/90" />
+                  <span className="h-[7vh] w-[0.25vh] bg-[#FEF6DA]/90" />
                 </motion.button>
               )}
             </AnimatePresence>
@@ -116,7 +116,7 @@ export function BalloonMatchScene({ scene, onNext, onWin, onLose, sync }: { scen
               className={`relative flex flex-col items-center p-[0.8vh] ${SKIN.card} ${basketSel === k ? 'ring-[0.5vh] ring-[#FDE68A]' : got ? 'ring-[0.5vh] ring-[#4ADE80]' : ''}`}
               style={{ width: `${Math.min(17, 90 / n)}%` }}>
               <img src={p.img} alt="" draggable={false} className="h-[min(17vh,11vw)] w-full object-contain" />
-              <span className="mt-[0.4vh] w-full rounded-[1vh] bg-gradient-to-b from-[#5B3A8C] to-[#3B1E66] py-[0.5vh] text-center font-black text-[#FFF4DC]" style={{ fontSize: 'min(2.4vh, 1.6vw)' }}>
+              <span className="mt-[0.4vh] w-full rounded-[1vh] bg-gradient-to-b from-[#FF8A4C] to-[#2A1A05] py-[0.5vh] text-center font-black text-[#FFFFFF]" style={{ fontSize: 'min(2.4vh, 1.6vw)' }}>
                 {got ? '🎉' : '🧺'}
               </span>
               {got && !reduce && (

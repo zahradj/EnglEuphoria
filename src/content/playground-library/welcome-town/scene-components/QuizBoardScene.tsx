@@ -78,7 +78,7 @@ export function QuizBoardScene({ scene, onNext, onWin, onLose, sync }: { scene: 
           {done ? scene.doneLine : `🏆 ${scene.title}`}
         </span>
       </div>
-      <motion.span key={Number(state.score) || 0} className="absolute end-3 top-[13%] z-30 rounded-full border-[0.3vh] border-white bg-gradient-to-b from-[#FDE68A] to-[#F59E0B] px-5 py-2 font-black text-[#3B1E66] shadow-[0_0.6vh_0_#B45309,0_1.2vh_2vh_rgba(30,10,60,0.35)]" style={{ fontSize: 'min(3.4vh, 2.3vw)' }}
+      <motion.span key={Number(state.score) || 0} className="absolute end-3 top-[13%] z-30 rounded-full border-[0.3vh] border-white bg-gradient-to-b from-[#FDE68A] to-[#F59E0B] px-5 py-2 font-black text-[#2A1A05] shadow-[0_0.6vh_0_#B45309,0_1.2vh_2vh_rgba(60,30,10,0.35)]" style={{ fontSize: 'min(3.4vh, 2.3vw)' }}
         initial={reduce ? false : { scale: 1.4 }} animate={{ scale: 1 }}>⭐ {Number(state.score) || 0}</motion.span>
       {/* the board */}
       <div className={`absolute inset-x-[6%] bottom-[5%] top-[20%] z-20 grid gap-[1.2vh] p-[1.8vh] ${SKIN.frame}`}
@@ -94,7 +94,7 @@ export function QuizBoardScene({ scene, onNext, onWin, onLose, sync }: { scene: 
           const got = answered.has(key);
           return exists ? (
             <motion.button key={key} type="button" onClick={() => pickTile(key)} disabled={got}
-              className={`grid place-items-center font-black ${got ? 'rounded-[1.6vh] border-[0.3vh] border-[#F2C46D]/30 bg-white/10 text-[#F2C46D]/70' : `${SKIN.card} ${SKIN.ink}`}`}
+              className={`grid place-items-center font-black ${got ? 'rounded-[1.6vh] border-[0.3vh] border-[#FEAF15]/30 bg-white/10 text-[#FEAF15]/70' : `${SKIN.card} ${SKIN.ink}`}`}
               style={{ fontSize: 'min(5vh, 3.4vw)', gridColumn: ci + 1, gridRow: ri + 2 }}
               whileHover={got || reduce ? {} : { scale: 1.04 }} whileTap={got ? {} : { scale: 0.95 }}>
               {got ? '✓' : (ri + 1) * 100}
@@ -105,7 +105,7 @@ export function QuizBoardScene({ scene, onNext, onWin, onLose, sync }: { scene: 
       {/* the open tile */}
       <AnimatePresence>
         {tile && !done && (
-          <motion.div key={state.open} className="absolute inset-0 z-40 grid place-items-center bg-[#1A0B33]/65 px-[8%] backdrop-blur-[2px]"
+          <motion.div key={state.open} className="absolute inset-0 z-40 grid place-items-center bg-[#0C2A3F]/65 px-[8%] backdrop-blur-[2px]"
             initial={reduce ? false : { opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <motion.div className="w-full" initial={reduce ? false : { rotateY: 90, scale: 0.7 }} animate={{ rotateY: 0, scale: 1 }} transition={{ duration: 0.45 }}>
               <div className="mb-[1.4vh] text-center font-black text-yellow-300" style={{ ...THICK_WORDS, fontSize: 'min(4.4vh, 3vw)' }}>

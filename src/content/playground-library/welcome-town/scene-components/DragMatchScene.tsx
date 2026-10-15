@@ -159,7 +159,7 @@ export function DragMatchScene({ scene, onNext, onWin, onLose }: { scene: Extrac
         <CharacterPointer key={`point-${i}`} left={p.left} top={p.top} dir={p.dir} color={CAST[p.who].color} />
       ))}
       {scene.showBlanks && (
-        <div className="pointer-events-none absolute left-1/2 top-4 z-30 -translate-x-1/2 rounded-full border-[0.3vh] border-white bg-gradient-to-b from-[#FDE68A] to-[#F59E0B] px-4 py-1 text-center text-xs font-black uppercase tracking-widest text-[#3B1E66] shadow-lg">
+        <div className="pointer-events-none absolute left-1/2 top-4 z-30 -translate-x-1/2 rounded-full border-[0.3vh] border-white bg-gradient-to-b from-[#FDE68A] to-[#F59E0B] px-4 py-1 text-center text-xs font-black uppercase tracking-widest text-[#2A1A05] shadow-lg">
           📝 Sentence Builder
         </div>
       )}

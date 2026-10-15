@@ -142,9 +142,9 @@ export function LevelTestScene({ scene, onWin, onNext, sync, role, roomId }: {
 
       {/* path of the four parts */}
       {phase <= nSec && (
-        <div className="pointer-events-none absolute left-1/2 top-[12%] z-30 flex -translate-x-1/2 items-center gap-[0.8vw] rounded-full bg-indigo-950/55 px-[1.2vw] py-[0.6vh] shadow-lg">
+        <div className="pointer-events-none absolute left-1/2 top-[12%] z-30 flex -translate-x-1/2 items-center gap-[0.8vw] rounded-full bg-sky-950/55 px-[1.2vw] py-[0.6vh] shadow-lg">
           {[...scene.sections.map((s) => ({ icon: s.icon, label: s.label })), { icon: scene.speaking.icon, label: scene.speaking.label }].map((p, k) => (
-            <span key={k} className={`flex items-center gap-1 rounded-full px-2 py-[0.3vh] font-black ${k < phase ? 'bg-lime-500 text-white' : k === phase ? 'bg-amber-400 text-indigo-950' : 'bg-white/15 text-white/70'}`} style={{ fontSize: 'min(2.2vh, 1.5vw)' }}>
+            <span key={k} className={`flex items-center gap-1 rounded-full px-2 py-[0.3vh] font-black ${k < phase ? 'bg-lime-500 text-white' : k === phase ? 'bg-amber-400 text-sky-950' : 'bg-white/15 text-white/70'}`} style={{ fontSize: 'min(2.2vh, 1.5vw)' }}>
               {k < phase ? '✓' : p.icon} {p.label}
             </span>
           ))}
@@ -160,7 +160,7 @@ export function LevelTestScene({ scene, onWin, onNext, sync, role, roomId }: {
       {/* a section's intro card */}
       {sec && !state.started && (
         <motion.div key={`intro-${phase}`} className="absolute inset-0 z-30 flex flex-col items-center justify-center gap-[2vh]" initial={reduce ? false : { scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}>
-          <div className="rounded-[3vh] border-[0.6vh] border-amber-200 bg-gradient-to-b from-indigo-500 to-violet-700 px-[4vw] py-[3vh] text-center shadow-2xl">
+          <div className="rounded-[3vh] border-[0.6vh] border-amber-200 bg-gradient-to-b from-[#38BDF8] to-[#0284C7] px-[4vw] py-[3vh] text-center shadow-2xl">
             <div style={{ fontSize: 'min(10vh, 7vw)' }}>{sec.icon}</div>
             <div className="font-black text-yellow-200" style={{ fontSize: 'min(3vh, 2vw)' }}>Part {phase + 1}</div>
             <div className="font-black text-white" style={{ ...THICK_WORDS, fontSize: 'min(5.5vh, 3.6vw)' }}>{sec.intro}</div>
@@ -183,13 +183,13 @@ export function LevelTestScene({ scene, onWin, onNext, sync, role, roomId }: {
               const show = picked >= 0;
               return (
                 <motion.button key={`${phase}-${state.i}-${k}`} type="button" aria-label={o.label} onClick={() => { void choose(k); }} disabled={picked >= 0}
-                  className={`relative flex flex-col items-center justify-center rounded-[3vh] border-[0.6vh] p-[1vh] ${show && isRight ? 'border-[#86EFAC] bg-gradient-to-b from-[#DCFCE7] to-[#86EFAC] shadow-[0_0.9vh_0_#16A34A,0_2vh_3vh_rgba(22,101,52,0.35)]' : show && k === picked ? 'border-[#FDA4AF] bg-gradient-to-b from-[#FFE4E6] to-[#FDA4AF] shadow-[0_0.9vh_0_#E11D48,0_2vh_3vh_rgba(159,18,57,0.3)]' : 'border-[#F3DDB3] bg-gradient-to-b from-[#FFFBF3] to-[#F7E8CF] shadow-[0_0.9vh_0_#D6AE78,0_2vh_3vh_rgba(46,16,101,0.3)]'}`}
+                  className={`relative flex flex-col items-center justify-center rounded-[3vh] border-[0.6vh] p-[1vh] ${show && isRight ? 'border-[#86EFAC] bg-gradient-to-b from-[#DCFCE7] to-[#86EFAC] shadow-[0_0.9vh_0_#16A34A,0_2vh_3vh_rgba(22,101,52,0.35)]' : show && k === picked ? 'border-[#FDA4AF] bg-gradient-to-b from-[#FFE4E6] to-[#FDA4AF] shadow-[0_0.9vh_0_#E11D48,0_2vh_3vh_rgba(159,18,57,0.3)]' : 'border-[#FDE3B0] bg-gradient-to-b from-[#FFFFFF] to-[#FEF6DA] shadow-[0_0.9vh_0_#F3C474,0_2vh_3vh_rgba(60,30,10,0.3)]'}`}
                   style={{ width: optW, height: optW }}
                   initial={reduce ? false : { y: 60, opacity: 0 }}
                   animate={show && isRight && !reduce ? { y: [0, -16, 0], opacity: 1 } : { y: 0, opacity: show && !isRight && k !== picked ? 0.45 : 1 }}
                   transition={{ delay: show ? 0 : reduce ? 0 : 0.1 + k * 0.08, type: 'spring', stiffness: 160, damping: 14 }} whileTap={{ scale: 0.93 }}>
                   {o.img ? <img src={o.img} alt="" draggable={false} className="h-[80%] w-[80%] object-contain drop-shadow-[0_0.6vh_0.5vh_rgba(0,0,0,0.3)]" />
-                    : <span className="px-[0.6vw] text-center font-black text-[#3B1E66]" style={{ fontSize: (o.text ?? o.label).length > 4 ? 'min(6vh, 4vw)' : 'min(12vh, 8vw)', lineHeight: 1.05 }}>{o.text ?? o.label}</span>}
+                    : <span className="px-[0.6vw] text-center font-black text-[#2A1A05]" style={{ fontSize: (o.text ?? o.label).length > 4 ? 'min(6vh, 4vw)' : 'min(12vh, 8vw)', lineHeight: 1.05 }}>{o.text ?? o.label}</span>}
                 </motion.button>
               );
             })}
@@ -213,7 +213,7 @@ export function LevelTestScene({ scene, onWin, onNext, sync, role, roomId }: {
                     <div className="flex gap-1">
                       {[0, 1, 2, 3].map((n) => (
                         <button key={n} type="button" aria-label={`score ${n}`} onClick={() => setRubric((r) => r.map((v, q) => (q === k ? n : v)))}
-                          className={`h-[4.2vh] w-[4.2vh] rounded-full font-black shadow ${rubric[k] === n ? 'bg-indigo-600 text-white' : 'bg-white text-indigo-700'}`} style={{ fontSize: 'min(2.2vh, 1.5vw)' }}>{n}</button>
+                          className={`h-[4.2vh] w-[4.2vh] rounded-full font-black shadow ${rubric[k] === n ? 'bg-sky-600 text-white' : 'bg-white text-sky-700'}`} style={{ fontSize: 'min(2.2vh, 1.5vw)' }}>{n}</button>
                       ))}
                     </div>
                   </>
@@ -221,7 +221,7 @@ export function LevelTestScene({ scene, onWin, onNext, sync, role, roomId }: {
               </div>
             ))}
           </div>
-          {isTeacherView && <div className="rounded-full bg-indigo-950/60 px-3 font-bold text-white/90" style={{ fontSize: 'min(1.8vh, 1.25vw)' }}>{scene.level === 'A1' ? '0 no answer · 1 words with help · 2 a short sentence alone · 3 full sentences, or a question asked correctly' : '0 no answer · 1 one word with help · 2 one word alone · 3 a phrase or sentence'}</div>}
+          {isTeacherView && <div className="rounded-full bg-sky-950/60 px-3 font-bold text-white/90" style={{ fontSize: 'min(1.8vh, 1.25vw)' }}>{scene.level === 'A1' ? '0 no answer · 1 words with help · 2 a short sentence alone · 3 full sentences, or a question asked correctly' : '0 no answer · 1 one word with help · 2 one word alone · 3 a phrase or sentence'}</div>}
           <button type="button" onClick={finishSpeaking} className={`${CLAY_BUTTON} px-8 py-2 text-xl`}>We're done talking ✓</button>
         </div>
       )}
@@ -242,7 +242,7 @@ export function LevelTestScene({ scene, onWin, onNext, sync, role, roomId }: {
 
             {isTeacherView && (
               <div className="flex w-[min(62vh,44vw)] flex-col gap-[1vh] rounded-[2.4vh] bg-white/95 p-[2vh] text-slate-800 shadow-2xl" style={{ fontSize: 'min(2vh, 1.35vw)' }}>
-                <div className="font-black text-indigo-800" style={{ fontSize: 'min(2.6vh, 1.8vw)' }}>Teacher · {scene.title} result</div>
+                <div className="font-black text-sky-800" style={{ fontSize: 'min(2.6vh, 1.8vw)' }}>Teacher · {scene.title} result</div>
                 {all.map((s) => (
                   <div key={s.key} className="flex items-center justify-between gap-2">
                     <span className="font-bold">{s.label}</span>
@@ -260,7 +260,7 @@ export function LevelTestScene({ scene, onWin, onNext, sync, role, roomId }: {
                           <b>{k + 1}</b>
                           {[0, 1, 2, 3].map((n) => (
                             <button key={n} type="button" onClick={() => setRubric((r) => r.map((v, q) => (q === k ? n : v)))}
-                              className={`h-[3vh] w-[3vh] rounded-full font-black ${rubric[k] === n ? 'bg-indigo-600 text-white' : 'bg-white text-indigo-700'}`}>{n}</button>
+                              className={`h-[3vh] w-[3vh] rounded-full font-black ${rubric[k] === n ? 'bg-sky-600 text-white' : 'bg-white text-sky-700'}`}>{n}</button>
                           ))}
                         </span>
                       ))}
@@ -289,7 +289,7 @@ export function LevelTestScene({ scene, onWin, onNext, sync, role, roomId }: {
                 <textarea value={note} onChange={(e) => setNote(e.target.value)} placeholder="Note for the record (optional)" className="h-[7vh] w-full resize-none rounded-lg border p-2" />
                 <div className="flex items-center gap-2">
                   <button type="button" disabled={save.status === 'saving' || save.status === 'saved' || !rubricDone} onClick={() => { void doSave(); }}
-                    className="rounded-full bg-indigo-600 px-4 py-2 font-black text-white shadow disabled:opacity-50">{save.status === 'saving' ? 'Saving…' : save.status === 'saved' ? 'Saved ✓' : 'Confirm & save result'}</button>
+                    className="rounded-full bg-sky-600 px-4 py-2 font-black text-white shadow disabled:opacity-50">{save.status === 'saving' ? 'Saving…' : save.status === 'saved' ? 'Saved ✓' : 'Confirm & save result'}</button>
                   <button type="button" onClick={onNext} className="rounded-full bg-orange-500 px-4 py-2 font-black text-white shadow">Next ⭐</button>
                 </div>
                 {save.msg && <div className={save.status === 'error' ? 'font-bold text-rose-700' : 'font-bold text-emerald-700'}>{save.msg}</div>}

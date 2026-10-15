@@ -79,10 +79,10 @@ export function AnswerRaceScene({ scene, onNext, onWin, onLose, sync }: { scene:
       </div>
 
       {/* the track */}
-      <div className={`absolute inset-x-[4%] top-[16%] z-20 h-[24%] overflow-hidden rounded-[3vh] border-[0.5vh] border-[#F2C46D] shadow-[inset_0_0.6vh_1.2vh_rgba(0,0,0,0.25),0_1.6vh_3vh_rgba(20,6,45,0.45)] ${raft ? 'bg-gradient-to-b from-[#5EEAD4] to-[#0D9488]' : race ? 'bg-gradient-to-b from-[#5B4A7E] to-[#2E2148]' : 'bg-gradient-to-b from-[#BBF7D0] to-[#6EE7B7]'}`}>
+      <div className={`absolute inset-x-[4%] top-[16%] z-20 h-[24%] overflow-hidden rounded-[3vh] border-[0.5vh] border-[#FEAF15] shadow-[inset_0_0.6vh_1.2vh_rgba(0,0,0,0.25),0_1.6vh_3vh_rgba(40,20,5,0.45)] ${raft ? 'bg-gradient-to-b from-[#5EEAD4] to-[#0D9488]' : race ? 'bg-gradient-to-b from-[#3B5B78] to-[#1E3A52]' : 'bg-gradient-to-b from-[#BBF7D0] to-[#6EE7B7]'}`}>
         {race
           ? [1, 2].map((k) => <div key={k} className="absolute inset-x-0 border-t-[0.5vh] border-dashed border-white/70" style={{ top: `${k * 33.3}%` }} />)
-          : <div className="absolute inset-x-0 top-1/2 h-[30%] -translate-y-1/2 rounded-full bg-[#F7E8CF]/90 shadow-[inset_0_0.3vh_0.4vh_rgba(120,80,30,0.25)]" />}
+          : <div className="absolute inset-x-0 top-1/2 h-[30%] -translate-y-1/2 rounded-full bg-[#FEF6DA]/90 shadow-[inset_0_0.3vh_0.4vh_rgba(120,80,30,0.25)]" />}
         <div className="absolute inset-y-0 right-[4%] w-[3%]" style={{ background: 'repeating-conic-gradient(#111 0 25%, #fff 0 50%) 0 0 / 1.6vh 1.6vh' }} />
         <motion.span className="absolute right-[1%] top-[2%]" style={{ fontSize: 'min(5vh, 3vw)' }} animate={done && !reduce ? { rotate: [0, -15, 15, 0] } : {}} transition={{ repeat: done ? Infinity : 0, duration: 0.8 }}>🏁</motion.span>
         {rivals.map((rv, k) => (
@@ -106,7 +106,7 @@ export function AnswerRaceScene({ scene, onNext, onWin, onLose, sync }: { scene:
             initial={reduce ? false : { opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
             <div className={`flex items-center gap-3 px-6 py-2 ${SKIN.panel}`}>
               <span className={`font-black ${SKIN.ink}`} style={{ fontSize: 'min(5vh, 3.2vw)' }}>{r.read ? '📖 ' : ''}{r.ask}</span>
-              <button type="button" onClick={() => cueSpeak(r.ask, voiceOf(scene.who))} aria-label="Hear it" className="grid h-[6vh] w-[6vh] place-items-center rounded-full bg-[#EDE4FF] text-[2.8vh] active:scale-95">🔊</button>
+              <button type="button" onClick={() => cueSpeak(r.ask, voiceOf(scene.who))} aria-label="Hear it" className="grid h-[6vh] w-[6vh] place-items-center rounded-full bg-[#E0F2FE] text-[2.8vh] active:scale-95">🔊</button>
               <span className="text-neutral-400" style={{ fontSize: 'min(2.2vh, 1.4vw)' }}>{roundIdx + 1}/{total}</span>
             </div>
             <div className="flex w-full flex-wrap justify-center gap-[2vw]">

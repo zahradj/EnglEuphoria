@@ -19,7 +19,7 @@ import { SKIN, jewel } from '../../gameSkin';
 
 type Parcel = Extract<Scene, { kind: 'pass-parcel' }>;
 /** Wrapping papers from the shared game palette (gameSkin.ts): [paper, ribbon]. */
-const PAPER: [string, string][] = [['#8B5CF6', '#FCD34D'], ['#14B8A6', '#FDE68A'], ['#EC4899', '#FFFBF3'], ['#F59E0B', '#7C3AED'], ['#6D28D9', '#5EEAD4']];
+const PAPER: [string, string][] = [['#38BDF8', '#FCD34D'], ['#14B8A6', '#FDE68A'], ['#EC4899', '#FFFFFF'], ['#F59E0B', '#0EA5E9'], ['#0EA5E9', '#5EEAD4']];
 
 export function PassParcelScene({ scene, onNext, onWin, onLose, sync }: { scene: Parcel; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; sync?: ActivitySync }) {
   const reduce = useReducedMotion();
@@ -82,14 +82,14 @@ export function PassParcelScene({ scene, onNext, onWin, onLose, sync }: { scene:
       <div className="absolute left-1/2 top-[44%] z-20 -translate-x-1/2 -translate-y-1/2" style={{ width: box, height: box }}>
         {done ? (
           <motion.div className="grid h-full w-full place-items-center" initial={reduce ? false : { scale: 0.2, rotate: -30 }} animate={{ scale: 1, rotate: 0 }} transition={{ type: 'spring', stiffness: 260, damping: 12 }}>
-            <div className="grid aspect-square w-[88%] place-items-center rounded-full border-[0.8vh] border-[#F2C46D] bg-gradient-to-b from-[#FFFBF3] to-[#EDE4FF] shadow-[0_0_6vh_rgba(253,230,138,0.7)]">
+            <div className="grid aspect-square w-[88%] place-items-center rounded-full border-[0.8vh] border-[#FEAF15] bg-gradient-to-b from-[#FFFFFF] to-[#E0F2FE] shadow-[0_0_6vh_rgba(253,230,138,0.7)]">
               <img src={scene.prize.img} alt={scene.prize.label} draggable={false} className="h-[78%] w-[78%] object-contain drop-shadow-xl" />
             </div>
             <span className={`mt-[1vh] px-4 py-1 ${SKIN.pill}`} style={{ fontSize: 'min(3vh, 2vw)' }}>{scene.prize.label}</span>
           </motion.div>
         ) : (
           <motion.div className="relative h-full w-full" animate={state.ripping || reduce ? {} : { rotate: [0, -3, 3, 0], y: [0, -6, 0] }} transition={{ duration: 2.2, repeat: Infinity }}>
-            <div className="absolute inset-[6%] rounded-[2.4vh] border-[0.5vh] border-white/80 shadow-[inset_0_0.6vh_0_rgba(255,255,255,0.3),0_2vh_3.4vh_rgba(30,10,60,0.4)]" style={{ background: `radial-gradient(circle, rgba(255,255,255,0.28) 0.35vh, transparent 0.45vh) 0 0 / 2.4vh 2.4vh, linear-gradient(160deg, ${paper[0]}, ${paper[0]}cc)` }} />
+            <div className="absolute inset-[6%] rounded-[2.4vh] border-[0.5vh] border-white/80 shadow-[inset_0_0.6vh_0_rgba(255,255,255,0.3),0_2vh_3.4vh_rgba(60,30,10,0.4)]" style={{ background: `radial-gradient(circle, rgba(255,255,255,0.28) 0.35vh, transparent 0.45vh) 0 0 / 2.4vh 2.4vh, linear-gradient(160deg, ${paper[0]}, ${paper[0]}cc)` }} />
             <div className="absolute inset-y-[6%] left-1/2 w-[16%] -translate-x-1/2" style={{ background: paper[1] }} />
             <div className="absolute inset-x-[6%] top-1/2 h-[16%] -translate-y-1/2" style={{ background: paper[1] }} />
             <div className="absolute left-1/2 top-[1%] -translate-x-1/2" style={{ fontSize: 'min(10vh, 7vw)' }}>🎀</div>

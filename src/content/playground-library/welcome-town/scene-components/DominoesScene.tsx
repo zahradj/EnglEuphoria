@@ -90,7 +90,7 @@ export function DominoesScene({ scene, onNext, onWin, onLose, sync }: { scene: D
             <motion.div key={k} layout className={`flex items-center divide-x-[0.3vh] divide-dashed divide-neutral-300 rounded-[1.6vh] border-[0.4vh] bg-[#fffaf0] shadow-lg ${k === placed - 1 ? 'border-yellow-300' : 'border-white'}`}
               style={{ width: tileW, height: tileH }}
               initial={reduce ? false : { y: 160, opacity: 0, rotate: 8 }} animate={{ y: 0, opacity: 1, rotate: 0 }} transition={{ type: 'spring', stiffness: 260, damping: 18 }}>
-              <DominoHalf><span className="text-center font-black leading-tight text-[#3B1E66]" style={{ fontSize: 'min(2.5vh, 1.7vw)' }}>{scene.steps[k].text}</span></DominoHalf>
+              <DominoHalf><span className="text-center font-black leading-tight text-[#2A1A05]" style={{ fontSize: 'min(2.5vh, 1.7vw)' }}>{scene.steps[k].text}</span></DominoHalf>
               <DominoHalf><img src={scene.steps[k].img} alt={scene.steps[k].label} draggable={false} className="h-full w-full object-contain" /></DominoHalf>
             </motion.div>
           ))}
@@ -115,7 +115,7 @@ export function DominoesScene({ scene, onNext, onWin, onLose, sync }: { scene: D
               animate={state.wrong === i ? { x: [0, -10, 10, -6, 0] } : {}}
               className={`flex items-center divide-x-[0.3vh] divide-dashed divide-[#E5CFA6] ${SKIN.card}`}
               style={{ height: 'min(14vh, 9.4vw)' }}>
-              <DominoHalf><span className="text-center font-black leading-tight text-[#3B1E66]" style={{ fontSize: 'min(2.7vh, 1.8vw)' }}>{scene.steps[i].text}</span></DominoHalf>
+              <DominoHalf><span className="text-center font-black leading-tight text-[#2A1A05]" style={{ fontSize: 'min(2.7vh, 1.8vw)' }}>{scene.steps[i].text}</span></DominoHalf>
               <DominoHalf><img src={scene.steps[i].img} alt="" draggable={false} className="h-full w-full object-contain" /></DominoHalf>
             </motion.button>
           ))}

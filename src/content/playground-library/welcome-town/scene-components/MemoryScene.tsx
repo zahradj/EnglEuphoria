@@ -96,7 +96,7 @@ export function MemoryScene({ scene, onNext, onWin, onLose, sync }: { scene: Ext
               <div className="absolute inset-0 transition-transform duration-500 [transform-style:preserve-3d]" style={{ transform: isFlipped ? 'rotateY(180deg)' : undefined }}>
                 <div className={`absolute inset-0 flex items-center justify-center overflow-hidden rounded-[2vh] [backface-visibility:hidden] ${SKIN.cardBack}`}>
                   <div className="absolute inset-0 opacity-25" style={{ backgroundImage: 'radial-gradient(circle, #FDE68A 1.4px, transparent 1.8px)', backgroundSize: '1.6vh 1.6vh' }} />
-                  <div className="absolute inset-[9%] rounded-[1.4vh] border-[0.3vh] border-dashed border-[#F2C46D]/60" />
+                  <div className="absolute inset-[9%] rounded-[1.4vh] border-[0.3vh] border-dashed border-[#FEAF15]/60" />
                   <span className="relative text-[min(6.5vh,4.6vw)] drop-shadow-[0_0.3vh_0_rgba(0,0,0,0.3)]">⭐</span>
                 </div>
                 <div className={`absolute inset-0 flex flex-col items-center justify-center overflow-hidden [backface-visibility:hidden] [transform:rotateY(180deg)] ${SKIN.card} ${card.variant === 'pic' ? 'p-[0.6vh]' : 'p-2'} ${isMatched ? 'ring-[0.5vh] ring-[#4ADE80]' : ''}`}>
