@@ -23,6 +23,8 @@ import {
   CreditCard,
   Gift,
   Settings as SettingsIcon,
+  Zap,
+  Mic2,
 } from "lucide-react";
 import {
   Sidebar,
@@ -99,8 +101,13 @@ export const StudentSidebar: React.FC<StudentSidebarProps> = ({
       label: t('sd.group.main', 'Main Menu'),
       items: [
         { id: 'dashboard', label: t('sd.menu.dashboard'), icon: Home },
-        { id: 'lessons', label: t('sd.menu.lessons', 'My Lessons'), icon: PlayCircle },
-        { id: 'homework', label: t('sd.menu.homework', 'Homework'), icon: BookMarked },
+        // Academy: the lessons are still being finished, so "My Lessons" stays hidden until they are published;
+        // its homework is the Quest Log (Daily 10 + zone quests), not the Playground's homework forest.
+        ...(hubKey === 'academy' ? [] : [{ id: 'lessons', label: t('sd.menu.lessons', 'My Lessons'), icon: PlayCircle }]),
+        hubKey === 'academy'
+          ? { id: 'homework', label: t('sd.menu.questLog', 'Quest Log'), icon: BookMarked }
+          : { id: 'homework', label: t('sd.menu.homework', 'Homework'), icon: BookMarked },
+        ...(hubKey === 'academy' ? [{ id: 'daily10', label: t('sd.menu.daily10', 'Daily 10'), icon: Zap, href: '/academy-daily-10' }] : []),
         // Playground students read the teacher's notes inside the quest map instead.
         ...(hubKey === 'playground'
           ? []
@@ -115,6 +122,7 @@ export const StudentSidebar: React.FC<StudentSidebarProps> = ({
       items: [
         { id: 'learning-path', label: t('sd.menu.learningPath', 'My Learning Path'), icon: RouteIcon, badge: newBadge },
         { id: 'sounds', label: t('sd.menu.sounds', 'Map of Sounds'), icon: Volume2, badge: newBadge },
+        ...(hubKey === 'academy' ? [{ id: 'speaking', label: t('sd.menu.speaking', 'Speaking Studio'), icon: Mic2 }] : []),
         { id: 'vocabulary', label: t('sd.menu.vocabulary', 'Vocabulary Vault'), icon: Archive, badge: newBadge },
         { id: 'grammar', label: t('sd.menu.grammar', 'Grammar Journal'), icon: BookText, badge: newBadge },
       ],

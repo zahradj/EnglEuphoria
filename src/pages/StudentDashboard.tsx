@@ -250,7 +250,9 @@ const StudentDashboard = () => {
       settings: () => <SettingsTab />,
     };
 
-    const TabComponent = tabComponents[activeTab as keyof typeof tabComponents] || tabComponents.dashboard;
+    // Academy lessons are hidden until they are published: an old link to the lessons tab lands on the dashboard
+    const shownTab = studentLevel === 'academy' && activeTab === 'lessons' ? 'dashboard' : activeTab;
+    const TabComponent = tabComponents[shownTab as keyof typeof tabComponents] || tabComponents.dashboard;
     
     return (
       <ErrorBoundary fallback={
