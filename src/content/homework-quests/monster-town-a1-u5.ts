@@ -125,3 +125,41 @@ export const QUEST_MONSTER_SONG_A1_U5L3: HomeworkQuest = {
     chest('You did it! Super listener!', `${S}/bg-a1u5-stage-wide.png`),
   ],
 };
+
+/** Lesson 4 "Describe a Monster Friend!" */
+export const QUEST_MONSTER_FRIEND_A1_U5L4: HomeworkQuest = {
+  id: 'monster-friend-a1-u5l4', title: 'Monster Friend Quest', subtitle: 'Describe a Monster Friend! · A1 Unit 5 · Lesson 4', level: 'A1', lessonKey: 'monster-rich-5-4',
+  theme: theme(`${S}/bg-a1u5-laundry-wide.png`), voice: 'teacher', praise,
+  levels: [
+    { kind: 'picture-choice', name: 'What Is It?', icon: '🧣', intro: 'Listen. Tap the right picture!', img: `${S}/bg-a1u5-laundry-wide.png`,
+      rounds: [
+        { line: 'He’s wearing a scarf.', answer: 'scarf', options: [{ label: 'hat', src: it('hat') }, { label: 'scarf', src: it('scarf') }, { label: 'boots', src: it('boots') }] },
+        { line: 'She’s wearing glasses.', answer: 'glasses', options: [{ label: 'glasses', src: it('glasses') }, { label: 'coat', src: it('coat-blue') }, { label: 'hat', src: it('hat') }] },
+        { line: 'He’s wearing boots.', answer: 'boots', options: [{ label: 'scarf', src: it('scarf') }, { label: 'glasses', src: it('glasses') }, { label: 'boots', src: it('boots') }] },
+      ] },
+    { kind: 'true-false', name: 'True or False?', icon: '👓', intro: 'Look and listen. True or false?',
+      rounds: [
+        { img: page(8), aspect: 16 / 9, line: 'Leo is wearing a green scarf.', isTrue: true },
+        { img: page(8), aspect: 16 / 9, line: 'Mia is wearing boots.', isTrue: false },
+        { img: page(9), aspect: 16 / 9, line: 'Bibi is sad.', isTrue: true },
+      ] },
+    { kind: 'sentence-builder', name: 'He’s Wearing…', icon: '🧱', intro: 'Listen. Build what you hear!',
+      rounds: [
+        { img: it('hat'), line: 'He is wearing a big hat.', extra: ['got'] },
+        { img: it('glasses'), line: 'She is wearing glasses.', extra: ['has'] },
+      ] },
+    { kind: 'reading', name: 'The Story', icon: '📖', intro: 'Read the story. Then answer from memory!', img: page(8),
+      sentences: ['Bibi is sad because she is tiny.', 'Leo is wearing a green scarf. Mia is wearing glasses.', 'Mia: Why are you sad, Bibi?'],
+      questions: [
+        { q: 'What is Mia wearing?', options: ['glasses', 'a scarf', 'boots'], answer: 'glasses' },
+        { q: 'Who asks Bibi a question?', options: ['Mia', 'Leo', 'Big Bob'], answer: 'Mia' },
+      ] },
+    { kind: 'twister', name: 'Funny Twister', icon: '🌀', intro: 'Build my tongue twister before the sand runs out!', img: `${S}/bg-a1u5-laundry-wide.png`, line: 'Funny Bibi is happy and sleepy.', seconds: 45, focus: 'y', sayIt: 'Now say it slow, then faster!' },
+    { kind: 'sound-blend', name: 'Blend It!', icon: '🧱', intro: 'Tap each sound, then Blend!', img: `${S}/bg-a1u5-laundry-wide.png`,
+      rounds: [
+        { word: 'happy', sounds: ['h', 'a', 'pp=p', 'y=ee'], picture: it('bibi-happy') },
+        { word: 'teddy', sounds: ['t', 'e', 'dd=d', 'y=ee'], picture: it('teddy') },
+      ] },
+    chest('You did it! Monster friend expert!', `${S}/bg-a1u5-laundry-wide.png`),
+  ],
+};

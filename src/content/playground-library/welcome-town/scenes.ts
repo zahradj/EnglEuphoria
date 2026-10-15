@@ -631,6 +631,21 @@ export type Scene =
        *  Check — every part must match the sentence. `body` sticker is square; parts sit at % of it. */
       body: string; eye: string; horns: { label: string; img: string }[]; mouths: { label: string; img: string }[];
       rounds: { line: string; eyes: 1 | 2 | 3; horns: number; mouth: number; name: string }[]; doneLine: string; }
+  | { id: string; kind: 'monster-mixup'; bg: string; teacher: string; title: string; who: CharKey;
+      /** ★ Monster Mix-Up (A1 U5L4, docs/a1-unit-5-monster-town.md §5.4 "Monster Maker"): Bibi describes a monster
+       *  (`line`, 2-3 sentences: has got + is wearing), the machine builds it — with ONE mistake (`mistake`). The child
+       *  taps the wrong part on the monster, picks the right one from the tray, the monster is fixed and the child says
+       *  `say` ("No! He's wearing a hat!"). `wear[i].on` = where it sits on the body. Boys never wear a dress. */
+      body: string; eye: string; horns: { label: string; img: string }[]; mouths: { label: string; img: string }[];
+      wear: { word: string; img: string; on: 'head' | 'face' | 'neck' | 'feet' }[];
+      rounds: {
+        line: string; name: string; eyes: 1 | 2 | 3; horns: number; mouth: number; wears: number[];
+        /** What the machine got wrong: `shown` = the wrong value it built (eye count, horns / mouth index, or for
+         *  `wear` the wrong item worn in place of `wears[slot]`). */
+        mistake: { part: 'eyes' | 'horns' | 'mouth' | 'wear'; shown: number; slot?: number };
+        say: string;
+      }[];
+      doneLine: string; }
   | { id: string; kind: 'festival-cafe'; bg: string; teacher: string; title: string; who: CharKey;
       /** `order` = menu indexes the tray must hold exactly; `offer` = the polite offer the child then SAYS (its item is
        *  added to the tray when the customer says "Yes, please!"). */

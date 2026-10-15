@@ -3,6 +3,7 @@ import { type ActivitySync, isSharedFollower, useSyncedState } from './sceneActi
 import { seededOrder } from './PictureMatchScene';
 import { Burst, GAME_FONT, GameStyles, HudBar, LocoIcon, ProgressPill, PromptChip, SkyBackdrop, TitleRibbon, TrainCar } from './gameTheme';
 import { playLetterPhonic, safeSpeak } from './unit1/audio';
+import { soundLabel } from './soundLabel';
 import * as sfx from './unit1/sfx';
 import { type BlendLook, BlendWorldScene } from './BlendWorlds';
 import { BlendReadCard } from './BlendReadCard';
@@ -208,12 +209,12 @@ function TrainBlendScene({ scene, onNext, onWin, onResult, sync }: {
                   type="button"
                   onClick={() => tapCar(i)}
                   disabled={isMirror || blended}
-                  aria-label={`Sound ${snd}`}
+                  aria-label={`Sound ${soundLabel(snd)}`}
                   className={isMirror ? 'cursor-default' : 'active:scale-95'}
                   style={{ animation: lit && !blended ? 'sb-lit .45s ease-out' : undefined }}
                 >
                   <TrainCar unit={carUnit} color={lit ? CAR_COLORS[i % CAR_COLORS.length] : '#94a3b8'} glyph={`calc(${carUnit} * 0.5)`} sound={!lit} rolling={blended && !solved}>
-                    {snd}
+                    {soundLabel(snd)}
                   </TrainCar>
                   {/* sound button: the dot under each sound */}
                   <span className="mx-auto mt-[0.6cqh] block rounded-full" style={{ width: '2.4cqh', height: '2.4cqh', background: lit ? '#16a34a' : '#ffffff', border: '0.4cqh solid #14532d' }} />

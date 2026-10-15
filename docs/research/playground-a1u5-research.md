@@ -22,16 +22,28 @@ never content. Unit-level sources (feelings + *because*, *has got* monster games
 | Teach Starter ee/ea/ey sort — https://teachstarter.com/us/teaching-resource/vowel-teams-sort-ee-ea-and-ey/ | picture cards sorted + a "swat" game | a fast tap game after the sort | good; verified page |
 | Boom Learning ee/ea deck — https://wow.boomlearning.com/deck/HvG5CNoc6MipfvsaE | drag the vowel team to complete the word | complete the word, then read it | fine; verified page |
 
+## Lesson 4 — Describe a Monster Friend!
+| Source (URL) | What it does | Taken (mechanic) | Quality / limits |
+|---|---|---|---|
+| One Stop English "What's she wearing?" — https://www.onestopenglish.com/young-learner-games/young-learner-games-whats-she-wearing/557255.article | pairs dress a paper model from a description, then compare | dress the friend from what you hear (Dress-Up Studio) | good; article verified, worksheet behind login |
+| ESL Printables describe-and-check pairs — https://www.eslprintables.com/printable.asp?id=105683 | one describes a monster, the other draws, then check accuracy | the CHECK step: compare description and picture, find what does not match (Monster Mix-Up) | teacher-made; verified page |
+| eslactive "Create A Monster" — https://eslactive.com/?p=8889 | teacher draws on the board, class suggests each part | teacher builds, student is the expert who corrects (free talk "wrong on purpose") | good; verified page |
+| Twee "Describe the Monster" — https://twee.com/esl-lesson-plans/describe-the-monster | describe-a-monster lesson plan | has got + is wearing in one description | lesson generator page; verified |
+| Games4ESL clothes activities — https://games4esl.com/clothes-games-and-activities/ | Simon says with clothes, What is he/she wearing? | put-on-your-hat TPR break; third-person question | good; verified page |
+| 123 Homeschool 4 Me y as long e — https://www.123homeschool4me.com/?p=78220 | sort / clip cards for words ending in y | contrast y at the END (/ee/: happy, teddy) with y at the start (/y/: yak, yo-yo) in Sound Pick | printable; verified page |
+
 ## Games list (Unit 5 so far)
 | Lesson | Signature game | Other games |
 |---|---|---|
 | L1 | **Monster Mood Machine** (new) | Which Monster? (listen-tap), Yes or No?, Potion sort, Sound Fish (ee), Blend & Read (Train) |
 | L2 | **Monster Builder** (new) | Read and Match (frames), Line Up (tall/short), Family Tree, Drag Match, Balloon Match, Sentence Build, Answer Race, Word Build (ea), Blend & Read (Slide) |
-| L3 (plan) | **Name That Feeling** game show | song "How Do You Feel?", Tick or Cross, Echo Cave, Read & Check, ee/ea sort (new design), Blend & Read (Gumball) |
+| L3 | **Name That Feeling** game show | song "How Do You Feel?", Monster Whispers, Echo Hall, Peek-a-Boo Plates, Read & Check, Story Order, ee/ea Catch & Sort, Blend & Read (Gumball) |
+| L4 | **Monster Mix-Up** (new) | Read and Match (chalk), Dress-Up Studio, Washing Line, Shadows, Read and Do, Sound Pick (y at the end), Blend & Read (Frog) |
 
 ## Video-game mechanics borrowed
 | Lesson | Mechanic | What the child does in English |
 |---|---|---|
 | L1 | slot-machine / gacha lever (pull → random reward) | pulls the lever, a reason picture pops out, says *She's scared because it's dark.* |
 | L2 | character creator (build your avatar) | builds the monster they HEAR (*She's got three eyes and long horns*) |
+| L4 | **inspector check** (Papers, Please: compare the papers with what you see) | reads Bibi's description, finds the one part the machine got wrong, says the correction (*No! He's wearing a hat!*) |
 | L3 | **game-show buzzer round** (Jeopardy/quiz show: buzz in, points, lights) + **rhythm game** (sing-along on the beat) | buzzes the face that matches the dialogue (*I'm bored. The lesson is long.*), sings the verse lines on the beat |
