@@ -134,7 +134,7 @@ export const PA1_S02_E1: DeckScript = {
       id: 'rule-slide', kind: 'rule', part: 3, bg: PH, actors: [who('Vee', 'left')], trains: [2, 5],
       title: 'The rule: sounds go together',
       lines: [
-        { rule: 'Sounds go together: i + n = in.', say: 'Sounds go together. i and n make in.', example: 'i + n = in' },
+        { rule: 'Sounds go together: i + n = in.', say: 'Sounds go together. i and n make in.', example: 'i, n, in' },
         { rule: 'Slide the sounds. Then say the word.', say: 'Slide the sounds. Then say the word.', example: 'p-i-n → pin' },
       ],
     },
