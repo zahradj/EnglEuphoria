@@ -57,4 +57,20 @@ describe('Academy library in the classroom', () => {
     fireEvent.click(btn);
     expect(bus.sent.some((p) => p.kind === 'click' && p.slide === 0 && p.senderRole === 'student')).toBe(true);
   });
+
+  it('LIVE: a teacher click (e.g. next word) is sent too, and a click for a page the student has not reached yet waits for it', async () => {
+    const view = render(<EmbeddedAcademyDeckLesson lessonId="b1-s01-e1" roomId="r1" role="student" persistedSceneIdx={0} />);
+    await waitFor(() => expect(view.container.querySelector('.ad-slidehost')).toBeTruthy());
+    const root = view.container.querySelector('.ad-slidehost') as HTMLElement;
+    const btn = root.querySelector('button') as HTMLElement;
+    const onClick = vi.fn();
+    btn.addEventListener('click', onClick);
+    const path = [...Array(0)];
+    const p: number[] = [];
+    let n: Element = btn; while (n !== root) { p.unshift(Array.prototype.indexOf.call(n.parentElement!.children, n)); n = n.parentElement!; }
+    void path;
+    bus.listeners.forEach((cb) => cb({ path: p, kind: 'click', slide: 0, senderRole: 'teacher', senderId: 'teacher' }));
+    expect(onClick).toHaveBeenCalledTimes(1);
+    expect(bus.sent.length).toBe(0); // the repeat is not sent back
+  });
 });
