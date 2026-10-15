@@ -323,7 +323,7 @@ describe('B1-S01-E1: Trophy Forge and the trio streak', () => {
     [['eat', 'ate', 'eaten'], ['see', 'saw', 'seen'], ['fly', 'flew', 'flown'], ['take', 'took', 'taken']].forEach((t) => t.forEach((w, c) => fireEvent.click(tile(w, c))));
     fireEvent.click(await screen.findByRole('button', { name: 'Draw a verb card' }));
     const forms = screen.getByRole('group', { name: 'Choose the form' });
-    const base = within(forms).getAllByRole('button').find((b) => /^(eat|see|fly|take)$/.test(b.textContent ?? '')) as HTMLElement;
+    const base = within(forms).getAllByRole('button').find((b) => /^[ABC](eat|see|fly|take)$/.test(b.textContent ?? '')) as HTMLElement;
     fireEvent.click(base);
     expect(screen.getByText(/After “have ever” we need the past participle/)).toBeTruthy();
   });
