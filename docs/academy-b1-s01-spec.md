@@ -137,3 +137,16 @@ The roadmap teaches the present perfect in **B1 Season 1** (experience), **Seaso
 - French, Italian and Turkish errors rest on a transfer chart, not a study.
 - The 12 vocabulary and participle items are not checked against the English Vocabulary Profile `[U]`.
 - Time estimates (student talk 55–60 %, minutes per part) are targets until the lesson clock has measured a real session.
+
+## 6. As built (2026-10-15, after "go")
+
+Deck: `src/academy-deck/lessons/b1s01e1.ts` (library id `b1-s01-e1`, route `/academy-lesson/b1-s01-e1`), tests `src/academy-deck/__tests__/b1s01e1.test.tsx` (they read the blueprint `B1-S01-E1` and this plan). New games (Academy files only): **Trophy Forge** (`forge`) and **trio streak** (`streak`) in `src/academy-deck/slides/forge.tsx`.
+
+Differences from the plan above, and why:
+- **Trio check covers the six new verbs** (go, be, see, eat, take, fly), not ten, so Check-in stays near five minutes; the four revised trios (do, make, write, win) are checked in the streak, which is the ten-item mastery check.
+- **Mission cards are an Explore page** (tap each person's card on the wall) instead of a "who said it" page, because the variety gate bans that page type from lessons outside A1 Season 1.
+- **Part minutes** for this lesson: Check-in 5, Remember? 7, The Drop 15, Notice & Build 10, Energiser 4, Mission 10, Release 5, Wrap 4. The Drop is long on purpose (the story, six word pages, two memorising games, the lie check and the gist).
+- **Release:** a short "my list" sort (I want to do it / I have done it / Not for me), then one spoken task that joins the reaction to the dare and one wish.
+- **Optional pages (dashed in the teacher's strip):** a warm-up verb listening and the feedback page before Take 2.
+
+Not done, waiting for the owner: the three story plates, the wall and trophy-case plates, the stickers, and the **recorded voices** (the audit prices the new lines at about $1.39; the voice list is deliberately not updated yet, so nothing is baked). Until then the pages use frames and gradients and are silent.

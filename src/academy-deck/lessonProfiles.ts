@@ -23,6 +23,11 @@ export interface LessonProfile {
 
 export const LESSON_PROFILES: LessonProfile[] = [
   {
+    id: 'b1-s01-e1', setting: 'the rooftop studio with the bucket-list wall', mainPlate: 'bucket-list-wall', look: 'evening rooftop, string lights, a glass wall of blank cards, a trophy case', frame: 'Vee’s bucket-list dare: tick it off before the break',
+    signature: 'forge', funHook: 'forge the three forms of each verb into a trophy on your board, then beat your own streak and predict who has done the most',
+    evidence: 'the student says the three forms of ten verbs, tells when from up to now, and says who has done the most and why (Take 2)', homeMission: 'send Vee one voice note: three sentences about things you have done',
+  },
+  {
     id: 'free-time-club-1', setting: 'the school Club Fair at dusk', mainPlate: 'fair-night', look: 'purple dusk, string lights, five stalls', frame: 'mystery: who took Ava’s poster?',
     signature: 'explore', funHook: 'walk the fair and tap each stall to hear what they like; sort your own hobbies with no wrong answer',
     evidence: 'the student says “I like ___. I love ___.” to Ava with their name (Take 2 and the voice note)', homeMission: 'send Ava one voice note: I like ___. I love ___.',

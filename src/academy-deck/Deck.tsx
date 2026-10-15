@@ -16,6 +16,7 @@ import { SortView } from './slides/sort';
 import { StoryView } from './slides/story';
 import { DuelView, RhythmView, VaultView } from './slides/lock';
 import { PassageView } from './slides/passage';
+import { ForgeView, StreakView } from './slides/forge';
 import { LessonClock } from './LessonClock';
 import { playSfx } from './sfx';
 import { applyLane, laneOf, LANE_LABEL } from './lanes';
@@ -100,6 +101,8 @@ function SlideView({ slide }: { slide: Slide }) {
     case 'rhythm': return <RhythmView slide={slide} />;
     case 'duel': return <DuelView slide={slide} />;
     case 'passage': return <PassageView slide={slide} />;
+    case 'forge': return <ForgeView slide={slide} />;
+    case 'streak': return <StreakView slide={slide} />;
     case 'wrap': return <WrapView slide={slide} />;
   }
 }

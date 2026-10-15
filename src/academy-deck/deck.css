@@ -1272,3 +1272,21 @@
 .ad-keepchips { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; padding: 6px 0 10px; }
 .ad-root .ad-keepchip { padding: 8px 18px; border-radius: 999px; border: 3px solid #a78bfa; background: rgba(255, 255, 255, 0.92); color: var(--violet-d); font-size: 1.3rem; font-weight: 900; cursor: pointer; }
 .ad-root .ad-keepchip[data-on='true'] { border-color: #f59e0b; background: linear-gradient(180deg, #fde68a, #f59e0b); color: #3b2a00; box-shadow: 0 0 14px rgba(251, 191, 36, 0.6); }
+
+/* Trophy Forge and trio streak (B1 S1) */
+.ad-trophies { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 0 0 10px; padding: 0; }
+.ad-trophy { display: grid; place-items: center; gap: 0; min-width: 64px; min-height: 64px; padding: 4px 8px; border-radius: 16px; border: 3px dashed #a78bfa; color: #c4b5fd; font-size: 0.8rem; font-weight: 800; }
+.ad-trophy i { width: 22px; height: 22px; border-radius: 50%; background: rgba(196, 181, 253, 0.25); }
+.ad-trophy svg { width: 22px; height: 22px; }
+.ad-trophy[data-on='true'] { border: 3px solid #fde68a; background: linear-gradient(180deg, #fde68a, #f59e0b); color: #3b2a00; box-shadow: 0 0 14px rgba(251, 191, 36, 0.55); animation: ad-key-pop 0.5s ease-out; }
+.ad-forge { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 6px 0 12px; }
+.ad-forge-slot { display: grid; place-items: center; gap: 2px; padding: 10px 6px; border-radius: 16px; border: 3px dashed #a78bfa; background: rgba(76, 29, 149, 0.35); color: #ddd6fe; }
+.ad-forge-slot small { font-size: 0.75rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; }
+.ad-forge-slot b { font-size: clamp(1.4rem, 3.4vw, 2rem); color: #fff; }
+.ad-forge-slot[data-next='true'] { border-color: #fbbf24; box-shadow: 0 0 12px rgba(251, 191, 36, 0.5); }
+.ad-forge-slot[data-full='true'] { border-style: solid; border-color: #fde68a; background: linear-gradient(180deg, rgba(253, 230, 138, 0.3), rgba(245, 158, 11, 0.25)); }
+.ad-forge-slot[data-full='true'] b { color: #fde68a; }
+.ad-streak { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 14px; margin: 4px 0 10px; }
+.ad-streak-n { padding: 4px 14px; border-radius: 999px; background: linear-gradient(180deg, #fde68a, #f59e0b); color: #3b2a00; font-weight: 900; font-size: 1.2rem; }
+.ad-streak-base { font-size: clamp(2rem, 5vw, 3rem); color: #fff; text-shadow: 0 0 18px rgba(253, 230, 138, 0.5); }
+.ad-streak-step { color: #ddd6fe; font-weight: 700; }

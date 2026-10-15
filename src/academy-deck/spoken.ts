@@ -32,7 +32,7 @@ export function openLines(s: Slide): SpokenLine[] {
   switch (s.kind) {
     case 'title': return line('Vee', s.heading);
     case 'brief': return line('Vee', s.say);
-    case 'dial': case 'lane': case 'blend': case 'hearpick': case 'reader': case 'rhythm': case 'duel': case 'passage': return line(lead(s), s.prompt);
+    case 'dial': case 'lane': case 'blend': case 'hearpick': case 'reader': case 'rhythm': case 'duel': case 'passage': case 'forge': case 'streak': return line(lead(s), s.prompt);
     case 'vault': return line(lead(s), s.line);
     case 'rule': return line('Vee', s.title);
     case 'say': return line(lead(s), s.prompt);
@@ -70,6 +70,8 @@ export function viewLines(s: Slide): SpokenLine[] {
     case 'hearpick': return s.rounds.flatMap((r) => line('Vee', r.say));
     case 'rhythm': return s.rounds.flatMap((r) => line('Vee', r.say));
     case 'duel': return s.rounds.flatMap((r) => line(lead(s), s.frame.replace('___', r.answer)));
+    case 'forge': return s.rounds.flatMap((r) => line(lead(s), `${r.forms[0]}, ${r.forms[1]}, ${r.forms[2]}.`));
+    case 'streak': return s.rounds.flatMap((r) => [...line(lead(s), r.forms[0]), ...line(lead(s), r.forms[1]), ...line(lead(s), r.forms[2])]);
     case 'passage': return [...s.lines.flatMap((t) => line(s.from, t)), ...[...new Set(s.lines.join(' ').replace(/[.,!?]/g, '').split(/\s+/))].flatMap((w) => line(s.from, w))];
     case 'story': return s.beats.flatMap((b) => b.lines.flatMap((l) => line(l.who, l.text)));
     case 'sort': return s.items.flatMap((it) => s.bins.flatMap((b) => line('Vee', b.template.replace('{w}', it.word))));

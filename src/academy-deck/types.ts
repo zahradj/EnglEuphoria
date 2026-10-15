@@ -202,7 +202,8 @@ export interface SortSlide extends Omit<SlideBase, 'items'> {
   bins: { id: string; label: string; /** the sentence made when an item goes in: {w} is the item's word */ template: string }[];
   /** save the words placed in the FIRST bin (comma list) in vars[save]: the teacher sees what the student already knows */
   save?: string;
-  items: { id: string; art: TeachArt; word: string }[];
+  /** `art` is optional: without a picture the item is a plain word or sentence chip (verbs, sentences) */
+  items: { id: string; art?: TeachArt; word: string }[];
 }
 /** Story (owner 2026-10-14: stories as full scene plates): each beat is ONE full-bleed generated scene with the cast painted into it (public/academy-art/bg/<plate>.webp); the lines show as film subtitles and are spoken; the plates cross-fade (never zoom or pan). Done when the last line has been seen. */
 export interface StorySlide extends SlideBase {
@@ -218,11 +219,15 @@ export interface RhythmSlide extends SlideBase { kind: 'rhythm'; prompt: string;
 export interface DuelSlide extends SlideBase { kind: 'duel'; prompt: string; frame: string; rounds: { art: TeachArt; options: string[]; answer: string }[] }
 /** Passage (Pre-A1 reading-first, owner 2026-10-15): a short message from a character. Step 1 listen, step 2 read it yourself (any word can be tapped to hear it), step 3 KEEP the words you want: they go in the student's word bank (vars[bank]) and come back in the word-bank game and the spaced Remember?/Daily 10. No wrong answers; done when the words are kept. */
 export interface PassageSlide extends SlideBase { kind: 'passage'; prompt: string; from: CastName; lines: string[]; /** the words the student may keep (all appear in the lines) */ keepFrom: string[]; /** how many words must be kept (default 3) */ keep?: number; /** vars key for the bank */ bank: string }
+/** Trophy Forge (B1 S1, owner-approved plan 2026-10-15): for each verb the student places the three forms (base, past simple, past participle) in order; the trio is forged into a trophy that stays on the board, and the student says it aloud (Say it). A wrong tile just shakes ("Not yet"); nothing is lost. Done when every verb is forged; the verbs are saved in vars.trophies. */
+export interface ForgeSlide extends SlideBase { kind: 'forge'; prompt: string; rounds: { /** the three forms in order: base, past simple, past participle */ forms: [string, string, string] }[] }
+/** Trio streak (B1 S1): the guide says the base form; the student picks the past simple and then the past participle. A streak counts the verbs done right the first time; a miss resets the streak (no penalty) and the verb comes again; the student's own best streak is kept in vars.bestStreak and the score in vars[save]. No timer. */
+export interface StreakSlide extends SlideBase { kind: 'streak'; prompt: string; save?: string; rounds: { forms: [string, string, string]; /** wrong choices for the past simple and for the past participle */ pastOptions: string[]; partOptions: string[] }[] }
 export interface WrapSlide extends SlideBase { kind: 'wrap'; heading: string; ticks: string[]; homework: string; clue: string }
 
 export type Slide =
   | TitleSlide | BriefSlide | BadgeSlide | DialSlide | LaneSlide | WhoSaidSlide | LockersSlide | NumTrainSlide | PadlockSlide | ConvoSlide | SpellSlide
-  | MatchSlide | CountUpSlide | BePickSlide | BuildSlide | FactCheckSlide | WriteSlide | HuntSlide | ShadowSlide | TeachSlide | ModelSlide | FindWrongSlide | BorderSlide | MemorySlide | NumWallSlide | PhoneChatSlide | FadeSlide | CardSlide | SaySlide | VaultSlide | RhythmSlide | DuelSlide | PassageSlide | WrapSlide | BlendSlide | HearPickSlide | ReaderSlide | RuleSlide | ExploreSlide | SortSlide | StorySlide;
+  | MatchSlide | CountUpSlide | BePickSlide | BuildSlide | FactCheckSlide | WriteSlide | HuntSlide | ShadowSlide | TeachSlide | ModelSlide | FindWrongSlide | BorderSlide | MemorySlide | NumWallSlide | PhoneChatSlide | FadeSlide | CardSlide | SaySlide | VaultSlide | RhythmSlide | DuelSlide | PassageSlide | ForgeSlide | StreakSlide | WrapSlide | BlendSlide | HearPickSlide | ReaderSlide | RuleSlide | ExploreSlide | SortSlide | StorySlide;
 
 export interface DeckScript {
   lessonId: string;
@@ -250,7 +255,7 @@ export interface DeckScript {
 export type Vars = Record<string, string>;
 export interface Stats { right: number; wrong: number; hints: number; skipped: string[]; /** times the student tapped "Say it" after saying an answer aloud (speaking practice, docs/academy-speaking-practice.md) */ spoken?: number }
 /** Slide kinds where the student can say the answer aloud and tap "Say it" (owner 2026-10-14: speaking practice in every lesson). */
-export const SAY_IT_KINDS: readonly string[] = ['teach', 'hearpick', 'blend', 'reader', 'match', 'memory', 'build', 'spell', 'convo', 'duel', 'rhythm', 'passage'];
+export const SAY_IT_KINDS: readonly string[] = ['teach', 'hearpick', 'blend', 'reader', 'match', 'memory', 'build', 'spell', 'convo', 'duel', 'rhythm', 'passage', 'forge', 'streak'];
 
 /** The parts of a lesson: its run of show, with the lesson's own minutes when it sets `partMinutes`. */
 export function partsFor(script: Pick<DeckScript, 'shape' | 'partMinutes'>): { name: string; goal: string; minutes: number }[] {

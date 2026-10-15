@@ -1,0 +1,168 @@
+// B1-S01-E1 "Have You Ever...? · Cold Open": reads the roadmap blueprint, the approved plan (docs/academy-b1-s01-spec.md) and the new games (Trophy Forge, trio streak).
+import { afterEach, describe, expect, it } from 'vitest';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { Deck } from '../Deck';
+import { B1_S01_E1, CRITERIA, ITEMS, OBJECTIVE, TRIOS, REVISED, streakRound } from '../lessons/b1s01e1';
+import { ACADEMY_LESSON_BLUEPRINTS, SPEAKING_TARGETS } from '../../curriculum/academy';
+import { partsFor, type Slide } from '../types';
+import { slideLines } from '../spoken';
+
+afterEach(cleanup);
+const slides = B1_S01_E1.slides;
+const bp = ACADEMY_LESSON_BLUEPRINTS.find((b) => b.id === 'B1-S01-E1')!;
+const at = (id: string) => slides.findIndex((s) => s.id === id);
+const open = (id: string) => render(<Deck script={B1_S01_E1} teacher slide={at(id)} />);
+
+// Same estimate as the other lessons (a slow student: listen, say, hesitate, try again), plus the two new games.
+const minutes = (s: Slide): number => {
+  switch (s.kind) {
+    case 'title': return 0.2;
+    case 'brief': return 0.8;
+    case 'dial': return 0.4;
+    case 'teach': return s.pages.length * 0.6;
+    case 'model': return s.lines.length * 0.35;
+    case 'whosaid': return 0.6 + s.items.length * 0.4 + (s.replay?.length ?? 0) * 0.3;
+    case 'convo': return 0.6 + s.steps.length * 0.5;
+    case 'memory': return 0.8 + s.pairs.length * 0.4;
+    case 'match': return 0.6 + s.pairs.length * 0.35;
+    case 'build': return s.rounds.length * 1.2;
+    case 'hearpick': return 0.5 + s.rounds.length * 0.5;
+    case 'rule': return 1;
+    case 'fade': return 0.6 + s.lines.length * 0.6;
+    case 'say': return 2;
+    case 'wrap': return 3.2;
+    case 'explore': return 0.6 + s.spots.length * 0.4;
+    case 'sort': return 0.6 + s.items.length * 0.45;
+    case 'story': return 0.4 + s.beats.reduce((n, b) => n + b.lines.length, 0) * 0.4;
+    case 'forge': return 0.5 + s.rounds.length * 0.7;
+    case 'streak': return 0.5 + s.rounds.length * 0.35;
+    default: return 1;
+  }
+};
+
+describe('B1-S01-E1: the blueprint and the approved plan', () => {
+  it('reads the blueprint: id, level, lead and cast, 12 receptive items, the eight parts, and keeps its main-idea objective', () => {
+    expect(B1_S01_E1.lessonId).toBe(bp.id);
+    expect(B1_S01_E1.level).toBe('B1');
+    expect(bp.cast.lead).toBe('Vee');
+    expect(B1_S01_E1.cast).toEqual(expect.arrayContaining(['Vee', 'Ava']));
+    expect(ITEMS).toHaveLength(bp.newItems.count);
+    expect(bp.newItems.kind).toBe('receptive');
+    expect(partsFor(B1_S01_E1).map((p) => p.name)).toEqual(bp.runOfShow.map((r) => r.name));
+    expect(bp.objective).toMatch(/main idea of a short text about experiences and bucket lists/);
+    expect(OBJECTIVE).toMatch(/main idea of the bucket-list story/);
+  });
+
+  it('keeps to five observable "I can" success criteria, and every criterion is trained on at least three slides', () => {
+    expect(CRITERIA).toHaveLength(5);
+    CRITERIA.forEach((c) => expect(c).toMatch(/^I /));
+    for (let c = 1; c <= 5; c++) expect(slides.filter((s) => s.trains?.includes(c)).length, `criterion ${c}`).toBeGreaterThanOrEqual(2);
+    slides.filter((s) => !['title', 'brief', 'wrap', 'dial'].includes(s.kind)).forEach((s) => expect(s.trains?.length, s.id).toBeGreaterThan(0));
+  });
+
+  it('TIME: the lesson minutes add to 60, the REQUIRED pages fill each part (70-125 %) and the hour (57-64.5), optional pages at most 12 minutes', () => {
+    const parts = partsFor(B1_S01_E1);
+    expect(parts.reduce((a, p) => a + p.minutes, 0)).toBe(60);
+    const req = slides.filter((s) => !s.optional);
+    const per = parts.map((_, i) => req.filter((s) => s.part === i).reduce((a, s) => a + minutes(s), 0));
+    per.forEach((m, i) => {
+      expect(m, `${parts[i].name}: ${m.toFixed(1)} min`).toBeGreaterThanOrEqual(parts[i].minutes * 0.7);
+      expect(m, `${parts[i].name}: ${m.toFixed(1)} min`).toBeLessThanOrEqual(parts[i].minutes * 1.25);
+    });
+    const total = per.reduce((a, b) => a + b, 0);
+    expect(total, `required total ${total.toFixed(1)} min`).toBeGreaterThanOrEqual(57);
+    expect(total, `required total ${total.toFixed(1)} min`).toBeLessThanOrEqual(64.5);
+    expect(slides.filter((s) => s.optional).reduce((a, s) => a + minutes(s), 0)).toBeLessThanOrEqual(12);
+  });
+
+  it('INTENSIVE PRACTICE: at least 80 student responses, at least five different games, no two neighbouring pages of the same kind', () => {
+    const responses = (s: Slide): number => {
+      switch (s.kind) {
+        case 'hearpick': case 'build': return s.rounds.length;
+        case 'forge': return s.rounds.length * 2;
+        case 'streak': return s.rounds.length * 2;
+        case 'match': return s.pairs.length;
+        case 'memory': return s.pairs.length * 2;
+        case 'sort': return s.items.length;
+        case 'explore': return s.spots.length;
+        case 'convo': return s.steps.length;
+        case 'say': return 1;
+        case 'fade': return s.lines.length;
+        default: return 0;
+      }
+    };
+    const total = slides.reduce((a, s) => a + responses(s), 0);
+    expect(total, `${total} responses`).toBeGreaterThanOrEqual(80);
+    const games = new Set(slides.filter((s) => ['match', 'memory', 'sort', 'forge', 'streak', 'hearpick', 'build', 'explore'].includes(s.kind)).map((s) => s.kind));
+    expect(games.size).toBeGreaterThanOrEqual(5);
+    slides.slice(1).forEach((s, i) => expect(s.kind, `${slides[i].id} -> ${s.id}`).not.toBe(slides[i].kind));
+  });
+
+  it('modelling and the rule: the rule (3 lines) comes before the practice games of Notice & Build, the teacher models the Mission before Take 1, and the student teaches back in the Wrap', () => {
+    const rule = slides.find((s) => s.kind === 'rule');
+    expect(rule && rule.kind === 'rule' && rule.lines.length).toBe(3);
+    expect(at('rule-trio')).toBeLessThan(at('detective'));
+    expect(at('rule-trio')).toBeLessThan(at('forge'));
+    expect(at('model-task')).toBeLessThan(at('say-take1'));
+    expect(at('say-take1')).toBeLessThan(at('say-take2'));
+    expect(slides.some((s) => s.id === 'teach-back' && s.part === 7)).toBe(true);
+  });
+
+  it('after the six words come TWO different memorising games before anything new', () => {
+    const i = at('teach-words');
+    expect(slides.slice(i + 1, i + 3).map((s) => s.kind)).toEqual(['match', 'memory']);
+  });
+
+  it('SPEAKING: the lesson reaches the free step (Mission Take 2, Release) with at least five distinct spoken tasks', () => {
+    expect(SPEAKING_TARGETS.B1.reachesStep).toBe('free');
+    const say = slides.filter((s) => s.kind === 'say');
+    expect(say.length).toBeGreaterThanOrEqual(5);
+    expect(slides.some((s) => s.id === 'say-release' && s.kind === 'say' && s.open)).toBe(true);
+  });
+
+  it('every spoken line can be baked (no variables or blanks) except the learner-filled model lines', () => {
+    slides.forEach((s) => slideLines(s).forEach((l) => expect(l.text, s.id).not.toMatch(/[{}]/)));
+  });
+});
+
+describe('B1-S01-E1: Trophy Forge and the trio streak', () => {
+  it('the trios are real: six new participles and four revised, base / past simple / past participle in order', () => {
+    expect(TRIOS.map((t) => t[2])).toEqual(['gone', 'been', 'seen', 'eaten', 'taken', 'flown']);
+    expect(REVISED.map((t) => t[0])).toEqual(['do', 'make', 'write', 'win']);
+    expect(ITEMS).toEqual(expect.arrayContaining(TRIOS.map((t) => t[2])));
+  });
+
+  it('FORGE: a wrong tile says Not yet and places nothing; the forms go in order; the trophy is added', () => {
+    open('forge');
+    fireEvent.click(screen.getByRole('button', { name: 'gone' })); // the first form must be the base: go
+    expect(screen.getByText(/Not yet/)).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: 'go' }));
+    fireEvent.click(screen.getByRole('button', { name: 'went' }));
+    fireEvent.click(screen.getByRole('button', { name: 'gone' }));
+    expect(screen.getByRole('button', { name: /Add the trophy/ })).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: /Add the trophy/ }));
+    expect(screen.getByRole('list', { name: /Trophies: 1 of 6/ })).toBeTruthy();
+  });
+
+  it('STREAK: a miss resets the streak and costs nothing else; the right past simple moves to the participle; wrong options are real forms', () => {
+    open('streak');
+    const t = TRIOS[0]; // go, went, gone
+    const r = streakRound(t, 0);
+    expect(r.pastOptions).not.toContain(t[1]);
+    expect(r.partOptions).not.toContain(t[2]);
+    [...r.pastOptions, ...r.partOptions].forEach((o) => expect(/^[a-z]+$/.test(o)).toBe(true));
+    fireEvent.click(screen.getByRole('button', { name: r.pastOptions[0] }));
+    expect(screen.getByText(/Not yet/)).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: 'went' }));
+    expect(screen.getByRole('group', { name: 'Choose the past participle' })).toBeTruthy();
+  });
+
+  it('TRIO CHECK: a private three-box sort that saves what the student already knows', () => {
+    const s = slides.find((x) => x.id === 'trio-check');
+    expect(s?.kind).toBe('sort');
+    if (s?.kind !== 'sort') throw new Error('no sort');
+    expect(s.save).toBe('trioKnown');
+    expect(s.bins).toHaveLength(3);
+    expect(s.items.map((i) => i.word)).toEqual(TRIOS.map((t) => t[0]));
+  });
+});

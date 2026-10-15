@@ -31,7 +31,7 @@ export function SortView({ slide }: { slide: SortSlide }) {
       <div className="ad-sort-pool" role="group" aria-label="Pictures to sort">
         {left.map((it) => (
           <button key={it.id} type="button" className="ad-sort-item" data-on={pick === it.id} aria-pressed={pick === it.id} aria-label={it.word} onClick={() => setPick(pick === it.id ? null : it.id)}>
-            <Art art={it.art} size="sm" />
+            {it.art && <Art art={it.art} size="sm" />}
             <span>{it.word}</span>
           </button>
         ))}
