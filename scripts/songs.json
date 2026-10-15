@@ -4038,5 +4038,113 @@
       "How do you feel? How do you feel?",
       "Make a face and spin like a wheel!"
     ]
+  },
+  "a1u6l3-ocean-down-in-the-sea": {
+    "publicPath": "public/lep1/audio/down-in-the-sea-song-a1u6l3.mp3",
+    "bpm": 112,
+    "key": "D major",
+    "beatsPerLine": 4,
+    "barsPerLine": 2,
+    "introBars": 2,
+    "maxSeconds": 75,
+    "targetWords": [
+      "sea",
+      "lives",
+      "eats",
+      "reef",
+      "beach"
+    ],
+    "style": "Bright, gentle ocean kids song, 112 BPM in 4/4, D major, with ukulele, steel drums, soft marimba, light shaker and bubbly water sounds, ONE clear happy young singer, every word sung slowly and very clearly; each verse names a sea animal, what it is doing, where it lives and what it eats, then an action line; the chorus 'Down in the sea, down in the sea' is catchy and repeated.",
+    "positiveStyles": [
+      "kids song",
+      "happy",
+      "ukulele",
+      "steel drums",
+      "marimba",
+      "shaker",
+      "clear kids vocals",
+      "112 BPM",
+      "sunny",
+      "beach"
+    ],
+    "negativeStyles": [
+      "scary",
+      "dark",
+      "horror",
+      "sad",
+      "lullaby",
+      "rap",
+      "adult vocals",
+      "instrumental only",
+      "extra verses",
+      "mumbling",
+      "heavy drums"
+    ],
+    "sections": [
+      {
+        "name": "Chorus",
+        "rhyme": "AA",
+        "lines": [
+          "Down in the sea, down in the sea,",
+          "The beach, the reef, come swim with me!"
+        ]
+      },
+      {
+        "name": "Verse 1",
+        "rhyme": "AABB",
+        "lines": [
+          "Look at the turtle, swimming slow,",
+          "It lives on the reef, you know!",
+          "It eats the grass, munch, munch!",
+          "Munch like a turtle, eat your lunch!"
+        ]
+      },
+      {
+        "name": "Verse 2",
+        "rhyme": "AABB",
+        "lines": [
+          "Look at the crab, it's walking slow,",
+          "It lives on the beach, you know!",
+          "It eats the shells, crunch, crunch!",
+          "Walk like a crab and eat your lunch!"
+        ]
+      },
+      {
+        "name": "Verse 3",
+        "rhyme": "AABB",
+        "lines": [
+          "Look at the shark, it's swimming, go!",
+          "It lives in the sea, you know!",
+          "It eats the fish, yum, yum!",
+          "Swim like a shark, here we come!"
+        ]
+      },
+      {
+        "name": "Chorus 2",
+        "rhyme": "AA",
+        "lines": [
+          "Down in the sea, down in the sea,",
+          "The beach, the reef, come swim with me!"
+        ]
+      }
+    ],
+    "lines": [
+      "Down in the sea, down in the sea,",
+      "The beach, the reef, come swim with me!",
+      "Look at the turtle, swimming slow,",
+      "It lives on the reef, you know!",
+      "It eats the grass, munch, munch!",
+      "Munch like a turtle, eat your lunch!",
+      "Look at the crab, it's walking slow,",
+      "It lives on the beach, you know!",
+      "It eats the shells, crunch, crunch!",
+      "Walk like a crab and eat your lunch!",
+      "Look at the shark, it's swimming, go!",
+      "It lives in the sea, you know!",
+      "It eats the fish, yum, yum!",
+      "Swim like a shark, here we come!",
+      "Down in the sea, down in the sea,",
+      "The beach, the reef, come swim with me!"
+    ]
   }
 }
