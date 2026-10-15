@@ -196,3 +196,14 @@ Weaknesses: the teen is one boy with dark hair and a purple hoodie in 9 of 10 sq
 | cards phone, pin, tin, map (cut-out stickers from one sheet) | `cards/p-phone.webp`, `p-pin`, `p-tin`, `p-map` | MAHYCKlTUeI | 100 |
 
 Purple share target is now about 25% (owner, 2026-10-15). Story plates 2 and 3 read below that by a rough hue count (navy and blue dominate); restyle only with the owner's approval.
+
+### Pre-A1 S2 L1 v2 plates (2026-10-15)
+The holder design reached Canva's 100-page limit, so holder pages 97-99 were reused: the three story plates are saved in the repo and recoverable by their Canva media ids above (MAHYCBxiW9M, MAHYCAxZPkA, MAHYCIyzlSQ).
+
+| Picture | File | Canva media | Holder page |
+|---|---|---|---|
+| scene `vault-corridor` (five round vault doors, the first glowing gold) | `bg/vault-corridor.webp` | MAHYCWjl1Fs | 97 |
+| scene `lockscreen-closeup` (lock screen, five empty key slots) | `bg/lockscreen-closeup.webp` | MAHYCV9JEuI | 98 |
+| scene `bus-stop-dawn` (the finale) | `bg/bus-stop-dawn.webp` | MAHYCQG_Dx8 | 99 |
+
+A new holder design is needed before more plates (page limit).
