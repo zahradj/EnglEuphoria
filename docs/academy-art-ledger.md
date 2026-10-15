@@ -207,3 +207,16 @@ The holder design reached Canva's 100-page limit, so holder pages 97-99 were reu
 | scene `bus-stop-dawn` (the finale) | `bg/bus-stop-dawn.webp` | MAHYCQG_Dx8 | 99 |
 
 A new holder design is needed before more plates (page limit).
+
+
+## B1 Season 1 lesson 1 (2026-10-15)
+
+| picture | file | Canva media | holder page |
+|---|---|---|---|
+| scene `bucket-list-wall` (rooftop studio, wall of blank cards; main plate) | `bg/bucket-list-wall.webp` | MAHYFlM8PDc | 97 (reused) |
+| scene `trophy-case` (cabinet with six empty glowing slots) | `bg/trophy-case.webp` | MAHYFtktauU | 98 (reused) |
+| story plate 1 (Vee at the wall, Ava on the sofa) | `bg/story-b1s1-1.webp` | MAHYCnd2Ab0 | 99 (reused) |
+| story plate 2 (Ava shows photos to Theo) | `bg/story-b1s1-2.webp` | MAHYCguSgIg | 97 (reused) |
+| story plate 3 (Vee points at the viewer, Ava laughs, Theo grins) | `bg/story-b1s1-3.webp` | MAHYChMdb5g | 98 (reused) |
+
+The holder is full (100 pages), so pages 97-99 are reused; the pictures are recoverable by their media ids. Still to make: word-picture sticker sheet (`b-bucketlist, b-dare, b-giveitago, b-lifetime, b-tick, b-brave`).
