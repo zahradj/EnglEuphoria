@@ -623,6 +623,12 @@ export type Scene =
        *  the chart for each `reports` card and picks likes / doesn't like. */
       friends: { name: string; who: CharKey; img: string }[]; foods: { label: string; img: string }[];
       answers: boolean[][]; reports: { friend: number; food: number }[]; doneLine: string; }
+  | { id: string; kind: 'reef-detective'; bg: string; teacher: string; title: string; who: CharKey; whoName: string;
+      /** ★ Reef Detective (A1 U6L4, docs/a1-unit-6-ocean.md §6.4): the child asks yes/no questions (size / doing / name keys,
+       *  reefDetectiveRules.ts) about `secret`; answers pin to a clue board and the suspects that don't fit are crossed out.
+       *  Part 2: the child hides one and `helper` asks `hideAsks`; the child answers Yes, it is / No, it isn't. */
+      helper: CharKey; helperName: string; intro: string;
+      suspects: { name: string; img: string; doing: string; size: 'big' | 'small' }[]; secret: number; hideAsks: string[]; doneLine: string; }
   | { id: string; kind: 'live-reef'; bg: string; teacher: string; title: string; who: CharKey;
       /** ★ Live Reef (A1 U6L2, docs/a1-unit-6-ocean.md §6.2): a reef in soft fog. Each round one animal peeks out at its
        *  `spots` place (left/top/size in % of the screen); the voice asks "What's the crab doing?" (reefAsk). The child

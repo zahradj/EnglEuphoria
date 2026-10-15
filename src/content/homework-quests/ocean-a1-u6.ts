@@ -126,3 +126,41 @@ export const QUEST_SEA_HOMES_A1_U6L3: HomeworkQuest = {
     chest('You did it! Sea home expert!', page(7)),
   ],
 };
+
+/** Lesson 4 "Ask and Answer: Is It a Shark?" */
+export const QUEST_REEF_DETECTIVE_A1_U6L4: HomeworkQuest = {
+  id: 'reef-detective-a1-u6l4', title: 'Reef Detective Quest', subtitle: 'Is It a Shark? · A1 Unit 6 · Lesson 4', level: 'A1', lessonKey: 'ocean-rich-6-4',
+  theme: theme(page(9)), voice: 'teacher', praise,
+  levels: [
+    { kind: 'picture-choice', name: 'Yes or No?', icon: '🔍', intro: 'Listen. Tap the animal that says YES!', img: reef,
+      rounds: [
+        { line: 'Is it walking? Yes, it is.', answer: 'crab', options: [{ label: 'crab', src: it('crab-walking') }, { label: 'starfish', src: it('starfish-sleeping') }, { label: 'whale', src: it('whale-diving') }] },
+        { line: 'Is it hiding? Yes, it is.', answer: 'octopus', options: [{ label: 'fish', src: it('fish-eating') }, { label: 'octopus', src: it('bub-hiding') }, { label: 'crab', src: it('crab-walking') }] },
+        { line: 'Is it diving? Yes, it is.', answer: 'whale', options: [{ label: 'whale', src: it('whale-diving') }, { label: 'turtle', src: it('turtle-eating') }, { label: 'octopus', src: it('bub-hiding') }] },
+      ] },
+    { kind: 'true-false', name: 'Is It…?', icon: '❓', intro: 'Look and listen. True or false?',
+      rounds: [
+        { img: page(9), aspect: 16 / 9, line: 'Is it the chest? No, it isn’t.', isTrue: true },
+        { img: page(8), aspect: 16 / 9, line: 'It is sunny.', isTrue: false },
+        { img: page(8), aspect: 16 / 9, line: 'The waves are big.', isTrue: true },
+      ] },
+    { kind: 'sentence-builder', name: 'Build the Question!', icon: '🧱', intro: 'Listen. Build what you hear!',
+      rounds: [
+        { img: it('shark'), line: 'Is it a shark?', extra: ['are'] },
+        { img: it('crab-walking'), line: 'Is it walking?', extra: ['do'] },
+      ] },
+    { kind: 'reading', name: 'The Story', icon: '📖', intro: 'Read the story. Then answer from memory!', img: page(8),
+      sentences: ['Oh no! It is windy. The waves are big.', 'Mia: Is it the chest? Shark: No, it isn’t!'],
+      questions: [
+        { q: 'What is the weather like?', options: ['Windy', 'Sunny', 'Snowy'], answer: 'Windy' },
+        { q: 'Is it the chest?', options: ['No, it isn’t.', 'Yes, it is.'], answer: 'No, it isn’t.' },
+      ] },
+    { kind: 'twister', name: 'Whale Twister', icon: '🌀', intro: 'Build my tongue twister before the sand runs out!', img: reef, line: 'White whales wish for a boat.', seconds: 45, focus: 'wh', sayIt: 'Now say it slow, then faster!' },
+    { kind: 'sound-blend', name: 'Blend It!', icon: '🧱', intro: 'Tap each sound, then Blend!', img: reef,
+      rounds: [
+        { word: 'boat', sounds: ['b', 'oa', 't'], picture: '/magic-castle/stickers/boat.png' },
+        { word: 'fish', sounds: ['f', 'i', 'sh'], picture: it('fish') },
+      ] },
+    chest('You did it! Reef detective!', page(9)),
+  ],
+};

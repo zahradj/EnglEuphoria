@@ -53,6 +53,8 @@ export const TREASURE_REEF: ReaderPage[] = [
   { img: reefPage(5), lines: [{ text: 'The crab is walking. The starfish is sleeping.' }], check: { who: 'pip', question: 'What is the crab doing?', answer: 'Walking', options: [{ label: 'Eating' }, { label: 'Walking' }, { label: 'Sleeping' }] } },
   { img: reefPage(6), lines: [{ text: 'The friends are diving. Fish are swimming!' }], check: { who: 'leo', question: 'What are the fish doing?', answer: 'Swimming', options: [{ label: 'Sleeping' }, { label: 'Swimming' }, { label: 'Walking' }] } },
   { img: reefPage(7), lines: [{ text: 'The turtle lives on the reef. It eats sea grass.' }], check: { who: 'mia', question: 'What does the turtle eat?', answer: 'Sea grass', options: [{ label: 'Fish', img: SEA.fish }, { label: 'Sea grass', img: item('sea-grass') }, { label: 'Shells', img: SEA.shell }] } },
+  { img: reefPage(8), lines: [{ text: 'Oh no! It is windy. The waves are big.' }], check: { who: 'pip', question: 'What is the weather like?', answer: 'Windy', options: [{ label: 'Sunny' }, { label: 'Windy' }, { label: 'Snowy' }] } },
+  { img: reefPage(9), lines: [{ text: 'Mia: Is it the chest? Shark: No, it isn’t!' }], check: { who: 'leo', question: 'Is it the chest?', answer: 'No, it isn’t.', options: [{ label: 'Yes, it is.' }, { label: 'No, it isn’t.' }] } },
 ];
 
 const helloSong = (id: string, bg: string): Scene => ({
@@ -88,7 +90,7 @@ const PET_EARLIER = [
   { label: 'pizza', img: item('pizza-slice') }, { label: 'soup', img: item('soup') }, { label: 'cake', img: item('cake') },
   { label: 'balloon', img: item('balloon-red') }, { label: 'glasses', img: item('glasses') }, { label: 'boots', img: item('boots') },
 ];
-const PET_OCEAN: { label: string; img: string }[] = [{ label: 'shell', img: SEA.shell }, { label: 'boat', img: '/magic-castle/stickers/boat.png' }, { label: 'dish', img: item('dish') }];
+const PET_OCEAN: { label: string; img: string }[] = [{ label: 'shell', img: SEA.shell }, { label: 'boat', img: '/magic-castle/stickers/boat.png' }, { label: 'dish', img: item('dish') }, { label: 'coat', img: item('coat-blue') }];
 const petPal = (id: string, n: number, line: string, choices: { label: string; img: string }[], answer: number, say: string): Scene => ({
   id, kind: 'pet-pal', bg: bgBeach, who: 'leo', title: 'Pet Pal: Biscuit at the Beach',
   teacher: 'Routine (1 minute): Biscuit the puppy says what he wants. The student listens, taps it and says it. It goes on his shelf and he grows — the shelf keeps everything from earlier lessons.',
@@ -949,4 +951,270 @@ export const LESSON_A1U6L3_SCENES: Scene[] = [
   },
   goodbyeSong('oc3-goodbye-song', reefPage(6)),
   { id: 'oc3-finale', kind: 'finale', bg: reefPage(7), who: 'pip', line: 'You know where the sea animals live and what they eat! See you at the reef! \u{1F422}' },
+];
+
+/* =============================================================================
+ * A1 Unit 6 Lesson 4: "Ask and Answer: Is It a Shark?"
+ * Objective: I can find a hidden animal by asking: "Is it a crab? Is it swimming?" "Yes, it is. / No, it isn't."
+ * Evidence: the child finds Coral's secret animal with 3-4 questions (Reef Detective), then hides one and answers.
+ * Story frame: a storm comes (story pages 8-9) — the friends must ask the sea animals where the chest is.
+ * Practice ladder: Revise (Remember? Lesson 3 homes) → Present (I do: Is it a…? / Is it + -ing?, then the short answers)
+ *   → we do (echo) → Read and Match → you do (Reef Detective ★: ask, pin the clues, find it; swap and answer) → Field
+ *   Guide (Bub got it wrong — the child is the expert) → Go Fish (Have you got…?) → Reading (Reader p8-9, Read and Match,
+ *   Treasure Islands) → Phonics review wh / oa / sh (Letter Blocks, Blend & Read, twister) → Free (ask Coral 3 questions;
+ *   hide one for the teacher) → check.
+ * Research (docs/research/playground-a1u6-research.md, Lesson 4).
+ * ========================================================================= */
+
+export const LESSON_A1U6L4_TITLE = 'Ask and Answer: Is It a Shark?';
+export const LESSON_A1U6L4_OBJECTIVE = 'I can find a hidden animal by asking: "Is it a crab? Is it swimming?" "Yes, it is. / No, it isn\'t."';
+
+const COAT = item('coat-blue');
+const WHEEL = item('wheel');
+const GOAT = item('goat');
+
+export const LESSON_A1U6L4_SCENES: Scene[] = [
+  { id: 'oc4-title', kind: 'title-card', bg: reefPage(9), level: 'A1', unit: 'Unit 6', lessonLabel: 'Lesson 4', title: 'Is It a Shark?', subtitle: 'Ask and answer: Yes, it is! No, it isn’t!', cta: '\u{1F50D} LET’S ASK!' },
+  {
+    // Remember? (owner, 2026-10-07): Lesson 3 — where they live. Shadow mode (Lesson 3 used click): clearly different outlines.
+    id: 'oc4-recall-warmup', kind: 'recall-warmup', bg: bgReef, who: 'pip', mode: 'shadow', listen: true,
+    fromLabel: 'Lesson 3 · Where Do They Live?',
+    teacher: 'Guided: Pip says where an animal lives — the student finds its shadow and says: It’s a … . It lives … .',
+    items: [
+      { word: 'crab', say: 'It lives on the beach.', img: SEA.crab },
+      { word: 'turtle', say: 'It lives on the reef. It eats sea grass.', img: SEA.turtle },
+      { word: 'shark', say: 'It lives in the sea. It eats fish.', img: SEA.shark },
+      { word: 'seahorse', say: 'It lives on the reef.', img: SEA.seahorse },
+    ],
+  },
+  helloSong('oc4-hello-song', reefPage(1)),
+  { id: 'oc4-model-is-it', kind: 'meet', focus: ['crab'], bg: reefPage(5), who: 'coral', cardSide: 'right', teacher: 'Present (I do): cover the picture with your hand. Ask: Is it a crab? Lift your hand — Yes, it is! Voice goes UP for the question, DOWN for the answer.', line: 'Is it a crab? Yes, it is!', repeat: 'Is it a crab? Yes, it is.' },
+  {
+    id: 'oc4-short-answers', kind: 'prea1', teacher: 'Present (I do → you do): the question goes up, the answer comes down. Thumbs up for "Yes, it is", thumbs down for "No, it isn’t".',
+    scene: {
+      id: 'oc4-short-answers', kind: 'listen-repeat-cards', bg: bgReef, teacher: 'Is it…? Listen and say it!',
+      cards: [
+        { who: 'mia', sentence: 'Is it a shark? Yes, it is.', img: SEA.shark, imgLabel: 'yes' },
+        { who: 'mia', sentence: 'Is it a turtle? No, it isn’t. It’s a whale.', img: SEA.whale, imgLabel: 'no' },
+        { who: 'mia', sentence: 'Is it a starfish? Yes, it is.', img: SEA.starfish, imgLabel: 'yes' },
+      ],
+    },
+  },
+  { id: 'oc4-model-doing', kind: 'meet', focus: ['hiding'], bg: reefPage(4), who: 'bub', cardSide: 'right', teacher: 'Present (I do): now ask what it is DOING. Point to Bub behind the rock: Is he hiding? Yes! Is he sleeping? No!', line: 'Is it hiding? Yes, it is! I’m hiding!', repeat: 'Is it hiding? Yes, it is.' },
+  {
+    id: 'oc4-doing-cards', kind: 'prea1', teacher: 'Present (we do): Is it + -ing? Say each question together, then the answer — act it out.',
+    scene: {
+      id: 'oc4-doing-cards', kind: 'listen-repeat-cards', bg: bgRocks, teacher: 'What is it doing? Listen and say it!',
+      cards: [
+        { who: 'mia', sentence: 'Is it swimming? Yes, it is.', img: ACT.swimming, imgLabel: 'swimming' },
+        { who: 'mia', sentence: 'Is it sleeping? No, it isn’t. It’s walking.', img: ACT.walking, imgLabel: 'walking' },
+        { who: 'mia', sentence: 'Is it eating? Yes, it is.', img: ACT.turtleEating, imgLabel: 'eating' },
+      ],
+    },
+  },
+  { id: 'oc4-echo', kind: 'echo', bg: reefPage(4), who: 'pip', textSide: 'top', teacher: 'Guided (we do): ask like Pip — voice UP — then answer like Bub, voice DOWN.', word: 'Is it swimming? No, it isn’t!' },
+  // Owner 2026-10-13/14: after the words, Read and Match. Design differs from L3 (frames) and U5L4 (chalk).
+  {
+    id: 'oc4-match', kind: 'picture-match', look: 'polaroids', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each question and answer and drags it under the picture that says YES. Then reads it aloud.',
+    items: [
+      { word: 'Is it hiding? Yes, it is.', img: ACT.hiding },
+      { word: 'Is it sleeping? Yes, it is.', img: ACT.sleeping },
+      { word: 'Is it diving? Yes, it is.', img: ACT.diving },
+      { word: 'Is it walking? Yes, it is.', img: ACT.walking },
+      { word: 'Is it eating? Yes, it is.', img: ACT.eating },
+    ],
+    bg: bgRocks,
+  },
+  {
+    id: 'oc4-detective', kind: 'reef-detective', bg: bgRocks, who: 'coral', whoName: 'Coral', helper: 'bub', helperName: 'Bub', title: 'Reef Detective: which animal is it?',
+    intro: 'I’m thinking of a sea animal. Ask me questions!',
+    teacher: 'You do (the new game ★): the student taps a question and SAYS it — Coral answers. The clue is pinned and the animals that don’t fit are crossed out. Then the student names it. Part 2: the student hides one and answers Bub: Yes, it is / No, it isn’t. Evidence: 3-4 questions.',
+    suspects: [
+      { name: 'shark', img: ACT.swimming, doing: 'swimming', size: 'big' },
+      { name: 'crab', img: ACT.walking, doing: 'walking', size: 'small' },
+      { name: 'octopus', img: ACT.hiding, doing: 'hiding', size: 'small' },
+      { name: 'whale', img: ACT.diving, doing: 'diving', size: 'big' },
+      { name: 'starfish', img: ACT.sleeping, doing: 'sleeping', size: 'small' },
+      { name: 'turtle', img: ACT.turtleEating, doing: 'eating', size: 'big' },
+    ],
+    secret: 5,
+    hideAsks: ['size:big', 'doing:swimming', 'doing:hiding'],
+    doneLine: 'Case closed! You are a super reef detective!',
+  },
+  {
+    id: 'oc4-field-guide', kind: 'field-guide', bg: bgReef, who: 'bub', title: 'Bub’s Reef Guide — fix it!',
+    teacher: 'You do (the child is the expert): Bub wrote the reef guide and got it wrong! For each line the student picks the right word (No! It isn’t sleeping — it’s swimming!), then reads the whole card aloud.',
+    animals: [
+      { name: 'shark', img: SEA.shark, lines: [
+        { frame: 'The shark is ___.', options: ['sleeping', 'swimming'], answer: 'swimming', no: 'No! It isn’t sleeping!' },
+        { frame: 'It lives in the ___.', options: ['sea', 'house'], answer: 'sea', no: 'No! Not in a house!' },
+        { frame: 'It eats ___.', options: ['fish', 'cake'], answer: 'fish', no: 'No! It doesn’t eat cake!' },
+      ] },
+      { name: 'crab', img: SEA.crab, lines: [
+        { frame: 'The crab is ___.', options: ['walking', 'flying'], answer: 'walking', no: 'No! It isn’t flying!' },
+        { frame: 'It lives on the ___.', options: ['beach', 'moon'], answer: 'beach', no: 'No! Not on the moon!' },
+        { frame: 'It is ___.', options: ['small', 'big'], answer: 'small', no: 'No! It isn’t big!' },
+      ] },
+      { name: 'turtle', img: SEA.turtle, lines: [
+        { frame: 'The turtle is ___.', options: ['eating', 'hiding'], answer: 'eating', no: 'No! It isn’t hiding!' },
+        { frame: 'It lives on the ___.', options: ['reef', 'beach'], answer: 'reef', no: 'No! Look at the picture!' },
+        { frame: 'It eats sea ___.', options: ['grass', 'shells'], answer: 'grass', no: 'No! It eats sea grass!' },
+      ] },
+    ],
+    doneLine: 'Thank you! Now my reef guide is right!',
+  },
+  {
+    id: 'oc4-go-fish', kind: 'go-fish', bg: reefPage(1), who: 'coral', friendImg: CORAL, title: 'Go Fish with Coral!',
+    teacher: 'Free: the student asks “Have you got a crab?” and Coral answers; then Coral asks and the student answers truthfully: Yes, I have. / No, I haven’t. Go fish!',
+    cards: [
+      { label: 'crab', img: SEA.crab }, { label: 'shark', img: SEA.shark }, { label: 'whale', img: SEA.whale },
+      { label: 'turtle', img: SEA.turtle }, { label: 'starfish', img: SEA.starfish }, { label: 'octopus', img: BUB, article: 'an' },
+      { label: 'seahorse', img: SEA.seahorse },
+    ],
+    childHand: ['crab', 'shark', 'whale', 'turtle'],
+    friendHand: ['crab', 'starfish', 'octopus'],
+    pond: ['starfish', 'shark', 'octopus', 'whale', 'seahorse', 'turtle', 'seahorse'],
+    doneLine: 'No more cards! Super asking and answering!',
+  },
+  {
+    id: 'oc4-race', kind: 'answer-race', look: 'raft', bg: reefPage(1), who: 'pip', racer: SEA.turtle, title: 'Raft Race: yes or no?',
+    teacher: 'Guided: Pip asks about the picture — the student reads the answers and taps the right one (Yes, it is / No, it isn’t), then says it. Every right answer paddles the raft.',
+    rounds: [
+      { ask: 'Look at the crab. Is it walking?', choices: ['Yes, it is.', 'No, it isn’t.'], answer: 0 },
+      { ask: 'Look at the starfish. Is it swimming?', choices: ['Yes, it is.', 'No, it isn’t.'], answer: 1 },
+      { ask: 'Look at Bub. Is he hiding?', choices: ['No, he isn’t.', 'Yes, he is.'], answer: 1 },
+      { ask: 'Look at the whale. Is it small?', choices: ['Yes, it is.', 'No, it isn’t.'], answer: 1 },
+      { ask: 'Look at the turtle. Is it eating?', choices: ['Yes, it is.', 'No, it isn’t.'], answer: 0 },
+    ],
+    doneLine: 'You won the raft race! Great answers!',
+  },
+  {
+    id: 'oc4-move-break', kind: 'prea1', teacher: 'Brain break: Pip asks — the student answers with the body: thumbs up (Yes, it is) or thumbs down (No, it isn’t).',
+    scene: {
+      id: 'oc4-move-break', kind: 'tpr-actions', mode: 'break', bg: reefPage(1), who: 'pip', teacher: 'Thumbs up or down!',
+      rounds: [
+        { line: 'Is the sea blue? Thumbs up! Yes, it is!', emoji: '\u{1F44D}' },
+        { line: 'Is a whale small? Thumbs down! No, it isn’t!', emoji: '\u{1F44E}' },
+        { line: 'Swim like a fish! Are you swimming? Yes, I am!', emoji: '\u{1F41F}' },
+        { line: 'Freeze like a starfish! Shh…', emoji: '\u{2B50}' },
+      ],
+    },
+  },
+  /* Reading: The Treasure Reef, pages 1-9 */
+  { id: 'oc4-storm', kind: 'meet', focus: ['chest'], bg: reefPage(8), who: 'mia', cardSide: 'left', teacher: 'Before reading: a storm! Ask the student: Is it sunny? (No, it isn’t — it’s windy!) Where is the chest? Let’s ask the animals!', line: 'Oh no, a storm! Where is the chest? Let’s ask!', repeat: 'Is it the chest?' },
+  {
+    id: 'oc4-reader', kind: 'reader', bg: reefPage(8), title: 'The Treasure Reef', doneLine: 'A storm! Where is the chest? See you next time!',
+    teacher: 'Reading: pages 1-7 quickly, then the new pages 8-9. Listen while the words light up, then the student reads — Mia’s question goes UP.',
+    pages: TREASURE_REEF.slice(0, 9),
+  },
+  {
+    id: 'oc4-read-match', kind: 'picture-match', look: 'cards', prompt: 'Read and match',
+    teacher: 'Reading: read each sentence from the story and drag it under its picture. Then read it aloud.',
+    items: [
+      { word: 'The waves are big.', img: reefPage(8) },
+      { word: 'Is it the chest? No, it isn’t!', img: reefPage(9) },
+      { word: 'The turtle eats sea grass.', img: reefPage(7) },
+    ],
+    bg: bgReef,
+  },
+  {
+    id: 'oc4-treasure-islands', kind: 'grid-hunt', bg: reefPage(1), who: 'coral', title: 'Treasure Islands: find the chest!',
+    teacher: 'Reading game: read the question and the answers, tap the right one — that earns a dive. The student says a square (B three!) and taps it. Splash or treasure?',
+    treasures: ['B3', 'D1', 'A4'],
+    rounds: [
+      { ask: 'Is it a crab?', choices: ['Yes, it is.', 'No, it isn’t.'], answer: 0, img: SEA.crab },
+      { ask: 'Is it a shark?', choices: ['Yes, it is.', 'No, it isn’t.'], answer: 1, img: SEA.whale },
+      { ask: 'Is it sleeping?', choices: ['Yes, it is.', 'No, it isn’t.'], answer: 0, img: ACT.sleeping },
+      { ask: 'Is it swimming?', choices: ['Yes, it is.', 'No, it isn’t.'], answer: 1, img: ACT.walking },
+      { ask: 'Is it a seahorse?', choices: ['Yes, it is.', 'No, it isn’t.'], answer: 0, img: SEA.seahorse },
+      { ask: 'Is it hiding?', choices: ['Yes, it is.', 'No, it isn’t.'], answer: 0, img: ACT.hiding },
+      { ask: 'Is it big?', choices: ['Yes, it is.', 'No, it isn’t.'], answer: 1, img: SEA.starfish },
+      { ask: 'Is it eating?', choices: ['Yes, it is.', 'No, it isn’t.'], answer: 0, img: ACT.eating },
+    ],
+    doneLine: 'You found all the treasure!',
+  },
+
+  /* Phonics review: wh, oa, sh → Letter Blocks → Blend & Read → the unit twister */
+  {
+    id: 'oc4-blocks', kind: 'letter-blocks', bg: reefPage(1), mode: 'sounds', model: false,
+    prompt: 'Build the word — sound by sound!',
+    teacher: 'Reading (review of the unit sounds): listen, put the sound blocks in order — wh, oa and sh are ONE block each — blend and read the word.',
+    rounds: [
+      { blocks: ['wh', 'ee', 'l'], word: 'wheel', img: WHEEL },
+      { blocks: ['b', 'oa', 't'], word: 'boat', img: BOAT },
+      { blocks: ['f', 'i', 'sh'], word: 'fish', img: SEA.fish },
+      { blocks: ['sh', 'e', 'll'], word: 'shell', img: SEA.shell },
+    ],
+  },
+  {
+    id: 'oc4-blend', kind: 'sound-blend', bg: reefPage(1),
+    teacher: 'Reading: blend the word, find the picture — then read the question and answer it.',
+    rounds: [
+      { word: 'coat', sounds: ['c', 'oa', 't'], img: COAT, sentence: 'Is it a coat? Yes, it is.' },
+      { word: 'goat', sounds: ['g', 'oa', 't'], img: GOAT, sentence: 'Is it a goat? Yes, it is.' },
+      { word: 'dish', sounds: ['d', 'i', 'sh'], img: item('dish'), sentence: 'Is it a fish? No, it isn’t. It’s a dish!' },
+    ],
+  },
+  { id: 'oc4-twister', kind: 'tongue-twister', look: 'town', speeds: 3, bg: reefPage(1), who: 'pip', focus: 'wh', teacher: 'Reading: the unit twister! Listen to Pip, then say it slow, faster — then whale speed!', line: 'White whales wish for a boat.' },
+  /* Free: ask Coral 3 questions; hide one for the teacher */
+  {
+    id: 'oc4-ask-coral', kind: 'join-stage', bg: reefPage(2), teacher: 'Free: Coral is holding a secret animal. The student asks 3 questions (size, doing, name) and finds it. Then the student tells Pip.', cast: ['coral', 'pip'],
+    turns: [
+      { who: 'coral', line: 'I’ve got a secret animal. Ask me!' },
+      { who: 'student', line: 'Is it big?' },
+      { who: 'coral', line: 'No, it isn’t. It’s small.' },
+      { who: 'student', line: 'Is it walking?' },
+      { who: 'coral', line: 'Yes, it is!' },
+      { who: 'student', line: 'Is it a crab?' },
+      { who: 'coral', line: 'Yes, it is! Well done!' },
+    ],
+  },
+  {
+    id: 'oc4-hide-one', kind: 'join-stage', bg: bgReef, teacher: 'Free (swap): the student thinks of a sea animal; the teacher (Pip) asks. The student answers in full short answers: Yes, it is. / No, it isn’t.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Is it big?' },
+      { who: 'student', line: 'Yes, it is. / No, it isn’t.' },
+      { who: 'pip', line: 'Is it swimming?' },
+      { who: 'student', line: 'Yes, it is. / No, it isn’t.' },
+      { who: 'pip', line: 'Is it a whale?' },
+      { who: 'student', line: 'Yes, it is! / No, it isn’t. It’s a … !' },
+    ],
+  },
+  { id: 'oc4-i-can', kind: 'meet', focus: ['Is it'], bg: reefPage(9), who: 'coral', cardSide: 'right', teacher: 'Check: the student finds a hidden animal with 3-4 questions, then answers 3 questions about their own — then the passport stamp!', line: 'Is it a super detective? Yes, it is — it’s you!', repeat: 'Is it a crab? Yes, it is. No, it isn’t.' },
+  {
+    id: 'oc4-sticker', kind: 'prea1', teacher: 'Sticker time! The student opens the pack and puts the Ocean sticker in their Sticker Book.',
+    scene: {
+      id: 'oc4-sticker', kind: 'sticker-reward', bg: reefPage(1), who: 'pip', teacher: 'Sticker time!',
+      line: 'Super questions! Here is your sticker.',
+      sticker: { img: SEA.seahorse, label: 'Reef detective' },
+    },
+  },
+  petPal('oc4-pet-pal', 3, 'Brr, it’s windy! Is it my coat? Yes, it is! I want my coat!', [{ label: 'goat', img: GOAT }, { label: 'coat', img: COAT }, { label: 'boat', img: BOAT }], 1, 'My coat! Is it warm? Yes, it is!'),
+  {
+    id: 'oc4-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
+    scene: {
+      id: 'oc4-home-mission', kind: 'home-mission', bg: reefPage(1), who: 'pip',
+      line: 'Your home mission!', teacher: 'Home Mission: read the steps with the student.',
+      parentNote: 'Today your child learned to ask yes/no questions: "Is it a crab? Is it swimming?" and to answer "Yes, it is. / No, it isn’t." Hide a toy in a bag and let your child ask questions to find it — then swap!',
+      steps: [
+        { emoji: '\u{1F45C}', say: 'Hide a toy in a bag.' },
+        { emoji: '\u{2753}', say: 'Your family asks: Is it big? Is it a car?' },
+        { emoji: '\u{1F44D}', say: 'Answer: Yes, it is! No, it isn’t!' },
+      ],
+    },
+  },
+  {
+    id: 'oc4-move-break-2', kind: 'prea1', teacher: 'Brain break: the storm!',
+    scene: {
+      id: 'oc4-move-break-2', kind: 'tpr-actions', mode: 'break', bg: reefPage(8), who: 'pip', teacher: 'The storm!',
+      rounds: [
+        { line: 'Big waves! Go up and down!', emoji: '\u{1F30A}' },
+        { line: 'It is windy! Wooosh!', emoji: '\u{1F32C}\u{FE0F}' },
+        { line: 'The sun is back! Sit down and smile!', emoji: '\u{2600}\u{FE0F}' },
+      ],
+    },
+  },
+  goodbyeSong('oc4-goodbye-song', reefPage(1)),
+  { id: 'oc4-finale', kind: 'finale', bg: reefPage(9), who: 'pip', line: 'You can ask and answer like a real reef detective! See you next time! \u{1F50D}' },
 ];

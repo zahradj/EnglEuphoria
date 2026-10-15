@@ -70,3 +70,17 @@ Searched 2026-10-15. Mechanics only, never content.
 **Song:** "Down in the Sea" (kids-song-writer, `scripts/songs.json` key `a1u6l3-ocean-down-in-the-sea`, lyrics gate PASS, 112 BPM, one take).
 **Games list (L3):** Read and Match (polaroids, then frames) · **Sort Basket ★ (signature)** · Musical Islands · Draw the Path · Sticker Bingo · Letter Bubbles (sh at the end) · Blend & Read · twister.
 **Video-game mechanic:** **rhythm** — the song and Musical Islands (move with the music, freeze, answer).
+
+## Lesson 4 — Ask and Answer: Is It a Shark? (*Is it a crab? Is it swimming? Yes, it is. / No, it isn't.*)
+Searched 2026-10-15. Mechanics only, never content.
+
+| Source (URL) | What it does | Taken (mechanic) | Quality / limits |
+|---|---|---|---|
+| Teach This "Animals" games — https://teach-this.com/general-activities-worksheets/animals | one child picks an animal card; the others ask one yes/no question each ("Is it tall?") and cross off the animals that don't match | Reef Detective ★: every answer crosses out the suspects that don't fit | teacher site, A1-A2; verified page (search) |
+| Teach This "Twenty Questions" — https://www.teach-this.com/images/games/twenty-questions.pdf | think of a thing; the class has 20 yes/no questions | a limited set of question chips (size, doing, name) so the child plans questions | teacher PDF; seen in search |
+| onestopenglish (David Paul) hidden-animal sticker game — https://onestopenglish.com/download?ac=19019 | an animal on your back; ask yes/no questions, a capped number | the swap: the child hides an animal and answers Bub's questions | Macmillan, ages 6-11; seen in search |
+| Boom "Describing Animals — Who Is It?" — https://wow.boomlearning.com/store/deck/5QtpsCjsLzKokRpM4 | sentence starters "Is it…? / Can it…?" on the cards | the question chips show the whole question to read and say | paid deck; seen in search |
+
+**Better than them:** every answer is pinned to a clue board (the video-game **detective board**) so the child sees the reasoning; the board moves only when the child asks in English; part 2 makes the child the one who answers, with a gentle "Look at your card again!" for a wrong answer — no lives, no timer.
+**Games list (L4):** Read and Match (polaroids, then cards) · **Reef Detective ★ (signature, new)** · Field Guide (Bub's mistakes) · Go Fish! · Raft Race · Treasure Islands · Letter Blocks (wh / oa / sh review) · Blend & Read · twister.
+**Video-game mechanic:** **detective board** (clues pinned until the case is solved).

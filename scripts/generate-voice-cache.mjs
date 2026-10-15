@@ -62,6 +62,7 @@ import { GW_ASK, GW_GOT_IT, GW_HIDE, GW_LOOK, GW_NOT, GW_WHO, gwGuess, gwRight }
 import { MIXUP_FIND, MIXUP_FIXED, MIXUP_NOT_THERE, MIXUP_PICK } from '../src/content/playground-library/welcome-town/scene-components/mixupRules.ts';
 import { moodSentence, moodReason, moodAsk, MOOD_PULL, MOOD_WRONG } from '../src/content/playground-library/welcome-town/scene-components/moodRules.ts';
 import { reefAsk, reefSentence, REEF_START, REEF_WRONG } from '../src/content/playground-library/welcome-town/scene-components/liveReefRules.ts';
+import { DETECTIVE_HIDE, DETECTIVE_LOOK, DETECTIVE_NO, DETECTIVE_YES, allQuestions, caughtLine, foundLine, guessLine, questionText } from '../src/content/playground-library/welcome-town/scene-components/reefDetectiveRules.ts';
 import { placeSentence, roomSentences, whoseQuestion, ownerSentence, OWNER_YES, OWNER_NO, ROOM_AGAIN, ROOM_FREE_START, ROOM_DESCRIBE } from '../src/content/playground-library/welcome-town/scene-components/roomRules.ts';
 import { homeworkA1U9L1Lines } from '../src/content/playground-library/magic-castle/homework.ts';
 import { allQuestLines } from '../src/content/homework-quests/registry.ts';
@@ -890,6 +891,10 @@ const WT_EXTRACTORS = {
     ...(s.questions ?? []).flatMap((q) => [[s.who, q.yes], [s.who, q.no]]), ...(s.hideAsks ?? []).map((q) => [s.who, q.ask])],
   'feelings-meter': (s) => [[s.who, s.doneLine], [s.who, METER_ASK], [s.who, METER_WRONG], ...(s.points ?? []).map((pt) => ['teacher', pt.line])],
   'monster-mixup': (s) => [[s.who, s.doneLine], [s.who, MIXUP_NOT_THERE], [s.who, MIXUP_PICK], ...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, `${r.line} ${MIXUP_FIND}`], ['teacher', `${MIXUP_FIXED} ${r.say}`]])],
+  'reef-detective': (s) => [[s.who, s.doneLine], [s.who, s.intro], [s.who, DETECTIVE_YES], [s.who, DETECTIVE_NO], ['teacher', DETECTIVE_YES], ['teacher', DETECTIVE_NO],
+    [s.helper, DETECTIVE_HIDE], [s.helper, DETECTIVE_LOOK], ...allQuestions(s.suspects ?? []).map((k) => ['teacher', questionText(k)]),
+    ...(s.hideAsks ?? []).map((k) => [s.helper, questionText(k)]),
+    ...(s.suspects ?? []).flatMap((x) => [[s.who, foundLine(x)], [s.helper, guessLine(x)], [s.helper, caughtLine(x)]])],
   'live-reef': (s) => [[s.who, s.doneLine], [s.who, REEF_WRONG],
     ...(s.rounds ?? []).flatMap((r, i) => { const sp = s.spots?.[r.spot]; if (!sp) return []; return [[s.who, i === 0 ? `${REEF_START} ${reefAsk(sp.name)}` : reefAsk(sp.name)], [s.who, reefAsk(sp.name)], ['teacher', reefSentence(sp.name, r.doing, sp.plural)]]; })],
   'mood-machine': (s) => [[s.who, s.doneLine], [s.who, MOOD_PULL], [s.who, MOOD_WRONG],
