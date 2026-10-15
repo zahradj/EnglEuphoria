@@ -52,3 +52,21 @@ Searched 2026-10-15. Mechanics only, never content.
 **Better than them:** the reef lights up only when the child says the whole *-ing* sentence (a word alone is not enough), every lit animal stays alive so the child sees what they have said, a wrong verb only makes the animal shrug (no lives, no timer), and every game happens in Bub's reef with the same cast.
 **Games list (L2):** Read and Match (cards, then chalk) · **Live Reef ★ (signature, new)** · Catch & Sort (is / are) · Flip & Say · Picture Maze · Balloon Match · Word Splat (oa) · Blend & Read · twister.
 **Video-game mechanic:** **fog of war / reveal** — the map is hidden until the player acts; here the action is an English sentence.
+
+## Lesson 3 — Listen: Where Do They Live? (*It lives in the sea. It eats fish.*)
+Searched 2026-10-15. Mechanics only, never content.
+
+| Source (URL) | What it does | Taken (mechanic) | Quality / limits |
+|---|---|---|---|
+| Boom "Ocean Animal Habitats – Where Do I Live?" (ESL) — https://wow.boomlearning.com/deck/JkAQYwkrXiEhrqstx | 15 cards, choose ocean / beach / lake with emoji support | Sort Basket ★: three homes (*in the sea / on the beach / on the reef*), emoji + word on each basket | paid deck; page seen in search |
+| Twinkl "Beach or Bush" board game — https://www.twinkl.com/resource/beach-or-bush-habitat-board-game-au-sc-2348 | move along a trail and SAY where the animal you land on lives | the child says the sentence when the animal lands (*It lives on the beach.*), not just taps | commercial; page seen in search |
+| Twinkl "Where Do I Live?" sort — https://www.twinkl.com/resource/where-do-i-live-animal-activity-t-sc-1631866672 | sort animal pictures into habitats | sorting by home, then a fact card | commercial; page seen in search |
+| Boom "Ending Digraphs — Feed the Shark" — https://wow.boomlearning.com/deck/daXAiJdQE5y3hFDao | hear the END sound of a picture word, feed the matching fish to the shark | Letter Bubbles (sh at the end): build *f-i-sh*, *d-i-sh*, *b-r-u-sh* with **sh** as one bubble | paid deck; page seen in search |
+| K5 Learning digraph sort — https://k5learning.com/worksheets/phonics/grade-1-digraph-sounds-6fs.pdf | sort sh words into starts-with / ends-with | the sound model contrasts *shell* (start) with *fish* (end) | free PDF; seen in search |
+| Final sh words / phrases / sentences sheet — https://cmms.cm201u.org//Userfiles/DBFiles/server_978289/202404/5544682/final_sh_words_phrases_and_sentences.pdf | words → phrases → sentences | Blend & Read ends on a sentence (*A fish in a dish!*) | school PDF; seen in search |
+| Lingokids Ocean Month (unit section) | ocean songs | one verse per animal, action line per verse | see unit section |
+
+**Better than them:** the animal swims home when sorted right and only stays when the child SAYS the full sentence; the song comes after the first practice game so the child sings words they already know; the listening games use the voice, not printed text, so the skill is listening.
+**Song:** "Down in the Sea" (kids-song-writer, `scripts/songs.json` key `a1u6l3-ocean-down-in-the-sea`, lyrics gate PASS, 112 BPM, one take).
+**Games list (L3):** Read and Match (polaroids, then frames) · **Sort Basket ★ (signature)** · Musical Islands · Draw the Path · Sticker Bingo · Letter Bubbles (sh at the end) · Blend & Read · twister.
+**Video-game mechanic:** **rhythm** — the song and Musical Islands (move with the music, freeze, answer).

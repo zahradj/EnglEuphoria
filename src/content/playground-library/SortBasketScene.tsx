@@ -52,8 +52,9 @@ export interface SortBasketSceneData {
   /** Optional background art. The market look draws its own stall; the potions look shows `bg` calmed behind the flasks. */
   bg?: string;
   /** Design (owner 2026-10-14: a repeated game gets several designs). 'market' (default): woven baskets at a stall.
-   *  'potions': glass potion flasks on the scene picture (Monster Town, Professor Glob's lab). */
-  look?: 'market' | 'potions';
+   *  'potions': glass potion flasks on the scene picture (Monster Town, Professor Glob's lab).
+   *  'homes': round glass bubbles on the calmed scene picture, one per home (Ocean: in the sea / on the beach / on the reef). */
+  look?: 'market' | 'potions' | 'homes';
 }
 
 interface SortState {
@@ -75,6 +76,8 @@ const INITIAL: SortState = { idx: 0, wrong: [], totalWrong: 0, introIdx: -1, int
 const sleep = (ms: number) => new Promise<void>((r) => window.setTimeout(r, ms));
 const BASKET_COLORS = ['#c2410c', '#15803d', '#1d4ed8'];
 const POTION_COLORS = ['#8B5CF6', '#14B8A6', '#F59E0B'];
+/** Sea blue, sand, reef green (Playground brand shades). */
+const HOME_COLORS = ['#0284C7', '#F59E0B', '#16A34A'];
 
 export function SortBasketScene({ scene, onNext, onWin, onResult, sync }: {
   scene: SortBasketSceneData;
@@ -221,7 +224,8 @@ export function SortBasketScene({ scene, onNext, onWin, onResult, sync }: {
   const hint = wrong.length >= 2 && !flying;
   const basketW = `min(${Math.min(26, 90 / n - 3)}cqw, 36cqh)`;
   const potions = scene.look === 'potions';
-  const title = scene.title ?? (potions ? 'Potion Sort' : 'Market Sort');
+  const homes = scene.look === 'homes';
+  const title = scene.title ?? (potions ? 'Potion Sort' : homes ? 'Home Sort' : 'Market Sort');
   const prompt = finished ? 'All sorted! Great job!'
     : !introDone ? 'Listen to the baskets…'
       : flying ? 'Yes!'
@@ -236,10 +240,10 @@ export function SortBasketScene({ scene, onNext, onWin, onResult, sync }: {
         @keyframes sb-arrive { 0% { transform: translateX(-60cqw) rotate(-14deg); opacity: 0; } 70% { transform: translateX(1.2cqw) rotate(3deg); opacity: 1; } 100% { transform: none; opacity: 1; } }
         @keyframes sb-drop { 0% { transform: translate(0,0) scale(1); opacity: 1; } 100% { transform: translate(var(--fx), 24cqh) scale(.35); opacity: 0; } }
       `}</style>
-      {potions && scene.bg ? <CalmBg img={scene.bg} /> : <MarketBackdrop />}
+      {(potions || homes) && scene.bg ? <CalmBg img={scene.bg} /> : <MarketBackdrop />}
 
       <HudBar
-        left={<TitleRibbon text={title} icon={<span style={{ fontSize: '4.4cqh', lineHeight: 1 }} aria-hidden="true">{potions ? '🧪' : '🧺'}</span>} />}
+        left={<TitleRibbon text={title} icon={<span style={{ fontSize: '4.4cqh', lineHeight: 1 }} aria-hidden="true">{potions ? '🧪' : homes ? '🐚' : '🧺'}</span>} />}
         centre={<PromptChip>{prompt}</PromptChip>}
         right={<ProgressPill done={Math.min(items.length, idx + (flying || finished ? 1 : 0))} total={items.length} color="#16a34a" label="sorted" />}
       />
@@ -282,7 +286,7 @@ export function SortBasketScene({ scene, onNext, onWin, onResult, sync }: {
           const isHint = hint && !finished && item && i === item.basket;
           const hot = introIdx === i;
           const count = sortedCount(i);
-          const color = (potions ? POTION_COLORS : BASKET_COLORS)[i % 3];
+          const color = (potions ? POTION_COLORS : homes ? HOME_COLORS : BASKET_COLORS)[i % 3];
           return (
             <button
               key={`${scene.id}-${i}`}
@@ -316,7 +320,13 @@ export function SortBasketScene({ scene, onNext, onWin, onResult, sync }: {
               {/* woven basket body / glass flask body */}
               <div
                 className="relative w-full"
-                style={potions ? {
+                style={homes ? {
+                  height: '17cqh',
+                  background: `radial-gradient(circle at 30% 25%, rgba(255,255,255,.75) 0, rgba(255,255,255,.25) 22%, ${color}cc 55%, ${color} 100%)`,
+                  borderRadius: '999px',
+                  boxShadow: `0 1.2cqh 0 rgba(12,42,63,.35), inset 0 -1.2cqh 0 rgba(0,0,0,.15), ${hot || isHint ? '0 0 3cqh rgba(253,224,71,.9)' : '0 0 2cqh rgba(255,255,255,.35)'}`,
+                  outline: hot || isHint ? '0.7cqh solid #facc15' : '0.5cqh solid rgba(255,255,255,.9)',
+                } : potions ? {
                   height: '17cqh',
                   background: `linear-gradient(180deg, rgba(255,255,255,.45) 0, rgba(255,255,255,.25) 28%, ${color} 28%, ${color} 55%, #2E1065 140%)`,
                   borderRadius: '4cqh 4cqh 8cqh 8cqh',

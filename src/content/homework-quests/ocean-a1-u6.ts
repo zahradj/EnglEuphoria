@@ -87,3 +87,42 @@ export const QUEST_REEF_ACTIONS_A1_U6L2: HomeworkQuest = {
     chest('You did it! Reef reporter!', page(5)),
   ],
 };
+
+/** Lesson 3 "Listen: Where Do They Live?" */
+export const QUEST_SEA_HOMES_A1_U6L3: HomeworkQuest = {
+  id: 'sea-homes-a1-u6l3', title: 'Sea Homes Quest', subtitle: 'Where Do They Live? · A1 Unit 6 · Lesson 3', level: 'A1', lessonKey: 'ocean-rich-6-3',
+  theme: theme(page(7)), voice: 'teacher', praise,
+  levels: [
+    { kind: 'picture-choice', name: 'Where Does It Live?', icon: '🐢', intro: 'Listen. Tap the animal!', img: reef,
+      rounds: [
+        { line: 'It lives on the beach. It walks sideways.', answer: 'crab', options: [{ label: 'crab', src: it('crab') }, { label: 'shark', src: it('shark') }, { label: 'turtle', src: it('turtle') }] },
+        { line: 'It lives on the reef. It eats sea grass.', answer: 'turtle', options: [{ label: 'whale', src: it('whale') }, { label: 'turtle', src: it('turtle') }, { label: 'crab', src: it('crab') }] },
+        { line: 'It lives in the sea. It eats fish.', answer: 'shark', options: [{ label: 'seahorse', src: it('seahorse') }, { label: 'crab', src: it('crab') }, { label: 'shark', src: it('shark') }] },
+        { line: 'It lives on the reef. It’s got a curly tail.', answer: 'seahorse', options: [{ label: 'seahorse', src: it('seahorse') }, { label: 'whale', src: it('whale') }, { label: 'starfish', src: it('starfish') }] },
+      ] },
+    { kind: 'true-false', name: 'Yes or No?', icon: '❓', intro: 'Look and listen. True or false?',
+      rounds: [
+        { img: page(7), aspect: 16 / 9, line: 'The turtle eats sea grass.', isTrue: true },
+        { img: page(6), aspect: 16 / 9, line: 'The friends are sleeping.', isTrue: false },
+        { img: page(6), aspect: 16 / 9, line: 'Fish are swimming.', isTrue: true },
+      ] },
+    { kind: 'sentence-builder', name: 'Build It!', icon: '🧱', intro: 'Listen. Build what you hear!',
+      rounds: [
+        { img: it('turtle'), line: 'It lives on the reef.', extra: ['in'] },
+        { img: it('shark'), line: 'It eats fish.', extra: ['lives'] },
+      ] },
+    { kind: 'reading', name: 'The Story', icon: '📖', intro: 'Read the story. Then answer from memory!', img: page(7),
+      sentences: ['The friends are diving. Fish are swimming!', 'The turtle lives on the reef. It eats sea grass.'],
+      questions: [
+        { q: 'What are the friends doing?', options: ['Diving', 'Sleeping', 'Walking'], answer: 'Diving' },
+        { q: 'Where does the turtle live?', options: ['On the reef', 'In a house', 'On the beach'], answer: 'On the reef' },
+      ] },
+    { kind: 'twister', name: 'Splash Twister', icon: '🌀', intro: 'Build my tongue twister before the sand runs out!', img: reef, line: 'Fish wish for a big splash.', seconds: 45, focus: 'sh', sayIt: 'Now say it slow, then faster!' },
+    { kind: 'sound-blend', name: 'Blend It!', icon: '🧱', intro: 'Tap each sound, then Blend!', img: reef,
+      rounds: [
+        { word: 'fish', sounds: ['f', 'i', 'sh'], picture: it('fish') },
+        { word: 'dish', sounds: ['d', 'i', 'sh'], picture: it('dish') },
+      ] },
+    chest('You did it! Sea home expert!', page(7)),
+  ],
+};

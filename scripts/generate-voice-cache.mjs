@@ -861,7 +861,7 @@ const WT_EXTRACTORS = {
   'tower-pull': (s) => [[s.who, s.doneLine], [s.who, 'Pick a block! Answer and pull it out!'], [s.who, 'Careful! Try again!'],
     ...(s.rounds ?? []).flatMap((r) => [[s.who, r.ask], ['teacher', r.choices[r.answer]]])],
   // MusicalIslandsScene / RedGreenScene / LetterBubblesScene / CrosswordScene (welcome-town/scene-components).
-  'musical-islands': (s) => [[s.who, s.doneLine], [s.who, 'Look again! Which lily pad?'], ...(s.rounds ?? []).flatMap((r) => [[s.who, r.ask], ['teacher', r.say]])],
+  'musical-islands': (s) => [[s.who, s.doneLine], [s.who, `Look again! Which ${s.padWord ?? 'lily pad'}?`], ...(s.rounds ?? []).flatMap((r) => [[s.who, r.ask], ['teacher', r.say]])],
   'red-green': (s) => [[s.who, s.doneLine], [s.who, 'Oops! Red light! Freeze!'], ...(s.rounds ?? []).map((r) => [s.who, r.say])],
   'letter-bubbles': (s) => [[s.who, s.doneLine], ...(s.words ?? []).flatMap((w) => [[s.who, `Spell it! ${w.word}!`], [s.who, w.word], ['teacher', w.say]])],
   'crossword': (s) => [[s.who, s.doneLine], [s.who, 'What is it? Spell it!'], [s.who, 'Pick a picture!'], ...(s.words ?? []).flatMap((w) => [[s.who, w.word], ['teacher', w.say]])],

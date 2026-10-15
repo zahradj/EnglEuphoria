@@ -51,6 +51,8 @@ export const TREASURE_REEF: ReaderPage[] = [
   { img: reefPage(3), lines: [{ text: 'It is a whale. It is big! It is a turtle.' }], check: { who: 'leo', question: 'What is big?', answer: 'The whale', options: [{ label: 'The whale', img: SEA.whale }, { label: 'The turtle', img: SEA.turtle }, { label: 'The starfish', img: SEA.starfish }] } },
   { img: reefPage(4), lines: [{ text: 'This is Bub. Bub is an octopus. He is hiding.' }], check: { who: 'mia', question: 'What is Bub doing?', answer: 'Hiding', options: [{ label: 'Hiding', img: item('bub-hiding') }, { label: 'Sleeping', img: item('starfish-sleeping') }, { label: 'Walking', img: item('crab-walking') }] } },
   { img: reefPage(5), lines: [{ text: 'The crab is walking. The starfish is sleeping.' }], check: { who: 'pip', question: 'What is the crab doing?', answer: 'Walking', options: [{ label: 'Eating' }, { label: 'Walking' }, { label: 'Sleeping' }] } },
+  { img: reefPage(6), lines: [{ text: 'The friends are diving. Fish are swimming!' }], check: { who: 'leo', question: 'What are the fish doing?', answer: 'Swimming', options: [{ label: 'Sleeping' }, { label: 'Swimming' }, { label: 'Walking' }] } },
+  { img: reefPage(7), lines: [{ text: 'The turtle lives on the reef. It eats sea grass.' }], check: { who: 'mia', question: 'What does the turtle eat?', answer: 'Sea grass', options: [{ label: 'Fish', img: SEA.fish }, { label: 'Sea grass', img: item('sea-grass') }, { label: 'Shells', img: SEA.shell }] } },
 ];
 
 const helloSong = (id: string, bg: string): Scene => ({
@@ -86,7 +88,7 @@ const PET_EARLIER = [
   { label: 'pizza', img: item('pizza-slice') }, { label: 'soup', img: item('soup') }, { label: 'cake', img: item('cake') },
   { label: 'balloon', img: item('balloon-red') }, { label: 'glasses', img: item('glasses') }, { label: 'boots', img: item('boots') },
 ];
-const PET_OCEAN: { label: string; img: string }[] = [{ label: 'shell', img: SEA.shell }, { label: 'boat', img: '/magic-castle/stickers/boat.png' }];
+const PET_OCEAN: { label: string; img: string }[] = [{ label: 'shell', img: SEA.shell }, { label: 'boat', img: '/magic-castle/stickers/boat.png' }, { label: 'dish', img: item('dish') }];
 const petPal = (id: string, n: number, line: string, choices: { label: string; img: string }[], answer: number, say: string): Scene => ({
   id, kind: 'pet-pal', bg: bgBeach, who: 'leo', title: 'Pet Pal: Biscuit at the Beach',
   teacher: 'Routine (1 minute): Biscuit the puppy says what he wants. The student listens, taps it and says it. It goes on his shelf and he grows — the shelf keeps everything from earlier lessons.',
@@ -662,4 +664,289 @@ export const LESSON_A1U6L2_SCENES: Scene[] = [
   },
   goodbyeSong('oc2-goodbye-song', reefPage(1)),
   { id: 'oc2-finale', kind: 'finale', bg: reefPage(5), who: 'pip', line: 'You can say what the sea animals are doing! See you at the reef! \u{1F419}' },
+];
+
+/* =============================================================================
+ * A1 Unit 6 Lesson 3: "Listen: Where Do They Live?"
+ * Objective: I can understand where animals live and what they eat: "It lives in the sea. It eats fish."
+ * Evidence: 4 of 5 right from listening (Sticker Bingo, Draw the Path).
+ * Story frame: the friends put on masks and dive down to the reef (story pages 6-7) — Coral shows them each animal's home.
+ * Practice ladder: Revise (Remember? Lesson 2 actions) → Present (I do: one home per card, one food per card) → we do
+ *   (echo) → Read and Match → you do (Home Sort ★: the animal swims home, the child says where it lives) → THE SONG
+ *   "Down in the Sea" (after the first practice game: the child sings words they know) → Musical Islands → Draw the Path
+ *   (listen) → Reading (Reader p6-7, Read and Match) → Sticker Bingo (listen to the facts) → Phonics: sh at the end
+ *   (Letter Bubbles, Blend & Read, twister) → Free (Where does it live? / ask Coral) → check.
+ * Research (docs/research/playground-a1u6-research.md, Lesson 3): Boom "Ocean Animal Habitats", Twinkl "Beach or Bush",
+ *   Twinkl "Where Do I Live?", Boom "Feed the Shark" (final digraphs), K5 sh sort, Lingokids ocean songs.
+ * ========================================================================= */
+
+export const LESSON_A1U6L3_TITLE = 'Listen: Where Do They Live?';
+export const LESSON_A1U6L3_OBJECTIVE = 'I can understand where animals live and what they eat: "It lives in the sea. It eats fish."';
+
+const SEAGRASS = item('sea-grass');
+const DISH = item('dish');
+const BRUSH = item('brush');
+const SPLASH = item('water-splash');
+/** "Down in the Sea" (scripts/songs.json a1u6l3-ocean-down-in-the-sea, kids-song-writer gate PASS, 112 BPM, one take). */
+const SONG_A1U6L3 = '/lep1/audio/down-in-the-sea-song-a1u6l3.mp3?v=1';
+const SONG_A1U6L3_LYRICS: { who: CharKey; text: string }[] = [
+  { who: 'coral', text: 'Down in the sea, down in the sea,' },
+  { who: 'coral', text: 'The beach, the reef, come swim with me!' },
+  { who: 'pip', text: 'Look at the turtle, swimming slow,' },
+  { who: 'pip', text: 'It lives on the reef, you know!' },
+  { who: 'pip', text: 'It eats the grass, munch, munch!' },
+  { who: 'pip', text: 'Munch like a turtle, eat your lunch!' },
+  { who: 'mia', text: 'Look at the crab, it’s walking slow,' },
+  { who: 'mia', text: 'It lives on the beach, you know!' },
+  { who: 'mia', text: 'It eats the shells, crunch, crunch!' },
+  { who: 'mia', text: 'Walk like a crab and eat your lunch!' },
+  { who: 'leo', text: 'Look at the shark, it’s swimming, go!' },
+  { who: 'leo', text: 'It lives in the sea, you know!' },
+  { who: 'leo', text: 'It eats the fish, yum, yum!' },
+  { who: 'leo', text: 'Swim like a shark, here we come!' },
+  { who: 'coral', text: 'Down in the sea, down in the sea,' },
+  { who: 'coral', text: 'The beach, the reef, come swim with me!' },
+];
+/** Planned line times (112 BPM, 2 bars a line after a 2-bar intro); replaced by the take's measured times. */
+const SONG_A1U6L3_MS = [8572, ...Array.from({ length: 15 }, () => 4286)];
+
+export const LESSON_A1U6L3_SCENES: Scene[] = [
+  { id: 'oc3-title', kind: 'title-card', bg: reefPage(6), level: 'A1', unit: 'Unit 6', lessonLabel: 'Lesson 3', title: 'Where Do They Live?', subtitle: 'In the sea, on the beach, on the reef!', cta: '\u{1F93F} DIVE IN!' },
+  {
+    // Remember? (owner, 2026-10-07): Lesson 2 — what the animals are doing. Click mode: action stickers, listen and click.
+    id: 'oc3-recall-warmup', kind: 'recall-warmup', bg: bgRocks, who: 'pip', mode: 'click',
+    fromLabel: 'Lesson 2 · More Sea Animals',
+    teacher: 'Guided: Pip says what an animal is doing — the student finds it and says the sentence: The crab is walking.',
+    items: [
+      { word: 'walking', say: 'The crab is walking.', img: ACT.walking },
+      { word: 'hiding', say: 'The octopus is hiding.', img: ACT.hiding },
+      { word: 'sleeping', say: 'The starfish is sleeping.', img: ACT.sleeping },
+      { word: 'diving', say: 'The whale is diving.', img: ACT.diving },
+    ],
+  },
+  helloSong('oc3-hello-song', reefPage(6)),
+  { id: 'oc3-meet-coral', kind: 'meet', focus: ['live', 'sea'], bg: reefPage(2), who: 'coral', cardSide: 'left', teacher: 'Present (I do): Coral asks and answers. Point down: in the sea. Ask the student: Where does Coral live? She lives in the sea.', line: 'Where do I live? I live in the sea!', repeat: 'Coral lives in the sea.' },
+  {
+    id: 'oc3-homes', kind: 'prea1', teacher: 'Present (I do → you do): one home per card. Say it with your hands: in the sea (wave), on the beach (flat hand), on the reef (fingers like coral).',
+    scene: {
+      id: 'oc3-homes', kind: 'listen-repeat-cards', bg: bgReef, teacher: 'Where does it live? Listen and say it!',
+      cards: [
+        { who: 'mia', sentence: 'The shark lives in the sea.', img: SEA.shark, imgLabel: 'in the sea' },
+        { who: 'mia', sentence: 'The crab lives on the beach.', img: ACT.walking, imgLabel: 'on the beach' },
+        { who: 'mia', sentence: 'The turtle lives on the reef.', img: SEA.turtle, imgLabel: 'on the reef' },
+      ],
+    },
+  },
+  { id: 'oc3-model-eats', kind: 'meet', focus: ['eats'], bg: reefPage(3), who: 'coral', cardSide: 'right', teacher: 'Present (I do): the question and the answer. Mime eating! What does it eat? It eats fish.', line: 'What does the shark eat? It eats fish!', repeat: 'It eats fish.' },
+  {
+    id: 'oc3-food', kind: 'prea1', teacher: 'Present (we do): one food per card. Say it together and mime it: munch (plants), crunch (shells), yum (fish).',
+    scene: {
+      id: 'oc3-food', kind: 'listen-repeat-cards', bg: bgDeep, teacher: 'What does it eat? Listen and say it!',
+      cards: [
+        { who: 'mia', sentence: 'It eats fish.', img: SEA.fish, imgLabel: 'fish' },
+        { who: 'mia', sentence: 'It eats sea grass.', img: SEAGRASS, imgLabel: 'sea grass' },
+        { who: 'mia', sentence: 'It eats shells.', img: SEA.shell, imgLabel: 'shells' },
+      ],
+    },
+  },
+  { id: 'oc3-echo', kind: 'echo', bg: reefPage(7), who: 'pip', textSide: 'top', teacher: 'Guided (we do): say it like Pip — fingers like coral for "reef", then munch!', word: 'It lives on the reef. It eats sea grass.' },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game. Design differs from L2 (cards) and U5L3 (polaroids).
+  {
+    id: 'oc3-match', kind: 'picture-match', look: 'frames', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each sentence and drags it under its animal, then reads it aloud.',
+    items: [
+      { word: 'The shark lives in the sea.', img: SEA.shark },
+      { word: 'The crab lives on the beach.', img: ACT.walking },
+      { word: 'The turtle lives on the reef.', img: SEA.turtle },
+      { word: 'The whale lives in the sea.', img: SEA.whale },
+      { word: 'The seahorse lives on the reef.', img: SEA.seahorse },
+    ],
+    bg: bgReef,
+  },
+  {
+    id: 'oc3-home-sort', kind: 'sort-basket', look: 'homes', bg: bgReef, title: 'Home Sort: where does it live?',
+    teacher: 'You do (the lesson’s big game ★): an animal arrives — the student taps its home. When it swims in, the student SAYS the sentence: It lives on the reef. Two wrong taps: the right home glows.',
+    baskets: [{ label: 'in the sea', emoji: '\u{1F30A}' }, { label: 'on the beach', emoji: '\u{1F3D6}\u{FE0F}' }, { label: 'on the reef', emoji: '\u{1FAB8}' }],
+    items: [
+      { word: 'shark', img: SEA.shark, basket: 0 },
+      { word: 'crab', img: ACT.walking, basket: 1 },
+      { word: 'turtle', img: SEA.turtle, basket: 2 },
+      { word: 'whale', img: SEA.whale, basket: 0 },
+      { word: 'starfish', img: ACT.sleeping, basket: 1 },
+      { word: 'seahorse', img: SEA.seahorse, basket: 2 },
+    ],
+  },
+  {
+    // The lesson song comes AFTER the first practice game (owner, 2026-10-10): the child sings words they know.
+    id: 'oc3-song', kind: 'song', bg: reefPage(6), title: '\u{1F3B5} Down in the Sea \u{1F3B5}',
+    teacher: 'Song: sing along and do the actions — swim slow (turtle), walk sideways (crab), swim fast (shark). Point down for "sea", flat hand for "beach", coral fingers for "reef".',
+    bigWord: 'sea', songUrl: SONG_A1U6L3, lineDurationsMs: SONG_A1U6L3_MS, lyrics: SONG_A1U6L3_LYRICS,
+  },
+  {
+    id: 'oc3-islands', kind: 'musical-islands', bg: bgReef, who: 'coral', music: SONG_HELLO /* → SONG_A1U6L3 once the take is in */, title: 'Musical Islands', padWord: 'island',
+    teacher: 'Guided (listen): press 🎵 — the animals swim from island to island. The music stops: Coral asks who is on an island. The student taps it and says: The turtle is on the red island!',
+    players: [{ label: 'turtle', img: SEA.turtle }, { label: 'crab', img: SEA.crab }, { label: 'shark', img: SEA.shark }, { label: 'octopus', img: BUB }],
+    rounds: [
+      { at: [0, 1, 2, 3], pad: 2, ask: 'Who is on the yellow island?', say: 'The shark is on the yellow island!' },
+      { at: [3, 0, 1, 2], pad: 0, ask: 'Who is on the red island?', say: 'The crab is on the red island!' },
+      { at: [1, 3, 0, 2], pad: 1, ask: 'Who is on the blue island?', say: 'The turtle is on the blue island!' },
+      { at: [2, 1, 3, 0], pad: 0, ask: 'Who is on the red island?', say: 'The octopus is on the red island!' },
+    ],
+    doneLine: 'Great listening! Everyone found an island!',
+  },
+  {
+    id: 'oc3-draw-path', kind: 'prea1', teacher: 'Guided (listen): Coral describes an animal (where it lives, what it eats) — the student draws a line from Pip to it, then says: It’s the … !',
+    scene: {
+      id: 'oc3-draw-path', kind: 'draw-path', bg: bgReef, who: 'pip', walker: 'pip',
+      teacher: 'Listen and draw a line from Pip to the animal!',
+      start: { x: 9, y: 84 },
+      spots: [
+        { label: 'turtle', img: SEA.turtle, x: 72, y: 62, size: 13 },
+        { label: 'crab', img: SEA.crab, x: 44, y: 80, size: 10 },
+        { label: 'shark', img: SEA.shark, x: 58, y: 32, size: 14 },
+        { label: 'seahorse', img: SEA.seahorse, x: 30, y: 46, size: 8 },
+      ],
+      rounds: [
+        { line: 'Take Pip to the animal that lives on the beach. It eats shells!', target: 1, reply: 'It’s the crab! It lives on the beach.' },
+        { line: 'Take Pip to the animal that eats sea grass. It lives on the reef!', target: 0, reply: 'It’s the turtle! It eats sea grass.' },
+        { line: 'Take Pip to the big animal that lives in the sea. It eats fish!', target: 2, reply: 'It’s the shark! It lives in the sea.' },
+        { line: 'Take Pip to the small animal that lives on the reef. It’s got a curly tail!', target: 3, reply: 'It’s the seahorse! It lives on the reef.' },
+      ],
+    },
+  },
+  {
+    id: 'oc3-move-break', kind: 'prea1', teacher: 'Brain break: do the song actions with Pip — and say where you live!',
+    scene: {
+      id: 'oc3-move-break', kind: 'tpr-actions', mode: 'break', bg: reefPage(6), who: 'pip', teacher: 'Swim, walk, munch!',
+      rounds: [
+        { line: 'Swim slow like a turtle! I live on the reef!', emoji: '\u{1F422}' },
+        { line: 'Walk sideways like a crab! I live on the beach!', emoji: '\u{1F980}' },
+        { line: 'Swim fast like a shark! I live in the sea!', emoji: '\u{1F988}' },
+        { line: 'Munch, munch! I eat sea grass!', emoji: '\u{1F33F}' },
+      ],
+    },
+  },
+  /* Reading: The Treasure Reef, pages 1-7 */
+  {
+    id: 'oc3-reader', kind: 'reader', bg: reefPage(6), title: 'The Treasure Reef', doneLine: 'The friends are on the reef. What happens next? See you next time!',
+    teacher: 'Reading: pages 1-5 again quickly, then the new pages 6-7. Listen while the words light up, then the student reads.',
+    pages: TREASURE_REEF.slice(0, 7),
+  },
+  {
+    id: 'oc3-read-match', kind: 'picture-match', look: 'polaroids', prompt: 'Read and match',
+    teacher: 'Reading: read each sentence from the story and drag it under its picture. Then read it aloud.',
+    items: [
+      { word: 'The friends are diving.', img: reefPage(6) },
+      { word: 'The turtle eats sea grass.', img: reefPage(7) },
+      { word: 'The crab is walking.', img: reefPage(5) },
+    ],
+    bg: bgReef,
+  },
+  {
+    id: 'oc3-bingo', kind: 'sticker-bingo', bg: bgReef, who: 'coral', title: 'Sea Bingo! Listen and stamp!',
+    teacher: 'Guided (listen — the lesson’s evidence): Coral says where an animal lives and what it eats — the student stamps it and says the animal: It’s a turtle! Three in a row: Bingo!',
+    cells: [
+      { label: 'turtle', img: SEA.turtle, say: 'It lives on the reef. It eats sea grass.' },
+      { label: 'crab', img: SEA.crab, say: 'It lives on the beach. It walks sideways.' },
+      { label: 'shark', img: SEA.shark, say: 'It lives in the sea. It eats fish. It’s got big teeth!' },
+      { label: 'whale', img: SEA.whale, say: 'It lives in the sea. It’s very, very big!' },
+      { label: 'seahorse', img: SEA.seahorse, say: 'It lives on the reef. It’s small. It’s got a curly tail.' },
+      { label: 'starfish', img: SEA.starfish, say: 'It lives on the beach. It’s got five arms.' },
+      { label: 'octopus', img: BUB, say: 'It’s got eight arms. It likes hiding!' },
+      { label: 'fish', img: SEA.fish, say: 'It’s small and orange. It swims and swims.' },
+      { label: 'shell', img: SEA.shell, say: 'It isn’t an animal. It’s on the beach. The crab eats it!' },
+    ],
+    calls: [0, 4, 8, 2, 6, 1, 3],
+    doneLine: 'Bingo! Super listening!',
+  },
+
+  /* Phonics: sh at the end → Letter Bubbles → Blend & Read → tongue twister */
+  {
+    id: 'oc3-sound-sh', kind: 'sound-model', bg: reefPage(7), who: 'pip', letter: 'SH', phoneme: '/ʃ/', sound: 'sh', soundSide: 'center',
+    teacher: 'Present: s and h together say /ʃ/ — finger on your lips, shhh! Now it’s at the END of the word: fish, dish, brush. (Shell has it at the start.)',
+    anchors: [
+      { word: 'fish', emoji: '\u{1F41F}', img: SEA.fish },
+      { word: 'dish', emoji: '\u{1F963}', img: DISH },
+      { word: 'brush', emoji: '\u{1FAA5}', img: BRUSH },
+    ],
+  },
+  {
+    id: 'oc3-bubbles', kind: 'letter-bubbles', bg: reefPage(7), who: 'coral', title: 'Letter Bubbles: sh at the end',
+    teacher: 'Spelling game: look at the picture, pop the bubbles in order — the word ends with s-h. Say the word at the end.',
+    words: [
+      { word: 'fish', img: SEA.fish, say: 'Fish! The shark eats fish.' },
+      { word: 'dish', img: DISH, say: 'Dish! Biscuit’s dish.' },
+      { word: 'brush', img: BRUSH, say: 'Brush! A brush.' },
+      { word: 'splash', img: SPLASH, say: 'Splash! A big splash!' },
+    ],
+    doneLine: 'Pop, pop! You can spell sh words!',
+  },
+  {
+    id: 'oc3-blend', kind: 'sound-blend', bg: reefPage(7),
+    teacher: 'Reading: say each sound (f, i, sh — blend them), blend the word, find the picture — then read the sentence.',
+    rounds: [
+      { word: 'fish', sounds: ['f', 'i', 'sh'], img: SEA.fish, sentence: 'The fish is swimming.' },
+      { word: 'dish', sounds: ['d', 'i', 'sh'], img: DISH, sentence: 'A fish in a dish!' },
+      { word: 'brush', sounds: ['b', 'r', 'u', 'sh'], img: BRUSH, sentence: 'Mia has got a brush.' },
+    ],
+  },
+  { id: 'oc3-twister', kind: 'tongue-twister', look: 'town', speeds: 3, bg: reefPage(7), who: 'pip', focus: 'sh', teacher: 'Reading: quick reading! Listen to Pip, then say it slow, faster — then splash speed!', line: 'Fish wish for a big splash.' },
+  /* Free: Where does it live? + ask Coral */
+  {
+    id: 'oc3-guess', kind: 'join-stage', bg: bgReef, teacher: 'Free: the student thinks of a sea animal and says two facts (It lives… It eats…). The teacher (Pip) guesses. Then swap: Pip says the facts, the student guesses.', cast: ['pip'],
+    turns: [
+      { who: 'student', line: 'It lives … . It eats … .' },
+      { who: 'pip', line: 'Is it a turtle?' },
+      { who: 'student', line: 'Yes! / No, it’s a … !' },
+      { who: 'pip', line: 'My turn! It lives on the beach. It walks sideways.' },
+      { who: 'student', line: 'It’s a crab!' },
+    ],
+  },
+  {
+    id: 'oc3-ask-coral', kind: 'join-stage', bg: reefPage(2), teacher: 'Free: the student asks Coral where she lives and what she eats, then tells Pip about Coral.', cast: ['coral', 'pip'],
+    turns: [
+      { who: 'student', line: 'Coral, where do you live?' },
+      { who: 'coral', line: 'I live in the sea, near the reef!' },
+      { who: 'student', line: 'What do you eat?' },
+      { who: 'coral', line: 'I eat sea grass and fish. Yum!' },
+      { who: 'pip', line: 'Where does Coral live?' },
+      { who: 'student', line: 'She lives in the sea!' },
+    ],
+  },
+  { id: 'oc3-i-can', kind: 'meet', focus: ['live', 'eat'], bg: reefPage(7), who: 'coral', cardSide: 'right', teacher: 'Check: Coral says 5 facts — the student points to the right animal (4 of 5). Then the student says one fact alone — then the passport stamp!', line: 'You can understand where they live and what they eat!', repeat: 'It lives on the reef. It eats sea grass.' },
+  {
+    id: 'oc3-sticker', kind: 'prea1', teacher: 'Sticker time! The student opens the pack and puts the Ocean sticker in their Sticker Book.',
+    scene: {
+      id: 'oc3-sticker', kind: 'sticker-reward', bg: reefPage(6), who: 'pip', teacher: 'Sticker time!',
+      line: 'Super listening! Here is your sticker.',
+      sticker: { img: ACT.turtleEating, label: 'Reef listener' },
+    },
+  },
+  petPal('oc3-pet-pal', 2, 'I’m hungry! Where’s my dish?', [{ label: 'fish', img: SEA.fish }, { label: 'dish', img: DISH }, { label: 'brush', img: BRUSH }], 1, 'My dish! Yum!'),
+  {
+    id: 'oc3-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
+    scene: {
+      id: 'oc3-home-mission', kind: 'home-mission', bg: reefPage(6), who: 'pip',
+      line: 'Your home mission!', teacher: 'Home Mission: read the steps with the student.',
+      parentNote: 'Today your child learned where sea animals live and what they eat: "The turtle lives on the reef. It eats sea grass." Sing "Down in the Sea" together and ask: "Where does a crab live? What does it eat?"',
+      steps: [
+        { emoji: '\u{1F3B5}', say: 'Sing Down in the Sea with your family.' },
+        { emoji: '\u{1F422}', say: 'Tell them: The turtle lives on the reef.' },
+        { emoji: '\u{1F41F}', say: 'Find 2 things that end in sh: fish, dish!' },
+      ],
+    },
+  },
+  {
+    id: 'oc3-move-break-2', kind: 'prea1', teacher: 'Brain break: swim home!',
+    scene: {
+      id: 'oc3-move-break-2', kind: 'tpr-actions', mode: 'break', bg: reefPage(6), who: 'pip', teacher: 'Swim home!',
+      rounds: [
+        { line: 'Put on your mask! Dive down!', emoji: '\u{1F93F}' },
+        { line: 'Splash, splash! Swim to the reef!', emoji: '\u{1F30A}' },
+        { line: 'Swim back to your chair!', emoji: '\u{1F3CA}' },
+      ],
+    },
+  },
+  goodbyeSong('oc3-goodbye-song', reefPage(6)),
+  { id: 'oc3-finale', kind: 'finale', bg: reefPage(7), who: 'pip', line: 'You know where the sea animals live and what they eat! See you at the reef! \u{1F422}' },
 ];

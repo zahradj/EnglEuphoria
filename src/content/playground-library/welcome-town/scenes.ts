@@ -586,7 +586,8 @@ export type Scene =
   | { id: string; kind: 'musical-islands'; bg: string; teacher: string; title: string; who: CharKey; music: string;
       /** players hop between the four coloured lily pads while the music plays; each round `at` = pad of each player,
        *  `pad` = the pad asked about ("Who is on the red lily pad?"). */
-      players: { label: string; img: string }[]; rounds: { at: number[]; pad: number; ask: string; say: string }[]; doneLine: string; }
+      players: { label: string; img: string }[]; rounds: { at: number[]; pad: number; ask: string; say: string }[]; doneLine: string;
+      /** What the four pads are called in the voice lines (default 'lily pad'; Ocean: 'island'). */ padWord?: string; }
   | { id: string; kind: 'red-green'; bg: string; teacher: string; title: string; who: CharKey; runner: string;
       cards: { label: string; img?: string }[];
       /** green: tap `cards[answer]` and the runner moves `steps`; red: freeze (don't tap) until it turns green. */
