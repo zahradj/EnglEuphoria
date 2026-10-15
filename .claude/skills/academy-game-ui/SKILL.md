@@ -115,3 +115,9 @@ The default Academy look (pastel lavender, white panels, purple ribbon titles) r
 - **Clarity**: 18 px body, 52 px minimum tap targets, one tile style for every choice (white, warm border, teal on hover, gold when held, orange for "not yet"), reading questions side by side (text left, question right).
 - **Game stage**: games (explore, hunt, vault, duel, forge) keep the scene plate visible, with one paper HUD bar (title + counter). New games must use `.ad-gm-stage` + `.ad-gm-hud` so they inherit it.
 - Add new slide styles under `.ad-root[data-theme='cozy']` using the tokens (`--paper`, `--edge`, `--teal`, `--plum`, `--gold`, `--ink`), never new hard-coded colours.
+
+### The hub is presented in the player (owner 2026-10-15: "the player does not present the Academy hub; it is boring")
+- **Top bar**: Academy mark + wordmark with the lesson's level, season and episode (`B1 · S1 · E1`), the numbered part you are in, a Level / rank + XP bar (`src/academy-deck/hub.ts`: Newcomer → Master; 10 XP per right answer, 15 per line said aloud), and the segmented progress bar along the bar's bottom edge.
+- **Lobby**: the first page of every lesson (`slides/lobby.tsx`, set `hub: false` on a script to keep the plain title): hub, season and episode, the lesson title, the crew with portraits (Vee = host), "Your mission" (the "I can" goals) and the quest path (the 8 parts). Like a game's start screen.
+- **Part cleared**: each part card shows "Part N cleared" with 1–3 honest stars from first-try accuracy so far.
+- **Life**: pages rise in, tiles pop in one after another, a right answer glows, characters carry a name tag (teal while speaking), pressing a tile feels pressed. All stops under reduced motion / calm mode.

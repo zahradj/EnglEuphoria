@@ -17,6 +17,8 @@ import { SortView } from './slides/sort';
 import { StoryView } from './slides/story';
 import { DuelView, RhythmView, VaultView } from './slides/lock';
 import { PassageView } from './slides/passage';
+import { LobbyView, HubMark } from './slides/lobby';
+import { levelLine, rankOf, xpOf } from './hub';
 import { ReadQView } from './slides/readq';
 import { ForgeView, StreakView } from './slides/forge';
 import { LessonClock } from './LessonClock';
@@ -61,9 +63,16 @@ class Guard extends Component<{ children: ReactNode; onSkip: () => void; id: str
   }
 }
 
-function SlideView({ slide }: { slide: Slide }) {
+/** 1 to 3 stars from first-try accuracy so far (honest, never zero: the student finished the part). */
+function clearedStars(s: Stats): number {
+  const t = s.right + s.wrong;
+  const r = t === 0 ? 1 : s.right / t;
+  return r >= 0.85 ? 3 : r >= 0.6 ? 2 : 1;
+}
+
+function SlideView({ slide, script }: { slide: Slide; script: DeckScript }) {
   switch (slide.kind) {
-    case 'title': return <TitleView slide={slide} />;
+    case 'title': return script.hub === false ? <TitleView slide={slide} /> : <LobbyView slide={slide} script={script} />;
     case 'brief': return <BriefView slide={slide} />;
     case 'badge': return <BadgeView slide={slide} />;
     case 'dial': return <DialView slide={slide} />;
@@ -172,6 +181,9 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
   const shownParts = useRef<Set<number>>(new Set());
   const [calm, setCalm] = useState(() => typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches);
   const parts = partsFor(script);
+  const hubInfo = levelLine(script);
+  const xp = xpOf(stats.right, stats.spoken ?? 0);
+  const rank = rankOf(xp);
   const lane = laneOf(vars);
   const cur = applyLane(script.slides[index], lane);
   // ---- recorded voices (silent when a clip or the clip list is missing; never the browser voice)
@@ -371,7 +383,10 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
           {actorsVisible.map((a) => <Character key={`${a.who}-${mood ?? 'base'}`} actor={mood ? { ...a, expr: mood } : a} artBase={artBase} small={compact} speaking={!calm && !mood && (speakingWho === a.who || (chat && !(voiceOn && slideHasClip) && ['title', 'brief', 'whosaid', 'teach', 'model', 'convo', 'say', 'wrap'].includes(cur.kind)))} />)}
         </div>
         <header className="ad-strip" aria-label="Slides">
-          <span className="ad-lesson">{homework ? `${homework.label} · game ${index + 1} of ${script.slides.length}` : parts[cur.part]?.name}</span>
+          {!homework && (
+            <span className="ad-brand" aria-label="EnglEuphoria Academy"><HubMark size={24} /><span><b>Academy</b><small>{hubInfo.level}{hubInfo.season ? ` · S${hubInfo.season} · E${hubInfo.episode}` : ''}</small></span></span>
+          )}
+          <span className="ad-lesson">{homework ? `${homework.label} · game ${index + 1} of ${script.slides.length}` : <><i className="ad-lesson-n">{cur.part + 1}</i>{parts[cur.part]?.name}</>}</span>
           <ol>
             {script.slides.map((s, i) => (
               <li key={s.id} data-part-start={i > 0 && s.part !== script.slides[i - 1].part} data-optional={(teacher && s.optional) || undefined}>
@@ -383,6 +398,12 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
             <ul className="ad-keys" aria-label={`Keys: ${keys.length} of ${lockNames.length}`}>
               {lockNames.map((nm, k) => <li key={nm} className="ad-keyslot" data-on={keys.includes(k + 1)} data-now={cur.lock === k + 1} title={`Lock ${k + 1}: ${nm}`}><Icon name={keys.includes(k + 1) ? 'key' : 'lock'} /></li>)}
             </ul>
+          )}
+          {!homework && (
+            <span className="ad-rank" role="status" aria-label={`Level ${rank.n}, ${rank.name}, ${xp} XP`}>
+              <span className="ad-rank-name">Lv {rank.n} · {rank.name}</span>
+              <span className="ad-rank-bar"><i style={{ width: `${Math.round((rank.into / rank.span) * 100)}%` }} /></span>
+            </span>
           )}
           <span className="ad-count">{index + 1}/{script.slides.length}</span>
         </header>
@@ -397,7 +418,7 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
         )}
         <main className="ad-main" data-panel={panelAt}>
           <Guard id={cur.id} onSkip={skip}>
-            <SlideView key={cur.id} slide={cur} />
+            <SlideView key={cur.id} slide={cur} script={script} />
           </Guard>
           {toast && <div className="ad-toast" role="status"><Icon name="bulb" /> {toast}</div>}
         </main>
@@ -432,6 +453,7 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
         )}
         {partCard !== null && (
           <div className="ad-partcard" data-leaving={partLeaving || undefined} role="dialog" aria-label={`Part ${partCard + 1}: ${parts[partCard].name}`} onClick={closePart}>
+            {partCard > 0 && <span className="ad-partcard-clear" role="status"><b>Part {partCard} cleared</b><span aria-hidden="true">{[0, 1, 2].map((k) => <i key={k} data-on={k < clearedStars(stats)} />)}</span></span>}
             <span className="ad-partcard-num" aria-hidden="true">{partCard + 1}</span>
             <span className="ad-partcard-kicker">Part {partCard + 1} of {parts.length} · {parts[partCard].minutes} min</span>
             <span className="ad-partcard-name">{parts[partCard].name}</span>
