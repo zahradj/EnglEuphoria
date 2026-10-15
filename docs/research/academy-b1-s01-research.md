@@ -68,3 +68,18 @@ Method: web search only (the container could not open the publishers' pages, so 
 | [Cambridge English Empower B1 (publisher descriptions)](https://assets.cambridge.org/97884903/66622/frontmatter/9788490366622_frontmatter.pdf) | Objectives stated at the start; core grammar and vocabulary input alongside skills; a speaking lesson combines functional language, pronunciation and conversation; each unit ends with consolidation and a communicative mixed-skills task (writing). | Retailer and publisher blurbs. | partly verified |
 
 Not found: the Pearson GSE descriptor for "present perfect: experience"; delayed error correction guidance (a standard teaching technique, kept from general practice, source not retrieved).
+
+## 8. Added 2026-10-15: more compatible games (owner: "search the internet for suitable, compatible games")
+
+Search summaries only (the container could not open the publisher pages); mechanics taken, never content.
+
+| Source | What was taken | Quality / limits |
+|---|---|---|
+| [British Council TeachingEnglish, B1 "Experiences" lesson plan](https://www.teachingenglish.org.uk/teaching-resources/teaching-secondary/lesson-plans/intermediate-b1/experiences) | past simple vs present perfect for older teens at B1; the experience → follow-up question pattern | summary only, activity detail unverified |
+| [British Council, "Find someone who" activity](https://www.teachingenglish.org.uk/professional-development/teachers/teaching-knowledge-database/d-h/find-someone-who-activity) | present perfect for experiences as a "find someone who has…" task | for a one-to-one lesson it becomes *Two Truths and a Lie* with the teacher |
+| [Teach-This, present simple vs perfect games](https://teach-this.com/grammar-activities-worksheets/present-simple-vs-present-perfect) and [ENG HUB, Never Have I Ever / speaking cards](https://enghub.pro/present-perfect-speaking-cards) | guess-and-check pair game, "Never have I ever" speaking cards | classroom pair formats; adapted to teacher + student |
+| [Twinkl, Liar Liar Pants on Fire (teens B1–B2)](https://www.twinkl.com/resource/liar-liar-pants-on-fire-game-t-e-2550763) | one invented sentence among true ones; follow-up questions in past simple | paid resource, only the idea used |
+| [LearnEnglishFeelGood, present perfect experiences](https://www.learnenglishfeelgood.com/lessonplans/i-present-perfect-experiences.pdf) and [Twee, past simple vs present perfect](https://twee.com/esl-grammar-worksheets/past-simple-vs-present-perfect-for-kids-teens) | sentence correction ("I has been to Japan") | worksheet only; made into a game below |
+| Cambridge *Games for Grammar Practice* (via search summary) | truth-or-dare about life experiences for present perfect | book not opened |
+
+Decisions: new game **Glitch Hunt** (error correction as a bug hunt: find the glitch in a chat, repair it, hear the reason) and new speaking round **Two Truths and a Lie** (optional, Energiser). Limits: no human teacher consulted; the two new pages are untested with a real student.

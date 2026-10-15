@@ -430,3 +430,20 @@
 .ad-root[data-theme='scene'] .ad-cloze-bank .ad-pk-tile { min-height: 46px; padding: 6px 16px; }
 .ad-root[data-theme='scene'] .ad-cloze-bank .ad-pk-tile[data-on='true'] { background: var(--gold-soft) !important; border-color: var(--gold) !important; }
 .ad-root[data-theme='scene'] .ad-story-listen { position: absolute; inset-inline: 10%; bottom: 112px; margin: 0; padding: 14px 22px; border-radius: 22px; text-align: center; background: rgba(255, 255, 255, 0.92); border: 2px solid #fff; box-shadow: var(--shadow-s); font-weight: 800; font-size: 1.2rem; color: var(--violet-d); }
+
+/* Glitch Hunt */
+.ad-root[data-theme='scene'] .ad-glitch { display: grid; gap: 10px; }
+.ad-root[data-theme='scene'] .ad-glitch-hud { text-align: center; font-weight: 800; color: var(--violet-d); }
+.ad-root[data-theme='scene'] .ad-glitch-chat { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.ad-root[data-theme='scene'] .ad-glitch-row { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 10px; align-items: center; }
+.ad-root[data-theme='scene'] .ad-glitch-row > b { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--violet); text-align: end; }
+.ad-root[data-theme='scene'] .ad-glitch-line { text-align: start; padding: 10px 16px; border-radius: 18px 18px 18px 6px; border: 2px solid #fff; background: #fff; color: var(--ink); font: inherit; font-weight: 700; cursor: pointer; box-shadow: var(--shadow-s); transition: transform 0.15s, background 0.15s; }
+.ad-root[data-theme='scene'] .ad-glitch-line:hover:not(:disabled) { transform: translateY(-2px); background: var(--violet-soft); }
+.ad-root[data-theme='scene'] .ad-glitch-line:disabled { cursor: default; }
+.ad-root[data-theme='scene'] .ad-glitch-line[data-bad='true'] { animation: sc-shake 0.45s; border-color: #e0605a; }
+.ad-root[data-theme='scene'] .ad-glitch-line[data-found='true'] { background: #fff1d6; border-color: var(--gold); box-shadow: 0 0 0 4px rgba(245, 185, 66, 0.45); animation: sc-pop 0.4s both; }
+.ad-root[data-theme='scene'] .ad-glitch-line[data-fixed='true'] { background: #d8f5e6; border-color: #7be0a8; animation: sc-ok 0.8s ease-out; }
+.ad-root[data-theme='scene'] .ad-glitch-fix { display: grid; gap: 8px; }
+.ad-root[data-theme='scene'] .ad-glitch-opt { padding: 10px 16px; border-radius: 16px; border: 2px solid #fff; background: #fff; color: var(--violet-d); font: inherit; font-weight: 800; cursor: pointer; box-shadow: 0 3px 0 rgba(90, 50, 190, 0.22); animation: sc-pop 0.4s both; }
+.ad-root[data-theme='scene'] .ad-glitch-opt:hover { background: var(--violet-soft); }
+.ad-root[data-theme='scene'] .ad-glitch-opt[data-bad='true'] { animation: sc-shake 0.45s; border-color: #e0605a; }

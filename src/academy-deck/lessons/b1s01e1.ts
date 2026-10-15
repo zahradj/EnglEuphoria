@@ -70,7 +70,7 @@ export const B1_S01_E1: DeckScript = {
   clock: true,
   theme: 'scene',
   // an integrated-skills lesson (listen, read, notice, write, speak): the long part is the Drop, where the student listens to a dialogue and reads a blog post
-  partMinutes: [3, 3, 21, 12, 3, 9, 5, 4],
+  partMinutes: [3, 3, 20, 13, 3, 9, 5, 4],
   partGoals: [
     'Talk about yourself and your experiences',
     'Wake up your past simple',
@@ -252,7 +252,7 @@ export const B1_S01_E1: DeckScript = {
       hints: ['Base form first, then past simple, then past participle.'],
     },
     {
-      id: 'triple-1', kind: 'triple', part: 3, stage: 'controlled', bg: DETECTIVE, actors: [who('Mia', 'right')], trains: [3],
+      id: 'triple-1', kind: 'triple', part: 3, stage: 'controlled', optional: true, bg: DETECTIVE, actors: [who('Mia', 'right')], trains: [3],
       prompt: 'Triple Match! Pick one tile in each column that belong to the same verb. Build combos!',
       verbs: [TRIOS[0], TRIOS[2], TRIOS[3], TRIOS[4]],
       hints: ['Think: base, past simple, past participle. go, went, gone.'],
@@ -263,6 +263,14 @@ export const B1_S01_E1: DeckScript = {
       rows: [
         { label: 'Ask a friend about travel (ever + be).', frame: 'Have you ever …?', accept: ['^have you ever been (to|in) .+'], hint: 'Have you ever + been to + a place.', sample: 'Have you ever been to Japan?' },
         { label: 'Answer for yourself with never (eat).', frame: 'I have never …', accept: ["^i (have never|haven't ever|have not ever) eaten .+", "^i've never eaten .+"], hint: 'I have never + eaten + something.', sample: 'I have never eaten octopus.' },
+      ],
+    },
+    {
+      id: 'glitch', kind: 'glitch', part: 3, stage: 'controlled', bg: DETECTIVE, actors: [who('Vee', 'right')], trains: [4],
+      prompt: 'Glitch Hunt! One line in each chat has a tense glitch. Tap it, then repair it.',
+      rounds: [
+        { lines: [{ who: 'Mia', text: 'I have been to Japan twice.' }, { who: 'Ava', text: 'I have seen the mountains last year.' }, { who: 'Mia', text: 'I loved the food there.' }], glitch: 1, fix: 'I saw the mountains last year.', options: ['I saw the mountains last year.', 'I have saw the mountains last year.', 'I seen the mountains last year.'], why: '“Last year” is a finished time, so we use the past simple: saw.' },
+        { lines: [{ who: 'Theo', text: 'Have you ever tried paragliding?' }, { who: 'Ava', text: 'Yes, I tried it in Spain.' }, { who: 'Ava', text: 'I have gave it a go three times.' }], glitch: 2, fix: 'I have given it a go three times.', options: ['I have given it a go three times.', 'I have give it a go three times.', 'I given it a go three times.'], why: 'After “have” we need the past participle: have given.' },
       ],
     },
     {
@@ -296,6 +304,12 @@ export const B1_S01_E1: DeckScript = {
     },
 
     // ---------- 5 · Mission: who has done the most? Argue it with reasons ----------
+    {
+      id: 'truths', kind: 'say', part: 4, stage: 'controlled', optional: true, bg: WALL, actors: [who('Theo', 'right')], trains: [3, 5],
+      prompt: 'Two truths and a lie! Say three sentences about yourself with “have”: two are true, one is a lie. Can your teacher find the lie?',
+      model: 'I have been to … I have never … I have … (one is a lie!)',
+      hints: ['Use the forms you just practised: been, seen, eaten, given, flown.'],
+    },
     { id: 'dial', kind: 'dial', part: 5, bg: WALL, actors: [who('Vee', 'right', 'thumbs')], prompt: 'Mission time! How much help do you want?' },
     {
       id: 'model-task', kind: 'model', part: 5, stage: 'model', bg: WALL, actors: [who('Vee', 'left'), who('Ava', 'right')], trains: [5],

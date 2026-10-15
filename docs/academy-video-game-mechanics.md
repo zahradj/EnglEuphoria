@@ -39,3 +39,7 @@ Sources for the retro rows: [Adapting arcade games for learning, CHI 2013](https
 - **Quiz-show ladder with lifelines** → *Hot Seat*.
 - **Dialogue RPG with a relationship meter** → *Rapport*.
 - **Match-3 with combos** (*Candy Crush*-style) → *Triple Match*.
+
+## Added 2026-10-15 (B1 S1 L1)
+- **Spot the glitch / bug hunt** (*Among Us*-style "find the odd one", debugging games) → *Glitch Hunt*: a chat with one tense glitch; tap it, repair it, hear the reason.
+- **Bluffing / deduction party game** (*Two Truths and a Lie*, social-deduction games) → the teacher guesses which of the student's three "have" sentences is the lie (speaking).

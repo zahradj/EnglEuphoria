@@ -278,3 +278,7 @@ Everything else (dictation, shadowing with private recording, Wordle/Spelling Be
 - **Participle Wordle** (six tries, green / gold / grey, on-screen keyboard) — spell the past participle.
 - **Rapport** (dialogue RPG: pick the natural reply, a Rapport meter rises, the character answers) — realistic exchanges with follow-up questions.
 - **Triple Match** (match-3: one tile in each of three columns, combo for first-try triples, trio spoken) — group related forms (base, past, participle; also noun-verb-adjective families).
+
+## Added 2026-10-15
+- **Glitch Hunt** (error correction as a bug hunt) — B1+ grammar accuracy: find the wrong line in a chat, choose the repair, hear the reason. Source: sentence-correction tasks (LearnEnglishFeelGood, Twee). Built as slide kind `glitch`.
+- **Two Truths and a Lie** (speaking) — A2+: three sentences, one is false; the listener asks follow-up questions and guesses. Source: British Council "Find someone who", Twinkl "Liar Liar". Built as a `say` page.

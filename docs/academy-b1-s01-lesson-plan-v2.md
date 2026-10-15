@@ -47,3 +47,9 @@ Keep: all games and plates already built. Change: order and minutes exactly as t
 
 ## 7 Open for the owner
 1. Approve this plan (or say what to change). 2. A qualified teacher should review it (none was consulted). 3. Voices: new lines are baked only after you approve the text.
+
+
+## Update 2026-10-15 — build notes (the deck as built)
+- Listening: *The Dare* story with `listenFirst` (audio only, "Show the text" on request) then 3 listening-check rounds. Reading: blog post, then 3 reading questions (gist, detail, inference), then the **cloze** (six words). The retell (`gist`) stays **optional** in The Drop; `fade` stays optional in the Mission.
+- **New this update:** *Glitch Hunt* (2 chats, required, Notice & Build) and *Two Truths and a Lie* (optional, Energiser). To keep the hour at 60, *Triple Match 1* became optional (Triple Match 2 and the other optional pages are the teacher's extras; optional pages now total about 25 minutes, so they are a menu, not a requirement). Part minutes: 3 / 3 / 20 / 13 / 3 / 9 / 5 / 4.
+- Rapport has 2 scenes, Triple Match 4 verbs per page. Research: `docs/research/academy-b1-s01-research.md` §7–8.

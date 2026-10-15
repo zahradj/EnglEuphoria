@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { shuffled, useDeck } from '../ctx';
-import type { BossSlide, ClozeSlide, QuizSlide, RpgSlide, TripleSlide, WordleSlide } from '../types';
+import type { BossSlide, ClozeSlide, GlitchSlide, QuizSlide, RpgSlide, TripleSlide, WordleSlide } from '../types';
 import { Feedback, NOT_YET, Panel } from './shared';
 
 /* Video-game mechanics for the B1 lessons. Each is a small loop with a clear goal and a clear reward; none can lose the student's progress (a miss costs a shield, a grey option, a retry). */
@@ -382,6 +382,61 @@ export function ClozeView({ slide }: { slide: ClozeSlide }) {
         {slips > 0 && !finished && <Feedback kind="try">{NOT_YET} Read the sentence again: which word fits the meaning?</Feedback>}
         {finished && <Feedback kind="ok">The whole passage is complete. You used all {gaps.length} words.</Feedback>}
         {!finished && <p className="ad-hint-line">Tap a word, then the gap where it belongs. {Object.keys(filled).length} of {gaps.length} done.</p>}
+      </div>
+    </Panel>
+  );
+}
+
+/** Glitch Hunt (spot the bug): tap the line with the tense glitch, then repair it with the right line; the repaired line is read aloud with the reason. */
+export function GlitchView({ slide }: { slide: GlitchSlide }) {
+  const { right, wrong, done, seed, speak } = useDeck();
+  const lead = slide.actors?.[0]?.who ?? 'Vee';
+  const total = slide.rounds.length;
+  const [i, setI] = useState(0);
+  const [found, setFound] = useState(false);
+  const [fixed, setFixed] = useState(false);
+  const [bad, setBad] = useState<string | null>(null);
+  const [slip, setSlip] = useState(false);
+  const finished = i >= total;
+  const r = slide.rounds[i];
+  const opts = useMemo(() => (r ? shuffled(r.options, seed + i * 13) : []), [r, seed, i]);
+  useEffect(() => { if (finished) done(); }, [finished, done]);
+  const tapLine = (k: number) => {
+    if (!r || found) return;
+    if (k === r.glitch) setFound(true);
+    else { wrong(); setBad(`line${k}`); setSlip(true); window.setTimeout(() => setBad(null), 500); }
+  };
+  const repair = (o: string) => {
+    if (!r || fixed) return;
+    if (o === r.fix) {
+      if (!slip) right();
+      setFixed(true);
+      void speak(r.lines[r.glitch].who, r.fix);
+      window.setTimeout(() => { setI((n) => n + 1); setFound(false); setFixed(false); setSlip(false); }, 2300);
+    } else { wrong(); setSlip(true); setBad(o); window.setTimeout(() => setBad(null), 500); }
+  };
+  if (finished || !r) return <Panel title={slide.prompt} wide variant="glass"><Feedback kind="ok">All {total} glitches repaired!</Feedback></Panel>;
+  return (
+    <Panel title={slide.prompt} wide variant="glass">
+      <div className="ad-glitch">
+        <div className="ad-glitch-hud" role="status">Glitch <b>{i + 1}</b> of {total} · {found ? (fixed ? 'Repaired!' : 'Found it! Now repair it.') : 'Tap the line with the glitch.'}</div>
+        <ul className="ad-glitch-chat" aria-label="Chat">
+          {r.lines.map((l, k) => (
+            <li key={k} className="ad-glitch-row" data-who={l.who}>
+              <b>{l.who}</b>
+              <button type="button" className="ad-glitch-line" data-bad={bad === `line${k}` || undefined} data-found={(found && k === r.glitch && !fixed) || undefined} data-fixed={(fixed && k === r.glitch) || undefined} disabled={found} onClick={() => tapLine(k)}>
+                {fixed && k === r.glitch ? r.fix : l.text}
+              </button>
+            </li>
+          ))}
+        </ul>
+        {found && !fixed && (
+          <div className="ad-glitch-fix" role="group" aria-label="Repair the line">
+            {opts.map((o) => <button key={o} type="button" className="ad-glitch-opt" data-bad={bad === o || undefined} onClick={() => repair(o)}>{o}</button>)}
+          </div>
+        )}
+        {fixed && <Feedback kind="ok">{r.why}</Feedback>}
+        {bad && !fixed && <Feedback kind="try">{found ? 'Not that repair. Check the time word.' : 'That line is fine. Look again.'}</Feedback>}
       </div>
     </Panel>
   );
