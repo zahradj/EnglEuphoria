@@ -622,6 +622,14 @@ export type Scene =
        *  the chart for each `reports` card and picks likes / doesn't like. */
       friends: { name: string; who: CharKey; img: string }[]; foods: { label: string; img: string }[];
       answers: boolean[][]; reports: { friend: number; food: number }[]; doneLine: string; }
+  | { id: string; kind: 'live-reef'; bg: string; teacher: string; title: string; who: CharKey;
+      /** ★ Live Reef (A1 U6L2, docs/a1-unit-6-ocean.md §6.2): a reef in soft fog. Each round one animal peeks out at its
+       *  `spots` place (left/top/size in % of the screen); the voice asks "What's the crab doing?" (reefAsk). The child
+       *  picks the action from `choices`, the whole sentence appears ("The crab is walking." — reefSentence), the child
+       *  SAYS it and taps 🎤 — and that part of the reef lights up and stays alive. A wrong action: the animal shrugs and
+       *  the voice says REEF_WRONG. Done when every animal is lit. */
+      spots: { name: string; img: string; left: number; top: number; size: number; plural?: boolean }[];
+      rounds: { spot: number; doing: string; choices: string[] }[]; doneLine: string; }
   | { id: string; kind: 'mood-machine'; bg: string; teacher: string; title: string; who: CharKey;
       /** ★ Monster Mood Machine (A1 U5L1, docs/a1-unit-5-monster-town.md §5.1): pull the lever, a REASON picture comes out
        *  of the hatch ("because it's dark"); the child picks the feeling that fits (`choices` index `feelings`), the

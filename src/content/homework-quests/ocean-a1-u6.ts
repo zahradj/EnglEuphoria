@@ -48,3 +48,42 @@ export const QUEST_SEA_ANIMALS_A1_U6L1: HomeworkQuest = {
     chest('You did it! Sea explorer!'),
   ],
 };
+
+/** Lesson 2 "More Sea Animals: Octopus, Crab" */
+export const QUEST_REEF_ACTIONS_A1_U6L2: HomeworkQuest = {
+  id: 'reef-actions-a1-u6l2', title: 'Live Reef Quest', subtitle: 'Octopus, Crab · A1 Unit 6 · Lesson 2', level: 'A1', lessonKey: 'ocean-rich-6-2',
+  theme: theme(page(4)), voice: 'teacher', praise,
+  levels: [
+    { kind: 'picture-choice', name: 'What Is It Doing?', icon: '🦀', intro: 'Listen. Tap the picture!', img: reef,
+      rounds: [
+        { line: 'The crab is walking.', answer: 'walking', options: [{ label: 'walking', src: it('crab-walking') }, { label: 'hiding', src: it('bub-hiding') }, { label: 'sleeping', src: it('starfish-sleeping') }] },
+        { line: 'The octopus is hiding.', answer: 'hiding', options: [{ label: 'eating', src: it('fish-eating') }, { label: 'hiding', src: it('bub-hiding') }, { label: 'diving', src: it('whale-diving') }] },
+        { line: 'The whale is diving.', answer: 'diving', options: [{ label: 'sleeping', src: it('starfish-sleeping') }, { label: 'walking', src: it('crab-walking') }, { label: 'diving', src: it('whale-diving') }] },
+        { line: 'The fish is eating.', answer: 'eating', options: [{ label: 'eating', src: it('fish-eating') }, { label: 'hiding', src: it('bub-hiding') }, { label: 'walking', src: it('crab-walking') }] },
+      ] },
+    { kind: 'true-false', name: 'Yes or No?', icon: '❓', intro: 'Look and listen. True or false?',
+      rounds: [
+        { img: page(5), aspect: 16 / 9, line: 'The crab is walking.', isTrue: true },
+        { img: page(5), aspect: 16 / 9, line: 'The starfish is swimming.', isTrue: false },
+        { img: page(4), aspect: 16 / 9, line: 'Bub is hiding.', isTrue: true },
+      ] },
+    { kind: 'sentence-builder', name: 'Is or Are?', icon: '🧱', intro: 'Listen. Build what you hear!',
+      rounds: [
+        { img: it('starfish-sleeping'), line: 'The starfish is sleeping.', extra: ['are'] },
+        { img: it('fish-school'), line: 'The fish are swimming.', extra: ['is'] },
+      ] },
+    { kind: 'reading', name: 'The Story', icon: '📖', intro: 'Read the story. Then answer from memory!', img: page(5),
+      sentences: ['This is Bub. Bub is an octopus. He is hiding.', 'The crab is walking. The starfish is sleeping.'],
+      questions: [
+        { q: 'What is Bub doing?', options: ['Hiding', 'Eating', 'Walking'], answer: 'Hiding' },
+        { q: 'What is the starfish doing?', options: ['Walking', 'Sleeping', 'Diving'], answer: 'Sleeping' },
+      ] },
+    { kind: 'twister', name: 'Goat Twister', icon: '🌀', intro: 'Build my tongue twister before the sand runs out!', img: reef, line: 'A goat in a coat floats on a boat.', seconds: 45, focus: 'oa', sayIt: 'Now say it slow, then faster!' },
+    { kind: 'sound-blend', name: 'Blend It!', icon: '🧱', intro: 'Tap each sound, then Blend!', img: reef,
+      rounds: [
+        { word: 'coat', sounds: ['c', 'oa', 't'], picture: it('coat-blue') },
+        { word: 'goat', sounds: ['g', 'oa', 't'], picture: it('goat') },
+      ] },
+    chest('You did it! Reef reporter!', page(5)),
+  ],
+};

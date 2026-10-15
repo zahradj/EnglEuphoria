@@ -49,6 +49,8 @@ export const TREASURE_REEF: ReaderPage[] = [
   { img: reefPage(1), lines: [{ text: 'It is sunny. Look! A boat on the sea.' }], check: { who: 'pip', question: 'What is on the sea?', answer: 'A boat', options: [{ label: 'A boat' }, { label: 'A car' }, { label: 'A bus' }] } },
   { img: reefPage(2), lines: [{ text: 'This is Coral. She lives in the sea.' }], check: { who: 'mia', question: 'Where does Coral live?', answer: 'In the sea', options: [{ label: 'In a house' }, { label: 'In the sea' }, { label: 'In space' }] } },
   { img: reefPage(3), lines: [{ text: 'It is a whale. It is big! It is a turtle.' }], check: { who: 'leo', question: 'What is big?', answer: 'The whale', options: [{ label: 'The whale', img: SEA.whale }, { label: 'The turtle', img: SEA.turtle }, { label: 'The starfish', img: SEA.starfish }] } },
+  { img: reefPage(4), lines: [{ text: 'This is Bub. Bub is an octopus. He is hiding.' }], check: { who: 'mia', question: 'What is Bub doing?', answer: 'Hiding', options: [{ label: 'Hiding', img: item('bub-hiding') }, { label: 'Sleeping', img: item('starfish-sleeping') }, { label: 'Walking', img: item('crab-walking') }] } },
+  { img: reefPage(5), lines: [{ text: 'The crab is walking. The starfish is sleeping.' }], check: { who: 'pip', question: 'What is the crab doing?', answer: 'Walking', options: [{ label: 'Eating' }, { label: 'Walking' }, { label: 'Sleeping' }] } },
 ];
 
 const helloSong = (id: string, bg: string): Scene => ({
@@ -84,7 +86,7 @@ const PET_EARLIER = [
   { label: 'pizza', img: item('pizza-slice') }, { label: 'soup', img: item('soup') }, { label: 'cake', img: item('cake') },
   { label: 'balloon', img: item('balloon-red') }, { label: 'glasses', img: item('glasses') }, { label: 'boots', img: item('boots') },
 ];
-const PET_OCEAN: { label: string; img: string }[] = [{ label: 'shell', img: SEA.shell }];
+const PET_OCEAN: { label: string; img: string }[] = [{ label: 'shell', img: SEA.shell }, { label: 'boat', img: '/magic-castle/stickers/boat.png' }];
 const petPal = (id: string, n: number, line: string, choices: { label: string; img: string }[], answer: number, say: string): Scene => ({
   id, kind: 'pet-pal', bg: bgBeach, who: 'leo', title: 'Pet Pal: Biscuit at the Beach',
   teacher: 'Routine (1 minute): Biscuit the puppy says what he wants. The student listens, taps it and says it. It goes on his shelf and he grows — the shelf keeps everything from earlier lessons.',
@@ -376,4 +378,278 @@ export const LESSON_A1U6L1_SCENES: Scene[] = [
   },
   goodbyeSong('oc-goodbye-song', bgBeach),
   { id: 'oc-finale', kind: 'finale', bg: bgBeach, who: 'pip', line: 'You can name the sea animals! See you at the beach! \u{1F30A}' },
+];
+
+/* =============================================================================
+ * A1 Unit 6 Lesson 2: "More Sea Animals: Octopus, Crab"
+ * Objective: I can say what a sea animal is doing: "The octopus is hiding. The crab is walking."
+ * Story frame: a dive into Bub's rocky reef garden (new setting: rocks, caves and purple sea fans, cool blue-green
+ *   light) — shy Bub hides, the reef wakes up when the child says what each animal is doing.
+ * Practice ladder: Revise (Remember? L1 animals, shadows) → Present (I do: octopus, crab; then one action per card on
+ *   the animals: hiding, walking, sleeping, eating, diving, swimming) → we do (echo) → Read and Match → you do (Live
+ *   Reef ★: pick the action, say the whole sentence, the reef lights up; Catch & Sort is / are; Flip & Say) → Reading
+ *   (Reader p1-5, Picture Maze, Read and Match, Yes or No?) → Phonics oa (Word Splat, Blend & Read, twister) → Free
+ *   (What am I doing? mime; ask Bub) → check.
+ * ========================================================================= */
+
+export const LESSON_A1U6L2_TITLE = 'More Sea Animals: Octopus, Crab';
+export const LESSON_A1U6L2_OBJECTIVE = 'I can say what a sea animal is doing: "The octopus is hiding. The crab is walking."';
+
+const bgRocks = `${S}/bg-a1u6-rocks-wide.png`;
+/** Action stickers (Canva, cut-out): one animal doing one thing — the picture shows exactly the verb. */
+export const ACT = {
+  hiding: item('bub-hiding'), walking: item('crab-walking'), sleeping: item('starfish-sleeping'),
+  eating: item('fish-eating'), diving: item('whale-diving'), turtleEating: item('turtle-eating'),
+  swimming: SEA.shark, fishSwimming: item('fish-swim'),
+};
+const BOAT = '/magic-castle/stickers/boat.png';
+
+export const LESSON_A1U6L2_SCENES: Scene[] = [
+  { id: 'oc2-title', kind: 'title-card', bg: reefPage(4), level: 'A1', unit: 'Unit 6', lessonLabel: 'Lesson 2', title: 'Octopus, Crab!', subtitle: 'What is it doing? Hiding, walking, sleeping…', cta: '\u{1F419} DIVE IN!' },
+  {
+    // Remember? (owner, 2026-10-07): Lesson 1 — the sea animals. Shadow mode: the stickers have clearly different outlines.
+    id: 'oc2-recall-warmup', kind: 'recall-warmup', bg: bgReef, who: 'pip', mode: 'shadow', listen: true,
+    fromLabel: 'Lesson 1 · Meet the Sea Animals',
+    teacher: 'Guided: listen — which shadow is it? Tap it, then say the sentence: It’s a … .',
+    items: [
+      { word: 'shark', say: 'It’s a shark.', img: SEA.shark },
+      { word: 'whale', say: 'It’s a whale.', img: SEA.whale },
+      { word: 'turtle', say: 'It’s a turtle.', img: SEA.turtle },
+      { word: 'starfish', say: 'It’s a starfish.', img: SEA.starfish },
+    ],
+  },
+  { id: 'oc2-meet-bub', kind: 'meet', focus: ['octopus', 'hiding'], bg: reefPage(4), who: 'bub', cardSide: 'right', teacher: 'Present: someone is behind the rock! Whisper: Who is it? It’s Bub — an octopus. He is shy. He is hiding.', line: 'Hello… I’m Bub. I’m an octopus. I’m hiding!', repeat: 'This is Bub. He is hiding.' },
+  {
+    id: 'oc2-animals', kind: 'prea1', teacher: 'Present (I do → you do): two new sea animals. Say it, the student says it.',
+    scene: {
+      id: 'oc2-animals', kind: 'listen-repeat-cards', bg: bgRocks, teacher: 'Listen and say it!',
+      cards: [
+        { who: 'mia', sentence: 'It’s an octopus.', img: SEA.octopus, imgLabel: 'octopus' },
+        { who: 'mia', sentence: 'It’s a crab.', img: SEA.crab, imgLabel: 'crab' },
+      ],
+    },
+  },
+  { id: 'oc2-model-doing', kind: 'meet', focus: ['doing', 'hiding'], bg: reefPage(4), who: 'coral', cardSide: 'right', teacher: 'Present (I do): the question and the answer, one each. Point to Bub: What is he doing? He’s hiding. Now hide your face behind your hands!', line: 'What’s Bub doing? He’s hiding!', repeat: 'What’s Bub doing? He’s hiding.' },
+  {
+    id: 'oc2-actions', kind: 'prea1', teacher: 'Present (I do → we do): one action per card. Say the sentence and do the action — the student copies both.',
+    scene: {
+      id: 'oc2-actions', kind: 'listen-repeat-cards', bg: bgRocks, teacher: 'Listen, do it and say it!',
+      cards: [
+        { who: 'mia', sentence: 'The octopus is hiding.', img: ACT.hiding, imgLabel: 'hiding' },
+        { who: 'mia', sentence: 'The crab is walking.', img: ACT.walking, imgLabel: 'walking' },
+        { who: 'mia', sentence: 'The starfish is sleeping.', img: ACT.sleeping, imgLabel: 'sleeping' },
+        { who: 'mia', sentence: 'The fish is eating.', img: ACT.eating, imgLabel: 'eating' },
+        { who: 'mia', sentence: 'The whale is diving.', img: ACT.diving, imgLabel: 'diving' },
+        { who: 'mia', sentence: 'The shark is swimming.', img: ACT.swimming, imgLabel: 'swimming' },
+      ],
+    },
+  },
+  { id: 'oc2-model-many', kind: 'meet', focus: ['swimming'], bg: bgDeep, who: 'coral', cardSide: 'right', teacher: 'Present (we do): one = is, many = are. Hold up one finger: The fish is swimming. All fingers: The fish are swimming!', line: 'One fish is swimming. Many fish are swimming!', repeat: 'The fish are swimming.' },
+  { id: 'oc2-echo', kind: 'echo', bg: reefPage(5), who: 'pip', textSide: 'top', teacher: 'Guided (we do): say it like Pip — and walk your fingers sideways like a crab!', word: 'The crab is walking!' },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game.
+  {
+    id: 'oc2-match', kind: 'picture-match', look: 'cards', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each sentence and drags it under its picture, then reads it aloud.',
+    items: [
+      { word: 'The octopus is hiding.', img: ACT.hiding },
+      { word: 'The crab is walking.', img: ACT.walking },
+      { word: 'The starfish is sleeping.', img: ACT.sleeping },
+      { word: 'The fish is eating.', img: ACT.eating },
+      { word: 'The whale is diving.', img: ACT.diving },
+      { word: 'The shark is swimming.', img: ACT.swimming },
+    ],
+    bg: bgRocks,
+  },
+  {
+    id: 'oc2-live-reef', kind: 'live-reef', bg: bgRocks, who: 'coral', title: 'Live Reef: wake up the reef!',
+    teacher: 'You do (the new game ★): an animal peeks out of the fog. Coral asks: What’s it doing? The student picks the action, then SAYS the whole sentence (The crab is walking.) and taps 🎤 — that part of the reef lights up. A wrong action: the animal shrugs — look again!',
+    spots: [
+      { name: 'crab', img: ACT.walking, left: 70, top: 66, size: 15 },
+      { name: 'octopus', img: ACT.hiding, left: 22, top: 62, size: 17 },
+      { name: 'starfish', img: ACT.sleeping, left: 46, top: 74, size: 13 },
+      { name: 'whale', img: ACT.diving, left: 30, top: 26, size: 20 },
+      { name: 'fish', img: ACT.eating, left: 82, top: 34, size: 12 },
+      { name: 'turtle', img: ACT.turtleEating, left: 58, top: 40, size: 15 },
+    ],
+    rounds: [
+      { spot: 0, doing: 'walking', choices: ['sleeping', 'walking', 'diving'] },
+      { spot: 1, doing: 'hiding', choices: ['hiding', 'eating', 'walking'] },
+      { spot: 2, doing: 'sleeping', choices: ['swimming', 'diving', 'sleeping'] },
+      { spot: 3, doing: 'diving', choices: ['diving', 'walking', 'hiding'] },
+      { spot: 4, doing: 'eating', choices: ['hiding', 'eating', 'sleeping'] },
+      { spot: 5, doing: 'eating', choices: ['walking', 'sleeping', 'eating'] },
+    ],
+    doneLine: 'The whole reef is awake! You can say what they are doing!',
+  },
+  helloSong('oc2-hello-song', reefPage(1)),
+  {
+    id: 'oc2-catch', kind: 'prea1', teacher: 'Guided: one animal or many? Catch it: is (one) or are (many) — and say the sentence: The shark is swimming. The sharks are swimming.',
+    scene: {
+      id: 'oc2-catch', kind: 'catch-sort', bg: bgDeep, goal: 6, seconds: 50,
+      teacher: 'One or many? Catch it in the right net and say it!',
+      left: { label: 'is', img: SEA.shark, emoji: '\u{0031}\u{FE0F}\u{20E3}' }, right: { label: 'are', img: SEA.sharks, emoji: '\u{1F522}' },
+      items: [
+        { word: 'shark', img: SEA.shark, emoji: '\u{1F988}', target: 'left' },
+        { word: 'sharks', img: SEA.sharks, emoji: '\u{1F988}', target: 'right' },
+        { word: 'turtle', img: SEA.turtle, emoji: '\u{1F422}', target: 'left' },
+        { word: 'turtles', img: SEA.turtles, emoji: '\u{1F422}', target: 'right' },
+        { word: 'one fish', img: ACT.fishSwimming, emoji: '\u{1F41F}', target: 'left' },
+        { word: 'many fish', img: SEA.fishes, emoji: '\u{1F41F}', target: 'right' },
+        { word: 'crab', img: ACT.walking, emoji: '\u{1F980}', target: 'left' },
+      ],
+    },
+  },
+  {
+    id: 'oc2-flip', kind: 'prea1', teacher: 'Guided: flip a card — say what the animal is doing in a whole sentence. The teacher flips one too and the student checks.',
+    scene: {
+      id: 'oc2-flip', kind: 'flip-say', bg: bgRocks, who: 'pip', title: 'Flip a card and say it!',
+      teacher: 'Flip a card. What is it doing?',
+      cards: [
+        { label: 'hiding', img: ACT.hiding, say: 'The octopus is hiding.' },
+        { label: 'walking', img: ACT.walking, say: 'The crab is walking.' },
+        { label: 'sleeping', img: ACT.sleeping, say: 'The starfish is sleeping.' },
+        { label: 'eating', img: ACT.eating, say: 'The fish is eating.' },
+        { label: 'diving', img: ACT.diving, say: 'The whale is diving.' },
+        { label: 'swimming', img: ACT.swimming, say: 'The shark is swimming.' },
+      ],
+      doneLine: 'Great sentences! You can say what they are doing!',
+    },
+  },
+  {
+    id: 'oc2-move-break', kind: 'prea1', teacher: 'Brain break: be the sea animals with Pip — and say what you are doing.',
+    scene: {
+      id: 'oc2-move-break', kind: 'tpr-actions', mode: 'break', bg: reefPage(1), who: 'pip', teacher: 'What are you doing?',
+      rounds: [
+        { line: 'Walk sideways like a crab! I’m walking!', emoji: '\u{1F980}' },
+        { line: 'Hide your face like Bub! I’m hiding!', emoji: '\u{1F419}' },
+        { line: 'Dive down like a whale! I’m diving!', emoji: '\u{1F433}' },
+        { line: 'Sleep like a starfish… shh! I’m sleeping!', emoji: '\u{2B50}' },
+      ],
+    },
+  },
+  /* Reading: The Treasure Reef, pages 1-5 */
+  {
+    id: 'oc2-reader', kind: 'reader', bg: reefPage(1), title: 'The Treasure Reef', doneLine: 'Bub is hiding and the crab is walking. What happens next? See you next time!',
+    teacher: 'Reading: pages 1-3 again quickly, then the new pages 4-5. Listen while the words light up, then the student reads.',
+    pages: TREASURE_REEF.slice(0, 5),
+  },
+  {
+    id: 'oc2-maze', kind: 'prea1', teacher: 'Reading: read the sentence at the top, take Pip through the maze to the right animal — then say the sentence.',
+    scene: {
+      id: 'oc2-maze', kind: 'picture-maze', bg: bgRocks, who: 'mia', walker: '/welcome-town/sprites/pip-wave.png', title: 'Who is doing it? Find the animal!', layout: 2,
+      teacher: 'Read it, take Pip to the animal, then say the sentence.',
+      items: [
+        { label: 'animal that is hiding', img: ACT.hiding, say: 'The octopus is hiding!' },
+        { label: 'animal that is walking', img: ACT.walking, say: 'The crab is walking!' },
+        { label: 'animal that is sleeping', img: ACT.sleeping, say: 'The starfish is sleeping!' },
+      ],
+      rounds: [1, 0, 2], doneLine: 'You found them all! Super reading!',
+    },
+  },
+  {
+    id: 'oc2-read-match', kind: 'picture-match', look: 'chalk', prompt: 'Read and match',
+    teacher: 'Reading: read each sentence from the story and drag it under its picture. Then read it aloud.',
+    items: [
+      { word: 'Bub is hiding.', img: reefPage(4) },
+      { word: 'The crab is walking.', img: reefPage(5) },
+      { word: 'This is Coral.', img: reefPage(2) },
+    ],
+    bg: bgRocks,
+  },
+  {
+    id: 'oc2-balloons', kind: 'balloon-match', bg: bgRocks, who: 'coral', title: 'Balloon Match: what is it doing?',
+    teacher: 'Reading game: the student reads a balloon (tap it to hear it), then taps the animal doing it. The balloon floats down and pops!',
+    pairs: [
+      { text: 'The whale is diving.', img: ACT.diving, label: 'whale' },
+      { text: 'The fish is eating.', img: ACT.eating, label: 'fish' },
+      { text: 'The octopus is hiding.', img: ACT.hiding, label: 'octopus' },
+      { text: 'The starfish is sleeping.', img: ACT.sleeping, label: 'starfish' },
+    ],
+    doneLine: 'Pop, pop! You can read what they are doing!',
+  },
+
+  /* Phonics: oa → Word Splat → Blend & Read → tongue twister */
+  {
+    id: 'oc2-sound-oa', kind: 'sound-model', bg: reefPage(1), who: 'pip', letter: 'OA', phoneme: '/oʊ/', sound: 'oa', soundSide: 'center',
+    teacher: 'Present: o and a together say /oʊ/ — make your mouth round like an O! Boat, coat, goat. Say: oa, oa, boat!',
+    anchors: [
+      { word: 'boat', emoji: '\u{26F5}', img: BOAT },
+      { word: 'coat', emoji: '\u{1F9E5}', img: item('coat-blue') },
+      { word: 'goat', emoji: '\u{1F410}', img: item('goat') },
+    ],
+  },
+  {
+    id: 'oc2-splat', kind: 'word-splat', bg: reefPage(1), who: 'coral', title: 'Word Splat! Listen and splat the word!',
+    teacher: 'Reading: Coral says a word — the student splats it and reads it aloud. The oa words and today’s sight words.',
+    words: ['boat', 'coat', 'goat', 'soap', 'road', 'is', 'are', 'what', 'doing', 'the'],
+    rounds: ['boat', 'doing', 'goat', 'is', 'coat', 'what', 'soap', 'are'],
+    doneLine: 'Splat! You can read them!',
+  },
+  {
+    id: 'oc2-blend', kind: 'sound-blend', bg: reefPage(1),
+    teacher: 'Reading: say each sound (b, oa, t — blend them), blend the word, find the picture — then read the sentence.',
+    rounds: [
+      { word: 'boat', sounds: ['b', 'oa', 't'], img: BOAT, sentence: 'The boat is on the sea.' },
+      { word: 'coat', sounds: ['c', 'oa', 't'], img: item('coat-blue'), sentence: 'Pip has got a blue coat.' },
+      { word: 'goat', sounds: ['g', 'oa', 't'], img: item('goat'), sentence: 'The goat is in the boat!' },
+    ],
+  },
+  { id: 'oc2-twister', kind: 'tongue-twister', look: 'town', speeds: 3, bg: reefPage(1), who: 'pip', focus: 'oa', teacher: 'Reading: quick reading! Listen to Pip, then say it slow, faster — then boat speed!', line: 'A goat in a coat floats on a boat.' },
+  /* Free: What am I doing? + ask Bub */
+  {
+    id: 'oc2-mime', kind: 'join-stage', bg: bgRocks, teacher: 'Free: the student mimes a sea animal doing something (walking crab, sleeping starfish, hiding octopus…). Pip asks; the student answers in a sentence. Then swap: Pip mimes, the student asks.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'What are you doing?' },
+      { who: 'student', line: 'I’m … ! I’m a … !' },
+      { who: 'pip', line: 'Now me! What am I doing?' },
+      { who: 'student', line: 'You’re … !' },
+      { who: 'pip', line: 'Yes! I’m swimming like a fish!' },
+    ],
+  },
+  {
+    id: 'oc2-ask-bub', kind: 'join-stage', bg: reefPage(4), teacher: 'Free: the student asks Bub questions (What are you doing? Are you hiding?) and then tells Coral what Bub is doing.', cast: ['bub', 'coral'],
+    turns: [
+      { who: 'student', line: 'Hello, Bub! What are you doing?' },
+      { who: 'bub', line: 'I’m hiding. I’m shy!' },
+      { who: 'coral', line: 'What’s Bub doing?' },
+      { who: 'student', line: 'He’s hiding!' },
+      { who: 'bub', line: 'Now I’m swimming with you!' },
+    ],
+  },
+  { id: 'oc2-i-can', kind: 'meet', focus: ['doing'], bg: reefPage(5), who: 'coral', cardSide: 'right', teacher: 'Check: the student says what 5 animals are doing, in whole sentences (The crab is walking.) — then the passport stamp!', line: 'You can say what the animals are doing!', repeat: 'The crab is walking. The octopus is hiding.' },
+  {
+    id: 'oc2-sticker', kind: 'prea1', teacher: 'Sticker time! The student opens the pack and puts the Ocean sticker in their Sticker Book.',
+    scene: {
+      id: 'oc2-sticker', kind: 'sticker-reward', bg: reefPage(1), who: 'pip', teacher: 'Sticker time!',
+      line: 'Super sentences! Here is your sticker.',
+      sticker: { img: ACT.hiding, label: 'Reef reporter' },
+    },
+  },
+  petPal('oc2-pet-pal', 1, 'I’m sailing today! I want a boat!', [{ label: 'goat', img: item('goat') }, { label: 'boat', img: BOAT }, { label: 'coat', img: item('coat-blue') }], 1, 'A boat! I’m sailing!'),
+  {
+    id: 'oc2-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
+    scene: {
+      id: 'oc2-home-mission', kind: 'home-mission', bg: reefPage(1), who: 'pip',
+      line: 'Your home mission!', teacher: 'Home Mission: read the steps with the student.',
+      parentNote: 'Today your child learned octopus and crab and how to say what someone is doing now: "The crab is walking. The octopus is hiding." This week, ask: "What are you doing?" and "What is Dad doing?"',
+      steps: [
+        { emoji: '\u{1F440}', say: 'Look at 3 people at home.' },
+        { emoji: '\u{1F5E3}\u{FE0F}', say: 'Say what they are doing: Mom is cooking!' },
+        { emoji: '\u{1F980}', say: 'Walk like a crab and say: I’m walking!' },
+      ],
+    },
+  },
+  {
+    id: 'oc2-move-break-2', kind: 'prea1', teacher: 'Brain break: Bub’s game — hide and peek!',
+    scene: {
+      id: 'oc2-move-break-2', kind: 'tpr-actions', mode: 'break', bg: reefPage(1), who: 'pip', teacher: 'Hide and peek!',
+      rounds: [
+        { line: 'Hide behind your hands! Shh…', emoji: '\u{1F648}' },
+        { line: 'Peek out! Boo! Hello!', emoji: '\u{1F440}' },
+        { line: 'Swim back to your chair!', emoji: '\u{1F3CA}' },
+      ],
+    },
+  },
+  goodbyeSong('oc2-goodbye-song', reefPage(1)),
+  { id: 'oc2-finale', kind: 'finale', bg: reefPage(5), who: 'pip', line: 'You can say what the sea animals are doing! See you at the reef! \u{1F419}' },
 ];
