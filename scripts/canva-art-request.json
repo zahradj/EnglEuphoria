@@ -1,27 +1,17 @@
 [
   {
-    "url": "https://export-download.canva.com/ndgiM/DAHYA1ndgiM/-1/0/0046-1123041218600940176.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261014%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261014T125219Z&X-Amz-Expires=52048&X-Amz-Signature=a4320e80e269ee27405853795b31828d2a0c69cd42dfe3af18708caeb4dc9b93&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2015%20Oct%202026%2003%3A19%3A47%20GMT",
-    "out": "public/lep1/scenes/bg-a1u5-story-8-wide.png",
+    "url": "https://export-download.canva.com/ndgiM/DAHYA1ndgiM/-1/0/0051-3023560260040588973.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261014%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261014T115801Z&X-Amz-Expires=55112&X-Amz-Signature=afd117bbe1bbb3cdd2f8f0b9e933de56957800f42cb2d70d71014e4bb4d01e7c&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2015%20Oct%202026%2003%3A16%3A33%20GMT",
+    "out": "public/lep1/scenes/bg-a1u5-story-10-wide.png",
     "sticker": false
   },
   {
-    "url": "https://export-download.canva.com/ndgiM/DAHYA1ndgiM/-1/0/0047-1123041218600940176.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261014%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261014T150901Z&X-Amz-Expires=43843&X-Amz-Signature=2e64e3348d44116c19563fbe1084ee3ff98311b42c84883255f3c9967d11fd33&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2015%20Oct%202026%2003%3A19%3A44%20GMT",
-    "out": "public/lep1/scenes/bg-a1u5-story-9-wide.png",
+    "url": "https://export-download.canva.com/ndgiM/DAHYA1ndgiM/-1/0/0052-3023560260040588973.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261014%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261014T030234Z&X-Amz-Expires=87081&X-Amz-Signature=77db23e6518b55467766a1e78eb1624f0c662b94f54f4fdf5ad3d81b144758fe&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2015%20Oct%202026%2003%3A13%3A55%20GMT",
+    "out": "public/lep1/scenes/bg-a1u5-story-11-wide.png",
     "sticker": false
   },
   {
-    "url": "https://export-download.canva.com/ndgiM/DAHYA1ndgiM/-1/0/0048-1123041218600940176.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261014%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261014T150858Z&X-Amz-Expires=41382&X-Amz-Signature=c57b5e405c4191da8831ba01e06de84ffeeee104076e9b991754ede69a2baf68&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2015%20Oct%202026%2002%3A38%3A40%20GMT",
-    "out": "public/lep1/scenes/bg-a1u5-laundry-wide.png",
+    "url": "https://export-download.canva.com/ndgiM/DAHYA1ndgiM/-1/0/0053-3023560260040588973.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261014%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261014T062103Z&X-Amz-Expires=76310&X-Amz-Signature=89b2dd32d7ed03039e10b0c9dd0f1640270558acbe2fe89ff6240185167968c9&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2015%20Oct%202026%2003%3A32%3A53%20GMT",
+    "out": "public/lep1/scenes/bg-a1u5-story-12-wide.png",
     "sticker": false
-  },
-  {
-    "url": "https://export-download.canva.com/ndgiM/DAHYA1ndgiM/-1/0/0049-1123041218600940176.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261014%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261014T214830Z&X-Amz-Expires=16470&X-Amz-Signature=d4a14a6a11efa5fa235ea99be6d8c396546c79a19f8c8a3c7a9e1a58cae72862&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2015%20Oct%202026%2002%3A23%3A00%20GMT",
-    "out": "public/lep1/items/item-glasses.png",
-    "sticker": true
-  },
-  {
-    "url": "https://export-download.canva.com/ndgiM/DAHYA1ndgiM/-1/0/0050-1123041218600940176.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261014%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261014T063616Z&X-Amz-Expires=72605&X-Amz-Signature=280ac137c266c727bb0d6c205abe4bbd6840b2c3991e20dd2956ad5f3151aec6&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2015%20Oct%202026%2002%3A46%3A21%20GMT",
-    "out": "public/lep1/items/item-boots.png",
-    "sticker": true
   }
 ]
