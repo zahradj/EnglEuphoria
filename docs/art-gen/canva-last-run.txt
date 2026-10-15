@@ -1,2 +1,16 @@
-+ public/lep1/scenes/bg-a1u6-story-2-wide.png (1376, 768)
-1/1 saved
+cut out: public/lep1/items/item-bub-hiding.png (834, 837)
+cut out: public/lep1/items/item-crab-walking.png (958, 666)
+cut out: public/lep1/items/item-starfish-sleeping.png (993, 872)
+cut out: public/lep1/items/item-fish-eating.png (959, 860)
+cut out: public/lep1/items/item-whale-diving.png (632, 938)
+cut out: public/lep1/items/item-turtle-eating.png (980, 689)
++ public/lep1/items/item-bub-hiding.png (1024, 1024)
++ public/lep1/items/item-crab-walking.png (1024, 1024)
++ public/lep1/items/item-starfish-sleeping.png (1024, 1024)
++ public/lep1/items/item-fish-eating.png (1024, 1024)
++ public/lep1/items/item-whale-diving.png (1024, 1024)
++ public/lep1/items/item-turtle-eating.png (1024, 1024)
++ public/lep1/scenes/bg-a1u6-story-4-wide.png (1376, 768)
++ public/lep1/scenes/bg-a1u6-story-5-wide.png (1376, 768)
++ public/lep1/scenes/bg-a1u6-rocks-wide.png (1376, 768)
+9/9 saved
