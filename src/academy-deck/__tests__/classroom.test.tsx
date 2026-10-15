@@ -6,11 +6,12 @@ import { hasDeckScript } from '../lessonScripts';
 import { ACADEMY_DECK_LESSONS } from '../lessonRegistry';
 
 // a tiny in-memory stand-in for the realtime channel (student sends, teacher receives)
-const bus = vi.hoisted(() => ({ listeners: new Set<(p: any) => void>(), sent: [] as any[] }));
+type Tap = { path: number[]; kind?: string; slide?: number; value?: string; senderRole: string; senderId: string };
+const bus = vi.hoisted(() => ({ listeners: new Set<(p: Tap) => void>(), sent: [] as Tap[] }));
 vi.mock('@/services/whiteboardService', () => ({
   whiteboardService: {
-    sendSceneTap: async (_r: string, p: any) => { bus.sent.push(p); bus.listeners.forEach((cb) => cb(p)); },
-    subscribeToSceneTap: (_r: string, cb: (p: any) => void) => { bus.listeners.add(cb); return () => bus.listeners.delete(cb); },
+    sendSceneTap: async (_r: string, p: Tap) => { bus.sent.push(p); bus.listeners.forEach((cb) => cb(p)); },
+    subscribeToSceneTap: (_r: string, cb: (p: Tap) => void) => { bus.listeners.add(cb); return () => bus.listeners.delete(cb); },
   },
 }));
 
