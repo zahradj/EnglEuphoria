@@ -195,7 +195,7 @@ describe('B1-S01-E1: Trophy Forge and the trio streak', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Everyone should learn to surf this term.' }));
     expect(screen.getByText(/Not yet/)).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: 'You are brave when you do something even though you are afraid.' }));
-    expect(screen.getByText(/do it anyway/)).toBeTruthy();
+    expect(screen.getByText(/Paragraph 3/)).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: /Next/ }));
     expect(screen.getByText(/2 of 4/)).toBeTruthy();
   });
