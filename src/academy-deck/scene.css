@@ -405,3 +405,10 @@
 .ad-root[data-theme='scene'] .ad-triple-cards { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; list-style: none; margin: 0; padding: 0; }
 .ad-root[data-theme='scene'] .ad-triple-cards li { padding: 5px 14px; border-radius: 99px; background: #fff; border: 2px solid var(--gold); font-weight: 700; color: var(--ink); animation: sc-pop 0.4s both; }
 .ad-root[data-theme='scene'] .ad-triple-cards b { color: var(--teal-d); }
+
+/* the teaching ladder chip: what kind of step this is */
+.ad-root[data-theme='scene'] .ad-stagechip { position: absolute; top: 62px; left: 50%; transform: translateX(-50%); padding: 3px 14px; border-radius: 99px; background: var(--pill); border: 2px solid #fff; box-shadow: var(--shadow-s); font-size: 0.72rem; font-weight: 800; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); z-index: 20; }
+.ad-root[data-theme='scene'] .ad-stagechip[data-s='model'], .ad-root[data-theme='scene'] .ad-stagechip[data-s='context'] { color: #b86a14; }
+.ad-root[data-theme='scene'] .ad-stagechip[data-s='rule'] { color: var(--violet); }
+.ad-root[data-theme='scene'] .ad-stagechip[data-s='controlled'] { color: var(--teal-d); }
+.ad-root[data-theme='scene'] .ad-stagechip[data-s='free'], .ad-root[data-theme='scene'] .ad-stagechip[data-s='produce'] { color: #c2410c; }

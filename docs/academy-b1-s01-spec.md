@@ -189,3 +189,16 @@ Order keeps the owner's rules: the rule is stated before the boss fight, the tea
 **The hour (estimate, a slow student; required pages 63 min inside the 57-64.5 gate, optional pages are extra for a fast student):** Check-in 4 (lead-in talk, mission) · Remember? 5 (Hot Seat) · The Drop 19 (dialogue story 5, six words 3.6, match 2.4, memory 2, Ava's blog post 3.5 + 3 reading questions 3.4, retell 2) · Notice & Build 12 (Grammar Detective 2.9, the rule 1, Break the Clock 3 strikes 3.2, **Triple Match** 4, write a question and an answer 2.8) · Energiser 3 (Participle Wordle) · Mission 8 (model, Rapport chat, Take 1 and 2) · Release 5 (write two sentences, speak one minute) · Wrap 4 (teach-back, tick the goals).
 
 **Triple Match** (match-3 mechanic): three columns, Base / Past simple / Past participle, five shuffled tiles each; pick one tile per column; the right three lock into a card and the trio is spoken; a combo rises with every first-try triple, a wrong triple shakes and clears (nothing lost). Board 1 (go, be, see, eat, take) is in Notice & Build; board 2, hard mode (drive, choose, begin, speak, write), is an extra in the Energiser. Serves criterion 3 (the three forms). Optional extras for a fast student: Trophy Forge, Triple Match hard mode, Verb Trio Memory, the speedrun streak, the verb check, the Take 2 feedback replay (about 17 min in total).
+
+## 10. The teaching ladder (owner 2026-10-15: "order the pages: modelling → guided practice → free practice → production")
+
+Every page carries a `stage` (shown to the student as a small chip) and the stages climb inside each part (checked by `b1s01e1.test.tsx` "LADDER"):
+
+| Part | Warm-up | Watch / model | The rule | Guided practice (we do) | Free practice (you do) | Production (make it yours) |
+|---|---|---|---|---|---|---|
+| Check-in, Remember? | talk, verb check, Hot Seat | | | | | |
+| The Drop | | dialogue story, blog post (input), six words modelled | | listen-and-match, memory, reading questions | retell the post | |
+| Notice & Build | | Grammar Detective (notice in the text) | the rule (3 lines) | Break the Clock, Triple Match, Forge, write a question and an answer | | |
+| Energiser | | | | Wordle, Triple Match hard mode, streak | | |
+| Mission | | **teacher models the task** (Vee and Ava) | | Rapport chat (guided choices) | Take 1, feedback replay, Take 2 | |
+| Release, Wrap | | | | | | write two sentences, speak one minute, teach the rule back |

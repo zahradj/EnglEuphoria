@@ -11,6 +11,7 @@ import { slideLines } from '../spoken';
 afterEach(cleanup);
 const slides = B1_S01_E1.slides;
 const bp = ACADEMY_LESSON_BLUEPRINTS.find((b) => b.id === 'B1-S01-E1')!;
+const parts = (): number[] => [...new Set(slides.map((x) => x.part))];
 const at = (id: string) => slides.findIndex((s) => s.id === id);
 const open = (id: string) => render(<Deck script={B1_S01_E1} teacher slide={at(id)} />);
 
@@ -121,6 +122,22 @@ describe('B1-S01-E1: the blueprint and the approved plan', () => {
     expect(at('model-task')).toBeLessThan(at('say-take1'));
     expect(at('say-take1')).toBeLessThan(at('say-take2'));
     expect(slides.some((s) => s.id === 'teach-back' && s.part === 7)).toBe(true);
+  });
+
+  it('LADDER: every teaching page has a stage, the stages climb inside each part (watch → rule → practise together → your turn → make it yours), and the Mission is modelled before it is practised', () => {
+    const rank: Record<string, number> = { review: 0, context: 1, model: 2, rule: 3, controlled: 4, free: 5, produce: 6 };
+    slides.filter((x) => !['title', 'brief', 'dial', 'wrap'].includes(x.kind)).forEach((x) => expect(x.stage, x.id).toBeTruthy());
+    parts().forEach((p) => {
+      const inPart = slides.filter((x) => x.part === p && x.stage);
+      inPart.slice(1).forEach((x, i) => expect(rank[x.stage!], `${inPart[i].id} (${inPart[i].stage}) -> ${x.id} (${x.stage})`).toBeGreaterThanOrEqual(rank[inPart[i].stage!]));
+    });
+    expect(slides[at('model-task')].stage).toBe('model');
+    expect(at('model-task')).toBeLessThan(at('rpg'));
+    expect(at('rpg')).toBeLessThan(at('say-take1'));
+    expect(at('say-take2')).toBeLessThan(at('my-list'));
+    expect(at('my-list')).toBeLessThan(at('say-release'));
+    expect(at('say-release')).toBeLessThan(at('teach-back'));
+    expect(at('rule-trio')).toBeLessThan(at('say-take1'));
   });
 
   it('after the six words come TWO different memorising games before anything new', () => {

@@ -85,13 +85,13 @@ export const B1_S01_E1: DeckScript = {
     // ---------- 0 · Check-in: speaking first (activate), then the verb check ----------
     { id: 'title', kind: 'title', part: 0, bg: WALL, actors: [who('Vee', 'center', 'wave')], heading: 'Have you ever…?', sub: 'Experiences and bucket lists · lesson 1' },
     {
-      id: 'lead-in', kind: 'say', part: 0, bg: WALL, actors: [who('Vee', 'right')], trains: [5],
+      id: 'lead-in', kind: 'say', part: 0, stage: 'review', bg: WALL, actors: [who('Vee', 'right')], trains: [5],
       prompt: 'Warm-up talk. Tell me one exciting thing you did in the last year, and one thing you have never done but would love to try. About 30 seconds.',
       model: 'Last year I went camping with my cousins and we swam in a lake. I have never been to a concert, but I would love to go to one.',
       hints: ['Two parts: something you did, then something you have never done.'],
     },
     {
-      id: 'trio-check', kind: 'sort', part: 0, optional: true, bg: WALL, actors: [], trains: [3], save: 'trioKnown',
+      id: 'trio-check', kind: 'sort', part: 0, stage: 'review', optional: true, bg: WALL, actors: [], trains: [3], save: 'trioKnown',
       prompt: 'Which verbs do you know? Tap a verb, then a box. No wrong answer.',
       bins: [{ id: 'all', label: 'I know all three forms', template: '{w}. I know all three.' }, { id: 'two', label: 'I know one or two', template: '{w}. I know one or two.' }, { id: 'new', label: 'New to me', template: '{w}. New to me.' }],
       items: TRIOS.map((t) => ({ id: t[0], word: t[0] })),
@@ -105,13 +105,13 @@ export const B1_S01_E1: DeckScript = {
 
     // ---------- 1 · Remember? (spaced recall, then past simple in writing) ----------
     {
-      id: 'rem-recall', kind: 'hearpick', part: 1, bg: CLASSROOM, actors: [who('Ava', 'right')], trains: [1],
+      id: 'rem-recall', kind: 'hearpick', part: 1, stage: 'review', bg: CLASSROOM, actors: [who('Ava', 'right')], trains: [1],
       prompt: 'Remember? Which one do you hear? Tap it.',
       rounds: recallRounds(ACADEMY_RECALL_NODES, 'B1-S01-E1', 2, MAX_REMEMBER_ITEMS),
       hints: ['Listen, then look for the same words.'],
     },
     {
-      id: 'hot-seat', kind: 'quiz', part: 1, bg: STAGE, actors: [who('Ava', 'right')], trains: [4], friend: 'Ava',
+      id: 'hot-seat', kind: 'quiz', part: 1, stage: 'review', bg: STAGE, actors: [who('Ava', 'right')], trains: [4], friend: 'Ava',
       prompt: 'Hot Seat! Climb the ladder. You have two lifelines: 50:50 and Ask Ava.',
       questions: [
         { q: 'Yesterday I ___ to the cinema with my cousin.', options: ['went', 'gone', 'go', 'have been'], answer: 'went', why: 'Yesterday is a finished time, so we use the past simple.', hint: 'Yesterday is finished. Think past simple.' },
@@ -145,7 +145,14 @@ export const B1_S01_E1: DeckScript = {
       ],
     },
     {
-      id: 'teach-words', kind: 'teach', part: 2, bg: WALL, actors: [who('Vee', 'left')], trains: [2], title: 'Six words from the dare',
+      id: 'blog', kind: 'passage', part: 2, stage: 'context', bg: LOBBY, actors: [], trains: [1, 2],
+      prompt: 'Now read Ava’s blog post. Listen, read it yourself, then keep the words you want for your word bank.',
+      from: 'Ava', lines: BLOG, bank: 'wordBank', keep: 3,
+      keepFrom: ['terrified', 'opposite', 'regret', 'insects', 'honestly', 'performed'],
+      hints: ['You do not need every word. Read for the main idea first.'],
+    },
+    {
+      id: 'teach-words', kind: 'teach', part: 2, stage: 'model', bg: WALL, actors: [who('Vee', 'left')], trains: [2], title: 'Six words from the dare',
       pages: [
         { word: 'bucket list', art: BUCKET, meaning: 'a list of things you want to do in your life', example: 'My bucket list has ten things on it.', clue: 'Say it as one word group: bucket list.' },
         { word: 'dare', art: DARE, meaning: 'to ask someone to do something difficult or scary', example: 'My cousin dared me to write a list.', clue: 'It rhymes with “care”.' },
@@ -157,26 +164,19 @@ export const B1_S01_E1: DeckScript = {
       hints: ['Listen to each word. Say it after the guide.'],
     },
     {
-      id: 'match-words', kind: 'match', part: 2, bg: WALL, actors: [who('Ava', 'right')], trains: [2], mode: 'listen',
+      id: 'match-words', kind: 'match', part: 2, stage: 'controlled', bg: WALL, actors: [who('Ava', 'right')], trains: [2], mode: 'listen',
       prompt: 'Listen. Tap the picture for what you hear.',
       pairs: [{ word: 'bucket list', art: BUCKET }, { word: 'dare', art: DARE }, { word: 'give it a go', art: GO }, { word: 'tick it off', art: TICK }, { word: 'brave', art: BRAVE }],
       hints: ['Listen to the words, then look for the picture.'],
     },
     {
-      id: 'mem-words', kind: 'memory', part: 2, bg: WALL, actors: [who('Vee', 'left')], trains: [2],
+      id: 'mem-words', kind: 'memory', part: 2, stage: 'controlled', bg: WALL, actors: [who('Vee', 'left')], trains: [2],
       prompt: 'Memory! Match each picture with its words.',
       pairs: [{ art: BUCKET, text: 'bucket list' }, { art: GO, text: 'give it a go' }, { art: BRAVE, text: 'brave' }],
       hints: ['Remember where you saw each picture.'],
     },
     {
-      id: 'blog', kind: 'passage', part: 2, bg: LOBBY, actors: [], trains: [1, 2],
-      prompt: 'Now read Ava’s blog post. Listen, read it yourself, then keep the words you want for your word bank.',
-      from: 'Ava', lines: BLOG, bank: 'wordBank', keep: 3,
-      keepFrom: ['terrified', 'opposite', 'regret', 'insects', 'honestly', 'performed'],
-      hints: ['You do not need every word. Read for the main idea first.'],
-    },
-    {
-      id: 'blog-q', kind: 'readq', part: 2, bg: LOBBY, actors: [], trains: [1],
+      id: 'blog-q', kind: 'readq', part: 2, stage: 'controlled', bg: LOBBY, actors: [], trains: [1],
       prompt: 'Reading questions. Choose the best answer. The text stays on the screen.',
       title: 'Why I stopped saying no', from: 'Ava', paragraphs: BLOG,
       questions: [
@@ -186,7 +186,7 @@ export const B1_S01_E1: DeckScript = {
       ],
     },
     {
-      id: 'gist', kind: 'say', part: 2, bg: WALL, actors: [who('Ava', 'right')], trains: [1, 5], open: true,
+      id: 'gist', kind: 'say', part: 2, stage: 'free', bg: WALL, actors: [who('Ava', 'right')], trains: [1, 5], open: true,
       prompt: 'Retell it. In two or three sentences, say what Ava’s post is about, and say if you agree that “you are brave when you do it anyway”.',
       model: 'Ava’s post is about being brave. She says people are brave when they do something even though they are scared. I agree, because I felt nervous before my first presentation, but I did it.',
       hints: ['Start with: Ava’s post is about …'],
@@ -194,7 +194,7 @@ export const B1_S01_E1: DeckScript = {
 
     // ---------- 3 · Notice & Build: find it in the text, the rule, the three forms, write it ----------
     {
-      id: 'detective', kind: 'sort', part: 3, bg: DETECTIVE, actors: [], trains: [4],
+      id: 'detective', kind: 'sort', part: 3, stage: 'model', bg: DETECTIVE, actors: [], trains: [4],
       prompt: 'Grammar Detective. These sentences come from the post and the dialogue. Is the time finished and stated, or is it an experience up to now? Tap a sentence, then a box.',
       bins: [{ id: 'when', label: 'A finished time (past simple)', template: '{w}' }, { id: 'now', label: 'Up to now, no time (have + past participle)', template: '{w}' }],
       items: [
@@ -207,7 +207,7 @@ export const B1_S01_E1: DeckScript = {
       hints: ['Is there a finished time (last summer, last month, in Spain)? Then it is past simple.'],
     },
     {
-      id: 'rule-trio', kind: 'rule', part: 3, bg: WALL, actors: [who('Vee', 'left')], trains: [3, 4],
+      id: 'rule-trio', kind: 'rule', part: 3, stage: 'rule', bg: WALL, actors: [who('Vee', 'left')], trains: [3, 4],
       title: 'The rule',
       lines: [
         { rule: 'Every verb has three forms: base, past simple, past participle.', say: 'Every verb has three forms. Base, past simple and past participle.', example: 'go, went, gone' },
@@ -216,7 +216,7 @@ export const B1_S01_E1: DeckScript = {
       ],
     },
     {
-      id: 'boss', kind: 'boss', part: 3, bg: VAULT, actors: [who('Theo', 'right')], trains: [4],
+      id: 'boss', kind: 'boss', part: 3, stage: 'controlled', bg: VAULT, actors: [who('Theo', 'right')], trains: [4],
       prompt: 'Break the Clock! Choose the right tense to strike. Three shields: a wrong tense costs one.',
       rounds: [
         { frame: 'I ___ to Italy three times in my life.', options: ['have been', 'went', 'was', 'have went'], answer: 'have been', why: 'In my life: no finished time, an experience up to now.' },
@@ -226,19 +226,19 @@ export const B1_S01_E1: DeckScript = {
       hints: ['Look for a time word: last summer is finished; in my life and ever are not.'],
     },
     {
-      id: 'forge', kind: 'forge', part: 3, optional: true, bg: CASE, actors: [who('Vee', 'right')], trains: [3],
+      id: 'forge', kind: 'forge', part: 3, stage: 'controlled', optional: true, bg: CASE, actors: [who('Vee', 'right')], trains: [3],
       prompt: 'Trophy Forge! Forge the three forms of each verb, in order. Then say them.',
       rounds: [TRIOS[0], TRIOS[5]].map((t) => ({ forms: t })),
       hints: ['Base form first, then past simple, then past participle.'],
     },
     {
-      id: 'triple-1', kind: 'triple', part: 3, bg: DETECTIVE, actors: [who('Mia', 'right')], trains: [3],
+      id: 'triple-1', kind: 'triple', part: 3, stage: 'controlled', bg: DETECTIVE, actors: [who('Mia', 'right')], trains: [3],
       prompt: 'Triple Match! Pick one tile in each column that belong to the same verb. Build combos!',
       verbs: [TRIOS[0], TRIOS[1], TRIOS[2], TRIOS[3], TRIOS[4]],
       hints: ['Think: base, past simple, past participle. go, went, gone.'],
     },
     {
-      id: 'write-forms', kind: 'write', part: 3, bg: CLASSROOM, actors: [who('Theo', 'right')], trains: [4],
+      id: 'write-forms', kind: 'write', part: 3, stage: 'controlled', bg: CLASSROOM, actors: [who('Theo', 'right')], trains: [4],
       prompt: 'Your turn to use the rule. Write a question with ever, and an answer with never.',
       rows: [
         { label: 'Ask a friend about travel (ever + be).', frame: 'Have you ever …?', accept: ['^have you ever been (to|in) .+'], hint: 'Have you ever + been to + a place.', sample: 'Have you ever been to Japan?' },
@@ -246,7 +246,7 @@ export const B1_S01_E1: DeckScript = {
       ],
     },
     {
-      id: 'trio-memory', kind: 'memory', part: 3, optional: true, bg: CASE, actors: [who('Ava', 'right')], trains: [3],
+      id: 'trio-memory', kind: 'memory', part: 3, stage: 'controlled', optional: true, bg: CASE, actors: [who('Ava', 'right')], trains: [3],
       prompt: 'Verb Trio Memory! Match each base form with its other two forms. Say the pair, then say a sentence.',
       pairs: TRIOS.slice(0, 5).map((t) => ({ art: L(t[0]), text: `${t[1]}, ${t[2]}` })),
       hints: ['Think: base, past simple, past participle.'],
@@ -254,13 +254,13 @@ export const B1_S01_E1: DeckScript = {
 
     // ---------- 4 · Energiser: the trio streak (harder verbs included) ----------
     {
-      id: 'triple-2', kind: 'triple', part: 4, optional: true, bg: LOBBY, actors: [who('Theo', 'right')], trains: [3],
+      id: 'triple-2', kind: 'triple', part: 4, stage: 'controlled', optional: true, bg: LOBBY, actors: [who('Theo', 'right')], trains: [3],
       prompt: 'Triple Match, hard mode! Harder verbs: match the three forms.',
       verbs: [HARD[0], HARD[1], HARD[2], HARD[3], REVISED[2]],
       hints: ['Vowel changes: drive, drove, driven.'],
     },
     {
-      id: 'wordle', kind: 'wordle', part: 4, bg: LOBBY, actors: [who('Theo', 'right')], trains: [3],
+      id: 'wordle', kind: 'wordle', part: 4, stage: 'controlled', bg: LOBBY, actors: [who('Theo', 'right')], trains: [3],
       prompt: 'Participle Wordle! Guess the past participle in six tries.',
       rounds: [
         { base: 'fly', clue: 'I have ___ across the world twice.', answer: 'flown' },
@@ -269,7 +269,7 @@ export const B1_S01_E1: DeckScript = {
       hints: ['Gold means the letter is in the word, but in another place.'],
     },
     {
-      id: 'streak', kind: 'streak', part: 4, optional: true, bg: CASE, actors: [who('Theo', 'right')], trains: [3], save: 'trioScore',
+      id: 'streak', kind: 'streak', part: 4, stage: 'controlled', optional: true, bg: CASE, actors: [who('Theo', 'right')], trains: [3], save: 'trioScore',
       prompt: 'Trio streak! Listen to the verb. Choose the past simple, then the past participle. Beat your own best.',
       rounds: [...HARD, TRIOS[4], REVISED[2], REVISED[0], REVISED[1]].map((t, i) => streakRound(t, i)),
       hints: ['Past simple first. Then the past participle.'],
@@ -278,7 +278,7 @@ export const B1_S01_E1: DeckScript = {
     // ---------- 5 · Mission: who has done the most? Argue it with reasons ----------
     { id: 'dial', kind: 'dial', part: 5, bg: WALL, actors: [who('Vee', 'right', 'thumbs')], prompt: 'Mission time! How much help do you want?' },
     {
-      id: 'model-task', kind: 'model', part: 5, bg: WALL, actors: [who('Vee', 'left'), who('Ava', 'right')], trains: [5],
+      id: 'model-task', kind: 'model', part: 5, stage: 'model', bg: WALL, actors: [who('Vee', 'left'), who('Ava', 'right')], trains: [5],
       title: 'Watch Vee argue it',
       lines: [
         { who: 'Vee', text: 'I would say Ava has done the most. She has flown across the world twice, and she has even eaten spicy noodles.' },
@@ -288,7 +288,7 @@ export const B1_S01_E1: DeckScript = {
       closing: 'Now YOU decide. Give your answer, two reasons, and one point against it.',
     },
     {
-      id: 'rpg', kind: 'rpg', part: 5, bg: NIGHT, actors: [who('Theo', 'right')], trains: [4, 5], npc: 'Theo', goal: 4,
+      id: 'rpg', kind: 'rpg', part: 5, stage: 'controlled', bg: NIGHT, actors: [who('Theo', 'right')], trains: [4, 5], npc: 'Theo', goal: 4,
       prompt: 'Rapport! Theo asks about your travels. Choose the reply that sounds most natural.',
       scenes: [
         { say: 'So, have you ever been abroad?', options: [
@@ -310,14 +310,14 @@ export const B1_S01_E1: DeckScript = {
       hints: ['An experience with no time: have + participle. A story with a time or place: past simple.'],
     },
     {
-      id: 'say-take1', kind: 'say', part: 5, bg: WALL, actors: [who('Vee', 'right')], trains: [5], open: true,
+      id: 'say-take1', kind: 'say', part: 5, stage: 'free', bg: WALL, actors: [who('Vee', 'right')], trains: [5], open: true,
       prompt: 'Take 1 · Who has done the most? Give your answer and your reasons. About a minute.',
       model: 'I would say … has done the most. He or she has … and … On the other hand, …',
       byDial: { chill: 'I think … has done the most. He or she has …', normal: 'I would say … has done the most. He or she has … and …', push: 'I would say … has done the most. He or she has … and … On the other hand, … has never …' },
       hints: ['Choose one person. Give two things they have done. Then one thing against.'],
     },
     {
-      id: 'fade', kind: 'fade', part: 5, optional: true, bg: WALL, actors: [who('Vee', 'left'), who('Ava', 'right')], trains: [5],
+      id: 'fade', kind: 'fade', part: 5, stage: 'free', optional: true, bg: WALL, actors: [who('Vee', 'left'), who('Ava', 'right')], trains: [5],
       prompt: 'Feedback time! Say the lines again, with less help each round, before Take 2.',
       lines: [
         { who: 'Vee', text: 'I would say Ava has done the most.', keys: ['Ava', 'most'] },
@@ -325,7 +325,7 @@ export const B1_S01_E1: DeckScript = {
       ],
     },
     {
-      id: 'say-take2', kind: 'say', part: 5, bg: WALL, actors: [who('Vee', 'right')], trains: [5], open: true,
+      id: 'say-take2', kind: 'say', part: 5, stage: 'free', bg: WALL, actors: [who('Vee', 'right')], trains: [5], open: true,
       prompt: 'Take 2 · Say it again, better: fix what we noticed, and add a point against your answer.',
       model: 'I would say Ava has done the most. She has flown across the world twice, and she has eaten spicy noodles. On the other hand, Theo has visited more countries.',
       hints: ['Use have or has with the past participle. Add: on the other hand …'],
@@ -333,7 +333,7 @@ export const B1_S01_E1: DeckScript = {
 
     // ---------- 6 · Release: write it, then tell it ----------
     {
-      id: 'my-list', kind: 'write', part: 6, bg: CLASSROOM, actors: [who('Mia', 'right')], trains: [4, 5],
+      id: 'my-list', kind: 'write', part: 6, stage: 'produce', bg: CLASSROOM, actors: [who('Mia', 'right')], trains: [4, 5],
       prompt: 'Write about your own list: when you did something (past simple), and one dare for yourself.',
       rows: [
         { label: 'When it happened (past simple, finished time).', frame: 'It was … / I … last …', accept: ['\\b(was|were|went|did|saw|ate|took|had|met|visited|last|ago|in \\d{4}|yesterday)\\b'], hint: 'Use a finished time: last summer, two years ago, in 2023.', sample: 'I went last summer with my brother.' },
@@ -341,7 +341,7 @@ export const B1_S01_E1: DeckScript = {
       ],
     },
     {
-      id: 'say-release', kind: 'say', part: 6, bg: STAGE, actors: [who('Ava', 'right')], trains: [1, 5], open: true,
+      id: 'say-release', kind: 'say', part: 6, stage: 'produce', bg: STAGE, actors: [who('Ava', 'right')], trains: [1, 5], open: true,
       prompt: 'Release: tell me your list out loud, with a follow-up story about one thing you have done. About a minute. (Record it privately first, then share if you want.)',
       model: 'I have been to a music festival. I went last summer with my brother, and we camped for three days. I would love to give surfing a go because it looks fun, but I am a little scared.',
       hints: ['Three steps: what you have done, when and what happened, what you want to do.'],
@@ -349,7 +349,7 @@ export const B1_S01_E1: DeckScript = {
 
     // ---------- 7 · Wrap ----------
     {
-      id: 'teach-back', kind: 'build', part: 7, bg: WALL, actors: [who('Vee', 'right')], trains: [4],
+      id: 'teach-back', kind: 'build', part: 7, stage: 'produce', bg: WALL, actors: [who('Vee', 'right')], trains: [4],
       prompt: 'Teach Vee the rule. Tap the words in the right order, then say it out loud.',
       rounds: [{ cue: 'Present perfect, in one sentence.', target: 'We use the present perfect for an experience up to now.', extra: ['finished', 'time'] }],
       hints: ['Say the rule, then show it with: I have been to Spain.'],
