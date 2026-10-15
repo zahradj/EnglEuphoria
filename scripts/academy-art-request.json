@@ -2,26 +2,11 @@
  {
   "kind": "story",
   "out": "public/academy-art/bg/bucket-list-wall.webp",
-  "url": "https://export-download.canva.com/3gn1o/DAHXiX3gn1o/-1/0/0097-6474443529806888842.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261015%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261015T041432Z&X-Amz-Expires=40825&X-Amz-Signature=c664d8e23c62596bf54eb9cfea2af96cc55fdf6d8331603ecbf59696ca00d1ac&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2015%20Oct%202026%2015%3A34%3A57%20GMT"
+  "url": "https://export-download.canva.com/3gn1o/DAHXiX3gn1o/-1/0/0097-945149091860852420.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261015%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261015T021945Z&X-Amz-Expires=54552&X-Amz-Signature=e98ccd90ec01415b64db850fb9c0e5b0d7446bff48d2b84536e1e1c97aa846a6&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2015%20Oct%202026%2017%3A28%3A57%20GMT"
  },
  {
   "kind": "story",
   "out": "public/academy-art/bg/trophy-case.webp",
-  "url": "https://export-download.canva.com/3gn1o/DAHXiX3gn1o/-1/0/0098-927134689104741125.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261015%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261015T081347Z&X-Amz-Expires=26342&X-Amz-Signature=87bc050c32a0d2bd4715493dc0c4b61b1e0b6a02ee22cc0ee28f634eb35523aa&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2015%20Oct%202026%2015%3A32%3A49%20GMT"
- },
- {
-  "kind": "story",
-  "out": "public/academy-art/bg/story-b1s1-1.webp",
-  "url": "https://export-download.canva.com/3gn1o/DAHXiX3gn1o/-1/0/0099-1164699568935796720.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261015%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261015T042939Z&X-Amz-Expires=41167&X-Amz-Signature=4889359edaa86b873d57b0f8bf2d10b672bb614819d1282755529992caba71ad&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2015%20Oct%202026%2015%3A55%3A46%20GMT"
- },
- {
-  "kind": "story",
-  "out": "public/academy-art/bg/story-b1s1-2.webp",
-  "url": "https://export-download.canva.com/3gn1o/DAHXiX3gn1o/-1/0/0097-3727247761065192287.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261015%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261015T142423Z&X-Amz-Expires=11581&X-Amz-Signature=bb84558cbcc8f0c37581ae70d90e48786da756070f249539ce4279125457c39c&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2015%20Oct%202026%2017%3A37%3A24%20GMT"
- },
- {
-  "kind": "story",
-  "out": "public/academy-art/bg/story-b1s1-3.webp",
-  "url": "https://export-download.canva.com/3gn1o/DAHXiX3gn1o/-1/0/0098-328155944295619122.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261015%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261015T130034Z&X-Amz-Expires=17189&X-Amz-Signature=2ba80b62ba6a579e90ed2794c8fe6115dafa8931295f1459812b72779a34cfef&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2015%20Oct%202026%2017%3A47%3A03%20GMT"
+  "url": "https://export-download.canva.com/3gn1o/DAHXiX3gn1o/-1/0/0098-8057458803873635352.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261015%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261015T151930Z&X-Amz-Expires=8993&X-Amz-Signature=e28b6975e1fbae7726f1ea2446d1ba1fc226d402e98b3aa37a2ef4b605fa588c&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2015%20Oct%202026%2017%3A49%3A23%20GMT"
  }
 ]
