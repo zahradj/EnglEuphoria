@@ -415,3 +415,18 @@
 
 /* the deck is a size container, so every size rule follows the lesson frame (the live classroom scales a fixed 1440x810 canvas) and not the browser window */
 .ad-root[data-theme='scene'] { container-type: size; }
+
+/* cloze */
+.ad-root[data-theme='scene'] .ad-cloze { display: grid; gap: 12px; }
+.ad-root[data-theme='scene'] .ad-cloze-text { background: #fff; border: 2px solid #fff; border-radius: 18px; padding: 14px 20px; box-shadow: var(--shadow-s); max-height: calc(100cqh - 330px); overflow-y: auto; }
+.ad-root[data-theme='scene'] .ad-cloze-text h3 { margin: 0 0 6px; font-size: 1.05rem; }
+.ad-root[data-theme='scene'] .ad-cloze-text p { margin: 0 0 8px; font-size: 1.1rem; line-height: 1.9; font-weight: 600; color: var(--ink); }
+.ad-root[data-theme='scene'] .ad-gap { display: inline-block; min-width: 110px; margin: 0 3px; padding: 0 10px; border: 0; border-bottom: 3px solid var(--violet); border-radius: 8px 8px 0 0; background: var(--violet-soft); color: var(--violet-d); font: inherit; font-weight: 800; text-align: center; cursor: pointer; }
+.ad-root[data-theme='scene'] .ad-gap[data-on='true'] { background: var(--gold-soft); border-color: var(--gold); }
+.ad-root[data-theme='scene'] .ad-gap[data-filled='true'] { background: #d8f5e6; border-color: var(--good); cursor: default; animation: sc-pop 0.35s both; }
+.ad-root[data-theme='scene'] .ad-gap[data-bad='true'] { animation: sc-shake 0.4s; background: #ffe6d3; border-color: var(--try); }
+.ad-root[data-theme='scene'] .ad-cloze-bank { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; align-items: center; }
+.ad-root[data-theme='scene'] .ad-cloze-bank > span { font-size: 0.75rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.ad-root[data-theme='scene'] .ad-cloze-bank .ad-pk-tile { min-height: 46px; padding: 6px 16px; }
+.ad-root[data-theme='scene'] .ad-cloze-bank .ad-pk-tile[data-on='true'] { background: var(--gold-soft) !important; border-color: var(--gold) !important; }
+.ad-root[data-theme='scene'] .ad-story-listen { position: absolute; inset-inline: 10%; bottom: 112px; margin: 0; padding: 14px 22px; border-radius: 22px; text-align: center; background: rgba(255, 255, 255, 0.92); border: 2px solid #fff; box-shadow: var(--shadow-s); font-weight: 800; font-size: 1.2rem; color: var(--violet-d); }

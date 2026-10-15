@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { shuffled, useDeck } from '../ctx';
-import type { BossSlide, QuizSlide, RpgSlide, TripleSlide, WordleSlide } from '../types';
+import type { BossSlide, ClozeSlide, QuizSlide, RpgSlide, TripleSlide, WordleSlide } from '../types';
 import { Feedback, NOT_YET, Panel } from './shared';
 
 /* Video-game mechanics for the B1 lessons. Each is a small loop with a clear goal and a clear reward; none can lose the student's progress (a miss costs a shield, a grey option, a retry). */
@@ -314,6 +314,74 @@ export function TripleView({ slide }: { slide: TripleSlide }) {
         {bad && <Feedback kind="try">Not the same verb. Look again: base, past, participle.</Feedback>}
         {finished && <Feedback kind="ok">All {n} triples matched! Best combo ×{best}.</Feedback>}
         {!finished && <p className="ad-hint-line">Tap one tile in each column that belong together, like go · went · gone.</p>}
+      </div>
+    </Panel>
+  );
+}
+
+/** Cloze: complete the passage with the vocabulary learned. */
+export function ClozeView({ slide }: { slide: ClozeSlide }) {
+  const { right, wrong, done, seed, speak } = useDeck();
+  const lead = slide.actors?.[0]?.who ?? 'Vee';
+  const gaps = useMemo(() => {
+    const out: string[] = [];
+    slide.paragraphs.forEach((p) => { for (const m of p.matchAll(/\[\[([^\]]+)\]\]/g)) out.push(m[1]); });
+    return out;
+  }, [slide.paragraphs]);
+  const bank = useMemo(() => shuffled(gaps.map((g, i) => ({ w: g, i })), seed + 91), [gaps, seed]);
+  const [filled, setFilled] = useState<Record<number, number>>({});
+  const [word, setWord] = useState<number | null>(null);
+  const [gap, setGap] = useState<number | null>(null);
+  const [bad, setBad] = useState<number | null>(null);
+  const [tries, setTries] = useState<Record<number, number>>({});
+  const [slips, setSlips] = useState(0);
+  const usedBank = new Set(Object.values(filled));
+  const finished = Object.keys(filled).length === gaps.length;
+  useEffect(() => { if (finished) done(); }, [finished, done]);
+  const place = (g: number, b: number) => {
+    if (filled[g] !== undefined) return;
+    const w = bank[b].w;
+    if (w === gaps[g]) {
+      setFilled((f) => ({ ...f, [g]: b })); setWord(null); setGap(null);
+      if (!tries[g]) right();
+      void speak(lead, w);
+    } else {
+      wrong(); setBad(g); setSlips((n) => n + 1); setTries((t) => ({ ...t, [g]: (t[g] ?? 0) + 1 }));
+      window.setTimeout(() => setBad(null), 450); setWord(null); setGap(null);
+    }
+  };
+  const pickWord = (b: number) => { if (usedBank.has(b)) return; if (gap !== null) place(gap, b); else setWord(b); };
+  const pickGap = (g: number) => { if (filled[g] !== undefined) return; if (word !== null) place(g, word); else setGap(g); };
+  let gi = -1;
+  return (
+    <Panel title={slide.prompt} wide variant="glass">
+      <div className="ad-cloze">
+        <article className="ad-cloze-text" aria-label={slide.title}>
+          <h3>{slide.title}</h3>
+          {slide.paragraphs.map((p, pi) => (
+            <p key={pi}>
+              {p.split(/(\[\[[^\]]+\]\])/).map((chunk, ci) => {
+                const m = /^\[\[([^\]]+)\]\]$/.exec(chunk);
+                if (!m) return <span key={ci}>{chunk}</span>;
+                gi += 1;
+                const g = gi;
+                const hint = (tries[g] ?? 0) >= 2 ? slide.hints?.[m[1]] : undefined;
+                return (
+                  <button key={ci} type="button" className="ad-gap" data-filled={filled[g] !== undefined || undefined} data-on={gap === g || undefined} data-bad={bad === g || undefined} onClick={() => pickGap(g)} aria-label={filled[g] !== undefined ? bank[filled[g]].w : `Gap ${g + 1}`}>
+                    {filled[g] !== undefined ? bank[filled[g]].w : (hint ? `(${hint})` : '\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0')}
+                  </button>
+                );
+              })}
+            </p>
+          ))}
+        </article>
+        <div className="ad-cloze-bank" role="group" aria-label="Word bank">
+          <span>Word bank</span>
+          {bank.map((b, bi) => <button key={bi} type="button" className="ad-pk-tile" data-on={word === bi || undefined} disabled={usedBank.has(bi)} onClick={() => pickWord(bi)}>{b.w}</button>)}
+        </div>
+        {slips > 0 && !finished && <Feedback kind="try">{NOT_YET} Read the sentence again: which word fits the meaning?</Feedback>}
+        {finished && <Feedback kind="ok">The whole passage is complete. You used all {gaps.length} words.</Feedback>}
+        {!finished && <p className="ad-hint-line">Tap a word, then the gap where it belongs. {Object.keys(filled).length} of {gaps.length} done.</p>}
       </div>
     </Panel>
   );

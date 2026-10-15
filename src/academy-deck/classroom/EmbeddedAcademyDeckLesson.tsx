@@ -1,10 +1,13 @@
 // Bridge from the live classroom stage to an Academy library lesson (the Academy twin of EmbeddedSceneLesson).
 // TEACHER: owns the slide index (Back / Next / the slide strip), saves it with `onSceneIdxPersist`, and may open any slide.
 // STUDENT: follows the saved index (`persistedSceneIdx`), plays the game on the current slide, and cannot move the lesson.
-// Game answers are not shared between the two screens (each side plays its own copy of the slide).
+// Live sharing: the student's clicks and typed text are sent to the teacher's screen (DOM-path replay on the same slide,
+// as in the Playground classroom) so the teacher sees the student play in real time. The deck is seeded, so both copies match.
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Deck } from '../Deck';
+import { whiteboardService } from '@/services/whiteboardService';
+import { getDomPath, getElementAtPath } from '@/content/playground-library/unit1/scenePathSync';
 import { loadDeckScript } from '../lessonScripts';
 import type { DeckScript } from '../types';
 import { useAcademyActivityLog } from './useAcademyActivityLog';
@@ -34,7 +37,7 @@ interface Props {
 }
 
 export const EmbeddedAcademyDeckLesson = forwardRef<EmbeddedAcademyDeckHandle, Props>(function EmbeddedAcademyDeckLesson(
-  { lessonId, role, persistedSceneIdx, onSceneIdxPersist, artBase = '/academy-art', sessionId, userId, onNavState },
+  { lessonId, roomId, role, persistedSceneIdx, onSceneIdxPersist, artBase = '/academy-art', sessionId, userId, onNavState },
   ref,
 ) {
   const { t } = useTranslation();
@@ -78,6 +81,56 @@ export const EmbeddedAcademyDeckLesson = forwardRef<EmbeddedAcademyDeckHandle, P
     setInteractionUnlocked: () => undefined,
   }));
 
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const replaying = useRef(false);
+  const idxRef = useRef(idx);
+  idxRef.current = idx;
+  const host = () => wrapRef.current?.querySelector('.ad-slidehost') ?? null;
+  // STUDENT: send what they click and type
+  useEffect(() => {
+    if (role !== 'student' || !roomId || !script || script === 'missing') return;
+    const wrap = wrapRef.current;
+    if (!wrap) return;
+    const send = (e: Event, kind: 'click' | 'input') => {
+      if (replaying.current) return;
+      const root = host();
+      const el = e.target as Element | null;
+      if (!root || !el) return;
+      const path = getDomPath(root, el);
+      if (!path) return;
+      const value = kind === 'input' ? (el as HTMLInputElement).value : undefined;
+      void whiteboardService.sendSceneTap(roomId, { path, kind, slide: idxRef.current, value, senderRole: 'student', senderId: 'student' });
+    };
+    const onClick = (e: Event) => send(e, 'click');
+    const onInput = (e: Event) => send(e, 'input');
+    wrap.addEventListener('click', onClick, true);
+    wrap.addEventListener('input', onInput, true);
+    return () => {
+      wrap.removeEventListener('click', onClick, true);
+      wrap.removeEventListener('input', onInput, true);
+    };
+  }, [role, roomId, script]);
+  // TEACHER: replay the student's actions on the same slide
+  useEffect(() => {
+    if (role !== 'teacher' || !roomId || !script || script === 'missing') return;
+    return whiteboardService.subscribeToSceneTap(roomId, (p) => {
+      if (p.senderRole !== 'student' || p.slide !== idxRef.current) return;
+      const root = host();
+      const el = root ? getElementAtPath(root, p.path) : null;
+      if (!el) return;
+      replaying.current = true;
+      try {
+        if (p.kind === 'input' && (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement)) {
+          const proto = el instanceof HTMLInputElement ? HTMLInputElement.prototype : HTMLTextAreaElement.prototype;
+          Object.getOwnPropertyDescriptor(proto, 'value')?.set?.call(el, p.value ?? '');
+          el.dispatchEvent(new Event('input', { bubbles: true }));
+        } else if (p.kind === 'click') el.click();
+      } finally {
+        replaying.current = false;
+      }
+    });
+  }, [role, roomId, script]);
+
   if (script === 'missing') {
     return (
       <div className="flex h-full w-full items-center justify-center bg-violet-50 p-8 text-center">
@@ -88,7 +141,7 @@ export const EmbeddedAcademyDeckLesson = forwardRef<EmbeddedAcademyDeckHandle, P
   if (!script) return <div className="flex h-full w-full items-center justify-center bg-violet-50" />;
   const student = role === 'student';
   return (
-    <div className="relative h-full w-full" data-testid="academy-deck-embed" data-role={role}>
+    <div ref={wrapRef} className="relative h-full w-full" data-testid="academy-deck-embed" data-role={role}>
       <Deck
         key={`${lessonId}-${role}`}
         script={script}

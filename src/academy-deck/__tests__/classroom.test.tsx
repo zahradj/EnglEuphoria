@@ -5,7 +5,16 @@ import { EmbeddedAcademyDeckLesson } from '../classroom/EmbeddedAcademyDeckLesso
 import { hasDeckScript } from '../lessonScripts';
 import { ACADEMY_DECK_LESSONS } from '../lessonRegistry';
 
-afterEach(cleanup);
+// a tiny in-memory stand-in for the realtime channel (student sends, teacher receives)
+const bus = vi.hoisted(() => ({ listeners: new Set<(p: any) => void>(), sent: [] as any[] }));
+vi.mock('@/services/whiteboardService', () => ({
+  whiteboardService: {
+    sendSceneTap: async (_r: string, p: any) => { bus.sent.push(p); bus.listeners.forEach((cb) => cb(p)); },
+    subscribeToSceneTap: (_r: string, cb: (p: any) => void) => { bus.listeners.add(cb); return () => bus.listeners.delete(cb); },
+  },
+}));
+
+afterEach(() => { cleanup(); bus.listeners.clear(); bus.sent.length = 0; });
 
 describe('Academy library in the classroom', () => {
   it('every library lesson has a script the classroom can load', () => {
@@ -38,5 +47,14 @@ describe('Academy library in the classroom', () => {
   it('an unknown lesson shows a friendly message instead of crashing', async () => {
     render(<EmbeddedAcademyDeckLesson lessonId="nope" roomId="r1" role="student" />);
     await waitFor(() => expect(screen.getByText(/isn’t available/)).toBeTruthy());
+  });
+
+  it('LIVE: the student clicks on a slide and the teacher sees the same click on the same slide', async () => {
+    const view = render(<><div data-testid="T"><EmbeddedAcademyDeckLesson lessonId="b1-s01-e1" roomId="r1" role="teacher" persistedSceneIdx={0} /></div><div data-testid="S"><EmbeddedAcademyDeckLesson lessonId="b1-s01-e1" roomId="r1" role="student" persistedSceneIdx={0} /></div></>);
+    await waitFor(() => expect(view.container.querySelectorAll('.ad-slidehost').length).toBe(2));
+    const sHost = view.container.querySelectorAll('.ad-slidehost')[1];
+    const btn = sHost.querySelector('button') as HTMLElement;
+    fireEvent.click(btn);
+    expect(bus.sent.some((p) => p.kind === 'click' && p.slide === 0 && p.senderRole === 'student')).toBe(true);
   });
 });

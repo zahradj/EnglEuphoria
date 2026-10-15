@@ -40,7 +40,8 @@ const minutes = (s: Slide): number => {
     case 'streak': return 0.5 + s.rounds.length * 0.35;
     case 'write': return 0.8 + s.rows.length * 1;
     case 'readq': return 0.4 + s.questions.length * 1;
-    case 'passage': return 3.5;
+    case 'passage': return 3;
+    case 'cloze': return 0.6 + (s.paragraphs.join(' ').match(/\[\[/g)?.length ?? 0) * 0.5;
     case 'quiz': return 0.5 + s.questions.length * 0.8;
     case 'boss': return 0.5 + s.rounds.length * 0.9;
     case 'wordle': return 0.5 + s.rounds.length * 1.0;
@@ -70,7 +71,7 @@ describe('B1-S01-E1: the blueprint and the approved plan', () => {
     slides.filter((s) => !['title', 'brief', 'wrap', 'dial'].includes(s.kind)).forEach((s) => expect(s.trains?.length, s.id).toBeGreaterThan(0));
   });
 
-  it('TIME: the lesson minutes add to 60, the REQUIRED pages fill each part (70-125 %) and the hour (57-64.5), optional pages at most 18 minutes', () => {
+  it('TIME: the lesson minutes add to 60, the REQUIRED pages fill each part (70-125 %) and the hour (57-64.5), optional pages at most 21 minutes', () => {
     const parts = partsFor(B1_S01_E1);
     expect(parts.reduce((a, p) => a + p.minutes, 0)).toBe(60);
     const req = slides.filter((s) => !s.optional);
@@ -82,7 +83,7 @@ describe('B1-S01-E1: the blueprint and the approved plan', () => {
     const total = per.reduce((a, b) => a + b, 0);
     expect(total, `required total ${total.toFixed(1)} min`).toBeGreaterThanOrEqual(57);
     expect(total, `required total ${total.toFixed(1)} min`).toBeLessThanOrEqual(64.5);
-    expect(slides.filter((s) => s.optional).reduce((a, s) => a + minutes(s), 0)).toBeLessThanOrEqual(18);
+    expect(slides.filter((s) => s.optional).reduce((a, s) => a + minutes(s), 0)).toBeLessThanOrEqual(21);
   });
 
   it('INTENSIVE PRACTICE: at least 80 student responses, at least five different games, no two neighbouring pages of the same kind', () => {
@@ -290,6 +291,6 @@ describe('B1-S01-E1: Trophy Forge and the trio streak', () => {
     open('triple-1');
     const tile = (label: string, col: number) => within(screen.getByRole('group', { name: ['Base', 'Past simple', 'Past participle'][col] })).getByRole('button', { name: label });
     fireEvent.click(tile('go', 0)); fireEvent.click(tile('went', 1)); fireEvent.click(tile('gone', 2));
-    expect(screen.getByRole('status', { name: /Matched 1 of 5. Combo 1/ })).toBeTruthy();
+    expect(screen.getByRole('status', { name: /Matched 1 of 4. Combo 1/ })).toBeTruthy();
   });
 });

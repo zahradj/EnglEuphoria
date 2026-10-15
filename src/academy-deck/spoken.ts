@@ -32,7 +32,7 @@ export function openLines(s: Slide): SpokenLine[] {
   switch (s.kind) {
     case 'title': return line('Vee', s.heading);
     case 'brief': return line('Vee', s.say);
-    case 'dial': case 'lane': case 'blend': case 'hearpick': case 'reader': case 'rhythm': case 'duel': case 'passage': case 'forge': case 'streak': case 'readq': case 'boss': case 'wordle': case 'rpg': case 'quiz': case 'triple': return line(lead(s), s.prompt);
+    case 'dial': case 'lane': case 'blend': case 'hearpick': case 'reader': case 'rhythm': case 'duel': case 'passage': case 'forge': case 'streak': case 'readq': case 'boss': case 'wordle': case 'rpg': case 'quiz': case 'triple': case 'cloze': return line(lead(s), s.prompt);
     case 'vault': return line(lead(s), s.line);
     case 'rule': return line('Vee', s.title);
     case 'say': return line(lead(s), s.prompt);
