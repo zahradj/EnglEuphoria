@@ -163,3 +163,40 @@ export const QUEST_MONSTER_FRIEND_A1_U5L4: HomeworkQuest = {
     chest('You did it! Monster friend expert!', `${S}/bg-a1u5-laundry-wide.png`),
   ],
 };
+
+/** Lesson 5 "Storybook: Bibi's Bad Day" */
+export const QUEST_BIBI_STORY_A1_U5L5: HomeworkQuest = {
+  id: 'bibi-story-a1-u5l5', title: 'Bibi’s Story Quest', subtitle: 'Storybook: Bibi’s Bad Day · A1 Unit 5 · Lesson 5', level: 'A1', lessonKey: 'monster-rich-5-5',
+  theme: theme(page(11)), voice: 'teacher', praise,
+  levels: [
+    { kind: 'reading', name: 'Read the Story', icon: '📖', intro: 'Read Bibi’s story. Then answer from memory!', img: page(10),
+      sentences: ['Bibi is tired because it is early.', 'Bibi is sad because she is tiny.', 'Surprise! Bibi is surprised.', 'Bibi is excited because it is a party for her!', 'Bibi is happy. It is a good day after all!'],
+      questions: [
+        { q: 'Why is Bibi sad?', options: ['She is tiny.', 'It is a party.', 'It is sunny.'], answer: 'She is tiny.' },
+        { q: 'Why is Bibi excited?', options: ['It is early.', 'It is a party for her.', 'The lesson is long.'], answer: 'It is a party for her.' },
+      ] },
+    { kind: 'picture-choice', name: 'How Does She Feel?', icon: '😮', intro: 'Listen. Tap Bibi’s face!', img: page(12),
+      rounds: [
+        { line: 'Surprise! Bibi is surprised.', answer: 'surprised', options: [{ label: 'tired', src: it('bibi-tired') }, { label: 'surprised', src: it('bibi-surprised') }, { label: 'sad', src: it('bibi-sad') }] },
+        { line: 'It is dark. Bibi is scared.', answer: 'scared', options: [{ label: 'scared', src: it('bibi-scared') }, { label: 'happy', src: it('bibi-happy') }, { label: 'bored', src: it('bibi-bored') }] },
+        { line: 'It is a good day! Bibi is happy.', answer: 'happy', options: [{ label: 'sad', src: it('bibi-sad') }, { label: 'excited', src: it('bibi-excited') }, { label: 'happy', src: it('bibi-happy') }] },
+      ] },
+    { kind: 'true-false', name: 'True or False?', icon: '🎉', intro: 'Look and listen. True or false?',
+      rounds: [
+        { img: page(11), aspect: 16 / 9, line: 'There is a big cake.', isTrue: true },
+        { img: page(10), aspect: 16 / 9, line: 'Bibi is bored.', isTrue: false },
+        { img: page(12), aspect: 16 / 9, line: 'Bibi is happy.', isTrue: true },
+      ] },
+    { kind: 'sentence-builder', name: 'Because…', icon: '🧱', intro: 'Listen. Build what you hear!',
+      rounds: [
+        { img: it('bibi-scared'), line: 'Bibi is scared because it is dark.', extra: ['happy'] },
+        { img: it('bibi-excited'), line: 'She is excited because it is a party.', extra: ['sad'] },
+      ] },
+    { kind: 'sound-blend', name: 'Blend It!', icon: '🧱', intro: 'Tap each sound, then Blend!', img: page(11),
+      rounds: [
+        { word: 'eat', sounds: ['ea', 't'], picture: it('cake') },
+        { word: 'teeth', sounds: ['t', 'ee', 'th'], picture: it('mb-mouth-teeth') },
+      ] },
+    chest('You did it! Story star!', page(12)),
+  ],
+};

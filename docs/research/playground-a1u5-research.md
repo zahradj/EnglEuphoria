@@ -32,6 +32,19 @@ never content. Unit-level sources (feelings + *because*, *has got* monster games
 | Games4ESL clothes activities — https://games4esl.com/clothes-games-and-activities/ | Simon says with clothes, What is he/she wearing? | put-on-your-hat TPR break; third-person question | good; verified page |
 | 123 Homeschool 4 Me y as long e — https://www.123homeschool4me.com/?p=78220 | sort / clip cards for words ending in y | contrast y at the END (/ee/: happy, teddy) with y at the start (/y/: yak, yo-yo) in Sound Pick | printable; verified page |
 
+## Lesson 5 — Storybook: Bibi's Bad Day
+| Source (URL) | What it does | Taken (mechanic) | Quality / limits |
+|---|---|---|---|
+| Lastinger Center "Predictions during read-aloud" — https://lastinger.center.ufl.edu/wp-content/uploads/2022/06/FGLRC_PredictionsDuringReadAloud-Teacher.pdf | stop at a turning point, children predict what happens next and say why, then read on and check | the PAUSE page after page 9: the child chooses how the friends cheer Bibi up and says why, then reads pages 10-12 to check | good (university literacy centre); PDF verified |
+| Illinois "What's next?" — https://ieltesting.web.illinois.edu/wp-content/uploads/2017/01/whatsnext.pdf | prediction routine for English learners with picture support | every prediction choice is a picture + short phrase; every answer is "good" | good; PDF verified |
+| TeachingEnglish (British Council) "How to tell a story to primary learners" — https://www.teachingenglish.org.uk/professional-development/teachers/knowing-subject/how-tell-story-primary-learners | before / while / after stages, pre-teach a few key words, act it out after | party words before the reader; act-out and retell after | good; verified page |
+| Scholastic "Emotions graph" — https://shop.scholastic.co.uk/resources/18879/asset_derivatives/80468 | plot a character's feelings across the story on a graph | the Feelings Meter (signature game) | good; worksheet verified |
+| Tes "Character feelings line graph" — https://www.tes.com/teaching-resource/character-feelings-line-graph-6116665 | x = story events, y = feeling, join the dots | story pictures under the columns, line joins the dots | teacher-made; page verified |
+| NZCER ARBs character ups-and-downs — https://arbs.nzcer.org.nz/print/3268/resource | reading assessment: show how a character's feelings change and why | each point carries its because sentence; the retell uses the graph as a map | good (assessment bank); verified |
+| British Library "Emotion timeline" | timeline of a character's feelings | (confirms the same mechanic) | search result only, unverified |
+
+Better than the sources: the faces are the story's own stickers, every point is tied to its picture and its reason, the child SAYS each because sentence, and the line ends "down, down… and up!" for the retell.
+
 ## Games list (Unit 5 so far)
 | Lesson | Signature game | Other games |
 |---|---|---|
@@ -39,6 +52,7 @@ never content. Unit-level sources (feelings + *because*, *has got* monster games
 | L2 | **Monster Builder** (new) | Read and Match (frames), Line Up (tall/short), Family Tree, Drag Match, Balloon Match, Sentence Build, Answer Race, Word Build (ea), Blend & Read (Slide) |
 | L3 | **Name That Feeling** game show | song "How Do You Feel?", Monster Whispers, Echo Hall, Peek-a-Boo Plates, Read & Check, Story Order, ee/ea Catch & Sort, Blend & Read (Gumball) |
 | L4 | **Monster Mix-Up** (new) | Read and Match (chalk), Dress-Up Studio, Washing Line, Shadows, Read and Do, Sound Pick (y at the end), Blend & Read (Frog) |
+| L5 | **Feelings Meter** (new) | Read and Match (cards), Reader (pages 1-9, 10-12), Prediction pause, Story Quiz Board, Party Crossword, I Spy at the party, Word Splat (ee/ea/y), Blend & Read, tongue twister |
 
 ## Video-game mechanics borrowed
 | Lesson | Mechanic | What the child does in English |
@@ -47,3 +61,4 @@ never content. Unit-level sources (feelings + *because*, *has got* monster games
 | L2 | character creator (build your avatar) | builds the monster they HEAR (*She's got three eyes and long horns*) |
 | L4 | **inspector check** (Papers, Please: compare the papers with what you see) | reads Bibi's description, finds the one part the machine got wrong, says the correction (*No! He's wearing a hat!*) |
 | L3 | **game-show buzzer round** (Jeopardy/quiz show: buzz in, points, lights) + **rhythm game** (sing-along on the beat) | buzzes the face that matches the dialogue (*I'm bored. The lesson is long.*), sings the verse lines on the beat |
+| L5 | **level graph / progress track** (the world map line that shows where you have been) | taps Bibi's face for each story picture, the line grows, says *Bibi is sad because she is tiny.* |

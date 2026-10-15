@@ -631,6 +631,14 @@ export type Scene =
        *  Check — every part must match the sentence. `body` sticker is square; parts sit at % of it. */
       body: string; eye: string; horns: { label: string; img: string }[]; mouths: { label: string; img: string }[];
       rounds: { line: string; eyes: 1 | 2 | 3; horns: number; mouth: number; name: string }[]; doneLine: string; }
+  | { id: string; kind: 'feelings-meter'; bg: string; teacher: string; title: string; who: CharKey;
+      /** ★ Feelings Meter (A1 U5L5, docs/a1-unit-5-monster-town.md §5.5): the story character's day as an emotion graph.
+       *  `feelings` = the rows, top (feels best) to bottom (feels worst); `points` = the story moments left to right.
+       *  For each moment the child taps the face on the side, a dot lands in that column and the line joins the dots;
+       *  then the sentence (`line`, with because) is read and said. */
+      feelings: { label: string; img: string }[];
+      points: { img: string; feeling: number; line: string }[];
+      doneLine: string; }
   | { id: string; kind: 'monster-mixup'; bg: string; teacher: string; title: string; who: CharKey;
       /** ★ Monster Mix-Up (A1 U5L4, docs/a1-unit-5-monster-town.md §5.4 "Monster Maker"): Bibi describes a monster
        *  (`line`, 2-3 sentences: has got + is wearing), the machine builds it — with ONE mistake (`mistake`). The child

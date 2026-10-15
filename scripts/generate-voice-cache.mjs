@@ -56,6 +56,7 @@ import * as foodScenes from '../src/content/playground-library/food-festival/sce
 import * as monsterScenes from '../src/content/playground-library/monster-town/scenes.ts';
 import { surveyQuestion, surveyAnswer, surveyReport, CAFE_WRONG, CAFE_YES } from '../src/content/playground-library/welcome-town/scene-components/foodRules.ts';
 import { BUILDER_WRONG, builderHint } from '../src/content/playground-library/welcome-town/scene-components/monsterRules.ts';
+import { METER_ASK, METER_WRONG } from '../src/content/playground-library/welcome-town/scene-components/meterRules.ts';
 import { MIXUP_FIND, MIXUP_FIXED, MIXUP_NOT_THERE, MIXUP_PICK } from '../src/content/playground-library/welcome-town/scene-components/mixupRules.ts';
 import { moodSentence, moodReason, moodAsk, MOOD_PULL, MOOD_WRONG } from '../src/content/playground-library/welcome-town/scene-components/moodRules.ts';
 import { placeSentence, roomSentences, whoseQuestion, ownerSentence, OWNER_YES, OWNER_NO, ROOM_AGAIN, ROOM_FREE_START, ROOM_DESCRIBE } from '../src/content/playground-library/welcome-town/scene-components/roomRules.ts';
@@ -881,6 +882,7 @@ const WT_EXTRACTORS = {
     ...(s.bag ?? []).flatMap((b) => [[s.who, b.line], ['teacher', b.say]])],
   'monster-builder': (s) => [[s.who, s.doneLine], ...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], ['teacher', `This is ${r.name}! ${r.line}`],
     ...['eyes', 'horns', 'mouth'].map((p) => [s.who, `${BUILDER_WRONG} ${builderHint(p, r.eyes, s.horns?.[r.horns]?.label ?? '', s.mouths?.[r.mouth]?.label ?? '')}`])])],
+  'feelings-meter': (s) => [[s.who, s.doneLine], [s.who, METER_ASK], [s.who, METER_WRONG], ...(s.points ?? []).map((pt) => ['teacher', pt.line])],
   'monster-mixup': (s) => [[s.who, s.doneLine], [s.who, MIXUP_NOT_THERE], [s.who, MIXUP_PICK], ...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, `${r.line} ${MIXUP_FIND}`], ['teacher', `${MIXUP_FIXED} ${r.say}`]])],
   'mood-machine': (s) => [[s.who, s.doneLine], [s.who, MOOD_PULL], [s.who, MOOD_WRONG],
     ...(s.rounds ?? []).flatMap((r) => [[s.who, `${moodReason(r.reason)} ${moodAsk(s.monster?.name ?? '')}`], ['teacher', moodSentence(s.monster?.name ?? '', s.feelings?.[r.feeling]?.feeling ?? '', r.reason)]])],
