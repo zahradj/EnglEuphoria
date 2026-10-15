@@ -1,4 +1,5 @@
 // Pre-A1 Season P2 "First sounds", Episode 1 "Cold Open" (the Phone), as a game deck on the Pre-A1 run of show (5/10/8/10/8/8/6/5).
+// v3 (owner 2026-10-15, docs/academy-pre-a1-reading-first.md): reading-first. Activate what the student knows (sort), blend, read a message (passage) and keep words for the word bank, then play the bank.
 // v2 (owner 2026-10-15, docs/academy-pre-a1-s02-e1-v2-plan.md): "Unlock the Lost Phone": five locks (Ears, Blend, Read, Say, Message), a key HUD, a vault door after each lock, a boss duel at Lock 4, a lesson clock for the teacher.
 // Season spec: src/curriculum/academy/preA1.ts (PA1_S02) and lesson plan docs/academy-pre-a1-s02-spec.md. Research: docs/research/academy-pa1s02e1-research.md.
 // New items (<= 8): phone, pin, tin, map, "This is a ___." + sounds /i/ /n/. Rules stated plainly before the practice; the student teaches the rule back (Wrap).
@@ -14,6 +15,7 @@ export const CRITERIA = [
   'I read two short lines: It is a pin. It is a tin.',
   'I said “This is a ___.” for a picture.',
   'I taught the rule back: slide the sounds, then say the word.',
+  'I read a message and kept words for my word bank.',
 ];
 
 const L = (text: string): TeachArt => ({ type: 'letters', text });
@@ -36,8 +38,8 @@ export const PA1_S02_E1: DeckScript = {
   title: 'First sounds · Cold Open',
   locks: ['Ears', 'Blend', 'Read', 'Say', 'Message'],
   clock: true,
-  // the required pages fill exactly the hour (9 min Remember?, 6 min Learn more, 10 min Mission with the boss lock); the dashed pages are extra practice the teacher can add or skip
-  partMinutes: [5, 9, 8, 10, 8, 6, 10, 4],
+  // the required pages fill exactly the hour (reading-first: 11 min Read with the message and the word bank, 8 min Remember?, 5 min Learn more, 9 min Mission with the boss lock); the dashed pages are extra practice the teacher can add or skip
+  partMinutes: [5, 8, 8, 10, 11, 5, 9, 4],
   objective: OBJECTIVE,
   criteria: CRITERIA,
   cast: ['Vee', 'Theo', 'Ava'],
@@ -48,7 +50,7 @@ export const PA1_S02_E1: DeckScript = {
     'Remember the sounds s, a, t, p',
     'A lost phone with five locks',
     'Locks 1 and 2: hear i and n, then blend them',
-    'Lock 3: read two short lines',
+    'Lock 3: read lines and a message, keep words',
     'Get ready for Lock 4: point and say',
     'Lock 4: say “This is a ___.” to open it',
     'Lock 5: read the message and teach the rule back',
@@ -58,7 +60,15 @@ export const PA1_S02_E1: DeckScript = {
     { id: 'title', kind: 'title', part: 0, bg: LOCKSCREEN, actors: [who('Vee', 'center', 'wave')], heading: 'First sounds', sub: 'The Phone · lesson 1' },
     { id: 'badge', kind: 'badge', part: 0, bg: GLOW, actors: [who('Theo', 'right', 'wave')], trains: [4], prompt: 'Theo found a lost phone. Put your name on its screen.', starter: 'My name is', ages: [13, 14, 15, 16, 17, 18], hints: ['Type only your name.'] },
     {
-      id: 'warm', kind: 'hearpick', part: 0, bg: LOCKSCREEN, actors: [who('Vee', 'right')], trains: [1],
+      id: 'activate', kind: 'sort', part: 0, bg: LOCKSCREEN, actors: [who('Vee', 'right')], trains: [6],
+      prompt: 'What do you already know? Tap a word, then tap a box. There is no wrong answer.',
+      save: 'known',
+      bins: [{ id: 'know', label: 'I know it', template: '{w}. I know it.' }, { id: 'new', label: 'New to me', template: '{w}. New to me.' }],
+      items: [{ id: 'phone', art: PHONE, word: 'phone' }, { id: 'map', art: MAP, word: 'map' }, { id: 'pin', art: PIN, word: 'pin' }, { id: 'tin', art: TIN, word: 'tin' }],
+      hints: ['Tap a word. Then choose a box. Both boxes are fine.'],
+    },
+    {
+      id: 'warm', kind: 'hearpick', part: 0, optional: true, bg: LOCKSCREEN, actors: [who('Vee', 'right')], trains: [1],
       prompt: 'Warm up your ears! Which letter do you hear?',
       rounds: [{ say: 'S', options: ['S', 'T', 'P'], answer: 'S' }, { say: 'P', options: ['A', 'P', 'T'], answer: 'P' }, { say: 'A', options: ['S', 'A', 'P'], answer: 'A' }, { say: 'T', options: ['T', 'S', 'A'], answer: 'T' }],
       hints: ['Listen, then look for the same letter.'],
@@ -195,6 +205,20 @@ export const PA1_S02_E1: DeckScript = {
       hints: ['Tap a word to hear it. Then pick the picture.'],
     },
     {
+      id: 'msg-theo', kind: 'passage', part: 4, lock: 3, bg: LOCKSCREEN, actors: [who('Theo', 'right')], trains: [3, 6],
+      prompt: 'A message from Theo. Listen, read it, then keep the words you want.',
+      from: 'Theo', bank: 'bank', keep: 3,
+      lines: ['I am Theo.', 'It is a pin.', 'It is in a tin.', 'It is a map.'],
+      keepFrom: ['pin', 'tin', 'map', 'in', 'it', 'is'],
+      hints: ['Tap any word to hear it. Then choose the words you want to remember.'],
+    },
+    {
+      id: 'bank-match', kind: 'match', part: 4, lock: 3, bg: LOCKSCREEN, actors: [who('Vee', 'right')], trains: [6], mode: 'listen',
+      prompt: 'Your word bank. Listen. Tap the word you hear.',
+      pairs: [{ word: 'pin', art: L('PIN') }, { word: 'tin', art: L('TIN') }, { word: 'map', art: L('MAP') }, { word: 'in', art: L('IN') }],
+      hints: ['Listen to the word, then look for it in your word bank.'],
+    },
+    {
       id: 'read-hear', kind: 'hearpick', part: 4, lock: 3, bg: LOCKSCREEN, actors: [who('Theo', 'right')], trains: [2],
       prompt: 'Which word do you hear? Tap it.',
       rounds: [{ say: 'pin', options: ['pin', 'tin', 'in'], answer: 'pin' }, { say: 'in', options: ['it', 'in', 'tin'], answer: 'in' }, { say: 'tin', options: ['pin', 'tin', 'it'], answer: 'tin' }],
@@ -236,7 +260,7 @@ export const PA1_S02_E1: DeckScript = {
       hints: ['Listen to the last word.'],
     },
     {
-      id: 'build-this', kind: 'build', part: 5, lock: 4, bg: VAULT, actors: [who('Ava', 'left')], trains: [4],
+      id: 'build-this', kind: 'build', part: 5, optional: true, lock: 4, bg: VAULT, actors: [who('Ava', 'left')], trains: [4],
       prompt: 'Build the sentence. Tap the words in the right order.',
       rounds: [{ cue: 'Say what it is.', target: 'This is a pin.', extra: ['it', 'tin'] }, { cue: 'Say what it is.', target: 'This is a phone.', extra: ['map', 'am'] }],
       hints: ['Start with This. Then the picture word.'],
@@ -281,7 +305,7 @@ export const PA1_S02_E1: DeckScript = {
     { id: 'vault-4', kind: 'vault', part: 6, lock: 4, bg: VAULT, actors: [who('Theo', 'left', 'thumbs')], line: 'Lock 4 is open!', reward: 'Key 4 of 5 · Say' },
 
     {
-      id: 'message', kind: 'reader', part: 6, lock: 5, bg: DAWN, actors: [who('Ava', 'left')], trains: [2, 3],
+      id: 'message', kind: 'reader', part: 6, lock: 5, bg: DAWN, actors: [who('Ava', 'left')], trains: [2, 3, 6],
       prompt: 'Lock 5 · The message. Read it. Which picture is it?',
       lines: [{ text: 'It is a pin.', art: PIN }, { text: 'It is a tin.', art: TIN }],
       hints: ['Tap a word to hear it. Then pick the picture.'],

@@ -20,6 +20,7 @@ export function undecodable(text: string, sounds: string[], sight: string[]): st
 export function readingTexts(slide: Slide): string[] {
   if (slide.kind === 'blend') return slide.rounds.map((r) => r.word);
   if (slide.kind === 'reader') return slide.lines.map((l) => l.text);
+  if (slide.kind === 'passage') return slide.lines;
   return [];
 }
 

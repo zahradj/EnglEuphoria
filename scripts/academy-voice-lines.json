@@ -2277,6 +2277,42 @@
   },
   {
     "who": "Vee",
+    "text": "What do you already know? Tap a word, then tap a box. There is no wrong answer."
+  },
+  {
+    "who": "Vee",
+    "text": "phone. I know it."
+  },
+  {
+    "who": "Vee",
+    "text": "phone. New to me."
+  },
+  {
+    "who": "Vee",
+    "text": "map. I know it."
+  },
+  {
+    "who": "Vee",
+    "text": "map. New to me."
+  },
+  {
+    "who": "Vee",
+    "text": "pin. I know it."
+  },
+  {
+    "who": "Vee",
+    "text": "pin. New to me."
+  },
+  {
+    "who": "Vee",
+    "text": "tin. I know it."
+  },
+  {
+    "who": "Vee",
+    "text": "tin. New to me."
+  },
+  {
+    "who": "Vee",
     "text": "Warm up your ears! Which letter do you hear?"
   },
   {
@@ -2505,6 +2541,70 @@
   },
   {
     "who": "Theo",
+    "text": "A message from Theo. Listen, read it, then keep the words you want."
+  },
+  {
+    "who": "Theo",
+    "text": "I am Theo."
+  },
+  {
+    "who": "Theo",
+    "text": "It is a pin."
+  },
+  {
+    "who": "Theo",
+    "text": "It is in a tin."
+  },
+  {
+    "who": "Theo",
+    "text": "It is a map."
+  },
+  {
+    "who": "Theo",
+    "text": "I"
+  },
+  {
+    "who": "Theo",
+    "text": "am"
+  },
+  {
+    "who": "Theo",
+    "text": "Theo"
+  },
+  {
+    "who": "Theo",
+    "text": "It"
+  },
+  {
+    "who": "Theo",
+    "text": "is"
+  },
+  {
+    "who": "Theo",
+    "text": "a"
+  },
+  {
+    "who": "Theo",
+    "text": "pin"
+  },
+  {
+    "who": "Theo",
+    "text": "in"
+  },
+  {
+    "who": "Theo",
+    "text": "tin"
+  },
+  {
+    "who": "Theo",
+    "text": "map"
+  },
+  {
+    "who": "Vee",
+    "text": "Your word bank. Listen. Tap the word you hear."
+  },
+  {
+    "who": "Theo",
     "text": "Which word do you hear? Tap it."
   },
   {
@@ -2530,10 +2630,6 @@
   {
     "who": "Theo",
     "text": "This is a phone."
-  },
-  {
-    "who": "Theo",
-    "text": "map"
   },
   {
     "who": "Theo",

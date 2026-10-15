@@ -7,7 +7,7 @@ import { Art } from './teach';
 
 /** Sort: your own opinions. Tap a picture, then a bin; the sentence is built from the bin's template, shown and spoken. No wrong answer. */
 export function SortView({ slide }: { slide: SortSlide }) {
-  const { right, done, speak } = useDeck();
+  const { right, done, speak, setVars } = useDeck();
   const [pick, setPick] = useState<string | null>(null);
   const [placed, setPlaced] = useState<Record<string, string>>({});
   const all = Object.keys(placed).length === slide.items.length;
@@ -18,7 +18,9 @@ export function SortView({ slide }: { slide: SortSlide }) {
     if (!pick) return;
     const it = slide.items.find((x) => x.id === pick)!;
     const bin = slide.bins.find((b) => b.id === binId)!;
-    setPlaced({ ...placed, [pick]: binId });
+    const next = { ...placed, [pick]: binId };
+    setPlaced(next);
+    if (slide.save) setVars({ [slide.save]: Object.entries(next).filter(([, b]) => b === slide.bins[0].id).map(([id]) => id).join(',') });
     setPick(null);
     right();
     void speak('Vee', bin.template.replace('{w}', it.word));

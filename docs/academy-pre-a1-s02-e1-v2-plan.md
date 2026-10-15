@@ -102,3 +102,14 @@ An activity not in this table is cut.
 - **Sound:** the "key" and "pin" sounds are synthesized by the player (no files, no voices), off in Calm mode and with Sounds off.
 - **Responses:** 110+ by the test's count, with the speaking checks (Say it on every duel picture, Take 1, Take 2, teach-back).
 - **Art:** three new plates (`vault-corridor`, `lockscreen-closeup`, `bus-stop-dawn`), reused story plates and the four cut-out cards.
+
+## 11. v3 — reading-first (owner, 2026-10-15)
+
+Direction: the youngest Academy student is 13 and has some English from school, so Pre-A1 activates it and then builds extensive reading and the sounds, and the vocabulary comes from the reading. Rule in `CLAUDE.md`; research `docs/research/academy-pre-a1-reading-research.md`; design note `docs/academy-pre-a1-reading-first.md`.
+
+Changes to this lesson:
+- **Activate** (Check-in): `activate` sort, "I know it / New to me" on phone, map, pin, tin (no wrong answers; the result is saved as `vars.known` for the teacher). The old letter warm-up is now optional.
+- **Read** (11 min, was 8): the decodable lines, then **a message from Theo** (`passage`: listen, read it yourself with every word tappable, keep 3 or more words), then **the word bank**: a listen-and-match with the kept words as word tiles (pin, tin, map, in), then the hear-and-pick, with the Lock 3 vault after it.
+- **Sixth success criterion:** "I read a message and kept words for my word bank."
+- **Part minutes now** [5, 8, 8, 10, 11, 5, 9, 4]; the build-the-sentence page is optional. Optional pages total about 15 minutes.
+- **Spaced return:** when the lesson is finished, the words the student kept (`vars.bank`) are added to the lesson's items and return on the Daily 10 schedule (`bankItems` in `practiceStore.ts`); Brown et al. found incidental gains fade without review. The recall plan's own Remember? still comes from the Season items (phone, pin, tin, map).

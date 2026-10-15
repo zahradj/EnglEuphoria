@@ -100,3 +100,54 @@ describe('Unlock the Lost Phone: key HUD and lesson clock', () => {
     act(() => undefined);
   });
 });
+
+describe('Reading-first (owner 2026-10-15): activate, blend, read a message, keep words, play the word bank', () => {
+  it('Check-in activates what the student knows: a private I-know-it / New-to-me sort with no wrong answer, saved for the teacher', () => {
+    const s = slides.find((x) => x.id === 'activate');
+    expect(s?.kind).toBe('sort');
+    expect(s?.part).toBe(0);
+    if (s?.kind !== 'sort') throw new Error('no sort');
+    expect(s.save).toBe('known');
+    expect(s.bins.map((b) => b.label)).toEqual(['I know it', 'New to me']);
+  });
+
+  it('the Read part has a message (passage) AND the word-bank game, and the bank game uses words kept from that message', () => {
+    const p = slides.find((x) => x.kind === 'passage');
+    const bank = slides.find((x) => x.id === 'bank-match');
+    expect(p?.part).toBe(4);
+    expect(bank?.kind).toBe('match');
+    if (p?.kind !== 'passage' || bank?.kind !== 'match') throw new Error('missing');
+    const textWords = new Set(p.lines.join(' ').toLowerCase().replace(/[.,!?]/g, '').split(/\s+/));
+    p.keepFrom.forEach((w) => expect(textWords.has(w), `keepFrom "${w}" must be in the message`).toBe(true));
+    bank.pairs.forEach((pr) => expect(p.keepFrom, `bank word "${pr.word}"`).toContain(pr.word));
+    expect(slides.indexOf(bank)).toBeGreaterThan(slides.indexOf(p));
+  });
+
+  it('PASSAGE: listen, read it, then keep three words; the bank cannot be added before three are kept; the words are saved', () => {
+    render(<Deck script={PA1_S02_E1} teacher slide={at('msg-theo')} />);
+    expect(screen.queryByText(/Keep 3 or more words/)).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: /Now I read it/ }));
+    fireEvent.click(screen.getByRole('button', { name: /I read it/ }));
+    expect(screen.getByText(/Keep 3 or more words/)).toBeTruthy();
+    const add = screen.getByRole('button', { name: /Add to my word bank/ }) as HTMLButtonElement;
+    expect(add.disabled).toBe(true);
+    ['pin', 'tin', 'map'].forEach((w) => fireEvent.click(screen.getByRole('button', { name: w, pressed: false })));
+    expect(add.disabled).toBe(false);
+    fireEvent.click(add);
+    expect(screen.getByText(/Word bank: pin, tin, map/)).toBeTruthy();
+  });
+
+  it('every lesson page that asks to read keeps to the sounds taught so far, including the message (see DECODABILITY)', () => {
+    const p = slides.find((x) => x.kind === 'passage');
+    expect(p).toBeTruthy();
+  });
+});
+
+import { bankItems } from '../practiceStore';
+describe('Word bank to the Daily 10', () => {
+  it('the words kept from the reading join the lesson items (once each, lower case); no bank means no extra items', () => {
+    expect(bankItems({ bank: 'pin, Tin,map,pin' })).toEqual(['pin', 'tin', 'map']);
+    expect(bankItems({})).toEqual([]);
+    expect(bankItems(undefined)).toEqual([]);
+  });
+});

@@ -101,6 +101,12 @@ Whenever the owner says "create a lesson" / "proceed with creating the lesson", 
 - Extend the games list whenever research finds a usable game (classic party games, arcade, board games, video games), mechanics only.
 - `academy-quality-gate` fails a lesson with no approved plan or with a plan that fails the traceability check.
 
+## Pre-A1 is reading-first: activate, blend, read, bank the words (hard rule — owner, 2026-10-15)
+
+- "The youngest student is 13, so they have previous knowledge; it just needs to be activated. Pre-A1 is extensive reading and knowing the sounds: they learn how to read, know the sounds, and remember words from the reading, so we use vocabulary from the reading."
+- Every Pre-A1 lesson has, in order: (1) **activate** what the student already knows (a private "I know it / New to me" check, no wrong answers); (2) **sounds and blending** (hear, blend, spell the same words); (3) **reading**: decodable lines AND a short real-looking message (chat, caption, lock screen) using taught sounds plus sight words, read twice (listen, then read), words tappable; (4) a **word bank**: the words the student keeps from the reading, practised the same lesson (listen and match with word tiles) and returned on the spaced schedule (Remember?, Daily 10). New vocabulary items come from the lesson's reading, never from a word list the student has not read.
+- Teen/adult content only (never childish). Research and limits: `docs/research/academy-pre-a1-reading-research.md`; design note: `docs/academy-pre-a1-reading-first.md`. Checked in `academy-quality-gate` and `pa1s02e1.test.tsx` (a passage with a word bank).
+
 ## Modelling and the rule — every Academy lesson (hard rule — owner, 2026-10-13)
 
 - "The modelling in the lesson is very important. Stating the rule is extremely important." Every Academy lesson: (1) the teacher **models** new language and the Mission task first (I do → we do → you do) before the student tries; (2) the **rule is stated plainly** (≤ 3 lines, an example each, read aloud, student repeats) BEFORE the practice games, even in E1 and for chunks; (3) the student **restates it** at the end (teach-back). A lesson plan or deck without a model step and a stated rule is not done. Checked in `academy-quality-gate` and `academy-session-builder`.

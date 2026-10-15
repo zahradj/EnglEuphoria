@@ -29,6 +29,9 @@ export function savePractice(studentKey: string, data: PracticeData): void {
 }
 
 /** A lesson was finished: its new items enter the Daily 10 (due tomorrow) and its "Say it" tally is kept. The same lesson played again only updates its tally. */
+/** The words the student kept from a reading page (vars.bank, a comma list): they join the lesson's own items and return on the spaced Daily 10 schedule. */
+export const bankItems = (vars: Record<string, string> | undefined): string[] => [...new Set((vars?.bank ?? '').split(',').map((w) => w.trim().toLowerCase()).filter(Boolean))];
+
 export function recordLesson(d: PracticeData, lessonId: string, items: string[], today: string, spoken: number): PracticeData {
   const others = d.lessons.filter((l) => l.id !== lessonId);
   return { ...d, items: addLessonItems(d.items, items, today), lessons: [...others, { id: lessonId, on: today, spoken }] };

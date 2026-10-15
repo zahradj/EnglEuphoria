@@ -32,6 +32,8 @@ const minutes = (s: Slide): number => {
     case 'blend': return 0.5 + s.rounds.length * 0.7;
     case 'rule': return 1;
     case 'vault': return 0.3;
+    case 'sort': return 0.6 + s.items.length * 0.45;
+    case 'passage': return 1.2 + s.lines.length * 0.6;
     case 'rhythm': return 0.5 + s.rounds.length * 0.4;
     case 'duel': return 0.8 + s.rounds.length * 0.7;
     case 'explore': return 0.6 + s.spots.length * 0.4;
@@ -57,7 +59,7 @@ describe('Pre-A1 S02 E1: Season spec and run of show', () => {
     expect(PA1_S02_E1.taughtSounds).toEqual(PA1_S02.soundsSoFar.slice(0, 6));
     slides.forEach((s) => (s.actors ?? []).forEach((a) => expect(PA1_S02_E1.cast, `${s.id} uses ${a.who}`).toContain(a.who)));
     expect(new Set(slides.map((s) => s.id)).size).toBe(slides.length);
-    expect(CRITERIA).toHaveLength(5);
+    expect(CRITERIA).toHaveLength(6); // five skills + "I read a message and kept words for my word bank"
   });
 
   it('follows the Pre-A1 shape; slides stay in part order and cover all 8 parts', () => {
@@ -69,7 +71,7 @@ describe('Pre-A1 S02 E1: Season spec and run of show', () => {
     expect(PA1_S02_E1.partGoals).toHaveLength(8);
   });
 
-  it('TIME: the REQUIRED pages fill the hour part by part (70-125 % of the lesson\'s own minutes, 57-64.5 in all); the optional pages are extra practice, at most 12 minutes', () => {
+  it('TIME: the REQUIRED pages fill the hour part by part (70-125 % of the lesson\'s own minutes, 57-64.5 in all); the optional pages are extra practice, at most 18 minutes', () => {
     const parts = partsFor(PA1_S02_E1);
     expect(parts.reduce((a, p) => a + p.minutes, 0)).toBe(60);
     const req = slides.filter((s) => !s.optional);
@@ -82,7 +84,7 @@ describe('Pre-A1 S02 E1: Season spec and run of show', () => {
     expect(total, `required total ${total.toFixed(1)} min`).toBeGreaterThanOrEqual(57);
     expect(total, `required total ${total.toFixed(1)} min`).toBeLessThanOrEqual(64.5);
     const extra = slides.filter((s) => s.optional).reduce((a, s) => a + minutes(s), 0);
-    expect(extra, `optional ${extra.toFixed(1)} min`).toBeLessThanOrEqual(12);
+    expect(extra, `optional ${extra.toFixed(1)} min`).toBeLessThanOrEqual(18);
   });
 
   it('RULE: two different games after every vocabulary introduction; no neighbouring slides share a kind; the rule is stated before the practice', () => {
