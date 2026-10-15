@@ -1,2 +1,8 @@
-+ public/lep1/scenes/bg-a1u5-show-wide.png (1376, 768)
-1/1 saved
+cut out: public/lep1/items/item-glasses.png (1019, 453)
+cut out: public/lep1/items/item-boots.png (821, 850)
++ public/lep1/scenes/bg-a1u5-story-8-wide.png (1376, 768)
++ public/lep1/scenes/bg-a1u5-story-9-wide.png (1376, 768)
++ public/lep1/scenes/bg-a1u5-laundry-wide.png (1376, 768)
++ public/lep1/items/item-glasses.png (1024, 1024)
++ public/lep1/items/item-boots.png (1024, 1024)
+5/5 saved
