@@ -331,7 +331,7 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
   const [checklist, setChecklist] = useState<ChecklistValue | null>(null);
   const showChecklist = isPlayground && !isTrialLesson && !!sceneLesson;
   const checklistPractice = useMemo(() => (showChecklist ? practiceLines(checklist) : []), [showChecklist, checklist]);
-  const moreList = useMemo(() => [...d.more, ...(d.extraMore.trim() ? [d.extraMore.trim()] : []), ...checklistPractice.map((x) => `More practice: ${x}`)], [d.more, d.extraMore, checklistPractice]);
+  const moreList = useMemo(() => [...d.more, ...(d.extraMore.trim() ? [d.extraMore.trim()] : []), ...checklistPractice.map((x) => `Keep practising: ${x.charAt(0).toLowerCase()}${x.slice(1)}`)], [d.more, d.extraMore, checklistPractice]);
   const verdictLine = useMemo(() => {
     if (!showChecklist || !checklist?.verdict) return '';
     const v = { nailed: '\u{1F3C6} Nailed it!', almost: '\u{1F44D} Almost there', practice: '\u{1F501} Needs more practice' }[checklist.verdict];
