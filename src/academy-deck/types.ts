@@ -208,6 +208,8 @@ export interface SortSlide extends Omit<SlideBase, 'items'> {
 /** Story (owner 2026-10-14: stories as full scene plates): each beat is ONE full-bleed generated scene with the cast painted into it (public/academy-art/bg/<plate>.webp); the lines show as film subtitles and are spoken; the plates cross-fade (never zoom or pan). Done when the last line has been seen. */
 export interface StorySlide extends SlideBase {
   kind: 'story';
+  /** listening segment: the lines are heard first and the subtitle stays hidden until the student taps "Show the text" */
+  listenFirst?: boolean;
   title: string;
   beats: { plate: string; lines: { who: CastName; text: string }[] }[];
 }
@@ -235,11 +237,15 @@ export interface RpgSlide extends SlideBase { kind: 'rpg'; prompt: string; npc: 
 export interface QuizSlide extends SlideBase { kind: 'quiz'; prompt: string; friend: CastName; questions: { q: string; options: string[]; answer: string; why: string; hint: string }[] }
 /** Triple Match (B1 S1, video-game mechanic: match-3). Three columns (base, past simple, past participle) of shuffled tiles; pick one tile in each column; when the three belong to the same verb they lock into a card with a pop, the trio is spoken, and a combo counter rises with each first-try triple. A wrong triple shakes and clears the picks (nothing is lost). Done when every verb is matched. */
 export interface TripleSlide extends SlideBase { kind: 'triple'; prompt: string; verbs: [string, string, string][] }
+/** Cloze (B1+): the passage again, with gaps where the vocabulary learned this lesson goes. A word bank of the missing words (plus no extras); tap a word, then a gap (or a gap, then a word). A wrong word shakes and the sentence is read back with a hint after two tries; nothing is lost. Done when every gap is filled. Gaps are written [[word]] inside `paragraphs`. */
+export interface ClozeSlide extends SlideBase { kind: 'cloze'; prompt: string; title: string; paragraphs: string[]; /** a short hint per gap word (shown after two wrong tries) */ gapHints?: Record<string, string> }
+/** Glitch Hunt (B1 S1, video-game mechanic: spot the glitch / bug hunt). A short chat in which ONE line has a tense glitch. The student taps the glitch (a wrong tap only shakes), then repairs it by choosing the right line; the repaired line is spoken with the reason. Done when every chat is repaired. */
+export interface GlitchSlide extends SlideBase { kind: 'glitch'; prompt: string; rounds: { lines: { who: CastName; text: string }[]; /** index of the line with the glitch */ glitch: number; /** the repaired line and two wrong repairs */ fix: string; options: string[]; /** one line that says why (the time word) */ why: string }[] }
 export interface WrapSlide extends SlideBase { kind: 'wrap'; heading: string; ticks: string[]; homework: string; clue: string }
 
 export type Slide =
   | TitleSlide | BriefSlide | BadgeSlide | DialSlide | LaneSlide | WhoSaidSlide | LockersSlide | NumTrainSlide | PadlockSlide | ConvoSlide | SpellSlide
-  | MatchSlide | CountUpSlide | BePickSlide | BuildSlide | FactCheckSlide | WriteSlide | HuntSlide | ShadowSlide | TeachSlide | ModelSlide | FindWrongSlide | BorderSlide | MemorySlide | NumWallSlide | PhoneChatSlide | FadeSlide | CardSlide | SaySlide | VaultSlide | RhythmSlide | DuelSlide | PassageSlide | ForgeSlide | StreakSlide | ReadQSlide | BossSlide | WordleSlide | RpgSlide | QuizSlide | TripleSlide | WrapSlide | BlendSlide | HearPickSlide | ReaderSlide | RuleSlide | ExploreSlide | SortSlide | StorySlide;
+  | MatchSlide | CountUpSlide | BePickSlide | BuildSlide | FactCheckSlide | WriteSlide | HuntSlide | ShadowSlide | TeachSlide | ModelSlide | FindWrongSlide | BorderSlide | MemorySlide | NumWallSlide | PhoneChatSlide | FadeSlide | CardSlide | SaySlide | VaultSlide | RhythmSlide | DuelSlide | PassageSlide | ForgeSlide | StreakSlide | ReadQSlide | BossSlide | WordleSlide | RpgSlide | QuizSlide | TripleSlide | GlitchSlide | ClozeSlide | WrapSlide | BlendSlide | HearPickSlide | ReaderSlide | RuleSlide | ExploreSlide | SortSlide | StorySlide;
 
 export interface DeckScript {
   lessonId: string;

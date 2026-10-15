@@ -2844,6 +2844,94 @@
     "text": "Ha! That is number two on my list."
   },
   {
+    "who": "Theo",
+    "text": "Listening check. Listen to each question about the dialogue (the text is hidden), then choose the best answer."
+  },
+  {
+    "who": "Vee",
+    "text": "What is the dare?"
+  },
+  {
+    "who": "Vee",
+    "text": "Why does Ava say that flying is easy?"
+  },
+  {
+    "who": "Vee",
+    "text": "What can you guess about Theo?"
+  },
+  {
+    "who": "Vee",
+    "text": "bucket list"
+  },
+  {
+    "who": "Vee",
+    "text": "My bucket list has ten things on it."
+  },
+  {
+    "who": "Vee",
+    "text": "dare"
+  },
+  {
+    "who": "Vee",
+    "text": "My cousin dared me to write a list."
+  },
+  {
+    "who": "Vee",
+    "text": "give it a go"
+  },
+  {
+    "who": "Vee",
+    "text": "I want to give surfing a go."
+  },
+  {
+    "who": "Vee",
+    "text": "once in a lifetime"
+  },
+  {
+    "who": "Vee",
+    "text": "A trip to Japan is once in a lifetime."
+  },
+  {
+    "who": "Vee",
+    "text": "tick it off"
+  },
+  {
+    "who": "Vee",
+    "text": "I tick it off when I do it."
+  },
+  {
+    "who": "Vee",
+    "text": "brave"
+  },
+  {
+    "who": "Vee",
+    "text": "Ava is brave: she has flown across the world."
+  },
+  {
+    "who": "Ava",
+    "text": "bucket list"
+  },
+  {
+    "who": "Ava",
+    "text": "dare"
+  },
+  {
+    "who": "Ava",
+    "text": "give it a go"
+  },
+  {
+    "who": "Ava",
+    "text": "tick it off"
+  },
+  {
+    "who": "Ava",
+    "text": "brave"
+  },
+  {
+    "who": "Vee",
+    "text": "Memory! Match each picture with its words."
+  },
+  {
     "who": "Vee",
     "text": "Now read Ava’s blog post. Listen, read it yourself, then keep the words you want for your word bank."
   },
@@ -3081,10 +3169,6 @@
   },
   {
     "who": "Ava",
-    "text": "brave"
-  },
-  {
-    "who": "Ava",
     "text": "Brave"
   },
   {
@@ -3257,10 +3341,6 @@
   },
   {
     "who": "Ava",
-    "text": "dare"
-  },
-  {
-    "who": "Ava",
     "text": "yourself"
   },
   {
@@ -3297,75 +3377,15 @@
   },
   {
     "who": "Vee",
-    "text": "bucket list"
-  },
-  {
-    "who": "Vee",
-    "text": "My bucket list has ten things on it."
-  },
-  {
-    "who": "Vee",
-    "text": "dare"
-  },
-  {
-    "who": "Vee",
-    "text": "My cousin dared me to write a list."
-  },
-  {
-    "who": "Vee",
-    "text": "give it a go"
-  },
-  {
-    "who": "Vee",
-    "text": "I want to give surfing a go."
-  },
-  {
-    "who": "Vee",
-    "text": "once in a lifetime"
-  },
-  {
-    "who": "Vee",
-    "text": "A trip to Japan is once in a lifetime."
-  },
-  {
-    "who": "Vee",
-    "text": "tick it off"
-  },
-  {
-    "who": "Vee",
-    "text": "I tick it off when I do it."
-  },
-  {
-    "who": "Vee",
-    "text": "brave"
-  },
-  {
-    "who": "Vee",
-    "text": "Ava is brave: she has flown across the world."
-  },
-  {
-    "who": "Ava",
-    "text": "bucket list"
-  },
-  {
-    "who": "Ava",
-    "text": "give it a go"
-  },
-  {
-    "who": "Ava",
-    "text": "tick it off"
-  },
-  {
-    "who": "Vee",
-    "text": "Memory! Match each picture with its words."
-  },
-  {
-    "who": "Vee",
     "text": "Reading questions. Choose the best answer. The text stays on the screen."
   },
   {
+    "who": "Vee",
+    "text": "Complete Vee’s note with the words and phrases you learned today."
+  },
+  {
     "who": "Ava",
-    "text": "Retell it. In two or three sentences, say what Ava’s post is about, and say if you agree that “you are brave when you do it anyway”."
+    "text": "Extra: retell it. In two or three sentences, say what Ava’s post is about, and say if you agree that “you are brave when you do it anyway”."
   },
   {
     "who": "Vee",
@@ -3445,10 +3465,6 @@
   },
   {
     "who": "Mia",
-    "text": "be, was, been."
-  },
-  {
-    "who": "Mia",
     "text": "see, saw, seen."
   },
   {
@@ -3458,6 +3474,10 @@
   {
     "who": "Mia",
     "text": "take, took, taken."
+  },
+  {
+    "who": "Vee",
+    "text": "Glitch Hunt! One line in each chat has a tense glitch. Tap it, then repair it."
   },
   {
     "who": "Ava",
@@ -3608,6 +3628,10 @@
     "text": "made"
   },
   {
+    "who": "Theo",
+    "text": "Two truths and a lie! Say three sentences about yourself with “have”: two are true, one is a lie. Can your teacher find the lie?"
+  },
+  {
     "who": "Vee",
     "text": "I would say Ava has done the most. She has flown across the world twice, and she has even eaten spicy noodles."
   },
@@ -3654,22 +3678,6 @@
   {
     "who": "Theo",
     "text": "Hmm, last August? Okay… what did you eat?"
-  },
-  {
-    "who": "Theo",
-    "text": "Amazing. What was the best thing you ate?"
-  },
-  {
-    "who": "Theo",
-    "text": "Ha, I have never eaten a pizza that big!"
-  },
-  {
-    "who": "Theo",
-    "text": "Classic. I have never been to Naples."
-  },
-  {
-    "who": "Theo",
-    "text": "Hold on, when was that?"
   },
   {
     "who": "Vee",

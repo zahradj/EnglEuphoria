@@ -30,6 +30,7 @@ import { ZenModeOverlay } from "@/components/classroom/ZenModeOverlay";
 import { PictureInPicture } from "@/components/classroom/PictureInPicture";
 import { LessonWrapUpDialog } from "@/components/classroom/LessonWrapUpDialog";
 import { LessonChecklistPopup } from "@/components/classroom/LessonChecklistPopup";
+import { AcademyChecklistPopup } from "@/academy-deck/teacher/AcademyChecklistPopup";
 import { TeacherInstructionsSidebar } from "@/components/classroom/TeacherInstructionsSidebar";
 import { ConnectionDebugPanel, type ConnectionHealthStatus } from "@/components/classroom/debug/ConnectionDebugPanel";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -831,6 +832,8 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
   // Whether the unified stage is currently showing an embedded Playground
   // scene lesson (vs. a regular slide deck) — gates the "Unlock Student
   // Activity" dock toggle. Mirrors MainStage's own sceneLessonRef derivation.
+  // Academy library (deck) lesson on the stage: one synthetic slide carries its id (classroomLessonResolver)
+  const academyDeckLessonId = hubType === 'academy' ? (displayedSlides as { type?: string; deckLessonRef?: { lessonId?: string } }[] | undefined)?.find((sl) => sl?.type === 'academy_deck')?.deckLessonRef?.lessonId : undefined;
   const isSceneLessonOnStage =
     hubType === 'playground' && stageMode === 'slide' && !!(displayedSlides as any)?.[0]?.sceneLessonRef;
 
@@ -997,6 +1000,9 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
       : 'disconnected';
 
   const classStarted = !!(sessionContext as any)?.classStarted;
+  // After a refresh the saved class state arrives a moment after the page (isConnected flips together with it).
+  // Until then `classStarted` reads false, which used to flash the "Start class" card and ring the bell again.
+  const stateLoaded = isConnected;
   // Only count *remote* peers — the teacher's own WebRTC `isConnected` must not
   // be mistaken for a student arrival.
   const remotePeerCount = (participants ?? []).filter(
@@ -1017,7 +1023,7 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
   // Ring a bell + notify the teacher the moment the student joins
   const studentJoinedFiredRef = useRef(false);
   useEffect(() => {
-    if (!studentPresent || classStarted || studentJoinedFiredRef.current) return;
+    if (!stateLoaded || !studentPresent || classStarted || studentJoinedFiredRef.current) return;
     studentJoinedFiredRef.current = true;
     try {
       const AC: typeof AudioContext | undefined =
@@ -1041,7 +1047,7 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
     toast({ title: '🔔 Student has joined', description: `${studentName} is in the classroom. You can start the lesson.` });
     // If teacher is already prepping inside the classroom, surface the top-right "Start lesson" nudge.
     setShowStartNudge(true);
-  }, [studentPresent, classStarted, toast, studentName]);
+  }, [stateLoaded, studentPresent, classStarted, toast, studentName]);
 
   const startingRef = useRef(false);
   const handleStartClass = useCallback(async (opts?: { force?: boolean }) => {
@@ -1074,7 +1080,7 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
   return (
     <div className={`h-dvh w-full ${hubBg} text-gray-900 flex flex-col overflow-hidden relative`}>
       <TalkTimeMeter bookingId={classId} stream={media.stream} />
-      {!classStarted && !prepMode && (
+      {stateLoaded && !classStarted && !prepMode && (
         <div className="absolute inset-0 z-[120] flex items-center justify-center bg-black/30 backdrop-blur-[2px] pointer-events-none">
           <div className="pointer-events-auto text-center max-w-sm w-[90%] px-6 py-6 bg-white rounded-2xl shadow-2xl border border-gray-200">
             <div className="w-14 h-14 rounded-full bg-gray-100 mx-auto mb-3 flex items-center justify-center">
@@ -1147,7 +1153,7 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
       )}
 
       {/* Top-right nudge shown when teacher is prepping and student has joined (or any time pre-start while prepping) */}
-      {!classStarted && prepMode && (studentPresent || showStartNudge) && (
+      {stateLoaded && !classStarted && prepMode && (studentPresent || showStartNudge) && (
         <div className="absolute top-4 right-4 z-[120] pointer-events-auto animate-in slide-in-from-right-2 fade-in duration-200">
           <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 px-4 py-3 w-[300px]">
             <div className="flex items-start gap-2 mb-2">
@@ -1674,6 +1680,18 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
           bookingId={classId}
           currentPage={sceneNavState.total > 0 ? sceneNavState.sceneIdx + 1 : null}
           accent="#FE6A2F"
+        />
+      )}
+
+      {/* Academy lesson checklist — teacher-only pop-up, optional (twin of the Playground one); the marks go into the report */}
+      {hubType === 'academy' && stageMode === 'slide' && !isTrial && academyDeckLessonId && (
+        <AcademyChecklistPopup
+          key={academyDeckLessonId}
+          lessonId={academyDeckLessonId}
+          sessionId={session?.id}
+          bookingId={classId}
+          studentId={studentId}
+          slideIndex={sceneNavState.total > 0 ? sceneNavState.sceneIdx : null}
         />
       )}
 

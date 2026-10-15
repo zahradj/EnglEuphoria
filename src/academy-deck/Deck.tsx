@@ -20,7 +20,7 @@ import { PassageView } from './slides/passage';
 import { LobbyView, HubMark } from './slides/lobby';
 import { levelLine, rankOf, xpOf } from './hub';
 import { ReadQView } from './slides/readq';
-import { BossView, WordleView, RpgView, QuizView, TripleView } from './slides/games';
+import { BossView, WordleView, RpgView, QuizView, TripleView, GlitchView, ClozeView } from './slides/games';
 import { ForgeView, StreakView } from './slides/forge';
 import { LessonClock } from './LessonClock';
 import { playSfx } from './sfx';
@@ -74,7 +74,7 @@ function clearedStars(s: Stats): number {
 /** The teaching ladder shown to the student: watch it done (I do), practise together (we do), your turn (you do), create (you make it yours). */
 const STAGE_LABEL: Record<string, string> = { review: 'Warm-up', context: 'Watch and listen', model: 'Watch and learn', rule: 'The rule', controlled: 'Practise together', free: 'Your turn', produce: 'Make it yours' };
 
-const SKILL: Record<string, string> = { say: 'Speaking', fade: 'Speaking', passage: 'Reading', readq: 'Reading', hearpick: 'Listening', story: 'Listening', model: 'Listening', write: 'Writing', build: 'Writing', boss: 'Game', wordle: 'Game', rpg: 'Game', quiz: 'Game', triple: 'Game', sort: 'Game', memory: 'Game', match: 'Game', forge: 'Game', streak: 'Game', explore: 'Game', hunt: 'Game', vault: 'Game', duel: 'Game', rhythm: 'Game' };
+const SKILL: Record<string, string> = { say: 'Speaking', fade: 'Speaking', passage: 'Reading', readq: 'Reading', hearpick: 'Listening', story: 'Listening', model: 'Listening', write: 'Writing', build: 'Writing', boss: 'Game', wordle: 'Game', rpg: 'Game', quiz: 'Game', triple: 'Game', glitch: 'Game', cloze: 'Reading', sort: 'Game', memory: 'Game', match: 'Game', forge: 'Game', streak: 'Game', explore: 'Game', hunt: 'Game', vault: 'Game', duel: 'Game', rhythm: 'Game' };
 const skillOf = (kind: string): string => SKILL[kind] ?? '';
 
 function SlideView({ slide, script, onStart }: { slide: Slide; script: DeckScript; onStart: () => void }) {
@@ -125,6 +125,8 @@ function SlideView({ slide, script, onStart }: { slide: Slide; script: DeckScrip
     case 'rpg': return <RpgView slide={slide} />;
     case 'quiz': return <QuizView slide={slide} />;
     case 'triple': return <TripleView slide={slide} />;
+    case 'glitch': return <GlitchView slide={slide} />;
+    case 'cloze': return <ClozeView slide={slide} />;
     case 'forge': return <ForgeView slide={slide} />;
     case 'streak': return <StreakView slide={slide} />;
     case 'wrap': return <WrapView slide={slide} />;
@@ -153,9 +155,11 @@ export interface DeckProps {
   /** homework quest mode: no part title cards, the strip label is `label`, and every solved slide reports its wrong tries */
   homework?: { label: string };
   onSlideDone?: (slide: Slide, result: { wrong: number }) => void;
+  /** every wrong try on a slide (the live classroom keeps what the student tried but did not finish) */
+  onSlideWrong?: (slide: Slide, wrongSoFar: number) => void;
 }
 
-export function Deck({ script, artBase, audioBase, teacher = false, freeNext = false, slide: controlled, start, embedded = false, follow = false, onSlide, onFinish, homework, onSlideDone }: DeckProps) {
+export function Deck({ script, artBase, audioBase, teacher = false, freeNext = false, slide: controlled, start, embedded = false, follow = false, onSlide, onFinish, homework, onSlideDone, onSlideWrong }: DeckProps) {
   const [own, setOwn] = useState(start ?? 0);
   const index = Math.min(controlled ?? own, script.slides.length - 1);
   const go = useCallback((i: number) => {
@@ -274,6 +278,8 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
   slideRef.current = cur;
   const cbRef = useRef(onSlideDone);
   cbRef.current = onSlideDone;
+  const wrongCb = useRef(onSlideWrong);
+  wrongCb.current = onSlideWrong;
   const done = useCallback(() => setSolved((s) => {
     if (s[curId.current]) return s;
     // report once per slide, outside the state updater's purity: schedule it
@@ -297,6 +303,7 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
   }, []);
   const wrong = useCallback(() => {
     wrongBySlide.current[curId.current] = (wrongBySlide.current[curId.current] ?? 0) + 1;
+    wrongCb.current?.(slideRef.current, wrongBySlide.current[curId.current]);
     setStats((s) => ({ ...s, wrong: s.wrong + 1 }));
     comboRef.current = 0;
     setCombo(0);

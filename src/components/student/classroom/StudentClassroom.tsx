@@ -672,9 +672,9 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
               userId={studentId}
               hubType={hubType}
               reactions={STUDENT_REACTIONS}
-              // Vertical strip on the right edge: at the bottom-centre it sat
-              // on top of the scene lesson's progress dots / nav.
-              placement="side"
+              // Bottom-centre of the page (owner, 2026-10-15), small and low so it
+              // sits under the lesson's own progress dots.
+              placement="bottom"
               canSend
             />
           )}

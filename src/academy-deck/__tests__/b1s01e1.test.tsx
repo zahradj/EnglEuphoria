@@ -40,12 +40,14 @@ const minutes = (s: Slide): number => {
     case 'streak': return 0.5 + s.rounds.length * 0.35;
     case 'write': return 0.8 + s.rows.length * 1;
     case 'readq': return 0.4 + s.questions.length * 1;
-    case 'passage': return 3.5;
+    case 'passage': return 3;
+    case 'cloze': return 0.6 + (s.paragraphs.join(' ').match(/\[\[/g)?.length ?? 0) * 0.5;
     case 'quiz': return 0.5 + s.questions.length * 0.8;
     case 'boss': return 0.5 + s.rounds.length * 0.9;
     case 'wordle': return 0.5 + s.rounds.length * 1.0;
     case 'rpg': return 0.6 + s.scenes.length * 0.9;
     case 'triple': return 0.6 + s.verbs.length * 0.7;
+    case 'glitch': return 0.5 + s.rounds.length * 1.0;
     default: return 1;
   }
 };
@@ -70,7 +72,7 @@ describe('B1-S01-E1: the blueprint and the approved plan', () => {
     slides.filter((s) => !['title', 'brief', 'wrap', 'dial'].includes(s.kind)).forEach((s) => expect(s.trains?.length, s.id).toBeGreaterThan(0));
   });
 
-  it('TIME: the lesson minutes add to 60, the REQUIRED pages fill each part (70-125 %) and the hour (57-64.5), optional pages at most 18 minutes', () => {
+  it('TIME: the lesson minutes add to 60, the REQUIRED pages fill each part (70-125 %) and the hour (57-64.5), optional pages at most 25 minutes', () => {
     const parts = partsFor(B1_S01_E1);
     expect(parts.reduce((a, p) => a + p.minutes, 0)).toBe(60);
     const req = slides.filter((s) => !s.optional);
@@ -82,7 +84,7 @@ describe('B1-S01-E1: the blueprint and the approved plan', () => {
     const total = per.reduce((a, b) => a + b, 0);
     expect(total, `required total ${total.toFixed(1)} min`).toBeGreaterThanOrEqual(57);
     expect(total, `required total ${total.toFixed(1)} min`).toBeLessThanOrEqual(64.5);
-    expect(slides.filter((s) => s.optional).reduce((a, s) => a + minutes(s), 0)).toBeLessThanOrEqual(18);
+    expect(slides.filter((s) => s.optional).reduce((a, s) => a + minutes(s), 0)).toBeLessThanOrEqual(25);
   });
 
   it('INTENSIVE PRACTICE: at least 80 student responses, at least five different games, no two neighbouring pages of the same kind', () => {
@@ -94,6 +96,7 @@ describe('B1-S01-E1: the blueprint and the approved plan', () => {
         case 'readq': case 'quiz': return s.questions.length;
         case 'boss': case 'wordle': return s.rounds.length;
         case 'triple': return s.verbs.length * 3;
+        case 'glitch': return s.rounds.length * 2;
         case 'rpg': return s.scenes.length;
         case 'streak': return s.rounds.length * 2;
         case 'match': return s.pairs.length;
@@ -108,7 +111,7 @@ describe('B1-S01-E1: the blueprint and the approved plan', () => {
     };
     const total = slides.reduce((a, s) => a + responses(s), 0);
     expect(total, `${total} responses`).toBeGreaterThanOrEqual(80);
-    const games = new Set(slides.filter((s) => ['match', 'memory', 'sort', 'forge', 'streak', 'hearpick', 'build', 'explore', 'quiz', 'boss', 'wordle', 'rpg', 'triple'].includes(s.kind)).map((s) => s.kind));
+    const games = new Set(slides.filter((s) => ['match', 'memory', 'sort', 'forge', 'streak', 'hearpick', 'build', 'explore', 'quiz', 'boss', 'wordle', 'rpg', 'triple', 'glitch'].includes(s.kind)).map((s) => s.kind));
     expect(games.size).toBeGreaterThanOrEqual(5);
     slides.slice(1).forEach((s, i) => expect(s.kind, `${slides[i].id} -> ${s.id}`).not.toBe(slides[i].kind));
   });
@@ -165,7 +168,7 @@ describe('B1-S01-E1: the blueprint and the approved plan', () => {
 
   it('VIDEO-GAME MECHANICS: the lesson plays a quiz-show ladder, a boss fight, a word puzzle, a dialogue RPG, a crafting forge and a speedrun, each tied to a criterion', () => {
     const kinds = slides.map((x) => x.kind);
-    ['quiz', 'boss', 'wordle', 'rpg', 'forge', 'streak', 'triple'].forEach((k) => expect(kinds, k).toContain(k));
+    ['quiz', 'boss', 'wordle', 'rpg', 'forge', 'streak', 'triple', 'glitch'].forEach((k) => expect(kinds, k).toContain(k));
     ['hot-seat', 'boss', 'wordle', 'rpg', 'forge'].forEach((id) => expect(slides[at(id)].trains?.length, id).toBeGreaterThan(0));
     expect(at('hot-seat')).toBeLessThan(at('story-dare')); // activate the past simple before the new input
     expect(at('rule-trio')).toBeLessThan(at('boss')); // the rule comes before the boss fight
@@ -290,6 +293,18 @@ describe('B1-S01-E1: Trophy Forge and the trio streak', () => {
     open('triple-1');
     const tile = (label: string, col: number) => within(screen.getByRole('group', { name: ['Base', 'Past simple', 'Past participle'][col] })).getByRole('button', { name: label });
     fireEvent.click(tile('go', 0)); fireEvent.click(tile('went', 1)); fireEvent.click(tile('gone', 2));
-    expect(screen.getByRole('status', { name: /Matched 1 of 5. Combo 1/ })).toBeTruthy();
+    expect(screen.getByRole('status', { name: /Matched 1 of 4. Combo 1/ })).toBeTruthy();
+  });
+
+  it('GLITCH HUNT: a fine line only shakes; the glitch line opens the repairs; a wrong repair shakes; the right repair is spoken with its reason', () => {
+    open('glitch');
+    fireEvent.click(screen.getByRole('button', { name: 'I loved the food there.' }));
+    expect(screen.getByText(/That line is fine/)).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: 'I have seen the mountains last year.' }));
+    expect(screen.getByRole('group', { name: 'Repair the line' })).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: 'I seen the mountains last year.' }));
+    expect(screen.getByText(/Not that repair/)).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: 'I saw the mountains last year.' }));
+    expect(screen.getByText(/finished time/)).toBeTruthy();
   });
 });

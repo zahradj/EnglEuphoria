@@ -444,6 +444,9 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
                           role={role}
                           persistedSceneIdx={sceneLessonIdx}
                           onSceneIdxPersist={onPersistSceneLessonIdx}
+                          sessionId={sessionId}
+                          userId={userId}
+                          onNavState={handleSceneNavState}
                         />
                       </ClassroomSceneErrorBoundary>
                     </div>

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { shuffled, useDeck } from '../ctx';
-import type { BossSlide, QuizSlide, RpgSlide, TripleSlide, WordleSlide } from '../types';
+import type { BossSlide, ClozeSlide, GlitchSlide, QuizSlide, RpgSlide, TripleSlide, WordleSlide } from '../types';
 import { Feedback, NOT_YET, Panel } from './shared';
 
 /* Video-game mechanics for the B1 lessons. Each is a small loop with a clear goal and a clear reward; none can lose the student's progress (a miss costs a shield, a grey option, a retry). */
@@ -314,6 +314,129 @@ export function TripleView({ slide }: { slide: TripleSlide }) {
         {bad && <Feedback kind="try">Not the same verb. Look again: base, past, participle.</Feedback>}
         {finished && <Feedback kind="ok">All {n} triples matched! Best combo ×{best}.</Feedback>}
         {!finished && <p className="ad-hint-line">Tap one tile in each column that belong together, like go · went · gone.</p>}
+      </div>
+    </Panel>
+  );
+}
+
+/** Cloze: complete the passage with the vocabulary learned. */
+export function ClozeView({ slide }: { slide: ClozeSlide }) {
+  const { right, wrong, done, seed, speak } = useDeck();
+  const lead = slide.actors?.[0]?.who ?? 'Vee';
+  const gaps = useMemo(() => {
+    const out: string[] = [];
+    slide.paragraphs.forEach((p) => { for (const m of p.matchAll(/\[\[([^\]]+)\]\]/g)) out.push(m[1]); });
+    return out;
+  }, [slide.paragraphs]);
+  const bank = useMemo(() => shuffled(gaps.map((g, i) => ({ w: g, i })), seed + 91), [gaps, seed]);
+  const [filled, setFilled] = useState<Record<number, number>>({});
+  const [word, setWord] = useState<number | null>(null);
+  const [gap, setGap] = useState<number | null>(null);
+  const [bad, setBad] = useState<number | null>(null);
+  const [tries, setTries] = useState<Record<number, number>>({});
+  const [slips, setSlips] = useState(0);
+  const usedBank = new Set(Object.values(filled));
+  const finished = Object.keys(filled).length === gaps.length;
+  useEffect(() => { if (finished) done(); }, [finished, done]);
+  const place = (g: number, b: number) => {
+    if (filled[g] !== undefined) return;
+    const w = bank[b].w;
+    if (w === gaps[g]) {
+      setFilled((f) => ({ ...f, [g]: b })); setWord(null); setGap(null);
+      if (!tries[g]) right();
+      void speak(lead, w);
+    } else {
+      wrong(); setBad(g); setSlips((n) => n + 1); setTries((t) => ({ ...t, [g]: (t[g] ?? 0) + 1 }));
+      window.setTimeout(() => setBad(null), 450); setWord(null); setGap(null);
+    }
+  };
+  const pickWord = (b: number) => { if (usedBank.has(b)) return; if (gap !== null) place(gap, b); else setWord(b); };
+  const pickGap = (g: number) => { if (filled[g] !== undefined) return; if (word !== null) place(g, word); else setGap(g); };
+  let gi = -1;
+  return (
+    <Panel title={slide.prompt} wide variant="glass">
+      <div className="ad-cloze">
+        <article className="ad-cloze-text" aria-label={slide.title}>
+          <h3>{slide.title}</h3>
+          {slide.paragraphs.map((p, pi) => (
+            <p key={pi}>
+              {p.split(/(\[\[[^\]]+\]\])/).map((chunk, ci) => {
+                const m = /^\[\[([^\]]+)\]\]$/.exec(chunk);
+                if (!m) return <span key={ci}>{chunk}</span>;
+                gi += 1;
+                const g = gi;
+                const hint = (tries[g] ?? 0) >= 2 ? slide.gapHints?.[m[1]] : undefined;
+                return (
+                  <button key={ci} type="button" className="ad-gap" data-filled={filled[g] !== undefined || undefined} data-on={gap === g || undefined} data-bad={bad === g || undefined} onClick={() => pickGap(g)} aria-label={filled[g] !== undefined ? bank[filled[g]].w : `Gap ${g + 1}`}>
+                    {filled[g] !== undefined ? bank[filled[g]].w : (hint ? `(${hint})` : '\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0')}
+                  </button>
+                );
+              })}
+            </p>
+          ))}
+        </article>
+        <div className="ad-cloze-bank" role="group" aria-label="Word bank">
+          <span>Word bank</span>
+          {bank.map((b, bi) => <button key={bi} type="button" className="ad-pk-tile" data-on={word === bi || undefined} disabled={usedBank.has(bi)} onClick={() => pickWord(bi)}>{b.w}</button>)}
+        </div>
+        {slips > 0 && !finished && <Feedback kind="try">{NOT_YET} Read the sentence again: which word fits the meaning?</Feedback>}
+        {finished && <Feedback kind="ok">The whole passage is complete. You used all {gaps.length} words.</Feedback>}
+        {!finished && <p className="ad-hint-line">Tap a word, then the gap where it belongs. {Object.keys(filled).length} of {gaps.length} done.</p>}
+      </div>
+    </Panel>
+  );
+}
+
+/** Glitch Hunt (spot the bug): tap the line with the tense glitch, then repair it with the right line; the repaired line is read aloud with the reason. */
+export function GlitchView({ slide }: { slide: GlitchSlide }) {
+  const { right, wrong, done, seed, speak } = useDeck();
+  const lead = slide.actors?.[0]?.who ?? 'Vee';
+  const total = slide.rounds.length;
+  const [i, setI] = useState(0);
+  const [found, setFound] = useState(false);
+  const [fixed, setFixed] = useState(false);
+  const [bad, setBad] = useState<string | null>(null);
+  const [slip, setSlip] = useState(false);
+  const finished = i >= total;
+  const r = slide.rounds[i];
+  const opts = useMemo(() => (r ? shuffled(r.options, seed + i * 13) : []), [r, seed, i]);
+  useEffect(() => { if (finished) done(); }, [finished, done]);
+  const tapLine = (k: number) => {
+    if (!r || found) return;
+    if (k === r.glitch) setFound(true);
+    else { wrong(); setBad(`line${k}`); setSlip(true); window.setTimeout(() => setBad(null), 500); }
+  };
+  const repair = (o: string) => {
+    if (!r || fixed) return;
+    if (o === r.fix) {
+      if (!slip) right();
+      setFixed(true);
+      void speak(r.lines[r.glitch].who, r.fix);
+      window.setTimeout(() => { setI((n) => n + 1); setFound(false); setFixed(false); setSlip(false); }, 2300);
+    } else { wrong(); setSlip(true); setBad(o); window.setTimeout(() => setBad(null), 500); }
+  };
+  if (finished || !r) return <Panel title={slide.prompt} wide variant="glass"><Feedback kind="ok">All {total} glitches repaired!</Feedback></Panel>;
+  return (
+    <Panel title={slide.prompt} wide variant="glass">
+      <div className="ad-glitch">
+        <div className="ad-glitch-hud" role="status">Glitch <b>{i + 1}</b> of {total} · {found ? (fixed ? 'Repaired!' : 'Found it! Now repair it.') : 'Tap the line with the glitch.'}</div>
+        <ul className="ad-glitch-chat" aria-label="Chat">
+          {r.lines.map((l, k) => (
+            <li key={k} className="ad-glitch-row" data-who={l.who}>
+              <b>{l.who}</b>
+              <button type="button" className="ad-glitch-line" data-bad={bad === `line${k}` || undefined} data-found={(found && k === r.glitch && !fixed) || undefined} data-fixed={(fixed && k === r.glitch) || undefined} disabled={found} onClick={() => tapLine(k)}>
+                {fixed && k === r.glitch ? r.fix : l.text}
+              </button>
+            </li>
+          ))}
+        </ul>
+        {found && !fixed && (
+          <div className="ad-glitch-fix" role="group" aria-label="Repair the line">
+            {opts.map((o) => <button key={o} type="button" className="ad-glitch-opt" data-bad={bad === o || undefined} onClick={() => repair(o)}>{o}</button>)}
+          </div>
+        )}
+        {fixed && <Feedback kind="ok">{r.why}</Feedback>}
+        {bad && !fixed && <Feedback kind="try">{found ? 'Not that repair. Check the time word.' : 'That line is fine. Look again.'}</Feedback>}
       </div>
     </Panel>
   );
