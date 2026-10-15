@@ -45,6 +45,19 @@ never content. Unit-level sources (feelings + *because*, *has got* monster games
 
 Better than the sources: the faces are the story's own stickers, every point is tied to its picture and its reason, the child SAYS each because sentence, and the line ends "down, down… and up!" for the retell.
 
+## Lesson 6 — Feelings Charades! (extra practice)
+| Source (URL) | What it does | Taken (mechanic) | Quality / limits |
+|---|---|---|---|
+| eslactive Guess Who — https://eslactive.com/?p=8393 | pairs: one picks a person, the other asks yes/no questions ("Is she wearing glasses?") | Guess Who ★: the child asks, the friend answers, faces are ruled out | good; search result, page not opened (unverified) |
+| Twinkl "Guess Who Game" — https://www.twinkl.com.au/resource/t-t-11758-guess-who-game | young learners practise "have got" questions with a picture line-up | "Has your monster got…?" questions; short answers | commercial resource; search result only (unverified) |
+| Jardín de idiomas "Guess Who? Children" — https://jardindeidiomas.gumroad.com/l/guesswho-children-ENG | printable line-up covering have / be / wear | three question types in one board (has got / is wearing / is + colour) | free printable; search result only (unverified) |
+| ESL KidStuff emotions games — https://www.eslkidstuff.com/esl-kids-games/emotions-games.htm | feelings charades: the teacher acts, the class guesses, the winner acts next | Charades on the curtain stage, roles swap | good; search result (unverified) |
+| Twinkl "Feelings Charades" — https://www.twinkl.de/resource/feelings-charades-game-au-t-1760323693 | picture + word cards, act without talking | feelings drawn as faces in Draw That (picture first, no reading needed) | commercial; search result (unverified) |
+| Morningside Center "Feelings Charade" — https://morningsidecenter.org/node/1031 | much of the learning is in the wrong guesses | the guesser must add WHY ("You're scared because it's dark!"); a wrong guess is talked through | good (SEL centre); search result (unverified) |
+| British Council LearnEnglish Kids "describing people" — https://learnenglishkids.britishcouncil.org/grammar-vocabulary/word-games/describing-1 | make sentences: "Are you wearing glasses? Have you got long hair?" | the free-talk questions about the child | good; page not opened (unverified) |
+
+Better than the sources: the doors close by themselves (attention stays on the question, not on bookkeeping), every answer is a full model sentence, the roles swap so the child both ASKS and ANSWERS, and the game can always be won with the language (`guessWho.test.ts` checks that every monster can be found by questions).
+
 ## Games list (Unit 5 so far)
 | Lesson | Signature game | Other games |
 |---|---|---|
@@ -52,6 +65,7 @@ Better than the sources: the faces are the story's own stickers, every point is 
 | L2 | **Monster Builder** (new) | Read and Match (frames), Line Up (tall/short), Family Tree, Drag Match, Balloon Match, Sentence Build, Answer Race, Word Build (ea), Blend & Read (Slide) |
 | L3 | **Name That Feeling** game show | song "How Do You Feel?", Monster Whispers, Echo Hall, Peek-a-Boo Plates, Read & Check, Story Order, ee/ea Catch & Sort, Blend & Read (Gumball) |
 | L4 | **Monster Mix-Up** (new) | Read and Match (chalk), Dress-Up Studio, Washing Line, Shadows, Read and Do, Sound Pick (y at the end), Blend & Read (Frog) |
+| L6 | **Guess Who** (new) | Charades, Draw That (feelings faces), Go Fish (clothes and party things), Monster Bingo, Save the Balloon (scarf, teeth, sleep), Tic-Tac-Toe, Hot Potato, Pass the Present, Dominoes, Twister Race, Blend & Read (Slide) |
 | L5 | **Feelings Meter** (new) | Read and Match (cards), Reader (pages 1-9, 10-12), Prediction pause, Story Quiz Board, Party Crossword, I Spy at the party, Word Splat (ee/ea/y), Blend & Read, tongue twister |
 
 ## Video-game mechanics borrowed
@@ -62,3 +76,4 @@ Better than the sources: the faces are the story's own stickers, every point is 
 | L4 | **inspector check** (Papers, Please: compare the papers with what you see) | reads Bibi's description, finds the one part the machine got wrong, says the correction (*No! He's wearing a hat!*) |
 | L3 | **game-show buzzer round** (Jeopardy/quiz show: buzz in, points, lights) + **rhythm game** (sing-along on the beat) | buzzes the face that matches the dialogue (*I'm bored. The lesson is long.*), sings the verse lines on the beat |
 | L5 | **level graph / progress track** (the world map line that shows where you have been) | taps Bibi's face for each story picture, the line grows, says *Bibi is sad because she is tiny.* |
+| L6 | **line-up deduction** (Guess Who / detective elimination: each clue closes doors until one suspect is left) | asks *Has your monster got long horns?*, hears *No! My monster hasn't got long horns.*, then hides a monster and answers Bibi's questions |

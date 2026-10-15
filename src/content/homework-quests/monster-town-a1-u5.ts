@@ -200,3 +200,35 @@ export const QUEST_BIBI_STORY_A1_U5L5: HomeworkQuest = {
     chest('You did it! Story star!', page(12)),
   ],
 };
+
+/** Lesson 6 "Feelings Charades!" */
+export const QUEST_GAME_NIGHT_A1_U5L6: HomeworkQuest = {
+  id: 'game-night-a1-u5l6', title: 'Game Night Quest', subtitle: 'Feelings Charades! · A1 Unit 5 · Lesson 6', level: 'A1', lessonKey: 'monster-rich-5-6',
+  theme: theme(`${S}/bg-a1u5-gamenight-wide.png`), voice: 'teacher', praise,
+  levels: [
+    { kind: 'picture-choice', name: 'Which Feeling?', icon: '🎭', intro: 'Listen. Tap Bibi’s face!', img: `${S}/bg-a1u5-gamenight-wide.png`,
+      rounds: [
+        { line: 'She’s tired because it’s early.', answer: 'tired', options: [{ label: 'tired', src: it('bibi-tired') }, { label: 'excited', src: it('bibi-excited') }, { label: 'sad', src: it('bibi-sad') }] },
+        { line: 'She’s excited because it’s a party.', answer: 'excited', options: [{ label: 'bored', src: it('bibi-bored') }, { label: 'excited', src: it('bibi-excited') }, { label: 'scared', src: it('bibi-scared') }] },
+        { line: 'She’s bored because the lesson is long.', answer: 'bored', options: [{ label: 'happy', src: it('bibi-happy') }, { label: 'surprised', src: it('bibi-surprised') }, { label: 'bored', src: it('bibi-bored') }] },
+      ] },
+    { kind: 'sentence-builder', name: 'Ask Me!', icon: '❓', intro: 'Listen. Build the question!',
+      rounds: [
+        { img: it('hat'), line: 'Is your monster wearing a hat?', extra: ['got'] },
+        { img: it('mb-horns-long'), line: 'Has your monster got long horns?', extra: ['is'] },
+      ] },
+    { kind: 'true-false', name: 'True or False?', icon: '🎲', intro: 'Look and listen. True or false?',
+      rounds: [
+        { img: it('big-bob'), line: 'Big Bob is very tall.', isTrue: true },
+        { img: it('scarf'), line: 'This is a hat.', isTrue: false },
+        { img: it('bibi-scared'), line: 'Bibi is scared.', isTrue: true },
+      ] },
+    { kind: 'twister', name: 'Twister Race', icon: '🌀', intro: 'Build my tongue twister before the sand runs out!', img: `${S}/bg-a1u5-gamenight-wide.png`, line: 'Three green bees see sheep.', seconds: 45, focus: 'ee', sayIt: 'Now say it slow, then faster!' },
+    { kind: 'sound-blend', name: 'Blend It!', icon: '🧱', intro: 'Tap each sound, then Blend!', img: `${S}/bg-a1u5-gamenight-wide.png`,
+      rounds: [
+        { word: 'sheep', sounds: ['sh', 'ee', 'p'], picture: it('sheep') },
+        { word: 'funny', sounds: ['f', 'u', 'nn=n', 'y=ee'], picture: it('bibi-happy') },
+      ] },
+    chest('You did it! Game night champion!', `${S}/bg-a1u5-gamenight-wide.png`),
+  ],
+};

@@ -8,6 +8,7 @@ import { CalmBg, Bursts, FloatText, useBursts } from '../../unit1/scene-componen
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
 import { voiceOf } from './shared';
 import { CLAY_BUTTON, THICK_WORDS } from '../../unit1/scene-components/shared';
+import { EYE_SPOTS, HORN_W, WEAR_AT } from './monsterParts';
 import { MIXUP_FIND, MIXUP_FIXED, MIXUP_NOT_THERE, MIXUP_PICK } from './mixupRules';
 
 /* ---------- Monster Mix-Up ★ (A1 U5L4, docs/a1-unit-5-monster-town.md §5.4 "Monster Maker") ----------
@@ -23,15 +24,6 @@ import { MIXUP_FIND, MIXUP_FIXED, MIXUP_NOT_THERE, MIXUP_PICK } from './mixupRul
 type MixUp = Extract<Scene, { kind: 'monster-mixup' }>;
 type Part = 'eyes' | 'horns' | 'mouth' | 'wear';
 
-const EYE_SPOTS: Record<1 | 2 | 3, number[]> = { 1: [50], 2: [38, 62], 3: [30, 50, 70] };
-const HORN_W = [56, 60];
-/** Where a worn piece sits on the square monster box (%). */
-const WEAR_AT: Record<'head' | 'face' | 'neck' | 'feet', { left: number; top?: number; bottom?: number; width: number }> = {
-  head: { left: 27, bottom: 70, width: 46 },
-  face: { left: 22, top: 25, width: 56 },
-  neck: { left: 25, top: 61, width: 50 },
-  feet: { left: 21, top: 84, width: 58 },
-};
 /** Tap zones for the parts (% of the box). Worn pieces are added on top of these. */
 const ZONE: Record<'eyes' | 'horns' | 'mouth', { left: number; top: number; w: number; h: number }> = {
   horns: { left: 15, top: 0, w: 70, h: 20 },

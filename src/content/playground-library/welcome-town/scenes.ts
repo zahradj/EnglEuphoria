@@ -631,6 +631,18 @@ export type Scene =
        *  Check — every part must match the sentence. `body` sticker is square; parts sit at % of it. */
       body: string; eye: string; horns: { label: string; img: string }[]; mouths: { label: string; img: string }[];
       rounds: { line: string; eyes: 1 | 2 | 3; horns: number; mouth: number; name: string }[]; doneLine: string; }
+  | { id: string; kind: 'guess-who'; bg: string; teacher: string; title: string; who: CharKey;
+      /** ★ Guess Who (A1 U5L6, docs/a1-unit-5-monster-town.md §5.6): 8 monsters behind doors, built from the Monster
+       *  Builder parts (`hue` recolours the body; `color` is its colour word). Part 1: the child asks `questions` (each a
+       *  `test`; the friend says `yes` / `no` about the `secret` monster) and the doors that don't fit close; the child
+       *  names the last one. Part 2: the child picks a monster and answers the friend's `hideAsks` Yes / No. */
+      body: string; eye: string; horns: { label: string; img: string }[]; mouths: { label: string; img: string }[];
+      wear: { word: string; img: string; on: 'head' | 'face' | 'neck' | 'feet' }[];
+      monsters: { name: string; eyes: 1 | 2 | 3; horns: number; mouth: number; wears: number[]; hue: number; color: string }[];
+      questions: { ask: string; yes: string; no: string; test: { eyes?: 1 | 2 | 3; horns?: number; mouth?: number; wear?: number; color?: string } }[];
+      secret: number;
+      hideAsks: { ask: string; test: { eyes?: 1 | 2 | 3; horns?: number; mouth?: number; wear?: number; color?: string } }[];
+      doneLine: string; }
   | { id: string; kind: 'feelings-meter'; bg: string; teacher: string; title: string; who: CharKey;
       /** ★ Feelings Meter (A1 U5L5, docs/a1-unit-5-monster-town.md §5.5): the story character's day as an emotion graph.
        *  `feelings` = the rows, top (feels best) to bottom (feels worst); `points` = the story moments left to right.
