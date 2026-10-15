@@ -12,6 +12,7 @@ import { calculateKpiBonus } from "@/lib/kpiBonus";
 import { useBonusPolicy } from "@/hooks/useBonusPolicy";
 import { toast } from "sonner";
 import { TeachingScorecard } from "@/components/teacher/scorecard/TeachingScorecard";
+import { LEGACY_KPI_PAUSED } from "@/lib/legacyKpiPause";
 
 type Metric = {
   overall_kpi_score: number;
@@ -59,7 +60,7 @@ export default function TeacherKpiSelfView() {
         <p className="text-muted-foreground">Five simple goals, and one thing to focus on.</p>
       </header>
 
-      {alert && alert.consecutive_weeks >= 2 && (
+      {!LEGACY_KPI_PAUSED && alert && alert.consecutive_weeks >= 2 && (
         <Card className="border-amber-500 bg-amber-50 dark:bg-amber-950/20">
           <CardContent className="flex items-start gap-3 p-4">
             <AlertTriangle className="mt-0.5 h-5 w-5 text-amber-600" />
@@ -76,7 +77,11 @@ export default function TeacherKpiSelfView() {
 
       <TeachingScorecard />
 
-      {metric && (
+      <p className="text-sm text-muted-foreground">
+        Want to know exactly what is measured, what is not, and who sees it? <Link to="/teacher/how-we-measure" className="font-medium text-primary underline-offset-4 hover:underline">How we measure</Link>.
+      </p>
+
+      {!LEGACY_KPI_PAUSED && metric && (
         <details className="group rounded-2xl border bg-card">
           <summary className="flex cursor-pointer list-none items-center justify-between gap-2 p-4 font-semibold">
             <span className="flex items-center gap-2"><Gift className="h-4 w-4 text-primary" /> Bonus preview</span>

@@ -248,6 +248,10 @@ export const TeacherLessonLibrary: React.FC = () => {
           </div>
 
           {activeHub === 'academy' && (
+            <div className="mb-3 flex justify-end"><Button variant="outline" size="sm" onClick={() => navigate('/academy-practice-reports')}>Student practice reports</Button></div>
+          )}
+
+          {activeHub === 'academy' && (
             <AcademyLevelLibrary
               showSteps
               lessons={ACADEMY_DECK_LESSONS}

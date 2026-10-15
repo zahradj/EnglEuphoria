@@ -3,6 +3,8 @@
 // New items (<= 8): phone, pin, tin, map, "This is a ___." + sounds /i/ /n/. Rules stated plainly before the practice; the student teaches the rule back (Wrap).
 // Pictures are placeholders (cards and letter tiles) until the owner approves the scenario and the Canva art is made; /i/ and /n/ clips stay silent until recorded.
 import type { CastName, DeckScript, TeachArt } from '../types';
+import { PRE_A1_RECALL_NODES, MAX_REMEMBER_ITEMS_PRE_A1 } from '../../curriculum/academy';
+import { recallRounds } from '../recallSlides';
 
 export const OBJECTIVE = 'By the end I can hear and say the sounds i and n, blend in, it, pin and tin, and say “This is a pin.”';
 export const CRITERIA = [
@@ -84,10 +86,11 @@ export const PA1_S02_E1: DeckScript = {
       hints: ['Drag the slider, or tap “Blend it”.'],
     },
     {
-      id: 'rem-hear', kind: 'hearpick', part: 1, bg: 'club-lobby', actors: [who('Theo', 'right')], trains: [1],
-      prompt: 'Which sound do you hear? Tap it.',
-      rounds: [{ say: 's', options: ['s', 'a', 'p'], answer: 's' }, { say: 'a', options: ['t', 'a', 's'], answer: 'a' }, { say: 'p', options: ['p', 't', 'a'], answer: 'p' }, { say: 't', options: ['s', 't', 'p'], answer: 't' }],
-      hints: ['Listen for the sound at the start of a word.'],
+      id: 'rem-recall', kind: 'hearpick', part: 1, bg: 'club-lobby', actors: [who('Theo', 'right')], trains: [1, 4],
+      // built from the spaced recall plan (recallPlan): what is DUE from Season 1, one item per earlier lesson in turn
+      prompt: 'Remember? Which one do you hear? Tap it.',
+      rounds: recallRounds(PRE_A1_RECALL_NODES, 'PA1-S02-E1', 5, MAX_REMEMBER_ITEMS_PRE_A1),
+      hints: ['Listen, then look for the same words.'],
     },
 
     // ---------- 2 · The Drop ----------

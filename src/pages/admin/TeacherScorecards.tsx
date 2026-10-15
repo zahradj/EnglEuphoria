@@ -8,6 +8,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { fetchTeacherScorecard, type Scorecard } from '@/hooks/useTeacherScorecard';
 import { ScorecardView, STATUS_STYLE, buildGoals, type Goal } from '@/components/teacher/scorecard/TeachingScorecard';
+import { ADMIN_SCORECARDS_ENABLED } from '@/lib/scorecardFlags';
 
 interface TeacherLite {
   id: string;
@@ -30,7 +31,7 @@ const GOAL_ORDER = ['On time', 'Delivered', 'Reports', 'Talking', 'Confidence'];
  * Admin overview: every teacher cleared to teach, five dots each, the ones who need support first.
  * It shows the SAME scorecard each teacher sees, so a conversation about it starts from shared numbers.
  */
-export default function TeacherScorecards() {
+function TeacherScorecardsOverview() {
   const [open, setOpen] = useState<Row | null>(null);
 
   const { data: teachers = [], isLoading: loadingTeachers } = useQuery<TeacherLite[]>({
@@ -168,3 +169,22 @@ export default function TeacherScorecards() {
     </div>
   );
 }
+
+/** Teachers first: until the rollout period is over the overview stays closed (see lib/scorecardFlags.ts). */
+export default function TeacherScorecards() {
+  if (ADMIN_SCORECARDS_ENABLED) return <TeacherScorecardsOverview />;
+  return (
+    <div className="container mx-auto max-w-2xl space-y-4 p-4 md:p-6">
+      <Button asChild variant="ghost" size="sm" className="-ml-2 w-fit">
+        <Link to="/admin/teacher-kpi"><ArrowLeft className="mr-2 h-4 w-4" />Teacher KPI</Link>
+      </Button>
+      <h1 className="text-2xl font-bold">Teacher scorecards are teachers-first</h1>
+      <p className="text-muted-foreground">
+        For the first weeks each teacher sees only their own scorecard on their "My teaching" page, so they can get used to it
+        before anyone sees a table of everyone. When that period is over, set <code>VITE_ADMIN_SCORECARDS=on</code> in the hosting
+        settings and this overview opens.
+      </p>
+    </div>
+  );
+}
+

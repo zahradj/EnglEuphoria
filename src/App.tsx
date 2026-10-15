@@ -44,6 +44,7 @@ const ReviewModeration = lazy(() => import("@/pages/admin/ReviewModeration"));
 const TeacherKpiDashboard = lazy(() => import("@/pages/admin/TeacherKpiDashboard"));
 const TeacherScorecards = lazy(() => import("@/pages/admin/TeacherScorecards"));
 const TeacherKpiSelfView = lazy(() => import("@/pages/teacher/TeacherKpiSelfView"));
+const HowWeMeasure = lazy(() => import("@/pages/teacher/HowWeMeasure"));
 const KpiCardGallery = lazy(() => import("@/pages/teacher/KpiCardGallery"));
 const TeacherAuraDetail = lazy(() => import("@/pages/teacher/TeacherAuraDetail"));
 const BonusApprovalQueue = lazy(() => import("@/pages/admin/BonusApprovalQueue"));
@@ -266,6 +267,8 @@ const PlayA2Unit1Lesson2 = lazy(() => import("./pages/playground-scene/PlayA2Uni
 const PlayA2Unit1Lesson3 = lazy(() => import("./pages/playground-scene/PlayA2Unit1Lesson3"));
 const AcademyLibraryPage = lazy(() => import("./academy-deck/pages/AcademyLibraryPage"));
 const AcademyDeckLessonPage = lazy(() => import("./academy-deck/pages/AcademyDeckLessonPage"));
+const AcademyDailyTenPage = lazy(() => import("./academy-deck/pages/AcademyDailyTenPage"));
+const AcademyPracticeReportsPage = lazy(() => import("./academy-deck/pages/AcademyPracticeReportsPage"));
 const PlaygroundLibraryPage = lazy(() => import("./pages/playground-library/PlaygroundLibraryPage"));
 const PlaygroundLibraryPublic = lazy(() => import("./pages/playground-library/PlaygroundLibraryPublic"));
 const PlaygroundGameRunner = lazy(() => import("./pages/PlaygroundGameRunner"));
@@ -976,6 +979,16 @@ const App = () => {
                           <Suspense fallback={<LoadingFallback />}><AcademyDeckLessonPage /></Suspense>
                         </ImprovedProtectedRoute>
                       } />
+                      <Route path="/academy-practice-reports" element={
+                        <ImprovedProtectedRoute requiredRole={["teacher", "content_creator", "admin"]}>
+                          <Suspense fallback={<LoadingFallback />}><AcademyPracticeReportsPage /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      <Route path="/academy-daily-10" element={
+                        <ImprovedProtectedRoute requiredRole={["student", "teacher", "content_creator", "admin"]}>
+                          <Suspense fallback={<LoadingFallback />}><AcademyDailyTenPage /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
                       <Route path="/academy-lesson/:id/homework" element={
                         <ImprovedProtectedRoute requiredRole={["student", "teacher", "content_creator", "admin"]}>
                           <Suspense fallback={<LoadingFallback />}><AcademyDeckLessonPage homework /></Suspense>
@@ -1136,6 +1149,11 @@ const App = () => {
                       <Route path="/teacher/kpi" element={
                         <ImprovedProtectedRoute requiredRole="teacher">
                           <Suspense fallback={<LoadingFallback />}><TeacherKpiSelfView /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      <Route path="/teacher/how-we-measure" element={
+                        <ImprovedProtectedRoute requiredRole="teacher">
+                          <Suspense fallback={<LoadingFallback />}><HowWeMeasure /></Suspense>
                         </ImprovedProtectedRoute>
                       } />
                       <Route path="/teacher/kpi-gallery" element={

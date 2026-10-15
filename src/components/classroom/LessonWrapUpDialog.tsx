@@ -16,6 +16,12 @@ import { buildLearningPlan, UNITS_PER_LEVEL, type PlanUnitInfo } from '@/lib/lea
 import { HUB_SKILL_PROFILE, normalizeSkillHub, scoreToCefr } from '@/hooks/useStudentSkills';
 import { asPayoutCurrency, formatPay } from '@/lib/teacherPay';
 import { LessonChecklistCard, clearChecklist, practiceLines, type ChecklistValue, type SceneLessonRef } from './LessonChecklistCard';
+import { LessonChecklistPanel } from '@/academy-deck/teacher/LessonChecklistPanel';
+import { UnitAssessmentPanel } from '@/academy-deck/teacher/UnitAssessmentPanel';
+import { ACADEMY_DECK_BLUEPRINT_IDS } from '@/academy-deck/lessonRegistry';
+import { loadDeckScript } from '@/academy-deck/lessonScripts';
+import { familyLines, type LessonChecklist, type UnitAssessment } from '@/curriculum/academy';
+import { saveCheck } from '@/services/academyChecklistService';
 
 /**
  * Session report — 3 short steps (redesigned from one long form):
@@ -162,6 +168,8 @@ interface LessonWrapUpDialogProps {
   sceneLesson?: SceneLessonRef | null;
   /** classroom_sessions.id — where the student's screen saved what they did. */
   sessionId?: string;
+  /** Academy library (deck) lesson that was on screen: adds the lesson checklist (and the unit assessment after a unit's last lesson) to this report. */
+  academyLessonId?: string;
 }
 
 interface Draft {
@@ -217,6 +225,7 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
   studentName,
   lessonTitle,
   classSummary, sceneLesson, sessionId,
+  academyLessonId,
 }) => {
   const theme = getClassroomHubTheme(hubType);
   const skillHub = normalizeSkillHub(hubType);
@@ -377,6 +386,19 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
     [isTrialLesson, trialLevel, planStartUnit, d.trialLessons, planUnits],
   );
 
+  // Academy checklist (owner 2026-10-14): the lesson's goals marked by the teacher, and the unit assessment after a unit's last lesson. Part of this report.
+  const [acScript, setAcScript] = useState<{ criteria: string[]; level: LessonChecklist['level'] } | null>(null);
+  const [acLesson, setAcLesson] = useState<LessonChecklist | null>(null);
+  const [acUnit, setAcUnit] = useState<UnitAssessment | null>(null);
+  const blueprintId = academyLessonId ? ACADEMY_DECK_BLUEPRINT_IDS[academyLessonId] : undefined;
+  const unitSeasonId = blueprintId && /-E8$/.test(blueprintId) ? blueprintId.replace(/-E8$/, '') : null;
+  useEffect(() => {
+    if (!open || !academyLessonId) { setAcScript(null); return; }
+    let cancelled = false;
+    void loadDeckScript(academyLessonId)?.then((sc) => { if (!cancelled) setAcScript({ criteria: sc.criteria, level: sc.level }); });
+    return () => { cancelled = true; };
+  }, [open, academyLessonId]);
+
   // Family message drafted from the taps until the teacher edits it.
   const draftedFamily = useMemo(() => {
     const topic = lessonTitle ? `“${lessonTitle}”` : 'today’s lesson';
@@ -391,9 +413,11 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
     if (verdictLine) msg += `\n\n${verdictLine}`;
     if (greatList.length) msg += `\n\n⭐ Great at:\n${greatList.map((x) => `• ${x}`).join('\n')}`;
     if (moreList.length) msg += `\n\n💪 Let's practise:\n${moreList.map((x) => `• ${x}`).join('\n')}`;
+    const goals = familyLines(acLesson, acUnit);
+    if (goals.length) msg += `\n\n✅ ${goals.join('\n')}`;
     if (d.homeworkOn && d.homework.trim()) msg += `\n\n📚 Homework: ${d.homework.trim()}`;
     return msg;
-  }, [name, lessonTitle, d.progress, greatList, moreList, d.homeworkOn, d.homework, isTrialLesson, trialLevel, verdictLine]);
+  }, [name, lessonTitle, d.progress, greatList, moreList, d.homeworkOn, d.homework, isTrialLesson, trialLevel, verdictLine, acLesson, acUnit]);
   const familyText = d.familyEdited ? d.family : draftedFamily;
   // Emailing is only for lessons the teacher created via "Invite a Student".
   const canEmail = !!bookingMeta.inviteEmail;
@@ -459,6 +483,7 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
           strengths: greatList,
           areas_for_improvement: moreList,
           quick_notes: familyText.trim(),
+          academy_checklist: acLesson || acUnit ? { lesson: acLesson, unit: acUnit } : undefined,
           teacher_note: d.teacherNote.trim() || undefined,
           checklist: showChecklist && checklist ? {
             lesson: checklist.lesson,
@@ -483,6 +508,12 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
       if (feedbackErr) {
         console.error('[LessonWrapUp] lesson_feedback_submissions insert failed:', feedbackErr);
         throw feedbackErr;
+      }
+      if (acLesson || acUnit) {
+        const sid = studentId || 'student';
+        if (acLesson) void saveCheck(teacherId, sid, 'lesson', acLesson.lessonId, acLesson);
+        if (acUnit) void saveCheck(teacherId, sid, 'unit', acUnit.seasonId, acUnit);
+        lines.push(['✅', 'Lesson checklist saved in the report']);
       }
       lines.push(['💌', `Report saved${homework ? ' with homework' : ''} — ${name}'s family can see it`]);
       if (showChecklist && checklist) { clearChecklist(bookingId); lines.push(['📋', `Lesson checklist saved in the report${checklist.verdict ? ` — ${{ nailed: 'Nailed it', almost: 'Almost there', practice: 'Needs more practice' }[checklist.verdict]}` : ''}`]); }
@@ -901,6 +932,13 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
                       </div>
                     )}
                   </section>
+
+                  {academyLessonId && acScript && (
+                    <section className="grid gap-3" aria-label="Academy checklist">
+                      <LessonChecklistPanel embedded lessonId={blueprintId ?? academyLessonId} studentId={studentId || 'student'} level={acScript.level} criteria={acScript.criteria} onChange={setAcLesson} />
+                      {unitSeasonId && <UnitAssessmentPanel embedded seasonId={unitSeasonId} studentId={studentId || 'student'} onChange={setAcUnit} />}
+                    </section>
+                  )}
 
                   <section className="grid gap-2">
                     <h3 className="text-base font-extrabold">Great at</h3>

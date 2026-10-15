@@ -72,3 +72,38 @@ describe('talkStatus', () => {
     expect(talkStatus(20)).toBe('low');
   });
 });
+
+import { TALK_TARGET_BY_HUB, normalizeTalkHub, talkTargetFor } from './talkTime';
+
+describe('hub-banded talk targets', () => {
+  it('maps the many booking hub names to three hubs', () => {
+    expect(normalizeTalkHub('Playground')).toBe('playground');
+    expect(normalizeTalkHub('kids')).toBe('playground');
+    expect(normalizeTalkHub('success')).toBe('professional');
+    expect(normalizeTalkHub('Professional')).toBe('professional');
+    expect(normalizeTalkHub('academy')).toBe('academy');
+    expect(normalizeTalkHub(null)).toBe('academy');
+  });
+
+  it('asks young beginners for less speech than older learners', () => {
+    expect(TALK_TARGET_BY_HUB.playground).toBeLessThan(TALK_TARGET_BY_HUB.academy);
+  });
+
+  it('weights each hub by how many lessons were measured in it', () => {
+    expect(talkTargetFor(undefined)).toBe(50);
+    expect(talkTargetFor([])).toBe(50);
+    expect(talkTargetFor([{ hub: 'playground', n: 10 }])).toBe(40);
+    expect(talkTargetFor([{ hub: 'academy', n: 5 }, { hub: 'kids', n: 5 }])).toBe(45);
+    expect(talkTargetFor([{ hub: 'academy', n: 0 }])).toBe(50);
+  });
+
+  it('judges a share against its own target, and stays 60/50/35 at the default', () => {
+    expect(talkStatus(45, 40)).toBe('good');
+    expect(talkStatus(45)).toBe('watch');
+    expect(talkStatus(50, 40)).toBe('great');
+    expect(talkStatus(24, 40)).toBe('low');
+    expect(talkStatus(60)).toBe('great');
+    expect(talkStatus(35)).toBe('watch');
+    expect(talkStatus(34)).toBe('low');
+  });
+});

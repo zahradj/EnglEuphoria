@@ -5,7 +5,7 @@ import { Deck } from '../Deck';
 import { PA1_S02_E1, CRITERIA, OBJECTIVE } from '../lessons/pa1s02e1';
 import { decodabilityProblems } from '../decodable';
 import { PRE_A1_PARTS, type Slide } from '../types';
-import { PA1_S02, PRE_A1_MAX_NEW_ITEMS, getLadderStep } from '../../curriculum/academy';
+import { PA1_S02, PRE_A1_MAX_NEW_ITEMS, PRE_A1_RECALL_NODES, getLadderStep, recallPlan } from '../../curriculum/academy';
 import { slideLines } from '../spoken';
 
 afterEach(cleanup);
@@ -119,6 +119,19 @@ describe('Pre-A1 S02 E1: Season spec and run of show', () => {
 
   it('every spoken line can be baked (no variables or blanks) except the learner-filled model lines', () => {
     slides.forEach((s) => slideLines(s).forEach((l) => expect(l.text, s.id).not.toMatch(/[{}]|_{2,}/)));
+  });
+});
+
+describe('Pre-A1 S02 E1: Remember? comes from the spaced recall plan', () => {
+  it('the Remember? game only uses items that are due in the plan, from at least two earlier lessons, and the answer is always among the options', () => {
+    const plan = recallPlan(PRE_A1_RECALL_NODES, 'PA1-S02-E1', 8)!;
+    const due = new Set(plan.due.flatMap((d) => d.items));
+    const rec = slides.find((s) => s.id === 'rem-recall');
+    expect(rec?.kind).toBe('hearpick');
+    if (rec?.kind !== 'hearpick') return;
+    expect(rec.rounds.length).toBeGreaterThanOrEqual(4);
+    rec.rounds.forEach((r) => { expect(due.has(r.say), r.say).toBe(true); expect(r.options).toContain(r.answer); expect(r.options.length).toBeGreaterThanOrEqual(2); });
+    expect(plan.due.length).toBeGreaterThanOrEqual(2);
   });
 });
 

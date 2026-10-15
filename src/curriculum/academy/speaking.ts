@@ -51,3 +51,6 @@ export function speakingProblems(plan: SpeakingPlan): string[] {
   if (reached < order.indexOf(t.reachesStep)) out.push(`the lesson never reaches the "${t.reachesStep}" step`);
   return out;
 }
+
+/** How many "Say it ✓" taps a lesson should collect (about one spoken answer every 40 seconds of the speaking minutes ×1.5) [target]. */
+export const sayItTarget = (level: keyof typeof SPEAKING_TARGETS): number => Math.round(SPEAKING_TARGETS[level].speakingMinutes * 1.5);

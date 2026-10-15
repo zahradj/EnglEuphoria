@@ -17,6 +17,8 @@ export interface Scorecard {
   talk: {
     n: number;
     student_pct: number | null;
+    /** Per-hub split (older scorecards without it simply omit the field). */
+    by_hub?: { hub: string; n: number; student_pct: number | null }[];
     recent: { date: string; student_seconds: number; teacher_seconds: number }[];
   };
   excluded: { platform_faults: number; student_side: number };

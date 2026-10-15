@@ -15,6 +15,7 @@ import {
   BookText,
   Archive,
   Target,
+  TrendingUp,
   Award,
   Sparkles,
   LogOut,
@@ -122,6 +123,7 @@ export const StudentSidebar: React.FC<StudentSidebarProps> = ({
       id: 'achievements',
       label: t('sd.group.achievements', 'Achievements'),
       items: [
+        { id: 'progress', label: t('sd.menu.myProgress', 'My Progress'), icon: TrendingUp, badge: newBadge },
         { id: 'milestones', label: t('sd.menu.milestones', 'Mastery Milestones'), icon: Target, badge: newBadge },
         ...(hubKey === 'professional'
           ? [{ id: 'skill-map', label: t('sd.menu.skillMap', 'Skill Map'), icon: Sparkles, badge: newBadge }]

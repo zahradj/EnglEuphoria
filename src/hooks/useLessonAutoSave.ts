@@ -15,8 +15,13 @@ export function useLessonAutoSave(params: {
   starsRemaining: number;
   totalSlides: number;
   completed: boolean;
+  /**
+   * Hold back the server write. The player starts on slide 1, so without this the first write
+   * would overwrite the saved position before the student has been offered to continue from it.
+   */
+  serverPaused?: boolean;
 }) {
-  const { lessonId, studentId, slideIndex, starsRemaining, totalSlides, completed } = params;
+  const { lessonId, studentId, slideIndex, starsRemaining, totalSlides, completed, serverPaused = false } = params;
   const debounceRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -39,7 +44,7 @@ export function useLessonAutoSave(params: {
     }
 
     // 2) Debounced server upsert (only if we have a uuid lesson + student)
-    if (!studentId) return;
+    if (!studentId || serverPaused) return;
     const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(lessonId);
     if (!isUuid) return;
 
@@ -64,7 +69,7 @@ export function useLessonAutoSave(params: {
     return () => {
       if (debounceRef.current) window.clearTimeout(debounceRef.current);
     };
-  }, [lessonId, studentId, slideIndex, starsRemaining, totalSlides, completed]);
+  }, [lessonId, studentId, slideIndex, starsRemaining, totalSlides, completed, serverPaused]);
 }
 
 /** Reads a bookmark from localStorage. */
@@ -82,6 +87,33 @@ export function readLessonBookmark(lessonId?: string): {
       slide_index: parsed.slide_index,
       stars_remaining: typeof parsed.stars_remaining === 'number' ? parsed.stars_remaining : 3,
     };
+  } catch {
+    return null;
+  }
+}
+
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/**
+ * The bookmark saved on the server, so "continue where I stopped" also works on another device or browser.
+ * Returns null when there is nothing to continue (no row, lesson already completed) or anything fails.
+ */
+export async function readServerBookmark(studentId?: string, lessonId?: string): Promise<{
+  slide_index: number;
+  stars_remaining: number;
+} | null> {
+  if (!studentId || !lessonId || !UUID_RE.test(lessonId)) return null;
+  try {
+    const { data, error } = await supabase
+      .from('student_sessions')
+      .select('slide_index, stars_remaining, completed')
+      .eq('user_id', studentId)
+      .eq('lesson_id', lessonId)
+      .maybeSingle();
+    if (error || !data) return null;
+    const row = data as { slide_index?: number; stars_remaining?: number; completed?: boolean };
+    if (row.completed || typeof row.slide_index !== 'number') return null;
+    return { slide_index: row.slide_index, stars_remaining: typeof row.stars_remaining === 'number' ? row.stars_remaining : 3 };
   } catch {
     return null;
   }

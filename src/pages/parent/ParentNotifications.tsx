@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from 'react-i18next';
 import { useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,6 +15,7 @@ import { toast } from "@/hooks/use-toast";
  * (An authenticated flow can be layered on later; today all emails ship a token.)
  */
 export default function ParentNotifications() {
+  const { t } = useTranslation();
   const [params] = useSearchParams();
   const token = params.get("token");
   const wantsUnsub = params.get("unsubscribe") === "1";
@@ -38,7 +40,7 @@ export default function ParentNotifications() {
   };
 
   const fetchPrefs = async () => {
-    if (!token) { setError("Missing token in link."); setLoading(false); return; }
+    if (!token) { setError(t('st.pn.noToken', 'Missing token in link.')); setLoading(false); return; }
     try {
       const url = `https://dcoxpyzoqjvmuuygvlme.supabase.co/functions/v1/parent-email-preferences?token=${encodeURIComponent(token)}`;
       const res = await fetch(url);
@@ -50,7 +52,7 @@ export default function ParentNotifications() {
         if (typeof data.prefs.quest_nudges === "boolean") setQuestNudges(data.prefs.quest_nudges);
       }
     } catch (e) {
-      setError((e as Error).message || "Failed to load preferences.");
+      setError((e as Error).message || t('st.pn.loadFail', 'Failed to load preferences.'));
     } finally {
       setLoading(false);
     }
@@ -65,9 +67,9 @@ export default function ParentNotifications() {
           setWeeklySummary(false);
           setQuestNudges(false);
           setDone(true);
-          toast({ title: "Unsubscribed", description: "You won't receive quest email updates." });
+          toast({ title: t('st.unsub.done', 'Unsubscribed'), description: t('st.pn.unsubDesc', "You won't receive quest email updates.") });
         } catch (e) {
-          setError((e as Error).message || "Failed to unsubscribe.");
+          setError((e as Error).message || t('st.pn.unsubFail', 'Failed to unsubscribe.'));
         } finally {
           setLoading(false);
         }
@@ -84,9 +86,9 @@ export default function ParentNotifications() {
     try {
       await call("POST", { weekly_summary: weeklySummary, quest_nudges: questNudges });
       setDone(true);
-      toast({ title: "Preferences saved" });
+      toast({ title: t('st.pn.saved', 'Preferences saved') });
     } catch (e) {
-      toast({ title: "Save failed", description: (e as Error).message, variant: "destructive" });
+      toast({ title: t('st.pn.saveFail', 'Save failed'), description: (e as Error).message, variant: "destructive" });
     } finally {
       setSaving(false);
     }
@@ -96,47 +98,47 @@ export default function ParentNotifications() {
     <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white p-6 flex items-center justify-center">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Email preferences</CardTitle>
+          <CardTitle>{t('st.pn.title', 'Email preferences')}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           {loading ? (
-            <p className="text-sm text-muted-foreground">Loading…</p>
+            <p className="text-sm text-muted-foreground">{t('st.pn.loading', 'Loading…')}</p>
           ) : error ? (
             <p className="text-sm text-destructive">{error}</p>
           ) : (
             <>
               {email ? (
                 <p className="text-xs text-muted-foreground">
-                  Managing preferences for <span className="font-semibold">{email}</span>
+                  {t('st.pn.managing', 'Managing preferences for')} <span className="font-semibold">{email}</span>
                 </p>
               ) : null}
 
               <label className="flex items-center justify-between gap-4 py-2">
                 <span className="text-sm">
-                  <span className="font-semibold block">Weekly quest summary</span>
-                  <span className="text-xs text-muted-foreground">Monday recap of your learner's adventures.</span>
+                  <span className="font-semibold block">{t('st.pn.weekly', 'Weekly quest summary')}</span>
+                  <span className="text-xs text-muted-foreground">{t('st.pn.weeklyDesc', "Monday recap of your learner's adventures.")}</span>
                 </span>
                 <Switch checked={weeklySummary} onCheckedChange={setWeeklySummary} />
               </label>
 
               <label className="flex items-center justify-between gap-4 py-2 border-t">
                 <span className="text-sm">
-                  <span className="font-semibold block">Quest milestone nudges</span>
-                  <span className="text-xs text-muted-foreground">Occasional highlights after big wins.</span>
+                  <span className="font-semibold block">{t('st.pn.nudges', 'Quest milestone nudges')}</span>
+                  <span className="text-xs text-muted-foreground">{t('st.pn.nudgesDesc', 'Occasional highlights after big wins.')}</span>
                 </span>
                 <Switch checked={questNudges} onCheckedChange={setQuestNudges} />
               </label>
 
               <div className="flex justify-end gap-2 pt-2">
                 <Button variant="outline" size="sm" disabled={saving} onClick={() => { setWeeklySummary(false); setQuestNudges(false); }}>
-                  Turn all off
+                  {t('st.pn.allOff', 'Turn all off')}
                 </Button>
                 <Button size="sm" disabled={saving} onClick={save}>
-                  {saving ? "Saving…" : "Save"}
+                  {saving ? t('st.pn.saving', 'Saving…') : t('st.pn.save', 'Save')}
                 </Button>
               </div>
 
-              {done ? <p className="text-xs text-emerald-600 pt-1">Preferences updated.</p> : null}
+              {done ? <p className="text-xs text-emerald-600 pt-1">{t('st.pn.updated', 'Preferences updated.')}</p> : null}
             </>
           )}
         </CardContent>

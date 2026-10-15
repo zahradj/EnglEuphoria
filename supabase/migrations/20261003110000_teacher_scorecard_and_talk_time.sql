@@ -137,6 +137,8 @@ BEGIN
     WHERE status IN ('completed', 'cancelled', 'failed_technical', 'no_show')
       AND NOT (status = 'cancelled' AND COALESCE(cancelled_by, '') <> 'teacher')
       AND NOT (status = 'failed_technical' AND COALESCE(technical_fault_party, '') <> 'teacher')
+      -- a no_show where the teacher did join the room is the student's absence, not the teacher's
+      AND NOT (status = 'no_show' AND teacher_joined_at IS NOT NULL)
       AND COALESCE(fault_type, '') NOT IN ('platform_crash', 'student_absent', 'student_tech_drop')
   ),
   fb AS (
@@ -145,7 +147,7 @@ BEGIN
     WHERE teacher_id = v_t AND created_at >= now() - make_interval(days => v_days)
   ),
   talk AS (
-    SELECT t.room_id, b.scheduled_at, t.teacher_seconds, t.student_seconds
+    SELECT t.room_id, b.scheduled_at, b.hub_type, t.teacher_seconds, t.student_seconds
     FROM public.classroom_talk_time t
     JOIN public.class_bookings b ON b.id::text = t.room_id
     WHERE t.teacher_id = v_t
@@ -174,7 +176,7 @@ BEGIN
       'n',   (SELECT count(*) FROM bk WHERE status = 'completed'),
       'pct', (SELECT round(100.0 * count(*) FILTER (WHERE EXISTS (
                 SELECT 1 FROM public.lesson_feedback_submissions l
-                WHERE l.lesson_id = bk.id
+                WHERE l.lesson_id::text = bk.id::text
                   AND l.submitted_at <= bk.scheduled_at + make_interval(mins => COALESCE(bk.duration, 30)) + interval '24 hours'))
                 / NULLIF(count(*), 0))
               FROM bk WHERE status = 'completed')),
@@ -189,6 +191,12 @@ BEGIN
       'confident_pct',(SELECT round(100.0 * count(*) FILTER (WHERE feels_more_confident) / NULLIF(count(feels_more_confident), 0)) FROM fb)),
     'talk', jsonb_build_object(
       'n',           (SELECT count(*) FROM talk),
+      'by_hub',      COALESCE((SELECT jsonb_agg(jsonb_build_object(
+                          'hub', h.hub, 'n', h.n,
+                          'student_pct', round(100.0 * h.student_s / NULLIF(h.student_s + h.teacher_s, 0))))
+                      FROM (SELECT lower(COALESCE(hub_type, 'unknown')) AS hub, count(*) AS n,
+                                   sum(student_seconds) AS student_s, sum(teacher_seconds) AS teacher_s
+                            FROM talk GROUP BY 1) h), '[]'::jsonb),
       'student_pct', (SELECT round(100.0 * sum(student_seconds) / NULLIF(sum(student_seconds + teacher_seconds), 0)) FROM talk),
       'recent',      COALESCE((SELECT jsonb_agg(jsonb_build_object(
                           'date', scheduled_at, 'student_seconds', student_seconds, 'teacher_seconds', teacher_seconds)
@@ -197,7 +205,7 @@ BEGIN
     'excluded', jsonb_build_object(
       'platform_faults', (SELECT count(*) FROM bk WHERE fault_type = 'platform_crash'),
       'student_side',    (SELECT count(*) FROM bk WHERE (status = 'cancelled' AND COALESCE(cancelled_by, '') <> 'teacher')
-                            OR status = 'student_absent'))
+                            OR (status = 'no_show' AND teacher_joined_at IS NOT NULL)))
   ) INTO v_result;
 
   RETURN v_result;

@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { LEGACY_KPI_PAUSED } from '@/lib/legacyKpiPause';
 
 export interface AdminPendingCounts {
   profileApprovals: number;
@@ -63,7 +64,8 @@ export const useAdminPendingCounts = (pollMs = 60_000): AdminPendingCounts => {
       setProfileApprovals(profileCount ?? 0);
       setApplications(appCount ?? 0);
       setPendingBonuses(bonusCount ?? 0);
-      setAtRiskTeachers(atRiskCount ?? 0);
+      // Paused: no "at risk" teachers are surfaced from the old composite score.
+      setAtRiskTeachers(LEGACY_KPI_PAUSED ? 0 : (atRiskCount ?? 0));
       setLevelRequests(levelRequestCount ?? 0);
     } catch (err) {
       console.warn('useAdminPendingCounts: fetch failed', err);
