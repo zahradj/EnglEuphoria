@@ -269,3 +269,11 @@ Research 2026-10-14 (search summaries only; pages not fully read): [eslactive.co
 | 142, 148 can-do, exit emoji | `content.levels[block].ican` (partial) |
 
 Everything else (dictation, shadowing with private recording, Wordle/Spelling Bee, Codenames Duet, Taboo-lite, Reverse Teacher, Photo Story-Talk, Opinion Line, podcast/vlog/meme/comic makers) needs a new component; build in the order the Season pilot needs them, one new or upgraded mechanic per Season.
+
+
+## 14. Added 2026-10-15 (B1 Season 1 lesson 1)
+
+- **Hot Seat** (quiz-show ladder, 50:50 and Ask a friend; a wrong answer only greys a choice) — recall and activation.
+- **Break the Clock** (boss fight: hit points, three shields, the round repeats with the reason) — choose between two tenses or forms.
+- **Participle Wordle** (six tries, green / gold / grey, on-screen keyboard) — spell the past participle.
+- **Rapport** (dialogue RPG: pick the natural reply, a Rapport meter rises, the character answers) — realistic exchanges with follow-up questions.

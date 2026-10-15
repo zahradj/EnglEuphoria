@@ -30,3 +30,11 @@ Owner rule 2026-10-14: every Academy unit (Season) and lesson names at least one
 Research 2026-10-15 (B1 Season 1): achievement-type features (badges, points, levels, tasks) were linked to inspiration and drive in a 2023 survey of language-app users and to higher motivation and retention in a 10-week experiment ([INTI journal](https://iuojs.intimal.edu.my/index.php/intijournal/article/view/581), search summary only; small studies, nothing on teens specifically).
 
 Sources for the retro rows: [Adapting arcade games for learning, CHI 2013](https://people.csail.mit.edu/ccai/website/publications/Cai_Adapting.pdf) (Tetris and Pac-Man vocabulary drills; seen in a search result, not read in full) and general knowledge [K]. See also games 149-168 in `docs/academy-games-catalog.md` section 13.
+
+
+## Added 2026-10-15
+
+- **Boss fight with hit points and shields** → *Break the Clock*: each right tense is a strike; shields recharge so nothing is lost.
+- **Word puzzle (Wordle)** → *Participle Wordle*.
+- **Quiz-show ladder with lifelines** → *Hot Seat*.
+- **Dialogue RPG with a relationship meter** → *Rapport*.

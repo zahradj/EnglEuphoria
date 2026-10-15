@@ -20,6 +20,7 @@ import { PassageView } from './slides/passage';
 import { LobbyView, HubMark } from './slides/lobby';
 import { levelLine, rankOf, xpOf } from './hub';
 import { ReadQView } from './slides/readq';
+import { BossView, WordleView, RpgView, QuizView } from './slides/games';
 import { ForgeView, StreakView } from './slides/forge';
 import { LessonClock } from './LessonClock';
 import { playSfx } from './sfx';
@@ -70,7 +71,7 @@ function clearedStars(s: Stats): number {
   return r >= 0.85 ? 3 : r >= 0.6 ? 2 : 1;
 }
 
-const SKILL: Record<string, string> = { say: 'Speaking', fade: 'Speaking', passage: 'Reading', readq: 'Reading', hearpick: 'Listening', story: 'Listening', model: 'Listening', write: 'Writing', build: 'Writing', sort: 'Game', memory: 'Game', match: 'Game', forge: 'Game', streak: 'Game', explore: 'Game', hunt: 'Game', vault: 'Game', duel: 'Game', rhythm: 'Game' };
+const SKILL: Record<string, string> = { say: 'Speaking', fade: 'Speaking', passage: 'Reading', readq: 'Reading', hearpick: 'Listening', story: 'Listening', model: 'Listening', write: 'Writing', build: 'Writing', boss: 'Game', wordle: 'Game', rpg: 'Game', quiz: 'Game', sort: 'Game', memory: 'Game', match: 'Game', forge: 'Game', streak: 'Game', explore: 'Game', hunt: 'Game', vault: 'Game', duel: 'Game', rhythm: 'Game' };
 const skillOf = (kind: string): string => SKILL[kind] ?? '';
 
 function SlideView({ slide, script, onStart }: { slide: Slide; script: DeckScript; onStart: () => void }) {
@@ -116,6 +117,10 @@ function SlideView({ slide, script, onStart }: { slide: Slide; script: DeckScrip
     case 'duel': return <DuelView slide={slide} />;
     case 'passage': return <PassageView slide={slide} />;
     case 'readq': return <ReadQView slide={slide} />;
+    case 'boss': return <BossView slide={slide} />;
+    case 'wordle': return <WordleView slide={slide} />;
+    case 'rpg': return <RpgView slide={slide} />;
+    case 'quiz': return <QuizView slide={slide} />;
     case 'forge': return <ForgeView slide={slide} />;
     case 'streak': return <StreakView slide={slide} />;
     case 'wrap': return <WrapView slide={slide} />;

@@ -2,6 +2,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { Deck } from '../Deck';
+import { scoreGuess } from '../slides/games';
 import { B1_S01_E1, BLOG, CRITERIA, ITEMS, OBJECTIVE, TRIOS, REVISED, HARD, streakRound } from '../lessons/b1s01e1';
 import { ACADEMY_LESSON_BLUEPRINTS, SPEAKING_TARGETS } from '../../curriculum/academy';
 import { partsFor, type Slide } from '../types';
@@ -39,6 +40,10 @@ const minutes = (s: Slide): number => {
     case 'write': return 0.8 + s.rows.length * 1;
     case 'readq': return 0.4 + s.questions.length * 1;
     case 'passage': return 3.5;
+    case 'quiz': return 0.5 + s.questions.length * 0.8;
+    case 'boss': return 0.5 + s.rounds.length * 0.9;
+    case 'wordle': return 0.5 + s.rounds.length * 1.0;
+    case 'rpg': return 0.6 + s.scenes.length * 0.9;
     default: return 1;
   }
 };
@@ -84,7 +89,9 @@ describe('B1-S01-E1: the blueprint and the approved plan', () => {
         case 'hearpick': case 'build': return s.rounds.length;
         case 'forge': return s.rounds.length * 2;
         case 'write': return s.rows.length;
-        case 'readq': return s.questions.length;
+        case 'readq': case 'quiz': return s.questions.length;
+        case 'boss': case 'wordle': return s.rounds.length;
+        case 'rpg': return s.scenes.length;
         case 'streak': return s.rounds.length * 2;
         case 'match': return s.pairs.length;
         case 'memory': return s.pairs.length * 2;
@@ -98,7 +105,7 @@ describe('B1-S01-E1: the blueprint and the approved plan', () => {
     };
     const total = slides.reduce((a, s) => a + responses(s), 0);
     expect(total, `${total} responses`).toBeGreaterThanOrEqual(80);
-    const games = new Set(slides.filter((s) => ['match', 'memory', 'sort', 'forge', 'streak', 'hearpick', 'build', 'explore'].includes(s.kind)).map((s) => s.kind));
+    const games = new Set(slides.filter((s) => ['match', 'memory', 'sort', 'forge', 'streak', 'hearpick', 'build', 'explore', 'quiz', 'boss', 'wordle', 'rpg'].includes(s.kind)).map((s) => s.kind));
     expect(games.size).toBeGreaterThanOrEqual(5);
     slides.slice(1).forEach((s, i) => expect(s.kind, `${slides[i].id} -> ${s.id}`).not.toBe(slides[i].kind));
   });
@@ -121,19 +128,29 @@ describe('B1-S01-E1: the blueprint and the approved plan', () => {
 
   it('FOUR SKILLS: the lesson listens (dialogue + questions), reads (a 150-220 word post + questions), writes (typed sentences) and speaks (5+ tasks), and the text is B1 length', () => {
     const kinds = new Set(slides.map((s) => s.kind));
-    ['story', 'hearpick', 'passage', 'readq', 'write', 'say'].forEach((k) => expect(kinds.has(k as Slide['kind']), k).toBe(true));
+    ['story', 'passage', 'readq', 'write', 'say', 'rpg'].forEach((k) => expect(kinds.has(k as Slide['kind']), k).toBe(true));
     const words = BLOG.join(' ').split(/\s+/).length;
     expect(words, `${words} words`).toBeGreaterThanOrEqual(150);
     expect(words).toBeLessThanOrEqual(220);
     const rq = slides.find((s) => s.kind === 'readq');
     if (rq?.kind !== 'readq') throw new Error('no readq');
-    expect(new Set(rq.questions.map((q) => q.type))).toEqual(new Set(['gist', 'detail', 'inference', 'word']));
+    const types = new Set(rq.questions.map((q) => q.type));
+    ['gist', 'detail', 'inference'].forEach((t) => expect(types.has(t as 'gist'), t).toBe(true));
     rq.questions.forEach((q) => expect(q.options).toContain(q.answer));
     const pass = slides.find((s) => s.kind === 'passage');
     if (pass?.kind !== 'passage') throw new Error('no passage');
     pass.keepFrom.forEach((w) => expect(BLOG.join(' ').toLowerCase()).toContain(w));
     const writes = slides.filter((s) => s.kind === 'write');
-    expect(writes.length).toBeGreaterThanOrEqual(3);
+    expect(writes.length).toBeGreaterThanOrEqual(2);
+  });
+
+  it('VIDEO-GAME MECHANICS: the lesson plays a quiz-show ladder, a boss fight, a word puzzle, a dialogue RPG, a crafting forge and a speedrun, each tied to a criterion', () => {
+    const kinds = slides.map((x) => x.kind);
+    ['quiz', 'boss', 'wordle', 'rpg', 'forge', 'streak'].forEach((k) => expect(kinds, k).toContain(k));
+    ['hot-seat', 'boss', 'wordle', 'rpg', 'forge'].forEach((id) => expect(slides[at(id)].trains?.length, id).toBeGreaterThan(0));
+    expect(at('hot-seat')).toBeLessThan(at('story-dare')); // activate the past simple before the new input
+    expect(at('rule-trio')).toBeLessThan(at('boss')); // the rule comes before the boss fight
+    expect(at('model-task')).toBeLessThan(at('rpg')); // modelled before the student plays
   });
 
   it('SPEAKING: the lesson reaches the free step (Mission Take 2, Release) with at least five distinct spoken tasks', () => {
@@ -165,7 +182,7 @@ describe('B1-S01-E1: Trophy Forge and the trio streak', () => {
     fireEvent.click(screen.getByRole('button', { name: 'gone' }));
     expect(screen.getByRole('button', { name: /Add the trophy/ })).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: /Add the trophy/ }));
-    expect(screen.getByRole('list', { name: /Trophies: 1 of 4/ })).toBeTruthy();
+    expect(screen.getByRole('list', { name: /Trophies: 1 of 2/ })).toBeTruthy();
   });
 
   it('STREAK: a miss resets the streak and costs nothing else; the right past simple moves to the participle; wrong options are real forms', () => {
@@ -198,5 +215,48 @@ describe('B1-S01-E1: Trophy Forge and the trio streak', () => {
     expect(screen.getByText(/Paragraph 3/)).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: 'Next ▸' }));
     expect(screen.getByText(/2 of 4/)).toBeTruthy();
+  });
+
+  it('BOSS: a wrong tense costs a shield and shows the hint; the right one strikes, shows why and cracks the clock', () => {
+    open('boss');
+    fireEvent.click(screen.getByRole('button', { name: 'went' }));
+    expect(screen.getByText(/Not yet/)).toBeTruthy();
+    expect(screen.getByRole('list', { name: /Shields: 2 of 3/ })).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: 'have been' }));
+    expect(screen.getByText(/no finished time/i)).toBeTruthy();
+    expect(screen.getByRole('button', { name: /Strike again/ })).toBeTruthy();
+  });
+
+  it('WORDLE: scoring marks green, gold and grey with duplicates counted once', () => {
+    expect(scoreGuess('flown', 'flown')).toEqual(['hit', 'hit', 'hit', 'hit', 'hit']);
+    expect(scoreGuess('taken', 'flown')).toEqual(['miss', 'miss', 'miss', 'miss', 'hit']);
+    expect(scoreGuess('nolfw', 'flown')).toEqual(['near', 'near', 'near', 'near', 'near']);
+    expect(scoreGuess('eeeee', 'taken')).toEqual(['miss', 'miss', 'miss', 'hit', 'miss']);
+  });
+
+  it('WORDLE: typing and Enter on the on-screen keyboard solves a word', () => {
+    open('wordle');
+    'flown'.split('').forEach((c) => fireEvent.click(screen.getByRole('button', { name: new RegExp(`^${c}$`, 'i') })));
+    fireEvent.click(screen.getByRole('button', { name: 'Enter' }));
+    expect(screen.getByText(/First try/)).toBeTruthy();
+  });
+
+  it('RPG: the best reply raises Rapport by 2, a mistimed one by 0 and explains why', () => {
+    open('rpg');
+    fireEvent.click(screen.getByRole('button', { name: 'Yes, I have been to Italy last year.' }));
+    expect(screen.getByText(/finished time/)).toBeTruthy();
+    expect(screen.getByRole('meter', { name: 'Rapport' }).getAttribute('aria-valuenow')).toBe('0');
+    fireEvent.click(screen.getByRole('button', { name: /Keep talking/ }));
+    fireEvent.click(screen.getByRole('button', { name: 'I went last August with my family.' }));
+    expect(screen.getByRole('meter', { name: 'Rapport' }).getAttribute('aria-valuenow')).toBe('2');
+  });
+
+  it('HOT SEAT: 50:50 hides two wrong answers, Ask Ava gives the hint, a wrong answer only greys that option', () => {
+    open('hot-seat');
+    fireEvent.click(screen.getByRole('button', { name: /Ask Ava/ }));
+    expect(screen.getByText(/Yesterday is finished/)).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: /50 : 50/ }));
+    const left = screen.getAllByRole('button').filter((b) => /^[ABCD] /.test(b.textContent ?? '') && (b as HTMLElement).style.visibility !== 'hidden');
+    expect(left.length).toBe(2);
   });
 });

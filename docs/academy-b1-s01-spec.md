@@ -164,3 +164,21 @@ Structure chosen (research 2026-10-15: [Cambridge Empower B1 unit pattern](https
 | Writing | 2 sentences (past simple, Remember?), question + answer + follow-up, 3 sentences about my own list (typed, checked for the tense) | 9 |
 
 Changes from the first build: 12 items unchanged; the single-word tiles and True/False are gone; the rule comes after the student has sorted sentences from the text (B1 method: task first); verbs grow to nine (four hard trios: drive, choose, begin, speak); the trio check is optional; reading questions are a new page type (`readq`). Voices: new lines need a bake (owner "go" first).
+
+
+## 8. Revision 3 (owner 2026-10-15: "recreate the lesson; add some games; lots of video games that actually serve the purpose; keep painted backgrounds like the Playground")
+
+Painted scenes: every page has a full-bleed plate (Playground model). New plates for this lesson (Canva, 25 % purple, no text): `bucket-list-wall` (main), `trophy-case`, three story plates; existing Academy plates serve the other places (`classroom-evening` for Remember?/writing, `club-lobby` for reading, `detective-wall`, `vault-corridor` for the boss fight, `bus-stop-night` for the chat, `club-stage` for the Hot Seat and the Release).
+
+| Mechanic (video game) | Game in the lesson | Serves | Where |
+|---|---|---|---|
+| Quiz-show ladder with lifelines (*Who Wants to Be a Millionaire*) | **Hot Seat**: 3 questions, 50:50 and Ask Ava | activate the past simple (need; criterion 4) | Remember? |
+| Visual novel / dialogue RPG (*Life is Strange*, *Persona* social links) | **Story: The Dare** (3 plates, voiced) and **Rapport** (win Theo over with natural replies) | main idea; present perfect for experience then a past-simple follow-up (1, 4, 5) | Drop, Mission |
+| Detective board (*Return of the Obra Dinn*) | **Grammar Detective** on the detective wall | notice "finished time" vs "up to now" (4) | Notice & Build |
+| **Boss fight** (*Zelda*-style boss with hit points and shields) | **Break the Clock**: a clock with hit points; strike with the right tense; 3 shields | choose the tense (4) | Notice & Build (signature) |
+| Crafting / loot (*Minecraft*, *Diablo*) | **Trophy Forge**: forge base, past simple, past participle into a trophy | the three forms (3) | Notice & Build |
+| Word puzzle (*Wordle*) | **Participle Wordle**: six tries, green / gold / grey | spell and recall participles (3) | Energiser |
+| Speedrun against your own best (*Celeste*, *Super Meat Boy*) | **Trio Streak** (optional extra) | fluency on 8 verbs (3) | Energiser |
+| Memory / card flip | **Memory** and **Match** | the six words (2) | Drop |
+
+Order keeps the owner's rules: the rule is stated before the boss fight, the teacher models before Rapport, two memorising games follow the words, the Mission and Release stay spoken. New slide kinds: `quiz`, `boss`, `wordle`, `rpg` (`src/academy-deck/slides/games.tsx`); listed in `docs/academy-games-catalog.md` and `docs/academy-video-game-mechanics.md`. Not shown to a real student yet: research of the mechanics themselves was done from our own lists and general knowledge (no new web search this round); verify with Oxford/Cambridge/British Council sources before the Season is called verified.

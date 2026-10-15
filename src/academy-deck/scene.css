@@ -286,3 +286,76 @@
 }
 @media (max-width: 1100px) and (min-height: 701px) and (min-width: 700px) { .ad-root[data-theme='scene'] .ad-lobby { grid-template-columns: 1fr; } }
 .ad-root[data-theme='scene'][data-kind='title'] .ad-main { top: 90px; }
+
+/* ---------- video-game mechanics: Break the Clock, Participle Wordle, Rapport, Hot Seat ---------- */
+.ad-root[data-theme='scene'] .ad-boss { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 22px; align-items: center; }
+.ad-root[data-theme='scene'] .ad-boss-clock { display: grid; justify-items: center; gap: 10px; }
+.ad-root[data-theme='scene'] .ad-boss-clock svg { width: 170px; height: 170px; filter: drop-shadow(0 10px 16px rgba(30, 15, 90, 0.4)); }
+.ad-root[data-theme='scene'] .ad-boss-clock[data-hit='true'] svg { animation: sc-shake 0.45s; }
+.ad-root[data-theme='scene'] .ad-boss-clock[data-broken='true'] svg { animation: sc-fall 0.8s forwards; }
+.ad-root[data-theme='scene'] .ad-clock-face { fill: #fff8e6; stroke: #6d46e6; stroke-width: 7; }
+.ad-root[data-theme='scene'] .ad-clock-tick { stroke: #4c1d95; stroke-width: 3; stroke-linecap: round; }
+.ad-root[data-theme='scene'] .ad-clock-hand { stroke: #2a2150; stroke-width: 5; stroke-linecap: round; transform-origin: 60px 60px; }
+.ad-root[data-theme='scene'] .ad-clock-hand-s { stroke: #e0605a; stroke-width: 3; }
+.ad-root[data-theme='scene'] .ad-clock-crack { fill: none; stroke: #e0605a; stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 140; animation: sc-crack 0.5s ease-out both; }
+.ad-root[data-theme='scene'] .ad-boss-hp { display: flex; gap: 6px; list-style: none; margin: 0; padding: 0; }
+.ad-root[data-theme='scene'] .ad-boss-hp li { width: 26px; height: 10px; border-radius: 99px; background: #e0605a; box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.18); transition: opacity 0.3s, transform 0.3s; }
+.ad-root[data-theme='scene'] .ad-boss-hp li[data-gone='true'] { opacity: 0.18; transform: scaleX(0.6); }
+.ad-root[data-theme='scene'] .ad-shields { display: flex; justify-content: center; gap: 8px; list-style: none; margin: 0 0 8px; padding: 0; }
+.ad-root[data-theme='scene'] .ad-shields li { width: 26px; height: 30px; background: #14a394; clip-path: polygon(50% 0, 100% 16%, 100% 58%, 50% 100%, 0 58%, 0 16%); transition: transform 0.25s, background 0.25s; }
+.ad-root[data-theme='scene'] .ad-shields li[data-on='false'] { background: rgba(42, 33, 80, 0.25); transform: scale(0.8); }
+.ad-root[data-theme='scene'] .ad-boss-frame { margin: 6px 0 14px; text-align: center; font-size: clamp(1.25rem, 2.6vw, 1.8rem); font-weight: 800; line-height: 1.4; color: var(--ink); }
+.ad-root[data-theme='scene'] .ad-boss-frame b { display: inline-block; min-width: 150px; padding: 0 12px; border-bottom: 4px solid var(--violet); color: var(--violet); }
+.ad-root[data-theme='scene'] .ad-boss-frame b[data-filled='true'] { border-color: var(--good); color: var(--good); }
+.ad-root[data-theme='scene'] .ad-boss-opts, .ad-root[data-theme='scene'] .ad-rpg-opts { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+.ad-root[data-theme='scene'] .ad-boss-opts .ad-pk-tile { flex: 1 1 200px; }
+@keyframes sc-shake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-9px) rotate(-3deg); } 40% { transform: translateX(9px) rotate(3deg); } 60% { transform: translateX(-6px); } 80% { transform: translateX(6px); } }
+@keyframes sc-fall { to { transform: translateY(40px) rotate(18deg) scale(0.85); opacity: 0.5; filter: grayscale(1); } }
+@keyframes sc-crack { from { stroke-dashoffset: 140; } to { stroke-dashoffset: 0; } }
+@media (max-width: 760px) { .ad-root[data-theme='scene'] .ad-boss { grid-template-columns: 1fr; } .ad-root[data-theme='scene'] .ad-boss-clock svg { width: 110px; height: 110px; } }
+/* wordle */
+.ad-root[data-theme='scene'] .ad-wordle { display: grid; justify-items: center; gap: 10px; }
+.ad-root[data-theme='scene'] .ad-wordle-clue { margin: 0; font-size: 1.2rem; font-weight: 700; color: var(--ink); text-align: center; }
+.ad-root[data-theme='scene'] .ad-wordle-clue b { border-bottom: 3px solid var(--violet); color: var(--violet); padding: 0 6px; }
+.ad-root[data-theme='scene'] .ad-wordle-clue small { color: var(--muted); font-weight: 700; }
+.ad-root[data-theme='scene'] .ad-wordle-grid { display: grid; gap: 6px; }
+.ad-root[data-theme='scene'] .ad-wordle-row { display: flex; gap: 6px; justify-content: center; }
+.ad-root[data-theme='scene'] .ad-wordle-cell { display: grid; place-items: center; width: 46px; height: 46px; border-radius: 12px; background: #fff; border: 2px solid rgba(109, 70, 230, 0.25); font-size: 1.5rem; font-weight: 900; text-transform: uppercase; color: var(--ink); }
+.ad-root[data-theme='scene'] .ad-wordle-cell[data-cur='true'] { border-color: var(--violet); box-shadow: 0 0 0 3px rgba(124, 77, 255, 0.3); }
+.ad-root[data-theme='scene'] .ad-wordle-cell[data-s='hit'] { background: #1f9d63; border-color: #1f9d63; color: #fff; animation: sc-pop 0.35s both; }
+.ad-root[data-theme='scene'] .ad-wordle-cell[data-s='near'] { background: var(--gold); border-color: var(--gold); color: #2a1d00; animation: sc-pop 0.35s both; }
+.ad-root[data-theme='scene'] .ad-wordle-cell[data-s='miss'] { background: #8d86ad; border-color: #8d86ad; color: #fff; animation: sc-pop 0.35s both; }
+.ad-root[data-theme='scene'] .ad-keys-kb { display: grid; gap: 6px; }
+.ad-root[data-theme='scene'] .ad-kb-row { display: flex; gap: 5px; justify-content: center; }
+.ad-root[data-theme='scene'] .ad-kb { min-width: 34px; height: 44px; padding: 0 8px; border-radius: 10px; border: 2px solid #fff; background: #fff; color: var(--violet-d); font-weight: 800; font-size: 1rem; text-transform: uppercase; box-shadow: 0 3px 0 rgba(90, 50, 190, 0.22); }
+.ad-root[data-theme='scene'] .ad-kb-wide { padding: 0 14px; font-size: 0.8rem; }
+.ad-root[data-theme='scene'] .ad-kb[data-s='hit'] { background: #1f9d63; color: #fff; border-color: #1f9d63; } .ad-root[data-theme='scene'] .ad-kb[data-s='near'] { background: var(--gold); border-color: var(--gold); color: #2a1d00; } .ad-root[data-theme='scene'] .ad-kb[data-s='miss'] { background: #8d86ad; border-color: #8d86ad; color: #fff; }
+/* rapport */
+.ad-root[data-theme='scene'] .ad-rapport { display: flex; align-items: center; gap: 12px; max-width: 420px; margin: 0 auto 12px; font-weight: 800; color: var(--violet-d); }
+.ad-root[data-theme='scene'] .ad-rapport i { position: relative; flex: 1; height: 14px; border-radius: 99px; background: #e4def8; overflow: hidden; --p: 0%; }
+.ad-root[data-theme='scene'] .ad-rapport i::before { content: ''; position: absolute; inset: 0 auto 0 0; width: var(--p); border-radius: 99px; background: linear-gradient(90deg, #ff7aa8, #ff5c8a); transition: width 0.6s cubic-bezier(0.2, 1.2, 0.3, 1); }
+.ad-root[data-theme='scene'] .ad-rapport b { position: absolute; top: 0; bottom: 0; width: 3px; background: var(--gold); }
+.ad-root[data-theme='scene'] .ad-rapport em { font-style: normal; font-size: 0.85rem; }
+.ad-root[data-theme='scene'] .ad-rpg { display: grid; gap: 12px; }
+.ad-root[data-theme='scene'] .ad-rpg-npc { position: relative; margin: 0; padding: 14px 20px; border-radius: 22px; background: #fff; border: 2px solid #fff; box-shadow: var(--shadow-s); font-size: 1.15rem; font-weight: 700; color: var(--ink); animation: sc-pop 0.4s both; }
+.ad-root[data-theme='scene'] .ad-rpg-npc span { display: inline-block; margin-inline-end: 10px; padding: 1px 12px; border-radius: 99px; background: var(--violet); color: #fff; font-size: 0.75rem; font-weight: 900; letter-spacing: 0.06em; text-transform: uppercase; vertical-align: middle; }
+.ad-root[data-theme='scene'] .ad-rpg-reply { background: #efe9ff; }
+.ad-root[data-theme='scene'] .ad-rpg-opts .ad-pk-tile { flex: 1 1 260px; text-align: start; padding: 12px 18px; }
+.ad-root[data-theme='scene'] .ad-pk-tile[data-score='2'][data-picked='true'] { background: #d8f5e6 !important; border-color: var(--good) !important; }
+.ad-root[data-theme='scene'] .ad-pk-tile[data-score='1'][data-picked='true'] { background: var(--gold-soft) !important; border-color: var(--gold) !important; }
+.ad-root[data-theme='scene'] .ad-pk-tile[data-score='0'][data-picked='true'] { background: #ffe6d3 !important; border-color: var(--try) !important; }
+/* hot seat */
+.ad-root[data-theme='scene'] .ad-hot { display: grid; grid-template-columns: 74px minmax(0, 1fr); gap: 18px; }
+.ad-root[data-theme='scene'] .ad-ladder { display: grid; gap: 5px; list-style: none; margin: 0; padding: 0; align-content: start; }
+.ad-root[data-theme='scene'] .ad-ladder li { display: grid; place-items: center; height: 28px; border-radius: 99px; background: rgba(255, 255, 255, 0.55); border: 2px solid #fff; font-size: 0.78rem; font-weight: 900; color: var(--muted); }
+.ad-root[data-theme='scene'] .ad-ladder li[data-mark='true'] { border-color: var(--gold); }
+.ad-root[data-theme='scene'] .ad-ladder li[data-done='true'] { background: var(--teal); color: #fff; border-color: #fff; }
+.ad-root[data-theme='scene'] .ad-ladder li[data-now='true'] { background: linear-gradient(135deg, #7c4dff, #b45cf0); color: #fff; border-color: #fff; transform: scale(1.1); box-shadow: 0 0 0 3px rgba(124, 77, 255, 0.35); }
+.ad-root[data-theme='scene'] .ad-hot-main { display: grid; gap: 10px; }
+.ad-root[data-theme='scene'] .ad-lifelines { display: flex; gap: 8px; justify-content: flex-end; }
+.ad-root[data-theme='scene'] .ad-hot-q { margin: 0; padding: 14px 20px; border-radius: 20px; background: #fff; box-shadow: var(--shadow-s); font-size: 1.25rem; font-weight: 800; color: var(--ink); text-align: center; }
+.ad-root[data-theme='scene'] .ad-hot-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.ad-root[data-theme='scene'] .ad-hot-opts .ad-pk-tile { text-align: start; padding: 10px 16px; font-size: 1rem; }
+.ad-root[data-theme='scene'] .ad-hot-opts .ad-pk-tile b { display: inline-grid; place-items: center; width: 24px; height: 24px; margin-inline-end: 8px; border-radius: 50%; background: var(--violet); color: #fff; font-size: 0.8rem; }
+.ad-root[data-theme='scene'] .ad-hot-opts .ad-pk-tile[data-ok='true'] { background: #d8f5e6 !important; border-color: var(--good) !important; }
+@media (max-width: 760px) { .ad-root[data-theme='scene'] .ad-hot { grid-template-columns: 1fr; } .ad-root[data-theme='scene'] .ad-ladder { display: none; } .ad-root[data-theme='scene'] .ad-hot-opts { grid-template-columns: 1fr; } }

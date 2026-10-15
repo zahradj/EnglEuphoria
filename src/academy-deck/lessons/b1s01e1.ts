@@ -38,6 +38,12 @@ const card = (id: string, label: string): TeachArt => ({ type: 'card', id, label
 const who = (w: CastName, pos: 'left' | 'right' | 'center', expr: 'happy' | 'wave' | 'thumbs' | 'neutral' = 'happy') => ({ who: w, pos, expr });
 const WALL = 'bucket-list-wall';
 const CASE = 'trophy-case';
+const STAGE = 'club-stage';
+const LOBBY = 'club-lobby';
+const VAULT = 'vault-corridor';
+const NIGHT = 'bus-stop-night';
+const CLASSROOM = 'classroom-evening';
+const DETECTIVE = 'detective-wall';
 const BUCKET = card('b-bucketlist', 'a bucket list on a wall');
 const DARE = card('b-dare', 'a friend daring you');
 const GO = card('b-giveitago', 'giving something a go');
@@ -64,7 +70,7 @@ export const B1_S01_E1: DeckScript = {
   clock: true,
   theme: 'scene',
   // an integrated-skills lesson (listen, read, notice, write, speak): the long part is the Drop, where the student listens to a dialogue and reads a blog post
-  partMinutes: [4, 5, 23, 10, 2, 7, 5, 4],
+  partMinutes: [4, 5, 19, 12, 3, 8, 5, 4],
   partGoals: [
     'Talk about yourself and your experiences',
     'Wake up your past simple',
@@ -99,18 +105,20 @@ export const B1_S01_E1: DeckScript = {
 
     // ---------- 1 · Remember? (spaced recall, then past simple in writing) ----------
     {
-      id: 'rem-recall', kind: 'hearpick', part: 1, bg: WALL, actors: [who('Ava', 'right')], trains: [1],
+      id: 'rem-recall', kind: 'hearpick', part: 1, bg: CLASSROOM, actors: [who('Ava', 'right')], trains: [1],
       prompt: 'Remember? Which one do you hear? Tap it.',
-      rounds: recallRounds(ACADEMY_RECALL_NODES, 'B1-S01-E1', 3, MAX_REMEMBER_ITEMS),
+      rounds: recallRounds(ACADEMY_RECALL_NODES, 'B1-S01-E1', 2, MAX_REMEMBER_ITEMS),
       hints: ['Listen, then look for the same words.'],
     },
     {
-      id: 'rem-write', kind: 'write', part: 1, bg: WALL, actors: [who('Vee', 'left')], trains: [4],
-      prompt: 'Write two full sentences about last weekend in the past simple. Add a detail to each (where, who or why).',
-      rows: [
-        { label: 'What did you do, and where?', frame: 'Last weekend I …', accept: ['\\b(went|visited|played|stayed|watched|met|saw|ate|took|made|studied|cooked|cleaned|had|did|bought|spent|walked|practised|practiced)\\b'], hint: 'Last weekend is finished, so use the past simple (went, played, saw …).', sample: 'Last weekend I went to my cousin’s house because it was her birthday.' },
-        { label: 'What did you eat or buy?', frame: 'We …', accept: ['\\b(ate|bought|cooked|had|drank|made|ordered|shared)\\b'], hint: 'Use ate, bought, had, cooked or drank.', sample: 'We ate pizza on the balcony and we shared a huge cake.' },
+      id: 'hot-seat', kind: 'quiz', part: 1, bg: STAGE, actors: [who('Ava', 'right')], trains: [4], friend: 'Ava',
+      prompt: 'Hot Seat! Climb the ladder. You have two lifelines: 50:50 and Ask Ava.',
+      questions: [
+        { q: 'Yesterday I ___ to the cinema with my cousin.', options: ['went', 'gone', 'go', 'have been'], answer: 'went', why: 'Yesterday is a finished time, so we use the past simple.', hint: 'Yesterday is finished. Think past simple.' },
+        { q: 'What is the past simple of “eat”?', options: ['ate', 'eaten', 'eated', 'eats'], answer: 'ate', why: 'Eat, ate, eaten: ate is the past simple.', hint: 'It is an irregular verb. Say it: eat, ate, eaten.' },
+        { q: 'Which sentence is correct?', options: ['We saw a great film last night.', 'We have seen a great film last night.', 'We seen a great film last night.', 'We have saw a great film last night.'], answer: 'We saw a great film last night.', why: 'Last night is a finished time, so: saw (past simple).', hint: 'Look for the time word: last night.' },
       ],
+      hints: ['Use a lifeline if you are not sure. A wrong answer only greys that choice.'],
     },
 
     // ---------- 2 · The Drop: LISTEN to the dare, learn the words, READ Ava's post ----------
@@ -137,16 +145,6 @@ export const B1_S01_E1: DeckScript = {
       ],
     },
     {
-      id: 'listen-detail', kind: 'hearpick', part: 2, bg: WALL, actors: [who('Theo', 'right')], trains: [1],
-      prompt: 'Listening check. Listen to each question about the dialogue, then choose the best answer.',
-      rounds: [
-        { say: 'What is the dare?', options: ['Make a bucket list and tick it off before the break.', 'Learn to surf before the break.', 'Take a photo in every country.'], answer: 'Make a bucket list and tick it off before the break.' },
-        { say: 'Why does Ava say that flying is easy?', options: ['She has flown many times, so it feels normal to her.', 'She is afraid of planes.', 'She has never been on a plane.'], answer: 'She has flown many times, so it feels normal to her.' },
-        { say: 'What can you guess about Theo?', options: ['He loves travelling and taking photos.', 'He is afraid to fly.', 'He has never left his country.'], answer: 'He loves travelling and taking photos.' },
-      ],
-      hints: ['Think about what each person said, not only the words.'],
-    },
-    {
       id: 'teach-words', kind: 'teach', part: 2, bg: WALL, actors: [who('Vee', 'left')], trains: [2], title: 'Six words from the dare',
       pages: [
         { word: 'bucket list', art: BUCKET, meaning: 'a list of things you want to do in your life', example: 'My bucket list has ten things on it.', clue: 'Say it as one word group: bucket list.' },
@@ -161,7 +159,7 @@ export const B1_S01_E1: DeckScript = {
     {
       id: 'match-words', kind: 'match', part: 2, bg: WALL, actors: [who('Ava', 'right')], trains: [2], mode: 'listen',
       prompt: 'Listen. Tap the picture for what you hear.',
-      pairs: [{ word: 'bucket list', art: BUCKET }, { word: 'dare', art: DARE }, { word: 'give it a go', art: GO }, { word: 'once in a lifetime', art: LIFETIME }, { word: 'tick it off', art: TICK }, { word: 'brave', art: BRAVE }],
+      pairs: [{ word: 'bucket list', art: BUCKET }, { word: 'dare', art: DARE }, { word: 'give it a go', art: GO }, { word: 'tick it off', art: TICK }, { word: 'brave', art: BRAVE }],
       hints: ['Listen to the words, then look for the picture.'],
     },
     {
@@ -171,14 +169,14 @@ export const B1_S01_E1: DeckScript = {
       hints: ['Remember where you saw each picture.'],
     },
     {
-      id: 'blog', kind: 'passage', part: 2, bg: WALL, actors: [], trains: [1, 2],
+      id: 'blog', kind: 'passage', part: 2, bg: LOBBY, actors: [], trains: [1, 2],
       prompt: 'Now read Ava’s blog post. Listen, read it yourself, then keep the words you want for your word bank.',
       from: 'Ava', lines: BLOG, bank: 'wordBank', keep: 3,
       keepFrom: ['terrified', 'opposite', 'regret', 'insects', 'honestly', 'performed'],
       hints: ['You do not need every word. Read for the main idea first.'],
     },
     {
-      id: 'blog-q', kind: 'readq', part: 2, bg: WALL, actors: [], trains: [1],
+      id: 'blog-q', kind: 'readq', part: 2, bg: LOBBY, actors: [], trains: [1],
       prompt: 'Reading questions. Choose the best answer. The text stays on the screen.',
       title: 'Why I stopped saying no', from: 'Ava', paragraphs: BLOG,
       questions: [
@@ -197,7 +195,7 @@ export const B1_S01_E1: DeckScript = {
 
     // ---------- 3 · Notice & Build: find it in the text, the rule, the three forms, write it ----------
     {
-      id: 'detective', kind: 'sort', part: 3, bg: WALL, actors: [], trains: [4],
+      id: 'detective', kind: 'sort', part: 3, bg: DETECTIVE, actors: [], trains: [4],
       prompt: 'Grammar Detective. These sentences come from the post and the dialogue. Is the time finished and stated, or is it an experience up to now? Tap a sentence, then a box.',
       bins: [{ id: 'when', label: 'A finished time (past simple)', template: '{w}' }, { id: 'now', label: 'Up to now, no time (have + past participle)', template: '{w}' }],
       items: [
@@ -205,7 +203,6 @@ export const B1_S01_E1: DeckScript = {
         { id: 's2', word: 'I have flown across the world twice.' },
         { id: 's3', word: 'Last month my cousin dared me.' },
         { id: 's4', word: 'I have never tried surfing.' },
-        { id: 's5', word: 'We took hundreds of photos in Spain.' },
         { id: 's6', word: 'I have eaten insects in Thailand.' },
       ],
       hints: ['Is there a finished time (last summer, last month, in Spain)? Then it is past simple.'],
@@ -220,19 +217,30 @@ export const B1_S01_E1: DeckScript = {
       ],
     },
     {
-      id: 'write-forms', kind: 'write', part: 3, bg: WALL, actors: [who('Theo', 'right')], trains: [4],
+      id: 'boss', kind: 'boss', part: 3, bg: VAULT, actors: [who('Theo', 'right')], trains: [4],
+      prompt: 'Break the Clock! Choose the right tense to strike. Three shields: a wrong tense costs one.',
+      rounds: [
+        { frame: 'I ___ to Italy three times in my life.', options: ['have been', 'went', 'was', 'have went'], answer: 'have been', why: 'In my life: no finished time, an experience up to now.' },
+        { frame: 'We ___ pizza in Naples last summer.', options: ['ate', 'have eaten', 'eaten', 'have ate'], answer: 'ate', why: 'Last summer is a finished time: past simple.' },
+        { frame: 'She ___ never tried surfing.', options: ['has', 'have', 'did', 'is'], answer: 'has', why: 'She takes has: has never tried.' },
+        { frame: 'Have you ever ___ spicy noodles?', options: ['eaten', 'ate', 'eat', 'eated'], answer: 'eaten', why: 'After have you ever we need the past participle: eaten.' },
+      ],
+      hints: ['Look for a time word: last summer is finished; in my life and ever are not.'],
+    },
+    {
+      id: 'forge', kind: 'forge', part: 3, bg: CASE, actors: [who('Vee', 'right')], trains: [3],
+      prompt: 'Trophy Forge! Forge the three forms of each verb, in order. Then say them.',
+      rounds: [TRIOS[0], TRIOS[5]].map((t) => ({ forms: t })),
+      hints: ['Base form first, then past simple, then past participle.'],
+    },
+    {
+      id: 'write-forms', kind: 'write', part: 3, bg: CLASSROOM, actors: [who('Theo', 'right')], trains: [4],
       prompt: 'Your turn to use the rule. Write a question, an answer and a follow-up.',
       rows: [
         { label: 'Ask a friend about travel (ever + be).', frame: 'Have you ever …?', accept: ['^have you ever been (to|in) .+'], hint: 'Have you ever + been to + a place.', sample: 'Have you ever been to Japan?' },
         { label: 'Answer for yourself with never (eat).', frame: 'I have never …', accept: ["^i (have never|haven't ever|have not ever) eaten .+", "^i've never eaten .+"], hint: 'I have never + eaten + something.', sample: 'I have never eaten octopus.' },
         { label: 'Ask a follow-up about the past (when / where / what).', frame: 'When did you …?', accept: ['^(when|where|what|who|why|how) did (you|he|she|they) \\w+'], hint: 'The follow-up is a finished time: Where did you go?', sample: 'Where did you go?' },
       ],
-    },
-    {
-      id: 'forge', kind: 'forge', part: 3, bg: CASE, actors: [who('Vee', 'right')], trains: [3],
-      prompt: 'Trophy Forge! Forge the three forms of each verb, in order. Then say them.',
-      rounds: [TRIOS[0], TRIOS[1], TRIOS[3], TRIOS[5]].map((t) => ({ forms: t })),
-      hints: ['Base form first, then past simple, then past participle.'],
     },
     {
       id: 'trio-memory', kind: 'memory', part: 3, optional: true, bg: CASE, actors: [who('Ava', 'right')], trains: [3],
@@ -243,24 +251,23 @@ export const B1_S01_E1: DeckScript = {
 
     // ---------- 4 · Energiser: the trio streak (harder verbs included) ----------
     {
-      id: 'streak', kind: 'streak', part: 4, bg: CASE, actors: [who('Theo', 'right')], trains: [3], save: 'trioScore',
+      id: 'wordle', kind: 'wordle', part: 4, bg: LOBBY, actors: [who('Theo', 'right')], trains: [3],
+      prompt: 'Participle Wordle! Guess the past participle in six tries.',
+      rounds: [
+        { base: 'fly', clue: 'I have ___ across the world twice.', answer: 'flown' },
+        { base: 'take', clue: 'She has ___ a hundred photos.', answer: 'taken' },
+      ],
+      hints: ['Gold means the letter is in the word, but in another place.'],
+    },
+    {
+      id: 'streak', kind: 'streak', part: 4, optional: true, bg: CASE, actors: [who('Theo', 'right')], trains: [3], save: 'trioScore',
       prompt: 'Trio streak! Listen to the verb. Choose the past simple, then the past participle. Beat your own best.',
-      rounds: [...HARD, TRIOS[4]].map((t, i) => streakRound(t, i)),
+      rounds: [...HARD, TRIOS[4], REVISED[2], REVISED[0], REVISED[1]].map((t, i) => streakRound(t, i)),
       hints: ['Past simple first. Then the past participle.'],
     },
 
     // ---------- 5 · Mission: who has done the most? Argue it with reasons ----------
     { id: 'dial', kind: 'dial', part: 5, bg: WALL, actors: [who('Vee', 'right', 'thumbs')], prompt: 'Mission time! How much help do you want?' },
-    {
-      id: 'cards', kind: 'explore', part: 5, bg: WALL, actors: [], trains: [5],
-      prompt: 'Four people, four lists. Tap each card on the wall to hear it, then decide who has done the most.',
-      spots: [
-        { id: 'mia', x: 18, y: 56, art: L('Mia'), who: 'Mia', line: 'I have never been on a plane, but I have crossed three countries by train. I have never eaten sushi.', label: 'Mia’s card' },
-        { id: 'theo', x: 40, y: 50, art: L('Theo'), who: 'Theo', line: 'I have taken a photo in every country I have visited, but I have never tried surfing.', label: 'Theo’s card' },
-        { id: 'ava', x: 62, y: 54, art: L('Ava'), who: 'Ava', line: 'I have flown across the world twice, and I have eaten spicy noodles three times.', label: 'Ava’s card' },
-        { id: 'vee', x: 82, y: 50, art: L('Vee'), who: 'Vee', line: 'I have watched a hundred surf videos, but I have never been in the ocean.', label: 'Vee’s card' },
-      ],
-    },
     {
       id: 'model-task', kind: 'model', part: 5, bg: WALL, actors: [who('Vee', 'left'), who('Ava', 'right')], trains: [5],
       title: 'Watch Vee argue it',
@@ -270,6 +277,28 @@ export const B1_S01_E1: DeckScript = {
         { who: 'Vee', text: 'That is true. On the other hand, he has never tried surfing, so it is a close call.' },
       ],
       closing: 'Now YOU decide. Give your answer, two reasons, and one point against it.',
+    },
+    {
+      id: 'rpg', kind: 'rpg', part: 5, bg: NIGHT, actors: [who('Theo', 'right')], trains: [4, 5], npc: 'Theo', goal: 4,
+      prompt: 'Rapport! Theo asks about your travels. Choose the reply that sounds most natural.',
+      scenes: [
+        { say: 'So, have you ever been abroad?', options: [
+          { text: 'Yes, I have. I have been to Italy.', score: 2, reply: 'Nice! When did you go?', note: 'Present perfect for the experience, no time.' },
+          { text: 'Yes, I went.', score: 1, reply: 'Cool. When was that?', note: 'Correct, but “I have been to …” sounds more natural for an experience.' },
+          { text: 'Yes, I have been to Italy last year.', score: 0, reply: 'Wait, last year? Hmm.', note: 'Last year is a finished time: say “I went to Italy last year.”' },
+        ] },
+        { say: 'I love Italy. When did you go there?', options: [
+          { text: 'I went last August with my family.', score: 2, reply: 'Lucky you! What did you eat?', note: 'Finished time, so the past simple. Perfect.' },
+          { text: 'Last August.', score: 1, reply: 'Nice. What did you eat?', note: 'Short answers are fine, but try a full sentence: “I went last August.”' },
+          { text: 'I have gone last August.', score: 0, reply: 'Hmm, last August? Okay… what did you eat?', note: 'With a finished time use went, not have gone.' },
+        ] },
+        { say: 'Amazing. What was the best thing you ate?', options: [
+          { text: 'I ate a huge pizza in Naples.', score: 2, reply: 'Ha, I have never eaten a pizza that big!', note: 'Past simple for a specific time and place.' },
+          { text: 'Pizza.', score: 1, reply: 'Classic. I have never been to Naples.', note: 'Fine, but a whole sentence is better practice.' },
+          { text: 'I have eaten a huge pizza in Naples.', score: 0, reply: 'Hold on, when was that?', note: 'You said where and it is a story: use the past simple, ate.' },
+        ] },
+      ],
+      hints: ['An experience with no time: have + participle. A story with a time or place: past simple.'],
     },
     {
       id: 'say-take1', kind: 'say', part: 5, bg: WALL, actors: [who('Vee', 'right')], trains: [5], open: true,
@@ -295,16 +324,15 @@ export const B1_S01_E1: DeckScript = {
 
     // ---------- 6 · Release: write it, then tell it ----------
     {
-      id: 'my-list', kind: 'write', part: 6, bg: WALL, actors: [who('Mia', 'right')], trains: [4, 5],
-      prompt: 'Write about your own list: one thing you have done, when it happened, and one dare for yourself.',
+      id: 'my-list', kind: 'write', part: 6, bg: CLASSROOM, actors: [who('Mia', 'right')], trains: [4, 5],
+      prompt: 'Write about your own list: when you did something (past simple), and one dare for yourself.',
       rows: [
-        { label: 'Something you have done (no time).', frame: 'I have …', accept: ["^i (have|ve|'ve) \\w+ .+"], hint: 'I have + past participle (been, seen, eaten, tried …).', sample: 'I have been to a music festival.' },
         { label: 'When it happened (past simple, finished time).', frame: 'It was … / I … last …', accept: ['\\b(was|were|went|did|saw|ate|took|had|met|visited|last|ago|in \\d{4}|yesterday)\\b'], hint: 'Use a finished time: last summer, two years ago, in 2023.', sample: 'I went last summer with my brother.' },
         { label: 'Something you want to do, and why.', frame: 'I would love to … because …', accept: ["\\bi (want|would love|'d love|hope|plan) to .+", '\\bbecause\\b'], hint: 'I would love to + verb, because + reason.', sample: 'I would love to give surfing a go because it looks fun.' },
       ],
     },
     {
-      id: 'say-release', kind: 'say', part: 6, bg: WALL, actors: [who('Ava', 'right')], trains: [1, 5], open: true,
+      id: 'say-release', kind: 'say', part: 6, bg: STAGE, actors: [who('Ava', 'right')], trains: [1, 5], open: true,
       prompt: 'Release: tell me your list out loud, with a follow-up story about one thing you have done. About a minute. (Record it privately first, then share if you want.)',
       model: 'I have been to a music festival. I went last summer with my brother, and we camped for three days. I would love to give surfing a go because it looks fun, but I am a little scared.',
       hints: ['Three steps: what you have done, when and what happened, what you want to do.'],
