@@ -1,8 +1,8 @@
 # Scenario: Pre-A1 Season 2, Episode 1 "First sounds · Cold Open" (story plates)
 
-Status: **draft for the owner's written approval.** Nothing below is made until it is approved. The lesson plan (approved 2026-10-15) is `docs/academy-pre-a1-s02-spec.md`.
+Status: **approved by the owner on 2026-10-15 ("go"); plates in progress, one Canva picture at a time.** Nothing below is made until it is approved. The lesson plan (approved 2026-10-15) is `docs/academy-pre-a1-s02-spec.md`.
 
-Learning goal: understand, by pictures and a few spoken lines, that a message has lost its letters and that each sound the student learns brings letters back; hear "This is a pin. This is a tin." before the student is asked to say it. Format: three full scene plates (16:9, Canva, cast painted in, about 35 % purple, no text or letters in the pictures), spoken by the recorded cast voices with subtitles, cross-fade only, never zoom or pan. The plates replace the hand-written `model-drop` slide in part 3 (The Drop).
+Learning goal: understand, by pictures and a few spoken lines, that a message has lost its letters and that each sound the student learns brings letters back; hear "This is a pin. This is a tin." before the student is asked to say it. Format: three full scene plates (16:9, Canva, cast painted in, about 25 % purple, no text or letters in the pictures), spoken by the recorded cast voices with subtitles, cross-fade only, never zoom or pan. The plates replace the hand-written `model-drop` slide in part 3 (The Drop).
 
 | Plate | Picture | Lines (spoken, one per tap) | Calm space |
 |---|---|---|---|
