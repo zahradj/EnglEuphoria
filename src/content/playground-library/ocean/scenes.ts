@@ -444,7 +444,17 @@ export const LESSON_A1U6L2_SCENES: Scene[] = [
       ],
     },
   },
-  { id: 'oc2-model-many', kind: 'meet', focus: ['swimming'], bg: bgDeep, who: 'coral', cardSide: 'right', teacher: 'Present (we do): one = is, many = are. Hold up one finger: The fish is swimming. All fingers: The fish are swimming!', line: 'One fish is swimming. Many fish are swimming!', repeat: 'The fish are swimming.' },
+  {
+    // One = is, many = are — the pictures show it (one fish / a school of fish), not an empty sea.
+    id: 'oc2-model-many', kind: 'prea1', teacher: 'Present (we do): one = is, many = are. Hold up one finger: The fish is swimming. All fingers: The fish are swimming!',
+    scene: {
+      id: 'oc2-model-many', kind: 'listen-repeat-cards', bg: bgDeep, teacher: 'One fish or many fish? Listen and say it!',
+      cards: [
+        { who: 'mia', sentence: 'The fish is swimming.', img: SEA.fish, imgLabel: 'one fish' },
+        { who: 'mia', sentence: 'The fish are swimming.', img: SEA.fishes, imgLabel: 'many fish' },
+      ],
+    },
+  },
   { id: 'oc2-echo', kind: 'echo', bg: reefPage(5), who: 'pip', textSide: 'top', teacher: 'Guided (we do): say it like Pip — and walk your fingers sideways like a crab!', word: 'The crab is walking!' },
   // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game.
   {
