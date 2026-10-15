@@ -2701,7 +2701,7 @@
   },
   {
     "who": "Vee",
-    "text": "Hi! How are you today?"
+    "text": "Warm-up talk. Tell me one exciting thing you did in the last year, and one thing you have never done but would love to try. About 30 seconds."
   },
   {
     "who": "Vee",
@@ -2780,24 +2780,8 @@
     "text": "fly. New to me."
   },
   {
-    "who": "Theo",
-    "text": "Warm up your ears! Which verb do you hear?"
-  },
-  {
     "who": "Vee",
-    "text": "went"
-  },
-  {
-    "who": "Vee",
-    "text": "seen"
-  },
-  {
-    "who": "Vee",
-    "text": "ate"
-  },
-  {
-    "who": "Vee",
-    "text": "Hi! I have a dare for you: a bucket list. Today you hear it, learn six new words, check your verb forms, and tell me who has done the most."
+    "text": "Today you listen to a dare, read a blog post, work out when to use the past simple and when to use have and the past participle, then write and tell me about your own list."
   },
   {
     "who": "Ava",
@@ -2812,32 +2796,8 @@
     "text": "complain"
   },
   {
-    "who": "Vee",
-    "text": "Somebody knows my personal information"
-  },
-  {
-    "who": "Vee",
-    "text": "banking"
-  },
-  {
-    "who": "Vee",
-    "text": "focus"
-  },
-  {
-    "who": "Vee",
-    "text": "Build the sentence about last weekend. Tap the words in order."
-  },
-  {
-    "who": "Vee",
-    "text": "I went to the park."
-  },
-  {
-    "who": "Vee",
-    "text": "We ate pizza."
-  },
-  {
     "who": "Ava",
-    "text": "Say two sentences about last weekend. Use went, saw or ate."
+    "text": "Hot Seat! Climb the ladder. You have two lifelines: 50:50 and Ask Ava."
   },
   {
     "who": "Vee",
@@ -2885,6 +2845,458 @@
   },
   {
     "who": "Vee",
+    "text": "Now read Ava’s blog post. Listen, read it yourself, then keep the words you want for your word bank."
+  },
+  {
+    "who": "Ava",
+    "text": "Last month my cousin dared me to write a bucket list, and I laughed. Honestly, I thought bucket lists were only for grown-ups."
+  },
+  {
+    "who": "Ava",
+    "text": "Then I counted what I have already done. I have flown across the world twice, I have slept in a tent in the rain, and I have eaten insects in Thailand. Last summer I went to Spain, and I even gave paragliding a go."
+  },
+  {
+    "who": "Ava",
+    "text": "The strange thing is that I have never felt brave. Brave people are not afraid, I used to think, but I was terrified before every one of those things. Now I believe it is the opposite: you are brave when you do it anyway."
+  },
+  {
+    "who": "Ava",
+    "text": "So this term I am going to tick off three more things, and one of them is a once in a lifetime trip. I have never tried surfing, and I have never performed on a stage."
+  },
+  {
+    "who": "Ava",
+    "text": "If you have a dare for yourself, write it down. You will probably regret the things you did not try more than the things you did."
+  },
+  {
+    "who": "Ava",
+    "text": "Last"
+  },
+  {
+    "who": "Ava",
+    "text": "month"
+  },
+  {
+    "who": "Ava",
+    "text": "my"
+  },
+  {
+    "who": "Ava",
+    "text": "cousin"
+  },
+  {
+    "who": "Ava",
+    "text": "dared"
+  },
+  {
+    "who": "Ava",
+    "text": "me"
+  },
+  {
+    "who": "Ava",
+    "text": "to"
+  },
+  {
+    "who": "Ava",
+    "text": "write"
+  },
+  {
+    "who": "Ava",
+    "text": "a"
+  },
+  {
+    "who": "Ava",
+    "text": "bucket"
+  },
+  {
+    "who": "Ava",
+    "text": "list"
+  },
+  {
+    "who": "Ava",
+    "text": "and"
+  },
+  {
+    "who": "Ava",
+    "text": "I"
+  },
+  {
+    "who": "Ava",
+    "text": "laughed"
+  },
+  {
+    "who": "Ava",
+    "text": "Honestly"
+  },
+  {
+    "who": "Ava",
+    "text": "thought"
+  },
+  {
+    "who": "Ava",
+    "text": "lists"
+  },
+  {
+    "who": "Ava",
+    "text": "were"
+  },
+  {
+    "who": "Ava",
+    "text": "only"
+  },
+  {
+    "who": "Ava",
+    "text": "for"
+  },
+  {
+    "who": "Ava",
+    "text": "grown-ups"
+  },
+  {
+    "who": "Ava",
+    "text": "Then"
+  },
+  {
+    "who": "Ava",
+    "text": "counted"
+  },
+  {
+    "who": "Ava",
+    "text": "what"
+  },
+  {
+    "who": "Ava",
+    "text": "have"
+  },
+  {
+    "who": "Ava",
+    "text": "already"
+  },
+  {
+    "who": "Ava",
+    "text": "done"
+  },
+  {
+    "who": "Ava",
+    "text": "flown"
+  },
+  {
+    "who": "Ava",
+    "text": "across"
+  },
+  {
+    "who": "Ava",
+    "text": "the"
+  },
+  {
+    "who": "Ava",
+    "text": "world"
+  },
+  {
+    "who": "Ava",
+    "text": "twice"
+  },
+  {
+    "who": "Ava",
+    "text": "slept"
+  },
+  {
+    "who": "Ava",
+    "text": "in"
+  },
+  {
+    "who": "Ava",
+    "text": "tent"
+  },
+  {
+    "who": "Ava",
+    "text": "rain"
+  },
+  {
+    "who": "Ava",
+    "text": "eaten"
+  },
+  {
+    "who": "Ava",
+    "text": "insects"
+  },
+  {
+    "who": "Ava",
+    "text": "Thailand"
+  },
+  {
+    "who": "Ava",
+    "text": "summer"
+  },
+  {
+    "who": "Ava",
+    "text": "went"
+  },
+  {
+    "who": "Ava",
+    "text": "Spain"
+  },
+  {
+    "who": "Ava",
+    "text": "even"
+  },
+  {
+    "who": "Ava",
+    "text": "gave"
+  },
+  {
+    "who": "Ava",
+    "text": "paragliding"
+  },
+  {
+    "who": "Ava",
+    "text": "go"
+  },
+  {
+    "who": "Ava",
+    "text": "The"
+  },
+  {
+    "who": "Ava",
+    "text": "strange"
+  },
+  {
+    "who": "Ava",
+    "text": "thing"
+  },
+  {
+    "who": "Ava",
+    "text": "is"
+  },
+  {
+    "who": "Ava",
+    "text": "that"
+  },
+  {
+    "who": "Ava",
+    "text": "never"
+  },
+  {
+    "who": "Ava",
+    "text": "felt"
+  },
+  {
+    "who": "Ava",
+    "text": "brave"
+  },
+  {
+    "who": "Ava",
+    "text": "Brave"
+  },
+  {
+    "who": "Ava",
+    "text": "people"
+  },
+  {
+    "who": "Ava",
+    "text": "are"
+  },
+  {
+    "who": "Ava",
+    "text": "not"
+  },
+  {
+    "who": "Ava",
+    "text": "afraid"
+  },
+  {
+    "who": "Ava",
+    "text": "used"
+  },
+  {
+    "who": "Ava",
+    "text": "think"
+  },
+  {
+    "who": "Ava",
+    "text": "but"
+  },
+  {
+    "who": "Ava",
+    "text": "was"
+  },
+  {
+    "who": "Ava",
+    "text": "terrified"
+  },
+  {
+    "who": "Ava",
+    "text": "before"
+  },
+  {
+    "who": "Ava",
+    "text": "every"
+  },
+  {
+    "who": "Ava",
+    "text": "one"
+  },
+  {
+    "who": "Ava",
+    "text": "of"
+  },
+  {
+    "who": "Ava",
+    "text": "those"
+  },
+  {
+    "who": "Ava",
+    "text": "things"
+  },
+  {
+    "who": "Ava",
+    "text": "Now"
+  },
+  {
+    "who": "Ava",
+    "text": "believe"
+  },
+  {
+    "who": "Ava",
+    "text": "it"
+  },
+  {
+    "who": "Ava",
+    "text": "opposite:"
+  },
+  {
+    "who": "Ava",
+    "text": "you"
+  },
+  {
+    "who": "Ava",
+    "text": "when"
+  },
+  {
+    "who": "Ava",
+    "text": "do"
+  },
+  {
+    "who": "Ava",
+    "text": "anyway"
+  },
+  {
+    "who": "Ava",
+    "text": "So"
+  },
+  {
+    "who": "Ava",
+    "text": "this"
+  },
+  {
+    "who": "Ava",
+    "text": "term"
+  },
+  {
+    "who": "Ava",
+    "text": "am"
+  },
+  {
+    "who": "Ava",
+    "text": "going"
+  },
+  {
+    "who": "Ava",
+    "text": "tick"
+  },
+  {
+    "who": "Ava",
+    "text": "off"
+  },
+  {
+    "who": "Ava",
+    "text": "three"
+  },
+  {
+    "who": "Ava",
+    "text": "more"
+  },
+  {
+    "who": "Ava",
+    "text": "them"
+  },
+  {
+    "who": "Ava",
+    "text": "once"
+  },
+  {
+    "who": "Ava",
+    "text": "lifetime"
+  },
+  {
+    "who": "Ava",
+    "text": "trip"
+  },
+  {
+    "who": "Ava",
+    "text": "tried"
+  },
+  {
+    "who": "Ava",
+    "text": "surfing"
+  },
+  {
+    "who": "Ava",
+    "text": "performed"
+  },
+  {
+    "who": "Ava",
+    "text": "on"
+  },
+  {
+    "who": "Ava",
+    "text": "stage"
+  },
+  {
+    "who": "Ava",
+    "text": "If"
+  },
+  {
+    "who": "Ava",
+    "text": "dare"
+  },
+  {
+    "who": "Ava",
+    "text": "yourself"
+  },
+  {
+    "who": "Ava",
+    "text": "down"
+  },
+  {
+    "who": "Ava",
+    "text": "You"
+  },
+  {
+    "who": "Ava",
+    "text": "will"
+  },
+  {
+    "who": "Ava",
+    "text": "probably"
+  },
+  {
+    "who": "Ava",
+    "text": "regret"
+  },
+  {
+    "who": "Ava",
+    "text": "did"
+  },
+  {
+    "who": "Ava",
+    "text": "try"
+  },
+  {
+    "who": "Ava",
+    "text": "than"
+  },
+  {
+    "who": "Vee",
     "text": "bucket list"
   },
   {
@@ -2897,7 +3309,7 @@
   },
   {
     "who": "Vee",
-    "text": "Vee dares us to make a list."
+    "text": "My cousin dared me to write a list."
   },
   {
     "who": "Vee",
@@ -2937,51 +3349,51 @@
   },
   {
     "who": "Ava",
-    "text": "dare"
-  },
-  {
-    "who": "Ava",
     "text": "give it a go"
-  },
-  {
-    "who": "Ava",
-    "text": "once in a lifetime"
   },
   {
     "who": "Ava",
     "text": "tick it off"
   },
   {
-    "who": "Ava",
-    "text": "brave"
-  },
-  {
     "who": "Vee",
     "text": "Memory! Match each picture with its words."
   },
   {
-    "who": "Theo",
-    "text": "Spot the lie! Listen to each sentence about the story. Is it true or false?"
-  },
-  {
     "who": "Vee",
-    "text": "Vee has finished her bucket list."
-  },
-  {
-    "who": "Vee",
-    "text": "Ava has flown across the world twice."
-  },
-  {
-    "who": "Vee",
-    "text": "Theo has never taken a photo."
+    "text": "Reading questions. Choose the best answer. The text stays on the screen."
   },
   {
     "who": "Ava",
-    "text": "Clue 1: What is Vee’s dare, and who sounds the bravest? Say it in your own words."
+    "text": "Retell it. In two or three sentences, say what Ava’s post is about, and say if you agree that “you are brave when you do it anyway”."
   },
   {
     "who": "Vee",
-    "text": "Remember: three forms"
+    "text": "Grammar Detective. These sentences come from the post and the dialogue. Is the time finished and stated, or is it an experience up to now? Tap a sentence, then a box."
+  },
+  {
+    "who": "Vee",
+    "text": "Last summer I went to Spain."
+  },
+  {
+    "who": "Vee",
+    "text": "I have flown across the world twice."
+  },
+  {
+    "who": "Vee",
+    "text": "Last month my cousin dared me."
+  },
+  {
+    "who": "Vee",
+    "text": "I have never tried surfing."
+  },
+  {
+    "who": "Vee",
+    "text": "I have eaten insects in Thailand."
+  },
+  {
+    "who": "Vee",
+    "text": "The rule"
   },
   {
     "who": "Vee",
@@ -2993,7 +3405,7 @@
   },
   {
     "who": "Vee",
-    "text": "Past simple tells you when it happened."
+    "text": "Past simple is for a finished time, so we say when."
   },
   {
     "who": "Vee",
@@ -3001,35 +3413,15 @@
   },
   {
     "who": "Vee",
-    "text": "Have and the past participle tell you about an experience up to now."
+    "text": "Have and the past participle is for an experience up to now, with no time."
   },
   {
     "who": "Vee",
     "text": "I have been to Spain."
   },
   {
-    "who": "Vee",
-    "text": "Grammar Detective! When it happened, or up to now? Tap a sentence, then a box."
-  },
-  {
-    "who": "Vee",
-    "text": "I have never been in the ocean."
-  },
-  {
-    "who": "Vee",
-    "text": "We ate pizza every day."
-  },
-  {
-    "who": "Vee",
-    "text": "I have seen a hundred videos."
-  },
-  {
-    "who": "Vee",
-    "text": "We took hundreds of photos."
-  },
-  {
-    "who": "Vee",
-    "text": "You have flown across the world twice."
+    "who": "Theo",
+    "text": "Break the Clock! Choose the right tense to strike. Three shields: a wrong tense costs one."
   },
   {
     "who": "Vee",
@@ -3041,23 +3433,31 @@
   },
   {
     "who": "Vee",
+    "text": "fly, flew, flown."
+  },
+  {
+    "who": "Mia",
+    "text": "Triple Match! Pick one tile in each column that belong to the same verb. Build combos!"
+  },
+  {
+    "who": "Mia",
+    "text": "go, went, gone."
+  },
+  {
+    "who": "Mia",
     "text": "be, was, been."
   },
   {
-    "who": "Vee",
+    "who": "Mia",
     "text": "see, saw, seen."
   },
   {
-    "who": "Vee",
+    "who": "Mia",
     "text": "eat, ate, eaten."
   },
   {
-    "who": "Vee",
+    "who": "Mia",
     "text": "take, took, taken."
-  },
-  {
-    "who": "Vee",
-    "text": "fly, flew, flown."
   },
   {
     "who": "Ava",
@@ -3085,55 +3485,83 @@
   },
   {
     "who": "Theo",
+    "text": "Triple Match, hard mode! Harder verbs: match the three forms."
+  },
+  {
+    "who": "Theo",
+    "text": "drive, drove, driven."
+  },
+  {
+    "who": "Theo",
+    "text": "choose, chose, chosen."
+  },
+  {
+    "who": "Theo",
+    "text": "begin, began, begun."
+  },
+  {
+    "who": "Theo",
+    "text": "speak, spoke, spoken."
+  },
+  {
+    "who": "Theo",
+    "text": "write, wrote, written."
+  },
+  {
+    "who": "Theo",
+    "text": "Participle Wordle! Guess the past participle in six tries."
+  },
+  {
+    "who": "Theo",
     "text": "Trio streak! Listen to the verb. Choose the past simple, then the past participle. Beat your own best."
   },
   {
     "who": "Theo",
-    "text": "go"
+    "text": "drive"
   },
   {
     "who": "Theo",
-    "text": "went"
+    "text": "drove"
   },
   {
     "who": "Theo",
-    "text": "gone"
+    "text": "driven"
   },
   {
     "who": "Theo",
-    "text": "be"
+    "text": "choose"
   },
   {
     "who": "Theo",
-    "text": "was"
+    "text": "chose"
   },
   {
     "who": "Theo",
-    "text": "been"
+    "text": "chosen"
   },
   {
     "who": "Theo",
-    "text": "see"
+    "text": "begin"
   },
   {
     "who": "Theo",
-    "text": "saw"
+    "text": "began"
   },
   {
     "who": "Theo",
-    "text": "seen"
+    "text": "begun"
   },
   {
     "who": "Theo",
-    "text": "eat"
+    "text": "speak"
   },
   {
     "who": "Theo",
-    "text": "ate"
+    "text": "spoke"
   },
   {
     "who": "Theo",
-    "text": "eaten"
+    "text": "spoken"
   },
   {
     "who": "Theo",
@@ -3149,15 +3577,15 @@
   },
   {
     "who": "Theo",
-    "text": "fly"
+    "text": "write"
   },
   {
     "who": "Theo",
-    "text": "flew"
+    "text": "wrote"
   },
   {
     "who": "Theo",
-    "text": "flown"
+    "text": "written"
   },
   {
     "who": "Theo",
@@ -3180,112 +3608,84 @@
     "text": "made"
   },
   {
-    "who": "Theo",
-    "text": "write"
-  },
-  {
-    "who": "Theo",
-    "text": "wrote"
-  },
-  {
-    "who": "Theo",
-    "text": "written"
-  },
-  {
-    "who": "Theo",
-    "text": "win"
-  },
-  {
-    "who": "Theo",
-    "text": "won"
-  },
-  {
     "who": "Vee",
-    "text": "Four people, four lists. Tap each card on the wall to hear it."
-  },
-  {
-    "who": "Mia",
-    "text": "I have never been on a plane. I have never eaten sushi."
-  },
-  {
-    "who": "Theo",
-    "text": "I have taken a photo in every country. I have never tried surfing."
+    "text": "I would say Ava has done the most. She has flown across the world twice, and she has even eaten spicy noodles."
   },
   {
     "who": "Ava",
-    "text": "I have flown across the world twice. I have eaten spicy noodles."
+    "text": "But Theo has visited more countries than I have."
   },
   {
     "who": "Vee",
-    "text": "I have seen a hundred surf videos. I have never been in the ocean."
+    "text": "That is true. On the other hand, he has never tried surfing, so it is a close call."
+  },
+  {
+    "who": "Theo",
+    "text": "Rapport! Theo asks about your travels. Choose the reply that sounds most natural."
+  },
+  {
+    "who": "Theo",
+    "text": "So, have you ever been abroad?"
+  },
+  {
+    "who": "Theo",
+    "text": "Nice! When did you go?"
+  },
+  {
+    "who": "Theo",
+    "text": "Cool. When was that?"
+  },
+  {
+    "who": "Theo",
+    "text": "Wait, last year? Hmm."
+  },
+  {
+    "who": "Theo",
+    "text": "I love Italy. When did you go there?"
+  },
+  {
+    "who": "Theo",
+    "text": "Lucky you! What did you eat?"
+  },
+  {
+    "who": "Theo",
+    "text": "Nice. What did you eat?"
+  },
+  {
+    "who": "Theo",
+    "text": "Hmm, last August? Okay… what did you eat?"
+  },
+  {
+    "who": "Theo",
+    "text": "Amazing. What was the best thing you ate?"
+  },
+  {
+    "who": "Theo",
+    "text": "Ha, I have never eaten a pizza that big!"
+  },
+  {
+    "who": "Theo",
+    "text": "Classic. I have never been to Naples."
+  },
+  {
+    "who": "Theo",
+    "text": "Hold on, when was that?"
   },
   {
     "who": "Vee",
-    "text": "I think Ava has done the most."
+    "text": "Take 1 · Who has done the most? Give your answer and your reasons. About a minute."
+  },
+  {
+    "who": "Vee",
+    "text": "Take 2 · Say it again, better: fix what we noticed, and add a point against your answer."
   },
   {
     "who": "Ava",
-    "text": "Why?"
+    "text": "Release: tell me your list out loud, with a follow-up story about one thing you have done. About a minute. (Record it privately first, then share if you want.)"
   },
   {
     "who": "Vee",
-    "text": "She has flown across the world twice, and she has eaten spicy noodles."
-  },
-  {
-    "who": "Vee",
-    "text": "Take 1 · Who has done the most? Say who, and why."
-  },
-  {
-    "who": "Vee",
-    "text": "Take 2 · Say it again, with your reason."
-  },
-  {
-    "who": "Vee",
-    "text": "Your own bucket list. Tap a thing, then a box. There is no wrong answer."
-  },
-  {
-    "who": "Vee",
-    "text": "surf. I want to do it."
-  },
-  {
-    "who": "Vee",
-    "text": "surf. I have done it."
-  },
-  {
-    "who": "Vee",
-    "text": "surf. Not for me."
-  },
-  {
-    "who": "Vee",
-    "text": "fly across the world. I want to do it."
-  },
-  {
-    "who": "Vee",
-    "text": "fly across the world. I have done it."
-  },
-  {
-    "who": "Vee",
-    "text": "fly across the world. Not for me."
-  },
-  {
-    "who": "Vee",
-    "text": "eat spicy noodles. I want to do it."
-  },
-  {
-    "who": "Vee",
-    "text": "eat spicy noodles. I have done it."
-  },
-  {
-    "who": "Vee",
-    "text": "eat spicy noodles. Not for me."
-  },
-  {
-    "who": "Ava",
-    "text": "Release: say what you think of Vee’s dare, and one thing you want to do once in a lifetime. (Record it privately first, then share if you want.)"
-  },
-  {
-    "who": "Vee",
-    "text": "Every verb has three forms."
+    "text": "We use the present perfect for an experience up to now."
   },
   {
     "who": "Vee",
@@ -3293,7 +3693,7 @@
   },
   {
     "who": "Vee",
-    "text": "Daily 10: say the three forms of ten verbs, and record a voice note with three sentences about things you have done. Not yet is okay!"
+    "text": "Daily 10: say the three forms of ten verbs, then record a voice note: three things you have done (with when) and one dare for yourself. Not yet is okay!"
   },
   {
     "who": "Vee",
