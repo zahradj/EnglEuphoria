@@ -73,8 +73,8 @@ export function RhythmView({ slide }: { slide: RhythmSlide }) {
       <div className="ad-row" style={{ justifyContent: 'center' }}>
         <button type="button" className="ad-hp-ear" onClick={() => void speak(lead, r.say)} aria-label="Hear it again"><Icon name="speaker" /></button>
       </div>
-      <div className="ad-lane" role="group" aria-label="Choose what you hear">
-        {opts.map((o, k) => <button key={o} type="button" className="ad-lane-tile" data-bad={bad === o} style={{ ['--k' as string]: k }} onClick={() => pick(o)}>{o}</button>)}
+      <div className="ad-pk-lane" role="group" aria-label="Choose what you hear">
+        {opts.map((o, k) => <button key={o} type="button" className="ad-pk-tile" data-bad={bad === o} style={{ ['--k' as string]: k }} onClick={() => pick(o)}>{o}</button>)}
       </div>
       {slip && <Feedback kind="try">{NOT_YET} Listen again, then choose.</Feedback>}
       <p className="ad-hint-line">Pin {round + 1} of {slide.rounds.length}. Listen, then tap what you hear. No rush.</p>
@@ -135,7 +135,7 @@ export function DuelView({ slide }: { slide: DuelSlide }) {
           <p className="ad-duel-frame" aria-live="polite">{said ? sentence : slide.frame}</p>
           {!said ? (
             <div className="ad-duel-opts" role="group" aria-label="Choose the word">
-              {opts.map((o) => <button key={o} type="button" className="ad-lane-tile" data-bad={bad === o} data-help={misses >= 3 && o === r.answer} onClick={() => pick(o)}>{o}</button>)}
+              {opts.map((o) => <button key={o} type="button" className="ad-pk-tile" data-bad={bad === o} data-help={misses >= 3 && o === r.answer} onClick={() => pick(o)}>{o}</button>)}
             </div>
           ) : (
             <div className="ad-row">

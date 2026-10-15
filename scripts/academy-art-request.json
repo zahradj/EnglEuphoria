@@ -1,17 +1,1 @@
-[
- {
-  "kind": "story",
-  "out": "public/academy-art/bg/vault-corridor.webp",
-  "url": "https://export-download.canva.com/3gn1o/DAHXiX3gn1o/-1/0/0097-234706191780692701.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261014%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261014T023902Z&X-Amz-Expires=86589&X-Amz-Signature=e97a663edb949686aadabd9fa30f899187d058e7350da60d5413768e1a01d1ae&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2015%20Oct%202026%2002%3A42%3A11%20GMT"
- },
- {
-  "kind": "story",
-  "out": "public/academy-art/bg/lockscreen-closeup.webp",
-  "url": "https://export-download.canva.com/3gn1o/DAHXiX3gn1o/-1/0/0098-234706191780692701.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261014%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261014T184158Z&X-Amz-Expires=27814&X-Amz-Signature=116ed64baea08cf0861ea3ebc0667fb37af97a1266897109b755e5347589942a&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2015%20Oct%202026%2002%3A25%3A32%20GMT"
- },
- {
-  "kind": "story",
-  "out": "public/academy-art/bg/bus-stop-dawn.webp",
-  "url": "https://export-download.canva.com/3gn1o/DAHXiX3gn1o/-1/0/0099-234706191780692701.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261014%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261014T084649Z&X-Amz-Expires=65227&X-Amz-Signature=8a30e62bdceb0d478ae647df7b0a5ecc12ee386cbe47968b26e23deeb43981fc&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2015%20Oct%202026%2002%3A53%3A56%20GMT"
- }
-]
+[]

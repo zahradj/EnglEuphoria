@@ -1,6 +1,6 @@
 # Pre-A1 S2 L1 "First sounds · The Phone" — version 2 plan (concept, design, 60-minute fill)
 
-Status: **draft for the owner's written approval (2026-10-15).** Nothing below is built until approved (CLAUDE.md: a lesson plan comes before every lesson). The approved v1 plan stays in `docs/academy-pre-a1-s02-spec.md`; the v1 story scenario stays in `docs/scenarios/academy-pa1s02e1-the-phone.md`. v2 changes the concept, the look and the length; the **objective, the new items, the cast and the Season theme (The Phone) do not change**.
+Status: **approved and built (2026-10-15).** The owner gave full authority over concept, layout and design ("you are free to decide… make it look like a video game, make it fun, student comfort first, and learning too"). What was built differs from the first draft in the ways listed in §10. The approved v1 plan stays in `docs/academy-pre-a1-s02-spec.md`; the v1 story scenario stays in `docs/scenarios/academy-pa1s02e1-the-phone.md`. v2 changes the concept, the look and the length; the **objective, the new items, the cast and the Season theme (The Phone) do not change**.
 
 ## 1. Why change (owner, 2026-10-15: "change the concept and the design of the game, and it doesn't seem like one hour")
 
@@ -93,3 +93,12 @@ An activity not in this table is cut.
 
 1. Approve v2 as written? (One word is enough.)
 2. /i/ and /n/ sound clips (separate approval; they stay silent until then).
+
+## 10. As built (2026-10-15)
+
+- **41 pages** (36 required + 5 optional), not 46: the project's own timing estimate said the first draft (45 pages, about 73 minutes) was too long for an hour, so the lesson was trimmed until the REQUIRED pages total about 61 minutes by that estimate (`pa1s02e1.test.tsx` TIME). The 5 optional pages (dashed in the teacher's strip) add about 11 minutes of extra practice the teacher can add or skip.
+- **Part minutes for this lesson** (`partMinutes`, adding to 60): Check-in 5, Remember? 9, The Drop 8, Learn 10, Read 8, Learn more 6, Mission 10, Wrap 4. Lock 5 (the message) sits at the end of the Mission; the Wrap is the teach-back and the can-dos.
+- **Lock 1** is a lock-pick lane on minimal pairs (in/an/at, it, tin/tan/tip, pin/pan/pit, sit/sat/sip) heard as words: the /i/ and /n/ sound clips are not approved yet, so the lane uses recorded words. **Lock 4** is the boss duel, four pictures.
+- **Sound:** the "key" and "pin" sounds are synthesized by the player (no files, no voices), off in Calm mode and with Sounds off.
+- **Responses:** 110+ by the test's count, with the speaking checks (Say it on every duel picture, Take 1, Take 2, teach-back).
+- **Art:** three new plates (`vault-corridor`, `lockscreen-closeup`, `bus-stop-dawn`), reused story plates and the four cut-out cards.
