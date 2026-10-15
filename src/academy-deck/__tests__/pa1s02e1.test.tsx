@@ -31,6 +31,7 @@ const minutes = (s: Slide): number => {
     case 'hearpick': return 0.5 + s.rounds.length * 0.5;
     case 'blend': return 0.5 + s.rounds.length * 0.7;
     case 'rule': return 1;
+    case 'story': return 0.4 + s.beats.reduce((n, b) => n + b.lines.length, 0) * 0.4;
     case 'reader': return 0.6 + s.lines.length * 0.7;
     case 'fade': return 0.6 + s.lines.length * 0.6;
     case 'say': return 2;

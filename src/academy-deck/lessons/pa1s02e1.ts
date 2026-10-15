@@ -18,7 +18,8 @@ export const CRITERIA = [
 const L = (text: string): TeachArt => ({ type: 'letters', text });
 const card = (id: string, label: string): TeachArt => ({ type: 'card', id, label });
 const who = (w: CastName, pos: 'left' | 'right' | 'center', expr: 'happy' | 'wave' | 'thumbs' | 'neutral' = 'happy') => ({ who: w, pos, expr });
-const PH = 'phone-profile-closeup';
+const PH = 'bus-stop-night';
+const GLOW = 'phone-screen-glow';
 const PIN = card('p-pin', 'a pin');
 const TIN = card('p-tin', 'a tin');
 const PHONE = card('p-phone', 'a phone');
@@ -47,7 +48,7 @@ export const PA1_S02_E1: DeckScript = {
   slides: [
     // ---------- 0 · Check-in ----------
     { id: 'title', kind: 'title', part: 0, bg: PH, actors: [who('Vee', 'center', 'wave')], heading: 'First sounds', sub: 'The Phone · lesson 1' },
-    { id: 'badge', kind: 'badge', part: 0, bg: PH, actors: [who('Theo', 'right', 'wave')], trains: [4], prompt: 'Theo sends you a message. Put your name on it.', starter: 'My name is', ages: [13, 14, 15, 16, 17, 18], hints: ['Type only your name.'] },
+    { id: 'badge', kind: 'badge', part: 0, bg: GLOW, actors: [who('Theo', 'right', 'wave')], trains: [4], prompt: 'Theo sends you a message. Put your name on it.', starter: 'My name is', ages: [13, 14, 15, 16, 17, 18], hints: ['Type only your name.'] },
     {
       id: 'warm', kind: 'hearpick', part: 0, bg: 'club-lobby', actors: [who('Vee', 'right')], trains: [1],
       prompt: 'Warm up your ears! Which letter do you hear?',
@@ -95,12 +96,17 @@ export const PA1_S02_E1: DeckScript = {
 
     // ---------- 2 · The Drop ----------
     {
+      id: 'story-open', kind: 'story', part: 2, stage: 'context', bg: PH, trains: [4], title: 'The Message',
+      beats: [
+        { plate: 'story-pa1s02-1', lines: [{ who: 'Vee', text: 'Look! A message!' }, { who: 'Theo', text: 'The letters are missing!' }] },
+        { plate: 'story-pa1s02-2', lines: [{ who: 'Theo', text: 'This is a pin.' }, { who: 'Vee', text: 'This is a tin.' }] },
+        { plate: 'story-pa1s02-3', lines: [{ who: 'Ava', text: 'I can help. Every sound brings a letter back.' }, { who: 'Vee', text: "Let's learn two sounds." }] },
+      ],
+    },
+    {
       id: 'model-drop', kind: 'model', part: 2, bg: PH, actors: [who('Vee', 'left'), who('Theo', 'right')], trains: [3, 4],
-      title: 'Watch Vee and Theo look at the phone',
+      title: 'Watch Vee and Theo say what things are',
       lines: [
-        { who: 'Vee', text: 'Look! A message.', pic: PHONE },
-        { who: 'Theo', text: 'It is a …?' },
-        { who: 'Vee', text: 'The letters are missing!' },
         { who: 'Theo', text: 'This is a pin.', pic: PIN },
         { who: 'Vee', text: 'This is a tin.', pic: TIN },
         { who: 'Theo', text: 'Now we can read it!' },
@@ -110,7 +116,7 @@ export const PA1_S02_E1: DeckScript = {
     {
       id: 'drop-match', kind: 'match', part: 2, bg: PH, actors: [who('Vee', 'right')], trains: [4], mode: 'listen',
       prompt: 'Listen. Tap the picture for what you hear.',
-      pairs: [{ word: 'phone', art: PHONE }, { word: 'pin', art: PIN }, { word: 'tin', art: TIN }],
+      pairs: [{ word: 'phone', art: PHONE }, { word: 'pin', art: PIN }, { word: 'tin', art: TIN }, { word: 'map', art: MAP }],
       hints: ['Listen to the word, then look for its picture.'],
     },
     {
@@ -123,13 +129,6 @@ export const PA1_S02_E1: DeckScript = {
       ],
       hints: ['Look at the picture. Choose the sentence that fits.'],
     },
-    {
-      id: 'drop-hear', kind: 'hearpick', part: 2, bg: 'locker-hall', actors: [who('Vee', 'right')], trains: [4],
-      prompt: 'Which word do you hear? Tap it.',
-      rounds: [{ say: 'phone', options: ['phone', 'pin', 'tin'], answer: 'phone' }, { say: 'tin', options: ['pin', 'tin', 'phone'], answer: 'tin' }, { say: 'pin', options: ['tin', 'phone', 'pin'], answer: 'pin' }],
-      hints: ['Listen, then read the words.'],
-    },
-
     // ---------- 3 · Learn set 1: the sounds i and n ----------
     {
       id: 'rule-slide', kind: 'rule', part: 3, bg: PH, actors: [who('Vee', 'left')], trains: [2, 5],

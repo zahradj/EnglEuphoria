@@ -2345,14 +2345,10 @@
   },
   {
     "who": "Vee",
-    "text": "Look! A message."
+    "text": "Look! A message!"
   },
   {
     "who": "Theo",
-    "text": "It is a …?"
-  },
-  {
-    "who": "Vee",
     "text": "The letters are missing!"
   },
   {
@@ -2362,6 +2358,14 @@
   {
     "who": "Vee",
     "text": "This is a tin."
+  },
+  {
+    "who": "Ava",
+    "text": "I can help. Every sound brings a letter back."
+  },
+  {
+    "who": "Vee",
+    "text": "Let's learn two sounds."
   },
   {
     "who": "Theo",
@@ -2380,16 +2384,16 @@
     "text": "tin"
   },
   {
+    "who": "Vee",
+    "text": "map"
+  },
+  {
     "who": "Theo",
     "text": "Look!"
   },
   {
     "who": "Theo",
     "text": "And this?"
-  },
-  {
-    "who": "Vee",
-    "text": "Which word do you hear? Tap it."
   },
   {
     "who": "Vee",
@@ -2462,10 +2466,6 @@
   {
     "who": "Vee",
     "text": "It is a map."
-  },
-  {
-    "who": "Vee",
-    "text": "map"
   },
   {
     "who": "Theo",
