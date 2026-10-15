@@ -22,6 +22,7 @@ import { ACADEMY_DECK_BLUEPRINT_IDS } from '@/academy-deck/lessonRegistry';
 import { loadDeckScript } from '@/academy-deck/lessonScripts';
 import { familyLines, type LessonChecklist, type UnitAssessment } from '@/curriculum/academy';
 import { saveCheck } from '@/services/academyChecklistService';
+import { clearAcademyChecklist, loadAcademyChecklist } from '@/academy-deck/classroom/checklistLog';
 
 /**
  * Session report — 3 short steps (redesigned from one long form):
@@ -512,6 +513,7 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
       if (acLesson || acUnit) {
         const sid = studentId || 'student';
         if (acLesson) void saveCheck(teacherId, sid, 'lesson', acLesson.lessonId, acLesson);
+        clearAcademyChecklist(bookingId);
         if (acUnit) void saveCheck(teacherId, sid, 'unit', acUnit.seasonId, acUnit);
         lines.push(['✅', 'Lesson checklist saved in the report']);
       }
@@ -935,7 +937,7 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
 
                   {academyLessonId && acScript && (
                     <section className="grid gap-3" aria-label="Academy checklist">
-                      <LessonChecklistPanel embedded lessonId={blueprintId ?? academyLessonId} studentId={studentId || 'student'} level={acScript.level} criteria={acScript.criteria} onChange={setAcLesson} />
+                      <LessonChecklistPanel embedded lessonId={blueprintId ?? academyLessonId} studentId={studentId || 'student'} level={acScript.level} criteria={acScript.criteria} initial={loadAcademyChecklist<LessonChecklist>(bookingId)?.lessonId === (blueprintId ?? academyLessonId) ? loadAcademyChecklist<LessonChecklist>(bookingId) : null} onChange={setAcLesson} />
                       {unitSeasonId && <UnitAssessmentPanel embedded seasonId={unitSeasonId} studentId={studentId || 'student'} onChange={setAcUnit} />}
                     </section>
                   )}

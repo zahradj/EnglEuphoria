@@ -153,9 +153,11 @@ export interface DeckProps {
   /** homework quest mode: no part title cards, the strip label is `label`, and every solved slide reports its wrong tries */
   homework?: { label: string };
   onSlideDone?: (slide: Slide, result: { wrong: number }) => void;
+  /** every wrong try on a slide (the live classroom keeps what the student tried but did not finish) */
+  onSlideWrong?: (slide: Slide, wrongSoFar: number) => void;
 }
 
-export function Deck({ script, artBase, audioBase, teacher = false, freeNext = false, slide: controlled, start, embedded = false, follow = false, onSlide, onFinish, homework, onSlideDone }: DeckProps) {
+export function Deck({ script, artBase, audioBase, teacher = false, freeNext = false, slide: controlled, start, embedded = false, follow = false, onSlide, onFinish, homework, onSlideDone, onSlideWrong }: DeckProps) {
   const [own, setOwn] = useState(start ?? 0);
   const index = Math.min(controlled ?? own, script.slides.length - 1);
   const go = useCallback((i: number) => {
@@ -274,6 +276,8 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
   slideRef.current = cur;
   const cbRef = useRef(onSlideDone);
   cbRef.current = onSlideDone;
+  const wrongCb = useRef(onSlideWrong);
+  wrongCb.current = onSlideWrong;
   const done = useCallback(() => setSolved((s) => {
     if (s[curId.current]) return s;
     // report once per slide, outside the state updater's purity: schedule it
@@ -297,6 +301,7 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
   }, []);
   const wrong = useCallback(() => {
     wrongBySlide.current[curId.current] = (wrongBySlide.current[curId.current] ?? 0) + 1;
+    wrongCb.current?.(slideRef.current, wrongBySlide.current[curId.current]);
     setStats((s) => ({ ...s, wrong: s.wrong + 1 }));
     comboRef.current = 0;
     setCombo(0);

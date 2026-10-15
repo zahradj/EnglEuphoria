@@ -30,6 +30,7 @@ import { ZenModeOverlay } from "@/components/classroom/ZenModeOverlay";
 import { PictureInPicture } from "@/components/classroom/PictureInPicture";
 import { LessonWrapUpDialog } from "@/components/classroom/LessonWrapUpDialog";
 import { LessonChecklistPopup } from "@/components/classroom/LessonChecklistPopup";
+import { AcademyChecklistPopup } from "@/academy-deck/teacher/AcademyChecklistPopup";
 import { TeacherInstructionsSidebar } from "@/components/classroom/TeacherInstructionsSidebar";
 import { ConnectionDebugPanel, type ConnectionHealthStatus } from "@/components/classroom/debug/ConnectionDebugPanel";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -831,6 +832,8 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
   // Whether the unified stage is currently showing an embedded Playground
   // scene lesson (vs. a regular slide deck) — gates the "Unlock Student
   // Activity" dock toggle. Mirrors MainStage's own sceneLessonRef derivation.
+  // Academy library (deck) lesson on the stage: one synthetic slide carries its id (classroomLessonResolver)
+  const academyDeckLessonId = hubType === 'academy' ? (displayedSlides as { type?: string; deckLessonRef?: { lessonId?: string } }[] | undefined)?.find((sl) => sl?.type === 'academy_deck')?.deckLessonRef?.lessonId : undefined;
   const isSceneLessonOnStage =
     hubType === 'playground' && stageMode === 'slide' && !!(displayedSlides as any)?.[0]?.sceneLessonRef;
 
@@ -1674,6 +1677,18 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
           bookingId={classId}
           currentPage={sceneNavState.total > 0 ? sceneNavState.sceneIdx + 1 : null}
           accent="#FE6A2F"
+        />
+      )}
+
+      {/* Academy lesson checklist — teacher-only pop-up, optional (twin of the Playground one); the marks go into the report */}
+      {hubType === 'academy' && stageMode === 'slide' && !isTrial && academyDeckLessonId && (
+        <AcademyChecklistPopup
+          key={academyDeckLessonId}
+          lessonId={academyDeckLessonId}
+          sessionId={session?.id}
+          bookingId={classId}
+          studentId={studentId}
+          slideIndex={sceneNavState.total > 0 ? sceneNavState.sceneIdx : null}
         />
       )}
 

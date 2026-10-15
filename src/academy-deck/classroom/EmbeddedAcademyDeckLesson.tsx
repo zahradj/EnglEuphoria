@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { Deck } from '../Deck';
 import { loadDeckScript } from '../lessonScripts';
 import type { DeckScript } from '../types';
+import { useAcademyActivityLog } from './useAcademyActivityLog';
 
 export interface EmbeddedAcademyDeckHandle {
   goNext: () => void;
@@ -24,16 +25,23 @@ interface Props {
   /** teacher only: save the slide index so the student's screen follows */
   onSceneIdxPersist?: (idx: number) => void;
   artBase?: string;
+  /** the live class's session: the student's screen saves what they did for the teacher's checklist */
+  sessionId?: string;
+  /** the signed-in student (rows are saved under their id) */
+  userId?: string;
+  /** reports the slide the class is on (the classroom's page strip, the checklist pop-up and the report read it) */
+  onNavState?: (state: { sceneIdx: number; total: number; canNavigate: boolean; interactionUnlocked: boolean; lockToggleApplicable: boolean }) => void;
 }
 
 export const EmbeddedAcademyDeckLesson = forwardRef<EmbeddedAcademyDeckHandle, Props>(function EmbeddedAcademyDeckLesson(
-  { lessonId, role, persistedSceneIdx, onSceneIdxPersist, artBase = '/academy-art' },
+  { lessonId, role, persistedSceneIdx, onSceneIdxPersist, artBase = '/academy-art', sessionId, userId, onNavState },
   ref,
 ) {
   const { t } = useTranslation();
   const [script, setScript] = useState<DeckScript | null | 'missing'>(null);
   const [idx, setIdx] = useState(() => Math.max(0, persistedSceneIdx ?? 0));
   const total = script && script !== 'missing' ? script.slides.length : 0;
+  const log = useAcademyActivityLog({ role, sessionId, userId });
   const totalRef = useRef(0);
   totalRef.current = total;
 
@@ -58,6 +66,11 @@ export const EmbeddedAcademyDeckLesson = forwardRef<EmbeddedAcademyDeckHandle, P
     setIdx(next);
     onSceneIdxPersist?.(next);
   };
+  // a page left after wrong tries without a win is saved as tried; the class's slide number goes to the classroom
+  useEffect(() => () => log.onLeave(), [idx]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (total > 0) onNavState?.({ sceneIdx: idx, total, canNavigate: true, interactionUnlocked: false, lockToggleApplicable: false });
+  }, [idx, total, onNavState]);
   useImperativeHandle(ref, () => ({
     goNext: () => move(idx + 1),
     goBack: () => move(idx - 1),
@@ -86,6 +99,8 @@ export const EmbeddedAcademyDeckLesson = forwardRef<EmbeddedAcademyDeckHandle, P
         follow={student}
         slide={idx}
         onSlide={student ? undefined : move}
+        onSlideDone={student ? log.onSlideDone : undefined}
+        onSlideWrong={student ? log.onSlideWrong : undefined}
       />
       {student && <p className="ad-follow-note" role="status">{t('al.follow', 'Your teacher moves the lesson.')}</p>}
     </div>
