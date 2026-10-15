@@ -87,3 +87,41 @@ export const QUEST_MONSTER_LOOKS_A1_U5L2: HomeworkQuest = {
     chest('You did it! Monster expert!', `${S}/bg-a1u5-home-wide.png`),
   ],
 };
+
+/** Lesson 3 "Listen to the Feelings Song" */
+export const QUEST_MONSTER_SONG_A1_U5L3: HomeworkQuest = {
+  id: 'monster-song-a1-u5l3', title: 'Monster Music Quest', subtitle: 'Listen to the Feelings Song · A1 Unit 5 · Lesson 3', level: 'A1', lessonKey: 'monster-rich-5-3',
+  theme: theme(`${S}/bg-a1u5-stage-wide.png`), voice: 'teacher', praise,
+  levels: [
+    { kind: 'picture-choice', name: 'Name That Feeling', icon: '🔔', intro: 'Listen to Bibi. How does she feel?', img: `${S}/bg-a1u5-stage-wide.png`,
+      rounds: [
+        { line: 'It’s dark! Oh no!', answer: 'scared', options: [{ label: 'excited', src: it('bibi-excited') }, { label: 'scared', src: it('bibi-scared') }, { label: 'bored', src: it('bibi-bored') }] },
+        { line: 'The lesson is long… so long.', answer: 'bored', options: [{ label: 'bored', src: it('bibi-bored') }, { label: 'surprised', src: it('bibi-surprised') }, { label: 'sad', src: it('bibi-sad') }] },
+        { line: 'A party for me! Hooray!', answer: 'excited', options: [{ label: 'sad', src: it('bibi-sad') }, { label: 'scared', src: it('bibi-scared') }, { label: 'excited', src: it('bibi-excited') }] },
+      ] },
+    { kind: 'true-false', name: 'Why?', icon: '🤔', intro: 'Look and listen. True or false?',
+      rounds: [
+        { img: page(7), aspect: 16 / 9, line: 'Bibi is sad because she is tiny.', isTrue: true },
+        { img: page(6), aspect: 16 / 9, line: 'Bibi has got a big brother.', isTrue: false },
+        { img: page(3), aspect: 16 / 9, line: 'Bibi is scared because it is dark.', isTrue: true },
+      ] },
+    { kind: 'sentence-builder', name: 'Why Are You…?', icon: '🧱', intro: 'Listen. Build what you hear!',
+      rounds: [
+        { img: it('bibi-sad'), line: 'Why are you sad?', extra: ['how'] },
+        { img: it('bibi-scared'), line: 'She is scared because it is dark.', extra: ['bored'] },
+      ] },
+    { kind: 'reading', name: 'The Story', icon: '📖', intro: 'Read the story. Then answer from memory!', img: page(6),
+      sentences: ['Big Bob has got three eyes. He is very tall.', 'Bibi has got a little sister. Her name is Bea.', 'Bibi is sad because she is tiny.'],
+      questions: [
+        { q: 'Who is Bea?', options: ['Bibi’s sister', 'Bibi’s mom', 'Bibi’s teacher'], answer: 'Bibi’s sister' },
+        { q: 'Why is Bibi sad?', options: ['She is tiny.', 'It is a party.', 'It is dark.'], answer: 'She is tiny.' },
+      ] },
+    { kind: 'twister', name: 'Pea Twister', icon: '🌀', intro: 'Build my tongue twister before the sand runs out!', img: page(6), line: 'Bea eats green peas.', seconds: 45, focus: 'ee', sayIt: 'Now say it slow, then faster!' },
+    { kind: 'sound-blend', name: 'Blend It!', icon: '🧱', intro: 'Tap each sound, then Blend!', img: `${S}/bg-a1u5-stage-wide.png`,
+      rounds: [
+        { word: 'leaf', sounds: ['l', 'ea', 'f'], picture: it('leaf') },
+        { word: 'cheese', sounds: ['ch', 'ee', 'z'], picture: it('cheese') },
+      ] },
+    chest('You did it! Super listener!', `${S}/bg-a1u5-stage-wide.png`),
+  ],
+};

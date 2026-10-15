@@ -46,6 +46,7 @@ const lessons: [string, readonly AnyScene[]][] = [
   ['food-rich-4-7', FOOD.LESSON_A1U4L7_SCENES],
   ['monster-rich-5-1', MONSTER.LESSON_A1U5L1_SCENES],
   ['monster-rich-5-2', MONSTER.LESSON_A1U5L2_SCENES],
+  ['monster-rich-5-3', MONSTER.LESSON_A1U5L3_SCENES],
 ];
 
 describe('Remember? warm-up', () => {
