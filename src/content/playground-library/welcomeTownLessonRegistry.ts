@@ -16,7 +16,7 @@ import { GAME_LESSON_FORMAT, getGameClassroomLesson } from './gameLessons';
 /** `skin: 'quest'` — the lesson plays in the Homework Quest look (see
  *  PlayWelcomeTownLesson's QUEST_SKIN_CSS); omit for the classic look. */
 export type LessonSkin = 'quest';
-const WELCOME_TOWN_LESSON_REGISTRY: Record<string, { scenes: Scene[]; title: string; objective: string; skin?: LessonSkin }> = {
+export const WELCOME_TOWN_LESSON_REGISTRY: Record<string, { scenes: Scene[]; title: string; objective: string; skin?: LessonSkin }> = {
   'wt-rich-1-1': { scenes: LESSON_1_SCENES, title: LESSON_1_TITLE, objective: LESSON_1_OBJECTIVE },
   'wt-rich-1-2': { scenes: LESSON_2_SCENES, title: LESSON_2_TITLE, objective: LESSON_2_OBJECTIVE },
   'wt-rich-1-3': { scenes: LESSON_3_SCENES, title: LESSON_3_TITLE, objective: LESSON_3_OBJECTIVE },

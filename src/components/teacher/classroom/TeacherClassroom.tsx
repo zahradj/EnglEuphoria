@@ -1677,6 +1677,8 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
         isTrial={isTrial}
         trialCefr={trialCefr}
         lessonTitle={activeLessonTitle}
+        sessionId={session?.id}
+        sceneLesson={isSceneLessonOnStage ? ((displayedSlides as unknown as { sceneLessonRef?: { contentFormat?: string; unitNumber: number; lessonNumber: number } }[] | undefined)?.[0]?.sceneLessonRef ?? null) : null}
         classSummary={{
           // Time with the student: from Start Lesson to now (owner, 2026-10-07) — a late student's
           // 25-minute lesson reads 25 min, not the booked length. Falls back to the class clock.

@@ -8,6 +8,8 @@ interface EmbeddedSceneLessonProps {
   unitNumber: number;
   lessonNumber: number;
   roomId: string;
+  /** classroom_sessions.id — lets the student's screen save the lesson checklist. */
+  sessionId?: string;
   role: 'teacher' | 'student';
   /** Whether the student may play the active scene's game (default locked/watch-only). */
   activityUnlocked?: boolean;
@@ -28,7 +30,7 @@ interface EmbeddedSceneLessonProps {
  */
 export const EmbeddedSceneLesson = forwardRef<PlayUnitLessonHandle, EmbeddedSceneLessonProps>(
   function EmbeddedSceneLesson(
-    { unitNumber, lessonNumber, roomId, role, activityUnlocked, hideInternalNav, onNavState, persistedSceneIdx, onSceneIdxPersist, persistedInteractionUnlocked, onInteractionUnlockedPersist },
+    { unitNumber, lessonNumber, roomId, sessionId, role, activityUnlocked, hideInternalNav, onNavState, persistedSceneIdx, onSceneIdxPersist, persistedInteractionUnlocked, onInteractionUnlockedPersist },
     ref,
   ) {
     const scenes = getSceneLesson(unitNumber, lessonNumber);
@@ -57,6 +59,7 @@ export const EmbeddedSceneLesson = forwardRef<PlayUnitLessonHandle, EmbeddedScen
           unitNumber={unitNumber}
           lessonNumber={lessonNumber}
           role={role}
+          sessionId={sessionId}
           roomId={roomId}
           activityUnlocked={activityUnlocked}
           hideInternalNav={hideInternalNav}

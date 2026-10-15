@@ -2,6 +2,7 @@ import { PREA1_REAL_SYNC_KINDS } from '@/content/playground-library/prea1SyncKin
 import { SHARED_PLAY_KINDS, useSceneScopedState } from '@/content/playground-library/sceneActivitySync';
 import { SceneCrashGuard } from '@/content/playground-library/SceneCrashGuard';
 import { useRecordClassroomCompletion } from '@/hooks/useRecordClassroomCompletion';
+import { useLessonActivityLog } from '@/hooks/useLessonActivityLog';
 import { resolveSoundSides } from '@/content/playground-library/welcome-town/scene-components/soundLayout';
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -46,6 +47,8 @@ interface PlayWelcomeTownLessonProps {
   onFinaleReached?: () => void;
   role?: 'teacher' | 'student';
   roomId?: string;
+  /** classroom_sessions.id of the live class — the student's screen saves each activity for the lesson checklist. */
+  sessionId?: string;
   hideInternalNav?: boolean;
   onNavState?: (state: { sceneIdx: number; total: number; canNavigate: boolean; interactionUnlocked: boolean; lockToggleApplicable?: boolean }) => void;
   persistedSceneIdx?: number | null;
@@ -92,7 +95,7 @@ const REAL_SYNC_KINDS = new Set<Scene['kind']>([
 , 'answer-mirror', 'feelings-camera', 'feelings-runner']);
 
 const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcomeTownLessonProps>(function PlayWelcomeTownLesson(
-  { scenes, sessionKey, embedded = false, skin, pageTitle, pageDescription, onFinaleReached, unitNumber, lessonNumber, role, roomId, hideInternalNav = false, onNavState, persistedSceneIdx, onSceneIdxPersist, persistedInteractionUnlocked, onInteractionUnlockedPersist },
+  { scenes, sessionKey, embedded = false, skin, pageTitle, pageDescription, onFinaleReached, unitNumber, lessonNumber, role, roomId, sessionId, hideInternalNav = false, onNavState, persistedSceneIdx, onSceneIdxPersist, persistedInteractionUnlocked, onInteractionUnlockedPersist },
   ref,
 ) {
   const navigate = useNavigate();
@@ -628,15 +631,19 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
     return () => { cancelled = true; stopSpeaking(); };
   }, [sceneIdx]);
 
+  // Lesson checklist (lessonChecklist.ts): the student's screen saves what they did on each activity.
+  const activityLog = useLessonActivityLog({ scenes: SCENES as unknown as { id: string; kind: string }[], sceneIdx, role, sessionId });
+  const { logWin, logWrong } = activityLog;
   const gainHeart = useCallback(() => setHearts((h) => Math.min(MAX_HEARTS, h + 1)), []);
   const loseHeart = useCallback(() => {
+    logWrong();
     setHearts((h) => {
       const n = h - 1;
       if (n <= 0) { setTimeout(() => setHearts(MAX_HEARTS), 400); return 0; }
       return n;
     });
-  }, []);
-  const registerWin = useCallback((didGem: boolean) => { if (didGem) setGems((g) => g + 1); }, []);
+  }, [logWrong]);
+  const registerWin = useCallback((didGem: boolean) => { logWin(didGem); if (didGem) setGems((g) => g + 1); }, [logWin]);
 
   const studentCanAdvanceViaActivity = isSynced && role === 'student' && interactionUnlocked;
   const goNext = useCallback(() => {

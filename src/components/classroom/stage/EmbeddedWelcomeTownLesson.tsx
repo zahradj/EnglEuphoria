@@ -9,6 +9,8 @@ interface EmbeddedWelcomeTownLessonProps {
   unitNumber: number;
   lessonNumber: number;
   roomId: string;
+  /** classroom_sessions.id — lets the student's screen save the lesson checklist. */
+  sessionId?: string;
   role: 'teacher' | 'student';
   /** When true, suppress the internal Back/Next/counter bar — the caller
    *  renders its own nav bar outside this component's frame instead. */
@@ -28,7 +30,7 @@ interface EmbeddedWelcomeTownLessonProps {
  */
 export const EmbeddedWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, EmbeddedWelcomeTownLessonProps>(
   function EmbeddedWelcomeTownLesson(
-    { contentFormat, unitNumber, lessonNumber, roomId, role, hideInternalNav, onNavState, persistedSceneIdx, onSceneIdxPersist, persistedInteractionUnlocked, onInteractionUnlockedPersist },
+    { contentFormat, unitNumber, lessonNumber, roomId, sessionId, role, hideInternalNav, onNavState, persistedSceneIdx, onSceneIdxPersist, persistedInteractionUnlocked, onInteractionUnlockedPersist },
     ref,
   ) {
     const lesson = getWelcomeTownLesson(contentFormat, unitNumber, lessonNumber);
@@ -58,6 +60,7 @@ export const EmbeddedWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle,
           unitNumber={unitNumber}
           lessonNumber={lessonNumber}
           role={role}
+          sessionId={sessionId}
           roomId={roomId}
           hideInternalNav={hideInternalNav}
           onNavState={onNavState}
