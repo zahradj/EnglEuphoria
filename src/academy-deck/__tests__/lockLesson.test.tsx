@@ -151,3 +151,33 @@ describe('Word bank to the Daily 10', () => {
     expect(bankItems(undefined)).toEqual([]);
   });
 });
+
+import { readingOf } from '../../curriculum/academy';
+describe('The deck reads its reading plan from the Season data', () => {
+  it('the passage, the words to keep and the word-bank game come from PRE_A1_READING (one source), and the activation sort covers the words of the plan', () => {
+    const plan = readingOf('PA1-S02-E1')!;
+    const p = slides.find((x) => x.kind === 'passage');
+    const bank = slides.find((x) => x.id === 'bank-match');
+    if (p?.kind !== 'passage' || bank?.kind !== 'match') throw new Error('missing');
+    expect(p.lines).toEqual(plan.message.lines);
+    expect(p.keepFrom).toEqual(plan.bank);
+    expect(bank.pairs.map((x) => x.word)).toEqual(plan.bank.slice(0, 4));
+    const act = slides.find((x) => x.id === 'activate');
+    if (act?.kind !== 'sort') throw new Error('missing');
+    expect(act.items.map((i) => i.word)).toEqual(plan.activate);
+  });
+});
+
+import { groupAcademyLibrary } from '../library/levels';
+import { ACADEMY_DECK_LESSONS } from '../lessonRegistry';
+describe('The creator library shows the reading plan of every Pre-A1 lesson', () => {
+  it('every Pre-A1 lesson slot carries its activation words, message and word bank', () => {
+    const pre = groupAcademyLibrary(ACADEMY_DECK_LESSONS, true).find((g) => g.label === 'Pre-A1');
+    const slots = (pre?.seasons ?? []).flatMap((s) => s.slots);
+    expect(slots).toHaveLength(40);
+    slots.forEach((x) => {
+      expect(x.plan?.reading?.lines.length, x.plan?.id).toBeGreaterThanOrEqual(3);
+      expect(x.plan?.reading?.bank.length, x.plan?.id).toBeGreaterThanOrEqual(3);
+    });
+  });
+});

@@ -21,3 +21,9 @@ Rule: `CLAUDE.md` "Pre-A1 is reading-first". Research: `docs/research/academy-pr
 ## Pre-A1 S2 L1 example
 
 Activate: phone, map, pin, tin, in, it. Sounds: i, n. Blend: in, it, pin, tin. Read: "It is a pin. It is a tin." then two short messages from Theo and Ava. Word bank: pin, tin, map, phone, in, it, is.
+
+## Status (2026-10-15)
+
+- **Plan data for all 40 Pre-A1 episodes** (P1-P5, eight lessons each): `src/curriculum/academy/preA1Reading.ts`, checked by `readingProblems()` (every text readable from the sounds and words taught by that episode, bank words in the message). Shown in the creator Academy Library under each Pre-A1 lesson and in `docs/academy-curriculum/pre-a1.md`.
+- **Built as a deck:** P1 E1 (Name Wall, earlier build, no passage page yet) and P2 E1 (reading-first, v3). Lessons P1 E2 to P5 E8 are plans only: each needs its own approved lesson plan (with this reading block), research file, scenario and plates before it is built.
+- **To do for P1 E1:** it predates this rule; its plan needs the activate step, a message and a word bank before it counts as reading-first.

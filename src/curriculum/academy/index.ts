@@ -101,6 +101,7 @@ export * from './lessonBlueprint';
 export * from './vocabGames';
 export * from './ladder';
 export * from './preA1';
+export * from './preA1Reading';
 export * from './recall';
 export * from './practiceGap';
 export * from './dailyTen';

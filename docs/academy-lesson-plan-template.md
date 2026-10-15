@@ -13,3 +13,17 @@ Rule: CLAUDE.md "A lesson plan comes before every lesson" (2026-10-14). Copy thi
 8. **Supports and differentiation.** Home-language hint, slower audio, chill track, stretch.
 9. **Assessment and follow-up.** Formative evidence, the Daily 10 on the spacing calendar (days 1, 3, 7, 14, 30), voice note, next clue.
 10. **Before building.** Scenario (if any story or video), pictures needed, audio needed, owner approval.
+
+
+## Pre-A1 only: the reading-first block (owner, 2026-10-15)
+
+Every Pre-A1 lesson plan states, before anything is built (data: `src/curriculum/academy/preA1Reading.ts`, rule: `CLAUDE.md` "Pre-A1 is reading-first"):
+
+| Step | Plan says |
+|---|---|
+| Activate | the 3+ words for the private "I know it / New to me" check (words the student may already know from school or a phone) |
+| Sounds and blending | the sounds taught so far, the words blended and spelled |
+| Message | a 3-6 line message from a cast member made only of the sounds and whole words taught so far (checked by `readingProblems()`), read twice: listen, then read |
+| Word bank | 3+ words the student may keep from the message, practised the same lesson (listen and match with word tiles) and returned on the spaced schedule |
+
+A Pre-A1 plan without a reading block fails the traceability check.

@@ -5,7 +5,7 @@
 // New items (<= 8): phone, pin, tin, map, "This is a ___." + sounds /i/ /n/. Rules stated plainly before the practice; the student teaches the rule back (Wrap).
 // Pictures are placeholders (cards and letter tiles) until the owner approves the scenario and the Canva art is made; /i/ and /n/ clips stay silent until recorded.
 import type { CastName, DeckScript, TeachArt } from '../types';
-import { PRE_A1_RECALL_NODES, MAX_REMEMBER_ITEMS_PRE_A1 } from '../../curriculum/academy';
+import { PRE_A1_RECALL_NODES, MAX_REMEMBER_ITEMS_PRE_A1, readingOf } from '../../curriculum/academy';
 import { recallRounds } from '../recallSlides';
 
 export const OBJECTIVE = 'By the end I can hear and say the sounds i and n, blend in, it, pin and tin, and say “This is a pin.”';
@@ -25,6 +25,8 @@ const GLOW = 'phone-screen-glow';
 const LOCKSCREEN = 'lockscreen-closeup';
 const VAULT = 'vault-corridor';
 const DAWN = 'bus-stop-dawn';
+// the reading plan of this episode (message, words to keep) is Season data: src/curriculum/academy/preA1Reading.ts
+const READING = readingOf('PA1-S02-E1')!;
 const PIN = card('p-pin', 'a pin');
 const TIN = card('p-tin', 'a tin');
 const PHONE = card('p-phone', 'a phone');
@@ -206,15 +208,15 @@ export const PA1_S02_E1: DeckScript = {
     {
       id: 'msg-theo', kind: 'passage', part: 4, lock: 3, bg: LOCKSCREEN, actors: [who('Theo', 'right')], trains: [3],
       prompt: 'A message from Theo. Listen, read it, then keep the words you want.',
-      from: 'Theo', bank: 'bank', keep: 3,
-      lines: ['I am Theo.', 'It is a pin.', 'It is in a tin.', 'It is a map.'],
-      keepFrom: ['pin', 'tin', 'map', 'in', 'it', 'is'],
+      from: READING.message.from, bank: 'bank', keep: 3,
+      lines: READING.message.lines,
+      keepFrom: READING.bank,
       hints: ['Tap any word to hear it. Then choose the words you want to remember.'],
     },
     {
       id: 'bank-match', kind: 'match', part: 4, lock: 3, bg: LOCKSCREEN, actors: [who('Vee', 'right')], trains: [3], mode: 'listen',
       prompt: 'Your word bank. Listen. Tap the word you hear.',
-      pairs: [{ word: 'pin', art: L('PIN') }, { word: 'tin', art: L('TIN') }, { word: 'map', art: L('MAP') }, { word: 'in', art: L('IN') }],
+      pairs: READING.bank.slice(0, 4).map((w) => ({ word: w, art: L(w.toUpperCase()) })),
       hints: ['Listen to the word, then look for it in your word bank.'],
     },
     {
