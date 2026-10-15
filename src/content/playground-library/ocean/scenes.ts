@@ -464,9 +464,9 @@ export const LESSON_A1U6L2_SCENES: Scene[] = [
     id: 'oc2-live-reef', kind: 'live-reef', bg: bgRocks, who: 'coral', title: 'Live Reef: wake up the reef!',
     teacher: 'You do (the new game ★): an animal peeks out of the fog. Coral asks: What’s it doing? The student picks the action, then SAYS the whole sentence (The crab is walking.) and taps 🎤 — that part of the reef lights up. A wrong action: the animal shrugs — look again!',
     spots: [
-      { name: 'crab', img: ACT.walking, left: 70, top: 66, size: 15 },
-      { name: 'octopus', img: ACT.hiding, left: 22, top: 62, size: 17 },
-      { name: 'starfish', img: ACT.sleeping, left: 46, top: 74, size: 13 },
+      { name: 'crab', img: ACT.walking, left: 72, top: 56, size: 14 },
+      { name: 'octopus', img: ACT.hiding, left: 18, top: 52, size: 16 },
+      { name: 'starfish', img: ACT.sleeping, left: 45, top: 58, size: 12 },
       { name: 'whale', img: ACT.diving, left: 30, top: 26, size: 20 },
       { name: 'fish', img: ACT.eating, left: 82, top: 34, size: 12 },
       { name: 'turtle', img: ACT.turtleEating, left: 58, top: 40, size: 15 },
