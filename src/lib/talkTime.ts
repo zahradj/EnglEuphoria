@@ -9,12 +9,38 @@
 
 export const TALK_TARGET_PCT = 50;
 
+/**
+ * Starting points, NOT researched thresholds: young beginners (Playground) are asked for less speech than
+ * older learners. They exist so the scorecard does not mark a teacher of 5-year-olds "low" for an expected pattern.
+ * Review them against real lessons once talk time has been collected for a few weeks.
+ */
+export type TalkHub = 'playground' | 'academy' | 'professional';
+export const TALK_TARGET_BY_HUB: Record<TalkHub, number> = { playground: 40, academy: 50, professional: 50 };
+
+/** Booking hub names are not uniform ('kids', 'success', ...); map them to the three hubs. */
+export function normalizeTalkHub(raw: string | null | undefined): TalkHub {
+  const h = (raw ?? '').toLowerCase();
+  if (h === 'playground' || h === 'kids') return 'playground';
+  if (h === 'professional' || h === 'success' || h === 'adults') return 'professional';
+  return 'academy';
+}
+
+/** The target for a teacher's mix of lessons: each hub's target weighted by how many lessons were measured in it. */
+export function talkTargetFor(byHub: Array<{ hub: string; n: number }> | null | undefined): number {
+  const rows = (byHub ?? []).filter((r) => r && r.n > 0);
+  const total = rows.reduce((s, r) => s + r.n, 0);
+  if (total === 0) return TALK_TARGET_PCT;
+  const weighted = rows.reduce((s, r) => s + TALK_TARGET_BY_HUB[normalizeTalkHub(r.hub)] * r.n, 0) / total;
+  return Math.round(weighted);
+}
+
 export type TalkStatus = 'great' | 'good' | 'watch' | 'low';
 
-export function talkStatus(studentPct: number): TalkStatus {
-  if (studentPct >= 60) return 'great';
-  if (studentPct >= TALK_TARGET_PCT) return 'good';
-  if (studentPct >= 35) return 'watch';
+/** Bands are relative to the target: 10 points above is great, 15 below is the "watch" floor. (With the default 50: 60 / 50 / 35.) */
+export function talkStatus(studentPct: number, target: number = TALK_TARGET_PCT): TalkStatus {
+  if (studentPct >= target + 10) return 'great';
+  if (studentPct >= target) return 'good';
+  if (studentPct >= target - 15) return 'watch';
   return 'low';
 }
 

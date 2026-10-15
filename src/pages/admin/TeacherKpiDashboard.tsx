@@ -1,3 +1,4 @@
+import { ADMIN_SCORECARDS_ENABLED } from "@/lib/scorecardFlags";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -215,9 +216,11 @@ export default function TeacherKpiDashboard() {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button asChild size="sm">
-            <Link to="/admin/teacher-scorecards">Teacher scorecards</Link>
-          </Button>
+          {ADMIN_SCORECARDS_ENABLED && (
+            <Button asChild size="sm">
+              <Link to="/admin/teacher-scorecards">Teacher scorecards</Link>
+            </Button>
+          )}
           <Button variant="outline" size="sm" onClick={recompute} disabled={recomputing}>
             <RefreshCw className={`w-4 h-4 mr-1 ${recomputing ? "animate-spin" : ""}`} />
             Recompute

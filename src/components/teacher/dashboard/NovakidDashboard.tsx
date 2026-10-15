@@ -10,6 +10,7 @@ import { NextLessonCard } from './NextLessonCard';
 import { MonthlyStatsCard } from './MonthlyStatsCard';
 import { LessonsListCard } from './LessonsListCard';
 import { KpiPulseCard } from './KpiPulseCard';
+import { SetupReminderBanner } from './SetupReminderBanner';
 import { asPayoutCurrency } from '@/lib/teacherPay';
 
 interface NovakidDashboardProps {
@@ -128,6 +129,7 @@ export const NovakidDashboard: React.FC<NovakidDashboardProps> = ({ teacherId, p
       <div className="space-y-6">
         <KpiPulseCard />
         <PushPrompt />
+        <SetupReminderBanner />
         <DeviceCheckBanner />
         <NextLessonCard />
         <MonthlyStatsCard
