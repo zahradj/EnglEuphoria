@@ -1,6 +1,6 @@
 # Scenario: B1 Season 1, lesson 1 "Have You Ever...? · Cold Open" (story plates and the text)
 
-Status: **draft for the owner's written approval.** Nothing below is made (no picture, no recording) until it is approved. The lesson plan (approved 2026-10-15, "go") is `docs/academy-b1-s01-spec.md`; research `docs/research/academy-b1-s01-research.md`.
+Status: **approved by the owner on 2026-10-15 ("go"); plates and voices in progress.** Nothing below is made (no picture, no recording) until it is approved. The lesson plan (approved 2026-10-15, "go") is `docs/academy-b1-s01-spec.md`; research `docs/research/academy-b1-s01-research.md`.
 
 Learning goal: understand, by listening and then reading, the main idea of a short exchange about bucket lists (Vee's dare, Ava's and Theo's experiences), meet six new words and six past participles in use, and hear "Have you ever eaten …?" in context, without being asked to produce it yet.
 
@@ -32,7 +32,7 @@ New receptive items met in the text (6 words and collocations): **bucket list ·
 |---|---|---|---|---|
 | 1 The dare | 1, 2, 3 (Vee) | Vee stands at the bucket-list wall holding a blank card up with a pen, smiling at the viewer; Ava sits on the sofa beside the wall, curious | rooftop studio, evening, string lights | bottom third |
 | 2 Stories | 4, 5, 6, 7, 8 (Ava, Theo) | Ava shows a phone full of holiday photos (no readable text) while Theo leans in, one eyebrow raised | the sofa corner of the same rooftop, a travel photo wall behind | bottom third |
-| 3 The question | 9, 10, 11 (Vee, Ava) | Vee points at the viewer with the card in her hand; Ava laughs, arms crossed; Theo grins | the whole wall, several cards already starred in gold (no writing) | bottom third |
+| 3 The question | 9, 10, 11 (Vee, Ava) | Vee points at the viewer with the card in his hand; Ava laughs, arms crossed; Theo grins | the whole wall, several cards already starred in gold (no writing) | bottom third |
 
 Prediction pause: after plate 3 the lesson goes to the six word pages (nothing is asked on the plates).
 
