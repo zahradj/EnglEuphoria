@@ -299,6 +299,7 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
                       lessonNumber={sceneLessonRef.lessonNumber}
                       roomId={roomId}
                       role={role}
+                      sessionId={sessionId}
                       hideInternalNav
                       onNavState={handleSceneNavState}
                       persistedSceneIdx={sceneLessonIdx}
@@ -313,6 +314,7 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
                       lessonNumber={sceneLessonRef.lessonNumber}
                       roomId={roomId}
                       role={role}
+                      sessionId={sessionId}
                       hideInternalNav
                       onNavState={handleSceneNavState}
                       persistedSceneIdx={sceneLessonIdx}

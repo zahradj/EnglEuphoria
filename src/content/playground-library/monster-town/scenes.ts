@@ -53,6 +53,13 @@ export const BIBI_BAD_DAY: ReaderPage[] = [
   { img: bibiGif(3), lines: [{ text: 'It is dark. Bibi is scared!' }], check: { who: 'mia', question: 'Why is Bibi scared?', answer: 'It is dark.', options: [{ label: 'It is a party.' }, { label: 'It is dark.' }, { label: 'It is hot.' }] } },
   { img: bibiPage(4), lines: [{ text: 'The lesson is long. Bibi is bored.' }], check: { who: 'pip', question: 'How is Bibi?', answer: 'Bored', options: [{ label: 'Bored', img: BIBI.bored }, { label: 'Excited', img: BIBI.excited }, { label: 'Scared', img: BIBI.scared }] } },
   { img: bibiPage(5), lines: [{ text: 'Big Bob has got three eyes. He is very tall.' }], check: { who: 'leo', question: 'How many eyes has Big Bob got?', answer: 'Three', options: [{ label: 'One' }, { label: 'Two' }, { label: 'Three' }] } },
+  { img: bibiPage(6), lines: [{ text: 'Bibi has got a little sister. Her name is Bea.' }], check: { who: 'mia', question: 'Who is Bea?', answer: 'Bibi’s sister', options: [{ label: 'Bibi’s mom' }, { label: 'Bibi’s sister' }, { label: 'Bibi’s teacher' }] } },
+  { img: bibiPage(7), lines: [{ text: 'Bibi is sad because she is tiny.' }], check: { who: 'pip', question: 'Why is Bibi sad?', answer: 'She is tiny.', options: [{ label: 'She is tiny.' }, { label: 'It is dark.' }, { label: 'It is a party.' }] } },
+  { img: bibiPage(8), lines: [{ text: 'Leo is wearing a green scarf. Mia is wearing glasses.' }], check: { who: 'pip', question: 'What is Leo wearing?', answer: 'A green scarf', options: [{ label: 'A green scarf' }, { label: 'Glasses' }, { label: 'Boots' }] } },
+  { img: bibiPage(9), lines: [{ text: 'Mia: Why are you sad, Bibi?' }, { text: 'Bibi: I am sad because I am little.' }], check: { who: 'leo', question: 'Why is Bibi sad?', answer: 'She is little.', options: [{ label: 'She is little.' }, { label: 'It is dark.' }, { label: 'It is a party.' }] } },
+  { img: bibiPage(10), lines: [{ text: 'Surprise! Bibi is surprised.' }], check: { who: 'mia', question: 'How is Bibi?', answer: 'Surprised', options: [{ label: 'Bored', img: BIBI.bored }, { label: 'Surprised', img: BIBI.surprised }, { label: 'Tired', img: BIBI.tired }] } },
+  { img: bibiPage(11), lines: [{ text: 'Bibi is excited because it is a party for her!' }], check: { who: 'pip', question: 'Why is Bibi excited?', answer: 'It is a party for her.', options: [{ label: 'It is a party for her.' }, { label: 'It is dark.' }, { label: 'The lesson is long.' }] } },
+  { img: bibiPage(12), lines: [{ text: 'Bibi is happy. It is a good day after all!' }], check: { who: 'leo', question: 'How is Bibi now?', answer: 'Happy', options: [{ label: 'Sad', img: BIBI.sad }, { label: 'Scared', img: BIBI.scared }, { label: 'Happy', img: BIBI.happy }] } },
 ];
 
 const helloSong = (id: string, bg: string): Scene => ({
@@ -647,4 +654,1415 @@ export const LESSON_A1U5L2_SCENES: Scene[] = [
   },
   goodbyeSong('mt2-goodbye-song', bgHome),
   { id: 'mt2-finale', kind: 'finale', bg: bgFamily, who: 'pip', line: 'You can describe monsters and families! See you in Monster Town! \u{1F47E}' },
+];
+
+/* =============================================================================
+ * A1 Unit 5 Lesson 3: "Listen to the Feelings Song"
+ * Objective: I can understand feelings and descriptions in a song and in short dialogues.
+ * Evidence: Name That Feeling — 4 of 5 buzzed right from listening.
+ * Story frame: the Monster Music Show — Professor Glob hosts a game show in the Academy music hall (new setting: stage
+ *   lights, purple velvet, star ceiling — evening show light). Research: docs/research/playground-a1u5-research.md.
+ * Practice ladder: Remember? (L2 looks, shadow) → revise the feelings fast (cards) → Present (I do: "Why are you sad?" —
+ *   "Because I'm tiny." on story page 7; we do: echo) → Read and Match (reasons) → you do: Name That Feeling (game-show
+ *   buzzer, listening) → the song "How Do You Feel?" → Whisper Tube (one wrong word) → Echo Hall (find the voice) →
+ *   Reading (Reader p1-7, Read & Check, Story Order) → Phonics ee / ea (Catch & Sort by spelling, Blend & Read gumball,
+ *   twister) → Free (sing your own verse; Why are you …? role-play) → check.
+ * ========================================================================= */
+export const LESSON_A1U5L3_TITLE = 'Listen to the Feelings Song';
+export const LESSON_A1U5L3_OBJECTIVE = 'I can understand feelings and descriptions in a song and in short dialogues.';
+
+const bgHall = `${S}/bg-a1u5-stage-wide.png`;
+const bgShow = `${S}/bg-a1u5-show-wide.png`;
+const SONG_A1U5L3 = '/lep1/audio/how-do-you-feel-song-a1u5l3.mp3?v=1';
+const SONG_A1U5L3_LYRICS: { who: CharKey; text: string }[] = [
+  { who: 'glob', text: 'How do you feel? How do you feel?' },
+  { who: 'glob', text: 'Make a face and spin like a wheel!' },
+  { who: 'bibi', text: 'Bibi is scared, so scared, oh no!' },
+  { who: 'bibi', text: 'Why is she scared? Do you know?' },
+  { who: 'bibi', text: 'Because it’s dark, it’s dark, you see!' },
+  { who: 'bibi', text: 'Make a scared face just like me!' },
+  { who: 'bibi', text: 'Bibi is bored, so bored, oh no!' },
+  { who: 'bibi', text: 'Why is she bored? Do you know?' },
+  { who: 'bibi', text: 'Because the lesson’s long, you see!' },
+  { who: 'bibi', text: 'Make a bored face just like me!' },
+  { who: 'bibi', text: 'Bibi’s excited, hooray, hooray!' },
+  { who: 'bibi', text: 'Why’s she excited? Can you say?' },
+  { who: 'bibi', text: 'Because it’s a party, you see!' },
+  { who: 'bibi', text: 'Make an excited face like me!' },
+  { who: 'glob', text: 'How do you feel? How do you feel?' },
+  { who: 'glob', text: 'Make a face and spin like a wheel!' },
+];
+/** Take 2 (docs/songs/a1u5l3-monster-how-do-you-feel-scores.txt, score 0.94, every line sung; Whisper hears "Bibi" as
+ *  "baby"): line starts 8.0 / 10.8 / 17.0 / 19.4 / 21.4 / 23.8 / 33.9 / 36.2 / 38.6 / 40.4 / 51.2 / 53.4 / 56.0 / 57.6 /
+ *  63.9 / 66.3 s (word timings), end 72.9 s. The verses are sung on the beat with an instrumental bar after each. */
+const SONG_A1U5L3_MS = [10800, 6200, 2400, 2000, 2400, 10100, 2300, 2400, 1800, 10800, 2200, 2600, 1600, 6300, 2400, 6600];
+
+export const LESSON_A1U5L3_SCENES: Scene[] = [
+  { id: 'mt3-title', kind: 'title-card', bg: bgHall, level: 'A1', unit: 'Unit 5', lessonLabel: 'Lesson 3', title: 'The Monster Music Show', subtitle: 'Listen to the Feelings Song!', cta: '\u{1F3B5} LET’S GO!' },
+  {
+    // Remember? (owner, 2026-10-07): Lesson 2 — looks. Shadow mode: the monster and part stickers have clearly different outlines.
+    id: 'mt3-recall-warmup', kind: 'recall-warmup', bg: bgHall, who: 'pip', mode: 'shadow', listen: true,
+    fromLabel: 'Lesson 2 · What Do They Look Like?',
+    teacher: 'Guided: listen — which shadow is it? Tap it, then say one more sentence about it.',
+    items: [
+      { word: 'Big Bob', say: 'Big Bob is very tall!', img: BOB },
+      { word: 'Bea', say: 'Bea is Bibi’s little sister.', img: BEA },
+      { word: 'horns', say: 'She’s got long horns.', img: PART.hornsLong },
+      { word: 'teeth', say: 'He’s got big teeth!', img: PART.teeth },
+    ],
+  },
+  { id: 'mt3-meet-show', kind: 'meet', focus: ['listen'], bg: bgHall, who: 'glob', cardSide: 'right', teacher: 'Present: Professor Glob opens the Monster Music Show. Today we LISTEN: songs, game shows, whispers. Cup your ear and say it together.', line: 'Welcome to the Monster Music Show! Today we listen, sing and play!', repeat: 'How do you feel?' },
+  {
+    id: 'mt3-feelings', kind: 'prea1', teacher: 'Revise (fast): six feelings on Bibi. Make the face, say it — the student copies the face and says it. Quick!',
+    scene: {
+      id: 'mt3-feelings', kind: 'listen-repeat-cards', bg: bgHall, teacher: 'Listen, make the face and say it!',
+      cards: [
+        { who: 'mia', sentence: 'She’s scared.', img: BIBI.scared, imgLabel: 'scared' },
+        { who: 'mia', sentence: 'She’s bored.', img: BIBI.bored, imgLabel: 'bored' },
+        { who: 'mia', sentence: 'She’s excited!', img: BIBI.excited, imgLabel: 'excited' },
+        { who: 'mia', sentence: 'She’s surprised!', img: BIBI.surprised, imgLabel: 'surprised' },
+        { who: 'mia', sentence: 'She’s sad.', img: BIBI.sad, imgLabel: 'sad' },
+        { who: 'mia', sentence: 'She’s happy!', img: BIBI.happy, imgLabel: 'happy' },
+      ],
+    },
+  },
+  { id: 'mt3-why-ask', kind: 'meet', focus: ['why', 'sad'], bg: bibiPage(7), who: 'mia', cardSide: 'left', teacher: 'Present (I do): the question. Point to Bibi alone at lunch and ask with a kind face: Why are you sad? The voice goes UP on "why". The student repeats.', line: 'Bibi, why are you sad?', repeat: 'Why are you sad?' },
+  { id: 'mt3-why-answer', kind: 'meet', focus: ['because', 'tiny'], bg: bibiPage(7), who: 'bibi', cardSide: 'left', teacher: 'Present (I do → we do): the answer starts with "because". Bibi says it about herself (I’m tiny); we say it about her (she’s tiny). Say both together.', line: 'Because I’m tiny. The big monsters are so tall!', repeat: 'She’s sad because she’s tiny.' },
+  { id: 'mt3-echo', kind: 'echo', bg: bibiPage(7), who: 'mia', textSide: 'top', teacher: 'Guided (we do): ask it like Mia — kind and soft, then answer like Bibi — sad and tiny!', word: 'Why are you sad? Because I’m tiny.' },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1) — here the reasons ("because …") with their scene plates.
+  {
+    id: 'mt3-why-match', kind: 'picture-match', look: 'polaroids', prompt: 'Read and match: why?',
+    teacher: 'Read and match: the student reads each reason and drags it under its picture (or taps the reason, then the picture), then says the whole sentence: She’s scared because it’s dark.',
+    items: [
+      { word: 'It’s dark.', img: whyPlate('dark') },
+      { word: 'The lesson is long.', img: whyPlate('lesson') },
+      { word: 'It’s a party!', img: whyPlate('party') },
+      { word: 'It’s a big present!', img: whyPlate('present') },
+      { word: 'It’s raining.', img: whyPlate('rain') },
+    ],
+    bg: bgHall,
+  },
+  /* You do: the signature game — a TV game show you win by listening */
+  {
+    id: 'mt3-name-that-feeling', kind: 'prea1', teacher: 'Signature game (evidence: 4 of 5): Name That Feeling! Pip plays what Bibi says — the student listens (twice if needed), presses the buzzer under the right face and says the whole sentence with because.',
+    scene: {
+      id: 'mt3-name-that-feeling', kind: 'buzzer-show', bg: bgShow, who: 'pip',
+      teacher: 'Listen to Bibi. How does she feel? Buzz, then say it!',
+      intro: 'Name That Feeling! Listen to Bibi and press the buzzer!',
+      podiums: [{ x: 17.2, y: 65.7, by: 45.3 }, { x: 49.8, y: 65.7, by: 45.3 }, { x: 82.8, y: 65.7, by: 45.3 }],
+      faces: [
+        { label: 'scared', name: 'scared', img: BIBI.scared },
+        { label: 'bored', name: 'bored', img: BIBI.bored },
+        { label: 'excited', name: 'excited', img: BIBI.excited },
+        { label: 'surprised', name: 'surprised', img: BIBI.surprised },
+        { label: 'sad', name: 'sad', img: BIBI.sad },
+      ],
+      rounds: [
+        { faces: [1, 0, 2], answer: 1, line: 'It’s dark! Oh no! How does Bibi feel?', reply: 'Yes! She’s scared!', say: 'She’s scared because it’s dark.' },
+        { faces: [0, 1, 4], answer: 1, line: 'The lesson is long… so long. How does Bibi feel?', reply: 'Yes! She’s bored!', say: 'She’s bored because the lesson is long.' },
+        { faces: [3, 4, 2], answer: 2, line: 'A party for me! Hooray! How does Bibi feel?', reply: 'Yes! She’s excited!', say: 'She’s excited because it’s a party.' },
+        { faces: [3, 1, 0], answer: 0, line: 'Wow! A big present! How does Bibi feel?', reply: 'Yes! She’s surprised!', say: 'She’s surprised because it’s a big present.' },
+        { faces: [2, 3, 4], answer: 2, line: 'I’m tiny. I’m all alone. How does Bibi feel?', reply: 'Yes! She’s sad.', say: 'She’s sad because she’s tiny.' },
+      ],
+      doneLine: 'You named every feeling! Feelings champion!',
+    },
+  },
+  /* The lesson's song: after the words and a first game (CLAUDE.md "Lesson song placement") */
+  {
+    id: 'mt3-song', kind: 'song', bg: bgHall, title: '\u{1F3B5} How Do You Feel? \u{1F3B5}', teacher: 'Guided: sing and do it — make the face in every verse (scared, bored, excited) and spin on "wheel". Sing it twice: the second time the student sings the "Why…?" lines alone.',
+    durationSeconds: 73, bigWord: 'How do you feel?',
+    songUrl: SONG_A1U5L3,
+    lineDurationsMs: SONG_A1U5L3_MS,
+    lyrics: SONG_A1U5L3_LYRICS,
+  },
+  {
+    id: 'mt3-whisper', kind: 'whisper-tube', bg: bgHall, who: 'pip', title: 'Monster Whispers',
+    teacher: 'Listening game: a friend whispers a sentence down the tube; the other friend gets ONE word wrong. The student taps the wrong word, picks the right one and says the whole sentence.',
+    rounds: [
+      { from: 'mia', to: 'leo', fromImg: wtSpr('mia'), toImg: wtSpr('leo'), said: 'Bibi is scared because it is dark.', heard: 'Bibi is bored because it is dark.', choices: ['happy'] },
+      { from: 'leo', to: 'pip', fromImg: wtSpr('leo'), toImg: wtSpr('pip'), said: 'Bibi is excited because it is a party.', heard: 'Bibi is excited because it is a lesson.', choices: ['bed'] },
+      { from: 'pip', to: 'mia', fromImg: wtSpr('pip'), toImg: wtSpr('mia'), said: 'Bibi has got a little sister.', heard: 'Bibi has got a little sweater.', choices: ['brother'] },
+      { from: 'mia', to: 'pip', fromImg: wtSpr('mia'), toImg: wtSpr('pip'), said: 'Big Bob is very tall.', heard: 'Big Bob is very small.', choices: ['short'] },
+    ],
+    doneLine: 'Great listening! No more monster mix-ups!',
+  },
+  {
+    id: 'mt3-echo-hall', kind: 'echo-cave', bg: whyPlate('dark'), who: 'pip', title: 'Echo Hall: who is calling?',
+    teacher: 'Game: the lights are off in the long hall! A friend calls from the left, the middle or the right (speakers or headphones help). The student taps where the voice is, then asks: Why are you scared? — the friend answers with because.',
+    rounds: [
+      { voice: 'bibi', img: BIBI.scared, at: 2, line: 'I’m scared! It’s so dark! Find me!', reply: 'You found me! I’m scared because it’s dark.' },
+      { voice: 'leo', img: feelSpr('leo-tired'), at: 0, line: 'I’m tired! It’s late! Find me!', reply: 'Here I am! I’m tired because it’s late.' },
+      { voice: 'mia', img: feelSpr('mia-sad'), at: 1, line: 'I’m sad! I can’t find Bibi! Find me!', reply: 'You found me! I’m sad because I can’t find Bibi.' },
+      { voice: 'pip', img: feelSpr('pip-happy'), at: 2, line: 'I’m happy! I love this game! Find me!', reply: 'Here I am! I’m happy because it’s fun!' },
+    ],
+    doneLine: 'You found everyone! Lights on!',
+  },
+  {
+    id: 'mt3-reveal', kind: 'prea1', teacher: 'Game: Peek-a-Boo Plates! Tiles hide a place. Guess early: how would Bibi feel there? Tap her face, then say the sentence with because.',
+    scene: {
+      id: 'mt3-reveal', kind: 'tile-reveal', bg: bgHall, who: 'pip',
+      teacher: 'What is the place? How does Bibi feel there?',
+      rounds: [
+        { img: whyPlate('thunder'), word: 'scared', line: 'Thunder! She’s scared because it’s a storm!', options: [{ label: 'excited', img: BIBI.excited }, { label: 'scared', img: BIBI.scared }, { label: 'bored', img: BIBI.bored }] },
+        { img: whyPlate('party'), word: 'excited', line: 'A party! She’s excited because it’s a party!', options: [{ label: 'sad', img: BIBI.sad }, { label: 'tired', img: BIBI.tired }, { label: 'excited', img: BIBI.excited }] },
+        { img: whyPlate('rain'), word: 'sad', line: 'Rain! She’s sad because it’s raining.', options: [{ label: 'sad', img: BIBI.sad }, { label: 'surprised', img: BIBI.surprised }, { label: 'happy', img: BIBI.happy }] },
+      ],
+    },
+  },
+  {
+    id: 'mt3-move-break', kind: 'prea1', teacher: 'Brain break: freeze faces! Dance — then freeze with the face you hear.',
+    scene: {
+      id: 'mt3-move-break', kind: 'tpr-actions', mode: 'break', bg: bgHall, who: 'pip', teacher: 'Dance and freeze!',
+      rounds: [
+        { line: 'Dance, dance… freeze! Make a scared face!', emoji: '\u{1F631}' },
+        { line: 'Dance, dance… freeze! Make a bored face!', emoji: '\u{1F971}' },
+        { line: 'Dance, dance… freeze! Make an excited face!', emoji: '\u{1F929}' },
+      ],
+    },
+  },
+  /* Reading: Bibi's Bad Day, pages 1-7 */
+  {
+    id: 'mt3-reader', kind: 'reader', bg: bibiPage(6), title: 'Bibi’s Bad Day', doneLine: 'Poor Bibi is sad… What can her friends do? Find out next time!',
+    teacher: 'Reading: a quick re-read of pages 1-5 (the student reads), then the new pages 6-7 (listen first). Tap any word to hear it.',
+    pages: BIBI_BAD_DAY.slice(0, 7),
+  },
+  {
+    id: 'mt3-read-check', kind: 'prea1', teacher: 'Reading: Read & Check (Cambridge "look and read") — read the sentence, look at the story picture: tick or cross? Correct every cross aloud.',
+    scene: {
+      id: 'mt3-read-check', kind: 'tick-cross', bg: bgHall, who: 'pip', teacher: 'Read and look. Yes or no?',
+      rounds: [
+        { img: bibiPage(6), sentence: 'Bibi has got a little sister.', isTrue: true },
+        { img: bibiPage(6), sentence: 'Bea is very tall.', isTrue: false },
+        { img: bibiPage(7), sentence: 'Bibi is sad.', isTrue: true },
+        { img: bibiPage(7), sentence: 'Bibi is with her friends.', isTrue: false },
+        { img: bibiPage(4), sentence: 'Bibi is bored because the lesson is long.', isTrue: true },
+      ],
+    },
+  },
+  {
+    id: 'mt3-story-order', kind: 'prea1', teacher: 'Reading: Story Order — put Bibi’s day in order (pages 2, 3, 4, 6, 7), then retell it with a feeling for each picture.',
+    scene: {
+      id: 'mt3-story-order', kind: 'story-order', bg: bgHall, who: 'pip', teacher: 'Put the story in order!',
+      frames: [
+        { img: bibiPage(2), caption: 'Bibi is tired because it is early.' },
+        { img: bibiPage(3), caption: 'It is dark. Bibi is scared!' },
+        { img: bibiPage(4), caption: 'The lesson is long. Bibi is bored.' },
+        { img: bibiPage(6), caption: 'Bibi has got a little sister.' },
+        { img: bibiPage(7), caption: 'Bibi is sad because she is tiny.' },
+      ],
+    },
+  },
+  /* Phonics: ee and ea — same sound, two spellings → Catch & Sort → Blend & Read → tongue twister */
+  {
+    id: 'mt3-sound-ee-ea', kind: 'sound-model', bg: bgHall, who: 'pip', letter: 'EE · EA', phoneme: '/iː/', sound: 'ee', soundSide: 'center',
+    teacher: 'Present: ee and ea say the SAME long /ee/ — like a smile! Green, sheep (ee) … tea, peas (ea). Listen: same sound. Look: two spellings.',
+    anchors: [
+      { word: 'sheep', emoji: '\u{1F411}', img: item('sheep') },
+      { word: 'tea', emoji: '\u{1F375}', img: item('tea') },
+      { word: 'cheese', emoji: '\u{1F9C0}', img: item('cheese') },
+    ],
+  },
+  {
+    id: 'mt3-catch-sort', kind: 'prea1', teacher: 'Guided: Catch & Sort! Every word has the long /ee/ sound — so LOOK at the word: ee or ea? Catch it in the right jar and read it aloud.',
+    scene: {
+      id: 'mt3-catch-sort', kind: 'catch-sort', bg: bgHall, goal: 8, seconds: 60,
+      teacher: 'Same sound! Look: ee or ea? Catch it in the right jar and read it!',
+      left: { label: 'ee', emoji: '\u{1F41D}' }, right: { label: 'ea', emoji: '\u{1F375}' },
+      items: [
+        { word: 'bee', img: item('bee'), emoji: '\u{1F41D}', target: 'left' },
+        { word: 'tea', img: item('tea'), emoji: '\u{1F375}', target: 'right' },
+        { word: 'tree', img: item('tree'), emoji: '\u{1F333}', target: 'left' },
+        { word: 'sea', img: item('sea'), emoji: '\u{1F30A}', target: 'right' },
+        { word: 'sheep', img: item('sheep'), emoji: '\u{1F411}', target: 'left' },
+        { word: 'leaf', img: item('leaf'), emoji: '\u{1F343}', target: 'right' },
+        { word: 'three', img: item('three'), emoji: '3\u{FE0F}\u{20E3}', target: 'left' },
+        { word: 'peas', img: item('peas'), emoji: '\u{1FADB}', target: 'right' },
+        { word: 'cheese', img: item('cheese'), emoji: '\u{1F9C0}', target: 'left' },
+        { word: 'seal', img: item('seal'), emoji: '\u{1F9AD}', target: 'right' },
+      ],
+    },
+  },
+  {
+    id: 'mt3-blend', kind: 'sound-blend', bg: bgHall, look: 'gumball',
+    teacher: 'Reading: tap each gumball and say the sound, press Blend!, find the picture — then read the sentence.',
+    rounds: [
+      { word: 'leaf', sounds: ['l', 'ea', 'f'], img: item('leaf'), sentence: 'Bea has got a green leaf.' },
+      { word: 'peas', sounds: ['p', 'ea', 'z'], img: item('peas'), sentence: 'Bibi is excited. Peas for lunch!' },
+      { word: 'cheese', sounds: ['ch', 'ee', 'z'], img: item('cheese'), sentence: 'The cheese is for Big Bob.' },
+    ],
+  },
+  { id: 'mt3-twister', kind: 'tongue-twister', look: 'town', speeds: 3, bg: bibiPage(6), who: 'pip', focus: 'ee', teacher: 'Reading: quick reading! Listen to Pip, then say it slow, faster — then monster speed! Point: ea in Bea, eats, peas — ee in green.', line: 'Bea eats green peas.' },
+  /* Free: sing your own verse; ask why */
+  {
+    id: 'mt3-free-verse', kind: 'join-stage', bg: bgHall, teacher: 'Free: the student makes their OWN verse of the song — a feeling and a reason — and sings or chants it to the tune. Then Bibi asks why.', cast: ['bibi'],
+    turns: [
+      { who: 'bibi', line: 'Make your own verse! How do you feel today?' },
+      { who: 'student', line: 'I am … , so … , oh no! / hooray!' },
+      { who: 'bibi', line: 'Why are you … ?' },
+      { who: 'student', line: 'Because … !' },
+      { who: 'bibi', line: 'Make a … face just like me!' },
+    ],
+  },
+  {
+    id: 'mt3-free-why', kind: 'join-stage', bg: bibiPage(7), teacher: 'Free: role-play the lunch hall. The student is Mia: they ask Bibi how she feels and why, then say one kind thing. Then swap.', cast: ['bibi', 'mia'],
+    turns: [
+      { who: 'mia', line: 'Hi, Bibi! How do you feel?' },
+      { who: 'bibi', line: 'I’m sad.' },
+      { who: 'student', line: 'Why are you sad?' },
+      { who: 'bibi', line: 'Because I’m tiny.' },
+      { who: 'student', line: 'You’re my friend! Sit with me!' },
+    ],
+  },
+  { id: 'mt3-i-can', kind: 'meet', focus: ['listen', 'feel'], bg: bgHall, who: 'glob', cardSide: 'right', teacher: 'Check: Name That Feeling 4 of 5 (done!) — now the student listens to one more: "I’m bored. The lesson is long." and says how Bibi feels and why. Then the passport stamp!', line: 'You can listen and say how we feel — and why!', repeat: 'She’s bored because the lesson is long.' },
+  {
+    id: 'mt3-sticker', kind: 'prea1', teacher: 'Sticker time! The student opens the pack and puts the Monster Town sticker in their Sticker Book.',
+    scene: {
+      id: 'mt3-sticker', kind: 'sticker-reward', bg: bgHall, who: 'pip', teacher: 'Sticker time!',
+      line: 'Super listener! Here is your sticker.',
+      sticker: { img: BIBI.excited, label: 'Super listener' },
+    },
+  },
+  petPal('mt3-pet-pal', 0, 'I’m bored! I want a leaf to play with!', [{ label: 'tea', img: item('tea') }, { label: 'leaf', img: item('leaf') }, { label: 'sheep', img: item('sheep') }], 1, 'A leaf! Now I’m happy!'),
+  {
+    id: 'mt3-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
+    scene: {
+      id: 'mt3-home-mission', kind: 'home-mission', bg: bgHall, who: 'pip',
+      line: 'Your home mission!',
+      teacher: 'Home Mission: read the steps with the student.',
+      parentNote: 'Today your child listened to a feelings song and short dialogues: "Why are you sad? Because I\'m tiny." This week, sing "How Do You Feel?" together and take turns asking "Why?".',
+      steps: [
+        { emoji: '\u{1F3B5}', say: 'Sing "How Do You Feel?" with your family.' },
+        { emoji: '\u{1F914}', say: 'Ask: How do you feel? Why?' },
+        { emoji: '\u{1F3AD}', say: 'Make a face. Your family guesses the feeling!' },
+      ],
+    },
+  },
+  {
+    id: 'mt3-move-break-2', kind: 'prea1', teacher: 'Brain break: the monster band!',
+    scene: {
+      id: 'mt3-move-break-2', kind: 'tpr-actions', mode: 'break', bg: bgHall, who: 'pip', teacher: 'Monster band!',
+      rounds: [
+        { line: 'Play the drum! Boom, boom, boom!', emoji: '\u{1F941}' },
+        { line: 'Play the guitar! Strum, strum!', emoji: '\u{1F3B8}' },
+        { line: 'Take a bow! Thank you, monsters!', emoji: '\u{1F647}' },
+      ],
+    },
+  },
+  goodbyeSong('mt3-goodbye-song', bgHall),
+  { id: 'mt3-finale', kind: 'finale', bg: bgHall, who: 'pip', line: 'You can listen and say how monsters feel — and why! See you in Monster Town! \u{1F47E}' },
+];
+
+/* =============================================================================
+ * A1 Unit 5 Lesson 4: "Describe a Monster Friend!"
+ * Objective: I can describe a monster in 4 sentences: "He's got three eyes. He's wearing a big hat. He's happy because…"
+ * Evidence: a 4-sentence description the teacher can build (Monster Mix-Up + the swap in free talk).
+ * Story frame: getting ready in Bibi's garden — the washing line, the dress-up box and the Monster Machine that keeps
+ *   making mistakes (new setting: a breezy garden, teal sky). Research: docs/research/playground-a1u5-research.md.
+ * Practice ladder: Remember? (L3 feelings) → Present (I do: He's wearing… on Leo, She's wearing… on Mia; the four new
+ *   clothes words; we do: echo) → Read and Match → you do: Monster Mix-Up ★ (spot and fix the machine's mistake, say the
+ *   correction) → Dress-Up Studio (dress Leo and Mia as you hear) → Washing Line (Where is Bob's scarf?) → Shadows →
+ *   Reading (Reader p1-9, Read and Do) → Phonics y = /ee/ (Sound Pick: the END of the word, Blend & Read frog, twister)
+ *   → Free (describe your monster — the teacher builds it wrong on purpose; What are you wearing?) → check.
+ * ========================================================================= */
+export const LESSON_A1U5L4_TITLE = 'Describe a Monster Friend!';
+export const LESSON_A1U5L4_OBJECTIVE = 'I can describe a monster in 4 sentences: "He\'s got three eyes. He\'s wearing a big hat. He\'s happy because…"';
+
+const bgYard = `${S}/bg-a1u5-laundry-wide.png`;
+const WEAR = { hat: item('hat'), glasses: item('glasses'), scarf: item('scarf'), boots: item('boots'), coat: item('coat-blue') };
+
+export const LESSON_A1U5L4_SCENES: Scene[] = [
+  { id: 'mt4-title', kind: 'title-card', bg: bibiPage(8), level: 'A1', unit: 'Unit 5', lessonLabel: 'Lesson 4', title: 'Describe a Monster Friend!', subtitle: 'He’s wearing a hat… or is he?', cta: '\u{1F47E} LET’S GO!' },
+  {
+    // Remember? (owner, 2026-10-07): Lesson 3 — feelings. Click mode (L3 used shadow): listen, click the face.
+    id: 'mt4-recall-warmup', kind: 'recall-warmup', bg: bgYard, who: 'pip', mode: 'click', listen: true,
+    fromLabel: 'Lesson 3 · The Monster Music Show',
+    teacher: 'Guided: listen — which face is it? Click it, then say why: She’s scared because…',
+    items: [
+      { word: 'scared', say: 'She’s scared because it’s dark!', img: BIBI.scared },
+      { word: 'bored', say: 'She’s bored because the lesson is long.', img: BIBI.bored },
+      { word: 'excited', say: 'She’s excited because it’s a party!', img: BIBI.excited },
+      { word: 'sad', say: 'She’s sad because she’s tiny.', img: BIBI.sad },
+    ],
+  },
+  { id: 'mt4-meet-leo', kind: 'meet', focus: ['wearing', 'scarf'], bg: bibiPage(8), who: 'leo', cardSide: 'right', teacher: 'Present (I do): Leo arrives in Monster Town. Point to his scarf: He’s wearing a green scarf. Mime wrapping a scarf. The student repeats.', line: 'Look! I’m wearing a green scarf!', repeat: 'He’s wearing a green scarf.' },
+  { id: 'mt4-meet-mia', kind: 'meet', focus: ['wearing', 'glasses'], bg: bibiPage(8), who: 'mia', cardSide: 'right', teacher: 'Present (I do): Mia — make "glasses" with your fingers. She’s wearing glasses. Note: glasses (always s). The student repeats.', line: 'And I’m wearing glasses!', repeat: 'She’s wearing glasses.' },
+  {
+    id: 'mt4-wear-cards', kind: 'prea1', teacher: 'Present (I do → you do): one piece at a time — say it, mime putting it on; the student mimes and says it.',
+    scene: {
+      id: 'mt4-wear-cards', kind: 'listen-repeat-cards', bg: bgYard, teacher: 'Listen, put it on and say it!',
+      cards: [
+        { who: 'mia', sentence: 'He’s wearing a hat.', img: WEAR.hat, imgLabel: 'hat' },
+        { who: 'mia', sentence: 'She’s wearing glasses.', img: WEAR.glasses, imgLabel: 'glasses' },
+        { who: 'mia', sentence: 'He’s wearing a scarf.', img: WEAR.scarf, imgLabel: 'scarf' },
+        { who: 'mia', sentence: 'She’s wearing boots.', img: WEAR.boots, imgLabel: 'boots' },
+      ],
+    },
+  },
+  { id: 'mt4-echo', kind: 'echo', bg: bgYard, who: 'leo', textSide: 'top', teacher: 'Guided (we do): say it like Leo — proud and loud!', word: 'He’s wearing a scarf and boots.' },
+  { id: 'mt4-echo-2', kind: 'echo', bg: bgYard, who: 'mia', textSide: 'top', teacher: 'Guided (we do): say it like Mia — then point to someone and change it: He’s / She’s…', word: 'She’s wearing glasses and a hat.' },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1). Design: chalk (L3 = polaroids, U4L4 = cards).
+  {
+    id: 'mt4-wear-match', kind: 'picture-match', look: 'chalk', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each word and drags it under its picture, then says: He’s wearing a … .',
+    items: [
+      { word: 'hat', img: WEAR.hat },
+      { word: 'glasses', img: WEAR.glasses },
+      { word: 'scarf', img: WEAR.scarf },
+      { word: 'boots', img: WEAR.boots },
+      { word: 'coat', img: WEAR.coat },
+    ],
+    bg: bgYard,
+  },
+  /* You do: the signature game */
+  {
+    id: 'mt4-mixup', kind: 'monster-mixup', bg: bgYard, who: 'bibi', title: 'Monster Mix-Up',
+    teacher: 'Signature game (you do): Bibi describes her friend, the Monster Machine builds it — with ONE mistake. The student reads/listens, taps the wrong part, picks the right one and says the correction: "No! He’s wearing a hat!"',
+    body: PART.body, eye: PART.eye,
+    horns: [{ label: 'short horns', img: PART.hornsShort }, { label: 'long horns', img: PART.hornsLong }],
+    mouths: [{ label: 'big teeth', img: PART.teeth }, { label: 'a big smile', img: PART.smile }],
+    wear: [
+      { word: 'a hat', img: WEAR.hat, on: 'head' },
+      { word: 'glasses', img: WEAR.glasses, on: 'face' },
+      { word: 'a scarf', img: WEAR.scarf, on: 'neck' },
+      { word: 'boots', img: WEAR.boots, on: 'feet' },
+    ],
+    rounds: [
+      { line: 'He’s got three eyes. He’s wearing a hat and boots.', name: 'Zog', eyes: 3, horns: 1, mouth: 1, wears: [0, 3], mistake: { part: 'eyes', shown: 2 }, say: 'No! He’s got three eyes!' },
+      { line: 'She’s got two eyes. She’s wearing glasses and a scarf.', name: 'Tilly', eyes: 2, horns: 0, mouth: 0, wears: [1, 2], mistake: { part: 'wear', slot: 0, shown: 0 }, say: 'No! She’s wearing glasses!' },
+      { line: 'She’s got long horns and big teeth. She’s wearing boots.', name: 'Mo', eyes: 1, horns: 1, mouth: 0, wears: [3], mistake: { part: 'horns', shown: 0 }, say: 'No! She’s got long horns!' },
+      { line: 'He’s got a big smile. He’s wearing a scarf and a hat.', name: 'Fizz', eyes: 2, horns: 0, mouth: 1, wears: [2, 0], mistake: { part: 'wear', slot: 0, shown: 3 }, say: 'No! He’s wearing a scarf!' },
+      { line: 'He’s got two eyes and big teeth. He’s wearing glasses.', name: 'Bop', eyes: 2, horns: 1, mouth: 0, wears: [1], mistake: { part: 'mouth', shown: 1 }, say: 'No! He’s got big teeth!' },
+    ],
+    doneLine: 'You fixed every monster! You are the Monster Expert!',
+  },
+  helloSong('mt4-hello-song', bgYard),
+  {
+    id: 'mt4-dress', kind: 'prea1', teacher: 'You do: Dress-Up Studio! Leo and Mia get ready for the monster party. Listen for the piece AND the colour, tap the piece, then the paint pot. Say it: He’s wearing a blue hat! (Leo is a boy: no dress for him.)',
+    scene: {
+      id: 'mt4-dress', kind: 'dress-studio', bg: bgYard, who: 'mia',
+      teacher: 'Listen: which piece and which colour?',
+      pieces: [
+        { id: 'hat', word: 'hat', img: item('hat-green') },
+        { id: 'shirt', word: 'shirt', img: item('shirt-red') },
+        { id: 'pants', word: 'pants', img: item('pants-blue'), plural: true },
+        { id: 'socks', word: 'socks', img: item('socks-red'), plural: true },
+        { id: 'shoes', word: 'shoes', img: item('shoes-blue'), plural: true },
+        { id: 'dress', word: 'dress', img: item('dress-yellow') },
+      ],
+      colors: [
+        { word: 'red', hex: '#E53935' },
+        { word: 'blue', hex: '#1E6FD9' },
+        { word: 'green', hex: '#3DAA3D' },
+        { word: 'yellow', hex: '#FFD31A' },
+        { word: 'purple', hex: '#8E44AD' },
+      ],
+      rounds: [
+        { friend: 'leo', piece: 0, color: 4, line: 'A purple hat, please! It’s a monster party!', reply: 'He’s wearing a purple hat!' },
+        { friend: 'leo', piece: 1, color: 2, line: 'Now a green shirt, please!', reply: 'He’s wearing a green shirt!' },
+        { friend: 'mia', piece: 5, color: 1, line: 'A blue dress, please!', reply: 'She’s wearing a blue dress!' },
+        { friend: 'mia', piece: 4, color: 3, line: 'And yellow shoes, please!', reply: 'She’s wearing yellow shoes!' },
+      ],
+      free: { friend: 'pip', line: 'Now dress me for the party! Then take a photo!' },
+      doneLine: 'Everyone is ready for the monster party!',
+    },
+  },
+  {
+    id: 'mt4-washing-line', kind: 'prea1', teacher: 'You do: Washing Line! The monsters’ clothes are on the line. Listen: whose thing is it? Tap it in the basket — up it goes. Say: Here’s Big Bob’s scarf!',
+    scene: {
+      id: 'mt4-washing-line', kind: 'washing-line', bg: bgYard, who: 'pip',
+      teacher: 'Where is it? Tap it and say it!',
+      rope: { y: 21, x0: 12, x1: 93 },
+      clothes: [
+        { word: 'scarf', img: WEAR.scarf },
+        { word: 'glasses', img: WEAR.glasses },
+        { word: 'boots', img: WEAR.boots },
+        { word: 'hat', img: WEAR.hat },
+      ],
+      rounds: [
+        { item: 0, line: 'Where is Big Bob’s scarf?', reply: 'Here it is! Big Bob’s scarf!' },
+        { item: 2, line: 'Where are Bibi’s boots?', reply: 'Yes! Bibi’s boots!' },
+        { item: 1, line: 'Where are Mia’s glasses?', reply: 'Here they are! Mia’s glasses!' },
+        { item: 3, line: 'Where is Professor Glob’s hat?', reply: 'Yes! Professor Glob’s hat!' },
+      ],
+      doneLine: 'All the clothes are on the line! Whoosh, the wind!',
+    },
+  },
+  {
+    id: 'mt4-move-break', kind: 'prea1', teacher: 'Brain break: get dressed — fast and silly!',
+    scene: {
+      id: 'mt4-move-break', kind: 'tpr-actions', mode: 'break', bg: bgYard, who: 'pip', teacher: 'Get dressed!',
+      rounds: [
+        { line: 'Put on your hat!', emoji: '\u{1F3A9}' },
+        { line: 'Put on your glasses!', emoji: '\u{1F453}' },
+        { line: 'Put on your boots — stomp, stomp!', emoji: '\u{1F462}' },
+      ],
+    },
+  },
+  {
+    id: 'mt4-shadows', kind: 'prea1', teacher: 'Game: Shadows! Drag each piece onto its shadow (or tap it, then the shadow). Say: It’s a scarf!',
+    scene: {
+      id: 'mt4-shadows', kind: 'shadow-match', bg: bgYard, who: 'mia',
+      teacher: 'Match each piece to its shadow!',
+      items: [
+        { label: 'hat', img: WEAR.hat, line: 'It’s a hat!' },
+        { label: 'glasses', img: WEAR.glasses, line: 'They’re glasses!' },
+        { label: 'scarf', img: WEAR.scarf, line: 'It’s a scarf!' },
+        { label: 'boots', img: WEAR.boots, line: 'They’re boots!' },
+        { label: 'coat', img: WEAR.coat, line: 'It’s a coat!' },
+      ],
+    },
+  },
+  /* Reading: Bibi's Bad Day, pages 1-9 */
+  { id: 'mt4-why-sad', kind: 'meet', focus: ['why', 'sad'], bg: bibiPage(9), who: 'mia', cardSide: 'left', teacher: 'Present before reading: Mia asks Bibi the question from page 9. The student asks it too, kindly.', line: 'Why are you sad, Bibi?', repeat: 'I am sad because I am little.' },
+  {
+    id: 'mt4-reader', kind: 'reader', bg: bibiPage(8), title: 'Bibi’s Bad Day', doneLine: 'Leo and Mia have an idea… What is it? Find out next time!',
+    teacher: 'Reading: the student reads pages 1-7 quickly, then the new pages 8-9 (listen first). Tap any word to hear it.',
+    pages: BIBI_BAD_DAY.slice(0, 9),
+  },
+  {
+    id: 'mt4-read-do', kind: 'read-do', bg: bgYard, title: 'Read and do!', cast: ['leo', 'mia', 'bibi'],
+    teacher: 'Reading: the student READS the card (🔊 only for help), taps the thing, then the friend.',
+    things: [
+      { label: 'green scarf', img: WEAR.scarf },
+      { label: 'glasses', img: WEAR.glasses },
+      { label: 'boots', img: WEAR.boots },
+      { label: 'hat', img: WEAR.hat },
+    ],
+    rounds: [
+      { text: 'Give Leo the green scarf.', thing: 0, to: 0, reply: 'Thank you! I’m wearing my green scarf!' },
+      { text: 'Give Mia the glasses.', thing: 1, to: 1, reply: 'My glasses! Now I can read!' },
+      { text: 'Give Bibi the boots.', thing: 2, to: 2, reply: 'Boots! I’m happy now!' },
+      { text: 'Give Leo the hat.', thing: 3, to: 0, reply: 'A hat and a scarf! I’m ready!' },
+    ],
+    doneLine: 'Great reading! Everyone is ready!',
+  },
+  /* Phonics: y = /ee/ at the end → Sound Pick (the END of the word) → Blend & Read (frog) → tongue twister */
+  {
+    id: 'mt4-sound-y', kind: 'sound-model', bg: bgYard, who: 'pip', letter: 'Y', phoneme: '/iː/', sound: 'ee', soundSide: 'center',
+    teacher: 'Present: at the END of a word, y says /ee/ — happy, sleepy, teddy. (At the start it says /y/: yes, yo-yo.) Smile and say: eeee!',
+    anchors: [
+      { word: 'happy', emoji: '\u{1F604}', img: BIBI.happy },
+      { word: 'sleepy', emoji: '\u{1F634}', img: BIBI.tired },
+      { word: 'teddy', emoji: '\u{1F9F8}', img: item('teddy') },
+    ],
+  },
+  {
+    id: 'mt4-sound-pick', kind: 'prea1', teacher: 'Guided: listen to /ee/, then tap the word that ENDS with it (y at the end). Say the word. Words with y at the START (yak, yo-yo) say /y/!',
+    scene: {
+      id: 'mt4-sound-pick', kind: 'sound-pick', bg: bgYard, who: 'pip', teacher: 'Which word ends with /ee/?',
+      ask: 'Which word ends with this sound?',
+      rounds: [
+        { sound: 'y=ee', answer: 0, options: [{ word: 'happy', img: BIBI.happy }, { word: 'yak', img: item('yak') }, { word: 'hat', img: WEAR.hat }] },
+        { sound: 'y=ee', answer: 2, options: [{ word: 'yarn', img: item('yarn') }, { word: 'hen', img: item('hen') }, { word: 'teddy', img: item('teddy') }] },
+        { sound: 'y=ee', answer: 1, options: [{ word: 'yo-yo', img: item('yoyo') }, { word: 'sleepy', img: BIBI.tired }, { word: 'pig', img: item('pig') }] },
+        { sound: 'y=ee', answer: 0, options: [{ word: 'sunny', img: item('sun') }, { word: 'yak', img: item('yak') }, { word: 'ham', img: item('ham') }] },
+      ],
+    },
+  },
+  {
+    id: 'mt4-blend', kind: 'sound-blend', bg: bgYard, look: 'frog',
+    teacher: 'Reading: tap each lily pad and say the sound — the y at the end says /ee/ — blend the word, find the picture, then read the sentence.',
+    rounds: [
+      { word: 'happy', sounds: ['h', 'a', 'pp=p', 'y=ee'], img: BIBI.happy, sentence: 'Bibi is happy now.' },
+      { word: 'teddy', sounds: ['t', 'e', 'dd=d', 'y=ee'], img: item('teddy'), sentence: 'Bea has got a teddy.' },
+      { word: 'sunny', sounds: ['s', 'u', 'nn=n', 'y=ee'], img: item('sun'), sentence: 'It is sunny in the garden.' },
+    ],
+  },
+  { id: 'mt4-twister', kind: 'tongue-twister', look: 'town', speeds: 3, bg: bgYard, who: 'pip', focus: 'y', teacher: 'Reading: quick reading! Listen to Pip, then say it slow, faster — then monster speed! Point to every y that says /ee/.', line: 'Funny Bibi is happy and sleepy.' },
+  /* Free: the student describes — the teacher builds it wrong on purpose; then swap */
+  {
+    id: 'mt4-free-maker', kind: 'join-stage', bg: bgYard, teacher: 'Free (the evidence): the student describes their own monster in 4 sentences (got, got, wearing, feeling + because). The teacher draws it — WRONG on purpose — and the student corrects: No! He’s got THREE eyes! Then swap: Bibi describes, the student draws.', cast: ['bibi'],
+    turns: [
+      { who: 'bibi', line: 'Tell me about your monster! What has it got?' },
+      { who: 'student', line: 'He’s got … . She’s got … .' },
+      { who: 'bibi', line: 'What is it wearing?' },
+      { who: 'student', line: 'He’s wearing … .' },
+      { who: 'bibi', line: 'How does it feel? Why?' },
+      { who: 'student', line: 'He’s happy because … .' },
+    ],
+  },
+  {
+    id: 'mt4-free-wearing', kind: 'join-stage', bg: bibiPage(8), teacher: 'Free: Mia asks what the student is wearing today — they answer with I’m wearing… . Then they describe the teacher: You’re wearing… / She’s wearing… .', cast: ['mia'],
+    turns: [
+      { who: 'mia', line: 'I’m wearing glasses! What are you wearing today?' },
+      { who: 'student', line: 'I’m wearing … .' },
+      { who: 'mia', line: 'What is your teacher wearing?' },
+      { who: 'student', line: 'She’s / He’s wearing … .' },
+    ],
+  },
+  { id: 'mt4-i-can', kind: 'meet', focus: ['wearing', 'got'], bg: bgYard, who: 'bibi', cardSide: 'left', teacher: 'Check: the student describes one monster in 4 sentences (got, got, wearing, feeling + because) — the teacher can build it. Then the passport stamp!', line: 'You can describe a monster friend! He’s got three eyes. He’s wearing a hat!', repeat: 'He’s wearing a big hat.' },
+  {
+    id: 'mt4-sticker', kind: 'prea1', teacher: 'Sticker time! The student opens the pack and puts the Monster Town sticker in their Sticker Book.',
+    scene: {
+      id: 'mt4-sticker', kind: 'sticker-reward', bg: bgYard, who: 'pip', teacher: 'Sticker time!',
+      line: 'Monster expert! Here is your sticker.',
+      sticker: { img: WEAR.glasses, label: 'Monster expert' },
+    },
+  },
+  petPal('mt4-pet-pal', 0, 'It’s rainy! I want my boots, please!', [{ label: 'hat', img: WEAR.hat }, { label: 'boots', img: WEAR.boots }, { label: 'glasses', img: WEAR.glasses }], 1, 'Boots! Now I can jump in the puddles!'),
+  {
+    id: 'mt4-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
+    scene: {
+      id: 'mt4-home-mission', kind: 'home-mission', bg: bgYard, who: 'pip',
+      teacher: 'Home Mission: read the steps with the student.',
+      line: 'Your home mission!',
+      parentNote: 'Today your child learned to describe what someone is wearing: "He\'s wearing a hat. She\'s wearing glasses." This week, describe a family member in 4 sentences together — and make one mistake on purpose for your child to correct!',
+      steps: [
+        { emoji: '\u{1F454}', say: 'What is your mom or dad wearing? Say: She’s wearing … .' },
+        { emoji: '\u{1F47E}', say: 'Draw a monster with a hat. Describe it!' },
+        { emoji: '\u{1F604}', say: 'Find 3 words with y at the end: happy, sunny… .' },
+      ],
+    },
+  },
+  {
+    id: 'mt4-move-break-2', kind: 'prea1', teacher: 'Brain break: Monster Mix-Up, freeze!',
+    scene: {
+      id: 'mt4-move-break-2', kind: 'tpr-actions', mode: 'break', bg: bgYard, who: 'pip', teacher: 'Monster moves!',
+      rounds: [
+        { line: 'Walk like a monster in big boots!', emoji: '\u{1F462}' },
+        { line: 'Wave your scarf in the wind!', emoji: '\u{1F9E3}' },
+        { line: 'Freeze! Make a happy face!', emoji: '\u{1F604}' },
+      ],
+    },
+  },
+  goodbyeSong('mt4-goodbye-song', bgYard),
+  { id: 'mt4-finale', kind: 'finale', bg: bibiPage(8), who: 'pip', line: 'You can describe a monster friend! See you in Monster Town! \u{1F47E}' },
+];
+
+/* =============================================================================
+ * A1 Unit 5 Lesson 5: "Storybook: Bibi's Bad Day"
+ * Objective: I can read "Bibi's Bad Day" with help and say how Bibi feels and why.
+ * Evidence: reads 4 pages alone; at the pause chooses how to cheer Bibi up and says why (She's sad because she's tiny.);
+ *   plots Bibi's day on the Feelings Meter with a because sentence for each point.
+ * Story frame: the party — the friends cheer Bibi up (new setting: the party room and the evening dance hall).
+ * Ladder: Remember? (L4 clothes) → predict (How can we help Bibi?) → party words → Read and Match (cards) → Reader p1-9
+ *   (the student reads) → PAUSE: choose how to cheer Bibi up → Reader p10-12 → Feelings Meter ★ (the day as a graph,
+ *   one because sentence per point) → Story Quiz Board → Picture Crossword → I Spy at the party → act it out →
+ *   phonics review ee / ea / y (Word Splat, Blend & Read) → twister of the unit → retell → check.
+ * Research: docs/research/playground-a1u5-research.md (Lesson 5).
+ * ========================================================================= */
+export const LESSON_A1U5L5_TITLE = 'Storybook: Bibi’s Bad Day';
+export const LESSON_A1U5L5_OBJECTIVE = 'I can read "Bibi\'s Bad Day" with help and say how Bibi feels and why.';
+
+export const LESSON_A1U5L5_SCENES: Scene[] = [
+  { id: 'mt5-title', kind: 'title-card', bg: bibiPage(12), level: 'A1', unit: 'Unit 5', lessonLabel: 'Lesson 5', title: 'Bibi’s Bad Day', subtitle: 'The whole story — and a surprise!', cta: '\u{1F4D6} LET’S READ!' },
+  {
+    // Remember? (owner, 2026-10-07): Lesson 4 — clothes. Shadow mode: the clothes stickers have clearly different outlines.
+    id: 'mt5-recall-warmup', kind: 'recall-warmup', bg: bibiPage(8), who: 'pip', mode: 'shadow', listen: true,
+    fromLabel: 'Lesson 4 · Describe a Monster Friend!',
+    teacher: 'Guided: listen — which shadow is it? Tap it, then say: He’s wearing … / She’s wearing … .',
+    items: [
+      { word: 'scarf', say: 'Leo is wearing a green scarf.', img: WEAR.scarf },
+      { word: 'glasses', say: 'Mia is wearing glasses.', img: WEAR.glasses },
+      { word: 'boots', say: 'Bibi is wearing boots.', img: WEAR.boots },
+      { word: 'hat', say: 'Professor Glob is wearing a hat.', img: WEAR.hat },
+    ],
+  },
+  { id: 'mt5-predict', kind: 'meet', focus: ['help'], bg: bibiPage(9), who: 'leo', cardSide: 'right', teacher: 'Predict (before reading): Bibi is sad. Ask: How can we help her? The student guesses in English: A party! A hug! A game! Every guess is good.', line: 'Bibi is sad. How can we help her?', repeat: 'How can we help Bibi?' },
+  {
+    id: 'mt5-party-words', kind: 'prea1', teacher: 'Present (I do → you do): the party words for the end of the story. Show, say, the student repeats with a party face.',
+    scene: {
+      id: 'mt5-party-words', kind: 'listen-repeat-cards', bg: bibiPage(11), teacher: 'Listen and say it!',
+      cards: [
+        { who: 'mia', sentence: 'Surprise!', img: BIBI.surprised, imgLabel: 'surprise' },
+        { who: 'mia', sentence: 'A big cake!', img: item('cake'), imgLabel: 'cake' },
+        { who: 'mia', sentence: 'Balloons!', img: item('balloon-red'), imgLabel: 'balloons' },
+        { who: 'mia', sentence: 'A present for you!', img: item('present'), imgLabel: 'present' },
+      ],
+    },
+  },
+  { id: 'mt5-echo', kind: 'echo', bg: bibiPage(10), who: 'mia', textSide: 'top', teacher: 'Guided (we do): shout it like Mia at a surprise party — then whisper it!', word: 'Surprise! Bibi is surprised.' },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1). Design: cards (L4 = chalk, U4L5 = frames).
+  {
+    id: 'mt5-party-match', kind: 'picture-match', look: 'cards', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each word and drags it under its picture, then says it in a sentence.',
+    items: [
+      { word: 'cake', img: item('cake') },
+      { word: 'balloon', img: item('balloon-red') },
+      { word: 'present', img: item('present') },
+      { word: 'surprised', img: BIBI.surprised },
+      { word: 'excited', img: BIBI.excited },
+    ],
+    bg: bibiPage(11),
+  },
+  /* The story: pages 1-9, the pause, pages 10-12 */
+  {
+    id: 'mt5-reader-1', kind: 'reader', bg: bibiPage(1), title: 'Bibi’s Bad Day', doneLine: 'Poor Bibi! Stop — what can her friends do?',
+    teacher: 'Reading (evidence): the student reads pages 1-9 — at least 4 pages alone (tap any word for help). Ask the picture questions.',
+    pages: BIBI_BAD_DAY.slice(0, 9),
+  },
+  {
+    id: 'mt5-pause', kind: 'choice', bg: bibiPage(9), who: 'pip', prompt: 'How can the friends cheer Bibi up? You choose!',
+    teacher: 'PAUSE page (evidence): the student chooses how to cheer Bibi up and says why — “A party! She’s sad because she’s tiny.” Every choice is good. Then read on and see what the friends do.',
+    options: [
+      { label: 'A surprise party!', emoji: '\u{1F389}', correct: true },
+      { label: 'A big hug!', emoji: '\u{1F917}', correct: true },
+      { label: 'A funny game!', emoji: '\u{1F3B2}', correct: true },
+    ],
+  },
+  {
+    id: 'mt5-reader-2', kind: 'reader', bg: bibiPage(10), title: 'Bibi’s Bad Day', doneLine: 'The end! It is a good day after all!',
+    teacher: 'Reading: pages 10-12 — was your idea right? Listen first, then the student reads. Act “Surprise!”.',
+    pages: BIBI_BAD_DAY.slice(9, 12),
+  },
+  { id: 'mt5-thanks', kind: 'meet', focus: ['happy'], bg: bibiPage(12), who: 'bibi', cardSide: 'left', teacher: 'Present: Bibi thanks the friends. Ask: How does Bibi feel now? Why?', line: 'Thank you, friends! I’m so happy!', repeat: 'She’s happy because it’s a party for her.' },
+  { id: 'mt5-echo-2', kind: 'echo', bg: bibiPage(11), who: 'bibi', textSide: 'top', teacher: 'Guided (we do): say it like Bibi — jumping with excitement!', word: 'Bibi is excited because it is a party for her!' },
+  /* You do: the signature game */
+  {
+    id: 'mt5-meter', kind: 'feelings-meter', bg: bibiPage(12), who: 'pip', title: 'Feelings Meter: Bibi’s day',
+    teacher: 'Signature game (evidence): look at each picture, tap Bibi’s face — the dot drops and the line grows. Then the student says the sentence with because. At the end: down, down… and up!',
+    feelings: [
+      { label: 'excited', img: BIBI.excited },
+      { label: 'happy', img: BIBI.happy },
+      { label: 'surprised', img: BIBI.surprised },
+      { label: 'bored', img: BIBI.bored },
+      { label: 'tired', img: BIBI.tired },
+      { label: 'scared', img: BIBI.scared },
+      { label: 'sad', img: BIBI.sad },
+    ],
+    points: [
+      { img: bibiPage(2), feeling: 4, line: 'Bibi is tired because it is early.' },
+      { img: bibiPage(3), feeling: 5, line: 'Bibi is scared because it is dark.' },
+      { img: bibiPage(4), feeling: 3, line: 'Bibi is bored because the lesson is long.' },
+      { img: bibiPage(7), feeling: 6, line: 'Bibi is sad because she is tiny.' },
+      { img: bibiPage(10), feeling: 2, line: 'Bibi is surprised. Surprise!' },
+      { img: bibiPage(11), feeling: 0, line: 'Bibi is excited because it is a party for her.' },
+      { img: bibiPage(12), feeling: 1, line: 'Bibi is happy. It is a good day after all!' },
+    ],
+    doneLine: 'Bibi’s day: down, down, down… and UP!',
+  },
+  {
+    id: 'mt5-quiz', kind: 'quiz-board', bg: bibiPage(12), who: 'bibi', title: 'Story Quiz Board!',
+    teacher: 'Guided: the student picks any tile — harder questions are worth more. Answer, then say it aloud. One tile is a BOOM tile: double points!',
+    categories: [
+      { name: 'Who?', emoji: '\u{1F47E}', tiles: [
+        { ask: 'Who is tiny?', choices: ['Bibi.', 'Big Bob.'], answer: 0, img: bibiPage(5) },
+        { ask: 'Who is Bea?', choices: ['Bibi’s sister.', 'Bibi’s teacher.'], answer: 0, img: bibiPage(6) },
+        { ask: 'Who asks “Why are you sad?”', choices: ['Mia.', 'Professor Glob.'], answer: 0, img: bibiPage(9) },
+      ] },
+      { name: 'How?', emoji: '\u{1F60A}', tiles: [
+        { ask: 'How is Bibi in the dark?', choices: ['Scared.', 'Happy.'], answer: 0, img: bibiPage(3) },
+        { ask: 'How is Bibi in the long lesson?', choices: ['Bored.', 'Excited.'], answer: 0, img: bibiPage(4) },
+        { ask: 'How is Bibi at the door?', choices: ['Surprised.', 'Tired.'], answer: 0, img: bibiPage(10) },
+      ] },
+      { name: 'Why?', emoji: '\u{2753}', tiles: [
+        { ask: 'Why is Bibi tired?', choices: ['It is early.', 'It is a party.'], answer: 0 },
+        { ask: 'Why is Bibi sad?', choices: ['She is tiny.', 'It is sunny.'], answer: 0 },
+        { ask: 'Why is Bibi excited?', choices: ['It is a party for her.', 'The lesson is long.'], answer: 0 },
+      ] },
+    ],
+    boom: [2, 2],
+    doneLine: 'The board is finished! Story champion!',
+  },
+  {
+    id: 'mt5-crossword', kind: 'crossword', bg: bibiPage(11), who: 'bibi', title: 'Party Crossword',
+    teacher: 'Spelling game: tap a picture, then tap the letters to fill its squares. Crossing letters help! Say each word when it is done.',
+    words: [
+      { word: 'cake', img: item('cake'), say: 'Cake! A big cake for Bibi.' },
+      { word: 'present', img: item('present'), say: 'Present! A present for Bibi.' },
+      { word: 'scarf', img: WEAR.scarf, say: 'Scarf! Leo is wearing a green scarf.' },
+      { word: 'boots', img: WEAR.boots, say: 'Boots! Teal boots.' },
+      { word: 'hat', img: WEAR.hat, say: 'Hat! A party hat.' },
+      { word: 'teddy', img: item('teddy'), say: 'Teddy! Bea has got a teddy.' },
+    ],
+    doneLine: 'You did the whole crossword!',
+  },
+  {
+    id: 'mt5-i-spy', kind: 'i-spy', bg: bibiPage(11), who: 'pip',
+    teacher: 'Game: I Spy at the party! Listen to the clue, move the binoculars to the thing and say it.',
+    rounds: [
+      { clue: 'I spy something sweet with candles!', spot: { left: 65, top: 73, r: 9 }, answer: 'A cake!' },
+      { clue: 'I spy something round in the air!', spot: { left: 86, top: 13, r: 8 }, answer: 'A balloon!' },
+      { clue: 'I spy a box with a bow!', spot: { left: 93, top: 89, r: 7 }, answer: 'A present!' },
+      { clue: 'I spy a green monster. He’s happy!', spot: { left: 78, top: 60, r: 9 }, answer: 'A green monster!' },
+    ],
+    doneLine: 'You found everything at the party!',
+  },
+  {
+    id: 'mt5-act-out', kind: 'join-stage', bg: bibiPage(9), teacher: 'Free: act it out! The student is Mia (then Bibi), the teacher is the other one. Use a sad voice, then a surprised one!', cast: ['bibi', 'mia'],
+    turns: [
+      { who: 'student', line: 'Why are you sad, Bibi?' },
+      { who: 'bibi', line: 'I am sad because I am little.' },
+      { who: 'student', line: 'Come with me! … Surprise!' },
+      { who: 'bibi', line: 'Wow! A party for me? I’m so excited!' },
+      { who: 'student', line: 'Yes! Happy day, Bibi!' },
+    ],
+  },
+  {
+    id: 'mt5-move-break', kind: 'prea1', teacher: 'Brain break: the party dance!',
+    scene: {
+      id: 'mt5-move-break', kind: 'tpr-actions', mode: 'break', bg: bibiPage(12), who: 'pip', teacher: 'Party time!',
+      rounds: [
+        { line: 'Jump like Bibi — so excited!', emoji: '\u{1F929}' },
+        { line: 'Blow up a big balloon!', emoji: '\u{1F388}' },
+        { line: 'Dance with your friends!', emoji: '\u{1F57A}' },
+      ],
+    },
+  },
+  helloSong('mt5-hello-song', bibiPage(12)),
+  /* Phonics review: ee · ea · y → Word Splat → Blend & Read → the unit's tongue twister */
+  {
+    id: 'mt5-sound-review', kind: 'sound-model', bg: bibiPage(12), who: 'pip', letter: 'EE · EA · Y', phoneme: '/iː/', sound: 'ee', soundSide: 'center',
+    teacher: 'Review: three spellings, ONE long /ee/ — ee (sheep), ea (tea), y at the end (happy). Smile and say: eeee!',
+    anchors: [
+      { word: 'sheep', emoji: '\u{1F411}', img: item('sheep') },
+      { word: 'tea', emoji: '\u{1F375}', img: item('tea') },
+      { word: 'happy', emoji: '\u{1F604}', img: BIBI.happy },
+    ],
+  },
+  {
+    id: 'mt5-splat', kind: 'word-splat', bg: bibiPage(11), who: 'pip', title: 'Word Splat: ee, ea, y!',
+    teacher: 'Reading: listen and splat the word you hear, then read it. Three spellings — one sound!',
+    words: ['bee', 'sheep', 'green', 'tea', 'leaf', 'sea', 'happy', 'teddy'],
+    rounds: ['sheep', 'leaf', 'happy', 'tea', 'teddy', 'green'],
+    doneLine: 'Splat! You can read ee, ea and y!',
+  },
+  {
+    id: 'mt5-blend', kind: 'sound-blend', bg: bibiPage(11),
+    teacher: 'Reading: say each sound, blend the word, find the picture — then read the sentence from the story.',
+    rounds: [
+      { word: 'teeth', sounds: ['t', 'ee', 'th'], img: PART.teeth, sentence: 'Big Bob has got big teeth.' },
+      { word: 'sleepy', sounds: ['s', 'l', 'ee', 'p', 'y=ee'], img: BIBI.tired, sentence: 'Bibi is sleepy because it is early.' },
+      { word: 'eat', sounds: ['ea', 't'], img: item('cake'), sentence: 'Let’s eat the cake!' },
+    ],
+  },
+  { id: 'mt5-twister', kind: 'tongue-twister', look: 'town', speeds: 3, bg: bibiPage(12), who: 'pip', focus: 'ee', teacher: 'Reading: the unit’s tongue twister — ee, ea and y together! Slow, faster — then monster speed!', line: 'Happy Bibi eats three green peas.' },
+  /* Free: retell with feelings; your own good day */
+  {
+    id: 'mt5-retell', kind: 'join-stage', bg: bibiPage(1), teacher: 'Free (evidence): the student retells the story with a feeling and a reason for each part — use the Feelings Meter as the map. Pip helps with the first words.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Tell me the story! First, Bibi is …' },
+      { who: 'student', line: 'Bibi is tired because it is early.' },
+      { who: 'pip', line: 'And then?' },
+      { who: 'student', line: 'She’s scared … She’s bored … She’s sad because … .' },
+      { who: 'pip', line: 'And at the end?' },
+      { who: 'student', line: 'Surprise! She’s excited because it’s a party! She’s happy!' },
+    ],
+  },
+  {
+    id: 'mt5-my-day', kind: 'join-stage', bg: bibiPage(12), teacher: 'Free: the student tells about a bad day that became a good day — how they felt and why.', cast: ['bibi'],
+    turns: [
+      { who: 'bibi', line: 'My day was bad, then good! And you? When are you sad?' },
+      { who: 'student', line: 'I’m sad when … / because … .' },
+      { who: 'bibi', line: 'What makes you happy?' },
+      { who: 'student', line: 'I’m happy because … .' },
+    ],
+  },
+  { id: 'mt5-i-can', kind: 'meet', focus: ['read', 'why'], bg: bibiPage(12), who: 'bibi', cardSide: 'left', teacher: 'Check: the student read 4 pages alone, chose at the pause and said why, and plotted Bibi’s day with because sentences — then the passport stamp!', line: 'You can read my story and say how I feel — and why!', repeat: 'Bibi is happy because it is a party for her.' },
+  {
+    id: 'mt5-sticker', kind: 'prea1', teacher: 'Sticker time! The student opens the pack and puts the Monster Town sticker in their Sticker Book.',
+    scene: {
+      id: 'mt5-sticker', kind: 'sticker-reward', bg: bibiPage(12), who: 'pip', teacher: 'Sticker time!',
+      line: 'Story star! Here is your sticker.',
+      sticker: { img: BIBI.happy, label: 'Story star' },
+    },
+  },
+  petPal('mt5-pet-pal', 0, 'It’s a party! I want a piece of cake, please!', [{ label: 'cake', img: item('cake') }, { label: 'boots', img: WEAR.boots }, { label: 'teddy', img: item('teddy') }], 0, 'Cake! I’m so excited!'),
+  {
+    id: 'mt5-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
+    scene: {
+      id: 'mt5-home-mission', kind: 'home-mission', bg: bibiPage(12), who: 'pip',
+      teacher: 'Home Mission: read the steps with the student.',
+      line: 'Your home mission!',
+      parentNote: 'Today your child read the whole story "Bibi\'s Bad Day" and said how Bibi feels and why: "She\'s sad because she\'s tiny." This week, ask your child to read the story to you (the Homework Quest has it) and to tell you how they feel and why.',
+      steps: [
+        { emoji: '\u{1F4D6}', say: 'Read Bibi’s story to your family.' },
+        { emoji: '\u{1F4C8}', say: 'Draw your day: happy, sad, excited…' },
+        { emoji: '\u{1F389}', say: 'Plan a little surprise for someone!' },
+      ],
+    },
+  },
+  {
+    id: 'mt5-move-break-2', kind: 'prea1', teacher: 'Brain break: feelings freeze!',
+    scene: {
+      id: 'mt5-move-break-2', kind: 'tpr-actions', mode: 'break', bg: bibiPage(12), who: 'pip', teacher: 'Freeze!',
+      rounds: [
+        { line: 'Freeze! Be scared in the dark!', emoji: '\u{1F631}' },
+        { line: 'Freeze! Be surprised at the door!', emoji: '\u{1F62E}' },
+        { line: 'Freeze! Be happy at the party!', emoji: '\u{1F604}' },
+      ],
+    },
+  },
+  goodbyeSong('mt5-goodbye-song', bibiPage(12)),
+  { id: 'mt5-finale', kind: 'finale', bg: bibiPage(12), who: 'pip', line: 'You read the whole story! Bibi is happy — and so are we! \u{1F47E}' },
+];
+
+/* =============================================================================
+ * A1 Unit 5 Lesson 6: "Feelings Charades!" (extra practice)
+ * Objective: I can ask and answer about looks, clothes and feelings quickly.
+ * Evidence: in Guess Who the student asks 3+ yes/no questions (Has your monster got…? Is your monster wearing…?) and
+ *   answers the friend's questions about their own monster; in Charades they say the feeling AND why.
+ * Story frame: game night in Monster Town (new setting: the game-night room with the round table and the curtain stage).
+ * Ladder: Remember? (L5 party words) → model the questions and the answers → Guess Who ★ (ask, then hide) →
+ *   Charades + Draw That (feelings and why) → Go Fish (Have you got…?) → Sticker Bingo → Save the Balloon (scarf,
+ *   teeth, sleep) → Tic-Tac-Toe → Hot Potato questions → Pass the Present → Dominoes → Twister Race → Blend & Read →
+ *   free talk with Bibi → check.
+ * Research: docs/research/playground-a1u5-research.md (Lesson 6).
+ * ========================================================================= */
+export const LESSON_A1U5L6_TITLE = 'Feelings Charades!';
+export const LESSON_A1U5L6_OBJECTIVE = 'I can ask and answer about looks, clothes and feelings quickly.';
+
+const bgGame = `${S}/bg-a1u5-gamenight-wide.png`;
+const GW_KIT = {
+  body: PART.body, eye: PART.eye,
+  horns: [{ label: 'short horns', img: PART.hornsShort }, { label: 'long horns', img: PART.hornsLong }],
+  mouths: [{ label: 'big teeth', img: PART.teeth }, { label: 'a big smile', img: PART.smile }],
+  wear: [
+    { word: 'a hat', img: WEAR.hat, on: 'head' as const },
+    { word: 'glasses', img: WEAR.glasses, on: 'face' as const },
+    { word: 'a scarf', img: WEAR.scarf, on: 'neck' as const },
+    { word: 'boots', img: WEAR.boots, on: 'feet' as const },
+  ],
+};
+/** Body colours: the lime body sticker (hue ≈ 68°) turned with hue-rotate — checked by eye in the browser. */
+const HUE = { purple: 180, blue: 140, green: 45, pink: -110 } as const;
+const gwMon = (name: string, color: keyof typeof HUE, eyes: 1 | 2 | 3, horns: number, mouth: number, wears: number[]) =>
+  ({ name, color, hue: HUE[color], eyes, horns, mouth, wears });
+const isQ = (color: string) => ({ ask: `Is your monster ${color}?`, yes: `Yes! My monster is ${color}.`, no: `No! My monster isn’t ${color}.`, test: { color } });
+const eyesQ = (n: 1 | 3) => { const w = n === 1 ? 'one eye' : 'three eyes'; return { ask: `Has your monster got ${w}?`, yes: `Yes! My monster has got ${w}.`, no: `No! My monster hasn’t got ${w}.`, test: { eyes: n } }; };
+const gotQ = (what: string, test: { horns?: number; mouth?: number }) => ({ ask: `Has your monster got ${what}?`, yes: `Yes! My monster has got ${what}.`, no: `No! My monster hasn’t got ${what}.`, test });
+const wearQ = (w: number) => { const what = GW_KIT.wear[w].word; return { ask: `Is your monster wearing ${what}?`, yes: `Yes! My monster is wearing ${what}.`, no: `No! My monster isn’t wearing ${what}.`, test: { wear: w } }; };
+/** Face doodles for Draw That (viewBox 1000 × 600): a round face, eyes, then the mouth that shows the feeling. */
+const FACE = ['M 300 300 a 200 200 0 1 0 400 0 a 200 200 0 1 0 -400 0', 'M 420 250 a 14 14 0 1 0 28 0 a 14 14 0 1 0 -28 0', 'M 552 250 a 14 14 0 1 0 28 0 a 14 14 0 1 0 -28 0'];
+
+export const LESSON_A1U5L6_SCENES: Scene[] = [
+  { id: 'mt6-title', kind: 'title-card', bg: bgGame, level: 'A1', unit: 'Unit 5', lessonLabel: 'Lesson 6', title: 'Feelings Charades!', subtitle: 'Game night in Monster Town', cta: '\u{1F3B2} LET’S PLAY!' },
+  {
+    // Remember? (owner, 2026-10-07): Lesson 5 — the party words. Click mode (L5 used shadow).
+    id: 'mt6-recall-warmup', kind: 'recall-warmup', bg: bgGame, who: 'pip', mode: 'click', listen: true,
+    fromLabel: 'Lesson 5 · Storybook: Bibi’s Bad Day',
+    teacher: 'Guided: listen — which picture is it? Tap it, then say the sentence from the story.',
+    items: [
+      { word: 'cake', say: 'A big cake for Bibi!', img: item('cake') },
+      { word: 'present', say: 'A present for you!', img: item('present') },
+      { word: 'surprised', say: 'Surprise! Bibi is surprised.', img: BIBI.surprised },
+      { word: 'excited', say: 'Bibi is excited because it is a party.', img: BIBI.excited },
+    ],
+  },
+  { id: 'mt6-intro', kind: 'meet', focus: ['games'], bg: bgGame, who: 'bibi', cardSide: 'left', teacher: 'Hook: it is game night in Monster Town! Ask: Do you like games? Which games do you play at home?', line: 'It’s game night in Monster Town! Let’s play games!', repeat: 'Let’s play games!' },
+  {
+    id: 'mt6-questions', kind: 'prea1', teacher: 'Model (I do → you do): the game questions. Show, say, the student repeats with a question voice (up at the end!).',
+    scene: {
+      id: 'mt6-questions', kind: 'listen-repeat-cards', bg: bgGame, teacher: 'Listen and ask it!',
+      cards: [
+        { who: 'pip', sentence: 'Has your monster got long horns?', img: PART.hornsLong, imgLabel: 'long horns' },
+        { who: 'pip', sentence: 'Has your monster got three eyes?', img: PART.eye, imgLabel: 'three eyes' },
+        { who: 'pip', sentence: 'Is your monster wearing a hat?', img: WEAR.hat, imgLabel: 'a hat' },
+        { who: 'pip', sentence: 'Is your monster blue?', img: item('monster-blue'), imgLabel: 'blue?' },
+      ],
+    },
+  },
+  { id: 'mt6-answer', kind: 'echo', bg: bgGame, who: 'bibi', textSide: 'top', teacher: 'Model the answers (we do): Yes! My monster has got… / No! My monster isn’t wearing… The student repeats both.', word: 'Yes! My monster has got long horns. No! My monster isn’t wearing a hat.' },
+  /* You do: the signature game */
+  {
+    id: 'mt6-guess-who', kind: 'guess-who', bg: bgGame, who: 'bibi', title: 'Guess Who?',
+    teacher: 'Signature game (evidence): Part 1 — the student taps a question AND says it aloud; Bibi answers; the doors that don’t fit close by themselves; then the student taps the last monster and says “It’s Lulu!”. Part 2 — the student secretly picks a monster and answers Bibi’s questions with Yes / No and the whole sentence.',
+    ...GW_KIT,
+    monsters: [
+      gwMon('Zog', 'green', 3, 1, 0, [0]),
+      gwMon('Tilly', 'pink', 2, 0, 1, [1]),
+      gwMon('Mo', 'blue', 1, 1, 0, [2]),
+      gwMon('Bix', 'purple', 2, -1, 1, [3]),
+      gwMon('Nim', 'green', 1, 0, 1, [1, 2]),
+      gwMon('Pog', 'blue', 3, 0, 0, [0, 3]),
+      gwMon('Lulu', 'pink', 3, 1, 1, [2]),
+      gwMon('Rex', 'purple', 1, 1, 0, [0]),
+    ],
+    questions: [isQ('pink'), isQ('green'), eyesQ(3), eyesQ(1), gotQ('long horns', { horns: 1 }), gotQ('big teeth', { mouth: 0 }), wearQ(0), wearQ(1), wearQ(2), wearQ(3)],
+    secret: 6,
+    hideAsks: [
+      { ask: 'Has your monster got long horns?', test: { horns: 1 } },
+      { ask: 'Is your monster wearing a hat?', test: { wear: 0 } },
+      { ask: 'Has your monster got three eyes?', test: { eyes: 3 } },
+      { ask: 'Is your monster blue?', test: { color: 'blue' } },
+      { ask: 'Is your monster green?', test: { color: 'green' } },
+      { ask: 'Is your monster wearing glasses?', test: { wear: 1 } },
+      { ask: 'Has your monster got one eye?', test: { eyes: 1 } },
+      { ask: 'Is your monster wearing a scarf?', test: { wear: 2 } },
+      { ask: 'Is your monster wearing boots?', test: { wear: 3 } },
+      { ask: 'Has your monster got big teeth?', test: { mouth: 0 } },
+      { ask: 'Is your monster pink?', test: { color: 'pink' } },
+    ],
+    doneLine: 'Super questions, super answers! You are a Guess Who star!',
+  },
+  { id: 'mt6-why-echo', kind: 'echo', bg: bgGame, who: 'mia', textSide: 'top', teacher: 'Model for Charades (we do): say the feeling AND why — with a scared face!', word: 'You’re scared because it’s dark!' },
+  {
+    id: 'mt6-charades', kind: 'join-stage', bg: bgGame, cast: ['bibi'],
+    teacher: 'Free (evidence): CHARADES on the curtain stage! Bibi mimes, the student guesses the feeling AND why. Then swap: the student mimes (tired, bored, excited, scared, surprised), the teacher guesses. No words for the mime!',
+    turns: [
+      { who: 'bibi', line: 'Watch me! How do I feel?' },
+      { who: 'student', line: 'You’re scared! Because it’s dark!' },
+      { who: 'bibi', line: 'Yes! Now you. Be tired!' },
+      { who: 'student', line: 'How do I feel?' },
+      { who: 'bibi', line: 'You’re tired because it’s early!' },
+      { who: 'student', line: 'Yes! Now you — be excited!' },
+    ],
+  },
+  {
+    id: 'mt6-draw', kind: 'draw-guess', bg: bgGame, who: 'bibi', title: 'Draw That! Which feeling?',
+    teacher: 'Game: take turns. The drawer sees a secret feeling and draws the face (no words!); the other one taps the picture and says it — and why: She’s sad because she’s tiny!',
+    rounds: [
+      { drawer: 'teacher', secret: 1, options: [{ label: 'sad', img: BIBI.sad, say: 'She’s sad!' }, { label: 'happy', img: BIBI.happy, say: 'She’s happy!' }, { label: 'surprised', img: BIBI.surprised, say: 'She’s surprised!' }], doodle: [...FACE, 'M 400 360 Q 500 450 600 360'] },
+      { drawer: 'student', secret: 0, options: [{ label: 'tired', img: BIBI.tired, say: 'She’s tired!' }, { label: 'excited', img: BIBI.excited, say: 'She’s excited!' }, { label: 'scared', img: BIBI.scared, say: 'She’s scared!' }] },
+      { drawer: 'teacher', secret: 2, options: [{ label: 'happy', img: BIBI.happy, say: 'She’s happy!' }, { label: 'bored', img: BIBI.bored, say: 'She’s bored!' }, { label: 'sad', img: BIBI.sad, say: 'She’s sad!' }], doodle: [...FACE, 'M 400 420 Q 500 340 600 420', 'M 434 285 Q 420 320 434 332 Q 448 320 434 285'] },
+      { drawer: 'student', secret: 1, options: [{ label: 'bored', img: BIBI.bored, say: 'She’s bored!' }, { label: 'surprised', img: BIBI.surprised, say: 'She’s surprised!' }, { label: 'happy', img: BIBI.happy, say: 'She’s happy!' }] },
+      { drawer: 'teacher', secret: 0, options: [{ label: 'surprised', img: BIBI.surprised, say: 'She’s surprised!' }, { label: 'tired', img: BIBI.tired, say: 'She’s tired!' }, { label: 'sad', img: BIBI.sad, say: 'She’s sad!' }], doodle: [...FACE, 'M 470 380 a 30 40 0 1 0 60 0 a 30 40 0 1 0 -60 0', 'M 400 195 Q 432 165 465 195', 'M 535 195 Q 568 165 600 195'] },
+    ],
+    doneLine: 'Great drawing! Great guessing!',
+  },
+  {
+    id: 'mt6-move-break', kind: 'prea1', teacher: 'Brain break: Monster says! Do it only when the monster says so.',
+    scene: {
+      id: 'mt6-move-break', kind: 'tpr-actions', mode: 'break', bg: bgGame, who: 'pip', teacher: 'Monster says!',
+      rounds: [
+        { line: 'Monster says: put on your hat!', emoji: '\u{1F3A9}' },
+        { line: 'Monster says: put on your glasses!', emoji: '\u{1F453}' },
+        { line: 'Monster says: be scared!', emoji: '\u{1F631}' },
+        { line: 'Monster says: be excited — jump!', emoji: '\u{1F929}' },
+      ],
+    },
+  },
+  helloSong('mt6-hello-song', bgGame),
+  {
+    id: 'mt6-go-fish', kind: 'go-fish', bg: bgGame, who: 'bibi', friendImg: BIBI.happy, title: 'Go Fish with Bibi!',
+    teacher: 'Game: the student asks Bibi “Have you got a scarf?” — “Yes! Here you are.” or “No! Go fish!”. Then Bibi asks and the student answers truthfully: Yes, I have. / No, I haven’t. Go fish!',
+    cards: [
+      { label: 'hat', img: WEAR.hat }, { label: 'scarf', img: WEAR.scarf }, { label: 'coat', img: WEAR.coat },
+      { label: 'cake', img: item('cake') }, { label: 'present', img: item('present') }, { label: 'balloon', img: item('balloon-red') }, { label: 'teddy', img: item('teddy') },
+    ],
+    childHand: ['hat', 'scarf', 'cake', 'present'],
+    friendHand: ['hat', 'coat', 'balloon'],
+    pond: ['coat', 'scarf', 'balloon', 'cake', 'teddy', 'present', 'teddy'],
+    doneLine: 'No more cards! Super asking and answering!',
+  },
+  {
+    id: 'mt6-bingo', kind: 'sticker-bingo', bg: bgGame, who: 'pip', title: 'Monster Bingo!',
+    teacher: 'Game: listen to the sentence and stamp the picture. A line of three = Bingo! Then the student reads a picture aloud for the teacher.',
+    cells: [
+      { label: 'happy', img: BIBI.happy, say: 'Bibi is happy. It is a good day!' },
+      { label: 'sad', img: BIBI.sad, say: 'Bibi is sad because she is tiny.' },
+      { label: 'tired', img: BIBI.tired, say: 'Bibi is tired because it is early.' },
+      { label: 'scared', img: BIBI.scared, say: 'Bibi is scared because it is dark.' },
+      { label: 'Big Bob', img: item('big-bob'), say: 'Big Bob is very tall. He has got three eyes.' },
+      { label: 'bored', img: BIBI.bored, say: 'Bibi is bored because the lesson is long.' },
+      { label: 'excited', img: BIBI.excited, say: 'Bibi is excited because it is a party.' },
+      { label: 'surprised', img: BIBI.surprised, say: 'Surprise! Bibi is surprised.' },
+      { label: 'Bea', img: item('bea'), say: 'This is Bea. She is Bibi’s sister.' },
+    ],
+    calls: [4, 0, 8, 2, 6, 1, 3, 5, 7],
+    doneLine: 'Bingo! You heard every sentence!',
+  },
+  {
+    id: 'mt6-balloon', kind: 'save-balloon', bg: bgGame, who: 'pip', title: 'Save the Balloon!',
+    teacher: 'Spelling: tap the letters of the word — every right letter lifts the balloon. Then read the sentence.',
+    rounds: [
+      { word: 'scarf', img: WEAR.scarf, sentence: 'Leo is wearing a green scarf.' },
+      { word: 'teeth', img: PART.teeth, sentence: 'Big Bob has got big teeth.' },
+      { word: 'sleep', img: BIBI.tired, sentence: 'Bibi is tired. She wants to sleep.' },
+    ],
+    doneLine: 'The balloon is safe! Super spelling!',
+  },
+  {
+    id: 'mt6-tictactoe', kind: 'tic-tac-toe', bg: bgGame, who: 'bibi', opponentImg: BIBI.excited, title: 'Tic-Tac-Toe with Bibi!',
+    teacher: 'Game: to take a square, read the question and choose the answer — then say it. Bibi takes the next square. Three in a row wins!',
+    squares: [
+      { ask: 'How is Bibi?', choices: ['She’s scared.', 'She’s happy.'], answer: 0, img: BIBI.scared },
+      { ask: 'What is Leo wearing?', choices: ['A scarf.', 'Glasses.'], answer: 0, img: WEAR.scarf },
+      { ask: 'Is Big Bob tall?', choices: ['Yes, he is.', 'No, he isn’t.'], answer: 0, img: item('big-bob') },
+      { ask: 'Why is Bibi bored?', choices: ['The lesson is long.', 'It is a party.'], answer: 0, img: BIBI.bored },
+      { ask: 'Has a bee got wings?', choices: ['Yes, it has.', 'No, it hasn’t.'], answer: 0, img: item('bee') },
+      { ask: 'How is Bibi?', choices: ['She’s tired.', 'She’s excited.'], answer: 1, img: BIBI.excited },
+      { ask: 'What is Mia wearing?', choices: ['Boots.', 'Glasses.'], answer: 1, img: WEAR.glasses },
+      { ask: 'Why is Bibi surprised?', choices: ['It is a surprise party!', 'It is early.'], answer: 0, img: BIBI.surprised },
+      { ask: 'Is Bibi big?', choices: ['Yes, she is.', 'No, she’s tiny.'], answer: 1, img: BIBI.happy },
+    ],
+    doneLine: 'Three in a row! You win!',
+  },
+  {
+    id: 'mt6-coconut', kind: 'hot-coconut', bg: bgGame, who: 'bibi', title: 'Hot Potato! Pass it — then answer!',
+    teacher: 'Free: tap Pass! — where the potato stops, the student answers the question (for themself or to help the friend).',
+    seats: [
+      { name: 'You', img: '' },
+      { name: 'Bibi', img: BIBI.happy },
+      { name: 'Bea', img: item('bea') },
+      { name: 'Big Bob', img: item('big-bob') },
+      { name: 'Glob', img: GLOB },
+    ],
+    rounds: [
+      { ask: 'How do you feel in the dark?', choices: ['I’m scared.', 'I’m a hat.'], answer: 0, stop: 0 },
+      { ask: 'Is Big Bob tall or short?', choices: ['He’s short.', 'He’s tall.'], answer: 1, stop: 3 },
+      { ask: 'What is Professor Glob wearing?', choices: ['He’s wearing a hat.', 'He’s wearing boots.'], answer: 0, stop: 4 },
+      { ask: 'How do you feel at a party?', choices: ['I’m excited!', 'I’m bored.'], answer: 0, stop: 0 },
+      { ask: 'Who is Bibi’s sister?', choices: ['Bea.', 'Big Bob.'], answer: 0, stop: 2 },
+    ],
+    doneLine: 'Hot potato champion!',
+  },
+  {
+    id: 'mt6-parcel', kind: 'pass-parcel', bg: bgGame, who: 'pip', title: 'Pass the Present!',
+    teacher: 'Game: every right answer tears one layer off the present. Read the question, choose, then say the whole answer.',
+    rounds: [
+      { ask: 'Bibi is ___ because she is tiny.', choices: ['sad', 'excited'], answer: 0, img: BIBI.sad },
+      { ask: 'He ___ got three eyes.', choices: ['has', 'is'], answer: 0, img: item('big-bob') },
+      { ask: 'She is ___ glasses.', choices: ['wearing', 'got'], answer: 0, img: WEAR.glasses },
+      { ask: 'I’m scared ___ it’s dark.', choices: ['because', 'and'], answer: 0, img: BIBI.scared },
+    ],
+    prize: { img: BIBI.excited, label: 'Excited Bibi' },
+    doneLine: 'You opened the present! It’s Bibi!',
+  },
+  {
+    id: 'mt6-dominoes', kind: 'dominoes', bg: bgGame, who: 'pip', title: 'Monster Dominoes!',
+    teacher: 'Reading: find the domino whose sentence matches the picture at the end of the line — read it aloud and add it.',
+    start: { img: BIBI.tired, label: 'tired Bibi' },
+    steps: [
+      { text: 'Bibi is tired.', img: BIBI.scared, label: 'scared Bibi' },
+      { text: 'Bibi is scared.', img: item('big-bob'), label: 'Big Bob' },
+      { text: 'Big Bob is very tall.', img: WEAR.scarf, label: 'scarf' },
+      { text: 'Leo is wearing a scarf.', img: BIBI.surprised, label: 'surprised Bibi' },
+      { text: 'Bibi is surprised!', img: BIBI.happy, label: 'happy Bibi' },
+    ],
+    doneLine: 'The whole domino line! Super reading!',
+  },
+  /* Reading and sounds: the unit's twisters, then Blend & Read */
+  {
+    id: 'mt6-sound-review', kind: 'sound-model', bg: bgGame, who: 'pip', letter: 'EE · EA · Y', phoneme: '/iː/', sound: 'ee', soundSide: 'center',
+    teacher: 'Review before the race: ee (bee), ea (leaf), y at the end (funny) — one long /ee/. Smile: eeee!',
+    anchors: [
+      { word: 'bee', emoji: '\u{1F41D}', img: item('bee') },
+      { word: 'leaf', emoji: '\u{1F343}', img: item('leaf') },
+      { word: 'funny', emoji: '\u{1F604}', img: BIBI.happy },
+    ],
+  },
+  {
+    id: 'mt6-twister-race', kind: 'tongue-twister', look: 'town', speeds: 3, bg: bgGame, who: 'pip', focus: '',
+    teacher: 'Reading: the Twister Race! All five Unit 5 twisters — slow, faster, then monster speed!',
+    line: 'Three green bees see sheep. Sea monsters eat peas at the beach. Bea eats green peas. Funny Bibi is happy and sleepy. Happy Bibi eats three green peas.',
+    lines: ['Three green bees see sheep.', 'Sea monsters eat peas at the beach.', 'Bea eats green peas.', 'Funny Bibi is happy and sleepy.', 'Happy Bibi eats three green peas.'],
+  },
+  {
+    id: 'mt6-blend', kind: 'sound-blend', bg: bgGame, look: 'slide',
+    teacher: 'Reading: say each sound, slide them together, find the picture — then read the sentence.',
+    rounds: [
+      { word: 'sheep', sounds: ['sh', 'ee', 'p'], img: item('sheep'), sentence: 'A sheep is sleepy.' },
+      { word: 'leaf', sounds: ['l', 'ea', 'f'], img: item('leaf'), sentence: 'Bibi plays with a green leaf.' },
+      { word: 'funny', sounds: ['f', 'u', 'nn=n', 'y=ee'], img: BIBI.happy, sentence: 'Bibi is funny and happy.' },
+    ],
+  },
+  {
+    id: 'mt6-monster-says', kind: 'prea1', teacher: 'Brain break: the clothes freeze — do it, then say it: I’m wearing a hat!',
+    scene: {
+      id: 'mt6-monster-says', kind: 'tpr-actions', mode: 'break', bg: bgGame, who: 'pip', teacher: 'Freeze!',
+      rounds: [
+        { line: 'Put on your boots — stomp, stomp!', emoji: '\u{1F462}' },
+        { line: 'Put on your scarf — it’s cold!', emoji: '\u{1F9E3}' },
+        { line: 'Freeze! Be a sleepy monster!', emoji: '\u{1F634}' },
+      ],
+    },
+  },
+  /* Free talk */
+  {
+    id: 'mt6-describe', kind: 'join-stage', bg: bgGame, cast: ['bibi'],
+    teacher: 'Free (evidence): the student secretly picks a monster from Guess Who and describes it in 3 sentences (has got / is wearing / is + colour); Bibi guesses. Then swap.',
+    turns: [
+      { who: 'bibi', line: 'Describe a monster! I will guess.' },
+      { who: 'student', line: 'My monster is pink. It has got three eyes. It is wearing a scarf.' },
+      { who: 'bibi', line: 'Is it Lulu?' },
+      { who: 'student', line: 'Yes! Now you describe one.' },
+    ],
+  },
+  {
+    id: 'mt6-free-talk', kind: 'join-stage', bg: bgGame, cast: ['bibi'],
+    teacher: 'Free: quick-fire talk with Bibi — the student answers fast and asks one question back.',
+    turns: [
+      { who: 'bibi', line: 'How do you feel today? Why?' },
+      { who: 'student', line: 'I’m … because … .' },
+      { who: 'bibi', line: 'What are you wearing?' },
+      { who: 'student', line: 'I’m wearing … . And you?' },
+      { who: 'bibi', line: 'I’m wearing a party hat! Have you got long hair?' },
+      { who: 'student', line: 'Yes, I have. / No, I haven’t.' },
+    ],
+  },
+  { id: 'mt6-i-can', kind: 'meet', focus: ['ask', 'answer'], bg: bgGame, who: 'bibi', cardSide: 'left', teacher: 'Check: the student asked 3+ Guess Who questions, answered about their own monster and said a feeling with why in Charades — then the passport stamp!', line: 'You can ask and answer about monsters — so fast!', repeat: 'Has your monster got three eyes?' },
+  {
+    id: 'mt6-sticker', kind: 'prea1', teacher: 'Sticker time! The student opens the pack and puts the Monster Town sticker in their Sticker Book.',
+    scene: {
+      id: 'mt6-sticker', kind: 'sticker-reward', bg: bgGame, who: 'pip', teacher: 'Sticker time!',
+      line: 'Game night star! Here is your sticker.',
+      sticker: { img: BIBI.excited, label: 'Game night star' },
+    },
+  },
+  petPal('mt6-pet-pal', 0, 'It’s game night! I want my teddy, please!', [{ label: 'teddy', img: item('teddy') }, { label: 'scarf', img: WEAR.scarf }, { label: 'present', img: item('present') }], 0, 'My teddy! Now I’m happy!'),
+  {
+    id: 'mt6-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
+    scene: {
+      id: 'mt6-home-mission', kind: 'home-mission', bg: bgGame, who: 'pip',
+      teacher: 'Home Mission: read the steps with the student.',
+      line: 'Your home mission!',
+      parentNote: 'Today your child played Guess Who and Charades in English: "Has your monster got three eyes?" "Is your monster wearing a hat?" "You\'re scared because it\'s dark!" This week, play Guess Who with family photos: your child asks the questions in English.',
+      steps: [
+        { emoji: '\u{1F5BC}', say: 'Play Guess Who with family photos.' },
+        { emoji: '\u{1F3AD}', say: 'Play Charades: act a feeling!' },
+        { emoji: '\u{1F5E3}', say: 'Ask: Is he wearing glasses?' },
+      ],
+    },
+  },
+  {
+    id: 'mt6-move-break-2', kind: 'prea1', teacher: 'Brain break: the last charade!',
+    scene: {
+      id: 'mt6-move-break-2', kind: 'tpr-actions', mode: 'break', bg: bgGame, who: 'pip', teacher: 'Charades!',
+      rounds: [
+        { line: 'Be a bored monster!', emoji: '\u{1F971}' },
+        { line: 'Be a surprised monster!', emoji: '\u{1F62E}' },
+        { line: 'Be a happy monster — wave goodbye!', emoji: '\u{1F44B}' },
+      ],
+    },
+  },
+  goodbyeSong('mt6-goodbye-song', bgGame),
+  { id: 'mt6-finale', kind: 'finale', bg: bgGame, who: 'pip', line: 'What a game night! You asked and answered like a monster champion! \u{1F47E}' },
+];
+
+/* =============================================================================
+ * A1 Unit 5 Lesson 7: "Boss Test: Monster Portrait!"
+ * Feelings Race warm-up, then five parts (4 of 5 each, docs/a1-unit-5-monster-town.md §5.7): listening (who feels
+ * what / looks / wearing), reading yes / no about the party picture, the story (5 gaps), speaking (a 4-sentence monster
+ * portrait + 2 questions about another monster), reading aloud. Practise-again games after the trophy.
+ * The A1 Halfway Check is its own lesson after this one (U5 · L8, docs/assessment/a1-assessment-plan.md).
+ * ========================================================================= */
+export const LESSON_A1U5L7_TITLE = 'Boss Test: Monster Portrait!';
+export const LESSON_A1U5L7_OBJECTIVE = 'I can show what I learned in Unit 5: feelings and why, looks (has got), clothes (is wearing) and the story.';
+
+export const LESSON_A1U5L7_SCENES: Scene[] = [
+  { id: 'mt7-title', kind: 'title-card', bg: bgStreet, level: 'A1', unit: 'Unit 5', lessonLabel: 'Lesson 7', title: 'Boss Test: Monster Portrait!', subtitle: 'Show everything you can do in Monster Town', cta: '\u{1F3C6} I’M READY!' },
+  {
+    // Remember? (owner, 2026-10-07): Lesson 6 — the Guess Who questions. Shadow mode (L6 used click): clothes stickers.
+    id: 'mt7-recall-warmup', kind: 'recall-warmup', bg: bgStreet, who: 'pip', mode: 'shadow', listen: true,
+    fromLabel: 'Unit 5 · Lesson 6 · Feelings Charades!',
+    teacher: 'Guided: listen — find the shadow, then ask the Guess Who question: Is your monster wearing a … ?',
+    items: [
+      { word: 'hat', say: 'Is your monster wearing a hat?', img: WEAR.hat },
+      { word: 'glasses', say: 'Is your monster wearing glasses?', img: WEAR.glasses },
+      { word: 'boots', say: 'Is your monster wearing boots?', img: WEAR.boots },
+      { word: 'scarf', say: 'Is your monster wearing a scarf?', img: WEAR.scarf },
+    ],
+  },
+  helloSong('mt7-hello-song', bgStreet),
+  {
+    id: 'mt7-intro', kind: 'cinematic', bg: bgStreet, title: 'The Boss Test', subtitle: 'A feelings race, then five parts', narrator: 'bibi',
+    script: [
+      { who: 'bibi', line: 'Welcome back to Monster Town!' },
+      { who: 'bibi', line: 'Listen, read, read my story, talk and read aloud!' },
+      { who: 'pip', line: 'First, the feelings race! Let’s go!' },
+    ],
+    cta: '\u{1F3C1} RACE!',
+  },
+  {
+    id: 'mt7-race', kind: 'answer-race', look: 'race', bg: bgStreet, who: 'pip', racer: BIBI.excited,
+    title: 'The Feelings Race! Every right answer moves Bibi!',
+    teacher: 'Warm-up: the student answers — every right answer moves Bibi. The last two cards are read, not heard.',
+    rounds: [
+      { ask: 'How do you feel at a party?', choices: ['I’m excited!', 'I’m wearing a hat.', 'It is dark.'], answer: 0 },
+      { ask: 'Why are you scared?', choices: ['Because it’s dark.', 'Because I’m happy.', 'Yes, I am.'], answer: 0 },
+      { ask: 'What has Big Bob got?', choices: ['He has got three eyes.', 'He is got three eyes.', 'He wearing eyes.'], answer: 0 },
+      { ask: 'What is Leo wearing?', choices: ['He is wearing a scarf.', 'He has wearing a scarf.', 'He is scarf.'], answer: 0, read: true },
+      { ask: 'Why is Bibi sad?', choices: ['She is sad because she is tiny.', 'She is sad because it is a party.', 'She sad tiny.'], answer: 0, read: true },
+    ],
+    doneLine: 'You won the feelings race! Now the Boss Test!',
+  },
+  /* Part 1 — Listening */
+  {
+    id: 'mt7-p1-listen', kind: 'prea1', teacher: 'Part 1 — Listening (5). One try each; 🔊 replays it. Pass: 4 of 5. The student works alone.',
+    scene: {
+      id: 'mt7-p1-listen', kind: 'hero-trials', bg: bgStreet, who: 'pip',
+      teacher: 'Listen and tap the picture. One try!',
+      hero: { img: BIBI.happy, name: 'Monster Expert' }, medal: item('medal-rainbow'),
+      skills: [
+        { key: 'feel', label: 'Feelings', icon: '\u{1F60A}' },
+        { key: 'look', label: 'Looks', icon: '\u{1F440}' },
+        { key: 'wear', label: 'Clothes', icon: '\u{1F9E3}' },
+      ],
+      items: [
+        { skill: 'feel', ask: 'She’s bored because the lesson is long.', reply: 'Bored!', answer: 2, options: [{ label: 'excited', img: BIBI.excited }, { label: 'scared', img: BIBI.scared }, { label: 'bored', img: BIBI.bored }] },
+        { skill: 'feel', ask: 'Surprise! She’s surprised!', reply: 'Surprised!', answer: 0, options: [{ label: 'surprised', img: BIBI.surprised }, { label: 'tired', img: BIBI.tired }, { label: 'sad', img: BIBI.sad }] },
+        { skill: 'look', ask: 'He’s very tall. He has got three eyes.', reply: 'Big Bob!', answer: 1, options: [{ label: 'Bea', img: item('bea') }, { label: 'Big Bob', img: item('big-bob') }, { label: 'Bibi', img: BIBI.happy }] },
+        { skill: 'wear', ask: 'She’s wearing glasses.', reply: 'Glasses!', answer: 0, options: [{ label: 'glasses', img: WEAR.glasses }, { label: 'boots', img: WEAR.boots }, { label: 'scarf', img: WEAR.scarf }] },
+        { skill: 'wear', ask: 'It’s cold. He’s wearing a scarf.', reply: 'A scarf!', answer: 2, options: [{ label: 'hat', img: WEAR.hat }, { label: 'coat', img: WEAR.coat }, { label: 'scarf', img: WEAR.scarf }] },
+      ],
+      doneLine: 'Listening done! Super ears!',
+    },
+  },
+  { id: 'mt7-can-1', kind: 'meet', focus: ['why'], bg: bibiPage(3), who: 'bibi', cardSide: 'right', teacher: 'Can-do: the student says 6 feelings and one reason with because — tick it on the Unit 5 can-do card.', line: 'I can say how I feel — and why!', repeat: 'I’m scared because it’s dark.' },
+  /* Part 2 — Reading: yes or no? */
+  {
+    id: 'mt7-p2-read', kind: 'true-false', bg: bgStreet, img: bibiPage(11), read: true,
+    teacher: 'Part 2 — Reading (5). Look at the party picture. Read: yes or no? Pass: 4 of 5.',
+    rounds: [
+      { who: 'bibi', statement: 'Bibi is excited.', isTrue: true },
+      { who: 'bibi', statement: 'There is a big cake.', isTrue: true },
+      { who: 'bibi', statement: 'Bibi is sad.', isTrue: false },
+      { who: 'bibi', statement: 'There are balloons.', isTrue: true },
+      { who: 'bibi', statement: 'Bibi is wearing glasses.', isTrue: false },
+    ],
+  },
+  {
+    id: 'mt7-p2b-tick', kind: 'prea1', teacher: 'Part 2b — Reading sentences (5). Read the sentence, look at the picture — tick or cross? Pass: 4 of 5.',
+    scene: {
+      id: 'mt7-p2b-tick', kind: 'tick-cross', bg: bgStreet, who: 'pip', teacher: 'Read and look. Yes or no?',
+      rounds: [
+        { img: BIBI.tired, sentence: 'She’s tired.', isTrue: true },
+        { img: WEAR.boots, sentence: 'He’s wearing a hat.', isTrue: false },
+        { img: item('big-bob'), sentence: 'He’s very tall.', isTrue: true },
+        { img: BIBI.scared, sentence: 'She’s happy.', isTrue: false },
+        { img: PART.hornsLong, sentence: 'Long horns!', isTrue: true },
+      ],
+    },
+  },
+  {
+    id: 'mt7-p2c-sounds', kind: 'letter-blocks', bg: bgStreet, mode: 'sounds', model: false,
+    prompt: 'Part 2c — Build the long ee words (3)',
+    teacher: 'Part 2c — Sounds (3). The student puts the sound blocks in order and reads the word: ee, ea, y. Pass: 2 of 3.',
+    rounds: [
+      { blocks: ['sh', 'ee', 'p'], word: 'sheep', img: item('sheep') },
+      { blocks: ['l', 'ea', 'f'], word: 'leaf', img: item('leaf') },
+      { blocks: ['t', 'ee', 'th'], word: 'teeth', img: PART.teeth },
+    ],
+  },
+  { id: 'mt7-can-2', kind: 'meet', focus: ['monsters'], bg: bibiPage(5), who: 'leo', cardSide: 'left', teacher: 'Can-do: the student says what a monster has got (eyes, horns, teeth) and tall / short / big / small — tick it.', line: 'I can say what monsters look like!', repeat: 'Big Bob has got three eyes.' },
+  /* Part 3 — Reading: the story */
+  {
+    id: 'mt7-p3-story', kind: 'grammar-gap', bg: bgStreet, title: 'Part 3 — The story',
+    teacher: 'Part 3 — Reading the story (5). Read and choose the missing word. Pass: 4 of 5.',
+    rounds: [
+      { before: 'Bibi is tired because it is', after: '.', choices: ['early', 'dark'], answer: 'early', img: bibiPage(2) },
+      { before: 'Big Bob has', after: 'three eyes.', choices: ['got', 'is'], answer: 'got', img: bibiPage(5) },
+      { before: 'Leo is', after: 'a green scarf.', choices: ['wearing', 'got'], answer: 'wearing', img: bibiPage(8) },
+      { before: 'Bibi is sad', after: 'she is tiny.', choices: ['because', 'and'], answer: 'because', img: bibiPage(7) },
+      { before: 'Bibi is', after: 'because it is a party for her!', choices: ['excited', 'bored'], answer: 'excited', img: bibiPage(11) },
+    ],
+  },
+  {
+    id: 'mt7-break', kind: 'prea1', teacher: 'Brain break between the parts: stretch and breathe.',
+    scene: {
+      id: 'mt7-break', kind: 'tpr-actions', mode: 'break', bg: bgStreet, who: 'pip', teacher: 'Stretch!',
+      rounds: [
+        { line: 'Stretch up tall like Big Bob!', emoji: '\u{1F64C}' },
+        { line: 'Now be tiny like Bibi!', emoji: '\u{1F90F}' },
+        { line: 'Breathe and count to five!', emoji: '\u{1F590}\u{FE0F}' },
+      ],
+    },
+  },
+  /* Part 4 — Speaking */
+  {
+    id: 'mt7-p4-portrait', kind: 'join-stage', bg: bgStreet, teacher: 'Part 4a — Speaking (3 points): the Monster Portrait. The student describes a monster (their own drawing or one from Guess Who) in 4 sentences: looks (has got), size or colour, clothes (is wearing), feeling + because. 1 point for has got / is wearing used right, 1 for the feeling with because, 1 for four sentences alone.', cast: ['bibi'],
+    turns: [
+      { who: 'bibi', line: 'Tell me about your monster!' },
+      { who: 'student', line: 'My monster is … . It has got … .' },
+      { who: 'student', line: 'It is wearing … .' },
+      { who: 'student', line: 'It is … because … .' },
+      { who: 'bibi', line: 'What a great monster!' },
+    ],
+  },
+  {
+    id: 'mt7-p4-ask', kind: 'join-stage', bg: bgGame, teacher: 'Part 4b — Speaking (2 points): the student asks Bibi 2 questions about HER secret monster (Has it got…? / Is it wearing…? / Is it…?). Pass for Part 4: 4 of 5 points.', cast: ['bibi'],
+    turns: [
+      { who: 'bibi', line: 'I have a secret monster. Ask me two questions!' },
+      { who: 'student', line: 'Has your monster got … ?' },
+      { who: 'bibi', line: 'Yes, it has!' },
+      { who: 'student', line: 'Is your monster wearing … ?' },
+      { who: 'bibi', line: 'No, it isn’t!' },
+    ],
+  },
+  { id: 'mt7-can-3', kind: 'meet', focus: ['describe'], bg: bibiPage(8), who: 'mia', cardSide: 'left', teacher: 'Can-do: the student describes a monster friend with has got and is wearing — tick it.', line: 'I can describe a monster friend!', repeat: 'He’s got long horns. He’s wearing a hat.' },
+  /* Part 5 — Reading aloud */
+  {
+    id: 'mt7-p5-read-aloud', kind: 'reader', bg: bgStreet, title: 'Part 5 — Read it aloud!', doneLine: 'You read it all by yourself!',
+    teacher: 'Part 5 — Reading aloud (5 points: every word read, then fluency). Skip the listening: tap “My turn to read” at once. Pass: 4 of 5.',
+    pages: [BIBI_BAD_DAY[6], BIBI_BAD_DAY[8]],
+  },
+  { id: 'mt7-can-4', kind: 'meet', focus: ['story'], bg: bibiPage(12), who: 'bibi', cardSide: 'left', teacher: 'Can-do: the student reads a page of the story and says how Bibi feels at the end — tick it.', line: 'I can read my story and say how I feel!', repeat: 'Bibi is happy. It is a good day!' },
+  { id: 'mt7-echo-champ', kind: 'echo', bg: bibiPage(12), who: 'bibi', textSide: 'top', teacher: 'Say it proudly with Bibi!', word: 'I can do it! Monster expert!' },
+  { id: 'mt7-i-can', kind: 'meet', focus: ['Unit 5'], bg: bibiPage(12), who: 'bibi', cardSide: 'left', teacher: 'Check: any part below 4 of 5? Play it again next lesson (Practise again). Then the trophy!', line: 'I can show everything from Unit 5!', repeat: 'I’m a monster expert!' },
+  {
+    id: 'mt7-sticker', kind: 'prea1', teacher: 'The Unit 5 trophy! The student opens the pack and puts the trophy sticker in their Sticker Book.',
+    scene: {
+      id: 'mt7-sticker', kind: 'sticker-reward', bg: bibiPage(12), who: 'pip', teacher: 'The Unit 5 trophy!',
+      line: 'You passed the Boss Test! Here is your Unit 5 trophy — and piece 4 of the Golden Compass!',
+      sticker: { img: item('medal-rainbow'), label: 'Golden Compass piece 4' },
+    },
+  },
+  petPal('mt7-pet-pal', 0, 'You are a monster expert! I want a medal too!', [{ label: 'medal', img: item('hero-medal') }, { label: 'hat', img: WEAR.hat }, { label: 'leaf', img: item('leaf') }], 0, 'A medal! I’m so happy!'),
+  {
+    id: 'mt7-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
+    scene: {
+      id: 'mt7-home-mission', kind: 'home-mission', bg: bgStreet, who: 'pip',
+      teacher: 'Home Mission: read the steps with the student.',
+      line: 'Your home mission!',
+      parentNote: 'Your child finished Unit 5: feelings and why ("I\'m scared because it\'s dark."), looks ("He has got three eyes."), clothes ("She is wearing glasses.") and the story "Bibi\'s Bad Day". Next comes the A1 Halfway Check. Ask your child to describe a friend to you in English.',
+      steps: [
+        { emoji: '\u{1F3C5}', say: 'Show your medal to your family.' },
+        { emoji: '\u{1F9D1}', say: 'Describe a friend: He has got… He is wearing…' },
+        { emoji: '\u{1F4D6}', say: 'Read Bibi’s story again.' },
+      ],
+    },
+  },
+  /* Practise again — for any part below the pass mark, or as extra time */
+  {
+    id: 'mt7-pa-match', kind: 'picture-match', look: 'frames', prompt: 'Practise again: read and match',
+    teacher: 'Practise again (Part 2): read each sentence and drag it under its picture.',
+    items: [
+      { word: 'She’s scared.', img: BIBI.scared },
+      { word: 'He’s very tall.', img: item('big-bob') },
+      { word: 'She’s wearing glasses.', img: WEAR.glasses },
+      { word: 'Long horns!', img: PART.hornsLong },
+    ],
+    bg: bgStreet,
+  },
+  {
+    id: 'mt7-pa-build', kind: 'sentence-build', bg: bgStreet, teacher: 'Practise again (Part 3): put the words in order, then read the sentence.',
+    rounds: [
+      { words: ['She', 'is', 'sad', 'because', 'she', 'is', 'tiny.'], emoji: '\u{1F622}' },
+      { words: ['He', 'has', 'got', 'three', 'eyes.'], emoji: '\u{1F440}' },
+      { words: ['Leo', 'is', 'wearing', 'a', 'scarf.'], emoji: '\u{1F9E3}' },
+    ],
+  },
+  {
+    id: 'mt7-pa-memory', kind: 'memory', bg: bgGame, teacher: 'Practise again (Part 4): find each question and its answer — read both aloud.',
+    pairs: [
+      { id: 'feel', label: 'How do you feel?', match: 'I’m happy!', emoji: '\u{1F604}' },
+      { id: 'why', label: 'Why are you scared?', match: 'Because it’s dark.', emoji: '\u{1F311}' },
+      { id: 'got', label: 'Has it got horns?', match: 'Yes, it has.', emoji: '\u{1F47E}' },
+      { id: 'wear', label: 'Is she wearing a hat?', match: 'No, she isn’t.', emoji: '\u{1F3A9}' },
+    ],
+  },
+  {
+    id: 'mt7-pa-chat', kind: 'chat-chain', bg: bgStreet, partner: 'leo', title: 'Practise again: chat with Leo',
+    intro: 'Hi! Let’s talk about monsters!',
+    teacher: 'Practise again (Part 4): Leo talks, the student picks the reply that fits and SAYS it, then taps “I said it”.',
+    turns: [
+      { who: 'leo', line: 'How are you today?' },
+      { who: 'student', line: 'I’m happy because it’s sunny!', wrong: ['I’m wearing happy.', 'I has got happy.'] },
+      { who: 'leo', line: 'What does your monster look like?' },
+      { who: 'student', line: 'It has got two big eyes.', wrong: ['It is got two eyes.', 'It wearing eyes.'] },
+      { who: 'leo', line: 'Ask me a question!' },
+      { who: 'student', line: 'Is your monster wearing a hat?', wrong: ['Your monster wearing a hat.', 'Has your monster wearing a hat?'] },
+    ],
+  },
+  {
+    id: 'mt7-pa-parcel', kind: 'pass-parcel', bg: bibiPage(12), who: 'bibi', title: 'Pass the Present!',
+    teacher: 'Practise again (all parts): every right answer tears one layer off the present. What is inside?',
+    rounds: [
+      { ask: 'Why is Bibi tired?', choices: ['Because it is early.', 'Because it is a party.', 'She tired.'], answer: 0, img: bibiPage(2) },
+      { ask: 'Who is Bea?', choices: ['Bibi’s sister.', 'Bibi’s teacher.', 'A big monster.'], answer: 0, img: bibiPage(6) },
+      { ask: 'Is Big Bob short?', choices: ['No, he isn’t. He’s tall.', 'Yes, he is.', 'He has short.'], answer: 0, img: bibiPage(5) },
+      { ask: 'What is Mia wearing?', choices: ['She is wearing glasses.', 'She has glasses wearing.', 'She is a scarf.'], answer: 0, img: bibiPage(8) },
+      { ask: 'How is Bibi at the end?', choices: ['She is happy.', 'She is scared.', 'She is bored.'], answer: 0, img: bibiPage(12) },
+    ],
+    prize: { img: BIBI.happy, label: 'Happy Bibi' },
+    doneLine: 'You opened the present! It’s happy Bibi!',
+  },
+  {
+    id: 'mt7-pa-twister', kind: 'tongue-twister', look: 'town', speeds: 3, bg: bibiPage(12), who: 'pip', focus: 'ee',
+    teacher: 'Practise again (sounds): the unit’s long ee — slow, faster, then monster speed!',
+    line: 'Happy Bibi eats three green peas.',
+  },
+  goodbyeSong('mt7-goodbye-song', bibiPage(12)),
+  { id: 'mt7-finale', kind: 'finale', bg: bibiPage(12), who: 'bibi', line: 'You finished Unit 5 and found piece 4 of the Golden Compass! Next: the Halfway Check… \u{1F9ED}' },
 ];

@@ -3,6 +3,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import type { HomeworkQuest as Quest, QuestLevel, QuestVoice, Box } from '@/content/homework-quests/types';
 import { dressUpWrongLine } from '@/content/homework-quests/types';
 import { speak, stopSpeaking, playLetterPhonic, unlockAudio } from '@/content/playground-library/unit1/audio';
+import { soundLabel } from '@/content/playground-library/soundLabel';
 import { QUEST_CSS } from './questStyles';
 import { JungleTheme } from '@/components/student/kids/JungleTheme';
 
@@ -349,7 +350,7 @@ function SoundBlend({ level, quest, say, praise, tryAgain, miss, star, done, set
       <div className="hq-dock">
         {!blended ? (
           <>
-            {sounds.map((s, i) => <button key={`${r}-${i}`} className={`hq-orb o${i % 3} ${lit.includes(i) ? 'hq-lit' : 'hq-dim'}`} onClick={() => tapSound(i)} aria-label={`Sound ${s}`}>{s}</button>)}
+            {sounds.map((s, i) => <button key={`${r}-${i}`} className={`hq-orb o${i % 3} ${lit.includes(i) ? 'hq-lit' : 'hq-dim'}`} onClick={() => tapSound(i)} aria-label={`Sound ${soundLabel(s)}`}>{soundLabel(s)}</button>)}
             <button className="hq-orb hq-blend" disabled={lit.length < sounds.length} onClick={() => void blend()}>🚂<br />Blend!</button>
           </>
         ) : opts.map((o) => (

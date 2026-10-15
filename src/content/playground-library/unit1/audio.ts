@@ -4,6 +4,7 @@
 // fails to decode as audio and silently falls back to browser speech
 // synthesis on every single line. A plain fetch() against the function URL
 // returns the binary body intact.
+import { soundKey } from '../soundLabel';
 import { spokenText } from './spokenText';
 import { supabaseUrl, supabaseAnonKey } from '@/integrations/supabase/client';
 import { approvedVoiceId, isShortLine, normalizeForSpeech, SHORT_LINE_CLIP_VERSION } from '@/lib/speechPolicy';
@@ -803,8 +804,9 @@ async function playBlend(blend: string): Promise<void> {
   for (const l of blend.split('')) await playPhonicsClip(PHONIC_CLIP[l], l);
 }
 
+/** "spelling=sound" (e.g. "y=ee") plays the sound after "=" — see ../soundLabel.ts. */
 export function playLetterPhonic(letter: string): Promise<void> {
-  const k = letter.toLowerCase();
+  const k = soundKey(letter).toLowerCase();
   if (!PHONIC_CLIP[k] && BLENDS.has(k)) return playBlend(k);
   return playPhonicsClip(PHONIC_CLIP[k], letter);
 }

@@ -41,7 +41,7 @@ export function SoundPickScene({ scene, onWin, onNext, sync }: { scene: Pick; on
     await wait(450);
     await playLetterPhonic(r.sound);
     await wait(350);
-    cueSpeak(SOUND_PICK_LINE, scene.who);
+    cueSpeak(scene.ask ?? SOUND_PICK_LINE, scene.who);
   };
   useEffect(() => {
     if (!r) return;
@@ -90,7 +90,7 @@ export function SoundPickScene({ scene, onWin, onNext, sync }: { scene: Pick; on
     <div className="absolute inset-0 overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
       <div className="absolute inset-0 bg-black/15" />
       <div className="absolute left-1/2 top-16 z-20 flex -translate-x-1/2 items-center gap-3">
-        <span className="text-center font-black text-white" style={{ ...THICK_WORDS, fontSize: 'clamp(1.5rem, calc(3.2*var(--svw,1vw)), 2.6rem)' }}>Which one starts with this sound?</span>
+        <span className="text-center font-black text-white" style={{ ...THICK_WORDS, fontSize: 'clamp(1.5rem, calc(3.2*var(--svw,1vw)), 2.6rem)' }}>{scene.ask ?? SOUND_PICK_LINE}</span>
       </div>
       <button onClick={() => { void ask(); }} aria-label="Hear it again" className="absolute right-3 top-16 z-30 rounded-full bg-white/90 px-4 py-2 text-lg font-black text-orange-700 shadow-lg active:scale-95">🔊</button>
       <div className="absolute left-3 top-16 z-30 flex gap-1">
@@ -125,7 +125,7 @@ export function SoundPickScene({ scene, onWin, onNext, sync }: { scene: Pick; on
 /** Every voiced line, for the clip baker (scripts/generate-voice-cache.mjs mirrors this). */
 export function soundPickLines(scene: Pick) {
   return [
-    [scene.who, SOUND_PICK_LINE],
+    [scene.who, scene.ask ?? SOUND_PICK_LINE],
     ...scene.rounds.flatMap((r) => r.options.map((o, i) => [scene.who, i === r.answer ? soundPickRight(o.word) : soundPickWrong(o.word)])),
   ] as [string, string][];
 }

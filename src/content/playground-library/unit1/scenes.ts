@@ -1128,6 +1128,8 @@ export type Scene =
       /** Calm first-sound pick: the recorded letter sound, then "Which one starts with this sound?";
        *  three still pictures, no clock, wrong taps are named back and cost nothing. */
       id: string; kind: 'sound-pick'; bg: string; teacher: string; who: CharKey;
+      /** The question (default "Which one starts with this sound?"); A1 U5L4 asks about the END of the word. */
+      ask?: string;
       rounds: { sound: string; options: { word: string; img?: string; emoji?: string }[]; answer: number }[];
     }
   | {

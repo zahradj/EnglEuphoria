@@ -29,6 +29,7 @@ import { LiveReactionBar } from "@/components/classroom/engagement/LiveReactionB
 import { ZenModeOverlay } from "@/components/classroom/ZenModeOverlay";
 import { PictureInPicture } from "@/components/classroom/PictureInPicture";
 import { LessonWrapUpDialog } from "@/components/classroom/LessonWrapUpDialog";
+import { LessonChecklistPopup } from "@/components/classroom/LessonChecklistPopup";
 import { TeacherInstructionsSidebar } from "@/components/classroom/TeacherInstructionsSidebar";
 import { ConnectionDebugPanel, type ConnectionHealthStatus } from "@/components/classroom/debug/ConnectionDebugPanel";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -1664,6 +1665,18 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
         />
       )}
 
+      {/* Playground lesson checklist — teacher-only pop-up, optional; the ticks go into the report */}
+      {hubType === 'playground' && isSceneLessonOnStage && !isTrial && ((displayedSlides as unknown as { sceneLessonRef?: { contentFormat?: string; unitNumber: number; lessonNumber: number } }[] | undefined)?.[0]?.sceneLessonRef ?? null) && (
+        <LessonChecklistPopup
+          key={sceneLessonKey ?? 'none'}
+          sceneLesson={((displayedSlides as unknown as { sceneLessonRef?: { contentFormat?: string; unitNumber: number; lessonNumber: number } }[] | undefined)?.[0]?.sceneLessonRef ?? null)!}
+          sessionId={session?.id}
+          bookingId={classId}
+          currentPage={sceneNavState.total > 0 ? sceneNavState.sceneIdx + 1 : null}
+          accent="#FE6A2F"
+        />
+      )}
+
       {/* Lesson Wrap-Up Dialog */}
       <LessonWrapUpDialog
         open={wrapUpOpen}
@@ -1677,6 +1690,8 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
         isTrial={isTrial}
         trialCefr={trialCefr}
         lessonTitle={activeLessonTitle}
+        sessionId={session?.id}
+        sceneLesson={isSceneLessonOnStage ? ((displayedSlides as unknown as { sceneLessonRef?: { contentFormat?: string; unitNumber: number; lessonNumber: number } }[] | undefined)?.[0]?.sceneLessonRef ?? null) : null}
         academyLessonId={(displayedSlides as { type?: string; deckLessonRef?: { lessonId?: string } }[] | undefined)?.find((sl) => sl?.type === 'academy_deck')?.deckLessonRef?.lessonId}
         classSummary={{
           // Time with the student: from Start Lesson to now (owner, 2026-10-07) — a late student's

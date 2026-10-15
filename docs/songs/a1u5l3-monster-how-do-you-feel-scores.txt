@@ -1,0 +1,15 @@
+
+=== docs/songs/a1u5l3-monster-how-do-you-feel-take1.mp3  length=72.9s  score=0.93  missing=7  extra=8
+heard: how do you feel how do you feel make a face and spin like a wheel bebe is scared so scared oh no why is she scared do you know cause it's dark it's dark you see make a scared face just like me phoebe is bored so bored i'll know why is she bored do you know because the lesson's long you see make a bored face just like me phoebe's excited hooray hooray why is she excited can you say because it's a party you see make an excited face like me how do you feel how do you feel make a face and spin like a wheel
+line starts (s): [np.float64(7.8), np.float64(10.7), np.float64(13.2), np.float64(14.9), np.float64(19.5), np.float64(23.3), np.float64(30.2), np.float64(32.1), np.float64(36.1), np.float64(40.2), np.float64(47.5), np.float64(49.9), np.float64(53.5), np.float64(57.4), np.float64(63.9), np.float64(66.5)]
+lineDurationsMs: [10740, 2440, 1700, 4580, 3800, 6980, 1820, 4060, 4120, 7280, 2400, 3580, 3880, 6480, 2680, 6368]
+
+=== docs/songs/a1u5l3-monster-how-do-you-feel-take2.mp3  length=72.9s  score=0.94  missing=6  extra=7
+heard: how do you feel how do you feel make a face and spin like a wheel bebe is scared so scared oh no why is she scared do you know because it's dark it's dark you see make a scared face just like me baby is bored so bored i'll know why is she bored do you know because the lesson's long you see make a bored face just like me baby's excited hooray hooray why is she excited can you say because it's a party you see make an excited face like me how do you feel how do you feel make a face and spin like a wheel
+line starts (s): [np.float64(8.0), np.float64(10.8), np.float64(17.5), np.float64(19.4), np.float64(21.4), np.float64(23.8), np.float64(34.4), np.float64(36.2), np.float64(38.6), np.float64(40.4), np.float64(51.8), np.float64(53.9), np.float64(56.0), np.float64(57.6), np.float64(63.9), np.float64(66.3)]
+lineDurationsMs: [10760, 6700, 1900, 2060, 2340, 10680, 1760, 2420, 1780, 11380, 2120, 2140, 1580, 6280, 2420, 6588]
+
+=== docs/songs/a1u5l3-monster-how-do-you-feel-take3.mp3  length=72.9s  score=0.94  missing=6  extra=6
+heard: how do you feel how do you feel make a face and spin like a wheel baby is scared so scared oh no why is she scared do you know because it's dark it's dark you see make a scare face just like me phoebe is bored so bored oh no why is she bored do you know because the lessons long you see make a bored face just like me baby's excited hooray hooray why's she excited can you say because it's a party you see make an exciting face like me how do you feel how do you feel make a face and spin like a wheel
+line starts (s): [np.float64(8.0), np.float64(10.8), np.float64(17.4), np.float64(19.4), np.float64(25.3), np.float64(27.7), np.float64(34.5), np.float64(36.2), np.float64(42.4), np.float64(44.8), np.float64(51.8), np.float64(53.4), np.float64(59.5), np.float64(61.9), np.float64(64.2), np.float64(66.5)]
+lineDurationsMs: [10760, 6600, 2020, 5900, 2380, 6860, 1700, 6220, 2400, 6940, 1620, 6140, 2400, 2260, 2300, 6408]

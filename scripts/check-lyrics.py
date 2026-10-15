@@ -27,7 +27,7 @@ FUNCTION = set('a an the and or but of to in on at for with by from up as is am 
 # word -> (syllables, stresses) for words the CMU dictionary lacks or gets wrong for singing
 SPECIAL = {'oink': (1, '1'), 'baa': (1, '1'), 'moo': (1, '1'), 'quack': (1, '1'), 'e-i-e-i-o': (5, '10101'),
            'e-i': (2, '10'), 'e-i-o': (3, '101'), 'yippee': (2, '01'), 'ta-da': (2, '01'), 'grandpa': (2, '10'),
-           'grandpa\'s': (2, '10'), 'cream': (1, '0'), 'tum': (1, '1'), 'meow': (1, '1'), 'goodnight': (2, '01'), 'isn\'t': (2, '10'), 'where\'s': (1, '1'), 'it\'s': (1, '0'), 'i\'m': (1, '0'), 'wim\'s': (1, '1')}
+           'grandpa\'s': (2, '10'), 'cream': (1, '0'), 'tum': (1, '1'), 'meow': (1, '1'), 'goodnight': (2, '01'), 'isn\'t': (2, '10'), 'where\'s': (1, '1'), 'it\'s': (1, '0'), 'i\'m': (1, '0'), 'wim\'s': (1, '1'), 'lesson\'s': (2, '10')}
 FAMILIES = [set('P B T D K G'.split()), set('F V TH DH S Z SH ZH'.split()), set('M N NG'.split()), set(['L', 'R']), set(['CH', 'JH'])]
 
 

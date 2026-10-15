@@ -5,6 +5,7 @@ import { type ActivitySync, isSharedFollower, useSyncedState } from './sceneActi
 import { seededOrder } from './PictureMatchScene';
 import { Burst, GAME_FONT, GameStyles, HudBar, ProgressPill, PromptChip, TitleRibbon } from './gameTheme';
 import { playLetterPhonic, safeSpeak } from './unit1/audio';
+import { soundLabel } from './soundLabel';
 import * as sfx from './unit1/sfx';
 import { blendSounds, type SoundBlendRound, type SoundBlendSceneData } from './SoundBlendScene';
 
@@ -204,14 +205,14 @@ function FrogHop({ scene, onNext, onWin, sync }: WorldProps) {
         const lit = k < g.next;
         const active = g.blended && bs === k;
         return (
-          <motion.button key={`${g.round}-${k}`} type="button" aria-label={`Sound ${g.sounds[k]}`} onClick={() => g.tap(k)} className="absolute z-10"
+          <motion.button key={`${g.round}-${k}`} type="button" aria-label={`Sound ${soundLabel(g.sounds[k])}`} onClick={() => g.tap(k)} className="absolute z-10"
             style={{ left: `${s.x}%`, top: `${s.y}%`, width: '24cqh', aspectRatio: '1', translate: '-50% -50%' }}
             initial={reduce ? false : { y: 40, opacity: 0 }} animate={g.nudge === k ? { x: [0, -8, 8, 0], y: 0, opacity: 1 } : { y: active ? [0, 6, 0] : 0, opacity: 1 }}
             transition={{ duration: 0.4, delay: g.nudge === k ? 0 : 0.1 * k }}>
             {/* ripple ring around the stone */}
             {!reduce && <motion.span className="pointer-events-none absolute inset-x-[2%] top-[38%] h-[44%] rounded-[50%] border-[0.5cqh] border-white/60" animate={{ scale: [1, 1.18, 1], opacity: [0.7, 0.2, 0.7] }} transition={{ duration: 2.4, repeat: Infinity, delay: k * 0.4 }} />}
             <img src={`${I}/item-stone.png`} alt="" draggable={false} className="pointer-events-none absolute inset-0 h-full w-full object-contain" />
-            <span className="absolute left-1/2 top-[44%] -translate-x-1/2 -translate-y-1/2 font-black" style={{ ...letterStyle, color: lit || active ? '#14532d' : '#334155' }}>{g.sounds[k]}</span>
+            <span className="absolute left-1/2 top-[44%] -translate-x-1/2 -translate-y-1/2 font-black" style={{ ...letterStyle, color: lit || active ? '#14532d' : '#334155' }}>{soundLabel(g.sounds[k])}</span>
             {/* sound dot */}
             <span className="absolute left-1/2 top-[64%] -translate-x-1/2 rounded-full" style={{ width: '3cqh', height: '3cqh', background: lit ? '#22c55e' : '#fff', border: '0.4cqh solid #14532d' }} />
             {k === g.next && !g.blended && !reduce && <motion.span className="pointer-events-none absolute -top-[6%] left-1/2 -translate-x-1/2" style={{ fontSize: '5cqh' }} animate={{ y: [0, -8, 0] }} transition={{ duration: 0.9, repeat: Infinity }}>👇</motion.span>}
@@ -301,12 +302,12 @@ function SlideDown({ scene, onNext, onWin, sync }: WorldProps) {
           const lit = k < g.next;
           const gone = collected(k);
           return (
-            <motion.button key={`${g.round}-${k}`} type="button" aria-label={`Sound ${g.sounds[k]}`} onClick={() => g.tap(k)} className="absolute z-10"
+            <motion.button key={`${g.round}-${k}`} type="button" aria-label={`Sound ${soundLabel(g.sounds[k])}`} onClick={() => g.tap(k)} className="absolute z-10"
               style={{ left: `${b.x}%`, top: `${b.y}%`, width: '12%', aspectRatio: '1', translate: '-50% -50%' }}
               animate={gone ? { left: '50%', top: '-2%', scale: 0.4, opacity: 0 } : g.nudge === k ? { x: [0, -8, 8, 0] } : lit && !reduce ? { y: [0, -10, 0] } : { y: 0 }}
               transition={gone ? { duration: 0.45, ease: 'easeIn' } : { duration: 0.4 }}>
               <img src={`${I}/item-gumball-pink.png`} alt="" draggable={false} className="pointer-events-none absolute inset-0 h-full w-full object-contain" style={{ filter: `hue-rotate(${BALL_HUES[k % 4]}deg) saturate(${lit ? 1.2 : 0.35})` }} />
-              <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-black text-white" style={{ fontSize: '7cqh', lineHeight: 1, textShadow: '0 0.4cqh 0 rgba(0,0,0,0.35)' }}>{g.sounds[k]}</span>
+              <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-black text-white" style={{ fontSize: '7cqh', lineHeight: 1, textShadow: '0 0.4cqh 0 rgba(0,0,0,0.35)' }}>{soundLabel(g.sounds[k])}</span>
               {k === g.next && !g.blended && !reduce && <motion.span className="pointer-events-none absolute -top-[70%] left-1/2 -translate-x-1/2" style={{ fontSize: '5cqh' }} animate={{ y: [0, -8, 0] }} transition={{ duration: 0.9, repeat: Infinity }}>👇</motion.span>}
             </motion.button>
           );

@@ -252,6 +252,11 @@ const PlayFoodLesson6 = lazy(() => import("./pages/playground-scene/PlayFoodLess
 const PlayFoodLesson7 = lazy(() => import("./pages/playground-scene/PlayFoodLesson7"));
 const PlayMonsterLesson1 = lazy(() => import("./pages/playground-scene/PlayMonsterLesson1"));
 const PlayMonsterLesson2 = lazy(() => import("./pages/playground-scene/PlayMonsterLesson2"));
+const PlayMonsterLesson3 = lazy(() => import("./pages/playground-scene/PlayMonsterLesson3"));
+const PlayMonsterLesson4 = lazy(() => import("./pages/playground-scene/PlayMonsterLesson4"));
+const PlayMonsterLesson5 = lazy(() => import("./pages/playground-scene/PlayMonsterLesson5"));
+const PlayMonsterLesson6 = lazy(() => import("./pages/playground-scene/PlayMonsterLesson6"));
+const PlayMonsterLesson7 = lazy(() => import("./pages/playground-scene/PlayMonsterLesson7"));
 const PlayMagicCastleLesson1 = lazy(() => import("./pages/playground-scene/PlayMagicCastleLesson1"));
 const PlayMagicCastleLesson2 = lazy(() => import("./pages/playground-scene/PlayMagicCastleLesson2"));
 const PlayMagicCastleLesson3 = lazy(() => import("./pages/playground-scene/PlayMagicCastleLesson3"));
@@ -848,6 +853,36 @@ const App = () => {
                       <Route path="/playground-scene/monster-lesson-2" element={
                         <ImprovedProtectedRoute>
                           <Suspense fallback={<LoadingFallback />}><PlayMonsterLesson2 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A1 tier — Monster Town, Unit 5 Lesson 3. */}
+                      <Route path="/playground-scene/monster-lesson-3" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayMonsterLesson3 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A1 tier — Monster Town, Unit 5 Lesson 4. */}
+                      <Route path="/playground-scene/monster-lesson-4" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayMonsterLesson4 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A1 tier — Monster Town, Unit 5 Lesson 5. */}
+                      <Route path="/playground-scene/monster-lesson-5" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayMonsterLesson5 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A1 tier — Monster Town, Unit 5 Lesson 6. */}
+                      <Route path="/playground-scene/monster-lesson-6" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayMonsterLesson6 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A1 tier — Monster Town, Unit 5 Lesson 7 (Boss Test). */}
+                      <Route path="/playground-scene/monster-lesson-7" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayMonsterLesson7 /></Suspense>
                         </ImprovedProtectedRoute>
                       } />
                       {/* A1 tier — Food Festival, Unit 4 Lesson 1. */}

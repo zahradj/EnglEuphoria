@@ -631,6 +631,41 @@ export type Scene =
        *  Check — every part must match the sentence. `body` sticker is square; parts sit at % of it. */
       body: string; eye: string; horns: { label: string; img: string }[]; mouths: { label: string; img: string }[];
       rounds: { line: string; eyes: 1 | 2 | 3; horns: number; mouth: number; name: string }[]; doneLine: string; }
+  | { id: string; kind: 'guess-who'; bg: string; teacher: string; title: string; who: CharKey;
+      /** ★ Guess Who (A1 U5L6, docs/a1-unit-5-monster-town.md §5.6): 8 monsters behind doors, built from the Monster
+       *  Builder parts (`hue` recolours the body; `color` is its colour word). Part 1: the child asks `questions` (each a
+       *  `test`; the friend says `yes` / `no` about the `secret` monster) and the doors that don't fit close; the child
+       *  names the last one. Part 2: the child picks a monster and answers the friend's `hideAsks` Yes / No. */
+      body: string; eye: string; horns: { label: string; img: string }[]; mouths: { label: string; img: string }[];
+      wear: { word: string; img: string; on: 'head' | 'face' | 'neck' | 'feet' }[];
+      monsters: { name: string; eyes: 1 | 2 | 3; horns: number; mouth: number; wears: number[]; hue: number; color: string }[];
+      questions: { ask: string; yes: string; no: string; test: { eyes?: 1 | 2 | 3; horns?: number; mouth?: number; wear?: number; color?: string } }[];
+      secret: number;
+      hideAsks: { ask: string; test: { eyes?: 1 | 2 | 3; horns?: number; mouth?: number; wear?: number; color?: string } }[];
+      doneLine: string; }
+  | { id: string; kind: 'feelings-meter'; bg: string; teacher: string; title: string; who: CharKey;
+      /** ★ Feelings Meter (A1 U5L5, docs/a1-unit-5-monster-town.md §5.5): the story character's day as an emotion graph.
+       *  `feelings` = the rows, top (feels best) to bottom (feels worst); `points` = the story moments left to right.
+       *  For each moment the child taps the face on the side, a dot lands in that column and the line joins the dots;
+       *  then the sentence (`line`, with because) is read and said. */
+      feelings: { label: string; img: string }[];
+      points: { img: string; feeling: number; line: string }[];
+      doneLine: string; }
+  | { id: string; kind: 'monster-mixup'; bg: string; teacher: string; title: string; who: CharKey;
+      /** ★ Monster Mix-Up (A1 U5L4, docs/a1-unit-5-monster-town.md §5.4 "Monster Maker"): Bibi describes a monster
+       *  (`line`, 2-3 sentences: has got + is wearing), the machine builds it — with ONE mistake (`mistake`). The child
+       *  taps the wrong part on the monster, picks the right one from the tray, the monster is fixed and the child says
+       *  `say` ("No! He's wearing a hat!"). `wear[i].on` = where it sits on the body. Boys never wear a dress. */
+      body: string; eye: string; horns: { label: string; img: string }[]; mouths: { label: string; img: string }[];
+      wear: { word: string; img: string; on: 'head' | 'face' | 'neck' | 'feet' }[];
+      rounds: {
+        line: string; name: string; eyes: 1 | 2 | 3; horns: number; mouth: number; wears: number[];
+        /** What the machine got wrong: `shown` = the wrong value it built (eye count, horns / mouth index, or for
+         *  `wear` the wrong item worn in place of `wears[slot]`). */
+        mistake: { part: 'eyes' | 'horns' | 'mouth' | 'wear'; shown: number; slot?: number };
+        say: string;
+      }[];
+      doneLine: string; }
   | { id: string; kind: 'festival-cafe'; bg: string; teacher: string; title: string; who: CharKey;
       /** `order` = menu indexes the tray must hold exactly; `offer` = the polite offer the child then SAYS (its item is
        *  added to the tray when the customer says "Yes, please!"). */
