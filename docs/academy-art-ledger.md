@@ -183,3 +183,16 @@ One Canva generation (LANDSCAPE_16_9, references: v-name card `MAHXiyPmEHA`, Vee
 
 Not in the repo yet: the owner downloads the page by hand (signed-URL commit blocked, Canva downloads blocked on the network). Cut into 10 by hand-set boxes (5 columns x 2 rows).
 Weaknesses: the teen is one boy with dark hair and a purple hoodie in 9 of 10 squares (consistent, but no cast variety); click (4) is a hand only, on a tablet. Gaps between squares are narrow (about 2-3% of the width), though clear. Pointing hand (6) and the slow-down hands (8) are slightly stylised; check fingers at full size before use. The flag target in 6 carries a small flag glyph; the clock in 8 has no numerals. No text, letters or numbers seen.
+
+## Pre-A1 S2 L1 "The Phone" (2026-10-15, owner approved the plan and the story scenario)
+
+| Picture | File | Canva media | Holder page |
+|---|---|---|---|
+| scene `bus-stop-night` | `bg/bus-stop-night.webp` | MAHYCEu_964 | 95 |
+| scene `phone-screen-glow` | `bg/phone-screen-glow.webp` | MAHYCNy2A9o | 96 |
+| story plate 1 (Vee, Theo, the phone) | `bg/story-pa1s02-1.webp` | MAHYCBxiW9M | 97 |
+| story plate 2 (the pin and the tin) | `bg/story-pa1s02-2.webp` | MAHYCAxZPkA | 98 |
+| story plate 3 (Ava arrives) | `bg/story-pa1s02-3.webp` | MAHYCIyzlSQ | 99 |
+| cards phone, pin, tin, map (cut-out stickers from one sheet) | `cards/p-phone.webp`, `p-pin`, `p-tin`, `p-map` | MAHYCKlTUeI | 100 |
+
+Purple share target is now about 25% (owner, 2026-10-15). Story plates 2 and 3 read below that by a rough hue count (navy and blue dominate); restyle only with the owner's approval.
