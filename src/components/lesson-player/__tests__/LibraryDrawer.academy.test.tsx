@@ -18,13 +18,16 @@ describe('Classroom Lesson Library: Academy hub', () => {
   it('lists the new Academy library lessons, never the old database list, and opens one as a deck lesson', async () => {
     const onSelectLesson = vi.fn();
     render(<LibraryDrawer open onClose={() => {}} onSelectLesson={onSelectLesson} hubFilter="academy" />);
-    // the first season with lessons opens by itself; later seasons open from their header
-    for (const l of ACADEMY_DECK_LESSONS.filter((x) => x.level !== 'Pre-A1' && x.season === 1)) expect(await screen.findByText(l.title)).toBeTruthy();
+    // the first level with lessons (A1) opens by itself; its first season opens by itself, later seasons open from their header
+    for (const l of ACADEMY_DECK_LESSONS.filter((x) => x.level === 'A1' && x.season === 1)) expect(await screen.findByText(l.title)).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: /Free Time Club/ }));
-    for (const l of ACADEMY_DECK_LESSONS.filter((x) => x.level !== 'Pre-A1' && x.season === 3)) expect(await screen.findByText(l.title)).toBeTruthy();
+    for (const l of ACADEMY_DECK_LESSONS.filter((x) => x.level === 'A1' && x.season === 3)) expect(await screen.findByText(l.title)).toBeTruthy();
+    // B1 lessons sit on the B1 tab (the teacher opens the tab to find them)
+    fireEvent.click(screen.getByRole('tab', { name: /^B1/ }));
+    for (const l of ACADEMY_DECK_LESSONS.filter((x) => x.level === 'B1')) expect(await screen.findByText(l.title)).toBeTruthy();
     // Pre-A1 lessons sit on their own step tab (teachers see the ladder)
     fireEvent.click(screen.getByRole('tab', { name: /^Pre-A1/ }));
-    for (const l of ACADEMY_DECK_LESSONS.filter((x) => x.level === 'Pre-A1')) expect(await screen.findByText(l.title)).toBeTruthy();
+    for (const l of ACADEMY_DECK_LESSONS.filter((x) => x.level === 'Pre-A1' && x.season === 1)) expect(await screen.findByText(l.title)).toBeTruthy();
     fireEvent.click(screen.getByRole('tab', { name: /^A1(?! Upper)/ }));
     expect(getLibraryLessons).not.toHaveBeenCalled();
     expect(screen.queryByText('OLD DATABASE ACADEMY LESSON')).toBeNull();
