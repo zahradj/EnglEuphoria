@@ -67,7 +67,7 @@ export function viewLines(s: Slide): SpokenLine[] {
     case 'build': return s.rounds.flatMap((r) => line(lead(s), r.target));
     case 'factcheck': return s.claims.flatMap((c) => line(lead(s), c.text));
     case 'blend': return s.rounds.flatMap((r) => line('Vee', r.word));
-    case 'hearpick': return s.rounds.flatMap((r) => line('Vee', r.say));
+    case 'hearpick': return s.rounds.flatMap((r) => line(lead(s), r.say));
     case 'rhythm': return s.rounds.flatMap((r) => line('Vee', r.say));
     case 'duel': return s.rounds.flatMap((r) => line(lead(s), s.frame.replace('___', r.answer)));
     case 'forge': return s.rounds.flatMap((r) => line(lead(s), `${r.forms[0]}, ${r.forms[1]}, ${r.forms[2]}.`));
@@ -76,6 +76,8 @@ export function viewLines(s: Slide): SpokenLine[] {
     case 'story': return s.beats.flatMap((b) => b.lines.flatMap((l) => line(l.who, l.text)));
     case 'sort': return s.items.flatMap((it) => s.bins.flatMap((b) => line('Vee', b.template.replace('{w}', it.word))));
     case 'triple': return s.verbs.flatMap((v) => line(lead(s), `${v[0]}, ${v[1]}, ${v[2]}.`));
+    case 'cloze': return s.paragraphs.flatMap((p) => [...p.matchAll(/\[\[([^\]]+)\]\]/g)].flatMap((m) => line(lead(s), m[1])));
+    case 'glitch': return s.rounds.flatMap((r) => line(r.lines[r.glitch].who, r.fix));
     case 'rpg': return s.scenes.flatMap((sc) => [...line(s.npc, sc.say), ...sc.options.flatMap((o) => line(s.npc, o.reply))]);
     case 'explore': return s.spots.flatMap((p) => line(p.who, p.line));
     case 'rule': return s.lines.flatMap((l) => [...line('Vee', l.say), ...line('Vee', l.example)]);

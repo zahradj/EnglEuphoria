@@ -307,4 +307,11 @@ describe('B1-S01-E1: Trophy Forge and the trio streak', () => {
     fireEvent.click(screen.getByRole('button', { name: 'I saw the mountains last year.' }));
     expect(screen.getByText(/finished time/)).toBeTruthy();
   });
+
+  it('LISTENING CHECK: each question is recorded under the same character the page asks to speak it (otherwise the page is silent)', () => {
+    const s = B1_S01_E1.slides.find((x) => x.id === 'listen-q') as Extract<Slide, { kind: 'hearpick' }>;
+    const lead = s.actors?.[0]?.who ?? 'Vee';
+    const lines = slideLines(s);
+    s.rounds.forEach((r) => expect(lines.some((l) => l.who === lead && l.text === r.say), r.say).toBe(true));
+  });
 });

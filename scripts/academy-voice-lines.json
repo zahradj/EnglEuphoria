@@ -2372,16 +2372,24 @@
     "text": "Remember? Which one do you hear? Tap it."
   },
   {
-    "who": "Vee",
+    "who": "Theo",
     "text": "the"
   },
   {
-    "who": "Vee",
+    "who": "Theo",
     "text": "Me too."
   },
   {
-    "who": "Vee",
+    "who": "Theo",
     "text": "boy"
+  },
+  {
+    "who": "Theo",
+    "text": "is"
+  },
+  {
+    "who": "Theo",
+    "text": "Sorry?"
   },
   {
     "who": "Vee",
@@ -2574,10 +2582,6 @@
   {
     "who": "Theo",
     "text": "It"
-  },
-  {
-    "who": "Theo",
-    "text": "is"
   },
   {
     "who": "Theo",
@@ -2788,11 +2792,11 @@
     "text": "Remember? Which one do you hear? Tap it."
   },
   {
-    "who": "Vee",
+    "who": "Ava",
     "text": "stay"
   },
   {
-    "who": "Vee",
+    "who": "Ava",
     "text": "complain"
   },
   {
@@ -2848,15 +2852,15 @@
     "text": "Listening check. Listen to each question about the dialogue (the text is hidden), then choose the best answer."
   },
   {
-    "who": "Vee",
+    "who": "Theo",
     "text": "What is the dare?"
   },
   {
-    "who": "Vee",
+    "who": "Theo",
     "text": "Why does Ava say that flying is easy?"
   },
   {
-    "who": "Vee",
+    "who": "Theo",
     "text": "What can you guess about Theo?"
   },
   {
@@ -3478,6 +3482,14 @@
   {
     "who": "Vee",
     "text": "Glitch Hunt! One line in each chat has a tense glitch. Tap it, then repair it."
+  },
+  {
+    "who": "Ava",
+    "text": "I saw the mountains last year."
+  },
+  {
+    "who": "Ava",
+    "text": "I have given it a go three times."
   },
   {
     "who": "Ava",
