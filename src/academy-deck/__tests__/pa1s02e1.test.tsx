@@ -59,7 +59,7 @@ describe('Pre-A1 S02 E1: Season spec and run of show', () => {
     expect(PA1_S02_E1.taughtSounds).toEqual(PA1_S02.soundsSoFar.slice(0, 6));
     slides.forEach((s) => (s.actors ?? []).forEach((a) => expect(PA1_S02_E1.cast, `${s.id} uses ${a.who}`).toContain(a.who)));
     expect(new Set(slides.map((s) => s.id)).size).toBe(slides.length);
-    expect(CRITERIA).toHaveLength(6); // five skills + "I read a message and kept words for my word bank"
+    expect(CRITERIA).toHaveLength(5); // 1-5 observable can-dos (docs/academy-lesson-checklist.md); criterion 3 covers the message and the word bank
   });
 
   it('follows the Pre-A1 shape; slides stay in part order and cover all 8 parts', () => {

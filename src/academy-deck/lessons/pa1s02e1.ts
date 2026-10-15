@@ -12,10 +12,9 @@ export const OBJECTIVE = 'By the end I can hear and say the sounds i and n, blen
 export const CRITERIA = [
   'I heard and said the sounds i and n.',
   'I blended in, it, pin and tin.',
-  'I read two short lines: It is a pin. It is a tin.',
+  'I read short lines and a message, and kept words for my word bank.',
   'I said “This is a ___.” for a picture.',
   'I taught the rule back: slide the sounds, then say the word.',
-  'I read a message and kept words for my word bank.',
 ];
 
 const L = (text: string): TeachArt => ({ type: 'letters', text });
@@ -60,7 +59,7 @@ export const PA1_S02_E1: DeckScript = {
     { id: 'title', kind: 'title', part: 0, bg: LOCKSCREEN, actors: [who('Vee', 'center', 'wave')], heading: 'First sounds', sub: 'The Phone · lesson 1' },
     { id: 'badge', kind: 'badge', part: 0, bg: GLOW, actors: [who('Theo', 'right', 'wave')], trains: [4], prompt: 'Theo found a lost phone. Put your name on its screen.', starter: 'My name is', ages: [13, 14, 15, 16, 17, 18], hints: ['Type only your name.'] },
     {
-      id: 'activate', kind: 'sort', part: 0, bg: LOCKSCREEN, actors: [who('Vee', 'right')], trains: [6],
+      id: 'activate', kind: 'sort', part: 0, bg: LOCKSCREEN, actors: [who('Vee', 'right')], trains: [3],
       prompt: 'What do you already know? Tap a word, then tap a box. There is no wrong answer.',
       save: 'known',
       bins: [{ id: 'know', label: 'I know it', template: '{w}. I know it.' }, { id: 'new', label: 'New to me', template: '{w}. New to me.' }],
@@ -205,7 +204,7 @@ export const PA1_S02_E1: DeckScript = {
       hints: ['Tap a word to hear it. Then pick the picture.'],
     },
     {
-      id: 'msg-theo', kind: 'passage', part: 4, lock: 3, bg: LOCKSCREEN, actors: [who('Theo', 'right')], trains: [3, 6],
+      id: 'msg-theo', kind: 'passage', part: 4, lock: 3, bg: LOCKSCREEN, actors: [who('Theo', 'right')], trains: [3],
       prompt: 'A message from Theo. Listen, read it, then keep the words you want.',
       from: 'Theo', bank: 'bank', keep: 3,
       lines: ['I am Theo.', 'It is a pin.', 'It is in a tin.', 'It is a map.'],
@@ -213,7 +212,7 @@ export const PA1_S02_E1: DeckScript = {
       hints: ['Tap any word to hear it. Then choose the words you want to remember.'],
     },
     {
-      id: 'bank-match', kind: 'match', part: 4, lock: 3, bg: LOCKSCREEN, actors: [who('Vee', 'right')], trains: [6], mode: 'listen',
+      id: 'bank-match', kind: 'match', part: 4, lock: 3, bg: LOCKSCREEN, actors: [who('Vee', 'right')], trains: [3], mode: 'listen',
       prompt: 'Your word bank. Listen. Tap the word you hear.',
       pairs: [{ word: 'pin', art: L('PIN') }, { word: 'tin', art: L('TIN') }, { word: 'map', art: L('MAP') }, { word: 'in', art: L('IN') }],
       hints: ['Listen to the word, then look for it in your word bank.'],
@@ -305,7 +304,7 @@ export const PA1_S02_E1: DeckScript = {
     { id: 'vault-4', kind: 'vault', part: 6, lock: 4, bg: VAULT, actors: [who('Theo', 'left', 'thumbs')], line: 'Lock 4 is open!', reward: 'Key 4 of 5 · Say' },
 
     {
-      id: 'message', kind: 'reader', part: 6, lock: 5, bg: DAWN, actors: [who('Ava', 'left')], trains: [2, 3, 6],
+      id: 'message', kind: 'reader', part: 6, lock: 5, bg: DAWN, actors: [who('Ava', 'left')], trains: [2, 3],
       prompt: 'Lock 5 · The message. Read it. Which picture is it?',
       lines: [{ text: 'It is a pin.', art: PIN }, { text: 'It is a tin.', art: TIN }],
       hints: ['Tap a word to hear it. Then pick the picture.'],

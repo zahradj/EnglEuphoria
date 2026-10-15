@@ -110,6 +110,6 @@ Direction: the youngest Academy student is 13 and has some English from school, 
 Changes to this lesson:
 - **Activate** (Check-in): `activate` sort, "I know it / New to me" on phone, map, pin, tin (no wrong answers; the result is saved as `vars.known` for the teacher). The old letter warm-up is now optional.
 - **Read** (11 min, was 8): the decodable lines, then **a message from Theo** (`passage`: listen, read it yourself with every word tappable, keep 3 or more words), then **the word bank**: a listen-and-match with the kept words as word tiles (pin, tin, map, in), then the hear-and-pick, with the Lock 3 vault after it.
-- **Sixth success criterion:** "I read a message and kept words for my word bank."
+- **Success criteria stay at five** (the checklist allows 1-5): criterion 3 now reads "I read short lines and a message, and kept words for my word bank."
 - **Part minutes now** [5, 8, 8, 10, 11, 5, 9, 4]; the build-the-sentence page is optional. Optional pages total about 15 minutes.
 - **Spaced return:** when the lesson is finished, the words the student kept (`vars.bank`) are added to the lesson's items and return on the Daily 10 schedule (`bankItems` in `practiceStore.ts`); Brown et al. found incidental gains fade without review. The recall plan's own Remember? still comes from the Season items (phone, pin, tin, map).
