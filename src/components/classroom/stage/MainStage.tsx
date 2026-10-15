@@ -1,4 +1,4 @@
-import React, { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
+import React, { forwardRef, lazy, Suspense, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { StageMode, WhiteboardStroke, SmartWorksheet } from '@/services/whiteboardService';
 import type { HubType } from '@/components/admin/lesson-builder/ai-wizard/types';
@@ -16,6 +16,9 @@ import { EmbeddedAcademyDeckLesson, type EmbeddedAcademyDeckHandle } from '@/aca
 import { useLetterboxSize } from '@/hooks/useLetterboxSize';
 import { isWelcomeTownFamilyFormat } from '@/content/playground-library/sceneLessonFormats';
 import { LiveReactionBar, STUDENT_REACTIONS } from '@/components/classroom/engagement/LiveReactionBar';
+
+// Academy Game Library games (src/academy-games) played inside the classroom: loaded only when a teacher puts one on the stage.
+const AcademyGamePlayer = lazy(() => import('@/academy-games/AcademyGamePlayer').then((m) => ({ default: m.AcademyGamePlayer })));
 
 /** The two embedded scene players (Pre-A1 lep1-rich, A1/A2 wt-rich/wt-a2-rich)
  *  expose the same 4 imperative methods from different source files —
@@ -142,6 +145,8 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
   // Academy library (deck) lesson: one synthetic slide carries { lessonId } (see TeacherClassroom / classroomLessonResolver).
   const deckLessonRef = (rawSlides as { deckLessonRef?: { lessonId: string } }[] | undefined)?.[0]?.deckLessonRef;
   const deckHandleRef = useRef<EmbeddedAcademyDeckHandle>(null);
+  // Academy game (Game Library): one synthetic slide carries { gameId }; teacher and student each play their own copy.
+  const academyGameRef = (rawSlides as { academyGameRef?: { gameId: string } }[] | undefined)?.[0]?.academyGameRef;
 
   const sceneLessonHandleRef = useRef<SceneLessonHandle>(null);
   const sceneStageAreaRef = useRef<HTMLDivElement>(null);
@@ -400,6 +405,18 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
                 </div>
               )}
             </div>
+          ) : hubType === 'academy' && mode === 'slide' && academyGameRef ? (
+            // Academy Game Library game, full stage. The game scrolls inside its own panel; each side plays their own copy
+            // (progress and recordings stay in that browser), so there is no pen layer on top of it.
+            <div className={`absolute inset-x-3 top-3 sm:inset-x-4 sm:top-4 lg:inset-x-6 lg:top-6 ${role === 'teacher' ? 'bottom-20 sm:bottom-24' : 'bottom-3 sm:bottom-4 lg:bottom-6'}`}>
+              <div data-testid="academy-game-stage" className="h-full w-full overflow-y-auto rounded-2xl bg-slate-950 p-2 shadow-2xl ring-1 ring-black/5 sm:p-3">
+                <ClassroomSceneErrorBoundary resetKey={`academy-game-${academyGameRef.gameId}`}>
+                  <Suspense fallback={<div className="p-10 text-center text-white/70">Loading the game…</div>}>
+                    <AcademyGamePlayer gameId={academyGameRef.gameId} />
+                  </Suspense>
+                </ClassroomSceneErrorBoundary>
+              </div>
+            </div>
           ) : hubType === 'academy' && mode === 'slide' && deckLessonRef ? (
             // Academy library lesson (deck player): framed exactly like a Playground scene lesson. A fixed 16:9 frame with
             // margins (taller bottom clearance for the teacher's floating dock), the lesson drawn on a fixed design canvas
@@ -545,7 +562,7 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
 
 
         {/* Slide counter (only in slide mode) */}
-        {mode === 'slide' && slides.length > 0 && !deckLessonRef && (
+        {mode === 'slide' && slides.length > 0 && !deckLessonRef && !academyGameRef && (
           <div className="absolute bottom-4 right-4 z-[60] bg-foreground/70 text-background px-2.5 py-0.5 rounded-full text-[11px] font-medium pointer-events-none">
             {currentSlideIndex + 1} / {slides.length}
           </div>

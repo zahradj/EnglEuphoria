@@ -1775,6 +1775,23 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
         onClose={() => setIsLibraryOpen(false)}
         slideFormat="raw"
         hubFilter={hubType}
+        onSelectAcademyGame={async (gameId, title) => {
+          setIsLibraryOpen(false);
+          // An Academy Game Library game: one synthetic slide carries { gameId }; MainStage plays it full-stage on both sides.
+          const gameSlides = [{ id: `academy-game-${gameId}`, type: 'academy_game', academyGameRef: { gameId } }];
+          setRawSlides(gameSlides);
+          try {
+            await updateSceneLessonIdx(0);
+            await updateSharedDisplay({ lessonSlides: gameSlides, lessonTitle: title, embeddedUrl: null });
+            await updateSlide(0);
+            await setStageMode('slide');
+            await updateCanvasTab('slides');
+            toast({ title: '🎮 Game on screen', description: `"${title}" is now on screen. You and the student each play your own copy.` });
+          } catch (error) {
+            console.error('Failed to load Academy game into classroom:', error);
+            toast({ title: '❌ Failed to load game', description: 'The student may not have received it — try again or use Force Sync.', variant: 'destructive' });
+          }
+        }}
         onSelectLesson={async (selectedSlides, title, sceneMeta, deckMeta) => {
           setIsLibraryOpen(false);
 

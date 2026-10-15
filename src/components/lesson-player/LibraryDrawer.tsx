@@ -15,6 +15,7 @@ import { LIBRARY_GAMES, type LibraryGame } from '@/content/playground-library/ga
 import { GAME_LESSON_FORMAT, gameLessonNumber } from '@/content/playground-library/gameLessons';
 import { ACADEMY_DECK_LESSONS, type AcademyDeckLesson } from '@/academy-deck/lessonRegistry';
 import { AcademyLevelLibrary } from '@/academy-deck/library/AcademyLevelLibrary';
+import { ACADEMY_GAMES, type AcademyGame } from '@/academy-games/academyGamesCatalog';
 
 
 export interface SceneLessonMeta {
@@ -36,6 +37,8 @@ interface LibraryDrawerProps {
    *  `content.slides` — the caller should render it via the scene player
    *  instead of treating `slides` as normal classroom slides. */
   onSelectLesson: (slides: any[], title: string, sceneMeta?: SceneLessonMeta, deckMeta?: DeckLessonMeta) => void;
+  /** Academy hub only: when given, the drawer also lists the Academy Game Library games (Games tab); picking one calls this. */
+  onSelectAcademyGame?: (gameId: string, title: string) => void;
   slideFormat?: 'classroom' | 'raw';
   /** Lock the drawer to a single hub (playground | academy | professional). */
   hubFilter?: string;
@@ -131,6 +134,7 @@ export default function LibraryDrawer({
   open,
   onClose,
   onSelectLesson,
+  onSelectAcademyGame,
   slideFormat = 'classroom',
   hubFilter,
 }: LibraryDrawerProps) {
@@ -148,6 +152,7 @@ export default function LibraryDrawer({
 
   // The Academy hub's library is the new Academy library (src/academy-deck/lessonRegistry): the old database-backed Academy list is not shown here.
   const academyDeck = hubFilter === 'academy';
+  const academyGamesAvailable = academyDeck && !!onSelectAcademyGame;
   const deckLessons = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
     return ACADEMY_DECK_LESSONS.filter((l) => !q || [l.title, l.blurb, l.level].some((v) => v.toLowerCase().includes(q)));
@@ -241,6 +246,32 @@ export default function LibraryDrawer({
     const q = searchQuery.trim().toLowerCase();
     return LIBRARY_GAMES.filter((g) => !q || g.title.toLowerCase().includes(q) || g.tagline.toLowerCase().includes(q) || g.skill.toLowerCase().includes(q));
   }, [searchQuery]);
+
+  const filteredAcademyGames = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    return ACADEMY_GAMES.filter((g) => !q || g.title.toLowerCase().includes(q) || g.tagline.toLowerCase().includes(q) || g.skill.toLowerCase().includes(q));
+  }, [searchQuery]);
+
+  /** A game opens full-stage in the classroom (each side plays their own copy). */
+  const renderAcademyGameRow = (game: AcademyGame) => (
+    <button
+      key={game.id}
+      onClick={() => onSelectAcademyGame?.(game.id, game.title)}
+      className={`w-full text-left overflow-hidden rounded-2xl border border-slate-100 dark:border-slate-800 ${accent.rowHover} hover:shadow-md bg-white dark:bg-slate-800/60 transition-all group`}
+    >
+      <div className="relative aspect-video w-full" style={{ background: game.gradient }}>
+        <img src={game.cover} alt="" draggable={false} className="absolute inset-0 h-full w-full object-cover" loading="lazy" onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }} />
+      </div>
+      <div className="p-4">
+        <div className="flex items-center gap-2">
+          <h3 className={`font-semibold text-sm flex-1 truncate ${accent.rowTitleHover} transition-colors`}>{game.title}</h3>
+          <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full border bg-amber-100 text-amber-700 border-amber-200">Game</span>
+        </div>
+        <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">{game.tagline}</p>
+        <p className="text-[11px] font-semibold text-slate-400 mt-2">{game.skill} · {game.levels.join('/')} · {game.minutes}</p>
+      </div>
+    </button>
+  );
 
   /** A game opens like a scene lesson: the classroom stage plays it through the synced scene player. */
   const handleSelectGame = (game: LibraryGame) => {
@@ -423,7 +454,7 @@ export default function LibraryDrawer({
 
             {/* Level tabs + Games — one row: the levels, then a Games tab beside them. Level tabs are
                 hidden while searching lessons (a search spans every level); Games stays reachable. */}
-            {(gamesAvailable || (!loading && !isSearching && grouped.length > 0)) && (
+            {(gamesAvailable || academyGamesAvailable || (!loading && !isSearching && grouped.length > 0)) && (
               <div className="flex gap-1.5 px-5 py-3 border-b border-slate-100 dark:border-slate-800 shrink-0 overflow-x-auto" role="tablist" aria-label="Levels and games">
                 {!loading && !isSearching && grouped.map(({ level, units }) => {
                   const lessonCount = units.reduce((sum, u) => sum + u.lessons.length, 0);
@@ -445,6 +476,35 @@ export default function LibraryDrawer({
                     </button>
                   );
                 })}
+                {academyGamesAvailable && (
+                  <>
+                    <button
+                      role="tab"
+                      aria-selected={view === 'lessons'}
+                      onClick={() => setView('lessons')}
+                      className={`shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide border transition-colors ${
+                        view === 'lessons'
+                          ? `${accent.tabActive} text-white`
+                          : `bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 ${accent.tabHover}`
+                      }`}
+                    >
+                      Lessons
+                    </button>
+                    <button
+                      role="tab"
+                      aria-selected={view === 'games'}
+                      onClick={() => setView('games')}
+                      className={`shrink-0 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide border transition-colors ${
+                        view === 'games'
+                          ? `${accent.tabActive} text-white`
+                          : `bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 ${accent.tabHover}`
+                      }`}
+                    >
+                      Games
+                      <span className={view === 'games' ? accent.tabActiveText : 'text-slate-400'}> · {ACADEMY_GAMES.length}</span>
+                    </button>
+                  </>
+                )}
                 {gamesAvailable && (
                   <button
                     role="tab"
@@ -465,7 +525,16 @@ export default function LibraryDrawer({
 
             {/* Lesson list */}
             <div className="flex-1 overflow-y-auto p-4 space-y-3">
-              {academyDeck ? (
+              {academyGamesAvailable && view === 'games' ? (
+                filteredAcademyGames.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center py-16 gap-2 opacity-50">
+                    <BookOpen size={40} />
+                    <p className="text-sm font-medium">No games match your search</p>
+                  </div>
+                ) : (
+                  <div className="space-y-3">{filteredAcademyGames.map(renderAcademyGameRow)}</div>
+                )
+              ) : academyDeck ? (
                 deckLessons.length === 0 ? (
                   <div className="flex flex-col items-center justify-center py-16 gap-2 opacity-50">
                     <BookOpen size={40} />
