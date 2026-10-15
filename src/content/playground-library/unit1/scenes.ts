@@ -593,7 +593,8 @@ export type Scene =
       testKey: string; title: string; level: string; mode: 'final' | 'checkpoint' | 'unit'; nextLevel?: string; strongKeys?: string[];
       hero: string; medal: string; certificate: { title: string; line: string };
       sections: { key: string; label: string; icon: string; intro: string;
-        items: { ask: string; reply: string; answer: number; blend?: string[]; options: { label: string; img?: string; text?: string }[] }[] }[];
+        /** `read`: a reading item (A1) — the question is shown, not said, and has no 🔊; `img` = a picture to read about. */
+        items: { ask: string; reply: string; answer: number; blend?: string[]; read?: boolean; img?: string; options: { label: string; img?: string; text?: string }[] }[] }[];
       speaking: { key: string; label: string; icon: string; intro: string; prompts: { img: string; say: string; prompt: string; model: string }[] };
     }
   | {

@@ -13,13 +13,14 @@ type Row = {
   sections: { key: string; stars: number }[] | null;
 };
 
-const SKILLS = ['words', 'sentences', 'sounds', 'speaking'];
+const SKILLS = ['words', 'sentences', 'reading', 'sounds', 'speaking'];
 
 function testName(t: (k: string, o?: Record<string, unknown>) => string, testKey: string): string {
   const boss = /^prea1-u(\d+)-boss$/.exec(testKey);
   if (boss) return t('pr.test.unit', { unit: boss[1], defaultValue: 'Unit {{unit}} Boss Test' });
   if (testKey === 'prea1-checkpoint-1') return t('pr.test.checkpoint', { defaultValue: 'Halfway Check (Units 1–5)' });
   if (testKey === 'prea1-final') return t('pr.test.final', { defaultValue: 'Pre-A1 Final Test' });
+  if (testKey === 'a1-halfway-check') return t('pr.test.a1Halfway', { defaultValue: 'A1 Halfway Check (Units 1–5)' });
   return testKey;
 }
 

@@ -150,6 +150,9 @@ export function SceneRenderer(props: {
   gemsCollected: number;
   heartsRemaining: number;
   activitySync?: ActivitySync;
+  /** Live class: who this screen is, and the class id (the A1 level tests need both to score and save). */
+  role?: 'teacher' | 'student';
+  roomId?: string;
 }) {
   const instruction = (props.scene as { teacher?: string }).teacher;
   const scene = displayScene(props.scene);
@@ -244,7 +247,7 @@ export function SceneRenderer(props: {
       case 'where-castle': return <WhereCastleScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'chat-chain': return <ChatChainScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'feelings-survey': return <FeelingsSurveyScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
-      case 'prea1': return <PreA1SceneRenderer scene={scene.scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} onRestart={props.onRestart} gemsCollected={props.gemsCollected} heartsRemaining={props.heartsRemaining} activitySync={props.activitySync} />;
+      case 'prea1': return <PreA1SceneRenderer scene={scene.scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} onRestart={props.onRestart} gemsCollected={props.gemsCollected} heartsRemaining={props.heartsRemaining} activitySync={props.activitySync} role={props.role} roomId={props.roomId} />;
       case 'finale': return <FinaleScene scene={scene} hearts={props.heartsRemaining} gems={props.gemsCollected} onRestart={props.onRestart} />;
       default: return null;
     }

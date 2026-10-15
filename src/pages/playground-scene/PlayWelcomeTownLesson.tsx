@@ -762,6 +762,8 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
                 onRestart={restart}
                 gemsCollected={gems}
                 heartsRemaining={hearts}
+                role={role}
+                roomId={roomId}
                 // Safe mode: after repeated crashes, run this activity purely on
                 // its own data — nothing the other screen sent can break it.
                 activitySync={safeMode ? undefined : activitySync}

@@ -54,7 +54,7 @@ export function LevelTestScene({ scene, onWin, onNext, sync, role, roomId }: {
     if (it.blend?.length) {
       for (const l of it.blend) { await playLetterPhonic(l); await new Promise((r) => window.setTimeout(r, 350)); }
     }
-    cueSpeak(it.ask, scene.who);
+    if (!it.read) cueSpeak(it.ask, scene.who);
   };
 
   // section intros, then each question is said
@@ -173,8 +173,9 @@ export function LevelTestScene({ scene, onWin, onNext, sync, role, roomId }: {
       {sec && state.started && item && (
         <>
           <div className="absolute inset-x-0 top-[24%] z-30 flex items-center justify-center gap-3 px-14">
-            <span className="text-center font-black text-white" style={{ ...THICK_WORDS, fontSize: 'clamp(1.15rem, min(calc(3*var(--svw,1vw)), 5vh), 2.4rem)' }}>{item.blend?.length ? '👂 What word is it?' : item.ask}</span>
-            <button type="button" aria-label="Hear it again" onClick={() => { void playItem(item); }} className="rounded-full bg-white/90 px-3 py-1 text-[3vh] shadow-lg active:scale-95">🔊</button>
+            {item.img && <img src={item.img} alt="" draggable={false} className="h-[18vh] w-auto rounded-[1.5vh] border-[0.5vh] border-white bg-white/85 object-contain shadow-lg" />}
+            <span className="text-center font-black text-white" style={{ ...THICK_WORDS, fontSize: 'clamp(1.15rem, min(calc(3*var(--svw,1vw)), 5vh), 2.4rem)' }}>{item.blend?.length ? '👂 What word is it?' : item.read ? `📖 ${item.ask}` : item.ask}</span>
+            {!item.read && <button type="button" aria-label="Hear it again" onClick={() => { void playItem(item); }} className="rounded-full bg-white/90 px-3 py-1 text-[3vh] shadow-lg active:scale-95">🔊</button>}
           </div>
           <div className="absolute inset-x-0 top-[38%] z-20 flex justify-center gap-[2.5vw]">
             {item.options.map((o, k) => {
@@ -188,7 +189,7 @@ export function LevelTestScene({ scene, onWin, onNext, sync, role, roomId }: {
                   animate={show && isRight && !reduce ? { y: [0, -16, 0], opacity: 1 } : { y: 0, opacity: show && !isRight && k !== picked ? 0.45 : 1 }}
                   transition={{ delay: show ? 0 : reduce ? 0 : 0.1 + k * 0.08, type: 'spring', stiffness: 160, damping: 14 }} whileTap={{ scale: 0.93 }}>
                   {o.img ? <img src={o.img} alt="" draggable={false} className="h-[80%] w-[80%] object-contain drop-shadow-[0_0.6vh_0.5vh_rgba(0,0,0,0.3)]" />
-                    : <span className="font-black text-white" style={{ ...THICK_WORDS, fontSize: 'min(12vh, 8vw)', lineHeight: 1 }}>{o.text ?? o.label}</span>}
+                    : <span className="px-[0.6vw] text-center font-black text-white" style={{ ...THICK_WORDS, fontSize: (o.text ?? o.label).length > 4 ? 'min(6vh, 4vw)' : 'min(12vh, 8vw)', lineHeight: 1.05 }}>{o.text ?? o.label}</span>}
                 </motion.button>
               );
             })}
@@ -220,7 +221,7 @@ export function LevelTestScene({ scene, onWin, onNext, sync, role, roomId }: {
               </div>
             ))}
           </div>
-          {isTeacherView && <div className="rounded-full bg-indigo-950/60 px-3 font-bold text-white/90" style={{ fontSize: 'min(1.8vh, 1.25vw)' }}>0 no answer · 1 one word with help · 2 one word alone · 3 a phrase or sentence</div>}
+          {isTeacherView && <div className="rounded-full bg-indigo-950/60 px-3 font-bold text-white/90" style={{ fontSize: 'min(1.8vh, 1.25vw)' }}>{scene.level === 'A1' ? '0 no answer · 1 words with help · 2 a short sentence alone · 3 full sentences, or a question asked correctly' : '0 no answer · 1 one word with help · 2 one word alone · 3 a phrase or sentence'}</div>}
           <button type="button" onClick={finishSpeaking} className={`${CLAY_BUTTON} px-8 py-2 text-xl`}>We're done talking ✓</button>
         </div>
       )}

@@ -257,6 +257,7 @@ const PlayMonsterLesson4 = lazy(() => import("./pages/playground-scene/PlayMonst
 const PlayMonsterLesson5 = lazy(() => import("./pages/playground-scene/PlayMonsterLesson5"));
 const PlayMonsterLesson6 = lazy(() => import("./pages/playground-scene/PlayMonsterLesson6"));
 const PlayMonsterLesson7 = lazy(() => import("./pages/playground-scene/PlayMonsterLesson7"));
+const PlayMonsterLesson8 = lazy(() => import("./pages/playground-scene/PlayMonsterLesson8"));
 const PlayMagicCastleLesson1 = lazy(() => import("./pages/playground-scene/PlayMagicCastleLesson1"));
 const PlayMagicCastleLesson2 = lazy(() => import("./pages/playground-scene/PlayMagicCastleLesson2"));
 const PlayMagicCastleLesson3 = lazy(() => import("./pages/playground-scene/PlayMagicCastleLesson3"));
@@ -883,6 +884,12 @@ const App = () => {
                       <Route path="/playground-scene/monster-lesson-7" element={
                         <ImprovedProtectedRoute>
                           <Suspense fallback={<LoadingFallback />}><PlayMonsterLesson7 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A1 tier — A1 Halfway Check after Unit 5 (U5 · L8). */}
+                      <Route path="/playground-scene/monster-lesson-8" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayMonsterLesson8 /></Suspense>
                         </ImprovedProtectedRoute>
                       } />
                       {/* A1 tier — Food Festival, Unit 4 Lesson 1. */}
