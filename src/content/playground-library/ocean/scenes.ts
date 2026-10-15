@@ -123,7 +123,7 @@ export const LESSON_A1U6L1_SCENES: Scene[] = [
     ],
   },
   { id: 'oc-meet-beach', kind: 'meet', focus: ['sea'], bg: bgBeach, who: 'pip', cardSide: 'right', teacher: 'Present: the compass points to the sea! Point to the boat and the water. Say: Look — the sea!', line: 'Look! The compass points to the sea!', repeat: 'Look! The sea!' },
-  { id: 'oc-meet-coral', kind: 'meet', focus: ['sea'], bg: reefPage(2), who: 'coral', cardSide: 'right', teacher: 'Present: this is Coral the Mermaid. She lives in the sea. Wave to her!', line: 'Hello! I’m Coral. I live in the sea!', repeat: 'This is Coral.' },
+  { id: 'oc-meet-coral', kind: 'meet', focus: ['sea'], bg: reefPage(2), who: 'coral', cardSide: 'left', teacher: 'Present: this is Coral the Mermaid. She lives in the sea. Wave to her!', line: 'Hello! I’m Coral. I live in the sea!', repeat: 'This is Coral.' },
   {
     id: 'oc-animals', kind: 'prea1', teacher: 'Present (I do → you do): one sea animal at a time. Say it, the student says it: It’s a shark.',
     scene: {
@@ -239,11 +239,11 @@ export const LESSON_A1U6L1_SCENES: Scene[] = [
     id: 'oc-i-spy', kind: 'i-spy', bg: bgSpy, who: 'pip', guide: item('pip-binoculars'),
     teacher: 'Guided: I Spy under the sea! Pip gives a clue — the student moves the binoculars to the animal, then says it: It’s a turtle!',
     rounds: [
-      { clue: 'I spy something big and blue!', spot: { left: 22, top: 22, r: 10 }, answer: 'It’s a whale!' },
-      { clue: 'I spy something grey with a big fin!', spot: { left: 78, top: 22, r: 8 }, answer: 'It’s a shark!' },
-      { clue: 'I spy something green with a shell!', spot: { left: 50, top: 50, r: 8 }, answer: 'It’s a turtle!' },
-      { clue: 'I spy something small and orange, like a star!', spot: { left: 18, top: 80, r: 6 }, answer: 'It’s a starfish!' },
-      { clue: 'I spy something yellow with a curly tail!', spot: { left: 80, top: 62, r: 6 }, answer: 'It’s a seahorse!' },
+      { clue: 'I spy something big and blue!', spot: { left: 28, top: 22, r: 12 }, answer: 'It’s a whale!' },
+      { clue: 'I spy something grey with a big fin!', spot: { left: 79, top: 23, r: 9 }, answer: 'It’s a shark!' },
+      { clue: 'I spy something green with a shell!', spot: { left: 49, top: 52, r: 9 }, answer: 'It’s a turtle!' },
+      { clue: 'I spy something small and orange, like a star!', spot: { left: 17, top: 83, r: 7 }, answer: 'It’s a starfish!' },
+      { clue: 'I spy something yellow with a curly tail!', spot: { left: 83, top: 60, r: 6 }, answer: 'It’s a seahorse!' },
     ],
     doneLine: 'Super spying! You found every sea animal!',
   },
@@ -339,7 +339,7 @@ export const LESSON_A1U6L1_SCENES: Scene[] = [
       { who: 'pip', line: 'Wow! You know the sea!' },
     ],
   },
-  { id: 'oc-i-can', kind: 'meet', focus: ['animals'], bg: reefPage(2), who: 'coral', cardSide: 'right', teacher: 'Check: the student names 5 sea animals in full sentences (It’s a… / They’re…) — then the passport stamp!', line: 'You can name the sea animals!', repeat: 'It’s a whale. They’re sharks.' },
+  { id: 'oc-i-can', kind: 'meet', focus: ['animals'], bg: reefPage(2), who: 'coral', cardSide: 'left', teacher: 'Check: the student names 5 sea animals in full sentences (It’s a… / They’re…) — then the passport stamp!', line: 'You can name the sea animals!', repeat: 'It’s a whale. They’re sharks.' },
   {
     id: 'oc-sticker', kind: 'prea1', teacher: 'Sticker time! The student opens the pack and puts the Ocean sticker in their Sticker Book.',
     scene: {
