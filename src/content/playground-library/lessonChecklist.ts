@@ -162,7 +162,7 @@ export function checklistItems(scenes: readonly unknown[]): ChecklistItem[] {
       out.push({ id: raw.id, kind, label, game: KIND_LABEL[kind] ?? pretty(kind), part: PART_OF[kind] ?? 'games', page: i + 1 });
       return;
     }
-    const name = (raw.title || inner.title || raw.prompt || inner.prompt || detailOf(inner) || '').replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\u{FE0F}]/gu, '').trim();
+    const name = (raw.title || inner.title || raw.prompt || inner.prompt || detailOf(inner) || '').replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, '').replace(/\u{FE0F}/gu, '').trim();
     const base = KIND_LABEL[kind] ?? pretty(kind);
     let label = name && name.toLowerCase() !== base.toLowerCase() && !name.toLowerCase().startsWith(base.toLowerCase()) ? `${base}: ${name}` : (name || base);
     const same = out.filter((o) => o.label === label || o.label.startsWith(`${label} (`)).length;
