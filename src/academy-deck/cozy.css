@@ -273,3 +273,66 @@
 .ad-root[data-theme='cozy'] .ad-lobby-card li { font-size: 0.92rem; line-height: 1.35; }
 .ad-root[data-theme='cozy'] .ad-lobby-hero { padding: 28px 30px; }
 @media (max-width: 900px) { .ad-root[data-theme='cozy'] .ad-lobby-path { grid-template-columns: 1fr; } }
+
+/* ===== aesthetic pass 2: a painted-feeling place while the real scene pictures are being made, skill labels, part colours, paper grain ===== */
+.ad-root[data-theme='cozy'] { --sky1: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 220' preserveAspectRatio='none'%3E%3Cpath fill='%23c3b3e0' d='M0 220V120h40V90h50v40h30V70h60v60h40V100h50v50h30V60h70v90h40V110h60v40h40V80h60v70h30V120h50V50h60v110h30V100h50v60h40V90h60v70h30V130h40V70h60v90h50V110h60v110z'/%3E%3C/svg%3E"); --sky2: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 160' preserveAspectRatio='none'%3E%3Cpath fill='%23ac98d2' d='M0 160V100h60V70h40v40h50V80h40v60h60V90h50v50h40V60h50v90h60V100h40v40h50V70h60v80h40V110h50v50h60V80h50v80h40V100h60v60h50V90h40v70z'/%3E%3C/svg%3E"); --lights: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='360' height='70' viewBox='0 0 360 70'%3E%3Cpath d='M0 8 Q90 62 180 8 T360 8' fill='none' stroke='%238a6a3a' stroke-opacity='.55' stroke-width='1.6'/%3E%3Cg fill='%23ffd98a'%3E%3Ccircle cx='45' cy='36' r='5'/%3E%3Ccircle cx='90' cy='44' r='5'/%3E%3Ccircle cx='135' cy='36' r='5'/%3E%3Ccircle cx='225' cy='36' r='5'/%3E%3Ccircle cx='270' cy='44' r='5'/%3E%3Ccircle cx='315' cy='36' r='5'/%3E%3C/g%3E%3Cg fill='%23ffe9b8' fill-opacity='.35'%3E%3Ccircle cx='45' cy='36' r='13'/%3E%3Ccircle cx='90' cy='44' r='13'/%3E%3Ccircle cx='135' cy='36' r='13'/%3E%3Ccircle cx='225' cy='36' r='13'/%3E%3Ccircle cx='270' cy='44' r='13'/%3E%3Ccircle cx='315' cy='36' r='13'/%3E%3C/g%3E%3C/svg%3E"); --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .32 0 0 0 0 .18 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url%28%23n%29' opacity='.5'/%3E%3C/svg%3E"); }
+/* golden hour: lavender sky (about a quarter plum), peach glow, warm cream ground, two layers of city, string lights */
+.ad-root[data-theme='cozy'] .ad-plate-ph {
+  background:
+    var(--lights) 0 6px / 360px 70px repeat-x,
+    var(--sky2) bottom / 100% 17% no-repeat,
+    var(--sky1) bottom / 100% 25% no-repeat,
+    radial-gradient(ellipse 60% 50% at 50% 88%, rgba(255, 214, 150, 0.9), transparent 70%),
+    linear-gradient(180deg, #d9cdee 0%, #efd9d6 38%, #f8e2c4 72%, #f3e0c2 100%) !important;
+}
+.ad-root[data-theme='cozy'] .ad-plate-ph::before { content: ''; position: absolute; inset: 0; background: var(--sky1) bottom / 100% 25% no-repeat; opacity: 0; }
+.ad-root[data-theme='cozy'] .ad-plate:has(.ad-plate-ph)::after { background: radial-gradient(ellipse at 50% 45%, rgba(251, 244, 232, 0.5), rgba(251, 244, 232, 0.12) 80%); }
+/* the trophy case: warm wood shelves with a gold glow */
+.ad-root[data-theme='cozy'] .ad-plate[data-plate='trophy-case'] .ad-plate-ph {
+  background:
+    radial-gradient(ellipse 40% 30% at 50% 40%, rgba(255, 219, 140, 0.8), transparent 70%),
+    repeating-linear-gradient(180deg, transparent 0 118px, rgba(120, 78, 36, 0.35) 118px 124px, transparent 124px 160px),
+    linear-gradient(180deg, #e9cfa6 0%, #cfa571 100%) !important;
+}
+/* paper: a faint grain and a hairline of light on every card */
+.ad-root[data-theme='cozy'] .ad-panel, .ad-root[data-theme='cozy'] .ad-lobby-card, .ad-root[data-theme='cozy'] .ad-lobby-hero { background-image: var(--grain); background-blend-mode: multiply; }
+.ad-root[data-theme='cozy'] .ad-panel { box-shadow: 0 1px 0 rgba(255, 255, 255, 0.95) inset, 0 2px 4px rgba(105, 72, 30, 0.08), 0 18px 40px rgba(105, 72, 30, 0.16); position: relative; }
+/* every part has its own colour thread: a bar on the top edge of the card */
+.ad-root[data-theme='cozy'] .ad-panel::after { content: ''; position: absolute; top: 0; left: 28px; right: 28px; height: 4px; border-radius: 0 0 6px 6px; background: var(--part, var(--teal)); }
+.ad-root[data-theme='cozy'][data-part='0'] { --part: var(--teal); } .ad-root[data-theme='cozy'][data-part='1'] { --part: var(--plum); }
+.ad-root[data-theme='cozy'][data-part='2'] { --part: var(--gold); } .ad-root[data-theme='cozy'][data-part='3'] { --part: var(--teal); }
+.ad-root[data-theme='cozy'][data-part='4'] { --part: #d9684f; } .ad-root[data-theme='cozy'][data-part='5'] { --part: var(--plum); }
+.ad-root[data-theme='cozy'][data-part='6'] { --part: var(--gold); } .ad-root[data-theme='cozy'][data-part='7'] { --part: var(--teal); }
+.ad-root[data-theme='cozy'] .ad-lesson-n { background: var(--part, var(--teal)); }
+/* a skill label above the task: what the student is about to do */
+.ad-root[data-theme='cozy'] .ad-panel > .ad-prompt::before { content: none; }
+.ad-root[data-theme='cozy'] .ad-panel { --skill: ''; }
+.ad-root[data-theme='cozy'] .ad-skill { display: inline-flex; align-items: center; gap: 7px; margin: 0 0 10px; padding: 3px 12px 3px 9px; border-radius: 99px; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.09em; text-transform: uppercase; background: var(--paper-2); color: var(--ink); border: 1px solid var(--edge); }
+.ad-root[data-theme='cozy'] .ad-skill::before { content: ''; width: 9px; height: 9px; border-radius: 50%; background: var(--dot, var(--teal)); }
+.ad-root[data-theme='cozy'] .ad-skill[data-s='Speaking'] { --dot: var(--plum); } .ad-root[data-theme='cozy'] .ad-skill[data-s='Listening'] { --dot: var(--gold); }
+.ad-root[data-theme='cozy'] .ad-skill[data-s='Reading'] { --dot: var(--teal); } .ad-root[data-theme='cozy'] .ad-skill[data-s='Writing'] { --dot: #4c7fc0; } .ad-root[data-theme='cozy'] .ad-skill[data-s='Game'] { --dot: #d9684f; }
+/* finer typography */
+.ad-root[data-theme='cozy'] { font-feature-settings: 'cv11', 'ss01'; -webkit-font-smoothing: antialiased; }
+.ad-root[data-theme='cozy'] .ad-panel > .ad-prompt { letter-spacing: -0.01em; border-bottom: 0; padding-bottom: 4px; margin-bottom: 18px; }
+.ad-root[data-theme='cozy'] .ad-dock { box-shadow: 0 -8px 24px rgba(105, 72, 30, 0.08); }
+.ad-root[data-theme='cozy'] .ad-strip { box-shadow: 0 6px 20px rgba(105, 72, 30, 0.08); }
+.ad-root[data-theme='cozy'] .ad-hp-tile, .ad-root[data-theme='cozy'] .ad-sort-item, .ad-root[data-theme='cozy'] .ad-readq-opt, .ad-root[data-theme='cozy'] .ad-chip { transition: transform 0.15s, border-color 0.15s, background 0.15s; }
+
+/* skill label (CSS only, from the page kind): a small pill above the task */
+.ad-root[data-theme='cozy'][data-skill] .ad-panel > .ad-prompt::before { display: block; width: max-content; margin: 0 0 10px; padding: 3px 12px; border-radius: 99px; font-size: 0.7rem; font-weight: 800; letter-spacing: 0.09em; text-transform: uppercase; background: var(--paper-2); border: 1px solid var(--edge); color: var(--ink); border-inline-start: 5px solid var(--dot, var(--teal)); }
+.ad-root[data-theme='cozy'][data-skill='Speaking'] .ad-panel > .ad-prompt::before { content: 'Speaking'; --dot: var(--plum); }
+.ad-root[data-theme='cozy'][data-skill='Listening'] .ad-panel > .ad-prompt::before { content: 'Listening'; --dot: var(--gold); }
+.ad-root[data-theme='cozy'][data-skill='Reading'] .ad-panel > .ad-prompt::before { content: 'Reading'; --dot: var(--teal); }
+.ad-root[data-theme='cozy'][data-skill='Writing'] .ad-panel > .ad-prompt::before { content: 'Writing'; --dot: #4c7fc0; }
+.ad-root[data-theme='cozy'][data-skill='Game'] .ad-panel > .ad-prompt::before { content: 'Game'; --dot: #d9684f; }
+
+/* refinements: a lighter city, lights below the bar, tiles that suit long answers, smaller guests */
+.ad-root[data-theme='cozy'] .ad-plate-ph { background-position: 0 64px, bottom, bottom, center, center !important; background-size: 360px 70px, 100% 11%, 100% 17%, auto, auto !important; }
+.ad-root[data-theme='cozy'] .ad-plate-ph { opacity: 0.9; }
+.ad-root[data-theme='cozy'] .ad-hearpick { flex-wrap: wrap; justify-content: center; align-items: stretch; }
+.ad-root[data-theme='cozy'] .ad-hp-tile { flex: 1 1 240px; max-width: 100%; min-width: 0; font-size: clamp(1.05rem, 1.7vw, 1.3rem); line-height: 1.3; padding: 14px 20px; transform: none !important; }
+.ad-root[data-theme='cozy'] .ad-hp-tile:hover { transform: translateY(-2px) !important; }
+.ad-root[data-theme='cozy'] .ad-actor { height: 50%; }
+.ad-root[data-theme='cozy'] .ad-panel[data-variant] .ad-hearpick { gap: 14px; padding: 8px 0 4px; flex-direction: row; }
+.ad-root[data-theme='cozy'] .ad-panel[data-variant] .ad-hp-tile { min-width: 0; min-height: 68px; width: auto; flex: 1 1 220px; border-radius: 16px !important; font-size: clamp(1.1rem, 1.8vw, 1.35rem); font-weight: 600; line-height: 1.3; padding: 14px 20px; border: 1.5px solid var(--edge-2); transform: none; text-align: center; display: grid; place-items: center; }
+.ad-root[data-theme='cozy'] .ad-panel[data-variant] .ad-hp-tile:hover { transform: translateY(-2px); }
