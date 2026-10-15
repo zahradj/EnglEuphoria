@@ -282,12 +282,6 @@ export const B1_S01_E1: DeckScript = {
 
     // ---------- 4 · Energiser: the trio streak (harder verbs included) ----------
     {
-      id: 'triple-2', kind: 'triple', part: 4, stage: 'controlled', optional: true, bg: LOBBY, actors: [who('Theo', 'right')], trains: [3],
-      prompt: 'Triple Match, hard mode! Harder verbs: match the three forms.',
-      verbs: [HARD[0], HARD[1], HARD[2], HARD[3], REVISED[2]],
-      hints: ['Vowel changes: drive, drove, driven.'],
-    },
-    {
       id: 'wordle', kind: 'wordle', part: 4, stage: 'controlled', bg: LOBBY, actors: [who('Theo', 'right')], trains: [3],
       prompt: 'Participle Wordle! Guess the past participle in six tries.',
       rounds: [
@@ -374,6 +368,18 @@ export const B1_S01_E1: DeckScript = {
       prompt: 'Release: tell me your list out loud, with a follow-up story about one thing you have done. About a minute. (Record it privately first, then share if you want.)',
       model: 'I have been to a music festival. I went last summer with my brother, and we camped for three days. I would love to give surfing a go because it looks fun, but I am a little scared.',
       hints: ['Three steps: what you have done, when and what happened, what you want to do.'],
+    },
+
+    {
+      id: 'verb-draw', kind: 'verbdraw', part: 6, stage: 'produce', optional: true, bg: STAGE, actors: [who('Theo', 'right')], trains: [3, 4, 5], npc: 'Theo', draws: 3,
+      prompt: 'Verb Draw! First match the verb trios. Then draw a card and open a conversation with Theo.',
+      verbs: [
+        { forms: ['eat', 'ate', 'eaten'], frame: 'Have you ever ___ insects?', follow: { ok: 'When did you eat them?', bad: ['When have you eaten them?', 'When did you eaten them?'] }, reply: 'Once, in Thailand. They were crunchy!' },
+        { forms: ['see', 'saw', 'seen'], frame: 'Have you ever ___ a shooting star?', follow: { ok: 'Where did you see it?', bad: ['Where have you seen it?', 'Where did you seen it?'] }, reply: 'Yes! Last summer, at the beach.' },
+        { forms: ['fly', 'flew', 'flown'], frame: 'Have you ever ___ in a hot-air balloon?', follow: { ok: 'How did you feel?', bad: ['How have you felt?', 'How did you felt?'] }, reply: 'Nervous at first, but it was beautiful.' },
+        { forms: ['take', 'took', 'taken'], frame: 'Have you ever ___ a photo of a sunrise?', follow: { ok: 'What time did you wake up?', bad: ['What time have you woken up?', 'What time did you woke up?'] }, reply: 'Very early, at five o’clock.' },
+      ],
+      hints: ['Draw a card, ask “Have you ever…?” with the participle, then ask about the details in the past simple.'],
     },
 
     // ---------- 7 · Wrap ----------

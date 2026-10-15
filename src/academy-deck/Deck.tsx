@@ -20,7 +20,7 @@ import { PassageView } from './slides/passage';
 import { LobbyView, HubMark } from './slides/lobby';
 import { levelLine, rankOf, xpOf } from './hub';
 import { ReadQView } from './slides/readq';
-import { BossView, WordleView, RpgView, QuizView, TripleView, GlitchView, ClozeView } from './slides/games';
+import { BossView, WordleView, RpgView, QuizView, TripleView, GlitchView, VerbDrawView, ClozeView } from './slides/games';
 import { ForgeView, StreakView } from './slides/forge';
 import { LessonClock } from './LessonClock';
 import { playSfx } from './sfx';
@@ -74,7 +74,7 @@ function clearedStars(s: Stats): number {
 /** The teaching ladder shown to the student: watch it done (I do), practise together (we do), your turn (you do), create (you make it yours). */
 const STAGE_LABEL: Record<string, string> = { review: 'Warm-up', context: 'Watch and listen', model: 'Watch and learn', rule: 'The rule', controlled: 'Practise together', free: 'Your turn', produce: 'Make it yours' };
 
-const SKILL: Record<string, string> = { say: 'Speaking', fade: 'Speaking', passage: 'Reading', readq: 'Reading', hearpick: 'Listening', story: 'Listening', model: 'Listening', write: 'Writing', build: 'Writing', boss: 'Game', wordle: 'Game', rpg: 'Game', quiz: 'Game', triple: 'Game', glitch: 'Game', cloze: 'Reading', sort: 'Game', memory: 'Game', match: 'Game', forge: 'Game', streak: 'Game', explore: 'Game', hunt: 'Game', vault: 'Game', duel: 'Game', rhythm: 'Game' };
+const SKILL: Record<string, string> = { say: 'Speaking', fade: 'Speaking', passage: 'Reading', readq: 'Reading', hearpick: 'Listening', story: 'Listening', model: 'Listening', write: 'Writing', build: 'Writing', boss: 'Game', wordle: 'Game', rpg: 'Game', quiz: 'Game', triple: 'Game', glitch: 'Game', verbdraw: 'Game', cloze: 'Reading', sort: 'Game', memory: 'Game', match: 'Game', forge: 'Game', streak: 'Game', explore: 'Game', hunt: 'Game', vault: 'Game', duel: 'Game', rhythm: 'Game' };
 const skillOf = (kind: string): string => SKILL[kind] ?? '';
 
 function SlideView({ slide, script, onStart }: { slide: Slide; script: DeckScript; onStart: () => void }) {
@@ -126,6 +126,7 @@ function SlideView({ slide, script, onStart }: { slide: Slide; script: DeckScrip
     case 'quiz': return <QuizView slide={slide} />;
     case 'triple': return <TripleView slide={slide} />;
     case 'glitch': return <GlitchView slide={slide} />;
+    case 'verbdraw': return <VerbDrawView slide={slide} />;
     case 'cloze': return <ClozeView slide={slide} />;
     case 'forge': return <ForgeView slide={slide} />;
     case 'streak': return <StreakView slide={slide} />;

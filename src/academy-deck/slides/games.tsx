@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { shuffled, useDeck } from '../ctx';
-import type { BossSlide, ClozeSlide, GlitchSlide, QuizSlide, RpgSlide, TripleSlide, WordleSlide } from '../types';
+import type { BossSlide, ClozeSlide, GlitchSlide, QuizSlide, RpgSlide, TripleSlide, VerbDrawSlide, WordleSlide } from '../types';
 import { Feedback, NOT_YET, Panel } from './shared';
 
 /* Video-game mechanics for the B1 lessons. Each is a small loop with a clear goal and a clear reward; none can lose the student's progress (a miss costs a shield, a grey option, a retry). */
@@ -257,7 +257,7 @@ export function QuizView({ slide }: { slide: QuizSlide }) {
 const COLS = ['Base', 'Past simple', 'Past participle'] as const;
 
 /** Triple Match (match-3): pick one tile in each column; the right three lock into a card and are spoken; combos for first-try triples. */
-export function TripleView({ slide }: { slide: TripleSlide }) {
+export function TripleView({ slide, onAllMatched }: { slide: TripleSlide; /** inside Verb Draw: called instead of finishing the page */ onAllMatched?: () => void }) {
   const { right, wrong, done, seed, speak } = useDeck();
   const lead = slide.actors?.[0]?.who ?? 'Vee';
   const n = slide.verbs.length;
@@ -270,7 +270,7 @@ export function TripleView({ slide }: { slide: TripleSlide }) {
   const [slip, setSlip] = useState(false);
   const [just, setJust] = useState<number | null>(null);
   const finished = done3.length === n;
-  useEffect(() => { if (finished) done(); }, [finished, done]);
+  useEffect(() => { if (finished) (onAllMatched ?? done)(); }, [finished]); // eslint-disable-line react-hooks/exhaustive-deps
   const choose = (c: number, v: number) => {
     if (done3.includes(v) || bad) return;
     const next = pick.map((x, k) => (k === c ? (x === v ? null : v) : x));
@@ -437,6 +437,107 @@ export function GlitchView({ slide }: { slide: GlitchSlide }) {
         )}
         {fixed && <Feedback kind="ok">{r.why}</Feedback>}
         {bad && !fixed && <Feedback kind="try">{found ? 'Not that repair. Check the time word.' : 'That line is fine. Look again.'}</Feedback>}
+      </div>
+    </Panel>
+  );
+}
+
+/** Verb Draw: phase 1 match the trios; phase 2 draw a verb card and open a conversation with it. */
+export function VerbDrawView({ slide }: { slide: VerbDrawSlide }) {
+  const { right, wrong, done, seed, speak } = useDeck();
+  const lead = slide.actors?.[0]?.who ?? 'Vee';
+  const [phase, setPhase] = useState<'match' | 'draw'>('match');
+  const matchSlide = useMemo<TripleSlide>(() => ({ id: `${slide.id}-m`, kind: 'triple', part: slide.part, bg: slide.bg, prompt: 'Phase 1 · Match the trios! One tile in each column: base, past simple, past participle.', verbs: slide.verbs.map((v) => v.forms) }), [slide]);
+  const order = useMemo(() => shuffled(slide.verbs.map((_, i) => i), seed + 3).slice(0, slide.draws), [slide.verbs, slide.draws, seed]);
+  const [i, setI] = useState(0);
+  const [step, setStep] = useState<'deck' | 'open' | 'say' | 'follow' | 'reply'>('deck');
+  const [slip, setSlip] = useState(false);
+  const [bad, setBad] = useState<string | null>(null);
+  const [streak, setStreak] = useState(0);
+  const [best, setBest] = useState(0);
+  const [chats, setChats] = useState<string[]>([]);
+  const finished = i >= order.length;
+  const v = finished ? null : slide.verbs[order[i]];
+  useEffect(() => { if (finished && phase === 'draw') done(); }, [finished, phase, done]);
+  const partOpts = useMemo(() => (v ? shuffled([v.forms[2], v.forms[1], v.forms[0]], seed + i * 7) : []), [v, seed, i]);
+  const followOpts = useMemo(() => (v ? shuffled([v.follow.ok, ...v.follow.bad], seed + i * 11) : []), [v, seed, i]);
+  const miss = (o: string) => { wrong(); setSlip(true); setBad(o); setStreak(0); window.setTimeout(() => setBad(null), 480); };
+  if (phase === 'match') return <TripleView slide={matchSlide} onAllMatched={() => setPhase('draw')} />;
+  if (finished || !v) {
+    return (
+      <Panel title="Verb Draw complete!" wide variant="glass">
+        <div className="ad-vd">
+          <Feedback kind="ok">{slide.draws} conversations opened! Best streak ×{best}.</Feedback>
+          <ol className="ad-vd-chats" aria-label="Your conversations">{chats.map((c, k) => <li key={k}>{c}</li>)}</ol>
+        </div>
+      </Panel>
+    );
+  }
+  const question = (o: string) => v.frame.replace('___', o);
+  const pickPart = (o: string) => {
+    if (step !== 'open') return;
+    if (o === v.forms[2]) {
+      if (!slip) right();
+      setStep('say');
+      void speak(lead, question(o));
+    } else miss(o);
+  };
+  const pickFollow = (o: string) => {
+    if (step !== 'follow') return;
+    if (o === v.follow.ok) {
+      if (!slip) { right(); const s = streak + 1; setStreak(s); setBest((b) => Math.max(b, s)); }
+      setStep('reply');
+      setChats((c) => [...c, `${question(v.forms[2])} → ${v.reply}`]);
+      void speak(slide.npc, v.reply);
+    } else miss(o);
+  };
+  const next = () => { setI((n) => n + 1); setStep('deck'); setSlip(false); };
+  return (
+    <Panel title={`Phase 2 · Verb Draw! Draw a card and open a conversation with ${slide.npc}.`} wide variant="glass">
+      <div className="ad-vd">
+        <div className="ad-vd-hud" role="status" aria-label={`Card ${i + 1} of ${order.length}. Streak ${streak}`}>
+          <span>Card <b>{i + 1}/{order.length}</b></span>
+          <span className="ad-vd-streak" data-hot={streak >= 2 || undefined}>Streak <b>×{streak}</b></span>
+        </div>
+        {step === 'deck' ? (
+          <button type="button" className="ad-vd-deck" onClick={() => setStep('open')} aria-label="Draw a verb card">
+            <span className="ad-vd-back">?</span><span className="ad-vd-draw">Draw a card ▸</span>
+          </button>
+        ) : (
+          <div className="ad-vd-card" key={i}>
+            <b>{v.forms[0]}</b><i>{v.forms[1]}</i><em>{v.forms[2]}</em>
+          </div>
+        )}
+        {step === 'open' && (
+          <>
+            <p className="ad-vd-q">Open the conversation: <b>{v.frame.replace('___', '…')}</b></p>
+            <div className="ad-vd-opts" role="group" aria-label="Choose the form">
+              {partOpts.map((o) => <button key={o} type="button" className="ad-vd-opt" data-bad={bad === o || undefined} onClick={() => pickPart(o)}>{o}</button>)}
+            </div>
+          </>
+        )}
+        {step === 'say' && (
+          <>
+            <p className="ad-vd-q"><b>{question(v.forms[2])}</b></p>
+            <p className="ad-hint-line">Ask {slide.npc} out loud, with your own voice. Then tap the button.</p>
+            <button type="button" className="ad-btn ad-btn-primary" onClick={() => setStep('follow')}>I asked it ✓</button>
+          </>
+        )}
+        {step === 'follow' && (
+          <>
+            <p className="ad-vd-q">{slide.npc} answers “yes”. Keep the talk going: choose your follow-up question.</p>
+            <div className="ad-vd-opts" role="group" aria-label="Choose the follow-up">
+              {followOpts.map((o) => <button key={o} type="button" className="ad-vd-opt" data-bad={bad === o || undefined} onClick={() => pickFollow(o)}>{o}</button>)}
+            </div>
+          </>
+        )}
+        {step === 'reply' && (
+          <>
+            <p className="ad-vd-bubble"><b>{slide.npc}:</b> {v.reply}</p>
+            <button type="button" className="ad-btn ad-btn-primary" onClick={next}>{i + 1 >= order.length ? 'Finish ✓' : 'Next card ▸'}</button>
+          </>
+        )}
+        {bad && <Feedback kind="try">{step === 'open' ? 'After “have ever” we need the past participle.' : 'The details of a finished event use the past simple.'}</Feedback>}
       </div>
     </Panel>
   );

@@ -241,11 +241,13 @@ export interface TripleSlide extends SlideBase { kind: 'triple'; prompt: string;
 export interface ClozeSlide extends SlideBase { kind: 'cloze'; prompt: string; title: string; paragraphs: string[]; /** a short hint per gap word (shown after two wrong tries) */ gapHints?: Record<string, string> }
 /** Glitch Hunt (B1 S1, video-game mechanic: spot the glitch / bug hunt). A short chat in which ONE line has a tense glitch. The student taps the glitch (a wrong tap only shakes), then repairs it by choosing the right line; the repaired line is spoken with the reason. Done when every chat is repaired. */
 export interface GlitchSlide extends SlideBase { kind: 'glitch'; prompt: string; rounds: { lines: { who: CastName; text: string }[]; /** index of the line with the glitch */ glitch: number; /** the repaired line and two wrong repairs */ fix: string; options: string[]; /** one line that says why (the time word) */ why: string }[] }
+/** Verb Draw (B1 S1, video-game mechanic: collectible card draw + talk show). Phase 1: match-3 of the verb trios (base, past simple, past participle). Phase 2: draw a verb card; open a conversation with it (choose the participle for the question, say the question aloud, choose the right past-simple follow-up); the other character answers. A streak counts conversations done right the first time. Done after `draws` cards. */
+export interface VerbDrawSlide extends SlideBase { kind: 'verbdraw'; prompt: string; npc: CastName; draws: number; verbs: { forms: [string, string, string]; /** the question with ___ for the participle */ frame: string; follow: { ok: string; bad: [string, string] }; /** what the other character answers */ reply: string }[] }
 export interface WrapSlide extends SlideBase { kind: 'wrap'; heading: string; ticks: string[]; homework: string; clue: string }
 
 export type Slide =
   | TitleSlide | BriefSlide | BadgeSlide | DialSlide | LaneSlide | WhoSaidSlide | LockersSlide | NumTrainSlide | PadlockSlide | ConvoSlide | SpellSlide
-  | MatchSlide | CountUpSlide | BePickSlide | BuildSlide | FactCheckSlide | WriteSlide | HuntSlide | ShadowSlide | TeachSlide | ModelSlide | FindWrongSlide | BorderSlide | MemorySlide | NumWallSlide | PhoneChatSlide | FadeSlide | CardSlide | SaySlide | VaultSlide | RhythmSlide | DuelSlide | PassageSlide | ForgeSlide | StreakSlide | ReadQSlide | BossSlide | WordleSlide | RpgSlide | QuizSlide | TripleSlide | GlitchSlide | ClozeSlide | WrapSlide | BlendSlide | HearPickSlide | ReaderSlide | RuleSlide | ExploreSlide | SortSlide | StorySlide;
+  | MatchSlide | CountUpSlide | BePickSlide | BuildSlide | FactCheckSlide | WriteSlide | HuntSlide | ShadowSlide | TeachSlide | ModelSlide | FindWrongSlide | BorderSlide | MemorySlide | NumWallSlide | PhoneChatSlide | FadeSlide | CardSlide | SaySlide | VaultSlide | RhythmSlide | DuelSlide | PassageSlide | ForgeSlide | StreakSlide | ReadQSlide | BossSlide | WordleSlide | RpgSlide | QuizSlide | TripleSlide | GlitchSlide | VerbDrawSlide | ClozeSlide | WrapSlide | BlendSlide | HearPickSlide | ReaderSlide | RuleSlide | ExploreSlide | SortSlide | StorySlide;
 
 export interface DeckScript {
   lessonId: string;
@@ -277,7 +279,7 @@ export interface DeckScript {
 export type Vars = Record<string, string>;
 export interface Stats { right: number; wrong: number; hints: number; skipped: string[]; /** times the student tapped "Say it" after saying an answer aloud (speaking practice, docs/academy-speaking-practice.md) */ spoken?: number }
 /** Slide kinds where the student can say the answer aloud and tap "Say it" (owner 2026-10-14: speaking practice in every lesson). */
-export const SAY_IT_KINDS: readonly string[] = ['teach', 'hearpick', 'blend', 'reader', 'match', 'memory', 'build', 'spell', 'convo', 'duel', 'rhythm', 'passage', 'forge', 'streak', 'triple'];
+export const SAY_IT_KINDS: readonly string[] = ['teach', 'hearpick', 'blend', 'reader', 'match', 'memory', 'build', 'spell', 'convo', 'duel', 'rhythm', 'passage', 'forge', 'streak', 'triple', 'verbdraw'];
 
 /** The parts of a lesson: its run of show, with the lesson's own minutes when it sets `partMinutes`. */
 export function partsFor(script: Pick<DeckScript, 'shape' | 'partMinutes'>): { name: string; goal: string; minutes: number }[] {

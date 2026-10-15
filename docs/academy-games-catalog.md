@@ -282,3 +282,4 @@ Everything else (dictation, shadowing with private recording, Wordle/Spelling Be
 ## Added 2026-10-15
 - **Glitch Hunt** (error correction as a bug hunt) — B1+ grammar accuracy: find the wrong line in a chat, choose the repair, hear the reason. Source: sentence-correction tasks (LearnEnglishFeelGood, Twee). Built as slide kind `glitch`.
 - **Two Truths and a Lie** (speaking) — A2+: three sentences, one is false; the listener asks follow-up questions and guesses. Source: British Council "Find someone who", Twinkl "Liar Liar". Built as a `say` page.
+- **Verb Draw** (B1+, grammar + speaking; owner request 2026-10-15) — phase 1 match the trio forms (base, past simple, past participle); phase 2 draw a verb card and start a conversation with it (present perfect question, then a past-simple follow-up). Source mechanics: Triple Match (match-3), "Never have I ever" speaking cards, card-draw prompts. Built as slide kind `verbdraw` (optional, end of the Release).

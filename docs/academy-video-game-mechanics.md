@@ -43,3 +43,4 @@ Sources for the retro rows: [Adapting arcade games for learning, CHI 2013](https
 ## Added 2026-10-15 (B1 S1 L1)
 - **Spot the glitch / bug hunt** (*Among Us*-style "find the odd one", debugging games) → *Glitch Hunt*: a chat with one tense glitch; tap it, repair it, hear the reason.
 - **Bluffing / deduction party game** (*Two Truths and a Lie*, social-deduction games) → the teacher guesses which of the student's three "have" sentences is the lie (speaking).
+- **Collectible card draw + talk-show host** (*Hearthstone*-style draw, late-night interview shows) → *Verb Draw*: match the verb trios (match-3), then draw a verb card and open a conversation with it (participle for the question, say it, past-simple follow-up, the other character answers); a conversation streak counts first-try chats.

@@ -450,3 +450,24 @@
 
 /* a follower who has not tapped yet: one tap turns the recorded voices (and the talking mouths) on */
 .ad-root[data-theme='scene'] .ad-sound-note { position: absolute; z-index: 30; inset-inline-start: 24px; bottom: 76px; padding: 8px 16px; border-radius: 999px; border: 2px solid #fff; background: var(--violet); color: #fff; font: inherit; font-weight: 800; cursor: pointer; box-shadow: var(--shadow-s); animation: sc-pop 0.4s both; }
+
+/* Verb Draw */
+.ad-root[data-theme='scene'] .ad-vd { display: grid; gap: 12px; justify-items: center; text-align: center; }
+.ad-root[data-theme='scene'] .ad-vd-hud { display: flex; gap: 22px; font-weight: 800; color: var(--violet-d); }
+.ad-root[data-theme='scene'] .ad-vd-hud b { color: var(--violet); }
+.ad-root[data-theme='scene'] .ad-vd-streak[data-hot='true'] b { color: #e0605a; animation: sc-pop 0.4s both; }
+.ad-root[data-theme='scene'] .ad-vd-deck { position: relative; width: 200px; height: 130px; border: 0; background: none; cursor: pointer; perspective: 600px; }
+.ad-root[data-theme='scene'] .ad-vd-back { position: absolute; inset: 0; display: grid; place-items: center; border-radius: 18px; font-size: 3rem; font-weight: 900; color: #fff; background: linear-gradient(135deg, var(--violet), #5b8def); box-shadow: 6px 6px 0 rgba(90, 50, 190, 0.25), 12px 12px 0 rgba(90, 50, 190, 0.12); transition: transform 0.2s; }
+.ad-root[data-theme='scene'] .ad-vd-deck:hover .ad-vd-back { transform: translateY(-4px) rotate(-2deg); }
+.ad-root[data-theme='scene'] .ad-vd-draw { position: absolute; inset-inline: 0; bottom: -26px; font-weight: 800; color: var(--violet-d); }
+.ad-root[data-theme='scene'] .ad-vd-card { display: flex; gap: 14px; align-items: baseline; justify-content: center; padding: 14px 26px; border-radius: 20px; background: #fff; border: 3px solid var(--gold); box-shadow: var(--shadow-s); font-size: 1.6rem; animation: sc-flip 0.5s both; }
+.ad-root[data-theme='scene'] .ad-vd-card b { color: var(--teal-d); } .ad-root[data-theme='scene'] .ad-vd-card i { color: #c77718; font-style: normal; font-weight: 800; } .ad-root[data-theme='scene'] .ad-vd-card em { color: var(--violet); font-style: normal; font-weight: 800; }
+.ad-root[data-theme='scene'] .ad-vd-q { margin: 0; font-weight: 700; color: var(--ink); max-width: 640px; }
+.ad-root[data-theme='scene'] .ad-vd-opts { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+.ad-root[data-theme='scene'] .ad-vd-opt { padding: 10px 20px; border-radius: 16px; border: 2px solid #fff; background: #fff; color: var(--violet-d); font: inherit; font-weight: 800; cursor: pointer; box-shadow: 0 3px 0 rgba(90, 50, 190, 0.22); }
+.ad-root[data-theme='scene'] .ad-vd-opt:hover { background: var(--violet-soft); }
+.ad-root[data-theme='scene'] .ad-vd-opt[data-bad='true'] { animation: sc-shake 0.45s; border-color: #e0605a; }
+.ad-root[data-theme='scene'] .ad-vd-bubble { margin: 0; padding: 10px 18px; border-radius: 18px 18px 18px 6px; background: #d8f5e6; border: 2px solid #7be0a8; font-weight: 700; color: var(--ink); animation: sc-pop 0.4s both; }
+.ad-root[data-theme='scene'] .ad-vd-chats { margin: 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+.ad-root[data-theme='scene'] .ad-vd-chats li { padding: 6px 14px; border-radius: 99px; background: #fff; border: 2px solid var(--gold); font-weight: 700; color: var(--ink); }
+@keyframes sc-flip { from { transform: rotateY(90deg) scale(0.8); opacity: 0; } to { transform: none; opacity: 1; } }
