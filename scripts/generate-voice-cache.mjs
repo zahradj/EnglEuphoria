@@ -54,6 +54,7 @@ import * as jungleScenes from '../src/content/playground-library/jungle-adventur
 import * as spaceScenes from '../src/content/playground-library/space-mission/scenes.ts';
 import * as foodScenes from '../src/content/playground-library/food-festival/scenes.ts';
 import * as monsterScenes from '../src/content/playground-library/monster-town/scenes.ts';
+import * as oceanScenes from '../src/content/playground-library/ocean/scenes.ts';
 import { surveyQuestion, surveyAnswer, surveyReport, CAFE_WRONG, CAFE_YES } from '../src/content/playground-library/welcome-town/scene-components/foodRules.ts';
 import { BUILDER_WRONG, builderHint } from '../src/content/playground-library/welcome-town/scene-components/monsterRules.ts';
 import { METER_ASK, METER_WRONG } from '../src/content/playground-library/welcome-town/scene-components/meterRules.ts';
@@ -965,6 +966,7 @@ const ENGINES = [
   { scenesModule: spaceScenes, extractors: WT_EXTRACTORS, resolveWho: (who) => wtScenes.VOICE_KEY[who] ?? who },
   { scenesModule: foodScenes, extractors: WT_EXTRACTORS, resolveWho: (who) => wtScenes.VOICE_KEY[who] ?? who },
   { scenesModule: monsterScenes, extractors: WT_EXTRACTORS, resolveWho: (who) => wtScenes.VOICE_KEY[who] ?? who },
+  { scenesModule: oceanScenes, extractors: WT_EXTRACTORS, resolveWho: (who) => wtScenes.VOICE_KEY[who] ?? who },
 ];
 
 /** Homework games: every line they can say, already as (voice, text). */

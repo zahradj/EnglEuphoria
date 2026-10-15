@@ -60,7 +60,7 @@ import type { ColorPlaySceneData } from '../ColorPlayScene';
 
 const W = '/welcome-town';
 
-export type CharKey = 'pip' | 'marigold' | 'mia' | 'bella' | 'willow' | 'leo' | 'coco' | 'wim' | 'catcat' | 'nova' | 'beep' | 'cilla' | 'pico' | 'bibi' | 'glob';
+export type CharKey = 'pip' | 'marigold' | 'mia' | 'bella' | 'willow' | 'leo' | 'coco' | 'wim' | 'catcat' | 'nova' | 'beep' | 'cilla' | 'pico' | 'bibi' | 'glob' | 'coral' | 'bub';
 
 /** Every one of these maps onto an audio.ts voice already built for that
  *  exact character (pip/mia/bella/willow/leo are the same characters as the
@@ -89,6 +89,9 @@ export const VOICE_KEY: Record<CharKey, 'pip' | 'mia' | 'bella' | 'willow' | 'le
   // Unit 5 (Monster Town): Bibi the Tiny Monster (a girl) and Professor Glob — teacher voice until they have their own.
   bibi: 'teacher',
   glob: 'teacher',
+  // Unit 6 (Ocean): Coral the Mermaid (a girl) and Bub the Octopus (a shy boy) — teacher voice until they have their own.
+  coral: 'teacher',
+  bub: 'teacher',
 };
 
 /** No `img` field — every character appears painted directly into a scene's
@@ -114,6 +117,8 @@ export const CAST: Record<CharKey, { name: string; emoji: string; color: string 
   pico: { name: 'Pico', emoji: '\u{1F42D}', color: '#94A3B8' },
   bibi: { name: 'Bibi', emoji: '\u{1F47E}', color: '#8B5CF6' },
   glob: { name: 'Professor Glob', emoji: '\u{1F9D0}', color: '#14B8A6' },
+  coral: { name: 'Coral', emoji: '\u{1F9DC}\u{200D}\u{2640}\u{FE0F}', color: '#0EA5E9' },
+  bub: { name: 'Bub', emoji: '\u{1F419}', color: '#8B5CF6' },
 };
 
 const bgWide = `${W}/scenes/bg-classroom-wide.png`;

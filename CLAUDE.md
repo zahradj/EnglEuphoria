@@ -123,6 +123,11 @@ Whenever the owner says "create a lesson" / "proceed with creating the lesson", 
 
 - **Don't dress male characters in girls' clothes.** Pip and Leo are boys: never a dress or a skirt on them — not in a lesson game, a homework level, a picture, a mock-up or a song line. Dress-up games give a boy no dress piece (it isn't on his rail); a dress is worn only by a girl (Mia, Bella, Willow) or shown as a thing (laundry, a shop). Lines to the child stay neutral (no "twirl in your dress"). `src/content/homework-quests/noDressForBoys.test.ts` fails otherwise.
 
+## Modest, covered characters (hard rule — owner, 2026-10-15)
+
+- "Make sure that the characters are covered. Don't put any unsuitable things, especially for these young ages. Be more reserved." Every character a child sees (stickers, story pages, game art, GIF frames, mock-ups) is **fully and modestly dressed**: shoulders, chest and tummy covered; no bikinis, crop tops, bare midriffs, swimsuits that show skin, or tight/revealing outfits. At the beach or in the sea, characters wear **long-sleeved swim shirts (rash guards) and knee-length swim shorts**; a mermaid wears a **long-sleeved, high-neck swim shirt that meets her tail** with no skin between. No kissing, no romance, nothing scary or violent, no bathroom/undressing scenes.
+- Put the line in every picture prompt ("modest, fully covered clothing for young children: shoulders, chest and tummy covered"), and look at every generated picture for it before it goes into a lesson; when in doubt, redraw. This applies to all hubs.
+
 ## Words → matching → a game (hard rule — owner, 2026-10-13)
 
 - **Every time new words are shown, a matching activity follows**: Pre-A1 = **listen and match** (`listen-match`, sounds only, no written words); A1 = **read and match** (`picture-match`). Then **another game** with the same words, so they stick. Blueprint §3f+.

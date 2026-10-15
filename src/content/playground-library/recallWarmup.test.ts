@@ -5,6 +5,7 @@ import { LESSON_A1U2L1_SCENES, LESSON_A1U2L2_SCENES, LESSON_A1U2L3_SCENES, LESSO
 import * as SPACE from './space-mission/scenes';
 import * as FOOD from './food-festival/scenes';
 import * as MONSTER from './monster-town/scenes';
+import * as OCEAN from './ocean/scenes';
 import type { RecallWarmupSceneData } from './RecallWarmupScene';
 
 // Owner's rule (2026-10-07, universal): every lesson after the first of its track opens
@@ -52,6 +53,7 @@ const lessons: [string, readonly AnyScene[]][] = [
   ['monster-rich-5-6', MONSTER.LESSON_A1U5L6_SCENES],
   ['monster-rich-5-7', MONSTER.LESSON_A1U5L7_SCENES],
   ['monster-rich-5-8', MONSTER.LESSON_A1U5L8_SCENES],
+  ['ocean-rich-6-1', OCEAN.LESSON_A1U6L1_SCENES],
 ];
 
 describe('Remember? warm-up', () => {

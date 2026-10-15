@@ -8,7 +8,7 @@ game twice in the unit**, **no story videos** (Canva story GIFs only after a sce
 gets the **aesthetic pass** in the Playground colours (`gameSkin.ts`), and after new words always comes **Read and
 Match**, then another game.
 
-**Status:** waiting for the owner's approval. Nothing is built.
+**Status:** approved (owner, 2026-10-15: "Go") — building.
 
 ## 1. Where we start
 
@@ -75,7 +75,7 @@ doing and where it lives.
 Pictures: Canva (owner rule), the Unit 1 cast + Biscuit + new cut-out stickers **Coral** (one per action: waving,
 swimming, pointing, laughing), **Bub** (hiding, swimming, eating, pointing, happy, scared), **shark, whale, turtle,
 starfish, crab, seahorse** each in 2 actions (swimming / eating / sleeping / hiding / walking as fits), shell, boat,
-chest. Clothes rule: Leo and Pip wear swim shorts, masks, rash vests — never a dress or skirt; Coral's tail is a tail.
+chest. Clothes rule (owner, 2026-10-15: "make sure the characters are covered"): everyone is modestly and fully covered — long-sleeved swim shirts (rash guards) and knee-length swim shorts at the beach, masks for diving; Coral wears a long-sleeved, high-neck teal swim shirt that meets her tail (no bare shoulders or tummy); boys never in a dress or skirt.
 ~35 % purple (purple coral, sea fans, a violet sunset), mixed with sea blues, teal, sand and green plants.
 
 ## 5. Lesson by lesson
@@ -205,4 +205,4 @@ cards · L7 show your medal and say what someone is doing.
 
 No paid video. Database rows unpublished until the branch is merged.
 
-**Approval:** waiting.
+**Approval:** owner, 2026-10-15: "Go"
