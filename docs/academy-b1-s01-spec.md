@@ -1,0 +1,139 @@
+# B1 Season 1 "Have You Ever...?" — Season plan and lesson 1 (Cold Open) plan (2026-10-15)
+
+Status: **draft for the owner's written approval.** Nothing (deck, pictures, audio, scenario) is made until this is approved (CLAUDE.md: a lesson plan comes before every lesson). The Season data is in `src/curriculum/academy/levels/b1.ts` (B1-S01) and the lesson blueprint is `ACADEMY_LESSON_BLUEPRINTS` id `B1-S01-E1`; this plan reads them and changes **none** of their objectives. Research and its limits: `docs/research/academy-b1-s01-research.md`. Template: `docs/academy-lesson-plan-template.md`.
+
+## 1. Season at a glance (from the roadmap)
+
+| | |
+|---|---|
+| Theme | Experiences and bucket lists |
+| Hook | Vee dares the group to complete a bucket list in one term. Who has already done the most? |
+| Cast | Vee (lead, drops the clue), Ava (asks the curious question), Theo and Mia in the profiles |
+| Structure (one) | present perfect: experience (*ever / never / been*), first met in E1, taught in E3 (task first, rule after) |
+| Functions | talking about life experiences · asking follow-up questions · showing interest and surprise |
+| Can-dos | talk about experiences I have had or never had · ask others about theirs and respond with interest |
+| Pronunciation | contracted *have* /əv/; *been* /bɪn/ (American) vs /biːn/; surprise intonation |
+| Mediation | relay the main points of a short article about an unusual experience |
+| Release | **My bucket list:** three things I have done and three I want to do |
+| Video-game mechanic (Season) | **achievement log / trophy case**: the bucket list is the log; every completed task unlocks a named trophy that stays on the board (new row in `docs/academy-video-game-mechanics.md`) |
+| Games planned (Season) | E1 Trophy Forge (loot and crafting) · E2 collocation builder · E3 grammar detective · E4 Two Truths and a Lie · E5 interview the expert · E7 boss round (Remix) · E8 the Release |
+
+## 2. Lesson 1 — "Have You Ever...? · Cold Open" (one-to-one, 60 minutes)
+
+### 2.1 The student's need (lesson-plan step 1)
+
+- **Who:** a 13–18 student at A2 (the roadmap's step before this Season is A2 Season 14) who asked, in the teacher's words, to **revise the past simple and the present perfect and the verb trios (base, past simple, past participle)**. Home language: **not yet given** (the teacher confirms; the plan covers ar, es, fr, tr, it).
+- **What they already know:** past simple of *be*, regular -ed and common irregular verbs in sentences (A2 Seasons 1–2); probably met the present perfect at school, so this is **activation and revision**, not a first meeting.
+- **What is hard:**
+  1. the past participle as its own form (*gone, seen, eaten, taken, flown*) and **been vs gone**;
+  2. choosing between past simple ("when") and present perfect ("up to now / experience") — the main error for the five home languages (Arabic: no equivalent, so the simple past replaces it; French and Italian: the compound past is their ordinary past, so *I have seen him yesterday*; Spanish: form transfers, stated times may over-extend; Turkish unverified);
+  3. the vowel in *been* (American /bɪn/).
+- **What they want:** the three forms and the two tenses sorted out, quickly, with a clear picture of which they already know.
+- **Comfort:** private rehearsal before speaking, "I need a minute", no visible timers, no public ranking, mistakes are the material (Mistake Bank).
+
+### 2.2 Objective, exit task, success criteria (built backwards)
+
+- **Objective (blueprint, unchanged):** *I can understand the main idea of a short text about experiences and bucket lists.* Primary skill listening; reading and vocabulary secondary; **12 new receptive items**, at most 14 (§2.7).
+- **For this student, added inside the same hour:** a **verb-trio check and first retrieval** (diagnostic, low stakes) and a noticing step that sorts "when" sentences from "up to now" sentences. The present perfect is **not taught as a rule** here (E3); the lesson activates it.
+- **Exit task:** (a) answer the gist question in your own words (this unlocks clue 1 of 8); (b) say the three forms of ten verbs; (c) predict who has done the most on the bucket-list board and say why.
+- **Success criteria** (five "I can …" lines the teacher marks in the lesson checklist):
+  1. I can say what the text is mainly about, in my own words.
+  2. I understood the six new words (6 of 6, at most one hint).
+  3. I can say the three forms of ten verbs (8 of 10, at most one hint).
+  4. I can tell a "when" sentence (past simple) from an "up to now" sentence (have + past participle) in 4 of 5 sentences from the text.
+  5. I can predict and give a reason, in one or two sentences.
+- **Mastery check:** ten mixed trio items at the end of the Energiser: 8 or more with at most one hint = "Nailed it"; 5–7 = "Almost"; fewer = "Needs more practice" (`checklist.ts`).
+
+### 2.3 New items (12 receptive) and the revision set
+
+| Kind | Items |
+|---|---|
+| 6 words / collocations (A2-safe, teen, unverified against the English Vocabulary Profile `[U]`) | bucket list · to dare (someone) · give it a go · once in a lifetime · tick it off · brave |
+| 6 past participles of verbs the student already knows in the past simple | been · gone · seen · eaten · taken · flown |
+| Revised, **not new** (trios already known or identical to the past simple) | do–did–done · make–made–made · write–wrote–written · win–won–won |
+
+Ten trios are worked in total: go–went–gone, be–was/were–been, see–saw–seen, eat–ate–eaten, take–took–taken, fly–flew–flown (new participles) and the four above (revised). The text input is at least 95 % known words (roadmap rule; checked when the text is written).
+
+### 2.4 Run of show (60 minutes; the blueprint's eight parts)
+
+| Min | Part | Teacher | Student | Resp. | Ladder step | Game / mechanic |
+|---|---|---|---|---|---|---|
+| 0–5 | **Check-in** | greets, shows today's mission and the five criteria | picks a feeling card; **Trio check**: privately sorts ten verbs "I know all three / I know two / New to me"; says one thing on their wish list | 12 | repeat | activate prior knowledge (the Pre-A1 idea at B1): the result is saved for the teacher and seeds Remember? |
+| 5–12 | **Remember?** | errors first (the student's own error list), then items due from A2-S14 and A2-S13 (`recallPlan`), feedback on every item | says 8–10 sentences about last weekend using past simple verbs (production first) | 10 | controlled | retrieval practice, spaced |
+| 12–22 | **The Drop** | plays Vee's voice note once, then the text with tappable words; models nothing yet | six word pages (picture, meaning, example, clue); **two memorising games** (Picture Match Memory, listen-and-match); reads the text again; **Spot the Lie** on three statements; **gist answer in own words** | 22 | repeat | catalogue 6, 44; gist unlocks clue 1 |
+| 22–32 | **Notice & Build** | states the **reminder** (three lines, below) and has the student say it back; prompts, does not tell | **Grammar Detective:** finds eight verbs in the text and sorts "when" / "up to now" (8); **Trophy Forge:** crafts six trios by placing base, past and participle tiles, then says each trio aloud (12) | 21 | controlled | catalogue 19; loot and crafting → each trio becomes a trophy on the board |
+| 32–36 | **Energiser** | calls the base form | **Trio streak:** says the other two forms; a streak counter, no timer, beats their own best; ends with the ten-item mastery check | 12 | guided | speedrun vs own best (no leaderboard) |
+| 36–48 | **Mission** | sets the task, gives a 60-second planning pause, listens, gives one thing done well and one to try | reads four short cards (Ava, Theo, Mia, Vee: things done and not done); **predicts who has done most and why** (1–2 sentences); Take 1, feedback, Take 2 | 8 | guided → free | quest log; dial chill / normal / push; task first (B1 method) |
+| 48–55 | **Release** | private first: the student hears their own recording before sharing | one-sentence reaction to the story (private recording, then shared if they choose); picks one thing from their own wish list for the Season's Release | 3 | free | spoken Release |
+| 55–60 | **Wrap** | shows the can-dos; unlocks clue 1 of 8; assigns the Daily 10 and a voice note | ticks the five can-dos honestly; sees the **trophy case** (the trophies earned today) | 5 | — | achievement log |
+
+**The reminder (≤ 3 lines, read aloud, the student repeats; revision, not new):**
+1. Every verb has three forms: base, past simple, past participle (*go, went, gone*).
+2. Past simple = when it happened (*yesterday, in 2022*).
+3. *have* + past participle = an experience up to now, no time (*I have been to Rome*).
+
+**Totals:** about **93 student responses** (target ≥ 80); **about 21 speaking minutes** (B1 target 20: `SPEAKING_TARGETS`); **five distinct speaking tasks** (past-simple sentences, trio sayings, trio streak, the prediction, the reaction); the ladder reaches **free** (Mission Take 2 and Release); student talk about 55–60 % (an estimate; the lesson clock measures the real time).
+
+### 2.5 Games and video-game mechanics (named, with what the student does in English)
+
+| Game or mechanic | Source | What the student does in English |
+|---|---|---|
+| Picture Match Memory, listen-and-match | catalogue 6 | matches the six new words with pictures and meanings |
+| Spot the Lie | catalogue 44 | hears three statements about the story and finds the false one |
+| Grammar Detective | catalogue 19 | finds the verbs, sorts "when" from "up to now" |
+| **Trophy Forge** (signature) | loot and crafting + achievement log | collects the three form-tiles of a verb, crafts the trio, says it, and the trio becomes a named trophy on the bucket-list board |
+| Trio streak | speedrun against your own best | says the other two forms in a row; no timer, no leaderboard |
+| Quest log + clue unlock | quest log | the gist answer unlocks clue 1 of 8 |
+| New in the lists | `docs/academy-games-catalog.md`: **Never Have I Ever** (E3 warm-up), **Verb Trio Memory**; `docs/academy-video-game-mechanics.md`: **achievement log / trophy case** | — |
+
+No game three in a row; at least five different games; the signature game is Trophy Forge. Never Have I Ever is held for E3, when the structure is taught.
+
+### 2.6 Traceability (every activity → objective or need)
+
+| Activity | Serves |
+|---|---|
+| Trio check | need: which trios the student already knows (activation); seeds Remember? |
+| Remember? | recall of A2-S14 / S13 and past-simple production (need: past simple secure before the contrast) |
+| Six word pages + two memory games | objective (understand the text); the 6 receptive words |
+| Text, Spot the Lie, gist | objective and criterion 1 (clue 1) |
+| Reminder, Grammar Detective | need: when vs up to now; criterion 4 |
+| Trophy Forge, Trio streak, mastery check | need: the three forms; criterion 3 |
+| Mission, Release | exit task (c); criterion 5; speaking to the *free* step |
+| Wrap, trophy case | can-do ticks, motivation (achievement log) |
+
+An activity that is not in this table is cut.
+
+### 2.7 Supports, comfort and assessment
+
+- **Supports:** first words of a frame only; home-language hint on request; natural audio speed (0.9× on request); teacher talk at most 30 % (blueprint).
+- **Comfort:** the Trio check and the Release are private first; no visible timers; "I need a minute"; the dial in the Mission; trophies are the student's own board, never ranked.
+- **Evidence for the report:** the checklist marks (five criteria), the speaking step reached, up to three recurring errors (the Mistake Bank), comfort.
+- **Daily 10 (spacing calendar days 1, 3, 7, 14, 30):** the 12 new items and the ten trios as "say the other two forms"; a **voice note** (three sentences about things you have done, no tense rule asked); next clue.
+- **Remember? next time:** from `recallPlan` plus the error list; the trios return after 1, 2, 4, 8 and 16 teaching lessons.
+
+### 2.8 Before building
+
+1. **Scenario first** (`docs/scenarios/academy-b1s01e1-bucket-list.md`, `story` plates, full-bleed, 16:9, Canva, about 25 % purple, cross-fade only): Vee's dare in three plates, Ava's curious question; owner approves it in writing.
+2. **Pictures needed** (Canva only, one at a time, owner sees each): bucket-list wall (main plate), three story plates, trophy-case plate; the six word-page pictures and four profile cards as cut-out stickers.
+3. **Audio:** recorded approved voices for the text (about 180–220 words), the word pages and the Mission cards; cost estimate at the bake audit; no browser voices.
+4. **Code:** reuse existing slide kinds (`teach`, `match`, `memory`, `sort`, `passage`-style reading page, `say`, `fade`, `build`); new: **Trophy Forge** (three-tile crafting with a trophy board) and the trio-streak counter. Tests read the blueprint `B1-S01-E1` and this plan's minute table.
+5. **Quality gate:** `academy-quality-gate` (12 checks) before it is called ready.
+
+## 3. This student: a suggested path (decision for the owner and the teacher)
+
+The roadmap teaches the present perfect in **B1 Season 1** (experience), **Season 3** (for / since) and **Season 4** (present perfect vs past simple). The student's request is closest to **Season 1 lesson 3 (Pattern Lab)** and **Season 4 lessons 3 and 5 (the contrast)**. Option A: run Season 1 in order (E1, E3 first, then E4–E5 for speaking). Option B: E1 as the diagnostic, then jump to Season 4 E3 and E5 for the contrast. Recommendation: **A for E1 and E3, then decide from the E1 mastery result.**
+
+## 4. Open questions for the owner
+
+1. Approve this plan as written (lesson 1)? One word is enough.
+2. The student's home language (to choose the L1 hints and the pronunciation focus).
+3. Path A or B above (can wait until after lesson 1).
+4. Approve the two list additions (Never Have I Ever, Verb Trio Memory) and the new mechanic (achievement log / trophy case)?
+
+## 5. Unverified, stated plainly
+
+- The English Grammar Profile / GSE wording for this structure was **not found**; the placement rests on the roadmap's own CEFR-J cross-check and Cambridge Grammar.
+- Grouping verbs by pattern is practice, not a proven method (no controlled study found).
+- French, Italian and Turkish errors rest on a transfer chart, not a study.
+- The 12 vocabulary and participle items are not checked against the English Vocabulary Profile `[U]`.
+- Time estimates (student talk 55–60 %, minutes per part) are targets until the lesson clock has measured a real session.

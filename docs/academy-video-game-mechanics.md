@@ -25,5 +25,8 @@ Owner rule 2026-10-14: every Academy unit (Season) and lesson names at least one
 | Whack-a-word | Whack-a-mole | Taps only the sound or word heard | sound discrimination | Med |
 | Sequence memory | Simon | Repeats a growing sequence of sounds/words | listening, pronunciation, memory | Low |
 | Board quest | Snakes and Ladders / party board | Answers to climb, co-op | any review | Low |
+| Achievement log / trophy case | RPG / platform achievements | Completes language tasks; each one unlocks a named trophy that stays on the student's own board (the Season's bucket list is the log); never ranked, never public | motivation, portfolio, any Season with a list or a collection | Low |
+
+Research 2026-10-15 (B1 Season 1): achievement-type features (badges, points, levels, tasks) were linked to inspiration and drive in a 2023 survey of language-app users and to higher motivation and retention in a 10-week experiment ([INTI journal](https://iuojs.intimal.edu.my/index.php/intijournal/article/view/581), search summary only; small studies, nothing on teens specifically).
 
 Sources for the retro rows: [Adapting arcade games for learning, CHI 2013](https://people.csail.mit.edu/ccai/website/publications/Cai_Adapting.pdf) (Tetris and Pac-Man vocabulary drills; seen in a search result, not read in full) and general knowledge [K]. See also games 149-168 in `docs/academy-games-catalog.md` section 13.

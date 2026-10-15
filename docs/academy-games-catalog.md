@@ -1,4 +1,4 @@
-# Academy games & activities catalogue — 168 entries, one-to-one, ages 13–18, A1–B2
+# Academy games & activities catalogue — 171 entries, one-to-one, ages 13–18, A1–B2
 
 Companion to `docs/academy-lesson-system.md` (§5 says how to choose from this list per segment of the 60-minute Live Session). Owner rules that apply to every entry: no browser TTS (recorded voices only), no public leaderboards, comfort first, mechanics borrowed never content, Variety Rule (no more than 2 of the same kind in a row).
 
@@ -232,6 +232,9 @@ Research 2026-10-14 (search summaries only; pages not fully read): [eslactive.co
 | 166 | Rhythm Lane | D | Taps stressed syllables or sounds in time with a beat | P,L | Pre-A1-B2 | Slow tempo by default | Med | Rhythm games [K] |
 | 167 | Spot the Sound | D | Finds all pictures that start with a given sound in a busy scene | L,V,P | Pre-A1-A2 | Scene calmed (CalmBg); own-best | Low | I Spy [K] |
 | 168 | Pairs Bingo (minimal pairs) | D | Hears one of two near-words (in/an) and marks the right one | L,P | Pre-A1-B1 | Teacher co-op | Low | Bingo + minimal pairs [K] |
+| 169 | Never Have I Ever (present perfect) | C/D | Says "I have never ___" about true things; the teacher says whether they have; the student keeps a score against their own best | S,G | A2-B2 | No rival: own-best score; the student can pass any prompt; teacher plays too | Low | ESL warm-ups: [Teach-This](https://www.teach-this.com/grammar/present-perfect-ever), [ESL Active](https://eslactive.com/?p=8558) (summaries only) [S] |
+| 170 | Verb Trio Memory | D | Flips or builds cards showing the base form, the past simple and the past participle of a verb; says the missing forms; earns the pair by saying a sentence | V,G,S | A2-B1 | The cards are split in two, then the past halves are hidden and recalled; teacher says the base form, student gives the rest | Low | [Twinkl irregular verbs card game](https://www.twinkl.com/resource/tefl-esl-irregular-verbs-past-simple-and-past-participle-card-game-t-esl-002), [ESLprintables memory game](https://eslprintables.com/printable.asp?id=262206) (summaries only) [S] |
+| 171 | Trophy Forge | D | Collects three form-tiles of a verb (base, past, participle), crafts the trio, says it aloud; each trio becomes a named trophy on the student's board | V,G,S | A2-B1 | Own board, never ranked; slips return to the Mistake Bank | Low | Our design: loot and crafting + achievement log (B1 S1 plan) [U] |
 
 ## Top 15 for shy teens
 1. Codenames Duet (co-op) 2. Connections 3. Escape Room with teacher as guide 4. Visual Novel Reader / Interactive Fiction 5. Wordle / Spelling Bee 6. Comic Strip Maker 7. Meme Maker / Caption This 8. Chat Message Sim 9. Opinion Line (slider, no voice pressure) 10. Photo Story-Talk 11. Boss Battle Review (co-op) 12. Card Trading Collection 13. Reverse Teacher (student is expert) 14. Shadowing with private recordings 15. Can-Do Self-Check and Exit Emoji (private).
