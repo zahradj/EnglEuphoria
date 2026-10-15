@@ -183,7 +183,6 @@ export const B1_S01_E1: DeckScript = {
         { type: 'gist', q: 'What is the main idea of Ava’s post?', options: ['You are brave when you do something even though you are afraid.', 'Everyone should learn to surf this term.', 'Ava has never been afraid of anything.', 'Bucket lists are only for grown-ups.'], answer: 'You are brave when you do something even though you are afraid.', why: 'Paragraph 3: “you are brave when you do it anyway”.' },
         { type: 'detail', q: 'What has Ava already done?', options: ['Flown across the world twice and eaten insects in Thailand.', 'Tried surfing and performed on a stage.', 'Written a bucket list with ten things.', 'Never left her country.'], answer: 'Flown across the world twice and eaten insects in Thailand.', why: 'Paragraph 2 lists what she has done.' },
         { type: 'inference', q: 'How did Ava probably feel when her cousin first dared her?', options: ['Unsure: she did not think a bucket list was for her.', 'Excited: she wrote the list at once.', 'Angry with her cousin.', 'Scared of flying.'], answer: 'Unsure: she did not think a bucket list was for her.', why: 'She laughed and thought they were only for grown-ups. The text does not say this directly: you work it out.' },
-        { type: 'word', q: 'What does “regret” mean in the last paragraph?', options: ['Feel sad about something you did or did not do.', 'Be afraid to try something new.', 'Forget something important.', 'Be proud of yourself.'], answer: 'Feel sad about something you did or did not do.', why: 'You regret the things you did not try: you feel sorry you missed them.' },
       ],
     },
     {
@@ -222,24 +221,28 @@ export const B1_S01_E1: DeckScript = {
       rounds: [
         { frame: 'I ___ to Italy three times in my life.', options: ['have been', 'went', 'was', 'have went'], answer: 'have been', why: 'In my life: no finished time, an experience up to now.' },
         { frame: 'We ___ pizza in Naples last summer.', options: ['ate', 'have eaten', 'eaten', 'have ate'], answer: 'ate', why: 'Last summer is a finished time: past simple.' },
-        { frame: 'She ___ never tried surfing.', options: ['has', 'have', 'did', 'is'], answer: 'has', why: 'She takes has: has never tried.' },
         { frame: 'Have you ever ___ spicy noodles?', options: ['eaten', 'ate', 'eat', 'eated'], answer: 'eaten', why: 'After have you ever we need the past participle: eaten.' },
       ],
       hints: ['Look for a time word: last summer is finished; in my life and ever are not.'],
     },
     {
-      id: 'forge', kind: 'forge', part: 3, bg: CASE, actors: [who('Vee', 'right')], trains: [3],
+      id: 'forge', kind: 'forge', part: 3, optional: true, bg: CASE, actors: [who('Vee', 'right')], trains: [3],
       prompt: 'Trophy Forge! Forge the three forms of each verb, in order. Then say them.',
       rounds: [TRIOS[0], TRIOS[5]].map((t) => ({ forms: t })),
       hints: ['Base form first, then past simple, then past participle.'],
     },
     {
+      id: 'triple-1', kind: 'triple', part: 3, bg: DETECTIVE, actors: [who('Mia', 'right')], trains: [3],
+      prompt: 'Triple Match! Pick one tile in each column that belong to the same verb. Build combos!',
+      verbs: [TRIOS[0], TRIOS[1], TRIOS[2], TRIOS[3], TRIOS[4]],
+      hints: ['Think: base, past simple, past participle. go, went, gone.'],
+    },
+    {
       id: 'write-forms', kind: 'write', part: 3, bg: CLASSROOM, actors: [who('Theo', 'right')], trains: [4],
-      prompt: 'Your turn to use the rule. Write a question, an answer and a follow-up.',
+      prompt: 'Your turn to use the rule. Write a question with ever, and an answer with never.',
       rows: [
         { label: 'Ask a friend about travel (ever + be).', frame: 'Have you ever …?', accept: ['^have you ever been (to|in) .+'], hint: 'Have you ever + been to + a place.', sample: 'Have you ever been to Japan?' },
         { label: 'Answer for yourself with never (eat).', frame: 'I have never …', accept: ["^i (have never|haven't ever|have not ever) eaten .+", "^i've never eaten .+"], hint: 'I have never + eaten + something.', sample: 'I have never eaten octopus.' },
-        { label: 'Ask a follow-up about the past (when / where / what).', frame: 'When did you …?', accept: ['^(when|where|what|who|why|how) did (you|he|she|they) \\w+'], hint: 'The follow-up is a finished time: Where did you go?', sample: 'Where did you go?' },
       ],
     },
     {
@@ -250,6 +253,12 @@ export const B1_S01_E1: DeckScript = {
     },
 
     // ---------- 4 · Energiser: the trio streak (harder verbs included) ----------
+    {
+      id: 'triple-2', kind: 'triple', part: 4, optional: true, bg: LOBBY, actors: [who('Theo', 'right')], trains: [3],
+      prompt: 'Triple Match, hard mode! Harder verbs: match the three forms.',
+      verbs: [HARD[0], HARD[1], HARD[2], HARD[3], REVISED[2]],
+      hints: ['Vowel changes: drive, drove, driven.'],
+    },
     {
       id: 'wordle', kind: 'wordle', part: 4, bg: LOBBY, actors: [who('Theo', 'right')], trains: [3],
       prompt: 'Participle Wordle! Guess the past participle in six tries.',

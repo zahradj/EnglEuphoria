@@ -277,3 +277,4 @@ Everything else (dictation, shadowing with private recording, Wordle/Spelling Be
 - **Break the Clock** (boss fight: hit points, three shields, the round repeats with the reason) — choose between two tenses or forms.
 - **Participle Wordle** (six tries, green / gold / grey, on-screen keyboard) — spell the past participle.
 - **Rapport** (dialogue RPG: pick the natural reply, a Rapport meter rises, the character answers) — realistic exchanges with follow-up questions.
+- **Triple Match** (match-3: one tile in each of three columns, combo for first-try triples, trio spoken) — group related forms (base, past, participle; also noun-verb-adjective families).

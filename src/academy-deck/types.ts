@@ -233,11 +233,13 @@ export interface WordleSlide extends SlideBase { kind: 'wordle'; prompt: string;
 export interface RpgSlide extends SlideBase { kind: 'rpg'; prompt: string; npc: CastName; goal: number; scenes: { say: string; options: { text: string; score: 0 | 1 | 2; reply: string; note: string }[] }[] }
 /** Hot Seat (video-game mechanic: quiz-show ladder with lifelines). Climb a ladder of questions; two lifelines (50:50 and Ask a friend, a hint) can each be used once; a wrong answer only greys that option. Done at the top. */
 export interface QuizSlide extends SlideBase { kind: 'quiz'; prompt: string; friend: CastName; questions: { q: string; options: string[]; answer: string; why: string; hint: string }[] }
+/** Triple Match (B1 S1, video-game mechanic: match-3). Three columns (base, past simple, past participle) of shuffled tiles; pick one tile in each column; when the three belong to the same verb they lock into a card with a pop, the trio is spoken, and a combo counter rises with each first-try triple. A wrong triple shakes and clears the picks (nothing is lost). Done when every verb is matched. */
+export interface TripleSlide extends SlideBase { kind: 'triple'; prompt: string; verbs: [string, string, string][] }
 export interface WrapSlide extends SlideBase { kind: 'wrap'; heading: string; ticks: string[]; homework: string; clue: string }
 
 export type Slide =
   | TitleSlide | BriefSlide | BadgeSlide | DialSlide | LaneSlide | WhoSaidSlide | LockersSlide | NumTrainSlide | PadlockSlide | ConvoSlide | SpellSlide
-  | MatchSlide | CountUpSlide | BePickSlide | BuildSlide | FactCheckSlide | WriteSlide | HuntSlide | ShadowSlide | TeachSlide | ModelSlide | FindWrongSlide | BorderSlide | MemorySlide | NumWallSlide | PhoneChatSlide | FadeSlide | CardSlide | SaySlide | VaultSlide | RhythmSlide | DuelSlide | PassageSlide | ForgeSlide | StreakSlide | ReadQSlide | BossSlide | WordleSlide | RpgSlide | QuizSlide | WrapSlide | BlendSlide | HearPickSlide | ReaderSlide | RuleSlide | ExploreSlide | SortSlide | StorySlide;
+  | MatchSlide | CountUpSlide | BePickSlide | BuildSlide | FactCheckSlide | WriteSlide | HuntSlide | ShadowSlide | TeachSlide | ModelSlide | FindWrongSlide | BorderSlide | MemorySlide | NumWallSlide | PhoneChatSlide | FadeSlide | CardSlide | SaySlide | VaultSlide | RhythmSlide | DuelSlide | PassageSlide | ForgeSlide | StreakSlide | ReadQSlide | BossSlide | WordleSlide | RpgSlide | QuizSlide | TripleSlide | WrapSlide | BlendSlide | HearPickSlide | ReaderSlide | RuleSlide | ExploreSlide | SortSlide | StorySlide;
 
 export interface DeckScript {
   lessonId: string;
@@ -269,7 +271,7 @@ export interface DeckScript {
 export type Vars = Record<string, string>;
 export interface Stats { right: number; wrong: number; hints: number; skipped: string[]; /** times the student tapped "Say it" after saying an answer aloud (speaking practice, docs/academy-speaking-practice.md) */ spoken?: number }
 /** Slide kinds where the student can say the answer aloud and tap "Say it" (owner 2026-10-14: speaking practice in every lesson). */
-export const SAY_IT_KINDS: readonly string[] = ['teach', 'hearpick', 'blend', 'reader', 'match', 'memory', 'build', 'spell', 'convo', 'duel', 'rhythm', 'passage', 'forge', 'streak'];
+export const SAY_IT_KINDS: readonly string[] = ['teach', 'hearpick', 'blend', 'reader', 'match', 'memory', 'build', 'spell', 'convo', 'duel', 'rhythm', 'passage', 'forge', 'streak', 'triple'];
 
 /** The parts of a lesson: its run of show, with the lesson's own minutes when it sets `partMinutes`. */
 export function partsFor(script: Pick<DeckScript, 'shape' | 'partMinutes'>): { name: string; goal: string; minutes: number }[] {

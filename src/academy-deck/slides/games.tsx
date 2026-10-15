@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { shuffled, useDeck } from '../ctx';
-import type { BossSlide, QuizSlide, RpgSlide, WordleSlide } from '../types';
+import type { BossSlide, QuizSlide, RpgSlide, TripleSlide, WordleSlide } from '../types';
 import { Feedback, NOT_YET, Panel } from './shared';
 
 /* Video-game mechanics for the B1 lessons. Each is a small loop with a clear goal and a clear reward; none can lose the student's progress (a miss costs a shield, a grey option, a retry). */
@@ -249,6 +249,71 @@ export function QuizView({ slide }: { slide: QuizSlide }) {
           {bad.length > 0 && !solved && <Feedback kind="try">{NOT_YET} Read the question again.</Feedback>}
           {solved && <><Feedback kind="ok">{q.why}</Feedback><div className="ad-row" style={{ justifyContent: 'center' }}><button type="button" className="ad-btn ad-btn-primary" onClick={next}>{i + 1 === total ? 'To the top ▸' : 'Next question ▸'}</button></div></>}
         </div>
+      </div>
+    </Panel>
+  );
+}
+
+const COLS = ['Base', 'Past simple', 'Past participle'] as const;
+
+/** Triple Match (match-3): pick one tile in each column; the right three lock into a card and are spoken; combos for first-try triples. */
+export function TripleView({ slide }: { slide: TripleSlide }) {
+  const { right, wrong, done, seed, speak } = useDeck();
+  const lead = slide.actors?.[0]?.who ?? 'Vee';
+  const n = slide.verbs.length;
+  const cols = useMemo(() => [0, 1, 2].map((c) => shuffled(slide.verbs.map((_, i) => i), seed + c * 31 + 5)), [slide.verbs, seed]);
+  const [pick, setPick] = useState<(number | null)[]>([null, null, null]);
+  const [done3, setDone3] = useState<number[]>([]);
+  const [bad, setBad] = useState(false);
+  const [combo, setCombo] = useState(0);
+  const [best, setBest] = useState(0);
+  const [slip, setSlip] = useState(false);
+  const [just, setJust] = useState<number | null>(null);
+  const finished = done3.length === n;
+  useEffect(() => { if (finished) done(); }, [finished, done]);
+  const choose = (c: number, v: number) => {
+    if (done3.includes(v) || bad) return;
+    const next = pick.map((x, k) => (k === c ? (x === v ? null : v) : x));
+    setPick(next);
+    if (next.every((x) => x !== null)) {
+      if (next[0] === next[1] && next[1] === next[2]) {
+        const v0 = next[0] as number;
+        setDone3((d) => [...d, v0]); setJust(v0); setPick([null, null, null]);
+        if (!slip) { right(); const cc = combo + 1; setCombo(cc); setBest(Math.max(best, cc)); } else setCombo(0);
+        setSlip(false);
+        const t = slide.verbs[v0]; void speak(lead, `${t[0]}, ${t[1]}, ${t[2]}.`);
+        window.setTimeout(() => setJust(null), 900);
+      } else {
+        wrong(); setBad(true); setSlip(true); setCombo(0);
+        window.setTimeout(() => { setBad(false); setPick([null, null, null]); }, 520);
+      }
+    }
+  };
+  return (
+    <Panel title={slide.prompt} wide variant="glass">
+      <div className="ad-triple">
+        <div className="ad-triple-hud" role="status" aria-label={`Matched ${done3.length} of ${n}. Combo ${combo}`}>
+          <span>Matched <b>{done3.length}/{n}</b></span>
+          <span className="ad-triple-combo" data-hot={combo >= 2 || undefined}>Combo <b>×{combo}</b></span>
+          <span>Best <b>×{best}</b></span>
+        </div>
+        <div className="ad-triple-board" data-bad={bad || undefined}>
+          {[0, 1, 2].map((c) => (
+            <div key={c} className="ad-triple-col" role="group" aria-label={COLS[c]}>
+              <h3>{COLS[c]}</h3>
+              {cols[c].map((v) => {
+                const gone = done3.includes(v);
+                return <button key={v} type="button" className="ad-triple-tile" data-on={pick[c] === v || undefined} data-gone={gone || undefined} data-just={just === v || undefined} disabled={gone} onClick={() => choose(c, v)}>{slide.verbs[v][c]}</button>;
+              })}
+            </div>
+          ))}
+        </div>
+        <ol className="ad-triple-cards" aria-label="Matched cards">
+          {done3.map((v) => <li key={v}><b>{slide.verbs[v][0]}</b> · {slide.verbs[v][1]} · {slide.verbs[v][2]}</li>)}
+        </ol>
+        {bad && <Feedback kind="try">Not the same verb. Look again: base, past, participle.</Feedback>}
+        {finished && <Feedback kind="ok">All {n} triples matched! Best combo ×{best}.</Feedback>}
+        {!finished && <p className="ad-hint-line">Tap one tile in each column that belong together, like go · went · gone.</p>}
       </div>
     </Panel>
   );

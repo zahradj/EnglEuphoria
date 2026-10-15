@@ -38,3 +38,4 @@ Sources for the retro rows: [Adapting arcade games for learning, CHI 2013](https
 - **Word puzzle (Wordle)** → *Participle Wordle*.
 - **Quiz-show ladder with lifelines** → *Hot Seat*.
 - **Dialogue RPG with a relationship meter** → *Rapport*.
+- **Match-3 with combos** (*Candy Crush*-style) → *Triple Match*.
