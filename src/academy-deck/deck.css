@@ -1414,3 +1414,14 @@
 .ad-root[data-theme='night'] .ad-homework *, .ad-root[data-theme='night'] .ad-clue-card * { color: inherit; }
 .ad-root[data-theme='night'] .ad-sort-pool { gap: 10px; }
 .ad-root[data-theme='night'] .ad-sort-item { min-width: 132px; max-width: 220px; padding: 10px 14px; text-align: left; font-weight: 600; line-height: 1.3; }
+
+/* readq: reading questions (B1+): text and one question at a time */
+.ad-readq-text { max-height: 36vh; overflow: auto; margin: 4px auto 10px; padding: 14px 18px; max-width: 760px; border-radius: 16px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.16); text-align: start; }
+.ad-readq-text h3 { margin: 0 0 6px; font-size: 1.05rem; } .ad-readq-text h3 small { font-weight: 500; opacity: 0.75; }
+.ad-readq-text p { margin: 0 0 8px; font-size: 1rem; line-height: 1.5; }
+.ad-readq-q { display: grid; gap: 8px; max-width: 760px; margin: 0 auto; }
+.ad-readq-kind { font-size: 0.75rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.8; }
+.ad-readq-ask { margin: 0; font-size: 1.15rem; font-weight: 800; }
+.ad-root .ad-readq-opt { text-align: start; padding: 10px 14px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.25); background: rgba(255, 255, 255, 0.1); color: inherit; font: inherit; font-weight: 600; cursor: pointer; min-height: 44px; }
+.ad-root .ad-readq-opt[data-bad='true'] { animation: ad-shake 0.38s; border-color: #ff8a80; }
+.ad-root .ad-readq-opt[data-ok='true'] { background: rgba(80, 200, 140, 0.35); border-color: #7be0a8; }

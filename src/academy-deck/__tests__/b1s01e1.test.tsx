@@ -2,7 +2,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { Deck } from '../Deck';
-import { B1_S01_E1, CRITERIA, ITEMS, OBJECTIVE, TRIOS, REVISED, streakRound } from '../lessons/b1s01e1';
+import { B1_S01_E1, BLOG, CRITERIA, ITEMS, OBJECTIVE, TRIOS, REVISED, HARD, streakRound } from '../lessons/b1s01e1';
 import { ACADEMY_LESSON_BLUEPRINTS, SPEAKING_TARGETS } from '../../curriculum/academy';
 import { partsFor, type Slide } from '../types';
 import { slideLines } from '../spoken';
@@ -36,6 +36,9 @@ const minutes = (s: Slide): number => {
     case 'story': return 0.4 + s.beats.reduce((n, b) => n + b.lines.length, 0) * 0.4;
     case 'forge': return 0.5 + s.rounds.length * 0.7;
     case 'streak': return 0.5 + s.rounds.length * 0.35;
+    case 'write': return 0.8 + s.rows.length * 1;
+    case 'readq': return 0.4 + s.questions.length * 1;
+    case 'passage': return 3.5;
     default: return 1;
   }
 };
@@ -50,7 +53,7 @@ describe('B1-S01-E1: the blueprint and the approved plan', () => {
     expect(bp.newItems.kind).toBe('receptive');
     expect(partsFor(B1_S01_E1).map((p) => p.name)).toEqual(bp.runOfShow.map((r) => r.name));
     expect(bp.objective).toMatch(/main idea of a short text about experiences and bucket lists/);
-    expect(OBJECTIVE).toMatch(/main idea of the bucket-list story/);
+    expect(OBJECTIVE).toMatch(/main idea and the detail of a short blog post/);
   });
 
   it('keeps to five observable "I can" success criteria, and every criterion is trained on at least three slides', () => {
@@ -80,6 +83,8 @@ describe('B1-S01-E1: the blueprint and the approved plan', () => {
       switch (s.kind) {
         case 'hearpick': case 'build': return s.rounds.length;
         case 'forge': return s.rounds.length * 2;
+        case 'write': return s.rows.length;
+        case 'readq': return s.questions.length;
         case 'streak': return s.rounds.length * 2;
         case 'match': return s.pairs.length;
         case 'memory': return s.pairs.length * 2;
@@ -101,7 +106,8 @@ describe('B1-S01-E1: the blueprint and the approved plan', () => {
   it('modelling and the rule: the rule (3 lines) comes before the practice games of Notice & Build, the teacher models the Mission before Take 1, and the student teaches back in the Wrap', () => {
     const rule = slides.find((s) => s.kind === 'rule');
     expect(rule && rule.kind === 'rule' && rule.lines.length).toBe(3);
-    expect(at('rule-trio')).toBeLessThan(at('detective'));
+    expect(at('detective')).toBeLessThan(at('rule-trio')); // B1: notice first, then the rule
+    expect(at('rule-trio')).toBeLessThan(at('write-forms'));
     expect(at('rule-trio')).toBeLessThan(at('forge'));
     expect(at('model-task')).toBeLessThan(at('say-take1'));
     expect(at('say-take1')).toBeLessThan(at('say-take2'));
@@ -111,6 +117,23 @@ describe('B1-S01-E1: the blueprint and the approved plan', () => {
   it('after the six words come TWO different memorising games before anything new', () => {
     const i = at('teach-words');
     expect(slides.slice(i + 1, i + 3).map((s) => s.kind)).toEqual(['match', 'memory']);
+  });
+
+  it('FOUR SKILLS: the lesson listens (dialogue + questions), reads (a 150-220 word post + questions), writes (typed sentences) and speaks (5+ tasks), and the text is B1 length', () => {
+    const kinds = new Set(slides.map((s) => s.kind));
+    ['story', 'hearpick', 'passage', 'readq', 'write', 'say'].forEach((k) => expect(kinds.has(k as Slide['kind']), k).toBe(true));
+    const words = BLOG.join(' ').split(/\s+/).length;
+    expect(words, `${words} words`).toBeGreaterThanOrEqual(150);
+    expect(words).toBeLessThanOrEqual(220);
+    const rq = slides.find((s) => s.kind === 'readq');
+    if (rq?.kind !== 'readq') throw new Error('no readq');
+    expect(new Set(rq.questions.map((q) => q.type))).toEqual(new Set(['gist', 'detail', 'inference', 'word']));
+    rq.questions.forEach((q) => expect(q.options).toContain(q.answer));
+    const pass = slides.find((s) => s.kind === 'passage');
+    if (pass?.kind !== 'passage') throw new Error('no passage');
+    pass.keepFrom.forEach((w) => expect(BLOG.join(' ').toLowerCase()).toContain(w));
+    const writes = slides.filter((s) => s.kind === 'write');
+    expect(writes.length).toBeGreaterThanOrEqual(3);
   });
 
   it('SPEAKING: the lesson reaches the free step (Mission Take 2, Release) with at least five distinct spoken tasks', () => {
@@ -129,6 +152,7 @@ describe('B1-S01-E1: Trophy Forge and the trio streak', () => {
   it('the trios are real: six new participles and four revised, base / past simple / past participle in order', () => {
     expect(TRIOS.map((t) => t[2])).toEqual(['gone', 'been', 'seen', 'eaten', 'taken', 'flown']);
     expect(REVISED.map((t) => t[0])).toEqual(['do', 'make', 'write', 'win']);
+    expect(HARD.map((t) => t[2])).toEqual(['driven', 'chosen', 'begun', 'spoken']);
     expect(ITEMS).toEqual(expect.arrayContaining(TRIOS.map((t) => t[2])));
   });
 
@@ -141,19 +165,19 @@ describe('B1-S01-E1: Trophy Forge and the trio streak', () => {
     fireEvent.click(screen.getByRole('button', { name: 'gone' }));
     expect(screen.getByRole('button', { name: /Add the trophy/ })).toBeTruthy();
     fireEvent.click(screen.getByRole('button', { name: /Add the trophy/ }));
-    expect(screen.getByRole('list', { name: /Trophies: 1 of 6/ })).toBeTruthy();
+    expect(screen.getByRole('list', { name: /Trophies: 1 of 4/ })).toBeTruthy();
   });
 
   it('STREAK: a miss resets the streak and costs nothing else; the right past simple moves to the participle; wrong options are real forms', () => {
     open('streak');
-    const t = TRIOS[0]; // go, went, gone
+    const t = HARD[0]; // drive, drove, driven
     const r = streakRound(t, 0);
     expect(r.pastOptions).not.toContain(t[1]);
     expect(r.partOptions).not.toContain(t[2]);
     [...r.pastOptions, ...r.partOptions].forEach((o) => expect(/^[a-z]+$/.test(o)).toBe(true));
     fireEvent.click(screen.getByRole('button', { name: r.pastOptions[0] }));
     expect(screen.getByText(/Not yet/)).toBeTruthy();
-    fireEvent.click(screen.getByRole('button', { name: 'went' }));
+    fireEvent.click(screen.getByRole('button', { name: 'drove' }));
     expect(screen.getByRole('group', { name: 'Choose the past participle' })).toBeTruthy();
   });
 
@@ -164,5 +188,15 @@ describe('B1-S01-E1: Trophy Forge and the trio streak', () => {
     expect(s.save).toBe('trioKnown');
     expect(s.bins).toHaveLength(3);
     expect(s.items.map((i) => i.word)).toEqual(TRIOS.map((t) => t[0]));
+  });
+
+  it('READING QUESTIONS: a wrong sentence says Not yet, the right one shows why, and Next moves on', () => {
+    open('blog-q');
+    fireEvent.click(screen.getByRole('button', { name: 'Everyone should learn to surf this term.' }));
+    expect(screen.getByText(/Not yet/)).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: 'You are brave when you do something even though you are afraid.' }));
+    expect(screen.getByText(/do it anyway/)).toBeTruthy();
+    fireEvent.click(screen.getByRole('button', { name: /Next/ }));
+    expect(screen.getByText(/2 of 4/)).toBeTruthy();
   });
 });

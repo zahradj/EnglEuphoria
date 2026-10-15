@@ -150,3 +150,17 @@ Differences from the plan above, and why:
 - **Optional pages (dashed in the teacher's strip):** a warm-up verb listening and the feedback page before Take 2.
 
 Not done, waiting for the owner: the three story plates, the wall and trophy-case plates, the stickers, and the **recorded voices** (the audit prices the new lines at about $1.39; the voice list is deliberately not updated yet, so nothing is baked). Until then the pages use frames and gradients and are silent.
+
+
+## 7. Revision 2026-10-15 (owner: "make it more challenging; it does not look like B1; it is not an hour; use all four skills")
+
+Structure chosen (research 2026-10-15: [Cambridge Empower B1 unit pattern](https://assets.cambridge.org/97884903/61979/toc/9788490361979_toc.pdf) of reading/listening input then grammar then speaking and writing; [learnenglishfeelgood experiences plan](https://www.learnenglishfeelgood.com/lessonplans/i-present-perfect-experiences.pdf); [TeachingEnglish PPP vs task-based](https://www.teachingenglish.org.uk/comment/18480) argues for language that arises from a task rather than invented contexts; unverified: no source found for a single "best" B1 one-to-one shape, so this is a text-driven integrated-skills lesson, our adaptation): **speak (activate) → listen (dialogue + questions) → words → read (blog post, 5 paragraphs, ~170 words) + reading questions (gist, detail, inference, word in context) → notice in the text → rule → write (question, answer, follow-up) → harder-verb streak → argue a decision (speak, two takes) → write own list → speak it → teach-back**.
+
+| Skill | Where | Minutes (est.) |
+|---|---|---|
+| Speaking | warm-up talk, retell + opinion, Mission Take 1 and 2 (about a minute, with "on the other hand"), Release (about a minute) | about 10 of the 60, plus the dialogue shadowing in the Word pages |
+| Listening | dialogue on three plates, 3 listening questions (inference), model Mission | 8 |
+| Reading | Ava's blog post (word bank of B1 words), 4 reading questions, detective sort from the text | 9 |
+| Writing | 2 sentences (past simple, Remember?), question + answer + follow-up, 3 sentences about my own list (typed, checked for the tense) | 9 |
+
+Changes from the first build: 12 items unchanged; the single-word tiles and True/False are gone; the rule comes after the student has sorted sentences from the text (B1 method: task first); verbs grow to nine (four hard trios: drive, choose, begin, speak); the trio check is optional; reading questions are a new page type (`readq`). Voices: new lines need a bake (owner "go" first).

@@ -223,11 +223,13 @@ export interface PassageSlide extends SlideBase { kind: 'passage'; prompt: strin
 export interface ForgeSlide extends SlideBase { kind: 'forge'; prompt: string; rounds: { /** the three forms in order: base, past simple, past participle */ forms: [string, string, string] }[] }
 /** Trio streak (B1 S1): the guide says the base form; the student picks the past simple and then the past participle. A streak counts the verbs done right the first time; a miss resets the streak (no penalty) and the verb comes again; the student's own best streak is kept in vars.bestStreak and the score in vars[save]. No timer. */
 export interface StreakSlide extends SlideBase { kind: 'streak'; prompt: string; save?: string; rounds: { forms: [string, string, string]; /** wrong choices for the past simple and for the past participle */ pastOptions: string[]; partOptions: string[] }[] }
+/** Reading questions (B1+): the text stays on screen; the student answers detail, inference and vocabulary-in-context questions by choosing a sentence; a short reason explains each answer. No voice: the student reads. Done when every question is answered. */
+export interface ReadQSlide extends SlideBase { kind: 'readq'; prompt: string; title: string; from: CastName; paragraphs: string[]; questions: { type: 'gist' | 'detail' | 'inference' | 'word'; q: string; options: string[]; answer: string; why: string }[] }
 export interface WrapSlide extends SlideBase { kind: 'wrap'; heading: string; ticks: string[]; homework: string; clue: string }
 
 export type Slide =
   | TitleSlide | BriefSlide | BadgeSlide | DialSlide | LaneSlide | WhoSaidSlide | LockersSlide | NumTrainSlide | PadlockSlide | ConvoSlide | SpellSlide
-  | MatchSlide | CountUpSlide | BePickSlide | BuildSlide | FactCheckSlide | WriteSlide | HuntSlide | ShadowSlide | TeachSlide | ModelSlide | FindWrongSlide | BorderSlide | MemorySlide | NumWallSlide | PhoneChatSlide | FadeSlide | CardSlide | SaySlide | VaultSlide | RhythmSlide | DuelSlide | PassageSlide | ForgeSlide | StreakSlide | WrapSlide | BlendSlide | HearPickSlide | ReaderSlide | RuleSlide | ExploreSlide | SortSlide | StorySlide;
+  | MatchSlide | CountUpSlide | BePickSlide | BuildSlide | FactCheckSlide | WriteSlide | HuntSlide | ShadowSlide | TeachSlide | ModelSlide | FindWrongSlide | BorderSlide | MemorySlide | NumWallSlide | PhoneChatSlide | FadeSlide | CardSlide | SaySlide | VaultSlide | RhythmSlide | DuelSlide | PassageSlide | ForgeSlide | StreakSlide | ReadQSlide | WrapSlide | BlendSlide | HearPickSlide | ReaderSlide | RuleSlide | ExploreSlide | SortSlide | StorySlide;
 
 export interface DeckScript {
   lessonId: string;
