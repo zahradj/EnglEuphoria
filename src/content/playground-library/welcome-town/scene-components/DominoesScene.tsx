@@ -7,6 +7,7 @@ import { Confetti } from '../../unit1/fx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
 import { voiceOf } from './shared';
 import { CLAY_BUTTON, THICK_WORDS } from '../../unit1/scene-components/shared';
+import { SKIN } from '../../gameSkin';
 
 /* ---------- Sentence Dominoes (classic dominoes, modern design — docs/a1-activity-library.md §11) ----------
  * The chain on the table ends with a picture. The child's dominoes each have a SENTENCE on one half and a new picture
@@ -78,9 +79,9 @@ export function DominoesScene({ scene, onNext, onWin, onLose, sync }: { scene: D
           {done ? scene.doneLine : `🁫 ${scene.title}`}
         </span>
       </div>
-      {!done && <span className="absolute right-3 top-[14%] z-30 rounded-full bg-white/95 px-4 py-2 font-black text-amber-700 shadow-lg" style={{ fontSize: 'min(3vh, 2vw)' }}>{placed}/{total}</span>}
+      {!done && <span className={`absolute end-3 top-[14%] z-30 px-4 py-2 ${SKIN.pill}`} style={{ fontSize: 'min(3vh, 2vw)' }}>{placed}/{total}</span>}
       {/* the table with the chain */}
-      <div className="absolute inset-x-[3%] top-[20%] z-20 flex h-[34%] items-center justify-center gap-[0.6vw] rounded-[3vh] border-[0.6vh] border-amber-900/50 bg-gradient-to-b from-amber-700 to-amber-900 px-[1vw] shadow-2xl">
+      <div className={`absolute inset-x-[3%] top-[20%] z-20 flex h-[34%] items-center justify-center gap-[0.6vw] px-[1vw] ${SKIN.frame}`}>
         <div className="flex items-center rounded-[1.6vh] border-[0.4vh] border-white bg-[#fffaf0] shadow-lg" style={{ width: `calc(${tileW} / 2)`, height: tileH }}>
           <img src={scene.start.img} alt={scene.start.label} draggable={false} className="h-full w-full object-contain p-[0.8vh]" />
         </div>
@@ -89,7 +90,7 @@ export function DominoesScene({ scene, onNext, onWin, onLose, sync }: { scene: D
             <motion.div key={k} layout className={`flex items-center divide-x-[0.3vh] divide-dashed divide-neutral-300 rounded-[1.6vh] border-[0.4vh] bg-[#fffaf0] shadow-lg ${k === placed - 1 ? 'border-yellow-300' : 'border-white'}`}
               style={{ width: tileW, height: tileH }}
               initial={reduce ? false : { y: 160, opacity: 0, rotate: 8 }} animate={{ y: 0, opacity: 1, rotate: 0 }} transition={{ type: 'spring', stiffness: 260, damping: 18 }}>
-              <DominoHalf><span className="text-center font-black leading-tight text-[#3b2410]" style={{ fontSize: 'min(2.5vh, 1.7vw)' }}>{scene.steps[k].text}</span></DominoHalf>
+              <DominoHalf><span className="text-center font-black leading-tight text-[#3B1E66]" style={{ fontSize: 'min(2.5vh, 1.7vw)' }}>{scene.steps[k].text}</span></DominoHalf>
               <DominoHalf><img src={scene.steps[k].img} alt={scene.steps[k].label} draggable={false} className="h-full w-full object-contain" /></DominoHalf>
             </motion.div>
           ))}
@@ -102,7 +103,7 @@ export function DominoesScene({ scene, onNext, onWin, onLose, sync }: { scene: D
       {/* the open end, big, so the child knows which picture to describe */}
       {!done && end && (
         <div className="absolute bottom-[4%] left-[3%] z-20 flex flex-col items-center gap-[0.6vh]">
-          <span className="rounded-full bg-white/95 px-3 py-1 font-black text-amber-700 shadow" style={{ fontSize: 'min(2.4vh, 1.6vw)' }}>Match this! 👉</span>
+          <span className={`px-3 py-1 ${SKIN.pill}`} style={{ fontSize: 'min(2.4vh, 1.6vw)' }}>Match this! 👉</span>
           <div className="rounded-[2vh] border-[0.5vh] border-yellow-300 bg-[#fffaf0] p-[0.8vh] shadow-xl"><img src={end.img} alt={end.label} draggable={false} className="h-[min(22vh,14vw)] w-[min(22vh,14vw)] object-contain" /></div>
         </div>
       )}
@@ -112,9 +113,9 @@ export function DominoesScene({ scene, onNext, onWin, onLose, sync }: { scene: D
           {hand.map((i) => (
             <motion.button key={i} type="button" onClick={() => play(i)} whileTap={{ scale: 0.95 }} whileHover={reduce ? {} : { y: -4 }}
               animate={state.wrong === i ? { x: [0, -10, 10, -6, 0] } : {}}
-              className="flex items-center divide-x-[0.3vh] divide-dashed divide-neutral-300 rounded-[1.6vh] border-[0.4vh] border-white bg-[#fffaf0] shadow-[0_0.7vh_0_rgba(0,0,0,0.25)]"
+              className={`flex items-center divide-x-[0.3vh] divide-dashed divide-[#E5CFA6] ${SKIN.card}`}
               style={{ height: 'min(14vh, 9.4vw)' }}>
-              <DominoHalf><span className="text-center font-black leading-tight text-[#3b2410]" style={{ fontSize: 'min(2.7vh, 1.8vw)' }}>{scene.steps[i].text}</span></DominoHalf>
+              <DominoHalf><span className="text-center font-black leading-tight text-[#3B1E66]" style={{ fontSize: 'min(2.7vh, 1.8vw)' }}>{scene.steps[i].text}</span></DominoHalf>
               <DominoHalf><img src={scene.steps[i].img} alt="" draggable={false} className="h-full w-full object-contain" /></DominoHalf>
             </motion.button>
           ))}

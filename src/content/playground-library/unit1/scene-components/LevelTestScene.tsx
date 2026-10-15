@@ -183,13 +183,13 @@ export function LevelTestScene({ scene, onWin, onNext, sync, role, roomId }: {
               const show = picked >= 0;
               return (
                 <motion.button key={`${phase}-${state.i}-${k}`} type="button" aria-label={o.label} onClick={() => { void choose(k); }} disabled={picked >= 0}
-                  className={`relative flex flex-col items-center justify-center rounded-[3vh] border-[0.7vh] p-[1vh] shadow-[0_1vh_0_rgba(0,0,0,0.25),0_2vh_3vh_rgba(0,0,0,0.3)] ${show && isRight ? 'border-lime-200 bg-gradient-to-b from-lime-300 to-green-500' : show && k === picked ? 'border-rose-200 bg-gradient-to-b from-rose-300 to-rose-500' : 'border-sky-200 bg-gradient-to-b from-sky-300 to-indigo-500'}`}
+                  className={`relative flex flex-col items-center justify-center rounded-[3vh] border-[0.6vh] p-[1vh] ${show && isRight ? 'border-[#86EFAC] bg-gradient-to-b from-[#DCFCE7] to-[#86EFAC] shadow-[0_0.9vh_0_#16A34A,0_2vh_3vh_rgba(22,101,52,0.35)]' : show && k === picked ? 'border-[#FDA4AF] bg-gradient-to-b from-[#FFE4E6] to-[#FDA4AF] shadow-[0_0.9vh_0_#E11D48,0_2vh_3vh_rgba(159,18,57,0.3)]' : 'border-[#F3DDB3] bg-gradient-to-b from-[#FFFBF3] to-[#F7E8CF] shadow-[0_0.9vh_0_#D6AE78,0_2vh_3vh_rgba(46,16,101,0.3)]'}`}
                   style={{ width: optW, height: optW }}
                   initial={reduce ? false : { y: 60, opacity: 0 }}
                   animate={show && isRight && !reduce ? { y: [0, -16, 0], opacity: 1 } : { y: 0, opacity: show && !isRight && k !== picked ? 0.45 : 1 }}
                   transition={{ delay: show ? 0 : reduce ? 0 : 0.1 + k * 0.08, type: 'spring', stiffness: 160, damping: 14 }} whileTap={{ scale: 0.93 }}>
                   {o.img ? <img src={o.img} alt="" draggable={false} className="h-[80%] w-[80%] object-contain drop-shadow-[0_0.6vh_0.5vh_rgba(0,0,0,0.3)]" />
-                    : <span className="px-[0.6vw] text-center font-black text-white" style={{ ...THICK_WORDS, fontSize: (o.text ?? o.label).length > 4 ? 'min(6vh, 4vw)' : 'min(12vh, 8vw)', lineHeight: 1.05 }}>{o.text ?? o.label}</span>}
+                    : <span className="px-[0.6vw] text-center font-black text-[#3B1E66]" style={{ fontSize: (o.text ?? o.label).length > 4 ? 'min(6vh, 4vw)' : 'min(12vh, 8vw)', lineHeight: 1.05 }}>{o.text ?? o.label}</span>}
                 </motion.button>
               );
             })}

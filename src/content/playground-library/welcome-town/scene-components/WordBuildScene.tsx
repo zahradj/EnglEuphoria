@@ -5,6 +5,8 @@ import * as sfx from '../../unit1/sfx';
 import { Confetti } from '../../unit1/fx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
 import { MAGIC_GRADIENT, MagicLayer } from './shared';
+import { CalmBg } from '../../unit1/scene-components/gameFx';
+import { SKIN, PILL_FONT, jewel } from '../../gameSkin';
 
 /* ---------- Word build (blend taught sounds into a real word) ---------- */
 
@@ -54,24 +56,24 @@ export function WordBuildScene({ scene, onNext, onWin, onLose, sync }: { scene: 
 
   const letters = r.tiles ?? r.word.split('');
   return (
-    <div className="absolute inset-0 flex items-center justify-center bg-cover bg-center pb-24" style={{ backgroundImage: `url(${scene.bg})` }}>
-      {scene.magic ? <MagicLayer /> : <div className="absolute inset-0 bg-black/15" />}
-      <div className={`pointer-events-none absolute left-1/2 top-4 z-30 max-w-[92%] -translate-x-1/2 rounded-full px-4 py-2 text-center text-sm font-black shadow-xl backdrop-blur sm:text-base ${scene.magic ? 'text-white' : 'bg-white/95 text-orange-700'}`} style={scene.magic ? { background: MAGIC_GRADIENT } : undefined}>{scene.magic ? '🪄' : '🧩'} {scene.teacher} <span className="ml-1 opacity-70">({round + 1}/{total})</span></div>
-      <div className="relative z-10 flex w-full max-w-[560px] flex-col items-center gap-6 px-4">
-        <button onClick={() => void safeSpeak(r.word, 'pip')} className="grid h-44 w-44 place-items-center rounded-3xl p-2 transition active:scale-95 sm:h-52 sm:w-52" aria-label={`Hear ${r.word}`}>
+    <div className="absolute inset-0 flex items-center justify-center overflow-hidden bg-cover bg-center pb-24" style={scene.magic ? { backgroundImage: `url(${scene.bg})` } : undefined}>
+      {scene.magic ? <MagicLayer /> : <CalmBg img={scene.bg} />}
+      <div className={`pointer-events-none absolute left-1/2 top-4 z-30 max-w-[92%] -translate-x-1/2 px-5 py-2 text-center ${scene.magic ? 'rounded-full font-black text-white shadow-xl' : SKIN.pill}`} style={scene.magic ? { background: MAGIC_GRADIENT } : { fontSize: PILL_FONT }}>{scene.magic ? '🪄' : '🧩'} {scene.teacher} <span className="ml-1 opacity-70">({round + 1}/{total})</span></div>
+      <div className={`relative z-10 flex w-full max-w-[600px] flex-col items-center gap-5 px-6 py-5 ${scene.magic ? '' : SKIN.frame}`}>
+        <button onClick={() => void safeSpeak(r.word, 'pip')} className="grid h-40 w-40 place-items-center rounded-full bg-[radial-gradient(circle,#FFFBF3_55%,#F7E8CF_100%)] p-4 shadow-[0_0_0_0.5vh_#F2C46D,0_1.6vh_3vh_rgba(20,6,45,0.45)] transition active:scale-95 sm:h-48 sm:w-48" aria-label={`Hear ${r.word}`}>
           {r.img ? <img src={r.img} alt={r.word} className="h-full w-full object-contain drop-shadow-2xl" draggable={false} /> : <span className="text-7xl drop-shadow-2xl">{r.emoji}</span>}
         </button>
         <div className="flex items-end gap-2">
           {letters.map((ch, i) => {
             const isBlank = i === r.blankIndex;
             const display = isBlank ? (filled ?? '_') : ch;
-            return <div key={i} className={`grid place-items-center rounded-2xl border-4 font-black uppercase shadow-lg ${isBlank ? (filled ? 'border-green-400 bg-green-100 text-green-700' : 'border-dashed border-white bg-white/70 text-orange-700') : 'border-white bg-white/90 text-orange-700'}`} style={{ minWidth: 62, padding: '0 8px', height: 78, fontSize: 42 }}>{display}</div>;
+            return <div key={i} className={`grid place-items-center font-black uppercase ${isBlank ? (filled ? `rounded-[2vh] border-[0.35vh] ${SKIN.right}` : 'rounded-[2vh] border-[0.4vh] border-dashed border-[#F2C46D] bg-white/10 text-[#FDE68A]') : `${SKIN.card} ${SKIN.ink}`}`} style={{ minWidth: 62, padding: '0 8px', height: 78, fontSize: 42 }}>{display}</div>;
           })}
         </div>
-        <button onClick={() => void safeSpeak(r.word, 'pip')} className="rounded-full bg-white/95 px-6 py-2 text-sm font-black text-orange-700 shadow ring-2 ring-orange-200 active:scale-95">🔊 Listen</button>
+        <button onClick={() => void safeSpeak(r.word, 'pip')} className="rounded-full bg-[#EDE4FF] px-6 py-2 text-sm font-black text-[#3B1E66] shadow active:scale-95">🔊 Listen</button>
         <div className="flex flex-wrap justify-center gap-3">
           {r.choices.map((L, i) => (
-            <button key={L} onClick={() => tap(L)} disabled={!!filled} className={`grid h-20 w-20 place-items-center rounded-2xl border-4 border-white text-4xl font-black text-white shadow-2xl transition active:scale-95 disabled:opacity-40 sm:h-24 sm:w-24 sm:text-5xl ${wrong === L ? 'animate-[lep1-shake_0.4s_ease-out]' : ''}`} style={{ background: scene.magic ? (i % 2 === 0 ? 'linear-gradient(135deg,#6D28D9,#A855F7)' : 'linear-gradient(135deg,#B45309,#F59E0B)') : i % 2 === 0 ? 'linear-gradient(135deg,#FE6A2F,#FF8A4C)' : 'linear-gradient(135deg,#B85CD1,#D57BE6)' }}>{L}</button>
+            <button key={L} onClick={() => tap(L)} disabled={!!filled} className={`grid h-20 w-20 place-items-center rounded-[2vh] text-4xl font-black transition active:scale-95 disabled:opacity-40 sm:h-24 sm:w-24 sm:text-5xl ${scene.magic ? 'border-4 border-white text-white shadow-2xl' : jewel(i)} ${wrong === L ? 'animate-[lep1-shake_0.4s_ease-out]' : ''}`} style={scene.magic ? { background: i % 2 === 0 ? 'linear-gradient(135deg,#6D28D9,#A855F7)' : 'linear-gradient(135deg,#B45309,#F59E0B)' } : undefined}>{L}</button>
           ))}
         </div>
       </div>

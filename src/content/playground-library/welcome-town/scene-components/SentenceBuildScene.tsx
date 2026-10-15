@@ -4,6 +4,8 @@ import { safeSpeak, cueSpeak } from '../../unit1/audio';
 import * as sfx from '../../unit1/sfx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
 import { shuffledIndices } from './shared';
+import { CalmBg } from '../../unit1/scene-components/gameFx';
+import { SKIN, PILL_FONT, jewel } from '../../gameSkin';
 
 /* ---------- Sentence build (tap shuffled words back into order) ----------
  * Ported from unit1/SceneRenderer.tsx's identical scene kind — same shape,
@@ -73,17 +75,12 @@ export function SentenceBuildScene({ scene, onNext, onWin, onLose, sync }: { sce
   const side = scene.side;
   const vAlign = side === 'top' ? 'items-start pt-24' : 'items-center';
   const hAlign = side === 'right' ? 'justify-end' : side === 'left' ? 'justify-start' : 'justify-center';
-  const choiceGradients = [
-    'linear-gradient(135deg,#FE6A2F,#FF8A4C)', // orange
-    'linear-gradient(135deg,#4FA9E0,#6EC6F0)', // blue
-    'linear-gradient(135deg,#B85CD1,#D57BE6)', // purple
-    'linear-gradient(135deg,#4ADE80,#86EFAC)', // green
-  ];
   return (
-    <div className={`absolute inset-0 flex bg-cover bg-center pb-24 ${vAlign} ${hAlign}`} style={{ backgroundImage: `url(${scene.bg})` }}>
-      <div className="pointer-events-none absolute left-1/2 top-4 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-4 py-2 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-base">🔀 {scene.teacher} <span className="ml-1 opacity-70">({round + 1}/{total})</span></div>
+    <div className={`absolute inset-0 flex overflow-hidden pb-24 ${vAlign} ${hAlign}`}>
+      <CalmBg img={scene.bg} />
+      <div className={`pointer-events-none absolute left-1/2 top-4 z-30 max-w-[92%] -translate-x-1/2 px-5 py-2 text-center ${SKIN.pill}`} style={{ fontSize: PILL_FONT }}>🔀 {scene.teacher} <span className="ml-1 opacity-70">({round + 1}/{total})</span></div>
       <div className={`relative z-10 flex w-full flex-col items-center px-4 ${side && side !== 'top' ? 'max-w-[440px]' : 'max-w-[600px]'}`}>
-        <div className="w-full rounded-[2.25rem] bg-white/90 p-6 shadow-2xl ring-4 ring-white/60 backdrop-blur-sm">
+        <div className={`w-full p-6 ${SKIN.panel}`}>
           {(r.img || r.emoji || scene.listen) && (
             <div className="mb-4 flex items-center justify-center gap-3">
               {r.img ? (
@@ -104,12 +101,12 @@ export function SentenceBuildScene({ scene, onNext, onWin, onLose, sync }: { sce
               const isCurrent = i === filledCount;
               const color = isFilled ? (r.colors?.[i] ?? undefined) : undefined;
               const tone = isFilled
-                ? 'border-green-300 bg-green-50'
+                ? 'border-[#F3DDB3] bg-gradient-to-b from-[#FFFBF3] to-[#F7E8CF] shadow-[0_0.5vh_0_#D6AE78]'
                 : isCurrent
-                ? 'border-dashed border-amber-400 bg-amber-50'
-                : 'border-dashed border-neutral-300 bg-neutral-100';
+                ? 'border-dashed border-[#F2C46D] bg-[#FEF6E0]'
+                : 'border-dashed border-[#D8CCEF] bg-[#F5F0FF]';
               return (
-                <div key={i} className={`grid min-w-[2.5rem] place-items-center rounded-2xl border-4 px-3 font-black shadow-md transition-colors ${tone}`} style={{ height: 62, fontSize: 26, color: isFilled ? (color ?? '#C2410C') : 'transparent' }}>
+                <div key={i} className={`grid min-w-[2.5rem] place-items-center rounded-2xl border-4 px-3 font-black shadow-md transition-colors ${tone}`} style={{ height: 62, fontSize: 26, color: isFilled ? (color ?? '#3B1E66') : 'transparent' }}>
                   {isFilled ? w : ' '}
                 </div>
               );
@@ -120,7 +117,7 @@ export function SentenceBuildScene({ scene, onNext, onWin, onLose, sync }: { sce
               const used = wordIdx < filledCount;
               if (tiles[wordIdx] === undefined) return null;
               return (
-                <button key={wordIdx} onClick={() => tap(wordIdx)} disabled={used} className={`rounded-2xl border-4 border-white px-5 py-3 text-lg font-black text-white shadow-xl transition active:scale-95 disabled:opacity-0 disabled:pointer-events-none sm:text-xl ${wrongIdx === wordIdx ? 'animate-[lep1-shake_0.4s_ease-out]' : ''}`} style={{ background: choiceGradients[i % choiceGradients.length] }}>{tiles[wordIdx]}</button>
+                <button key={wordIdx} onClick={() => tap(wordIdx)} disabled={used} className={`rounded-[2vh] px-5 py-3 text-lg font-black transition active:scale-95 disabled:opacity-0 disabled:pointer-events-none sm:text-xl ${jewel(i)} ${wrongIdx === wordIdx ? 'animate-[lep1-shake_0.4s_ease-out]' : ''}`}>{tiles[wordIdx]}</button>
               );
             })}
           </div>

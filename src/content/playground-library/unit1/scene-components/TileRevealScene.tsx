@@ -6,6 +6,7 @@ import * as sfx from '../sfx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
 import { CLAY_BUTTON, CLAY_CARD, STICKER_TILTS, ThingArt, sayWithin } from './shared';
 import { Bursts, LivingBg, idleFloat, useBursts, useShake } from './gameFx';
+import { SKIN, PILL_FONT } from '../../gameSkin';
 
 /* ---------- Image Reveal ----------
  * Wordwall's "Image quiz" template: a hidden picture uncovers one tile at a
@@ -104,11 +105,11 @@ export function TileRevealScene({ scene, onWin, onLose, onNext, sync }: { scene:
   return (
     <motion.div className="absolute inset-0 overflow-hidden" animate={shakeCtl}>
       <LivingBg img={scene.bg} video={scene.bgVideo} />
-      <div className="pointer-events-none absolute left-1/2 top-3 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-base font-black text-orange-700 shadow-xl sm:text-xl">
+      <div className={`pointer-events-none absolute left-1/2 top-3 z-30 max-w-[92%] -translate-x-1/2 px-5 py-2 text-center ${SKIN.pill}`} style={{ fontSize: PILL_FONT }}>
         {solved ? `🎉 ${r.line}` : `👀 ${QUESTION}`}
-        <span className="ml-2 rounded-full bg-orange-100 px-2 py-0.5 text-sm text-orange-600">{round + 1}/{total}</span>
+        <span className="ml-2 rounded-full bg-[#F2C46D] px-2 py-0.5 text-sm text-[#3B1E66]">{round + 1}/{total}</span>
       </div>
-      <button onClick={() => cueSpeak(solved ? r.line : QUESTION, scene.who)} className="absolute right-3 top-3 z-30 rounded-full bg-white/95 px-3 py-2 text-sm font-black text-orange-700 shadow-lg active:scale-95">🔊 Again</button>
+      <button onClick={() => cueSpeak(solved ? r.line : QUESTION, scene.who)} className={`absolute end-3 top-3 z-30 px-3 py-2 text-sm active:scale-95 ${SKIN.pill}`}>🔊 Again</button>
 
       <div className="absolute inset-x-0 bottom-[6%] top-[13%] z-20 flex items-center justify-center gap-[4vw] px-4">
         {/* The hidden picture under its flipping tiles */}
@@ -121,8 +122,8 @@ export function TileRevealScene({ scene, onWin, onLose, onNext, sync }: { scene:
             <motion.div className="absolute inset-[-30%] -z-10 rounded-full" style={{ background: 'repeating-conic-gradient(from 0deg, rgba(253,224,71,0.55) 0deg 12deg, transparent 12deg 30deg)' }}
               initial={{ opacity: 0, scale: 0.6 }} animate={{ opacity: 1, scale: 1, rotate: 360 }} transition={{ rotate: { duration: 8, repeat: Infinity, ease: 'linear' }, opacity: { duration: 0.3 } }} />
           )}
-          <div className={`${CLAY_CARD} relative h-full w-full overflow-hidden p-3`}>
-            <div className="relative h-full w-full overflow-hidden rounded-[20px] bg-white">
+          <div className={`relative h-full w-full overflow-hidden p-3 ${SKIN.frame}`}>
+            <div className="relative h-full w-full overflow-hidden rounded-[20px] bg-gradient-to-b from-[#FFFBF3] to-[#F7E8CF]">
               <motion.img src={r.img} alt="" draggable={false} className="absolute inset-0 h-full w-full object-contain p-2" animate={solved ? { scale: [1, 1.12, 1], rotate: [0, -4, 4, 0] } : { scale: 1 }} transition={{ duration: 0.8 }} />
               <div className="absolute inset-0 grid" style={{ gridTemplateColumns: `repeat(${COLS}, 1fr)`, gridTemplateRows: `repeat(${ROWS}, 1fr)` }}>
                 {Array.from({ length: TILES }, (_, i) => (
@@ -131,8 +132,8 @@ export function TileRevealScene({ scene, onWin, onLose, onNext, sync }: { scene:
                       {!goneSet.has(i) && (
                         <motion.div
                           key={`${round}-${i}`}
-                          className="absolute inset-0 grid place-items-center border border-white/60 text-2xl font-black text-white/80"
-                          style={{ background: `linear-gradient(135deg, ${i % 2 ? '#FDBA74' : '#FB923C'}, ${i % 3 ? '#F472B6' : '#FB7185'})`, boxShadow: 'inset 0 3px 0 rgba(255,255,255,0.45), inset 0 -4px 0 rgba(0,0,0,0.12)' }}
+                          className="absolute inset-0 grid place-items-center border border-[#F2C46D]/45 text-2xl font-black text-[#FDE68A]/85"
+                          style={{ background: `linear-gradient(135deg, ${['#8B5CF6', '#7C3AED', '#14B8A6', '#6D28D9'][(i + Math.floor(i / COLS)) % 4]}, ${i % 3 ? '#4C1D95' : '#0F766E'})`, boxShadow: 'inset 0 3px 0 rgba(255,255,255,0.3), inset 0 -4px 0 rgba(0,0,0,0.18)' }}
                           initial={{ rotateY: 0 }}
                           exit={{ rotateY: 100, scale: 0.5, opacity: 0, y: -20, transition: { duration: 0.5, ease: 'easeIn' } }}
                         >

@@ -7,6 +7,8 @@ import { Confetti } from '../../unit1/fx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
 import { voiceOf } from './shared';
 import { CLAY_BUTTON, THICK_WORDS } from '../../unit1/scene-components/shared';
+import { CalmBg } from '../../unit1/scene-components/gameFx';
+import { SKIN } from '../../gameSkin';
 
 /* ---------- Balloon Match (Wordwall "Balloon Pop", redesigned — docs/a1-activity-library.md §12) ----------
  * Balloons float in the sky, each carrying a sentence ("This is Mia."). The pictures wait in baskets below. The child
@@ -16,7 +18,8 @@ import { CLAY_BUTTON, THICK_WORDS } from '../../unit1/scene-components/shared';
  * sentences (reading for meaning, not single words), tap-tap instead of fast popping, every match is heard. */
 
 type BalloonMatch = Extract<Scene, { kind: 'balloon-match' }>;
-const COLORS = ['#f43f5e', '#3b82f6', '#22c55e', '#f59e0b', '#a855f7', '#06b6d4'];
+/** Balloon colours from the shared game palette (gameSkin.ts): light / deep pairs for a soft round shine. */
+const COLORS: [string, string][] = [['#A78BFA', '#6D28D9'], ['#5EEAD4', '#0D9488'], ['#F9A8D4', '#DB2777'], ['#FCD34D', '#D97706'], ['#93C5FD', '#3B6FD4'], ['#FDA4AF', '#E0475B']];
 
 export function BalloonMatchScene({ scene, onNext, onWin, onLose, sync }: { scene: BalloonMatch; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; sync?: ActivitySync }) {
   const reduce = useReducedMotion();
@@ -70,15 +73,15 @@ export function BalloonMatchScene({ scene, onNext, onWin, onLose, sync }: { scen
   };
 
   return (
-    <div className="absolute inset-0 select-none overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
-      <div className="absolute inset-0 bg-sky-900/15" />
+    <div className="absolute inset-0 select-none overflow-hidden">
+      <CalmBg img={scene.bg} />
       {done && <Confetti count={90} />}
       <div className="pointer-events-none absolute inset-x-0 top-[5%] z-30 flex justify-center px-14">
         <span className="text-center font-black text-white" style={{ ...THICK_WORDS, fontSize: 'clamp(1.1rem, min(calc(2.6*var(--svw,1vw)), 4.4vh), 2.1rem)' }}>
           {done ? scene.doneLine : `🎈 ${scene.title}`}
         </span>
       </div>
-      {!done && <span className="absolute right-3 top-[13%] z-30 rounded-full bg-white/95 px-4 py-2 font-black text-rose-600 shadow-lg" style={{ fontSize: 'min(3vh, 2vw)' }}>🎈 {matched.size}/{n}</span>}
+      {!done && <span className={`absolute end-3 top-[13%] z-30 px-4 py-2 ${SKIN.pill}`} style={{ fontSize: 'min(3vh, 2vw)' }}>🎈 {matched.size}/{n}</span>}
       {/* the balloons */}
       <div className="absolute inset-x-[3%] top-[17%] z-20 flex h-[40%] justify-around">
         {order.map((b, slot) => {
@@ -92,12 +95,12 @@ export function BalloonMatchScene({ scene, onNext, onWin, onLose, sync }: { scen
                   animate={state.wrong === b ? { y: [0, 60, 0], x: [0, -8, 8, 0] } : reduce ? { y: isSel ? -6 : 0 } : { y: isSel ? [-10, -18, -10] : [0, -12, 0] }}
                   transition={state.wrong === b ? { duration: 0.6 } : { duration: 2.4 + (slot % 3) * 0.4, repeat: Infinity, ease: 'easeInOut' }}
                   exit={{ y: 260, scale: 0.4, opacity: 0, transition: { duration: 0.5 } }}>
-                  <span className={`relative flex aspect-[4/5] w-full items-center justify-center rounded-[50%] p-[8%] text-center font-black leading-tight text-white shadow-xl ${isSel ? 'ring-[0.7vh] ring-yellow-300' : ''}`}
-                    style={{ background: `radial-gradient(circle at 32% 28%, rgba(255,255,255,0.55) 0 10%, ${COLORS[slot % COLORS.length]} 40%)`, fontSize: 'min(2.7vh, 1.75vw)', textShadow: '0 0.2vh 0.3vh rgba(0,0,0,0.35)' }}>
-                    {p.text}
+                  <span className={`relative flex aspect-[4/5] w-full items-center justify-center rounded-[50%] p-[7%] shadow-[inset_-1.2vh_-1.6vh_2.4vh_rgba(0,0,0,0.18),0_1.6vh_2.4vh_rgba(30,10,60,0.3)] ${isSel ? 'ring-[0.7vh] ring-[#FDE68A]' : ''}`}
+                    style={{ background: `radial-gradient(circle at 32% 26%, rgba(255,255,255,0.75) 0 7%, ${COLORS[slot % COLORS.length][0]} 26%, ${COLORS[slot % COLORS.length][1]} 92%)` }}>
+                    <span className={`rounded-[1.4vh] bg-[#FFFBF3]/95 px-[0.6vw] py-[0.6vh] text-center font-black leading-tight shadow ${SKIN.ink}`} style={{ fontSize: 'min(2.6vh, 1.7vw)' }}>{p.text}</span>
                   </span>
-                  <span className="h-[1.4vh] w-[1.4vh] -mt-[0.4vh] rotate-45" style={{ background: COLORS[slot % COLORS.length] }} />
-                  <span className="h-[7vh] w-[0.25vh] bg-slate-500/70" />
+                  <span className="h-[1.4vh] w-[1.4vh] -mt-[0.4vh] rotate-45" style={{ background: COLORS[slot % COLORS.length][1] }} />
+                  <span className="h-[7vh] w-[0.25vh] bg-[#F7E8CF]/90" />
                 </motion.button>
               )}
             </AnimatePresence>
@@ -110,10 +113,10 @@ export function BalloonMatchScene({ scene, onNext, onWin, onLose, sync }: { scen
           const got = matched.has(k);
           return (
             <motion.button key={k} type="button" onClick={() => tapBasket(k)} aria-label={p.label} whileTap={{ scale: 0.95 }}
-              className={`relative flex flex-col items-center rounded-[2vh] border-[0.5vh] bg-white/95 p-[0.8vh] shadow-xl ${basketSel === k ? 'border-yellow-300 ring-[0.5vh] ring-yellow-300' : got ? 'border-emerald-400' : 'border-white'}`}
+              className={`relative flex flex-col items-center p-[0.8vh] ${SKIN.card} ${basketSel === k ? 'ring-[0.5vh] ring-[#FDE68A]' : got ? 'ring-[0.5vh] ring-[#4ADE80]' : ''}`}
               style={{ width: `${Math.min(17, 90 / n)}%` }}>
               <img src={p.img} alt="" draggable={false} className="h-[min(17vh,11vw)] w-full object-contain" />
-              <span className="mt-[0.4vh] w-full rounded-[1vh] bg-gradient-to-b from-amber-600 to-amber-800 py-[0.5vh] text-center font-black text-amber-50" style={{ fontSize: 'min(2.4vh, 1.6vw)' }}>
+              <span className="mt-[0.4vh] w-full rounded-[1vh] bg-gradient-to-b from-[#5B3A8C] to-[#3B1E66] py-[0.5vh] text-center font-black text-[#FFF4DC]" style={{ fontSize: 'min(2.4vh, 1.6vw)' }}>
                 {got ? '🎉' : '🧺'}
               </span>
               {got && !reduce && (

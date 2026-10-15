@@ -2,6 +2,7 @@
 import { motion } from 'framer-motion';
 import type { CharKey } from '../scenes';
 import { VOICE_KEY } from '../scenes';
+import { SKIN, jewel } from '../../gameSkin';
 
 /** Shorthand: every audio call here takes a story CharKey (pip/marigold),
  *  but the shared voice pipeline is keyed by role/name (Character) — see
@@ -138,20 +139,22 @@ export function QuestionCard({ ask, choices, img, wrong, onPick, onHear, disable
   ask: string; choices: string[]; img?: string; wrong: number; onPick: (i: number) => void; onHear: () => void;
   disabled?: boolean; tone?: 'sky' | 'amber' | 'emerald' | 'pink'; className?: string;
 }) {
-  const grad = { sky: 'from-sky-400 to-sky-600', amber: 'from-amber-400 to-orange-600', emerald: 'from-emerald-400 to-emerald-600', pink: 'from-pink-400 to-pink-600' }[tone];
+  // `tone` is kept for older callers; every answer card now uses the shared game skin (gameSkin.ts).
+  void tone;
   return (
-    <div className={`rounded-[3vh] border-[0.6vh] border-white bg-white/95 p-[2vh] text-center shadow-2xl ${className}`}>
-      <div className="mb-[1.4vh] flex items-center justify-center gap-3">
-        {img && <img src={img} alt="" draggable={false} className="h-[min(10vh,6.6vw)] w-auto object-contain" />}
-        <button type="button" onClick={onHear} className="font-black text-[#3b2410]" style={{ fontSize: 'min(4.2vh, 2.9vw)' }}>
-          {ask} <span className="text-[0.7em]">🔊</span>
+    <div className={`relative p-[2.2vh] pt-[2.6vh] text-center ${SKIN.panel} ${className}`}>
+      <div className="absolute inset-x-[18%] -top-[0.5vh] h-[1vh] rounded-full bg-gradient-to-r from-[#F2C46D] via-[#FDE68A] to-[#F2C46D] shadow" />
+      <div className="mb-[1.6vh] flex items-center justify-center gap-3">
+        {img && <img src={img} alt="" draggable={false} className="h-[min(11vh,7.4vw)] w-auto rounded-[1.4vh] object-contain drop-shadow-[0_0.6vh_0.6vh_rgba(46,16,101,0.25)]" />}
+        <button type="button" onClick={onHear} className={`font-black ${SKIN.ink}`} style={{ fontSize: 'min(4.2vh, 2.9vw)' }}>
+          {ask} <span className="ms-1 inline-grid h-[1.4em] w-[1.4em] place-items-center rounded-full bg-[#EDE4FF] align-middle text-[0.6em]">🔊</span>
         </button>
       </div>
       <div className="flex flex-wrap justify-center gap-[1.2vw]">
         {choices.map((c, i) => (
-          <motion.button key={i} type="button" onClick={() => onPick(i)} disabled={disabled} whileTap={{ scale: 0.93 }}
+          <motion.button key={i} type="button" onClick={() => onPick(i)} disabled={disabled} whileTap={{ scale: 0.93 }} whileHover={disabled ? {} : { y: -3 }}
             animate={wrong === i ? { x: [0, -10, 10, -6, 0] } : { x: 0 }} transition={{ duration: 0.45 }}
-            className={`rounded-[2vh] border-[0.4vh] border-white bg-gradient-to-b ${grad} px-[2vw] py-[1.1vh] font-black text-white shadow-[0_0.7vh_0_rgba(0,0,0,0.25)]`}
+            className={`rounded-[2vh] px-[2vw] py-[1.2vh] font-black ${jewel(i)}`}
             style={{ fontSize: 'min(3.4vh, 2.3vw)' }}>{c}</motion.button>
         ))}
       </div>

@@ -7,6 +7,7 @@ import { Confetti } from '../../unit1/fx';
 import { seededOrder } from '../../PictureMatchScene';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
 import { voiceOf, CARD_FONT } from './shared';
+import { SKIN, PILL_FONT } from '../../gameSkin';
 
 /* ---------- Chat Chain (A1 U1 L4 signature game, "have a short greeting conversation").
    A friend says a line (heard + shown as a chat bubble). The child picks the reply that FITS out of 2-3
@@ -96,7 +97,7 @@ export function ChatChainScene({ scene, onNext, onWin, onLose, sync }: { scene: 
     <div className="absolute inset-0 overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})`, fontFamily: CARD_FONT }}>
       <div className="pointer-events-none absolute inset-0 bg-black/25" />
       {finished && <Confetti count={50} />}
-      <div className="pointer-events-none absolute left-1/2 top-3 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-sm font-black text-orange-700 shadow-xl sm:text-base">
+      <div className={`pointer-events-none absolute left-1/2 top-3 z-30 max-w-[92%] -translate-x-1/2 px-5 py-2 text-center ${SKIN.pill}`} style={{ fontSize: PILL_FONT }}>
         💬 {scene.title} <span className="ml-1 opacity-60">({Math.min(turns.filter((t, i) => t.who === 'student' && (i < step || finished)).length, turns.filter((t) => t.who === 'student').length)}/{turns.filter((t) => t.who === 'student').length})</span>
       </div>
 
@@ -116,7 +117,7 @@ export function ChatChainScene({ scene, onNext, onWin, onLose, sync }: { scene: 
               <div key={i} className={`flex ${mine ? 'justify-end' : 'justify-start'}`} style={{ animation: 'lep1-pop 0.3s ease-out' }}>
                 <button
                   onClick={() => { if (!isRemoteMirror) cueSpeak(t.line, voiceOf(mine ? 'pip' : (t.who as CharKey))); }}
-                  className={`max-w-[80%] rounded-3xl px-4 py-2 text-left text-lg font-black shadow sm:text-2xl ${mine ? 'rounded-br-md bg-gradient-to-r from-orange-500 to-pink-500 text-white' : 'rounded-bl-md bg-white text-[#2A1459]'} ${playing === i ? 'ring-4 ring-yellow-400' : ''}`}
+                  className={`max-w-[80%] rounded-3xl px-4 py-2 text-left text-lg font-black shadow sm:text-2xl ${mine ? 'rounded-br-md bg-gradient-to-b from-[#8B5CF6] to-[#6D28D9] text-white' : 'rounded-bl-md bg-white text-[#2A1459]'} ${playing === i ? 'ring-4 ring-yellow-400' : ''}`}
                 >
                   {!mine && c && <span className="mr-2 text-sm font-black" style={{ color: c.color }}>{c.name}:</span>}
                   {mine && <span className="mr-2 text-sm font-black text-white/80">You:</span>}
@@ -128,14 +129,14 @@ export function ChatChainScene({ scene, onNext, onWin, onLose, sync }: { scene: 
         </div>
 
         {/* Reply bar */}
-        <div className="border-t-4 border-white bg-white/70 px-3 py-3">
+        <div className="border-t-[0.4vh] border-[#F2C46D]/60 bg-[#2A1450]/70 px-3 py-3 backdrop-blur-sm">
           {turn && turn.who === 'student' && phase === 'pick' && (
             <div className="flex flex-wrap justify-center gap-2">
               {options.map((o) => (
                 <button
                   key={o}
                   onClick={() => pick(o)}
-                  className={`rounded-3xl border-4 bg-white px-4 py-2 text-base font-black text-[#2A1459] shadow-lg transition active:scale-95 sm:text-xl ${wrong === o ? 'animate-[lep1-shake_0.4s_ease-in-out] border-red-400 bg-red-100' : 'border-orange-300'}`}
+                  className={`${SKIN.card} px-4 py-2 text-base font-black text-[#2A1459] transition active:scale-95 sm:text-xl ${wrong === o ? 'animate-[lep1-shake_0.4s_ease-in-out] !border-[#FB7185] !from-[#FFE4E6] !to-[#FECDD3]' : ''}`}
                 >
                   {o}
                 </button>

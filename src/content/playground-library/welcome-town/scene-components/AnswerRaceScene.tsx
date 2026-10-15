@@ -7,6 +7,8 @@ import { Confetti } from '../../unit1/fx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
 import { voiceOf } from './shared';
 import { CLAY_BUTTON, THICK_WORDS } from '../../unit1/scene-components/shared';
+import { CalmBg } from '../../unit1/scene-components/gameFx';
+import { SKIN, jewel } from '../../gameSkin';
 
 /* ---------- Answer Race (A1 U1: L6 "Catch the answer", L7 Boss warm-up) ----------
  * A question (heard, or read when `read`), three answer cards. Every right answer moves the racer one step along the
@@ -18,7 +20,6 @@ import { CLAY_BUTTON, THICK_WORDS } from '../../unit1/scene-components/shared';
  * river race (A1 U2L7): the racer floats on the water against a duck and a frog. */
 
 type Race = Extract<Scene, { kind: 'answer-race' }>;
-const GATE = ['#FE6A2F', '#4FA9E0', '#B85CD1'];
 
 export function AnswerRaceScene({ scene, onNext, onWin, onLose, sync }: { scene: Race; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; sync?: ActivitySync }) {
   const reduce = useReducedMotion();
@@ -68,8 +69,8 @@ export function AnswerRaceScene({ scene, onNext, onWin, onLose, sync }: { scene:
   const laneY = (lane: number) => 18 + lane * 32; // % inside the track strip
 
   return (
-    <div className="absolute inset-0 select-none overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
-      <div className="absolute inset-0 bg-white/20" />
+    <div className="absolute inset-0 select-none overflow-hidden">
+      <CalmBg img={scene.bg} />
       {done && <Confetti count={70} />}
       <div className="pointer-events-none absolute inset-x-0 top-[8%] z-30 flex justify-center px-14">
         <span className="text-center font-black text-white" style={{ ...THICK_WORDS, fontSize: 'clamp(1.1rem, min(calc(2.6*var(--svw,1vw)), 4.4vh), 2.1rem)' }}>
@@ -78,10 +79,10 @@ export function AnswerRaceScene({ scene, onNext, onWin, onLose, sync }: { scene:
       </div>
 
       {/* the track */}
-      <div className={`absolute inset-x-[4%] top-[16%] z-20 h-[24%] overflow-hidden rounded-[3vh] border-[0.5vh] border-white shadow-xl ${raft ? 'bg-sky-400' : race ? 'bg-slate-600' : 'bg-lime-200'}`}>
+      <div className={`absolute inset-x-[4%] top-[16%] z-20 h-[24%] overflow-hidden rounded-[3vh] border-[0.5vh] border-[#F2C46D] shadow-[inset_0_0.6vh_1.2vh_rgba(0,0,0,0.25),0_1.6vh_3vh_rgba(20,6,45,0.45)] ${raft ? 'bg-gradient-to-b from-[#5EEAD4] to-[#0D9488]' : race ? 'bg-gradient-to-b from-[#5B4A7E] to-[#2E2148]' : 'bg-gradient-to-b from-[#BBF7D0] to-[#6EE7B7]'}`}>
         {race
           ? [1, 2].map((k) => <div key={k} className="absolute inset-x-0 border-t-[0.5vh] border-dashed border-white/70" style={{ top: `${k * 33.3}%` }} />)
-          : <div className="absolute inset-x-0 top-1/2 h-[30%] -translate-y-1/2 rounded-full bg-amber-200/90" />}
+          : <div className="absolute inset-x-0 top-1/2 h-[30%] -translate-y-1/2 rounded-full bg-[#F7E8CF]/90 shadow-[inset_0_0.3vh_0.4vh_rgba(120,80,30,0.25)]" />}
         <div className="absolute inset-y-0 right-[4%] w-[3%]" style={{ background: 'repeating-conic-gradient(#111 0 25%, #fff 0 50%) 0 0 / 1.6vh 1.6vh' }} />
         <motion.span className="absolute right-[1%] top-[2%]" style={{ fontSize: 'min(5vh, 3vw)' }} animate={done && !reduce ? { rotate: [0, -15, 15, 0] } : {}} transition={{ repeat: done ? Infinity : 0, duration: 0.8 }}>🏁</motion.span>
         {rivals.map((rv, k) => (
@@ -103,16 +104,16 @@ export function AnswerRaceScene({ scene, onNext, onWin, onLose, sync }: { scene:
         <AnimatePresence mode="wait">
           <motion.div key={roundIdx} className="absolute inset-x-0 top-[43%] z-30 flex flex-col items-center gap-[2.5vh] px-[4%]"
             initial={reduce ? false : { opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-            <div className="flex items-center gap-3 rounded-[2.5vh] bg-white/95 px-6 py-2 shadow-xl">
-              <span className="font-black text-[#3b2410]" style={{ fontSize: 'min(5vh, 3.2vw)' }}>{r.read ? '📖 ' : ''}{r.ask}</span>
-              <button type="button" onClick={() => cueSpeak(r.ask, voiceOf(scene.who))} aria-label="Hear it" className="grid h-[6vh] w-[6vh] place-items-center rounded-full bg-sky-100 text-[2.8vh] active:scale-95">🔊</button>
+            <div className={`flex items-center gap-3 px-6 py-2 ${SKIN.panel}`}>
+              <span className={`font-black ${SKIN.ink}`} style={{ fontSize: 'min(5vh, 3.2vw)' }}>{r.read ? '📖 ' : ''}{r.ask}</span>
+              <button type="button" onClick={() => cueSpeak(r.ask, voiceOf(scene.who))} aria-label="Hear it" className="grid h-[6vh] w-[6vh] place-items-center rounded-full bg-[#EDE4FF] text-[2.8vh] active:scale-95">🔊</button>
               <span className="text-neutral-400" style={{ fontSize: 'min(2.2vh, 1.4vw)' }}>{roundIdx + 1}/{total}</span>
             </div>
             <div className="flex w-full flex-wrap justify-center gap-[2vw]">
               {r.choices.map((c, i) => (
                 <motion.button key={c} type="button" onClick={() => pick(i)}
-                  className={`relative min-w-[24%] max-w-[32%] px-4 font-black text-white shadow-[0_0.8vh_0_rgba(0,0,0,0.25)] ${race ? 'rounded-[2vh] py-4' : 'rounded-t-[12vh] rounded-b-[1.5vh] pb-4 pt-8'} ${state.right === i ? 'ring-[0.7vh] ring-yellow-300' : ''}`}
-                  style={{ background: GATE[i % GATE.length], fontSize: 'min(3.8vh, 2.4vw)' }}
+                  className={`relative min-w-[24%] max-w-[32%] px-4 font-black ${jewel(i)} ${race ? 'rounded-[2vh] py-4' : 'rounded-t-[12vh] rounded-b-[1.5vh] pb-4 pt-8'} ${state.right === i ? 'ring-[0.7vh] ring-[#FDE68A]' : ''}`}
+                  style={{ fontSize: 'min(3.8vh, 2.4vw)' }}
                   animate={state.wrong === i ? { x: [0, -10, 10, -6, 0] } : state.right === i && !reduce ? { scale: [1, 1.12, 1] } : {}}
                   transition={{ duration: 0.5 }} whileTap={{ scale: 0.95 }}>
                   {c}

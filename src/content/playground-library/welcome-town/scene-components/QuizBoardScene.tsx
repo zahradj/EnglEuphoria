@@ -7,6 +7,8 @@ import { Confetti } from '../../unit1/fx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
 import { QuestionCard, voiceOf } from './shared';
 import { CLAY_BUTTON, THICK_WORDS } from '../../unit1/scene-components/shared';
+import { CalmBg } from '../../unit1/scene-components/gameFx';
+import { SKIN, jewel } from '../../gameSkin';
 
 /* ---------- Quiz Board (Jeopardy / Baamboozle board, modern design — docs/a1-activity-library.md §12) ----------
  * A glowing game-show board: one column per category, tiles worth 100 / 200 / 300. The child picks any tile, it
@@ -16,7 +18,6 @@ import { CLAY_BUTTON, THICK_WORDS } from '../../unit1/scene-components/shared';
  * child chooses what to answer (agency), harder questions are worth more, no negative scores, no rivals. */
 
 type Board = Extract<Scene, { kind: 'quiz-board' }>;
-const COL = ['from-sky-500 to-blue-700', 'from-fuchsia-500 to-purple-700', 'from-emerald-500 to-green-700', 'from-orange-500 to-red-600'];
 
 export function QuizBoardScene({ scene, onNext, onWin, onLose, sync }: { scene: Board; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; sync?: ActivitySync }) {
   const reduce = useReducedMotion();
@@ -69,21 +70,21 @@ export function QuizBoardScene({ scene, onNext, onWin, onLose, sync }: { scene: 
   };
 
   return (
-    <div className="absolute inset-0 select-none overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
-      <div className="absolute inset-0 bg-indigo-950/45" />
+    <div className="absolute inset-0 select-none overflow-hidden">
+      <CalmBg img={scene.bg} />
       {done && <Confetti count={90} />}
       <div className="pointer-events-none absolute inset-x-0 top-[5%] z-30 flex justify-center px-14">
         <span className="text-center font-black text-white" style={{ ...THICK_WORDS, fontSize: 'clamp(1.1rem, min(calc(2.6*var(--svw,1vw)), 4.4vh), 2.1rem)' }}>
           {done ? scene.doneLine : `🏆 ${scene.title}`}
         </span>
       </div>
-      <motion.span key={Number(state.score) || 0} className="absolute right-3 top-[13%] z-30 rounded-full bg-yellow-300 px-5 py-2 font-black text-indigo-900 shadow-lg" style={{ fontSize: 'min(3.4vh, 2.3vw)' }}
+      <motion.span key={Number(state.score) || 0} className="absolute end-3 top-[13%] z-30 rounded-full border-[0.3vh] border-white bg-gradient-to-b from-[#FDE68A] to-[#F59E0B] px-5 py-2 font-black text-[#3B1E66] shadow-[0_0.6vh_0_#B45309,0_1.2vh_2vh_rgba(30,10,60,0.35)]" style={{ fontSize: 'min(3.4vh, 2.3vw)' }}
         initial={reduce ? false : { scale: 1.4 }} animate={{ scale: 1 }}>⭐ {Number(state.score) || 0}</motion.span>
       {/* the board */}
-      <div className="absolute inset-x-[6%] bottom-[5%] top-[20%] z-20 grid gap-[1.2vh] rounded-[3vh] border-[0.7vh] border-yellow-300 bg-indigo-900/85 p-[1.6vh] shadow-[0_0_4vh_rgba(250,204,21,0.45)]"
+      <div className={`absolute inset-x-[6%] bottom-[5%] top-[20%] z-20 grid gap-[1.2vh] p-[1.8vh] ${SKIN.frame}`}
         style={{ gridTemplateColumns: `repeat(${cats.length}, minmax(0, 1fr))`, gridTemplateRows: `auto repeat(${rows}, minmax(0, 1fr))` }}>
         {cats.map((c, ci) => (
-          <div key={`h${ci}`} className={`flex items-center justify-center gap-2 rounded-[1.6vh] bg-gradient-to-b ${COL[ci % COL.length]} px-2 py-[1vh] text-center font-black text-white shadow`} style={{ fontSize: 'min(2.8vh, 1.9vw)' }}>
+          <div key={`h${ci}`} className={`flex items-center justify-center gap-2 rounded-[1.6vh] px-2 py-[1vh] text-center font-black ${jewel(ci)}`} style={{ fontSize: 'min(2.8vh, 1.9vw)' }}>
             <span>{c.emoji}</span><span>{c.name}</span>
           </div>
         ))}
@@ -93,7 +94,7 @@ export function QuizBoardScene({ scene, onNext, onWin, onLose, sync }: { scene: 
           const got = answered.has(key);
           return exists ? (
             <motion.button key={key} type="button" onClick={() => pickTile(key)} disabled={got}
-              className={`grid place-items-center rounded-[1.6vh] border-[0.4vh] font-black shadow-[0_0.6vh_0_rgba(0,0,0,0.3)] ${got ? 'border-indigo-700 bg-indigo-800/60 text-indigo-400' : 'border-yellow-200 bg-gradient-to-b from-blue-500 to-blue-700 text-yellow-300'}`}
+              className={`grid place-items-center font-black ${got ? 'rounded-[1.6vh] border-[0.3vh] border-[#F2C46D]/30 bg-white/10 text-[#F2C46D]/70' : `${SKIN.card} ${SKIN.ink}`}`}
               style={{ fontSize: 'min(5vh, 3.4vw)', gridColumn: ci + 1, gridRow: ri + 2 }}
               whileHover={got || reduce ? {} : { scale: 1.04 }} whileTap={got ? {} : { scale: 0.95 }}>
               {got ? '✓' : (ri + 1) * 100}
@@ -104,7 +105,7 @@ export function QuizBoardScene({ scene, onNext, onWin, onLose, sync }: { scene: 
       {/* the open tile */}
       <AnimatePresence>
         {tile && !done && (
-          <motion.div key={state.open} className="absolute inset-0 z-40 grid place-items-center bg-indigo-950/60 px-[8%]"
+          <motion.div key={state.open} className="absolute inset-0 z-40 grid place-items-center bg-[#1A0B33]/65 px-[8%] backdrop-blur-[2px]"
             initial={reduce ? false : { opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <motion.div className="w-full" initial={reduce ? false : { rotateY: 90, scale: 0.7 }} animate={{ rotateY: 0, scale: 1 }} transition={{ duration: 0.45 }}>
               <div className="mb-[1.4vh] text-center font-black text-yellow-300" style={{ ...THICK_WORDS, fontSize: 'min(4.4vh, 3vw)' }}>

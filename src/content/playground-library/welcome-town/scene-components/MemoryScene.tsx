@@ -5,6 +5,8 @@ import * as sfx from '../../unit1/sfx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
 import { CroppedImage } from '../../PictureMatchScene';
 import { shuffledIndices } from './shared';
+import { CalmBg } from '../../unit1/scene-components/gameFx';
+import { SKIN, PILL_FONT } from '../../gameSkin';
 
 /* ---------- Memory ---------- */
 
@@ -82,32 +84,38 @@ export function MemoryScene({ scene, onNext, onWin, onLose, sync }: { scene: Ext
   const complete = matched.length === scene.pairs.length;
 
   return (
-    <div className="absolute inset-0 flex items-center justify-center bg-cover bg-center pb-24" style={{ backgroundImage: `url(${scene.bg})` }}>
-      <div className="pointer-events-none absolute left-1/2 top-4 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-4 py-2 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-base">🧠 {scene.teacher}</div>
-      <div className="relative z-10 grid w-full max-w-[860px] grid-cols-4 gap-5 px-4 sm:gap-6">
+    <div className="absolute inset-0 flex items-center justify-center overflow-hidden pb-[11vh] pt-[21vh]">
+      <CalmBg img={scene.bg} />
+      <div className={`pointer-events-none absolute left-1/2 top-4 z-30 max-w-[92%] -translate-x-1/2 px-5 py-2 text-center ${SKIN.pill}`} style={{ fontSize: PILL_FONT }}>🧠 {scene.teacher}</div>
+      <div className={`relative z-10 grid w-full grid-cols-4 gap-[1.6vh] p-[2.2vh] ${SKIN.frame}`} style={{ maxWidth: `min(880px, calc((64vh - 40px) * ${(4 / Math.max(1, Math.ceil(deck.length / 4))).toFixed(3)}))` }}>
         {deck.map((card) => {
           const isMatched = matchedSet.has(card.pairId);
           const isFlipped = flipped.includes(card.key) || isMatched;
           return (
             <button key={card.key} onClick={() => tap(card)} disabled={busy || isMatched} className="relative aspect-square [perspective:800px]" aria-label={isFlipped ? card.label : 'Hidden card'}>
               <div className="absolute inset-0 transition-transform duration-500 [transform-style:preserve-3d]" style={{ transform: isFlipped ? 'rotateY(180deg)' : undefined }}>
-                <div className="absolute inset-0 flex items-center justify-center rounded-2xl border-4 border-white text-3xl font-black text-white shadow-xl [backface-visibility:hidden]" style={{ background: 'linear-gradient(135deg,#FE6A2F,#FF8A4C)' }}>?</div>
-                <div className={`absolute inset-0 flex flex-col items-center justify-center overflow-hidden rounded-2xl border-4 bg-white shadow-xl [backface-visibility:hidden] [transform:rotateY(180deg)] ${card.variant === 'pic' ? '' : 'p-2'} ${isMatched ? 'border-green-400 ring-4 ring-green-300/60' : 'border-white'}`}>
+                <div className={`absolute inset-0 flex items-center justify-center overflow-hidden rounded-[2vh] [backface-visibility:hidden] ${SKIN.cardBack}`}>
+                  <div className="absolute inset-0 opacity-25" style={{ backgroundImage: 'radial-gradient(circle, #FDE68A 1.4px, transparent 1.8px)', backgroundSize: '1.6vh 1.6vh' }} />
+                  <div className="absolute inset-[9%] rounded-[1.4vh] border-[0.3vh] border-dashed border-[#F2C46D]/60" />
+                  <span className="relative text-[min(6.5vh,4.6vw)] drop-shadow-[0_0.3vh_0_rgba(0,0,0,0.3)]">⭐</span>
+                </div>
+                <div className={`absolute inset-0 flex flex-col items-center justify-center overflow-hidden [backface-visibility:hidden] [transform:rotateY(180deg)] ${SKIN.card} ${card.variant === 'pic' ? 'p-[0.6vh]' : 'p-2'} ${isMatched ? 'ring-[0.5vh] ring-[#4ADE80]' : ''}`}>
+                  {isMatched && <span className="absolute end-[6%] top-[6%] z-10 grid h-[3.4vh] w-[3.4vh] place-items-center rounded-full bg-[#16A34A] text-[2vh] font-black text-white shadow">✓</span>}
                   {card.variant === 'pic' ? (
                     card.img && card.crop ? (
                       <CroppedImage src={card.img} crop={card.crop} aspect={card.imgAspect ?? 16 / 9} />
                     ) : (
-                      <img src={card.img} alt={card.label} className="h-full w-full object-cover" />
+                      <img src={card.img} alt={card.label} className="h-full w-full rounded-[1.4vh] object-cover" />
                     )
                   ) : card.variant === 'word' ? (
                     // Word card: reading practice half of a word<->picture
                     // pair — just the text, no emoji, so the match is
                     // genuinely word-to-meaning rather than icon-to-icon.
-                    <span className="px-1 text-center text-xl font-black leading-tight text-orange-700 sm:text-2xl">{card.label}</span>
+                    <span className={`px-1 text-center text-xl font-black leading-tight sm:text-2xl ${SKIN.ink}`}>{card.label}</span>
                   ) : (
                     <>
                       <span className="text-4xl">{card.emoji}</span>
-                      <span className="mt-1 text-[10px] font-black text-orange-700 sm:text-xs">{card.label}</span>
+                      <span className={`mt-1 text-[10px] font-black sm:text-xs ${SKIN.ink}`}>{card.label}</span>
                     </>
                   )}
                 </div>

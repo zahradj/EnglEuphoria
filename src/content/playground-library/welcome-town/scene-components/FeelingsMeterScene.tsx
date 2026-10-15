@@ -9,6 +9,7 @@ import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
 import { voiceOf } from './shared';
 import { CLAY_BUTTON, THICK_WORDS } from '../../unit1/scene-components/shared';
 import { METER_ASK, METER_WRONG } from './meterRules';
+import { SKIN } from '../../gameSkin';
 
 /* ---------- Feelings Meter ★ (A1 U5L5, docs/a1-unit-5-monster-town.md §5.5) ----------
  * The story as an emotion graph: Bibi's day from left to right (story pictures under the graph), her feelings from top
@@ -75,13 +76,13 @@ export function FeelingsMeterScene({ scene, onNext, onWin, onLose, sync }: { sce
       <FloatText show={star} x={50} y={30}>+⭐</FloatText>
 
       <div className="pointer-events-none absolute inset-x-0 top-[2.5%] z-30 flex justify-center px-16">
-        <span className="rounded-full bg-violet-900/70 px-6 py-1.5 text-center font-black text-white shadow-xl backdrop-blur-sm" style={{ ...THICK_WORDS, fontSize: big }}>
+        <span className={`px-6 py-1.5 text-center ${SKIN.pill}`} style={{ fontSize: big }}>
           {done ? scene.doneLine : `📈 ${scene.title}`}
         </span>
       </div>
 
       {/* the graph card */}
-      <div className="absolute z-10 rounded-[2.4vh] bg-amber-50/90 shadow-2xl" style={{ left: '3%', right: '3%', top: `${G.top - 4}%`, bottom: `${100 - G.bottom - 4}%` }} />
+      <div className={`absolute z-10 ${SKIN.panel}`} style={{ left: '3%', right: '3%', top: `${G.top - 4}%`, bottom: `${100 - G.bottom - 4}%` }} />
       {/* row guide lines */}
       {scene.feelings.map((_, r) => (
         <div key={`g${r}`} className="absolute z-10 border-t-2 border-dashed border-violet-200" style={{ left: `${G.left}%`, right: `${100 - G.right}%`, top: `${rowY(r)}%` }} />
@@ -90,10 +91,10 @@ export function FeelingsMeterScene({ scene, onNext, onWin, onLose, sync }: { sce
       {scene.feelings.map((f, r) => (
         <motion.button key={f.label} type="button" onClick={() => tapFace(r)} aria-label={f.label} disabled={done}
           animate={miss === r && !reduce ? { x: [0, -8, 8, -5, 0] } : { x: 0 }}
-          className="absolute z-30 flex items-center gap-[0.4vw] rounded-full border-[0.35vh] border-violet-300 bg-white px-[0.6vw] py-[0.2vh] shadow-md hover:ring-[0.4vh] hover:ring-yellow-300"
+          className="absolute z-30 flex items-center gap-[0.4vw] rounded-full border-[0.35vh] border-[#F3DDB3] bg-gradient-to-b from-[#FFFBF3] to-[#F7E8CF] px-[0.6vw] py-[0.2vh] shadow-[0_0.5vh_0_#D6AE78,0_1vh_1.6vh_rgba(46,16,101,0.25)] hover:ring-[0.4vh] hover:ring-[#FDE68A]"
           style={{ left: '3.6%', top: `${rowY(r)}%`, y: '-50%', width: '11.5%', minHeight: 40 }}>
           <img src={f.img} alt="" draggable={false} className="h-[min(5.4vh,3.6vw)] w-auto object-contain" />
-          <span className="truncate font-black text-violet-800" style={{ fontSize: 'min(2.1vh,1.4vw)' }}>{f.label}</span>
+          <span className="truncate font-black text-[#3B1E66]" style={{ fontSize: 'min(2.1vh,1.4vw)' }}>{f.label}</span>
         </motion.button>
       ))}
       {/* the line and the dots */}
@@ -124,7 +125,7 @@ export function FeelingsMeterScene({ scene, onNext, onWin, onLose, sync }: { sce
       {/* the sentence of the last point */}
       {!done && last && (
         <div className="absolute inset-x-0 bottom-[3%] z-30 flex justify-center">
-          <button type="button" onClick={() => cueSpeak(last.line, 'teacher')} className="rounded-full border-[0.4vh] border-white bg-violet-600 px-5 py-1.5 font-black text-white shadow-xl" style={{ fontSize: 'min(2.8vh,1.9vw)' }}>
+          <button type="button" onClick={() => cueSpeak(last.line, 'teacher')} className="rounded-full border-[0.35vh] border-[#C4B5FD] bg-gradient-to-b from-[#8B5CF6] to-[#6D28D9] px-5 py-1.5 font-black text-white shadow-[0_0.6vh_0_#4C1D95,0_1.2vh_2vh_rgba(30,10,60,0.35)]" style={{ fontSize: 'min(2.8vh,1.9vw)' }}>
             🎤 Say it: {last.line}
           </button>
         </div>
