@@ -3,5 +3,10 @@
   "kind": "scene",
   "out": "public/academy-art/bg/bus-stop-night.webp",
   "url": "https://export-download.canva.com/3gn1o/DAHXiX3gn1o/-1/0/0095-7528285782316397010.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261014%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261014T065127Z&X-Amz-Expires=66286&X-Amz-Signature=32698fd6c8a3aa2b6d72bc8c400fc9ff9e00a2cc2b8b65fb5706c8e265633ba2&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2015%20Oct%202026%2001%3A16%3A13%20GMT"
+ },
+ {
+  "kind": "scene",
+  "out": "public/academy-art/bg/phone-screen-glow.webp",
+  "url": "https://export-download.canva.com/3gn1o/DAHXiX3gn1o/-1/0/0096-3846593088501927192.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261014%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261014T231745Z&X-Amz-Expires=9839&X-Amz-Signature=eed593c0f297265130457178889aee0b3292e5c6cbe4da7dbce40f2895332c37&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2015%20Oct%202026%2002%3A01%3A44%20GMT"
  }
 ]
