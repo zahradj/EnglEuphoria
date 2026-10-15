@@ -14,7 +14,7 @@ for (const l of LEVELS) out.push(`| **${l.level}** | ${l.ages} | ${l.lessonLengt
 const total = (Object.values(PLAYGROUND_CURRICULUM) as { lessons: unknown[] }[][]).reduce((n, us) => n + us.reduce((m, u) => m + u.lessons.length, 0), 0);
 out.push('', `**${Object.keys(PLAYGROUND_CURRICULUM).length} levels × 10 units × 7 lessons = ${total} lessons.**`, '');
 out.push('## 2. The unit arc (every level)', '', ...UNIT_ARC.map((a) => `- ${a}`), '');
-out.push('Every lesson keeps the Playground rules: one "I can" goal, Remember? warm-up, model first (I do → we do → you do), Read and Match after new words (A1+), games not worksheets with no game twice in a unit, a song in L3, a story in L5, recorded voices only, Canva / Gemini pictures (~35 % purple, modest clothing, cut-out stickers), research before every lesson, a plan approved before building.', '');
+out.push('Every lesson keeps the Playground rules: one "I can" goal, Remember? warm-up, model first (I do → we do → you do), Read and Match after new words (A1+), games not worksheets with no game twice in a unit, a song in L3, a story in L5, recorded voices only, Canva / Gemini pictures (Playground brand shades, modest clothing, cut-out stickers), research before every lesson, a plan approved before building.', '');
 let n = 3;
 for (const level of Object.keys(PLAYGROUND_CURRICULUM) as PlaygroundLevel[]) {
   const units = PLAYGROUND_CURRICULUM[level];

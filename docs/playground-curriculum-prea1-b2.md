@@ -28,7 +28,7 @@ Research (levels, grammar placement, exam formats — never content): [`docs/res
 - L6 extra-practice games
 - L7 Boss Test (80 % per part, Practise-again packs)
 
-Every lesson keeps the Playground rules: one "I can" goal, Remember? warm-up, model first (I do → we do → you do), Read and Match after new words (A1+), games not worksheets with no game twice in a unit, a song in L3, a story in L5, recorded voices only, Canva / Gemini pictures (~35 % purple, modest clothing, cut-out stickers), research before every lesson, a plan approved before building.
+Every lesson keeps the Playground rules: one "I can" goal, Remember? warm-up, model first (I do → we do → you do), Read and Match after new words (A1+), games not worksheets with no game twice in a unit, a song in L3, a story in L5, recorded voices only, Canva / Gemini pictures (Playground brand shades, modest clothing, cut-out stickers), research before every lesson, a plan approved before building.
 
 ## 3. Pre-A1
 

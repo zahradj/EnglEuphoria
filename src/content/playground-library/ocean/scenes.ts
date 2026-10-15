@@ -10,8 +10,9 @@
  * Research (mechanics only, sources in docs/research/playground-a1u6-research.md): British Council "My sea creature"
  * (A1 listen-and-guess), Lingokids aquatic animals, teach-this / Twinkl present-continuous games, Boom + Smithsonian
  * habitat sorts, Teach Starter oa games.
- * Art: Canva, Playground game colours (gameSkin.ts); pictures ~35 % purple (purple coral, sea fans) with sea blues, teal,
- * sand and green. Coral the Mermaid is a girl; Bub the Octopus is a shy boy. Leo and Pip wear swim shorts, never a dress.
+ * Art: Canva, Playground game colours (gameSkin.ts). Pictures up to L4 are ~35 % purple (purple coral, sea fans); from
+ * 2026-10-15 new pictures use the Playground brand shades (PICTURE_COLOUR_LINE): sky blue sea, orange and sunshine coral,
+ * cream sand, green sea grass. Coral the Mermaid is a girl; Bub the Octopus is a shy boy. Leo and Pip wear swim shorts, never a dress.
  * ========================================================================= */
 
 import { CAST, VOICE_KEY, type CharKey, type ReaderPage, type Scene } from '../welcome-town/scenes';

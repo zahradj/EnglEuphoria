@@ -3,8 +3,9 @@
  * then: "don't use the purple color a lot — use the branded colors, shades of the Playground").
  *
  * Every game draws from the Playground brand (src/index.css `.theme-playground`): bright orange #FE6A2F, sunshine
- * yellow #FEAF15 on warm cream #FEFBDD, sky blue #38BDF8, and the kids' jungle green. Purple stays in the painted
- * pictures only, never in the game chrome.
+ * yellow #FEAF15 on warm cream #FEFBDD, sky blue #38BDF8, and the kids' jungle green. Never purple in the game chrome.
+ * The pictures use the same shades too (owner, 2026-10-15: "use the branded color shades in the generated images as
+ * well"): every Playground picture prompt ends with `PICTURE_COLOUR_LINE`.
  *
  *  - `card`   warm cream "storybook card" with a sunny lip underneath — tiles, picture cards, answer cards
  *  - `frame`  sky-blue glass with a sunshine rim — boards, trays, tracks, game panels that hold other pieces
@@ -49,3 +50,11 @@ export const PALETTE = {
   green: '#22C55E', greenDeep: '#15803D', sun: '#FEAF15', sunDeep: '#B45309',
   cream: '#FEFBDD', creamDeep: '#FEF6DA', white: '#FFFFFF', ink: '#2A1A05',
 } as const;
+
+/**
+ * Colour line for every generated Playground picture (Canva, Gemini). Owner, 2026-10-15: "Use the branded color shades
+ * in the generated images as well." Replaces the "~35 % purple" line for the Playground; the Academy keeps its own
+ * art bible. `scripts/generate-art.mjs` adds it to any Playground target that lacks it (pictureColour.test.ts).
+ */
+export const PICTURE_COLOUR_LINE =
+  'Colour palette: the EnglEuphoria Playground brand shades - bright orange (#FE6A2F), sunshine yellow (#FEAF15), warm cream (#FEFBDD), sky blue (#38BDF8) and fresh green (#22C55E), with natural wood and skin tones; purple only as a small accent, never the main colour.';
