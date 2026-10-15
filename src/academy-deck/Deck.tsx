@@ -214,8 +214,10 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
   voiceRef.current = voiceOn;
   sfxRef.current = sfxOn && !calm;
   const [clipsReady, setClipsReady] = useState(false);
-  const [unlocked, setUnlocked] = useState(false);
-  const unlockedRef = useRef(false);
+  // sound is allowed once the person has used the page (a tap on the Join button counts), not only a tap inside the lesson
+  const alreadyActive = () => typeof navigator !== 'undefined' && !!(navigator as Navigator & { userActivation?: { hasBeenActive: boolean } }).userActivation?.hasBeenActive;
+  const [unlocked, setUnlocked] = useState(alreadyActive);
+  const unlockedRef = useRef(alreadyActive());
   const [speakingWho, setSpeakingWho] = useState<string | null>(null);
   const seq = useRef(0);
   useEffect(() => {
@@ -234,7 +236,9 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
     };
     window.addEventListener('pointerdown', unlock, true);
     window.addEventListener('keydown', unlock, true);
+    window.addEventListener('click', unlock, true);
     return () => {
+      window.removeEventListener('click', unlock, true);
       window.removeEventListener('pointerdown', unlock, true);
       window.removeEventListener('keydown', unlock, true);
     };
@@ -264,6 +268,10 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
       setSpeakingWho(null);
     }
   }, [voiceOn]);
+  // a student who follows the teacher may not tap inside the lesson: unlock as soon as the page has been used
+  useEffect(() => {
+    if (!unlockedRef.current && alreadyActive()) { unlockedRef.current = true; setUnlocked(true); }
+  }, [index]); // eslint-disable-line react-hooks/exhaustive-deps
   // the slide's own spoken lines (greeting, mission, wrap...) once the voices are unlocked
   useEffect(() => {
     if (!unlocked || !voiceOn || !clipsReady) return;
@@ -447,6 +455,9 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
             <b className="ad-plus">+1 ★</b>
             {Array.from({ length: 12 }, (_, i) => <span key={i} style={{ ['--a' as string]: `${i * 30}deg`, ['--d' as string]: `${70 + (i % 3) * 26}px` }}>{i % 2 ? '★' : '✦'}</span>)}
           </div>
+        )}
+        {embedded && !unlocked && voiceOn && (
+          <button type="button" className="ad-sound-note" onClick={() => { unlockedRef.current = true; setUnlocked(true); }}>🔊 Tap to hear the lesson</button>
         )}
         <nav className="ad-dock" aria-label="Lesson controls">
           {!follow && <button type="button" className="ad-dockbtn" onClick={() => go(index - 1)} disabled={index === 0}>◀ Back</button>}

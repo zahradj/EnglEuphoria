@@ -447,3 +447,6 @@
 .ad-root[data-theme='scene'] .ad-glitch-opt { padding: 10px 16px; border-radius: 16px; border: 2px solid #fff; background: #fff; color: var(--violet-d); font: inherit; font-weight: 800; cursor: pointer; box-shadow: 0 3px 0 rgba(90, 50, 190, 0.22); animation: sc-pop 0.4s both; }
 .ad-root[data-theme='scene'] .ad-glitch-opt:hover { background: var(--violet-soft); }
 .ad-root[data-theme='scene'] .ad-glitch-opt[data-bad='true'] { animation: sc-shake 0.45s; border-color: #e0605a; }
+
+/* a follower who has not tapped yet: one tap turns the recorded voices (and the talking mouths) on */
+.ad-root[data-theme='scene'] .ad-sound-note { position: absolute; z-index: 30; inset-inline-start: 24px; bottom: 76px; padding: 8px 16px; border-radius: 999px; border: 2px solid #fff; background: var(--violet); color: #fff; font: inherit; font-weight: 800; cursor: pointer; box-shadow: var(--shadow-s); animation: sc-pop 0.4s both; }

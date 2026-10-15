@@ -72,6 +72,6 @@ describe('Academy library in the classroom', () => {
     void path;
     bus.listeners.forEach((cb) => cb({ path: p, kind: 'click', slide: 0, senderRole: 'teacher', senderId: 'teacher' }));
     expect(onClick).toHaveBeenCalledTimes(1);
-    expect(bus.sent.length).toBe(0); // the repeat is not sent back
+    expect(bus.sent.filter((x) => x.kind !== 'ping').length).toBe(0); // the repeat is not sent back
   });
 });

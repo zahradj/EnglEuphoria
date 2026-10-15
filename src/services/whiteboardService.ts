@@ -209,10 +209,12 @@ type SceneLessonNavListener = (payload: SceneLessonNavPayload) => void;
 export interface SceneTapPayload {
   /** Child-index path from the scene wrapper root down to the target element. */
   path: number[];
-  kind?: 'click' | 'pointerdown' | 'pointermove' | 'pointerup' | 'pointercancel' | 'input';
+  kind?: 'click' | 'pointerdown' | 'pointermove' | 'pointerup' | 'pointercancel' | 'input' | 'ping';
   /** Academy deck: the slide the event happened on (replayed only on the same slide) and a typed value. */
   slide?: number;
   value?: string;
+  /** Academy deck: which shared area the path starts from (default: the slide itself). */
+  sel?: string;
   dx?: number;
   dy?: number;
   /** Groups down/move/up events belonging to the same gesture. */
