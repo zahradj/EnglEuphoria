@@ -62,7 +62,7 @@ export const B1_S01_E1: DeckScript = {
   criteria: CRITERIA,
   cast: ['Vee', 'Ava', 'Theo', 'Mia'],
   clock: true,
-  theme: 'night',
+  theme: 'cozy',
   // an integrated-skills lesson (listen, read, notice, write, speak): the long part is the Drop, where the student listens to a dialogue and reads a blog post
   partMinutes: [4, 5, 23, 10, 2, 7, 5, 4],
   partGoals: [

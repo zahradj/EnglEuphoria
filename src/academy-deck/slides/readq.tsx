@@ -24,7 +24,7 @@ export function ReadQView({ slide }: { slide: ReadQSlide }) {
   const next = () => { setI(i + 1); setSlip(false); setSolved(false); };
   return (
     <Panel title={slide.prompt} wide variant="glass">
-      <article className="ad-readq-text" aria-label={slide.title}>
+      <div className="ad-readq"><article className="ad-readq-text" aria-label={slide.title}>
         <h3>{slide.title} <small>by {slide.from}</small></h3>
         {slide.paragraphs.map((p, k) => <p key={k}>{p}</p>)}
       </article>
@@ -34,6 +34,7 @@ export function ReadQView({ slide }: { slide: ReadQSlide }) {
         {opts.map((o) => <button key={o} type="button" className="ad-readq-opt" data-bad={bad === o} data-ok={solved && o === q.answer} disabled={solved} onClick={() => pick(o)}>{o}</button>)}
         {slip && !solved && <Feedback kind="try">{NOT_YET} Find the sentence in the text.</Feedback>}
         {solved && <><Feedback kind="ok">{q.why}</Feedback><div className="ad-row" style={{ justifyContent: 'center' }}><button type="button" className="ad-btn ad-btn-primary" onClick={next}>{i + 1 === slide.questions.length ? 'Done' : 'Next'} ▸</button></div></>}
+      </div>
       </div>
     </Panel>
   );

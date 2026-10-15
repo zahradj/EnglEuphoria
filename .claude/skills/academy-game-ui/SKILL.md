@@ -105,3 +105,13 @@ A game screen is **layers, each with its own motion, driven by one state**, not 
 ## "Night" theme for B1 and up (owner 2026-10-15)
 
 The default Academy look (pastel lavender, white panels, purple ribbon titles) reads young and unfinished at B1. A lesson sets `theme: 'night'` on its `DeckScript` for: deep indigo and teal, one gold accent, dark glass panels, plain headings (no ribbons), clean glass answer tiles (no gold ovals), the teacher's lesson clock as a slim pill in the bottom bar (never a card over the lesson). While a plate is missing, the fallback is a deep-night gradient, never pastel. CSS: `.ad-root[data-theme='night']` in `src/academy-deck/deck.css`. Check every slide kind of the lesson in the real player (screenshots) before reporting it done; new slide kinds must be styled for the night theme too.
+
+## The "cozy" player theme — the default look (owner, 2026-10-15)
+
+"A player where a video game can settle in, where the student sees clearly, understands the lesson clearly and does the activities easily; cozy, clean, professional, well organised." Every Academy lesson now renders with `data-theme='cozy'` unless the script sets `theme: 'night'` (`src/academy-deck/cozy.css`, after `deck.css`).
+
+- **Palette**: warm paper (#fffcf6) cards on a cream page, deep warm-charcoal text, calm teal for every action (Next, Check), plum for accents (about a quarter of the colour), gold only for "look here". No violet wash, no ribbons, no gem dots.
+- **Layout, same on every page**: slim top bar (part name, one continuous progress bar of page segments, page count) → one paper card with the task as a plain heading and a divider → big Next button bottom right, quiet helpers (Back, Hint, I need a minute, More) and the teacher's clock in the dock. Characters stand in the side margins, never behind the card (hidden under 1000 px).
+- **Clarity**: 18 px body, 52 px minimum tap targets, one tile style for every choice (white, warm border, teal on hover, gold when held, orange for "not yet"), reading questions side by side (text left, question right).
+- **Game stage**: games (explore, hunt, vault, duel, forge) keep the scene plate visible, with one paper HUD bar (title + counter). New games must use `.ad-gm-stage` + `.ad-gm-hud` so they inherit it.
+- Add new slide styles under `.ad-root[data-theme='cozy']` using the tokens (`--paper`, `--edge`, `--teal`, `--plum`, `--gold`, `--ink`), never new hard-coded colours.
