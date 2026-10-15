@@ -2293,7 +2293,7 @@
   },
   {
     "who": "Vee",
-    "text": "Hi! A message came, but its letters are missing. Every sound you learn brings one back."
+    "text": "Hi! We found a lost phone. It has five locks. Every sound you learn opens one."
   },
   {
     "who": "Vee",
@@ -2326,6 +2326,10 @@
   {
     "who": "Vee",
     "text": "Slide the sounds together. What is the word?"
+  },
+  {
+    "who": "Theo",
+    "text": "Spell TAP. Tap the letters in order."
   },
   {
     "who": "Theo",
@@ -2368,10 +2372,6 @@
     "text": "Let's learn two sounds."
   },
   {
-    "who": "Theo",
-    "text": "Now we can read it!"
-  },
-  {
     "who": "Vee",
     "text": "phone"
   },
@@ -2394,6 +2394,22 @@
   {
     "who": "Theo",
     "text": "And this?"
+  },
+  {
+    "who": "Vee",
+    "text": "Search the bus stop. Tap every glowing thing."
+  },
+  {
+    "who": "Vee",
+    "text": "This is a phone."
+  },
+  {
+    "who": "Theo",
+    "text": "This is a tin."
+  },
+  {
+    "who": "Ava",
+    "text": "This is a map."
   },
   {
     "who": "Vee",
@@ -2433,7 +2449,7 @@
   },
   {
     "who": "Vee",
-    "text": "Which sound do you hear? Tap it."
+    "text": "Lock 1 · Ears. Listen. Tap the word to set each pin."
   },
   {
     "who": "Vee",
@@ -2444,8 +2460,28 @@
     "text": "it"
   },
   {
+    "who": "Vee",
+    "text": "sit"
+  },
+  {
+    "who": "Theo",
+    "text": "Lock 1 is open!"
+  },
+  {
+    "who": "Vee",
+    "text": "Lock 2 · Blend. Slide the sounds together. What is the word?"
+  },
+  {
     "who": "Theo",
     "text": "Spell PIN. Tap the letters in order."
+  },
+  {
+    "who": "Vee",
+    "text": "Lock 2 is open!"
+  },
+  {
+    "who": "Vee",
+    "text": "Lock 3 · Read. Read the line. Which picture is it? Tap a word to hear it."
   },
   {
     "who": "Vee",
@@ -2476,16 +2512,16 @@
     "text": "One more page. Read the line. Which picture is it?"
   },
   {
+    "who": "Ava",
+    "text": "Lock 3 is open!"
+  },
+  {
     "who": "Vee",
     "text": "The rule: point and say"
   },
   {
     "who": "Vee",
     "text": "Point and say. This is a, and the word."
-  },
-  {
-    "who": "Vee",
-    "text": "This is a phone."
   },
   {
     "who": "Theo",
@@ -2504,16 +2540,16 @@
     "text": "This is a map."
   },
   {
-    "who": "Theo",
-    "text": "This is a tin."
-  },
-  {
     "who": "Vee",
     "text": "This is a pin."
   },
   {
     "who": "Vee",
     "text": "This is a map."
+  },
+  {
+    "who": "Theo",
+    "text": "Which line do you hear? Tap it."
   },
   {
     "who": "Ava",
@@ -2529,7 +2565,23 @@
   },
   {
     "who": "Theo",
+    "text": "Lock 4 · Say it to open it. Choose the word, then say the sentence."
+  },
+  {
+    "who": "Theo",
     "text": "Take 2 · Say what each photo is: a pin, a tin, a map."
+  },
+  {
+    "who": "Theo",
+    "text": "Lock 4 is open!"
+  },
+  {
+    "who": "Ava",
+    "text": "Lock 5 · The message. Read it. Which picture is it?"
+  },
+  {
+    "who": "Ava",
+    "text": "Lock 5 is open! The phone is unlocked."
   },
   {
     "who": "Vee",
@@ -2537,7 +2589,7 @@
   },
   {
     "who": "Vee",
-    "text": "The message is back!"
+    "text": "The phone is unlocked!"
   },
   {
     "who": "Vee",

@@ -14,6 +14,8 @@ import { RuleView } from './slides/rule';
 import { ExploreView } from './slides/explore';
 import { SortView } from './slides/sort';
 import { StoryView } from './slides/story';
+import { DuelView, RhythmView, VaultView } from './slides/lock';
+import { LessonClock } from './LessonClock';
 import { playSfx } from './sfx';
 import { applyLane, laneOf, LANE_LABEL } from './lanes';
 import { BadgeView, BriefView, DialView, TitleView } from './slides/intro';
@@ -30,7 +32,7 @@ import { BePickView, BuildView, FactCheckView, WriteView } from './slides/patter
 import { ConvoView, FadeView, PhoneChatView, SayView, WhoSaidView } from './slides/talk';
 import { audioBaseFor, hasClip, loadManifest, playLine, stopLine } from './audio';
 import { openLines, slideLines } from './spoken';
-import { partsOf, SAY_IT_KINDS, type DeckScript, type Slide, type Stats, type Vars } from './types';
+import { partsFor, SAY_IT_KINDS, type DeckScript, type Slide, type Stats, type Vars } from './types';
 
 class Guard extends Component<{ children: ReactNode; onSkip: () => void; id: string }, { err: string | null; n: number }> {
   state = { err: null as string | null, n: 0 };
@@ -93,6 +95,9 @@ function SlideView({ slide }: { slide: Slide }) {
     case 'fade': return <FadeView slide={slide} />;
     case 'card': return <CardView slide={slide} />;
     case 'say': return <SayView slide={slide} />;
+    case 'vault': return <VaultView slide={slide} />;
+    case 'rhythm': return <RhythmView slide={slide} />;
+    case 'duel': return <DuelView slide={slide} />;
     case 'wrap': return <WrapView slide={slide} />;
   }
 }
@@ -158,7 +163,7 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
   }, []);
   const shownParts = useRef<Set<number>>(new Set());
   const [calm, setCalm] = useState(() => typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches);
-  const parts = partsOf(script.shape);
+  const parts = partsFor(script);
   const lane = laneOf(vars);
   const cur = applyLane(script.slides[index], lane);
   // ---- recorded voices (silent when a clip or the clip list is missing; never the browser voice)
@@ -267,8 +272,16 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
     react('concerned');
   }, [react]);
   const ctx: DeckCtx = useMemo(() => ({ artBase, vars, setVars, done, right, wrong, award, stamps, reduced: calm, seed: 1000 + index * 17, voice: voiceOn, clipsReady, canHear, speak, speakSeq }), [artBase, vars, setVars, done, right, wrong, award, stamps, calm, index, voiceOn, clipsReady, canHear, speak, speakSeq]);
+  const keys = useMemo(() => script.slides.filter((x) => x.kind === 'vault' && solved[x.id]).map((x) => (x as { lock: number }).lock), [script.slides, solved]);
+  const lockNames = script.locks;
   const isSolved = !!solved[cur.id];
   const last = index === script.slides.length - 1;
+  // a lock opens: a soft click and chime (none in Calm mode or with Sounds off)
+  const keyCount = useRef(0);
+  useEffect(() => {
+    if (keys.length > keyCount.current) playSfx('key', sfxRef.current);
+    keyCount.current = keys.length;
+  }, [keys.length]);
   // the cast chatter for a moment when a slide opens: only for slides with NO recorded clip (a real clip drives the mouth itself)
   useEffect(() => {
     setChat(true);
@@ -343,7 +356,7 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
   const panelAt = only === 'left' ? 'right' : only === 'right' ? 'left' : 'center';
   return (
     <DeckContext.Provider value={ctx}>
-      <div className="ad-root" dir="ltr" data-calm={calm || undefined} data-embedded={embedded || undefined} data-follow={follow || undefined} style={artBase ? ({ ['--o-gem-empty' as string]: `url(${artBase}/objects/gem-empty.webp)`, ['--o-gem-full' as string]: `url(${artBase}/objects/gem-full.webp)`, ['--o-ribbon' as string]: `url(${artBase}/objects/ribbon.webp)`, ['--o-frame' as string]: `url(${artBase}/objects/frame.webp)`, ['--o-star' as string]: `url(${artBase}/objects/star.webp)`, ['--o-stamp' as string]: `url(${artBase}/objects/stamp.webp)`, ['--o-ticket' as string]: `url(${artBase}/objects/ticket.webp)`, ['--o-pill-violet' as string]: `url(${artBase}/objects/pill-violet.webp)`, ['--o-pill-blue' as string]: `url(${artBase}/objects/pill-blue.webp)`, ['--o-pill-orange' as string]: `url(${artBase}/objects/pill-orange.webp)` } as React.CSSProperties) : undefined} data-reduced={calm} data-kind={cur.kind} data-hw={!!homework} data-mood={mood ?? undefined} data-testid="deck">
+      <div className="ad-root" dir="ltr" data-calm={calm || undefined} data-embedded={embedded || undefined} data-follow={follow || undefined} style={artBase ? ({ ['--o-gem-empty' as string]: `url(${artBase}/objects/gem-empty.webp)`, ['--o-gem-full' as string]: `url(${artBase}/objects/gem-full.webp)`, ['--o-ribbon' as string]: `url(${artBase}/objects/ribbon.webp)`, ['--o-frame' as string]: `url(${artBase}/objects/frame.webp)`, ['--o-star' as string]: `url(${artBase}/objects/star.webp)`, ['--o-stamp' as string]: `url(${artBase}/objects/stamp.webp)`, ['--o-ticket' as string]: `url(${artBase}/objects/ticket.webp)`, ['--o-pill-violet' as string]: `url(${artBase}/objects/pill-violet.webp)`, ['--o-pill-blue' as string]: `url(${artBase}/objects/pill-blue.webp)`, ['--o-pill-orange' as string]: `url(${artBase}/objects/pill-orange.webp)` } as React.CSSProperties) : undefined} data-reduced={calm} data-kind={cur.kind} data-lock={lockNames ? (cur.lock ?? 0) : undefined} data-hw={!!homework} data-mood={mood ?? undefined} data-testid="deck">
         {prevBg && prevBg !== cur.bg && !calm && <Plate id={prevBg} artBase={artBase} key={`out-${prevBg}`} phase="out" />}
         <Plate id={cur.bg} artBase={artBase} key={cur.bg} phase={prevBg && prevBg !== cur.bg && !calm ? 'in' : undefined} />
         <div className="ad-actors" aria-hidden={actorsVisible.length === 0}>
@@ -353,13 +366,19 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
           <span className="ad-lesson">{homework ? `${homework.label} · game ${index + 1} of ${script.slides.length}` : parts[cur.part]?.name}</span>
           <ol>
             {script.slides.map((s, i) => (
-              <li key={s.id} data-part-start={i > 0 && s.part !== script.slides[i - 1].part}>
+              <li key={s.id} data-part-start={i > 0 && s.part !== script.slides[i - 1].part} data-optional={(teacher && s.optional) || undefined}>
                 <button type="button" className="ad-dot" data-now={i === index} data-done={!!solved[s.id]} disabled={follow || (!teacher && i > index && !solved[script.slides[i - 1]?.id])} aria-label={`Slide ${i + 1}${i === index ? ' (now)' : ''}`} aria-current={i === index} onClick={() => go(i)} />
               </li>
             ))}
           </ol>
+          {lockNames && !homework && (
+            <ul className="ad-keys" aria-label={`Keys: ${keys.length} of ${lockNames.length}`}>
+              {lockNames.map((nm, k) => <li key={nm} className="ad-keyslot" data-on={keys.includes(k + 1)} data-now={cur.lock === k + 1} title={`Lock ${k + 1}: ${nm}`}><Icon name={keys.includes(k + 1) ? 'key' : 'lock'} /></li>)}
+            </ul>
+          )}
           <span className="ad-count">{index + 1}/{script.slides.length}</span>
         </header>
+        {teacher && !follow && !homework && script.clock && <LessonClock script={script} part={cur.part} />}
         {!homework && (stats.spoken ?? 0) > 0 && (
           <div className="ad-say-tally" role="status" aria-label={`Spoken aloud: ${stats.spoken}`}><Icon name="chat" /> {stats.spoken}</div>
         )}

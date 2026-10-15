@@ -57,6 +57,10 @@ export interface SlideBase {
   /** scene plate id: `${artBase}/bg/<id>.webp` (a drawn gradient shows if the picture is missing) */
   bg: string;
   actors?: Actor[];
+  /** extra practice the teacher can skip to keep the hour (shown dashed in the teacher's strip); the REQUIRED slides alone fill the hour */
+  optional?: boolean;
+  /** v2 lock-screen lessons: which lock (1-5) this slide belongs to; the key HUD fills when the lock's vault slide is done */
+  lock?: number;
   /** success criteria this slide trains (1-based); a slide with none is only allowed for title / brief / wrap */
   trains?: number[];
   /** two-step help shown by the Hint button: [small nudge, bigger help] */
@@ -204,11 +208,17 @@ export interface StorySlide extends SlideBase {
   title: string;
   beats: { plate: string; lines: { who: CastName; text: string }[] }[];
 }
+/** Vault hub (v2): a lock opens. The door for `lock` swings open, its key flies into the HUD slot, one line says what the student just did. Done by itself after the animation; no question is asked. */
+export interface VaultSlide extends SlideBase { kind: 'vault'; lock: number; line: string; reward: string }
+/** Lock-pick lane (v2, Lock 1): the guide says a sound or word; the student taps the matching tile to set a pin. A soft light sweeps the tiles on a slow beat (visual only, no timing, no penalty); done when every pin is set. */
+export interface RhythmSlide extends SlideBase { kind: 'rhythm'; prompt: string; rounds: { say: string; options: string[]; answer: string }[] }
+/** Boss duel (v2, Lock 4, the signature game): a picture; the student picks its word, the sentence is built and spoken, then the student says it aloud (Say it). A right pick is a step forward; a miss is ONE soft step back (never below the start); three misses in a round show the answer. Done when the key reaches the lock. */
+export interface DuelSlide extends SlideBase { kind: 'duel'; prompt: string; frame: string; rounds: { art: TeachArt; options: string[]; answer: string }[] }
 export interface WrapSlide extends SlideBase { kind: 'wrap'; heading: string; ticks: string[]; homework: string; clue: string }
 
 export type Slide =
   | TitleSlide | BriefSlide | BadgeSlide | DialSlide | LaneSlide | WhoSaidSlide | LockersSlide | NumTrainSlide | PadlockSlide | ConvoSlide | SpellSlide
-  | MatchSlide | CountUpSlide | BePickSlide | BuildSlide | FactCheckSlide | WriteSlide | HuntSlide | ShadowSlide | TeachSlide | ModelSlide | FindWrongSlide | BorderSlide | MemorySlide | NumWallSlide | PhoneChatSlide | FadeSlide | CardSlide | SaySlide | WrapSlide | BlendSlide | HearPickSlide | ReaderSlide | RuleSlide | ExploreSlide | SortSlide | StorySlide;
+  | MatchSlide | CountUpSlide | BePickSlide | BuildSlide | FactCheckSlide | WriteSlide | HuntSlide | ShadowSlide | TeachSlide | ModelSlide | FindWrongSlide | BorderSlide | MemorySlide | NumWallSlide | PhoneChatSlide | FadeSlide | CardSlide | SaySlide | VaultSlide | RhythmSlide | DuelSlide | WrapSlide | BlendSlide | HearPickSlide | ReaderSlide | RuleSlide | ExploreSlide | SortSlide | StorySlide;
 
 export interface DeckScript {
   lessonId: string;
@@ -224,10 +234,22 @@ export interface DeckScript {
   cast: CastName[];
   /** one line per part (index 0-7) shown on the part card; defaults to the PARTS goals */
   partGoals?: string[];
+  /** minutes per part for THIS lesson (eight numbers adding to 60) when the content needs a different split from the run of show; the part cards and the lesson clock use them */
+  partMinutes?: number[];
+  /** v2 lock-screen lesson: the names of the locks (five), shown by the key HUD; slides carry `lock` and a `vault` slide opens each lock */
+  locks?: string[];
+  /** teacher view only: show the lesson clock (part target vs running time); never shown to the student */
+  clock?: boolean;
   slides: Slide[];
 }
 
 export type Vars = Record<string, string>;
 export interface Stats { right: number; wrong: number; hints: number; skipped: string[]; /** times the student tapped "Say it" after saying an answer aloud (speaking practice, docs/academy-speaking-practice.md) */ spoken?: number }
 /** Slide kinds where the student can say the answer aloud and tap "Say it" (owner 2026-10-14: speaking practice in every lesson). */
-export const SAY_IT_KINDS: readonly string[] = ['teach', 'hearpick', 'blend', 'reader', 'match', 'memory', 'build', 'spell', 'convo'];
+export const SAY_IT_KINDS: readonly string[] = ['teach', 'hearpick', 'blend', 'reader', 'match', 'memory', 'build', 'spell', 'convo', 'duel', 'rhythm'];
+
+/** The parts of a lesson: its run of show, with the lesson's own minutes when it sets `partMinutes`. */
+export function partsFor(script: Pick<DeckScript, 'shape' | 'partMinutes'>): { name: string; goal: string; minutes: number }[] {
+  const base = partsOf(script.shape);
+  return base.map((p, i) => ({ name: p.name, goal: p.goal, minutes: script.partMinutes?.[i] ?? p.minutes }));
+}

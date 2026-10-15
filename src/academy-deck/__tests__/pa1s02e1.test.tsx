@@ -4,7 +4,7 @@ import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { Deck } from '../Deck';
 import { PA1_S02_E1, CRITERIA, OBJECTIVE } from '../lessons/pa1s02e1';
 import { decodabilityProblems } from '../decodable';
-import { PRE_A1_PARTS, type Slide } from '../types';
+import { PRE_A1_PARTS, partsFor, type Slide } from '../types';
 import { PA1_S02, PRE_A1_MAX_NEW_ITEMS, PRE_A1_RECALL_NODES, getLadderStep, recallPlan } from '../../curriculum/academy';
 import { slideLines } from '../spoken';
 
@@ -31,6 +31,10 @@ const minutes = (s: Slide): number => {
     case 'hearpick': return 0.5 + s.rounds.length * 0.5;
     case 'blend': return 0.5 + s.rounds.length * 0.7;
     case 'rule': return 1;
+    case 'vault': return 0.3;
+    case 'rhythm': return 0.5 + s.rounds.length * 0.4;
+    case 'duel': return 0.8 + s.rounds.length * 0.7;
+    case 'explore': return 0.6 + s.spots.length * 0.4;
     case 'story': return 0.4 + s.beats.reduce((n, b) => n + b.lines.length, 0) * 0.4;
     case 'reader': return 0.6 + s.lines.length * 0.7;
     case 'fade': return 0.6 + s.lines.length * 0.6;
@@ -65,22 +69,28 @@ describe('Pre-A1 S02 E1: Season spec and run of show', () => {
     expect(PA1_S02_E1.partGoals).toHaveLength(8);
   });
 
-  it('TIME: every part fills its time (70-125 %) and the lesson totals 57-64.5 minutes', () => {
-    const per = PRE_A1_PARTS.map((_, i) => slides.filter((s) => s.part === i).reduce((a, s) => a + minutes(s), 0));
+  it('TIME: the REQUIRED pages fill the hour part by part (70-125 % of the lesson\'s own minutes, 57-64.5 in all); the optional pages are extra practice, at most 12 minutes', () => {
+    const parts = partsFor(PA1_S02_E1);
+    expect(parts.reduce((a, p) => a + p.minutes, 0)).toBe(60);
+    const req = slides.filter((s) => !s.optional);
+    const per = parts.map((_, i) => req.filter((s) => s.part === i).reduce((a, s) => a + minutes(s), 0));
     per.forEach((m, i) => {
-      expect(m, `${PRE_A1_PARTS[i].name}: ${m.toFixed(1)} min`).toBeGreaterThanOrEqual(PRE_A1_PARTS[i].minutes * 0.7);
-      expect(m, `${PRE_A1_PARTS[i].name}: ${m.toFixed(1)} min`).toBeLessThanOrEqual(PRE_A1_PARTS[i].minutes * 1.25);
+      expect(m, `${parts[i].name}: ${m.toFixed(1)} min`).toBeGreaterThanOrEqual(parts[i].minutes * 0.7);
+      expect(m, `${parts[i].name}: ${m.toFixed(1)} min`).toBeLessThanOrEqual(parts[i].minutes * 1.25);
     });
     const total = per.reduce((a, b) => a + b, 0);
-    expect(total, `total ${total.toFixed(1)} min`).toBeGreaterThanOrEqual(57);
-    expect(total, `total ${total.toFixed(1)} min`).toBeLessThanOrEqual(64.5);
+    expect(total, `required total ${total.toFixed(1)} min`).toBeGreaterThanOrEqual(57);
+    expect(total, `required total ${total.toFixed(1)} min`).toBeLessThanOrEqual(64.5);
+    const extra = slides.filter((s) => s.optional).reduce((a, s) => a + minutes(s), 0);
+    expect(extra, `optional ${extra.toFixed(1)} min`).toBeLessThanOrEqual(12);
   });
 
   it('RULE: two different games after every vocabulary introduction; no neighbouring slides share a kind; the rule is stated before the practice', () => {
-    const GAMES = new Set(['match', 'memory', 'spell', 'build', 'hearpick', 'blend', 'reader']);
+    const GAMES = new Set(['match', 'memory', 'spell', 'build', 'hearpick', 'blend', 'reader', 'rhythm', 'duel']);
     slides.forEach((s, i) => {
       if (s.kind !== 'teach') return;
-      const after = slides.slice(i + 1, i + 3);
+      // a vault page (a lock opening) is a reward moment between games, not a learning page: it is skipped here
+      const after = slides.slice(i + 1).filter((g) => g.kind !== 'vault').slice(0, 2);
       expect(after.every((g) => GAMES.has(g.kind)), `${s.id}: games after it`).toBe(true);
       expect(new Set(after.map((g) => g.kind)).size, `${s.id}: different kinds`).toBe(2);
     });
@@ -93,7 +103,8 @@ describe('Pre-A1 S02 E1: Season spec and run of show', () => {
   it('INTENSIVE PRACTICE: at least 80 student responses in the hour, and a teach-back of the rule', () => {
     const responses = (s: Slide): number => {
       switch (s.kind) {
-        case 'hearpick': case 'blend': case 'build': return s.rounds.length;
+        case 'hearpick': case 'blend': case 'build': case 'rhythm': return s.rounds.length;
+        case 'duel': return s.rounds.length * 2; // a pick and a sentence said aloud for every picture
         case 'reader': return s.lines.length;
         case 'match': return s.pairs.length;
         case 'memory': return s.pairs.length * 2;
@@ -111,7 +122,7 @@ describe('Pre-A1 S02 E1: Season spec and run of show', () => {
 
   it('ALIGNMENT: every criterion is practised on at least 3 slides, and every non-intro slide trains one', () => {
     for (let c = 1; c <= 5; c++) expect(slides.filter((s) => s.trains?.includes(c)).length, `criterion ${c}`).toBeGreaterThanOrEqual(3);
-    slides.filter((s) => !['title', 'brief', 'wrap', 'dial'].includes(s.kind)).forEach((s) => expect(s.trains?.length, s.id).toBeGreaterThan(0));
+    slides.filter((s) => !['title', 'brief', 'wrap', 'dial', 'vault'].includes(s.kind)).forEach((s) => expect(s.trains?.length, s.id).toBeGreaterThan(0));
   });
 
   it('DECODABILITY: every word the student reads is blendable from s a t p i n or a taught whole word', () => {
@@ -145,8 +156,8 @@ describe('Pre-A1 S02 E1: play-through', () => {
   });
 
   it('HEAR AND PICK sounds: a wrong tile says Not yet, the right tile moves on', () => {
-    open('hear-in');
-    fireEvent.click(screen.getByRole('button', { name: 'a' }));
+    open('warm');
+    fireEvent.click(screen.getByRole('button', { name: 'T' }));
     expect(screen.getByText(/Not yet/)).toBeTruthy();
   });
 

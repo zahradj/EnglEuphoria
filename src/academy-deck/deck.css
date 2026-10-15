@@ -1198,3 +1198,63 @@
 .ad-root .ad-story-dots i { width: 9px; height: 9px; border-radius: 50%; background: rgba(255, 255, 255, 0.35); }
 .ad-root .ad-story-dots i[data-seen='true'] { background: rgba(255, 255, 255, 0.8); }
 .ad-root .ad-story-dots i[data-on='true'] { width: 26px; border-radius: 6px; background: #fbbf24; }
+
+/* ===== Pre-A1 S2 L1 v2 "Unlock the Lost Phone" (owner 2026-10-15): lock-screen look, key HUD, vault doors, lock-pick lane, boss duel, lesson clock ===== */
+/* lock-screen bezel on every page of a lock lesson: a thin glowing frame and a notch, never over the game */
+.ad-root[data-lock] { box-shadow: inset 0 0 0 3px rgba(196, 181, 253, 0.55), inset 0 0 38px rgba(109, 70, 230, 0.22); }
+.ad-root[data-lock]::before { content: ''; position: absolute; z-index: 6; top: 0; left: 50%; width: 120px; height: 12px; margin-left: -60px; border-radius: 0 0 12px 12px; background: rgba(30, 27, 75, 0.78); pointer-events: none; }
+.ad-keys { list-style: none; display: flex; gap: 6px; margin: 0; padding: 4px 8px; border-radius: 999px; background: rgba(30, 27, 75, 0.82); }
+.ad-keyslot { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; border: 2px solid #a78bfa; color: #c4b5fd; background: rgba(109, 70, 230, 0.25); }
+.ad-keyslot svg { width: 15px; height: 15px; }
+.ad-keyslot[data-now='true'] { border-color: #fbbf24; box-shadow: 0 0 10px rgba(251, 191, 36, 0.7); }
+.ad-keyslot[data-on='true'] { color: #3b2a00; background: linear-gradient(180deg, #fde68a, #f59e0b); border-color: #fde68a; animation: ad-key-pop 0.5s ease-out; }
+@keyframes ad-key-pop { 0% { transform: scale(0.4) rotate(-40deg); } 70% { transform: scale(1.25) rotate(8deg); } 100% { transform: scale(1) rotate(0); } }
+/* vault hub */
+.ad-vault { display: grid; gap: 14px; justify-items: center; text-align: center; padding: 6px 4px; }
+.ad-vault-doors { list-style: none; display: flex; gap: 14px; margin: 0; padding: 0; }
+.ad-vault-door { position: relative; display: grid; place-items: center; width: 74px; height: 74px; border-radius: 50%; border: 4px solid #8b5cf6; background: radial-gradient(circle at 40% 35%, #4c1d95, #1e1b4b); box-shadow: 0 6px 14px rgba(30, 27, 75, 0.45); transition: transform 0.6s, border-color 0.6s, background 0.6s; }
+.ad-vault-num { font-weight: 900; font-size: 1.6rem; color: #ddd6fe; }
+.ad-vault-key { position: absolute; inset: 0; display: grid; place-items: center; opacity: 0; color: #3b2a00; transform: scale(0.3); transition: opacity 0.4s 0.2s, transform 0.5s 0.2s; }
+.ad-vault-key svg { width: 38px; height: 38px; }
+.ad-vault-door[data-state='opened'], .ad-vault-door[data-state='opening'] { border-color: #fbbf24; background: radial-gradient(circle at 40% 35%, #fde68a, #d97706); }
+.ad-vault-door[data-state='opening'] { transform: scale(1.18); }
+.ad-vault-door[data-state='opened'] .ad-vault-num, .ad-vault-door[data-state='opening'] .ad-vault-num { opacity: 0; }
+.ad-vault-door[data-state='opened'] .ad-vault-key, .ad-vault-door[data-state='opening'] .ad-vault-key { opacity: 1; transform: scale(1); }
+.ad-vault-line { margin: 0; font-size: clamp(1.2rem, 3vw, 1.7rem); font-weight: 900; color: var(--violet-d); }
+.ad-vault-reward { margin: 0; font-weight: 700; color: #92400e; display: flex; gap: 6px; align-items: center; }
+/* pins and the lock-pick lane */
+.ad-pins { list-style: none; display: flex; gap: 10px; justify-content: center; margin: 0 0 6px; padding: 0; }
+.ad-pin { width: 16px; height: 46px; border-radius: 8px; background: linear-gradient(180deg, #a78bfa, #6d46e6); border: 2px solid #fff; box-shadow: 0 3px 6px rgba(60, 30, 140, 0.35); transform: translateY(10px); opacity: 0.55; transition: transform 0.35s, opacity 0.35s, background 0.35s; }
+.ad-pin[data-set='true'] { transform: translateY(-4px); opacity: 1; background: linear-gradient(180deg, #fde68a, #f59e0b); }
+.ad-lane { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; padding: 10px 0 6px; }
+.ad-lane-tile { position: relative; min-width: 104px; min-height: 104px; padding: 10px 20px; border-radius: 22px; border: 3px solid #c4b5fd; background: linear-gradient(180deg, #fff, #ede9fe); font-size: 2.2rem; font-weight: 900; color: var(--violet-d); box-shadow: 0 8px 14px rgba(60, 30, 140, 0.22); cursor: pointer; overflow: hidden; }
+.ad-lane-tile::after { content: ''; position: absolute; inset: 0; background: linear-gradient(100deg, transparent 30%, rgba(251, 191, 36, 0.35) 50%, transparent 70%); transform: translateX(-120%); animation: ad-sweep 3.6s ease-in-out infinite; animation-delay: calc(var(--k, 0) * 0.45s); pointer-events: none; }
+@keyframes ad-sweep { 0%, 55% { transform: translateX(-120%); } 85%, 100% { transform: translateX(120%); } }
+.ad-lane-tile:hover { transform: translateY(-3px); border-color: var(--violet); }
+.ad-lane-tile[data-bad='true'] { animation: ad-shake 0.35s; border-color: #f97316; }
+.ad-lane-tile[data-help='true'] { border-color: #f59e0b; box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.55), 0 8px 14px rgba(60, 30, 140, 0.22); }
+/* boss duel */
+.ad-duel-track { display: flex; align-items: center; justify-content: center; gap: 0; margin: 2px 0 10px; }
+.ad-duel-step { position: relative; display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; border: 3px solid #c4b5fd; background: rgba(255, 255, 255, 0.7); color: #3b2a00; }
+.ad-duel-step svg { width: 22px; height: 22px; }
+.ad-duel-step + .ad-duel-step { margin-left: 22px; }
+.ad-duel-step + .ad-duel-step::before { content: ''; position: absolute; right: 100%; top: 50%; width: 22px; height: 4px; margin-top: -2px; background: #c4b5fd; }
+.ad-duel-step[data-on='true'] { border-color: #f59e0b; background: linear-gradient(180deg, #fde68a, #f59e0b); }
+.ad-duel-step[data-on='true']::before { background: #f59e0b; }
+.ad-duel-step[data-end='true'] { color: var(--violet-d); }
+.ad-duel { display: grid; grid-template-columns: minmax(150px, 0.8fr) 1.2fr; gap: 18px; align-items: center; }
+.ad-duel-pic { display: grid; place-items: center; }
+.ad-duel-side { display: grid; gap: 12px; justify-items: start; }
+.ad-duel-frame { margin: 0; font-size: clamp(1.4rem, 3.4vw, 2rem); font-weight: 900; color: var(--violet-d); }
+.ad-duel-opts { display: flex; flex-wrap: wrap; gap: 12px; }
+.ad-duel-opts .ad-lane-tile { min-width: 92px; min-height: 72px; font-size: 1.7rem; }
+@media (max-width: 640px) { .ad-duel { grid-template-columns: 1fr; justify-items: center; } .ad-duel-side { justify-items: center; } }
+/* lesson clock (teacher only) */
+.ad-clock { position: absolute; z-index: 7; top: 52px; right: 10px; display: grid; grid-template-columns: auto 1fr; gap: 2px 8px; align-items: center; max-width: 260px; padding: 7px 10px; border-radius: 14px; background: rgba(30, 27, 75, 0.86); color: #ede9fe; font-size: 0.78rem; font-weight: 700; box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3); }
+.ad-clock svg { width: 16px; height: 16px; grid-row: 1 / 4; }
+.ad-clock-hint { grid-column: 2; font-weight: 600; opacity: 0.9; }
+.ad-clock[data-state='behind'] { background: rgba(124, 45, 18, 0.9); }
+.ad-clock[data-state='ahead'] { background: rgba(6, 78, 59, 0.9); }
+.ad-root[data-reduced='true'] .ad-lane-tile::after { display: none; }
+
+.ad-strip li[data-optional='true'] .ad-dot { border-style: dashed; border-color: #f59e0b; }
