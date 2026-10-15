@@ -4,7 +4,7 @@ import { partsFor, type DeckScript, type TitleSlide } from '../types';
 import { levelLine } from '../hub';
 
 /** The Academy lobby: the first page of every lesson. It presents the hub (level, season, episode), the mission (objective and "I can" goals), the crew and the quest path, like the start screen of a game. */
-export function LobbyView({ slide, script }: { slide: TitleSlide; script: DeckScript }) {
+export function LobbyView({ slide, script, onStart }: { slide: TitleSlide; script: DeckScript; onStart?: () => void }) {
   const { done, artBase } = useDeck();
   useEffect(() => done(), [done]);
   const parts = partsFor(script);
@@ -23,6 +23,7 @@ export function LobbyView({ slide, script }: { slide: TitleSlide; script: DeckSc
             </span>
           ))}
         </div>
+        {onStart && <button type="button" className="ad-start" onClick={onStart}>Start the mission →</button>}
       </div>
       <div className="ad-lobby-side">
         <section className="ad-lobby-card" aria-label="Your mission">

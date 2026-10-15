@@ -5,7 +5,7 @@ import type React from 'react';
 import { Component, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import './deck.css';
-import './cozy.css';
+import './scene.css';
 import { DeckContext, type DeckCtx } from './ctx';
 import { Icon } from './Icon';
 import { Character, Plate } from './Stage';
@@ -73,9 +73,9 @@ function clearedStars(s: Stats): number {
 const SKILL: Record<string, string> = { say: 'Speaking', fade: 'Speaking', passage: 'Reading', readq: 'Reading', hearpick: 'Listening', story: 'Listening', model: 'Listening', write: 'Writing', build: 'Writing', sort: 'Game', memory: 'Game', match: 'Game', forge: 'Game', streak: 'Game', explore: 'Game', hunt: 'Game', vault: 'Game', duel: 'Game', rhythm: 'Game' };
 const skillOf = (kind: string): string => SKILL[kind] ?? '';
 
-function SlideView({ slide, script }: { slide: Slide; script: DeckScript }) {
+function SlideView({ slide, script, onStart }: { slide: Slide; script: DeckScript; onStart: () => void }) {
   switch (slide.kind) {
-    case 'title': return script.hub === false ? <TitleView slide={slide} /> : <LobbyView slide={slide} script={script} />;
+    case 'title': return script.hub === false ? <TitleView slide={slide} /> : <LobbyView slide={slide} script={script} onStart={onStart} />;
     case 'brief': return <BriefView slide={slide} />;
     case 'badge': return <BadgeView slide={slide} />;
     case 'dial': return <DialView slide={slide} />;
@@ -379,7 +379,7 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
   const panelAt = only === 'left' ? 'right' : only === 'right' ? 'left' : 'center';
   return (
     <DeckContext.Provider value={ctx}>
-      <div className="ad-root" dir="ltr" data-calm={calm || undefined} data-embedded={embedded || undefined} data-follow={follow || undefined} style={artBase ? ({ ['--o-gem-empty' as string]: `url(${artBase}/objects/gem-empty.webp)`, ['--o-gem-full' as string]: `url(${artBase}/objects/gem-full.webp)`, ['--o-ribbon' as string]: `url(${artBase}/objects/ribbon.webp)`, ['--o-frame' as string]: `url(${artBase}/objects/frame.webp)`, ['--o-star' as string]: `url(${artBase}/objects/star.webp)`, ['--o-stamp' as string]: `url(${artBase}/objects/stamp.webp)`, ['--o-ticket' as string]: `url(${artBase}/objects/ticket.webp)`, ['--o-pill-violet' as string]: `url(${artBase}/objects/pill-violet.webp)`, ['--o-pill-blue' as string]: `url(${artBase}/objects/pill-blue.webp)`, ['--o-pill-orange' as string]: `url(${artBase}/objects/pill-orange.webp)` } as React.CSSProperties) : undefined} data-reduced={calm} data-theme={script.theme ?? 'cozy'} data-kind={cur.kind} data-part={cur.part} data-skill={skillOf(cur.kind) || undefined} data-lock={lockNames ? (cur.lock ?? 0) : undefined} data-hw={!!homework} data-mood={mood ?? undefined} data-testid="deck">
+      <div className="ad-root" dir="ltr" data-calm={calm || undefined} data-embedded={embedded || undefined} data-follow={follow || undefined} style={artBase ? ({ ['--o-gem-empty' as string]: `url(${artBase}/objects/gem-empty.webp)`, ['--o-gem-full' as string]: `url(${artBase}/objects/gem-full.webp)`, ['--o-ribbon' as string]: `url(${artBase}/objects/ribbon.webp)`, ['--o-frame' as string]: `url(${artBase}/objects/frame.webp)`, ['--o-star' as string]: `url(${artBase}/objects/star.webp)`, ['--o-stamp' as string]: `url(${artBase}/objects/stamp.webp)`, ['--o-ticket' as string]: `url(${artBase}/objects/ticket.webp)`, ['--o-pill-violet' as string]: `url(${artBase}/objects/pill-violet.webp)`, ['--o-pill-blue' as string]: `url(${artBase}/objects/pill-blue.webp)`, ['--o-pill-orange' as string]: `url(${artBase}/objects/pill-orange.webp)` } as React.CSSProperties) : undefined} data-reduced={calm} data-theme={script.theme ?? 'scene'} data-kind={cur.kind} data-part={cur.part} data-skill={skillOf(cur.kind) || undefined} data-lock={lockNames ? (cur.lock ?? 0) : undefined} data-hw={!!homework} data-mood={mood ?? undefined} data-testid="deck">
         {prevBg && prevBg !== cur.bg && !calm && <Plate id={prevBg} artBase={artBase} key={`out-${prevBg}`} phase="out" />}
         <Plate id={cur.bg} artBase={artBase} key={cur.bg} phase={prevBg && prevBg !== cur.bg && !calm ? 'in' : undefined} />
         <div className="ad-actors" aria-hidden={actorsVisible.length === 0}>
@@ -421,7 +421,7 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
         )}
         <main className="ad-main" data-panel={panelAt}>
           <Guard id={cur.id} onSkip={skip}>
-            <SlideView key={cur.id} slide={cur} script={script} />
+            <SlideView key={cur.id} slide={cur} script={script} onStart={() => go(index + 1)} />
           </Guard>
           {toast && <div className="ad-toast" role="status"><Icon name="bulb" /> {toast}</div>}
         </main>
@@ -434,10 +434,12 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
         <nav className="ad-dock" aria-label="Lesson controls">
           {!follow && <button type="button" className="ad-dockbtn" onClick={() => go(index - 1)} disabled={index === 0}>◀ Back</button>}
           {!homework && SAY_IT_KINDS.includes(cur.kind) && (<button type="button" className="ad-dockbtn ad-dock-say" onClick={sayIt} aria-label="Say it aloud, then tap"><Icon name="chat" /> Say it ✓</button>)}
+          <div className="ad-tools">
           <button type="button" className="ad-dockbtn" onClick={hint}>{artBase ? <img className="ad-dockico" src={`${artBase}/objects/btn-hint.webp`} alt="" aria-hidden="true" /> : <Icon name="bulb" />} Hint</button>
           <button type="button" className="ad-dockbtn" onClick={() => setMinute(true)}>{artBase ? <img className="ad-dockico" src={`${artBase}/objects/btn-pause.webp`} alt="" aria-hidden="true" /> : <Icon name="pause" />} <span className="ad-long">I need a minute</span><span className="ad-short">Minute</span></button>
+          <button type="button" className="ad-dockbtn" onClick={() => setMenu(!menu)} aria-expanded={menu}>{artBase ? <img className="ad-dockico" src={`${artBase}/objects/btn-gear.webp`} alt="" aria-hidden="true" /> : <Icon name="gear" />} <span className="ad-long">More</span></button>
+          </div>
           {teacher && !follow && !homework && script.clock && <LessonClock script={script} part={cur.part} />}
-          <button type="button" className="ad-dockbtn" onClick={() => setMenu(!menu)} aria-expanded={menu}>{artBase ? <img className="ad-dockico" src={`${artBase}/objects/btn-gear.webp`} alt="" aria-hidden="true" /> : <Icon name="gear" />} More</button>
           {!follow && (<button type="button" className="ad-dockbtn ad-dock-next" onClick={next} disabled={!isSolved && !freeNext}>{last ? 'Finish ✓' : <>Next {artBase ? <img className="ad-dockico ad-nextico" src={`${artBase}/objects/btn-next.webp`} alt="" aria-hidden="true" /> : '▶'}</>}</button>)}
         </nav>
         {menu && (

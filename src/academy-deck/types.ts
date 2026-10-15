@@ -249,8 +249,8 @@ export interface DeckScript {
   partMinutes?: number[];
   /** v2 lock-screen lesson: the names of the locks (five), shown by the key HUD; slides carry `lock` and a `vault` slide opens each lock */
   locks?: string[];
-  /** a look for the whole lesson: 'cozy' (default, owner 2026-10-15) = warm paper, calm teal and plum, one clean card per page; 'night' = deep indigo and teal with dark glass panels */
-  theme?: 'night' | 'cozy';
+  /** a look for the whole lesson: 'scene' (default, owner 2026-10-15: "study the Playground player") = the painted scene fills the screen, frosted glass for the task, an instruction pill, floating pill buttons; 'night' = deep indigo and teal with dark glass panels */
+  theme?: 'night' | 'scene';
   /** false keeps the plain title card instead of the Academy lobby */
   hub?: boolean;
   /** teacher view only: show the lesson clock (part target vs running time); never shown to the student */
