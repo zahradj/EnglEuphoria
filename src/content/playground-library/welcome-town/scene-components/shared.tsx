@@ -142,7 +142,9 @@ export function QuestionCard({ ask, choices, img, wrong, onPick, onHear, disable
   // `tone` is kept for older callers; every answer card now uses the shared game skin (gameSkin.ts).
   void tone;
   return (
-    <div className={`relative p-[2.2vh] pt-[2.6vh] text-center ${SKIN.panel} ${className}`}>
+    // `relative` only when the caller doesn't place the card itself: in Tailwind's CSS `relative` comes after
+    // `absolute`, so both together pin the card to the top-left corner over the title.
+    <div className={`${/\b(absolute|fixed)\b/.test(className) ? '' : 'relative '}p-[2.2vh] pt-[2.6vh] text-center ${SKIN.panel} ${className}`}>
       <div className="absolute inset-x-[18%] -top-[0.5vh] h-[1vh] rounded-full bg-gradient-to-r from-[#FEAF15] via-[#FDE68A] to-[#FEAF15] shadow" />
       <div className="mb-[1.6vh] flex items-center justify-center gap-3">
         {img && <img src={img} alt="" draggable={false} className="h-[min(11vh,7.4vw)] w-auto rounded-[1.4vh] object-contain drop-shadow-[0_0.6vh_0.6vh_rgba(60,30,10,0.25)]" />}
