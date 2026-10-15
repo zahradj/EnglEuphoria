@@ -202,7 +202,7 @@ export const B1_S01_E1: DeckScript = {
         'I made my first bucket list last month. My cousin gave me a [[dare]]: write ten things I want to do. Number one is to [[give it a go]] on a surfboard, even though I am scared.',
         'I am not very [[brave]], but I want to do one [[once in a lifetime]] thing every year. When I finish an item, I [[tick it off]] on my [[bucket list]] and I feel proud.',
       ],
-      hints: { dare: 'a challenge', 'give it a go': 'try', brave: 'not afraid', 'once in a lifetime': 'one time only', 'tick it off': 'mark as done', 'bucket list': 'things to do in your life' },
+      gapHints: { dare: 'a challenge', 'give it a go': 'try', brave: 'not afraid', 'once in a lifetime': 'one time only', 'tick it off': 'mark as done', 'bucket list': 'things to do in your life' },
     },
 
     {

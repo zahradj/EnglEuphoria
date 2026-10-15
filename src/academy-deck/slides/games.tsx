@@ -365,7 +365,7 @@ export function ClozeView({ slide }: { slide: ClozeSlide }) {
                 if (!m) return <span key={ci}>{chunk}</span>;
                 gi += 1;
                 const g = gi;
-                const hint = (tries[g] ?? 0) >= 2 ? slide.hints?.[m[1]] : undefined;
+                const hint = (tries[g] ?? 0) >= 2 ? slide.gapHints?.[m[1]] : undefined;
                 return (
                   <button key={ci} type="button" className="ad-gap" data-filled={filled[g] !== undefined || undefined} data-on={gap === g || undefined} data-bad={bad === g || undefined} onClick={() => pickGap(g)} aria-label={filled[g] !== undefined ? bank[filled[g]].w : `Gap ${g + 1}`}>
                     {filled[g] !== undefined ? bank[filled[g]].w : (hint ? `(${hint})` : '\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0')}
