@@ -549,3 +549,30 @@
 .ad-root[data-theme='scene'] .ad-partcard::after { content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none; background: linear-gradient(rgba(60, 35, 140, 0.5), rgba(35, 20, 90, 0.72)); }
 .ad-root[data-theme='scene'] .ad-partcard > :not(.ad-partcard-plate) { position: relative; z-index: 1; }
 @media (prefers-reduced-motion: reduce) { .ad-root[data-theme='scene'] .ad-story-title { animation: none; } }
+
+/* ── Three different looks for the verb-form games (owner plan v3, 2026-10-16: a repeated game gets new designs) ──
+   Triple Match = card table (felt and playing cards) · Streak = dial (round gauge) · Wordle = keyboard wall (keycaps). */
+.ad-root[data-theme='scene'] .ad-triple-board { padding: 12px; border-radius: 26px; background: radial-gradient(circle at 50% 30%, #2e8f78, #1d6b5a); box-shadow: inset 0 0 0 4px rgba(255, 255, 255, 0.45), 0 10px 24px rgba(20, 60, 50, 0.3); }
+.ad-root[data-theme='scene'] .ad-triple-col { background: rgba(255, 255, 255, 0.14); border-top-width: 0 !important; box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.35); }
+.ad-root[data-theme='scene'] .ad-triple-col h3 { color: #f4fff9; }
+.ad-root[data-theme='scene'] .ad-triple-tile { background: linear-gradient(180deg, #fff, #f6f3ff); border-radius: 10px; border: 2px solid #fff; box-shadow: 0 5px 0 rgba(0, 0, 0, 0.25); font-family: Georgia, 'Times New Roman', serif; font-weight: 700; }
+.ad-root[data-theme='scene'] .ad-triple-hud { justify-self: center; padding: 4px 16px; border-radius: 99px; background: #1d6b5a; color: #fff; box-shadow: 0 3px 0 rgba(0, 0, 0, 0.2); }
+.ad-root[data-theme='scene'] .ad-triple-hud b { color: #ffe08a; }
+
+.ad-root[data-theme='scene'] .ad-streak { position: relative; width: min(46cqh, 260px); aspect-ratio: 1; margin: 2px auto 8px; border-radius: 50%; display: grid; place-items: center; align-content: center; gap: 2px; background: radial-gradient(circle, #fff 58%, #efe9ff 60%), conic-gradient(var(--violet), var(--teal), var(--gold), var(--violet)); border: 8px solid transparent; background-clip: padding-box, border-box; background-origin: border-box; box-shadow: 0 8px 22px rgba(70, 40, 160, 0.3); }
+.ad-root[data-theme='scene'] .ad-streak-n { position: absolute; top: 8%; padding: 2px 12px; font-size: 1rem; }
+.ad-root[data-theme='scene'] .ad-streak-base { color: var(--violet-d); text-shadow: none; font-size: clamp(1.8rem, 4.6cqh, 2.6rem); }
+.ad-root[data-theme='scene'] .ad-streak-step { color: var(--muted); font-size: 0.8rem; max-width: 80%; text-align: center; }
+.ad-root[data-theme='scene'] .ad-streak .ad-hp-ear { position: absolute; bottom: 9%; }
+
+.ad-root[data-theme='scene'] .ad-wordle-grid { padding: 10px; border-radius: 18px; background: #2a2150; box-shadow: 0 8px 18px rgba(30, 20, 80, 0.35); }
+.ad-root[data-theme='scene'] .ad-wordle-cell { border-radius: 8px; background: linear-gradient(180deg, #4a3d8a, #3a2f72); border: 0; border-bottom: 4px solid #1d1745; color: #fff; }
+.ad-root[data-theme='scene'] .ad-wordle-cell[data-cur='true'] { background: #5a4aa8; box-shadow: 0 0 0 3px var(--gold); }
+.ad-root[data-theme='scene'] .ad-wordle-cell[data-s='hit'] { border-bottom-color: #14683f; }
+.ad-root[data-theme='scene'] .ad-wordle-cell[data-s='near'] { border-bottom-color: #b9801e; }
+.ad-root[data-theme='scene'] .ad-wordle-cell[data-s='miss'] { background: #5c5680; border-bottom-color: #3a3558; }
+
+/* Wrap reveal: the trophy plate shows alone with one button; then the checklist fades in (a fade only, no zoom or pan). */
+.ad-root[data-theme='scene'] .ad-reveal-btn { position: absolute; inset-inline: 0; bottom: 17%; margin-inline: auto; width: fit-content; padding: 14px 30px; border-radius: 999px; border: 3px solid #fff; background: linear-gradient(180deg, var(--violet), var(--violet-d)); color: #fff; font: inherit; font-weight: 900; font-size: 1.3rem; box-shadow: 0 6px 0 rgba(60, 30, 140, 0.35), 0 10px 26px rgba(60, 30, 140, 0.3); cursor: pointer; animation: sc-pop 0.5s cubic-bezier(0.2, 1.4, 0.4, 1) both; }
+.ad-root[data-theme='scene'] .ad-reveal-btn:hover { filter: brightness(1.08); }
+.ad-root[data-theme='scene'] .ad-panel[data-variant='reveal'] { animation: sc-rise 0.6s ease both; }

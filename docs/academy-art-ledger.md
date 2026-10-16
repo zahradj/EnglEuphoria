@@ -256,3 +256,12 @@ Scenario `docs/scenarios/academy-b1s01e2-postcard-wall.md` approved by the owner
 | story plate 1 (Vee beside the postcard wall, Travel Club room) | `bg/story-b1s2-1.webp` | MAHYKF2JuvY | 99 (reused) |
 
 Notes: generated with the Lesson 1 plate `MAHYCnd2Ab0` as the only style reference (two attempts with a second cast reference failed with a Canva server error), so Vee is matched by description, not by his cast picture. Holder page 99 reused; set the image box to exactly 1920x1080 (`crop_media`) or Canva zooms the picture.
+
+## B1 Season 1 lesson 1 v3 — new plates (2026-10-16)
+
+| picture | file | Canva media | holder page |
+|---|---|---|---|
+| story plate 4 (the dare moment: Vee holds out a blank card, Ava and Theo behind him) | `bg/story-b1s1-4.webp` | MAHYKrKSe2w | 98 (reused) |
+
+"The Dare" is now four beats: plate 1, plate 2, plate 4 (the dare line), plate 3 (the noodles joke). No text changed, so no new voice lines.
+| trophy-case reveal (six trophies lit; the Wrap's background) | `bg/trophy-reveal.webp` | MAHYKx7rtSM | 97 (reused) |

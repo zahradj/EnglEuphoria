@@ -69,10 +69,14 @@ export function WrapView({ slide }: { slide: WrapSlide }) {
   const trophies = (vars.trophies ?? '').split(',').filter(Boolean);
   const [tick, setTick] = useState<Record<number, 'yes' | 'almost' | 'not yet'>>({});
   const [flip, setFlip] = useState(false);
+  // the Wrap over the trophy plate opens with the plate alone and one button, then the checklist (a reveal, not a cut)
+  const reveal = slide.bg === 'trophy-reveal';
+  const [opened, setOpened] = useState(!reveal);
   const all = Object.keys(tick).length === slide.ticks.length;
   const cycle = (i: number) => setTick({ ...tick, [i]: tick[i] === 'yes' ? 'almost' : tick[i] === 'almost' ? 'not yet' : 'yes' });
+  if (!opened) return <button type="button" className="ad-reveal-btn" onClick={() => setOpened(true)}>See your trophies</button>;
   return (
-    <Panel title={slide.heading} wide>
+    <Panel title={slide.heading} wide variant={reveal ? 'reveal' : undefined}>
       {trophies.length > 0 ? (
         <ul className="ad-trophies" aria-label={`Trophies earned: ${trophies.length}`}>
           {trophies.map((v) => <li key={v} className="ad-trophy" data-on="true"><Icon name="star" /><span>{v}</span></li>)}

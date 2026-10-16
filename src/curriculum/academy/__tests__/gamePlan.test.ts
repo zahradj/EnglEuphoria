@@ -31,7 +31,7 @@ describe('Season games shortlist', () => {
   const cat = catalogue();
   const mech = mechanics();
   it('the catalogue and the mechanics list are readable', () => {
-    expect(cat.size).toBe(183);
+    expect(cat.size).toBe(184);
     expect(mech.size).toBeGreaterThanOrEqual(19);
   });
   it('every Season of a covered level has 4-6 catalogue games that exist and fit the level', () => {
