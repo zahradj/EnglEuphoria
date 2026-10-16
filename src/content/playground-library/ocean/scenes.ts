@@ -32,6 +32,9 @@ const SONG_GOODBYE = `${WT}/audio/goodbye-song.mp3?v=3`;
 
 /** The Treasure Reef — Canva story pictures (scripts/canva-art-request.json); pages 4-12 come with Lessons 2-5. */
 export const reefPage = (n: number) => `${S}/bg-a1u6-story-${n}-wide.png`;
+/** Story GIFs (owner-approved scenario docs/scenarios/a1u6-treasure-reef-gifs.md, 2026-10-16 "Yes"): two Canva frames of
+ *  the same picture (layer-separated, only the named part moves) as an animated WebP. Only the Reader uses them. */
+const reefGif = (n: number) => `/lep1/gifs/a1u6-story-${n}.webp`;
 const bgBeach = reefPage(1);
 
 /** The sea animals (cut-out stickers, same style as the whale and octopus). */
@@ -53,10 +56,10 @@ export const TREASURE_REEF: ReaderPage[] = [
   { img: reefPage(3), lines: [{ text: 'It is a whale. It is big! It is a turtle.' }], check: { who: 'bella', question: 'What is big?', answer: 'The whale', options: [{ label: 'The whale', img: SEA.whale }, { label: 'The turtle', img: SEA.turtle }, { label: 'The starfish', img: SEA.starfish }] } },
   { img: reefPage(4), lines: [{ text: 'This is Bub. Bub is an octopus. He is hiding.' }], check: { who: 'mia', question: 'What is Bub doing?', answer: 'Hiding', options: [{ label: 'Hiding', img: item('bub-hiding') }, { label: 'Sleeping', img: item('starfish-sleeping') }, { label: 'Walking', img: item('crab-walking') }] } },
   { img: reefPage(5), lines: [{ text: 'The crab is walking. The starfish is sleeping.' }], check: { who: 'pip', question: 'What is the crab doing?', answer: 'Walking', options: [{ label: 'Eating' }, { label: 'Walking' }, { label: 'Sleeping' }] } },
-  { img: reefPage(6), lines: [{ text: 'The friends are diving. Fish are swimming!' }], check: { who: 'bella', question: 'What are the fish doing?', answer: 'Swimming', options: [{ label: 'Sleeping' }, { label: 'Swimming' }, { label: 'Walking' }] } },
-  { img: reefPage(7), lines: [{ text: 'The turtle lives on the reef. It eats sea grass.' }], check: { who: 'mia', question: 'What does the turtle eat?', answer: 'Sea grass', options: [{ label: 'Fish', img: SEA.fish }, { label: 'Sea grass', img: item('sea-grass') }, { label: 'Shells', img: SEA.shell }] } },
-  { img: reefPage(8), lines: [{ text: 'Oh no! It is windy. The waves are big.' }], check: { who: 'bella', question: 'What is the weather like?', answer: 'Windy', options: [{ label: 'Sunny' }, { label: 'Windy' }, { label: 'Snowy' }] } },
-  { img: reefPage(9), lines: [{ text: 'Mia: Is it the chest? Shark: No, it isn’t!' }], check: { who: 'leo', question: 'Is it the chest?', answer: 'No, it isn’t.', options: [{ label: 'Yes, it is.' }, { label: 'No, it isn’t.' }] } },
+  { img: reefGif(6), lines: [{ text: 'The friends are diving. Fish are swimming!' }], check: { who: 'bella', question: 'What are the fish doing?', answer: 'Swimming', options: [{ label: 'Sleeping' }, { label: 'Swimming' }, { label: 'Walking' }] } },
+  { img: reefGif(7), lines: [{ text: 'The turtle lives on the reef. It eats sea grass.' }], check: { who: 'mia', question: 'What does the turtle eat?', answer: 'Sea grass', options: [{ label: 'Fish', img: SEA.fish }, { label: 'Sea grass', img: item('sea-grass') }, { label: 'Shells', img: SEA.shell }] } },
+  { img: reefGif(8), lines: [{ text: 'Oh no! It is windy. The waves are big.' }], check: { who: 'bella', question: 'What is the weather like?', answer: 'Windy', options: [{ label: 'Sunny' }, { label: 'Windy' }, { label: 'Snowy' }] } },
+  { img: reefGif(9), lines: [{ text: 'Mia: Is it the chest? Shark: No, it isn’t!' }], check: { who: 'leo', question: 'Is it the chest?', answer: 'No, it isn’t.', options: [{ label: 'Yes, it is.' }, { label: 'No, it isn’t.' }] } },
 ];
 
 const helloSong = (id: string, bg: string): Scene => ({

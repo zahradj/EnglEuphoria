@@ -1,6 +1,6 @@
 # Scenario: A1 Unit 6 story *The Treasure Reef*, pages 6-9, four Canva story GIFs
 
-**Status: approved (owner, 2026-10-16: "Yes"). Making frame B pictures and the GIFs.**
+**Status: approved (owner, 2026-10-16: "Yes"). Built 2026-10-16: `public/lep1/gifs/a1u6-story-6..9.webp`, in the Reader of Lessons 3 and 4.**
 
 Owner, 2026-10-16: *"You can generate them as a GIF video."* A1 has no story videos; stories move with Canva GIFs made from the
 approved story pictures, after a written scenario and the owner's OK (CLAUDE.md "A1 lessons — length and story GIFs").
@@ -47,3 +47,20 @@ Pages that stay still: 1-5 (no new art yet; they keep the earlier pictures).
 
 ## Approval
 - Owner: 2026-10-16, "Yes"
+
+## How they were made (2026-10-16)
+An AI-redrawn frame B moved the whole picture (19 % of the pixels, the friends too), so it was dropped. Instead each page was
+split into layers with Canva `separate-image-layers` (characters, fish, turtle, boat, shark, corals and an inpainted
+background each became their own element) and ONLY the element the line names was moved; every frame was diffed against
+frame A to prove nothing else changed.
+
+| GIF | Layered design | What moves | Frames | Changed pixels |
+|---|---|---|---|---|
+| 1 (p6) | DAHYIs04Hrg | the 21 small fish, about 24 px forward | A, B · 0.4 s each | 3.7 % (fish only) |
+| 2 (p7) | DAHYKAGbNjg | the turtle tilts its head down into the sea grass (−3°) and back: the munch | A, B · 0.5 s each | 9.5 % (turtle only) |
+| 3 (p8) | DAHYKCmj3Cw | the boat with the four friends rocks ±2.5° | right, left · 0.7 s each | 11.5 % (boat + friends only) |
+| 4 (p9) | DAHYKL0Fc5w | the shark's body turns ±4° (shakes its head), smile unchanged | 4 × (left, right) 0.35 s, then still 1 s | 2.6 % (shark only) |
+
+Pages 6, 7 and 9 now use the layered frame A as their still too, so the still and the GIF are the same picture. Page 8 keeps
+the original still (the level boat). The turtle's mouth is not redrawn; the head-dip into the grass is the munch, so
+nothing appears or disappears.
