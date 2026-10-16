@@ -1,6 +1,6 @@
 # Scenario: A1 Unit 6 story *The Treasure Reef*, pages 6-9, four Canva story GIFs
 
-**Status: waiting for the owner's OK.** Frame B pictures are not drawn yet; the preview uses the still pages.
+**Status: approved (owner, 2026-10-16: "Yes"). Making frame B pictures and the GIFs.**
 
 Owner, 2026-10-16: *"You can generate them as a GIF video."* A1 has no story videos; stories move with Canva GIFs made from the
 approved story pictures, after a written scenario and the owner's OK (CLAUDE.md "A1 lessons — length and story GIFs").
@@ -46,4 +46,4 @@ Pages that stay still: 1-5 (no new art yet; they keep the earlier pictures).
 `docs/scenarios/a1u6-treasure-reef-preview.gif` shows pages 6-9 in book order, each held for its reading time, with a corner label naming the action that will move.
 
 ## Approval
-- Owner: _waiting_
+- Owner: 2026-10-16, "Yes"
