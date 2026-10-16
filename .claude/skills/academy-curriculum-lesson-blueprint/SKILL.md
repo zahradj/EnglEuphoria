@@ -96,3 +96,14 @@ Real lessons are decks (`src/academy-deck/lessons/*.ts`). If a plan needs a data
 ## 6. Before you call an Academy lesson or plan done
 
 Run `academy-quality-gate` (12 checks). Also confirm: approved plan with a traceability table (every activity serves an objective or a student need); research file with sources; games and video-game mechanic named; model step and stated rule before practice; speaking targets met; teacher checklist of 1-5 observable can-dos; `npm run lint`, `node scripts/typecheck-classroom.mjs`, and the Academy tests pass; voice audit clean (`node scripts/bake-academy-voice.mjs --audit`); the library hand-off and preview rules in `CLAUDE.md`.
+
+### Expert-teaching checks (research round 2026-10-16, `docs/research/academy-expert-teaching-research.md`)
+
+- **Four strands:** list the lesson's minutes in meaning-focused input / meaning-focused output / language-focused learning / fluency development (Nation). All four must appear; the fluency strand is a *repeated* task with no new language.
+- **Take 2 is a real repetition:** it changes one thing (new listener, tighter time, new topic), not only "try again".
+- **Feedback ladder** nudge → clue → direct fix; delayed correction in fluency tasks (Li 2010; Lyster & Saito 2010: prompts do at least as well as recasts). Quote no effect sizes.
+- **Words get used, not only matched:** each kept word is used in a sentence about the student the same lesson (need + search + evaluation).
+- **Listening checks** follow predict → listen → compare → listen again → reflect.
+- **Coverage (95/98 % known words) is a design target, not a proven law;** never promise it to families. Pronunciation is judged on being understood.
+- **Present perfect lessons:** teacher note on L1 transfer (tr/ar: past simple instead; it/es/fr: present perfect with finished-time words; it *da*, es *desde*, fr *depuis* for "for/since") and the time-word rule early.
+- **Open until checked in primary sources:** English Grammar Profile / GSE placement; no claim of CELTA or teacher review.
