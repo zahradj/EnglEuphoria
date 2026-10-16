@@ -22,7 +22,7 @@ const g = (catalogue: number[], mechanic: string, does: string, signature: numbe
   catalogue, mechanic, does, signature, signatureNote, research: 'catalogue shortlist',
 });
 
-/** Keyed by Season id. A1, A2, B1 and B2 written (2026-10-16). C1 is NOT written: the catalogue has no game rated for C1 (its ranges end at B2), so C1 needs new researched games first (see docs/research/academy-curriculum-teen-sla-and-l1-gaps.md note). */
+/** Keyed by Season id. All 80 Seasons written (2026-10-16). C1 draws on catalogue ids 172-183 (docs/research/academy-c1-games-research.md). */
 export const SEASON_GAMES: Record<string, SeasonGamePlan> = {
   'A1-S01': g([109, 71, 23, 47, 89], 'Dialogue tree', 'Chooses and says introductions (name, age, country); the reply shows whether it sounded friendly', 109, 'Digital Avatar & Bio: builds an avatar and says its profile aloud'),
   'A1-S02': g([28, 15, 40, 6, 62], 'Loot and crafting', 'Collects furniture and objects by name and places each with in / on / under', 28, 'Preposition Maps as a room builder'),
@@ -86,10 +86,28 @@ export const SEASON_GAMES: Record<string, SeasonGamePlan> = {
   'B2-S16': g([56, 66, 32, 77, 67], 'Boss fight (rounds with a weak spot)', 'Wins each round of a debate with cohesion markers and a clear signpost', 56, 'Debate Duel with signposting'),
   'B2-S17': g([59, 55, 68, 25, 145], 'Dialogue tree', 'Gives supportive advice (had better, ought to) and states a purpose (so that, in order to)', 55, 'Role-play Cards: supportive advice'),
   'B2-S18': g([114, 55, 105, 77, 66], 'Quest log + clue unlock', 'Completes the quests of a study-abroad plan with preposition + -ing', 114, 'Travel Itinerary Planner: study abroad'),
+  'C1-S01': g([172, 173, 179, 181], 'Cross-examination (press / present)', 'Presses a witness statement and presents the contradicting line with a fronted negative (Never had he …, Hardly had she …)', 181, 'Cross-Examination of a witness'),
+  'C1-S02': g([181, 182, 178, 183], 'Deduction log (confirm in threes)', 'Fills a log and gives a reason with an inverted conditional (Had the door been locked, …; Should you find …)', 182, 'Deduction Log with Reasons'),
+  'C1-S03': g([176, 177, 180, 175], 'Detective board', 'Separates rumour from evidence and says it with It is said that / He is believed to', 176, 'Summarise-in-an-Email of a rumour'),
+  'C1-S04': g([178, 183, 173, 174], 'Skill-check dialogue (curated voices)', 'Chooses the formal advice voice and says it with I suggest that he go / I would rather', 183, 'Voice-Option Dialogue'),
+  'C1-S05': g([177, 176, 178, 179], 'Falling-tile stacker', 'Stacks verb phrases into compact noun phrases for an academic text', 177, 'Explain It Simply, with noun phrases'),
+  'C1-S06': g([179, 172, 174, 173], 'Rhythm lane', 'Taps the stress of fronted and emphatic structures (What matters is …; Not only … but)', 179, 'Pecha Kucha, Six Slides'),
+  'C1-S07': g([182, 181, 176, 175], 'Deduction log (confirm in threes)', 'Logs what happened first with Having done … and states the main clause', 182, 'Deduction Log with Reasons'),
+  'C1-S08': g([180, 183, 182, 173], 'Skill-check dialogue (curated voices)', 'Chooses the hedged or stance voice (admittedly, arguably, ostensibly) and sees the effect', 180, 'Irony or Sincere? and stance'),
+  'C1-S09': g([178, 183, 174, 176], 'Stealth (quiet path)', 'Picks the right register to pass each formal “guard” (email, interview, meeting)', 178, 'Register Shift Rewrite'),
+  'C1-S10': g([173, 172, 174, 181], 'Boss fight (rounds with a weak spot)', 'Wins each round with a concession (Granted, …; Much as I …; Strange as it may seem)', 173, 'Concede & Challenge Ladder'),
+  'C1-S11': g([183, 182, 175, 180], 'Dialogue tree', 'Judges a past choice with needn’t have / was to / be bound to and sees the character’s reaction', 183, 'Voice-Option Dialogue: judging a choice'),
+  'C1-S12': g([177, 178, 176, 179], 'Loot and crafting', 'Collects exact collocations and crafts a precise phrase for each situation', 177, 'Explain It Simply with exact collocations'),
+  'C1-S13': g([176, 177, 174, 175], 'Quest log + clue unlock', 'Unlocks each quest by mediating a text or an idea between two worlds', 176, 'Summarise-in-an-Email (mediation)'),
+  'C1-S14': g([172, 173, 179, 174], 'Boss fight (rounds with a weak spot)', 'Wins each round of a persuasion duel using a rule of three, a rhetorical question and parallelism', 172, 'Quick Debate Cards'),
+  'C1-S15': g([180, 183, 178, 182], 'Skill-check dialogue (curated voices)', 'Chooses the ironic or understated voice and explains the clue', 180, 'Irony or Sincere?'),
+  'C1-S16': g([179, 176, 177, 174, 175], 'Achievement log / trophy case', 'Earns a trophy for each portfolio piece with clear signposting', 179, 'Pecha Kucha, Six Slides (the capstone talk)'),
+  'C1-S17': g([172, 173, 175, 177, 181], 'Board quest', 'Climbs a board of whatever / however and the more … the more arguments about climate choices', 175, 'Student-led Seminar Questions'),
+  'C1-S18': g([179, 174, 176, 183], 'Skill tree', 'Unlocks a final skill by using absolute and participle phrases in a confident close', 174, 'Fishbowl for Two'),
 };
 
 export function gamePlanFor(seasonId: string): SeasonGamePlan | undefined {
   return SEASON_GAMES[seasonId];
 }
 
-export const SEASON_GAMES_LEVELS = ['A1', 'A2', 'B1', 'B2'] as const;
+export const SEASON_GAMES_LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1'] as const;
