@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import type { SupabaseClient } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { mediaStatusStore } from '@/lib/classroom/mediaStatusStore';
 
@@ -46,7 +47,7 @@ export function useClassroomHeartbeat({
       if (stoppedRef.current) return;
       try {
         if (heartbeatTakesMediaStatus) {
-          const { error } = await (supabase as any).rpc('tick_heartbeat', {
+          const { error } = await (supabase as unknown as SupabaseClient).rpc('tick_heartbeat', {
             p_session_id: sessionId,
             p_role: role,
             p_media_status: mediaStatusStore.getOwn(),
@@ -74,7 +75,7 @@ export function useClassroomHeartbeat({
           .from('classroom_sessions')
           .update({ [col]: new Date().toISOString() })
           .eq('id', sessionId);
-      } catch {}
+      } catch { /* best effort: the next heartbeat tries again */ }
     };
 
     window.addEventListener('beforeunload', markLeave);
@@ -91,7 +92,7 @@ export function useClassroomHeartbeat({
           table: 'classroom_sessions',
           filter: `id=eq.${sessionId}`,
         },
-        (payload: any) => {
+        (payload: { new?: Record<string, unknown> }) => {
           // The peer's camera / connection status rides on the same row update.
           const peerStatus = payload?.new?.[role === 'teacher' ? 'student_media_status' : 'teacher_media_status'];
           mediaStatusStore.setPeer(typeof peerStatus === 'string' ? peerStatus : null);
@@ -128,7 +129,6 @@ export function useClassroomHeartbeat({
     // actively-connected user as having left every few seconds. The
     // staleCheck interval reads the live value via peerLastPingAtRef
     // instead, so correctness doesn't depend on this effect re-running.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionId, role, intervalMs]);
 
   return { peerLastPingAt, peerOnline };

@@ -8,7 +8,7 @@ import {
   worstQuality,
 } from './mediaHealth';
 
-const report = (items: any[]) => ({ forEach: (cb: (r: any) => void) => items.forEach(cb) });
+const report = (items: Record<string, unknown>[]) => ({ forEach: (cb: (r: Record<string, unknown>) => void) => items.forEach(cb) });
 
 describe('camera problems are named', () => {
   it('maps browser errors to a reason the student can act on', () => {
@@ -64,6 +64,6 @@ describe('what travels with the heartbeat, and what the other side is told', () 
     expect(parsePeerMediaStatus('cam:denied')).toEqual({ kind: 'no-camera', reason: 'denied' });
     expect(parsePeerMediaStatus('cam:weird')).toEqual({ kind: 'no-camera', reason: 'unknown' });
     expect(parsePeerMediaStatus('poor')).toEqual({ kind: 'poor-link' });
-    for (const quiet of ['ok', 'good', 'fair', '', null, undefined]) expect(parsePeerMediaStatus(quiet as any)).toBeNull();
+    for (const quiet of ['ok', 'good', 'fair', '', null, undefined]) expect(parsePeerMediaStatus(quiet as unknown as string)).toBeNull();
   });
 });
