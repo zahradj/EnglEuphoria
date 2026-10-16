@@ -63,6 +63,8 @@ function build(): LevelPlan[] {
         newItemBudget: r.items,
         pronunciation: r.pron,
         mediation: r.mediation,
+        essentialQuestion: r.essentialQuestion,
+        chapters: r.chapters,
         recycleFrom,
         skins: r.skins.map((s) => ({ id: s, swaps: `nouns, scenarios and pictures from ${SKIN_LIBRARY[s] ?? s}; language spine unchanged` })),
         bigRemix: (i + 1) % 2 === 0,

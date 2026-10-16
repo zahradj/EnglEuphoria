@@ -202,3 +202,20 @@ Every page carries a `stage` (shown to the student as a small chip) and the stag
 | Energiser | | | | Wordle, Triple Match hard mode, streak | | |
 | Mission | | **teacher models the task** (Vee and Ava) | | Rapport chat (guided choices) | Take 1, feedback replay, Take 2 | |
 | Release, Wrap | | | | | | write two sentences, speak one minute, teach the rule back |
+
+## 12. Season arc (2026-10-16, skill `academy-season-arc`; data in `levels/b1.ts`, test `seasonArc.test.ts`)
+
+**One theme:** Experiences and bucket lists. **Essential question:** What have I done, and what do I still want to do? The Release (my bucket list: three things done, three wanted) answers it.
+
+| E | Chapter | Sub-question inside the theme | Complexity step (one thing rises) | Hands on |
+|---|---|---|---|---|
+| 1 Cold Open | The dare | Who has already done the most? | Recognise: follow the story and its experiences | "How do you talk about them?" |
+| 2 Word Lab | What goes on a list? | Which words describe an adventure and how it felt? | Controlled: say and use the words | "Now put them in a sentence." |
+| 3 Pattern Lab | Been or gone? | How do I say what I have done; what do ever / never change? | Controlled: build correct sentences | "Say it to someone." |
+| 4 On Air | Ask and react | How do I ask about someone else's experiences and show interest? | Guided: a short exchange with a partner | "Read how others do it." |
+| 5 Deep Dive | Whose list is longest? | What do the details of a longer text tell me? | More input and reasoning: longer text, relay key points | "Now your own kind." |
+| 6 Side Quest | My kind of adventure | What have I done in the world I chose? | Free choice: own topic, own words | "Can you do it unaided?" |
+| 7 Remix | True or false? | Can I use everything so far without help? | Fluency on known language only | "Show it all." |
+| 8 Finale | My bucket list | What have I done, and what do I still want to do? | Release: the hardest task, spoken | next Season |
+
+The lessons already built (L1 Cold Open, L2 Word Lab, L3 Pattern Lab) match chapters 1-3; the Season's other Seasons get chapters one level at a time. The thematic-not-semantic rule applies to word sets (Word Lab: words that go together on a trip or a challenge, not a list of feeling adjectives).

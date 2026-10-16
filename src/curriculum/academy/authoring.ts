@@ -9,6 +9,13 @@ export interface RawStructure {
   use?: string;
 }
 
+/** One episode's chapter of the Season theme (academy-season-arc skill): a sub-question INSIDE the theme, and the ONE difficulty that rises at this step. */
+export interface RawChapter {
+  title: string;
+  question: string;
+  step: string;
+}
+
 export interface RawSeason {
   title: string;
   theme: string;
@@ -27,6 +34,10 @@ export interface RawSeason {
   mediation?: string;
   /** skin ids from SKIN_LIBRARY (3-6) */
   skins: string[];
+  /** optional: the eight chapters E1-E8 (academy-season-arc); required once a Season has one, exactly 8 */
+  chapters?: RawChapter[];
+  /** the one question the whole Season lets the student answer in English (the Release answers it) */
+  essentialQuestion?: string;
   notes?: string;
 }
 

@@ -12,7 +12,14 @@ from scipy import ndimage
 sheet, count, ids = sys.argv[1], int(sys.argv[2]), sys.argv[3:]
 im = Image.open(sheet).convert('RGB')
 a = np.asarray(im).astype(int)
-white = (a.min(2) > 232) & (np.ptp(a, axis=2) < 18)
+# background = the sheet's corner colour: white sheets use the old rule, grey/tinted sheets (Canva 'plain light-grey background') match that colour +-TOL
+corner = np.median(np.concatenate([a[:8, :8].reshape(-1, 3), a[:8, -8:].reshape(-1, 3), a[-8:, :8].reshape(-1, 3), a[-8:, -8:].reshape(-1, 3)]), axis=0)
+TOL = int(__import__("os").environ.get("TOL", "6"))
+def is_bg(x):
+    if corner.min() > 240:
+        return (x.min(-1) > 232) & (np.ptp(x, axis=-1) < 18)
+    return np.abs(x - corner).max(-1) <= TOL
+white = is_bg(a)
 ink = ~white
 merged = ndimage.binary_dilation(ink, iterations=int(__import__("os").environ.get("GAP", "8")))
 lab, n = ndimage.label(merged)
@@ -28,7 +35,7 @@ assert len(boxes) == len(ids), f'{len(boxes)} pictures for {len(ids)} ids'
 for (y0, y1, x0, x1), cid in zip(boxes, ids):
     pad = 6
     cell = a[max(0, y0 - pad):y1 + pad, max(0, x0 - pad):x1 + pad]
-    cw = (cell.min(2) > 232) & (np.ptp(cell, axis=2) < 18)
+    cw = is_bg(cell)
     l2, _ = ndimage.label(cw)
     border = set(np.unique(np.concatenate([l2[0], l2[-1], l2[:, 0], l2[:, -1]]))) - {0}
     obj = ~np.isin(l2, list(border))

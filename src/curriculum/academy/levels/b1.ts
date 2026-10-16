@@ -21,6 +21,17 @@ export const B1_SEASONS: RawSeason[] = [
     pron: ["contracted 'have' /əv/ and 'been' /bɪn/ vs /biːn/", 'intonation of surprise'],
     mediation: 'Relay to a friend, in simple English, the main points of a short article about an unusual experience.',
     skins: ['travel', 'gaming', 'music', 'fitness'],
+    essentialQuestion: 'What have I done, and what do I still want to do?',
+    chapters: [
+      { title: 'The dare', question: 'Who has already done the most?', step: 'Recognise: follow the story and the experiences in it (gist)' },
+      { title: 'What goes on a list?', question: 'Which words describe an adventure and how it felt?', step: 'Controlled: say and use the words' },
+      { title: 'Been or gone?', question: 'How do I say something I have done, and what does ever / never change?', step: 'Controlled: build correct sentences with the pattern' },
+      { title: 'Ask and react', question: 'How do I ask about someone else\'s experiences and show interest?', step: 'Guided: a short exchange with a partner' },
+      { title: 'Whose list is longest?', question: 'What do the details of a longer text about experiences tell me?', step: 'More input and reasoning: a longer text, then relay the key points' },
+      { title: 'My kind of adventure', question: 'What have I done in the world I chose?', step: 'Free choice: my own topic, my own words' },
+      { title: 'Remix: true or false?', question: 'Can I use everything so far without help?', step: 'Fluency on known language only: the boss round' },
+      { title: 'My bucket list', question: 'What have I done, and what do I still want to do?', step: 'Release: the hardest task, three done and three wanted, spoken' },
+    ],
   },
   {
     title: 'Then and Now',

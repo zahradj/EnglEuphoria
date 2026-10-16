@@ -332,6 +332,8 @@ export interface AcademyLessonBlueprint {
   /** minimum fun ingredients to include when the session content is written */
   funIngredientsMin: 5;
   mediation?: string;
+  /** this episode's chapter of the Season theme (academy-season-arc), when the Season has chapters */
+  chapter?: { no: number; title: string; question: string; step: string; essentialQuestion?: string };
   assessment: { rememberFrom: string[]; exitCanDo: string[]; checkpoint: boolean; levelCheck: boolean; bigRemix: boolean };
   dailyTen: { focus: string };
   status: 'outline';
@@ -503,6 +505,7 @@ export function buildLessonBlueprint(s: SeasonOutline, episodeIndex: number, pre
     comfort: COMFORT_CONTROLS,
     funIngredientsMin: 5,
     mediation: type === 'finale' || type === 'deep-dive' ? s.mediation : undefined,
+    chapter: s.chapters?.[episodeIndex] ? { no: meta.no, ...s.chapters[episodeIndex], essentialQuestion: s.essentialQuestion } : undefined,
     assessment: {
       rememberFrom: Array.from(new Set([...(previousId ? [previousId] : []), ...[...earlierIds].reverse(), ...s.recycleFrom])),
       exitCanDo: type === 'finale' ? s.canDo : [objectiveFor(s, type)],

@@ -25,3 +25,23 @@ describe('Season arc: one theme, eight related, progressive episodes', () => {
     });
   }
 });
+
+describe('Seasons that carry chapters (academy-season-arc)', () => {
+  const withChapters = ACADEMY_SEASONS.filter((s) => s.chapters);
+  it('B1-S01 has an essential question and eight distinct chapters, each with a sub-question and a difficulty step', () => {
+    const s = ACADEMY_SEASONS.find((x) => x.id === 'B1-S01')!;
+    expect(s.essentialQuestion?.trim().length).toBeGreaterThan(10);
+    expect(s.chapters).toHaveLength(8);
+    expect(withChapters.map((x) => x.id)).toContain('B1-S01');
+  });
+  for (const s of withChapters) {
+    it(`${s.id}: chapters are distinct, the last answers the essential question, and each blueprint carries its chapter`, () => {
+      expect(s.chapters).toHaveLength(8);
+      expect(new Set(s.chapters!.map((c) => c.title.toLowerCase())).size).toBe(8);
+      for (const c of s.chapters!) { expect(c.question.endsWith('?')).toBe(true); expect(c.step.length).toBeGreaterThan(10); }
+      expect(s.chapters![7].question).toBe(s.essentialQuestion);
+      const eps = BPS.filter((b) => b.seasonId === s.id);
+      eps.forEach((e, i) => expect(e.chapter?.title, `${e.id} chapter`).toBe(s.chapters![i].title));
+    });
+  }
+});
