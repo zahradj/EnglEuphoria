@@ -70,7 +70,7 @@ export const B1_S01_E1: DeckScript = {
   clock: true,
   theme: 'scene',
   // an integrated-skills lesson (listen, read, notice, write, speak): the long part is the Drop, where the student listens to a dialogue and reads a blog post
-  partMinutes: [3, 3, 20, 13, 3, 9, 5, 4],
+  partMinutes: [3, 3, 22, 11, 3, 9, 5, 4],
   partGoals: [
     'Talk about yourself and your experiences',
     'Wake up your past simple',
@@ -122,6 +122,13 @@ export const B1_S01_E1: DeckScript = {
 
     // ---------- 2 · The Drop: LISTEN to the dare, learn the words, READ Ava's post ----------
     {
+      id: 'predict', kind: 'say', part: 2, stage: 'context', bg: WALL, actors: [who('Vee', 'right')], trains: [1], open: true,
+      prompt: 'Before you listen: Vee has a dare for the class. What do you think the dare is? Guess in one sentence.',
+      model: 'I think the dare is to … / Maybe we have to …',
+      hints: ['There is no wrong answer. A guess helps you listen for the right words.'],
+      note: 'Predict step (listening research: predict, listen, compare, listen again, reflect). Do not correct the guess; come back to it after the story.',
+    },
+    {
       id: 'story-dare', kind: 'story', part: 2, stage: 'context', listenFirst: true, bg: WALL, trains: [1], title: 'The Dare',
       beats: [
         { plate: 'story-b1s1-1', lines: [
@@ -152,6 +159,7 @@ export const B1_S01_E1: DeckScript = {
         { say: 'What can you guess about Theo?', options: ['He loves travelling and taking photos.', 'He is afraid to fly.', 'He has never left his country.'], answer: 'He loves travelling and taking photos.' },
       ],
       hints: ['Listen again with the speaker button. Think about what each person said, not only the words.'],
+      note: 'Reflect: was your guess close? Which words helped you answer? Ask the student, then move on.',
     },
     {
       id: 'teach-words', kind: 'teach', part: 2, stage: 'model', bg: WALL, actors: [who('Vee', 'left')], trains: [2], title: 'Six words from the dare',
@@ -195,7 +203,7 @@ export const B1_S01_E1: DeckScript = {
       ],
     },
     {
-      id: 'cloze', kind: 'cloze', part: 2, stage: 'controlled', bg: LOBBY, actors: [who('Vee', 'right')], trains: [2],
+      id: 'cloze', kind: 'cloze', part: 2, stage: 'controlled', optional: true, bg: LOBBY, actors: [who('Vee', 'right')], trains: [2],
       prompt: 'Complete Vee’s note with the words and phrases you learned today.',
       title: 'Vee’s note',
       paragraphs: [
@@ -227,7 +235,7 @@ export const B1_S01_E1: DeckScript = {
       hints: ['Is there a finished time (last summer, last month, in Spain)? Then it is past simple.'],
     },
     {
-      id: 'rule-trio', kind: 'rule', part: 3, stage: 'rule', bg: WALL, actors: [who('Vee', 'left')], trains: [3, 4],
+      id: 'rule-trio', note: 'L1 watch: Turkish and Arabic speakers often use the past simple where English needs have/has + participle; Italian, Spanish and French speakers add finished-time words (“yesterday I have seen”) and use the present for “for/since” (it da, es desde, fr depuis). Teach the time-word rule early: if you say when, use the past simple.', kind: 'rule', part: 3, stage: 'rule', bg: WALL, actors: [who('Vee', 'left')], trains: [3, 4],
       title: 'The rule',
       lines: [
         { rule: 'Every verb has three forms: base, past simple, past participle.', say: 'Every verb has three forms. Base, past simple and past participle.', example: 'go, went, gone' },
@@ -272,12 +280,6 @@ export const B1_S01_E1: DeckScript = {
         { lines: [{ who: 'Mia', text: 'I have been to Japan twice.' }, { who: 'Ava', text: 'I have seen the mountains last year.' }, { who: 'Mia', text: 'I loved the food there.' }], glitch: 1, fix: 'I saw the mountains last year.', options: ['I saw the mountains last year.', 'I have saw the mountains last year.', 'I seen the mountains last year.'], why: '“Last year” is a finished time, so we use the past simple: saw.' },
         { lines: [{ who: 'Theo', text: 'Have you ever tried paragliding?' }, { who: 'Ava', text: 'Yes, I tried it in Spain.' }, { who: 'Ava', text: 'I have gave it a go three times.' }], glitch: 2, fix: 'I have given it a go three times.', options: ['I have given it a go three times.', 'I have give it a go three times.', 'I given it a go three times.'], why: 'After “have” we need the past participle: have given.' },
       ],
-    },
-    {
-      id: 'trio-memory', kind: 'memory', part: 3, stage: 'controlled', optional: true, bg: CASE, actors: [who('Ava', 'right')], trains: [3],
-      prompt: 'Verb Trio Memory! Match each base form with its other two forms. Say the pair, then say a sentence.',
-      pairs: TRIOS.slice(0, 5).map((t) => ({ art: L(t[0]), text: `${t[1]}, ${t[2]}` })),
-      hints: ['Think: base, past simple, past participle.'],
     },
 
     // ---------- 4 · Energiser: the trio streak (harder verbs included) ----------
@@ -349,18 +351,20 @@ export const B1_S01_E1: DeckScript = {
     },
     {
       id: 'say-take2', kind: 'say', part: 5, stage: 'free', bg: WALL, actors: [who('Vee', 'right')], trains: [5], open: true,
-      prompt: 'Take 2 · Say it again, better: fix what we noticed, and add a point against your answer.',
-      model: 'I would say Ava has done the most. She has flown across the world twice, and she has eaten spicy noodles. On the other hand, Theo has visited more countries.',
-      hints: ['Use have or has with the past participle. Add: on the other hand …'],
+      prompt: 'Take 2 · Say it again, better: fix what we noticed, add a point against your answer, and answer Theo’s question at the end.',
+      model: 'I would say Ava has done the most. She has flown across the world twice, and she has eaten spicy noodles. On the other hand, Theo has visited more countries. Theo asks: And when did she fly? Ava flew across the world last year.',
+      hints: ['Use have or has with the past participle. Add: on the other hand … Then answer Theo with the past simple and a time.'],
+      note: 'Take 2 changes the listener: play Theo and ask one follow-up (When did …?). It tests present perfect for the experience and past simple for the finished time.',
     },
 
     // ---------- 6 · Release: write it, then tell it ----------
     {
-      id: 'my-list', kind: 'write', part: 6, stage: 'produce', bg: CLASSROOM, actors: [who('Mia', 'right')], trains: [4, 5],
-      prompt: 'Write about your own list: when you did something (past simple), and one dare for yourself.',
+      id: 'my-list', kind: 'write', part: 6, stage: 'produce', bg: CLASSROOM, actors: [who('Mia', 'right')], trains: [2, 4, 5],
+      prompt: 'Write about your own list: when you did something (past simple), one dare for yourself, and use one of the six words about you.',
       rows: [
         { label: 'When it happened (past simple, finished time).', frame: 'It was … / I … last …', accept: ['\\b(was|were|went|did|saw|ate|took|had|met|visited|last|ago|in \\d{4}|yesterday)\\b'], hint: 'Use a finished time: last summer, two years ago, in 2023.', sample: 'I went last summer with my brother.' },
         { label: 'Something you want to do, and why.', frame: 'I would love to … because …', accept: ["\\bi (want|would love|'d love|hope|plan) to .+", '\\bbecause\\b'], hint: 'I would love to + verb, because + reason.', sample: 'I would love to give surfing a go because it looks fun.' },
+        { label: 'Use one of the six words about you: bucket list, dare, give it a go, once in a lifetime, tick it off, brave.', frame: 'My bucket list … / I dare myself to … / I think … is brave.', accept: ['\\b(bucket list|dare|dared|give (it|\\w+) a go|once in a lifetime|tick(ed)? (it )?off|brave)\\b'], hint: 'Pick one word and make a sentence about your life.', sample: 'Going to Japan is once in a lifetime, so I will tick it off my bucket list.' },
       ],
     },
     {

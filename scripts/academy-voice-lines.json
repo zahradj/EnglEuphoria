@@ -2805,6 +2805,10 @@
   },
   {
     "who": "Vee",
+    "text": "Before you listen: Vee has a dare for the class. What do you think the dare is? Guess in one sentence."
+  },
+  {
+    "who": "Vee",
     "text": "Okay, listen. I have a dare for everyone. We all make a bucket list this term, and we tick it off before the break."
   },
   {
@@ -3492,30 +3496,6 @@
     "text": "I have given it a go three times."
   },
   {
-    "who": "Ava",
-    "text": "Verb Trio Memory! Match each base form with its other two forms. Say the pair, then say a sentence."
-  },
-  {
-    "who": "Vee",
-    "text": "went, gone"
-  },
-  {
-    "who": "Vee",
-    "text": "was, been"
-  },
-  {
-    "who": "Vee",
-    "text": "saw, seen"
-  },
-  {
-    "who": "Vee",
-    "text": "ate, eaten"
-  },
-  {
-    "who": "Vee",
-    "text": "took, taken"
-  },
-  {
     "who": "Theo",
     "text": "Participle Wordle! Guess the past participle in six tries."
   },
@@ -3673,7 +3653,7 @@
   },
   {
     "who": "Vee",
-    "text": "Take 2 · Say it again, better: fix what we noticed, and add a point against your answer."
+    "text": "Take 2 · Say it again, better: fix what we noticed, add a point against your answer, and answer Theo’s question at the end."
   },
   {
     "who": "Ava",

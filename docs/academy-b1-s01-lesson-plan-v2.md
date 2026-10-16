@@ -54,3 +54,11 @@ Keep: all games and plates already built. Change: order and minutes exactly as t
 - **New this update:** *Glitch Hunt* (2 chats, required, Notice & Build) and *Two Truths and a Lie* (optional, Energiser). To keep the hour at 60, *Triple Match 1* became optional (Triple Match 2 and the other optional pages are the teacher's extras; optional pages now total about 25 minutes, so they are a menu, not a requirement). Part minutes: 3 / 3 / 20 / 13 / 3 / 9 / 5 / 4.
 - Rapport has 2 scenes, Triple Match 4 verbs per page. Research: `docs/research/academy-b1-s01-research.md` §7–8.
 - **Verb Draw (2026-10-15, owner request):** optional end-of-lesson game in the Release (3 draws of 4 verbs). It replaces the Energiser's *Triple Match 2* (the new game contains the match-3 phase). Optional pages now total about 27 minutes, a menu for the teacher; the test cap is 28.
+
+## Build notes, 16 October 2026 — expert-teaching fixes (`docs/research/academy-expert-teaching-research.md`)
+
+- **Predict → listen → reflect:** new required slide `predict` (guess the dare, no wrong answer) before the story; `listen-q` carries a teacher cue to reflect (was the guess close, which words helped).
+- **Words used, not only matched:** `my-list` has a third row: use one of the six words in a sentence about you (criterion 2 now ends in production).
+- **Take 2 changes the listener:** Theo asks one follow-up (When did …?), answered with the past simple and a time.
+- **L1 note** on `rule-trio` for the teacher (tr/ar past simple instead of present perfect; it/es/fr finished-time words and *da/desde/depuis*).
+- **Time:** `partMinutes` now 3 / 3 / 22 / 11 / 3 / 9 / 5 / 4; `cloze` is optional; the optional second memory game `trio-memory` was removed (the trios are practised in forge, triple, streak, wordle and Verb Draw).
