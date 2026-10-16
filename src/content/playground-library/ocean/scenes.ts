@@ -13,6 +13,7 @@
  * Art: Canva, Playground game colours (gameSkin.ts). Pictures up to L4 are ~35 % purple (purple coral, sea fans); from
  * 2026-10-15 new pictures use the Playground brand shades (PICTURE_COLOUR_LINE): sky blue sea, orange and sunshine coral,
  * cream sand, green sea grass. Coral the Mermaid is a girl; Bub the Octopus is a shy boy. Leo and Pip wear swim shorts, never a dress.
+ * Bella the bunny (a girl) dives with Pip, Mia and Leo (owner, 2026-10-16: "add Bella also").
  * ========================================================================= */
 
 import { CAST, VOICE_KEY, type CharKey, type ReaderPage, type Scene } from '../welcome-town/scenes';
@@ -49,12 +50,12 @@ const BIBI = (f: string) => item(`bibi-${f}`);
 export const TREASURE_REEF: ReaderPage[] = [
   { img: reefPage(1), lines: [{ text: 'It is sunny. Look! A boat on the sea.' }], check: { who: 'pip', question: 'What is on the sea?', answer: 'A boat', options: [{ label: 'A boat' }, { label: 'A car' }, { label: 'A bus' }] } },
   { img: reefPage(2), lines: [{ text: 'This is Coral. She lives in the sea.' }], check: { who: 'mia', question: 'Where does Coral live?', answer: 'In the sea', options: [{ label: 'In a house' }, { label: 'In the sea' }, { label: 'In space' }] } },
-  { img: reefPage(3), lines: [{ text: 'It is a whale. It is big! It is a turtle.' }], check: { who: 'leo', question: 'What is big?', answer: 'The whale', options: [{ label: 'The whale', img: SEA.whale }, { label: 'The turtle', img: SEA.turtle }, { label: 'The starfish', img: SEA.starfish }] } },
+  { img: reefPage(3), lines: [{ text: 'It is a whale. It is big! It is a turtle.' }], check: { who: 'bella', question: 'What is big?', answer: 'The whale', options: [{ label: 'The whale', img: SEA.whale }, { label: 'The turtle', img: SEA.turtle }, { label: 'The starfish', img: SEA.starfish }] } },
   { img: reefPage(4), lines: [{ text: 'This is Bub. Bub is an octopus. He is hiding.' }], check: { who: 'mia', question: 'What is Bub doing?', answer: 'Hiding', options: [{ label: 'Hiding', img: item('bub-hiding') }, { label: 'Sleeping', img: item('starfish-sleeping') }, { label: 'Walking', img: item('crab-walking') }] } },
   { img: reefPage(5), lines: [{ text: 'The crab is walking. The starfish is sleeping.' }], check: { who: 'pip', question: 'What is the crab doing?', answer: 'Walking', options: [{ label: 'Eating' }, { label: 'Walking' }, { label: 'Sleeping' }] } },
-  { img: reefPage(6), lines: [{ text: 'The friends are diving. Fish are swimming!' }], check: { who: 'leo', question: 'What are the fish doing?', answer: 'Swimming', options: [{ label: 'Sleeping' }, { label: 'Swimming' }, { label: 'Walking' }] } },
+  { img: reefPage(6), lines: [{ text: 'The friends are diving. Fish are swimming!' }], check: { who: 'bella', question: 'What are the fish doing?', answer: 'Swimming', options: [{ label: 'Sleeping' }, { label: 'Swimming' }, { label: 'Walking' }] } },
   { img: reefPage(7), lines: [{ text: 'The turtle lives on the reef. It eats sea grass.' }], check: { who: 'mia', question: 'What does the turtle eat?', answer: 'Sea grass', options: [{ label: 'Fish', img: SEA.fish }, { label: 'Sea grass', img: item('sea-grass') }, { label: 'Shells', img: SEA.shell }] } },
-  { img: reefPage(8), lines: [{ text: 'Oh no! It is windy. The waves are big.' }], check: { who: 'pip', question: 'What is the weather like?', answer: 'Windy', options: [{ label: 'Sunny' }, { label: 'Windy' }, { label: 'Snowy' }] } },
+  { img: reefPage(8), lines: [{ text: 'Oh no! It is windy. The waves are big.' }], check: { who: 'bella', question: 'What is the weather like?', answer: 'Windy', options: [{ label: 'Sunny' }, { label: 'Windy' }, { label: 'Snowy' }] } },
   { img: reefPage(9), lines: [{ text: 'Mia: Is it the chest? Shark: No, it isn’t!' }], check: { who: 'leo', question: 'Is it the chest?', answer: 'No, it isn’t.', options: [{ label: 'Yes, it is.' }, { label: 'No, it isn’t.' }] } },
 ];
 
@@ -138,8 +139,8 @@ export const LESSON_A1U6L1_SCENES: Scene[] = [
       cards: [
         { who: 'mia', sentence: 'It’s a shark.', img: SEA.shark, imgLabel: 'shark' },
         { who: 'mia', sentence: 'It’s a whale.', img: SEA.whale, imgLabel: 'whale' },
-        { who: 'mia', sentence: 'It’s a turtle.', img: SEA.turtle, imgLabel: 'turtle' },
-        { who: 'mia', sentence: 'It’s a starfish.', img: SEA.starfish, imgLabel: 'starfish' },
+        { who: 'bella', sentence: 'It’s a turtle.', img: SEA.turtle, imgLabel: 'turtle' },
+        { who: 'bella', sentence: 'It’s a starfish.', img: SEA.starfish, imgLabel: 'starfish' },
       ],
     },
   },
@@ -219,7 +220,7 @@ export const LESSON_A1U6L1_SCENES: Scene[] = [
   {
     id: 'oc-shadows', kind: 'prea1', teacher: 'Guided: drag each sea animal onto its shadow — and say it: It’s a starfish!',
     scene: {
-      id: 'oc-shadows', kind: 'shadow-match', bg: bgReef, who: 'mia',
+      id: 'oc-shadows', kind: 'shadow-match', bg: bgReef, who: 'bella',
       teacher: 'Drag each animal onto its shadow. Say it!',
       items: [
         { label: 'shark', img: SEA.shark, line: 'It’s a shark!' },
@@ -294,7 +295,7 @@ export const LESSON_A1U6L1_SCENES: Scene[] = [
       { who: 'pip', statement: 'The whale is small.', isTrue: false },
       { who: 'mia', statement: 'It is a turtle.', isTrue: true },
       { who: 'mia', statement: 'They are sharks.', isTrue: false },
-      { who: 'leo', statement: 'It is sunny.', isTrue: true },
+      { who: 'bella', statement: 'It is sunny.', isTrue: true },
     ],
   },
   /* Phonics: wh → Letter Moles → Blend & Read → tongue twister */
@@ -443,9 +444,9 @@ export const LESSON_A1U6L2_SCENES: Scene[] = [
         { who: 'mia', sentence: 'The octopus is hiding.', img: ACT.hiding, imgLabel: 'hiding' },
         { who: 'mia', sentence: 'The crab is walking.', img: ACT.walking, imgLabel: 'walking' },
         { who: 'mia', sentence: 'The starfish is sleeping.', img: ACT.sleeping, imgLabel: 'sleeping' },
-        { who: 'mia', sentence: 'The fish is eating.', img: ACT.eating, imgLabel: 'eating' },
-        { who: 'mia', sentence: 'The whale is diving.', img: ACT.diving, imgLabel: 'diving' },
-        { who: 'mia', sentence: 'The shark is swimming.', img: ACT.swimming, imgLabel: 'swimming' },
+        { who: 'bella', sentence: 'The fish is eating.', img: ACT.eating, imgLabel: 'eating' },
+        { who: 'bella', sentence: 'The whale is diving.', img: ACT.diving, imgLabel: 'diving' },
+        { who: 'bella', sentence: 'The shark is swimming.', img: ACT.swimming, imgLabel: 'swimming' },
       ],
     },
   },
@@ -533,7 +534,7 @@ export const LESSON_A1U6L2_SCENES: Scene[] = [
   {
     id: 'oc2-move-break', kind: 'prea1', teacher: 'Brain break: be the sea animals with Pip — and say what you are doing.',
     scene: {
-      id: 'oc2-move-break', kind: 'tpr-actions', mode: 'break', bg: reefPage(1), who: 'pip', teacher: 'What are you doing?',
+      id: 'oc2-move-break', kind: 'tpr-actions', mode: 'break', bg: reefPage(1), who: 'bella', teacher: 'What are you doing?',
       rounds: [
         { line: 'Walk sideways like a crab! I’m walking!', emoji: '\u{1F980}' },
         { line: 'Hide your face like Bub! I’m hiding!', emoji: '\u{1F419}' },
@@ -612,13 +613,13 @@ export const LESSON_A1U6L2_SCENES: Scene[] = [
   { id: 'oc2-twister', kind: 'tongue-twister', look: 'town', speeds: 3, bg: reefPage(1), who: 'pip', focus: 'oa', teacher: 'Reading: quick reading! Listen to Pip, then say it slow, faster — then boat speed!', line: 'A goat in a coat floats on a boat.' },
   /* Free: What am I doing? + ask Bub */
   {
-    id: 'oc2-mime', kind: 'join-stage', bg: bgRocks, teacher: 'Free: the student mimes a sea animal doing something (walking crab, sleeping starfish, hiding octopus…). Pip asks; the student answers in a sentence. Then swap: Pip mimes, the student asks.', cast: ['pip'],
+    id: 'oc2-mime', kind: 'join-stage', bg: bgRocks, teacher: 'Free: the student mimes a sea animal doing something (walking crab, sleeping starfish, hiding octopus…). Bella asks; the student answers in a sentence. Then swap: Bella mimes, the student asks.', cast: ['bella'],
     turns: [
-      { who: 'pip', line: 'What are you doing?' },
+      { who: 'bella', line: 'What are you doing?' },
       { who: 'student', line: 'I’m … ! I’m a … !' },
-      { who: 'pip', line: 'Now me! What am I doing?' },
+      { who: 'bella', line: 'Now me! What am I doing?' },
       { who: 'student', line: 'You’re … !' },
-      { who: 'pip', line: 'Yes! I’m swimming like a fish!' },
+      { who: 'bella', line: 'Yes! I’m swimming like a fish!' },
     ],
   },
   {
@@ -746,9 +747,9 @@ export const LESSON_A1U6L3_SCENES: Scene[] = [
     scene: {
       id: 'oc3-food', kind: 'listen-repeat-cards', bg: bgDeep, teacher: 'What does it eat? Listen and say it!',
       cards: [
-        { who: 'mia', sentence: 'It eats fish.', img: SEA.fish, imgLabel: 'fish' },
-        { who: 'mia', sentence: 'It eats sea grass.', img: SEAGRASS, imgLabel: 'sea grass' },
-        { who: 'mia', sentence: 'It eats shells.', img: SEA.shell, imgLabel: 'shells' },
+        { who: 'bella', sentence: 'It eats fish.', img: SEA.fish, imgLabel: 'fish' },
+        { who: 'bella', sentence: 'It eats sea grass.', img: SEAGRASS, imgLabel: 'sea grass' },
+        { who: 'bella', sentence: 'It eats shells.', img: SEA.shell, imgLabel: 'shells' },
       ],
     },
   },
@@ -820,7 +821,7 @@ export const LESSON_A1U6L3_SCENES: Scene[] = [
   {
     id: 'oc3-move-break', kind: 'prea1', teacher: 'Brain break: do the song actions with Pip — and say where you live!',
     scene: {
-      id: 'oc3-move-break', kind: 'tpr-actions', mode: 'break', bg: reefPage(6), who: 'pip', teacher: 'Swim, walk, munch!',
+      id: 'oc3-move-break', kind: 'tpr-actions', mode: 'break', bg: reefPage(6), who: 'bella', teacher: 'Swim, walk, munch!',
       rounds: [
         { line: 'Swim slow like a turtle! I live on the reef!', emoji: '\u{1F422}' },
         { line: 'Walk sideways like a crab! I live on the beach!', emoji: '\u{1F980}' },
@@ -896,12 +897,12 @@ export const LESSON_A1U6L3_SCENES: Scene[] = [
   { id: 'oc3-twister', kind: 'tongue-twister', look: 'town', speeds: 3, bg: reefPage(7), who: 'pip', focus: 'sh', teacher: 'Reading: quick reading! Listen to Pip, then say it slow, faster — then splash speed!', line: 'Fish wish for a big splash.' },
   /* Free: Where does it live? + ask Coral */
   {
-    id: 'oc3-guess', kind: 'join-stage', bg: bgReef, teacher: 'Free: the student thinks of a sea animal and says two facts (It lives… It eats…). The teacher (Pip) guesses. Then swap: Pip says the facts, the student guesses.', cast: ['pip'],
+    id: 'oc3-guess', kind: 'join-stage', bg: bgReef, teacher: 'Free: the student thinks of a sea animal and says two facts (It lives… It eats…). The teacher (Bella) guesses. Then swap: Bella says the facts, the student guesses.', cast: ['bella'],
     turns: [
       { who: 'student', line: 'It lives … . It eats … .' },
-      { who: 'pip', line: 'Is it a turtle?' },
+      { who: 'bella', line: 'Is it a turtle?' },
       { who: 'student', line: 'Yes! / No, it’s a … !' },
-      { who: 'pip', line: 'My turn! It lives on the beach. It walks sideways.' },
+      { who: 'bella', line: 'My turn! It lives on the beach. It walks sideways.' },
       { who: 'student', line: 'It’s a crab!' },
     ],
   },
@@ -1007,9 +1008,9 @@ export const LESSON_A1U6L4_SCENES: Scene[] = [
     scene: {
       id: 'oc4-doing-cards', kind: 'listen-repeat-cards', bg: bgRocks, teacher: 'What is it doing? Listen and say it!',
       cards: [
-        { who: 'mia', sentence: 'Is it swimming? Yes, it is.', img: ACT.swimming, imgLabel: 'swimming' },
-        { who: 'mia', sentence: 'Is it sleeping? No, it isn’t. It’s walking.', img: ACT.walking, imgLabel: 'walking' },
-        { who: 'mia', sentence: 'Is it eating? Yes, it is.', img: ACT.turtleEating, imgLabel: 'eating' },
+        { who: 'bella', sentence: 'Is it swimming? Yes, it is.', img: ACT.swimming, imgLabel: 'swimming' },
+        { who: 'bella', sentence: 'Is it sleeping? No, it isn’t. It’s walking.', img: ACT.walking, imgLabel: 'walking' },
+        { who: 'bella', sentence: 'Is it eating? Yes, it is.', img: ACT.turtleEating, imgLabel: 'eating' },
       ],
     },
   },
@@ -1093,7 +1094,7 @@ export const LESSON_A1U6L4_SCENES: Scene[] = [
   {
     id: 'oc4-move-break', kind: 'prea1', teacher: 'Brain break: Pip asks — the student answers with the body: thumbs up (Yes, it is) or thumbs down (No, it isn’t).',
     scene: {
-      id: 'oc4-move-break', kind: 'tpr-actions', mode: 'break', bg: reefPage(1), who: 'pip', teacher: 'Thumbs up or down!',
+      id: 'oc4-move-break', kind: 'tpr-actions', mode: 'break', bg: reefPage(1), who: 'bella', teacher: 'Thumbs up or down!',
       rounds: [
         { line: 'Is the sea blue? Thumbs up! Yes, it is!', emoji: '\u{1F44D}' },
         { line: 'Is a whale small? Thumbs down! No, it isn’t!', emoji: '\u{1F44E}' },
@@ -1172,13 +1173,13 @@ export const LESSON_A1U6L4_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'oc4-hide-one', kind: 'join-stage', bg: bgReef, teacher: 'Free (swap): the student thinks of a sea animal; the teacher (Pip) asks. The student answers in full short answers: Yes, it is. / No, it isn’t.', cast: ['pip'],
+    id: 'oc4-hide-one', kind: 'join-stage', bg: bgReef, teacher: 'Free (swap): the student thinks of a sea animal; the teacher (Bella) asks. The student answers in full short answers: Yes, it is. / No, it isn’t.', cast: ['bella'],
     turns: [
-      { who: 'pip', line: 'Is it big?' },
+      { who: 'bella', line: 'Is it big?' },
       { who: 'student', line: 'Yes, it is. / No, it isn’t.' },
-      { who: 'pip', line: 'Is it swimming?' },
+      { who: 'bella', line: 'Is it swimming?' },
       { who: 'student', line: 'Yes, it is. / No, it isn’t.' },
-      { who: 'pip', line: 'Is it a whale?' },
+      { who: 'bella', line: 'Is it a whale?' },
       { who: 'student', line: 'Yes, it is! / No, it isn’t. It’s a … !' },
     ],
   },
