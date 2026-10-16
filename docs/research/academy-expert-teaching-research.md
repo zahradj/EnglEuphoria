@@ -45,3 +45,27 @@ Marks: **[V]** a result seen this session (summary level) · **[V-weak]** seen o
 - Primary texts of Lyster & Saito and Li for the delayed-test figures.
 - CELTA/Delta syllabus and the Scrivener / Ur / Thornbury / Harmer books: **not retrieved**; this round does not make the plan "CELTA-reviewed". A qualified teacher review of the plan is still needed.
 - Evidence on one-to-one online lessons with teenagers specifically.
+
+## 4. One-to-one online lessons for teenagers (follow-up search, 2026-10-16)
+
+Finding: **direct research is thin.** What exists is general tutoring research, practitioner advice and a few small studies. Nothing below proves a design for online 1:1 teen English; treat it as guidance.
+
+| Source | What was taken | Limits | Mark |
+|---|---|---|---|
+| [Nickow, Oreopoulos & Quan, tutoring meta-analysis](https://www.nber.org/papers/w27476) (working paper pooled 0.37 SD; published 89-RCT version 0.288 SD) | Tutoring works; larger when tutors are teachers/paraprofessionals, sessions are frequent (≥ 3 days a week) and in school time. Supports the Daily 10 and short voice-note touchpoints between lessons. | General school subjects, mostly younger pupils, not English or online; no online effect size retrieved. Cite the version you mean. | [V] |
+| [EdWorkingPaper, 16,629 literacy tutoring transcripts](https://edworkingpapers.com/sites/default/files/ai25-1289.pdf) | 1:1 gives more personalised attention than 2:1 for similar time on content and relationship. | Early literacy, not EFL. | [V] indirect |
+| [UK study of rapport online](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9517968/) | Short one-to-one contact before and after sessions may build rapport better than the sessions themselves (so: a real check-in and a warm sign-off). | University EAP students. | [V] indirect |
+| [British Council EnglishScore Tutors (13–17, 1:1)](https://www.britishcouncil.es/en/english/learn-online/englishscore-tutors-teens) | Peer product: tailored to level and goals, past notes and vocabulary reviewed, designed to maximise speaking time. Confirms our model (student need, error log, speaking-first). | Marketing page, not evidence of results. | [V-weak] |
+| [Hampel & Stickler 2012](https://cambridge.org/core/journals/recall/article/use-of-videoconferencing-to-support-multimodal-interaction-in-an-online-language-classroom/799F7ABEABF07A9F2D2DB8099CCB98E6), [Latvian videoconferencing study](https://research.lu.lv/en/publications/opportunities-and-challenges-of-videoconferencing-based-teaching-/) | Video lessons need multimodal support (chat, shared screen, gesture) and task design that allows for fatigue; little research on student fatigue; video is dual-modal and can raise cognitive load. | Abstracts only; small samples. | [V-weak] |
+| [Engoo tutor tips for teens](https://tutor.engoo.com/blog/about-online-tutoring/useful-suggestions-for-tutoring-teenagers/), [teacher talk time](https://richardjamesrogers.com/2022/12/11/the-truth-about-teacher-talking-time-ttt/) | Learn interests and goals, use the name, open with conversation; student-led homework review cuts teacher talk. | Vendor and blog opinion. | [V-weak] |
+| [Wong & Waring, conversation analysis for teachers](https://www.routledge.com/Conversation-Analysis-and-Second-Language-Pedagogy-A-Guide-for-ESL-EFL-Teachers/Wong-Waring/p/book/9781138596047) | Teach turn-taking, repair and openings explicitly; helps reticent learners take initiative. | Not about 1:1 or online; summary only. | [V] indirect |
+
+### What this changes for the Academy (design choices, not proven rules)
+
+1. **Frequency over length:** keep the Daily 10 and voice notes between lessons; they are the best-supported lever (frequent tutoring).
+2. **Warm open and close:** a real 2-3 minute check-in and a personal sign-off; use the student's name and goals from the student-need section.
+3. **Fatigue and load online:** change activity type about every 5-8 minutes (already in the Run of Show), keep one focus per screen, avoid reading text while the teacher talks, and use shared-screen, chat and reactions as the multimodal channels.
+4. **Teach interaction skills:** include turn-taking and repair phrases ("Sorry, could you say that again?", "Do you mean…?") as taught chunks, since a 1:1 student has no peers to hide behind.
+5. **Student-led review:** the student runs the Remember? and the error-log review (teacher talk down, student talk up).
+6. **Do not claim** an online 1:1 effect size; our tutoring claim stays "frequent, personalised practice is well supported in general".
+7. **Open:** a pilot with real teen students and a teacher (timing, fatigue, anxiety) is the only way to learn what works online for our format.
