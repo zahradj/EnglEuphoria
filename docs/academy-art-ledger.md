@@ -220,3 +220,17 @@ A new holder design is needed before more plates (page limit).
 | story plate 3 (Vee points at the viewer, Ava laughs, Theo grins) | `bg/story-b1s1-3.webp` | MAHYChMdb5g | 98 (reused) |
 
 The holder is full (100 pages), so pages 97-99 are reused; the pictures are recoverable by their media ids. Still to make: word-picture sticker sheet (`b-bucketlist, b-dare, b-giveitago, b-lifetime, b-tick, b-brave`).
+
+## B1 Season 1 word stickers — prompts ready, NOT generated (2026-10-16)
+
+Status: **blocked.** Canva `generate-image` returned `quota_cooldown`; the Gemini route (`ai-image-generation`, tried directly) returned HTTP 402 "prepayment credits are depleted". Higgsfield is not allowed for pictures. Nothing was generated and no picture was drawn by hand. When either route is back: generate one sheet per prompt below on a plain white background (Canva `LANDSCAPE_3_2`, no scene panels: an earlier sheet with panels was rejected), look at it, then cut the stickers with `python3 scripts/academy-split-cards.py <sheet.png> <rows> <cols> <ids…>` into `public/academy-art/cards/`.
+
+Common style line (every prompt): flat 2D game-art style, thick dark-violet outline, soft top highlight and bottom shade; bright, light, airy, broad daylight, at school, age-appropriate, reserved; about 25 % soft lilac and violet mixed with sky blue, warm cream, light wood and green plants; modest school clothes, calm friendly faces; one isolated object or person per cell on pure white; no text, letters or numbers; no scenery or panels.
+
+| Sheet | Grid | Card ids in reading order | Pictures |
+|---|---|---|---|
+| E1 words | 3 x 2 | `b-bucketlist`, `b-dare`, `b-giveitago`, `b-lifetime`, `b-tick`, `b-brave` | a checklist scroll pinned to a small corkboard with a gold star; a teen in a hoodie holding out a blank card with a playful smile; a teen about to try a climbing wall, one hand raised; a single golden ticket with a sparkle above a small globe; a pencil ticking a big green check mark on a card; a teen standing tall with a calm confident smile and a small shield-shaped badge |
+| E2 feelings A | 4 x 2 (7 used) | `w-excitement`, `w-amazed`, `w-disappointed`, `w-embarrassed`, `w-proud`, `w-frightened`, `w-relaxed` | a packed bag by a door with a big smile; a wide-eyed face looking up at a huge view; a closed museum door and a sad face; a red-faced student who dropped a tray; a smiling hiker on a hilltop; a student gripping a high railing; a student lying on grass, calm |
+| E2 places B | 4 x 2 (7 used) | `w-grateful`, `w-destination`, `w-attraction`, `w-countryside`, `w-camping`, `w-sightseeing`, `w-trynew` | a student saying thank you with a small gift; a signpost with a village at the end of a road; a famous tower with visitors; green fields, a farm and hills; a camp by a lake at sunset; a small group with a map in front of a monument; a student about to try a new activity |
+
+After the stickers exist: the card ids in `b1s01e1.ts` (`b-*`) and `b1s01e2.ts` (`w-*`) already point at these file names; run `npm test` for the deck, then push with `[preview]`.
