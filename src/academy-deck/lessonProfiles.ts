@@ -28,6 +28,11 @@ export const LESSON_PROFILES: LessonProfile[] = [
     evidence: 'the student says the three forms of ten verbs, tells when from up to now, and says who has done the most and why (Take 2)', homeMission: 'send Vee one voice note: three sentences about things you have done',
   },
   {
+    id: 'b1-s01-e2', previous: 'b1-s01-e1', setting: 'the Travel Club room with the postcard wall (bright daytime school)', mainPlate: 'postcard-wall', look: 'bright daytime school room, tall sunny windows, light wood, a big world map, a wall of postcards, soft lilac accents', frame: 'Vee’s postcard wall: find the right word for every postcard',
+    signature: 'rpg', funHook: 'name the feeling on a Mood Postcard, craft sentence cards at the Word Workbench, build whole chunks, and describe a postcard so Ava can find it',
+    evidence: 'the student uses at least five of the 14 words in a private voice note, with an “I have …” sentence and a past-simple follow-up with a time', homeMission: 'send Vee one voice note: three sentences about a trip with a feeling, a place and a chunk',
+  },
+  {
     id: 'free-time-club-1', setting: 'the school Club Fair at dusk', mainPlate: 'fair-night', look: 'purple dusk, string lights, five stalls', frame: 'mystery: who took Ava’s poster?',
     signature: 'explore', funHook: 'walk the fair and tap each stall to hear what they like; sort your own hobbies with no wrong answer',
     evidence: 'the student says “I like ___. I love ___.” to Ava with their name (Take 2 and the voice note)', homeMission: 'send Ava one voice note: I like ___. I love ___.',
