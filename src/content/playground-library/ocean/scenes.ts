@@ -1779,3 +1779,247 @@ export const LESSON_A1U6L6_SCENES: Scene[] = [
   goodbyeSong('oc6-goodbye-song', bgStage),
   { id: 'oc6-finale', kind: 'finale', bg: bgStage, who: 'pip', line: 'You asked, you answered and you won the pearls! See you next time! \u{1F41A}' },
 ];
+
+/* =============================================================================
+ * A1 Unit 6 Lesson 7: "Boss Test: Ocean Explorer!" (plan docs/a1-unit-6-ocean.md §6.7)
+ * Objective: I can show what I learned in Unit 6: sea animals, what they are doing, where they live and what they eat,
+ *   asking "Is it…?" and reading "The Treasure Reef".
+ * Frame: the Golden Compass piece 5 is in the reef; Coral sends the friends through five trials. Warm-up = Rising Tide
+ *   (the Rising River game on the beach: the tide comes in, every right answer lays a plank of the pier to the boat).
+ * Parts (pass 4/5 each): 1 Listening · 2 Reading yes/no (+ tick or cross, + spell with bubbles) · 3 the story gaps ·
+ *   4 Speaking (describe two animals + find Coral's hidden animal) · 5 Reading aloud. Then can-do ticks, trophy,
+ *   Practise again (different designs from L6 and from U5 L7), and the teaser: a hero cape flies past (Hero City).
+ * ========================================================================= */
+
+export const LESSON_A1U6L7_TITLE = 'Boss Test: Ocean Explorer!';
+export const LESSON_A1U6L7_OBJECTIVE = 'I can show what I learned in Unit 6: sea animals, what they are doing, where they live, asking "Is it…?" and the story.';
+
+export const LESSON_A1U6L7_SCENES: Scene[] = [
+  { id: 'oc7-title', kind: 'title-card', bg: reefPage(3), level: 'A1', unit: 'Unit 6', lessonLabel: 'Lesson 7', title: 'Boss Test: Ocean Explorer!', subtitle: 'Show everything you can do under the sea', cta: '\u{1F3C6} I’M READY!' },
+  {
+    // Remember? (owner, 2026-10-07): Lesson 6 — the buzzer questions. Click mode (L6 used shadow).
+    id: 'oc7-recall-warmup', kind: 'recall-warmup', bg: bgStage, who: 'pip', mode: 'click',
+    fromLabel: 'Lesson 6 · Ocean Question Game!',
+    teacher: 'Guided: Pip asks the buzzer question — the student finds the animal and answers with the whole sentence.',
+    items: [
+      { word: 'walking', say: 'Who is walking? The crab is walking!', img: ACT.walking },
+      { word: 'diving', say: 'Who is diving? The whale is diving!', img: ACT.diving },
+      { word: 'eating', say: 'Who is eating? The turtle is eating!', img: ACT.turtleEating },
+      { word: 'swimming', say: 'Who is swimming? The fish is swimming!', img: ACT.fishSwimming },
+    ],
+  },
+  helloSong('oc7-hello-song', reefPage(3)),
+  {
+    id: 'oc7-intro', kind: 'cinematic', bg: reefPage(2), title: 'The Boss Test', subtitle: 'The tide, then five trials', narrator: 'coral',
+    script: [
+      { who: 'coral', line: 'The last piece of the compass is in my reef!' },
+      { who: 'coral', line: 'Listen, read, read the story, talk and read aloud!' },
+      { who: 'pip', line: 'First, the tide is coming in! Quick, build the pier!' },
+    ],
+    cta: '\u{1F30A} GO!',
+  },
+  // Creative idea: the Rising River on the beach becomes the RISING TIDE — the friends wait on a rock, every right
+  // answer lays a plank of the pier to the boat, a wrong one lets the tide come up a little (wet feet only).
+  {
+    id: 'oc7-tide', kind: 'rising-river', look: 'tide', goalImg: BOAT, bg: reefPage(1), who: 'coral', title: 'Rising Tide! Build the pier to the boat!',
+    teacher: 'Warm-up (together!): every right answer lays a plank of the pier. A wrong answer — the tide comes up a little. Get the friends to the boat!',
+    friends: [item('pip-hero'), item('mia-hero'), item('leo-hero')],
+    rounds: [
+      { ask: 'What is it? It is big. It lives in the sea.', choices: ['It’s a whale.', 'It’s a dog.'], answer: 0 },
+      { ask: 'Is the crab walking?', choices: ['Yes, it is.', 'Yes, it walking.'], answer: 0, img: ACT.walking },
+      { ask: 'What does the shark eat?', choices: ['It eats fish.', 'It eats sea fish grass.'], answer: 0 },
+      { ask: 'They are …', choices: ['sharks.', 'a shark.'], answer: 0, img: SEA.sharks },
+      { ask: 'Is Bub hiding?', choices: ['Yes, he is.', 'No, it isn’t a crab.'], answer: 0, img: ACT.hiding },
+    ],
+    doneLine: 'Everybody is on the boat! Now the Boss Test!',
+  },
+  /* Part 1 — Listening */
+  {
+    id: 'oc7-p1-listen', kind: 'prea1', teacher: 'Part 1 — Listening (5). One try each; 🔊 replays it. Pass: 4 of 5. The student works alone.',
+    scene: {
+      id: 'oc7-p1-listen', kind: 'hero-trials', bg: bgReef, who: 'pip',
+      teacher: 'Listen and tap the picture. One try!',
+      hero: { img: CORAL, name: 'Ocean Explorer' }, medal: item('medal-rainbow'),
+      skills: [
+        { key: 'doing', label: 'Doing', icon: '\u{1F3CA}' },
+        { key: 'lives', label: 'Homes', icon: '\u{1F3DD}\u{FE0F}' },
+        { key: 'animal', label: 'Animals', icon: '\u{1F433}' },
+      ],
+      items: [
+        { skill: 'doing', ask: 'It’s sleeping on the sand.', reply: 'The starfish is sleeping!', answer: 1, options: [{ label: 'crab', img: ACT.walking }, { label: 'starfish', img: ACT.sleeping }, { label: 'turtle', img: ACT.turtleEating }] },
+        { skill: 'doing', ask: 'He’s shy. He’s hiding.', reply: 'Bub is hiding!', answer: 2, options: [{ label: 'whale', img: ACT.diving }, { label: 'fish', img: ACT.fishSwimming }, { label: 'Bub', img: ACT.hiding }] },
+        { skill: 'lives', ask: 'It lives on the reef. It eats sea grass.', reply: 'The turtle!', answer: 0, options: [{ label: 'turtle', img: SEA.turtle }, { label: 'shark', img: SEA.shark }, { label: 'starfish', img: SEA.starfish }] },
+        { skill: 'lives', ask: 'It lives in the sea. It eats fish. It’s grey.', reply: 'The shark!', answer: 1, options: [{ label: 'crab', img: SEA.crab }, { label: 'shark', img: SEA.shark }, { label: 'seahorse', img: SEA.seahorse }] },
+        { skill: 'animal', ask: 'Look! They’re turtles.', reply: 'Turtles!', answer: 2, options: [{ label: 'turtle', img: SEA.turtle }, { label: 'sharks', img: SEA.sharks }, { label: 'turtles', img: SEA.turtles }] },
+      ],
+      doneLine: 'Listening done! Super ears!',
+    },
+  },
+  { id: 'oc7-can-1', kind: 'meet', focus: ['animals'], bg: reefPage(3), who: 'coral', cardSide: 'right', teacher: 'Can-do: the student names 6 sea animals, one and many (It’s a whale. They’re sharks.) — tick it on the Unit 6 can-do card.', line: 'I can name the sea animals!', repeat: 'It’s a whale. They’re sharks.' },
+  /* Part 2 — Reading */
+  {
+    id: 'oc7-p2-read', kind: 'true-false', bg: bgReef, img: reefPage(5), read: true,
+    teacher: 'Part 2 — Reading (5). Look at the reef picture. Read: yes or no? Pass: 4 of 5.',
+    rounds: [
+      { who: 'coral', statement: 'The crab is walking.', isTrue: true },
+      { who: 'coral', statement: 'The starfish is sleeping.', isTrue: true },
+      { who: 'coral', statement: 'The crab is sleeping.', isTrue: false },
+      { who: 'coral', statement: 'It is snowy.', isTrue: false },
+      { who: 'coral', statement: 'They live in the sea.', isTrue: true },
+    ],
+  },
+  {
+    id: 'oc7-p2b-tick', kind: 'prea1', teacher: 'Part 2b — Reading sentences (5). Read the sentence, look at the picture — tick or cross? Pass: 4 of 5.',
+    scene: {
+      id: 'oc7-p2b-tick', kind: 'tick-cross', bg: bgReef, who: 'pip', teacher: 'Read and look. Yes or no?',
+      rounds: [
+        { img: ACT.diving, sentence: 'The whale is diving.', isTrue: true },
+        { img: ACT.walking, sentence: 'The crab is eating.', isTrue: false },
+        { img: SEA.sharks, sentence: 'They’re sharks.', isTrue: true },
+        { img: ACT.hiding, sentence: 'Is it hiding? Yes, it is.', isTrue: true },
+        { img: SEA.seahorse, sentence: 'It’s a turtle.', isTrue: false },
+      ],
+    },
+  },
+  // Creative idea: the spelling part pops sea bubbles in order (Letter Bubbles, the unit's own sea game).
+  {
+    id: 'oc7-p2c-bubbles', kind: 'letter-bubbles', bg: reefPage(7), who: 'coral', title: 'Part 2c — Spell it with bubbles (3)',
+    teacher: 'Part 2c — Sounds (3). Pop the bubbles in order and say the word: wh, oa, sh. Pass: 2 of 3.',
+    words: [
+      { word: 'whale', img: SEA.whale, say: 'Whale! W-H says wh.' },
+      { word: 'boat', img: BOAT, say: 'Boat! O-A says oa.' },
+      { word: 'shell', img: SEA.shell, say: 'Shell! S-H says sh.' },
+    ],
+    doneLine: 'Pop, pop! Sounds done!',
+  },
+  { id: 'oc7-can-2', kind: 'meet', focus: ['doing'], bg: reefPage(5), who: 'bub', cardSide: 'right', teacher: 'Can-do: the student says what 4 animals are doing (The crab is walking.) and where they live — tick it.', line: 'I can say what they are doing — and where they live!', repeat: 'The crab is walking. It lives on the beach.' },
+  /* Part 3 — Reading: the story */
+  {
+    id: 'oc7-p3-story', kind: 'grammar-gap', look: 'reef', bg: bgReef, title: 'Part 3 — The story',
+    teacher: 'Part 3 — Reading the story (5). Read and choose the missing word. Pass: 4 of 5.',
+    rounds: [
+      { before: 'This is Coral. She lives in the', after: '.', choices: ['sea', 'house'], answer: 'sea', img: reefPage(2) },
+      { before: 'Bub is an octopus. He is', after: '.', choices: ['hiding', 'flying'], answer: 'hiding', img: reefPage(4) },
+      { before: 'The turtle lives on the reef. It', after: 'sea grass.', choices: ['eats', 'is'], answer: 'eats', img: reefPage(7) },
+      { before: 'Oh no! It is windy. The waves are', after: '.', choices: ['big', 'sleeping'], answer: 'big', img: reefPage(8) },
+      { before: 'Is it the treasure? Yes, it', after: '!', choices: ['is', 'isn’t'], answer: 'is', img: reefPage(11) },
+    ],
+  },
+  {
+    id: 'oc7-break', kind: 'prea1', teacher: 'Brain break between the parts: move and breathe.',
+    scene: {
+      id: 'oc7-break', kind: 'tpr-actions', mode: 'break', bg: reefPage(6), who: 'pip', teacher: 'Move like the sea!',
+      rounds: [
+        { line: 'Be a big wave — up and down!', emoji: '\u{1F30A}' },
+        { line: 'Be a sleepy starfish — stretch out!', emoji: '\u{2B50}' },
+        { line: 'Breathe like a whale — in, out!', emoji: '\u{1F40B}' },
+      ],
+    },
+  },
+  /* Part 4 — Speaking */
+  {
+    id: 'oc7-p4-describe', kind: 'join-stage', bg: bgReef, teacher: 'Part 4a — Speaking (3 points): the student describes two sea animals (point to them in the picture): name, what it is doing, where it lives / what it eats. 1 point for the -ing sentence right, 1 for lives / eats, 1 for both animals alone.', cast: ['coral'],
+    turns: [
+      { who: 'coral', line: 'Tell me about two animals in my reef!' },
+      { who: 'student', line: 'It’s a … . It’s …ing.' },
+      { who: 'student', line: 'It lives … . It eats … .' },
+      { who: 'student', line: 'And this is a … . It’s …ing.' },
+      { who: 'coral', line: 'Wow! You know my reef!' },
+    ],
+  },
+  {
+    id: 'oc7-p4-ask', kind: 'join-stage', bg: reefPage(4), teacher: 'Part 4b — Speaking (2 points): Coral hides a sea animal; the student finds it with yes/no questions (Is it big? Is it swimming? Is it a … ?). 1 point for two well-formed questions, 1 for finding it. Pass for Part 4: 4 of 5 points.', cast: ['coral'],
+    turns: [
+      { who: 'coral', line: 'I have a secret animal. Ask me questions!' },
+      { who: 'student', line: 'Is it big?' },
+      { who: 'coral', line: 'No, it isn’t.' },
+      { who: 'student', line: 'Is it walking?' },
+      { who: 'coral', line: 'Yes, it is!' },
+      { who: 'student', line: 'Is it a crab?' },
+      { who: 'coral', line: 'Yes, it is! Well done!' },
+    ],
+  },
+  { id: 'oc7-can-3', kind: 'meet', focus: ['ask'], bg: reefPage(9), who: 'mia', cardSide: 'left', teacher: 'Can-do: the student finds a hidden animal by asking Is it…? and answers Yes, it is / No, it isn’t — tick it.', line: 'I can ask and find the hidden animal!', repeat: 'Is it a crab? Yes, it is!' },
+  /* Part 5 — Reading aloud */
+  {
+    id: 'oc7-p5-read-aloud', kind: 'reader', bg: reefPage(10), title: 'Part 5 — Read it aloud!', doneLine: 'You read it all by yourself!',
+    teacher: 'Part 5 — Reading aloud (5 points: every word read, then fluency). Skip the listening: tap “My turn to read” at once. Pass: 4 of 5.',
+    pages: [TREASURE_REEF[6], TREASURE_REEF[9]],
+  },
+  { id: 'oc7-can-4', kind: 'meet', focus: ['story'], bg: reefPage(12), who: 'bub', cardSide: 'right', teacher: 'Can-do: the student reads a page of The Treasure Reef and says who helps at the end — tick it.', line: 'I can read my story — and I’m helping!', repeat: 'Bub is helping. It is sunny again!' },
+  { id: 'oc7-echo-champ', kind: 'echo', bg: reefPage(12), who: 'coral', textSide: 'top', teacher: 'Say it proudly with Coral!', word: 'I can do it! Ocean explorer!' },
+  { id: 'oc7-i-can', kind: 'meet', focus: ['Unit 6'], bg: reefPage(11), who: 'coral', cardSide: 'right', teacher: 'Check: any part below 4 of 5? Play it again next lesson (Practise again). Then the trophy!', line: 'I can show everything from Unit 6!', repeat: 'I’m an ocean explorer!' },
+  {
+    id: 'oc7-sticker', kind: 'prea1', teacher: 'The Unit 6 trophy! The student opens the pack and puts the trophy sticker in their Sticker Book.',
+    scene: {
+      id: 'oc7-sticker', kind: 'sticker-reward', bg: reefPage(11), who: 'pip', teacher: 'The Unit 6 trophy!',
+      line: 'You passed the Boss Test! Here is your Unit 6 trophy — and piece 5 of the Golden Compass!',
+      sticker: { img: item('medal-rainbow'), label: 'Golden Compass piece 5' },
+    },
+  },
+  petPal('oc7-pet-pal', 4, 'You are an ocean explorer! I want a medal too!', [{ label: 'medal', img: item('hero-medal') }, { label: 'boat', img: BOAT }, { label: 'shell', img: SEA.shell }], 0, 'A medal! I’m so happy!'),
+  {
+    id: 'oc7-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
+    scene: {
+      id: 'oc7-home-mission', kind: 'home-mission', bg: reefPage(12), who: 'pip',
+      teacher: 'Home Mission: read the steps with the student.',
+      line: 'Your home mission!',
+      parentNote: 'Your child finished Unit 6: sea animals ("It\'s a whale. They\'re sharks."), what they are doing ("The crab is walking."), where they live and what they eat, asking "Is it…?" and the story "The Treasure Reef". Ask your child to tell you what someone at home is doing now.',
+      steps: [
+        { emoji: '\u{1F3C5}', say: 'Show your medal to your family.' },
+        { emoji: '\u{1F3E0}', say: 'Say what someone is doing: Mum is cooking!' },
+        { emoji: '\u{1F4D6}', say: 'Read The Treasure Reef again.' },
+      ],
+    },
+  },
+  /* Practise again — for any part below the pass mark, or as extra time (designs differ from L6 and from U5 L7) */
+  {
+    id: 'oc7-pa-match', kind: 'picture-match', look: 'portholes', prompt: 'Practise again: read and match',
+    teacher: 'Practise again (Part 2; creative idea: look through the submarine portholes): read each sentence and drag it under its picture.',
+    items: [
+      { word: 'It’s diving.', img: ACT.diving },
+      { word: 'They’re sharks.', img: SEA.sharks },
+      { word: 'It’s sleeping.', img: ACT.sleeping },
+      { word: 'It’s a seahorse.', img: SEA.seahorse },
+    ],
+    bg: bgDeep,
+  },
+  {
+    id: 'oc7-pa-build', kind: 'sentence-build', bg: bgReef, teacher: 'Practise again (Part 3): put the words in order, then read the sentence.',
+    rounds: [
+      { words: ['The', 'crab', 'is', 'walking.'], img: ACT.walking },
+      { words: ['It', 'lives', 'in', 'the', 'sea.'], img: SEA.whale },
+      { words: ['Is', 'it', 'hiding?'], img: ACT.hiding },
+    ],
+  },
+  // Creative idea: the question and answer cards are shells on the sand again (Shell Memory).
+  {
+    id: 'oc7-pa-memory', kind: 'memory', look: 'shells', bg: reefPage(12), teacher: 'Find each question and its answer!',
+    pairs: [
+      { id: 'what', label: 'What is it?', match: 'It’s a turtle.', emoji: '\u{1F422}' },
+      { id: 'doing', label: 'What is it doing?', match: 'It’s swimming.', emoji: '\u{1F3CA}' },
+      { id: 'is', label: 'Is it a shark?', match: 'No, it isn’t.', emoji: '\u{1F988}' },
+      { id: 'lives', label: 'Where does it live?', match: 'It lives in the sea.', emoji: '\u{1F30A}' },
+    ],
+  },
+  {
+    id: 'oc7-pa-chat', kind: 'chat-chain', bg: reefPage(2), partner: 'coral', title: 'Practise again: chat with Coral',
+    intro: 'Hi! Let’s talk about the sea!',
+    teacher: 'Practise again (Part 4): Coral talks, the student picks the reply that fits and SAYS it, then taps “I said it”.',
+    turns: [
+      { who: 'coral', line: 'What is your favourite sea animal?' },
+      { who: 'student', line: 'I like turtles!', wrong: ['It eating turtles.', 'I am turtle sea.'] },
+      { who: 'coral', line: 'What is the turtle doing?' },
+      { who: 'student', line: 'It’s eating sea grass.', wrong: ['It eating sea grass.', 'It’s eat sea grass.'] },
+      { who: 'coral', line: 'Ask me a question!' },
+      { who: 'student', line: 'Is it swimming?', wrong: ['It is swimming is?', 'Is swimming it?'] },
+    ],
+  },
+  {
+    id: 'oc7-pa-twister', kind: 'tongue-twister', look: 'sea', speeds: 3, bg: reefPage(12), who: 'pip', focus: 'wh|oa|sh',
+    teacher: 'Practise again (sounds): the unit’s wh, oa and sh in one twister — slow, faster, then splash speed!',
+    line: 'White whales float by the shiny boat.',
+  },
+  goodbyeSong('oc7-goodbye-song', reefPage(12)),
+  { id: 'oc7-finale', kind: 'finale', bg: reefPage(12), who: 'coral', line: 'You finished Unit 6 and found piece 5 of the Golden Compass! Look — a hero cape is flying past… Next: Hero City! \u{1F9B8}' },
+];

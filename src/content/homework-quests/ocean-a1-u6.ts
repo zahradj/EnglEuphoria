@@ -229,3 +229,36 @@ export const QUEST_OCEAN_QUESTIONS_A1_U6L6: HomeworkQuest = {
     chest('You did it! Question champion!', page(12)),
   ],
 };
+
+/** Lesson 7 "Boss Test: Ocean Explorer!" */
+export const QUEST_OCEAN_EXPLORER_A1_U6L7: HomeworkQuest = {
+  id: 'ocean-explorer-a1-u6l7', title: 'Ocean Explorer Quest', subtitle: 'Boss Test: Ocean Explorer! · A1 Unit 6 · Lesson 7', level: 'A1', lessonKey: 'ocean-rich-6-7',
+  theme: theme(page(3)), voice: 'teacher', praise,
+  levels: [
+    { kind: 'picture-choice', name: 'Listen!', icon: '👂', intro: 'Listen. Tap the right picture!', img: reef,
+      rounds: [
+        { line: 'They’re sharks.', answer: 'sharks', options: [{ label: 'shark', src: it('shark') }, { label: 'sharks', src: it('sharks') }, { label: 'turtles', src: it('turtles') }] },
+        { line: 'It’s sleeping.', answer: 'starfish', options: [{ label: 'crab', src: it('crab-walking') }, { label: 'starfish', src: it('starfish-sleeping') }, { label: 'whale', src: it('whale-diving') }] },
+        { line: 'It lives on the reef. It eats sea grass.', answer: 'turtle', options: [{ label: 'shark', src: it('shark') }, { label: 'seahorse', src: it('seahorse') }, { label: 'turtle', src: it('turtle') }] },
+      ] },
+    { kind: 'true-false', name: 'Yes or No?', icon: '❓', intro: 'Look and read. True or false?',
+      rounds: [
+        { img: page(5), aspect: 16 / 9, line: 'The crab is walking.', isTrue: true },
+        { img: page(8), aspect: 16 / 9, line: 'It is sunny.', isTrue: false },
+        { img: page(4), aspect: 16 / 9, line: 'Bub is hiding.', isTrue: true },
+      ] },
+    { kind: 'sentence-builder', name: 'Build It!', icon: '🧱', intro: 'Listen. Build what you hear!',
+      rounds: [
+        { img: it('whale-diving'), line: 'The whale is diving.', extra: ['are'] },
+        { img: it('turtle'), line: 'It lives in the sea.', extra: ['live'] },
+      ] },
+    { kind: 'reading', name: 'The Treasure Reef', icon: '📖', intro: 'Read. Then answer from memory!', img: page(7),
+      sentences: ['The turtle lives on the reef. It eats sea grass.', 'Oh no! It is windy. The waves are big.', 'Bub is not hiding now. He is helping!'],
+      questions: [
+        { q: 'What does the turtle eat?', options: ['Sea grass', 'Fish', 'Cake'], answer: 'Sea grass' },
+        { q: 'Who is helping?', options: ['Bub', 'The shark', 'The whale'], answer: 'Bub' },
+      ] },
+    { kind: 'twister', name: 'Splash Twister', icon: '🌀', intro: 'Build my tongue twister before the sand runs out!', img: reef, line: 'White whales float by the shiny boat.', seconds: 45, focus: 'wh', sayIt: 'Now say it slow, then faster!' },
+    chest('You did it! Ocean explorer!', page(11)),
+  ],
+};

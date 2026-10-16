@@ -553,6 +553,9 @@ export type Scene =
        *  on a rock; every right answer lays one plank of the bridge; a wrong answer lets the river rise a little (only
        *  wet feet — nobody falls). When the bridge is complete the friends walk across. */
       id: string; kind: 'rising-river'; bg: string; teacher: string; title: string; who: CharKey;
+      /** Design (owner 2026-10-16, "be creative"): 'river' (default: a bridge to the green bank and home) or 'tide'
+       *  (beach worlds: the sea comes in, the planks are a pier, and a boat (`goalImg`) waits bobbing at the end). */
+      look?: 'river' | 'tide'; goalImg?: string;
       friends: string[]; rounds: { ask: string; choices: string[]; answer: number; img?: string }[]; doneLine: string;
     }
   | {

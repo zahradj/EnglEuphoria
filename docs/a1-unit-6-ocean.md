@@ -175,6 +175,10 @@ Blend & Read, the child as host, free talk with Bub. Research: `docs/research/pl
 | 5 Reading aloud | one story page (5) | 4/5 |
 | | practise-again games, **Golden Compass piece 5**, trophy, Pet Pal, home mission, goodbye; **teaser**: a hero cape flying past (Hero City) | |
 
+**Built 2026-10-16** (`LESSON_A1U6L7_SCENES`, `/playground-scene/ocean-lesson-7`): the Rising River warm-up is played as a
+**Rising Tide** on the beach (planks of a pier to the boat); Part 2c spells wh / oa / sh with Letter Bubbles; Practise
+again uses portholes, Shell Memory (questions and answers) and a chat with Coral. Research in the unit research file.
+
 ### 6.8 No game twice in the unit (and different from Unit 5's same slot)
 
 | Lesson | Games |

@@ -115,3 +115,17 @@ Searched 2026-10-16. Mechanics only, never content.
 **Games list (L6):** Read and Match (polaroids — Coral's underwater camera) · **Pearl Buzzer Show ★ (signature)** · Shell Memory · Hot Shell · Sandcastle Tower · Sail Race · Pearl Dive Quiz · Twister Race · Blend & Read.
 **Deviation from the plan:** Pearl Dive Quiz (quiz board) instead of Tic-Tac-Toe Duel, so the lesson does not repeat U5 L6's duel.
 **Video-game mechanic:** **game-show / loot** — pearls for every right answer, Bub's bonus shell doubles them.
+
+## Lesson 7 — Boss Test: Ocean Explorer! (unit check, pass 4/5 per part)
+Searched 2026-10-16. Mechanics only, never content.
+
+| Source (URL) | What it does | Taken (mechanic) | Quality / limits |
+|---|---|---|---|
+| Cambridge Pre A1 Starters test format — https://www.cambridgeenglish.org/exams-and-tests/starters/test-format/ | short Listening / Reading & Writing / Speaking papers; scored in shields | five short parts, one skill each, pass 4 of 5 per part, no timer | official; verified |
+| Cambridge YL 2018 update — https://www.cambridgeenglish.org/images/419671-young-learners-2018-exam-update.pdf | Speaking: point to parts of a scene picture, answer short questions incl. one "Tell me about…" | Part 4a "Tell me about two animals in my reef" (point and describe), Part 4b short yes/no questions | official; verified (part numbering in the search snippet unclear) |
+| Cambridge Starters sample papers (Lesson 6 row) | listen and tick the picture; yes/no sentences about a picture; choose the missing word | Part 1 (Hero Trials), Part 2 (yes/no on the reef picture + tick or cross), Part 3 (story gaps) | official; verified |
+| Gimkit "The Floor is Lava" (unit research, Rising River) | a rising hazard as gentle pressure | **Rising Tide** warm-up: the tide comes in on the beach, every right answer lays a pier plank | app pattern; seen in search |
+
+**Better than them:** the test is a game around the edges only (Rising Tide, bubbles for the spelling part, the reef picture), never inside the scored parts; one try per item, the right answer is said after a miss, and a part below 4/5 goes to **Practise again** (designs different from L6 and U5 L7: portholes, Shell Memory with questions and answers, chat with Coral). The child leaves with the trophy, Golden Compass piece 5 and a teaser for Hero City.
+**Games list (L7):** Rising Tide (warm-up) · Hero Trials · yes/no · tick or cross · Letter Bubbles (spell) · story gaps · speaking stages · Read aloud · Practise again: Read and Match (portholes), Build the sentence, Shell Memory, Chat with Coral, Splash Twister.
+**Video-game mechanic:** **boss fight** (five trials, stars per skill) + **co-op survival** (Rising Tide).
