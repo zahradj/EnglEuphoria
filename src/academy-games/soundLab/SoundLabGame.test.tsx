@@ -19,20 +19,20 @@ async function playScoredSteps() {
   fireEvent.click(await screen.findByRole('button', { name: /I can hear it/ }));
   const c = CONTRASTS[0];
   for (let n = 0; n < 8; n++) {
-    await waitFor(() => expect(screen.getByText(new RegExp(`\(${n + 1}/8\)`))).toBeTruthy(), { timeout: 5000 });
+    await waitFor(() => expect(screen.getByText(new RegExp(`(${n + 1}/8)`))).toBeTruthy(), { timeout: 5000 });
     await waitFor(() => expect(calls().length).toBeGreaterThan(0));
     const target = calls()[calls().length - 1][0]; // the word just said
     fireEvent.click(screen.getByRole('button', { name: target }));
-    if (n < 7) await waitFor(() => expect(screen.getByText(new RegExp(`\(${n + 2}/8\)`))).toBeTruthy(), { timeout: 5000 });
+    if (n < 7) await waitFor(() => expect(screen.getByText(new RegExp(`(${n + 2}/8)`))).toBeTruthy(), { timeout: 5000 });
   }
   for (let n = 0; n < 6; n++) {
-    await waitFor(() => expect(screen.getByText(new RegExp(`\(${n + 1}/6\)`))).toBeTruthy(), { timeout: 5000 });
+    await waitFor(() => expect(screen.getByText(new RegExp(`(${n + 1}/6)`))).toBeTruthy(), { timeout: 5000 });
     await waitFor(() => expect(calls().length).toBeGreaterThanOrEqual(2));
     await act(async () => { await new Promise((r) => setTimeout(r, 700)); });
     const [w1, w2] = calls().slice(-2).map((x) => x[0]);
     expect(c.pairs.some((p) => p.includes(w1)) && c.pairs.some((p) => p.includes(w2))).toBe(true);
     fireEvent.click(screen.getByRole('button', { name: w1 === w2 ? 'Same' : 'Different' }));
-    if (n < 5) await waitFor(() => expect(screen.getByText(new RegExp(`\(${n + 2}/6\)`))).toBeTruthy(), { timeout: 5000 });
+    if (n < 5) await waitFor(() => expect(screen.getByText(new RegExp(`(${n + 2}/6)`))).toBeTruthy(), { timeout: 5000 });
   }
   await waitFor(() => expect(screen.getByText(/Now say it/)).toBeTruthy(), { timeout: 5000 });
 }
