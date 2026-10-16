@@ -12,6 +12,7 @@ import { Character, Plate } from './Stage';
 import { LaneView } from './slides/lane';
 import { BlendView, HearPickView, ReaderView } from './slides/reading';
 import { RuleView } from './slides/rule';
+import { BoardView } from './slides/board';
 import { ExploreView } from './slides/explore';
 import { SortView } from './slides/sort';
 import { StoryView } from './slides/story';
@@ -74,7 +75,7 @@ function clearedStars(s: Stats): number {
 /** The teaching ladder shown to the student: watch it done (I do), practise together (we do), your turn (you do), create (you make it yours). */
 const STAGE_LABEL: Record<string, string> = { review: 'Warm-up', context: 'Watch and listen', model: 'Watch and learn', rule: 'The rule', controlled: 'Practise together', free: 'Your turn', produce: 'Make it yours' };
 
-const SKILL: Record<string, string> = { say: 'Speaking', fade: 'Speaking', passage: 'Reading', readq: 'Reading', hearpick: 'Listening', story: 'Listening', model: 'Listening', write: 'Writing', build: 'Writing', boss: 'Game', wordle: 'Game', rpg: 'Game', quiz: 'Game', triple: 'Game', glitch: 'Game', verbdraw: 'Game', cloze: 'Reading', sort: 'Game', memory: 'Game', match: 'Game', forge: 'Game', streak: 'Game', explore: 'Game', hunt: 'Game', vault: 'Game', duel: 'Game', rhythm: 'Game' };
+const SKILL: Record<string, string> = { say: 'Speaking', fade: 'Speaking', passage: 'Reading', readq: 'Reading', hearpick: 'Listening', story: 'Listening', model: 'Listening', write: 'Writing', build: 'Writing', boss: 'Game', wordle: 'Game', rpg: 'Game', quiz: 'Game', triple: 'Game', glitch: 'Game', board: 'Game', verbdraw: 'Game', cloze: 'Reading', sort: 'Game', memory: 'Game', match: 'Game', forge: 'Game', streak: 'Game', explore: 'Game', hunt: 'Game', vault: 'Game', duel: 'Game', rhythm: 'Game' };
 const skillOf = (kind: string): string => SKILL[kind] ?? '';
 
 /** Comfort settings (voice, sounds, calm mode) are the student's own: remembered on this device so a reload does not undo them. Fails soft. */
@@ -162,6 +163,7 @@ function SlideView({ slide, script, onStart }: { slide: Slide; script: DeckScrip
     case 'quiz': return <QuizView slide={slide} />;
     case 'triple': return <TripleView slide={slide} />;
     case 'glitch': return <GlitchView slide={slide} />;
+    case 'board': return <BoardView slide={slide} />;
     case 'verbdraw': return <VerbDrawView slide={slide} />;
     case 'cloze': return <ClozeView slide={slide} />;
     case 'forge': return <ForgeView slide={slide} />;

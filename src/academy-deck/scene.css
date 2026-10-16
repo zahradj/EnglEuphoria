@@ -580,3 +580,44 @@
 .ad-root[data-theme='scene'] .ad-reveal-btn { position: absolute; inset-inline: 0; bottom: 17%; margin-inline: auto; width: fit-content; padding: 14px 30px; border-radius: 999px; border: 3px solid #fff; background: linear-gradient(180deg, var(--violet), var(--violet-d)); color: #fff; font: inherit; font-weight: 900; font-size: 1.3rem; box-shadow: 0 6px 0 rgba(60, 30, 140, 0.35), 0 10px 26px rgba(60, 30, 140, 0.3); cursor: pointer; animation: sc-pop 0.5s cubic-bezier(0.2, 1.4, 0.4, 1) both; }
 .ad-root[data-theme='scene'] .ad-reveal-btn:hover { filter: brightness(1.08); }
 .ad-root[data-theme='scene'] .ad-panel[data-variant='reveal'] { animation: sc-rise 0.6s ease both; }
+
+/* ---------- Case Board (B1 S1 L3): a detective board as a game. Evidence cards drop on the table, pins stick with a pop, red string joins them. ---------- */
+.ad-root[data-theme='scene'] .ad-board { display: grid; gap: clamp(8px, 1.6cqh, 14px); }
+.ad-root[data-theme='scene'] .ad-board-hud { display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 0.78rem; letter-spacing: 0.12em; color: var(--violet-d); }
+.ad-root[data-theme='scene'] .ad-board-pips { display: inline-flex; gap: 5px; }
+.ad-root[data-theme='scene'] .ad-board-pips i { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--violet); background: rgba(255, 255, 255, 0.7); transition: transform 0.25s, background 0.25s; }
+.ad-root[data-theme='scene'] .ad-board-pips i[data-on] { background: #e0443e; border-color: #b91c1c; box-shadow: 0 0 0 3px rgba(224, 68, 62, 0.18); }
+.ad-root[data-theme='scene'] .ad-board-pips i[data-now] { transform: scale(1.25); border-color: var(--violet-d); background: #fde68a; }
+.ad-root[data-theme='scene'] .ad-board-table { display: grid; place-items: center; min-height: clamp(86px, 17cqh, 150px); padding: 10px; border-radius: 18px; background: repeating-linear-gradient(90deg, rgba(190, 150, 100, 0.34) 0 22px, rgba(205, 168, 118, 0.34) 22px 44px), linear-gradient(#e9d3ac, #dcc197); box-shadow: inset 0 3px 10px rgba(80, 50, 20, 0.25); }
+.ad-root[data-theme='scene'] .ad-board-card { position: relative; display: flex; align-items: center; gap: 12px; max-width: min(100%, 520px); padding: 16px 20px 14px; border-radius: 6px; background: #fffdf5; background-image: repeating-linear-gradient(transparent 0 25px, rgba(109, 70, 230, 0.13) 25px 26px); color: var(--ink); font-weight: 800; font-size: clamp(1rem, 2.8cqh, 1.35rem); line-height: 26px; box-shadow: 0 10px 22px rgba(60, 35, 20, 0.3), 0 2px 0 rgba(0, 0, 0, 0.06); transform: rotate(-1.6deg); animation: ad-board-drop 0.5s cubic-bezier(0.2, 1.4, 0.4, 1) both; }
+.ad-root[data-theme='scene'] .ad-board-card p { margin: 0; }
+.ad-root[data-theme='scene'] .ad-board-card[data-bounce] { animation: sc-shake 0.45s; }
+.ad-root[data-theme='scene'] .ad-board-pin { position: absolute; top: -9px; left: 50%; width: 18px; height: 18px; margin-left: -9px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #ff8a80, #d32f2f 60%, #8e1b1b); box-shadow: 0 3px 4px rgba(0, 0, 0, 0.35); }
+.ad-root[data-theme='scene'] .ad-board-ear { flex: none; width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--violet); background: #fff; color: var(--violet-d); cursor: pointer; display: grid; place-items: center; }
+.ad-root[data-theme='scene'] .ad-board-ear:hover { background: var(--violet-soft, #f3edff); }
+.ad-root[data-theme='scene'] .ad-board-cols { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(8px, 2cqw, 16px); }
+.ad-root[data-theme='scene'] .ad-board-col { position: relative; display: block; text-align: start; padding: 28px 12px 12px; min-height: clamp(96px, 20cqh, 170px); border-radius: 14px; border: 3px solid #fff; background: linear-gradient(rgba(255, 255, 255, 0.92), rgba(243, 237, 255, 0.92)); color: var(--ink); font: inherit; cursor: pointer; box-shadow: 0 8px 18px rgba(76, 29, 149, 0.18); transition: transform 0.15s, box-shadow 0.15s; }
+.ad-root[data-theme='scene'] .ad-board-col::before { content: ''; position: absolute; top: 9px; left: 14px; right: 14px; height: 0; border-top: 3px dashed #d32f2f; opacity: 0.55; }
+.ad-root[data-theme='scene'] button.ad-board-col:hover { transform: translateY(-3px); box-shadow: 0 12px 22px rgba(76, 29, 149, 0.28); }
+.ad-root[data-theme='scene'] .ad-board-col[data-bounce] { animation: sc-shake 0.45s; border-color: #e0605a; }
+.ad-root[data-theme='scene'] .ad-board-col h3 { margin: 0 0 6px; font-size: 0.95rem; font-weight: 900; color: var(--violet-d); letter-spacing: 0.02em; }
+.ad-root[data-theme='scene'] .ad-board-col kbd { display: inline-grid; place-items: center; width: 22px; height: 22px; margin-inline-end: 4px; border-radius: 6px; background: var(--violet-d); color: #fff; font: 800 0.78rem system-ui; }
+.ad-root[data-theme='scene'] .ad-board-col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 5px; }
+.ad-root[data-theme='scene'] .ad-board-note { padding: 5px 9px; border-radius: 4px; background: #fff6bf; color: var(--ink); font-size: 0.82rem; font-weight: 700; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18); transform: rotate(0.8deg); animation: ad-board-pin 0.4s cubic-bezier(0.2, 1.5, 0.4, 1) both; }
+.ad-root[data-theme='scene'] .ad-board-note:nth-child(even) { transform: rotate(-1deg); background: #d9f2ff; }
+/* scenes look: picture cards with two big game buttons */
+.ad-root[data-theme='scene'] .ad-board[data-look='scenes'] .ad-board-table { background: radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.9), rgba(214, 198, 255, 0.85)); box-shadow: inset 0 0 0 3px #fff; }
+.ad-root[data-theme='scene'] .ad-board[data-look='scenes'] .ad-board-card { flex-direction: column; text-align: center; background: #fff; background-image: none; border-radius: 22px; transform: none; line-height: 1.35; }
+.ad-root[data-theme='scene'] .ad-board[data-look='scenes'] .ad-board-col { min-height: 0; padding: 14px 16px; text-align: center; border-radius: 999px; background: linear-gradient(135deg, #8b5cf6, #6d46e6); border-color: #fff; color: #fff; }
+.ad-root[data-theme='scene'] .ad-board[data-look='scenes'] .ad-board-col::before { display: none; }
+.ad-root[data-theme='scene'] .ad-board[data-look='scenes'] .ad-board-col h3 { margin: 0; color: #fff; font-size: 1.15rem; }
+.ad-root[data-theme='scene'] .ad-board[data-look='scenes'] .ad-board-col ul { display: none; }
+.ad-root[data-theme='scene'] .ad-board[data-look='scenes'][data-done] .ad-board-col { background: rgba(255, 255, 255, 0.92); color: var(--ink); border-radius: 14px; }
+.ad-root[data-theme='scene'] .ad-board[data-look='scenes'][data-done] .ad-board-col h3 { color: var(--violet-d); }
+.ad-root[data-theme='scene'] .ad-board[data-look='scenes'][data-done] .ad-board-col ul { display: grid; }
+@keyframes ad-board-drop { from { opacity: 0; transform: translateY(-46px) rotate(-6deg) scale(0.92); } to { opacity: 1; transform: translateY(0) rotate(-1.6deg) scale(1); } }
+@keyframes ad-board-pin { from { opacity: 0; transform: scale(1.5) rotate(6deg); } to { opacity: 1; } }
+@container (max-width: 480px) {
+  .ad-root[data-theme='scene'] .ad-board-cols { grid-template-columns: 1fr; }
+  .ad-root[data-theme='scene'] .ad-board-col { min-height: 0; padding-top: 24px; }
+}

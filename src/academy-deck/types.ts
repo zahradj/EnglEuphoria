@@ -243,11 +243,20 @@ export interface ClozeSlide extends SlideBase { kind: 'cloze'; prompt: string; t
 export interface GlitchSlide extends SlideBase { kind: 'glitch'; prompt: string; rounds: { lines: { who: CastName; text: string }[]; /** index of the line with the glitch */ glitch: number; /** the repaired line and two wrong repairs */ fix: string; options: string[]; /** one line that says why (the time word) */ why: string }[] }
 /** Verb Draw (B1 S1, video-game mechanic: collectible card draw + talk show). Phase 1: match-3 of the verb trios (base, past simple, past participle). Phase 2: draw a verb card; open a conversation with it (choose the participle for the question, say the question aloud, choose the right past-simple follow-up); the other character answers. A streak counts conversations done right the first time. Done after `draws` cards. */
 export interface VerbDrawSlide extends SlideBase { kind: 'verbdraw'; prompt: string; npc: CastName; draws: number; verbs: { forms: [string, string, string]; /** the question with ___ for the participle */ frame: string; follow: { ok: string; bad: [string, string] }; /** what the other character answers */ reply: string }[] }
+/** Case Board (B1 S1 L3, video-game mechanic: detective board / evidence sorting). One evidence card at a time drops onto the table; the student pins it under the right heading (a wrong pin only bounces back with the reason). `look: 'case'` = a corkboard with index cards and red string; `look: 'scenes'` = picture scene cards with two big choice buttons. Done when every card is pinned. The card text is spoken. */
+export interface BoardSlide extends SlideBase {
+  kind: 'board';
+  look: 'case' | 'scenes';
+  prompt: string;
+  /** exactly two headings the cards are pinned under */
+  bins: { id: string; label: string; hint?: string }[];
+  cards: { id: string; text: string; /** what is spoken when the card is read (defaults to `text`; use it when `text` has a ___ blank) */ say?: string; bin: string; /** why it belongs there (shown after a right pin, and as the nudge after a wrong one) */ why: string; /** scene picture (look 'scenes') */ art?: TeachArt; who?: CastName }[];
+}
 export interface WrapSlide extends SlideBase { kind: 'wrap'; heading: string; ticks: string[]; homework: string; clue: string }
 
 export type Slide =
   | TitleSlide | BriefSlide | BadgeSlide | DialSlide | LaneSlide | WhoSaidSlide | LockersSlide | NumTrainSlide | PadlockSlide | ConvoSlide | SpellSlide
-  | MatchSlide | CountUpSlide | BePickSlide | BuildSlide | FactCheckSlide | WriteSlide | HuntSlide | ShadowSlide | TeachSlide | ModelSlide | FindWrongSlide | BorderSlide | MemorySlide | NumWallSlide | PhoneChatSlide | FadeSlide | CardSlide | SaySlide | VaultSlide | RhythmSlide | DuelSlide | PassageSlide | ForgeSlide | StreakSlide | ReadQSlide | BossSlide | WordleSlide | RpgSlide | QuizSlide | TripleSlide | GlitchSlide | VerbDrawSlide | ClozeSlide | WrapSlide | BlendSlide | HearPickSlide | ReaderSlide | RuleSlide | ExploreSlide | SortSlide | StorySlide;
+  | BoardSlide | MatchSlide | CountUpSlide | BePickSlide | BuildSlide | FactCheckSlide | WriteSlide | HuntSlide | ShadowSlide | TeachSlide | ModelSlide | FindWrongSlide | BorderSlide | MemorySlide | NumWallSlide | PhoneChatSlide | FadeSlide | CardSlide | SaySlide | VaultSlide | RhythmSlide | DuelSlide | PassageSlide | ForgeSlide | StreakSlide | ReadQSlide | BossSlide | WordleSlide | RpgSlide | QuizSlide | TripleSlide | GlitchSlide | VerbDrawSlide | ClozeSlide | WrapSlide | BlendSlide | HearPickSlide | ReaderSlide | RuleSlide | ExploreSlide | SortSlide | StorySlide;
 
 export interface DeckScript {
   lessonId: string;

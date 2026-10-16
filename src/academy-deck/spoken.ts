@@ -32,7 +32,7 @@ export function openLines(s: Slide): SpokenLine[] {
   switch (s.kind) {
     case 'title': return line('Vee', s.heading);
     case 'brief': return line('Vee', s.say);
-    case 'dial': case 'lane': case 'blend': case 'hearpick': case 'reader': case 'rhythm': case 'duel': case 'passage': case 'forge': case 'streak': case 'readq': case 'boss': case 'wordle': case 'rpg': case 'quiz': case 'triple': case 'glitch': case 'verbdraw': case 'cloze': return line(lead(s), s.prompt);
+    case 'dial': case 'lane': case 'blend': case 'hearpick': case 'reader': case 'rhythm': case 'duel': case 'passage': case 'forge': case 'streak': case 'readq': case 'boss': case 'wordle': case 'rpg': case 'quiz': case 'triple': case 'glitch': case 'verbdraw': case 'cloze': case 'board': return line(lead(s), s.prompt);
     case 'vault': return line(lead(s), s.line);
     case 'rule': return line('Vee', s.title);
     case 'say': return line(lead(s), s.prompt);
@@ -78,6 +78,7 @@ export function viewLines(s: Slide): SpokenLine[] {
     case 'triple': return s.verbs.flatMap((v) => line(lead(s), `${v[0]}, ${v[1]}, ${v[2]}.`));
     case 'cloze': return s.paragraphs.flatMap((p) => [...p.matchAll(/\[\[([^\]]+)\]\]/g)].flatMap((m) => line(lead(s), m[1])));
     case 'verbdraw': return s.verbs.flatMap((v) => [...line(lead(s), `${v.forms[0]}, ${v.forms[1]}, ${v.forms[2]}.`), ...line(lead(s), v.frame.replace('___', v.forms[2])), ...line(s.npc, v.reply)]);
+    case 'board': return s.cards.flatMap((c) => line(c.who ?? lead(s), c.say ?? c.text));
     case 'glitch': return s.rounds.flatMap((r) => line(r.lines[r.glitch].who, r.fix));
     case 'rpg': return s.scenes.flatMap((sc) => [...line(s.npc, sc.say), ...sc.options.flatMap((o) => line(s.npc, o.reply))]);
     case 'explore': return s.spots.flatMap((p) => line(p.who, p.line));
