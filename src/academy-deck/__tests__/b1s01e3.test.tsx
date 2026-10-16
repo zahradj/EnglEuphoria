@@ -189,4 +189,17 @@ describe('B1-S01-E3: the blueprint and the plan', () => {
     }
     expect(screen.getByText(/Every card is pinned/)).toBeTruthy();
   });
+
+  it('GAME FEEL: right pins show the +10 XP burst and the streak flame, and the third right answer in a row earns an achievement badge', () => {
+    render(<Deck script={B1_S01_E3} teacher slide={at('board-when')} />);
+    for (let k = 0; k < 3; k++) {
+      const card = screen.getByRole('article').textContent ?? '';
+      const c = WHEN_CARDS.find((x) => card.includes(x.text))!;
+      const [whenBtn, nowBtn] = screen.getAllByRole('button', { name: /pin the card here/i });
+      fireEvent.click(c.bin === 'when' ? whenBtn : nowBtn);
+    }
+    expect(screen.getByText(/On a roll/)).toBeTruthy();
+    expect(screen.getByLabelText('Streak 3')).toBeTruthy();
+    expect(screen.getByText('+10 XP')).toBeTruthy();
+  });
 });
