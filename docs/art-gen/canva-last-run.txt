@@ -1,11 +1,5 @@
-cut out: public/lep1/items/item-sea-grass.png (876, 973)
-cut out: public/lep1/items/item-dish.png (950, 621)
-cut out: public/lep1/items/item-brush.png (985, 381)
-+ public/lep1/items/item-sea-grass.png (1024, 1024)
-+ public/lep1/items/item-dish.png (1024, 1024)
-+ public/lep1/items/item-brush.png (1024, 1024)
 + public/lep1/scenes/bg-a1u6-story-6-wide.png (1376, 768)
 + public/lep1/scenes/bg-a1u6-story-7-wide.png (1376, 768)
 + public/lep1/scenes/bg-a1u6-story-8-wide.png (1376, 768)
 + public/lep1/scenes/bg-a1u6-story-9-wide.png (1376, 768)
-7/7 saved
+4/4 saved
