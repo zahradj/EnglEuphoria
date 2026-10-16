@@ -279,6 +279,7 @@ Scenario `docs/scenarios/academy-b1s01e3-missing-postcard.md`; plan approved by 
 |---|---|---|---|
 | scene `case-board` (close-up of the pinboard, index cards and string; Drop, Notice & Build, Wrap) | `bg/case-board.webp` | MAHYNAql7Sk | 99 (reused) |
 | story plate 1 (Vee beside the case board, pointing at the board) | `bg/story-b1s3-1.webp` | MAHYNWxXz6U | 99 (reused) |
+| story plate 2 (Theo at the table, two fingers up, notebook and globe) | `bg/story-b1s3-2.webp` | MAHYNSZcaTI | 99 (reused) |
 | scene `library-case-room` (library reading room with the case board; the lesson's main plate) | `bg/library-case-room.webp` | MAHYNE9eVJg | 99 (reused) |
 
 Notes: generated with the Lesson 2 plate `MAHYK9TKvzk` as the only style reference; no people, no text; checked by eye: bright daytime, light wood, a pinboard, a window seat and cushions with soft lilac (about 25 %), purple chairs a little more than the rest. Still to make: `case-board`, `story-b1s3-1`, `-2`, `-3`, and later the six Been-or-Gone scene cards (`cards/sc-bg-1`…`-6`). Until they exist the player shows a drawn gradient for a missing plate and a frame icon for a missing card.
