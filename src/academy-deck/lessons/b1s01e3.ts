@@ -240,7 +240,7 @@ export const B1_S01_E3: DeckScript = {
       closing: 'You found the contradiction with a question and a follow-up. Now YOU are the detective.',
     },
     {
-      id: 'alibi', kind: 'rpg', part: 5, stage: 'controlled', bg: WALL, actors: [who('Theo', 'right')], trains: [2, 4], npc: 'Theo', goal: 4,
+      id: 'alibi', kind: 'rpg', part: 5, stage: 'controlled', bg: WALL, actors: [who('Theo', 'right')], trains: [2, 4], npc: 'Theo', goal: 4, meter: 'Evidence',
       prompt: 'Alibi! You are the detective. Theo is the suspect. Choose the best question each time and catch the contradiction.',
       scenes: [
         { say: 'I have never been to Lisbon. I have been to Rome twice.', options: [
