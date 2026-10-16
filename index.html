@@ -10,7 +10,7 @@
     <link rel="canonical" href="https://www.engleuphoria.com/" />
 
     <!-- PWA manifest + theme -->
-    <link rel="manifest" href="/manifest.json?v=11" />
+    <link rel="manifest" href="/manifest.json?v=12" />
     <meta name="theme-color" content="#FE6A2F" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#0a0a12" media="(prefers-color-scheme: dark)" />
     <meta name="color-scheme" content="light dark" />
@@ -20,8 +20,8 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Engleuphoria" />
-    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png?v=10" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png?v=10" />
+    <link rel="apple-touch-icon" href="/icons/ee-apple-touch-180.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/ee-apple-touch-180.png" />
 
     <!-- Kid-friendly fonts + Display font for landing -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,7 +31,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://www.engleuphoria.com" />
     <meta property="og:site_name" content="EnglEuphoria" />
-    <meta property="og:image" content="https://www.engleuphoria.com/social/og-image.png?v=1">
+    <meta property="og:image" content="https://www.engleuphoria.com/social/og-image-v2.png">
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="EnglEuphoria — Joyful English Learning for Kids, Teens and Adults" />
@@ -39,19 +39,21 @@
     <meta property="og:description" content="Live 1-on-1 English lessons with expert teachers for kids, teens, and adults. CEFR-aligned curriculum, flexible scheduling — start with a free trial lesson.">
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image" content="https://www.engleuphoria.com/social/og-image.png?v=1">
+    <meta name="twitter:image" content="https://www.engleuphoria.com/social/og-image-v2.png">
     <meta name="twitter:title" content="EnglEuphoria — Live 1-on-1 English Lessons for Kids, Teens & Adults">
     <meta name="twitter:description" content="Live 1-on-1 English lessons with expert teachers for kids, teens, and adults. CEFR-aligned curriculum, flexible scheduling — start with a free trial lesson.">
 
-    <link rel="icon" type="image/x-icon" href="/favicon.ico?v=10" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png?v=10" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png?v=10" />
+    <!-- Round "e" logo (2026-10-16). New file names (favicon-v2-*) so browsers and the
+         service worker don't keep serving the old picture. -->
+    <link rel="icon" type="image/x-icon" href="/favicon-v2.ico" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-v2-16.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-v2-32.png" />
     <!-- Google's favicon guidelines specifically call for a size that's a
          multiple of 48px: https://developers.google.com/search/docs/appearance/favicon-in-search
-         — the .ico bundle already has a 48x48 frame, but a dedicated
-         standalone reference removes any doubt for Googlebot. -->
-    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png?v=1" />
-    <link rel="icon" type="image/png" href="/favicon.png?v=10" />
+         — dedicated 48 / 96 / 192 references remove any doubt for Googlebot. -->
+    <link rel="icon" type="image/png" sizes="48x48" href="/favicon-v2-48.png" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-v2-96.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-v2-192.png" />
 
     <script type="application/ld+json">
     {
@@ -61,8 +63,8 @@
           "@type": "EducationalOrganization",
           "name": "EnglEuphoria",
           "url": "https://www.engleuphoria.com",
-          "logo": "https://www.engleuphoria.com/favicon.png?v=10",
-          "image": "https://www.engleuphoria.com/social/og-image.png?v=1",
+          "logo": "https://www.engleuphoria.com/brand/engleuphoria-logo-512.png",
+          "image": "https://www.engleuphoria.com/social/og-image-v2.png",
           "description": "Live 1-on-1 English lessons with expert teachers. Three hubs for kids, teens, and adults — book a lesson, learn, and grow.",
           "sameAs": []
         },

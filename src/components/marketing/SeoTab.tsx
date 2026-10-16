@@ -216,7 +216,7 @@ export const SeoTab = () => {
       "@type": "EducationalOrganization",
       "name": "EnglEuphoria",
       "url": "https://www.engleuphoria.com",
-      "logo": "https://www.engleuphoria.com/favicon.png",
+      "logo": "https://www.engleuphoria.com/brand/engleuphoria-logo-512.png",
       "description": "Live 1-on-1 English lessons with expert teachers. Three hubs for kids, teens, and adults.",
       "sameAs": []
     },
