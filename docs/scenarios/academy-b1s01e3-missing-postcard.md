@@ -16,7 +16,7 @@ Status: written 2026-10-16 with the approved lesson plan (`docs/academy-b1-s01-e
 
 ## Pictures needed (Canva, one at a time)
 - Scene plates (full 16:9): `library-case-room` (the main plate), `case-board` (a closer view of the pinboard, index cards and string), `story-b1s3-1`, `-2`, `-3`.
-- Optional later: six Been-or-Gone scene cards (`sc-bg-1`…`sc-bg-6`, cut-out stickers on transparent backgrounds): until they exist the cards show a drawn frame.
+- Six Been-or-Gone scene cards (`sc-bg-1`…`sc-bg-6`, cut-out cards on transparent backgrounds) are made (2026-10-16).
 - Cast references: the approved Vee and Theo pictures.
 - Cost: pictures only; no video credits.
 
