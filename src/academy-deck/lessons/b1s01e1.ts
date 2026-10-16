@@ -1,6 +1,6 @@
 // B1-S01-E1 "Have You Ever...? · Cold Open" (Experiences and bucket lists), as a game deck on the standard run of show (5/7/10/10/4/12/7/5, re-split for this lesson).
 // Plan (approved "go" 2026-10-15): docs/academy-b1-s01-spec.md. Scenario and text (owner approval pending for the plates and the voices): docs/scenarios/academy-b1s01e1-bucket-list.md.
-// Research: docs/research/academy-b1-s01-research.md. Blueprint: ACADEMY_LESSON_BLUEPRINTS id B1-S01-E1 (objective unchanged; 12 receptive items: 6 words + 6 past participles).
+// Research: docs/research/academy-b1-s01-research.md. Blueprint: ACADEMY_LESSON_BLUEPRINTS id B1-S01-E1 (objective unchanged; the Season's E1 item bank was aligned to the lesson on 2026-10-16: dare, brave, flown, eaten, gone, taken + bucket list, once in a lifetime, give it a go, tick it off, have you ever, has never been).
 // Student need: an A2 student who wants to revise the past simple, the present perfect and the verb trios. The present perfect is ACTIVATED here (rule in E3): trio check, text, noticing, Trophy Forge, trio streak.
 // Pictures are placeholders (frames, letter tiles) until the owner approves the scenario and the Canva art is made; voices are baked after the text is approved.
 import type { CastName, DeckScript, TeachArt } from '../types';
