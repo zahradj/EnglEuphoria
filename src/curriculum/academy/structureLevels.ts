@@ -72,7 +72,7 @@ export const STRUCTURES: Record<string, StructureInfo> = {
   'adverbs-manner': { label: 'adverbs of manner (-ly)', floor: 'A2', confidence: 'known' },
   'suggestions': { label: "let's / shall we / how about + -ing (suggestions)", floor: 'A2', confidence: 'known' },
   // ---------------------------------------------------------------- B1
-  'present-perfect-experience': { label: 'present perfect: experience (ever/never/been)', floor: 'B1', confidence: 'unverified', note: 'A2 late / B1; teach for production at B1' },
+  'present-perfect-experience': { label: 'present perfect: experience (ever/never/been)', floor: 'B1', confidence: 'verified', note: 'English Grammar Profile (checked 2026-10-16): experiences up to now with a limited range of verbs, have you + -ed questions and never/just are A2; the range of verbs, pronouns and adverbs widens at B1. So B1-S01 consolidates and widens an A2 start; it is not a first meeting' },
   'used-to': { label: 'used to', floor: 'B1', confidence: 'known', note: 'CEFR-J B1.1, EGP B1, GSE B1' },
   'present-perfect-for-since': { label: 'present perfect: for / since / how long', floor: 'B1', confidence: 'known' },
   'present-perfect-vs-past-simple': { label: 'present perfect vs past simple', floor: 'B1', confidence: 'known' },
@@ -92,7 +92,7 @@ export const STRUCTURES: Record<string, StructureInfo> = {
   'linking-although': { label: 'although / even though / while (contrast)', floor: 'B1', confidence: 'known' },
   'phrasal-verbs-separable': { label: 'common phrasal verbs (separable / inseparable) as vocabulary', floor: 'B1', confidence: 'known' },
   // ---------------------------------------------------------------- B2
-  'present-perfect-continuous': { label: 'present perfect continuous', floor: 'B2', confidence: 'known', note: 'CEFR-J B2.1, GSE B2, Core Inventory B1-B2' },
+  'present-perfect-continuous': { label: 'present perfect continuous', floor: 'B2', confidence: 'known', note: 'CEFR-J B2.1, GSE B2, Core Inventory B1-B2. English Grammar Profile (2026-10-16) lists affirmative, limited questions and continuing events at B1, and adverbs, negatives and recent-past results at B2: B2 for production is a conservative choice, a late-B1 receptive start is allowed' },
   'third-conditional': { label: 'third conditional', floor: 'B2', confidence: 'known', note: 'GSE B2, Core Inventory B1-C1, EGP C1' },
   'wish-past-perfect': { label: 'wish / if only + past perfect', floor: 'B2', confidence: 'known' },
   'passive-extended': { label: 'passive: all tenses and modal passives', floor: 'B2', confidence: 'known' },
