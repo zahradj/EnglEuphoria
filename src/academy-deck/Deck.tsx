@@ -77,6 +77,42 @@ const STAGE_LABEL: Record<string, string> = { review: 'Warm-up', context: 'Watch
 const SKILL: Record<string, string> = { say: 'Speaking', fade: 'Speaking', passage: 'Reading', readq: 'Reading', hearpick: 'Listening', story: 'Listening', model: 'Listening', write: 'Writing', build: 'Writing', boss: 'Game', wordle: 'Game', rpg: 'Game', quiz: 'Game', triple: 'Game', glitch: 'Game', verbdraw: 'Game', cloze: 'Reading', sort: 'Game', memory: 'Game', match: 'Game', forge: 'Game', streak: 'Game', explore: 'Game', hunt: 'Game', vault: 'Game', duel: 'Game', rhythm: 'Game' };
 const skillOf = (kind: string): string => SKILL[kind] ?? '';
 
+/** Comfort settings (voice, sounds, calm mode) are the student's own: remembered on this device so a reload does not undo them. Fails soft. */
+const PREFS_KEY = 'academy-deck-prefs-v1';
+function prefOf(k: 'voice' | 'sfx' | 'calm'): boolean | undefined {
+  try {
+    const v = (JSON.parse(window.localStorage.getItem(PREFS_KEY) ?? '{}') as Record<string, unknown>)[k];
+    return typeof v === 'boolean' ? v : undefined;
+  } catch {
+    return undefined;
+  }
+}
+function savePrefs(p: { voice: boolean; sfx: boolean; calm: boolean }) {
+  try {
+    window.localStorage.setItem(PREFS_KEY, JSON.stringify(p));
+  } catch { /* blocked storage: nothing is remembered, nothing breaks */ }
+}
+
+/** Lesson progress (slide, answers, stamps, stars) for a student working alone: kept on this device so a reload or a dropped connection does not restart the hour. Fails soft. */
+const PROGRESS_KEY = 'academy-deck-progress-v1';
+interface Saved { index: number; slideId: string; solved: Record<string, boolean>; vars: Vars; stamps: string[]; stats: Stats }
+function loadProgress(lessonId: string, slideIds: string[]): Saved | null {
+  try {
+    const v = JSON.parse(window.localStorage.getItem(`${PROGRESS_KEY}:${lessonId}`) ?? 'null') as Saved | null;
+    // a lesson that was edited since (different slides) is not resumed: positions would not mean the same thing
+    if (!v || typeof v.index !== 'number' || v.index < 1 || v.index >= slideIds.length || slideIds[v.index] !== v.slideId) return null;
+    return v;
+  } catch {
+    return null;
+  }
+}
+function saveProgress(lessonId: string, v: Saved | null) {
+  try {
+    if (v) window.localStorage.setItem(`${PROGRESS_KEY}:${lessonId}`, JSON.stringify(v));
+    else window.localStorage.removeItem(`${PROGRESS_KEY}:${lessonId}`);
+  } catch { /* blocked storage: nothing is remembered, nothing breaks */ }
+}
+
 function SlideView({ slide, script, onStart }: { slide: Slide; script: DeckScript; onStart: () => void }) {
   switch (slide.kind) {
     case 'title': return script.hub === false ? <TitleView slide={slide} /> : <LobbyView slide={slide} script={script} onStart={onStart} />;
@@ -168,6 +204,9 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
     if (controlled === undefined) setOwn(n);
     onSlide?.(n);
   }, [controlled, onSlide, script.slides.length]);
+  // a student working alone (not a teacher preview, a live class or homework) can pick the lesson up where they left off
+  const keepsProgress = controlled === undefined && !embedded && !follow && !teacher && !freeNext && !homework;
+  const [resume, setResume] = useState<Saved | null>(() => (keepsProgress && typeof window !== 'undefined' ? loadProgress(script.lessonId, script.slides.map((x) => x.id)) : null));
   const [solved, setSolved] = useState<Record<string, boolean>>({});
   const [vars, setVarsState] = useState<Vars>({ num: '427', numw: 'four hundred twenty-seven' });
   const [stamps, setStamps] = useState<string[]>([]);
@@ -196,7 +235,7 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
     }, 320);
   }, []);
   const shownParts = useRef<Set<number>>(new Set());
-  const [calm, setCalm] = useState(() => typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches);
+  const [calm, setCalm] = useState(() => prefOf('calm') ?? (typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches));
   const parts = partsFor(script);
   const hubInfo = levelLine(script);
   const xp = xpOf(stats.right, stats.spoken ?? 0);
@@ -205,8 +244,8 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
   const cur = applyLane(script.slides[index], lane);
   // ---- recorded voices (silent when a clip or the clip list is missing; never the browser voice)
   const base = audioBaseFor(artBase, audioBase);
-  const [voiceOn, setVoiceOn] = useState(true);
-  const [sfxOn, setSfxOn] = useState(true);
+  const [voiceOn, setVoiceOn] = useState(() => prefOf('voice') ?? true);
+  const [sfxOn, setSfxOn] = useState(() => prefOf('sfx') ?? true);
   const sfxRef = useRef(true);
   const [combo, setCombo] = useState(0);
   const comboRef = useRef(0);
@@ -272,7 +311,7 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
   // a student who follows the teacher may not tap inside the lesson: unlock as soon as the page has been used
   useEffect(() => {
     if (!unlockedRef.current && alreadyActive()) { unlockedRef.current = true; setUnlocked(true); }
-  }, [index]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [index]);
   // the slide's own spoken lines (greeting, mission, wrap...) once the voices are unlocked
   useEffect(() => {
     if (!unlocked || !voiceOn || !clipsReady) return;
@@ -371,6 +410,49 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
     if (stats.right > 0) setBurst((b) => b + 1);
   }, [stats.right]);
   useEffect(() => {
+    if (!keepsProgress || resume) return;
+    saveProgress(script.lessonId, index >= 1 ? { index, slideId: script.slides[index].id, solved, vars, stamps, stats } : null);
+  }, [index, solved, vars, stamps, stats]); // eslint-disable-line react-hooks/exhaustive-deps
+  const continueLesson = () => {
+    if (!resume) return;
+    setSolved(resume.solved);
+    setVarsState(resume.vars);
+    setStamps(resume.stamps);
+    setStats(resume.stats);
+    for (let k = 0; k <= script.slides[resume.index].part; k++) shownParts.current.add(k);
+    go(resume.index);
+    setResume(null);
+  };
+  const startOver = () => {
+    saveProgress(script.lessonId, null);
+    setResume(null);
+  };
+  const touchedPrefs = useRef(false);
+  useEffect(() => {
+    // only after the student changes a setting (the first render must not freeze the OS "reduce motion" default into storage)
+    if (touchedPrefs.current) savePrefs({ voice: voiceOn, sfx: sfxOn, calm });
+    touchedPrefs.current = true;
+  }, [voiceOn, sfxOn, calm]);
+  // the next scene's picture is fetched ahead of time, so the cross-fade never waits on the network
+  useEffect(() => {
+    if (!artBase || typeof Image === 'undefined') return;
+    for (const s of script.slides.slice(index + 1, index + 3)) {
+      if (s.bg && s.bg !== cur.bg) new Image().src = `${artBase}/bg/${s.bg}.webp`;
+    }
+  }, [index]); // eslint-disable-line react-hooks/exhaustive-deps
+  // Escape closes the pause card and the part title card (keyboard users could not dismiss them before)
+  useEffect(() => {
+    if (!minute && partCard === null && !menu) return;
+    const esc = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return;
+      if (minute) setMinute(false);
+      else if (partCard !== null) closePart();
+      else setMenu(false);
+    };
+    window.addEventListener('keydown', esc);
+    return () => window.removeEventListener('keydown', esc);
+  }, [minute, partCard, menu, closePart]);
+  useEffect(() => {
     const k = (e: KeyboardEvent) => {
       const t = e.target as HTMLElement | null;
       if (t && /^(INPUT|TEXTAREA)$/.test(t.tagName)) return;
@@ -394,7 +476,7 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
     if (!last) go(index + 1);
   };
   const next = () => {
-    if (last) onFinish?.({ vars, stats, stamps });
+    if (last) { saveProgress(script.lessonId, null); onFinish?.({ vars, stats, stamps }); }
     else go(index + 1);
   };
   const actorsVisible = cur.actors ?? [];
@@ -497,12 +579,24 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
             <span className="ad-partcard-tap">Tap to start</span>
           </div>
         )}
+        {resume && (
+          <div className="ad-minute" role="dialog" aria-label="Continue the lesson">
+            <div>
+              <h2>Welcome back</h2>
+              <p>You were on slide {resume.index + 1} of {script.slides.length}. Pick up where you left off?</p>
+              <div className="ad-row">
+                <button type="button" className="ad-btn ad-btn-primary" autoFocus onClick={continueLesson}>Continue ▸</button>
+                <button type="button" className="ad-btn" onClick={startOver}>Start over</button>
+              </div>
+            </div>
+          </div>
+        )}
         {minute && (
           <div className="ad-minute" role="dialog" aria-label="Pause">
             <div>
               <h2><Icon name="pause" /> Take a minute</h2>
               <p>No problem. Breathe. Your place is saved.</p>
-              <button type="button" className="ad-btn ad-btn-primary" onClick={() => setMinute(false)}>I’m ready ▸</button>
+              <button type="button" className="ad-btn ad-btn-primary" autoFocus onClick={() => setMinute(false)}>I’m ready ▸</button>
             </div>
           </div>
         )}

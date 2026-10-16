@@ -189,6 +189,10 @@
 .ad-root[data-theme='scene'] .ad-partcard-clear i[data-on='true'] { background: var(--gold); animation: sc-star 0.5s cubic-bezier(0.2, 1.6, 0.4, 1) both; }
 .ad-root[data-theme='scene'] .ad-partcard-clear i:nth-child(2) { animation-delay: 0.15s; } .ad-root[data-theme='scene'] .ad-partcard-clear i:nth-child(3) { animation-delay: 0.3s; }
 .ad-root[data-theme='scene'] .ad-minute { background: rgba(25, 12, 70, 0.7); backdrop-filter: blur(14px); color: #fff; }
+/* the pause / welcome-back card: the heading was dark violet on the dark veil (unreadable), and on a phone the buttons touched the edge */
+.ad-root[data-theme='scene'] .ad-minute > div { padding: 0 20px; max-width: 460px; }
+.ad-root[data-theme='scene'] .ad-minute h2 { color: #fff; text-shadow: 0 2px 12px rgba(25, 12, 70, 0.6); }
+.ad-root[data-theme='scene'] .ad-minute .ad-row { flex-wrap: wrap; justify-content: center; gap: 10px; }
 .ad-root[data-theme='scene'] .ad-toast { background: var(--pill); color: var(--violet-d); border: 2px solid #fff; box-shadow: var(--shadow-s); font-weight: 800; }
 
 /* ---------- the lobby: a game start screen, like the Playground title ---------- */
