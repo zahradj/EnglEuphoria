@@ -5,6 +5,7 @@
 //
 // A blueprint is the *plan* for a session: objective, language load, run of show with the cognitive job of each segment, supports,
 // comfort, recap source. It does not choose the concrete game (academy-activity-selector does) and contains no lesson content.
+import { l1WatchFor, type L1WatchItem } from './l1Watch';
 import { VOCAB_GAME_MENU, suggestVocabGames, type VocabGamePicks } from './vocabGames';
 import { ACADEMY_CAST_NAMES, CAST_ROLES, GENERIC_HELPER_PART, type AcademyCastName } from './cast';
 import {
@@ -322,6 +323,8 @@ export interface AcademyLessonBlueprint {
     /** suggested picks for word sets 1-3 of this lesson; the plan may swap any for another menu game (validateVocabGamePicks) */
     suggested: VocabGamePicks[];
   };
+  /** home-language trouble spots to listen for in this Season (ar, es, fr, tr, it); tendencies, not facts about every student */
+  l1Watch: readonly L1WatchItem[];
   comfort: readonly string[];
   /** minimum fun ingredients to include when the session content is written */
   funIngredientsMin: 5;
@@ -492,6 +495,7 @@ export function buildLessonBlueprint(s: SeasonOutline, episodeIndex: number, pre
     clue: { no: meta.no, of: 8, unlockedBy: meta.clueUnlockedBy },
     supports: LEVEL_SUPPORTS[s.level],
     vocabGames: { ...VOCAB_GAMES_RULE, menu: VOCAB_GAME_MENU.map((g) => g.id), suggested: [0, 1, 2].map((i) => suggestVocabGames(s.level, meta.no, i)) },
+    l1Watch: l1WatchFor(s.id),
     comfort: COMFORT_CONTROLS,
     funIngredientsMin: 5,
     mediation: type === 'finale' || type === 'deep-dive' ? s.mediation : undefined,

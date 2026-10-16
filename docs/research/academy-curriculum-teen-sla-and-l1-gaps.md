@@ -194,3 +194,7 @@ Implication: the plateau risk is a production and breadth issue. B1 should shift
 ## Sources not used because they could not be assessed
 
 Blogs and vendor sites (e.g. boldvoice, theteflacademy, trykaiwa, kaiwa) surfaced in results but were not relied on for any claim above.
+
+## Home-language watch lists in the blueprint (2026-10-16)
+
+`src/curriculum/academy/l1Watch.ts` now holds 2-4 "listen for this" entries per Season (languages ar, es, fr, tr, it; what to hear, what to do, evidence mark V / V-weak / K) and every lesson blueprint carries its Season's list (`l1Watch`). **A1 (12 Seasons) is done**; A2 to C1 follow in the same shape, one level at a time. Entries marked K are standard contrastive linguistics that this research round did not re-check in a source; entries marked V-weak come from teaching sources in Part 2 above. They are tendencies to screen for, never facts about a student; the Mistake Bank overrides them. `l1Watch.test.ts` keeps the shape.
