@@ -125,6 +125,33 @@ export type Database = {
         }
         Relationships: []
       }
+      academy_teacher_checks: {
+        Row: {
+          data: Json
+          kind: string
+          ref: string
+          student_id: string
+          teacher_id: string
+          updated_at: string
+        }
+        Insert: {
+          data: Json
+          kind: string
+          ref: string
+          student_id: string
+          teacher_id: string
+          updated_at?: string
+        }
+        Update: {
+          data?: Json
+          kind?: string
+          ref?: string
+          student_id?: string
+          teacher_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       accessories: {
         Row: {
           created_at: string
@@ -11843,6 +11870,24 @@ export type Database = {
         }
         Relationships: []
       }
+      student_academy_practice: {
+        Row: {
+          data: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          data?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          data?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       student_accessories: {
         Row: {
           accessory_id: string
@@ -12447,6 +12492,41 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      student_lesson_resume: {
+        Row: {
+          lesson_id: string
+          scene_id: string | null
+          scene_index: number
+          total_scenes: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          lesson_id: string
+          scene_id?: string | null
+          scene_index: number
+          total_scenes: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          lesson_id?: string
+          scene_id?: string | null
+          scene_index?: number
+          total_scenes?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "student_lesson_resume_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "curriculum_lessons"
             referencedColumns: ["id"]
           },
         ]
