@@ -246,3 +246,13 @@ Canva sheet `MAHYI4QImxA` (4 x 2, seven pictures), placed on holder page 99, exp
 
 ### Lesson 2 sticker `w-trynew` regenerated (2026-10-16)
 Canva `MAHYI0ZkNYo` (a teenager in a plain t-shirt and jeans with a paintbrush before a blank canvas, paint pots and a plant), placed on holder page 99, exported, cut with `scripts/academy-split-cards-auto.py` into `cards/w-trynew.webp`. Replaces the rejected shirtless diving-board picture. Checked by eye: modest, clear, transparent background. Small inconsistency: it keeps a thin white die-cut outline that the other stickers do not have. **All 20 Season 1 word stickers (E1 six, E2 fourteen) now exist.** Still missing for Lesson 2: its three story plates and three scene backgrounds; weak points: `w-frightened` railing (white between the bars) and `w-proud` hill cut flat.
+
+## B1 Season 1 lesson 2 — story plates (2026-10-16)
+
+Scenario `docs/scenarios/academy-b1s01e2-postcard-wall.md` approved by the owner 2026-10-16 ("Approved, start plate 1"). One plate at a time; the owner sees each before the next.
+
+| picture | file | Canva media | holder page |
+|---|---|---|---|
+| story plate 1 (Vee beside the postcard wall, Travel Club room) | `bg/story-b1s2-1.webp` | MAHYKF2JuvY | 99 (reused) |
+
+Notes: generated with the Lesson 1 plate `MAHYCnd2Ab0` as the only style reference (two attempts with a second cast reference failed with a Canva server error), so Vee is matched by description, not by his cast picture. Holder page 99 reused; set the image box to exactly 1920x1080 (`crop_media`) or Canva zooms the picture.
