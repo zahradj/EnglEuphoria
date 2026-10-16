@@ -67,7 +67,7 @@ export const B1_S01_E1: DeckScript = {
   clock: true,
   theme: 'scene',
   // an integrated-skills lesson (listen, read, notice, write, speak): the long part is the Drop, where the student listens to a dialogue and reads a blog post
-  partMinutes: [3, 3, 22, 11, 3, 9, 5, 4],
+  partMinutes: [3, 3, 21, 11, 3, 10, 5, 4],
   partGoals: [
     'Talk about yourself and your experiences',
     'Wake up your past simple',
@@ -315,7 +315,7 @@ export const B1_S01_E1: DeckScript = {
       closing: 'Now YOU decide. Give your answer, two reasons, and one point against it.',
     },
     {
-      id: 'rpg', kind: 'rpg', part: 5, stage: 'controlled', bg: CLASSROOM, actors: [who('Theo', 'right')], trains: [4, 5], npc: 'Theo', goal: 3,
+      id: 'rpg', kind: 'rpg', part: 5, stage: 'controlled', bg: CLASSROOM, actors: [who('Theo', 'right')], trains: [4, 5], npc: 'Theo', goal: 4,
       prompt: 'Rapport! Theo asks about your travels. Choose the reply that sounds most natural.',
       scenes: [
         { say: 'So, have you ever been abroad?', options: [
@@ -328,8 +328,14 @@ export const B1_S01_E1: DeckScript = {
           { text: 'Last August.', score: 1, reply: 'Nice. What did you eat?', note: 'Short answers are fine, but try a full sentence: “I went last August.”' },
           { text: 'I have gone last August.', score: 0, reply: 'Hmm, last August? Okay… what did you eat?', note: 'With a finished time use went, not have gone.' },
         ] },
+        { say: 'Have you ever flown in a plane?', options: [
+          { text: 'Yes, I have. I flew to Spain last year.', score: 2, reply: 'Lucky you! Was it your first time?', note: 'The follow-up chain: have + participle for the experience, then the past simple with a time.' },
+          { text: 'Yes, I have flown.', score: 1, reply: 'Cool! Where did you fly?', note: 'Correct. Add the story with a time: “I flew to Spain last year.”' },
+          { text: 'Yes, I have flown last year.', score: 0, reply: 'Last year? Hmm.', note: 'Last year is a finished time: use flew.' },
+        ] },
       ],
       hints: ['An experience with no time: have + participle. A story with a time or place: past simple.'],
+      note: 'v3 (BusyTeacher ask-and-follow-up drill): three exchanges, each “Have you ever…?” then the follow-up with a finished time. Practise the pair before Take 1.',
     },
     {
       id: 'say-take1', kind: 'say', part: 5, stage: 'free', bg: WALL, actors: [who('Vee', 'right')], trains: [5], open: true,

@@ -102,3 +102,10 @@ Lesson 1 was built before `docs/academy-lesson-creation-protocol.md` existed. Th
 | Grammar Detective sort (`detective`) | 19 Grammar Detective | Detective board | §2 | notice finished time vs up to now (crit 4) |
 | Match / Memory (words) | vocabulary menu | none | session builder | the six words (crit 2) |
 Chosen: all of the above; each serves a named criterion and has a mechanic. Rejected earlier: none logged. **Open:** a fresh >= 5-candidate internet search against the current catalogue (including the C1 and the newer sources) at the lesson's next review; the Season shortlist (`gamePlan.ts`: 169, 170, 171, 50, 21) is consistent with these.
+
+
+## 10. Game search for the v3 improvement (2026-10-16)
+
+Real search run for lesson 1 (protocol `docs/academy-lesson-creation-protocol.md`). Table, sources and verdicts: `docs/academy-b1-s01-e1-plan-v3.md` §3 (seven candidates from three source families; chosen: the ask-and-follow-up chain, catalogue id 184; kept: Two Truths and a Lie, Wordle; rejected: Find someone who, Stand up / sit down, Among Us deduction). All are search-result summaries, labelled "verified (summary)", not read in full. **Limit:** no Oxford, Cambridge or British Council page was returned; their B1 present-perfect treatment is unverified in this run.
+
+**As built (2026-10-16):** the chain became three exchanges inside the existing Rapport game (`rpg`, goal 4 of 6) instead of a second RPG slide, because two RPG slides cannot sit next to each other (variety rule). The Participle Wordle already was the required Energiser, so no change was needed there.

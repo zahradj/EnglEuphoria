@@ -1,6 +1,6 @@
 # B1 Season 1 · Lesson 1 "Have You Ever…? · Cold Open" — improvement plan v3 (for owner approval)
 
-Status: **written 2026-10-16, waiting for the owner's approval.** Nothing in this plan is built. Lesson 1 v2 is live (PR #99). The owner chose, on 2026-10-16: (a) apply the Lesson 2 design to Lesson 1, (b) re-run the full lesson-creation protocol, (c) make it more visual and cinematic. Objective, exit task and success criteria are **unchanged** (`docs/academy-b1-s01-lesson-plan-v2.md`). Protocol: `docs/academy-lesson-creation-protocol.md`.
+Status: **approved by the owner 2026-10-16 ("go"); changes 1, 2 (no change needed), 4 and 5 built; the two Canva plates (change 3) are next, one at a time.** Lesson 1 v2 is live (PR #99). The owner chose, on 2026-10-16: (a) apply the Lesson 2 design to Lesson 1, (b) re-run the full lesson-creation protocol, (c) make it more visual and cinematic. Objective, exit task and success criteria are **unchanged** (`docs/academy-b1-s01-lesson-plan-v2.md`). Protocol: `docs/academy-lesson-creation-protocol.md`.
 
 ## 1 Gap check: Lesson 1 v2 against the Lesson 2 design and the protocol
 

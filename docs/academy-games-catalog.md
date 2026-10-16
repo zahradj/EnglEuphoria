@@ -1,4 +1,4 @@
-# Academy games & activities catalogue — 171 entries (+ 12 C1 additions, ids 172-183), one-to-one, ages 13–18, A1–B2
+# Academy games & activities catalogue — 171 entries (+ 12 C1 additions, ids 172-183, + 1 B1 find, id 184), one-to-one, ages 13–18, A1–B2
 
 Companion to `docs/academy-lesson-system.md` (§5 says how to choose from this list per segment of the 60-minute Live Session). Owner rules that apply to every entry: no browser TTS (recorded voices only), no public leaderboards, comfort first, mechanics borrowed never content, Variety Rule (no more than 2 of the same kind in a row).
 
@@ -236,7 +236,7 @@ Research 2026-10-14 (search summaries only; pages not fully read): [eslactive.co
 | 170 | Verb Trio Memory | D | Flips or builds cards showing the base form, the past simple and the past participle of a verb; says the missing forms; earns the pair by saying a sentence | V,G,S | A2-B1 | The cards are split in two, then the past halves are hidden and recalled; teacher says the base form, student gives the rest | Low | [Twinkl irregular verbs card game](https://www.twinkl.com/resource/tefl-esl-irregular-verbs-past-simple-and-past-participle-card-game-t-esl-002), [ESLprintables memory game](https://eslprintables.com/printable.asp?id=262206) (summaries only) [S] |
 | 171 | Trophy Forge | D | Collects three form-tiles of a verb (base, past, participle), crafts the trio, says it aloud; each trio becomes a named trophy on the student's board | V,G,S | A2-B1 | Own board, never ranked; slips return to the Mistake Bank | Low | Our design: loot and crafting + achievement log (B1 S1 plan) [U] |
 
-## 15. C1 additions, ids 172-183 (added 2026-10-16)
+## 15. C1 additions, ids 172-183, and id 184 (added 2026-10-16)
 
 Owner rule 2026-10-16 (C1 gap): the 171 entries all end at B2. These 12 were taken from a research round on 2026-10-16 (debate formats, CEFR Companion Volume mediation, register, irony studies, Pecha Kucha studies, fishbowl / Socratic seminar, and the cross-examination, deduction-log and dialogue-option mechanics of commercial video games). **Mechanics only, never content.** Sources and limits: `docs/research/academy-c1-games-research.md`. Unverified or weak evidence is marked.
 
@@ -254,6 +254,7 @@ Owner rule 2026-10-16 (C1 gap): the 171 entries all end at B2. These 12 were tak
 | 181 | Cross-Examination (Press / Present) | D | Presses a statement for more detail or presents the line that contradicts it; says why in a full sentence | R,S | B2-C1 | Wrong choices only grey a card; reasons are spoken or typed | Low | Ace Attorney cross-examination mechanic [V]; no language-learning evidence found [U] |
 | 182 | Deduction Log with Reasons | D | Fills a log (who, what, why) and confirms entries in threes, but must give a sentence of reasoning for each entry | R,W | B2-C1 | Hint ladder; the reason sentence replaces blind guessing | Low | Return of the Obra Dinn deduction design [V-weak] |
 | 183 | Voice-Option Dialogue | D | Chooses among curated replies in different voices (Diplomatic, Blunt, Formal, Warm) and sees how the character responds | R,S | B2-C1 | Replay the scene with another voice; teacher asks why | Low | Disco Elysium curated dialogue options [V-weak] |
+| 184 | Ask-and-Follow-Up Chain | D | Answers "Have you ever…?" with the experience form, then the follow-up ("When did you…?") with a finished time, three exchanges in a row | S,R | B1-B2 | Teacher or a cast character asks; wrong picks only grey the option and show a note; no timer | Low | BusyTeacher present perfect vs past simple drills (busyteacher.org/8862, /17772) [V-summary] |
 
 ## Top 15 for shy teens
 1. Codenames Duet (co-op) 2. Connections 3. Escape Room with teacher as guide 4. Visual Novel Reader / Interactive Fiction 5. Wordle / Spelling Bee 6. Comic Strip Maker 7. Meme Maker / Caption This 8. Chat Message Sim 9. Opinion Line (slider, no voice pressure) 10. Photo Story-Talk 11. Boss Battle Review (co-op) 12. Card Trading Collection 13. Reverse Teacher (student is expert) 14. Shadowing with private recordings 15. Can-Do Self-Check and Exit Emoji (private).
