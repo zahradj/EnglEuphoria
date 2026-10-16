@@ -140,8 +140,10 @@ export const B1_S01_E1: DeckScript = {
           { who: 'Ava', text: 'Flying is easy, Theo. Falling off a surfboard is the scary part.' },
           { who: 'Theo', text: 'I have taken a photo in every country I have visited. That is my record.' },
         ] },
-        { plate: 'story-b1s1-3', lines: [
+        { plate: 'story-b1s1-4', lines: [
           { who: 'Vee', text: 'So here is the dare: three things you have done, and three things you want to do. Who has gone the furthest? Who has eaten the strangest thing?' },
+        ] },
+        { plate: 'story-b1s1-3', lines: [
           { who: 'Ava', text: 'Wait. Have you ever eaten spicy noodles?' },
           { who: 'Vee', text: 'Ha! That is number two on my list.' },
         ] },
