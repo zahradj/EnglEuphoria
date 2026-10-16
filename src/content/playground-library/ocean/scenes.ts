@@ -1378,7 +1378,7 @@ export const LESSON_A1U6L5_SCENES: Scene[] = [
   },
   {
     id: 'oc5-whats-missing', kind: 'whats-missing', look: 'reef', bg: bgRocks, title: 'Who is missing?',
-    teacher: 'Guided (creative idea: the animals sit in bubbles on the reef and a curtain of kelp sways across — one swims away, like Bub hiding): look at the story animals — one swims away! Say who is missing and what it was doing: The crab is missing. It was walking!',
+    teacher: 'Guided (creative idea: the animals sit in bubbles on the reef; a big school of fish swims past and one animal swims away with them): look at the story animals — one swims away! Say who is missing and what it was doing: The crab is missing. It was walking!',
     rounds: [
       { items: [{ word: 'crab', img: SEA.crab }, { word: 'shark', img: SEA.shark }, { word: 'turtle', img: SEA.turtle }, { word: 'starfish', img: SEA.starfish }], missing: 0 },
       { items: [{ word: 'whale', img: SEA.whale }, { word: 'octopus', img: BUB }, { word: 'fish', img: SEA.fish }, { word: 'seahorse', img: SEA.seahorse }], missing: 1 },

@@ -50,9 +50,12 @@ export interface WhatsMissingSceneData {
   /** Optional background art. The scene draws its own theatre, but the lesson players read `bg` on every scene (e.g. to preload art). */
   bg?: string;
   /** Design (owner 2026-10-16, "be creative — ideas that suit the concept"): 'theatre' (default: a magic show with red
-   *  curtains) or 'reef' (sea worlds: the animals sit in bubble nooks on the `bg` reef and a curtain of kelp sways
-   *  across to hide one). */
+   *  curtains) or 'reef' (sea worlds: the animals sit in bubbles on the `bg` reef and a big school of fish swims
+   *  past — when the fish have gone by, one animal has swum away; owner 2026-10-16 asked for a clearer animation than
+   *  the first kelp curtain). */
   look?: 'theatre' | 'reef';
+  /** Reef: the fish sticker for the school (faces LEFT; it is mirrored to swim right). */
+  schoolImg?: string;
 }
 
 type Phase = 'look' | 'cover' | 'guess' | 'reveal';
@@ -227,8 +230,8 @@ export function WhatsMissingScene({ scene, onNext, onWin, onResult, sync }: {
   const reef = scene.look === 'reef';
   const title = scene.title ?? (reef ? 'Kelp Hide-and-Seek' : 'Magic Show');
   const prompt = finished ? (reef ? 'Splash! You found them all!' : 'Abracadabra! You did it!')
-    : phase === 'look' ? (introDone ? 'Look carefully. Remember them all!' : 'Listen and look…')
-      : phase === 'cover' ? (reef ? 'Swish, swish… the kelp is moving!' : 'Abracadabra…')
+    : phase === 'look' ? (introDone ? (reef ? 'Remember them all! Then the fish swim by…' : 'Look carefully. Remember them all!') : 'Listen and look…')
+      : phase === 'cover' ? (reef ? 'Whoosh! The fish swim by…' : 'Abracadabra…')
         : phase === 'guess' ? "What's missing?"
           : `Yes! It was the ${items[missingIdx]?.word ?? ''}!`;
 
@@ -240,7 +243,10 @@ export function WhatsMissingScene({ scene, onNext, onWin, onResult, sync }: {
         @keyframes wm-back { 0% { transform: scale(.2) rotate(-160deg); opacity: 0; } 70% { transform: scale(1.18) rotate(8deg); opacity: 1; } 100% { transform: scale(1) rotate(0); opacity: 1; } }
         @keyframes wm-wobble { 0%,100% { transform: rotate(0); } 25% { transform: rotate(-7deg); } 75% { transform: rotate(7deg); } }
         @keyframes wm-glow { 0%,100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(253,224,71,0)); } 50% { transform: scale(1.08); filter: drop-shadow(0 0 2.4cqh rgba(253,224,71,1)); } }
-        @keyframes wm-sway { 0%,100% { transform: skewX(0deg); } 50% { transform: skewX(2.5deg); } }
+        @keyframes wm-swim-away { 0% { transform: translateX(0) scale(1); opacity: 1; } 30% { transform: translateX(-6%) scale(1.04); } 100% { transform: translateX(160%) scale(.6) rotate(8deg); opacity: 0; } }
+        @keyframes wm-swim-back { 0% { transform: translateX(170%) scale(.7); opacity: 0; } 70% { transform: translateX(-8%) scale(1.08); opacity: 1; } 100% { transform: translateX(0) scale(1); opacity: 1; } }
+        @keyframes wm-school { 0% { left: -30%; } 100% { left: 125%; } }
+        @keyframes wm-wiggle { 0%,100% { transform: translateY(0) scaleX(-1) rotate(0deg); } 50% { transform: translateY(-1.6cqh) scaleX(-1) rotate(-6deg); } }
         @keyframes wm-ask { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-1.4cqh) scale(1.08); } }
       `}</style>
       {reef && scene.bg ? (
@@ -251,7 +257,7 @@ export function WhatsMissingScene({ scene, onNext, onWin, onResult, sync }: {
       ) : <TheatreBackdrop />}
 
       <HudBar
-        left={<TitleRibbon text={title} icon={reef ? <span style={{ fontSize: '4.4cqh', lineHeight: 1 }} aria-hidden="true">🌿</span> : <TopHatIcon />} />}
+        left={<TitleRibbon text={title} icon={reef ? <span style={{ fontSize: '4.4cqh', lineHeight: 1 }} aria-hidden="true">🐟</span> : <TopHatIcon />} />}
         centre={<PromptChip>{prompt}</PromptChip>}
         right={<ProgressPill done={Math.min(rounds.length, roundNo + (phase === 'reveal' || finished ? 1 : 0))} total={rounds.length} color={reef ? '#0ea5e9' : '#a855f7'} label={reef ? 'finds' : 'tricks'} />}
       />
@@ -273,8 +279,9 @@ export function WhatsMissingScene({ scene, onNext, onWin, onResult, sync }: {
                   animation: !visible && phase === 'guess' ? undefined : phase === 'look' ? `gt-float ${3 + (i % 3) * 0.5}s ease-in-out ${i * 0.2}s infinite` : undefined,
                 }}
               >
+                {reef && <span aria-hidden className="pointer-events-none absolute left-[18%] top-[10%] z-10 h-[16%] w-[26%] -rotate-[30deg] rounded-full bg-white/75" />}
                 {visible ? (
-                  <div className="h-full w-full p-[8%]" style={{ animation: isMissing && phase === 'reveal' ? 'wm-back .7s cubic-bezier(.2,.9,.3,1.3) both' : isMissing && phase === 'cover' && gone ? 'wm-vanish .5s ease-in both' : undefined }}>
+                  <div className="h-full w-full p-[8%]" style={{ animation: isMissing && phase === 'reveal' ? (reef ? 'wm-swim-back .8s cubic-bezier(.2,.9,.3,1.1) both' : 'wm-back .7s cubic-bezier(.2,.9,.3,1.3) both') : isMissing && phase === 'cover' && gone ? (reef ? 'wm-swim-away .7s ease-in both' : 'wm-vanish .5s ease-in both') : undefined }}>
                     {it.img
                       ? <img src={it.img} alt="" className="h-full w-full object-contain" draggable={false} />
                       : <span className="flex h-full w-full items-center justify-center" style={{ fontSize: '11cqh', lineHeight: 1 }}>{it.emoji ?? ''}</span>}
@@ -294,34 +301,43 @@ export function WhatsMissingScene({ scene, onNext, onWin, onResult, sync }: {
         })}
       </div>
 
+      {/* Reef: a big school of fish swims across the row — when it has passed, one animal has swum away */}
+      {reef && phase === 'cover' && (
+        <div className="pointer-events-none absolute inset-x-0 z-20 overflow-hidden" style={{ top: '9%', height: '49%' }} aria-hidden="true">
+          {Array.from({ length: 30 }, (_, k) => {
+            const row = k % 4;
+            const size = 14 + ((k * 7) % 5) * 1.8;
+            return (
+              <span key={k} className="absolute" style={{ top: `${row * 22 - 4 + ((k * 13) % 10)}%`, width: `${size}cqh`, height: `${size}cqh`, animation: `wm-school ${1.45 + (k % 4) * 0.1}s cubic-bezier(.45,.05,.55,.95) ${(Math.floor(k / 4) * 0.09 + row * 0.04).toFixed(2)}s both` }}>
+                <img src={scene.schoolImg ?? '/lep1/items/item-fish.png'} alt="" draggable={false} className="h-full w-full object-contain drop-shadow-[0_0.6cqh_0.8cqh_rgba(3,105,161,0.35)]"
+                  style={{ filter: `hue-rotate(${[0, 160, -35, 190, 25, 0][k % 6]}deg) saturate(${k % 6 === 3 ? 1.2 : 1})`, animation: `wm-wiggle ${0.45 + (k % 3) * 0.08}s ease-in-out infinite` }} />
+              </span>
+            );
+          })}
+          {/* a trail of bubbles behind the school */}
+          {Array.from({ length: 10 }, (_, k) => (
+            <span key={`b${k}`} className="absolute rounded-full border-2 border-white/80 bg-white/25" style={{ top: `${15 + ((k * 23) % 70)}%`, width: `${1.6 + (k % 3)}cqh`, height: `${1.6 + (k % 3)}cqh`, animation: `wm-school ${1.9 + (k % 3) * 0.15}s linear ${0.25 + k * 0.08}s both` }} />
+          ))}
+        </div>
+      )}
+
       {/* …and the curtains that hide them */}
-      <div className="pointer-events-none absolute inset-x-0 z-20 overflow-hidden" style={{ top: '9%', height: '49%' }} aria-hidden="true">
+      {!reef && <div className="pointer-events-none absolute inset-x-0 z-20 overflow-hidden" style={{ top: '9%', height: '49%' }} aria-hidden="true">
         {(['left', 'right'] as const).map((side) => (
           <div
             key={side}
             className="absolute top-0 h-full"
             style={{
               [side]: 0, width: '52%',
-              background: reef
-                ? 'repeating-linear-gradient(90deg, #15803d 0 1.4cqw, #22c55e 1.4cqw 3cqw, #16a34a 3cqw 4.2cqw, #4ade80 4.2cqw 4.8cqw)'
-                : 'repeating-linear-gradient(90deg, #7f1022 0, #7f1022 2.4cqw, #b3182f 2.4cqw, #b3182f 4.8cqw)',
-              boxShadow: reef ? 'inset 0 0 5cqh rgba(5,46,22,.45)' : 'inset 0 -1.6cqh 0 #f6c453, inset 0 0 6cqh rgba(0,0,0,.45)',
-              ...(reef ? {
-                // kelp blades: straight stems with a rounded tip each, swaying gently
-                maskImage: 'linear-gradient(#000, #000), radial-gradient(ellipse 50% 100% at 50% 0, #000 96%, transparent 100%)',
-                WebkitMaskImage: 'linear-gradient(#000, #000), radial-gradient(ellipse 50% 100% at 50% 0, #000 96%, transparent 100%)',
-                maskSize: '100% calc(100% - 6cqh), 4.8cqw 6cqh', WebkitMaskSize: '100% calc(100% - 6cqh), 4.8cqw 6cqh',
-                maskPosition: 'top, bottom left', WebkitMaskPosition: 'top, bottom left',
-                maskRepeat: 'no-repeat, repeat-x', WebkitMaskRepeat: 'no-repeat, repeat-x',
-                animation: closed ? 'wm-sway 1.6s ease-in-out infinite' : undefined, transformOrigin: 'top center',
-              } : {}),
-              transform: closed ? 'translateX(0)' : `translateX(${side === 'left' ? (reef ? '-102%' : '-86%') : (reef ? '102%' : '86%')})`,
+              background: 'repeating-linear-gradient(90deg, #7f1022 0, #7f1022 2.4cqw, #b3182f 2.4cqw, #b3182f 4.8cqw)',
+              boxShadow: 'inset 0 -1.6cqh 0 #f6c453, inset 0 0 6cqh rgba(0,0,0,.45)',
+              transform: closed ? 'translateX(0)' : `translateX(${side === 'left' ? '-86%' : '86%'})`,
               transition: 'transform .75s cubic-bezier(.6,.05,.3,1)',
               borderRadius: side === 'left' ? '0 0 4cqh 0' : '0 0 0 4cqh',
             }}
           />
         ))}
-      </div>
+      </div>}
 
       {/* Bottom half: Hide! → abracadabra → choices */}
       <div className="absolute inset-x-[3%] flex items-center justify-center" style={{ top: '60%', height: '34%' }}>
@@ -338,10 +354,10 @@ export function WhatsMissingScene({ scene, onNext, onWin, onResult, sync }: {
             style={{ fontSize: '5.4cqh', animation: introDone && !isMirror ? 'gt-glow-pulse 1.5s ease-out infinite' : undefined }}
           >
             <span className="gt-idle pointer-events-none absolute inset-y-0 w-1/4 bg-white/40" style={{ animation: 'gt-shine 2.6s ease-in-out infinite' }} />
-            {introDone ? (reef ? '🌿 Hide!' : '✨ Hide!') : 'Listen…'}
+            {introDone ? (reef ? '🐟 Here come the fish!' : '✨ Hide!') : 'Listen…'}
           </button>
         ) : phase === 'cover' ? (
-          <span className="font-black text-yellow-200" style={{ fontSize: '7cqh', textShadow: '0 0.6cqh 0 rgba(0,0,0,.35)', animation: 'gt-pop-in .5s cubic-bezier(.2,.9,.3,1.4) both' }}>{reef ? 'Swish, swish!' : 'Abracadabra!'}</span>
+          <span className="font-black text-yellow-200" style={{ fontSize: '7cqh', textShadow: '0 0.6cqh 0 rgba(0,0,0,.35)', animation: 'gt-pop-in .5s cubic-bezier(.2,.9,.3,1.4) both' }}>{reef ? 'Whoosh!' : 'Abracadabra!'}</span>
         ) : (
           <div className="flex items-center justify-center" style={{ gap: '1.6cqw' }}>
             {order.map((srcIdx, k) => {
