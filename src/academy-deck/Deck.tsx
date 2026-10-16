@@ -25,6 +25,7 @@ import { BossView, WordleView, RpgView, QuizView, TripleView, GlitchView, VerbDr
 import { ForgeView, StreakView } from './slides/forge';
 import { LessonClock } from './LessonClock';
 import { playSfx } from './sfx';
+import { loadBank, saveLessonMistakes, type BankEntry } from './mistakeBank';
 import { applyLane, laneOf, LANE_LABEL } from './lanes';
 import { BadgeView, BriefView, DialView, TitleView } from './slides/intro';
 import { HuntView, ShadowView } from './slides/homework';
@@ -77,6 +78,14 @@ const STAGE_LABEL: Record<string, string> = { review: 'Warm-up', context: 'Watch
 
 const SKILL: Record<string, string> = { say: 'Speaking', fade: 'Speaking', passage: 'Reading', readq: 'Reading', hearpick: 'Listening', story: 'Listening', model: 'Listening', write: 'Writing', build: 'Writing', boss: 'Game', wordle: 'Game', rpg: 'Game', quiz: 'Game', triple: 'Game', glitch: 'Game', board: 'Game', verbdraw: 'Game', cloze: 'Reading', sort: 'Game', memory: 'Game', match: 'Game', forge: 'Game', streak: 'Game', explore: 'Game', hunt: 'Game', vault: 'Game', duel: 'Game', rhythm: 'Game' };
 const skillOf = (kind: string): string => SKILL[kind] ?? '';
+
+/** A short human label for a slide (what the student was doing), for the Mistake Bank. */
+function slideLabel(s: Slide): string {
+  const t = (s as { prompt?: string; title?: string; heading?: string }).prompt ?? (s as { title?: string }).title ?? (s as { heading?: string }).heading ?? s.id;
+  const one = t.replace(/\s+/g, ' ').trim();
+  const first = one.split(/(?<=[.!?])\s/)[0];
+  return (first.length > 8 ? first : one).slice(0, 90);
+}
 
 /** Comfort settings (voice, sounds, calm mode) are the student's own: remembered on this device so a reload does not undo them. Fails soft. */
 const PREFS_KEY = 'academy-deck-prefs-v1';
@@ -216,6 +225,7 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
   const [tiers, setTiers] = useState<Record<string, number>>({});
   const [toast, setToast] = useState<string | null>(null);
   const [minute, setMinute] = useState(false);
+  const [bank, setBank] = useState<BankEntry[] | null>(null);
   const [menu, setMenu] = useState(false);
   const [burst, setBurst] = useState<{ n: number; x: number; y: number } | null>(null);
   // game feel (adapted from the Playground's approach, rebuilt for teens in Academy files only): the burst flies from where the student tapped,
@@ -370,7 +380,9 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
     setShake(true);
     window.setTimeout(() => setShake(false), 460);
   }, [react]);
-  const ctx: DeckCtx = useMemo(() => ({ artBase, vars, setVars, done, right, wrong, award, stamps, reduced: calm, seed: 1000 + index * 17, voice: voiceOn, clipsReady, canHear, speak, speakSeq }), [artBase, vars, setVars, done, right, wrong, award, stamps, calm, index, voiceOn, clipsReady, canHear, speak, speakSeq]);
+  const mistakes = useMemo(() => Object.entries(wrongBySlide.current).filter(([, n]) => n > 0).map(([id, n]) => ({ id, label: slideLabel(script.slides.find((x) => x.id === id) ?? script.slides[0]), wrong: n })).sort((a, b) => b.wrong - a.wrong), [stats.wrong, script.slides]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { if (keepsProgress && mistakes.length) saveLessonMistakes(script.lessonId, mistakes); }, [mistakes]); // eslint-disable-line react-hooks/exhaustive-deps
+  const ctx: DeckCtx = useMemo(() => ({ artBase, vars, setVars, done, right, wrong, award, stamps, reduced: calm, seed: 1000 + index * 17, voice: voiceOn, clipsReady, canHear, speak, speakSeq, mistakes }), [artBase, vars, setVars, done, right, wrong, award, stamps, calm, index, voiceOn, clipsReady, canHear, speak, speakSeq, mistakes]);
   const keys = useMemo(() => script.slides.filter((x) => x.kind === 'vault' && solved[x.id]).map((x) => (x as { lock: number }).lock), [script.slides, solved]);
   const lockNames = script.locks;
   const isSolved = !!solved[cur.id];
@@ -474,16 +486,17 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
   }, [index]); // eslint-disable-line react-hooks/exhaustive-deps
   // Escape closes the pause card and the part title card (keyboard users could not dismiss them before)
   useEffect(() => {
-    if (!minute && partCard === null && !menu) return;
+    if (!minute && !bank && partCard === null && !menu) return;
     const esc = (e: KeyboardEvent) => {
       if (e.key !== 'Escape') return;
-      if (minute) setMinute(false);
+      if (bank) setBank(null);
+      else if (minute) setMinute(false);
       else if (partCard !== null) closePart();
       else setMenu(false);
     };
     window.addEventListener('keydown', esc);
     return () => window.removeEventListener('keydown', esc);
-  }, [minute, partCard, menu, closePart]);
+  }, [minute, bank, partCard, menu, closePart]);
   useEffect(() => {
     const k = (e: KeyboardEvent) => {
       const t = e.target as HTMLElement | null;
@@ -524,6 +537,17 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
         <div className="ad-actors" aria-hidden={actorsVisible.length === 0}>
           {actorsVisible.map((a) => <Character key={`${a.who}-${mood ?? 'base'}`} actor={mood ? { ...a, expr: mood } : a} artBase={artBase} small={compact} speaking={!calm && !mood && (speakingWho === a.who || (chat && !(voiceOn && slideHasClip) && ['title', 'brief', 'whosaid', 'teach', 'model', 'convo', 'say', 'wrap'].includes(cur.kind)))} />)}
         </div>
+        {!homework && (
+          <div className="ad-segs" role="progressbar" aria-label={`Lesson parts: part ${cur.part + 1} of ${parts.length}, ${parts[cur.part]?.name ?? ''}`} aria-valuemin={0} aria-valuemax={parts.length} aria-valuenow={cur.part + 1}>
+            {parts.map((pt, k) => {
+              const idx = script.slides.map((x, i) => (x.part === k ? i : -1)).filter((i) => i >= 0);
+              const first = idx[0] ?? 0;
+              const n = idx.length || 1;
+              const frac = k < cur.part ? 1 : k > cur.part ? 0 : Math.min(1, (index - first + (isSolved ? 1 : 0)) / n);
+              return <span key={pt.name} className="ad-seg" data-state={k < cur.part ? 'done' : k === cur.part ? 'now' : 'todo'} title={`${k + 1} · ${pt.name} · ${pt.minutes} min`} style={{ flexGrow: Math.max(1, pt.minutes), ['--f' as string]: `${Math.round(frac * 100)}%` }}><i /></span>;
+            })}
+          </div>
+        )}
         <header className="ad-strip" aria-label="Slides">
           {!homework && (
             <span className="ad-brand" aria-label="EnglEuphoria Academy"><HubMark size={24} /><span><b>Academy</b><small>{hubInfo.level}{hubInfo.season ? ` · S${hubInfo.season} · E${hubInfo.episode}` : ''}</small></span></span>
@@ -610,6 +634,7 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
                 <button type="button" role="menuitem" disabled={lane === 'stretch'} onClick={() => setVars({ lane: lane === 'start' ? 'core' : 'stretch' })}>Harder ({LANE_LABEL[lane === 'start' ? 'core' : 'stretch'].student})</button>
               </>
             )}
+            <button type="button" role="menuitem" onClick={() => { setBank(loadBank()); setMenu(false); }}><Icon name="note" /> Mistake Bank</button>
             <button type="button" role="menuitem" onClick={skip}><Icon name="skip" /> Skip this slide</button>
             <button type="button" role="menuitemcheckbox" aria-checked={voiceOn} onClick={() => setVoiceOn(!voiceOn)}>{voiceOn ? '✔ ' : ''}Voice {voiceOn ? 'on' : 'off'}</button>
             <button type="button" role="menuitemcheckbox" aria-checked={sfxOn} onClick={() => setSfxOn(!sfxOn)}>{sfxOn ? '✔ ' : ''}Sounds {sfxOn ? 'on' : 'off'}</button>
@@ -626,6 +651,19 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
             <span className="ad-partcard-goal">{script.partGoals?.[partCard] ?? parts[partCard].goal}</span>
             <span className="ad-partcard-pips" aria-hidden="true">{parts.map((_, k) => <i key={k} data-on={k <= partCard} />)}</span>
             <span className="ad-partcard-tap">Tap to start</span>
+          </div>
+        )}
+        {bank && (
+          <div className="ad-minute ad-bank" role="dialog" aria-label="Mistake Bank">
+            <div>
+              <h2><Icon name="note" /> Mistake Bank</h2>
+              {bank.length === 0 ? <p>Nothing here yet. When something takes more than one try, it is saved here so you can look back at it.</p> : (
+                <ul className="ad-bank-list">
+                  {bank.map((e) => <li key={`${e.lesson}-${e.slide}`}><span>{e.label}</span><b>×{e.wrong}</b><small>{e.lesson} · {e.on}</small></li>)}
+                </ul>
+              )}
+              <button type="button" className="ad-btn ad-btn-primary" autoFocus onClick={() => setBank(null)}>Close</button>
+            </div>
           </div>
         )}
         {resume && (

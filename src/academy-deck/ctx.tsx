@@ -23,6 +23,8 @@ export interface DeckCtx {
   speak: (who: string, text: string) => Promise<boolean>;
   /** speak lines one after another; a newer call or leaving the slide cancels the rest */
   speakSeq: (lines: { who: string; text: string }[]) => Promise<void>;
+  /** this lesson's mistakes so far (slides where the student needed more than one try), most tries first: feeds the Mistake Bank in the Wrap */
+  mistakes: { id: string; label: string; wrong: number }[];
 }
 export const DeckContext = createContext<DeckCtx | null>(null);
 export const useDeck = (): DeckCtx => {
