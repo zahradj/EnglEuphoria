@@ -40,7 +40,8 @@ export function TongueTwisterScene({ scene, onNext, onWin, sync }: { scene: Extr
   // later units add magic speed (3). `look: 'town'` swaps the wizard dressing for the lesson's own friend.
   const speeds = Math.max(1, Math.min(3, scene.speeds ?? 3));
   const ROUNDS = TWISTER_ROUNDS.slice(0, speeds);
-  const town = scene.look === 'town';
+  const sea = scene.look === 'sea';
+  const town = scene.look === 'town' || sea;
   const [state, setState] = useSyncedState(sync, { step: 0, run: 0, gemDone: false });
   const { step, run, gemDone } = state;
   const words = useMemo(() => scene.line.split(/\s+/), [scene.line]);
@@ -82,12 +83,12 @@ export function TongueTwisterScene({ scene, onNext, onWin, sync }: { scene: Extr
       {done && <Confetti count={60} />}
       <div className="pointer-events-none absolute inset-x-0 top-3 z-20 flex justify-center">
         <div className="rounded-full px-4 py-1 text-xs font-black uppercase tracking-widest text-white shadow-lg ring-2 ring-white/50" style={{ background: MAGIC_GRADIENT }}>
-          {town ? '👅 Tongue Twister' : '🪄 Wizard’s Tongue Twister'}
+          {sea ? '🌊 Splash Twister' : town ? '👅 Tongue Twister' : '🪄 Wizard’s Tongue Twister'}
         </div>
       </div>
       <div className="absolute inset-x-0 top-12 z-20 flex justify-center px-4">
         <div className="max-w-xl rounded-2xl px-4 py-2 text-center text-sm font-bold text-white shadow-2xl sm:text-base" style={{ background: 'rgba(20,6,48,0.6)', backdropFilter: 'blur(6px)' }}>
-          {done ? (town ? 'Super fast reading! ⭐' : 'Magic! You said it at magic speed! ⭐') : step === 0 ? scene.teacher : `Your turn — say it ${round!.label.toLowerCase()} ${round!.icon}`}
+          {done ? (sea ? 'Splash speed! Super fast reading! 🐚' : town ? 'Super fast reading! ⭐' : 'Magic! You said it at magic speed! ⭐') : step === 0 ? scene.teacher : `Your turn — say it ${round!.label.toLowerCase()} ${round!.icon}`}
         </div>
       </div>
 
@@ -117,7 +118,7 @@ export function TongueTwisterScene({ scene, onNext, onWin, sync }: { scene: Extr
               const active = step === i + 1;
               return (
                 <div key={rd.label} className={`flex flex-col items-center gap-1 transition ${active ? 'scale-110' : ''}`}>
-                  <span className="text-4xl" style={{ filter: filled ? 'drop-shadow(0 0 10px rgba(245,197,66,0.95))' : active ? undefined : 'grayscale(0.8) opacity(0.55)' }}>{town ? (filled ? '⭐' : '☆') : filled ? '🧪' : '⚗️'}</span>
+                  <span className="text-4xl" style={{ filter: filled ? 'drop-shadow(0 0 10px rgba(245,197,66,0.95))' : active ? undefined : 'grayscale(0.8) opacity(0.55)' }}>{sea ? (filled ? '🐚' : '🫧') : town ? (filled ? '⭐' : '☆') : filled ? '🧪' : '⚗️'}</span>
                   <span className={`text-xs font-black ${active ? 'text-[#6D28D9]' : 'text-[#6B7280]'}`}>{rd.icon} {rd.label}</span>
                 </div>
               );

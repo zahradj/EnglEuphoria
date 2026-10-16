@@ -1279,8 +1279,8 @@ export const LESSON_A1U6L5_SCENES: Scene[] = [
   { id: 'oc5-echo', kind: 'echo', bg: reefPage(10), who: 'bub', textSide: 'top', teacher: 'Guided (we do): say it like Bub — a tiny shy voice for “hiding”, a big proud voice for “helping”!', word: 'I’m not hiding now. I’m helping!' },
   // Owner 2026-10-13/14: after the words, Read and Match. Design differs from L4 (polaroids) and U5L5 (cards).
   {
-    id: 'oc5-match', kind: 'picture-match', look: 'chalk', prompt: 'Read and match',
-    teacher: 'Read and match: the student reads each word and drags it under its picture, then says a sentence: It is the treasure!',
+    id: 'oc5-match', kind: 'picture-match', look: 'portholes', prompt: 'Read and match',
+    teacher: 'Read and match (creative idea: the pictures are seen through submarine portholes and the words float up as bubbles — we are under the sea): the student reads each word and drags it under its picture, then says a sentence: It is the treasure!',
     items: [
       { word: 'treasure', img: CHEST_OPEN },
       { word: 'rock', img: STONE },
@@ -1290,6 +1290,7 @@ export const LESSON_A1U6L5_SCENES: Scene[] = [
     ],
     bg: bgRocks,
   },
+  // Creative idea (blueprint §3f++): the chest is lost on the seabed, so the flaps are ROCKS to lift — under each one a story animal is doing its story action.
   {
     id: 'oc5-story-rocks', kind: 'prea1', teacher: 'You do (the signature game): where is the chest? The student ASKS at each rock “Is it the chest?”, taps to look and answers: No, it isn’t. It’s a crab. The crab is walking!',
     scene: {
@@ -1312,7 +1313,7 @@ export const LESSON_A1U6L5_SCENES: Scene[] = [
     pages: TREASURE_REEF.slice(0, 9),
   },
   {
-    id: 'oc5-pause', kind: 'choice', bg: reefPage(9), who: 'coral', teacher: 'Pause (branching choice): who can help find the chest? The student chooses and SAYS why: Bub! He is good at hiding — he knows the rocks!',
+    id: 'oc5-pause', kind: 'choice', look: 'bottles', bg: reefPage(9), who: 'coral', teacher: 'Pause (branching choice; creative idea: each answer floats in as a message in a bottle — the sea brings the ideas): who can help find the chest? The student chooses and SAYS why: Bub! He is good at hiding — he knows the rocks!',
     prompt: 'Who can help find the chest?',
     options: [
       { label: 'Bub — he knows the rocks!', emoji: '\u{1F419}', correct: true },
@@ -1338,6 +1339,7 @@ export const LESSON_A1U6L5_SCENES: Scene[] = [
     ],
     bg: bgReef,
   },
+  // Creative idea: the hidden picture is under the sea behind BUBBLES that pop one by one (tile-reveal look 'bubbles').
   {
     id: 'oc5-which-page', kind: 'prea1', teacher: 'Guided: Tile Reveal! Who or what from the story is hiding? Tiles open one by one — the student listens to the story clue and guesses early, then says the story sentence.',
     scene: {
@@ -1350,6 +1352,7 @@ export const LESSON_A1U6L5_SCENES: Scene[] = [
       ],
     },
   },
+  // Creative idea: the story pictures are laid out along the reef floor like the pages of the treasure map.
   {
     id: 'oc5-story-order', kind: 'prea1', teacher: 'Guided: put the story pictures in order, then retell it: first, then, then, at the end! Evidence: retells 3 pictures.',
     scene: {
@@ -1364,8 +1367,8 @@ export const LESSON_A1U6L5_SCENES: Scene[] = [
     },
   },
   {
-    id: 'oc5-story-gaps', kind: 'grammar-gap', bg: bgReef, title: 'Read and Choose',
-    teacher: 'Reading (Cambridge Starters style): read the sentence from the story and choose the missing word. Then read it all.',
+    id: 'oc5-story-gaps', kind: 'grammar-gap', look: 'reef', bg: bgReef, title: 'Pearl Reef: Read and Choose',
+    teacher: 'Reading (Cambridge Starters style; creative idea: the answers are pearls in open clam shells on the reef — the right pearl opens its shell wide): read the sentence from the story and choose the missing word. Then read it all.',
     rounds: [
       { before: 'The crab is', after: '.', choices: ['walking', 'sleeping'], answer: 'walking', img: reefPage(5) },
       { before: 'The turtle eats sea', after: '.', choices: ['grass', 'fish'], answer: 'grass', img: reefPage(7) },
@@ -1374,13 +1377,14 @@ export const LESSON_A1U6L5_SCENES: Scene[] = [
     ],
   },
   {
-    id: 'oc5-whats-missing', kind: 'whats-missing', bg: bgRocks, title: 'Who is missing?',
-    teacher: 'Guided: look at the story animals — one swims away! Say who is missing and what it was doing: The crab is missing. It was walking!',
+    id: 'oc5-whats-missing', kind: 'whats-missing', look: 'reef', bg: bgRocks, title: 'Who is missing?',
+    teacher: 'Guided (creative idea: the animals sit in bubbles on the reef and a curtain of kelp sways across — one swims away, like Bub hiding): look at the story animals — one swims away! Say who is missing and what it was doing: The crab is missing. It was walking!',
     rounds: [
       { items: [{ word: 'crab', img: SEA.crab }, { word: 'shark', img: SEA.shark }, { word: 'turtle', img: SEA.turtle }, { word: 'starfish', img: SEA.starfish }], missing: 0 },
       { items: [{ word: 'whale', img: SEA.whale }, { word: 'octopus', img: BUB }, { word: 'fish', img: SEA.fish }, { word: 'seahorse', img: SEA.seahorse }], missing: 1 },
     ],
   },
+  // Creative idea: the story's own treasure chests open on each right answer; the pearls fill the jar.
   {
     id: 'oc5-chests', kind: 'chest-quest', bg: reefPage(11), who: 'coral', title: 'Treasure Chests!', goal: 60,
     teacher: 'Guided: story questions — every right answer opens a chest and the pearls fill the jar. Can we reach 60?',
@@ -1417,9 +1421,9 @@ export const LESSON_A1U6L5_SCENES: Scene[] = [
   },
   /* Phonics review: wh, sh, b (boat) → Letter Monsters → Blend & Read → the unit twister */
   {
-    id: 'oc5-monsters', kind: 'prea1', teacher: 'Reading (review of the unit sounds): Hungry Letter Monsters! Feed each picture to the monster with its first sound — wh, sh or b — and say it.',
+    id: 'oc5-monsters', kind: 'prea1', teacher: 'Reading (review of the unit sounds; creative idea: hungry SEA monsters on the seabed — each picture floats down in a bubble): Hungry Letter Monsters! Feed each picture to the monster with its first sound — wh, sh or b — and say it.',
     scene: {
-      id: 'oc5-monsters', kind: 'letter-monsters', bg: bgReef, who: 'pip', teacher: 'Feed each picture to the monster with its first sound!',
+      id: 'oc5-monsters', kind: 'letter-monsters', look: 'sea', bg: bgReef, who: 'pip', teacher: 'Feed each picture to the monster with its first sound!',
       monsters: [{ letter: 'wh', color: '#38BDF8' }, { letter: 'sh', color: '#FE6A2F' }, { letter: 'b', color: '#22C55E' }],
       cards: [
         { word: 'whale', img: SEA.whale }, { word: 'shell', img: SEA.shell },
@@ -1437,7 +1441,8 @@ export const LESSON_A1U6L5_SCENES: Scene[] = [
       { word: 'whale', sounds: ['wh', 'a', 'l'], img: SEA.whale, sentence: 'It is a whale. It is big!' },
     ],
   },
-  { id: 'oc5-twister', kind: 'tongue-twister', look: 'town', speeds: 3, bg: reefPage(12), who: 'bub', focus: 'sh', teacher: 'Reading: the story twister! Listen to Bub, then say it slow, faster — then splash speed!', line: 'Bub wishes for a shiny shell. Splash!' },
+  // Creative idea (blueprint §3f++): a splash twister — every speed fills a shell.
+  { id: 'oc5-twister', kind: 'tongue-twister', look: 'sea', speeds: 3, bg: reefPage(12), who: 'bub', focus: 'sh', teacher: 'Reading: the story twister! Listen to Bub, then say it slow, faster — then splash speed!', line: 'Bub wishes for a shiny shell. Splash!' },
   /* Free: retell from the pictures; talk with Coral */
   {
     id: 'oc5-retell', kind: 'join-stage', bg: reefPage(12), teacher: 'Free: the student tells the story to Pip with the pictures — 3 pictures at least (first, then, at the end). Pip only asks; the student tells.', cast: ['pip'],

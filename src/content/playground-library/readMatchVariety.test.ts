@@ -7,7 +7,7 @@ import * as MT from './monster-town/scenes';
 import * as OC from './ocean/scenes';
 import * as MC from './magic-castle/scenes';
 // Same list as PICTURE_MATCH_LOOKS in PictureMatchScene.tsx (not imported: the component pulls in the Supabase client).
-const PICTURE_MATCH_LOOKS = ['cards', 'frames', 'polaroids', 'chalk'];
+const PICTURE_MATCH_LOOKS = ['cards', 'frames', 'polaroids', 'chalk', 'portholes'];
 
 /* Owner 2026-10-14: "change the design of the games to prevent repetition — make it a rule." The A1 Read and Match
  * (`picture-match`) has four designs; a lesson's first Read and Match must look different from the one in the lesson

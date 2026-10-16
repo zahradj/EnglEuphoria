@@ -286,7 +286,7 @@ export type Scene =
         img?: string;
       }[];
     }
-  | { id: string; kind: 'choice'; bg: string; who: CharKey; teacher: string; prompt: string; options: { label: string; emoji: string; correct?: boolean }[]; pointTo?: { who: CharKey; left: string; top: string; dir?: 'down' | 'left' | 'right' }[] }
+  | { id: string; kind: 'choice'; bg: string; who: CharKey; teacher: string; prompt: string; /** Design (owner 2026-10-16, "be creative — ideas that suit the concept"): 'cards' (default) or 'bottles' (sea worlds: each choice is a message in a bottle bobbing on the waves). */ look?: 'cards' | 'bottles'; options: { label: string; emoji: string; correct?: boolean }[]; pointTo?: { who: CharKey; left: string; top: string; dir?: 'down' | 'left' | 'right' }[] }
   // Listen-and-tap-in-the-scene: unlike `vocab-spot` (one guided arrow at a
   // time, no wrong answer possible) every real object/character already
   // painted in `bg` is a live hotspot at once, so a spoken line genuinely
@@ -424,7 +424,7 @@ export type Scene =
        *  pace. `focus` letters are glowing in the text. */
       id: string; kind: 'tongue-twister'; bg: string; who: CharKey; teacher: string; line: string; focus: string;
       /** A1 tongue-twister ladder: 2 speeds in Units 1-3, 3 later (default 3). `look: 'town'` = no wizard dressing. */
-      speeds?: number; look?: 'town';
+      speeds?: number; /** 'sea' (owner 2026-10-16, "be creative"): like 'town', dressed for the sea — shells fill up, bubbles. */ look?: 'town' | 'sea';
       /** Twister Race: the twisters of the unit, one per row (`line` = all of them, in order). */
       lines?: string[];
     }

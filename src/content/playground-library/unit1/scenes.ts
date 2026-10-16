@@ -521,6 +521,10 @@ export type Scene =
   | {
       /** Hungry Letter Monsters: feed each picture card to the monster whose tummy letter is its first sound. */
       id: string; kind: 'letter-monsters'; bg: string; teacher: string; who: CharKey;
+      /** Design (owner 2026-10-16, "be creative — ideas that suit the concept"): 'meadow' (default) or 'sea' (sea
+       *  worlds: the monsters wait on the seabed of `bg`, each picture floats in inside a bubble, bubbles rise,
+       *  shells count the progress). */
+      look?: 'meadow' | 'sea';
       monsters: { letter: string; color: string }[];
       cards: { word: string; img: string }[];
     }
