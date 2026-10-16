@@ -1,6 +1,6 @@
 # Academy video-game mechanics list (living list)
 
-Owner rule 2026-10-14: every Academy unit (Season) and lesson names at least one mechanic borrowed from a video game, so students have a blast. Companion to `docs/academy-games-catalog.md` (148 classroom games). Mechanics only, never characters, content or music; teen-appropriate (13-18); recorded voices only; motion rules in CLAUDE.md apply.
+Owner rule 2026-10-14: every Academy unit (Season) and lesson names at least one mechanic borrowed from a video game, so students have a blast. Companion to `docs/academy-games-catalog.md` (171 classroom games). Mechanics only, never characters, content or music; teen-appropriate (13-18); recorded voices only; motion rules in CLAUDE.md apply.
 
 **Status:** seed list from general game-design knowledge, **unverified**. The next research pass (units: see `docs/research/`) must confirm, extend and log sources per mechanic. Add rows as lessons use them.
 

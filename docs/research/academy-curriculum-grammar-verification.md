@@ -257,3 +257,14 @@ Next step for a human or an open-egress session: open EGP Online (filter by stru
 Grammar learning-objectives PDF, the British Council LearnEnglish grammar index pages, and the Empower A2/B1 and
 Prepare 3/4 tables of contents, then re-run the verdict column. Until then keep every placement above flagged
 `unverified` in `structureLevels.ts`.
+
+## Re-check 2026-10-16 (curriculum improvement, step 1)
+
+- **English Grammar Profile (englishprofile.org):** the site could not be reached from the build environment (host did not resolve) and a web search returned no EGP entries. **Placement of "present perfect: experience" is still unverified.** Teaching sites place `ever`/`never` experience questions at A2 and the wider use at B1, which agrees with the "move earlier or split" row above (A2 late receptive / B1 productive). Action: check englishprofile.org and the Pearson GSE Teacher Toolkit from a machine with access before marking B1-S01 verified. [U]
+- **Pearson GSE:** the score bands (B1 = 43-58, B2 = 59-75) were seen in a Pearson PDF; no learning objective for the present perfect was retrieved. [U]
+
+## Item alignment finding, B1-S01-E1 (2026-10-16)
+
+- The Season's item bank (`src/curriculum/academy/items/b1.ts`, `B1-S01.E1`) lists 12 receptive items: expedition, remote, tent, helicopter, survive, brave, bucket list, once in a lifetime, take a risk, climb to the top, far from the crowds, face a fear.
+- The lesson as built teaches: bucket list, dare, give it a go, once in a lifetime, tick it off, brave (+ past participles). Overlap: **bucket list, once in a lifetime, brave** (3 of 12).
+- **Progression break:** E3 and E4 reuse *expedition, remote, tent, helicopter* ("Have you ever slept in a tent?", "Was it a remote place?") as if known; E1 as built never teaches them. Decision needed (see the owner question in the session): change the bank to the lesson, or change the lesson to the bank.

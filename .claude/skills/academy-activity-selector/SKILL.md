@@ -4,7 +4,7 @@ description: >
   Choose the right game or activity for an Academy segment: by purpose (what the learner must retrieve/produce), theme and
   topic, objective, CEFR level, the student's needs and comfort, and variety. Gives the decision procedure, scoring rubric,
   purpose->mechanic and theme->mechanic tables, level ladder and a worked example. Use whenever a session, Daily-10 pack or
-  quiz needs activities, or when a lesson feels repetitive. Catalogue: docs/academy-games-catalog.md (148 games).
+  quiz needs activities, or when a lesson feels repetitive. Catalogue: docs/academy-games-catalog.md (171 games).
 ---
 
 # Academy Activity Selector — the right mechanic, not just a fun one
