@@ -87,7 +87,7 @@ async function generateClip(l) {
         headers: { apikey: ANON_KEY, Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: normalizeForSpeech(speechText(l.text)), voiceId }),
       });
-      if (!res.ok) throw new Error(`tts ${res.status}`);
+      if (!res.ok) throw new Error(`tts ${res.status} ${(await res.text().catch(() => '')).replace(/\s+/g, ' ').slice(0, 160)}`);
       const buf = Buffer.from(await res.arrayBuffer());
       if (!buf.length) throw new Error('empty response');
       return buf;

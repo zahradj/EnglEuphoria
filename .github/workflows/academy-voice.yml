@@ -34,7 +34,9 @@ jobs:
           set -e
           if [ -z "$BAKE_SERVICE_KEY" ]; then echo "::error::Add the BAKE_SERVICE_KEY repository secret (Supabase service_role key) so new clips can be recorded."; exit 1; fi
           npx -y tsx scripts/bake-academy-voice.mjs
+      # always() so the clips that were recorded are saved even when a few lines failed (the failed lines are retried on the next run)
       - name: Commit new clips
+        if: always()
         run: |
           git add public/academy-audio scripts/academy-voice-lines.json
           if git diff --cached --quiet; then echo "No new clips."; exit 0; fi
