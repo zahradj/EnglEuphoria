@@ -158,6 +158,11 @@ Games (different from L1-L5, accuracy before speed): **Buzzer Show** (game show,
 **Memory** (new design; say the *-ing* sentence to keep a pair) · **Hot Coconut** (*Is it swimming?* before the coconut
 passes) · **Tic-Tac-Toe Duel** · **Wobbly Tower** · **Team Flags** · Twister Race · Blend & Read · free talk with Bub.
 
+**Built 2026-10-16** (`LESSON_A1U6L6_SCENES`, 31 pages, `/playground-scene/ocean-lesson-6`): a new Canva stage (an underwater
+game show: clam-shell podiums, golden frames, red buzzers) and a sea design for every game — Pearl Buzzer Show ★, Shell
+Memory, Hot Shell, Sandcastle Tower, Sail Race, Pearl Dive Quiz (instead of Tic-Tac-Toe, which U5 L6 used), Twister Race,
+Blend & Read, the child as host, free talk with Bub. Research: `docs/research/playground-a1u6-research.md`.
+
 ### 6.7 Lesson 7 — Boss Test: Ocean Explorer!
 
 | Part | Format | Pass |

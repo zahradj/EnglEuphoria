@@ -69,19 +69,21 @@ export function QuizBoardScene({ scene, onNext, onWin, onLose, sync }: { scene: 
     });
   };
 
+  const pearls = scene.look === 'pearls';
+  const SHELLS = ['#FE6A2F', '#FEAF15', '#F472B6', '#38BDF8', '#22C55E'];
   return (
     <div className="absolute inset-0 select-none overflow-hidden">
       <CalmBg img={scene.bg} />
       {done && <Confetti count={90} />}
       <div className="pointer-events-none absolute inset-x-0 top-[5%] z-30 flex justify-center px-14">
         <span className="text-center font-black text-white" style={{ ...THICK_WORDS, fontSize: 'clamp(1.1rem, min(calc(2.6*var(--svw,1vw)), 4.4vh), 2.1rem)' }}>
-          {done ? scene.doneLine : `🏆 ${scene.title}`}
+          {done ? scene.doneLine : `${pearls ? '🐚' : '🏆'} ${scene.title}`}
         </span>
       </div>
       <motion.span key={Number(state.score) || 0} className="absolute end-3 top-[13%] z-30 rounded-full border-[0.3vh] border-white bg-gradient-to-b from-[#FDE68A] to-[#F59E0B] px-5 py-2 font-black text-[#2A1A05] shadow-[0_0.6vh_0_#B45309,0_1.2vh_2vh_rgba(60,30,10,0.35)]" style={{ fontSize: 'min(3.4vh, 2.3vw)' }}
-        initial={reduce ? false : { scale: 1.4 }} animate={{ scale: 1 }}>⭐ {Number(state.score) || 0}</motion.span>
+        initial={reduce ? false : { scale: 1.4 }} animate={{ scale: 1 }}>{pearls ? '⚪' : '⭐'} {Number(state.score) || 0}</motion.span>
       {/* the board */}
-      <div className={`absolute inset-x-[6%] bottom-[5%] top-[20%] z-20 grid gap-[1.2vh] p-[1.8vh] ${SKIN.frame}`}
+      <div className={`absolute inset-x-[6%] bottom-[5%] top-[20%] z-20 grid gap-[1.2vh] p-[1.8vh] ${pearls ? 'rounded-[3vh] border-[0.5vh] border-white/70 bg-gradient-to-b from-sky-300/45 to-sky-700/45 shadow-[inset_0_0_4vh_rgba(255,255,255,0.35),0_1.6vh_3vh_rgba(3,60,90,0.35)] backdrop-blur-[2px]' : SKIN.frame}`}
         style={{ gridTemplateColumns: `repeat(${cats.length}, minmax(0, 1fr))`, gridTemplateRows: `auto repeat(${rows}, minmax(0, 1fr))` }}>
         {cats.map((c, ci) => (
           <div key={`h${ci}`} className={`flex items-center justify-center gap-2 rounded-[1.6vh] px-2 py-[1vh] text-center font-black ${jewel(ci)}`} style={{ fontSize: 'min(2.8vh, 1.9vw)' }}>
@@ -93,12 +95,26 @@ export function QuizBoardScene({ scene, onNext, onWin, onLose, sync }: { scene: 
           const exists = !!c.tiles[ri];
           const got = answered.has(key);
           return exists ? (
+            pearls ? (
+              /* a scallop shell: closed with its points on a pearl; answered = open, the pearl shines */
+              <motion.button key={key} type="button" onClick={() => pickTile(key)} disabled={got} aria-label={got ? 'answered' : `${(ri + 1) * 100}`}
+                className="relative grid place-items-center" style={{ gridColumn: ci + 1, gridRow: ri + 2 }}
+                whileHover={got || reduce ? {} : { scale: 1.06, rotate: -2 }} whileTap={got ? {} : { scale: 0.92 }}
+                animate={got || reduce ? {} : { y: [0, -3, 0] }} transition={{ duration: 2.4 + ((ci + ri) % 3) * 0.4, repeat: Infinity }}>
+                <span className="absolute inset-x-[8%] inset-y-[6%]" style={{ borderRadius: '50% 50% 44% 44% / 62% 62% 38% 38%', background: `repeating-conic-gradient(from 270deg at 50% 100%, ${SHELLS[(ci + ri) % SHELLS.length]} 0deg 10deg, #FEFBDD 10deg 20deg)`, opacity: got ? 0.45 : 1, boxShadow: '0 0.8vh 1.4vh rgba(3,60,90,0.3)', transform: got ? 'scaleY(0.82) translateY(10%)' : undefined, transition: 'all .4s' }} />
+                <span className="relative grid place-items-center rounded-full font-black text-sky-950"
+                  style={{ width: 'min(9vh, 6vw)', aspectRatio: '1', fontSize: got ? 'min(4vh, 2.8vw)' : 'min(2.8vh, 1.9vw)', background: 'radial-gradient(circle at 32% 28%, #ffffff 0 18%, #F0F9FF 45%, #BAE6FD 100%)', border: '0.3vh solid rgba(255,255,255,0.9)', boxShadow: got ? '0 0 2vh 0.6vh rgba(254,175,21,0.8)' : '0 0.4vh 0.8vh rgba(3,60,90,0.3)' }}>
+                  {got ? '✓' : (ri + 1) * 100}
+                </span>
+              </motion.button>
+            ) : (
             <motion.button key={key} type="button" onClick={() => pickTile(key)} disabled={got}
               className={`grid place-items-center font-black ${got ? 'rounded-[1.6vh] border-[0.3vh] border-[#FEAF15]/30 bg-white/10 text-[#FEAF15]/70' : `${SKIN.card} ${SKIN.ink}`}`}
               style={{ fontSize: 'min(5vh, 3.4vw)', gridColumn: ci + 1, gridRow: ri + 2 }}
               whileHover={got || reduce ? {} : { scale: 1.04 }} whileTap={got ? {} : { scale: 0.95 }}>
               {got ? '✓' : (ri + 1) * 100}
             </motion.button>
+            )
           ) : <div key={key} style={{ gridColumn: ci + 1, gridRow: ri + 2 }} />;
         }))}
       </div>
@@ -109,7 +125,7 @@ export function QuizBoardScene({ scene, onNext, onWin, onLose, sync }: { scene: 
             initial={reduce ? false : { opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <motion.div className="w-full" initial={reduce ? false : { rotateY: 90, scale: 0.7 }} animate={{ rotateY: 0, scale: 1 }} transition={{ duration: 0.45 }}>
               <div className="mb-[1.4vh] text-center font-black text-yellow-300" style={{ ...THICK_WORDS, fontSize: 'min(4.4vh, 3vw)' }}>
-                {state.boom ? '💥 BOOM! ×2 · ' : ''}{cats[oc]?.emoji} {cats[oc]?.name} · {(or + 1) * 100 * (state.boom ? 2 : 1)}
+                {state.boom ? (pearls ? '🐙 Bub’s bonus! ×2 · ' : '💥 BOOM! ×2 · ') : ''}{cats[oc]?.emoji} {cats[oc]?.name} · {(or + 1) * 100 * (state.boom ? 2 : 1)}
               </div>
               <QuestionCard ask={tile.ask} choices={tile.choices} img={tile.img} wrong={Number(state.wrong)} onPick={answer} onHear={() => cueSpeak(tile.ask, voiceOf(scene.who))} tone="amber" />
             </motion.div>

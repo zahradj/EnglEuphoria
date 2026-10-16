@@ -18,6 +18,7 @@ import { CLAY_BUTTON, THICK_WORDS } from '../../unit1/scene-components/shared';
 type Tower = Extract<Scene, { kind: 'tower-pull' }>;
 const LAYERS = 5;
 const WOOD = ['from-amber-300 to-amber-500', 'from-orange-300 to-amber-600', 'from-yellow-200 to-amber-400'];
+const SAND = ['from-[#FEF3C7] to-[#FCD34D]', 'from-[#FDE68A] to-[#F5B53A]', 'from-[#FEFBDD] to-[#FDE68A]'];
 
 export function TowerPullScene({ scene, onNext, onWin, onLose, sync }: { scene: Tower; onNext: () => void; onWin: (gem: boolean) => void; onLose: () => void; sync?: ActivitySync }) {
   const reduce = useReducedMotion();
@@ -74,20 +75,26 @@ export function TowerPullScene({ scene, onNext, onWin, onLose, sync }: { scene: 
 
   // geometry (all in % of the tower box): base layers bottom-up, then the stacked blocks on top
   const LH = 100 / (LAYERS + Math.ceil(total / 3) + 1); // layer height
+  const sand = scene.look === 'sand';
+  const SKINS = sand ? SAND : WOOD;
+  const edge = sand ? 'border-[#B45309]/45' : 'border-amber-900/70';
+  const topLayer = pulled.length ? LAYERS + Math.floor((pulled.length - 1) / 3) + 1 : LAYERS;
   return (
     <div className="absolute inset-0 select-none overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
       <div className="absolute inset-0 bg-black/20" />
       {done && <Confetti count={90} />}
       <div className="pointer-events-none absolute inset-x-0 top-[5%] z-30 flex justify-center px-14">
         <span className="text-center font-black text-white" style={{ ...THICK_WORDS, fontSize: 'clamp(1.1rem, min(calc(2.6*var(--svw,1vw)), 4.4vh), 2.1rem)' }}>
-          {done ? scene.doneLine : `🧱 ${scene.title}`}
+          {done ? scene.doneLine : `${sand ? '🏰' : '🧱'} ${scene.title}`}
         </span>
       </div>
-      {!done && <span className="absolute right-3 top-[13%] z-30 rounded-full bg-white/95 px-4 py-2 font-black text-amber-700 shadow-lg" style={{ fontSize: 'min(3vh, 2vw)' }}>🧱 {answered}/{total}</span>}
+      {!done && <span className="absolute right-3 top-[13%] z-30 rounded-full bg-white/95 px-4 py-2 font-black text-amber-700 shadow-lg" style={{ fontSize: 'min(3vh, 2vw)' }}>{sand ? '🐚' : '🧱'} {answered}/{total}</span>}
       {/* the tower */}
       <div className="absolute bottom-[5%] left-[6%] top-[14%] z-20 w-[34%]">
-        {/* table */}
-        <div className="absolute -inset-x-[10%] bottom-0 h-[3%] rounded-full bg-gradient-to-b from-amber-800 to-amber-950 shadow-xl" />
+        {/* table (sand: a sand mound) */}
+        {sand
+          ? <div className="absolute -inset-x-[22%] -bottom-[2%] h-[8%] rounded-[50%] bg-gradient-to-b from-[#FDE68A] to-[#E3A33A] shadow-xl" />
+          : <div className="absolute -inset-x-[10%] bottom-0 h-[3%] rounded-full bg-gradient-to-b from-amber-800 to-amber-950 shadow-xl" />}
         <motion.div key={Number(state.wobble) || 0} className="absolute inset-x-[12%] bottom-[3%] top-0 origin-bottom"
           animate={reduce || !(Number(state.wobble) > 0) ? {} : { rotate: [0, -3, 2.5, -1.5, 1, 0] }} transition={{ duration: 0.9 }}>
           {Array.from({ length: LAYERS * 3 }, (_, b) => {
@@ -99,14 +106,24 @@ export function TowerPullScene({ scene, onNext, onWin, onLose, sync }: { scene: 
               <AnimatePresence key={b}>
                 {!out && (
                   <motion.button type="button" onClick={() => pick(b)} disabled={!ok} aria-label={`block ${b + 1}`}
-                    className={`absolute rounded-[0.8vh] border-[0.35vh] border-amber-900/70 bg-gradient-to-b ${WOOD[(layer + col) % 3]} shadow-[inset_0_-0.6vh_0_rgba(120,53,15,0.25)] ${sel ? 'ring-[0.6vh] ring-yellow-300' : ''}`}
+                    className={`absolute rounded-[0.8vh] border-[0.35vh] ${edge} bg-gradient-to-b ${SKINS[(layer + col) % 3]} shadow-[inset_0_-0.6vh_0_rgba(120,53,15,0.25)] ${sel ? 'ring-[0.6vh] ring-yellow-300' : ''}`}
                     style={{ left: `${col * 33.6}%`, width: '32.6%', bottom: `${layer * LH}%`, height: `${LH * 0.94}%` }}
                     animate={sel && !reduce ? { x: [0, 14, 10, 14] } : { x: 0 }} transition={{ duration: 0.6, repeat: sel ? Infinity : 0, repeatType: 'reverse' }}
                     exit={{ x: col === 0 ? -260 : 260, opacity: 0, transition: { duration: 0.45 } }}
                     whileHover={ok ? { y: -3 } : {}}>
-                    {/* wood grain */}
-                    <span className="absolute inset-x-[10%] top-[35%] h-[0.3vh] rounded-full bg-amber-900/15" />
-                    <span className="absolute inset-x-[20%] top-[60%] h-[0.3vh] rounded-full bg-amber-900/10" />
+                    {sand ? (
+                      /* sand speckles and a tiny shell */
+                      <>
+                        <span className="absolute inset-0 opacity-40" style={{ backgroundImage: 'radial-gradient(circle, #B45309 0.7px, transparent 1px)', backgroundSize: '9px 7px' }} />
+                        {(layer + col) % 4 === 1 && <span className="absolute right-[10%] top-[18%] text-[min(1.8vh,1.2vw)]">🐚</span>}
+                      </>
+                    ) : (
+                      <>
+                        {/* wood grain */}
+                        <span className="absolute inset-x-[10%] top-[35%] h-[0.3vh] rounded-full bg-amber-900/15" />
+                        <span className="absolute inset-x-[20%] top-[60%] h-[0.3vh] rounded-full bg-amber-900/10" />
+                      </>
+                    )}
                     {ok && <span className="relative font-black text-amber-900/60" style={{ fontSize: 'min(2.2vh, 1.4vw)' }}>?</span>}
                   </motion.button>
                 )}
@@ -117,13 +134,18 @@ export function TowerPullScene({ scene, onNext, onWin, onLose, sync }: { scene: 
           {pulled.map((_, k) => {
             const layer = LAYERS + Math.floor(k / 3); const col = k % 3;
             return (
-              <motion.div key={`top-${k}`} className={`absolute rounded-[0.8vh] border-[0.35vh] border-amber-900/70 bg-gradient-to-b ${WOOD[(layer + col) % 3]} shadow-lg`}
+              <motion.div key={`top-${k}`} className={`absolute rounded-[0.8vh] border-[0.35vh] ${edge} bg-gradient-to-b ${SKINS[(layer + col) % 3]} shadow-lg`}
                 style={{ left: `${col * 33.6}%`, width: '32.6%', bottom: `${layer * LH}%`, height: `${LH * 0.94}%` }}
                 initial={reduce || k < pulled.length - 1 ? false : { y: -220, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ type: 'spring', stiffness: 220, damping: 16, delay: 0.3 }}>
-                <span className="absolute inset-0 grid place-items-center text-[min(2.4vh,1.6vw)]">⭐</span>
+                <span className="absolute inset-0 grid place-items-center text-[min(2.4vh,1.6vw)]">{sand ? '🐚' : '⭐'}</span>
               </motion.div>
             );
           })}
+          {/* sand: a little flag waves on top of the castle */}
+          {sand && (
+            <motion.span className="absolute left-1/2 -translate-x-1/2 text-[min(5vh,3.4vw)]" style={{ bottom: `${topLayer * LH}%`, transformOrigin: 'bottom left' }}
+              animate={reduce ? {} : { rotate: [-4, 6, -4] }} transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}>🚩</motion.span>
+          )}
         </motion.div>
       </div>
       {/* the question */}

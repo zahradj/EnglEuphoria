@@ -82,11 +82,13 @@ export function MemoryScene({ scene, onNext, onWin, onLose, sync }: { scene: Ext
     }
   };
   const complete = matched.length === scene.pairs.length;
+  const shells = scene.look === 'shells';
 
   return (
     <div className="absolute inset-0 flex items-center justify-center overflow-hidden pb-[11vh] pt-[21vh]">
       <CalmBg img={scene.bg} />
-      <div className={`pointer-events-none absolute left-1/2 top-4 z-30 max-w-[92%] -translate-x-1/2 px-5 py-2 text-center ${SKIN.pill}`} style={{ fontSize: PILL_FONT }}>🧠 {scene.teacher}</div>
+      {shells && <style>{`@keyframes mem-shell-bob { 0%,100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-0.6vh) rotate(2deg); } }`}</style>}
+      <div className={`pointer-events-none absolute left-1/2 top-4 z-30 max-w-[92%] -translate-x-1/2 px-5 py-2 text-center ${SKIN.pill}`} style={{ fontSize: PILL_FONT }}>{shells ? '🐚' : '🧠'} {scene.teacher}</div>
       <div className={`relative z-10 grid w-full grid-cols-4 gap-[1.6vh] p-[2.2vh] ${SKIN.frame}`} style={{ maxWidth: `min(880px, calc((64vh - 40px) * ${(4 / Math.max(1, Math.ceil(deck.length / 4))).toFixed(3)}))` }}>
         {deck.map((card) => {
           const isMatched = matchedSet.has(card.pairId);
@@ -94,12 +96,25 @@ export function MemoryScene({ scene, onNext, onWin, onLose, sync }: { scene: Ext
           return (
             <button key={card.key} onClick={() => tap(card)} disabled={busy || isMatched} className="relative aspect-square [perspective:800px]" aria-label={isFlipped ? card.label : 'Hidden card'}>
               <div className="absolute inset-0 transition-transform duration-500 [transform-style:preserve-3d]" style={{ transform: isFlipped ? 'rotateY(180deg)' : undefined }}>
+                {shells ? (
+                  /* Back (sea worlds): a scallop shell on the sand — fanned ribs in the brand shades, a hinge, a pearl peeking out. */
+                  <div className="absolute inset-[3%] [backface-visibility:hidden]" style={{ filter: 'drop-shadow(0 0.6vh 0.8vh rgba(120,53,15,0.35))' }}>
+                    <div className="relative h-full w-full" style={{ animation: `mem-shell-bob ${3 + (deck.indexOf(card) % 4) * 0.45}s ease-in-out infinite` }}>
+                      <div className="absolute inset-x-[4%] bottom-[18%] top-[6%] overflow-hidden" style={{ borderRadius: '50% 50% 46% 46% / 62% 62% 38% 38%', background: `repeating-conic-gradient(from 270deg at 50% 100%, ${['#FE6A2F', '#FEAF15', '#38BDF8', '#22C55E'][deck.indexOf(card) % 4]} 0deg 9deg, #FEFBDD 9deg 18deg)`, boxShadow: 'inset 0 -1.2vh 2vh rgba(120,53,15,0.28)' }}>
+                        <div className="absolute -left-1/4 top-0 h-full w-1/3 rotate-12 bg-white/35 blur-sm" />
+                      </div>
+                      <div className="absolute bottom-[8%] left-1/2 h-[16%] w-[32%] -translate-x-1/2 rounded-[40%] bg-gradient-to-b from-[#FEAF15] to-[#D97706]" />
+                      <span className="absolute bottom-[1%] left-1/2 h-[15%] w-[15%] -translate-x-1/2 rounded-full shadow" style={{ background: 'radial-gradient(circle at 32% 28%, #fff 0 25%, #F0F9FF 50%, #BAE6FD 100%)' }} />
+                    </div>
+                  </div>
+                ) : (
                 <div className={`absolute inset-0 flex items-center justify-center overflow-hidden rounded-[2vh] [backface-visibility:hidden] ${SKIN.cardBack}`}>
                   <div className="absolute inset-0 opacity-25" style={{ backgroundImage: 'radial-gradient(circle, #FDE68A 1.4px, transparent 1.8px)', backgroundSize: '1.6vh 1.6vh' }} />
                   <div className="absolute inset-[9%] rounded-[1.4vh] border-[0.3vh] border-dashed border-[#FEAF15]/60" />
                   <span className="relative text-[min(6.5vh,4.6vw)] drop-shadow-[0_0.3vh_0_rgba(0,0,0,0.3)]">⭐</span>
                 </div>
-                <div className={`absolute inset-0 flex flex-col items-center justify-center overflow-hidden [backface-visibility:hidden] [transform:rotateY(180deg)] ${SKIN.card} ${card.variant === 'pic' ? 'p-[0.6vh]' : 'p-2'} ${isMatched ? 'ring-[0.5vh] ring-[#4ADE80]' : ''}`}>
+                )}
+                <div className={`absolute inset-0 flex flex-col items-center justify-center overflow-hidden [backface-visibility:hidden] [transform:rotateY(180deg)] ${shells ? 'rounded-[2vh] border-[0.4vh] border-[#FEAF15] bg-[radial-gradient(circle_at_35%_28%,#ffffff_0,#F0F9FF_55%,#BAE6FD_100%)] shadow-[0_0.6vh_1.2vh_rgba(3,105,161,0.3)]' : SKIN.card} ${card.variant === 'pic' ? 'p-[0.6vh]' : 'p-2'} ${isMatched ? `ring-[0.5vh] ${shells ? 'ring-[#FEAF15]' : 'ring-[#4ADE80]'}` : ''}`}>
                   {isMatched && <span className="absolute end-[6%] top-[6%] z-10 grid h-[3.4vh] w-[3.4vh] place-items-center rounded-full bg-[#16A34A] text-[2vh] font-black text-white shadow">✓</span>}
                   {card.variant === 'pic' ? (
                     card.img && card.crop ? (

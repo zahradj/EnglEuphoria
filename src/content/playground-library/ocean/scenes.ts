@@ -1503,3 +1503,279 @@ export const LESSON_A1U6L5_SCENES: Scene[] = [
   goodbyeSong('oc5-goodbye-song', reefPage(12)),
   { id: 'oc5-finale', kind: 'finale', bg: reefPage(11), who: 'pip', line: 'You read the whole story and found the treasure! See you next time! \u{1F4D6}' },
 ];
+
+/* =============================================================================
+ * A1 Unit 6 Lesson 6: "Ocean Question Game!" (extra practice — plan docs/a1-unit-6-ocean.md §6.6)
+ * Objective: I can ask and answer questions about sea animals quickly and correctly.
+ * Story frame: after the treasure, Coral hosts a game show on the seabed — the Pearl Buzzer Show — and every game is
+ *   played with things from the sea (shells, sand, sails, pearls). Setting: an underwater game-show stage (new Canva
+ *   picture), then the beach and the reef.
+ * Practice ladder: Revise (Remember? Lesson 5, shadow mode) → model the two questions (I do: What is it doing? / Is it
+ *   …ing?) → we do (echo) → Read and Match → you do (Pearl Buzzer Show ★, Shell Memory, Hot Shell, Sandcastle Tower,
+ *   Sail Race, Pearl Dive Quiz) → the child asks (swap) → phonics review (Twister Race, Blend & Read) → free talk with
+ *   Bub → check. Accuracy before speed: no timers; a wrong answer is a gentle "try again".
+ * Research (mechanics only): docs/research/playground-a1u6-research.md, Lesson 6.
+ * ========================================================================= */
+
+export const LESSON_A1U6L6_TITLE = 'Ocean Question Game!';
+export const LESSON_A1U6L6_OBJECTIVE = 'I can ask and answer questions about sea animals quickly and correctly.';
+
+const bgStage = `${S}/bg-a1u6-buzzer-stage-wide.png`;
+const PEARL_FACES = [
+  { label: 'hiding', name: 'Bub', img: ACT.hiding },
+  { label: 'walking', name: 'the crab', img: ACT.walking },
+  { label: 'sleeping', name: 'the starfish', img: ACT.sleeping },
+  { label: 'eating', name: 'the turtle', img: ACT.turtleEating },
+  { label: 'diving', name: 'the whale', img: ACT.diving },
+  { label: 'swimming', name: 'the fish', img: ACT.fishSwimming },
+];
+
+export const LESSON_A1U6L6_SCENES: Scene[] = [
+  { id: 'oc6-title', kind: 'title-card', bg: bgStage, level: 'A1', unit: 'Unit 6', lessonLabel: 'Lesson 6', title: 'Ocean Question Game!', subtitle: 'Ask, answer — and win the pearls!', cta: '\u{1F41A} LET’S PLAY!' },
+  {
+    // Remember? (owner, 2026-10-07): Lesson 5 — the story things. Shadow mode (Lesson 5 used click); clear outlines.
+    id: 'oc6-recall-warmup', kind: 'recall-warmup', bg: bgReef, who: 'pip', mode: 'shadow',
+    fromLabel: 'Lesson 5 · The Treasure Reef',
+    teacher: 'Guided: Pip says a word from the story — the student finds its shadow and says the story sentence.',
+    items: [
+      { word: 'treasure', say: 'The treasure! Is it the treasure? Yes, it is!', img: CHEST },
+      { word: 'boat', say: 'The boat! A boat on the sea.', img: BOAT },
+      { word: 'starfish', say: 'The starfish! The starfish is sleeping.', img: SEA.starfish },
+      { word: 'octopus', say: 'Bub! Bub is helping.', img: BUB },
+    ],
+  },
+  helloSong('oc6-hello-song', bgStage),
+  { id: 'oc6-welcome', kind: 'meet', focus: ['question'], bg: bgStage, who: 'coral', cardSide: 'right', teacher: 'Hook: Coral is the game-show host today. Every right answer wins a pearl! Ask: Do you like game shows?', line: 'Welcome to the Ocean Question Game! Ask and answer — and win the pearls!', repeat: 'Let’s play!' },
+  /* Model (I do): the two questions of the unit, one page each, then the short answers */
+  {
+    id: 'oc6-model-questions', kind: 'prea1', teacher: 'Model (I do → we do): the teacher asks, points to the picture and answers; then the student repeats. The voice goes UP on "Is it…?" and DOWN on the answer.',
+    scene: {
+      id: 'oc6-model-questions', kind: 'listen-repeat-cards', bg: bgReef, teacher: 'Listen — then ask and answer!',
+      cards: [
+        { who: 'pip', sentence: 'What is it doing? It’s walking.', img: ACT.walking, imgLabel: 'walking' },
+        { who: 'mia', sentence: 'Is it sleeping? Yes, it is.', img: ACT.sleeping, imgLabel: 'sleeping' },
+        { who: 'pip', sentence: 'Is it swimming? No, it isn’t. It’s eating.', img: ACT.turtleEating, imgLabel: 'eating' },
+        { who: 'mia', sentence: 'Is it a whale? Yes, it is. It’s diving!', img: ACT.diving, imgLabel: 'diving' },
+      ],
+    },
+  },
+  { id: 'oc6-rule', kind: 'meet', focus: ['Is it'], bg: bgStage, who: 'pip', cardSide: 'left', teacher: 'The rule (say it, the student repeats): ask "Is it …ing?" — answer "Yes, it is." or "No, it isn’t." Do the voice: up, then down.', line: 'Is it swimming? Yes, it is! Is it sleeping? No, it isn’t!', repeat: 'Is it …ing? Yes, it is. / No, it isn’t.' },
+  { id: 'oc6-echo', kind: 'echo', bg: bgStage, who: 'coral', textSide: 'top', teacher: 'Guided (we do): game-show voice! Ask like a host — slow, then fast.', word: 'What is it doing? Is it hiding?' },
+  // Owner 2026-10-13/14: Read and Match after the model. Design differs from L5 (portholes, frames) and U5L6 (none).
+  {
+    id: 'oc6-match', kind: 'picture-match', look: 'polaroids', prompt: 'Read and match',
+    teacher: 'Read and match (creative idea: Coral’s underwater camera — the pictures are photos from the reef): the student reads each sentence, drags it under its photo, then asks the question: Is it hiding? Yes, it is!',
+    items: [
+      { word: 'It’s hiding.', img: ACT.hiding },
+      { word: 'It’s walking.', img: ACT.walking },
+      { word: 'It’s sleeping.', img: ACT.sleeping },
+      { word: 'It’s diving.', img: ACT.diving },
+      { word: 'It’s swimming.', img: ACT.fishSwimming },
+    ],
+    bg: bgReef,
+  },
+  // Creative idea: an underwater game show — clam-shell podiums with golden frames, pearl strings, red buzzers (Canva).
+  {
+    id: 'oc6-buzzer', kind: 'prea1', teacher: 'Signature game (evidence: 5 of 6): the Pearl Buzzer Show! Coral asks a question — the student presses the buzzer under the right animal, then says the whole answer.',
+    scene: {
+      id: 'oc6-buzzer', kind: 'buzzer-show', bg: bgStage, who: 'pip',
+      teacher: 'Listen! Press the right buzzer, then say it.',
+      intro: 'The Pearl Buzzer Show! Listen and press the buzzer!',
+      podiums: [{ x: 22.2, y: 25.3, by: 82.4 }, { x: 49.8, y: 25.3, by: 82.4 }, { x: 76.4, y: 25.3, by: 82.4 }],
+      faces: PEARL_FACES,
+      rounds: [
+        { faces: [1, 0, 2], answer: 1, line: 'Who is hiding?', reply: 'Yes! Bub is hiding!', say: 'Bub is hiding.' },
+        { faces: [2, 3, 1], answer: 2, line: 'Who is walking? It has got big claws!', reply: 'Yes! The crab is walking!', say: 'The crab is walking.' },
+        { faces: [4, 2, 5], answer: 1, line: 'Is it sleeping? Yes, it is! Who is it?', reply: 'Yes! The starfish is sleeping!', say: 'The starfish is sleeping.' },
+        { faces: [3, 5, 0], answer: 0, line: 'Who is eating sea grass?', reply: 'Yes! The turtle is eating!', say: 'The turtle is eating.' },
+        { faces: [5, 1, 4], answer: 2, line: 'It is very big. It is diving. Who is it?', reply: 'Yes! The whale is diving!', say: 'The whale is diving.' },
+        { faces: [0, 5, 3], answer: 1, line: 'Is it swimming? Yes, it is! It is small. Who is it?', reply: 'Yes! The fish is swimming!', say: 'The fish is swimming.' },
+      ],
+      doneLine: 'Six pearls! You are the buzzer champion!',
+    },
+  },
+  {
+    id: 'oc6-move-break', kind: 'prea1', teacher: 'Brain break: Coral says it — the student does it!',
+    scene: {
+      id: 'oc6-move-break', kind: 'tpr-actions', mode: 'break', bg: bgStage, who: 'mia', teacher: 'Do it with Coral!',
+      rounds: [
+        { line: 'Swim like a fish! Swim, swim!', emoji: '\u{1F41F}' },
+        { line: 'Walk like a crab! Side, side!', emoji: '\u{1F980}' },
+        { line: 'Sleep like a starfish! Shh…', emoji: '\u{2B50}' },
+        { line: 'Dive like a whale! Down, down!', emoji: '\u{1F40B}' },
+      ],
+    },
+  },
+  // Creative idea: the cards are scallop shells on the sand that open to show the picture or the sentence.
+  {
+    id: 'oc6-memory', kind: 'memory', look: 'shells', bg: bgBeach, teacher: 'Find the sentence and its picture!',
+    pairs: [
+      { id: 'crab', label: 'The crab is walking.', emoji: '\u{1F980}', img: ACT.walking },
+      { id: 'starfish', label: 'The starfish is sleeping.', emoji: '\u{2B50}', img: ACT.sleeping },
+      { id: 'bub', label: 'Bub is hiding.', emoji: '\u{1F419}', img: ACT.hiding },
+      { id: 'turtle', label: 'The turtle is eating.', emoji: '\u{1F422}', img: ACT.turtleEating },
+      { id: 'whale', label: 'The whale is diving.', emoji: '\u{1F40B}', img: ACT.diving },
+      { id: 'fish', label: 'The fish is swimming.', emoji: '\u{1F41F}', img: ACT.fishSwimming },
+    ],
+  },
+  // Creative idea: on the beach we pass a SHELL, not a coconut — where it stops, that friend answers.
+  {
+    id: 'oc6-hot-shell', kind: 'hot-coconut', bg: bgBeach, who: 'coral', coconutImg: SEA.shell, title: 'Hot Shell! Pass it — then answer!',
+    teacher: 'Free: tap Pass! — where the shell stops, the student answers the question (for themself or to help the friend). Quick, but right first!',
+    seats: [
+      { name: 'You', img: '' },
+      { name: 'Coral', img: CORAL },
+      { name: 'Bub', img: BUB },
+      { name: 'Mia', img: item('mia-wave') },
+      { name: 'Pip', img: item('pip-clap') },
+    ],
+    rounds: [
+      { ask: 'Is the whale small?', choices: ['Yes, it is.', 'No, it isn’t.'], answer: 1, stop: 2 },
+      { ask: 'What is the crab doing?', choices: ['It’s walking.', 'It’s flying.'], answer: 0, stop: 0 },
+      { ask: 'Is the starfish sleeping?', choices: ['Yes, it is.', 'No, it isn’t.'], answer: 0, stop: 3 },
+      { ask: 'Where does Coral live?', choices: ['She lives in the sea.', 'She lives in space.'], answer: 0, stop: 1 },
+      { ask: 'Is Bub hiding now?', choices: ['Yes, he is.', 'No, he isn’t. He’s helping!'], answer: 1, stop: 0 },
+    ],
+    doneLine: 'Hot shell champion!',
+  },
+  { id: 'oc6-echo-2', kind: 'echo', bg: bgBeach, who: 'bub', textSide: 'top', teacher: 'Guided: the answers! A happy "Yes, it is!" with a thumbs up, a funny "No, it isn’t!" with a head shake.', word: 'Yes, it is! No, it isn’t!' },
+  // Creative idea: a sandcastle on the beach — every right answer adds a block of sand, the flag goes on top.
+  {
+    id: 'oc6-sandcastle', kind: 'tower-pull', look: 'sand', bg: bgBeach, who: 'leo', title: 'Sandcastle Tower',
+    teacher: 'Game: the student picks a sand block and answers its question. Right — the block slides out and goes on top. Wrong — the castle wobbles, try again. It never falls!',
+    rounds: [
+      { ask: 'What is it? It’s big. It lives in the sea.', choices: ['It’s a whale.', 'It’s a crab.', 'It’s a fish.'], answer: 0 },
+      { ask: 'Is the shark swimming?', choices: ['Yes, it is.', 'No, it isn’t.'], answer: 0 },
+      { ask: 'What is the turtle doing?', choices: ['It’s eating.', 'It’s hiding.', 'It’s flying.'], answer: 0 },
+      { ask: 'The octopus is …', choices: ['hiding.', 'big and grey.', 'a whale.'], answer: 0 },
+      { ask: 'Is the crab sleeping?', choices: ['Yes, it is.', 'No, it isn’t. It’s walking.'], answer: 1 },
+      { ask: 'What does the turtle eat?', choices: ['It eats sea grass.', 'It eats pizza.'], answer: 0 },
+      { ask: 'Where does the starfish live?', choices: ['It lives in the sea.', 'It lives in a tree.'], answer: 0 },
+      { ask: 'What is the weather like? It’s windy. The waves are …', choices: ['big.', 'sleeping.', 'small.'], answer: 0 },
+    ],
+    doneLine: 'Look! Our sandcastle is so tall! Well done!',
+  },
+  // Creative idea: two boats on the waves — every right answer hoists that team's sail up the mast.
+  {
+    id: 'oc6-sail-race', kind: 'flag-race', look: 'sails', bg: reefPage(1), who: 'leo', title: 'Sail Race: you vs your teacher',
+    teacher: 'Team game, student vs teacher: take turns. On the student’s turn they answer; on the teacher’s turn the student READS the question to the teacher and the teacher answers. Each right answer hoists your sail one step. Nobody slides back.',
+    rounds: [
+      { ask: 'Is it a shark? It’s big and grey.', choices: ['Yes, it is.', 'It’s eating.'], answer: 0 },
+      { ask: 'What is the fish doing?', choices: ['It’s swimming.', 'It’s walking.'], answer: 0 },
+      { ask: 'Is the whale diving?', choices: ['Yes, it is.', 'Yes, it isn’t.'], answer: 0 },
+      { ask: 'What is Bub doing on page 4?', choices: ['He’s hiding.', 'He’s diving.'], answer: 0 },
+      { ask: 'Is the starfish walking?', choices: ['No, it isn’t.', 'Yes, it walking.'], answer: 0 },
+      { ask: 'Where does the crab live?', choices: ['On the beach.', 'In space.'], answer: 0 },
+      { ask: 'Is it sunny again at the end?', choices: ['Yes, it is!', 'No, it is.'], answer: 0 },
+      { ask: 'What is your favourite sea animal?', choices: ['I like whales!', 'It’s Tuesday.'], answer: 0 },
+    ],
+    doneLine: 'Your sail is at the top! What a race!',
+  },
+  { id: 'oc6-host-model', kind: 'meet', focus: ['host'], bg: bgStage, who: 'coral', cardSide: 'right', teacher: 'Model (I do) before the swap: Coral shows how a host asks — point at the picture, voice up, wait for the answer.', line: 'I’m the host! Is it a turtle? What is it doing? Now you are the host!', repeat: 'Is it a …? What is it doing?' },
+  {
+    id: 'oc6-swap', kind: 'join-stage', bg: bgStage, teacher: 'Free: swap! Now the STUDENT is the game-show host and asks Coral. Coral answers. Evidence: 3 questions asked correctly (voice up).', cast: ['coral'],
+    turns: [
+      { who: 'student', line: 'Is it a whale?' },
+      { who: 'coral', line: 'No, it isn’t! It’s a turtle.' },
+      { who: 'student', line: 'What is it doing?' },
+      { who: 'coral', line: 'It’s eating sea grass.' },
+      { who: 'student', line: 'Is it swimming?' },
+      { who: 'coral', line: 'Yes, it is! Great question!' },
+    ],
+  },
+  // Creative idea: a pearl dive — every tile is a shell with its points on a pearl; Bub's bonus shell doubles.
+  {
+    id: 'oc6-pearl-dive', kind: 'quiz-board', look: 'pearls', bg: bgReef, who: 'coral', title: 'Pearl Dive Quiz!',
+    teacher: 'Game: the student picks any shell — harder questions are worth more pearls. Answer, then say it aloud. One shell is Bub’s bonus: double pearls!',
+    categories: [
+      { name: 'Animals', emoji: '\u{1F40B}', tiles: [{ ask: 'What is it?', choices: ['It’s a shark.', 'It’s a crab.'], answer: 0, img: SEA.shark }, { ask: 'It’s small. It has got claws. What is it?', choices: ['a crab', 'a whale'], answer: 0 }, { ask: 'It has got eight arms. It is shy.', choices: ['an octopus', 'a turtle'], answer: 0 }] },
+      { name: 'Doing', emoji: '\u{1F3CA}', tiles: [{ ask: 'What is it doing?', choices: ['It’s sleeping.', 'It’s eating.'], answer: 0, img: ACT.sleeping }, { ask: 'Is it hiding?', choices: ['Yes, it is.', 'No, it isn’t.'], answer: 0, img: ACT.hiding }, { ask: 'Is it walking?', choices: ['Yes, it is.', 'No, it isn’t. It’s diving.'], answer: 1, img: ACT.diving }] },
+      { name: 'Where?', emoji: '\u{1F3DD}\u{FE0F}', tiles: [{ ask: 'Where does the fish live?', choices: ['In the sea.', 'In a house.'], answer: 0 }, { ask: 'What does the shark eat?', choices: ['It eats fish.', 'It eats cake.'], answer: 0 }, { ask: 'Where does the turtle live?', choices: ['On the reef.', 'On the moon.'], answer: 0 }] },
+      { name: 'Story', emoji: '\u{1F4D6}', tiles: [{ ask: 'Who is Coral?', choices: ['A mermaid.', 'A shark.'], answer: 0, img: reefPage(2) }, { ask: 'What is the weather like?', choices: ['It’s windy.', 'It’s snowy.'], answer: 0, img: reefPage(8) }, { ask: 'Who helps find the treasure?', choices: ['Bub.', 'The whale.'], answer: 0, img: reefPage(10) }] },
+    ],
+    boom: [1, 2],
+    doneLine: 'The board is finished! Pearl diving champion!',
+  },
+  {
+    id: 'oc6-reader', kind: 'reader', bg: reefPage(4), title: 'The Treasure Reef — read and ask', doneLine: 'Great reading! Great questions!',
+    teacher: 'Reading: the student reads pages 4-6 alone, then ASKS the teacher one question about each page (Is Bub hiding? What is the crab doing?).',
+    pages: TREASURE_REEF.slice(3, 6),
+  },
+  { id: 'oc6-echo-3', kind: 'echo', bg: reefPage(5), who: 'mia', textSide: 'top', teacher: 'Guided: a question chain — the student asks, the teacher answers, then swap. Faster each time!', word: 'Is the crab walking? Yes, it is! Is the starfish walking? No, it isn’t!' },
+  {
+    id: 'oc6-move-break-2', kind: 'prea1', teacher: 'Brain break: Bub asks — the student answers and does it!',
+    scene: {
+      id: 'oc6-move-break-2', kind: 'tpr-actions', mode: 'break', bg: bgReef, who: 'pip', teacher: 'Answer — and do it!',
+      rounds: [
+        { line: 'Are you swimming? Yes, I am! Swim, swim!', emoji: '\u{1F3CA}' },
+        { line: 'Are you hiding? Yes, I am! Hide like Bub!', emoji: '\u{1F648}' },
+        { line: 'Are you sleeping? No, I’m not! Jump!', emoji: '\u{1F998}' },
+      ],
+    },
+  },
+  /* Phonics review: the unit twisters, then Blend & Read */
+  // Creative idea: a splash twister race — every twister fills a shell.
+  {
+    id: 'oc6-twister-race', kind: 'tongue-twister', look: 'sea', speeds: 3, bg: reefPage(12), who: 'pip', focus: '',
+    teacher: 'Reading: the Twister Race! All the Unit 6 twisters — slow, faster, then splash speed!',
+    line: 'Why do white whales whistle? A goat in a coat floats on a boat. Fish wish for a big splash. Bub wishes for a shiny shell. Splash!',
+    lines: ['Why do white whales whistle?', 'A goat in a coat floats on a boat.', 'Fish wish for a big splash.', 'Bub wishes for a shiny shell. Splash!'],
+  },
+  {
+    id: 'oc6-blend', kind: 'sound-blend', bg: bgBeach,
+    teacher: 'Reading: say each sound, blend them, find the picture — then read the question and answer it.',
+    rounds: [
+      { word: 'shell', sounds: ['sh', 'e', 'll'], img: SEA.shell, sentence: 'Is it a shell? Yes, it is!' },
+      { word: 'crab', sounds: ['c', 'r', 'a', 'b'], img: SEA.crab, sentence: 'Is the crab walking? Yes, it is!' },
+      { word: 'fish', sounds: ['f', 'i', 'sh'], img: SEA.fish, sentence: 'Is the fish sleeping? No, it isn’t!' },
+    ],
+  },
+  /* Free: Bub's turn — the student hides an animal, Bub asks */
+  {
+    id: 'oc6-bub-asks', kind: 'join-stage', bg: reefPage(4), teacher: 'Free: the student thinks of a sea animal and what it is doing (a secret!). Bub asks; the student answers Yes, it is / No, it isn’t until Bub guesses. Then swap once more.', cast: ['bub'],
+    turns: [
+      { who: 'bub', line: 'Is it big?' },
+      { who: 'student', line: 'Yes, it is. / No, it isn’t.' },
+      { who: 'bub', line: 'Is it swimming?' },
+      { who: 'student', line: 'Yes, it is. / No, it isn’t.' },
+      { who: 'bub', line: 'Is it a … ? I know!' },
+      { who: 'student', line: 'Yes, it is! It’s a … . It’s …ing.' },
+    ],
+  },
+  {
+    id: 'oc6-talk-bub', kind: 'join-stage', bg: reefPage(12), teacher: 'Free: a mini-conversation with Bub — the student answers about the sea animals and about themself.', cast: ['bub'],
+    turns: [
+      { who: 'bub', line: 'What is your favourite sea animal?' },
+      { who: 'student', line: 'I like … !' },
+      { who: 'bub', line: 'What is it doing?' },
+      { who: 'student', line: 'It’s …ing.' },
+      { who: 'bub', line: 'And you? What are you doing now?' },
+      { who: 'student', line: 'I’m playing the Ocean Question Game!' },
+    ],
+  },
+  { id: 'oc6-i-can', kind: 'meet', focus: ['ask', 'answer'], bg: bgStage, who: 'coral', cardSide: 'right', teacher: 'Check: the student answered 5 of 6 buzzer rounds, asked 3 questions as the host (voice up) and answered Bub with Yes, it is / No, it isn’t — then the passport stamp!', line: 'You can ask and answer about the sea animals! Is it a champion? Yes, it is — it’s you!', repeat: 'I can ask and answer about sea animals.' },
+  {
+    id: 'oc6-sticker', kind: 'prea1', teacher: 'Sticker time! The student opens the pack and puts the Ocean sticker in their Sticker Book.',
+    scene: {
+      id: 'oc6-sticker', kind: 'sticker-reward', bg: bgStage, who: 'pip', teacher: 'Sticker time!',
+      line: 'You won the pearls! Here is your sticker.',
+      sticker: { img: SEA.shell, label: 'Question champion' },
+    },
+  },
+  petPal('oc6-pet-pal', 4, 'I want a shell from the beach! Is it my shell? Yes, it is!', [{ label: 'shell', img: SEA.shell }, { label: 'boat', img: BOAT }, { label: 'starfish', img: SEA.starfish }], 0, 'My shell! Thank you!'),
+  {
+    id: 'oc6-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
+    scene: {
+      id: 'oc6-home-mission', kind: 'home-mission', bg: bgBeach, who: 'pip',
+      line: 'Your home mission!', teacher: 'Home Mission: read the steps with the student.',
+      parentNote: 'Today your child played question games about sea animals. Play memory with them using sea-animal pictures: when they find a pair, they say what the animal is doing ("The crab is walking."). Then let them ask you: "Is it swimming?"',
+      steps: [
+        { emoji: '\u{1F0CF}', say: 'Play memory with sea-animal cards.' },
+        { emoji: '\u{1F980}', say: 'Say what each animal is doing.' },
+        { emoji: '\u{2753}', say: 'Ask your family: Is it swimming?' },
+      ],
+    },
+  },
+  goodbyeSong('oc6-goodbye-song', bgStage),
+  { id: 'oc6-finale', kind: 'finale', bg: bgStage, who: 'pip', line: 'You asked, you answered and you won the pearls! See you next time! \u{1F41A}' },
+];

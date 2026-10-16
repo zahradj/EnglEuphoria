@@ -196,3 +196,36 @@ export const QUEST_TREASURE_REEF_A1_U6L5: HomeworkQuest = {
     chest('You did it! Treasure finder!', page(11)),
   ],
 };
+
+/** Lesson 6 "Ocean Question Game!" */
+export const QUEST_OCEAN_QUESTIONS_A1_U6L6: HomeworkQuest = {
+  id: 'ocean-questions-a1-u6l6', title: 'Ocean Question Quest', subtitle: 'Ocean Question Game! · A1 Unit 6 · Lesson 6', level: 'A1', lessonKey: 'ocean-rich-6-6',
+  theme: theme('/lep1/scenes/bg-a1u6-buzzer-stage-wide.png'), voice: 'teacher', praise,
+  levels: [
+    { kind: 'picture-choice', name: 'Buzzer Round', icon: '🔴', intro: 'Listen. Tap the right animal!', img: reef,
+      rounds: [
+        { line: 'Who is walking?', answer: 'crab', options: [{ label: 'crab', src: it('crab-walking') }, { label: 'starfish', src: it('starfish-sleeping') }, { label: 'whale', src: it('whale-diving') }] },
+        { line: 'Who is diving?', answer: 'whale', options: [{ label: 'octopus', src: it('bub-hiding') }, { label: 'whale', src: it('whale-diving') }, { label: 'turtle', src: it('turtle-eating') }] },
+        { line: 'Who is eating?', answer: 'turtle', options: [{ label: 'turtle', src: it('turtle-eating') }, { label: 'crab', src: it('crab-walking') }, { label: 'starfish', src: it('starfish-sleeping') }] },
+      ] },
+    { kind: 'true-false', name: 'Yes, It Is?', icon: '❓', intro: 'Look and listen. True or false?',
+      rounds: [
+        { img: it('starfish-sleeping'), line: 'Is it sleeping? Yes, it is.', isTrue: true },
+        { img: it('bub-hiding'), line: 'Is it swimming? Yes, it is.', isTrue: false },
+        { img: it('crab-walking'), line: 'Is it walking? Yes, it is.', isTrue: true },
+      ] },
+    { kind: 'sentence-builder', name: 'Ask It!', icon: '🧱', intro: 'Listen. Build the question!',
+      rounds: [
+        { img: it('fish-swim'), line: 'Is it swimming?', extra: ['are'] },
+        { img: it('crab-walking'), line: 'What is it doing?', extra: ['where'] },
+      ] },
+    { kind: 'reading', name: 'Game Show', icon: '📖', intro: 'Read. Then answer from memory!', img: '/lep1/scenes/bg-a1u6-buzzer-stage-wide.png',
+      sentences: ['Coral asks: Is it a whale?', 'Bub says: No, it isn’t. It’s a turtle.', 'Coral asks: What is it doing?', 'Bub says: It’s eating sea grass.'],
+      questions: [
+        { q: 'Is it a whale?', options: ['No, it isn’t.', 'Yes, it is.'], answer: 'No, it isn’t.' },
+        { q: 'What is the turtle doing?', options: ['It’s eating.', 'It’s sleeping.', 'It’s walking.'], answer: 'It’s eating.' },
+      ] },
+    { kind: 'twister', name: 'Twister Race', icon: '🌀', intro: 'Build the tongue twister before the sand runs out!', img: reef, line: 'A goat in a coat floats on a boat.', seconds: 45, focus: 'oa', sayIt: 'Now say it slow, then faster!' },
+    chest('You did it! Question champion!', page(12)),
+  ],
+};

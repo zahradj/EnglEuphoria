@@ -7,6 +7,7 @@ import { Confetti } from '../../unit1/fx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
 import { voiceOf } from './shared';
 import { CLAY_BUTTON, THICK_WORDS } from '../../unit1/scene-components/shared';
+import { CalmBg } from '../../unit1/scene-components/gameFx';
 
 /* ---------- Hot Coconut (classic hot potato, modern design — docs/a1-activity-library.md §11) ----------
  * The friends sit in a circle with a star seat for the child. Tap "Pass!": a coconut hops from seat to seat to a drum
@@ -85,12 +86,14 @@ export function HotCoconutScene({ scene, onNext, onWin, onLose, sync }: { scene:
   };
   const c = seatAt(pos);
   return (
-    <div className="absolute inset-0 select-none overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
-      <div className="absolute inset-0 bg-black/15" />
+    <div className="absolute inset-0 select-none overflow-hidden">
+      {/* The seats and the passed object float over the picture: calm it so they stay the clearest things on screen. */}
+      <CalmBg img={scene.bg} />
+      <div className="absolute inset-0 bg-black/10" />
       {done && <Confetti count={70} />}
       <div className="pointer-events-none absolute inset-x-0 top-[5%] z-30 flex justify-center px-14">
         <span className="text-center font-black text-white" style={{ ...THICK_WORDS, fontSize: 'clamp(1.1rem, min(calc(2.6*var(--svw,1vw)), 4.4vh), 2.1rem)' }}>
-          {done ? scene.doneLine : `🥥 ${scene.title}`}
+          {done ? scene.doneLine : `${scene.coconutImg ? '' : '🥥 '}${scene.title}`}
         </span>
       </div>
       {!done && <span className="absolute right-3 top-[13%] z-30 rounded-full bg-white/95 px-4 py-2 font-black text-amber-700 shadow-lg" style={{ fontSize: 'min(3vh, 2vw)' }}>{round + 1}/{total}</span>}
@@ -113,7 +116,7 @@ export function HotCoconutScene({ scene, onNext, onWin, onLose, sync }: { scene:
         animate={{ left: `${c.x}%`, top: `${c.y - 9}%`, rotate: state.phase === 'passing' && !reduce ? [0, 180, 360] : 0, scale: state.phase === 'right' ? [1, 1.5, 1] : 1 }}
         transition={{ type: 'spring', stiffness: 420, damping: 22, rotate: { duration: 0.3 } }}>
         <span className="block -translate-x-1/2 -translate-y-1/2" style={{ filter: state.phase === 'right' ? 'drop-shadow(0 0 2vh #fde047)' : undefined }}>
-          {scene.coconutImg ? <img src={scene.coconutImg} alt="coconut" className="h-[1.2em]" /> : '🥥'}
+          {scene.coconutImg ? <img src={scene.coconutImg} alt="" className="h-[1.2em]" /> : '🥥'}
         </span>
       </motion.div>
       {/* pass button */}

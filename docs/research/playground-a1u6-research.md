@@ -99,3 +99,19 @@ Searched 2026-10-16. Mechanics only, never content.
 **Better than them:** the pause is a real choice inside the story — the child picks a helper and SAYS why (*Bub! He is good at hiding.*), and only the language unlocks the chest; the reveal games use the story's own pictures, so every game retells the book; the treasure chest opens on the child's spoken answer (*Is it the treasure? Yes, it is!*). No timers, gentle wrong answers.
 **Games list (L5):** Predict · Reader (whole book, pause page) · **Lift the Flap — Story Rocks** (signature: what is hiding under each rock in the story) · Tile Reveal (which page is it?) · Story Order + retell · What's Missing? · Treasure Chests (story questions) · Letter Monsters (wh / oa / sh) · Blend & Read · twister.
 **Video-game mechanic:** **branching choice** (the pause page) + **loot** (the compass piece in the chest).
+
+## Lesson 6 — Ocean Question Game! (*What is it doing? Is it …ing? Yes, it is. / No, it isn't.* — quickly and correctly)
+Searched 2026-10-16. Mechanics only, never content.
+
+| Source (URL) | What it does | Taken (mechanic) | Quality / limits |
+|---|---|---|---|
+| Boom "Present Continuous ESL Review Game Show" — https://wow.boomlearning.com/deck/5Y3v3mpaxrwa2CgML | teams pick from a numbered board; a wrong answer lets the other team steal | **Pearl Dive Quiz** (pick a shell, harder = more pearls) and the **Sail Race** turns (student vs teacher) — no stealing, nobody loses points | paid deck, grades 1-4; page seen in search |
+| Teach This "What am I doing?" — https://www.teach-this.com/images/games/what-am-i-doing.pdf | one child mimes; the others guess with present-continuous sentences; first to ten points | the mime brain breaks and the **swap**: the child becomes the host and asks | teacher PDF; seen in search |
+| Games4ESL present continuous lesson (pass the ball) — https://games4esl.com/lesson-plans/present-continuous-tense/ | music, a ball goes round, the holder acts and the class asks "What is he doing?" | **Hot Shell**: the shell is passed, the holder answers | teacher site; seen in search |
+| Cambridge Pre A1 Starters sample papers — https://www.cambridgeenglish.org/Images/423014-cambridge-english-young-learners-sample-papers-2018-volume-2.pdf | listening items "What is the crocodile doing?" with picture answers | the **Pearl Buzzer Show** rounds (listen to the question, choose the picture, then say the sentence) | official exam format; verified |
+| Twinkl "Sea Creatures Pairs" — https://www.twinkl.com/resource/sea-creatures-pairs-card-game-t-e-1650901352 | cards face down, turn two, find a pair | **Shell Memory**: sentence ↔ picture pairs, read the sentence aloud for every pair | commercial; page seen in search |
+
+**Better than them:** the buzzer only counts when the child then SAYS the whole sentence; every game is a thing from the sea (clam-shell podiums with pearl strings, scallop-shell memory cards, a shell to pass, a sandcastle, sails, pearl shells), so the review feels like one day at the sea, not six quizzes; accuracy before speed — no timers, gentle "try again", team games where nobody slides back; the child becomes the host and asks, which apps cannot check.
+**Games list (L6):** Read and Match (polaroids — Coral's underwater camera) · **Pearl Buzzer Show ★ (signature)** · Shell Memory · Hot Shell · Sandcastle Tower · Sail Race · Pearl Dive Quiz · Twister Race · Blend & Read.
+**Deviation from the plan:** Pearl Dive Quiz (quiz board) instead of Tic-Tac-Toe Duel, so the lesson does not repeat U5 L6's duel.
+**Video-game mechanic:** **game-show / loot** — pearls for every right answer, Bub's bonus shell doubles them.

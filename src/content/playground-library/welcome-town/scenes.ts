@@ -223,6 +223,9 @@ export type Scene =
     }
   | {
       id: string; kind: 'memory'; bg: string; teacher: string;
+      /** Design (owner 2026-10-16, "be creative — ideas that suit the concept"): 'stars' (default) or 'shells'
+       *  (sea worlds: each card is a scallop shell on the sand that opens to show a pearl-white face). */
+      look?: 'stars' | 'shells';
       pairs: {
         id: string; label: string; emoji: string;
         /** When set, this pair's two cards are DIFFERENT instead of
@@ -534,7 +537,7 @@ export type Scene =
       /** Quiz Board (QuizBoardScene.tsx, Jeopardy / Baamboozle board redesigned): columns = categories, rows = 100 /
        *  200 / 300 points. The child picks a tile, it flips to its question; a right answer scores the points (a wrong
        *  one only says "Try again!"). The `boom` tile ([column, row]) is a surprise that doubles its points. */
-      id: string; kind: 'quiz-board'; bg: string; teacher: string; title: string; who: CharKey;
+      id: string; kind: 'quiz-board'; bg: string; teacher: string; title: string; who: CharKey; /** Design (owner 2026-10-16, "be creative"): 'show' (default game-show board) or 'pearls' (sea worlds: every tile is a closed shell with its points on a pearl; answered shells open; Bub's bonus doubles). */ look?: 'show' | 'pearls';
       categories: { name: string; emoji: string; tiles: { ask: string; choices: string[]; answer: number; img?: string }[] }[];
       boom?: [number, number]; doneLine: string;
     }
@@ -596,7 +599,7 @@ export type Scene =
       words: { word: string; img: string; say: string }[]; doneLine: string; }
   | { id: string; kind: 'crossword'; bg: string; teacher: string; title: string; who: CharKey;
       words: { word: string; img: string; say: string }[]; doneLine: string; }
-  | { id: string; kind: 'flag-race'; bg: string; teacher: string; title: string; who: CharKey;
+  | { id: string; kind: 'flag-race'; bg: string; teacher: string; title: string; who: CharKey; /** Design (owner 2026-10-16, "be creative"): 'hills' (default: flags climb two hills) or 'sails' (sea worlds: two boats bob on the waves and each right answer hoists the sail one step up the mast). */ look?: 'hills' | 'sails';
       /** turns alternate: even = the child answers, odd = the teacher answers (the child asks). First flag up the hill wins. */
       rounds: { ask: string; choices: string[]; answer: number }[]; doneLine: string; }
   | { id: string; kind: 'balloon-match'; bg: string; teacher: string; title: string; who: CharKey;
@@ -721,7 +724,7 @@ export type Scene =
       rounds: { from: CharKey; to: CharKey; fromImg: string; toImg: string; said: string; heard: string; choices?: string[] }[]; doneLine: string; }
   | { id: string; kind: 'glider'; bg: string; teacher: string; title: string; who: CharKey; pilot: string;
       rounds: { ask: string; choices: { label: string; img?: string }[]; answer: number; say?: string }[]; doneLine: string; }
-  | { id: string; kind: 'tower-pull'; bg: string; teacher: string; title: string; who: CharKey;
+  | { id: string; kind: 'tower-pull'; bg: string; teacher: string; title: string; who: CharKey; /** Design (owner 2026-10-16, "be creative"): 'wood' (default Jenga tower) or 'sand' (beach worlds: a sandcastle — sand blocks, shells, a flag on top). */ look?: 'wood' | 'sand';
       rounds: { ask: string; choices: string[]; answer: number; img?: string }[]; doneLine: string; }
   | { id: string; kind: 'letter-game'; bg: string; who: CharKey; teacher: string; mode: 'name' | 'sound'; rounds: { letter: string; phoneme?: string; choices: string[] }[] }
   | { id: string; kind: 'jigsaw-puzzle'; bg: string; teacher: string; image: string; rows: number; cols: number }

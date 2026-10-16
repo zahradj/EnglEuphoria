@@ -65,7 +65,36 @@ export function FlagRaceScene({ scene, onNext, onWin, onLose, sync }: { scene: F
     });
   }
 
+  const sails = scene.look === 'sails';
+  /** Sea worlds: a boat bobbing on the waves; every right answer hoists the sail one step up the mast. */
+  const boat = (side: 'left' | 'right', steps: number, color: string, label: string) => {
+    const p = Math.min(1, steps / goal);
+    return (
+      <motion.div key={side} className={`absolute bottom-[3%] ${side === 'left' ? 'left-[3%]' : 'right-[3%]'} z-10 h-[64%] w-[24%]`}
+        animate={reduce ? {} : { rotate: side === 'left' ? [-2, 2, -2] : [2, -2, 2], y: [0, -6, 0] }} transition={{ duration: 3.2, repeat: Infinity, ease: 'easeInOut' }} style={{ transformOrigin: '50% 90%' }}>
+        {/* mast with step rings */}
+        <span className="absolute bottom-[14%] left-1/2 top-[6%] w-[0.8vh] -translate-x-1/2 rounded bg-gradient-to-b from-[#8a5427] to-[#5b3517]" />
+        {Array.from({ length: goal }, (_, i) => {
+          const q = (i + 1) / goal;
+          return <span key={i} className="absolute left-1/2 h-[1.4vh] w-[1.4vh] -translate-x-1/2 rounded-full border-[0.3vh] border-white bg-white/50" style={{ bottom: `${16 + q * 70}%` }} />;
+        })}
+        {/* the sail: slides up the mast */}
+        <motion.span className="absolute left-1/2 block h-[26%] w-[46%] origin-left" style={{ background: `linear-gradient(135deg, #ffffff 0%, ${color} 70%)`, clipPath: 'polygon(0 0, 100% 100%, 0 100%)', marginLeft: '0.4vh', filter: 'drop-shadow(0 0.5vh 0.6vh rgba(0,0,0,0.25))' }}
+          animate={{ bottom: `${15 + p * 62}%`, scaleX: reduce ? 1 : [1, 0.92, 1] }} transition={{ bottom: { type: 'spring', stiffness: 120, damping: 14 }, scaleX: { duration: 1.4, repeat: Infinity } }} />
+        {p >= 1 && <span className="absolute left-1/2 top-0 -translate-x-1/2 text-[min(4vh,2.6vw)]">🏁</span>}
+        {/* hull */}
+        <svg viewBox="0 0 100 40" className="absolute inset-x-0 bottom-[2%] h-[16%] w-full" aria-hidden>
+          <path d="M2 6 L98 6 L84 38 L16 38 Z" fill="#b7773d" stroke="#5b3517" strokeWidth="2" />
+          <path d="M6 14 L94 14" stroke="#8a5427" strokeWidth="2" />
+          <circle cx="50" cy="24" r="5" fill={color} stroke="#fff" strokeWidth="2" />
+        </svg>
+        <span className="absolute -top-[6%] left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-white/95 px-3 py-1 font-black shadow" style={{ color, fontSize: 'min(2.6vh, 1.8vw)' }}>{label} · {steps}/{goal}</span>
+      </motion.div>
+    );
+  };
+
   const hill = (side: 'left' | 'right', steps: number, color: string, label: string) => {
+    if (sails) return boat(side, steps, color, label);
     const p = Math.min(1, steps / goal);
     return (
       <div key={side} className={`absolute bottom-[4%] ${side === 'left' ? 'left-[3%]' : 'right-[3%]'} z-10 h-[56%] w-[24%]`}>
@@ -92,10 +121,17 @@ export function FlagRaceScene({ scene, onNext, onWin, onLose, sync }: { scene: F
   return (
     <div className="absolute inset-0 select-none overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
       <div className="absolute inset-0 bg-black/15" />
+      {/* sea worlds: waves along the bottom for the boats */}
+      {sails && (
+        <svg viewBox="0 0 400 40" preserveAspectRatio="none" className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-[9%] w-full" aria-hidden>
+          <path d="M0 14 Q 25 0 50 14 T 100 14 T 150 14 T 200 14 T 250 14 T 300 14 T 350 14 T 400 14 V40 H0 Z" fill="#38BDF8" opacity="0.85" />
+          <path d="M0 22 Q 25 10 50 22 T 100 22 T 150 22 T 200 22 T 250 22 T 300 22 T 350 22 T 400 22 V40 H0 Z" fill="#0EA5E9" />
+        </svg>
+      )}
       {done && <Confetti count={90} />}
       <div className="pointer-events-none absolute inset-x-0 top-[5%] z-30 flex justify-center px-14">
         <span className="text-center font-black text-white" style={{ ...THICK_WORDS, fontSize: 'clamp(1.1rem, min(calc(2.6*var(--svw,1vw)), 4.4vh), 2.1rem)' }}>
-          {done ? scene.doneLine : `🚩 ${scene.title}`}
+          {done ? scene.doneLine : `${sails ? '⛵' : '🚩'} ${scene.title}`}
         </span>
       </div>
       {hill('left', kid, '#eab308', '⭐ You')}
