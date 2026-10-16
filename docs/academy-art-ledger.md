@@ -254,6 +254,7 @@ Scenario `docs/scenarios/academy-b1s01e2-postcard-wall.md` approved by the owner
 | picture | file | Canva media | holder page |
 |---|---|---|---|
 | story plate 1 (Vee beside the postcard wall, Travel Club room) | `bg/story-b1s2-1.webp` | MAHYKF2JuvY | 99 (reused) |
+| story plate 2 (Ava with green hills, Theo with the old tower) | `bg/story-b1s2-2.webp` | MAHYKKmlX60 | 99 (reused) |
 
 Notes: generated with the Lesson 1 plate `MAHYCnd2Ab0` as the only style reference (two attempts with a second cast reference failed with a Canva server error), so Vee is matched by description, not by his cast picture. Holder page 99 reused; set the image box to exactly 1920x1080 (`crop_media`) or Canva zooms the picture.
 
