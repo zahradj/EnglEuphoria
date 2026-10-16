@@ -34,7 +34,7 @@ export default function AcademyDailyTenPage() {
     if (key !== 'device') void syncPractice(key);
   };
 
-  const back = () => navigate('/dashboard/academy?tab=lessons');
+  const back = () => navigate('/dashboard/academy?tab=homework');
   return (
     <div className="relative min-h-screen bg-[#f5f3ff]">
       <button type="button" onClick={back} className="absolute start-3 top-3 z-50 inline-flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1.5 text-sm font-bold text-violet-800 shadow ring-1 ring-violet-200 hover:bg-white">

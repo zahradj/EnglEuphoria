@@ -47,3 +47,5 @@ Recorded approved American voices for the text (11 lines), the six word pages, t
 ## Safety and fit
 
 Teens, no brand logos, no real text in pictures, no risky activity shown (surfing is only a wish; nobody is in danger), nobody alone in a worrying way.
+
+**As made (2026-10-16):** the plates `bucket-list-wall`, `story-b1s1-1`, `-2`, `-3` were made as a **bright daytime Club classroom** with a corkboard wall of blank cards, bunting, plants and soft lilac accents (which follows the 2026-10-15 Academy pictures rule), not the rooftop studio imagined above. The lesson profile was corrected to match. Still missing: the six word stickers (`b-*` cards) and the trophy-case sticker work.

@@ -1,6 +1,6 @@
 # Academy video-game mechanics list (living list)
 
-Owner rule 2026-10-14: every Academy unit (Season) and lesson names at least one mechanic borrowed from a video game, so students have a blast. Companion to `docs/academy-games-catalog.md` (148 classroom games). Mechanics only, never characters, content or music; teen-appropriate (13-18); recorded voices only; motion rules in CLAUDE.md apply.
+Owner rule 2026-10-14: every Academy unit (Season) and lesson names at least one mechanic borrowed from a video game, so students have a blast. Companion to `docs/academy-games-catalog.md` (171 classroom games). Mechanics only, never characters, content or music; teen-appropriate (13-18); recorded voices only; motion rules in CLAUDE.md apply.
 
 **Status:** seed list from general game-design knowledge, **unverified**. The next research pass (units: see `docs/research/`) must confirm, extend and log sources per mechanic. Add rows as lessons use them.
 
@@ -43,3 +43,7 @@ Sources for the retro rows: [Adapting arcade games for learning, CHI 2013](https
 ## Added 2026-10-15 (B1 S1 L1)
 - **Spot the glitch / bug hunt** (*Among Us*-style "find the odd one", debugging games) → *Glitch Hunt*: a chat with one tense glitch; tap it, repair it, hear the reason.
 - **Bluffing / deduction party game** (*Two Truths and a Lie*, social-deduction games) → the teacher guesses which of the student's three "have" sentences is the lie (speaking).
+- **Collectible card draw + talk-show host** (*Hearthstone*-style draw, late-night interview shows) → *Verb Draw*: match the verb trios (match-3), then draw a verb card and open a conversation with it (participle for the question, say it, past-simple follow-up, the other character answers); a conversation streak counts first-try chats.
+| Cross-examination (press / present) | Courtroom adventure (Ace Attorney family) | Presses a statement for detail, or presents the sentence that contradicts it, and says why | inversion, reporting, hedging, concession (C1) | Low |
+| Deduction log (confirm in threes) | Detective (Return of the Obra Dinn) | Fills a who / what / why log from evidence and confirms entries in groups of three, giving a sentence of reasoning for each | inverted conditionals, perfect participles, stance (C1) | Low |
+| Skill-check dialogue (curated voices) | Narrative RPG (Disco Elysium) | Chooses among curated replies in different voices (diplomatic, blunt, formal, warm) and sees the character's response | register, stance, modal nuance, irony (C1) | Low |

@@ -23,9 +23,14 @@ export interface LessonProfile {
 
 export const LESSON_PROFILES: LessonProfile[] = [
   {
-    id: 'b1-s01-e1', setting: 'the rooftop studio with the bucket-list wall', mainPlate: 'bucket-list-wall', look: 'evening rooftop, string lights, a glass wall of blank cards, a trophy case', frame: 'Vee’s bucket-list dare: tick it off before the break',
+    id: 'b1-s01-e1', setting: 'the Club classroom with the bucket-list corkboard wall (bright daytime school)', mainPlate: 'bucket-list-wall', look: 'bright daytime classroom, tall sunny windows, light wood, a corkboard wall of blank cards, bunting, plants, soft lilac accents, and a trophy case', frame: 'Vee’s bucket-list dare: tick it off before the break',
     signature: 'boss', funHook: 'break a giant clock with the right tense (boss fight), crack participles in Wordle, climb the Hot Seat ladder, win Theo’s rapport, forge verb trophies and beat your own streak',
     evidence: 'the student says the three forms of ten verbs, tells when from up to now, and says who has done the most and why (Take 2)', homeMission: 'send Vee one voice note: three sentences about things you have done',
+  },
+  {
+    id: 'b1-s01-e2', previous: 'b1-s01-e1', setting: 'the Travel Club room with the postcard wall (bright daytime school)', mainPlate: 'postcard-wall', look: 'bright daytime school room, tall sunny windows, light wood, a big world map, a wall of postcards, soft lilac accents', frame: 'Vee’s postcard wall: find the right word for every postcard',
+    signature: 'rpg', funHook: 'name the feeling on a Mood Postcard, craft sentence cards at the Word Workbench, build whole chunks, and describe a postcard so Ava can find it',
+    evidence: 'the student uses at least five of the 14 words in a private voice note, with an “I have …” sentence and a past-simple follow-up with a time', homeMission: 'send Vee one voice note: three sentences about a trip with a feeling, a place and a chunk',
   },
   {
     id: 'free-time-club-1', setting: 'the school Club Fair at dusk', mainPlate: 'fair-night', look: 'purple dusk, string lights, five stalls', frame: 'mystery: who took Ava’s poster?',

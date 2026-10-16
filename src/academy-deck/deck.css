@@ -1424,3 +1424,7 @@
 .ad-root .ad-readq-opt { text-align: start; padding: 10px 14px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.25); background: rgba(255, 255, 255, 0.1); color: inherit; font: inherit; font-weight: 600; cursor: pointer; min-height: 44px; }
 .ad-root .ad-readq-opt[data-bad='true'] { animation: ad-shake 0.38s; border-color: #ff8a80; }
 .ad-root .ad-readq-opt[data-ok='true'] { background: rgba(80, 200, 140, 0.35); border-color: #7be0a8; }
+
+/* teacher only: is the student's screen linked? */
+.ad-link-note { position: absolute; inset-inline-end: 16px; bottom: 76px; z-index: 30; margin: 0; padding: 3px 12px; border-radius: 999px; font-size: 0.72rem; font-weight: 800; background: rgba(255, 241, 214, 0.95); color: #8a5a00; border: 1px solid #f5b942; }
+.ad-link-note[data-ok='true'] { background: rgba(216, 245, 230, 0.95); color: #1f7a4f; border-color: #7be0a8; }

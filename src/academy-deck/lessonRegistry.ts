@@ -35,6 +35,7 @@ export const ACADEMY_DECK_LESSONS: AcademyDeckLesson[] = [
     homework: null,
     parts: 8,
   },
+  // B1-S01-E2 (Word Lab) is built (lessons/b1s01e2.ts, lessonScripts.ts) but NOT listed until its story plates, backgrounds and 8 voice lines exist (owner asked to deploy lesson 1 only, 2026-10-16).
   {
     id: 'pa1-s01-e1',
     season: 1,
@@ -129,6 +130,6 @@ export const ACADEMY_DECK_LESSONS: AcademyDeckLesson[] = [
 ];
 
 /** Blueprint id of each deck lesson (src/curriculum/academy). The library numbers lessons in the order they were built (Sign Me Up = Lesson 1, Fake or Real? = Lesson 2); the blueprint episodes are E2 and E3. */
-export const ACADEMY_DECK_BLUEPRINT_IDS: Record<string, string> = { 'pa1-s01-e1': 'PA1-S01-E1', 'pa1-s02-e1': 'PA1-S02-E1', 'b1-s01-e1': 'B1-S01-E1', 'sign-me-up': 'A1-S01-E2', 'sign-me-up-2': 'A1-S01-E2', 'fake-or-real': 'A1-S01-E3', 'free-time-club-1': 'A1-S03-E1', 'free-time-club-2': 'A1-S03-E2' };
+export const ACADEMY_DECK_BLUEPRINT_IDS: Record<string, string> = { 'pa1-s01-e1': 'PA1-S01-E1', 'pa1-s02-e1': 'PA1-S02-E1', 'b1-s01-e1': 'B1-S01-E1', 'b1-s01-e2': 'B1-S01-E2', 'sign-me-up': 'A1-S01-E2', 'sign-me-up-2': 'A1-S01-E2', 'fake-or-real': 'A1-S01-E3', 'free-time-club-1': 'A1-S03-E1', 'free-time-club-2': 'A1-S03-E2' };
 
 export const getAcademyDeckLesson = (id: string | undefined) => ACADEMY_DECK_LESSONS.find((l) => l.id === id);

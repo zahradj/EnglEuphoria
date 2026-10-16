@@ -58,3 +58,6 @@ Fail a plan or lesson with no Remember? list taken from `recallPlan`, no progres
 
 ## Checklist check (owner rule 2026-10-14)
 Fail a lesson whose success criteria are not 1-5 observable "I can ..." lines the teacher can mark in `LessonChecklistPanel`, or a Season whose final lesson has no unit assessment (six strands + Release rubric) feeding the lesson report (`docs/academy-lesson-checklist.md`).
+
+## Game search and skills check (owner rule 2026-10-16)
+Fail a lesson or unit if: (0) its games list does not say which games come from the 171-game catalogue (by number) and which are new finds; (1) its research file has no "Game search" table with >= 5 candidates from >= 3 source families (language platforms, classroom games, commercial video games / game-design writing), each with source, mechanic, alignment result and verified/unverified mark; (2) a chosen game fails the alignment test in `docs/academy-lesson-creation-protocol.md` (serves a named criterion, practises the target English, fits stage and level, teen-appropriate and comfortable, buildable in the player and the hour); (3) the lesson was made without the protocol's skills, the handbook (Part 10) and, for a new mechanic, the game-dev skills (`gdev-prototype-fast`, `gdev-game-feel`, `game-animation`, `gdev-game-ui-ux`).

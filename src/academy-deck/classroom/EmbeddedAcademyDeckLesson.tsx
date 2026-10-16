@@ -85,11 +85,17 @@ export const EmbeddedAcademyDeckLesson = forwardRef<EmbeddedAcademyDeckHandle, P
   const replaying = useRef(false);
   const idxRef = useRef(idx);
   idxRef.current = idx;
-  const host = () => wrapRef.current?.querySelector('.ad-slidehost') ?? null;
+  // the areas that look the same on both screens: the page itself and the part card / Hint / Minute / More controls
+  const SHARED = ['.ad-slidehost', '.ad-partcard', '.ad-minute', '.ad-tools', '.ad-menu'] as const;
+  const rootOf = (sel: string) => wrapRef.current?.querySelector(sel) ?? null;
+  const host = () => rootOf('.ad-slidehost');
   // BOTH SIDES: send what this side clicks and types on the slide; the other side repeats it (never the page moves: the teacher owns those)
   const pending = useRef<SceneTapPayload[]>([]);
+  const [peer, setPeer] = useState<{ at: number; slide: number } | null>(null);
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => { const t = window.setInterval(() => setNow(Date.now()), 2000); return () => window.clearInterval(t); }, []);
   const apply = (p: SceneTapPayload) => {
-    const root = host();
+    const root = rootOf(p.sel ?? '.ad-slidehost');
     const el = root ? getElementAtPath(root, p.path) : null;
     if (!el) return;
     replaying.current = true;
@@ -109,24 +115,32 @@ export const EmbeddedAcademyDeckLesson = forwardRef<EmbeddedAcademyDeckHandle, P
     if (!wrap) return;
     const send = (e: Event, kind: 'click' | 'input') => {
       if (replaying.current) return;
-      const root = host();
       const el = e.target as Element | null;
-      if (!root || !el) return;
+      if (!el) return;
+      const sel = SHARED.find((q) => el.closest(q));
+      const root = sel ? el.closest(sel) : null;
+      if (!sel || !root) return;
       const path = getDomPath(root, el);
       if (!path) return;
       const value = kind === 'input' ? (el as HTMLInputElement).value : undefined;
-      void whiteboardService.sendSceneTap(roomId, { path, kind, slide: idxRef.current, value, senderRole: role, senderId: role });
+      void whiteboardService.sendSceneTap(roomId, { path, kind, slide: idxRef.current, value, sel, senderRole: role, senderId: role });
     };
     const onClick = (e: Event) => send(e, 'click');
     const onInput = (e: Event) => send(e, 'input');
     wrap.addEventListener('click', onClick, true);
     wrap.addEventListener('input', onInput, true);
+    // a heartbeat both ways: each side sees whether the other screen is really connected and on which page
+    const beat = () => void whiteboardService.sendSceneTap(roomId, { path: [], kind: 'ping', slide: idxRef.current, senderRole: role, senderId: role });
+    beat();
+    const timer = window.setInterval(beat, 4000);
     const off = whiteboardService.subscribeToSceneTap(roomId, (p) => {
       if (p.senderRole === role || p.slide == null) return;
+      if (p.kind === 'ping') { setPeer({ at: Date.now(), slide: p.slide }); return; }
       if (p.slide === idxRef.current) apply(p);
       else if (p.slide > idxRef.current) pending.current.push(p); // the page change is still on its way
     });
     return () => {
+      window.clearInterval(timer);
       wrap.removeEventListener('click', onClick, true);
       wrap.removeEventListener('input', onInput, true);
       off();
@@ -166,6 +180,13 @@ export const EmbeddedAcademyDeckLesson = forwardRef<EmbeddedAcademyDeckHandle, P
         onSlideDone={student ? (...a: Parameters<typeof log.onSlideDone>) => { if (!replaying.current) log.onSlideDone(...a); } : undefined}
         onSlideWrong={student ? (...a: Parameters<typeof log.onSlideWrong>) => { if (!replaying.current) log.onSlideWrong(...a); } : undefined}
       />
+      {!student && (
+        <p className="ad-link-note" role="status" data-ok={(!!peer && now - peer.at < 11000) || undefined}>
+          {peer && now - peer.at < 11000
+            ? (peer.slide === idx ? t('al.linked', 'Student’s screen is linked ✓') : t('al.linkOther', 'The student is on page {{n}}', { n: peer.slide + 1 }))
+            : t('al.linkWait', 'Waiting for the student’s screen…')}
+        </p>
+      )}
       {student && <p className="ad-follow-note" role="status">{t('al.follow', 'Your teacher moves the lesson.')}</p>}
     </div>
   );

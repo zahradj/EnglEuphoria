@@ -4,7 +4,7 @@ description: >
   Choose the right game or activity for an Academy segment: by purpose (what the learner must retrieve/produce), theme and
   topic, objective, CEFR level, the student's needs and comfort, and variety. Gives the decision procedure, scoring rubric,
   purpose->mechanic and theme->mechanic tables, level ladder and a worked example. Use whenever a session, Daily-10 pack or
-  quiz needs activities, or when a lesson feels repetitive. Catalogue: docs/academy-games-catalog.md (148 games).
+  quiz needs activities, or when a lesson feels repetitive. Catalogue: docs/academy-games-catalog.md (171 games).
 ---
 
 # Academy Activity Selector — the right mechanic, not just a fun one
@@ -18,6 +18,7 @@ Inputs: `segment`, `episodeType`, `objective` (+ target item/structure ids), `sk
 
 ## Procedure
 
+0. **Catalogue first, then the deep search (owner 2026-10-16):** shortlist from the 171-game catalogue (`docs/academy-games-catalog.md`) by section and cognitive job, reusing games that already exist in the repo; then **deep game search** (owner 2026-10-16, `docs/academy-lesson-creation-protocol.md`):** before scoring, search the internet for >= 5 candidate games and video-game mechanics from >= 3 source families (language platforms, classroom games, commercial video games / game-design writing) that fit the lesson's objective and criteria; log them in the lesson's research file; only candidates that pass the alignment test enter the scoring below. Use the `gdev-*` and `game-developer` skills to judge buildability and to prototype a new mechanic.
 1. **Name the cognitive job** of the segment (table A). If you cannot, the activity is decoration - drop it.
 2. **Filter by hard constraints**: CEFR range; comfort (shy / anxious -> Low only, Push is opt-in and never first; speaking under a timer never);
    mode (solo needs auto-marking); voice rule (heard audio via recorded approved voices); no elimination/public ranking.

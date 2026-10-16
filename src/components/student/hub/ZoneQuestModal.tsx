@@ -20,6 +20,7 @@ import {
 } from '@/services/studentGames';
 import { zoneForTags, type AcademyZone } from '@/hooks/academy/useAcademyZones';
 import { openStudentTab } from '@/lib/studentTabRouter';
+import { useNavigate } from 'react-router-dom';
 
 const GamePlayer = lazy(() => import('@/components/games/GamePlayer'));
 
@@ -33,6 +34,7 @@ interface Props {
 
 export const ZoneQuestModal: React.FC<Props> = ({ open, onClose, zone, theme }) => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [homework, setHomework] = useState<StudentGameWithProgress[]>([]);
   const [loading, setLoading] = useState(false);
   const [active, setActive] = useState<StudentGameWithProgress | null>(null);
@@ -206,6 +208,7 @@ export const ZoneQuestModal: React.FC<Props> = ({ open, onClose, zone, theme }) 
                 {/* Footer actions */}
                 <div className="flex flex-wrap items-center justify-end gap-2 pt-2 border-t">
                   <Button variant="outline" size="sm" onClick={onClose}>Close</Button>
+                  <Button variant="outline" size="sm" onClick={() => { onClose(); navigate('/academy-daily-10'); }}>Daily 10</Button>
                   <Button
                     size="sm"
                     className={cn('text-white gap-2 bg-gradient-to-r', theme.gradient)}
@@ -217,7 +220,7 @@ export const ZoneQuestModal: React.FC<Props> = ({ open, onClose, zone, theme }) 
                       onClose();
                     }}
                   >
-                    Open full {zone.short} <ExternalLink className="w-3.5 h-3.5" />
+                    {zone.tab === 'homework' ? 'Open Quest Log' : `Open full ${zone.short}`} <ExternalLink className="w-3.5 h-3.5" />
                   </Button>
                 </div>
               </div>

@@ -1,4 +1,4 @@
-"""Academy: cut a Canva sticker sheet into transparent card pictures (public/academy-art/cards/v-<word>.webp).
+"""Academy: cut a Canva sticker sheet into transparent card pictures (public/academy-art/cards/v-<word>.webp, or <id>.webp when the word is a full card id like b-bucketlist).
 
   python3 scripts/academy-split-cards.py <sheet.png> <rows> <cols> word1 word2 ... (row by row; '-' skips a cell)
 
@@ -37,6 +37,7 @@ for k, word in enumerate(words):
     piece = piece.resize((round(piece.width * k), round(piece.height * k)), Image.LANCZOS)
     out = Image.new('RGBA', (1024, 1024), (0, 0, 0, 0))
     out.paste(piece, ((1024 - piece.width) // 2, (1024 - piece.height) // 2), piece)
-    path = f'public/academy-art/cards/v-{word}.webp'
+    # a full card id such as b-bucketlist or w-amazed is used as given; a plain word becomes v-<word>
+    path = f'public/academy-art/cards/{word}.webp' if len(word) > 2 and word[1] == '-' else f'public/academy-art/cards/v-{word}.webp'
     out.save(path, 'WEBP', quality=90)
     print(path, piece.size)

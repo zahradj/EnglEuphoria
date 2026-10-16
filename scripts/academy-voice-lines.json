@@ -2372,16 +2372,24 @@
     "text": "Remember? Which one do you hear? Tap it."
   },
   {
-    "who": "Vee",
+    "who": "Theo",
     "text": "the"
   },
   {
-    "who": "Vee",
+    "who": "Theo",
     "text": "Me too."
   },
   {
-    "who": "Vee",
+    "who": "Theo",
     "text": "boy"
+  },
+  {
+    "who": "Theo",
+    "text": "is"
+  },
+  {
+    "who": "Theo",
+    "text": "Sorry?"
   },
   {
     "who": "Vee",
@@ -2574,10 +2582,6 @@
   {
     "who": "Theo",
     "text": "It"
-  },
-  {
-    "who": "Theo",
-    "text": "is"
   },
   {
     "who": "Theo",
@@ -2788,16 +2792,20 @@
     "text": "Remember? Which one do you hear? Tap it."
   },
   {
-    "who": "Vee",
+    "who": "Ava",
     "text": "stay"
   },
   {
-    "who": "Vee",
+    "who": "Ava",
     "text": "complain"
   },
   {
     "who": "Ava",
     "text": "Hot Seat! Climb the ladder. You have two lifelines: 50:50 and Ask Ava."
+  },
+  {
+    "who": "Vee",
+    "text": "Before you listen: Vee has a dare for the class. What do you think the dare is? Guess in one sentence."
   },
   {
     "who": "Vee",
@@ -2848,15 +2856,15 @@
     "text": "Listening check. Listen to each question about the dialogue (the text is hidden), then choose the best answer."
   },
   {
-    "who": "Vee",
+    "who": "Theo",
     "text": "What is the dare?"
   },
   {
-    "who": "Vee",
+    "who": "Theo",
     "text": "Why does Ava say that flying is easy?"
   },
   {
-    "who": "Vee",
+    "who": "Theo",
     "text": "What can you guess about Theo?"
   },
   {
@@ -3481,51 +3489,11 @@
   },
   {
     "who": "Ava",
-    "text": "Verb Trio Memory! Match each base form with its other two forms. Say the pair, then say a sentence."
+    "text": "I saw the mountains last year."
   },
   {
-    "who": "Vee",
-    "text": "went, gone"
-  },
-  {
-    "who": "Vee",
-    "text": "was, been"
-  },
-  {
-    "who": "Vee",
-    "text": "saw, seen"
-  },
-  {
-    "who": "Vee",
-    "text": "ate, eaten"
-  },
-  {
-    "who": "Vee",
-    "text": "took, taken"
-  },
-  {
-    "who": "Theo",
-    "text": "Triple Match, hard mode! Harder verbs: match the three forms."
-  },
-  {
-    "who": "Theo",
-    "text": "drive, drove, driven."
-  },
-  {
-    "who": "Theo",
-    "text": "choose, chose, chosen."
-  },
-  {
-    "who": "Theo",
-    "text": "begin, began, begun."
-  },
-  {
-    "who": "Theo",
-    "text": "speak, spoke, spoken."
-  },
-  {
-    "who": "Theo",
-    "text": "write, wrote, written."
+    "who": "Ava",
+    "text": "I have given it a go three times."
   },
   {
     "who": "Theo",
@@ -3685,11 +3653,63 @@
   },
   {
     "who": "Vee",
-    "text": "Take 2 · Say it again, better: fix what we noticed, and add a point against your answer."
+    "text": "Take 2 · Say it again, better: fix what we noticed, add a point against your answer, and answer Theo’s question at the end."
   },
   {
     "who": "Ava",
     "text": "Release: tell me your list out loud, with a follow-up story about one thing you have done. About a minute. (Record it privately first, then share if you want.)"
+  },
+  {
+    "who": "Theo",
+    "text": "Verb Draw! First match the verb trios. Then draw a card and open a conversation with Theo."
+  },
+  {
+    "who": "Theo",
+    "text": "eat, ate, eaten."
+  },
+  {
+    "who": "Theo",
+    "text": "Have you ever eaten insects?"
+  },
+  {
+    "who": "Theo",
+    "text": "Once, in Thailand. They were crunchy!"
+  },
+  {
+    "who": "Theo",
+    "text": "see, saw, seen."
+  },
+  {
+    "who": "Theo",
+    "text": "Have you ever seen a shooting star?"
+  },
+  {
+    "who": "Theo",
+    "text": "Yes! Last summer, at the beach."
+  },
+  {
+    "who": "Theo",
+    "text": "fly, flew, flown."
+  },
+  {
+    "who": "Theo",
+    "text": "Have you ever flown in a hot-air balloon?"
+  },
+  {
+    "who": "Theo",
+    "text": "Nervous at first, but it was beautiful."
+  },
+  {
+    "who": "Theo",
+    "text": "take, took, taken."
+  },
+  {
+    "who": "Theo",
+    "text": "Have you ever taken a photo of a sunrise?"
+  },
+  {
+    "who": "Theo",
+    "text": "Very early, at five o’clock."
   },
   {
     "who": "Vee",
@@ -3706,6 +3726,518 @@
   {
     "who": "Vee",
     "text": "Clue 1 of 8: Vee has hidden a card with a mystery experience on the wall. Who has done it?"
+  },
+  {
+    "who": "Vee",
+    "text": "Word Lab"
+  },
+  {
+    "who": "Vee",
+    "text": "Warm-up talk. Think of one moment on a trip or at an event. How did you feel? Say it in one or two sentences, any words you have."
+  },
+  {
+    "who": "Vee",
+    "text": "Today you meet fourteen new words for feelings, places and things to do, play with them, and then describe a postcard so your partner can find it."
+  },
+  {
+    "who": "Ava",
+    "text": "choose"
+  },
+  {
+    "who": "Ava",
+    "text": "Is there anything I can do?"
+  },
+  {
+    "who": "Ava",
+    "text": "as good as"
+  },
+  {
+    "who": "Ava",
+    "text": "pick"
+  },
+  {
+    "who": "Vee",
+    "text": "Bucket-list recall. Build a question for Vee with the words from last lesson, then say it out loud."
+  },
+  {
+    "who": "Vee",
+    "text": "Have you ever flown in a plane?"
+  },
+  {
+    "who": "Vee",
+    "text": "Before you listen: the Travel Club has a postcard wall. What do you think the postcards say? Guess in one sentence."
+  },
+  {
+    "who": "Vee",
+    "text": "Welcome to the Travel Club! Look at the postcard wall. Everyone sent a postcard from a bucket-list trip."
+  },
+  {
+    "who": "Vee",
+    "text": "But I need the right words for every postcard. “Good” and “nice” are not enough!"
+  },
+  {
+    "who": "Ava",
+    "text": "My postcard is from the countryside. We stayed there for a weekend, and I felt so relaxed."
+  },
+  {
+    "who": "Ava",
+    "text": "The view was amazing, and I was grateful that my cousin invited me."
+  },
+  {
+    "who": "Theo",
+    "text": "Mine is from a big city. We went sightseeing, and my favorite attraction was an old tower."
+  },
+  {
+    "who": "Theo",
+    "text": "At the top I was a little frightened, but I was proud that I did it."
+  },
+  {
+    "who": "Mia",
+    "text": "I went camping with my family. I was embarrassed because I forgot my sleeping bag!"
+  },
+  {
+    "who": "Mia",
+    "text": "But I was proud when I finished the hike, and I would love to try something new every year."
+  },
+  {
+    "who": "Vee",
+    "text": "Perfect. Where was your destination? What did you do? How did you feel? Let’s find the words."
+  },
+  {
+    "who": "Theo",
+    "text": "Listening check. Listen to each question about the postcards (the text is hidden), then choose the best answer."
+  },
+  {
+    "who": "Theo",
+    "text": "Where did Ava go for her weekend?"
+  },
+  {
+    "who": "Theo",
+    "text": "What did Theo do in the city?"
+  },
+  {
+    "who": "Theo",
+    "text": "Why was Mia embarrassed?"
+  },
+  {
+    "who": "Vee",
+    "text": "excitement"
+  },
+  {
+    "who": "Vee",
+    "text": "The excitement before my trip kept me awake."
+  },
+  {
+    "who": "Vee",
+    "text": "amazed"
+  },
+  {
+    "who": "Vee",
+    "text": "I was amazed when I saw the mountains."
+  },
+  {
+    "who": "Vee",
+    "text": "disappointed"
+  },
+  {
+    "who": "Vee",
+    "text": "We were disappointed when the museum was closed."
+  },
+  {
+    "who": "Vee",
+    "text": "embarrassed"
+  },
+  {
+    "who": "Vee",
+    "text": "I was embarrassed when I dropped my tray."
+  },
+  {
+    "who": "Vee",
+    "text": "proud"
+  },
+  {
+    "who": "Vee",
+    "text": "I was proud when I finished the hike."
+  },
+  {
+    "who": "Ava",
+    "text": "Listen. Tap the picture for the feeling you hear."
+  },
+  {
+    "who": "Ava",
+    "text": "excitement"
+  },
+  {
+    "who": "Ava",
+    "text": "amazed"
+  },
+  {
+    "who": "Ava",
+    "text": "disappointed"
+  },
+  {
+    "who": "Ava",
+    "text": "embarrassed"
+  },
+  {
+    "who": "Ava",
+    "text": "proud"
+  },
+  {
+    "who": "Vee",
+    "text": "Memory! Match each picture with its word."
+  },
+  {
+    "who": "Vee",
+    "text": "frightened"
+  },
+  {
+    "who": "Vee",
+    "text": "I was frightened at the top of the tower."
+  },
+  {
+    "who": "Vee",
+    "text": "relaxed"
+  },
+  {
+    "who": "Vee",
+    "text": "I felt relaxed in the countryside."
+  },
+  {
+    "who": "Vee",
+    "text": "grateful"
+  },
+  {
+    "who": "Vee",
+    "text": "I am grateful to my friends for the trip."
+  },
+  {
+    "who": "Vee",
+    "text": "destination"
+  },
+  {
+    "who": "Vee",
+    "text": "Our destination was a small village."
+  },
+  {
+    "who": "Vee",
+    "text": "attraction"
+  },
+  {
+    "who": "Vee",
+    "text": "The tower is the city’s best attraction."
+  },
+  {
+    "who": "Theo",
+    "text": "Shadow match! A dark shape of the picture. Pick the right word."
+  },
+  {
+    "who": "Ava",
+    "text": "Drag each word onto its picture."
+  },
+  {
+    "who": "Ava",
+    "text": "frightened"
+  },
+  {
+    "who": "Ava",
+    "text": "relaxed"
+  },
+  {
+    "who": "Ava",
+    "text": "grateful"
+  },
+  {
+    "who": "Ava",
+    "text": "destination"
+  },
+  {
+    "who": "Ava",
+    "text": "attraction"
+  },
+  {
+    "who": "Vee",
+    "text": "Cause or Feeling? Each sentence is about a person’s feeling or about the thing that causes it. Tap a sentence, then a box."
+  },
+  {
+    "who": "Vee",
+    "text": "I was amazed."
+  },
+  {
+    "who": "Vee",
+    "text": "The view was amazing."
+  },
+  {
+    "who": "Vee",
+    "text": "We were disappointed."
+  },
+  {
+    "who": "Vee",
+    "text": "The ending was disappointing."
+  },
+  {
+    "who": "Vee",
+    "text": "Words like amazed, proud and frightened say how a person feels."
+  },
+  {
+    "who": "Vee",
+    "text": "I felt amazed."
+  },
+  {
+    "who": "Vee",
+    "text": "Go camping, go sightseeing and try something new are whole chunks. Learn each one as one piece."
+  },
+  {
+    "who": "Vee",
+    "text": "We went camping. I have been sightseeing in Rome."
+  },
+  {
+    "who": "Vee",
+    "text": "A destination is where you are going. An attraction is a place to visit. The countryside is land outside the city."
+  },
+  {
+    "who": "Vee",
+    "text": "Our destination was the countryside."
+  },
+  {
+    "who": "Vee",
+    "text": "countryside"
+  },
+  {
+    "who": "Vee",
+    "text": "We spent the weekend in the countryside."
+  },
+  {
+    "who": "Vee",
+    "text": "go camping"
+  },
+  {
+    "who": "Vee",
+    "text": "We went camping near a lake."
+  },
+  {
+    "who": "Vee",
+    "text": "go sightseeing"
+  },
+  {
+    "who": "Vee",
+    "text": "We went sightseeing in Rome."
+  },
+  {
+    "who": "Vee",
+    "text": "try something new"
+  },
+  {
+    "who": "Vee",
+    "text": "I want to try something new this summer."
+  },
+  {
+    "who": "Ava",
+    "text": "Collocation Builder. The whole chunk is on the card. Build each sentence, then say it out loud."
+  },
+  {
+    "who": "Ava",
+    "text": "We went camping near the lake."
+  },
+  {
+    "who": "Ava",
+    "text": "They went sightseeing in the city."
+  },
+  {
+    "who": "Ava",
+    "text": "I want to try something new this summer."
+  },
+  {
+    "who": "Mia",
+    "text": "Word Connections. Sort the words into the hidden groups: tap a word, then a box."
+  },
+  {
+    "who": "Vee",
+    "text": "excitement is a good feeling."
+  },
+  {
+    "who": "Vee",
+    "text": "excitement is a difficult feeling."
+  },
+  {
+    "who": "Vee",
+    "text": "excitement is a place or a plan."
+  },
+  {
+    "who": "Vee",
+    "text": "proud is a good feeling."
+  },
+  {
+    "who": "Vee",
+    "text": "proud is a difficult feeling."
+  },
+  {
+    "who": "Vee",
+    "text": "proud is a place or a plan."
+  },
+  {
+    "who": "Vee",
+    "text": "relaxed is a good feeling."
+  },
+  {
+    "who": "Vee",
+    "text": "relaxed is a difficult feeling."
+  },
+  {
+    "who": "Vee",
+    "text": "relaxed is a place or a plan."
+  },
+  {
+    "who": "Vee",
+    "text": "grateful is a good feeling."
+  },
+  {
+    "who": "Vee",
+    "text": "grateful is a difficult feeling."
+  },
+  {
+    "who": "Vee",
+    "text": "grateful is a place or a plan."
+  },
+  {
+    "who": "Vee",
+    "text": "embarrassed is a good feeling."
+  },
+  {
+    "who": "Vee",
+    "text": "embarrassed is a difficult feeling."
+  },
+  {
+    "who": "Vee",
+    "text": "embarrassed is a place or a plan."
+  },
+  {
+    "who": "Vee",
+    "text": "frightened is a good feeling."
+  },
+  {
+    "who": "Vee",
+    "text": "frightened is a difficult feeling."
+  },
+  {
+    "who": "Vee",
+    "text": "frightened is a place or a plan."
+  },
+  {
+    "who": "Vee",
+    "text": "disappointed is a good feeling."
+  },
+  {
+    "who": "Vee",
+    "text": "disappointed is a difficult feeling."
+  },
+  {
+    "who": "Vee",
+    "text": "disappointed is a place or a plan."
+  },
+  {
+    "who": "Vee",
+    "text": "destination is a good feeling."
+  },
+  {
+    "who": "Vee",
+    "text": "destination is a difficult feeling."
+  },
+  {
+    "who": "Vee",
+    "text": "destination is a place or a plan."
+  },
+  {
+    "who": "Theo",
+    "text": "Mood Postcards! Theo shows a postcard. Choose the feeling that fits the picture best."
+  },
+  {
+    "who": "Theo",
+    "text": "This postcard shows a person at the top of a very tall tower, holding the railing tight."
+  },
+  {
+    "who": "Theo",
+    "text": "Yes! Her hands tell the story."
+  },
+  {
+    "who": "Theo",
+    "text": "Hmm, relaxed people do not hold on so tight."
+  },
+  {
+    "who": "Theo",
+    "text": "Maybe later, when she gets down!"
+  },
+  {
+    "who": "Theo",
+    "text": "This postcard shows a student on the grass in a quiet green field, with a book."
+  },
+  {
+    "who": "Theo",
+    "text": "Exactly. Quiet and calm."
+  },
+  {
+    "who": "Theo",
+    "text": "He does not look sad at all."
+  },
+  {
+    "who": "Theo",
+    "text": "He might be, but he is calm."
+  },
+  {
+    "who": "Theo",
+    "text": "This postcard shows a group at a closed museum door, looking at a sign."
+  },
+  {
+    "who": "Theo",
+    "text": "Yes, they hoped for more."
+  },
+  {
+    "who": "Theo",
+    "text": "Hmm, for a closed door?"
+  },
+  {
+    "who": "Theo",
+    "text": "Maybe before they arrived!"
+  },
+  {
+    "who": "Vee",
+    "text": "I picked a postcard from the countryside. I felt so relaxed there, and the view was amazing."
+  },
+  {
+    "who": "Ava",
+    "text": "Which postcard is it? Is it the one with the lake?"
+  },
+  {
+    "who": "Vee",
+    "text": "Yes! It was our destination for the weekend, and I am grateful that I went."
+  },
+  {
+    "who": "Ava",
+    "text": "Take 1 · Describe a postcard so Ava can find it: where it is, what you did and how you felt. About a minute."
+  },
+  {
+    "who": "Theo",
+    "text": "Take 2 · A new listener! Theo is listening now. Say it again with the fixes, then answer his question: “When did you go?” (the past simple, with a time)."
+  },
+  {
+    "who": "Vee",
+    "text": "Release: record a voice note, “my words”, privately first. About 40 seconds: use at least five of the new words, one “I have …” sentence about an experience and one follow-up in the past simple with a time."
+  },
+  {
+    "who": "Vee",
+    "text": "Words like amazed and proud say how a person feels."
+  },
+  {
+    "who": "Vee",
+    "text": "Your postcard is on the wall!"
+  },
+  {
+    "who": "Vee",
+    "text": "Daily 10: say the 14 words with the pictures, then record a voice note: three sentences about a trip with a feeling, a place and one chunk. Not yet is okay!"
+  },
+  {
+    "who": "Vee",
+    "text": "Clue 2 of 8: a new postcard has arrived with no picture and no name. What can you tell from the words alone?"
   },
   {
     "who": "Vee",

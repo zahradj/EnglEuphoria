@@ -20,7 +20,7 @@ import { PassageView } from './slides/passage';
 import { LobbyView, HubMark } from './slides/lobby';
 import { levelLine, rankOf, xpOf } from './hub';
 import { ReadQView } from './slides/readq';
-import { BossView, WordleView, RpgView, QuizView, TripleView, GlitchView, ClozeView } from './slides/games';
+import { BossView, WordleView, RpgView, QuizView, TripleView, GlitchView, VerbDrawView, ClozeView } from './slides/games';
 import { ForgeView, StreakView } from './slides/forge';
 import { LessonClock } from './LessonClock';
 import { playSfx } from './sfx';
@@ -74,7 +74,7 @@ function clearedStars(s: Stats): number {
 /** The teaching ladder shown to the student: watch it done (I do), practise together (we do), your turn (you do), create (you make it yours). */
 const STAGE_LABEL: Record<string, string> = { review: 'Warm-up', context: 'Watch and listen', model: 'Watch and learn', rule: 'The rule', controlled: 'Practise together', free: 'Your turn', produce: 'Make it yours' };
 
-const SKILL: Record<string, string> = { say: 'Speaking', fade: 'Speaking', passage: 'Reading', readq: 'Reading', hearpick: 'Listening', story: 'Listening', model: 'Listening', write: 'Writing', build: 'Writing', boss: 'Game', wordle: 'Game', rpg: 'Game', quiz: 'Game', triple: 'Game', glitch: 'Game', cloze: 'Reading', sort: 'Game', memory: 'Game', match: 'Game', forge: 'Game', streak: 'Game', explore: 'Game', hunt: 'Game', vault: 'Game', duel: 'Game', rhythm: 'Game' };
+const SKILL: Record<string, string> = { say: 'Speaking', fade: 'Speaking', passage: 'Reading', readq: 'Reading', hearpick: 'Listening', story: 'Listening', model: 'Listening', write: 'Writing', build: 'Writing', boss: 'Game', wordle: 'Game', rpg: 'Game', quiz: 'Game', triple: 'Game', glitch: 'Game', verbdraw: 'Game', cloze: 'Reading', sort: 'Game', memory: 'Game', match: 'Game', forge: 'Game', streak: 'Game', explore: 'Game', hunt: 'Game', vault: 'Game', duel: 'Game', rhythm: 'Game' };
 const skillOf = (kind: string): string => SKILL[kind] ?? '';
 
 function SlideView({ slide, script, onStart }: { slide: Slide; script: DeckScript; onStart: () => void }) {
@@ -126,6 +126,7 @@ function SlideView({ slide, script, onStart }: { slide: Slide; script: DeckScrip
     case 'quiz': return <QuizView slide={slide} />;
     case 'triple': return <TripleView slide={slide} />;
     case 'glitch': return <GlitchView slide={slide} />;
+    case 'verbdraw': return <VerbDrawView slide={slide} />;
     case 'cloze': return <ClozeView slide={slide} />;
     case 'forge': return <ForgeView slide={slide} />;
     case 'streak': return <StreakView slide={slide} />;
@@ -214,8 +215,10 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
   voiceRef.current = voiceOn;
   sfxRef.current = sfxOn && !calm;
   const [clipsReady, setClipsReady] = useState(false);
-  const [unlocked, setUnlocked] = useState(false);
-  const unlockedRef = useRef(false);
+  // sound is allowed once the person has used the page (a tap on the Join button counts), not only a tap inside the lesson
+  const alreadyActive = () => typeof navigator !== 'undefined' && !!(navigator as Navigator & { userActivation?: { hasBeenActive: boolean } }).userActivation?.hasBeenActive;
+  const [unlocked, setUnlocked] = useState(alreadyActive);
+  const unlockedRef = useRef(alreadyActive());
   const [speakingWho, setSpeakingWho] = useState<string | null>(null);
   const seq = useRef(0);
   useEffect(() => {
@@ -234,7 +237,9 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
     };
     window.addEventListener('pointerdown', unlock, true);
     window.addEventListener('keydown', unlock, true);
+    window.addEventListener('click', unlock, true);
     return () => {
+      window.removeEventListener('click', unlock, true);
       window.removeEventListener('pointerdown', unlock, true);
       window.removeEventListener('keydown', unlock, true);
     };
@@ -264,6 +269,10 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
       setSpeakingWho(null);
     }
   }, [voiceOn]);
+  // a student who follows the teacher may not tap inside the lesson: unlock as soon as the page has been used
+  useEffect(() => {
+    if (!unlockedRef.current && alreadyActive()) { unlockedRef.current = true; setUnlocked(true); }
+  }, [index]); // eslint-disable-line react-hooks/exhaustive-deps
   // the slide's own spoken lines (greeting, mission, wrap...) once the voices are unlocked
   useEffect(() => {
     if (!unlocked || !voiceOn || !clipsReady) return;
@@ -448,13 +457,16 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
             {Array.from({ length: 12 }, (_, i) => <span key={i} style={{ ['--a' as string]: `${i * 30}deg`, ['--d' as string]: `${70 + (i % 3) * 26}px` }}>{i % 2 ? '★' : '✦'}</span>)}
           </div>
         )}
+        {embedded && !unlocked && voiceOn && (
+          <button type="button" className="ad-sound-note" onClick={() => { unlockedRef.current = true; setUnlocked(true); }}>🔊 Tap to hear the lesson</button>
+        )}
         <nav className="ad-dock" aria-label="Lesson controls">
           {!follow && <button type="button" className="ad-dockbtn" onClick={() => go(index - 1)} disabled={index === 0}>◀ Back</button>}
           {!homework && SAY_IT_KINDS.includes(cur.kind) && (<button type="button" className="ad-dockbtn ad-dock-say" onClick={sayIt} aria-label="Say it aloud, then tap"><Icon name="chat" /> Say it ✓</button>)}
           <div className="ad-tools">
           <button type="button" className="ad-dockbtn" onClick={hint}>{artBase ? <img className="ad-dockico" src={`${artBase}/objects/btn-hint.webp`} alt="" aria-hidden="true" /> : <Icon name="bulb" />} Hint</button>
-          <button type="button" className="ad-dockbtn" onClick={() => setMinute(true)}>{artBase ? <img className="ad-dockico" src={`${artBase}/objects/btn-pause.webp`} alt="" aria-hidden="true" /> : <Icon name="pause" />} <span className="ad-long">I need a minute</span><span className="ad-short">Minute</span></button>
-          <button type="button" className="ad-dockbtn" onClick={() => setMenu(!menu)} aria-expanded={menu}>{artBase ? <img className="ad-dockico" src={`${artBase}/objects/btn-gear.webp`} alt="" aria-hidden="true" /> : <Icon name="gear" />} <span className="ad-long">More</span></button>
+          {!embedded && <button type="button" className="ad-dockbtn" onClick={() => setMinute(true)}>{artBase ? <img className="ad-dockico" src={`${artBase}/objects/btn-pause.webp`} alt="" aria-hidden="true" /> : <Icon name="pause" />} <span className="ad-long">I need a minute</span><span className="ad-short">Minute</span></button>}
+          {!embedded && <button type="button" className="ad-dockbtn" onClick={() => setMenu(!menu)} aria-expanded={menu}>{artBase ? <img className="ad-dockico" src={`${artBase}/objects/btn-gear.webp`} alt="" aria-hidden="true" /> : <Icon name="gear" />} <span className="ad-long">More</span></button>}
           </div>
           {teacher && !follow && !homework && script.clock && <LessonClock script={script} part={cur.part} />}
           {!follow && (<button type="button" className="ad-dockbtn ad-dock-next" onClick={next} disabled={!isSolved && !freeNext}>{last ? 'Finish ✓' : <>Next {artBase ? <img className="ad-dockico ad-nextico" src={`${artBase}/objects/btn-next.webp`} alt="" aria-hidden="true" /> : '▶'}</>}</button>)}
@@ -475,6 +487,7 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
         )}
         {partCard !== null && (
           <div className="ad-partcard" data-leaving={partLeaving || undefined} role="dialog" aria-label={`Part ${partCard + 1}: ${parts[partCard].name}`} onClick={closePart}>
+            {artBase && (() => { const plate = script.slides.find((x) => x.part === partCard)?.bg; return plate ? <img className="ad-partcard-plate" src={`${artBase}/bg/${plate}.webp`} alt="" aria-hidden="true" draggable={false} onError={(e) => { e.currentTarget.hidden = true; }} /> : null; })()}
             {partCard > 0 && <span className="ad-partcard-clear" role="status"><b>Part {partCard} cleared</b><span aria-hidden="true">{[0, 1, 2].map((k) => <i key={k} data-on={k < clearedStars(stats)} />)}</span></span>}
             <span className="ad-partcard-num" aria-hidden="true">{partCard + 1}</span>
             <span className="ad-partcard-kicker">Part {partCard + 1} of {parts.length} · {parts[partCard].minutes} min</span>
