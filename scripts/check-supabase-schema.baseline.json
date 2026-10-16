@@ -15,6 +15,9 @@
  "src/hooks/useCurriculumExport.ts :: exports": 1,
  "src/pages/StudentCertificatePage.tsx :: profiles": 2,
  "src/pages/UnifiedClassroomPage.tsx :: student_prior_knowledge": 1,
+ "src/services/academyChecklistService.ts :: academy_teacher_checks": 1,
+ "src/services/academyPracticeService.ts :: student_academy_practice": 1,
+ "src/services/lessonResumeService.ts :: student_lesson_resume": 3,
  "src/services/speakingPracticeService.ts :: ai_conversation_sessions": 3,
  "src/services/speakingPracticeService.ts :: speaking_assessments": 2,
  "src/services/speakingPracticeService.ts :: student_speaking_goals": 4
