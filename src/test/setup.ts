@@ -6,6 +6,7 @@ import '@testing-library/jest-dom/vitest';
 afterEach(() => {
   cleanup();
   vi.clearAllMocks();
+  try { window.localStorage.clear(); } catch { /* no storage in this environment */ }
 });
 
 // Mock Supabase client

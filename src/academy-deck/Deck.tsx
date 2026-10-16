@@ -93,6 +93,26 @@ function savePrefs(p: { voice: boolean; sfx: boolean; calm: boolean }) {
   } catch { /* blocked storage: nothing is remembered, nothing breaks */ }
 }
 
+/** Lesson progress (slide, answers, stamps, stars) for a student working alone: kept on this device so a reload or a dropped connection does not restart the hour. Fails soft. */
+const PROGRESS_KEY = 'academy-deck-progress-v1';
+interface Saved { index: number; slideId: string; solved: Record<string, boolean>; vars: Vars; stamps: string[]; stats: Stats }
+function loadProgress(lessonId: string, slideIds: string[]): Saved | null {
+  try {
+    const v = JSON.parse(window.localStorage.getItem(`${PROGRESS_KEY}:${lessonId}`) ?? 'null') as Saved | null;
+    // a lesson that was edited since (different slides) is not resumed: positions would not mean the same thing
+    if (!v || typeof v.index !== 'number' || v.index < 1 || v.index >= slideIds.length || slideIds[v.index] !== v.slideId) return null;
+    return v;
+  } catch {
+    return null;
+  }
+}
+function saveProgress(lessonId: string, v: Saved | null) {
+  try {
+    if (v) window.localStorage.setItem(`${PROGRESS_KEY}:${lessonId}`, JSON.stringify(v));
+    else window.localStorage.removeItem(`${PROGRESS_KEY}:${lessonId}`);
+  } catch { /* blocked storage: nothing is remembered, nothing breaks */ }
+}
+
 function SlideView({ slide, script, onStart }: { slide: Slide; script: DeckScript; onStart: () => void }) {
   switch (slide.kind) {
     case 'title': return script.hub === false ? <TitleView slide={slide} /> : <LobbyView slide={slide} script={script} onStart={onStart} />;
@@ -184,6 +204,9 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
     if (controlled === undefined) setOwn(n);
     onSlide?.(n);
   }, [controlled, onSlide, script.slides.length]);
+  // a student working alone (not a teacher preview, a live class or homework) can pick the lesson up where they left off
+  const keepsProgress = controlled === undefined && !embedded && !follow && !teacher && !freeNext && !homework;
+  const [resume, setResume] = useState<Saved | null>(() => (keepsProgress && typeof window !== 'undefined' ? loadProgress(script.lessonId, script.slides.map((x) => x.id)) : null));
   const [solved, setSolved] = useState<Record<string, boolean>>({});
   const [vars, setVarsState] = useState<Vars>({ num: '427', numw: 'four hundred twenty-seven' });
   const [stamps, setStamps] = useState<string[]>([]);
@@ -386,6 +409,24 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
   useEffect(() => {
     if (stats.right > 0) setBurst((b) => b + 1);
   }, [stats.right]);
+  useEffect(() => {
+    if (!keepsProgress || resume) return;
+    saveProgress(script.lessonId, index >= 1 ? { index, slideId: script.slides[index].id, solved, vars, stamps, stats } : null);
+  }, [index, solved, vars, stamps, stats]); // eslint-disable-line react-hooks/exhaustive-deps
+  const continueLesson = () => {
+    if (!resume) return;
+    setSolved(resume.solved);
+    setVarsState(resume.vars);
+    setStamps(resume.stamps);
+    setStats(resume.stats);
+    for (let k = 0; k <= script.slides[resume.index].part; k++) shownParts.current.add(k);
+    go(resume.index);
+    setResume(null);
+  };
+  const startOver = () => {
+    saveProgress(script.lessonId, null);
+    setResume(null);
+  };
   const touchedPrefs = useRef(false);
   useEffect(() => {
     // only after the student changes a setting (the first render must not freeze the OS "reduce motion" default into storage)
@@ -435,7 +476,7 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
     if (!last) go(index + 1);
   };
   const next = () => {
-    if (last) onFinish?.({ vars, stats, stamps });
+    if (last) { saveProgress(script.lessonId, null); onFinish?.({ vars, stats, stamps }); }
     else go(index + 1);
   };
   const actorsVisible = cur.actors ?? [];
@@ -536,6 +577,18 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
             <span className="ad-partcard-goal">{script.partGoals?.[partCard] ?? parts[partCard].goal}</span>
             <span className="ad-partcard-pips" aria-hidden="true">{parts.map((_, k) => <i key={k} data-on={k <= partCard} />)}</span>
             <span className="ad-partcard-tap">Tap to start</span>
+          </div>
+        )}
+        {resume && (
+          <div className="ad-minute" role="dialog" aria-label="Continue the lesson">
+            <div>
+              <h2>Welcome back</h2>
+              <p>You were on slide {resume.index + 1} of {script.slides.length}. Pick up where you left off?</p>
+              <div className="ad-row">
+                <button type="button" className="ad-btn ad-btn-primary" autoFocus onClick={continueLesson}>Continue ▸</button>
+                <button type="button" className="ad-btn" onClick={startOver}>Start over</button>
+              </div>
+            </div>
           </div>
         )}
         {minute && (
