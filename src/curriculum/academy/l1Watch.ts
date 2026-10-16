@@ -20,7 +20,7 @@ export interface L1WatchItem {
 
 const w = (langs: HomeLanguage[], watch: string, teach: string, evidence: L1Evidence): L1WatchItem => ({ langs, watch, teach, evidence });
 
-/** Keyed by Season id. A1 and A2 written (2026-10-16); the other levels follow in the same shape. */
+/** Keyed by Season id. A1, A2 and B1 written (2026-10-16); the other levels follow in the same shape. */
 export const L1_WATCH: Record<string, readonly L1WatchItem[]> = {
   'A1-S01': [
     w(['ar'], 'Leaves out "am/is/are": "I student", "She happy" (Arabic has no present-tense copula).', 'State the rule line "every present sentence has am / is / are"; the student restates it in teach-back; nudge with "Say it with am/is/are."', 'V'),
@@ -151,6 +151,97 @@ export const L1_WATCH: Record<string, readonly L1WatchItem[]> = {
     w(['tr'], 'Uses the present continuous for habits (the Turkish -yor covers both): “I am going to school every day.”', 'A habits-versus-now sorting game with time words (every day, now, at the moment).', 'K'),
     w(['es', 'fr', 'it', 'ar'], 'Uses the continuous with state verbs: “I am knowing”, “I am wanting.”', 'List five state verbs on the Word Card; recast once, then nudge.', 'K'),
   ],
+  'B1-S01': [
+    w(['it', 'es', 'fr'], 'Uses the present perfect with a finished time: “Yesterday I have seen it”, “Last year I have been to Rome.”', 'Teach the time-word rule early: if you say when, use the past simple; the rule line plus a sorting game (experience or finished time).', 'V-weak'),
+    w(['tr', 'ar'], 'Uses the past simple where English needs the present perfect: “Did you ever eat sushi?”, “I went to Paris” for a life experience.', 'Contrast the two with a timeline picture; “ever / never / been” as fixed cues.', 'V-weak'),
+    w(['es', 'it'], 'Mixes up gone and been: “I have gone to Italy” for a finished trip.', 'A short “been = returned, gone = still there” sorting round with pictures.', 'K'),
+    w(['es', 'fr', 'it', 'tr', 'ar'], 'Wrong or regularised participles: “I have eated”, “I have saw”.', 'Sort the participles by pattern; misses go to the Mistake Bank.', 'K'),
+  ],
+  'B1-S02': [
+    w(['es', 'fr', 'it'], 'Mixes used to + verb with be used to + -ing (“I am used to play”).', 'Keep to used to + verb at this level; show be used to only as a note.', 'K'),
+    w(['tr', 'ar', 'es', 'fr', 'it'], 'Says “I used to going” or keeps the d in the question: “Did you used to…?”', 'The rule line “used to + base verb; didn’t use to in questions and negatives”.', 'K'),
+    w(['fr', 'it'], 'Reads the /s/ in “used to” as /z/ and the weak “to” disappears.', 'Shadow a recorded voice with “used to” in connected speech (understandable is enough).', 'V-weak'),
+  ],
+  'B1-S03': [
+    w(['it', 'es', 'fr'], 'Uses the present simple for “for / since”: “I live here since 2020”, “I study English for three years” (it da, es desde, fr depuis).', 'The rule line “started in the past and still true now: have + participle + for / since”; a timeline sorting game.', 'V-weak'),
+    w(['tr', 'ar'], 'Uses the past simple for a situation that continues: “I lived here for five years” (when they still do).', 'Ask “Do you still live here?” to make the contrast; use the timeline picture.', 'V-weak'),
+    w(['es', 'fr', 'it', 'tr', 'ar'], 'Confuses for and since, or says “How long time?”', 'Sort time expressions into a period (for) and a starting point (since); “How long…?” as a chunk.', 'K'),
+  ],
+  'B1-S04': [
+    w(['it', 'es', 'fr'], 'Present perfect with a finished-time word in news stories: “The mayor has said it yesterday.”', 'A news-headline game: headline in the present perfect, details in the past simple; the time-word rule on the board.', 'V-weak'),
+    w(['tr', 'ar'], 'Past simple for everything in a news report.', 'Use headline-then-detail: the first sentence gives the news (present perfect), the next ones give the time (past simple).', 'V-weak'),
+    w(['es', 'fr', 'it', 'tr', 'ar'], 'Wrong participle forms (“said”, “been”, “seen” confused with the past simple).', 'Trio sorting (base, past, participle) from B1-S01 recycled in the Remember?', 'K'),
+  ],
+  'B1-S05': [
+    w(['es', 'fr', 'it'], 'Uses will in the if-clause: “If it will rain, we stay home.”', 'The rule line “if + present simple, will + verb”; build the two halves with blocks.', 'K'),
+    w(['tr', 'ar'], 'Puts the result first or mixes the order without a comma; clause order from the L1.', 'A card game that swaps the clause order with the comma moving.', 'K'),
+    w(['fr', 'it'], 'Misses the pause after the if-clause and reads the sentence flat.', 'Shadow a recorded voice with the pause; clap the comma.', 'V-weak'),
+  ],
+  'B1-S06': [
+    w(['es', 'fr', 'it'], 'Uses would in the if-clause: “If I would have money, I would travel.”', 'The rule line “if + past simple, would + verb”; hand it over as a swap game.', 'K'),
+    w(['tr', 'ar', 'es', 'fr', 'it'], 'Says “If I was you” (common in everyday English) or “If I would be you”.', 'Accept “was” in speech; teach “If I were you” as a stock phrase for advice, and rule out would in the if-clause.', 'K'),
+    w(['fr', 'tr', 'it'], 'Hears and says ’d as “had” or loses it: “I’d go” sounds like “I go”.', 'Minimal-pair listening (I go / I’d go) with several recorded voices.', 'V-weak'),
+  ],
+  'B1-S07': [
+    w(['es', 'fr', 'it'], 'Uses the L1 impersonal pattern (se / on / si) instead of the passive: “Here speaks English”, “Here one speaks English.”', 'A simple build: object + be + participle (English is spoken here); keep to the present and past simple.', 'K'),
+    w(['tr', 'ar'], 'Leaves out be: “English spoken here”; or uses the active.', 'The rule line “be + past participle”; a transform game (active to passive).', 'K'),
+    w(['es', 'fr', 'it', 'tr', 'ar'], 'Says -ed as a full syllable in every participle.', 'Sort the participles by /t/ /d/ /ɪd/ with recorded voices.', 'K'),
+  ],
+  'B1-S08': [
+    w(['es', 'fr', 'it', 'tr'], 'Repeats the pronoun: “The man who I saw him”, “The film that I watched it.”', 'The rule line “one subject or object per clause: who / which / that replaces it”; a sentence-merging game.', 'K'),
+    w(['ar'], 'Resumptive pronoun in relative clauses (Arabic keeps it): “The book that I read it.”', 'Cross the pronoun out in a merging game; nudge with “Do you need it twice?”', 'K'),
+    w(['fr', 'it'], 'Uses “what” for “that”: “The thing what I like.”', 'Sort relative pronouns by what they refer to (person, thing, place).', 'K'),
+  ],
+  'B1-S09': [
+    w(['es', 'fr', 'it'], 'Uses must for every deduction and must not for “can’t be”: “He must not be at home.”', 'A clue-board game: must (sure), might (maybe), can’t (sure not); the student sorts the clues.', 'K'),
+    w(['tr', 'ar'], 'Adds “to” after the modal: “He might to be here.”', 'The rule line “must / might / can’t + base verb”.', 'K'),
+    w(['fr', 'tr', 'it'], 'Misses the weak form of modals and hears “can” for “can’t”.', 'Minimal-pair listening with several voices; the vowel carries the meaning.', 'V-weak'),
+  ],
+  'B1-S10': [
+    w(['es', 'fr', 'it'], 'Uses the present simple for a plan: “Tomorrow I meet my friends.” (a normal L1 pattern)', 'Check with “Is it arranged?”; teach the present continuous for arrangements with a diary picture.', 'K'),
+    w(['tr', 'ar', 'es', 'fr', 'it'], 'Uses “will” for a plan already made, or the present continuous for a promise.', 'A two-pile sorting game: arranged (continuing) or promised on the spot (will).', 'K'),
+    w(['fr', 'it', 'tr'], 'Loses the contracted ’ll in “I’ll be there”.', 'Shadow a recorded voice with ’ll in promises.', 'V-weak'),
+  ],
+  'B1-S11': [
+    w(['es', 'fr', 'it'], 'Uses the infinitive where English needs -ing (“I enjoy to read”) or the reverse (“I want going”).', 'Group verbs into two boxes (+ -ing / + to) with an anchor example; a sorting race that is a personal best, not a ranking.', 'K'),
+    w(['tr', 'ar'], 'Uses “for” + verb or a that-clause: “I want that you come.”', 'Show “want + object + to + verb” beside the L1 pattern once.', 'K'),
+    w(['fr', 'it', 'tr'], 'Weak “to” disappears or becomes “too”.', 'Shadow a recorded voice with “to” in the chain.', 'V-weak'),
+  ],
+  'B1-S12': [
+    w(['es', 'fr', 'it'], 'Keeps the question word order in an indirect question: “Could you tell me where is the station?”', 'The rule line “statement order after Could you tell me…”; a word-block builder.', 'K'),
+    w(['tr', 'ar', 'es', 'fr', 'it'], 'No backshift: “He said he is tired.” Or says “say me”.', 'Say/tell sorting: say + something, tell + someone; a short backshift timeline (present → past).', 'K'),
+    w(['it', 'fr'], 'Says said as /sed/ vs /sɛd/ incorrectly or adds a vowel to told.', 'Minimal-pair game with said, sad, told with recorded voices.', 'V-weak'),
+  ],
+  'B1-S13': [
+    w(['es', 'fr', 'it'], 'Uses the past simple instead of the past perfect: “When I arrived, he left.” (for “had left”)', 'A timeline game with two past events: which happened first?', 'K'),
+    w(['tr', 'ar'], 'Omits had or uses it with the wrong form: “I had went.”', 'The rule line “had + past participle”; participle trio sorting.', 'K'),
+    w(['fr', 'it', 'tr'], 'Loses the contracted ’d for had in speech.', 'Listening game with ’d (had) versus ’d (would) from B1-S06.', 'V-weak'),
+  ],
+  'B1-S14': [
+    w(['es', 'fr', 'it'], 'Uses wish + would or wish + the present: “I wish I have more time.”', 'The rule line “wish + past simple (I wish I had …)”; a wish-list builder.', 'K'),
+    w(['tr', 'ar'], 'Says “wish” for “want”: “I wish to go” (formal) or confuses it with hope.', 'Sort sentences into real now (want) and not real now (wish) with a picture.', 'K'),
+    w(['fr', 'tr', 'it'], 'Final /ʃ/ in wish: /s/ or /ʃi/.', 'Minimal pair wish / wit / with; aim to be understood.', 'V-weak'),
+  ],
+  'B1-S15': [
+    w(['es', 'fr', 'it'], 'Treats mustn’t and don’t have to as the same (revisits A2-S06).', 'A visa-rules sorting game: not allowed or not necessary; return the A2 items in the Remember?', 'K'),
+    w(['es', 'fr', 'it', 'tr', 'ar'], 'Uses “although … but” in one sentence: “Although it was late, but we went.”', 'Show one word per link; a sentence-merging game.', 'K'),
+    w(['ar', 'tr'], 'Uses “even though” and “although” the wrong way round or leaves out a verb.', 'A short build with blocks; teach-back of the rule.', 'V-weak'),
+  ],
+  'B1-S16': [
+    w(['tr', 'ar', 'es', 'fr', 'it'], 'Wrong tag auxiliary: “You like it, isn’t it?”; uses “no?” for all tags.', 'The rule line “same auxiliary, opposite sign”; a quick-fire tag-matching game.', 'K'),
+    w(['fr', 'it'], 'Flat intonation: every tag sounds like a real question.', 'Rising versus falling tags with recorded voices (confirm or ask); shadow, then say.', 'V-weak'),
+    w(['es', 'fr', 'it'], 'Separates phrasal verbs wrongly: “Turn off it”, “Look for them up.”', 'Sort separable and inseparable phrasal verbs by whether a pronoun goes in the middle.', 'K'),
+  ],
+  'B1-S17': [
+    w(['es', 'fr', 'it', 'tr', 'ar'], 'Leaves out “that” or uses “so… as”: “It was so cold, we stayed.”', 'The rule line “so + adjective + that”; blocks for the result.', 'K'),
+    w(['es', 'fr', 'it'], 'Uses reflexive pronouns where English does not (“I feel myself good”, “wash myself my hands”).', 'List verbs that take no reflexive in English (feel, relax, get up) on a Word Card.', 'K'),
+    w(['fr', 'ar'], 'Adds a vowel at the end of -selves /selvz/.', 'Say it in blocks and shadow a recorded voice.', 'V-weak'),
+  ],
+  'B1-S18': [
+    w(['es', 'fr', 'it'], 'Puts “enough” before the adjective: “enough big” (L1 order) or uses “too” for “very”.', 'The rule line “adjective + enough; enough + noun”; sort “too” and “enough” sentences.', 'K'),
+    w(['tr', 'ar', 'es', 'fr', 'it'], 'Mixes few and little: “a little friends”, “a few money.”', 'Countable / uncountable sorting with the picture; keep few and little as chunks.', 'K'),
+    w(['es', 'it', 'tr'], 'Reads the “gh” in enough as written (/g/ or /gh/) instead of /f/.', 'Pair the written word with the recorded voice; add to the Daily 10 dictation.', 'V-weak'),
+  ],
 };
 
 /** The watch list for a Season ([] when none is written yet). */
@@ -159,4 +250,4 @@ export function l1WatchFor(seasonId: string): readonly L1WatchItem[] {
 }
 
 /** Levels whose Seasons all have a list (used by the test; extend as each level is written). */
-export const L1_WATCH_LEVELS: readonly AcademyLevel[] = ['A1', 'A2'];
+export const L1_WATCH_LEVELS: readonly AcademyLevel[] = ['A1', 'A2', 'B1'];
