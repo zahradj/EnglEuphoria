@@ -84,3 +84,18 @@ Searched 2026-10-15. Mechanics only, never content.
 **Better than them:** every answer is pinned to a clue board (the video-game **detective board**) so the child sees the reasoning; the board moves only when the child asks in English; part 2 makes the child the one who answers, with a gentle "Look at your card again!" for a wrong answer — no lives, no timer.
 **Games list (L4):** Read and Match (polaroids, then cards) · **Reef Detective ★ (signature, new)** · Field Guide (Bub's mistakes) · Go Fish! · Raft Race · Treasure Islands · Letter Blocks (wh / oa / sh review) · Blend & Read · twister.
 **Video-game mechanic:** **detective board** (clues pinned until the case is solved).
+
+## Lesson 5 — Storybook: The Treasure Reef (*read the whole story; Bub is helping; Is it the treasure? Yes, it is!*)
+Searched 2026-10-16. Mechanics only, never content.
+
+| Source (URL) | What it does | Taken (mechanic) | Quality / limits |
+|---|---|---|---|
+| British Council TeachingEnglish "Carnival crime" (A1+) — https://www.teachingenglish.org.uk/sites/teacheng/files/teaching-kids-storytelling-carnival-crime-lesson-plan.pdf | the teacher stops the story so children predict, and children join in with repeated lines | **Predict** page before reading and the **pause page** after page 9 (who can help find the chest?) | official lesson plan, A1+ primary; verified (search) |
+| British Council "Draw a Story" / school retell guides (e.g. Lethbridge kindergarten guide — https://home.lethsd.ab.ca/kindergarten/kindergarten-team-website/post/146061) | pause on pages to look at the pictures; children retell from the pictures | **Lift the Flap** (look closely: what is hiding where in the story) and the picture-led retell | teacher guides; seen in search |
+| Sequencing cards (flipeducation, UK Year 1 bank — https://flipeducation.ai/curriculum/gb/english/year-1/retelling-stories-with-detail/activities) | sort picture cards beginning / middle / end, retell, then retell without cards | **Story Order** with the story pictures, then a retell from memory | activity bank, unofficial; seen in search |
+| Cambridge Pre A1 Starters Reading & Writing (sample papers — https://www.cambridgeenglish.org/fr/images/starters-sample-papers-2018-vol1.pdf) | read a short text with gaps and choose the word; yes/no sentences about a picture | **story gap** check (choose the missing story word) and yes/no sentences about the story pictures | official exam format; verified |
+| Khan Academy Kids / Duolingo ABC interactive storybooks (App Store — https://apps.apple.com/app/id1378467217) | read-to-me then read-alone, words light up | the Reader's listen → read-alone flow (already ours); not a branching story app (no choice found) | app listings; limits: no branching found |
+
+**Better than them:** the pause is a real choice inside the story — the child picks a helper and SAYS why (*Bub! He is good at hiding.*), and only the language unlocks the chest; the reveal games use the story's own pictures, so every game retells the book; the treasure chest opens on the child's spoken answer (*Is it the treasure? Yes, it is!*). No timers, gentle wrong answers.
+**Games list (L5):** Predict · Reader (whole book, pause page) · **Lift the Flap — Story Rocks** (signature: what is hiding under each rock in the story) · Tile Reveal (which page is it?) · Story Order + retell · What's Missing? · Treasure Chests (story questions) · Letter Monsters (wh / oa / sh) · Blend & Read · twister.
+**Video-game mechanic:** **branching choice** (the pause page) + **loot** (the compass piece in the chest).

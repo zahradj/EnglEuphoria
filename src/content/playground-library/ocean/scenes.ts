@@ -60,6 +60,9 @@ export const TREASURE_REEF: ReaderPage[] = [
   { img: reefGif(7), lines: [{ text: 'The turtle lives on the reef. It eats sea grass.' }], check: { who: 'mia', question: 'What does the turtle eat?', answer: 'Sea grass', options: [{ label: 'Fish', img: SEA.fish }, { label: 'Sea grass', img: item('sea-grass') }, { label: 'Shells', img: SEA.shell }] } },
   { img: reefGif(8), lines: [{ text: 'Oh no! It is windy. The waves are big.' }], check: { who: 'bella', question: 'What is the weather like?', answer: 'Windy', options: [{ label: 'Sunny' }, { label: 'Windy' }, { label: 'Snowy' }] } },
   { img: reefGif(9), lines: [{ text: 'Mia: Is it the chest? Shark: No, it isn’t!' }], check: { who: 'leo', question: 'Is it the chest?', answer: 'No, it isn’t.', options: [{ label: 'Yes, it is.' }, { label: 'No, it isn’t.' }] } },
+  { img: reefPage(10), lines: [{ text: 'Bub is not hiding now. He is helping!' }], check: { who: 'mia', question: 'What is Bub doing now?', answer: 'Helping', options: [{ label: 'Hiding' }, { label: 'Helping' }, { label: 'Sleeping' }] } },
+  { img: reefPage(11), lines: [{ text: 'Is it the treasure? Yes, it is!' }], check: { who: 'bella', question: 'Is it the treasure?', answer: 'Yes, it is.', options: [{ label: 'Yes, it is.' }, { label: 'No, it isn’t.' }] } },
+  { img: reefPage(12), lines: [{ text: 'It is sunny again. Bub is happy. Splash!' }], check: { who: 'pip', question: 'What is the weather like now?', answer: 'Sunny', options: [{ label: 'Windy' }, { label: 'Sunny' }, { label: 'Snowy' }] } },
 ];
 
 const helloSong = (id: string, bg: string): Scene => ({
@@ -1222,4 +1225,276 @@ export const LESSON_A1U6L4_SCENES: Scene[] = [
   },
   goodbyeSong('oc4-goodbye-song', reefPage(1)),
   { id: 'oc4-finale', kind: 'finale', bg: reefPage(9), who: 'pip', line: 'You can ask and answer like a real reef detective! See you next time! \u{1F50D}' },
+];
+
+/* =============================================================================
+ * A1 Unit 6 Lesson 5: "Storybook: The Treasure Reef"
+ * Objective: I can read "The Treasure Reef" with help and say what the animals are doing and what the weather is like.
+ * Evidence: reads 4 pages alone; at the pause chooses who can help find the chest and says why; retells 3 pictures.
+ * Story frame: after the storm the friends search the rocks for the lost chest — Bub stops hiding and helps; the chest
+ *   holds the fifth piece of the Golden Compass. Sunny again: everyone splashes.
+ * Practice ladder: Revise (Remember? L4 questions) → Predict (Coral) → Present the story words (I do → we do) → Read
+ *   and Match → Lift the Flap: Story Rocks (signature, the story's question "Is it the chest?") → Reader p1-9 → PAUSE
+ *   (branching choice: who can help?) → Reader p10-12 → Read and Match → Tile Reveal (which page?) → Story Order +
+ *   retell → story gaps → What's missing? → Treasure Chests → act it out → phonics review (Letter Monsters wh / sh / b,
+ *   Blend & Read, twister) → Free (retell + talk with Coral) → check.
+ * Research (mechanics only): docs/research/playground-a1u6-research.md § Lesson 5 (British Council predict + pause,
+ *   retell guides, picture sequencing, Cambridge Starters gap task).
+ * ========================================================================= */
+export const LESSON_A1U6L5_TITLE = 'Storybook: The Treasure Reef';
+export const LESSON_A1U6L5_OBJECTIVE = 'I can read "The Treasure Reef" with help and say what the animals are doing and what the weather is like.';
+
+const CHEST = '/lep1/stickers/chest-closed.png';
+const CHEST_OPEN = '/lep1/stickers/chest-open.png';
+const STONE = item('stone');
+
+export const LESSON_A1U6L5_SCENES: Scene[] = [
+  { id: 'oc5-title', kind: 'title-card', bg: reefPage(10), level: 'A1', unit: 'Unit 6', lessonLabel: 'Lesson 5', title: 'The Treasure Reef', subtitle: 'Read the whole story!', cta: '\u{1F4D6} LET’S READ!' },
+  {
+    // Remember? (owner, 2026-10-07): Lesson 4 — Is it…? questions. Click mode (Lesson 4 used shadow).
+    id: 'oc5-recall-warmup', kind: 'recall-warmup', bg: bgRocks, who: 'pip', mode: 'click',
+    fromLabel: 'Lesson 4 · Is It a Shark?',
+    teacher: 'Guided: Pip asks a question — the student finds the picture that says YES and answers: Yes, it is!',
+    items: [
+      { word: 'hiding', say: 'Is it hiding? Yes, it is!', img: ACT.hiding },
+      { word: 'walking', say: 'Is it walking? Yes, it is!', img: ACT.walking },
+      { word: 'sleeping', say: 'Is it sleeping? Yes, it is!', img: ACT.sleeping },
+      { word: 'eating', say: 'Is it eating? Yes, it is!', img: ACT.turtleEating },
+    ],
+  },
+  helloSong('oc5-hello-song', reefPage(12)),
+  { id: 'oc5-predict', kind: 'meet', focus: ['treasure'], bg: reefPage(9), who: 'coral', cardSide: 'right', teacher: 'Predict (I do): the storm is over, but where is the chest? Ask: Who can help? The shark? The crab? Bub? Let the student guess — we find out in the story!', line: 'The chest is lost! Who can help us find the treasure?', repeat: 'Where is the treasure?' },
+  {
+    id: 'oc5-story-words', kind: 'prea1', teacher: 'Present (I do → we do): the new story words. Point, say, act: hide behind your hands, then help — point!',
+    scene: {
+      id: 'oc5-story-words', kind: 'listen-repeat-cards', bg: bgRocks, teacher: 'New story words — listen and say!',
+      cards: [
+        { who: 'pip', sentence: 'He is hiding.', img: ACT.hiding, imgLabel: 'hiding' },
+        { who: 'pip', sentence: 'He is helping!', img: item('bub-hiding'), imgLabel: 'helping' },
+        { who: 'mia', sentence: 'It is the treasure!', img: CHEST_OPEN, imgLabel: 'treasure' },
+        { who: 'mia', sentence: 'It is under the rock.', img: STONE, imgLabel: 'rock' },
+      ],
+    },
+  },
+  { id: 'oc5-echo', kind: 'echo', bg: reefPage(10), who: 'bub', textSide: 'top', teacher: 'Guided (we do): say it like Bub — a tiny shy voice for “hiding”, a big proud voice for “helping”!', word: 'I’m not hiding now. I’m helping!' },
+  // Owner 2026-10-13/14: after the words, Read and Match. Design differs from L4 (polaroids) and U5L5 (cards).
+  {
+    id: 'oc5-match', kind: 'picture-match', look: 'chalk', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each word and drags it under its picture, then says a sentence: It is the treasure!',
+    items: [
+      { word: 'treasure', img: CHEST_OPEN },
+      { word: 'rock', img: STONE },
+      { word: 'hiding', img: ACT.hiding },
+      { word: 'boat', img: BOAT },
+      { word: 'starfish', img: SEA.starfish },
+    ],
+    bg: bgRocks,
+  },
+  {
+    id: 'oc5-story-rocks', kind: 'prea1', teacher: 'You do (the signature game): where is the chest? The student ASKS at each rock “Is it the chest?”, taps to look and answers: No, it isn’t. It’s a crab. The crab is walking!',
+    scene: {
+      id: 'oc5-story-rocks', kind: 'lift-flap', bg: bgRocks, who: 'mia', guided: true, whatPrompt: 'What is it doing?',
+      teacher: 'Ask: Is it the chest? Then look!',
+      question: 'Where is the chest?',
+      notYet: 'Not yet! Look under the other rocks first!',
+      spots: [
+        { x: 20, y: 80, size: 13, ask: 'Is it the chest?', reveal: 'No, it isn’t! It’s a crab. The crab is walking.', say: 'The crab is walking.', cover: { img: STONE, label: 'rock' }, under: { img: ACT.walking, label: 'crab' } },
+        { x: 42, y: 84, size: 12, ask: 'Is it the chest?', reveal: 'No, it isn’t! It’s a starfish. The starfish is sleeping.', say: 'The starfish is sleeping.', cover: { img: STONE, label: 'rock' }, under: { img: ACT.sleeping, label: 'starfish' } },
+        { x: 64, y: 80, size: 13, ask: 'Is it the chest?', reveal: 'No, it isn’t! It’s Bub. Bub is hiding!', say: 'Bub is hiding.', cover: { img: STONE, label: 'rock' }, under: { img: ACT.hiding, label: 'Bub' } },
+        { x: 84, y: 84, size: 15, ask: 'Is it the chest?', reveal: 'Yes, it is! It’s the treasure chest!', target: true, cover: { img: STONE, label: 'rock' }, under: { img: CHEST, label: 'chest' } },
+      ],
+    },
+  },
+  /* Reading: the whole book, with a pause after page 9 */
+  {
+    id: 'oc5-reader-1', kind: 'reader', bg: reefPage(1), title: 'The Treasure Reef', doneLine: 'The shark says no. Who can help? Let’s think!',
+    teacher: 'Reading: pages 1-9 — the student reads pages they know ALONE (🔊 only for help). Evidence: 4 pages read alone.',
+    pages: TREASURE_REEF.slice(0, 9),
+  },
+  {
+    id: 'oc5-pause', kind: 'choice', bg: reefPage(9), who: 'coral', teacher: 'Pause (branching choice): who can help find the chest? The student chooses and SAYS why: Bub! He is good at hiding — he knows the rocks!',
+    prompt: 'Who can help find the chest?',
+    options: [
+      { label: 'Bub — he knows the rocks!', emoji: '\u{1F419}', correct: true },
+      { label: 'The whale — it is big!', emoji: '\u{1F40B}' },
+      { label: 'The starfish — it is sleeping!', emoji: '\u{2B50}' },
+    ],
+  },
+  {
+    id: 'oc5-reader-2', kind: 'reader', bg: reefPage(10), title: 'The Treasure Reef — the end', doneLine: 'The end! You read the whole story!',
+    teacher: 'Reading: the new pages 10-12. Listen while the words light up, then the student reads. “Is it the treasure?” goes UP, “Yes, it is!” comes DOWN.',
+    pages: TREASURE_REEF.slice(9, 12),
+  },
+  { id: 'oc5-thanks', kind: 'meet', focus: ['helping'], bg: reefPage(11), who: 'bub', cardSide: 'right', teacher: 'Guided: Bub thanks the student for choosing him. Ask: Was Bub hiding? Is he hiding now? (No — he is helping!)', line: 'Thank you! I’m not hiding now — I’m helping! Is it the treasure? Yes, it is!', repeat: 'Bub is helping!' },
+  { id: 'oc5-echo-2', kind: 'echo', bg: reefPage(11), who: 'mia', textSide: 'top', teacher: 'Guided: question UP, answer DOWN — then whisper it, then shout it like a pirate!', word: 'Is it the treasure? Yes, it is!' },
+  {
+    id: 'oc5-read-match', kind: 'picture-match', look: 'frames', prompt: 'Read and match',
+    teacher: 'Reading: read each sentence from the story and drag it under its picture. Then read it aloud.',
+    items: [
+      { word: 'Bub is helping!', img: reefPage(10) },
+      { word: 'Is it the treasure? Yes, it is!', img: reefPage(11) },
+      { word: 'It is sunny again. Splash!', img: reefPage(12) },
+      { word: 'The waves are big.', img: reefPage(8) },
+    ],
+    bg: bgReef,
+  },
+  {
+    id: 'oc5-which-page', kind: 'prea1', teacher: 'Guided: Tile Reveal! Who or what from the story is hiding? Tiles open one by one — the student listens to the story clue and guesses early, then says the story sentence.',
+    scene: {
+      id: 'oc5-which-page', kind: 'tile-reveal', bg: bgReef, who: 'pip',
+      teacher: 'Who is it in the story? Guess early!',
+      rounds: [
+        { img: ACT.hiding, word: 'Bub', line: 'He is shy. He is hiding. Then he is helping! Who is it?', options: [{ label: 'crab', img: SEA.crab }, { label: 'Bub', img: BUB }, { label: 'shark', img: SEA.shark }] },
+        { img: ACT.turtleEating, word: 'turtle', line: 'It lives on the reef. It eats sea grass. Who is it?', options: [{ label: 'turtle', img: SEA.turtle }, { label: 'whale', img: SEA.whale }, { label: 'starfish', img: SEA.starfish }] },
+        { img: CHEST_OPEN, word: 'treasure', line: 'It is in the chest. Is it the treasure? Yes, it is!', options: [{ label: 'boat', img: BOAT }, { label: 'shell', img: SEA.shell }, { label: 'treasure', img: CHEST_OPEN }] },
+      ],
+    },
+  },
+  {
+    id: 'oc5-story-order', kind: 'prea1', teacher: 'Guided: put the story pictures in order, then retell it: first, then, then, at the end! Evidence: retells 3 pictures.',
+    scene: {
+      id: 'oc5-story-order', kind: 'story-order', bg: bgReef, who: 'pip', teacher: 'Put the pictures in order, then tell the story!',
+      frames: [
+        { img: reefPage(1), caption: 'It is sunny. A boat on the sea.' },
+        { img: reefPage(4), caption: 'Bub is hiding.' },
+        { img: reefPage(8), caption: 'It is windy. The waves are big.' },
+        { img: reefPage(10), caption: 'Bub is helping!' },
+        { img: reefPage(12), caption: 'It is sunny again. Splash!' },
+      ],
+    },
+  },
+  {
+    id: 'oc5-story-gaps', kind: 'grammar-gap', bg: bgReef, title: 'Read and Choose',
+    teacher: 'Reading (Cambridge Starters style): read the sentence from the story and choose the missing word. Then read it all.',
+    rounds: [
+      { before: 'The crab is', after: '.', choices: ['walking', 'sleeping'], answer: 'walking', img: reefPage(5) },
+      { before: 'The turtle eats sea', after: '.', choices: ['grass', 'fish'], answer: 'grass', img: reefPage(7) },
+      { before: 'Oh no! It is', after: '.', choices: ['sunny', 'windy'], answer: 'windy', img: reefPage(8) },
+      { before: 'Bub is not hiding now. He is', after: '!', choices: ['helping', 'eating'], answer: 'helping', img: reefPage(10) },
+    ],
+  },
+  {
+    id: 'oc5-whats-missing', kind: 'whats-missing', bg: bgRocks, title: 'Who is missing?',
+    teacher: 'Guided: look at the story animals — one swims away! Say who is missing and what it was doing: The crab is missing. It was walking!',
+    rounds: [
+      { items: [{ word: 'crab', img: SEA.crab }, { word: 'shark', img: SEA.shark }, { word: 'turtle', img: SEA.turtle }, { word: 'starfish', img: SEA.starfish }], missing: 0 },
+      { items: [{ word: 'whale', img: SEA.whale }, { word: 'octopus', img: BUB }, { word: 'fish', img: SEA.fish }, { word: 'seahorse', img: SEA.seahorse }], missing: 1 },
+    ],
+  },
+  {
+    id: 'oc5-chests', kind: 'chest-quest', bg: reefPage(11), who: 'coral', title: 'Treasure Chests!', goal: 60,
+    teacher: 'Guided: story questions — every right answer opens a chest and the pearls fill the jar. Can we reach 60?',
+    rounds: [
+      { ask: 'Where does Coral live?', choices: ['She lives in the sea.', 'She lives in a house.'], answer: 0, img: CORAL, prizes: ['10', '20', '⭐'] },
+      { ask: 'What is Bub doing on page 4?', choices: ['He is helping.', 'He is hiding.'], answer: 1, img: ACT.hiding, prizes: ['20', '×2', '10'] },
+      { ask: 'Is the whale small?', choices: ['Yes, it is.', 'No, it isn’t.'], answer: 1, img: SEA.whale, prizes: ['10', '20', '×2'] },
+      { ask: 'What is in the chest?', choices: ['The treasure!', 'A crab!'], answer: 0, img: CHEST_OPEN, prizes: ['⭐', '10', '20'] },
+    ],
+    doneLine: 'Look at the jar! Super story answers!',
+  },
+  {
+    id: 'oc5-move-break', kind: 'prea1', teacher: 'Brain break: act the story with the body!',
+    scene: {
+      id: 'oc5-move-break', kind: 'tpr-actions', mode: 'break', bg: reefPage(6), who: 'bella', teacher: 'Act the story!',
+      rounds: [
+        { line: 'Dive like the friends! Swim, swim!', emoji: '\u{1F93F}' },
+        { line: 'Hide like Bub! Shh…', emoji: '\u{1F419}' },
+        { line: 'Big waves! Go up and down!', emoji: '\u{1F30A}' },
+        { line: 'Open the treasure chest! Wow!', emoji: '\u{1F381}' },
+      ],
+    },
+  },
+  {
+    id: 'oc5-act-out', kind: 'join-stage', bg: reefPage(10), teacher: 'Guided: act it out! The student is Bub and says his lines; the teacher is Mia. Then swap.', cast: ['mia', 'bub'],
+    turns: [
+      { who: 'mia', line: 'Where is the chest? Is it under this rock?' },
+      { who: 'student', line: 'No, it isn’t! Look — it’s here!' },
+      { who: 'mia', line: 'Bub! You are not hiding now!' },
+      { who: 'student', line: 'I’m helping!' },
+      { who: 'mia', line: 'Is it the treasure?' },
+      { who: 'student', line: 'Yes, it is!' },
+    ],
+  },
+  /* Phonics review: wh, sh, b (boat) → Letter Monsters → Blend & Read → the unit twister */
+  {
+    id: 'oc5-monsters', kind: 'prea1', teacher: 'Reading (review of the unit sounds): Hungry Letter Monsters! Feed each picture to the monster with its first sound — wh, sh or b — and say it.',
+    scene: {
+      id: 'oc5-monsters', kind: 'letter-monsters', bg: bgReef, who: 'pip', teacher: 'Feed each picture to the monster with its first sound!',
+      monsters: [{ letter: 'wh', color: '#38BDF8' }, { letter: 'sh', color: '#FE6A2F' }, { letter: 'b', color: '#22C55E' }],
+      cards: [
+        { word: 'whale', img: SEA.whale }, { word: 'shell', img: SEA.shell },
+        { word: 'boat', img: BOAT }, { word: 'wheel', img: WHEEL },
+        { word: 'ship', img: item('ship') }, { word: 'ball', img: item('ball-red') },
+      ],
+    },
+  },
+  {
+    id: 'oc5-blend', kind: 'sound-blend', bg: reefPage(12),
+    teacher: 'Reading: blend the word, find the picture — then read the story sentence.',
+    rounds: [
+      { word: 'boat', sounds: ['b', 'oa', 't'], img: BOAT, sentence: 'Look! A boat on the sea.' },
+      { word: 'fish', sounds: ['f', 'i', 'sh'], img: SEA.fish, sentence: 'Fish are swimming!' },
+      { word: 'whale', sounds: ['wh', 'a', 'l'], img: SEA.whale, sentence: 'It is a whale. It is big!' },
+    ],
+  },
+  { id: 'oc5-twister', kind: 'tongue-twister', look: 'town', speeds: 3, bg: reefPage(12), who: 'bub', focus: 'sh', teacher: 'Reading: the story twister! Listen to Bub, then say it slow, faster — then splash speed!', line: 'Bub wishes for a shiny shell. Splash!' },
+  /* Free: retell from the pictures; talk with Coral */
+  {
+    id: 'oc5-retell', kind: 'join-stage', bg: reefPage(12), teacher: 'Free: the student tells the story to Pip with the pictures — 3 pictures at least (first, then, at the end). Pip only asks; the student tells.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Tell me the story! What is the weather like first?' },
+      { who: 'student', line: 'It is sunny. A boat on the sea.' },
+      { who: 'pip', line: 'And then?' },
+      { who: 'student', line: 'It is windy. The waves are big.' },
+      { who: 'pip', line: 'Who helps?' },
+      { who: 'student', line: 'Bub! He is helping. Is it the treasure? Yes, it is!' },
+    ],
+  },
+  {
+    id: 'oc5-talk-coral', kind: 'join-stage', bg: reefPage(2), teacher: 'Free: a mini-conversation with Coral — the student answers about the story and their own favourite.', cast: ['coral'],
+    turns: [
+      { who: 'coral', line: 'Who is your favourite in the story?' },
+      { who: 'student', line: 'Bub! / The whale! / The turtle!' },
+      { who: 'coral', line: 'What is it doing?' },
+      { who: 'student', line: 'It’s … -ing.' },
+      { who: 'coral', line: 'Do you like the story?' },
+      { who: 'student', line: 'Yes, I do!' },
+    ],
+  },
+  { id: 'oc5-i-can', kind: 'meet', focus: ['story'], bg: reefPage(11), who: 'coral', cardSide: 'right', teacher: 'Check: the student read 4 pages alone, chose Bub at the pause and said why, and retold 3 pictures — then the passport stamp!', line: 'You can read the whole story! Is it a super reader? Yes, it is — it’s you!', repeat: 'I can read The Treasure Reef.' },
+  {
+    id: 'oc5-sticker', kind: 'prea1', teacher: 'Sticker time! The student opens the pack and puts the Ocean sticker in their Sticker Book.',
+    scene: {
+      id: 'oc5-sticker', kind: 'sticker-reward', bg: reefPage(12), who: 'pip', teacher: 'Sticker time!',
+      line: 'You found the treasure! Here is your sticker.',
+      sticker: { img: CHEST_OPEN, label: 'Treasure finder' },
+    },
+  },
+  petPal('oc5-pet-pal', 4, 'I want to splash too! Is it my boat? Yes, it is!', [{ label: 'goat', img: GOAT }, { label: 'boat', img: BOAT }, { label: 'coat', img: COAT }], 1, 'My boat! Splash, splash!'),
+  {
+    id: 'oc5-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
+    scene: {
+      id: 'oc5-home-mission', kind: 'home-mission', bg: reefPage(12), who: 'pip',
+      line: 'Your home mission!', teacher: 'Home Mission: read the steps with the student.',
+      parentNote: 'Today your child read the whole story "The Treasure Reef". Ask them to tell it to you with the pictures: the weather, the animals and what they are doing, and who helps find the treasure.',
+      steps: [
+        { emoji: '\u{1F4D6}', say: 'Tell the story to your family.' },
+        { emoji: '\u{1F419}', say: 'Say who helps: Bub is helping!' },
+        { emoji: '\u{1F381}', say: 'Hide a “treasure” — your family asks: Is it under the bed?' },
+      ],
+    },
+  },
+  {
+    id: 'oc5-move-break-2', kind: 'prea1', teacher: 'Brain break: sunny again!',
+    scene: {
+      id: 'oc5-move-break-2', kind: 'tpr-actions', mode: 'break', bg: reefPage(12), who: 'pip', teacher: 'Sunny again!',
+      rounds: [
+        { line: 'The sun is back! Stretch up high!', emoji: '\u{2600}\u{FE0F}' },
+        { line: 'Splash! Jump in the sea!', emoji: '\u{1F4A6}' },
+        { line: 'Wave goodbye to Bub!', emoji: '\u{1F44B}' },
+      ],
+    },
+  },
+  goodbyeSong('oc5-goodbye-song', reefPage(12)),
+  { id: 'oc5-finale', kind: 'finale', bg: reefPage(11), who: 'pip', line: 'You read the whole story and found the treasure! See you next time! \u{1F4D6}' },
 ];

@@ -149,6 +149,8 @@ knows the rocks.*) → **Lift the Flap** (what's hiding where in the story) → 
 out → phonics review (**Letter Monsters**: wh, oa, sh) → Blend & Read → twister → check · sticker · Pet Pal · home ·
 goodbye · finale. Story GIFs (Canva) only after a written scenario, a preview GIF and the owner's OK.
 
+**Built 2026-10-16** (`LESSON_A1U6L5_SCENES`, 33 pages): story pages 10-12 drawn in Canva (holder DAHYA1ndgiM p94-96, brand shades, Bella, Bub, Coral fully covered); signature game **Lift the Flap — Story Rocks** (ask *Is it the chest?* at each rock); the pause page is the branching choice; Tile Reveal uses story characters; Letter Monsters reviews wh / sh / b; plus Story Order, Read and Choose (Cambridge gap task), Who is missing?, Treasure Chests.
+
 ### 6.6 Lesson 6 — Ocean Question Game! (extra practice)
 
 **Objective:** *I can ask and answer questions about sea animals quickly and correctly.*

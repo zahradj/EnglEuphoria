@@ -46,7 +46,8 @@ Pages that stay still: 1-5 (no new art yet; they keep the earlier pictures).
 `docs/scenarios/a1u6-treasure-reef-preview.gif` shows pages 6-9 in book order, each held for its reading time, with a corner label naming the action that will move.
 
 ## Approval
-- Owner: 2026-10-16, "Yes"
+- Owner: 2026-10-16, "Yes" (scenario)
+- Owner: 2026-10-16, "Go" after seeing the four GIFs (built GIFs accepted)
 
 ## How they were made (2026-10-16)
 An AI-redrawn frame B moved the whole picture (19 % of the pixels, the friends too), so it was dropped. Instead each page was

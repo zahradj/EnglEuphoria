@@ -164,3 +164,35 @@ export const QUEST_REEF_DETECTIVE_A1_U6L4: HomeworkQuest = {
     chest('You did it! Reef detective!', page(9)),
   ],
 };
+
+/** Lesson 5 "Storybook: The Treasure Reef" */
+export const QUEST_TREASURE_REEF_A1_U6L5: HomeworkQuest = {
+  id: 'treasure-reef-a1-u6l5', title: 'Treasure Reef Quest', subtitle: 'The Treasure Reef · A1 Unit 6 · Lesson 5', level: 'A1', lessonKey: 'ocean-rich-6-5',
+  theme: theme(page(11)), voice: 'teacher', praise,
+  levels: [
+    { kind: 'true-false', name: 'True or False?', icon: '📖', intro: 'Look at the story. True or false?',
+      rounds: [
+        { img: page(10), aspect: 16 / 9, line: 'Bub is hiding.', isTrue: false },
+        { img: page(11), aspect: 16 / 9, line: 'Is it the treasure? Yes, it is.', isTrue: true },
+        { img: page(12), aspect: 16 / 9, line: 'It is sunny again.', isTrue: true },
+      ] },
+    { kind: 'picture-choice', name: 'Who Is It?', icon: '🐙', intro: 'Listen. Tap the right picture!', img: reef,
+      rounds: [
+        { line: 'He is hiding.', answer: 'octopus', options: [{ label: 'octopus', src: it('bub-hiding') }, { label: 'crab', src: it('crab-walking') }, { label: 'whale', src: it('whale-diving') }] },
+        { line: 'It is sleeping.', answer: 'starfish', options: [{ label: 'turtle', src: it('turtle-eating') }, { label: 'starfish', src: it('starfish-sleeping') }, { label: 'fish', src: it('fish-eating') }] },
+      ] },
+    { kind: 'sentence-builder', name: 'Build the Story!', icon: '🧱', intro: 'Listen. Build what you hear!',
+      rounds: [
+        { img: page(10), line: 'Bub is helping!', extra: ['are'] },
+        { img: page(12), line: 'It is sunny again.', extra: ['windy'] },
+      ] },
+    { kind: 'reading', name: 'The Story', icon: '📖', intro: 'Read the end of the story. Then answer from memory!', img: page(12),
+      sentences: ['Bub is not hiding now. He is helping!', 'Is it the treasure? Yes, it is!', 'It is sunny again. Bub is happy. Splash!'],
+      questions: [
+        { q: 'Who is helping?', options: ['Bub', 'The shark', 'The crab'], answer: 'Bub' },
+        { q: 'What is the weather like at the end?', options: ['Sunny', 'Windy', 'Snowy'], answer: 'Sunny' },
+      ] },
+    { kind: 'twister', name: 'Shell Twister', icon: '🌀', intro: 'Build my tongue twister before the sand runs out!', img: reef, line: 'Bub wishes for a shiny shell.', seconds: 45, focus: 'sh', sayIt: 'Now say it slow, then faster!' },
+    chest('You did it! Treasure finder!', page(11)),
+  ],
+};

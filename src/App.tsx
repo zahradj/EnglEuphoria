@@ -255,6 +255,7 @@ const PlayOceanLesson1 = lazy(() => import("./pages/playground-scene/PlayOceanLe
 const PlayOceanLesson2 = lazy(() => import("./pages/playground-scene/PlayOceanLesson2"));
 const PlayOceanLesson3 = lazy(() => import("./pages/playground-scene/PlayOceanLesson3"));
 const PlayOceanLesson4 = lazy(() => import("./pages/playground-scene/PlayOceanLesson4"));
+const PlayOceanLesson5 = lazy(() => import("./pages/playground-scene/PlayOceanLesson5"));
 const PlayMonsterLesson2 = lazy(() => import("./pages/playground-scene/PlayMonsterLesson2"));
 const PlayMonsterLesson3 = lazy(() => import("./pages/playground-scene/PlayMonsterLesson3"));
 const PlayMonsterLesson4 = lazy(() => import("./pages/playground-scene/PlayMonsterLesson4"));
@@ -848,6 +849,12 @@ const App = () => {
                           <Suspense fallback={<LoadingFallback />}><PlaySpaceLesson7 /></Suspense>
                         </ImprovedProtectedRoute>
                       } /> 
+                      {/* A1 tier — Ocean Explorers, Unit 6 Lesson 5. */}
+                      <Route path="/playground-scene/ocean-lesson-5" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayOceanLesson5 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
                       {/* A1 tier — Ocean Explorers, Unit 6 Lesson 4. */}
                       <Route path="/playground-scene/ocean-lesson-4" element={
                         <ImprovedProtectedRoute>
