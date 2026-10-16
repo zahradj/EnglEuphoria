@@ -35,7 +35,19 @@ export const ACADEMY_DECK_LESSONS: AcademyDeckLesson[] = [
     homework: null,
     parts: 8,
   },
-  // B1-S01-E2 (Word Lab) is built (lessons/b1s01e2.ts, lessonScripts.ts) but NOT listed until its story plates, backgrounds and 8 voice lines exist (owner asked to deploy lesson 1 only, 2026-10-16).
+  {
+    id: 'b1-s01-e2',
+    season: 1,
+    lesson: 2,
+    title: 'Have You Ever...? · Word Lab',
+    blurb: 'B1: the Travel Club’s postcard wall needs the right words. Learn 14 words for feelings, places and things to do, play with them, craft your own sentences, and describe a postcard so your partner can find it.',
+    level: 'B1',
+    minutes: 60,
+    cover: '/academy-art/bg/postcard-wall.webp',
+    gradient: 'linear-gradient(135deg,#ede9fe 0%,#a78bfa 50%,#fde68a 100%)',
+    homework: null,
+    parts: 8,
+  },
   {
     id: 'pa1-s01-e1',
     season: 1,

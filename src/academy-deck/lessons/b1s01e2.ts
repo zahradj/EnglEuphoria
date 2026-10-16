@@ -26,7 +26,7 @@ const ROOM = 'travel-club-room';
 const WALL = 'postcard-wall';
 const TABLE = 'postcard-table';
 const CLASSROOM = 'classroom-morning';
-const LIBRARY = 'school-library';
+const LIBRARY = 'locker-hall'; // bright school corridor for the Release pages (no separate library plate was made)
 const ART: Record<string, TeachArt> = {
   excitement: card('w-excitement', 'a packed bag by the door, a big smile'),
   amazed: card('w-amazed', 'a wide-eyed face looking at a huge view'),
