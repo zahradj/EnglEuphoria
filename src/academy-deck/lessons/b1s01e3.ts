@@ -111,15 +111,15 @@ export const B1_S01_E3: DeckScript = {
     {
       id: 'story-case', kind: 'story', part: 2, stage: 'context', listenFirst: true, look: 'comic', bg: LIB, trains: [2, 4], title: 'The Missing Postcard',
       beats: [
-        { plate: 'story-b1s3-1', caption: "Vee's Lisbon postcard is missing from the club's case board.", side: { Vee: 'right' }, lines: [
+        { plate: 'story-b1s3-1', caption: "Vee's Lisbon postcard is missing from the club's case board.", side: { Vee: 'right' }, capAt: { x: 2, y: 82, w: 36 }, spots: { Vee: { x: 42, y: 50, w: 50 } }, lines: [
           { who: 'Vee', text: 'Stop! My Lisbon postcard is gone from the wall. It was pinned right here this morning.', shout: true, sfx: 'GONE!' },
           { who: 'Vee', text: 'Detective, I need your help. I have a board of evidence. Please read it carefully.' },
         ] },
-        { plate: 'story-b1s3-2', caption: 'Theo tells us where he has been. Listen for the pattern.', side: { Theo: 'right', Vee: 'left' }, lines: [
+        { plate: 'story-b1s3-2', caption: 'Theo tells us where he has been. Listen for the pattern.', side: { Theo: 'right', Vee: 'left' }, capAt: { x: 3, y: 4, w: 44 }, spots: { Vee: { x: 3, y: 16, w: 44 }, Theo: { x: 3, y: 38, w: 44 } }, lines: [
           { who: 'Theo', text: 'I have never been to Lisbon. I have been to Rome twice, but never to Portugal.' },
           { who: 'Vee', text: 'Hmm. Some sentences say when something happened. Others say what you have done in your life.', sfx: 'Hmm…' },
         ] },
-        { plate: 'story-b1s3-3', caption: 'Vee wants the evidence sorted: when it happened, or up to now?', side: { Theo: 'right', Vee: 'left' }, lines: [
+        { plate: 'story-b1s3-3', caption: 'Vee wants the evidence sorted: when it happened, or up to now?', side: { Theo: 'right', Vee: 'left' }, capAt: { x: 34, y: 3, w: 28 }, spots: { Vee: { x: 34, y: 18, w: 28 }, Theo: { x: 34, y: 42, w: 28 } }, lines: [
           { who: 'Theo', text: 'I will wait over here. I am sure I have never taken a postcard!' },
           { who: 'Vee', text: 'Let us see. Which cards say when, and which say something about your life up to now?' },
         ] },

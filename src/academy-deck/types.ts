@@ -219,6 +219,10 @@ export interface StorySlide extends SlideBase {
     caption?: string;
     /** comic look: which side of the plate each speaker's bubble sits on (default: the first speaker left, the next right) */
     side?: Partial<Record<CastName, 'left' | 'right'>>;
+    /** Where each speaker's bubble sits, in % of the picture (x, y = top-left corner, w = width). Put it only on empty space, never over a face, body or key object. */
+    spots?: Partial<Record<CastName, { x: number; y: number; w: number }>>;
+    /** Where the narration box sits (same units). */
+    capAt?: { x: number; y: number; w: number };
     /** `shout` = speed lines and a bold bubble (also automatic for a line ending in "!"); `sfx` = a big sound word (our own label) */
     lines: { who: CastName; text: string; shout?: boolean; sfx?: string }[];
   }[];

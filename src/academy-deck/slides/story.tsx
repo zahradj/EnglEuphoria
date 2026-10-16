@@ -75,18 +75,22 @@ type Flat = { who: CastName; text: string; shout?: boolean; sfx?: string; bi: nu
 function ComicLayer({ slide, flat, i, line, shown, reduced }: { slide: StorySlide; flat: Flat[]; i: number; line: Flat; shown: boolean; reduced: boolean }) {
   const beat = slide.beats[line.bi];
   const sideOf = (f: Flat): 'left' | 'right' => beat.side?.[f.who] ?? (f.li % 2 === 0 ? 'left' : 'right');
-  const prev = i > 0 && flat[i - 1].bi === line.bi ? flat[i - 1] : null;
+  const p0 = i > 0 && flat[i - 1].bi === line.bi ? flat[i - 1] : null;
+  const spotOf = (f: Flat) => beat.spots?.[f.who];
+  const at = (f: Flat) => { const sp = spotOf(f); return sp ? { left: `${sp.x}%`, top: `${sp.y}%`, width: `${sp.w}%`, maxWidth: 'none' } : undefined; };
+  // the line before stays only if it is another speaker with its own spot (never stacked on the same spot)
+  const prev = p0 && p0.who !== line.who && (spotOf(p0) || !spotOf(line)) ? p0 : null;
   const shout = !!line.shout || /!\s*$/.test(line.text);
   const side = sideOf(line);
   return (
     <div className="ad-comic" aria-hidden={!shown ? true : undefined}>
       <i className="ad-comic-wipe" key={`wipe${line.bi}`} aria-hidden="true" />
-      {shown && beat.caption && <p className="ad-comic-cap" key={`cap${line.bi}`}><span>{beat.caption}</span></p>}
-      {shown && prev && <p className="ad-comic-bubble" data-old="true" data-side={sideOf(prev)} key={`old${i}`}><b>{prev.who}</b>{prev.text}</p>}
+      {shown && beat.caption && <p className="ad-comic-cap" key={`cap${line.bi}`} style={beat.capAt ? { left: `${beat.capAt.x}%`, top: `${beat.capAt.y}%`, width: `${beat.capAt.w}%`, maxWidth: 'none' } : undefined}><span>{beat.caption}</span></p>}
+      {shown && prev && <p className="ad-comic-bubble" data-old="true" data-side={sideOf(prev)} style={at(prev)} key={`old${i}`}><b>{prev.who}</b>{prev.text}</p>}
       {shown && (
         <>
           {shout && <i className="ad-comic-speed" data-side={side} key={`sp${i}`} aria-hidden="true" />}
-          <p className="ad-comic-bubble" data-shout={shout || undefined} data-side={side} key={`b${i}`} aria-label={`${line.who}: ${line.text}`} role="status">
+          <p className="ad-comic-bubble" data-shout={shout || undefined} data-side={side} style={at(line)} key={`b${i}`} aria-label={`${line.who}: ${line.text}`} role="status">
             <b>{line.who}</b>
             <Typed text={line.text} instant={reduced} />
           </p>
