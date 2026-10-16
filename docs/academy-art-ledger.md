@@ -270,3 +270,17 @@ Notes: generated with the Lesson 1 plate `MAHYCnd2Ab0` as the only style referen
 
 "The Dare" is now four beats: plate 1, plate 2, plate 4 (the dare line), plate 3 (the noodles joke). No text changed, so no new voice lines.
 | trophy-case reveal (six trophies lit; the Wrap's background) | `bg/trophy-reveal.webp` | MAHYKx7rtSM | 97 (reused) |
+
+## B1 Season 1 lesson 3 "Pattern Lab" — plates (2026-10-16)
+
+Scenario `docs/scenarios/academy-b1s01e3-missing-postcard.md`; plan approved by the owner 2026-10-16 ("go, start creating the lesson"). One plate at a time; Canva `quota_cooldown` about 20 minutes between pictures.
+
+| picture | file | Canva media | holder page |
+|---|---|---|---|
+| scene `case-board` (close-up of the pinboard, index cards and string; Drop, Notice & Build, Wrap) | `bg/case-board.webp` | MAHYNAql7Sk | 99 (reused) |
+| story plate 1 (Vee beside the case board, pointing at the board) | `bg/story-b1s3-1.webp` | MAHYNWxXz6U | 99 (reused) |
+| story plate 2 (Theo at the table, two fingers up, notebook and globe) | `bg/story-b1s3-2.webp` | MAHYNSZcaTI | 99 (reused) |
+| story plate 3 (Vee thinking at the case board, Theo waving by the table) | `bg/story-b1s3-3.webp` | MAHYNcwzJoU | 99 (reused) |
+| scene `library-case-room` (library reading room with the case board; the lesson's main plate) | `bg/library-case-room.webp` | MAHYNE9eVJg | 99 (reused) |
+
+Notes: generated with the Lesson 2 plate `MAHYK9TKvzk` as the only style reference; no people, no text; checked by eye: bright daytime, light wood, a pinboard, a window seat and cushions with soft lilac (about 25 %), purple chairs a little more than the rest. All five plates are now made. Still to make: later the six Been-or-Gone scene cards (`cards/sc-bg-1`…`-6`). Until they exist the player shows a drawn gradient for a missing plate and a frame icon for a missing card.

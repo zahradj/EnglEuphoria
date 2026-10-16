@@ -8,6 +8,7 @@ const LOADERS: Record<string, () => Promise<DeckScript>> = {
   'pa1-s02-e1': async () => (await import('./lessons/pa1s02e1')).PA1_S02_E1,
   'b1-s01-e1': async () => (await import('./lessons/b1s01e1')).B1_S01_E1,
   'b1-s01-e2': async () => (await import('./lessons/b1s01e2')).B1_S01_E2,
+  'b1-s01-e3': async () => (await import('./lessons/b1s01e3')).B1_S01_E3,
   'free-time-club-1': async () => (await import('./lessons/freeTimeClub1')).FREE_TIME_CLUB_1,
   'free-time-club-2': async () => (await import('./lessons/freeTimeClub2')).FREE_TIME_CLUB_2,
   'fake-or-real': async () => (await import('./lessons/patternLab')).PATTERN_LAB,

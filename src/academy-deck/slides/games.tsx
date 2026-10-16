@@ -176,13 +176,13 @@ export function RpgView({ slide }: { slide: RpgSlide }) {
   };
   const next = () => { setI(i + 1); setPicked(null); };
   const meter = (
-    <div className="ad-rapport" role="meter" aria-valuemin={0} aria-valuemax={max} aria-valuenow={rapport} aria-label="Rapport">
-      <span>Rapport</span>
+    <div className="ad-rapport" role="meter" aria-valuemin={0} aria-valuemax={max} aria-valuenow={rapport} aria-label={slide.meter ?? 'Rapport'}>
+      <span>{slide.meter ?? 'Rapport'}</span>
       <i style={{ ['--p' as string]: `${(rapport / max) * 100}%` }}><b style={{ left: `${(slide.goal / max) * 100}%` }} aria-hidden="true" /></i>
       <em>{rapport}/{max}</em>
     </div>
   );
-  if (finished) return <Panel title={slide.prompt} wide variant="glass">{meter}<Feedback kind="ok">{rapport >= slide.goal ? `${slide.npc} is impressed: that sounded natural. Rapport ${rapport}/${max}.` : `Good talk. Rapport ${rapport}/${max}: try the “I have … / When did you …?” pair next time.`}</Feedback></Panel>;
+  if (finished) return <Panel title={slide.prompt} wide variant="glass">{meter}<Feedback kind="ok">{rapport >= slide.goal ? (slide.meter ? `Case cracked! ${slide.meter} ${rapport}/${max}.` : `${slide.npc} is impressed: that sounded natural. Rapport ${rapport}/${max}.`) : `Good talk. ${slide.meter ?? 'Rapport'} ${rapport}/${max}: try the “I have … / When did you …?” pair next time.`}</Feedback></Panel>;
   const o = picked === null ? null : sc.options[picked];
   return (
     <Panel title={slide.prompt} wide variant="glass">

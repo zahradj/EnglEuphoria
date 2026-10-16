@@ -54,7 +54,7 @@ describe('Student Game Library tab: built-in Playground games', () => {
     // it must still never show a Playground game.
     hub = 'academy';
     render(<GamesTab />);
-    await waitFor(() => expect(screen.getByText(/games available/)).toBeTruthy());
+    await waitFor(() => expect(screen.getByText(/Games available/i)).toBeTruthy());
     expect(screen.queryByText('Alphabet Express')).toBeNull();
   });
 

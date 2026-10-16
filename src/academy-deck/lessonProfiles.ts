@@ -33,6 +33,11 @@ export const LESSON_PROFILES: LessonProfile[] = [
     evidence: 'the student uses at least five of the 14 words in a private voice note, with an “I have …” sentence and a past-simple follow-up with a time', homeMission: 'send Vee one voice note: three sentences about a trip with a feeling, a place and a chunk',
   },
   {
+    id: 'b1-s01-e3', previous: 'b1-s01-e2', setting: 'the school library reading room with a detective case board (bright daytime school)', mainPlate: 'library-case-room', look: 'bright daytime school library, tall sunny windows, light wood shelves, a long study table, a pinboard case board with index cards and red string, soft lilac cushions and book spines', frame: 'The Missing Postcard: the club detective reads the evidence and questions the suspect',
+    signature: 'board', funHook: 'pin evidence cards on the case board, choose been or gone for scene cards, forge the questions, and catch Theo in a contradiction in the Alibi',
+    evidence: 'the student builds and says “I have / never + participle”, asks “Have you ever…?” with a “When did you…?” follow-up, and writes three sentences of their own', homeMission: 'send Vee one voice note: three things you have done and one thing you have never done',
+  },
+  {
     id: 'free-time-club-1', setting: 'the school Club Fair at dusk', mainPlate: 'fair-night', look: 'purple dusk, string lights, five stalls', frame: 'mystery: who took Ava’s poster?',
     signature: 'explore', funHook: 'walk the fair and tap each stall to hear what they like; sort your own hobbies with no wrong answer',
     evidence: 'the student says “I like ___. I love ___.” to Ava with their name (Take 2 and the voice note)', homeMission: 'send Ava one voice note: I like ___. I love ___.',

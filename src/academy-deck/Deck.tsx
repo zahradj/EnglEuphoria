@@ -12,6 +12,7 @@ import { Character, Plate } from './Stage';
 import { LaneView } from './slides/lane';
 import { BlendView, HearPickView, ReaderView } from './slides/reading';
 import { RuleView } from './slides/rule';
+import { BoardView } from './slides/board';
 import { ExploreView } from './slides/explore';
 import { SortView } from './slides/sort';
 import { StoryView } from './slides/story';
@@ -74,7 +75,7 @@ function clearedStars(s: Stats): number {
 /** The teaching ladder shown to the student: watch it done (I do), practise together (we do), your turn (you do), create (you make it yours). */
 const STAGE_LABEL: Record<string, string> = { review: 'Warm-up', context: 'Watch and listen', model: 'Watch and learn', rule: 'The rule', controlled: 'Practise together', free: 'Your turn', produce: 'Make it yours' };
 
-const SKILL: Record<string, string> = { say: 'Speaking', fade: 'Speaking', passage: 'Reading', readq: 'Reading', hearpick: 'Listening', story: 'Listening', model: 'Listening', write: 'Writing', build: 'Writing', boss: 'Game', wordle: 'Game', rpg: 'Game', quiz: 'Game', triple: 'Game', glitch: 'Game', verbdraw: 'Game', cloze: 'Reading', sort: 'Game', memory: 'Game', match: 'Game', forge: 'Game', streak: 'Game', explore: 'Game', hunt: 'Game', vault: 'Game', duel: 'Game', rhythm: 'Game' };
+const SKILL: Record<string, string> = { say: 'Speaking', fade: 'Speaking', passage: 'Reading', readq: 'Reading', hearpick: 'Listening', story: 'Listening', model: 'Listening', write: 'Writing', build: 'Writing', boss: 'Game', wordle: 'Game', rpg: 'Game', quiz: 'Game', triple: 'Game', glitch: 'Game', board: 'Game', verbdraw: 'Game', cloze: 'Reading', sort: 'Game', memory: 'Game', match: 'Game', forge: 'Game', streak: 'Game', explore: 'Game', hunt: 'Game', vault: 'Game', duel: 'Game', rhythm: 'Game' };
 const skillOf = (kind: string): string => SKILL[kind] ?? '';
 
 /** Comfort settings (voice, sounds, calm mode) are the student's own: remembered on this device so a reload does not undo them. Fails soft. */
@@ -162,6 +163,7 @@ function SlideView({ slide, script, onStart }: { slide: Slide; script: DeckScrip
     case 'quiz': return <QuizView slide={slide} />;
     case 'triple': return <TripleView slide={slide} />;
     case 'glitch': return <GlitchView slide={slide} />;
+    case 'board': return <BoardView slide={slide} />;
     case 'verbdraw': return <VerbDrawView slide={slide} />;
     case 'cloze': return <ClozeView slide={slide} />;
     case 'forge': return <ForgeView slide={slide} />;
@@ -215,7 +217,15 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
   const [toast, setToast] = useState<string | null>(null);
   const [minute, setMinute] = useState(false);
   const [menu, setMenu] = useState(false);
-  const [burst, setBurst] = useState(0);
+  const [burst, setBurst] = useState<{ n: number; x: number; y: number } | null>(null);
+  // game feel (adapted from the Playground's approach, rebuilt for teens in Academy files only): the burst flies from where the student tapped,
+  // a wrong answer gives the play area a soft shake, a new rank shows a LEVEL UP banner, and streaks earn small achievement badges
+  const lastPt = useRef({ x: 50, y: 46 });
+  const [shake, setShake] = useState(false);
+  const [levelUp, setLevelUp] = useState<{ n: number; name: string } | null>(null);
+  const [achv, setAchv] = useState<{ id: number; text: string } | null>(null);
+  const prevRank = useRef(1);
+  const achvId = useRef(0);
   const [chat, setChat] = useState(false);
   const [mood, setMood] = useState<'happy' | 'concerned' | null>(null);
   const moodTimer = useRef<number>();
@@ -357,6 +367,8 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
     setCombo(0);
     playSfx('wrong', sfxRef.current);
     react('concerned');
+    setShake(true);
+    window.setTimeout(() => setShake(false), 460);
   }, [react]);
   const ctx: DeckCtx = useMemo(() => ({ artBase, vars, setVars, done, right, wrong, award, stamps, reduced: calm, seed: 1000 + index * 17, voice: voiceOn, clipsReady, canHear, speak, speakSeq }), [artBase, vars, setVars, done, right, wrong, award, stamps, calm, index, voiceOn, clipsReady, canHear, speak, speakSeq]);
   const keys = useMemo(() => script.slides.filter((x) => x.kind === 'vault' && solved[x.id]).map((x) => (x as { lock: number }).lock), [script.slides, solved]);
@@ -407,8 +419,28 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
   }, [cur.part]);
   // a short sparkle burst on every correct answer (UI motion tied to success; none in Calm mode)
   useEffect(() => {
-    if (stats.right > 0) setBurst((b) => b + 1);
+    if (stats.right > 0) setBurst((b) => ({ n: (b?.n ?? 0) + 1, x: lastPt.current.x, y: lastPt.current.y }));
   }, [stats.right]);
+  // LEVEL UP when the rank changes (a short banner, tap-through, no blocking)
+  useEffect(() => {
+    if (rank.n > prevRank.current) {
+      setLevelUp({ n: rank.n, name: rank.name });
+      playSfx('combo', sfxRef.current);
+      const t = window.setTimeout(() => setLevelUp(null), 2600);
+      prevRank.current = rank.n;
+      return () => window.clearTimeout(t);
+    }
+    prevRank.current = rank.n;
+  }, [rank.n]); // eslint-disable-line react-hooks/exhaustive-deps
+  // streak achievements: small badges at 3, 5 and 10 right answers in a row
+  useEffect(() => {
+    const text = combo === 3 ? 'On a roll · ×3' : combo === 5 ? 'Hot streak · ×5' : combo === 10 ? 'Unstoppable · ×10' : null;
+    if (!text) return;
+    const id = ++achvId.current;
+    setAchv({ id, text });
+    const t = window.setTimeout(() => setAchv((a) => (a && a.id === id ? null : a)), 2300);
+    return () => window.clearTimeout(t);
+  }, [combo]);
   useEffect(() => {
     if (!keepsProgress || resume) return;
     saveProgress(script.lessonId, index >= 1 ? { index, slideId: script.slides[index].id, solved, vars, stamps, stats } : null);
@@ -486,7 +518,7 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
   const panelAt = only === 'left' ? 'right' : only === 'right' ? 'left' : 'center';
   return (
     <DeckContext.Provider value={ctx}>
-      <div className="ad-root" dir="ltr" data-calm={calm || undefined} data-embedded={embedded || undefined} data-follow={follow || undefined} style={artBase ? ({ ['--o-gem-empty' as string]: `url(${artBase}/objects/gem-empty.webp)`, ['--o-gem-full' as string]: `url(${artBase}/objects/gem-full.webp)`, ['--o-ribbon' as string]: `url(${artBase}/objects/ribbon.webp)`, ['--o-frame' as string]: `url(${artBase}/objects/frame.webp)`, ['--o-star' as string]: `url(${artBase}/objects/star.webp)`, ['--o-stamp' as string]: `url(${artBase}/objects/stamp.webp)`, ['--o-ticket' as string]: `url(${artBase}/objects/ticket.webp)`, ['--o-pill-violet' as string]: `url(${artBase}/objects/pill-violet.webp)`, ['--o-pill-blue' as string]: `url(${artBase}/objects/pill-blue.webp)`, ['--o-pill-orange' as string]: `url(${artBase}/objects/pill-orange.webp)` } as React.CSSProperties) : undefined} data-reduced={calm} data-theme={script.theme ?? 'scene'} data-kind={cur.kind} data-part={cur.part} data-stage={cur.stage} data-skill={skillOf(cur.kind) || undefined} data-lock={lockNames ? (cur.lock ?? 0) : undefined} data-hw={!!homework} data-mood={mood ?? undefined} data-testid="deck">
+      <div className="ad-root" dir="ltr" data-calm={calm || undefined} data-embedded={embedded || undefined} data-follow={follow || undefined} style={artBase ? ({ ['--o-gem-empty' as string]: `url(${artBase}/objects/gem-empty.webp)`, ['--o-gem-full' as string]: `url(${artBase}/objects/gem-full.webp)`, ['--o-ribbon' as string]: `url(${artBase}/objects/ribbon.webp)`, ['--o-frame' as string]: `url(${artBase}/objects/frame.webp)`, ['--o-star' as string]: `url(${artBase}/objects/star.webp)`, ['--o-stamp' as string]: `url(${artBase}/objects/stamp.webp)`, ['--o-ticket' as string]: `url(${artBase}/objects/ticket.webp)`, ['--o-pill-violet' as string]: `url(${artBase}/objects/pill-violet.webp)`, ['--o-pill-blue' as string]: `url(${artBase}/objects/pill-blue.webp)`, ['--o-pill-orange' as string]: `url(${artBase}/objects/pill-orange.webp)` } as React.CSSProperties) : undefined} data-reduced={calm} data-theme={script.theme ?? 'scene'} data-kind={cur.kind} data-part={cur.part} data-stage={cur.stage} data-skill={skillOf(cur.kind) || undefined} data-lock={lockNames ? (cur.lock ?? 0) : undefined} data-hw={!!homework} data-mood={mood ?? undefined} data-testid="deck" onPointerDownCapture={(e) => { const r = e.currentTarget.getBoundingClientRect(); if (r.width > 0 && r.height > 0) lastPt.current = { x: Math.min(92, Math.max(8, ((e.clientX - r.left) / r.width) * 100)), y: Math.min(88, Math.max(12, ((e.clientY - r.top) / r.height) * 100)) }; }}>
         {prevBg && prevBg !== cur.bg && !calm && <Plate id={prevBg} artBase={artBase} key={`out-${prevBg}`} phase="out" />}
         <Plate id={cur.bg} artBase={artBase} key={cur.bg} phase={prevBg && prevBg !== cur.bg && !calm ? 'in' : undefined} />
         <div className="ad-actors" aria-hidden={actorsVisible.length === 0}>
@@ -516,6 +548,12 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
               <span className="ad-rank-bar"><i style={{ width: `${Math.round((rank.into / rank.span) * 100)}%` }} /></span>
             </span>
           )}
+          {!homework && combo >= 2 && (
+            <span className="ad-flame" key={combo} data-hot={combo >= 5 || undefined} role="status" aria-label={`Streak ${combo}`}>
+              <svg viewBox="0 0 24 32" aria-hidden="true"><path d="M12 1c1 6 8 9 8 18a8 8 0 0 1-16 0c0-4 2-6 3-8 1 3 2 4 3 4-1-5 0-9 2-14z" /></svg>
+              <b>×{combo}</b>
+            </span>
+          )}
           <span className="ad-count">{index + 1}/{script.slides.length}</span>
         </header>
         {!homework && (stats.spoken ?? 0) > 0 && (
@@ -527,17 +565,28 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
             {combo >= 3 && <span className="ad-xp-combo" key={`c${combo}`}>×{combo}</span>}
           </div>
         )}
-        <main className="ad-main" data-panel={panelAt}>
+        <main className="ad-main" data-panel={panelAt} data-shake={shake || undefined}>
           <Guard id={cur.id} onSkip={skip}>
             <SlideView key={cur.id} slide={cur} script={script} onStart={() => go(index + 1)} />
           </Guard>
           {toast && <div className="ad-toast" role="status"><Icon name="bulb" /> {toast}</div>}
         </main>
-        {burst > 0 && !calm && (
-          <div className="ad-burst" key={burst} aria-hidden="true">
-            <b className="ad-plus">+1 ★</b>
-            {Array.from({ length: 12 }, (_, i) => <span key={i} style={{ ['--a' as string]: `${i * 30}deg`, ['--d' as string]: `${70 + (i % 3) * 26}px` }}>{i % 2 ? '★' : '✦'}</span>)}
+        {burst && !calm && (
+          <div className="ad-burst" key={burst.n} aria-hidden="true" style={{ left: `${burst.x}%`, top: `${burst.y}%` }}>
+            <i className="ad-ring" />
+            <b className="ad-plus">+10 XP</b>
+            {Array.from({ length: 12 }, (_, i) => <span key={i} style={{ ['--a' as string]: `${i * 30}deg`, ['--d' as string]: `${70 + (i % 3) * 26}px` }}>{i % 2 ? '◆' : '✦'}</span>)}
           </div>
+        )}
+        {levelUp && (
+          <div className="ad-levelup" role="status" aria-label={`Level up: Level ${levelUp.n}, ${levelUp.name}`}>
+            <span className="ad-levelup-rays" aria-hidden="true" />
+            <span className="ad-levelup-kicker">LEVEL UP</span>
+            <b>Lv {levelUp.n} · {levelUp.name}</b>
+          </div>
+        )}
+        {achv && (
+          <div className="ad-achv" key={achv.id} role="status"><Icon name="star" /> {achv.text}</div>
         )}
         {embedded && !unlocked && voiceOn && (
           <button type="button" className="ad-sound-note" onClick={() => { unlockedRef.current = true; setUnlocked(true); }}>🔊 Tap to hear the lesson</button>

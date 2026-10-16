@@ -580,3 +580,82 @@
 .ad-root[data-theme='scene'] .ad-reveal-btn { position: absolute; inset-inline: 0; bottom: 17%; margin-inline: auto; width: fit-content; padding: 14px 30px; border-radius: 999px; border: 3px solid #fff; background: linear-gradient(180deg, var(--violet), var(--violet-d)); color: #fff; font: inherit; font-weight: 900; font-size: 1.3rem; box-shadow: 0 6px 0 rgba(60, 30, 140, 0.35), 0 10px 26px rgba(60, 30, 140, 0.3); cursor: pointer; animation: sc-pop 0.5s cubic-bezier(0.2, 1.4, 0.4, 1) both; }
 .ad-root[data-theme='scene'] .ad-reveal-btn:hover { filter: brightness(1.08); }
 .ad-root[data-theme='scene'] .ad-panel[data-variant='reveal'] { animation: sc-rise 0.6s ease both; }
+
+/* ---------- Case Board (B1 S1 L3): a detective board as a game. Evidence cards drop on the table, pins stick with a pop, red string joins them. ---------- */
+.ad-root[data-theme='scene'] .ad-board { display: grid; gap: clamp(8px, 1.6cqh, 14px); }
+.ad-root[data-theme='scene'] .ad-board-hud { display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 0.78rem; letter-spacing: 0.12em; color: var(--violet-d); }
+.ad-root[data-theme='scene'] .ad-board-pips { display: inline-flex; gap: 5px; }
+.ad-root[data-theme='scene'] .ad-board-pips i { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--violet); background: rgba(255, 255, 255, 0.7); transition: transform 0.25s, background 0.25s; }
+.ad-root[data-theme='scene'] .ad-board-pips i[data-on] { background: #e0443e; border-color: #b91c1c; box-shadow: 0 0 0 3px rgba(224, 68, 62, 0.18); }
+.ad-root[data-theme='scene'] .ad-board-pips i[data-now] { transform: scale(1.25); border-color: var(--violet-d); background: #fde68a; }
+.ad-root[data-theme='scene'] .ad-board-table { display: grid; place-items: center; min-height: clamp(86px, 17cqh, 150px); padding: 10px; border-radius: 18px; background: repeating-linear-gradient(90deg, rgba(190, 150, 100, 0.34) 0 22px, rgba(205, 168, 118, 0.34) 22px 44px), linear-gradient(#e9d3ac, #dcc197); box-shadow: inset 0 3px 10px rgba(80, 50, 20, 0.25); }
+.ad-root[data-theme='scene'] .ad-board-card { position: relative; display: flex; align-items: center; gap: 12px; max-width: min(100%, 520px); padding: 16px 20px 14px; border-radius: 6px; background: #fffdf5; background-image: repeating-linear-gradient(transparent 0 25px, rgba(109, 70, 230, 0.13) 25px 26px); color: var(--ink); font-weight: 800; font-size: clamp(1rem, 2.8cqh, 1.35rem); line-height: 26px; box-shadow: 0 10px 22px rgba(60, 35, 20, 0.3), 0 2px 0 rgba(0, 0, 0, 0.06); transform: rotate(-1.6deg); animation: ad-board-drop 0.5s cubic-bezier(0.2, 1.4, 0.4, 1) both; }
+.ad-root[data-theme='scene'] .ad-board-card p { margin: 0; }
+.ad-root[data-theme='scene'] .ad-board-card[data-bounce] { animation: sc-shake 0.45s; }
+.ad-root[data-theme='scene'] .ad-board-pin { position: absolute; top: -9px; left: 50%; width: 18px; height: 18px; margin-left: -9px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #ff8a80, #d32f2f 60%, #8e1b1b); box-shadow: 0 3px 4px rgba(0, 0, 0, 0.35); }
+.ad-root[data-theme='scene'] .ad-board-ear { flex: none; width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--violet); background: #fff; color: var(--violet-d); cursor: pointer; display: grid; place-items: center; }
+.ad-root[data-theme='scene'] .ad-board-ear:hover { background: var(--violet-soft, #f3edff); }
+.ad-root[data-theme='scene'] .ad-board-cols { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(8px, 2cqw, 16px); }
+.ad-root[data-theme='scene'] .ad-board-col { position: relative; display: block; text-align: start; padding: 28px 12px 12px; min-height: clamp(96px, 20cqh, 170px); border-radius: 14px; border: 3px solid #fff; background: linear-gradient(rgba(255, 255, 255, 0.92), rgba(243, 237, 255, 0.92)); color: var(--ink); font: inherit; cursor: pointer; box-shadow: 0 8px 18px rgba(76, 29, 149, 0.18); transition: transform 0.15s, box-shadow 0.15s; }
+.ad-root[data-theme='scene'] .ad-board-col::before { content: ''; position: absolute; top: 9px; left: 14px; right: 14px; height: 0; border-top: 3px dashed #d32f2f; opacity: 0.55; }
+.ad-root[data-theme='scene'] button.ad-board-col:hover { transform: translateY(-3px); box-shadow: 0 12px 22px rgba(76, 29, 149, 0.28); }
+.ad-root[data-theme='scene'] .ad-board-col[data-bounce] { animation: sc-shake 0.45s; border-color: #e0605a; }
+.ad-root[data-theme='scene'] .ad-board-col h3 { margin: 0 0 6px; font-size: 0.95rem; font-weight: 900; color: var(--violet-d); letter-spacing: 0.02em; }
+.ad-root[data-theme='scene'] .ad-board-col kbd { display: inline-grid; place-items: center; width: 22px; height: 22px; margin-inline-end: 4px; border-radius: 6px; background: var(--violet-d); color: #fff; font: 800 0.78rem system-ui; }
+.ad-root[data-theme='scene'] .ad-board-col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 5px; }
+.ad-root[data-theme='scene'] .ad-board-note { padding: 5px 9px; border-radius: 4px; background: #fff6bf; color: var(--ink); font-size: 0.82rem; font-weight: 700; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.18); transform: rotate(0.8deg); animation: ad-board-pin 0.4s cubic-bezier(0.2, 1.5, 0.4, 1) both; }
+.ad-root[data-theme='scene'] .ad-board-note:nth-child(even) { transform: rotate(-1deg); background: #d9f2ff; }
+/* scenes look: picture cards with two big game buttons */
+.ad-root[data-theme='scene'] .ad-board[data-look='scenes'] .ad-board-table { background: radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.9), rgba(214, 198, 255, 0.85)); box-shadow: inset 0 0 0 3px #fff; }
+.ad-root[data-theme='scene'] .ad-board[data-look='scenes'] .ad-board-card { flex-direction: column; text-align: center; background: #fff; background-image: none; border-radius: 22px; transform: none; line-height: 1.35; }
+.ad-root[data-theme='scene'] .ad-board[data-look='scenes'] .ad-board-col { min-height: 0; padding: 14px 16px; text-align: center; border-radius: 999px; background: linear-gradient(135deg, #8b5cf6, #6d46e6); border-color: #fff; color: #fff; }
+.ad-root[data-theme='scene'] .ad-board[data-look='scenes'] .ad-board-col::before { display: none; }
+.ad-root[data-theme='scene'] .ad-board[data-look='scenes'] .ad-board-col h3 { margin: 0; color: #fff; font-size: 1.15rem; }
+.ad-root[data-theme='scene'] .ad-board[data-look='scenes'] .ad-board-col ul { display: none; }
+.ad-root[data-theme='scene'] .ad-board[data-look='scenes'][data-done] .ad-board-col { background: rgba(255, 255, 255, 0.92); color: var(--ink); border-radius: 14px; }
+.ad-root[data-theme='scene'] .ad-board[data-look='scenes'][data-done] .ad-board-col h3 { color: var(--violet-d); }
+.ad-root[data-theme='scene'] .ad-board[data-look='scenes'][data-done] .ad-board-col ul { display: grid; }
+@keyframes ad-board-drop { from { opacity: 0; transform: translateY(-46px) rotate(-6deg) scale(0.92); } to { opacity: 1; transform: translateY(0) rotate(-1.6deg) scale(1); } }
+@keyframes ad-board-pin { from { opacity: 0; transform: scale(1.5) rotate(6deg); } to { opacity: 1; } }
+@container (max-width: 480px) {
+  .ad-root[data-theme='scene'] .ad-board-cols { grid-template-columns: 1fr; }
+  .ad-root[data-theme='scene'] .ad-board-col { min-height: 0; padding-top: 24px; }
+}
+.ad-root[data-theme='scene'] .ad-board-ico { display: inline-grid; place-items: center; width: 26px; height: 26px; margin-inline-end: 6px; border-radius: 50%; background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #4c1d95; box-shadow: 0 2px 5px rgba(120, 70, 0, 0.35); vertical-align: -6px; }
+.ad-root[data-theme='scene'] .ad-board-ico svg { width: 15px; height: 15px; }
+.ad-root[data-theme='scene'] .ad-board[data-look='scenes'] .ad-board-ico { background: rgba(255, 255, 255, 0.95); }
+.ad-root[data-theme='scene'] .ad-board-empty { margin: 14px 0 0; padding: 14px 8px; border: 2px dashed rgba(109, 70, 230, 0.4); border-radius: 10px; text-align: center; font-size: 0.8rem; font-weight: 800; color: rgba(76, 29, 149, 0.55); }
+
+/* ---------- Game feel (adapted from the Playground's feedback ideas, rebuilt for teens): tap-point burst, soft shake, level-up, streak badges, idle-float answers ---------- */
+.ad-root[data-theme='scene'] .ad-burst { z-index: 30; }
+.ad-root[data-theme='scene'] .ad-burst .ad-ring { position: absolute; left: -46px; top: -46px; width: 92px; height: 92px; border-radius: 50%; border: 4px solid rgba(253, 224, 71, 0.95); box-shadow: 0 0 22px rgba(253, 224, 71, 0.7), inset 0 0 14px rgba(255, 255, 255, 0.6); animation: ad-ring 0.7s ease-out forwards; }
+.ad-root[data-theme='scene'] .ad-burst .ad-plus { font-size: 1.5rem; left: -40px; top: -52px; color: #fff7c2; text-shadow: 0 2px 0 #8a4b00, 0 0 14px rgba(253, 224, 71, 0.95); }
+@keyframes ad-ring { from { transform: scale(0.25); opacity: 0.95; } to { transform: scale(2.6); opacity: 0; } }
+.ad-root[data-theme='scene'] .ad-main[data-shake] .ad-panel, .ad-root[data-theme='scene'] .ad-main[data-shake] .ad-slidehost > * { animation: ad-soft-shake 0.45s; }
+@keyframes ad-soft-shake { 0%, 100% { transform: translateX(0); } 18% { transform: translateX(-7px); } 36% { transform: translateX(7px); } 54% { transform: translateX(-4px); } 72% { transform: translateX(4px); } }
+/* answer tiles breathe gently so they read as things you can grab (staggered; off in Calm mode) */
+.ad-root[data-theme='scene'] .ad-pk-tile:not(:disabled), .ad-root[data-theme='scene'] .ad-glitch-opt, .ad-root[data-theme='scene'] .ad-readq-opt, .ad-root[data-theme='scene'] .ad-option, .ad-root[data-theme='scene'] .ad-vd-opt { animation: ad-idle 3.2s ease-in-out infinite; }
+.ad-root[data-theme='scene'] .ad-pk-tile:nth-child(2n), .ad-root[data-theme='scene'] .ad-option:nth-child(2n), .ad-root[data-theme='scene'] .ad-vd-opt:nth-child(2n) { animation-delay: 0.5s; }
+.ad-root[data-theme='scene'] .ad-pk-tile:nth-child(3n), .ad-root[data-theme='scene'] .ad-option:nth-child(3n) { animation-delay: 1.1s; }
+.ad-root[data-theme='scene'] .ad-pk-tile:hover, .ad-root[data-theme='scene'] .ad-option:hover { animation-play-state: paused; }
+@keyframes ad-idle { 0%, 100% { translate: 0 0; } 50% { translate: 0 -3px; } }
+.ad-root[data-calm='true'] .ad-pk-tile, .ad-root[data-calm='true'] .ad-glitch-opt, .ad-root[data-calm='true'] .ad-readq-opt, .ad-root[data-calm='true'] .ad-option, .ad-root[data-calm='true'] .ad-vd-opt { animation: none !important; }
+/* streak flame in the top strip (the old XP chip is hidden in this theme, so the combo had no home) */
+.ad-root[data-theme='scene'] .ad-flame { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px 3px 6px; border-radius: 999px; background: linear-gradient(135deg, #fb923c, #f43f5e); color: #fff; font-weight: 900; font-size: 0.85rem; box-shadow: 0 3px 10px rgba(244, 63, 94, 0.45); border: 2px solid rgba(255, 255, 255, 0.85); animation: sc-pop 0.35s cubic-bezier(0.2, 1.6, 0.4, 1); }
+.ad-root[data-theme='scene'] .ad-flame svg { width: 14px; height: 18px; fill: #fff7c2; filter: drop-shadow(0 0 4px rgba(255, 235, 150, 0.9)); }
+.ad-root[data-theme='scene'] .ad-flame[data-hot] { background: linear-gradient(135deg, #f59e0b, #dc2626); box-shadow: 0 0 16px rgba(251, 146, 60, 0.8); }
+.ad-root[data-theme='scene'] .ad-flame[data-hot] svg { animation: ad-flicker 0.5s ease-in-out infinite alternate; }
+@keyframes ad-flicker { from { transform: scale(1) rotate(-3deg); } to { transform: scale(1.18) rotate(3deg); } }
+/* LEVEL UP banner */
+.ad-levelup { position: absolute; z-index: 25; left: 50%; top: 34%; transform: translate(-50%, -50%); display: grid; justify-items: center; gap: 2px; padding: 14px 38px; border-radius: 22px; background: linear-gradient(135deg, rgba(76, 29, 149, 0.94), rgba(20, 163, 148, 0.92)); border: 3px solid #fde68a; box-shadow: 0 0 40px rgba(253, 224, 71, 0.55), 0 14px 32px rgba(30, 15, 90, 0.5); color: #fff; pointer-events: none; animation: ad-levelup 2.6s cubic-bezier(0.2, 1.3, 0.4, 1) forwards; overflow: hidden; }
+.ad-levelup-kicker { font-size: 0.8rem; font-weight: 900; letter-spacing: 0.35em; color: #fde68a; }
+.ad-levelup b { font-size: clamp(1.3rem, 4cqh, 2rem); font-weight: 900; }
+.ad-levelup-rays { position: absolute; inset: -60%; background: repeating-conic-gradient(from 0deg, rgba(253, 224, 71, 0.22) 0 10deg, transparent 10deg 30deg); animation: ad-rays 2.6s linear forwards; z-index: -1; }
+@keyframes ad-levelup { 0% { opacity: 0; transform: translate(-50%, -30%) scale(0.5); } 14% { opacity: 1; transform: translate(-50%, -50%) scale(1.08); } 22% { transform: translate(-50%, -50%) scale(1); } 82% { opacity: 1; } 100% { opacity: 0; transform: translate(-50%, -70%) scale(1); } }
+@keyframes ad-rays { to { transform: rotate(60deg); } }
+/* streak achievement badge */
+.ad-achv { position: absolute; z-index: 24; right: 16px; top: 74px; display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px 8px 10px; border-radius: 14px; background: rgba(30, 27, 75, 0.92); color: #fde68a; font-weight: 900; font-size: 0.9rem; border: 2px solid rgba(253, 224, 71, 0.75); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); pointer-events: none; animation: ad-achv 2.3s ease-out forwards; }
+.ad-achv svg { width: 18px; height: 18px; color: #fde047; }
+@keyframes ad-achv { 0% { opacity: 0; transform: translateX(40px); } 12% { opacity: 1; transform: translateX(0); } 85% { opacity: 1; } 100% { opacity: 0; transform: translateX(30px); } }
+.ad-root[data-theme='scene'] .ad-flame { position: absolute; top: 22px; left: calc(50% + 118px); z-index: 6; }
+@container (max-width: 480px) { .ad-root[data-theme='scene'] .ad-flame { top: 50px; left: auto; right: 12px; } }
