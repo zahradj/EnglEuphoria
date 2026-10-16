@@ -342,6 +342,30 @@ A1, read and match … after the matching, another activity or another game to r
   "Aesthetic pass on every activity" and `.claude/skills/game-animation` §5b.
 - First lesson built this way: Pre-A1 U1L5 (story words → Listen and Match → Wind Catch → the film).
 
+## 3f++. Be creative — every activity fits its concept (hard rule, all hubs — owner, 2026-10-16)
+
+> *"In every concept, try to be more creative. You have to have creative ideas that actually suit the concept — just
+> like the bubbles in the sea example."*
+
+Every activity is **dressed in the world and the moment of the lesson**, never left in its generic default look. Before
+building a page, ask: *"What would this game look like if it really happened here, in this story?"*
+
+- **The parts of the game become things from the world.** The covers, cards, slots, buttons, counters and rewards are
+  objects the child would find in that place: under the sea the hidden picture sits behind **bubbles that pop**, not blue
+  blocks (U6L5 Tile Reveal, `look: 'bubbles'`); the chest is found by lifting **rocks**; the score fills a **pearl jar**.
+  In Space the same reveal could use **clouds of stardust**, in the Jungle **leaves**, in the Kitchen **steam**, in the
+  Monster Town **slime blobs**, at the Farm **hay**.
+- **The idea must suit the concept, not just decorate it.** It has to make sense for the words and the action (bubbles
+  rise and pop in water; rocks hide sea animals; a shy octopus hides). A random theme skin that has nothing to do with
+  the lesson does not count.
+- **Build it as a new `look` / `mode`** of the shared game (one component, several designs), so it can be reused and so
+  repeated games keep changing (see "Vary the design of a repeated game").
+- **Keep every other rule:** brand colours, cut-out pictures (no white boxes), calm background behind floating pieces,
+  game feel (pop-in, burst, gentle wrong), no zoom/pan on story pictures, modest characters, no browser voices.
+- **Check before done:** for every game page, write one line in the teacher note or the lesson plan naming the creative
+  idea and why it fits ("bubbles: the picture is under the sea"). A page still in its generic default look is not done
+  (lesson-quality-gate, Visual engine).
+
 ## 3g. A1 lessons — themed worlds, the plan first, sentences and questions (all A1 lessons)
 
 Owner (2026-10-12): A1 is ten themed worlds (Welcome Town, Jungle, Space, Food Festival, Monster Town, Ocean, Hero City,

@@ -142,6 +142,11 @@ Whenever the owner says "create a lesson" / "proceed with creating the lesson", 
 - **A repeated activity gets new designs** (see "Vary the design of a repeated game"), and each design gets the same aesthetic pass "as much as possible".
 - **Busy pictures behind floating pieces:** when pieces float over a detailed scene picture, the picture is calmed with `CalmBg` (`unit1/scene-components/gameFx.tsx`: soft blur, a little desaturation and a light veil) so the pieces are the clearest, brightest things on screen; small pieces also get a light backing (chip, bubble, card). `calmBackground.test.ts` (deploy gate) keeps the games that need it on it — add a new floating-pieces game to its list.
 
+## Be creative — ideas that suit the concept (hard rule, all hubs — owner, 2026-10-16)
+
+- "In every concept, try to be more creative. You have to have creative ideas that actually suit the concept — just like the bubbles in the sea example." Every activity is dressed in the lesson's world and moment: its covers, cards, slots and rewards become things from that place (under the sea: **bubbles that pop** instead of blue blocks; rocks to lift; a pearl jar), and the idea must make sense for the words and the action, not just decorate.
+- Build it as a new `look` / `mode` of the shared game, keep all other rules (brand colours, cut-outs, calm background, game feel, motion, modesty, voices), and name the creative idea for each game page in the plan or teacher note. A game left in its generic default look is not done. Blueprint §3f++.
+
 ## A1 lessons — length and story GIFs (hard rule — owner, 2026-10-13)
 
 - **Every A1 lesson has 30-49 pages** ("A1 lessons can be from 30 to 49 pages"): real practice, not padding — and still no game twice in a unit. `a1LessonLength.test.ts` (deploy gate) fails otherwise.
