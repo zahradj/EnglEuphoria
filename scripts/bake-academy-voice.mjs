@@ -12,7 +12,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { ACADEMY_VOICES } from '../src/academy-deck/voices.ts';
 import { speechText } from '../src/academy-deck/spoken.ts';
-import { approvedVoiceId, normalizeForSpeech, safeVoiceSettings, languageLock, DEFAULT_TTS_MODEL, unresolvedSpeechRisks, voiceStatus } from '../src/lib/speechPolicy.ts';
+import { approvedVoiceId, normalizeForSpeech, safeVoiceSettings, languageLock, DEFAULT_TTS_MODEL, SHORT_LINE_TTS_MODEL, ttsModelFor, unresolvedSpeechRisks, voiceStatus } from '../src/lib/speechPolicy.ts';
+import { withPhonemes } from '../src/lib/pronunciations.ts';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const LINES = path.join(here, 'academy-voice-lines.json');
@@ -72,7 +73,36 @@ function audit() {
   return problems ? 1 : 0;
 }
 
+// Direct path (owner 2026-10-16: "use elevenlabs 5"): when a GitHub secret holds an ElevenLabs key, record straight from ElevenLabs
+// with the same policy as the elevenlabs-tts function (approved voice, same model per line, safe settings, phonemes on short lines).
+// The key is only sent to ElevenLabs, never printed.
+const HOSTS = ['api.elevenlabs.io', 'api.us.elevenlabs.io', 'api.eu.residency.elevenlabs.io', 'api.in.residency.elevenlabs.io'];
+async function generateDirect(l, apiKey) {
+  const text = normalizeForSpeech(speechText(l.text));
+  const voiceId = approvedVoiceId(ACADEMY_VOICES[l.who]);
+  const model = ttsModelFor(text);
+  const body = JSON.stringify({
+    text: model === SHORT_LINE_TTS_MODEL ? withPhonemes(text) : text,
+    model_id: model,
+    ...languageLock(model),
+    voice_settings: safeVoiceSettings({ stability: 0.5, similarity_boost: 0.75, style: 0.3, use_speaker_boost: true }),
+  });
+  let last = '';
+  for (const host of HOSTS) {
+    const res = await fetch(`https://${host}/v1/text-to-speech/${voiceId}?output_format=mp3_44100_128`, { method: 'POST', headers: { 'xi-api-key': apiKey, 'Content-Type': 'application/json' }, body });
+    if (res.ok) {
+      const buf = Buffer.from(await res.arrayBuffer());
+      if (!buf.length) throw new Error('empty response');
+      return buf;
+    }
+    last = `${res.status} ${(await res.text().catch(() => '')).replace(/\s+/g, ' ').slice(0, 200)}`;
+    if (!/invalid_api_key/i.test(last)) break; // only a bad key is retried on the regional hosts
+  }
+  throw new Error(`elevenlabs ${last}`);
+}
+
 async function generateClip(l) {
+  if (process.env.ELEVENLABS_DIRECT_KEY) return generateDirect(l, process.env.ELEVENLABS_DIRECT_KEY.trim().match(/sk_[A-Za-z0-9]+/)?.[0] ?? process.env.ELEVENLABS_DIRECT_KEY.trim());
   const key = process.env.BAKE_SERVICE_KEY;
   if (!key) throw new Error('Set BAKE_SERVICE_KEY (Supabase service_role key) to record clips');
   const voiceId = approvedVoiceId(ACADEMY_VOICES[l.who]);

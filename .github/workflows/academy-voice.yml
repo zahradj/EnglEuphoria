@@ -30,9 +30,11 @@ jobs:
       - name: Record missing clips
         env:
           BAKE_SERVICE_KEY: ${{ secrets.BAKE_SERVICE_KEY }}
+          # owner 2026-10-16 "use elevenlabs 5": if the key is also a GitHub secret, record straight from ElevenLabs (no edge function needed)
+          ELEVENLABS_DIRECT_KEY: ${{ secrets.ELEVENLABS_5 || secrets.ELEVENLABS5 || secrets.ELEVENLABS_API_KEY_5 || secrets.elevenlabs5 }}
         run: |
           set -e
-          if [ -z "$BAKE_SERVICE_KEY" ]; then echo "::error::Add the BAKE_SERVICE_KEY repository secret (Supabase service_role key) so new clips can be recorded."; exit 1; fi
+          if [ -z "$BAKE_SERVICE_KEY" ] && [ -z "$ELEVENLABS_DIRECT_KEY" ]; then echo "::error::Add the BAKE_SERVICE_KEY or ELEVENLABS_5 repository secret so new clips can be recorded."; exit 1; fi
           npx -y tsx scripts/bake-academy-voice.mjs
       # always() so the clips that were recorded are saved even when a few lines failed (the failed lines are retried on the next run)
       - name: Commit new clips
