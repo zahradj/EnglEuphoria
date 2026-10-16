@@ -487,6 +487,7 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
         )}
         {partCard !== null && (
           <div className="ad-partcard" data-leaving={partLeaving || undefined} role="dialog" aria-label={`Part ${partCard + 1}: ${parts[partCard].name}`} onClick={closePart}>
+            {artBase && (() => { const plate = script.slides.find((x) => x.part === partCard)?.bg; return plate ? <img className="ad-partcard-plate" src={`${artBase}/bg/${plate}.webp`} alt="" aria-hidden="true" draggable={false} onError={(e) => { e.currentTarget.hidden = true; }} /> : null; })()}
             {partCard > 0 && <span className="ad-partcard-clear" role="status"><b>Part {partCard} cleared</b><span aria-hidden="true">{[0, 1, 2].map((k) => <i key={k} data-on={k < clearedStars(stats)} />)}</span></span>}
             <span className="ad-partcard-num" aria-hidden="true">{partCard + 1}</span>
             <span className="ad-partcard-kicker">Part {partCard + 1} of {parts.length} · {parts[partCard].minutes} min</span>

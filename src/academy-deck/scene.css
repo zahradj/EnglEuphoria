@@ -538,3 +538,14 @@
 .ad-root[data-theme='scene'] .ad-write-row { background: rgba(255, 255, 255, 0.82); border-radius: 18px; padding: 10px 14px; box-shadow: var(--shadow-s); }
 .ad-root[data-theme='scene'] .ad-textarea { min-height: 96px; }
 @media (prefers-reduced-motion: reduce) { .ad-root[data-theme='scene'] .ad-forge-slot[data-full='true'] { animation: none; } }
+
+/* ── Cinematic Drop (owner 2026-10-16): film bars, title card, plate behind the part card ── */
+.ad-root[data-theme='scene'] .ad-story-bars { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(#1b1038, #1b1038) top / 100% 5.5% no-repeat, linear-gradient(#1b1038, #1b1038) bottom / 100% 5.5% no-repeat; opacity: 0.92; }
+.ad-root[data-theme='scene'] .ad-story-title { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; background: radial-gradient(circle at 50% 50%, rgba(46, 16, 120, 0.55), rgba(27, 16, 56, 0.85)); animation: sc-title 2s ease both; }
+.ad-root[data-theme='scene'] .ad-story-title span { font-size: clamp(2rem, 7cqw, 4.2rem); font-weight: 900; color: #fff; letter-spacing: 0.04em; text-shadow: 0 4px 0 rgba(0, 0, 0, 0.3); padding: 0 24px; text-align: center; }
+@keyframes sc-title { 0% { opacity: 0; } 18% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; } }
+.ad-root[data-theme='scene'] .ad-partcard { overflow: hidden; }
+.ad-root[data-theme='scene'] .ad-partcard-plate { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+.ad-root[data-theme='scene'] .ad-partcard::after { content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none; background: linear-gradient(rgba(60, 35, 140, 0.5), rgba(35, 20, 90, 0.72)); }
+.ad-root[data-theme='scene'] .ad-partcard > :not(.ad-partcard-plate) { position: relative; z-index: 1; }
+@media (prefers-reduced-motion: reduce) { .ad-root[data-theme='scene'] .ad-story-title { animation: none; } }
