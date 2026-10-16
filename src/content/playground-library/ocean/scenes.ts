@@ -1821,7 +1821,7 @@ export const LESSON_A1U6L7_SCENES: Scene[] = [
   // Creative idea: the Rising River on the beach becomes the RISING TIDE — the friends wait on a rock, every right
   // answer lays a plank of the pier to the boat, a wrong one lets the tide come up a little (wet feet only).
   {
-    id: 'oc7-tide', kind: 'rising-river', look: 'tide', goalImg: BOAT, bg: reefPage(1), who: 'coral', title: 'Rising Tide! Build the pier to the boat!',
+    id: 'oc7-tide', kind: 'rising-river', look: 'tide', bg: '/lep1/scenes/bg-a1u6-tide-wide.png', who: 'coral', title: 'Rising Tide! Build the pier to the boat!',
     teacher: 'Warm-up (together!): every right answer lays a plank of the pier. A wrong answer — the tide comes up a little. Get the friends to the boat!',
     friends: [item('pip-hero'), item('mia-hero'), item('leo-hero')],
     rounds: [

@@ -1,7 +1,8 @@
 # Scenario: A1 Unit 6 Lesson 7, page 5, Rising Tide game, painted and animated with Canva
 
-**Status: requested by the owner (2026-10-16: "Animation looks very flat, so use Canva to generate well animated
-illustrations"). Built pieces go into the lesson only after the owner sees the preview and says OK.**
+**Status: built on the work branch 2026-10-16 (preview build only, not live); waiting for the owner's OK on the preview
+`docs/scenarios/a1u6-rising-tide-preview.gif`. Requested by the owner (2026-10-16: "Animation looks very flat, so use
+Canva to generate well animated illustrations").**
 
 Rules followed: CLAUDE.md "Media generators" (pictures and GIF frames from Canva only, Playground brand shades,
 cut-out stickers, Canva GIFs follow the scenario rule) and "Games: background loops only" (a game may move its
@@ -41,6 +42,17 @@ walk the pier at the end (live UI motion, as now). No new character poses are ge
 
 ## Preview before it goes in
 `docs/scenarios/a1u6-rising-tide-preview.gif`: the painted page with the moving pieces, as the child will see it.
+
+## What was made (2026-10-16)
+| Piece | Canva | File |
+|---|---|---|
+| Seaside background | media MAHYNVqogYI, holder DAHYA1ndgiM p98 | `public/lep1/scenes/bg-a1u6-tide-wide.png` |
+| Sticker sheet (boat, gull, plank, post, waves) | media MAHYNYwtfSE, p99, cut with an object splitter | `public/lep1/stickers/tide-{boat,gull,plank,post,waves}.png` |
+| Gull wings-down frame | media MAHYNW_CWsc (edit of the sheet's gull), p100 | with the wings-up gull, aligned at the beak: `public/lep1/gifs/a1u6-tide-gull.webp` (0.26 s / 0.22 s) |
+
+Changes from the plan: the background holds completely still (no foam loop): the two painted wave bands rolling past at
+different speeds give the sea its motion, and they rise with the tide. The boat rocks as one piece (no separate flag
+frames). Everything else as in the shot list.
 
 ## Approval
 - Owner: requested 2026-10-16 ("use Canva to generate well animated illustrations").
