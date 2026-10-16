@@ -688,3 +688,44 @@
 @keyframes ad-clue-glow { 0% { box-shadow: 0 0 0 0 rgba(253, 224, 71, 0.9); } 100% { box-shadow: 0 0 0 26px rgba(253, 224, 71, 0); } }
 .ad-root[data-calm='true'] .ad-clue-seal, .ad-root[data-calm='true'] .ad-clue-kicker, .ad-root[data-calm='true'] .ad-clue-text, .ad-root[data-calm='true'] .ad-clue-card[data-flip='true'] { animation: none; }
 .ad-panel > .ad-clue-card, .ad-panel > .ad-mbank { flex: none; }
+
+/* ---------- Comic (manga-style) story layer: UI over a still plate; the picture never moves ---------- */
+.ad-story[data-look='comic'] .ad-story-bars { display: none; }
+.ad-story[data-look='comic']::after { content: ''; position: absolute; inset: 56px 10px 10px; border: 5px solid #1b1038; border-radius: 6px; box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.9), inset 0 0 0 2px rgba(255, 255, 255, 0.55); pointer-events: none; z-index: 2; }
+.ad-comic { position: absolute; inset: 0; pointer-events: none; z-index: 4; }
+/* halftone screen-tone in the corners, very light */
+.ad-comic::before { content: ''; position: absolute; inset: 56px 10px 10px; background: radial-gradient(circle at 100% 0, rgba(27, 16, 56, 0.28) 0 2px, transparent 2.5px) 0 0 / 9px 9px; -webkit-mask-image: radial-gradient(ellipse at 100% 0, #000 0, transparent 38%); mask-image: radial-gradient(ellipse at 100% 0, #000 0, transparent 38%); opacity: 0.55; }
+.ad-comic-cap { position: absolute; top: 76px; left: 28px; max-width: min(46%, 440px); margin: 0; padding: 0; animation: ad-comic-cap 0.5s steps(6, end) both; }
+.ad-comic-cap span { display: block; padding: 9px 14px 10px; background: #fffbe6; color: #1b1038; font-weight: 800; font-size: clamp(0.85rem, 1.9cqw, 1.1rem); line-height: 1.3; border: 3px solid #1b1038; box-shadow: 5px 5px 0 #1b1038; }
+.ad-comic-bubble { position: absolute; bottom: 168px; margin: 0; max-width: min(46%, 470px); padding: 12px 20px 14px; background: #fff; color: #1b1038; font-weight: 800; font-size: clamp(1rem, 2.3cqw, 1.5rem); line-height: 1.3; border: 4px solid #1b1038; border-radius: 30px; box-shadow: 0 6px 0 rgba(27, 16, 56, 0.25); animation: ad-comic-pop 0.32s cubic-bezier(0.2, 1.5, 0.4, 1) both; }
+.ad-comic-bubble b { display: block; margin: 0 0 3px; font-size: 0.62em; letter-spacing: 0.14em; text-transform: uppercase; color: #6d46e6; }
+.ad-comic-bubble[data-side='left'] { left: 28px; transform-origin: 18% 100%; }
+.ad-comic-bubble[data-side='right'] { right: 28px; transform-origin: 82% 100%; }
+.ad-comic-bubble::after { content: ''; position: absolute; bottom: -22px; width: 26px; height: 26px; background: #fff; border-right: 4px solid #1b1038; border-bottom: 4px solid #1b1038; transform: skewX(-24deg) rotate(45deg) scale(0.8); }
+.ad-comic-bubble[data-side='left']::after { left: 42px; }
+.ad-comic-bubble[data-side='right']::after { right: 42px; transform: skewX(24deg) rotate(45deg) scale(0.8); }
+.ad-comic-bubble[data-old] { bottom: 292px; opacity: 0.62; font-size: clamp(0.85rem, 1.9cqw, 1.2rem); animation: none; box-shadow: none; }
+.ad-comic-bubble[data-old]::after { display: none; }
+.ad-comic-bubble[data-shout] { border-width: 5px; border-radius: 14px 40px 14px 40px; background: #fffdf0; }
+.ad-comic-caret { display: inline-block; width: 2px; height: 1em; margin-inline-start: 1px; vertical-align: -2px; background: transparent; }
+.ad-comic-caret[data-on] { background: #1b1038; animation: ad-blink 0.6s steps(2) infinite; }
+@keyframes ad-blink { 50% { opacity: 0; } }
+.ad-comic-speed { position: absolute; inset: 56px 10px 10px; background: repeating-conic-gradient(from 0deg at var(--sx, 30%) 78%, rgba(27, 16, 56, 0.55) 0 0.6deg, transparent 0.6deg 7deg); -webkit-mask-image: radial-gradient(circle at var(--sx, 30%) 78%, transparent 0 22%, #000 55%); mask-image: radial-gradient(circle at var(--sx, 30%) 78%, transparent 0 22%, #000 55%); animation: ad-speed 0.7s ease-out forwards; }
+.ad-comic-speed[data-side='right'] { --sx: 70%; }
+@keyframes ad-speed { 0% { opacity: 0; } 15% { opacity: 0.9; } 100% { opacity: 0; } }
+.ad-comic-sfx { position: absolute; top: 22%; font-family: Impact, 'Arial Black', system-ui, sans-serif; font-style: italic; font-weight: 900; font-size: clamp(2rem, 8cqw, 5rem); color: #fde047; -webkit-text-stroke: 3px #1b1038; paint-order: stroke fill; text-shadow: 4px 4px 0 #1b1038; transform: rotate(-7deg); animation: ad-sfx 1.4s cubic-bezier(0.2, 1.6, 0.4, 1) both; letter-spacing: 0.03em; }
+.ad-comic-sfx[data-side='left'] { right: 12%; }
+.ad-comic-sfx[data-side='right'] { left: 12%; transform: rotate(6deg); }
+@keyframes ad-sfx { 0% { opacity: 0; scale: 0.3; } 18% { opacity: 1; scale: 1.18; } 30% { scale: 1; } 80% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes ad-comic-pop { from { opacity: 0; scale: 0.7; } to { opacity: 1; scale: 1; } }
+@keyframes ad-comic-cap { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+/* a halftone wipe sweeps across at every new beat (it covers the plate, the plate does not move) */
+.ad-comic-wipe { position: absolute; inset: 0; background: linear-gradient(112deg, transparent 0 38%, rgba(255, 255, 255, 0.95) 38% 50%, #1b1038 50% 53%, transparent 53%), radial-gradient(circle, rgba(27, 16, 56, 0.35) 1.4px, transparent 1.8px) 0 0 / 8px 8px; -webkit-mask-image: linear-gradient(112deg, transparent 0 28%, #000 28% 60%, transparent 60%); mask-image: linear-gradient(112deg, transparent 0 28%, #000 28% 60%, transparent 60%); animation: ad-comic-wipe 0.75s ease-in forwards; }
+@keyframes ad-comic-wipe { from { transform: translateX(-110%); } to { transform: translateX(110%); } }
+.ad-root[data-calm='true'] .ad-comic *, .ad-root[data-calm='true'] .ad-comic::before { animation: none !important; }
+.ad-root[data-calm='true'] .ad-comic-wipe, .ad-root[data-calm='true'] .ad-comic-speed { display: none; }
+@container (max-width: 480px) {
+  .ad-comic-bubble { max-width: 86%; bottom: 150px; left: 7% !important; right: auto !important; }
+  .ad-comic-bubble[data-old] { display: none; }
+  .ad-comic-cap { max-width: 86%; top: 70px; }
+}
