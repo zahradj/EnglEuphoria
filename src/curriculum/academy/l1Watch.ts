@@ -20,7 +20,7 @@ export interface L1WatchItem {
 
 const w = (langs: HomeLanguage[], watch: string, teach: string, evidence: L1Evidence): L1WatchItem => ({ langs, watch, teach, evidence });
 
-/** Keyed by Season id. A1, A2 and B1 written (2026-10-16); the other levels follow in the same shape. */
+/** Keyed by Season id. All 80 Seasons written (2026-10-16); the other levels follow in the same shape. */
 export const L1_WATCH: Record<string, readonly L1WatchItem[]> = {
   'A1-S01': [
     w(['ar'], 'Leaves out "am/is/are": "I student", "She happy" (Arabic has no present-tense copula).', 'State the rule line "every present sentence has am / is / are"; the student restates it in teach-back; nudge with "Say it with am/is/are."', 'V'),
@@ -242,6 +242,157 @@ export const L1_WATCH: Record<string, readonly L1WatchItem[]> = {
     w(['tr', 'ar', 'es', 'fr', 'it'], 'Mixes few and little: “a little friends”, “a few money.”', 'Countable / uncountable sorting with the picture; keep few and little as chunks.', 'K'),
     w(['es', 'it', 'tr'], 'Reads the “gh” in enough as written (/g/ or /gh/) instead of /f/.', 'Pair the written word with the recorded voice; add to the Daily 10 dictation.', 'V-weak'),
   ],
+  'B2-S01': [
+    w(['it', 'es', 'fr'], 'Present simple for a continuing activity: “I study English since 2020.” (it da, es desde, fr depuis)', 'Recycle B1-S03: timeline sort, then “How long have you been …-ing?” with a diary picture.', 'V-weak'),
+    w(['es', 'fr', 'it', 'tr', 'ar'], 'Uses the continuous with state verbs: “I have been knowing him for years.”', 'The Word Card of state verbs; sort “activity” and “state” verbs.', 'K'),
+    w(['fr', 'it', 'tr'], 'Loses the weak “’ve been” /əv bɪn/ and hears it as “be”.', 'Minimal-pair listening with several recorded voices.', 'V-weak'),
+  ],
+  'B2-S02': [
+    w(['es', 'fr', 'it', 'ar', 'tr'], 'Uses “would have” in the if-clause: “If I would have known, I would have gone.”', 'The rule line “if + past perfect, would have + participle”; swap-the-half builder.', 'K'),
+    w(['es', 'fr', 'it'], 'Says “I wish I would have …” for a past regret.', 'The rule line “wish + past perfect”; a regrets board (what I wish I had done).', 'K'),
+    w(['fr', 'it', 'tr'], 'Misses weak “have” in “would’ve / could’ve” and writes “would of”.', 'Listening game with the contracted forms and a spelling check.', 'V-weak'),
+  ],
+  'B2-S03': [
+    w(['es', 'fr', 'it'], 'Uses the L1 impersonal pattern (se / on / si) instead of the passive, or the active with “people”.', 'Active-to-passive transform game for all tenses; keep the agent “by” only when it adds information.', 'K'),
+    w(['tr', 'ar'], 'Leaves out be or uses the wrong form of be: “It built in 1990”, “It is being built” missed.', 'Build the passive with blocks: object + be (tense) + participle; the Mistake Bank for forms of be.', 'K'),
+    w(['fr', 'it'], 'Weak forms “been” and “being” are lost in fast speech.', 'Listening and shadowing with several voices.', 'V-weak'),
+  ],
+  'B2-S04': [
+    w(['es', 'fr', 'it', 'tr', 'ar'], 'Keeps question order in a reported question: “He asked me where was I.”; leaves out if/whether.', 'The rule line “statement order after asked”; word blocks; if / whether in a coloured block.', 'K'),
+    w(['es', 'fr', 'it'], 'Says “He told me to not go” or “He told that…” instead of “told me not to go”, “said that”.', 'Sort say / tell / ask patterns; a short matching game.', 'K'),
+  ],
+  'B2-S05': [
+    w(['es', 'fr', 'it', 'tr', 'ar'], 'Leaves out the commas or uses “that” in a non-defining clause: “My brother, that lives in Rome …”.', 'The rule line “who / which, with commas; no that”; a comma-and-pause shadowing game.', 'K'),
+    w(['fr', 'it'], 'Uses “what” for “which”: “He passed, what surprised me.”', 'Sort which (the whole clause) and what (a thing); short corrections in the Mistake Bank.', 'K'),
+  ],
+  'B2-S06': [
+    w(['es', 'fr', 'it'], 'Uses should have, must have and might have interchangeably (the L1 conditional perfect covers all of them): “He should have been at home” for a deduction.', 'Three-level scale: must have (sure), might have (maybe), can’t have (sure not); criticism uses should have; a clue-board game.', 'K'),
+    w(['tr', 'ar', 'es', 'fr', 'it'], 'Wrong participle or “should of” in writing: “She should have went.”', 'Participle trio sorting recycled from B1-S01; a quick spelling check.', 'K'),
+    w(['fr', 'it', 'tr'], 'Loses weak “have” /əv/.', 'Shadow a recorded voice with “should’ve / could’ve”.', 'V-weak'),
+  ],
+  'B2-S07': [
+    w(['es', 'fr', 'it'], 'Uses the future after “when / by the time / as soon as”: “When I will graduate, I will travel.”', 'The rule line “time clause = present, main clause = will”; a clause-order builder.', 'K'),
+    w(['tr', 'ar'], 'Uses the simple future for something in progress at a future time, or leaves out “have” in “will have finished”.', 'Timeline pictures: will be -ing (in progress at 5 pm) versus will have -ed (done by 5 pm).', 'K'),
+    w(['fr', 'it'], 'Hears “will have” /wɪl əv/ as one word.', 'Listening game with several recorded voices.', 'V-weak'),
+  ],
+  'B2-S08': [
+    w(['es', 'fr', 'it', 'tr', 'ar'], 'Uses “despite of” or “in spite” without “of”, or “despite that”.', 'A fixed-chunk card: despite + noun / -ing; in spite of + noun / -ing.', 'K'),
+    w(['es', 'fr', 'it', 'tr', 'ar'], 'Joins sentences with “however” and a comma: “It was good, however it was long.”', 'Punctuation sort: however starts a new sentence or follows a semicolon.', 'K'),
+    w(['fr', 'it', 'es'], 'False friend: “actually” used for “currently”.', 'Word Card flag; Mistake Bank if it appears.', 'V-weak'),
+  ],
+  'B2-S09': [
+    w(['es', 'fr', 'it'], 'Uses the active with a reflexive: “I cut my hair” or “I repaired my car” when someone else did it.', 'A photo game: who did it? I had my car repaired / I repaired it myself.', 'K'),
+    w(['es', 'fr', 'it', 'tr', 'ar'], 'Indirect question order: “Could you tell me where is the bank?”', 'Recycle B1-S12: statement order after “Could you tell me”; a polite-request builder.', 'K'),
+  ],
+  'B2-S10': [
+    w(['es', 'fr', 'it', 'tr', 'ar'], 'Double negative with unless: “Unless you don’t come, …”', 'The rule line “unless = if not, so no second negative”; swap-the-sentence game.', 'K'),
+    w(['es', 'fr', 'it'], 'Uses will in the condition: “As long as it will be easy, I’ll do it.”', 'Recycle B1-S05: present in the condition clause, will in the result.', 'K'),
+  ],
+  'B2-S11': [
+    w(['es', 'fr', 'it', 'tr', 'ar'], 'Does not separate “remember to do” (the future task) and “remember doing” (the memory); “stop to” and “stop -ing”.', 'A picture pair for each verb (remember, stop, try); the student picks the meaning before the form.', 'K'),
+    w(['es', 'fr', 'it'], 'Uses “the” for general ideas: “The life is hard”, “I like the music.” (the L1 uses the definite article here)', 'Sort sentences into general (no article) and specific (the); keep it to five examples.', 'K'),
+    w(['tr', 'ar'], 'Leaves out articles or uses “a” everywhere.', 'Recycle A1-S12: a / an / the sorting; a short article quiz in the Daily 10.', 'V-weak'),
+  ],
+  'B2-S12': [
+    w(['es', 'it', 'tr', 'ar'], 'Keeps a resumptive pronoun in the cleft: “What I need, it is a rest.”', 'The rule line “What I need is …” with blocks; remove the extra pronoun.', 'K'),
+    w(['fr', 'es', 'it'], 'Uses “what” instead of “that” in a cleft: “It was the key what I needed.”', 'A clefting game: person (who), thing (that), place (where).', 'K'),
+  ],
+  'B2-S13': [
+    w(['es', 'fr', 'it', 'tr', 'ar'], 'Dangling participles: “Walking down the street, the sun was hot.”', 'Ask “Who is walking?”; a match-the-subject game.', 'K'),
+    w(['es', 'it', 'tr'], 'Drops the subject in the main clause after an ellipsis (a pro-drop transfer): “Went to the shop and bought bread.”', 'Subject-checking in the Mistake Bank; speak in two clear clauses.', 'K'),
+  ],
+  'B2-S14': [
+    w(['es', 'fr', 'it'], 'Says “as more as” or leaves out the second “the”: “The more you practise, more you learn.”', 'The rule line “the + comparative, the + comparative”; a paired-sentences builder.', 'K'),
+    w(['tr', 'ar', 'es', 'fr', 'it'], 'Mixes so and such: “It was so a good film.”', 'The rule line “so + adjective, such + (a) + noun”; sort sentences.', 'K'),
+  ],
+  'B2-S15': [
+    w(['es', 'fr', 'it'], 'Uses the L1 object pattern: “He suggested me to go”, “She admitted to do it.”', 'A pattern table (suggest + -ing / that, admit + -ing, insist on, deny + -ing); sort 8 verbs.', 'K'),
+    w(['tr', 'ar'], 'Uses a to-infinitive after every reporting verb.', 'The same pattern table with one example per verb; the Mistake Bank returns it.', 'K'),
+  ],
+  'B2-S16': [
+    w(['es', 'fr', 'it'], 'Writes “in the other hand” and overuses “moreover” and “furthermore”.', 'A connector menu: on the one hand / on the other hand; vary the markers (one use each per paragraph).', 'K'),
+    w(['tr', 'ar', 'es', 'fr', 'it'], 'Mixes “at the end” and “in the end”, “besides” and “beside”.', 'A pair-picking game with example sentences.', 'K'),
+  ],
+  'B2-S17': [
+    w(['es', 'fr', 'it'], 'Uses “for + verb” for purpose: “I study for pass the exam.”', 'The rule line “to / in order to / so as to + verb”; “so that” + a full clause.', 'K'),
+    w(['tr', 'ar', 'es', 'fr', 'it'], 'Says “had better to go” or “better go”.', 'The rule line “had better + base verb”; a warning-sign game.', 'K'),
+  ],
+  'B2-S18': [
+    w(['es', 'fr', 'it'], 'Uses the infinitive after a preposition: “Before to leave”, “instead to go”, “look forward to meet you”.', 'The rule line “preposition + -ing”; a gap-fill sort of look forward to, instead of, apart from.', 'K'),
+    w(['tr', 'ar', 'es', 'fr', 'it'], 'Confuses “be used to + -ing” with “used to + verb”.', 'A sort game recycling B1-S02: habit in the past (used to) versus familiar now (be used to).', 'K'),
+  ],
+  'C1-S01': [
+    w(['es', 'fr', 'it', 'tr', 'ar'], 'No inversion after a fronted negative: “Rarely we go there.”', 'The rule line “negative adverbial first, then auxiliary + subject”; a fronting builder.', 'K'),
+    w(['es', 'fr', 'it', 'tr', 'ar'], 'Over-inverts or puts a main verb before the subject: “Rarely go we there.”', 'Auxiliary-only practice: do / have / can before the subject.', 'K'),
+  ],
+  'C1-S02': [
+    w(['es', 'it'], 'Is helped by the L1 inverted conditional (de haber sabido, se avessi saputo), but copies the order literally.', 'Contrast L1 and English once, then drill “Had I known…”.', 'K'),
+    w(['es', 'fr', 'it', 'tr', 'ar'], 'Mixes the tenses in a mixed conditional: “If I studied more, I would have passed.”', 'A two-timeline picture (past cause, present result); sort sentences.', 'K'),
+  ],
+  'C1-S03': [
+    w(['es', 'fr', 'it'], 'Uses the L1 impersonal pattern: “It says that…” for “It is said that…”.', 'A reporting-structure builder: it is said that / he is said to / he is thought to have.', 'K'),
+    w(['tr', 'ar', 'es', 'fr', 'it'], 'Wrong infinitive: “He is said to has left.”', 'The rule line “to + base / to have + participle”; a timeline match.', 'K'),
+  ],
+  'C1-S04': [
+    w(['es', 'fr', 'it'], 'Has a subjunctive in the L1 and so adds -s or “should” or an indicative form: “I suggest that he goes.”', 'Show the base form “I suggest that he go”, and accept “should go” as an alternative; a formal-advice builder.', 'K'),
+    w(['tr', 'ar'], 'Uses “would rather” with the wrong form: “I would rather to stay.”', 'The rule line “would rather + base verb (+ past simple for another person)”.', 'K'),
+  ],
+  'C1-S05': [
+    w(['es', 'fr', 'it'], 'Is helped by Latin-based nouns but builds heavy “of … of …” chains, or uses a noun where English prefers a verb.', 'A transform game: verb phrase to noun phrase and back; keep each noun phrase to two “of”s.', 'K'),
+    w(['tr', 'ar'], 'Places the modifier after the noun or leaves out articles in long noun phrases.', 'A blocks builder for noun phrases (determiner, adjectives, noun, of-phrase).', 'K'),
+  ],
+  'C1-S06': [
+    w(['es', 'fr', 'it', 'tr', 'ar'], '“Not only … but” without inversion: “Not only he came but …”', 'The rule line “Not only + auxiliary + subject”; a fronting builder.', 'K'),
+    w(['es', 'it', 'tr'], 'Misses the stress on the fronted word and speaks in an even rhythm.', 'Clap the stress and shadow a recorded voice.', 'V-weak'),
+  ],
+  'C1-S07': [
+    w(['es', 'fr', 'it', 'tr', 'ar'], 'Dangling perfect participle: “Having finished, the exam was easy.”', 'Ask “Who finished?”; a match-the-subject game recycled from B2-S13.', 'K'),
+    w(['es', 'fr', 'it'], 'Uses the L1 gerund “Habiendo terminado” as a model but loses the perfect: “Finishing yesterday, I …”', 'A timeline: first event (having + participle), second event (main clause).', 'K'),
+  ],
+  'C1-S08': [
+    w(['es', 'fr', 'it'], 'False friends in stance words: “actually” (for currently), “eventually” (for possibly).', 'Word Card with the false friends; add to the Mistake Bank if they appear.', 'V-weak'),
+    w(['tr', 'ar', 'es', 'fr', 'it'], 'Sounds too direct or too certain in discussion; hedges are rare in the L1 style.', 'A hedging ladder: it is clear / it seems / arguably; the student restates a claim at three levels.', 'K'),
+  ],
+  'C1-S09': [
+    w(['es', 'fr', 'it', 'tr', 'ar'], 'Formal in speech or informal in an email (contractions, phrasal verbs, “Hi” to an unknown person).', 'A register sort: formal, neutral, informal; the student rewrites one message both ways.', 'K'),
+    w(['tr', 'ar'], 'Politeness norms differ (titles, indirect requests); English formality is signalled mostly by vocabulary and structure.', 'Scenario cards (a teacher, a manager, a friend); pick the right register, then say why.', 'K'),
+  ],
+  'C1-S10': [
+    w(['es', 'fr', 'it', 'tr', 'ar'], '“Although … but” in one sentence, or “much as” misused: “Much as I like it but …”.', 'The rule line “one concession word per clause”; a clause-merging game.', 'K'),
+    w(['es', 'fr', 'it'], 'Misses the adjective + as pattern: “Strange as it may seem” (as is not “because”).', 'Five fixed models to shadow; a short paraphrase game.', 'K'),
+  ],
+  'C1-S11': [
+    w(['es', 'fr', 'it'], 'Mixes “needn’t have” and “didn’t need to”: “I needn’t have gone” (I went but it was not necessary) versus “I didn’t need to go” (no need).', 'A two-picture game (went or not); the student chooses and says it.', 'K'),
+    w(['tr', 'ar'], 'Uses must for every obligation and past obligation.', 'A modal-nuance ladder (must, have to, need to, needn’t, be bound to); sort 10 sentences.', 'K'),
+  ],
+  'C1-S12': [
+    w(['es', 'fr', 'it'], 'Collocation calques: “make a photo”, “do a mistake”, “say a lie”, “open the light”.', 'A collocation matcher (make / do / take / have); keep each miss in the Mistake Bank.', 'K'),
+    w(['tr', 'ar'], 'Calques of idioms and fixed phrases translated word for word.', 'Learn idioms as whole chunks with a picture; the student says what the L1 idiom means in English.', 'K'),
+  ],
+  'C1-S13': [
+    w(['es', 'fr', 'it', 'tr', 'ar'], 'Copies the source structure and vocabulary when summarising (little real reformulation).', 'A summary ladder: paraphrase one sentence, then two; the student changes the structure.', 'K'),
+    w(['es', 'fr', 'it'], 'False friends in summary words: “actually”, “sensible / sensitive”.', 'Word Card flag; the Mistake Bank.', 'V-weak'),
+  ],
+  'C1-S14': [
+    w(['tr', 'ar', 'es', 'fr', 'it'], 'Rhetorical habits differ by language (repetition, indirectness); this is a contested area, so listen without judging.', 'Model a rule of three; the student tries two and three and compares the effect.', 'K'),
+    w(['fr', 'it'], 'Even rhythm and little pause or emphasis in a speech.', 'Mark pauses and emphasis in the text; shadow a recorded voice.', 'V-weak'),
+  ],
+  'C1-S15': [
+    w(['es', 'fr', 'it', 'tr', 'ar'], 'Irony and understatement are signalled by tone and context; literal reading is common.', 'A short listening game: sincere or ironic? with several recorded voices; the student explains the clue.', 'K'),
+    w(['es', 'fr', 'it', 'tr', 'ar'], 'Misses British-style understatement (“not bad”, “a bit of a problem”).', 'A meaning-in-context sort: what did the speaker really mean?', 'K'),
+  ],
+  'C1-S16': [
+    w(['es', 'it', 'tr'], 'Omits subjects and loses track of who is meant (a pro-drop habit), so reference chains become unclear.', 'A reference-checking pass in the portfolio: underline each “it / they / this” and say what it points to.', 'K'),
+    w(['es', 'fr', 'it', 'tr', 'ar'], 'Overuses the same connector or places it in the wrong position.', 'A connector menu (adding, contrast, result); vary one per paragraph.', 'K'),
+  ],
+  'C1-S17': [
+    w(['es', 'fr', 'it'], 'Mis-orders “However small the change”: “However the change is small”.', 'The rule line “however + adjective + subject + verb”; a word-block builder.', 'K'),
+    w(['es', 'fr', 'it', 'tr', 'ar'], 'Omits a “the” in “The more … the more” or the verb be.', 'A paired-sentences builder with both “the”s marked.', 'K'),
+  ],
+  'C1-S18': [
+    w(['es', 'fr', 'it', 'tr', 'ar'], 'Absolute phrases are rare in the L1, so “Time permitting” or “Weather allowing” sound unnatural when invented.', 'Teach six fixed phrases with a picture; let the student replace the subject in each.', 'K'),
+    w(['es', 'fr', 'it'], 'Dangling absolute phrases: the subject differs from the main clause but is not stated.', 'Ask “Who or what is …?”; a subject-matching game.', 'K'),
+  ],
 };
 
 /** The watch list for a Season ([] when none is written yet). */
@@ -250,4 +401,4 @@ export function l1WatchFor(seasonId: string): readonly L1WatchItem[] {
 }
 
 /** Levels whose Seasons all have a list (used by the test; extend as each level is written). */
-export const L1_WATCH_LEVELS: readonly AcademyLevel[] = ['A1', 'A2', 'B1'];
+export const L1_WATCH_LEVELS: readonly AcademyLevel[] = ['A1', 'A2', 'B1', 'B2', 'C1'];
