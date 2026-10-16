@@ -1192,6 +1192,9 @@ export type Scene =
        *  by tile; the child guesses early by tapping one of the answer
        *  pictures and says it. Fewer tiles gone = more stars. */
       id: string; kind: 'tile-reveal'; bg: string; bgVideo?: string; teacher: string; who: CharKey;
+      /** Design (owner 2026-10-16: "be more creative — instead of the blue blocks, use bubbles"): 'tiles' (default,
+       *  flipping blocks in a frame) or 'bubbles' (the picture floats in the sea behind a cluster of bubbles that pop). */
+      look?: 'tiles' | 'bubbles';
       rounds: { img: string; word: string; line: string; options: Thing[] }[];
     }
   | {

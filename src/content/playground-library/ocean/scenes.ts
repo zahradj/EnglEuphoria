@@ -1341,7 +1341,7 @@ export const LESSON_A1U6L5_SCENES: Scene[] = [
   {
     id: 'oc5-which-page', kind: 'prea1', teacher: 'Guided: Tile Reveal! Who or what from the story is hiding? Tiles open one by one — the student listens to the story clue and guesses early, then says the story sentence.',
     scene: {
-      id: 'oc5-which-page', kind: 'tile-reveal', bg: bgReef, who: 'pip',
+      id: 'oc5-which-page', kind: 'tile-reveal', look: 'bubbles', bg: bgReef, who: 'pip',
       teacher: 'Who is it in the story? Guess early!',
       rounds: [
         { img: ACT.hiding, word: 'Bub', line: 'He is shy. He is hiding. Then he is helping! Who is it?', options: [{ label: 'crab', img: SEA.crab }, { label: 'Bub', img: BUB }, { label: 'shark', img: SEA.shark }] },
