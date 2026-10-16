@@ -399,7 +399,7 @@ export const B1_S01_E1: DeckScript = {
       hints: ['Say the rule, then show it with: I have been to Spain.'],
     },
     {
-      id: 'wrap', kind: 'wrap', part: 7, bg: CASE, actors: [who('Vee', 'left', 'thumbs')], heading: 'Your trophies are on the board!', ticks: CRITERIA,
+      id: 'wrap', kind: 'wrap', part: 7, bg: 'trophy-reveal', actors: [who('Vee', 'left', 'thumbs')], heading: 'Your trophies are on the board!', ticks: CRITERIA,
       homework: 'Daily 10: say the three forms of ten verbs, then record a voice note: three things you have done (with when) and one dare for yourself. Not yet is okay!',
       clue: 'Clue 1 of 8: Vee has hidden a card with a mystery experience on the wall. Who has done it?',
     },

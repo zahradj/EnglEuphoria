@@ -571,3 +571,8 @@
 .ad-root[data-theme='scene'] .ad-wordle-cell[data-s='hit'] { border-bottom-color: #14683f; }
 .ad-root[data-theme='scene'] .ad-wordle-cell[data-s='near'] { border-bottom-color: #b9801e; }
 .ad-root[data-theme='scene'] .ad-wordle-cell[data-s='miss'] { background: #5c5680; border-bottom-color: #3a3558; }
+
+/* Wrap reveal: the trophy plate shows alone with one button; then the checklist fades in (a fade only, no zoom or pan). */
+.ad-root[data-theme='scene'] .ad-reveal-btn { position: absolute; inset-inline: 0; bottom: 17%; margin-inline: auto; width: fit-content; padding: 14px 30px; border-radius: 999px; border: 3px solid #fff; background: linear-gradient(180deg, var(--violet), var(--violet-d)); color: #fff; font: inherit; font-weight: 900; font-size: 1.3rem; box-shadow: 0 6px 0 rgba(60, 30, 140, 0.35), 0 10px 26px rgba(60, 30, 140, 0.3); cursor: pointer; animation: sc-pop 0.5s cubic-bezier(0.2, 1.4, 0.4, 1) both; }
+.ad-root[data-theme='scene'] .ad-reveal-btn:hover { filter: brightness(1.08); }
+.ad-root[data-theme='scene'] .ad-panel[data-variant='reveal'] { animation: sc-rise 0.6s ease both; }

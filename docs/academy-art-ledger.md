@@ -264,3 +264,4 @@ Notes: generated with the Lesson 1 plate `MAHYCnd2Ab0` as the only style referen
 | story plate 4 (the dare moment: Vee holds out a blank card, Ava and Theo behind him) | `bg/story-b1s1-4.webp` | MAHYKrKSe2w | 98 (reused) |
 
 "The Dare" is now four beats: plate 1, plate 2, plate 4 (the dare line), plate 3 (the noodles joke). No text changed, so no new voice lines.
+| trophy-case reveal (six trophies lit; the Wrap's background) | `bg/trophy-reveal.webp` | MAHYKx7rtSM | 97 (reused) |
