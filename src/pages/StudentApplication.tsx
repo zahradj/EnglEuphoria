@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -46,6 +47,7 @@ interface StudentProfile {
 }
 
 const StudentApplication = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [currentStep, setCurrentStep] = useState(1);
@@ -76,12 +78,12 @@ const StudentApplication = () => {
   });
 
   const englishLevels = [
-    { value: 'none', label: 'Complete Beginner (No English)' },
-    { value: 'pre-a1', label: 'Pre-A1 (Some words)' },
-    { value: 'a1', label: 'A1 (Basic phrases)' },
-    { value: 'a2', label: 'A2 (Simple conversations)' },
-    { value: 'b1', label: 'B1 (Intermediate)' },
-    { value: 'b2', label: 'B2 (Upper Intermediate)' }
+    { value: 'none', label: t('st.app.lvlNone', 'Complete Beginner (No English)') },
+    { value: 'pre-a1', label: t('st.app.lvlPre', 'Pre-A1 (Some words)') },
+    { value: 'a1', label: t('st.app.lvlA1', 'A1 (Basic phrases)') },
+    { value: 'a2', label: t('st.app.lvlA2', 'A2 (Simple conversations)') },
+    { value: 'b1', label: t('st.app.lvlB1', 'B1 (Intermediate)') },
+    { value: 'b2', label: t('st.app.lvlB2', 'B2 (Upper Intermediate)') }
   ];
 
   const goalOptions = [
@@ -96,12 +98,12 @@ const StudentApplication = () => {
   ];
 
   const styleOptions = [
-    { value: 'games', label: 'Games & Interactive Activities', icon: '🎮' },
-    { value: 'stories', label: 'Stories & Reading', icon: '📖' },
-    { value: 'videos', label: 'Videos & Multimedia', icon: '📺' },
-    { value: 'projects', label: 'Creative Projects', icon: '🛠️' },
-    { value: 'music', label: 'Songs & Music', icon: '🎵' },
-    { value: 'speaking', label: 'Conversation Practice', icon: '💬' }
+    { value: 'games', label: t('st.app.styGames', 'Games & Interactive Activities'), icon: '🎮' },
+    { value: 'stories', label: t('st.app.styStories', 'Stories & Reading'), icon: '📖' },
+    { value: 'videos', label: t('st.app.styVideos', 'Videos & Multimedia'), icon: '📺' },
+    { value: 'projects', label: t('st.app.styProjects', 'Creative Projects'), icon: '🛠️' },
+    { value: 'music', label: t('st.app.styMusic', 'Songs & Music'), icon: '🎵' },
+    { value: 'speaking', label: t('st.app.stySpeaking', 'Conversation Practice'), icon: '💬' }
   ];
 
   const interestOptions = [
@@ -111,10 +113,10 @@ const StudentApplication = () => {
   ];
 
   const timeOptions = [
-    { value: '1-lesson', label: '1 lesson per week (25 minutes)' },
-    { value: '2-lessons', label: '2 lessons per week (50 minutes total)' },
-    { value: '3-lessons', label: '3 lessons per week (75 minutes total)' },
-    { value: 'intensive', label: 'Intensive (5+ lessons per week)' }
+    { value: '1-lesson', label: t('st.app.time1', '1 lesson per week (25 minutes)') },
+    { value: '2-lessons', label: t('st.app.time2', '2 lessons per week (50 minutes total)') },
+    { value: '3-lessons', label: t('st.app.time3', '3 lessons per week (75 minutes total)') },
+    { value: 'intensive', label: t('st.app.timeInt', 'Intensive (5+ lessons per week)') }
   ];
 
   const handleArrayToggle = (array: string[], value: string, setter: (arr: string[]) => void) => {
@@ -144,8 +146,8 @@ const StudentApplication = () => {
       await new Promise(resolve => setTimeout(resolve, 3000));
       
       toast({
-        title: "🎉 Your Learning Path is Ready!",
-        description: "Redirecting to your personalized dashboard...",
+        title: t('st.app.ready', '🎉 Your Learning Path is Ready!'),
+        description: t('st.app.redirect', 'Redirecting to your personalized dashboard...'),
       });
       
       setTimeout(() => {
@@ -155,8 +157,8 @@ const StudentApplication = () => {
     } catch (error) {
       console.error('Error generating learning path:', error);
       toast({
-        title: "Something went wrong",
-        description: "Please try again or contact support.",
+        title: t('st.app.wrong', 'Something went wrong'),
+        description: t('st.app.wrongDesc', 'Please try again or contact support.'),
         variant: "destructive"
       });
     } finally {
@@ -188,17 +190,17 @@ const StudentApplication = () => {
             <div className="w-16 h-16 bg-gradient-to-r from-emerald-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
               <Sparkles className="h-8 w-8 text-white animate-pulse" />
             </div>
-            <CardTitle>Creating Your Learning Path...</CardTitle>
+            <CardTitle>{t('st.app.creating', 'Creating Your Learning Path...')}</CardTitle>
           </CardHeader>
           <CardContent>
             <Progress value={66} className="mb-4" />
             <p className="text-gray-600 mb-4">
-              Our AI is analyzing your profile and creating a personalized curriculum just for you!
+              {t('st.app.creatingDesc', 'Our AI is analyzing your profile and creating a personalized curriculum just for you!')}
             </p>
             <div className="space-y-2 text-sm text-gray-500">
-              <div>✅ Analyzing your strengths and goals</div>
-              <div>✅ Selecting perfect learning materials</div>
-              <div className="animate-pulse">🔄 Building your weekly lessons...</div>
+              <div>{t('st.app.step1', '✅ Analyzing your strengths and goals')}</div>
+              <div>{t('st.app.step2', '✅ Selecting perfect learning materials')}</div>
+              <div className="animate-pulse">{t('st.app.step3', '🔄 Building your weekly lessons...')}</div>
             </div>
           </CardContent>
         </Card>
@@ -213,7 +215,7 @@ const StudentApplication = () => {
         <div className="container mx-auto flex items-center justify-between">
           <Logo />
           <Button variant="ghost" onClick={() => navigate('/login')}>
-            Back to Login
+            {t('st.auth.backLogin', 'Back to Login')}
           </Button>
         </div>
       </header>
@@ -224,10 +226,10 @@ const StudentApplication = () => {
           <div className="mb-8">
             <div className="flex items-center justify-between mb-4">
               <Badge variant="secondary" className="text-sm">
-                Step {currentStep} of {totalSteps}
+                {t('st.app.stepOf', { a: currentStep, b: totalSteps, defaultValue: 'Step {{a}} of {{b}}' })}
               </Badge>
               <div className="text-sm text-gray-600">
-                {Math.round(progress)}% Complete
+                {t('st.path.pctComplete', { n: Math.round(progress), defaultValue: '{{n}}% Complete' })}
               </div>
             </div>
             <Progress value={progress} className="h-2" />
@@ -243,12 +245,12 @@ const StudentApplication = () => {
                 {currentStep === 5 && <Heart className="h-5 w-5" />}
                 {currentStep === 6 && <Clock className="h-5 w-5" />}
                 
-                {currentStep === 1 && "Tell us about yourself! 👋"}
-                {currentStep === 2 && "What's your English level? 📚"}
-                {currentStep === 3 && "What are your goals? 🎯"}
-                {currentStep === 4 && "Rate your current skills 💪"}
-                {currentStep === 5 && "What do you love? ❤️"}
-                {currentStep === 6 && "Let's plan your schedule! ⏰"}
+                {currentStep === 1 && t('st.app.t1', 'Tell us about yourself! 👋')}
+                {currentStep === 2 && t('st.app.t2', "What's your English level? 📚")}
+                {currentStep === 3 && t('st.app.t3', 'What are your goals? 🎯')}
+                {currentStep === 4 && t('st.app.t4', 'Rate your current skills 💪')}
+                {currentStep === 5 && t('st.app.t5', 'What do you love? ❤️')}
+                {currentStep === 6 && t('st.app.t6', "Let's plan your schedule! ⏰")}
               </CardTitle>
             </CardHeader>
             
@@ -257,7 +259,7 @@ const StudentApplication = () => {
               {currentStep === 1 && (
                 <div className="space-y-4">
                   <div>
-                    <Label htmlFor="name">What's your name? *</Label>
+                    <Label htmlFor="name">{t('st.app.name', "What's your name? *")}</Label>
                     <Input
                       id="name"
                       value={profile.basicInfo.name}
@@ -265,14 +267,14 @@ const StudentApplication = () => {
                         ...prev,
                         basicInfo: { ...prev.basicInfo, name: e.target.value }
                       }))}
-                      placeholder="Enter your full name"
+                      placeholder={t('st.app.namePh', 'Enter your full name')}
                       className="mt-1"
                     />
                   </div>
                   
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="age">How old are you? *</Label>
+                      <Label htmlFor="age">{t('st.app.age', 'How old are you? *')}</Label>
                       <Input
                         id="age"
                         type="number"
@@ -283,13 +285,13 @@ const StudentApplication = () => {
                           ...prev,
                           basicInfo: { ...prev.basicInfo, age: parseInt(e.target.value) || 0 }
                         }))}
-                        placeholder="Age"
+                        placeholder={t('st.mp.age', 'Age')}
                         className="mt-1"
                       />
                     </div>
                     
                     <div>
-                      <Label htmlFor="grade">What grade are you in?</Label>
+                      <Label htmlFor="grade">{t('st.app.grade', 'What grade are you in?')}</Label>
                       <Input
                         id="grade"
                         value={profile.basicInfo.currentGrade}
@@ -297,14 +299,14 @@ const StudentApplication = () => {
                           ...prev,
                           basicInfo: { ...prev.basicInfo, currentGrade: e.target.value }
                         }))}
-                        placeholder="e.g., 5th grade"
+                        placeholder={t('st.app.gradePh', 'e.g., 5th grade')}
                         className="mt-1"
                       />
                     </div>
                   </div>
                   
                   <div>
-                    <Label htmlFor="nationality">What's your nationality? *</Label>
+                    <Label htmlFor="nationality">{t('st.app.nat', "What's your nationality? *")}</Label>
                     <Input
                       id="nationality"
                       value={profile.basicInfo.nationality}
@@ -312,13 +314,13 @@ const StudentApplication = () => {
                         ...prev,
                         basicInfo: { ...prev.basicInfo, nationality: e.target.value }
                       }))}
-                      placeholder="e.g., Algerian, French, American..."
+                      placeholder={t('st.app.natPh', 'e.g., Algerian, French, American...')}
                       className="mt-1"
                     />
                   </div>
                   
                   <div>
-                    <Label htmlFor="native">What's your native language? *</Label>
+                    <Label htmlFor="native">{t('st.app.native', "What's your native language? *")}</Label>
                     <Input
                       id="native"
                       value={profile.basicInfo.nativeLanguage}
@@ -326,7 +328,7 @@ const StudentApplication = () => {
                         ...prev,
                         basicInfo: { ...prev.basicInfo, nativeLanguage: e.target.value }
                       }))}
-                      placeholder="e.g., Spanish, Chinese, Arabic..."
+                      placeholder={t('st.app.nativePh', 'e.g., Spanish, Chinese, Arabic...')}
                       className="mt-1"
                     />
                   </div>
@@ -337,7 +339,7 @@ const StudentApplication = () => {
               {currentStep === 2 && (
                 <div className="space-y-4">
                   <p className="text-gray-600">
-                    Have you studied English before? Choose the level that best describes you:
+                    {t('st.app.p2', 'Have you studied English before? Choose the level that best describes you:')}
                   </p>
                   
                   <div className="space-y-2">
@@ -362,12 +364,12 @@ const StudentApplication = () => {
               {currentStep === 3 && (
                 <div className="space-y-4">
                   <p className="text-gray-600">
-                    Why do you want to learn English? Check all that apply:
+                    {t('st.app.p3', 'Why do you want to learn English? Check all that apply:')}
                   </p>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    {goalOptions.map((goal) => (
-                      <div key={goal} className="flex items-center space-x-2">
+                    {goalOptions.map((goal, gi) => (
+                      <div key={goal} className="flex items-center space-x-2 rtl:space-x-reverse">
                         <Checkbox
                           id={goal}
                           checked={profile.goals.includes(goal)}
@@ -378,7 +380,7 @@ const StudentApplication = () => {
                           }
                         />
                         <Label htmlFor={goal} className="text-sm cursor-pointer">
-                          {goal}
+                          {t('st.app.goal.' + gi, goal)}
                         </Label>
                       </div>
                     ))}
@@ -390,7 +392,7 @@ const StudentApplication = () => {
               {currentStep === 4 && (
                 <div className="space-y-6">
                   <p className="text-gray-600">
-                    Rate your current English skills (1 = Beginner, 5 = Advanced):
+                    {t('st.app.p4', 'Rate your current English skills (1 = Beginner, 5 = Advanced):')}
                   </p>
                   
                   {Object.entries(profile.strengths).map(([skill, value]) => (
@@ -401,10 +403,10 @@ const StudentApplication = () => {
                           {skill === 'speaking' && '🗣️'} 
                           {skill === 'reading' && '📖'} 
                           {skill === 'writing' && '✍️'} 
-                          {skill}
+                          {t('st.app.skill.' + skill, skill)}
                         </Label>
                         <Badge variant={value >= 4 ? 'default' : value >= 3 ? 'secondary' : 'outline'}>
-                          {value >= 4 ? 'Strong' : value >= 3 ? 'Good' : 'Needs Work'}
+                          {value >= 4 ? t('st.app.strong', 'Strong') : value >= 3 ? t('st.app.good', 'Good') : t('st.app.needs', 'Needs Work')}
                         </Badge>
                       </div>
                       <div className="flex gap-2">
@@ -433,7 +435,7 @@ const StudentApplication = () => {
                 <div className="space-y-6">
                   <div>
                     <Label className="text-base font-medium mb-3 block">
-                      How do you like to learn? Choose your favorites:
+                      {t('st.app.p5a', 'How do you like to learn? Choose your favorites:')}
                     </Label>
                     <div className="grid grid-cols-2 gap-3">
                       {styleOptions.map((style) => (
@@ -459,10 +461,10 @@ const StudentApplication = () => {
                   
                   <div>
                     <Label className="text-base font-medium mb-3 block">
-                      What topics interest you? (Pick 3-5)
+                      {t('st.app.p5b', 'What topics interest you? (Pick 3-5)')}
                     </Label>
                     <div className="flex flex-wrap gap-2">
-                      {interestOptions.map((interest) => (
+                      {interestOptions.map((interest, ii) => (
                         <Badge
                           key={interest}
                           variant={profile.interests.includes(interest) ? "default" : "outline"}
@@ -473,7 +475,7 @@ const StudentApplication = () => {
                             )
                           }
                         >
-                          {interest}
+                          {t('st.app.int.' + ii, interest)}
                         </Badge>
                       ))}
                     </div>
@@ -486,7 +488,7 @@ const StudentApplication = () => {
                 <div className="space-y-6">
                   <div>
                     <Label className="text-base font-medium mb-3 block">
-                      How much time can you dedicate to learning?
+                      {t('st.app.p6', 'How much time can you dedicate to learning?')}
                     </Label>
                     <div className="space-y-2">
                       {timeOptions.map((option) => (
@@ -506,12 +508,12 @@ const StudentApplication = () => {
                   </div>
                   
                   <div>
-                    <Label htmlFor="special">Any special requirements or notes? (Optional)</Label>
+                    <Label htmlFor="special">{t('st.app.special', 'Any special requirements or notes? (Optional)')}</Label>
                     <Textarea
                       id="special"
                       value={profile.specialNeeds}
                       onChange={(e) => setProfile(prev => ({ ...prev, specialNeeds: e.target.value }))}
-                      placeholder="Learning difficulties, specific focus areas, or anything else we should know..."
+                      placeholder={t('st.app.specialPh', 'Learning difficulties, specific focus areas, or anything else we should know...')}
                       className="mt-1"
                       rows={3}
                     />
@@ -527,8 +529,8 @@ const StudentApplication = () => {
                   disabled={currentStep === 1}
                   className="flex items-center gap-2"
                 >
-                  <ArrowLeft className="h-4 w-4" />
-                  Back
+                  <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
+                  {t('st.arc.back', 'Back')}
                 </Button>
                 
                 <Button
@@ -537,13 +539,13 @@ const StudentApplication = () => {
                 >
                   {currentStep === totalSteps ? (
                     <>
-                      Create My Path
+                      {t('st.app.create', 'Create My Path')}
                       <Sparkles className="h-4 w-4" />
                     </>
                   ) : (
                     <>
-                      Next
-                      <ArrowRight className="h-4 w-4" />
+                      {t('st.app.next', 'Next')}
+                      <ArrowRight className="h-4 w-4 rtl:rotate-180" />
                     </>
                   )}
                 </Button>

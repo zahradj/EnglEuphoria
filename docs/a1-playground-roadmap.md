@@ -153,7 +153,7 @@ ask and answer "Can it…?".
 
 ### Unit 5 · Monster Town
 **Unit objective:** describe a monster in 4 sentences (feeling + why, looks, family, what it's wearing).
-1. **How Do You Feel? Happy, Sad, Tired** — say how someone feels and why · He's scared because it's dark · Feelings Wheel ⇄ (new feelings + because)
+1. **How Do You Feel? Scared, Bored, Excited!** — say how someone feels and why · She's scared because it's dark · Monster Mood Machine ★ (new feelings + because)
 2. **What Do They Look Like? Tall, Short, Big, Small** — describe looks and family · She's got long hair. She's got a little brother. · Face Builder ⇄ (build what you hear)
 3. **Listen to the Feelings Song** — listening lesson · Who is…? · Listen & Tap (A1, "Name That Feeling")
 4. **Describe a Monster Friend!** — describe a monster in 4 sentences · He's got three eyes. He's wearing a big hat. · Monster Maker ⇄ (the child describes, the teacher builds; then swap)

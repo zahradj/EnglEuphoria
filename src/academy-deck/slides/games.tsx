@@ -1,0 +1,588 @@
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { shuffled, useDeck } from '../ctx';
+import type { BossSlide, ClozeSlide, GlitchSlide, QuizSlide, RpgSlide, TripleSlide, VerbDrawSlide, WordleSlide } from '../types';
+import { Feedback, NOT_YET, Panel } from './shared';
+
+/* Video-game mechanics for the B1 lessons. Each is a small loop with a clear goal and a clear reward; none can lose the student's progress (a miss costs a shield, a grey option, a retry). */
+
+/** Break the Clock (boss fight): strike with the right tense; three shields; the clock cracks. */
+export function BossView({ slide }: { slide: BossSlide }) {
+  const { right, wrong, done, seed } = useDeck();
+  const total = slide.rounds.length;
+  const [i, setI] = useState(0);
+  const [shields, setShields] = useState(3);
+  const [hit, setHit] = useState(false);
+  const [bad, setBad] = useState<string | null>(null);
+  const [slip, setSlip] = useState(false);
+  const [recharged, setRecharged] = useState(false);
+  const finished = i >= total;
+  const r = slide.rounds[i];
+  const opts = useMemo(() => (r ? shuffled(r.options, seed + i * 11) : []), [r, seed, i]);
+  useEffect(() => { if (finished) done(); }, [finished, done]);
+  const pick = (o: string) => {
+    if (hit || !r) return;
+    if (o === r.answer) { if (!slip) right(); setHit(true); setRecharged(false); }
+    else {
+      setSlip(true); setBad(o); wrong(); window.setTimeout(() => setBad(null), 420);
+      if (shields <= 1) { setShields(3); setRecharged(true); } else setShields(shields - 1);
+    }
+  };
+  const next = () => { setI(i + 1); setHit(false); setSlip(false); setRecharged(false); };
+  const [pre, post] = r ? r.frame.split('___') : ['', ''];
+  const cracks = Math.min(i + (hit ? 1 : 0), total);
+  return (
+    <Panel title={slide.prompt} wide variant="glass">
+      <div className="ad-boss">
+        <div className="ad-boss-clock" data-hit={hit || undefined} data-broken={finished || undefined} role="img" aria-label={`The clock: ${total - cracks} of ${total} hit points left`}>
+          <svg viewBox="0 0 120 120" aria-hidden="true">
+            <circle cx="60" cy="60" r="54" className="ad-clock-face" />
+            {Array.from({ length: 12 }, (_, k) => <line key={k} x1="60" y1="10" x2="60" y2={k % 3 === 0 ? 20 : 15} className="ad-clock-tick" transform={`rotate(${k * 30} 60 60)`} />)}
+            <line x1="60" y1="60" x2="60" y2="32" className="ad-clock-hand" transform={`rotate(${finished ? 20 : 300} 60 60)`} />
+            <line x1="60" y1="60" x2="82" y2="60" className="ad-clock-hand ad-clock-hand-s" />
+            {Array.from({ length: cracks }, (_, k) => <path key={k} className="ad-clock-crack" d={['M30 24 L52 52 L44 70', 'M96 36 L72 54 L80 78', 'M24 84 L50 66 L60 96', 'M66 14 L62 44 L88 60', 'M40 100 L58 74 L84 92'][k % 5]} />)}
+          </svg>
+          <ol className="ad-boss-hp" aria-hidden="true">{slide.rounds.map((_, k) => <li key={k} data-gone={k < cracks} />)}</ol>
+        </div>
+        <div className="ad-boss-main">
+          <ol className="ad-shields" aria-label={`Shields: ${shields} of 3`}>{[0, 1, 2].map((k) => <li key={k} data-on={k < shields} />)}</ol>
+          {finished ? <Feedback kind="ok">The clock is broken! You chose the right tense every time it counted.</Feedback> : (
+            <>
+              <p className="ad-boss-frame" aria-live="polite">{pre}<b data-filled={hit || undefined}>{hit ? r.answer : '  ?  '}</b>{post}</p>
+              <div className="ad-boss-opts" role="group" aria-label="Choose the tense">
+                {opts.map((o) => <button key={o} type="button" className="ad-pk-tile" data-bad={bad === o} disabled={hit} onClick={() => pick(o)}>{o}</button>)}
+              </div>
+              {slip && !hit && <Feedback kind="try">{recharged ? 'Shields recharged. Look at the time word, then strike again.' : `${NOT_YET} Look at the time word.`}</Feedback>}
+              {hit && <><Feedback kind="ok">Strike! {r.why}</Feedback><div className="ad-row" style={{ justifyContent: 'center' }}><button type="button" className="ad-btn ad-btn-primary" onClick={next}>{i + 1 === total ? 'Break it ▸' : 'Strike again ▸'}</button></div></>}
+              <p className="ad-hint-line">Hit {Math.min(i + 1, total)} of {total}. Finished time: past simple. Experience up to now: have + past participle.</p>
+            </>
+          )}
+        </div>
+      </div>
+    </Panel>
+  );
+}
+
+/** Wordle scoring: green = right place, gold = in the word elsewhere, grey = not in the word (duplicates counted once). */
+export function scoreGuess(guess: string, answer: string): ('hit' | 'near' | 'miss')[] {
+  const res: ('hit' | 'near' | 'miss')[] = Array.from({ length: guess.length }, () => 'miss');
+  const left: Record<string, number> = {};
+  for (let k = 0; k < answer.length; k++) {
+    if (guess[k] === answer[k]) res[k] = 'hit';
+    else left[answer[k]] = (left[answer[k]] ?? 0) + 1;
+  }
+  for (let k = 0; k < guess.length; k++) {
+    if (res[k] === 'hit') continue;
+    if ((left[guess[k]] ?? 0) > 0) { res[k] = 'near'; left[guess[k]]--; }
+  }
+  return res;
+}
+const KEYS = ['qwertyuiop', 'asdfghjkl', 'zxcvbnm'];
+const RANK = { miss: 1, near: 2, hit: 3 } as const;
+
+/** Participle Wordle: six tries per verb. */
+export function WordleView({ slide }: { slide: WordleSlide }) {
+  const { right, wrong, done } = useDeck();
+  const [round, setRound] = useState(0);
+  const [guesses, setGuesses] = useState<string[]>([]);
+  const [cur, setCur] = useState('');
+  const [msg, setMsg] = useState('');
+  const finished = round >= slide.rounds.length;
+  const r = slide.rounds[round];
+  const len = r?.answer.length ?? 0;
+  const TRIES = 6;
+  const won = !!r && guesses.includes(r.answer);
+  const lost = !!r && !won && guesses.length >= TRIES;
+  const over = won || lost;
+  useEffect(() => { if (finished) done(); }, [finished, done]);
+  const key = useCallback((k: string) => {
+    if (!r || over) return;
+    if (k === 'enter') {
+      if (cur.length !== len) { setMsg(`Use ${len} letters.`); return; }
+      const g = [...guesses, cur];
+      setGuesses(g); setCur(''); setMsg('');
+      if (cur === r.answer) right(); else if (g.length >= TRIES) wrong();
+    } else if (k === 'back') setCur(cur.slice(0, -1));
+    else if (/^[a-z]$/.test(k) && cur.length < len) setCur(cur + k);
+  }, [r, over, cur, len, guesses, right, wrong]);
+  useEffect(() => {
+    const h = (e: KeyboardEvent) => {
+      if ((e.target as HTMLElement)?.tagName === 'INPUT' || (e.target as HTMLElement)?.tagName === 'TEXTAREA' || e.ctrlKey || e.metaKey) return;
+      if (e.key === 'Enter') key('enter'); else if (e.key === 'Backspace') key('back'); else key(e.key.toLowerCase());
+    };
+    window.addEventListener('keydown', h);
+    return () => window.removeEventListener('keydown', h);
+  }, [key]);
+  const board = useMemo(() => {
+    const st: Record<string, 'hit' | 'near' | 'miss'> = {};
+    if (r) guesses.forEach((g) => scoreGuess(g, r.answer).forEach((s, k) => { if (!st[g[k]] || RANK[s] > RANK[st[g[k]]]) st[g[k]] = s; }));
+    return st;
+  }, [guesses, r]);
+  if (finished) return <Panel title={slide.prompt} wide variant="glass"><Feedback kind="ok">All the participles are cracked!</Feedback></Panel>;
+  const [pre, post] = r.clue.split('___');
+  return (
+    <Panel title={slide.prompt} wide variant="glass">
+      <div className="ad-wordle">
+        <p className="ad-wordle-clue">{pre}<b>{won || lost ? r.answer : '_____'}</b>{post} <small>({r.base})</small></p>
+        <div className="ad-wordle-grid" role="grid" aria-label="Your guesses">
+          {Array.from({ length: TRIES }, (_, row) => {
+            const g = guesses[row];
+            const sc = g ? scoreGuess(g, r.answer) : null;
+            const text = g ?? (row === guesses.length ? cur : '');
+            return (
+              <div key={row} className="ad-wordle-row" role="row">
+                {Array.from({ length: len }, (_, col) => <span key={col} role="gridcell" className="ad-wordle-cell" data-s={sc ? sc[col] : undefined} data-cur={!g && row === guesses.length && col === cur.length ? true : undefined} aria-label={`${text[col] ?? 'empty'}${sc ? `, ${sc[col]}` : ''}`}>{text[col] ?? ''}</span>)}
+              </div>
+            );
+          })}
+        </div>
+        {msg && <Feedback kind="try">{msg}</Feedback>}
+        {won && <Feedback kind="ok">Yes: {r.base}, {r.answer}. {guesses.length === 1 ? 'First try!' : `Cracked in ${guesses.length}.`}</Feedback>}
+        {lost && <Feedback kind="try">It was “{r.answer}”. You will see it again.</Feedback>}
+        {over ? (
+          <div className="ad-row" style={{ justifyContent: 'center' }}><button type="button" className="ad-btn ad-btn-primary" onClick={() => { setRound(round + 1); setGuesses([]); setCur(''); setMsg(''); }}>{round + 1 === slide.rounds.length ? 'Done ▸' : 'Next word ▸'}</button></div>
+        ) : (
+          <div className="ad-keys-kb" role="group" aria-label="Keyboard">
+            {KEYS.map((row, ri) => (
+              <div key={row} className="ad-kb-row">
+                {ri === 2 && <button type="button" className="ad-kb ad-kb-wide" onClick={() => key('enter')}>Enter</button>}
+                {row.split('').map((c) => <button key={c} type="button" className="ad-kb" data-s={board[c]} onClick={() => key(c)}>{c}</button>)}
+                {ri === 2 && <button type="button" className="ad-kb ad-kb-wide" onClick={() => key('back')} aria-label="Delete">⌫</button>}
+              </div>
+            ))}
+          </div>
+        )}
+        <p className="ad-hint-line">Word {round + 1} of {slide.rounds.length}. Gold = right letter, wrong place. Green = right place.</p>
+      </div>
+    </Panel>
+  );
+}
+
+/** Rapport (dialogue RPG): pick the reply that sounds like a person who has done things, then ask about when. */
+export function RpgView({ slide }: { slide: RpgSlide }) {
+  const { right, wrong, done, speak } = useDeck();
+  const [i, setI] = useState(0);
+  const [rapport, setRapport] = useState(0);
+  const [picked, setPicked] = useState<number | null>(null);
+  const finished = i >= slide.scenes.length;
+  const sc = slide.scenes[i];
+  useEffect(() => { if (finished) done(); else void speak(slide.npc, sc.say); }, [finished, done, speak, slide.npc, sc]);
+  const max = slide.scenes.length * 2;
+  const choose = (k: number) => {
+    if (picked !== null) return;
+    const o = sc.options[k];
+    setPicked(k); setRapport(rapport + o.score);
+    if (o.score > 0) right(); else wrong();
+    void speak(slide.npc, o.reply);
+  };
+  const next = () => { setI(i + 1); setPicked(null); };
+  const meter = (
+    <div className="ad-rapport" role="meter" aria-valuemin={0} aria-valuemax={max} aria-valuenow={rapport} aria-label="Rapport">
+      <span>Rapport</span>
+      <i style={{ ['--p' as string]: `${(rapport / max) * 100}%` }}><b style={{ left: `${(slide.goal / max) * 100}%` }} aria-hidden="true" /></i>
+      <em>{rapport}/{max}</em>
+    </div>
+  );
+  if (finished) return <Panel title={slide.prompt} wide variant="glass">{meter}<Feedback kind="ok">{rapport >= slide.goal ? `${slide.npc} is impressed: that sounded natural. Rapport ${rapport}/${max}.` : `Good talk. Rapport ${rapport}/${max}: try the “I have … / When did you …?” pair next time.`}</Feedback></Panel>;
+  const o = picked === null ? null : sc.options[picked];
+  return (
+    <Panel title={slide.prompt} wide variant="glass">
+      {meter}
+      <div className="ad-rpg">
+        <p className="ad-rpg-npc"><span>{slide.npc}</span>{sc.say}</p>
+        <div className="ad-rpg-opts" role="group" aria-label="Your reply">
+          {sc.options.map((op, k) => <button key={op.text} type="button" className="ad-pk-tile" data-picked={picked === k || undefined} data-score={picked !== null ? op.score : undefined} disabled={picked !== null} onClick={() => choose(k)}>{op.text}</button>)}
+        </div>
+        {o && (
+          <>
+            <p className="ad-rpg-npc ad-rpg-reply"><span>{slide.npc}</span>{o.reply}</p>
+            <Feedback kind={o.score > 0 ? 'ok' : 'try'}>{o.note}</Feedback>
+            <div className="ad-row" style={{ justifyContent: 'center' }}><button type="button" className="ad-btn ad-btn-primary" onClick={next}>{i + 1 === slide.scenes.length ? 'Finish the chat ▸' : 'Keep talking ▸'}</button></div>
+          </>
+        )}
+      </div>
+    </Panel>
+  );
+}
+
+/** Hot Seat: a ladder of questions with two lifelines (50:50, ask a friend). A wrong answer greys that option; nothing is lost. */
+export function QuizView({ slide }: { slide: QuizSlide }) {
+  const { right, wrong, done, seed } = useDeck();
+  const [i, setI] = useState(0);
+  const [gone, setGone] = useState<string[]>([]);
+  const [bad, setBad] = useState<string[]>([]);
+  const [solved, setSolved] = useState(false);
+  const [fifty, setFifty] = useState(false);
+  const [ask, setAsk] = useState(false);
+  const [asked, setAsked] = useState(false);
+  const total = slide.questions.length;
+  const finished = i >= total;
+  const q = slide.questions[i];
+  const opts = useMemo(() => (q ? shuffled(q.options, seed + i * 13) : []), [q, seed, i]);
+  useEffect(() => { if (finished) done(); }, [finished, done]);
+  const useFifty = () => { if (fifty || solved) return; setFifty(true); setGone(shuffled(q.options.filter((o) => o !== q.answer), seed + i).slice(0, 2)); };
+  const useAsk = () => { if (ask || solved) return; setAsk(true); setAsked(true); };
+  const pick = (o: string) => {
+    if (solved) return;
+    if (o === q.answer) { if (bad.length === 0) right(); setSolved(true); } else { setBad([...bad, o]); wrong(); }
+  };
+  const next = () => { setI(i + 1); setGone([]); setBad([]); setSolved(false); setAsked(false); };
+  const ladder = (
+    <ol className="ad-ladder" aria-label={`Question ${Math.min(i + 1, total)} of ${total}`}>
+      {Array.from({ length: total }, (_, k) => total - 1 - k).map((k) => <li key={k} data-done={k < i} data-now={k === i} data-mark={(k + 1) % 3 === 0 || k + 1 === total}><i>{k + 1}</i></li>)}
+    </ol>
+  );
+  if (finished) return <Panel title={slide.prompt} wide variant="glass"><div className="ad-hot">{ladder}<Feedback kind="ok">You reached the top of the ladder!</Feedback></div></Panel>;
+  return (
+    <Panel title={slide.prompt} wide variant="glass">
+      <div className="ad-hot">
+        {ladder}
+        <div className="ad-hot-main">
+          <div className="ad-lifelines" role="group" aria-label="Lifelines">
+            <button type="button" className="ad-btn ad-btn-small" disabled={fifty || solved} onClick={useFifty}>50 : 50</button>
+            <button type="button" className="ad-btn ad-btn-small" disabled={ask || solved} onClick={useAsk}>Ask {slide.friend}</button>
+          </div>
+          <h3 className="ad-hot-q">{q.q}</h3>
+          <div className="ad-hot-opts" role="group" aria-label="Answers">
+            {opts.map((o, k) => <button key={o} type="button" className="ad-pk-tile" data-bad={bad.includes(o) || undefined} data-ok={solved && o === q.answer ? true : undefined} disabled={solved || gone.includes(o) || bad.includes(o)} style={gone.includes(o) ? { visibility: 'hidden' } : undefined} onClick={() => pick(o)}><b>{'ABCD'[k]}</b> {o}</button>)}
+          </div>
+          {asked && !solved && <Feedback kind="ok">{slide.friend}: {q.hint}</Feedback>}
+          {bad.length > 0 && !solved && <Feedback kind="try">{NOT_YET} Read the question again.</Feedback>}
+          {solved && <><Feedback kind="ok">{q.why}</Feedback><div className="ad-row" style={{ justifyContent: 'center' }}><button type="button" className="ad-btn ad-btn-primary" onClick={next}>{i + 1 === total ? 'To the top ▸' : 'Next question ▸'}</button></div></>}
+        </div>
+      </div>
+    </Panel>
+  );
+}
+
+const COLS = ['Base', 'Past simple', 'Past participle'] as const;
+
+/** Triple Match (match-3): pick one tile in each column; the right three lock into a card and are spoken; combos for first-try triples. */
+export function TripleView({ slide, onAllMatched, header }: { slide: TripleSlide; /** inside Verb Draw: called instead of finishing the page */ onAllMatched?: () => void; header?: ReactNode }) {
+  const { right, wrong, done, seed, speak } = useDeck();
+  const lead = slide.actors?.[0]?.who ?? 'Vee';
+  const n = slide.verbs.length;
+  const cols = useMemo(() => [0, 1, 2].map((c) => shuffled(slide.verbs.map((_, i) => i), seed + c * 31 + 5)), [slide.verbs, seed]);
+  const [pick, setPick] = useState<(number | null)[]>([null, null, null]);
+  const [done3, setDone3] = useState<number[]>([]);
+  const [bad, setBad] = useState(false);
+  const [combo, setCombo] = useState(0);
+  const [best, setBest] = useState(0);
+  const [slip, setSlip] = useState(false);
+  const [just, setJust] = useState<number | null>(null);
+  const finished = done3.length === n;
+  useEffect(() => { if (finished) (onAllMatched ?? done)(); }, [finished]); // eslint-disable-line react-hooks/exhaustive-deps
+  const choose = (c: number, v: number) => {
+    if (done3.includes(v) || bad) return;
+    const next = pick.map((x, k) => (k === c ? (x === v ? null : v) : x));
+    setPick(next);
+    if (next.every((x) => x !== null)) {
+      if (next[0] === next[1] && next[1] === next[2]) {
+        const v0 = next[0] as number;
+        setDone3((d) => [...d, v0]); setJust(v0); setPick([null, null, null]);
+        if (!slip) { right(); const cc = combo + 1; setCombo(cc); setBest(Math.max(best, cc)); } else setCombo(0);
+        setSlip(false);
+        const t = slide.verbs[v0]; void speak(lead, `${t[0]}, ${t[1]}, ${t[2]}.`);
+        window.setTimeout(() => setJust(null), 900);
+      } else {
+        wrong(); setBad(true); setSlip(true); setCombo(0);
+        window.setTimeout(() => { setBad(false); setPick([null, null, null]); }, 520);
+      }
+    }
+  };
+  return (
+    <Panel title={slide.prompt} wide variant="glass">
+      <div className="ad-triple">
+        {header}
+        <div className="ad-triple-hud" role="status" aria-label={`Matched ${done3.length} of ${n}. Combo ${combo}`}>
+          <span>Matched <b>{done3.length}/{n}</b></span>
+          <span className="ad-triple-combo" data-hot={combo >= 2 || undefined}>Combo <b>×{combo}</b></span>
+          <span>Best <b>×{best}</b></span>
+        </div>
+        <div className="ad-triple-board" data-bad={bad || undefined}>
+          {[0, 1, 2].map((c) => (
+            <div key={c} className="ad-triple-col" role="group" aria-label={COLS[c]}>
+              <h3>{COLS[c]}</h3>
+              {cols[c].map((v) => {
+                const gone = done3.includes(v);
+                return <button key={v} type="button" className="ad-triple-tile" data-on={pick[c] === v || undefined} data-gone={gone || undefined} data-just={just === v || undefined} disabled={gone} onClick={() => choose(c, v)}>{slide.verbs[v][c]}</button>;
+              })}
+            </div>
+          ))}
+        </div>
+        <ol className="ad-triple-cards" aria-label="Matched cards">
+          {done3.map((v) => <li key={v}><b>{slide.verbs[v][0]}</b> · {slide.verbs[v][1]} · {slide.verbs[v][2]}</li>)}
+        </ol>
+        {bad && <Feedback kind="try">Not the same verb. Look again: base, past, participle.</Feedback>}
+        {finished && <Feedback kind="ok">All {n} triples matched! Best combo ×{best}.</Feedback>}
+        {!finished && <p className="ad-hint-line">Tap one tile in each column that belong together, like go · went · gone.</p>}
+      </div>
+    </Panel>
+  );
+}
+
+/** Cloze: complete the passage with the vocabulary learned. */
+export function ClozeView({ slide }: { slide: ClozeSlide }) {
+  const { right, wrong, done, seed, speak } = useDeck();
+  const lead = slide.actors?.[0]?.who ?? 'Vee';
+  const gaps = useMemo(() => {
+    const out: string[] = [];
+    slide.paragraphs.forEach((p) => { for (const m of p.matchAll(/\[\[([^\]]+)\]\]/g)) out.push(m[1]); });
+    return out;
+  }, [slide.paragraphs]);
+  const bank = useMemo(() => shuffled(gaps.map((g, i) => ({ w: g, i })), seed + 91), [gaps, seed]);
+  const [filled, setFilled] = useState<Record<number, number>>({});
+  const [word, setWord] = useState<number | null>(null);
+  const [gap, setGap] = useState<number | null>(null);
+  const [bad, setBad] = useState<number | null>(null);
+  const [tries, setTries] = useState<Record<number, number>>({});
+  const [slips, setSlips] = useState(0);
+  const usedBank = new Set(Object.values(filled));
+  const finished = Object.keys(filled).length === gaps.length;
+  useEffect(() => { if (finished) done(); }, [finished, done]);
+  const place = (g: number, b: number) => {
+    if (filled[g] !== undefined) return;
+    const w = bank[b].w;
+    if (w === gaps[g]) {
+      setFilled((f) => ({ ...f, [g]: b })); setWord(null); setGap(null);
+      if (!tries[g]) right();
+      void speak(lead, w);
+    } else {
+      wrong(); setBad(g); setSlips((n) => n + 1); setTries((t) => ({ ...t, [g]: (t[g] ?? 0) + 1 }));
+      window.setTimeout(() => setBad(null), 450); setWord(null); setGap(null);
+    }
+  };
+  const pickWord = (b: number) => { if (usedBank.has(b)) return; if (gap !== null) place(gap, b); else setWord(b); };
+  const pickGap = (g: number) => { if (filled[g] !== undefined) return; if (word !== null) place(g, word); else setGap(g); };
+  let gi = -1;
+  return (
+    <Panel title={slide.prompt} wide variant="glass">
+      <div className="ad-cloze">
+        <article className="ad-cloze-text" aria-label={slide.title}>
+          <h3>{slide.title}</h3>
+          {slide.paragraphs.map((p, pi) => (
+            <p key={pi}>
+              {p.split(/(\[\[[^\]]+\]\])/).map((chunk, ci) => {
+                const m = /^\[\[([^\]]+)\]\]$/.exec(chunk);
+                if (!m) return <span key={ci}>{chunk}</span>;
+                gi += 1;
+                const g = gi;
+                const hint = (tries[g] ?? 0) >= 2 ? slide.gapHints?.[m[1]] : undefined;
+                return (
+                  <button key={ci} type="button" className="ad-gap" data-filled={filled[g] !== undefined || undefined} data-on={gap === g || undefined} data-bad={bad === g || undefined} onClick={() => pickGap(g)} aria-label={filled[g] !== undefined ? bank[filled[g]].w : `Gap ${g + 1}`}>
+                    {filled[g] !== undefined ? bank[filled[g]].w : (hint ? `(${hint})` : '\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0')}
+                  </button>
+                );
+              })}
+            </p>
+          ))}
+        </article>
+        <div className="ad-cloze-bank" role="group" aria-label="Word bank">
+          <span>Word bank</span>
+          {bank.map((b, bi) => <button key={bi} type="button" className="ad-pk-tile" data-on={word === bi || undefined} disabled={usedBank.has(bi)} onClick={() => pickWord(bi)}>{b.w}</button>)}
+        </div>
+        {slips > 0 && !finished && <Feedback kind="try">{NOT_YET} Read the sentence again: which word fits the meaning?</Feedback>}
+        {finished && <Feedback kind="ok">The whole passage is complete. You used all {gaps.length} words.</Feedback>}
+        {!finished && <p className="ad-hint-line">Tap a word, then the gap where it belongs. {Object.keys(filled).length} of {gaps.length} done.</p>}
+      </div>
+    </Panel>
+  );
+}
+
+/** Glitch Hunt (spot the bug): tap the line with the tense glitch, then repair it with the right line; the repaired line is read aloud with the reason. */
+export function GlitchView({ slide }: { slide: GlitchSlide }) {
+  const { right, wrong, done, seed, speak } = useDeck();
+  const lead = slide.actors?.[0]?.who ?? 'Vee';
+  const total = slide.rounds.length;
+  const [i, setI] = useState(0);
+  const [found, setFound] = useState(false);
+  const [fixed, setFixed] = useState(false);
+  const [bad, setBad] = useState<string | null>(null);
+  const [slip, setSlip] = useState(false);
+  const finished = i >= total;
+  const r = slide.rounds[i];
+  const opts = useMemo(() => (r ? shuffled(r.options, seed + i * 13) : []), [r, seed, i]);
+  useEffect(() => { if (finished) done(); }, [finished, done]);
+  const tapLine = (k: number) => {
+    if (!r || found) return;
+    if (k === r.glitch) setFound(true);
+    else { wrong(); setBad(`line${k}`); setSlip(true); window.setTimeout(() => setBad(null), 500); }
+  };
+  const repair = (o: string) => {
+    if (!r || fixed) return;
+    if (o === r.fix) {
+      if (!slip) right();
+      setFixed(true);
+      void speak(r.lines[r.glitch].who, r.fix);
+      window.setTimeout(() => { setI((n) => n + 1); setFound(false); setFixed(false); setSlip(false); }, 2300);
+    } else { wrong(); setSlip(true); setBad(o); window.setTimeout(() => setBad(null), 500); }
+  };
+  if (finished || !r) return <Panel title={slide.prompt} wide variant="glass"><Feedback kind="ok">All {total} glitches repaired!</Feedback></Panel>;
+  return (
+    <Panel title={slide.prompt} wide variant="glass">
+      <div className="ad-glitch">
+        <div className="ad-glitch-hud" role="status">Glitch <b>{i + 1}</b> of {total} · {found ? (fixed ? 'Repaired!' : 'Found it! Now repair it.') : 'Tap the line with the glitch.'}</div>
+        <ul className="ad-glitch-chat" aria-label="Chat">
+          {r.lines.map((l, k) => (
+            <li key={k} className="ad-glitch-row" data-who={l.who}>
+              <b>{l.who}</b>
+              <button type="button" className="ad-glitch-line" data-bad={bad === `line${k}` || undefined} data-found={(found && k === r.glitch && !fixed) || undefined} data-fixed={(fixed && k === r.glitch) || undefined} disabled={found} onClick={() => tapLine(k)}>
+                {fixed && k === r.glitch ? r.fix : l.text}
+              </button>
+            </li>
+          ))}
+        </ul>
+        {found && !fixed && (
+          <div className="ad-glitch-fix" role="group" aria-label="Repair the line">
+            {opts.map((o) => <button key={o} type="button" className="ad-glitch-opt" data-bad={bad === o || undefined} onClick={() => repair(o)}>{o}</button>)}
+          </div>
+        )}
+        {fixed && <Feedback kind="ok">{r.why}</Feedback>}
+        {bad && !fixed && <Feedback kind="try">{found ? 'Not that repair. Check the time word.' : 'That line is fine. Look again.'}</Feedback>}
+      </div>
+    </Panel>
+  );
+}
+
+const VD_STEPS = ['Open', 'Say it', 'Follow up', 'Reply'] as const;
+const VD_KEYS = ['A', 'B', 'C'];
+
+/** The phase / step tracker above the game: Match → Draw, then the four moves of a conversation. */
+function VdTracker({ phase, step }: { phase: 'match' | 'draw'; step?: 'deck' | 'open' | 'say' | 'follow' | 'reply' }) {
+  const at = step === 'open' ? 0 : step === 'say' ? 1 : step === 'follow' ? 2 : step === 'reply' ? 3 : -1;
+  return (
+    <ol className="ad-vd-track" aria-label="Where you are">
+      <li data-state={phase === 'match' ? 'now' : 'done'}><i>{phase === 'match' ? '1' : '✓'}</i>Match the trios</li>
+      <li data-state={phase === 'draw' ? 'now' : 'next'}><i>2</i>Verb Draw</li>
+      {phase === 'draw' && (
+        <li className="ad-vd-moves" aria-hidden="true">
+          {VD_STEPS.map((s, k) => <span key={s} data-state={k < at ? 'done' : k === at ? 'now' : 'next'}>{s}</span>)}
+        </li>
+      )}
+    </ol>
+  );
+}
+
+/** Verb Draw: phase 1 match the trios; phase 2 draw a verb card and open a conversation with it. */
+export function VerbDrawView({ slide }: { slide: VerbDrawSlide }) {
+  const { right, wrong, done, seed, speak } = useDeck();
+  const lead = slide.actors?.[0]?.who ?? 'Vee';
+  const [phase, setPhase] = useState<'match' | 'draw'>('match');
+  const matchSlide = useMemo<TripleSlide>(() => ({ id: `${slide.id}-m`, kind: 'triple', part: slide.part, bg: slide.bg, prompt: 'Phase 1 · Match the trios! One tile in each column: base, past simple, past participle.', verbs: slide.verbs.map((v) => v.forms) }), [slide]);
+  const order = useMemo(() => shuffled(slide.verbs.map((_, i) => i), seed + 3).slice(0, slide.draws), [slide.verbs, slide.draws, seed]);
+  const [i, setI] = useState(0);
+  const [step, setStep] = useState<'deck' | 'open' | 'say' | 'follow' | 'reply'>('deck');
+  const [slip, setSlip] = useState(false);
+  const [bad, setBad] = useState<string | null>(null);
+  const [streak, setStreak] = useState(0);
+  const [best, setBest] = useState(0);
+  const [stars, setStars] = useState(0);
+  const [chats, setChats] = useState<{ q: string; f: string; r: string }[]>([]);
+  const [chosenFollow, setChosenFollow] = useState('');
+  const finished = i >= order.length;
+  const v = finished ? null : slide.verbs[order[i]];
+  useEffect(() => { if (finished && phase === 'draw') done(); }, [finished, phase, done]);
+  const partOpts = useMemo(() => (v ? shuffled([v.forms[2], v.forms[1], v.forms[0]], seed + i * 7) : []), [v, seed, i]);
+  const followOpts = useMemo(() => (v ? shuffled([v.follow.ok, ...v.follow.bad], seed + i * 11) : []), [v, seed, i]);
+  const miss = (o: string) => { wrong(); setSlip(true); setBad(o); setStreak(0); window.setTimeout(() => setBad(null), 480); };
+  if (phase === 'match') return <TripleView slide={matchSlide} onAllMatched={() => setPhase('draw')} header={<VdTracker phase="match" />} />;
+  if (finished || !v) {
+    const rank = stars >= slide.draws * 2 ? 'Talk-show host' : stars >= slide.draws ? 'Great conversationalist' : 'Conversation starter';
+    return (
+      <Panel title="Verb Draw complete!" wide variant="glass">
+        <div className="ad-vd">
+          <div className="ad-vd-reward" role="status">
+            <span className="ad-vd-medal" aria-hidden="true">★</span>
+            <span><b>{rank}</b><small>{slide.draws} conversations · {stars} ★ · best streak ×{best}</small></span>
+          </div>
+          <ol className="ad-vd-recap" aria-label="Your conversations">
+            {chats.map((c, k) => (
+              <li key={k}><span className="ad-vd-b ad-vd-b-you">{c.q}</span><span className="ad-vd-b ad-vd-b-you">{c.f}</span><span className="ad-vd-b ad-vd-b-npc"><em>{slide.npc}</em> {c.r}</span></li>
+            ))}
+          </ol>
+        </div>
+      </Panel>
+    );
+  }
+  const question = (o: string) => v.frame.replace('___', o);
+  const pickPart = (o: string) => {
+    if (step !== 'open') return;
+    if (o === v.forms[2]) {
+      if (!slip) { right(); setStars((s) => s + 1); }
+      setStep('say');
+      void speak(lead, question(o));
+    } else miss(o);
+  };
+  const pickFollow = (o: string) => {
+    if (step !== 'follow') return;
+    if (o === v.follow.ok) {
+      if (!slip) { right(); setStars((s) => s + 1); const s = streak + 1; setStreak(s); setBest((b) => Math.max(b, s)); }
+      setChosenFollow(o);
+      setStep('reply');
+      setChats((c) => [...c, { q: question(v.forms[2]), f: o, r: v.reply }]);
+      void speak(slide.npc, v.reply);
+    } else miss(o);
+  };
+  const next = () => { setI((n) => n + 1); setStep('deck'); setSlip(false); setChosenFollow(''); };
+  const youOpened = step !== 'deck' && step !== 'open';
+  return (
+    <Panel title={`Phase 2 · Verb Draw! Draw a card and open a conversation with ${slide.npc}.`} wide variant="glass">
+      <div className="ad-vd">
+        <VdTracker phase="draw" step={step} />
+        <div className="ad-vd-hud" role="status" aria-label={`Card ${i + 1} of ${order.length}. Streak ${streak}`}>
+          <span>Card <b>{i + 1}/{order.length}</b></span>
+          <span className="ad-vd-streak" data-hot={streak >= 2 || undefined}><i aria-hidden="true">🔥</i> Streak <b>×{streak}</b></span>
+          <span>Stars <b>{stars} ★</b></span>
+        </div>
+        <div className="ad-vd-stage">
+          {step === 'deck' ? (
+            <button type="button" className="ad-vd-deck" onClick={() => setStep('open')} aria-label="Draw a verb card">
+              <span className="ad-vd-c ad-vd-c3" aria-hidden="true" /><span className="ad-vd-c ad-vd-c2" aria-hidden="true" />
+              <span className="ad-vd-c ad-vd-c1"><b>?</b><small>{order.length - i} left</small></span>
+              <span className="ad-vd-draw">Draw a card ▸</span>
+            </button>
+          ) : (
+            <div className="ad-vd-card" key={i}>
+              <span className="ad-vd-card-tag">Verb card</span>
+              <div className="ad-vd-row" data-k="b"><small>base</small><b>{v.forms[0]}</b></div>
+              <div className="ad-vd-row" data-k="p"><small>past simple</small><b>{v.forms[1]}</b></div>
+              <div className="ad-vd-row" data-k="pp"><small>participle</small><b>{v.forms[2]}</b></div>
+              <span className="ad-vd-shine" aria-hidden="true" />
+            </div>
+          )}
+          {step !== 'deck' && (
+            <div className="ad-vd-chat" aria-live="polite">
+              <span className="ad-vd-b ad-vd-b-you" data-open={step === 'open' || undefined}>
+                {step === 'open' ? <>{v.frame.split('___')[0]}<u>…</u>{v.frame.split('___')[1]}</> : question(v.forms[2])}
+              </span>
+              {youOpened && step !== 'say' && <span className="ad-vd-b ad-vd-b-npc"><em>{slide.npc}</em> Yes, I have!</span>}
+              {(step === 'follow' || step === 'reply') && step === 'reply' && <span className="ad-vd-b ad-vd-b-you">{chosenFollow}</span>}
+              {step === 'reply' && <span className="ad-vd-b ad-vd-b-npc"><em>{slide.npc}</em> {v.reply}</span>}
+            </div>
+          )}
+        </div>
+        {step === 'open' && (
+          <div className="ad-vd-opts" role="group" aria-label="Choose the form">
+            <p className="ad-vd-q">Open the conversation: which form goes in the gap?</p>
+            {partOpts.map((o, k) => <button key={o} type="button" className="ad-vd-opt" data-bad={bad === o || undefined} onClick={() => pickPart(o)}><kbd>{VD_KEYS[k]}</kbd>{o}</button>)}
+          </div>
+        )}
+        {step === 'say' && (
+          <div className="ad-vd-say">
+            <p className="ad-vd-q">Now ask {slide.npc} out loud, in your own voice.</p>
+            <button type="button" className="ad-btn ad-btn-primary ad-vd-go" onClick={() => setStep('follow')}>I asked it ✓</button>
+          </div>
+        )}
+        {step === 'follow' && (
+          <div className="ad-vd-opts" role="group" aria-label="Choose the follow-up">
+            <p className="ad-vd-q">{slide.npc} says “Yes, I have!” Keep the talk going: choose your follow-up.</p>
+            {followOpts.map((o, k) => <button key={o} type="button" className="ad-vd-opt ad-vd-opt-wide" data-bad={bad === o || undefined} onClick={() => pickFollow(o)}><kbd>{VD_KEYS[k]}</kbd>{o}</button>)}
+          </div>
+        )}
+        {step === 'reply' && (
+          <button type="button" className="ad-btn ad-btn-primary ad-vd-go" onClick={next}>{i + 1 >= order.length ? 'Finish ✓' : 'Next card ▸'}</button>
+        )}
+        {bad && <Feedback kind="try">{step === 'open' ? 'After “have ever” we need the past participle.' : 'The details of a finished event use the past simple.'}</Feedback>}
+      </div>
+    </Panel>
+  );
+}

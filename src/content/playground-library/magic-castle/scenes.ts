@@ -413,7 +413,7 @@ export const LESSON_A1U9L1_SCENES: Scene[] = [
     // shows the same room the student already met under that name. Crop
     // boxes checked against the art: left room ≈ 5.5-52% x, right room ≈
     // 55.5-94.5% x, both ≈ 17-86% y of the 1376×768 images.
-    id: 'mc-match-rooms', kind: 'picture-match',
+    id: 'mc-match-rooms', kind: 'picture-match', look: 'polaroids',
     prompt: 'Match the rooms!',
     studentOnly: true,
     teacher: 'Self-check: the student drags each room name under its picture on their own — no help needed. Afterwards point to a picture and ask: "What room is this?"',
@@ -630,9 +630,9 @@ export const LESSON_A1U9L1_SCENES: Scene[] = [
     teacher: 'Wim’s magic sound is CH! Say /ch/ /ch/ like a train: ch-ch-ch! Tap each magic box to find a CH word.',
     anchors: [
       { word: 'chair', emoji: '\u{1FA91}', img: `${M}/stickers/chair.png` },
-      { word: 'kitchen', emoji: '\u{1F373}' },
-      { word: 'cheese', emoji: '\u{1F9C0}' },
-      { word: 'chick', emoji: '\u{1F424}' },
+      { word: 'kitchen', emoji: '\u{1F373}', img: `${M}/stickers/kitchen.png` },
+      { word: 'cheese', emoji: '\u{1F9C0}', img: `${M}/stickers/cheese.png` },
+      { word: 'chick', emoji: '\u{1F424}', img: `${M}/stickers/chick.png` },
     ],
   },
   {
@@ -896,7 +896,7 @@ export const LESSON_A1U9L2_SCENES: Scene[] = [
   {
     // Written-word self-check, cropped from the very picture the words were
     // taught on (crop boxes measured on the 1376×768 tour art).
-    id: 'mc2-match', kind: 'picture-match',
+    id: 'mc2-match', kind: 'picture-match', look: 'chalk',
     prompt: 'Match the words!',
     studentOnly: true,
     teacher: 'Self-check: the student drags each word under its picture on their own. Afterwards point to a picture and ask: "What is this?"',
@@ -960,9 +960,9 @@ export const LESSON_A1U9L2_SCENES: Scene[] = [
     teacher: 'Now the W sound! Make a little circle with your lips: /w/ /w/. Tap each box to find a W word.',
     anchors: [
       { word: 'window', emoji: '\u{1FA9F}', img: `${M}/stickers/window.png` },
-      { word: 'wand', emoji: '\u{1FA84}' },
-      { word: 'wizard', emoji: '\u{1F9D9}' },
-      { word: 'web', emoji: '\u{1F578}️' },
+      { word: 'wand', emoji: '\u{1FA84}', img: `${M}/stickers/wand.png` },
+      { word: 'wizard', emoji: '\u{1F9D9}', img: `${M}/stickers/wizard.png` },
+      { word: 'web', emoji: '\u{1F578}️', img: `${M}/stickers/web.png` },
     ],
   },
   { id: 'mc2-ph-trace-w', kind: 'trace', bg: bgWim, who: 'wim', letter: 'W', phoneme: '/w/', word: 'window', teacher: 'Trace the letter W! Say /w/ /w/ /w/ as you draw.' },
@@ -1116,7 +1116,7 @@ export const LESSON_A1U9L3_SCENES: Scene[] = [
   {
     // Warm-up retrieval of Lessons 1-2 before anything new: the furniture
     // the lamp will hide in/on/under in today's games.
-    id: 'mc3-warmup-match', kind: 'picture-match',
+    id: 'mc3-warmup-match', kind: 'picture-match', look: 'cards',
     prompt: 'Remember these? Match the words!',
     teacher: 'Warm-up: the student matches each word to its picture. Point to each one and ask "What is this?"',
     items: [
@@ -1246,7 +1246,7 @@ export const LESSON_A1U9L3_SCENES: Scene[] = [
   {
     // Reading self-check: each picture is cropped from the hunt rooms around
     // the lamp; the student matches the "where" word.
-    id: 'mc3-where-match', kind: 'picture-match',
+    id: 'mc3-where-match', kind: 'picture-match', look: 'frames',
     prompt: 'Where is the lamp? Match the words!',
     studentOnly: true,
     teacher: 'Self-check: the student matches each word to the picture on their own. Afterwards point to a picture and ask: "Where is the lamp?"',
@@ -1482,6 +1482,18 @@ export const LESSON_A1U9L4_SCENES: Scene[] = [
   },
   { id: 'mc4-meet-there-are', kind: 'meet', focus: ['There are'], bg: towerPage(1), who: 'wim', cardSide: 'right', teacher: 'Present: one bed — There is. Two lamps — There are! Show one finger, then two.', line: 'There is one bed. There are two lamps!', repeat: 'There are two lamps.' },
   { id: 'mc4-echo-windows', kind: 'echo', bg: towerPage(1), who: 'catcat', textSide: 'top', teacher: 'Guided: say it with Cat-cat — point to the two windows.', word: 'There are two windows.' },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game.
+  {
+    id: 'mc4-there-match', kind: 'picture-match', look: 'frames', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each sentence and drags it under its picture (or taps it, then the picture), then reads it aloud.',
+    items: [
+      { word: 'There is one bed.', emoji: '🛏️' },
+      { word: 'There are two lamps.', emoji: '🪔🪔' },
+      { word: 'There are two windows.', emoji: '🪟🪟' },
+      { word: 'There are three chairs.', emoji: '🪑🪑🪑' },
+    ],
+    bg: towerPage(1),
+  },
 
   /* CONTROLLED PRACTICE 1 — There is / There are */
   {

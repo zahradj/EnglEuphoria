@@ -119,7 +119,7 @@ export const BookedSlotManager: React.FC<BookedSlotManagerProps> = ({
     setCtxLoading(true);
     loadMoveContext({ teacherId, studentId, slotStart: slotStartIso })
       .then((c) => { if (!cancelled) { setCtx(c); setCtxError(null); } })
-      .catch((e: any) => { if (!cancelled) { setCtx(null); setCtxError(e?.message ?? "Could not load this lesson."); } })
+      .catch((e: unknown) => { if (!cancelled) { setCtx(null); setCtxError((e as { message?: string })?.message ?? "Could not load this lesson."); } })
       .finally(() => { if (!cancelled) setCtxLoading(false); });
     return () => { cancelled = true; };
   }, [open, slotId, studentId, slotStartIso, teacherId]);
@@ -174,8 +174,8 @@ export const BookedSlotManager: React.FC<BookedSlotManagerProps> = ({
         variant: penalized ? "destructive" : "default",
       });
       done(onCancelled);
-    } catch (err: any) {
-      toast({ title: "Could not cancel", description: err?.message ?? "Please try again.", variant: "destructive" });
+    } catch (err: unknown) {
+      toast({ title: "Could not cancel", description: (err as { message?: string })?.message ?? "Please try again.", variant: "destructive" });
     } finally {
       setBusy(false);
     }
@@ -200,8 +200,8 @@ export const BookedSlotManager: React.FC<BookedSlotManagerProps> = ({
         }.`,
       });
       done(onCancelled);
-    } catch (err: any) {
-      toast({ title: "Could not cancel series", description: err?.message ?? "Please try again.", variant: "destructive" });
+    } catch (err: unknown) {
+      toast({ title: "Could not cancel series", description: (err as { message?: string })?.message ?? "Please try again.", variant: "destructive" });
     } finally {
       setBusy(false);
     }
@@ -219,8 +219,8 @@ export const BookedSlotManager: React.FC<BookedSlotManagerProps> = ({
         })}. Their credits are unchanged.`,
       });
       done(onMoved);
-    } catch (err: any) {
-      toast({ title: "Could not move the lesson", description: err?.message ?? "Please try again.", variant: "destructive" });
+    } catch (err: unknown) {
+      toast({ title: "Could not move the lesson", description: (err as { message?: string })?.message ?? "Please try again.", variant: "destructive" });
     } finally {
       setBusy(false);
     }

@@ -33,17 +33,19 @@ const TALKER: Partial<Record<CharKey, MascotProfile>> = {
  * first, then reads the same words; help is one tap away on any word; both screens turn the page together. */
 
 type Reader = Extract<Scene, { kind: 'reader' }>;
-type Phase = 'listen' | 'read';
+type Phase = 'listen' | 'read' | 'check';
 
 const tidy = (w: string) => w.replace(/[^A-Za-z'’-]/g, '');
 
 export function ReaderScene({ scene, onNext, onWin, sync }: { scene: Reader; onNext: () => void; onWin: (gem: boolean) => void; sync?: ActivitySync }) {
   const reduce = useReducedMotion();
   const total = scene.pages.length;
-  const [state, setState] = useSyncedState(sync, { page: 0, phase: 'listen', run: 0, done: false, gemDone: false });
+  const [state, setState] = useSyncedState(sync, { page: 0, phase: 'listen', run: 0, done: false, gemDone: false, wrong: -1 });
   const pageIdx = Math.max(0, Math.min(total - 1, Number(state.page) || 0));
   const page = scene.pages[pageIdx];
-  const phase: Phase = state.phase === 'read' ? 'read' : 'listen';
+  const phase: Phase = state.phase === 'read' ? 'read' : state.phase === 'check' ? 'check' : 'listen';
+  // The picture question of this page (owner 2026-10-14), asked after the child has read it.
+  const check = scene.noChecks ? undefined : page?.check;
   const done = !!state.done;
   const [lit, setLit] = useState(-1);
   const [talking, setTalking] = useState<number>(-1); // index of the line being spoken
@@ -79,15 +81,39 @@ export function ReaderScene({ scene, onNext, onWin, sync }: { scene: Reader; onN
 
   const listenAgain = () => { sfx.pop(); setState((s) => ({ ...s, phase: 'listen', run: (Number(s.run) || 0) + 1 })); };
   const myTurn = () => { sfx.pop(); setLit(-1); setState((s) => ({ ...s, phase: 'read' })); };
-  const readIt = () => {
-    sfx.match();
+  const advance = () => {
     if (pageIdx + 1 >= total) {
       if (!state.gemDone) { sfx.gem(); onWin(true); }
       setState((s) => ({ ...s, done: true, gemDone: true }));
       return;
     }
     sfx.click();
-    setState((s) => ({ ...s, page: pageIdx + 1, phase: 'listen', run: (Number(s.run) || 0) + 1 }));
+    setState((s) => ({ ...s, page: pageIdx + 1, phase: 'listen', run: (Number(s.run) || 0) + 1, wrong: -1 }));
+  };
+  const readIt = () => {
+    sfx.match();
+    if (check) { setState((s) => ({ ...s, phase: 'check', wrong: -1 })); return; }
+    advance();
+  };
+  // Ask the page's question aloud.
+  useEffect(() => {
+    if (phase !== 'check' || !check || done) return undefined;
+    const t = window.setTimeout(() => cueSpeak(check.question, check.who ? voiceOf(check.who) : 'teacher'), 400);
+    return () => window.clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase, pageIdx]);
+  const answer = async (i: number) => {
+    const opt = check?.options[i];
+    if (!check || !opt || phase !== 'check') return;
+    if (opt.label !== check.answer) {
+      sfx.wrong();
+      setState((s) => ({ ...s, wrong: i }));
+      window.setTimeout(() => setState((s) => ({ ...s, wrong: -1 })), 600);
+      return;
+    }
+    sfx.match();
+    await Promise.race([safeSpeak(`Yes! ${check.answer}`, check.who ? voiceOf(check.who) : 'teacher'), new Promise((r) => window.setTimeout(r, 3000))]);
+    if (alive.current) advance();
   };
 
   if (done) {
@@ -156,9 +182,27 @@ export function ReaderScene({ scene, onNext, onWin, sync }: { scene: Reader; onN
         </motion.div>
       </AnimatePresence>
 
+      {/* the picture question (owner 2026-10-14): after the child reads the page */}
+      {phase === 'check' && check && (
+        <div className="absolute inset-0 z-40 flex flex-col items-center justify-center gap-[2.5cqh] bg-black/50 px-4 backdrop-blur-[2px]">
+          <button type="button" onClick={() => { sfx.click(); cueSpeak(check.question, check.who ? voiceOf(check.who) : 'teacher'); }}
+            className="flex items-center gap-3 rounded-full bg-white px-6 py-2 font-black text-orange-700 shadow-2xl active:scale-95" style={{ fontSize: 'clamp(1rem, 5cqh, 2rem)' }}>
+            🔊 {check.question}
+          </button>
+          <div className="flex flex-wrap justify-center gap-[2cqw]">
+            {check.options.map((o, i) => (
+              <button key={o.label} type="button" onClick={() => void answer(i)} aria-label={o.label}
+                className={`flex flex-col items-center gap-[1cqh] rounded-[3cqh] border-[0.8cqh] bg-white px-[1.5cqw] py-[1.5cqh] shadow-2xl active:scale-95 ${Number(state.wrong) === i ? 'animate-[lep1-shake_0.4s_ease-in-out] border-red-400' : 'border-white'}`}>
+                {o.img && <img src={o.img} alt="" draggable={false} className="h-[min(22cqh,16cqw)] w-[min(22cqh,16cqw)] object-contain" />}
+                <span className="font-black text-[#2a1a0a]" style={{ fontSize: 'clamp(0.9rem, 4.2cqh, 1.6rem)' }}>{o.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
       <div className="absolute inset-x-0 bottom-[3%] z-30 flex flex-wrap items-center justify-center gap-3 px-4">
         <button onClick={listenAgain} className="rounded-full bg-white/95 px-5 py-3 font-black text-orange-700 shadow-xl ring-2 ring-orange-200 active:scale-95" style={{ fontSize: 'clamp(0.85rem, 3.4cqh, 1.2rem)' }}>🔊 Listen</button>
-        {phase === 'listen'
+        {phase === 'check' ? null : phase === 'listen'
           ? <button onClick={myTurn} className="rounded-full bg-gradient-to-r from-sky-500 to-indigo-500 px-6 py-3 font-black text-white shadow-xl active:scale-95" style={{ fontSize: 'clamp(0.85rem, 3.4cqh, 1.2rem)' }}>🎤 My turn to read</button>
           : <>
               <span className="rounded-full bg-white/90 px-4 py-2 font-black text-emerald-700 shadow" style={{ fontSize: 'clamp(0.8rem, 3cqh, 1.1rem)' }}>📖 Read it! Tap a word for help.</span>

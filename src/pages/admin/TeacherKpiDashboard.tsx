@@ -1,3 +1,4 @@
+import { ADMIN_SCORECARDS_ENABLED } from "@/lib/scorecardFlags";
 import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -14,6 +15,7 @@ import { TrendingUp, Users, Clock, Star, AlertTriangle, Download, RefreshCw, Gif
 import { LineChart, Line, ResponsiveContainer, YAxis, Tooltip } from "recharts";
 import { toast } from "sonner";
 import { calculateKpiBonus, formatBonusNote } from "@/lib/kpiBonus";
+import { LEGACY_KPI_PAUSED } from "@/lib/legacyKpiPause";
 import { asPayoutCurrency, formatPay, type PayoutCurrency } from "@/lib/teacherPay";
 
 type TeacherRow = {
@@ -134,7 +136,8 @@ export default function TeacherKpiDashboard() {
       };
     });
 
-    merged.sort((a, b) => b.overall_kpi_score - a.overall_kpi_score);
+    // While the composite is paused nobody is ranked by it: list teachers alphabetically.
+    merged.sort((a, b) => (LEGACY_KPI_PAUSED ? a.name.localeCompare(b.name) : b.overall_kpi_score - a.overall_kpi_score));
     setRows(merged);
     setLoading(false);
   };
@@ -215,9 +218,11 @@ export default function TeacherKpiDashboard() {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button asChild size="sm">
-            <Link to="/admin/teacher-scorecards">Teacher scorecards</Link>
-          </Button>
+          {ADMIN_SCORECARDS_ENABLED && (
+            <Button asChild size="sm">
+              <Link to="/admin/teacher-scorecards">Teacher scorecards</Link>
+            </Button>
+          )}
           <Button variant="outline" size="sm" onClick={recompute} disabled={recomputing}>
             <RefreshCw className={`w-4 h-4 mr-1 ${recomputing ? "animate-spin" : ""}`} />
             Recompute
@@ -228,7 +233,19 @@ export default function TeacherKpiDashboard() {
         </div>
       </header>
 
-      {atRiskList.length > 0 && (
+      {LEGACY_KPI_PAUSED && (
+        <Card className="border-sky-300 bg-sky-50 dark:bg-sky-950/20">
+          <CardContent className="p-4 text-sm">
+            <p className="font-semibold">The overall score, ranking and "At Risk" tier are paused</p>
+            <p className="mt-1 text-muted-foreground">
+              The old score rests on star ratings and on defaults for missing data, so it is not used to rank, flag or pay anyone while we
+              move to coaching-based scorecards. The figures below are shown for information only. Set <code>VITE_LEGACY_KPI=on</code> to restore the old view.
+            </p>
+          </CardContent>
+        </Card>
+      )}
+
+      {!LEGACY_KPI_PAUSED && atRiskList.length > 0 && (
         <Card className="border-red-500 bg-red-50 dark:bg-red-950/20">
           <CardContent className="p-4">
             <div className="flex items-center gap-2 text-red-700 dark:text-red-400 font-semibold mb-2">
@@ -247,7 +264,13 @@ export default function TeacherKpiDashboard() {
         </Card>
       )}
 
-      {summary && (
+      {summary && LEGACY_KPI_PAUSED && (
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <KpiCard icon={<Clock className="w-4 h-4" />} label="Lessons Taught" value={summary.totalLessons.toString()} />
+        </div>
+      )}
+
+      {summary && !LEGACY_KPI_PAUSED && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <KpiCard icon={<TrendingUp className="w-4 h-4" />} label="Avg KPI" value={summary.avgKpi.toFixed(1)} />
           <KpiCard icon={<Clock className="w-4 h-4" />} label="Lessons Taught" value={summary.totalLessons.toString()} />
@@ -277,14 +300,14 @@ export default function TeacherKpiDashboard() {
                 <TableHeader>
                   <TableRow>
                     <TableHead>Teacher</TableHead>
-                    <TableHead>KPI</TableHead>
+                    {!LEGACY_KPI_PAUSED && <TableHead>KPI</TableHead>}
                     <TableHead>Quality</TableHead>
                     <TableHead>Attendance</TableHead>
                     <TableHead>Progress</TableHead>
-                    <TableHead>Response</TableHead>
+                    {!LEGACY_KPI_PAUSED && <TableHead>Response</TableHead>}
                     <TableHead>Feedback</TableHead>
                     <TableHead>Curriculum</TableHead>
-                    <TableHead>Rating</TableHead>
+                    {!LEGACY_KPI_PAUSED && <TableHead>Rating</TableHead>}
                     <TableHead>Students</TableHead>
                     <TableHead>Retention</TableHead>
                     <TableHead>Lessons</TableHead>
@@ -317,26 +340,26 @@ export default function TeacherKpiDashboard() {
                             </div>
                           </div>
                         </TableCell>
-                        <TableCell>
+                        {!LEGACY_KPI_PAUSED && <TableCell>
                           <div className="flex items-center gap-2 min-w-[140px]">
                             <Badge className={`${t.color} text-white border-0`}>{t.label}</Badge>
                             <span className="font-mono text-sm">{r.overall_kpi_score.toFixed(0)}</span>
                           </div>
                           <Progress value={r.overall_kpi_score} className="h-1 mt-1" />
-                        </TableCell>
+                        </TableCell>}
                         <MetricCell v={r.lesson_quality_score} />
                         <MetricCell v={r.attendance_rate} />
                         <MetricCell v={r.student_progress_impact} />
-                        <MetricCell v={r.response_time_score} />
+                        {!LEGACY_KPI_PAUSED && <MetricCell v={r.response_time_score} />}
                         <MetricCell v={r.feedback_completion_rate} />
                         <MetricCell v={r.curriculum_coverage} />
-                        <TableCell>
+                        {!LEGACY_KPI_PAUSED && <TableCell>
                           <div className="flex items-center gap-1">
                             <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
                             <span>{r.rating.toFixed(1)}</span>
                             <span className="text-xs text-muted-foreground">({r.total_reviews})</span>
                           </div>
-                        </TableCell>
+                        </TableCell>}
                         <TableCell className="font-mono text-sm">{r.active_students}</TableCell>
                         <TableCell>
                           <div className="flex items-center gap-2 min-w-[90px]">
@@ -436,8 +459,8 @@ function TeacherDrillDown({
             <div>
               <div>{row.name}</div>
               <div className="flex items-center gap-2 mt-1">
-                <Badge className={`${t.color} text-white border-0`}>{t.label} · {row.overall_kpi_score.toFixed(0)}</Badge>
-                {weeksAtRisk >= 2 && (
+                {!LEGACY_KPI_PAUSED && <Badge className={`${t.color} text-white border-0`}>{t.label} · {row.overall_kpi_score.toFixed(0)}</Badge>}
+                {!LEGACY_KPI_PAUSED && weeksAtRisk >= 2 && (
                   <Badge variant="destructive">{weeksAtRisk} weeks at-risk</Badge>
                 )}
               </div>
@@ -446,7 +469,7 @@ function TeacherDrillDown({
         </DialogHeader>
 
         <div className="space-y-6">
-          {trend.length > 1 && (
+          {!LEGACY_KPI_PAUSED && trend.length > 1 && (
             <div>
               <div className="text-sm font-medium mb-2">KPI Trend</div>
               <div className="h-32">
@@ -461,7 +484,7 @@ function TeacherDrillDown({
             </div>
           )}
 
-          <div>
+          {!LEGACY_KPI_PAUSED && <div>
             <div className="text-sm font-medium mb-2">Recent Reviews ({reviews.length})</div>
             {reviews.length === 0 && <p className="text-sm text-muted-foreground">No reviews yet.</p>}
             <div className="space-y-2">
@@ -478,7 +501,7 @@ function TeacherDrillDown({
                 </div>
               ))}
             </div>
-          </div>
+          </div>}
 
           <div>
             <div className="text-sm font-medium mb-2">Recent Cancellations / No-shows ({cancellations.length})</div>
@@ -495,7 +518,14 @@ function TeacherDrillDown({
             </div>
           </div>
 
-          <BonusPanel row={row} />
+          {LEGACY_KPI_PAUSED ? (
+            <div className="rounded-lg border bg-muted/40 p-3 text-sm text-muted-foreground">
+              <div className="font-medium text-foreground">KPI payroll bonus is paused</div>
+              Bonuses are not calculated or queued from the old score. Bonuses that were already queued are unchanged and still appear in the approval queue.
+            </div>
+          ) : (
+            <BonusPanel row={row} />
+          )}
         </div>
       </DialogContent>
     </Dialog>

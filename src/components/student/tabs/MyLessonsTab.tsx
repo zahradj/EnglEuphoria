@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
 import { ACADEMY_DECK_LESSONS } from '@/academy-deck/lessonRegistry';
 import { AcademyLevelLibrary } from '@/academy-deck/library/AcademyLevelLibrary';
+import { Daily10Banner } from '@/academy-deck/Daily10Banner';
 import { Badge } from '@/components/ui/badge';
 import { HubBackButton } from '@/components/student/common/HubBackButton';
 
@@ -113,6 +114,8 @@ function AcademyLessonList() {
     return <div className="rounded-2xl border border-dashed bg-card/40 p-8 text-center text-muted-foreground">{t('al.empty', 'Your lessons will show up here as soon as they are ready.')}</div>;
   }
   return (
+    <>
+    <Daily10Banner />
     <AcademyLevelLibrary
       lessons={ACADEMY_DECK_LESSONS}
       renderLesson={(l) => (
@@ -143,6 +146,7 @@ function AcademyLessonList() {
         </article>
       )}
     />
+    </>
   );
 }
 

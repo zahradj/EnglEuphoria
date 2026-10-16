@@ -65,18 +65,29 @@ export function CardView({ slide }: { slide: CardSlide }) {
 
 /** Wrap: stamps collected, can-do ticks (yes / almost / not yet), homework, and the clue for next time. */
 export function WrapView({ slide }: { slide: WrapSlide }) {
-  const { stamps, done, setVars } = useDeck();
+  const { stamps, done, setVars, vars } = useDeck();
+  const trophies = (vars.trophies ?? '').split(',').filter(Boolean);
   const [tick, setTick] = useState<Record<number, 'yes' | 'almost' | 'not yet'>>({});
   const [flip, setFlip] = useState(false);
+  // the Wrap over the trophy plate opens with the plate alone and one button, then the checklist (a reveal, not a cut)
+  const reveal = slide.bg === 'trophy-reveal';
+  const [opened, setOpened] = useState(!reveal);
   const all = Object.keys(tick).length === slide.ticks.length;
   const cycle = (i: number) => setTick({ ...tick, [i]: tick[i] === 'yes' ? 'almost' : tick[i] === 'almost' ? 'not yet' : 'yes' });
+  if (!opened) return <button type="button" className="ad-reveal-btn" onClick={() => setOpened(true)}>See your trophies</button>;
   return (
-    <Panel title={slide.heading} wide>
-      <div className="ad-stamps" aria-label="Stamps collected">
-        {[['spell', 'abc', 'Spell'], ['number', 'numbers', 'Number'], ['passport', 'passport', 'Passport'], ['card', 'idcard', 'Card']].map(([id, icon, label]) => (
-          <span key={id} className="ad-stampbadge" data-got={stamps.includes(id)}><b><Icon name={icon} /></b><i>{label}</i></span>
-        ))}
-      </div>
+    <Panel title={slide.heading} wide variant={reveal ? 'reveal' : undefined}>
+      {trophies.length > 0 ? (
+        <ul className="ad-trophies" aria-label={`Trophies earned: ${trophies.length}`}>
+          {trophies.map((v) => <li key={v} className="ad-trophy" data-on="true"><Icon name="star" /><span>{v}</span></li>)}
+        </ul>
+      ) : stamps.length > 0 && (
+        <div className="ad-stamps" aria-label="Stamps collected">
+          {[['spell', 'abc', 'Spell'], ['number', 'numbers', 'Number'], ['passport', 'passport', 'Passport'], ['card', 'idcard', 'Card']].map(([id, icon, label]) => (
+            <span key={id} className="ad-stampbadge" data-got={stamps.includes(id)}><b><Icon name={icon} /></b><i>{label}</i></span>
+          ))}
+        </div>
+      )}
       <p className="ad-hint-line">Tap each line: yes · almost · not yet. Honest is best!</p>
       <div className="ad-ticks">
         {slide.ticks.map((t, i) => (

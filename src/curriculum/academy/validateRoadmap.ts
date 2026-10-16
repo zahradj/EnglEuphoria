@@ -24,12 +24,14 @@ export const MAX_ITEMS_PER_SEASON = INTRODUCING_SESSIONS * MAX_ITEMS_PER_SESSION
 
 /**
  * Cumulative taught items (words + chunks) at the end of each level. Tolerance +-8 %.
+ * Re-set on 2026-10-14 after two Seasons were added per level (was 800 / 1650 / 2750 / 4050 / 5400); the new Seasons' item lists are
+ * not yet calibrated against the Oxford lists, so these targets follow the planned totals, not the Oxford counts below.
  * Calibrated 2026-10-08 against the public Oxford 3000/5000 lists by CEFR level (distinct headwords, cumulative):
  * A1 901 · A2 1,700 · B1 2,399 · B2 3,697 (3000 list 2,999 + 5000 list B2 698) · C1 4,979.
  * A1/A2 targets sit just under the Oxford counts (closed-class function words are taught through grammar, not counted);
  * B1+ sit above them because items also count chunks and collocations.
  */
-export const CUMULATIVE_ITEM_TARGET: Record<AcademyLevel, number> = { A1: 800, A2: 1650, B1: 2750, B2: 4050, C1: 5400 };
+export const CUMULATIVE_ITEM_TARGET: Record<AcademyLevel, number> = { A1: 940, A2: 1900, B1: 3250, B2: 4680, C1: 6180 };
 
 /**
  * Earliest level at which a structure may be introduced for productive use, e.g. 'present-perfect-experience': 'A2'.

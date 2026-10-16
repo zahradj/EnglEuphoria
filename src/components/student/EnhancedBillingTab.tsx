@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from "react";
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,6 +12,7 @@ import { useStudentLevel } from "@/hooks/useStudentLevel";
 import { cn } from "@/lib/utils";
 
 export const EnhancedBillingTab = () => {
+  const { t, i18n } = useTranslation();
   const [paymentHistory, setPaymentHistory] = useState<PaymentHistoryItem[]>([]);
   const [subscription, setSubscription] = useState<SubscriptionDetails | null>(null);
   const [loading, setLoading] = useState(true);
@@ -39,8 +41,8 @@ export const EnhancedBillingTab = () => {
       setSubscription(subscriptionData);
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Failed to load billing data",
+        title: t('st.bill.error', 'Error'),
+        description: t('st.bill.loadFail', 'Failed to load billing data'),
         variant: "destructive"
       });
     } finally {
@@ -53,8 +55,8 @@ export const EnhancedBillingTab = () => {
     await loadBillingData();
     setRefreshing(false);
     toast({
-      title: "Updated",
-      description: "Billing data refreshed successfully"
+      title: t('st.bill.updated', 'Updated'),
+      description: t('st.bill.refreshed', 'Billing data refreshed successfully')
     });
   };
 
@@ -64,20 +66,22 @@ export const EnhancedBillingTab = () => {
       window.open(url, '_blank');
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Failed to open subscription management",
+        title: t('st.bill.error', 'Error'),
+        description: t('st.bill.portalFail', 'Failed to open subscription management'),
         variant: "destructive"
       });
     }
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
+    return new Date(dateString).toLocaleDateString(i18n.language, {
       year: 'numeric',
       month: 'short',
       day: 'numeric'
     });
   };
+
+  const statusLabel = (status: string) => t('st.bill.status.' + status, status);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -96,16 +100,16 @@ export const EnhancedBillingTab = () => {
   };
 
   if (loading) {
-    return <div className="text-center py-8">Loading billing information...</div>;
+    return <div className="text-center py-8">{t('st.bill.loading', 'Loading billing information...')}</div>;
   }
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-800">Payment & Billing</h1>
+        <h1 className="text-2xl font-bold text-gray-800">{t('st.bill.title', 'Payment & Billing')}</h1>
         <Button onClick={handleRefresh} variant="outline" disabled={refreshing} className={outlineBtn}>
           <RefreshCw className={`h-4 w-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
-          Refresh
+          {t('st.bill.refresh', 'Refresh')}
         </Button>
       </div>
 
@@ -114,7 +118,7 @@ export const EnhancedBillingTab = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <CreditCard className={cn("h-5 w-5", iconAccent)} />
-            Current Subscription
+            {t('st.bill.current', 'Current Subscription')}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -124,19 +128,19 @@ export const EnhancedBillingTab = () => {
                 <h3 className="font-semibold text-lg mb-4">{subscription.plan.name}</h3>
                 <div className="space-y-2">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Status:</span>
+                    <span className="text-gray-600">{t('st.bill.statusLbl', 'Status:')}</span>
                     <Badge className={getStatusColor(subscription.status)}>
-                      {subscription.status}
+                      {statusLabel(subscription.status)}
                     </Badge>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Current Period:</span>
+                    <span className="text-gray-600">{t('st.bill.period', 'Current Period:')}</span>
                     <span className="font-medium">
                       {formatDate(subscription.current_period_start)} - {formatDate(subscription.current_period_end)}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Monthly Cost:</span>
+                    <span className="text-gray-600">{t('st.bill.monthly', 'Monthly Cost:')}</span>
                     <span className="font-medium">
                       {subscription.plan.price.toLocaleString()} {subscription.plan.currency}
                     </span>
@@ -144,7 +148,7 @@ export const EnhancedBillingTab = () => {
                   {subscription.cancel_at_period_end && (
                     <div className="flex items-center gap-2 text-orange-600">
                       <AlertCircle className="h-4 w-4" />
-                      <span className="text-sm">Subscription will cancel at period end</span>
+                      <span className="text-sm">{t('st.bill.cancelsAtEnd', 'Subscription will cancel at period end')}</span>
                     </div>
                   )}
                 </div>
@@ -153,17 +157,17 @@ export const EnhancedBillingTab = () => {
               <div className="space-y-3">
                 <Button onClick={handleManageSubscription} className={cn("w-full", primaryBtn)}>
                   <Settings className="h-4 w-4 mr-2" />
-                  Manage Subscription
+                  {t('st.bill.manage', 'Manage Subscription')}
                 </Button>
                 <p className="text-sm text-gray-500">
-                  Cancel, change plan, or update payment method through Stripe portal
+                  {t('st.bill.manageDesc', 'Cancel, change plan, or update payment method through Stripe portal')}
                 </p>
               </div>
             </div>
           ) : (
             <div className="text-center py-6">
-              <p className="text-gray-600 mb-4">No active subscription found</p>
-              <p className="text-sm text-gray-500">Choose a plan below to get started</p>
+              <p className="text-gray-600 mb-4">{t('st.bill.noSub', 'No active subscription found')}</p>
+              <p className="text-sm text-gray-500">{t('st.bill.choosePlan', 'Choose a plan below to get started')}</p>
             </div>
           )}
         </CardContent>
@@ -172,7 +176,7 @@ export const EnhancedBillingTab = () => {
       {/* Lesson Packages & Plans — always available, synced with subscription */}
       <Card>
         <CardHeader>
-          <CardTitle>{subscription ? "Buy More Lessons or Change Plan" : "Choose Your Plan"}</CardTitle>
+          <CardTitle>{subscription ? t('st.bill.buyMore', 'Buy More Lessons or Change Plan') : t('st.bill.yourPlan', 'Choose Your Plan')}</CardTitle>
         </CardHeader>
         <CardContent>
           <PaymentPlansGrid />
@@ -184,7 +188,7 @@ export const EnhancedBillingTab = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Calendar className={cn("h-5 w-5", iconAccent2)} />
-            Payment History
+            {t('st.bill.history', 'Payment History')}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -205,7 +209,7 @@ export const EnhancedBillingTab = () => {
                   </div>
                   <div className="flex items-center gap-3">
                     <Badge className={getStatusColor(payment.status)}>
-                      {payment.status}
+                      {statusLabel(payment.status)}
                     </Badge>
                     {payment.invoice_url && (
                       <Button 
@@ -214,7 +218,7 @@ export const EnhancedBillingTab = () => {
                         onClick={() => window.open(payment.invoice_url, '_blank')}
                       >
                         <Download className="h-4 w-4 mr-1" />
-                        Invoice
+                        {t('st.bill.invoice', 'Invoice')}
                       </Button>
                     )}
                   </div>
@@ -223,7 +227,7 @@ export const EnhancedBillingTab = () => {
             </div>
           ) : (
             <div className="text-center py-6 text-gray-500">
-              No payment history found
+              {t('st.bill.noHistory', 'No payment history found')}
             </div>
           )}
         </CardContent>

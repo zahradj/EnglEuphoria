@@ -23,6 +23,16 @@ export interface LessonProfile {
 
 export const LESSON_PROFILES: LessonProfile[] = [
   {
+    id: 'b1-s01-e1', setting: 'the Club classroom with the bucket-list corkboard wall (bright daytime school)', mainPlate: 'bucket-list-wall', look: 'bright daytime classroom, tall sunny windows, light wood, a corkboard wall of blank cards, bunting, plants, soft lilac accents, and a trophy case', frame: 'Vee’s bucket-list dare: tick it off before the break',
+    signature: 'boss', funHook: 'break a giant clock with the right tense (boss fight), crack participles in Wordle, climb the Hot Seat ladder, win Theo’s rapport, forge verb trophies and beat your own streak',
+    evidence: 'the student says the three forms of ten verbs, tells when from up to now, and says who has done the most and why (Take 2)', homeMission: 'send Vee one voice note: three sentences about things you have done',
+  },
+  {
+    id: 'b1-s01-e2', previous: 'b1-s01-e1', setting: 'the Travel Club room with the postcard wall (bright daytime school)', mainPlate: 'postcard-wall', look: 'bright daytime school room, tall sunny windows, light wood, a big world map, a wall of postcards, soft lilac accents', frame: 'Vee’s postcard wall: find the right word for every postcard',
+    signature: 'rpg', funHook: 'name the feeling on a Mood Postcard, craft sentence cards at the Word Workbench, build whole chunks, and describe a postcard so Ava can find it',
+    evidence: 'the student uses at least five of the 14 words in a private voice note, with an “I have …” sentence and a past-simple follow-up with a time', homeMission: 'send Vee one voice note: three sentences about a trip with a feeling, a place and a chunk',
+  },
+  {
     id: 'free-time-club-1', setting: 'the school Club Fair at dusk', mainPlate: 'fair-night', look: 'purple dusk, string lights, five stalls', frame: 'mystery: who took Ava’s poster?',
     signature: 'explore', funHook: 'walk the fair and tap each stall to hear what they like; sort your own hobbies with no wrong answer',
     evidence: 'the student says “I like ___. I love ___.” to Ava with their name (Take 2 and the voice note)', homeMission: 'send Ava one voice note: I like ___. I love ___.',
@@ -35,6 +45,11 @@ export const LESSON_PROFILES: LessonProfile[] = [
   { id: 'sign-me-up', setting: 'the club sign-up desk', mainPlate: 'club-signup-desk', look: 'club lobby', frame: 'sign up', signature: 'padlock', funHook: 'padlock code', evidence: 'sign-up card', homeMission: 'homework quest', grandfathered: 'Season 1 lesson built before the variety gate.' },
   { id: 'sign-me-up-2', setting: 'the club sign-up desk', mainPlate: 'club-signup-desk', look: 'club lobby', frame: 'sign up (three lanes)', signature: 'padlock', funHook: 'lanes', evidence: 'sign-up card', homeMission: 'voice note', grandfathered: 'Season 1 sample built before the variety gate.' },
   { id: 'fake-or-real', setting: 'the detective wall', mainPlate: 'detective-wall', look: 'detective wall', frame: 'detective', signature: 'factcheck', funHook: 'fact-check a profile', evidence: 'written profile check', homeMission: 'write three sentences', grandfathered: 'Season 1 lesson built before the variety gate.' },
+  {
+    id: 'pa1-s02-e1', setting: 'a lost phone with five locks inside a neon phone vault', mainPlate: 'vault-corridor', look: 'lock-screen frame, key HUD, vault doors, rainy bus stop at night and dawn', frame: 'unlock the lost phone: every skill opens one lock',
+    signature: 'duel', funHook: 'set lock-pick pins by ear, craft words, then win the boss duel by saying This is a ___ to open the last lock',
+    evidence: 'the student blends in, it, pin and tin, reads the unlocked message and says “This is a pin.” to Theo (Take 2), then teaches the rule back', homeMission: 'send Vee one voice note: This is a pin. This is a tin.',
+  },
   { id: 'pa1-s01-e1', setting: 'the Name Wall', mainPlate: 'name-wall', look: 'name wall', frame: 'letters', signature: 'reader', funHook: 'read names', evidence: 'says hello and name', homeMission: 'say hello to one person', grandfathered: 'Pre-A1 lesson built before the variety gate.' },
 ];
 

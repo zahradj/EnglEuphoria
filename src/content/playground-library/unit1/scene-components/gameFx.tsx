@@ -30,6 +30,27 @@ export function LivingBg({ img, video }: { img: string; video?: string }) {
   );
 }
 
+/**
+ * A busy scene picture calmed down behind a game whose pieces float over it (owner 2026-10-14: "the background
+ * images are fully charged and there are some items floating to be matched — it's very difficult to see"). The
+ * picture stays recognisable (the place of the lesson) but is softly blurred, a little desaturated and veiled, so
+ * the pieces on top are the sharpest, brightest things on screen. Static: no zoom/pan (the slight scale only hides
+ * the blurred edge). Use `strong` when pieces are small or spread over the whole picture.
+ */
+export function CalmBg({ img, strength = 'soft' }: { img: string; strength?: 'soft' | 'strong' }) {
+  const blur = strength === 'strong' ? 5 : 2.5;
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+      <div className="absolute inset-0 bg-cover bg-center"
+        style={{ backgroundImage: `url(${img})`, filter: `blur(${blur}px) saturate(0.8) brightness(1.04)`, transform: 'scale(1.04)' }} />
+      <div className="absolute inset-0"
+        style={{ background: strength === 'strong'
+          ? 'radial-gradient(ellipse at 50% 45%, rgba(255,251,240,0.5) 0%, rgba(255,251,240,0.3) 60%, rgba(30,27,75,0.25) 100%)'
+          : 'radial-gradient(ellipse at 50% 45%, rgba(255,251,240,0.32) 0%, rgba(255,251,240,0.16) 60%, rgba(30,27,75,0.22) 100%)' }} />
+    </div>
+  );
+}
+
 type BurstKind = 'stars' | 'splash' | 'sparkle' | 'confetti';
 type Burst = { id: number; x: number; y: number; kind: BurstKind };
 const BURST_GLYPHS: Record<BurstKind, string[]> = {

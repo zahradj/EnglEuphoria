@@ -1,10 +1,13 @@
 // Academy Deck: data checks (academy-lesson-craft + quality gate) and real component play-throughs of the games.
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { Deck } from '../Deck';
 import { SIGN_ME_UP, CRITERIA, OBJECTIVE } from '../lessons/signMeUp';
+
 import { ACADEMY_LESSON_BLUEPRINTS } from '../../curriculum/academy';
 import { PARTS, type Slide } from '../types';
+// two games animate for several seconds under jsdom; the full suite shares the CPU, so give them room
+vi.setConfig({ testTimeout: 20000 });
 
 afterEach(cleanup);
 const bp = ACADEMY_LESSON_BLUEPRINTS.find((b) => b.id === 'A1-S01-E2')!;

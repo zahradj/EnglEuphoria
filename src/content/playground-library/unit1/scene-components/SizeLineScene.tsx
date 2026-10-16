@@ -6,7 +6,7 @@ import * as sfx from '../sfx';
 import { Confetti } from '../fx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
 import { CLAY_BUTTON, STICKER_FILTER, THICK_WORDS, sayWithin } from './shared';
-import { Bursts, useBursts, useShake } from './gameFx';
+import { Bursts, CalmBg, useBursts, useShake } from './gameFx';
 
 /* ---------- Line Up! (Pre-A1 Unit 5 Lesson 2) ----------
  * The family lines up for the photo, biggest to smallest. "Who is the
@@ -38,7 +38,7 @@ export function SizeLineScene({ scene, onWin, onNext, sync }: { scene: Line; onW
   const [wrong, setWrong] = useState(-1);
   const [bursts, fire] = useBursts();
   const [shakeCtl, shake] = useShake();
-  const prompt = done ? scene.doneLine : want === 0 ? LINE_FIRST : want === total - 1 ? scene.lastLine : LINE_NEXT;
+  const prompt = done ? scene.doneLine : want === 0 ? (scene.firstLine ?? LINE_FIRST) : want === total - 1 ? scene.lastLine : LINE_NEXT;
 
   useEffect(() => {
     busy.current = false;
@@ -55,7 +55,7 @@ export function SizeLineScene({ scene, onWin, onNext, sync }: { scene: Line; onW
     if (i !== want) {
       sfx.wrong(); shake(); setWrong(i);
       setMisses((m) => m + 1);
-      await sayWithin(LINE_WRONG, scene.who, 2200);
+      await sayWithin(scene.wrongLine ?? LINE_WRONG, scene.who, 2200);
       setWrong(-1);
       busy.current = false;
       return;
@@ -70,7 +70,9 @@ export function SizeLineScene({ scene, onWin, onNext, sync }: { scene: Line; onW
 
   const tallest = Math.max(...scene.members.map((m) => m.height));
   return (
-    <motion.div className="absolute inset-0 select-none overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }} animate={shakeCtl}>
+    <motion.div className="absolute inset-0 select-none overflow-hidden" animate={shakeCtl}>
+      {/* busy picture calmed down so the floating pieces are the clearest thing (owner 2026-10-14) */}
+      <CalmBg img={scene.bg} strength="strong" />
       {done && <Confetti count={60} />}
       <div className="pointer-events-none absolute inset-x-0 top-16 z-30 flex flex-col items-center gap-1 px-14">
         <span className="text-center font-black leading-tight text-white" style={{ ...THICK_WORDS, fontSize: 'clamp(1.4rem, calc(3.6*var(--svw,1vw)), 3rem)' }}>{prompt}</span>
@@ -130,7 +132,7 @@ export function SizeLineScene({ scene, onWin, onNext, sync }: { scene: Line; onW
 /** Every voiced line, for the clip baker (scripts/generate-voice-cache.mjs mirrors this). */
 export function sizeLineLines(scene: Line) {
   return [
-    [scene.who, LINE_FIRST], [scene.who, LINE_NEXT], [scene.who, LINE_WRONG], [scene.who, scene.lastLine],
+    [scene.who, scene.firstLine ?? LINE_FIRST], [scene.who, LINE_NEXT], [scene.who, scene.wrongLine ?? LINE_WRONG], [scene.who, scene.lastLine],
     ...scene.members.map((m) => [scene.who, m.reply]),
     [scene.who, scene.doneLine],
   ] as [string, string][];

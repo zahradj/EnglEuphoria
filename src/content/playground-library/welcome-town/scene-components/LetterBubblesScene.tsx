@@ -7,6 +7,7 @@ import { Confetti } from '../../unit1/fx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
 import { voiceOf } from './shared';
 import { CLAY_BUTTON, THICK_WORDS } from '../../unit1/scene-components/shared';
+import { CalmBg } from '../../unit1/scene-components/gameFx';
 
 /* ---------- Letter Bubbles (anagram, Wordwall "Anagram" / "Spell the word", modern design — docs/a1-activity-library.md §10) ----------
  * The picture shows the word; its letters float up in soap bubbles, mixed up. The child pops the bubbles in the right
@@ -76,7 +77,9 @@ export function LetterBubblesScene({ scene, onNext, onWin, onLose, sync }: { sce
 
   const hintBubble = Number(state.misses) >= 2 ? order.findIndex((v, b) => !popped(b) && word[v] === word[got]) : -1;
   return (
-    <div className="absolute inset-0 select-none overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
+    <div className="absolute inset-0 select-none overflow-hidden">
+      {/* busy picture calmed down so the floating pieces are the clearest thing (owner 2026-10-14) */}
+      <CalmBg img={scene.bg} strength="strong" />
       <div className="absolute inset-0 bg-gradient-to-b from-sky-900/20 to-sky-900/40" />
       {done && <Confetti count={80} />}
       <div className="pointer-events-none absolute inset-x-0 top-[5%] z-30 flex justify-center px-14">
@@ -118,15 +121,17 @@ export function LetterBubblesScene({ scene, onNext, onWin, onLose, sync }: { sce
                   {!gone && (
                     <motion.button type="button" onClick={() => pop(b)} aria-label={`bubble ${word[order[b]]}`}
                       className="absolute grid place-items-center rounded-full"
-                      style={{ left: `${left}%`, top: `${top}%`, width: 'min(13vh,8.6vw)', height: 'min(13vh,8.6vw)', marginLeft: 'calc(min(13vh,8.6vw) / -2)',
-                        background: 'radial-gradient(circle at 32% 28%, rgba(255,255,255,0.95) 0 8%, rgba(255,255,255,0.25) 9% 40%, rgba(186,230,253,0.35) 70%, rgba(125,211,252,0.6) 100%)',
-                        boxShadow: hintBubble === b ? '0 0 3vh rgba(253,224,71,0.95), inset 0 0 1.5vh rgba(255,255,255,0.8)' : 'inset 0 0 1.5vh rgba(255,255,255,0.8), 0 0.6vh 1.4vh rgba(14,116,144,0.3)', border: '0.3vh solid rgba(255,255,255,0.85)' }}
+                      style={{ left: `${left}%`, top: `${top}%`, width: 'min(16vh,10.5vw)', height: 'min(16vh,10.5vw)', marginLeft: 'calc(min(16vh,10.5vw) / -2)',
+                        // a bright, almost-white bubble with a coloured rim, so the letter reads on any picture (owner 2026-10-14)
+                        background: 'radial-gradient(circle at 32% 28%, rgba(255,255,255,1) 0 9%, rgba(255,255,255,0.88) 10% 55%, rgba(224,242,254,0.85) 78%, rgba(125,211,252,0.9) 100%)',
+                        boxShadow: hintBubble === b ? '0 0 3vh rgba(253,224,71,0.95), inset 0 0 1.5vh rgba(255,255,255,0.9)' : 'inset 0 0 1.5vh rgba(255,255,255,0.9), 0 0.8vh 1.8vh rgba(14,116,144,0.35)',
+                        border: `0.55vh solid ${['#38bdf8', '#f472b6', '#a78bfa', '#34d399', '#fbbf24', '#fb923c'][b % 6]}` }}
                       initial={reduce ? false : { y: 200, opacity: 0 }}
                       animate={state.wrong === b ? { x: [0, -10, 10, -6, 0], y: 0, opacity: 1 } : reduce ? { y: 0, opacity: 1 } : { y: [0, -12, 0], opacity: 1 }}
                       transition={state.wrong === b ? { duration: 0.4 } : { y: { duration: 2.6 + (b % 3) * 0.5, repeat: Infinity, ease: 'easeInOut', delay: b * 0.2 }, opacity: { duration: 0.4 } }}
                       exit={{ scale: 1.6, opacity: 0, transition: { duration: 0.25 } }}
                       whileHover={{ scale: 1.08 }}>
-                      <span className="font-black text-sky-900" style={{ fontSize: 'min(5.6vh, 3.7vw)' }}>{word[order[b]]}</span>
+                      <span className="font-black text-sky-900" style={{ fontSize: 'min(7.4vh, 4.9vw)', lineHeight: 1 }}>{word[order[b]]}</span>
                     </motion.button>
                   )}
                 </AnimatePresence>

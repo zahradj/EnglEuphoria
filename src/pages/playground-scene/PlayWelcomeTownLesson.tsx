@@ -3,6 +3,7 @@ import { PREA1_REAL_SYNC_KINDS } from '@/content/playground-library/prea1SyncKin
 import { SHARED_PLAY_KINDS, useSceneScopedState } from '@/content/playground-library/sceneActivitySync';
 import { SceneCrashGuard } from '@/content/playground-library/SceneCrashGuard';
 import { useRecordClassroomCompletion } from '@/hooks/useRecordClassroomCompletion';
+import { useLessonActivityLog } from '@/hooks/useLessonActivityLog';
 import { resolveSoundSides } from '@/content/playground-library/welcome-town/scene-components/soundLayout';
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -47,6 +48,8 @@ interface PlayWelcomeTownLessonProps {
   onFinaleReached?: () => void;
   role?: 'teacher' | 'student';
   roomId?: string;
+  /** classroom_sessions.id of the live class — the student's screen saves each activity for the lesson checklist. */
+  sessionId?: string;
   hideInternalNav?: boolean;
   onNavState?: (state: { sceneIdx: number; total: number; canNavigate: boolean; interactionUnlocked: boolean; lockToggleApplicable?: boolean }) => void;
   persistedSceneIdx?: number | null;
@@ -60,7 +63,7 @@ interface PlayWelcomeTownLessonProps {
 /** Gem-eligible scene kinds — every activity kind that ever calls onWin(true)
  *  exactly once when completed. Kept in sync manually with SceneRenderer.tsx
  *  (title-card/cinematic never award a gem; finale is the end screen). */
-const GEM_KINDS = new Set<Scene['kind']>(['meet', 'echo', 'memory', 'vocab-spot', 'drag-match', 'drag-sticker', 'choice', 'listen-tap', 'true-false', 'roleplay', 'join-stage', 'hello-doors', 'flipbook', 'song', 'trace', 'word-build', 'sentence-build', 'letter-game', 'jigsaw-puzzle', 'spin-wheel', 'picture-match', 'first-sound', 'letter-match', 'letter-blocks', 'place-it', 'torch-hunt', 'where-castle', 'first-sound', 'letter-match', 'letter-blocks', 'whats-missing', 'sort-basket', 'grammar-gap', 'color-play', 'welcome-party', 'name-badge', 'prea1', 'feelings-survey', 'sound-blend', 'chat-chain', 'reader', 'tongue-twister', 'read-do', 'answer-race', 'word-splat', 'field-guide', 'sticker-bingo', 'tic-tac-toe', 'pass-parcel', 'i-spy', 'save-balloon', 'dominoes', 'go-fish', 'hot-coconut', 'quiz-board', 'chest-quest', 'rising-river', 'world-builder', 'draw-guess', 'echo-cave', 'grid-hunt', 'draw-guess', 'echo-cave', 'grid-hunt', 'hot-cold', 'whisper-tube', 'glider', 'tower-pull', 'musical-islands', 'red-green', 'letter-bubbles', 'crossword', 'flag-race', 'balloon-match', 'pet-pal', 'rocket-maze', 'weather-report', 'food-survey', 'festival-cafe', 'build-dish', 'design-room', 'lost-property', 'answer-mirror', 'feelings-camera', 'feelings-runner']);
+const GEM_KINDS = new Set<Scene['kind']>(['meet', 'echo', 'memory', 'vocab-spot', 'drag-match', 'drag-sticker', 'choice', 'listen-tap', 'true-false', 'roleplay', 'join-stage', 'hello-doors', 'flipbook', 'song', 'trace', 'word-build', 'sentence-build', 'letter-game', 'jigsaw-puzzle', 'spin-wheel', 'picture-match', 'first-sound', 'letter-match', 'letter-blocks', 'place-it', 'torch-hunt', 'where-castle', 'first-sound', 'letter-match', 'letter-blocks', 'whats-missing', 'sort-basket', 'grammar-gap', 'color-play', 'welcome-party', 'name-badge', 'prea1', 'feelings-survey', 'sound-blend', 'chat-chain', 'reader', 'tongue-twister', 'read-do', 'answer-race', 'word-splat', 'field-guide', 'sticker-bingo', 'tic-tac-toe', 'pass-parcel', 'i-spy', 'save-balloon', 'dominoes', 'go-fish', 'hot-coconut', 'quiz-board', 'chest-quest', 'rising-river', 'world-builder', 'draw-guess', 'echo-cave', 'grid-hunt', 'draw-guess', 'echo-cave', 'grid-hunt', 'hot-cold', 'whisper-tube', 'glider', 'tower-pull', 'musical-islands', 'red-green', 'letter-bubbles', 'crossword', 'flag-race', 'balloon-match', 'pet-pal', 'rocket-maze', 'weather-report', 'food-survey', 'mood-machine', 'monster-builder', 'monster-mixup', 'feelings-meter', 'guess-who', 'festival-cafe', 'build-dish', 'design-room', 'lost-property', 'answer-mirror', 'feelings-camera', 'feelings-runner']);
 
 /** Scene kinds that own real synced state (see `activityState` below)
  *  instead of relying on the generic scene_tap DOM-click-mirror. Whoever
@@ -86,14 +89,14 @@ const GEM_KINDS = new Set<Scene['kind']>(['meet', 'echo', 'memory', 'vocab-spot'
  *    channel to convert safely, deferred as its own follow-up. */
 const REAL_SYNC_KINDS = new Set<Scene['kind']>([
   'vocab-spot', 'meet', 'echo', 'memory', 'choice', 'listen-tap', 'true-false',
-  'frequency-ladder', 'roleplay', 'join-stage', 'hello-doors', 'flipbook', 'reader', 'read-do', 'answer-race', 'word-splat', 'field-guide', 'sticker-bingo', 'tic-tac-toe', 'pass-parcel', 'i-spy', 'save-balloon', 'dominoes', 'go-fish', 'hot-coconut', 'quiz-board', 'chest-quest', 'rising-river', 'world-builder', 'draw-guess', 'echo-cave', 'grid-hunt', 'hot-cold', 'whisper-tube', 'glider', 'tower-pull', 'musical-islands', 'red-green', 'letter-bubbles', 'crossword', 'flag-race', 'balloon-match', 'pet-pal', 'rocket-maze', 'weather-report', 'food-survey', 'festival-cafe', 'build-dish', 'design-room', 'lost-property',
+  'frequency-ladder', 'roleplay', 'join-stage', 'hello-doors', 'flipbook', 'reader', 'read-do', 'answer-race', 'word-splat', 'field-guide', 'sticker-bingo', 'tic-tac-toe', 'pass-parcel', 'i-spy', 'save-balloon', 'dominoes', 'go-fish', 'hot-coconut', 'quiz-board', 'chest-quest', 'rising-river', 'world-builder', 'draw-guess', 'echo-cave', 'grid-hunt', 'hot-cold', 'whisper-tube', 'glider', 'tower-pull', 'musical-islands', 'red-green', 'letter-bubbles', 'crossword', 'flag-race', 'balloon-match', 'pet-pal', 'rocket-maze', 'weather-report', 'food-survey', 'mood-machine', 'monster-builder', 'monster-mixup', 'feelings-meter', 'guess-who', 'festival-cafe', 'build-dish', 'design-room', 'lost-property',
   'sound-model', 'word-build', 'sentence-build', 'letter-game', 'spin-wheel', 'picture-match', 'recall-warmup',
   'first-sound', 'sound-blend', 'letter-match', 'letter-blocks', 'whats-missing', 'sort-basket', 'grammar-gap', 'color-play',
   'tongue-twister', 'place-it', 'torch-hunt', 'where-castle', 'welcome-party', 'name-badge', 'feelings-survey', 'chat-chain',
   'answer-mirror', 'feelings-camera', 'feelings-runner']);
 
 const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcomeTownLessonProps>(function PlayWelcomeTownLesson(
-  { scenes, sessionKey, embedded = false, skin, pageTitle, pageDescription, onFinaleReached, unitNumber, lessonNumber, role, roomId, hideInternalNav = false, onNavState, persistedSceneIdx, onSceneIdxPersist, persistedInteractionUnlocked, onInteractionUnlockedPersist },
+  { scenes, sessionKey, embedded = false, skin, pageTitle, pageDescription, onFinaleReached, unitNumber, lessonNumber, role, roomId, sessionId, hideInternalNav = false, onNavState, persistedSceneIdx, onSceneIdxPersist, persistedInteractionUnlocked, onInteractionUnlockedPersist },
   ref,
 ) {
   const navigate = useNavigate();
@@ -626,15 +629,19 @@ const PlayWelcomeTownLesson = forwardRef<PlayWelcomeTownLessonHandle, PlayWelcom
     return () => { cancelled = true; stopSpeaking(); };
   }, [sceneIdx]);
 
+  // Lesson checklist (lessonChecklist.ts): the student's screen saves what they did on each activity.
+  const activityLog = useLessonActivityLog({ scenes: SCENES as unknown as { id: string; kind: string }[], sceneIdx, role, sessionId });
+  const { logWin, logWrong } = activityLog;
   const gainHeart = useCallback(() => setHearts((h) => Math.min(MAX_HEARTS, h + 1)), []);
   const loseHeart = useCallback(() => {
+    logWrong();
     setHearts((h) => {
       const n = h - 1;
       if (n <= 0) { setTimeout(() => setHearts(MAX_HEARTS), 400); return 0; }
       return n;
     });
-  }, []);
-  const registerWin = useCallback((didGem: boolean) => { if (didGem) setGems((g) => g + 1); }, []);
+  }, [logWrong]);
+  const registerWin = useCallback((didGem: boolean) => { logWin(didGem); if (didGem) setGems((g) => g + 1); }, [logWin]);
 
   // Only the teacher changes the slide in a live class (owner, 2026-10-14): a student's own "Next" buttons are
   // hidden and do nothing — see teacherAdvancesOnly.ts. The teacher's goNext below still serves the teacher.

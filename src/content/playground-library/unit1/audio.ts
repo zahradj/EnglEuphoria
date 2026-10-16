@@ -4,6 +4,7 @@
 // fails to decode as audio and silently falls back to browser speech
 // synthesis on every single line. A plain fetch() against the function URL
 // returns the binary body intact.
+import { soundKey } from '../soundLabel';
 import { spokenText } from './spokenText';
 import { supabaseUrl, supabaseAnonKey } from '@/integrations/supabase/client';
 import { approvedVoiceId, isShortLine, normalizeForSpeech, SHORT_LINE_CLIP_VERSION } from '@/lib/speechPolicy';
@@ -738,6 +739,8 @@ const PHONICS_ZIP_CLIP: Record<string, string> = {
 };
 const zipUrl = (file: string) => `/phonics-sounds/phonics-zip/${file}.mp3`;
 for (const [key, file] of Object.entries(PHONICS_ZIP_CLIP)) PHONIC_CLIP[key] = zipUrl(file);
+// ea (tea, sea, leaf — A1 U5L2) is the same long /iː/ as ee: reuse the recorded ee.
+PHONIC_CLIP.ea = PHONIC_CLIP.ee;
 
 // Long-vowel variants (phonics-master's double-underscore recordings), kept under
 // a distinct key since e.g. 'a' is already the SHORT /æ/ sound above.
@@ -801,8 +804,9 @@ async function playBlend(blend: string): Promise<void> {
   for (const l of blend.split('')) await playPhonicsClip(PHONIC_CLIP[l], l);
 }
 
+/** "spelling=sound" (e.g. "y=ee") plays the sound after "=" — see ../soundLabel.ts. */
 export function playLetterPhonic(letter: string): Promise<void> {
-  const k = letter.toLowerCase();
+  const k = soundKey(letter).toLowerCase();
   if (!PHONIC_CLIP[k] && BLENDS.has(k)) return playBlend(k);
   return playPhonicsClip(PHONIC_CLIP[k], letter);
 }

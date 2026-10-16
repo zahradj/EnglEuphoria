@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from "react";
+import { useTranslation } from 'react-i18next';
 import {
   addMonths,
   subMonths,
@@ -53,6 +54,7 @@ export const StudentBookingCalendarGrid = ({
   onBookLesson,
   isLoading = false,
 }: StudentBookingCalendarGridProps) => {
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { resolvedTheme } = useThemeMode();
   const isDark = resolvedTheme === "dark";
@@ -143,7 +145,9 @@ export const StudentBookingCalendarGrid = ({
       : "bg-white/70 backdrop-blur-xl border-gray-200/50 shadow-[0_8px_32px_rgba(0,0,0,0.06)]"
   );
 
-  const weekdayLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  // 2024-01-01 was a Monday: localised short weekday names, Monday first
+  const weekdayLabels = Array.from({ length: 7 }, (_, i) =>
+    new Intl.DateTimeFormat(i18n.language, { weekday: 'short' }).format(new Date(2024, 0, 1 + i)));
 
   return (
     <div className={glassPanel}>
@@ -151,7 +155,7 @@ export const StudentBookingCalendarGrid = ({
       <div className="flex items-center justify-between mb-4">
         <h3 className="flex items-center gap-2 text-lg font-semibold">
           <CalendarIcon className="w-5 h-5 text-primary" />
-          {format(viewMonth, "MMMM yyyy")}
+          {new Intl.DateTimeFormat(i18n.language, { month: 'long', year: 'numeric' }).format(viewMonth)}
         </h3>
         <div className="flex items-center gap-1">
           <Button
@@ -159,14 +163,14 @@ export const StudentBookingCalendarGrid = ({
             size="sm"
             onClick={() => setViewMonth(startOfMonth(new Date()))}
           >
-            Today
+            {t('st.cal.today', 'Today')}
           </Button>
           <Button
             variant="ghost"
             size="icon"
             className="h-8 w-8"
             onClick={() => setViewMonth((m) => subMonths(m, 1))}
-            aria-label="Previous month"
+            aria-label={t('st.cal.prevMonth', 'Previous month')}
           >
             <ChevronLeft className="w-4 h-4" />
           </Button>
@@ -175,7 +179,7 @@ export const StudentBookingCalendarGrid = ({
             size="icon"
             className="h-8 w-8"
             onClick={() => setViewMonth((m) => addMonths(m, 1))}
-            aria-label="Next month"
+            aria-label={t('st.cal.nextMonth', 'Next month')}
           >
             <ChevronRight className="w-4 h-4" />
           </Button>
@@ -184,7 +188,7 @@ export const StudentBookingCalendarGrid = ({
 
       {localSlots.length === 0 && (
         <div className={cn("mb-4 p-3 rounded-lg text-sm text-muted-foreground", isDark ? "bg-white/5" : "bg-muted/50")}>
-          No open slots yet for this hub — browse another month, or check back soon.
+          {t('st.cal.gridEmpty', 'No open slots yet for this hub — browse another month, or check back soon.')}
         </div>
       )}
 
@@ -257,7 +261,7 @@ export const StudentBookingCalendarGrid = ({
                         isDark ? "bg-white/10 text-white/70 hover:bg-white/20" : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                       )}
                     >
-                      +{overflowSlots.length} more
+                      {t('st.cal.more', { n: overflowSlots.length, defaultValue: '+{{n}} more' })}
                     </button>
                   </PopoverTrigger>
                   <PopoverContent className="w-56 p-2" align="start">
@@ -293,15 +297,15 @@ export const StudentBookingCalendarGrid = ({
       <div className={cn("mt-4 p-3 rounded-lg text-sm text-muted-foreground flex items-center gap-4", isDark ? "bg-white/5" : "bg-muted/50")}>
         <span className="flex items-center gap-1.5">
           <span className={cn("inline-block w-3 h-3 rounded-sm", isDark ? "bg-emerald-500/40" : "bg-emerald-200")} />
-          Open
+          {t('st.cal.open', 'Open')}
         </span>
         <span className="flex items-center gap-1.5">
           <span className="inline-block w-3 h-3 rounded-sm bg-indigo-600" />
-          Selected
+          {t('st.cal.selected', 'Selected')}
         </span>
         <Button variant="ghost" size="sm" className="ml-auto h-7 text-xs" onClick={() => window.dispatchEvent(new Event('availability-changed'))}>
           <RefreshCcw className="w-3 h-3 mr-1" />
-          Refresh
+          {t('st.cal.refresh', 'Refresh')}
         </Button>
       </div>
 
@@ -322,10 +326,10 @@ export const StudentBookingCalendarGrid = ({
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Clock className="w-4 h-4" />
                 <span>
-                  {format(selectedSlot.startTime, "EEE, MMM d")} · {formatTime(selectedSlot.startTime)} – {formatTime(selectedSlot.endTime)}
+                  {selectedSlot.startTime.toLocaleDateString(i18n.language, { weekday: 'short', month: 'short', day: 'numeric' })} · {formatTime(selectedSlot.startTime)} – {formatTime(selectedSlot.endTime)}
                 </span>
                 <Badge variant="secondary" className="ml-1 text-xs">
-                  {selectedSlot.duration}min
+                  {t('st.cal.min', { n: selectedSlot.duration, defaultValue: '{{n}} min' })}
                 </Badge>
               </div>
             </div>
@@ -335,11 +339,11 @@ export const StudentBookingCalendarGrid = ({
               className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-[0_0_15px_rgba(99,102,241,0.3)]"
             >
               {isLoading ? (
-                <span className="animate-pulse">Booking…</span>
+                <span className="animate-pulse">{t('st.cal.booking', 'Booking…')}</span>
               ) : (
                 <>
                   <CheckCircle className="w-4 h-4 mr-2" />
-                  Book Now
+                  {t('st.cal.bookNow', 'Book Now')}
                 </>
               )}
             </Button>
@@ -350,7 +354,7 @@ export const StudentBookingCalendarGrid = ({
       {localSlots.length === 0 && (
         <div className="mt-2 flex justify-center">
           <Button variant="outline" size="sm" onClick={() => navigate('/student')}>
-            Back to Dashboard
+            {t('st.cal.back', 'Back to Dashboard')}
           </Button>
         </div>
       )}

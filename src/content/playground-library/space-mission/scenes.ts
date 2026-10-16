@@ -15,7 +15,7 @@
  * Planet Weather Report ★ (`weather-report`).
  * ========================================================================= */
 
-import { CAST, VOICE_KEY, type CharKey, type Scene } from '../welcome-town/scenes';
+import { CAST, VOICE_KEY, type CharKey, type ReaderPage, type Scene } from '../welcome-town/scenes';
 
 export type { CharKey, Scene };
 export { CAST, VOICE_KEY };
@@ -42,19 +42,19 @@ export const numCard = (n: number) => {
 };
 
 /** The unit's reading strand (plan §4). */
-export const LOST_ROBOT: { img: string; lines: { who?: CharKey; text: string }[] }[] = [
-  { img: lostRobot(1), lines: [{ text: 'Look! The stars! There are a lot of stars.' }] },
-  { img: lostRobot(2), lines: [{ who: 'nova', text: 'Hello! I am Captain Nova. This is my rocket.' }] },
-  { img: lostRobot(3), lines: [{ text: 'Count the stars! Ten, twenty, thirty, forty!' }] },
-  { img: lostRobot(4), lines: [{ who: 'nova', text: 'Oh no! Where is Beep? Beep is my robot. He is lost!' }] },
-  { img: lostRobot(5), lines: [{ text: 'Go up! Go left! The moon is above the rocket.' }] },
-  { img: lostRobot(6), lines: [{ text: 'It is hot and sunny. Beep is not here.' }] },
-  { img: lostRobot(7), lines: [{ text: 'It is windy! Up, up goes Biscuit’s hat!' }] },
-  { img: lostRobot(8), lines: [{ text: 'It is cold and snowy. Look! Little tracks.' }] },
-  { img: lostRobot(9), lines: [{ text: 'Beep, beep! It is below us. Go down! Go right!' }] },
-  { img: lostRobot(10), lines: [{ who: 'beep', text: 'I am cold. I am lost!' }] },
-  { img: lostRobot(11), lines: [{ text: 'Biscuit finds Beep! Thank you, Biscuit!' }] },
-  { img: lostRobot(12), lines: [{ text: 'Ten, nine, eight… Go! Up, up, up! Beep is home.' }] },
+export const LOST_ROBOT: ReaderPage[] = [
+  { img: lostRobot(1), lines: [{ text: 'Look! The stars! There are a lot of stars.' }], check: { who: 'pip', question: 'What do they see?', answer: 'Stars', options: [{ label: 'The moon', img: item('moon') }, { label: 'Stars', img: item('star-gold') }, { label: 'The sun', img: item('sun') }] } },
+  { img: lostRobot(2), lines: [{ who: 'nova', text: 'Hello! I am Captain Nova. This is my rocket.' }], check: { who: 'pip', question: 'Who is this?', answer: 'Captain Nova', options: [{ label: 'Captain Nova', img: item('nova') }, { label: 'Beep', img: item('beep') }, { label: 'Biscuit', img: item('dog') }] } },
+  { img: lostRobot(3), lines: [{ text: 'Count the stars! Ten, twenty, thirty, forty!' }], check: { who: 'pip', question: 'How many stars?', answer: 'Forty', options: [{ label: 'Twenty' }, { label: 'Forty' }, { label: 'Thirty' }] } },
+  { img: lostRobot(4), lines: [{ who: 'nova', text: 'Oh no! Where is Beep? Beep is my robot. He is lost!' }], check: { who: 'leo', question: 'Who is lost?', answer: 'Beep', options: [{ label: 'Biscuit', img: item('dog') }, { label: 'Captain Nova', img: item('nova') }, { label: 'Beep', img: item('beep') }] } },
+  { img: lostRobot(5), lines: [{ text: 'Go up! Go left! The moon is above the rocket.' }], check: { who: 'pip', question: 'What is above the rocket?', answer: 'The moon', options: [{ label: 'The moon', img: item('moon') }, { label: 'The sun', img: item('sun') }, { label: 'A star', img: item('star-gold') }] } },
+  { img: lostRobot(6), lines: [{ text: 'It is hot and sunny. Beep is not here.' }], check: { who: 'pip', question: 'What is the weather?', answer: 'Hot and sunny', options: [{ label: 'Hot and sunny', img: item('planet-sun') }, { label: 'Rainy', img: item('planet-rain') }, { label: 'Cold and snowy', img: item('planet-ice') }] } },
+  { img: lostRobot(7), lines: [{ text: 'It is windy! Up, up goes Biscuit’s hat!' }], check: { who: 'leo', question: 'What goes up?', answer: 'The hat', options: [{ label: 'The rocket', img: item('rocket') }, { label: 'The hat', img: item('hat') }, { label: 'A star', img: item('star-gold') }] } },
+  { img: lostRobot(8), lines: [{ text: 'It is cold and snowy. Look! Little tracks.' }], check: { who: 'pip', question: 'What is the weather?', answer: 'Cold and snowy', options: [{ label: 'Hot and sunny', img: item('planet-sun') }, { label: 'Windy', img: item('planet-wind') }, { label: 'Cold and snowy', img: item('planet-ice') }] } },
+  { img: lostRobot(9), lines: [{ text: 'Beep, beep! It is below us. Go down! Go right!' }], check: { who: 'pip', question: 'Where is Beep?', answer: 'Below us', options: [{ label: 'Below us' }, { label: 'Above us' }, { label: 'In the rocket' }] } },
+  { img: lostRobot(10), lines: [{ who: 'beep', text: 'I am cold. I am lost!' }], check: { who: 'pip', question: 'How is Beep?', answer: 'Cold', options: [{ label: 'Hot' }, { label: 'Cold' }, { label: 'Hungry' }] } },
+  { img: lostRobot(11), lines: [{ text: 'Biscuit finds Beep! Thank you, Biscuit!' }], check: { who: 'leo', question: 'Who finds Beep?', answer: 'Biscuit', options: [{ label: 'Biscuit', img: item('dog') }, { label: 'Captain Nova', img: item('nova') }, { label: 'Leo', img: item('leo-run') }] } },
+  { img: lostRobot(12), lines: [{ text: 'Ten, nine, eight… Go! Up, up, up! Beep is home.' }], check: { who: 'pip', question: 'Where is Beep now?', answer: 'Home', options: [{ label: 'Lost' }, { label: 'On the moon' }, { label: 'Home' }] } },
 ];
 
 const helloSong = (id: string, bg: string): Scene => ({
@@ -145,6 +145,20 @@ export const LESSON_A1U3L1_SCENES: Scene[] = [
   { id: 'sm-meet-forty', kind: 'meet', focus: ['forty'], bg: lostRobot(3), who: 'nova', cardSide: 'left', teacher: 'Present: count the groups of ten stars with Nova — ten, twenty, thirty, forty. Then say the sentence.', line: 'Look! There are forty stars!', repeat: 'There are forty stars.' },
   { id: 'sm-echo', kind: 'echo', bg: lostRobot(3), who: 'pip', textSide: 'top', teacher: 'Guided: say it like Pip — loud, then quiet!', word: 'There are thirty stars.' },
   { id: 'sm-echo-2', kind: 'echo', bg: bgStation, who: 'leo', textSide: 'top', teacher: 'Guided: count with Leo — faster each time!', word: 'Ten, twenty, thirty, forty, fifty!' },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game.
+  {
+    id: 'sm-space-match', kind: 'picture-match', look: 'cards', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each word and drags it under its picture (or taps the word, then the picture), then reads it aloud.',
+    items: [
+      { word: 'a star', img: item('star-gold') },
+      { word: 'the moon', img: item('moon') },
+      { word: 'a rocket', img: item('rocket') },
+      { word: 'a planet', img: item('planet-ice') },
+      { word: 'a robot', img: item('beep') },
+      { word: 'fifty', img: numCard(50) },
+    ],
+    bg: bgStation,
+  },
   {
     id: 'sm-count-catch', kind: 'prea1', teacher: 'Guided: Count & Catch! Each star balloon is worth ten. Pop them in order and count: ten, twenty, thirty… one hundred!',
     scene: { id: 'sm-count-catch', kind: 'count-balloons', bg: bgDeep, who: 'pip', total: 10, step: 10, teacher: 'Every balloon is ten! Pop and count: ten, twenty, thirty…' },
@@ -206,7 +220,7 @@ export const LESSON_A1U3L1_SCENES: Scene[] = [
     pages: LOST_ROBOT.slice(0, 3),
   },
   {
-    id: 'sm-read-match', kind: 'picture-match', prompt: 'Read and match',
+    id: 'sm-read-match', kind: 'picture-match', look: 'frames', prompt: 'Read and match',
     teacher: 'Reading: read each sentence and drag it under its picture. Then read it aloud.',
     items: [
       { word: 'This is my rocket.', img: item('rocket') },
@@ -387,6 +401,18 @@ export const LESSON_A1U3L2_SCENES: Scene[] = [
     ],
   },
   { id: 'sm2-meet-above', kind: 'meet', focus: ['above'], bg: lostRobot(5), who: 'nova', cardSide: 'left', teacher: 'Present: hands up high for “above”. Then say the sentence with Nova.', line: 'Look! The moon is above the rocket.', repeat: 'The moon is above the rocket.' },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game.
+  {
+    id: 'sm2-direction-match', kind: 'picture-match', look: 'frames', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each sentence and drags it under its picture (or taps it, then the picture), then reads it aloud.',
+    items: [
+      { word: 'Go up to the moon!', img: item('moon') },
+      { word: 'Go down to the planet!', img: item('planet-ice') },
+      { word: 'Go left to the star!', img: item('star-gold') },
+      { word: 'Go right to the rocket!', img: item('rocket') },
+    ],
+    bg: bgStation,
+  },
   /* ★ Signature: Rocket Maze — listen first, then the child gives the orders */
   {
     id: 'sm2-rocket-maze', kind: 'rocket-maze', bg: bgDeep, who: 'nova', rocketImg: item('rocket'), title: 'Rocket Maze: fly to the moon!',
@@ -648,6 +674,18 @@ export const LESSON_A1U3L3_SCENES: Scene[] = [
         { who: 'pip', sentence: 'Where is Beep? He’s below us.', img: item('beep'), imgLabel: 'Beep' },
       ],
     },
+  },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game.
+  {
+    id: 'sm3-answer-match', kind: 'picture-match', look: 'polaroids', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each sentence and drags it under its picture (or taps it, then the picture), then reads it aloud.',
+    items: [
+      { word: 'There are fifty.', img: numCard(50) },
+      { word: 'There are twenty.', img: numCard(20) },
+      { word: 'It’s above the rocket.', img: item('moon') },
+      { word: 'He’s below us.', img: item('beep') },
+    ],
+    bg: bgDeep,
   },
   {
     id: 'sm3-listen-colour', kind: 'prea1', teacher: 'Guided: Listen and Colour (Cambridge Starters format). Pick the paint, then tap the planet or star you hear. Big or small? Pass: 4 of 5.',
@@ -919,6 +957,19 @@ export const LESSON_A1U3L4_SCENES: Scene[] = [
       ],
     },
   },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game.
+  {
+    id: 'sm4-weather-match', kind: 'picture-match', look: 'chalk', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each sentence and drags it under its picture (or taps it, then the picture), then reads it aloud.',
+    items: [
+      { word: 'It’s sunny.', img: WEATHER.sunny.img },
+      { word: 'It’s windy.', img: WEATHER.windy.img },
+      { word: 'It’s cloudy.', img: WEATHER.cloudy.img },
+      { word: 'It’s rainy.', img: WEATHER.rainy.img },
+      { word: 'It’s snowy.', img: WEATHER.snowy.img },
+    ],
+    bg: bgStation,
+  },
   /* ★ Signature: Planet Weather Report */
   {
     id: 'sm4-weather-report', kind: 'weather-report', bg: bgStation, who: 'nova', title: 'Space Weather Report',
@@ -1155,6 +1206,17 @@ export const LESSON_A1U3L5_SCENES: Scene[] = [
   { id: 'sm5-meet-beep', kind: 'meet', focus: ['cold'], bg: lostRobot(10), who: 'beep', cardSide: 'right', teacher: 'Present: meet Beep at last! Shiver with him, then say his line.', line: 'Beep, beep! I am cold. I am lost!', repeat: 'I am cold!' },
   { id: 'sm5-echo-thanks', kind: 'echo', bg: lostRobot(11), who: 'nova', textSide: 'top', teacher: 'Guided: a happy voice! Say thank you to Biscuit.', word: 'Thank you, Biscuit!' },
   { id: 'sm5-meet-biscuit', kind: 'meet', focus: ['finds'], bg: lostRobot(11), who: 'pip', cardSide: 'left', teacher: 'Present: who is the hero? Point to Biscuit and say it.', line: 'Look! Biscuit finds Beep!', repeat: 'Biscuit finds Beep!' },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game.
+  {
+    id: 'sm5-story-match', kind: 'picture-match', look: 'cards', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each sentence and drags it under its picture (or taps it, then the picture), then reads it aloud.',
+    items: [
+      { word: 'Oh no! Beep is lost!', img: lostRobot(4), crop: { x: 0, y: 0, w: 100, h: 100 }, imgAspect: 16 / 9 },
+      { word: 'I am cold. I am lost!', img: lostRobot(10), crop: { x: 0, y: 0, w: 100, h: 100 }, imgAspect: 16 / 9 },
+      { word: 'Look! Biscuit finds Beep!', img: lostRobot(11), crop: { x: 0, y: 0, w: 100, h: 100 }, imgAspect: 16 / 9 },
+    ],
+    bg: bgStation,
+  },
   {
     id: 'sm5-story-order', kind: 'prea1', teacher: 'Guided: put the story pictures in order, then tell it: first, then, then, at the end!',
     scene: {
@@ -1758,7 +1820,7 @@ export const LESSON_A1U3L7_SCENES: Scene[] = [
   },
   /* Practise again — for any part below the pass mark, or as extra time */
   {
-    id: 'sm7-pa-match', kind: 'picture-match', prompt: 'Practise again: read and match',
+    id: 'sm7-pa-match', kind: 'picture-match', look: 'polaroids', prompt: 'Practise again: read and match',
     teacher: 'Practise again (Part 2): read each sentence and drag it under its picture.',
     items: [
       { word: 'It’s cold and snowy.', img: item('planet-ice') },

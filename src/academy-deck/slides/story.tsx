@@ -9,15 +9,26 @@ export function StoryView({ slide }: { slide: StorySlide }) {
   const { artBase, done, speak, reduced } = useDeck();
   const flat = slide.beats.flatMap((b, bi) => b.lines.map((l) => ({ ...l, bi })));
   const [i, setI] = useState(0);
+  const [shown, setShown] = useState(!slide.listenFirst);
   const [broken, setBroken] = useState<Record<string, boolean>>({});
+  const [auto, setAuto] = useState(true);
+  const [title, setTitle] = useState(true);
+  const timer = useRef<number | undefined>(undefined);
   const line = flat[Math.min(i, flat.length - 1)];
   const lastRef = useRef(-1);
   useEffect(() => {
     if (lastRef.current === i) return;
     lastRef.current = i;
-    void speak(line.who, line.text);
+    window.clearTimeout(timer.current);
+    let live = true;
+    void speak(line.who, line.text).then((played) => {
+      // play the scene on its own: after the voice ends, a short beat, then the next line (a silent clip waits for a tap)
+      if (live && played && auto && i < flat.length - 1) timer.current = window.setTimeout(() => setI((n) => Math.min(flat.length - 1, n + 1)), 700);
+    });
     if (i >= flat.length - 1) done();
-  }, [i, line, flat.length, speak, done]);
+    return () => { live = false; window.clearTimeout(timer.current); };
+  }, [i, line, flat.length, speak, done, auto]);
+  useEffect(() => { const t = window.setTimeout(() => setTitle(false), reduced ? 900 : 2000); return () => window.clearTimeout(t); }, [reduced]);
   const next = () => setI((n) => Math.min(flat.length - 1, n + 1));
   const back = () => setI((n) => Math.max(0, n - 1));
   return (
@@ -28,8 +39,13 @@ export function StoryView({ slide }: { slide: StorySlide }) {
         </div>
       ))}
       <div className="ad-story-shade" aria-hidden />
-      <p className="ad-story-sub" key={i} style={{ ['--who' as string]: COLOR[line.who as keyof typeof COLOR] }} aria-live="polite"><b>{line.who}</b> {line.text}</p>
+      <div className="ad-story-bars" aria-hidden />
+      {title && <div className="ad-story-title" aria-hidden><span>{slide.title}</span></div>}
+      <p className="ad-story-sub" key={`${i}${shown}`} hidden={!shown} style={{ ['--who' as string]: COLOR[line.who as keyof typeof COLOR] }} aria-live="polite"><b>{line.who}</b> {line.text}</p>
+      {!shown && <p className="ad-story-listen" role="status"><Icon name="speaker" /> {auto ? 'Listen to the scene. It plays on its own; tap Pause to stop.' : 'Listen. Tap “Next line” to hear the next one.'}</p>}
       <div className="ad-story-ctl" onClick={(e) => e.stopPropagation()}>
+        {slide.listenFirst && <button type="button" className="ad-btn" onClick={() => setShown((v) => !v)}>{shown ? 'Hide the text' : 'Show the text'}</button>}
+        <button type="button" className="ad-btn" onClick={() => setAuto((v) => !v)} aria-pressed={auto}>{auto ? 'Pause' : 'Play'}</button>
         <button type="button" className="ad-btn" onClick={back} disabled={i === 0} aria-label="Previous line">‹</button>
         <span className="ad-story-dots" aria-label={`Line ${i + 1} of ${flat.length}`}>{flat.map((_, k) => <i key={k} data-on={k === i} data-seen={k < i} />)}</span>
         <button type="button" className="ad-btn" onClick={next} disabled={i >= flat.length - 1} aria-label="Next line"><Icon name="speaker" /> Next line ›</button>

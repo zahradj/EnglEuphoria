@@ -3,11 +3,11 @@ import { describe, expect, it } from 'vitest';
 import { ACADEMY_CAST_NAMES, ACADEMY_LESSON_BLUEPRINTS, ACADEMY_SEASONS, MAX_ITEMS_PER_SESSION, allocateItems, EPISODES, RECOMMENDED_RHYTHM, RUN_OF_SHOW, VOCAB_GAMES_RULE, VOCAB_GAME_MENU, validateVocabGamePicks, suggestVocabGames } from '..';
 
 describe('Academy lesson blueprints', () => {
-  it('has one blueprint per session: 560, unique ids, correct order', () => {
-    expect(ACADEMY_LESSON_BLUEPRINTS).toHaveLength(560);
-    expect(new Set(ACADEMY_LESSON_BLUEPRINTS.map((b) => b.id)).size).toBe(560);
+  it('has one blueprint per session: 640, unique ids, correct order', () => {
+    expect(ACADEMY_LESSON_BLUEPRINTS).toHaveLength(640);
+    expect(new Set(ACADEMY_LESSON_BLUEPRINTS.map((b) => b.id)).size).toBe(640);
     expect(ACADEMY_LESSON_BLUEPRINTS[0].id).toBe('A1-S01-E1');
-    expect(ACADEMY_LESSON_BLUEPRINTS[559].id).toBe('C1-S16-E8');
+    expect(ACADEMY_LESSON_BLUEPRINTS[639].id).toBe('C1-S18-E8');
   });
 
   it('allocates every Season budget exactly, never above the per-session cap, and nothing in E7/E8', () => {

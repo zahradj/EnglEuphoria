@@ -53,7 +53,13 @@ import * as magicCastleScenes from '../src/content/playground-library/magic-cast
 import * as jungleScenes from '../src/content/playground-library/jungle-adventure/scenes.ts';
 import * as spaceScenes from '../src/content/playground-library/space-mission/scenes.ts';
 import * as foodScenes from '../src/content/playground-library/food-festival/scenes.ts';
+import * as monsterScenes from '../src/content/playground-library/monster-town/scenes.ts';
 import { surveyQuestion, surveyAnswer, surveyReport, CAFE_WRONG, CAFE_YES } from '../src/content/playground-library/welcome-town/scene-components/foodRules.ts';
+import { BUILDER_WRONG, builderHint } from '../src/content/playground-library/welcome-town/scene-components/monsterRules.ts';
+import { METER_ASK, METER_WRONG } from '../src/content/playground-library/welcome-town/scene-components/meterRules.ts';
+import { GW_ASK, GW_GOT_IT, GW_HIDE, GW_LOOK, GW_NOT, GW_WHO, gwGuess, gwRight } from '../src/content/playground-library/welcome-town/scene-components/guessWhoRules.ts';
+import { MIXUP_FIND, MIXUP_FIXED, MIXUP_NOT_THERE, MIXUP_PICK } from '../src/content/playground-library/welcome-town/scene-components/mixupRules.ts';
+import { moodSentence, moodReason, moodAsk, MOOD_PULL, MOOD_WRONG } from '../src/content/playground-library/welcome-town/scene-components/moodRules.ts';
 import { placeSentence, roomSentences, whoseQuestion, ownerSentence, OWNER_YES, OWNER_NO, ROOM_AGAIN, ROOM_FREE_START, ROOM_DESCRIBE } from '../src/content/playground-library/welcome-town/scene-components/roomRules.ts';
 import { homeworkA1U9L1Lines } from '../src/content/playground-library/magic-castle/homework.ts';
 import { allQuestLines } from '../src/content/homework-quests/registry.ts';
@@ -389,7 +395,7 @@ const UNIT1_EXTRACTORS = {
   'sticker-reward': (s) => [[s.who, 'You earned a sticker!'], [s.who, s.line]],
   'home-mission': (s) => [[s.who, s.line], [s.who, 'Mission accepted!']],
   // Mirrors LiftFlapScene.tsx's liftFlapLines().
-  'lift-flap': (s) => [[s.who, s.question], [s.who, s.notYet], ...(s.guided ? [[s.who, 'What is it?']] : []), ...(s.spots ?? []).flatMap((p) => [[s.who, p.ask], [s.who, p.reveal], ...(s.guided ? [[s.who, `${s.question} ${p.ask}`], [s.who, p.say ?? p.reveal.replace(/^(No|Yes)!\s*/i, '')]] : [])])],
+  'lift-flap': (s) => [[s.who, s.question], [s.who, s.notYet], ...(s.guided ? [[s.who, s.whatPrompt ?? 'What is it?']] : []), ...(s.spots ?? []).flatMap((p) => [[s.who, p.ask], [s.who, p.reveal], ...(s.guided ? [[s.who, `${s.question} ${p.ask}`], [s.who, p.say ?? p.reveal.replace(/^(No|Yes)!\s*/i, '')]] : [])])],
   // Mirrors DrawPathScene.tsx's drawPathLines().
   'draw-path': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), [s.who, `Start at ${({ pip: 'Pip', mia: 'Mia', bella: 'Bella', willow: 'Willow', leo: 'Leo' })[s.walker] ?? s.walker}!`]],
   // Mirror SimonTouchScene.tsx's simonTouchLines() / BodyStackScene.tsx's bodyStackLines().
@@ -410,7 +416,7 @@ const UNIT1_EXTRACTORS = {
     [s.who, s.doneLine],
   ],
   'size-line': (s) => [
-    [s.who, 'Who is the biggest?'], [s.who, 'Who is next?'], [s.who, 'Not yet! Who is bigger?'], [s.who, s.lastLine],
+    [s.who, s.firstLine ?? 'Who is the biggest?'], [s.who, 'Who is next?'], [s.who, s.wrongLine ?? 'Not yet! Who is bigger?'], [s.who, s.lastLine],
     ...(s.members ?? []).map((m) => [s.who, m.reply]),
     [s.who, s.doneLine],
   ],
@@ -628,7 +634,7 @@ const UNIT1_EXTRACTORS = {
   // Mirror SandPrintsScene.tsx's sandPrintsLines().
   'sand-prints': (s) => [...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]), ...(s.parts ?? []).map((p) => [s.who, `That's your ${p.label}! Try again!`]), [s.who, s.doneLine]],
   // Mirror SoundPickScene.tsx's soundPickLines().
-  'sound-pick': (s) => [[s.who, 'Which one starts with this sound?'], ...(s.rounds ?? []).flatMap((r) => (r.options ?? []).map((o, i) => [s.who, i === r.answer ? `Yes! ${o.word.charAt(0).toUpperCase() + o.word.slice(1)}!` : `${o.word.charAt(0).toUpperCase() + o.word.slice(1)}! Try again!`]))],
+  'sound-pick': (s) => [[s.who, s.ask ?? 'Which one starts with this sound?'], ...(s.rounds ?? []).flatMap((r) => (r.options ?? []).map((o, i) => [s.who, i === r.answer ? `Yes! ${o.word.charAt(0).toUpperCase() + o.word.slice(1)}!` : `${o.word.charAt(0).toUpperCase() + o.word.slice(1)}! Try again!`]))],
   'ring-toss': (s) => (s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, r.reply]]),
   // Mirror TidyUpScene.tsx's tidyUpLines() / PeekPopScene.tsx's peekPopLines().
   // Mirror ColorMonstersScene.tsx's colorMonstersLines().
@@ -736,6 +742,9 @@ const UNIT1_EXTRACTORS = {
  *  call sites. Character keys here are the story's CharKey (e.g.
  *  'marigold') and must be normalized through `voiceOf` before use — see
  *  `resolveWho` below. */
+/** Reader picture questions (owner 2026-10-14): the question and "Yes! <answer>" in the asker's voice. */
+const readerChecks = (s) => (s.noChecks ? [] : (s.pages ?? []).flatMap((p) => (p.check ? [[p.check.who ?? 'teacher', p.check.question], [p.check.who ?? 'teacher', `Yes! ${p.check.answer}`]] : [])));
+
 const WT_EXTRACTORS = {
   // Universal "Remember?" warm-up (RecallWarmupScene.tsx's recallWarmupLines()) — was missing here, so A1/A2
   // warm-up lines were never baked and the audit could not see them.
@@ -790,7 +799,7 @@ const WT_EXTRACTORS = {
   'word-build': (s) => (s.rounds ?? []).map((r) => ['pip', r.word]),
   finale: (s) => (s.line ? [[s.who, s.line]] : []),
   'tongue-twister': (s) => [[s.who, s.line]],
-  reader: (s) => (s.pages ?? []).flatMap((p) => (p.lines ?? []).flatMap((l) => [[l.who ?? 'teacher', l.text], ...l.text.split(/\s+/).map((w) => [l.who ?? 'teacher', w.replace(/[^A-Za-z'’-]/g, '')]).filter(([, w]) => w)])),
+  reader: (s) => [...readerChecks(s), ...(s.pages ?? []).flatMap((p) => (p.lines ?? []).flatMap((l) => [[l.who ?? 'teacher', l.text], ...l.text.split(/\s+/).map((w) => [l.who ?? 'teacher', w.replace(/[^A-Za-z'’-]/g, '')]).filter(([, w]) => w)]))],
   // Verified against welcome-town/SceneRenderer.tsx call sites.
   // FeelingsSurveyScene.tsx: intro, "How are you, <name>?" + "<name> is <feeling>!" (host), "I am <feeling>!" (friend).
   'chat-chain': (s) => [[s.partner, s.intro], ...(s.turns ?? []).map((t) => [t.who === 'student' ? 'pip' : t.who, t.line])],
@@ -872,6 +881,15 @@ const WT_EXTRACTORS = {
     ...(s.icons ?? []).map((i) => ['teacher', i.label]),
     ...(s.planets ?? []).flatMap((p) => [[s.who, p.forecast], ['teacher', p.report]]),
     ...(s.bag ?? []).flatMap((b) => [[s.who, b.line], ['teacher', b.say]])],
+  'monster-builder': (s) => [[s.who, s.doneLine], ...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], ['teacher', `This is ${r.name}! ${r.line}`],
+    ...['eyes', 'horns', 'mouth'].map((p) => [s.who, `${BUILDER_WRONG} ${builderHint(p, r.eyes, s.horns?.[r.horns]?.label ?? '', s.mouths?.[r.mouth]?.label ?? '')}`])])],
+  'guess-who': (s) => [[s.who, s.doneLine], ...[GW_ASK, GW_GOT_IT, GW_HIDE, GW_LOOK, GW_NOT, GW_WHO].map((l) => [s.who, l]),
+    ...(s.monsters ?? []).flatMap((m) => [[s.who, gwGuess(m.name)], [s.who, gwRight(m.name)]]),
+    ...(s.questions ?? []).flatMap((q) => [[s.who, q.yes], [s.who, q.no]]), ...(s.hideAsks ?? []).map((q) => [s.who, q.ask])],
+  'feelings-meter': (s) => [[s.who, s.doneLine], [s.who, METER_ASK], [s.who, METER_WRONG], ...(s.points ?? []).map((pt) => ['teacher', pt.line])],
+  'monster-mixup': (s) => [[s.who, s.doneLine], [s.who, MIXUP_NOT_THERE], [s.who, MIXUP_PICK], ...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, `${r.line} ${MIXUP_FIND}`], ['teacher', `${MIXUP_FIXED} ${r.say}`]])],
+  'mood-machine': (s) => [[s.who, s.doneLine], [s.who, MOOD_PULL], [s.who, MOOD_WRONG],
+    ...(s.rounds ?? []).flatMap((r) => [[s.who, `${moodReason(r.reason)} ${moodAsk(s.monster?.name ?? '')}`], ['teacher', moodSentence(s.monster?.name ?? '', s.feelings?.[r.feeling]?.feeling ?? '', r.reason)]])],
   'food-survey': (s) => [[s.who, s.doneLine], [s.who, 'Ask your friends! Tap a box.'], [s.who, 'Now read the chart. Likes or doesn’t like?'], [s.who, 'Look at the chart again!'],
     ...(s.friends ?? []).flatMap((fr, f) => (s.foods ?? []).flatMap((fd, c) => [['teacher', surveyQuestion(fd.label, fr.name)], [fr.who, surveyAnswer(!!s.answers?.[f]?.[c])]])),
     ...(s.reports ?? []).map((r) => ['teacher', surveyReport(s.friends[r.friend].name, s.foods[r.food].label, !!s.answers?.[r.friend]?.[r.food])])],
@@ -946,6 +964,7 @@ const ENGINES = [
   { scenesModule: jungleScenes, extractors: WT_EXTRACTORS, resolveWho: (who) => wtScenes.VOICE_KEY[who] ?? who },
   { scenesModule: spaceScenes, extractors: WT_EXTRACTORS, resolveWho: (who) => wtScenes.VOICE_KEY[who] ?? who },
   { scenesModule: foodScenes, extractors: WT_EXTRACTORS, resolveWho: (who) => wtScenes.VOICE_KEY[who] ?? who },
+  { scenesModule: monsterScenes, extractors: WT_EXTRACTORS, resolveWho: (who) => wtScenes.VOICE_KEY[who] ?? who },
 ];
 
 /** Homework games: every line they can say, already as (voice, text). */

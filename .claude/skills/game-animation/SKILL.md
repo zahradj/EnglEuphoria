@@ -111,6 +111,21 @@ Gotchas learned here: an element with `initial` but no `animate` stays at its in
 keep hop state in a `useState` with a timeout so a re-render mid-jump doesn't cut it; Playwright needs `force: true` on
 pieces that never stop bobbing.
 
+## 5b. The aesthetic pass (owner 2026-10-14: a hard rule for every activity)
+
+Before a game is done, design all five, then check the screenshot at 1280×720 and 390×844:
+1. **Colour combinations** — take 3-4 colours from the lesson picture (one accent for "tap me", one for "right"
+   = emerald, soft tints for cards); never default white-on-white or random primaries; keep text ≥ 4.5:1 contrast.
+2. **Look** — pieces are painted art or stickers with depth: a 3D lip (`0 0.9vh 0 <darker>`), soft drop shadow,
+   rounded shapes, a slight tilt for playfulness; no flat white boxes standing in for objects.
+3. **Layout** — one focus; pieces never cover the picture's key part; even spacing; instructions on a readable pill.
+4. **Icons** — one family, meaningful, ≥ 40 px; speakers, ticks and stars look the same in every game.
+5. **Legibility over busy pictures** — if pieces float over a detailed scene, render the picture with
+   `CalmBg` (`strong` for small or spread pieces) and give small pieces a light chip/bubble backing. Never leave
+   a dark item on a dark area or a busy item on a busy area (Train Recall carrots on carrot crates: fixed this way).
+6. **Repeated activity = new designs**, each through this same pass (Listen and Match: cards/balloons/doors/lily pads;
+   Read and Match: cards/frames/polaroids/chalk).
+
 ## 6. Characters (next level)
 
 - Now: sticker sprites + `Hopper` (breathe, hop, face direction) + emotion sprites (`getEmotionSprite`) swapped on reactions.

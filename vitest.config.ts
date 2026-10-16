@@ -9,6 +9,8 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
     css: true,
+    // the Academy deck's stylesheets are parsed by jsdom on every render (css: true), so its play-through tests take 4-6 s; give them room
+    testTimeout: 20000,
     // .claude/worktrees/* are separate git worktrees other agent sessions
     // left behind, each with its own stale copy of the whole src tree.
     // Without this, vitest's default include picks up every one of them

@@ -6,7 +6,7 @@ import * as sfx from '../sfx';
 import { Confetti } from '../fx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
 import { CLAY_BUTTON, CropPic, THICK_WORDS, sayWithin } from './shared';
-import { Bursts, useBursts, useShake } from './gameFx';
+import { Bursts, CalmBg, useBursts, useShake } from './gameFx';
 
 /* ---------- Feed the Ducks (Pre-A1 Unit 5 Lesson 5 signature game) ----------
  * After the "My Day with Dad" film: ducks swim on the pond, each carrying a
@@ -73,7 +73,9 @@ export function DuckFeedScene({ scene, onWin, onNext, sync }: { scene: Feed; onW
   };
 
   return (
-    <motion.div className="absolute inset-0 select-none overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }} animate={shakeCtl}>
+    <motion.div className="absolute inset-0 select-none overflow-hidden" animate={shakeCtl}>
+      {/* busy picture calmed down so the floating pieces are the clearest thing (owner 2026-10-14) */}
+      <CalmBg img={scene.bg} strength="strong" />
       {done && <Confetti count={60} />}
       <div className="pointer-events-none absolute inset-x-0 top-16 z-30 flex flex-col items-center gap-1 px-14">
         <span className="text-center font-black leading-tight text-white" style={{ ...THICK_WORDS, fontSize: 'clamp(1.2rem, min(calc(3.4*var(--svw,1vw)), 5.6vh), 2.8rem)' }}>

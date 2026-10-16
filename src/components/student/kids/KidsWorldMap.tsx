@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion';
 import { ClipboardCheck, X, Backpack, Play } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -73,6 +74,7 @@ export const KidsWorldMap: React.FC<KidsWorldMapProps> = ({
   onLessonComplete,
   onPlayNext,
 }) => {
+  const { t } = useTranslation();
   const [selectedTheme] = useState<ThemeType>(theme);
   const [selectedLesson, setSelectedLesson] = useState<PlaygroundLesson | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -198,7 +200,7 @@ export const KidsWorldMap: React.FC<KidsWorldMapProps> = ({
           transition={{ delay: 0.5 }}
           className="absolute -top-8 left-1/2 -translate-x-1/2 bg-white px-3 py-1 rounded-full text-sm font-bold text-purple-600 whitespace-nowrap shadow-lg"
         >
-          Let's go!
+          {t('st.map.letsGo', "Let's go!")}
         </motion.div>
       </motion.div>
     );
@@ -238,11 +240,11 @@ export const KidsWorldMap: React.FC<KidsWorldMapProps> = ({
           <button
             type="button"
             onClick={() => setHomeworkOpen(true)}
-            aria-label={`Homework${readyQuests ? `, ${readyQuests} ready` : ''}`}
+            aria-label={`${t('st.map.homework', 'Homework')}${readyQuests ? `, ${t('st.map.nReady', { n: readyQuests, defaultValue: '{{n}} ready' })}` : ''}`}
             className="relative bg-white/90 backdrop-blur rounded-full px-4 py-2 shadow-lg flex items-center gap-2 font-bold text-emerald-700 transition hover:scale-105 active:scale-95 focus:outline-none focus-visible:ring-4 focus-visible:ring-emerald-300"
           >
             <Backpack className="w-5 h-5" />
-            <span>Homework</span>
+            <span>{t('st.map.homework', 'Homework')}</span>
             {readyQuests > 0 && (
               <span className="absolute -right-1 -top-2 grid h-6 min-w-6 place-items-center rounded-full bg-rose-500 px-1.5 text-xs font-black text-white shadow">{readyQuests}</span>
             )}
@@ -255,7 +257,7 @@ export const KidsWorldMap: React.FC<KidsWorldMapProps> = ({
             className="bg-white/90 backdrop-blur rounded-full px-4 py-2 shadow-lg flex items-center gap-2 font-bold text-orange-700 transition hover:scale-105 active:scale-95 focus:outline-none focus-visible:ring-4 focus-visible:ring-orange-300"
           >
             <ClipboardCheck className="w-5 h-5" />
-            <span>Teacher's notes</span>
+            <span>{t('st.map.notes', "Teacher's notes")}</span>
           </button>
 
           {/* Progress indicator */}
@@ -274,7 +276,7 @@ export const KidsWorldMap: React.FC<KidsWorldMapProps> = ({
           className="absolute inset-0 z-[60] flex items-center justify-center bg-black/45 p-3 backdrop-blur-sm"
           role="dialog"
           aria-modal="true"
-          aria-label="Teacher's notes"
+          aria-label={t('st.map.notes', "Teacher's notes")}
           onClick={() => setNotesOpen(false)}
         >
           <motion.div
@@ -286,14 +288,14 @@ export const KidsWorldMap: React.FC<KidsWorldMapProps> = ({
             <div className="mb-3 flex items-start justify-between gap-3">
               <div>
                 <h2 className="flex items-center gap-2 text-xl font-bold text-orange-700">
-                  <ClipboardCheck className="w-6 h-6" /> Teacher's notes
+                  <ClipboardCheck className="w-6 h-6" /> {t('st.map.notes', "Teacher's notes")}
                 </h2>
-                <p className="text-sm text-orange-900/70">What your teacher wrote about your classes.</p>
+                <p className="text-sm text-orange-900/70">{t('st.map.notesSub', 'What your teacher wrote about your classes.')}</p>
               </div>
               <button
                 type="button"
                 onClick={() => setNotesOpen(false)}
-                aria-label="Close teacher's notes"
+                aria-label={t('st.map.closeNotes', "Close teacher's notes")}
                 className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-white text-orange-700 shadow transition hover:scale-110"
               >
                 <X className="w-5 h-5" />
@@ -310,7 +312,7 @@ export const KidsWorldMap: React.FC<KidsWorldMapProps> = ({
           className="absolute inset-0 z-[60] flex items-center justify-center bg-black/45 p-3 backdrop-blur-sm"
           role="dialog"
           aria-modal="true"
-          aria-label="Homework"
+          aria-label={t('st.map.homework', 'Homework')}
           onClick={() => setHomeworkOpen(false)}
         >
           <motion.div
@@ -322,21 +324,21 @@ export const KidsWorldMap: React.FC<KidsWorldMapProps> = ({
             <div className="mb-3 flex items-start justify-between gap-3">
               <div>
                 <h2 className="flex items-center gap-2 text-xl font-bold text-emerald-700">
-                  <Backpack className="w-6 h-6" /> Homework Forest
+                  <Backpack className="w-6 h-6" /> {t('st.map.forest', 'Homework Forest')}
                 </h2>
-                <p className="text-sm text-emerald-900/70">The homework quests of the lessons you finished.</p>
+                <p className="text-sm text-emerald-900/70">{t('st.map.forestSub', 'The homework quests of the lessons you finished.')}</p>
               </div>
               <button
                 type="button"
                 onClick={() => setHomeworkOpen(false)}
-                aria-label="Close homework"
+                aria-label={t('st.map.closeHw', 'Close homework')}
                 className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-white text-emerald-700 shadow transition hover:scale-110"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
             {questCards.length === 0 ? (
-              <p className="rounded-2xl bg-white p-4 text-center text-sm font-semibold text-emerald-900/70">No homework yet. Finish a lesson and its homework quest appears here!</p>
+              <p className="rounded-2xl bg-white p-4 text-center text-sm font-semibold text-emerald-900/70">{t('st.map.noHw', 'No homework yet. Finish a lesson and its homework quest appears here!')}</p>
             ) : (
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {questCards.map(({ quest }) => (
@@ -353,7 +355,7 @@ export const KidsWorldMap: React.FC<KidsWorldMapProps> = ({
                       onClick={() => navigate(`/homework-quest/${quest.id}`)}
                       className="mt-auto inline-flex items-center justify-center gap-1.5 rounded-full bg-orange-500 px-4 py-2 text-sm font-extrabold text-white shadow active:scale-95"
                     >
-                      <Play className="h-4 w-4" /> Start quest
+                      <Play className="h-4 w-4" /> {t('st.hw.start', 'Start quest')}
                     </button>
                   </div>
                 ))}

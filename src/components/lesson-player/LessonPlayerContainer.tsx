@@ -17,7 +17,7 @@ import { useStreak } from '@/hooks/useStreak';
 import { X, Volume2, VolumeX, Zap, Star, ChevronLeft, ChevronRight, Focus, BookOpen } from 'lucide-react';
 import LibraryDrawer from './LibraryDrawer';
 import PhaseTracker from './PhaseTracker';
-import { useLessonAutoSave, readLessonBookmark, clearLessonBookmark } from '@/hooks/useLessonAutoSave';
+import { useLessonAutoSave, readLessonBookmark, readServerBookmark, clearLessonBookmark } from '@/hooks/useLessonAutoSave';
 import { useMicroRemediation } from './feedback/useMicroRemediation';
 import ConfidenceBuilderIntro from './feedback/ConfidenceBuilderIntro';
 import { buildConfidenceBuilderSlide } from './feedback/buildConfidenceBuilderSlide';
@@ -257,14 +257,24 @@ export default function LessonPlayerContainer({
   // Resume prompt — shown once per mount, only if a saved bookmark exists for an incomplete lesson
   const [resumePrompt, setResumePrompt] = useState<{ slide: number; stars: number } | null>(null);
   const resumeChecked = useRef(false);
+  // True until we know whether there is a saved position (this device first, then the server for other devices).
+  const [resumeChecking, setResumeChecking] = useState(true);
   useEffect(() => {
     if (resumeChecked.current) return;
     resumeChecked.current = true;
-    const bookmark = readLessonBookmark(lessonId);
-    if (bookmark && bookmark.slide_index > 0 && bookmark.slide_index < activeSlides.length - 1) {
-      setResumePrompt({ slide: bookmark.slide_index, stars: bookmark.stars_remaining });
+    const usable = (b: { slide_index: number } | null) => !!b && b.slide_index > 0 && b.slide_index < activeSlides.length - 1;
+    const local = readLessonBookmark(lessonId);
+    if (usable(local)) {
+      setResumePrompt({ slide: local!.slide_index, stars: local!.stars_remaining });
+      setResumeChecking(false);
+      return;
     }
-  }, [lessonId, activeSlides.length]);
+    // No cleanup on purpose: this check runs once per mount, and it must always end by releasing the autosave.
+    void readServerBookmark(studentId, lessonId).then((server) => {
+      if (usable(server)) setResumePrompt({ slide: server!.slide_index, stars: server!.stars_remaining });
+      setResumeChecking(false);
+    });
+  }, [lessonId, studentId, activeSlides.length]);
 
   // Auto-save bookmark on every slide change
   useLessonAutoSave({
@@ -274,6 +284,7 @@ export default function LessonPlayerContainer({
     starsRemaining,
     totalSlides: activeSlides.length,
     completed,
+    serverPaused: resumeChecking || !!resumePrompt,
   });
 
   const [feedbackVisible, setFeedbackVisible] = useState(false);

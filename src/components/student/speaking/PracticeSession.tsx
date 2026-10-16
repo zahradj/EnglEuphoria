@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { SpeakingScenario, ConversationMessage, MessageFeedback } from '@/types/speaking';
 import { useSpeechRecognition } from '@/hooks/useSpeechRecognition';
 import { speakingPracticeService } from '@/services/speakingPracticeService';
@@ -23,6 +24,7 @@ export const PracticeSession: React.FC<PracticeSessionProps> = ({
   onComplete,
   onBack
 }) => {
+  const { t } = useTranslation();
   const [messages, setMessages] = useState<ConversationMessage[]>([]);
   const [isSessionActive, setIsSessionActive] = useState(false);
   const [sessionStartTime, setSessionStartTime] = useState<Date | null>(null);
@@ -147,8 +149,8 @@ export const PracticeSession: React.FC<PracticeSessionProps> = ({
       } catch (error) {
         console.error('Error processing voice input:', error);
         toast({
-          title: "Recording Error",
-          description: "Failed to process your recording. Please try again.",
+          title: t('st.sp.recErr', 'Recording Error'),
+          description: t('st.sp.recErrDesc', 'Failed to process your recording. Please try again.'),
           variant: "destructive"
         });
       }
@@ -158,8 +160,8 @@ export const PracticeSession: React.FC<PracticeSessionProps> = ({
       } catch (error) {
         console.error('Error starting recording:', error);
         toast({
-          title: "Microphone Error",
-          description: "Could not access microphone. Please check permissions.",
+          title: t('st.sp.micErr', 'Microphone Error'),
+          description: t('st.sp.micErrDesc', 'Could not access microphone. Please check permissions.'),
           variant: "destructive"
         });
       }
@@ -251,8 +253,8 @@ export const PracticeSession: React.FC<PracticeSessionProps> = ({
     } catch (error) {
       console.error('Error handling user message:', error);
       toast({
-        title: "AI Error",
-        description: "Failed to generate response. Please try again.",
+        title: t('st.sp.aiErr', 'AI Error'),
+        description: t('st.sp.aiErrDesc', 'Failed to generate response. Please try again.'),
         variant: "destructive"
       });
     }
@@ -284,8 +286,8 @@ export const PracticeSession: React.FC<PracticeSessionProps> = ({
     } catch (error) {
       console.error('Error saving session:', error);
       toast({
-        title: "Session completed!",
-        description: `Great job practicing! You earned ${xpEarned} XP.`
+        title: t('st.sp.sessionDone', 'Session completed!'),
+        description: t('st.sp.sessionDoneDesc', { xp: xpEarned, defaultValue: 'Great job practicing! You earned {{xp}} XP.' })
       });
       onComplete(sessionData);
     }
@@ -310,7 +312,7 @@ export const PracticeSession: React.FC<PracticeSessionProps> = ({
       {isDemoMode && (
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-4">
           <p className="text-yellow-800 text-sm">
-            Demo mode: AI responses and audio features are limited. Your progress is saved locally.
+            {t('st.sp.demoShort', 'Demo mode: AI responses and audio features are limited. Your progress is saved locally.')}
           </p>
         </div>
       )}

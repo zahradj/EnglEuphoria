@@ -7,7 +7,7 @@ import * as sfx from '../sfx';
 import { Confetti } from '../fx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
 import { CLAY_BUTTON, THICK_WORDS, sayWithin } from './shared';
-import { Bursts, useBursts, useShake } from './gameFx';
+import { Bursts, CalmBg, useBursts, useShake } from './gameFx';
 
 /* ---------- Wind Catch (Pre-A1 Unit 1 Lesson 5 signature game) ----------
  * After "Leo's Lost Star": the wind that blew the star away now carries the story things across the sky — the hat, the
@@ -71,7 +71,9 @@ export function WindCatchScene({ scene, onWin, onNext, sync }: { scene: Catch; o
 
   const starCaught = scene.things.some((t, i) => t.label === 'star' && caughtSet.has(i));
   return (
-    <motion.div className="absolute inset-0 select-none overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }} animate={shakeCtl}>
+    <motion.div className="absolute inset-0 select-none overflow-hidden" animate={shakeCtl}>
+      {/* busy picture calmed down so the floating pieces are the clearest thing (owner 2026-10-14) */}
+      <CalmBg img={scene.bg} strength="strong" />
       {done && <Confetti count={60} />}
       <div className="pointer-events-none absolute inset-x-0 top-[3%] z-30 flex flex-col items-center gap-1 px-14">
         <span className="text-center font-black leading-tight text-white" style={{ ...THICK_WORDS, fontSize: 'clamp(1.2rem, min(calc(3.4*var(--svw,1vw)), 5.6vh), 2.8rem)' }}>

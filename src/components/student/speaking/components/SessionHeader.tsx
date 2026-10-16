@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
@@ -21,6 +22,7 @@ export const SessionHeader: React.FC<SessionHeaderProps> = ({
   onEndSession,
   onToggleAudio
 }) => {
+  const { t } = useTranslation();
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -32,7 +34,7 @@ export const SessionHeader: React.FC<SessionHeaderProps> = ({
       <div className="flex items-center gap-4">
         <Button variant="outline" onClick={onEndSession}>
           <ArrowLeft className="h-4 w-4 mr-2" />
-          End Session
+          {t('st.sp.end', 'End Session')}
         </Button>
         <Badge variant="outline">{scenario.cefr_level}</Badge>
         <span className="text-lg font-medium">{scenario.name}</span>

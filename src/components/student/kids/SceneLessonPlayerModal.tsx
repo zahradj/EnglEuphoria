@@ -1,4 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { X, Loader2, Sparkles, Trophy, BookOpen, Map as MapIcon } from 'lucide-react';
@@ -8,6 +9,16 @@ import PlayWelcomeTownLesson from '@/pages/playground-scene/PlayWelcomeTownLesso
 import { getSceneLesson, getSceneLessonMeta } from '@/content/playground-library/sceneLessonRegistry';
 import { getWelcomeTownLesson } from '@/content/playground-library/welcomeTownLessonRegistry';
 import { extractTaughtLetters, completeSceneLesson } from '@/services/sceneLessonCompletionService';
+import {
+  clearResume,
+  createResumeSaver,
+  hasSomethingToResume,
+  loadResume,
+  resolveResumeIndex,
+  resumePercent,
+  type ResumeSaver,
+  type SavedResume,
+} from '@/services/lessonResumeService';
 import type { PlaygroundLesson } from '@/hooks/usePlaygroundLessons';
 import { isWelcomeTownFamilyFormat } from '@/content/playground-library/sceneLessonFormats';
 
@@ -32,9 +43,13 @@ export const SceneLessonPlayerModal: React.FC<SceneLessonPlayerModalProps> = ({
   onComplete,
 }) => {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [phase, setPhase] = useState<'preview' | 'playing' | 'saving' | 'complete'>('preview');
   const [homeworkAssignmentId, setHomeworkAssignmentId] = useState<string | null>(null);
+  // Where the student stopped last time (saved automatically while they play), so the same lesson continues there.
+  const [resume, setResume] = useState<SavedResume | null>(null);
+  const saverRef = useRef<ResumeSaver | null>(null);
 
   useEffect(() => {
     if (isOpen) {
@@ -42,6 +57,32 @@ export const SceneLessonPlayerModal: React.FC<SceneLessonPlayerModalProps> = ({
       setHomeworkAssignmentId(null);
     }
   }, [isOpen, lesson?.id]);
+
+  // Load the saved position whenever a lesson is opened (not for a replay of a lesson already completed).
+  useEffect(() => {
+    setResume(null);
+    if (!isOpen || !lesson || !user?.id || lesson.status === 'completed') return;
+    let cancelled = false;
+    void loadResume(user.id, lesson.id).then((r) => { if (!cancelled) setResume(r); });
+    return () => { cancelled = true; };
+  }, [isOpen, lesson?.id, lesson?.status, user?.id]);
+
+  // The players report every scene change here; the saver turns a burst of moves into one write.
+  const onNavState = useCallback((state: { sceneIdx: number }) => { saverRef.current?.note(state.sceneIdx); }, []);
+
+  // Never lose the last move: write it when the lesson is left, the tab is hidden, or the page is closed.
+  useEffect(() => {
+    if (phase !== 'playing') return;
+    const flush = () => { void saverRef.current?.flush(); };
+    const onHide = () => { if (document.visibilityState === 'hidden') flush(); };
+    document.addEventListener('visibilitychange', onHide);
+    window.addEventListener('pagehide', flush);
+    return () => {
+      document.removeEventListener('visibilitychange', onHide);
+      window.removeEventListener('pagehide', flush);
+      flush();
+    };
+  }, [phase]);
 
   const isWelcomeTown = isWelcomeTownFamilyFormat(lesson?.contentFormat);
   const key = lesson?.unitNumber != null && lesson?.lessonNumber != null ? `${lesson.unitNumber}-${lesson.lessonNumber}` : null;
@@ -58,6 +99,8 @@ export const SceneLessonPlayerModal: React.FC<SceneLessonPlayerModalProps> = ({
     ? (welcomeTownLesson ? { title: welcomeTownLesson.title, objective: welcomeTownLesson.objective } : undefined)
     : (key ? getSceneLessonMeta(lesson!.unitNumber!, lesson!.lessonNumber!) ?? undefined : undefined);
   const letters = useMemo(() => (scenes ? extractTaughtLetters(scenes) : []), [scenes]);
+  const resumeIdx = useMemo(() => (scenes ? resolveResumeIndex(resume, scenes as { id?: string }[]) : 0), [resume, scenes]);
+  const canResume = !!scenes && !!resume && hasSomethingToResume(resumeIdx);
 
   if (!isOpen || !lesson) return null;
 
@@ -74,9 +117,34 @@ export const SceneLessonPlayerModal: React.FC<SceneLessonPlayerModalProps> = ({
     );
   }
 
+  /** Begin (or continue) the lesson. Continuing seeds the player's own scene-index store; starting over clears the saved position. */
+  const startPlaying = (fromResume: boolean) => {
+    const storageKey = `dash-scene-${lesson.id}`;
+    try {
+      if (fromResume) window.sessionStorage.setItem(storageKey, String(resumeIdx));
+      else window.sessionStorage.removeItem(storageKey);
+    } catch { /* private mode: the player starts at the beginning */ }
+    if (!fromResume && user?.id && resume) { void clearResume(user.id, lesson.id); setResume(null); }
+    saverRef.current?.cancel();
+    // A replay of a completed lesson saves nothing (it must stay completed).
+    saverRef.current = user?.id && lesson.status !== 'completed'
+      ? createResumeSaver({ userId: user.id, lessonId: lesson.id, scenes: scenes as { id?: string }[] })
+      : null;
+    setPhase('playing');
+  };
+
+  const leaveLesson = () => {
+    void saverRef.current?.flush();
+    onClose();
+  };
+
   const handleFinale = async () => {
     setPhase('saving');
+    // The lesson is done: no pending position may be written after this, and the saved one is no longer needed.
+    saverRef.current?.cancel();
+    saverRef.current = null;
     if (user?.id) {
+      await clearResume(user.id, lesson.id);
       const result = await completeSceneLesson({ userId: user.id, lessonRowId: lesson.id, title: meta.title, scenes, lessonKey: lesson.contentFormat && key ? `${lesson.contentFormat}-${key}` : null });
       setHomeworkAssignmentId(result.homeworkAssignmentId);
     }
@@ -146,12 +214,41 @@ export const SceneLessonPlayerModal: React.FC<SceneLessonPlayerModalProps> = ({
                 </div>
               )}
 
-              <button
-                onClick={() => setPhase('playing')}
-                className="flex w-full items-center justify-center gap-2 rounded-full bg-[#FE6A2F] px-6 py-4 text-lg font-extrabold text-white shadow-lg transition-transform hover:scale-[1.02] active:scale-95"
-              >
-                <Sparkles className="h-5 w-5" /> Start!
-              </button>
+              {canResume && resume ? (
+                <div className="space-y-3">
+                  <div>
+                    <div className="mb-1 flex items-center justify-between text-xs font-extrabold text-[#FE6A2F]/80">
+                      <span>{t('lr.stoppedAt', { n: resumeIdx + 1, total: resume.totalScenes, defaultValue: 'You stopped at step {{n}} of {{total}}' })}</span>
+                      <span>{resumePercent(resumeIdx, resume.totalScenes)}%</span>
+                    </div>
+                    <div className="h-2.5 overflow-hidden rounded-full bg-[#FE6A2F]/15" role="progressbar" aria-valuenow={resumePercent(resumeIdx, resume.totalScenes)} aria-valuemin={0} aria-valuemax={100}>
+                      <div className="h-full rounded-full bg-[#FE6A2F]" style={{ width: `${resumePercent(resumeIdx, resume.totalScenes)}%` }} />
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => startPlaying(true)}
+                    className="flex w-full items-center justify-center gap-2 rounded-full bg-[#FE6A2F] px-6 py-4 text-lg font-extrabold text-white shadow-lg transition-transform hover:scale-[1.02] active:scale-95"
+                  >
+                    <Sparkles className="h-5 w-5" /> {t('lr.continue', 'Continue where I stopped')}
+                  </button>
+                  <button
+                    onClick={() => startPlaying(false)}
+                    className="flex w-full items-center justify-center gap-2 rounded-full border-2 border-[#FE6A2F]/30 bg-white px-6 py-3 text-base font-extrabold text-[#FE6A2F] transition-transform hover:scale-[1.02] active:scale-95"
+                  >
+                    {t('lr.startOver', 'Start from the beginning')}
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => startPlaying(false)}
+                  className="flex w-full items-center justify-center gap-2 rounded-full bg-[#FE6A2F] px-6 py-4 text-lg font-extrabold text-white shadow-lg transition-transform hover:scale-[1.02] active:scale-95"
+                >
+                  <Sparkles className="h-5 w-5" /> Start!
+                </button>
+              )}
+              {lesson.status !== 'completed' && (
+                <p className="text-center text-xs font-semibold text-slate-400">{t('lr.autoSaved', 'Your progress is saved automatically.')}</p>
+              )}
             </div>
           </motion.div>
         </motion.div>
@@ -201,7 +298,7 @@ export const SceneLessonPlayerModal: React.FC<SceneLessonPlayerModalProps> = ({
           className="fixed inset-0 z-[100] bg-[#FEFBDD]"
         >
           <button
-            onClick={onClose}
+            onClick={leaveLesson}
             className="absolute right-4 top-4 z-[110] flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-slate-700 shadow-lg backdrop-blur hover:bg-white"
             aria-label="Close lesson"
           >
@@ -213,6 +310,7 @@ export const SceneLessonPlayerModal: React.FC<SceneLessonPlayerModalProps> = ({
               sessionKey={`dash-scene-${lesson.id}`}
               embedded
               onFinaleReached={handleFinale}
+              onNavState={onNavState}
             />
           ) : (
             <PlayUnitLesson
@@ -220,6 +318,7 @@ export const SceneLessonPlayerModal: React.FC<SceneLessonPlayerModalProps> = ({
               sessionKey={`dash-scene-${lesson.id}`}
               embedded
               onFinaleReached={handleFinale}
+              onNavState={onNavState}
             />
           )}
           {phase === 'saving' && (

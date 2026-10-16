@@ -3,6 +3,7 @@ import type { Scene } from '../scenes';
 import { cueSpeak, cueSpeakOnce } from '../audio';
 import * as sfx from '../sfx';
 import { STICKER_FILTER, STICKER_TILTS, scatterPositions } from './shared';
+import { CalmBg } from './gameFx';
 
 /* ---------- Plural sort (drag each picture into "It is" or "They are") ----------
  * Non-reader version: the bins are pictures (one finger = ONE, two hands =
@@ -76,7 +77,9 @@ export function PluralSortScene({ scene, onWin, onLose, onNext }: { scene: Extra
   const scattered = scatterPositions(slots.length, [15, 68]);
 
   return (
-    <div className="absolute inset-0 overflow-hidden" style={{ backgroundImage: `url(${scene.bg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+    <div className="absolute inset-0 overflow-hidden">
+      {/* busy picture calmed down so the floating pieces are the clearest thing (owner 2026-10-14) */}
+      <CalmBg img={scene.bg} strength="strong" />
       <div className="pointer-events-none absolute inset-x-0 top-4 z-30 flex justify-center px-4">
         <div className="max-w-lg rounded-2xl bg-white/95 px-5 py-3 text-center text-base font-bold text-orange-800 shadow-xl backdrop-blur sm:text-lg">{scene.teacher}</div>
       </div>

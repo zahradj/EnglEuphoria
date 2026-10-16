@@ -5,6 +5,7 @@ import type React from 'react';
 import { Component, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import './deck.css';
+import './scene.css';
 import { DeckContext, type DeckCtx } from './ctx';
 import { Icon } from './Icon';
 import { Character, Plate } from './Stage';
@@ -14,6 +15,14 @@ import { RuleView } from './slides/rule';
 import { ExploreView } from './slides/explore';
 import { SortView } from './slides/sort';
 import { StoryView } from './slides/story';
+import { DuelView, RhythmView, VaultView } from './slides/lock';
+import { PassageView } from './slides/passage';
+import { LobbyView, HubMark } from './slides/lobby';
+import { levelLine, rankOf, xpOf } from './hub';
+import { ReadQView } from './slides/readq';
+import { BossView, WordleView, RpgView, QuizView, TripleView, GlitchView, VerbDrawView, ClozeView } from './slides/games';
+import { ForgeView, StreakView } from './slides/forge';
+import { LessonClock } from './LessonClock';
 import { playSfx } from './sfx';
 import { applyLane, laneOf, LANE_LABEL } from './lanes';
 import { BadgeView, BriefView, DialView, TitleView } from './slides/intro';
@@ -30,7 +39,7 @@ import { BePickView, BuildView, FactCheckView, WriteView } from './slides/patter
 import { ConvoView, FadeView, PhoneChatView, SayView, WhoSaidView } from './slides/talk';
 import { audioBaseFor, hasClip, loadManifest, playLine, stopLine } from './audio';
 import { openLines, slideLines } from './spoken';
-import { partsOf, type DeckScript, type Slide, type Stats, type Vars } from './types';
+import { partsFor, SAY_IT_KINDS, type DeckScript, type Slide, type Stats, type Vars } from './types';
 
 class Guard extends Component<{ children: ReactNode; onSkip: () => void; id: string }, { err: string | null; n: number }> {
   state = { err: null as string | null, n: 0 };
@@ -55,9 +64,22 @@ class Guard extends Component<{ children: ReactNode; onSkip: () => void; id: str
   }
 }
 
-function SlideView({ slide }: { slide: Slide }) {
+/** 1 to 3 stars from first-try accuracy so far (honest, never zero: the student finished the part). */
+function clearedStars(s: Stats): number {
+  const t = s.right + s.wrong;
+  const r = t === 0 ? 1 : s.right / t;
+  return r >= 0.85 ? 3 : r >= 0.6 ? 2 : 1;
+}
+
+/** The teaching ladder shown to the student: watch it done (I do), practise together (we do), your turn (you do), create (you make it yours). */
+const STAGE_LABEL: Record<string, string> = { review: 'Warm-up', context: 'Watch and listen', model: 'Watch and learn', rule: 'The rule', controlled: 'Practise together', free: 'Your turn', produce: 'Make it yours' };
+
+const SKILL: Record<string, string> = { say: 'Speaking', fade: 'Speaking', passage: 'Reading', readq: 'Reading', hearpick: 'Listening', story: 'Listening', model: 'Listening', write: 'Writing', build: 'Writing', boss: 'Game', wordle: 'Game', rpg: 'Game', quiz: 'Game', triple: 'Game', glitch: 'Game', verbdraw: 'Game', cloze: 'Reading', sort: 'Game', memory: 'Game', match: 'Game', forge: 'Game', streak: 'Game', explore: 'Game', hunt: 'Game', vault: 'Game', duel: 'Game', rhythm: 'Game' };
+const skillOf = (kind: string): string => SKILL[kind] ?? '';
+
+function SlideView({ slide, script, onStart }: { slide: Slide; script: DeckScript; onStart: () => void }) {
   switch (slide.kind) {
-    case 'title': return <TitleView slide={slide} />;
+    case 'title': return script.hub === false ? <TitleView slide={slide} /> : <LobbyView slide={slide} script={script} onStart={onStart} />;
     case 'brief': return <BriefView slide={slide} />;
     case 'badge': return <BadgeView slide={slide} />;
     case 'dial': return <DialView slide={slide} />;
@@ -93,6 +115,21 @@ function SlideView({ slide }: { slide: Slide }) {
     case 'fade': return <FadeView slide={slide} />;
     case 'card': return <CardView slide={slide} />;
     case 'say': return <SayView slide={slide} />;
+    case 'vault': return <VaultView slide={slide} />;
+    case 'rhythm': return <RhythmView slide={slide} />;
+    case 'duel': return <DuelView slide={slide} />;
+    case 'passage': return <PassageView slide={slide} />;
+    case 'readq': return <ReadQView slide={slide} />;
+    case 'boss': return <BossView slide={slide} />;
+    case 'wordle': return <WordleView slide={slide} />;
+    case 'rpg': return <RpgView slide={slide} />;
+    case 'quiz': return <QuizView slide={slide} />;
+    case 'triple': return <TripleView slide={slide} />;
+    case 'glitch': return <GlitchView slide={slide} />;
+    case 'verbdraw': return <VerbDrawView slide={slide} />;
+    case 'cloze': return <ClozeView slide={slide} />;
+    case 'forge': return <ForgeView slide={slide} />;
+    case 'streak': return <StreakView slide={slide} />;
     case 'wrap': return <WrapView slide={slide} />;
   }
 }
@@ -119,9 +156,11 @@ export interface DeckProps {
   /** homework quest mode: no part title cards, the strip label is `label`, and every solved slide reports its wrong tries */
   homework?: { label: string };
   onSlideDone?: (slide: Slide, result: { wrong: number }) => void;
+  /** every wrong try on a slide (the live classroom keeps what the student tried but did not finish) */
+  onSlideWrong?: (slide: Slide, wrongSoFar: number) => void;
 }
 
-export function Deck({ script, artBase, audioBase, teacher = false, freeNext = false, slide: controlled, start, embedded = false, follow = false, onSlide, onFinish, homework, onSlideDone }: DeckProps) {
+export function Deck({ script, artBase, audioBase, teacher = false, freeNext = false, slide: controlled, start, embedded = false, follow = false, onSlide, onFinish, homework, onSlideDone, onSlideWrong }: DeckProps) {
   const [own, setOwn] = useState(start ?? 0);
   const index = Math.min(controlled ?? own, script.slides.length - 1);
   const go = useCallback((i: number) => {
@@ -132,7 +171,7 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
   const [solved, setSolved] = useState<Record<string, boolean>>({});
   const [vars, setVarsState] = useState<Vars>({ num: '427', numw: 'four hundred twenty-seven' });
   const [stamps, setStamps] = useState<string[]>([]);
-  const [stats, setStats] = useState<Stats>({ right: 0, wrong: 0, hints: 0, skipped: [] });
+  const [stats, setStats] = useState<Stats>({ right: 0, wrong: 0, hints: 0, skipped: [], spoken: 0 });
   const [tiers, setTiers] = useState<Record<string, number>>({});
   const [toast, setToast] = useState<string | null>(null);
   const [minute, setMinute] = useState(false);
@@ -158,7 +197,10 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
   }, []);
   const shownParts = useRef<Set<number>>(new Set());
   const [calm, setCalm] = useState(() => typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches);
-  const parts = partsOf(script.shape);
+  const parts = partsFor(script);
+  const hubInfo = levelLine(script);
+  const xp = xpOf(stats.right, stats.spoken ?? 0);
+  const rank = rankOf(xp);
   const lane = laneOf(vars);
   const cur = applyLane(script.slides[index], lane);
   // ---- recorded voices (silent when a clip or the clip list is missing; never the browser voice)
@@ -173,8 +215,10 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
   voiceRef.current = voiceOn;
   sfxRef.current = sfxOn && !calm;
   const [clipsReady, setClipsReady] = useState(false);
-  const [unlocked, setUnlocked] = useState(false);
-  const unlockedRef = useRef(false);
+  // sound is allowed once the person has used the page (a tap on the Join button counts), not only a tap inside the lesson
+  const alreadyActive = () => typeof navigator !== 'undefined' && !!(navigator as Navigator & { userActivation?: { hasBeenActive: boolean } }).userActivation?.hasBeenActive;
+  const [unlocked, setUnlocked] = useState(alreadyActive);
+  const unlockedRef = useRef(alreadyActive());
   const [speakingWho, setSpeakingWho] = useState<string | null>(null);
   const seq = useRef(0);
   useEffect(() => {
@@ -193,7 +237,9 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
     };
     window.addEventListener('pointerdown', unlock, true);
     window.addEventListener('keydown', unlock, true);
+    window.addEventListener('click', unlock, true);
     return () => {
+      window.removeEventListener('click', unlock, true);
       window.removeEventListener('pointerdown', unlock, true);
       window.removeEventListener('keydown', unlock, true);
     };
@@ -223,6 +269,10 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
       setSpeakingWho(null);
     }
   }, [voiceOn]);
+  // a student who follows the teacher may not tap inside the lesson: unlock as soon as the page has been used
+  useEffect(() => {
+    if (!unlockedRef.current && alreadyActive()) { unlockedRef.current = true; setUnlocked(true); }
+  }, [index]); // eslint-disable-line react-hooks/exhaustive-deps
   // the slide's own spoken lines (greeting, mission, wrap...) once the voices are unlocked
   useEffect(() => {
     if (!unlocked || !voiceOn || !clipsReady) return;
@@ -237,6 +287,8 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
   slideRef.current = cur;
   const cbRef = useRef(onSlideDone);
   cbRef.current = onSlideDone;
+  const wrongCb = useRef(onSlideWrong);
+  wrongCb.current = onSlideWrong;
   const done = useCallback(() => setSolved((s) => {
     if (s[curId.current]) return s;
     // report once per slide, outside the state updater's purity: schedule it
@@ -254,8 +306,13 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
     playSfx(comboRef.current % 5 === 0 ? 'combo' : 'right', sfxRef.current);
     react('happy');
   }, [react]);
+  const sayIt = useCallback(() => {
+    setStats((s) => ({ ...s, spoken: (s.spoken ?? 0) + 1 }));
+    playSfx('right', sfxRef.current);
+  }, []);
   const wrong = useCallback(() => {
     wrongBySlide.current[curId.current] = (wrongBySlide.current[curId.current] ?? 0) + 1;
+    wrongCb.current?.(slideRef.current, wrongBySlide.current[curId.current]);
     setStats((s) => ({ ...s, wrong: s.wrong + 1 }));
     comboRef.current = 0;
     setCombo(0);
@@ -263,8 +320,16 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
     react('concerned');
   }, [react]);
   const ctx: DeckCtx = useMemo(() => ({ artBase, vars, setVars, done, right, wrong, award, stamps, reduced: calm, seed: 1000 + index * 17, voice: voiceOn, clipsReady, canHear, speak, speakSeq }), [artBase, vars, setVars, done, right, wrong, award, stamps, calm, index, voiceOn, clipsReady, canHear, speak, speakSeq]);
+  const keys = useMemo(() => script.slides.filter((x) => x.kind === 'vault' && solved[x.id]).map((x) => (x as { lock: number }).lock), [script.slides, solved]);
+  const lockNames = script.locks;
   const isSolved = !!solved[cur.id];
   const last = index === script.slides.length - 1;
+  // a lock opens: a soft click and chime (none in Calm mode or with Sounds off)
+  const keyCount = useRef(0);
+  useEffect(() => {
+    if (keys.length > keyCount.current) playSfx('key', sfxRef.current);
+    keyCount.current = keys.length;
+  }, [keys.length]);
   // the cast chatter for a moment when a slide opens: only for slides with NO recorded clip (a real clip drives the mouth itself)
   useEffect(() => {
     setChat(true);
@@ -339,23 +404,41 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
   const panelAt = only === 'left' ? 'right' : only === 'right' ? 'left' : 'center';
   return (
     <DeckContext.Provider value={ctx}>
-      <div className="ad-root" dir="ltr" data-calm={calm || undefined} data-embedded={embedded || undefined} data-follow={follow || undefined} style={artBase ? ({ ['--o-gem-empty' as string]: `url(${artBase}/objects/gem-empty.webp)`, ['--o-gem-full' as string]: `url(${artBase}/objects/gem-full.webp)`, ['--o-ribbon' as string]: `url(${artBase}/objects/ribbon.webp)`, ['--o-frame' as string]: `url(${artBase}/objects/frame.webp)`, ['--o-star' as string]: `url(${artBase}/objects/star.webp)`, ['--o-stamp' as string]: `url(${artBase}/objects/stamp.webp)`, ['--o-ticket' as string]: `url(${artBase}/objects/ticket.webp)`, ['--o-pill-violet' as string]: `url(${artBase}/objects/pill-violet.webp)`, ['--o-pill-blue' as string]: `url(${artBase}/objects/pill-blue.webp)`, ['--o-pill-orange' as string]: `url(${artBase}/objects/pill-orange.webp)` } as React.CSSProperties) : undefined} data-reduced={calm} data-kind={cur.kind} data-hw={!!homework} data-mood={mood ?? undefined} data-testid="deck">
+      <div className="ad-root" dir="ltr" data-calm={calm || undefined} data-embedded={embedded || undefined} data-follow={follow || undefined} style={artBase ? ({ ['--o-gem-empty' as string]: `url(${artBase}/objects/gem-empty.webp)`, ['--o-gem-full' as string]: `url(${artBase}/objects/gem-full.webp)`, ['--o-ribbon' as string]: `url(${artBase}/objects/ribbon.webp)`, ['--o-frame' as string]: `url(${artBase}/objects/frame.webp)`, ['--o-star' as string]: `url(${artBase}/objects/star.webp)`, ['--o-stamp' as string]: `url(${artBase}/objects/stamp.webp)`, ['--o-ticket' as string]: `url(${artBase}/objects/ticket.webp)`, ['--o-pill-violet' as string]: `url(${artBase}/objects/pill-violet.webp)`, ['--o-pill-blue' as string]: `url(${artBase}/objects/pill-blue.webp)`, ['--o-pill-orange' as string]: `url(${artBase}/objects/pill-orange.webp)` } as React.CSSProperties) : undefined} data-reduced={calm} data-theme={script.theme ?? 'scene'} data-kind={cur.kind} data-part={cur.part} data-stage={cur.stage} data-skill={skillOf(cur.kind) || undefined} data-lock={lockNames ? (cur.lock ?? 0) : undefined} data-hw={!!homework} data-mood={mood ?? undefined} data-testid="deck">
         {prevBg && prevBg !== cur.bg && !calm && <Plate id={prevBg} artBase={artBase} key={`out-${prevBg}`} phase="out" />}
         <Plate id={cur.bg} artBase={artBase} key={cur.bg} phase={prevBg && prevBg !== cur.bg && !calm ? 'in' : undefined} />
         <div className="ad-actors" aria-hidden={actorsVisible.length === 0}>
           {actorsVisible.map((a) => <Character key={`${a.who}-${mood ?? 'base'}`} actor={mood ? { ...a, expr: mood } : a} artBase={artBase} small={compact} speaking={!calm && !mood && (speakingWho === a.who || (chat && !(voiceOn && slideHasClip) && ['title', 'brief', 'whosaid', 'teach', 'model', 'convo', 'say', 'wrap'].includes(cur.kind)))} />)}
         </div>
         <header className="ad-strip" aria-label="Slides">
-          <span className="ad-lesson">{homework ? `${homework.label} · game ${index + 1} of ${script.slides.length}` : parts[cur.part]?.name}</span>
+          {!homework && (
+            <span className="ad-brand" aria-label="EnglEuphoria Academy"><HubMark size={24} /><span><b>Academy</b><small>{hubInfo.level}{hubInfo.season ? ` · S${hubInfo.season} · E${hubInfo.episode}` : ''}</small></span></span>
+          )}
+          <span className="ad-lesson">{homework ? `${homework.label} · game ${index + 1} of ${script.slides.length}` : <><i className="ad-lesson-n">{cur.part + 1}</i>{parts[cur.part]?.name}</>}</span>
           <ol>
             {script.slides.map((s, i) => (
-              <li key={s.id} data-part-start={i > 0 && s.part !== script.slides[i - 1].part}>
+              <li key={s.id} data-part-start={i > 0 && s.part !== script.slides[i - 1].part} data-optional={(teacher && s.optional) || undefined}>
                 <button type="button" className="ad-dot" data-now={i === index} data-done={!!solved[s.id]} disabled={follow || (!teacher && i > index && !solved[script.slides[i - 1]?.id])} aria-label={`Slide ${i + 1}${i === index ? ' (now)' : ''}`} aria-current={i === index} onClick={() => go(i)} />
               </li>
             ))}
           </ol>
+          {lockNames && !homework && (
+            <ul className="ad-keys" aria-label={`Keys: ${keys.length} of ${lockNames.length}`}>
+              {lockNames.map((nm, k) => <li key={nm} className="ad-keyslot" data-on={keys.includes(k + 1)} data-now={cur.lock === k + 1} title={`Lock ${k + 1}: ${nm}`}><Icon name={keys.includes(k + 1) ? 'key' : 'lock'} /></li>)}
+            </ul>
+          )}
+          {!homework && cur.stage && <span className="ad-stagechip" data-s={cur.stage}>{STAGE_LABEL[cur.stage]}</span>}
+          {!homework && (
+            <span className="ad-rank" role="status" aria-label={`Level ${rank.n}, ${rank.name}, ${xp} XP`}>
+              <span className="ad-rank-name">Lv {rank.n} · {rank.name}</span>
+              <span className="ad-rank-bar"><i style={{ width: `${Math.round((rank.into / rank.span) * 100)}%` }} /></span>
+            </span>
+          )}
           <span className="ad-count">{index + 1}/{script.slides.length}</span>
         </header>
+        {!homework && (stats.spoken ?? 0) > 0 && (
+          <div className="ad-say-tally" role="status" aria-label={`Spoken aloud: ${stats.spoken}`}><Icon name="chat" /> {stats.spoken}</div>
+        )}
         {!homework && stats.right > 0 && (
           <div className="ad-xp" role="status" aria-label={`${stats.right * 10} XP${combo >= 3 ? `, combo ${combo}` : ''}`}>
             <span className="ad-xp-num" key={stats.right}>{stats.right * 10} XP</span>
@@ -364,7 +447,7 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
         )}
         <main className="ad-main" data-panel={panelAt}>
           <Guard id={cur.id} onSkip={skip}>
-            <SlideView key={cur.id} slide={cur} />
+            <SlideView key={cur.id} slide={cur} script={script} onStart={() => go(index + 1)} />
           </Guard>
           {toast && <div className="ad-toast" role="status"><Icon name="bulb" /> {toast}</div>}
         </main>
@@ -374,11 +457,18 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
             {Array.from({ length: 12 }, (_, i) => <span key={i} style={{ ['--a' as string]: `${i * 30}deg`, ['--d' as string]: `${70 + (i % 3) * 26}px` }}>{i % 2 ? '★' : '✦'}</span>)}
           </div>
         )}
+        {embedded && !unlocked && voiceOn && (
+          <button type="button" className="ad-sound-note" onClick={() => { unlockedRef.current = true; setUnlocked(true); }}>🔊 Tap to hear the lesson</button>
+        )}
         <nav className="ad-dock" aria-label="Lesson controls">
           {!follow && <button type="button" className="ad-dockbtn" onClick={() => go(index - 1)} disabled={index === 0}>◀ Back</button>}
+          {!homework && SAY_IT_KINDS.includes(cur.kind) && (<button type="button" className="ad-dockbtn ad-dock-say" onClick={sayIt} aria-label="Say it aloud, then tap"><Icon name="chat" /> Say it ✓</button>)}
+          <div className="ad-tools">
           <button type="button" className="ad-dockbtn" onClick={hint}>{artBase ? <img className="ad-dockico" src={`${artBase}/objects/btn-hint.webp`} alt="" aria-hidden="true" /> : <Icon name="bulb" />} Hint</button>
-          <button type="button" className="ad-dockbtn" onClick={() => setMinute(true)}>{artBase ? <img className="ad-dockico" src={`${artBase}/objects/btn-pause.webp`} alt="" aria-hidden="true" /> : <Icon name="pause" />} <span className="ad-long">I need a minute</span><span className="ad-short">Minute</span></button>
-          <button type="button" className="ad-dockbtn" onClick={() => setMenu(!menu)} aria-expanded={menu}>{artBase ? <img className="ad-dockico" src={`${artBase}/objects/btn-gear.webp`} alt="" aria-hidden="true" /> : <Icon name="gear" />} More</button>
+          {!embedded && <button type="button" className="ad-dockbtn" onClick={() => setMinute(true)}>{artBase ? <img className="ad-dockico" src={`${artBase}/objects/btn-pause.webp`} alt="" aria-hidden="true" /> : <Icon name="pause" />} <span className="ad-long">I need a minute</span><span className="ad-short">Minute</span></button>}
+          {!embedded && <button type="button" className="ad-dockbtn" onClick={() => setMenu(!menu)} aria-expanded={menu}>{artBase ? <img className="ad-dockico" src={`${artBase}/objects/btn-gear.webp`} alt="" aria-hidden="true" /> : <Icon name="gear" />} <span className="ad-long">More</span></button>}
+          </div>
+          {teacher && !follow && !homework && script.clock && <LessonClock script={script} part={cur.part} />}
           {!follow && (<button type="button" className="ad-dockbtn ad-dock-next" onClick={next} disabled={!isSolved && !freeNext}>{last ? 'Finish ✓' : <>Next {artBase ? <img className="ad-dockico ad-nextico" src={`${artBase}/objects/btn-next.webp`} alt="" aria-hidden="true" /> : '▶'}</>}</button>)}
         </nav>
         {menu && (
@@ -397,6 +487,8 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
         )}
         {partCard !== null && (
           <div className="ad-partcard" data-leaving={partLeaving || undefined} role="dialog" aria-label={`Part ${partCard + 1}: ${parts[partCard].name}`} onClick={closePart}>
+            {artBase && (() => { const plate = script.slides.find((x) => x.part === partCard)?.bg; return plate ? <img className="ad-partcard-plate" src={`${artBase}/bg/${plate}.webp`} alt="" aria-hidden="true" draggable={false} onError={(e) => { e.currentTarget.hidden = true; }} /> : null; })()}
+            {partCard > 0 && <span className="ad-partcard-clear" role="status"><b>Part {partCard} cleared</b><span aria-hidden="true">{[0, 1, 2].map((k) => <i key={k} data-on={k < clearedStars(stats)} />)}</span></span>}
             <span className="ad-partcard-num" aria-hidden="true">{partCard + 1}</span>
             <span className="ad-partcard-kicker">Part {partCard + 1} of {parts.length} · {parts[partCard].minutes} min</span>
             <span className="ad-partcard-name">{parts[partCard].name}</span>

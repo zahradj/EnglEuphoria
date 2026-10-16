@@ -1,6 +1,6 @@
 # Academy Pre-A1 curriculum — proposal (2026-10-12)
 
-Owner request: a Pre-A1 curriculum for students with no English at all, focused on **reading and vocabulary**, slower than A1. Academy = ages 13-18 (Playground = 4-12). **Status: proposal, not approved. Nothing is built; the roadmap code (`src/curriculum/academy`) is unchanged.**
+Owner request: a Pre-A1 curriculum for students with no English at all, focused on **reading and vocabulary**, slower than A1. Academy = ages 13-18 (Playground = 4-12). **Status (2026-10-14): the lean ladder (Pre-A1 Lite = Seasons P1-P3) is in `src/curriculum/academy/preA1.ts` (P1 with a built lesson, P2-P3 planned with 8 episodes each); P4-P6 (the Full ladder) are still only this proposal.**
 
 ## 1. Who and why
 - Teen (13-18) with no English. They may read another script (Arabic) or a Latin script with different sound rules (Spanish, French, Italian, Turkish), so the first job is **letters and sounds**, not words.

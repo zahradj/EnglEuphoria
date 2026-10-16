@@ -1,5 +1,2 @@
-+ public/academy-art/bg/story-fair-1.png (1376, 768)
-+ public/academy-art/bg/story-fair-2.png (1376, 768)
-+ public/academy-art/bg/story-fair-3.png (1376, 768)
-+ public/academy-art/bg/story-fair-4.png (1376, 768)
-4/4 saved
++ public/lep1/scenes/bg-a1u5-gamenight-wide.png (1376, 768)
+1/1 saved

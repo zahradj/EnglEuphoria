@@ -60,7 +60,7 @@ import type { ColorPlaySceneData } from '../ColorPlayScene';
 
 const W = '/welcome-town';
 
-export type CharKey = 'pip' | 'marigold' | 'mia' | 'bella' | 'willow' | 'leo' | 'coco' | 'wim' | 'catcat' | 'nova' | 'beep' | 'cilla' | 'pico';
+export type CharKey = 'pip' | 'marigold' | 'mia' | 'bella' | 'willow' | 'leo' | 'coco' | 'wim' | 'catcat' | 'nova' | 'beep' | 'cilla' | 'pico' | 'bibi' | 'glob';
 
 /** Every one of these maps onto an audio.ts voice already built for that
  *  exact character (pip/mia/bella/willow/leo are the same characters as the
@@ -86,6 +86,9 @@ export const VOICE_KEY: Record<CharKey, 'pip' | 'mia' | 'bella' | 'willow' | 'le
   // Unit 4 (Food Festival): Chef Cilla and Pico the Mouse — teacher voice until they have their own recorded voices.
   cilla: 'teacher',
   pico: 'teacher',
+  // Unit 5 (Monster Town): Bibi the Tiny Monster (a girl) and Professor Glob — teacher voice until they have their own.
+  bibi: 'teacher',
+  glob: 'teacher',
 };
 
 /** No `img` field — every character appears painted directly into a scene's
@@ -109,6 +112,8 @@ export const CAST: Record<CharKey, { name: string; emoji: string; color: string 
   beep: { name: 'Beep', emoji: '\u{1F916}', color: '#64748B' },
   cilla: { name: 'Chef Cilla', emoji: '\u{1F469}\u{200D}\u{1F373}', color: '#E63946' },
   pico: { name: 'Pico', emoji: '\u{1F42D}', color: '#94A3B8' },
+  bibi: { name: 'Bibi', emoji: '\u{1F47E}', color: '#8B5CF6' },
+  glob: { name: 'Professor Glob', emoji: '\u{1F9D0}', color: '#14B8A6' },
 };
 
 const bgWide = `${W}/scenes/bg-classroom-wide.png`;
@@ -422,7 +427,8 @@ export type Scene =
       /** The Reader (ReaderScene.tsx): the unit's serial story, read-along then the child reads; `lines` of a page are
        *  spoken in their speaker's voice, every word tappable. */
       id: string; kind: 'reader'; bg: string; title: string; teacher: string; doneLine: string;
-      pages: { img: string; lines: { who?: CharKey; text: string }[] }[];
+      pages: ReaderPage[];
+      /** Speed reading / read-aloud pages: no picture questions. */ noChecks?: boolean;
     }
   | {
       /** Read & Do (ReadDoScene.tsx, A1 U1L6): an instruction card to READ (not spoken; 🔊 = help), e.g. "Give Leo the
@@ -611,6 +617,55 @@ export type Scene =
        *  the chart for each `reports` card and picks likes / doesn't like. */
       friends: { name: string; who: CharKey; img: string }[]; foods: { label: string; img: string }[];
       answers: boolean[][]; reports: { friend: number; food: number }[]; doneLine: string; }
+  | { id: string; kind: 'mood-machine'; bg: string; teacher: string; title: string; who: CharKey;
+      /** ★ Monster Mood Machine (A1 U5L1, docs/a1-unit-5-monster-town.md §5.1): pull the lever, a REASON picture comes out
+       *  of the hatch ("because it's dark"); the child picks the feeling that fits (`choices` index `feelings`), the
+       *  monster's face changes, and the child SAYS the whole sentence (moodSentence in moodRules.ts). */
+      monster: { name: string; img: string }; feelings: { feeling: string; img: string }[];
+      /** The lab owner (Professor Glob), shown by the machine while the child pulls the lever. */
+      host?: { name: string; img: string };
+      rounds: { reason: string; img: string; feeling: number; choices: number[] }[]; doneLine: string; }
+  | { id: string; kind: 'monster-builder'; bg: string; teacher: string; title: string; who: CharKey;
+      /** ★ Monster Builder (A1 U5L2, docs/a1-unit-5-monster-town.md §5.2): a blank monster body; the child hears
+       *  "She's got three eyes and long horns." and builds it from the part trays (eyes 1-3, horns, mouth), then taps
+       *  Check — every part must match the sentence. `body` sticker is square; parts sit at % of it. */
+      body: string; eye: string; horns: { label: string; img: string }[]; mouths: { label: string; img: string }[];
+      rounds: { line: string; eyes: 1 | 2 | 3; horns: number; mouth: number; name: string }[]; doneLine: string; }
+  | { id: string; kind: 'guess-who'; bg: string; teacher: string; title: string; who: CharKey;
+      /** ★ Guess Who (A1 U5L6, docs/a1-unit-5-monster-town.md §5.6): 8 monsters behind doors, built from the Monster
+       *  Builder parts (`hue` recolours the body; `color` is its colour word). Part 1: the child asks `questions` (each a
+       *  `test`; the friend says `yes` / `no` about the `secret` monster) and the doors that don't fit close; the child
+       *  names the last one. Part 2: the child picks a monster and answers the friend's `hideAsks` Yes / No. */
+      body: string; eye: string; horns: { label: string; img: string }[]; mouths: { label: string; img: string }[];
+      wear: { word: string; img: string; on: 'head' | 'face' | 'neck' | 'feet' }[];
+      monsters: { name: string; eyes: 1 | 2 | 3; horns: number; mouth: number; wears: number[]; hue: number; color: string }[];
+      questions: { ask: string; yes: string; no: string; test: { eyes?: 1 | 2 | 3; horns?: number; mouth?: number; wear?: number; color?: string } }[];
+      secret: number;
+      hideAsks: { ask: string; test: { eyes?: 1 | 2 | 3; horns?: number; mouth?: number; wear?: number; color?: string } }[];
+      doneLine: string; }
+  | { id: string; kind: 'feelings-meter'; bg: string; teacher: string; title: string; who: CharKey;
+      /** ★ Feelings Meter (A1 U5L5, docs/a1-unit-5-monster-town.md §5.5): the story character's day as an emotion graph.
+       *  `feelings` = the rows, top (feels best) to bottom (feels worst); `points` = the story moments left to right.
+       *  For each moment the child taps the face on the side, a dot lands in that column and the line joins the dots;
+       *  then the sentence (`line`, with because) is read and said. */
+      feelings: { label: string; img: string }[];
+      points: { img: string; feeling: number; line: string }[];
+      doneLine: string; }
+  | { id: string; kind: 'monster-mixup'; bg: string; teacher: string; title: string; who: CharKey;
+      /** ★ Monster Mix-Up (A1 U5L4, docs/a1-unit-5-monster-town.md §5.4 "Monster Maker"): Bibi describes a monster
+       *  (`line`, 2-3 sentences: has got + is wearing), the machine builds it — with ONE mistake (`mistake`). The child
+       *  taps the wrong part on the monster, picks the right one from the tray, the monster is fixed and the child says
+       *  `say` ("No! He's wearing a hat!"). `wear[i].on` = where it sits on the body. Boys never wear a dress. */
+      body: string; eye: string; horns: { label: string; img: string }[]; mouths: { label: string; img: string }[];
+      wear: { word: string; img: string; on: 'head' | 'face' | 'neck' | 'feet' }[];
+      rounds: {
+        line: string; name: string; eyes: 1 | 2 | 3; horns: number; mouth: number; wears: number[];
+        /** What the machine got wrong: `shown` = the wrong value it built (eye count, horns / mouth index, or for
+         *  `wear` the wrong item worn in place of `wears[slot]`). */
+        mistake: { part: 'eyes' | 'horns' | 'mouth' | 'wear'; shown: number; slot?: number };
+        say: string;
+      }[];
+      doneLine: string; }
   | { id: string; kind: 'festival-cafe'; bg: string; teacher: string; title: string; who: CharKey;
       /** `order` = menu indexes the tray must hold exactly; `offer` = the polite offer the child then SAYS (its item is
        *  added to the tray when the customer says "Yes, please!"). */
@@ -795,18 +850,22 @@ const L1_FACES = [
 /* Leo's First Day — the Unit 1 serial story (docs/a1-unit-1-welcome-town.md §4): one picture per page, read a bit
  * more each lesson in the Reader. Canva art, cast from public/welcome-town/refs/cast-ref.png. */
 export const leoStory = (n: number) => `${W}/scenes/bg-leo-story-${n}-wide.png`;
-export const LEO_STORY: { img: string; lines: { who?: CharKey; text: string }[] }[] = [
-  { img: leoStory(1), lines: [{ text: 'This is Leo. Leo is new in Welcome Town.' }] },
-  { img: leoStory(2), lines: [{ who: 'pip', text: 'Hello! My name is Pip. What’s your name?' }] },
-  { img: leoStory(3), lines: [{ who: 'leo', text: 'Hi, Pip! My name is Leo.' }] },
-  { img: leoStory(4), lines: [{ who: 'pip', text: 'How are you, Leo?' }, { who: 'leo', text: 'I am sad. My red cap is lost.' }] },
-  { img: leoStory(5), lines: [{ who: 'pip', text: 'Come on, Leo! Let’s find it!' }] },
-  { img: leoStory(6), lines: [{ who: 'pip', text: 'Mia, this is my friend Leo.' }, { who: 'mia', text: 'Hello, Leo! Nice to meet you.' }] },
-  { img: leoStory(7), lines: [{ who: 'bella', text: 'Hi, Leo! I’m Bella. Look! A red cap!' }] },
-  { img: leoStory(8), lines: [{ who: 'willow', text: 'No, no! That is my red hat!' }] },
-  { img: leoStory(9), lines: [{ who: 'mia', text: 'Look! The cap is on the cat!' }] },
-  { img: leoStory(10), lines: [{ who: 'leo', text: 'My cap! Thank you, friends! I am happy now!' }] },
-  { img: leoStory(11), lines: [{ who: 'pip', text: 'Goodbye, Leo! See you tomorrow!' }, { who: 'leo', text: 'Goodbye, friends!' }] },
+/** A picture question after a story page (owner 2026-10-14: a question after every scene, like the Pre-A1 films):
+ *  asked once the child has read the page; `options` are pictures with their words (A1 reads). */
+export type ReaderCheck = { who?: CharKey; question: string; answer: string; options: { label: string; img?: string }[] };
+export type ReaderPage = { img: string; lines: { who?: CharKey; text: string }[]; check?: ReaderCheck };
+export const LEO_STORY: ReaderPage[] = [
+  { img: leoStory(1), lines: [{ text: 'This is Leo. Leo is new in Welcome Town.' }], check: { who: 'pip', question: 'Who is new in Welcome Town?', answer: 'Leo', options: [{ label: 'Leo', img: spr('leo') }, { label: 'Pip', img: spr('pip') }, { label: 'Mia', img: spr('mia') }] } },
+  { img: leoStory(2), lines: [{ who: 'pip', text: 'Hello! My name is Pip. What’s your name?' }], check: { who: 'mia', question: 'Who says hello to Leo?', answer: 'Pip', options: [{ label: 'Bella', img: spr('bella') }, { label: 'Pip', img: spr('pip') }, { label: 'Willow', img: spr('willow') }] } },
+  { img: leoStory(3), lines: [{ who: 'leo', text: 'Hi, Pip! My name is Leo.' }], check: { who: 'pip', question: 'What is his name?', answer: 'Leo', options: [{ label: 'Pip', img: spr('pip') }, { label: 'Leo', img: spr('leo') }, { label: 'Mia', img: spr('mia') }] } },
+  { img: leoStory(4), lines: [{ who: 'pip', text: 'How are you, Leo?' }, { who: 'leo', text: 'I am sad. My red cap is lost.' }], check: { who: 'pip', question: 'What is lost?', answer: 'A red cap', options: [{ label: 'A red cap', img: '/lep1/items/item-cap.png' }, { label: 'A hat', img: '/lep1/items/item-hat.png' }, { label: 'A ball', img: '/lep1/items/item-ball.png' }] } },
+  { img: leoStory(5), lines: [{ who: 'pip', text: 'Come on, Leo! Let’s find it!' }], check: { who: 'leo', question: 'Who helps Leo?', answer: 'Pip', options: [{ label: 'Mia', img: spr('mia') }, { label: 'Pip', img: spr('pip') }, { label: 'Bella', img: spr('bella') }] } },
+  { img: leoStory(6), lines: [{ who: 'pip', text: 'Mia, this is my friend Leo.' }, { who: 'mia', text: 'Hello, Leo! Nice to meet you.' }], check: { who: 'pip', question: 'Who meets Leo?', answer: 'Mia', options: [{ label: 'Mia', img: spr('mia') }, { label: 'Willow', img: spr('willow') }, { label: 'Bella', img: spr('bella') }] } },
+  { img: leoStory(7), lines: [{ who: 'bella', text: 'Hi, Leo! I’m Bella. Look! A red cap!' }], check: { who: 'pip', question: 'What does Bella see?', answer: 'A red cap', options: [{ label: 'A ball', img: '/lep1/items/item-ball.png' }, { label: 'A cat', img: '/lep1/items/item-cat.png' }, { label: 'A red cap', img: '/lep1/items/item-cap.png' }] } },
+  { img: leoStory(8), lines: [{ who: 'willow', text: 'No, no! That is my red hat!' }], check: { who: 'pip', question: 'Whose hat is it?', answer: 'Willow', options: [{ label: 'Bella', img: spr('bella') }, { label: 'Willow', img: spr('willow') }, { label: 'Leo', img: spr('leo') }] } },
+  { img: leoStory(9), lines: [{ who: 'mia', text: 'Look! The cap is on the cat!' }], check: { who: 'pip', question: 'Where is the cap?', answer: 'On the cat', options: [{ label: 'On the cat', img: '/lep1/items/item-cat.png' }, { label: 'On the hat', img: '/lep1/items/item-hat.png' }, { label: 'In the box', img: '/lep1/items/item-toybox.png' }] } },
+  { img: leoStory(10), lines: [{ who: 'leo', text: 'My cap! Thank you, friends! I am happy now!' }], check: { who: 'pip', question: 'How is Leo now?', answer: 'Happy', options: [{ label: 'Sad' }, { label: 'Happy' }, { label: 'Angry' }] } },
+  { img: leoStory(11), lines: [{ who: 'pip', text: 'Goodbye, Leo! See you tomorrow!' }, { who: 'leo', text: 'Goodbye, friends!' }], check: { who: 'pip', question: 'What do they say?', answer: 'Goodbye!', options: [{ label: 'Hello!' }, { label: 'Thank you!' }, { label: 'Goodbye!' }] } },
 ];
 
 /* Rebuilt 2026-10-12 to the approved Unit 1 plan (docs/a1-unit-1-welcome-town.md §5.1; owner: "some activities don't
@@ -821,6 +880,18 @@ export const LESSON_1_SCENES: Scene[] = classroomLook([
   { id: 'wt-sentence-name', kind: 'meet', focus: ['name'], bg: bgL1Hello, who: 'pip', cardSide: 'left', teacher: 'Present: listen to Pip. Then say: My name is … (your name!)', line: 'My name is Pip. What’s your name?', repeat: 'My name is …' },
   { id: 'wt-echo-question', kind: 'echo', bg: bgL1Peers, who: 'pip', textSide: 'top', teacher: 'Guided: say the question with Pip — the voice goes up at the end.', word: 'What’s your name?' },
   { id: 'wt-echo-goodbye', kind: 'echo', bg: bgL1Goodbye, who: 'pip', textSide: 'top', teacher: 'Guided: wave and say it with Pip — loud, then quiet.', word: 'Goodbye! See you!' },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game.
+  {
+    id: 'wt-name-match', kind: 'picture-match', look: 'polaroids', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each sentence and drags it under its picture (or taps it, then the picture), then reads it aloud.',
+    items: [
+      { word: 'My name is Pip.', img: spr('pip') },
+      { word: 'My name is Mia.', img: spr('mia') },
+      { word: 'My name is Leo.', img: spr('leo') },
+      { word: 'My name is Bella.', img: spr('bella') },
+    ],
+    bg: bgL1Goodbye,
+  },
   /* Guided: when do we say hello / goodbye? */
   {
     id: 'wt-hello-goodbye-sort', kind: 'prea1', teacher: 'Guided: Hello or Goodbye? A friend arrives → catch it in Hello!; a friend leaves → Goodbye! Say it as you catch it.',
@@ -949,7 +1020,7 @@ export const LESSON_1_SCENES: Scene[] = classroomLook([
     pages: LEO_STORY.slice(0, 3),
   },
   {
-    id: 'wt-read-match', kind: 'picture-match', prompt: 'Read and match',
+    id: 'wt-read-match', kind: 'picture-match', look: 'chalk', prompt: 'Read and match',
     teacher: 'Reading: the student reads each sentence and drags it under its picture, then reads it aloud.',
     items: [
       { word: 'Leo is new.', img: leoStory(1) },
@@ -1639,6 +1710,20 @@ export const LESSON_3_SCENES: Scene[] = classroomLook([
     id: 'wt3-numbers-11-20', kind: 'prea1', teacher: 'Present: the new numbers 11 to 20. Stretch and clap the end: four-TEEN! Then twenty.',
     scene: { id: 'wt3-numbers-11-20', kind: 'numbers-learn', bg: bgL1Party, who: 'mia', from: 11, to: 20, teacher: 'New numbers! Tap each one, listen and say it: eleven, twelve, thirteen…' },
   },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game.
+  {
+    id: 'wt3-number-match', kind: 'picture-match', look: 'cards', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each word and drags it under its picture (or taps the word, then the picture), then reads it aloud.',
+    items: [
+      { word: 'eleven', emoji: '11' },
+      { word: 'thirteen', emoji: '13' },
+      { word: 'fifteen', emoji: '15' },
+      { word: 'sixteen', emoji: '16' },
+      { word: 'eighteen', emoji: '18' },
+      { word: 'twenty', emoji: '20' },
+    ],
+    bg: bgL1Party,
+  },
   /* CONTROLLED PRACTICE 1 — hear, find and say the numbers */
   {
     id: 'wt3-number-tap', kind: 'prea1', teacher: 'Guided: Number Tap! Pip says a number from 1 to 20 — tap it and say it.',
@@ -1936,6 +2021,18 @@ export const LESSON_4_SCENES: Scene[] = classroomLook([
   { id: 'wt4-this-is-she', kind: 'meet', focus: ['This is my friend'], bg: leoStory(6), who: 'leo', cardSide: 'left', teacher: 'Present: a girl friend — This is my friend Bella. She is nine.', line: 'Pip, this is my friend Bella. She is nine.', repeat: 'This is my friend Bella.' },
   { id: 'wt4-echo', kind: 'echo', bg: bgL1Peers, who: 'leo', textSide: 'top', teacher: 'Guided: the answer — say it with Leo.', word: 'Nice to meet you, too!' },
   { id: 'wt4-echo-friend', kind: 'echo', bg: bgL1Peers, who: 'pip', textSide: 'top', teacher: 'Guided: point to a friend and say it with Pip.', word: 'This is my friend.' },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game.
+  {
+    id: 'wt4-friend-match', kind: 'picture-match', look: 'frames', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each sentence and drags it under its picture (or taps it, then the picture), then reads it aloud.',
+    items: [
+      { word: 'This is my friend Leo.', img: spr('leo') },
+      { word: 'This is my friend Mia.', img: spr('mia') },
+      { word: 'This is my friend Bella.', img: spr('bella') },
+      { word: 'This is my friend Willow.', img: spr('willow') },
+    ],
+    bg: bgL1Peers,
+  },
   /* Guided */
   {
     id: 'wt4-chat-chain', kind: 'chat-chain', bg: bgL1Circle, partner: 'bella', title: 'Chat with Bella',
@@ -2009,7 +2106,7 @@ export const LESSON_4_SCENES: Scene[] = classroomLook([
   {
     id: 'wt4-hide-seek', kind: 'prea1', teacher: 'Free: hide and seek! The student ASKS "Is it Mia?" at each hiding place, then taps to look. Leo is hiding somewhere — when they find him: This is my friend Leo!',
     scene: {
-      id: 'wt4-hide-seek', kind: 'lift-flap', bg: bgParkEmpty, who: 'pip',
+      id: 'wt4-hide-seek', kind: 'lift-flap', bg: bgParkEmpty, who: 'pip', guided: true, whatPrompt: 'Who is it?',
       teacher: 'Where is Leo? Ask at each place, then look!',
       question: 'Where is my friend Leo?',
       notYet: 'Not yet! Look in the other places first!',
@@ -2289,6 +2386,17 @@ export const LESSON_5_SCENES: Scene[] = classroomLook([
     ],
   },
   { id: 'wt5-thank-you', kind: 'meet', focus: ['Thank you'], bg: leoStory(10), who: 'leo', cardSide: 'left', teacher: 'Present: when friends help, we say Thank you! Hands on the heart and say it.', line: 'My cap! Thank you, friends!', repeat: 'Thank you!' },
+  // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game.
+  {
+    id: 'wt5-story-match', kind: 'picture-match', look: 'polaroids', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each sentence and drags it under its picture (or taps it, then the picture), then reads it aloud.',
+    items: [
+      { word: 'My red cap is lost!', img: leoStory(4), crop: { x: 0, y: 0, w: 100, h: 100 }, imgAspect: 16 / 9 },
+      { word: 'Look! The cap!', img: leoStory(9), crop: { x: 0, y: 0, w: 100, h: 100 }, imgAspect: 16 / 9 },
+      { word: 'My cap! Thank you, friends!', img: leoStory(10), crop: { x: 0, y: 0, w: 100, h: 100 }, imgAspect: 16 / 9 },
+    ],
+    bg: bgL1Peers,
+  },
   /* Reading: the whole book */
   {
     id: 'wt5-book', kind: 'reader', bg: bgL1Reading, title: 'Leo’s First Day', doneLine: 'Where is the red cap? Let’s guess — then read on!',
@@ -2746,7 +2854,7 @@ export const LESSON_6_SCENES: Scene[] = classroomLook([
     lines: ['Happy Hen hops.', 'Sad Sam sits.', 'Ten tiny teddies.', 'Fun Fred finds a frog.'],
   },
   {
-    id: 'wt6-speed-read', kind: 'reader', bg: bgL1Reading, title: 'Speed Reading: Leo’s First Day', doneLine: 'Wow! Fast and clear — super reading!',
+    id: 'wt6-speed-read', kind: 'reader', noChecks: true, bg: bgL1Reading, title: 'Speed Reading: Leo’s First Day', doneLine: 'Wow! Fast and clear — super reading!',
     teacher: 'Reading: Game Day speed read! The student reads pages 1-4 on their own (🔊 only for help) — then once more, faster.',
     pages: LEO_STORY.slice(0, 4),
   },
@@ -3175,7 +3283,7 @@ export const LESSON_7_SCENES: Scene[] = classroomLook([
   },
   /* Practise again — for any part below the pass mark, or as extra time */
   {
-    id: 'wt7-pa-match', kind: 'picture-match', prompt: 'Practise again: read and match',
+    id: 'wt7-pa-match', kind: 'picture-match', look: 'cards', prompt: 'Practise again: read and match',
     teacher: 'Practise again (Part 2/3): read each sentence and drag it under its picture.',
     items: [
       { word: 'I am sad. My red cap is lost.', img: leoStory(4) },

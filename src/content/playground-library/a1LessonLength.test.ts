@@ -3,6 +3,7 @@ import * as WT from './welcome-town/scenes';
 import * as JA from './jungle-adventure/scenes';
 import * as SM from './space-mission/scenes';
 import * as FF from './food-festival/scenes';
+import * as MT from './monster-town/scenes';
 
 /**
  * A1 lessons (owner, 2026-10-13: "A1 lessons can be from 30 to 49 pages"): every rebuilt A1 lesson has 30-49 pages,
@@ -19,7 +20,7 @@ const ROUTINES = new Set([
   'sticker-reward', 'home-mission', 'finale',
   // Read and match (owner 2026-10-13/14: after every word presentation a matching page — A1 reads and matches, "like the
   // one in the screenshot"): a routine, like Pre-A1's listen-match, so it may come after each new set of words.
-  'drag-match',
+  'drag-match', 'picture-match',
   'pet-pal', // a short collecting moment like the sticker reward: Biscuit grows across the units, so it is in every lesson
 ]);
 
@@ -28,6 +29,8 @@ const UNITS: { unit: string; lessons: AnyScene[][] }[] = [
   { unit: 'A1 Unit 2 Jungle', lessons: [1, 2, 3, 4, 5, 6, 7].map((n) => (JA as unknown as Record<string, AnyScene[]>)[`LESSON_A1U2L${n}_SCENES`]) },
   { unit: 'A1 Unit 3 Space', lessons: [1, 2, 3, 4, 5, 6, 7].map((n) => (SM as unknown as Record<string, AnyScene[]>)[`LESSON_A1U3L${n}_SCENES`]) },
   { unit: 'A1 Unit 4 Food', lessons: [1, 2, 3, 4, 5, 6, 7].map((n) => (FF as unknown as Record<string, AnyScene[]>)[`LESSON_A1U4L${n}_SCENES`]) },
+  // Unit 5 is being built lesson by lesson: only the lessons that exist are checked.
+  { unit: 'A1 Unit 5 Monster Town', lessons: [1, 2, 3, 4, 5, 6, 7].map((n) => (MT as unknown as Record<string, AnyScene[]>)[`LESSON_A1U5L${n}_SCENES`]).filter(Boolean) },
 ];
 
 describe('A1 lessons: 30-49 pages, no game twice in a unit', () => {

@@ -319,6 +319,27 @@ A1, read and match … after the matching, another activity or another game to r
   - **A1: Read and Match** (`picture-match`) — the written words go under their pictures.
 - Then **one more game with the same words** (any game of the lesson's slot) before the lesson moves on.
 - `listen-match` is a routine kind (`ROUTINE_KINDS`), so it may come in every lesson.
+- **The matching game changes its design** (owner 2026-10-14: "change the design of the games to prevent repetition —
+  make it a rule"): `listen-match` has four looks — `cards` (picture grid), `balloons` (pictures float on balloons),
+  `doors` (a row of doors, the right one swings open), `lilypads` (pictures on a pond) — assigned by (unit + lesson) mod 4,
+  so a lesson never shares its look with the lesson before or with the same lesson of the previous unit
+  (`listenMatchVariety.test.ts`, deploy gate). Any game used in many lessons follows the same rule: several designs,
+  rotated.
+- **The A1 Read and Match changes its design too**: `picture-match` has four looks — `cards`, `frames` (framed
+  pictures on a wall, brass name plates, wooden word tags), `polaroids` (taped photos, sticky-note words), `chalk`
+  (chalkboard tiles) — by (unit + lesson) mod 4; a second one in the same lesson takes the next look
+  (`readMatchVariety.test.ts`, deploy gate).
+- **A1: the Read and Match comes right after the opening words** (owner 2026-10-13, applied 2026-10-14 to A1 Units
+  1-4 Lessons 1-5 and Unit 9 Lesson 4): words lessons match words or sentences to stickers, story lessons match story
+  sentences to the story pictures. Checked in `readMatchVariety.test.ts` (a matching page within the first 15 pages).
+- **Pre-A1: every lesson that teaches words on a listen-repeat-cards page has a Listen and Match** (checked in
+  `listenMatchVariety.test.ts`). A full scene picture fills its frame in every design, so it is never shown tiny.
+  A `crop` on an item shows only the part of a scene picture that carries the word (Leo's pose in U4L1, Pip's shoes
+  in U9L5, the toy and its place in U3L5). Story phrases are matched to their story moments (U2L5
+  "Here you are!" = the boat, U6L5 "No, it isn't!" = the blue and the yellow door). Every Pre-A1 word lesson now has one.
+- **Aesthetic pass on every activity** (owner 2026-10-14): colours, look, layout, icons and game feel are designed, not
+  left at defaults; floating pieces over a busy picture sit on `CalmBg` (blurred, veiled picture) — see CLAUDE.md
+  "Aesthetic pass on every activity" and `.claude/skills/game-animation` §5b.
 - First lesson built this way: Pre-A1 U1L5 (story words → Listen and Match → Wind Catch → the film).
 
 ## 3g. A1 lessons — themed worlds, the plan first, sentences and questions (all A1 lessons)

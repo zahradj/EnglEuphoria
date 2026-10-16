@@ -3930,5 +3930,113 @@
       "Up in the tower, what can you see?",
       "There is, there are, for you and me!"
     ]
+  },
+  "a1u5l3-monster-how-do-you-feel": {
+    "publicPath": "public/lep1/audio/how-do-you-feel-song-a1u5l3.mp3",
+    "bpm": 112,
+    "key": "F major",
+    "beatsPerLine": 4,
+    "barsPerLine": 2,
+    "introBars": 2,
+    "maxSeconds": 75,
+    "targetWords": [
+      "feel",
+      "scared",
+      "bored",
+      "excited",
+      "because"
+    ],
+    "style": "Playful spooky-cute monster kids song, 112 BPM in 4/4, F major, with plucky pizzicato strings, xylophone, bouncy tuba bass, finger snaps and hand claps, ONE clear happy young singer, every word sung slowly and very clearly: each verse names the feeling, asks 'Why?' going UP, answers with a strong 'Because…', then a fun face-making line; the chorus is a catchy question 'How do you feel?'.",
+    "positiveStyles": [
+      "kids song",
+      "playful",
+      "pizzicato strings",
+      "xylophone",
+      "tuba",
+      "finger snaps",
+      "hand claps",
+      "clear kids vocals",
+      "112 BPM",
+      "happy"
+    ],
+    "negativeStyles": [
+      "scary",
+      "horror",
+      "dark",
+      "lullaby",
+      "sleepy",
+      "slow",
+      "adult vocals",
+      "rap",
+      "instrumental only",
+      "extra verses",
+      "mumbling"
+    ],
+    "sections": [
+      {
+        "name": "Chorus",
+        "rhyme": "AA",
+        "lines": [
+          "How do you feel? How do you feel?",
+          "Make a face and spin like a wheel!"
+        ]
+      },
+      {
+        "name": "Verse 1",
+        "rhyme": "AABB",
+        "lines": [
+          "Bibi is scared, so scared, oh no!",
+          "Why is she scared? Do you know?",
+          "Because it's dark, it's dark, you see!",
+          "Make a scared face just like me!"
+        ]
+      },
+      {
+        "name": "Verse 2",
+        "rhyme": "AABB",
+        "lines": [
+          "Bibi is bored, so bored, oh no!",
+          "Why is she bored? Do you know?",
+          "Because the lesson's long, you see!",
+          "Make a bored face just like me!"
+        ]
+      },
+      {
+        "name": "Verse 3",
+        "rhyme": "AABB",
+        "lines": [
+          "Bibi's excited, hooray, hooray!",
+          "Why's she excited? Can you say?",
+          "Because it's a party, you see!",
+          "Make an excited face like me!"
+        ]
+      },
+      {
+        "name": "Chorus 2",
+        "rhyme": "AA",
+        "lines": [
+          "How do you feel? How do you feel?",
+          "Make a face and spin like a wheel!"
+        ]
+      }
+    ],
+    "lines": [
+      "How do you feel? How do you feel?",
+      "Make a face and spin like a wheel!",
+      "Bibi is scared, so scared, oh no!",
+      "Why is she scared? Do you know?",
+      "Because it's dark, it's dark, you see!",
+      "Make a scared face just like me!",
+      "Bibi is bored, so bored, oh no!",
+      "Why is she bored? Do you know?",
+      "Because the lesson's long, you see!",
+      "Make a bored face just like me!",
+      "Bibi's excited, hooray, hooray!",
+      "Why's she excited? Can you say?",
+      "Because it's a party, you see!",
+      "Make an excited face like me!",
+      "How do you feel? How do you feel?",
+      "Make a face and spin like a wheel!"
+    ]
   }
 }

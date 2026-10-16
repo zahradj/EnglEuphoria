@@ -4,7 +4,7 @@
 > Brand-new and Academy-only: the Playground curriculum files and the old Academy rows in the database are not used or changed.
 > Rules: `.claude/skills/academy-season-system`, `docs/academy-lesson-system.md`, `docs/academy-learning-science.md`.
 
-**Size:** 70 Seasons · 560 sessions of 60 minutes · 5452 planned new items (words + chunks).
+**Size:** 80 Seasons · 640 sessions of 60 minutes · 6182 planned new items (words + chunks).
 
 **Status of the placements.** Grammar levels are recalled from the English Grammar Profile, Pearson GSE and Cambridge lists and were **not re-checked** against the sources (they could not be opened on 2026-10-08). Rows marked ⚠ are the least certain. Word lists (Oxford 3000/5000, Cambridge Vocabulary Profile) are **not yet loaded**: each Season has an item *budget* and lexical fields, not an item list. CEFR can-do lines are paraphrased from memory of the CEFR Companion Volume (2020) and need checking at coe.int.
 
@@ -12,26 +12,28 @@
 
 | Level | Seasons | Sessions | New items (budget) | Cumulative items | Cambridge cumulative hours |
 |---|---|---|---|---|---|
-| A1 | 10 | 80 | 800 | 800 (target 800) | ~90-100 (not confirmed) |
-| A2 | 12 | 96 | 828 | 1628 (target 1650) | 180-200 |
-| B1 | 16 | 128 | 1200 | 2828 (target 2750) | 350-400 |
-| B2 | 16 | 128 | 1280 | 4108 (target 4050) | 500-600 |
-| C1 | 16 | 128 | 1344 | 5452 (target 5400) | 700-800 |
+| A1 | 12 | 96 | 940 | 940 (target 940) | ~90-100 (not confirmed) |
+| A2 | 14 | 112 | 958 | 1898 (target 1900) | 180-200 |
+| B1 | 18 | 144 | 1350 | 3248 (target 3250) | 350-400 |
+| B2 | 18 | 144 | 1430 | 4678 (target 4680) | 500-600 |
+| C1 | 18 | 144 | 1504 | 6182 (target 6180) | 700-800 |
 
 ## A1
 
 | Season | Title · theme | Cast | Structures (E3 / E6) | Functions | Release | Items |
 |---|---|---|---|---|---|---|
-| A1-S01 | **Who Are You?** · Online profiles and meeting people | Ava | be (am/is/are): statements, questions, negatives / possessive adjectives (my/your/his/her/our/their) | greeting and leave-taking; introducing yourself; asking for personal information; spelling | My profile card plus a 30-second voice introduction | 80 |
-| A1-S02 · Big Remix | **My Room, My Stuff** · Rooms, gadgets and where things are | Theo | there is / there are / prepositions of place (in/on/under/next to/behind) | describing a place; saying where things are; asking where something is | A voice-note tour of my room | 80 |
+| A1-S01 | **Who Are You?** · Online profiles and meeting people | Ava | be (am/is/are): statements, questions, negatives (with who / what / where / how questions as chunks (What's your name? Where are you from?)) / possessive adjectives (my/your/his/her/our/their) | greeting and leave-taking; introducing yourself; asking for personal information; spelling | My profile card plus a 30-second voice introduction | 80 |
+| A1-S02 · Big Remix | **My Room, My Stuff** · Rooms, gadgets and where things are | Theo | there is / there are (with a / an / the and plural -s nouns) / prepositions of place (in/on/under/next to/behind) | describing a place; saying where things are; asking where something is | A voice-note tour of my room | 80 |
 | A1-S03 | **Free Time Club** · Hobbies and the Club Fair | Ava | present simple (I/you/we/they): statements and negatives / like/love/hate + -ing | talking about likes and dislikes; talking about hobbies; asking about interests | A 45-second pitch for a club I would start | 80 |
 | A1-S04 · Big Remix | **Café Night** · Food, drinks and ordering | Mia | some / any with countable and uncountable nouns / I'd like ... / Would you like ...? (as a chunk first) ⚠ | ordering food and drink; asking for and giving prices; polite requests | A short café role-play with my own menu | 80 |
 | A1-S05 | **A Day in My Life** · Daily routines and the school day | Mia | present simple he/she/it (-s) and questions with does / adverbs of frequency (always/usually/sometimes/never) | describing routines; telling the time; saying how often you do things | A short vlog script and recording of my day | 80 |
-| A1-S06 · Big Remix | **Family and Friends** · People close to me | Theo | have got / has got / possessive 's | talking about family; describing people; talking about possessions | My family or friends tree with a spoken description of three people | 80 |
+| A1-S06 · Big Remix | **Family and Friends** · People close to me | Theo | have got / has got / possessive 's (with object pronouns (him / her / them)) | talking about family; describing people; talking about possessions | My family or friends tree with a spoken description of three people | 80 |
 | A1-S07 | **Treasure Map Town** · Places in town and giving directions | Vee | imperatives (instructions, directions) / prepositions of movement (to/into/out of/along/across) | giving directions; asking where a place is; giving simple instructions | A voice guide that leads a friend to a hidden place on a map | 80 |
 | A1-S08 · Big Remix | **Can Do!** · Talents and abilities | Theo | can / can't for ability / and / but / because (simple linking) | talking about ability; asking for and giving help; simple linking of ideas | A talent card: what I can and cannot do, with one demonstration | 80 |
 | A1-S09 | **Market Day** · Clothes, shopping and money | Ava | this / that / these / those / how much / how many and prices | shopping; asking for and giving prices; choosing between things | A market role-play: buying and selling with prices | 80 |
-| A1-S10 · Big Remix · **level check** | **Right Now** · What is happening now: a live stream | Vee | present continuous for actions happening now / wh-questions and question word order | describing what is happening now; asking wh-questions; talking about the weather | A 60-second live commentary clip | 80 |
+| A1-S10 · Big Remix | **Right Now** · What is happening now: a live stream | Vee | present continuous for actions happening now / wh-questions and question word order | describing what is happening now; asking wh-questions; talking about the weather | A 60-second live commentary clip | 80 |
+| A1-S11 | **Plan the Weekend** · Days, dates, times and invitations | Mia, Theo | want / need + to-infinitive (want / need + to-infinitive for plans and obligations) / prepositions of time (in / on / at) (in the morning / on Saturday / at six o'clock) ⚠ | inviting and responding to invitations; making simple plans; giving days, dates and times; saying what you want and need to do | A weekend plan chat: invite a friend, give day and time, and accept or politely decline | 70 |
+| A1-S12 · Big Remix · **level check** | **Lost and Found** · Belongings, whose is it and describing objects | Ava, Theo | articles a / an / the and regular and irregular plural nouns (a / an / the and regular and irregular plurals to describe objects) / object pronouns (me / you / him / her / it / us / them) (me / him / her / us / them after verbs and prepositions) | describing objects; asking whose something is; reporting a lost item; giving something back | A lost-property report: describe an object, say whose it is and hand it back (a short spoken role-play) | 70 |
 
 <details><summary>Can-do statements, hooks and mediation</summary>
 
@@ -84,6 +86,16 @@
 - I can say what is happening at this moment.
 - I can ask and answer simple questions with who, what, where, when and why.
 - Lexical fields: actions and activities; weather and seasons; places and events · Pronunciation: -ing and weak "are" in "What are you doing?"; falling intonation in wh-questions · Skins: social, football, travel, film, nature
+
+**A1-S11 Plan the Weekend** — *Mia has a spare ticket for Saturday night but the message she sent is full of gaps: no day, no time, no place. Fill in the plan before Theo books something else.*
+- I can say what I want and need to do on a day or at a time.
+- I can invite someone, and accept or politely say no, giving a day and a time.
+- Lexical fields: days, months and dates; weekend activities; invitations and replies · Pronunciation: Wednesday /ˈwenzdeɪ/ and Thursday /θ/ (silent d; th awareness for fr, tr, it); weak "to" /tə/ in "want to / need to" · Skins: social, film, music, football, food
+
+**A1-S12 Lost and Found** — *Ava runs the school lost-and-found box and nothing has a label. Theo swears the black bag is his. Describe each object and work out whose it is.*
+- I can name and describe my things using a, an, the and plural nouns.
+- I can ask whose something is, and use me, him, her, us and them correctly.
+- Lexical fields: personal belongings; materials, shapes and sizes; giving and returning things · Pronunciation: a vs an linked to the next word ("an_old_watch"); the /h/ in him / her (fr speakers drop it) and the vowel in them / us · Skins: tech, fashion, gaming, travel
 - Note: Level check Season: E8 includes the A1 level check (separate from XP).
 
 </details>
@@ -92,7 +104,7 @@
 
 | Season | Title · theme | Cast | Structures (E3 / E6) | Functions | Release | Items |
 |---|---|---|---|---|---|---|
-| A2-S01 | **Last Weekend** · Telling a story about the past | Ava | past simple of be (was/were) ⚠ / past simple: regular verbs (-ed) | describing past events; saying where you were; sequencing events (first, then, after that) | A voice note telling the story of my last weekend | 69 |
+| A2-S01 | **Last Weekend** · Telling a story about the past | Ava | past simple of be (was/were) / past simple: regular verbs (-ed) | describing past events; saying where you were; sequencing events (first, then, after that) | A voice note telling the story of my last weekend | 69 |
 | A2-S02 · Big Remix | **Travel Trouble** · Journeys that went wrong | Theo | past simple: irregular verbs, questions and negatives | narrating past events; asking about past events; describing a problem while travelling | A postcard or message about a trip that went wrong | 69 |
 | A2-S03 | **Gadget Wars** · Comparing technology | Mia | comparatives and superlatives | comparing; recommending; giving a reason | A written review comparing two things I own or want | 69 |
 | A2-S04 · Big Remix | **Plans and Dreams** · Plans for next week and next summer | Vee, Ava | be going to (plans and intentions) | talking about plans; asking about plans; giving reasons for plans | My plan for next summer, spoken and as a short written list | 69 |
@@ -100,10 +112,12 @@
 | A2-S06 · Big Remix | **House Rules** · Rules at home, at school and in games | Mia | must / mustn't (rules) / have to (obligation) | talking about rules; saying what is necessary; prohibiting | A short guide to the rules of a place or game I know well | 69 |
 | A2-S07 | **Food Cultures** · What people eat around the world | Vee | much / many / a few / a little / a lot of | talking about quantity; giving instructions for a recipe; comparing food customs | A short recipe video script and recording of a dish I know | 69 |
 | A2-S08 · Big Remix | **Getting Around** · Transport and city life | Ava | infinitive of purpose (to + verb) / prepositions of movement and transport phrases | giving travel directions; explaining purpose; buying a ticket | A route guide for a visitor, spoken and as a simple map | 69 |
-| A2-S09 | **Tomorrow's World** · Predictions and quick decisions | Vee, Mia | will for decisions, offers and simple predictions ⚠ | making predictions; making offers and quick decisions; agreeing and disagreeing simply | A one-minute predictions podcast clip: my world in 2040 | 69 |
+| A2-S09 | **Tomorrow's World** · Predictions and quick decisions | Vee, Mia | will for decisions, offers and simple predictions | making predictions; making offers and quick decisions; agreeing and disagreeing simply | A one-minute predictions podcast clip: my world in 2040 | 69 |
 | A2-S10 · Big Remix | **Storm Warning** · Weather and an adventure that went wrong | Ava, Theo, Mia, Vee | past continuous (was/were + -ing) / so / because / then (linking sentences) | describing a scene in the past; giving reasons and results; telling a short story | An eyewitness account: what was happening when the storm started | 69 |
 | A2-S11 | **Dream Jobs** · Jobs, skills and how people do things | Theo | adverbs of manner (-ly) | talking about jobs; describing how things are done; answering simple interview questions | A short job-interview role-play: me as the candidate | 69 |
-| A2-S12 · Big Remix · **level check** | **Event Planners** · Organising a school festival | Vee, Ava, Theo | let's / shall we / how about + -ing (suggestions) | making suggestions; accepting and refusing politely; writing an invitation | A festival invitation plus a one-minute pitch for the committee | 69 |
+| A2-S12 · Big Remix | **Event Planners** · Organising a school festival | Vee, Ava, Theo | let's / shall we / how about + -ing (suggestions) | making suggestions; accepting and refusing politely; writing an invitation | A festival invitation plus a one-minute pitch for the committee | 69 |
+| A2-S13 | **Money Talks** · Pocket money, saving up and buying things online | Mia | polite requests and permission: Can I / Could you / May I ...? / as ... as / not as ... as (basic comparison of equality) ⚠ | asking politely for things and permission; comparing prices and products; talking about saving and spending | A short role-play in an online shop chat: asking politely, comparing two prices and deciding what to buy | 65 |
+| A2-S14 · Big Remix · **level check** | **Stay Safe Online** · Passwords, privacy and sharing photos wisely | Theo, Vee, Ava | indefinite pronouns: somebody / anything / nothing / nobody / everyone / present simple vs present continuous (habits vs now) | giving simple online-safety rules; talking about habits and what is happening now; asking for and giving help with a problem | A short guide for younger students: five rules for staying safe online (spoken or written) | 65 |
 
 <details><summary>Can-do statements, hooks and mediation</summary>
 
@@ -166,6 +180,18 @@
 - I can make, accept and refuse suggestions politely.
 - I can write a short invitation with the key information.
 - Lexical fields: festivals and events; dates and times; food, music and decorations · Pronunciation: intonation in polite suggestions (Let's go! / Shall we ...?); dates: ordinal numbers stress · Skins: music, food, art, fashion, football
+
+**A2-S13 Money Talks** — *Mia is saving for a pair of headphones, but her bank app shows less money than she expected. Ask polite questions, compare prices and find out where the missing cash went.*
+- I can ask for things, for permission and for help politely (Can I ...? Could you ...? May I ...?).
+- I can compare two prices or products (as cheap as, not as good as).
+- I can understand a short text about pocket money and part-time jobs.
+- Lexical fields: money, saving and spending; pocket money and part-time jobs; online shopping and prices · Pronunciation: polite rising intonation on Could you ...? / Can I ...?; weak "as ... as" /əz/ in connected speech · Skins: business, tech, fashion, gaming
+
+**A2-S14 Stay Safe Online** — *Theo's account sends strange messages that he never wrote. Vee and Ava follow the clues, one rule at a time, to find out who knows his password and how to lock the door again.*
+- I can say that nobody, somebody or nothing is true or not (There is nothing wrong. Nobody knows my password.).
+- I can say what I usually do online and what I am doing right now.
+- I can give simple rules and advice about passwords and privacy.
+- Lexical fields: accounts, passwords and privacy; sharing photos and messages; online rules and problems · Pronunciation: stress on the first syllable of SOMEbody / ANYthing / NOthing; present simple -s vs present continuous -ing endings · Skins: social, tech, gaming, film
 - Note: Level check Season: E8 includes the A2 level check (separate from XP).
 
 </details>
@@ -175,21 +201,23 @@
 | Season | Title · theme | Cast | Structures (E3 / E6) | Functions | Release | Items |
 |---|---|---|---|---|---|---|
 | B1-S01 | **Have You Ever...?** · Experiences and bucket lists | Vee | present perfect: experience (ever/never/been) ⚠ | talking about life experiences; asking follow-up questions; showing interest and surprise | My bucket list: three things I have done and three I want to do | 75 |
-| B1-S02 · Big Remix | **Then and Now** · Memories and how things have changed | Theo | used to ⚠ | talking about past habits; comparing past and present; reminiscing | A "then and now" photo story: how my life or my town has changed | 75 |
+| B1-S02 · Big Remix | **Then and Now** · Memories and how things have changed | Theo | used to | talking about past habits; comparing past and present; reminiscing | A "then and now" photo story: how my life or my town has changed | 75 |
 | B1-S03 | **Still Going** · Things that began in the past and continue now | Ava, Mia | present perfect: for / since / how long | talking about duration; interviewing someone; giving a short personal profile | An interview with a friend about a long-term hobby or friendship, recorded | 75 |
 | B1-S04 · Big Remix | **Breaking News** · Recent events and news stories | Ava | present perfect vs past simple | reporting news; giving details of a past event; announcing results | A 60-second audio news bulletin | 75 |
 | B1-S05 | **If This, Then That** · Rules, systems and game design | Mia | zero and first conditional ⚠ | explaining rules; predicting consequences; giving warnings and instructions | The rules of a game I designed, explained step by step | 75 |
-| B1-S06 · Big Remix | **What If...?** · Imaginary situations and dilemmas | Vee | second conditional ⚠ | talking about imaginary situations; giving opinions; agreeing and disagreeing | A spoken debate: three "what if" dilemmas and my answers | 75 |
+| B1-S06 · Big Remix | **What If...?** · Imaginary situations and dilemmas | Vee | second conditional | talking about imaginary situations; giving opinions; agreeing and disagreeing | A spoken debate: three "what if" dilemmas and my answers | 75 |
 | B1-S07 | **Made in the World** · How things are made and where they come from | Theo | passive: present and past simple | describing a process; giving factual information; sequencing steps | A short 'how it is made' explainer clip | 75 |
 | B1-S08 · Big Remix | **Who's Who** · Describing people, places and things precisely | Mia | defining relative clauses (who/which/that/where) | describing and defining; adding detail; clarifying | A "guess who / what" game I wrote and played with a partner | 75 |
 | B1-S09 | **Case Closed** · Mystery and deduction | Vee, Ava, Theo | modals of deduction (must / might / can't) ⚠ | speculating; expressing certainty and doubt; explaining a theory | A detective briefing: my theory of the case with evidence | 75 |
 | B1-S10 · Big Remix | **Plans and Promises** · Arrangements and commitments | Vee, Mia, Theo | present continuous for future arrangements (future arrangements) ⚠ / will for promises and predictions (promises and predictions) ⚠ | arranging to meet; making promises; predicting | A trip plan with arrangements and promises, as an invitation and short call | 75 |
 | B1-S11 | **Learning Machines** · Technology, AI and how we learn | Vee | verb patterns: gerund vs infinitive (common verbs) | giving opinions; recommending; comparing options | A short review of a learning tool, with a recommendation | 75 |
-| B1-S12 · Big Remix | **Word on the Street** · Reporting what people said | Ava, Theo, Mia | reported speech: statements (say/tell, basic backshift) ⚠ | reporting speech; passing on messages; clarifying what was said | A story told through other people's words: what they said and what I replied | 75 |
-| B1-S13 | **Before the Storm** · Narrative writing: what had already happened | Ava, Theo, Mia, Vee | past perfect ⚠ | narrating; sequencing past events; creating suspense | A short story of 150-200 words with a twist, written and read aloud | 75 |
+| B1-S12 · Big Remix | **Word on the Street** · Reporting what people said | Ava, Theo, Mia | reported speech: statements (say/tell, basic backshift) (present-to-past backshift only; past perfect backshift waits for the next Season) / embedded (indirect) questions (as polite chunks: Could you tell me where ...? (first met here, full use in B2)) | reporting speech; passing on messages; clarifying what was said | A story told through other people's words: what they said and what I replied | 75 |
+| B1-S13 | **Before the Storm** · Narrative writing: what had already happened | Ava, Theo, Mia, Vee | past perfect | narrating; sequencing past events; creating suspense | A short story of 150-200 words with a twist, written and read aloud | 75 |
 | B1-S14 · Big Remix | **Wish List** · Wishes, regrets and imagining change | Ava | wish + past simple ⚠ | expressing wishes; expressing feelings; giving encouragement | A short blog post: three things I wish were different and why | 75 |
 | B1-S15 | **Study Abroad** · Rules, expectations and cultures | Vee, Mia, Theo | mustn't vs don't have to (contrast) / although / even though / while (contrast) | explaining rules and customs; giving advice; contrasting ideas | An advice email for a new exchange student | 75 |
-| B1-S16 · Big Remix · **level check** | **Teen Talk Show** · Hosting a show: everything at B1 | Vee | question tags / common phrasal verbs (separable / inseparable) as vocabulary | hosting and interviewing; checking information; agreeing and disagreeing | A five-minute talk-show episode recorded with a guest | 75 |
+| B1-S16 · Big Remix | **Teen Talk Show** · Hosting a show: everything at B1 | Vee | question tags / common phrasal verbs (separable / inseparable) as vocabulary | hosting and interviewing; checking information; agreeing and disagreeing | A five-minute talk-show episode recorded with a guest | 75 |
+| B1-S17 | **Click with Care** · Online safety, scams and your digital footprint | Mia, Vee, Ava, Theo | so + adjective + that / such (a) + noun + that (result) / reflexive pronouns (myself, yourself, themselves; by myself) | warning and advising; explaining reasons and results; checking whether something is true | A short safety guide for younger students: five tips, each with a reason | 75 |
+| B1-S18 · Big Remix · **level check** | **First Paycheck** · Money, first jobs, saving and budgeting | Theo, Vee, Ava, Mia | enough (adjective + enough, enough + noun) and too + adjective + to / (a) few / (a) little (small quantities, with and without a) ⚠ | talking about money and prices; asking about a job; making and justifying a budget | My first-month budget: what I earn, what I spend, what I save and why | 75 |
 
 <details><summary>Can-do statements, hooks and mediation</summary>
 
@@ -290,6 +318,20 @@
 - I can use common phrasal verbs naturally in everyday talk.
 - *Mediation:* Introduce a guest by relaying key facts from a profile, and summarise their answers for the audience.
 - Lexical fields: entertainment and media; everyday phrasal verbs; interview language · Pronunciation: rising and falling tags (confirmation vs real questions); stress in phrasal verbs · Skins: film, music, social, gaming, football
+
+**B1-S17 Click with Care** — *Mia almost clicked a prize link that looked exactly like a message from Vee. Ava and Theo want to know how to spot the fake. Check every clue before anyone clicks.*
+- I can explain why something is risky using so ... that and such ... that.
+- I can give practical advice about staying safe online.
+- I can talk about what I did or can do for myself using myself, yourself and ourselves.
+- *Mediation:* Explain the safety tips in a short English article to a friend who must decide whether to click.
+- Lexical fields: online safety and privacy; social media and accounts; digital footprint · Pronunciation: sentence stress on so and such, then a pause before that; reflexive endings -self /self/ and -selves /selvz/ (final /vz/) · Skins: tech, social, gaming, film
+
+**B1-S18 First Paycheck** — *Theo has his first paycheck and Vee says he has one week to make it last. Ava and Mia find out what is enough, what is too much and what to save.*
+- I can say whether something is enough or too much, using enough and too ... to.
+- I can talk about small amounts with a few and a little.
+- I can ask simple questions about a part-time job and make a basic budget.
+- *Mediation:* Pass on the key points of a short job advert to a friend who is thinking of applying.
+- Lexical fields: money, saving and spending; first jobs and applications; banks and budgets · Pronunciation: stress on enough /ɪˈnʌf/ (the "gh" is /f/); few /fjuː/ vs little /ˈlɪtl/ in quantity phrases · Skins: business, fashion, food, football, tech
 - Note: Level check Season: E8 includes the B1 level check (separate from XP).
 
 </details>
@@ -298,22 +340,24 @@
 
 | Season | Title · theme | Cast | Structures (E3 / E6) | Functions | Release | Items |
 |---|---|---|---|---|---|---|
-| B2-S01 | **Been There, Doing That** · Long-term projects and ongoing effort | Vee | present perfect continuous ⚠ | describing ongoing activity; reporting progress; explaining causes of results | A progress report on a project I have been working on, spoken and written | 80 |
+| B2-S01 | **Been There, Doing That** · Long-term projects and ongoing effort | Vee | present perfect continuous | describing ongoing activity; reporting progress; explaining causes of results | A progress report on a project I have been working on, spoken and written | 80 |
 | B2-S02 · Big Remix | **What Might Have Been** · Regrets and alternative histories | Theo | third conditional / wish / if only + past perfect | expressing regret; speculating about the past; criticising tactfully | A short reflective essay or talk: a decision I would change and why | 80 |
 | B2-S03 | **Passive Power** · Systems, processes and who is responsible | Ava | passive: all tenses and modal passives | describing processes; reporting facts; avoiding blame | A report on how a system works or who is responsible for a problem | 80 |
-| B2-S04 · Big Remix | **Reporting It** · Reporting conversations and interviews | Mia | reported questions, commands, reporting verbs | reporting questions and requests; summarising an interview; conveying attitude with reporting verbs | A written report of an interview I conducted | 80 |
+| B2-S04 · Big Remix | **Reporting It** · Reporting conversations and interviews | Mia | reported questions, commands, reporting verbs (builds on the indirect-question word order met at B1; reporting verbs and commands are new) | reporting questions and requests; summarising an interview; conveying attitude with reporting verbs | A written report of an interview I conducted | 80 |
 | B2-S05 | **Who Is He Anyway?** · Biographies and profile writing | Mia | non-defining relative clauses | describing people; adding extra information; writing profiles | A profile of an interesting person with extra information | 80 |
 | B2-S06 · Big Remix | **Could Have, Should Have** · Blame, advice and criticism | Ava | perfect modals (should/could/might/must have + past participle) | speculating about the past; criticising politely; taking responsibility | A diplomatic feedback message: what could have been done differently | 80 |
 | B2-S07 | **The Future Is...** · Predicting and planning the next decade | Vee | future continuous and future perfect | predicting; planning; talking about future achievements | A letter to my future self (written) and a short vision talk (spoken) | 80 |
 | B2-S08 · Big Remix | **Opinions That Matter** · Arguing a point of view | Vee | hedging and stance (arguably, I'd suggest, to some extent) / however / despite / in spite of / whereas | arguing a case; conceding a point; hedging and emphasising | A structured spoken argument (two minutes) and a written paragraph version | 80 |
-| B2-S09 | **Get It Done** · Services, problems and polite complaints | Ava | have / get something done / embedded (indirect) questions | making complaints; asking indirectly; arranging services | A role-play: making a complaint and asking for a solution | 80 |
+| B2-S09 | **Get It Done** · Services, problems and polite complaints | Ava | have / get something done / embedded (indirect) questions (full use, in writing and speech (the form was first met at B1)) | making complaints; asking indirectly; arranging services | A role-play: making a complaint and asking for a solution | 80 |
 | B2-S10 · Big Remix | **Unless You Do** · Conditions, deals and negotiation | Ava, Theo | unless / as long as / provided that / suppose | negotiating; setting conditions; making deals and compromises | A negotiation role-play and the written agreement that follows | 80 |
 | B2-S11 | **Remember That!** · Memory, habits and meaning-changing verbs | Theo, Mia | verbs that change meaning (remember/stop/try + -ing or to) / articles: generic reference, zero article, fixed uses | explaining differences in meaning; talking about memory and habit; writing accurately | A short talk or essay about memory and how it shapes our habits | 80 |
 | B2-S12 · Big Remix | **The Big Picture** · Emphasis and focus in speaking and writing | Theo | cleft sentences (It was ... that / What I need is ...) | emphasising; structuring a talk; contrasting ideas | A short speech or article using emphasis to make one clear point | 80 |
 | B2-S13 | **Cut the Words** · Concise, elegant writing | Vee | participle clauses (-ing / -ed) / ellipsis and substitution | editing and condensing; writing concisely; combining ideas efficiently | A shortened version of my own text, showing what I cut and why | 80 |
 | B2-S14 · Big Remix | **As Much As** · Comparing, measuring and describing change | Mia | as ... as, the more ... the more, so/such ... that | comparing in detail; describing change and trends; drawing conclusions | A comparison presentation with a chart and spoken commentary | 80 |
 | B2-S15 | **Say It Clearly** · Mediation: relaying, summarising and facilitating | Vee, Ava | reporting verbs + -ing / that / to (admit, deny, suggest, insist) | summarising; relaying information; facilitating discussion | A live mediation: summarising and relaying between two speakers, plus a written summary | 80 |
-| B2-S16 · Big Remix · **level check** | **Debate League** · Putting B2 together: argument, cohesion and delivery | Vee | cohesion: addition, result, sequence markers (moreover, consequently, as for) | debating; structuring an argument; responding to challenge | A full debate speech (three minutes) and a written case summary | 80 |
+| B2-S16 · Big Remix | **Debate League** · Putting B2 together: argument, cohesion and delivery | Vee | cohesion: addition, result, sequence markers (moreover, consequently, as for) | debating; structuring an argument; responding to challenge | A full debate speech (three minutes) and a written case summary | 80 |
+| B2-S17 | **Mind Matters** · Stress, sleep, screen time and supporting a friend | Ava, Mia, Theo | purpose clauses: so that, in order to / not to, so as (not) to (so that, in order (not) to, so as not to, in contrast to the plain to + verb of A2) / had better / ought to (strong advice and warning) (strong advice and gentle warning to a friend) ⚠ | explaining purpose; giving supportive advice; describing habits and routines | A short wellbeing guide (spoken and written) with five habits, each with its reason, for a friend my age | 75 |
+| B2-S18 · Big Remix · **level check** | **Study Abroad Plan** · Choosing a course, applying and an exchange year | Theo, Vee | preposition + -ing (look forward to, be/get used to, instead of, apart from, not + -ing) (look forward to, be/get used to, instead of, apart from, interested in, not + -ing) ⚠ | comparing and choosing options; applying and expressing motivation; talking about expectations | A motivation message (written, about 180 words) and a one-minute spoken pitch for an exchange course I choose | 75 |
 
 <details><summary>Can-do statements, hooks and mediation</summary>
 
@@ -412,6 +456,18 @@
 - I can link ideas into a cohesive text using a range of devices.
 - *Mediation:* Chair a short discussion: summarise each speaker and invite responses.
 - Lexical fields: debate language; society and ethics; cohesion and signposting · Pronunciation: stress and pace in a speech; signposting intonation · Skins: social, tech, business, nature, film
+
+**B2-S17 Mind Matters** — *Ava has gone quiet in the group chat and Mia says she is exhausted. Theo found a sleep-tracker clue: every habit comes with a reason. Explain the reasons, and you can help.*
+- I can explain the purpose of a habit or action using a range of purpose clauses.
+- I can give practical, supportive advice to a friend about stress, sleep or screen time.
+- *Mediation:* Relay the key advice of a short wellbeing article to a friend who has no time to read it, in your own words.
+- Lexical fields: stress and wellbeing; sleep and routines; screens and social media · Pronunciation: weak "to" /tə/ and linking in "in order to"; warm, falling intonation for supportive advice · Skins: fitness, social, tech, nature
+
+**B2-S18 Study Abroad Plan** — *Theo has one place left on an exchange year and three courses to choose from. Vee says the application only works if the clues in each programme are read carefully - and nobody sounds keen without the right phrases.*
+- I can compare study options and justify a choice.
+- I can write a clear, polite motivation message for a course or exchange, using preposition + -ing structures accurately.
+- *Mediation:* Explain the main points of a course brochure in your own words to a friend and help them choose between two programmes.
+- Lexical fields: courses and applications; life abroad; future plans and skills · Pronunciation: weak forms and linking in "look forward to -ing"; polite, confident intonation in formal speaking · Skins: travel, business, social, science
 - Note: Level check Season: E8 includes the B2 level check (separate from XP).
 
 </details>
@@ -435,7 +491,9 @@
 | C1-S13 | **Mediating Worlds** · Mediation across cultures and viewpoints | Vee | discourse markers for mediation and summary (in essence, by contrast, with regard to) ⚠ | mediating; summarising for different audiences; facilitating agreement | A live mediation of a short negotiation and a written summary | 84 |
 | C1-S14 · Big Remix | **The Art of Persuasion** · Rhetoric, advertising and public speaking | Vee | rhetorical devices (rule of three, rhetorical question, parallelism) ⚠ | persuading; presenting; analysing persuasion | A persuasive speech or pitch (three minutes) with an annotated script | 84 |
 | C1-S15 | **Wit and Irony** · Humour, understatement and cultural nuance | Theo, Mia | irony, understatement and pragmatic markers ⚠ | joking and teasing tactfully; understanding irony; managing tone | A short comic or satirical piece (school-safe) with notes on how the humour works | 84 |
-| C1-S16 · Big Remix · **level check** | **Capstone Portfolio** · Putting it all together: a student-led final project | Vee | text-level cohesion and signposting in long texts ⚠ | presenting a project; reflecting on learning; setting goals | A capstone portfolio: a spoken presentation, a written piece and a reflection on my progress | 84 |
+| C1-S16 · Big Remix | **Capstone Portfolio** · Putting it all together: a student-led final project | Vee | text-level cohesion and signposting in long texts ⚠ | presenting a project; reflecting on learning; setting goals | A capstone portfolio: a spoken presentation, a written piece and a reflection on my progress | 84 |
+| C1-S17 | **Climate and Choices** · A balanced school debate on climate, consumption and lifestyle choices | Ava, Theo, Mia | concessive whatever / however + adjective / wherever (However small the change, ...; Whatever you decide, ...) ⚠ / extended comparative correlatives (The more ..., the more ...; The sooner, the better; all the more) (proportional trends with ellipsis (The sooner, the better; all the more)) ⚠ | arguing both sides fairly; generalising and conceding; describing trends and trade-offs | A two-sided school-council briefing (spoken, three minutes) on one everyday choice, with a recommendation | 80 |
+| C1-S18 · Big Remix · **level check** | **Beyond the Classroom** · University and work readiness: presenting yourself in writing and speech | Vee, Theo, Mia | absolute and participle phrases with their own subject (Time permitting, ...; All things considered, ...; with + noun + participle) ⚠ | presenting yourself formally; writing a networking email; answering interview questions | A personal statement paragraph (150 words), a networking email and a two-minute interview answer about myself | 80 |
 
 <details><summary>Can-do statements, hooks and mediation</summary>
 
@@ -534,33 +592,48 @@
 - I can reflect on my progress and set goals for continued learning.
 - *Mediation:* Summarise for an examiner the key insights from a complex source used in my project.
 - Lexical fields: project work and presentation; academic and professional skills; self-assessment · Pronunciation: sustained clear delivery; signposting in long presentations · Skins: science, business, art, tech, social, nature
+
+**C1-S17 Climate and Choices** — *Ava's school council must decide what the canteen and the school trip will do about waste. Theo says 'whatever we choose, it won't matter'; Mia has the numbers. Which choices really count - and how do you argue it fairly?*
+- I can concede and generalise with whatever, however + adjective and wherever to argue a balanced position.
+- I can show how two trends move together (The more ..., the more ...) when I discuss evidence.
+- I can weigh pros and cons of a lifestyle choice without attacking the people who disagree.
+- *Mediation:* Summarise for a classmate the two sides of a long article on school waste, keeping each side fair.
+- Lexical fields: environment and sustainability; consumption and lifestyle; evidence and statistics · Pronunciation: stress on the wh-ever / however + adjective before the pause; two matched stresses and rise-then-fall in The more ..., the more ... · Skins: nature, science, food, social
+
+**C1-S18 Beyond the Classroom** — *Vee has two weeks to help Theo send a personal statement and Mia to ace a work-experience interview. Both documents need one thing: say who you are, precisely, in a formal register - and the clue to the final application is hidden in the phrasing.*
+- I can write and say a formal self-presentation with absolute and participle phrases (Time permitting, ...; All things considered, ...).
+- I can write a polite, well-structured networking email and answer interview questions with evidence.
+- I can present my strengths and plans without sounding arrogant or vague.
+- *Mediation:* Explain the main points of a university admissions page to a friend who is applying, in plain English and in order of importance.
+- Lexical fields: education and university applications; work experience and professional skills; formal correspondence · Pronunciation: pause after the absolute phrase and stress on the main clause; clear, steady pace and a falling tone to sound confident in interviews · Skins: business, tech, social, science
 - Note: Level check Season: E8 includes the C1 level check (separate from XP) and the final portfolio review.
 
 </details>
 
 ## Validator
 
-Errors: 0 · Warnings: 20
+Errors: 0 · Warnings: 21
 
 
-**Unverified grammar placements (20) — check in the English Grammar Profile / GSE Grammar before locking:**
+**Unverified grammar placements (21) — check in the English Grammar Profile / GSE Grammar before locking:**
 - A1-S04: Placement of "would-like" is unverified [U].
-- A2-S01: Placement of "past-be" is unverified [U].
-- A2-S09: Placement of "will-decisions-predictions" is unverified [U].
+- A1-S11: Placement of "prepositions-time" is unverified [U].
+- A2-S13: Placement of "as-as-comparison" is unverified [U].
 - B1-S01: Placement of "present-perfect-experience" is unverified [U].
-- B1-S02: Placement of "used-to" is unverified [U].
 - B1-S05: Placement of "zero-first-conditional" is unverified [U].
-- B1-S06: Placement of "second-conditional" is unverified [U].
 - B1-S09: Placement of "modals-deduction" is unverified [U].
 - B1-S10: Placement of "present-continuous-future" is unverified [U].
 - B1-S10: Placement of "will-promises-predictions" is unverified [U].
-- B1-S12: Placement of "reported-statements" is unverified [U].
-- B1-S13: Placement of "past-perfect" is unverified [U].
 - B1-S14: Placement of "wish-past-simple" is unverified [U].
-- B2-S01: Placement of "present-perfect-continuous" is unverified [U].
+- B1-S18: Placement of "few-little" is unverified [U].
+- B2-S17: Placement of "had-better-ought-to" is unverified [U].
+- B2-S18: Placement of "preposition-gerund" is unverified [U].
 - C1-S02: Placement of "mixed-conditionals" is unverified [U].
 - C1-S12: Placement of "ellipsis-advanced" is unverified [U].
 - C1-S13: Placement of "discourse-markers-advanced" is unverified [U].
 - C1-S14: Placement of "rhetorical-devices" is unverified [U].
 - C1-S15: Placement of "irony-understatement" is unverified [U].
 - C1-S16: Placement of "text-cohesion" is unverified [U].
+- C1-S17: Placement of "concessive-wh-ever" is unverified [U].
+- C1-S17: Placement of "the-more-extended" is unverified [U].
+- C1-S18: Placement of "participle-absolute" is unverified [U].

@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -21,12 +22,13 @@ export const SessionSetup: React.FC<SessionSetupProps> = ({
   onStartSession,
   onToggleAudio
 }) => {
+  const { t } = useTranslation();
   return (
     <div className="max-w-2xl mx-auto space-y-6 p-6">
       <div className="flex items-center gap-4">
         <Button variant="outline" onClick={onBack}>
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Back
+          {t('st.sp.back', 'Back')}
         </Button>
         <Badge variant="outline">{scenario.cefr_level}</Badge>
       </div>
@@ -41,25 +43,25 @@ export const SessionSetup: React.FC<SessionSetupProps> = ({
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="bg-blue-50 p-4 rounded-lg">
-            <h4 className="font-medium mb-2">📝 What you'll practice:</h4>
+            <h4 className="font-medium mb-2">{t('st.sp.willPractice', "📝 What you'll practice:")}</h4>
             <p className="text-gray-700">{scenario.context_instructions}</p>
           </div>
 
           <div className="flex items-center justify-between text-sm text-gray-600">
-            <span>⏱️ Expected time: {Math.floor(scenario.expected_duration / 60)} minutes</span>
-            <span>🎯 Difficulty: {scenario.difficulty_rating}/5</span>
+            <span>{t('st.sp.expected', { n: Math.floor(scenario.expected_duration / 60), defaultValue: '⏱️ Expected time: {{n}} min' })}</span>
+            <span>{t('st.sp.difficulty', { n: scenario.difficulty_rating, defaultValue: '🎯 Difficulty: {{n}}/5' })}</span>
           </div>
 
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="text-sm">🔊 Voice responses:</span>
+              <span className="text-sm">{t('st.sp.voice', '🔊 Voice responses:')}</span>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={onToggleAudio}
               >
                 {isAudioEnabled ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
-                {isAudioEnabled ? 'On' : 'Off'}
+                {isAudioEnabled ? t('st.sp.on', 'On') : t('st.sp.off', 'Off')}
               </Button>
             </div>
           </div>
@@ -70,7 +72,7 @@ export const SessionSetup: React.FC<SessionSetupProps> = ({
             size="lg"
           >
             <Play className="h-5 w-5 mr-2" />
-            Start Practice Session
+            {t('st.sp.start', 'Start Practice Session')}
           </Button>
         </CardContent>
       </Card>

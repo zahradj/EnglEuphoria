@@ -15,6 +15,14 @@ import { toLevelMapHub } from '@/components/teacher/classroom/UnitKnowledgeCheck
 import { buildLearningPlan, UNITS_PER_LEVEL, type PlanUnitInfo } from '@/lib/learningPlan';
 import { HUB_SKILL_PROFILE, normalizeSkillHub, scoreToCefr } from '@/hooks/useStudentSkills';
 import { asPayoutCurrency, formatPay } from '@/lib/teacherPay';
+import { LessonChecklistCard, clearChecklist, practiceLines, type ChecklistValue, type SceneLessonRef } from './LessonChecklistCard';
+import { LessonChecklistPanel } from '@/academy-deck/teacher/LessonChecklistPanel';
+import { UnitAssessmentPanel } from '@/academy-deck/teacher/UnitAssessmentPanel';
+import { ACADEMY_DECK_BLUEPRINT_IDS } from '@/academy-deck/lessonRegistry';
+import { loadDeckScript } from '@/academy-deck/lessonScripts';
+import { familyLines, type LessonChecklist, type UnitAssessment } from '@/curriculum/academy';
+import { saveCheck } from '@/services/academyChecklistService';
+import { clearAcademyChecklist, loadAcademyChecklist } from '@/academy-deck/classroom/checklistLog';
 
 /**
  * Session report — 3 short steps (redesigned from one long form):
@@ -157,6 +165,12 @@ interface LessonWrapUpDialogProps {
   lessonTitle?: string;
   /** Live classroom numbers for step 1's auto-filled summary (classroom only). */
   classSummary?: WrapUpClassSummary;
+  /** Playground: the scene lesson on the stage — its checklist goes into the report (LessonChecklistCard). */
+  sceneLesson?: SceneLessonRef | null;
+  /** classroom_sessions.id — where the student's screen saved what they did. */
+  sessionId?: string;
+  /** Academy library (deck) lesson that was on screen: adds the lesson checklist (and the unit assessment after a unit's last lesson) to this report. */
+  academyLessonId?: string;
 }
 
 interface Draft {
@@ -211,7 +225,8 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
   trialCefr = null,
   studentName,
   lessonTitle,
-  classSummary,
+  classSummary, sceneLesson, sessionId,
+  academyLessonId,
 }) => {
   const theme = getClassroomHubTheme(hubType);
   const skillHub = normalizeSkillHub(hubType);
@@ -322,7 +337,16 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
       : `${Math.floor(msRemaining / 3_600_000)} h ${Math.floor((msRemaining % 3_600_000) / 60_000)} min left`;
 
   const greatList = useMemo(() => [...d.great, ...(d.extraGreat.trim() ? [d.extraGreat.trim()] : [])], [d.great, d.extraGreat]);
-  const moreList = useMemo(() => [...d.more, ...(d.extraMore.trim() ? [d.extraMore.trim()] : [])], [d.more, d.extraMore]);
+  // Playground lesson checklist (owner, 2026-10-15): filled from what the student did, the teacher corrects it.
+  const [checklist, setChecklist] = useState<ChecklistValue | null>(null);
+  const showChecklist = isPlayground && !isTrialLesson && !!sceneLesson;
+  const checklistPractice = useMemo(() => (showChecklist ? practiceLines(checklist) : []), [showChecklist, checklist]);
+  const moreList = useMemo(() => [...d.more, ...(d.extraMore.trim() ? [d.extraMore.trim()] : []), ...checklistPractice.map((x) => `Keep practising: ${x.charAt(0).toLowerCase()}${x.slice(1)}`)], [d.more, d.extraMore, checklistPractice]);
+  const verdictLine = useMemo(() => {
+    if (!showChecklist || !checklist?.verdict) return '';
+    const v = { nailed: '\u{1F3C6} Nailed it!', almost: '\u{1F44D} Almost there', practice: '\u{1F501} Needs more practice' }[checklist.verdict];
+    return checklist.lesson.isUnitTest ? `Unit ${checklist.lesson.unitNumber} test: ${v}` : `Today's result: ${v}`;
+  }, [showChecklist, checklist]);
 
   const ratedLevels = Object.values(d.skills);
   const overall: Level | null = ratedLevels.length
@@ -363,6 +387,19 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
     [isTrialLesson, trialLevel, planStartUnit, d.trialLessons, planUnits],
   );
 
+  // Academy checklist (owner 2026-10-14): the lesson's goals marked by the teacher, and the unit assessment after a unit's last lesson. Part of this report.
+  const [acScript, setAcScript] = useState<{ criteria: string[]; level: LessonChecklist['level'] } | null>(null);
+  const [acLesson, setAcLesson] = useState<LessonChecklist | null>(null);
+  const [acUnit, setAcUnit] = useState<UnitAssessment | null>(null);
+  const blueprintId = academyLessonId ? ACADEMY_DECK_BLUEPRINT_IDS[academyLessonId] : undefined;
+  const unitSeasonId = blueprintId && /-E8$/.test(blueprintId) ? blueprintId.replace(/-E8$/, '') : null;
+  useEffect(() => {
+    if (!open || !academyLessonId) { setAcScript(null); return; }
+    let cancelled = false;
+    void loadDeckScript(academyLessonId)?.then((sc) => { if (!cancelled) setAcScript({ criteria: sc.criteria, level: sc.level }); });
+    return () => { cancelled = true; };
+  }, [open, academyLessonId]);
+
   // Family message drafted from the taps until the teacher edits it.
   const draftedFamily = useMemo(() => {
     const topic = lessonTitle ? `“${lessonTitle}”` : 'today’s lesson';
@@ -374,11 +411,14 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
       early: `Today we started ${topic}. We'll carry on with it next class.`,
     }[d.progress];
     let msg = opener;
+    if (verdictLine) msg += `\n\n${verdictLine}`;
     if (greatList.length) msg += `\n\n⭐ Great at:\n${greatList.map((x) => `• ${x}`).join('\n')}`;
     if (moreList.length) msg += `\n\n💪 Let's practise:\n${moreList.map((x) => `• ${x}`).join('\n')}`;
+    const goals = familyLines(acLesson, acUnit);
+    if (goals.length) msg += `\n\n✅ ${goals.join('\n')}`;
     if (d.homeworkOn && d.homework.trim()) msg += `\n\n📚 Homework: ${d.homework.trim()}`;
     return msg;
-  }, [name, lessonTitle, d.progress, greatList, moreList, d.homeworkOn, d.homework, isTrialLesson, trialLevel]);
+  }, [name, lessonTitle, d.progress, greatList, moreList, d.homeworkOn, d.homework, isTrialLesson, trialLevel, verdictLine, acLesson, acUnit]);
   const familyText = d.familyEdited ? d.family : draftedFamily;
   // Emailing is only for lessons the teacher created via "Invite a Student".
   const canEmail = !!bookingMeta.inviteEmail;
@@ -444,7 +484,13 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
           strengths: greatList,
           areas_for_improvement: moreList,
           quick_notes: familyText.trim(),
+          academy_checklist: acLesson || acUnit ? { lesson: acLesson, unit: acUnit } : undefined,
           teacher_note: d.teacherNote.trim() || undefined,
+          checklist: showChecklist && checklist ? {
+            lesson: checklist.lesson,
+            verdict: checklist.verdict,
+            lines: checklist.lines.map((l) => ({ id: l.id, label: l.label, part: l.part, status: l.status, wrong: l.wrong, auto: l.recorded, reached: l.reached })),
+          } : undefined,
           trial: isTrialLesson ? {
             level: trialLevel || undefined,
             english_today: d.trialEnglish || undefined,
@@ -464,7 +510,15 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
         console.error('[LessonWrapUp] lesson_feedback_submissions insert failed:', feedbackErr);
         throw feedbackErr;
       }
+      if (acLesson || acUnit) {
+        const sid = studentId || 'student';
+        if (acLesson) void saveCheck(teacherId, sid, 'lesson', acLesson.lessonId, acLesson);
+        clearAcademyChecklist(bookingId);
+        if (acUnit) void saveCheck(teacherId, sid, 'unit', acUnit.seasonId, acUnit);
+        lines.push(['✅', 'Lesson checklist saved in the report']);
+      }
       lines.push(['💌', `Report saved${homework ? ' with homework' : ''} — ${name}'s family can see it`]);
+      if (showChecklist && checklist) { clearChecklist(bookingId); lines.push(['📋', `Lesson checklist saved in the report${checklist.verdict ? ` — ${{ nailed: 'Nailed it', almost: 'Almost there', practice: 'Needs more practice' }[checklist.verdict]}` : ''}`]); }
       if (isPlayground && d.parentNote.trim()) lines.push(['🔒', 'Private note saved for the parents only']);
 
       if (lessonId && studentId && sharedNotes) {
@@ -805,6 +859,10 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
 
               {step === 2 && (
                 <>
+                  {showChecklist && sceneLesson && (
+                    <LessonChecklistCard sceneLesson={sceneLesson} sessionId={sessionId} bookingId={bookingId} pagesReached={classSummary?.pagesReached}
+                      accent={accent} value={checklist} onChange={setChecklist} />
+                  )}
                   {isTrialLesson && (
                     <section className="grid gap-3 rounded-2xl border-2 p-4" style={{ borderColor: accent, background: `${accent}0F` }}>
                       <div className="flex flex-wrap items-center justify-between gap-2">
@@ -876,6 +934,13 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
                       </div>
                     )}
                   </section>
+
+                  {academyLessonId && acScript && (
+                    <section className="grid gap-3" aria-label="Academy checklist">
+                      <LessonChecklistPanel embedded lessonId={blueprintId ?? academyLessonId} studentId={studentId || 'student'} level={acScript.level} criteria={acScript.criteria} initial={loadAcademyChecklist<LessonChecklist>(bookingId)?.lessonId === (blueprintId ?? academyLessonId) ? loadAcademyChecklist<LessonChecklist>(bookingId) : null} onChange={setAcLesson} />
+                      {unitSeasonId && <UnitAssessmentPanel embedded seasonId={unitSeasonId} studentId={studentId || 'student'} onChange={setAcUnit} />}
+                    </section>
+                  )}
 
                   <section className="grid gap-2">
                     <h3 className="text-base font-extrabold">Great at</h3>

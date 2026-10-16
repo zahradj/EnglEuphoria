@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState, lazy, Suspense } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useStudentLevel } from '@/hooks/useStudentLevel';
-import { BookMarked, Gamepad2, Zap, Loader2, ArrowLeft, X, Play } from 'lucide-react';
+import { BookMarked, Gamepad2, Zap, Loader2, ArrowLeft, X, Play, ScrollText } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -45,6 +46,7 @@ const ZONE_CHIP: Record<AcademyZoneId, string> = {
 /** Playground: the Homework Quests of the lessons this student has FINISHED - nothing else.
  *  A quest appears here when its lesson is done; there are no locked cards for lessons not yet played. */
 function HomeworkQuestsSection() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { lessons, loading } = usePlaygroundLessons();
 
@@ -55,15 +57,15 @@ function HomeworkQuestsSection() {
   if (cards.length === 0) {
     return (
       <div className="rounded-2xl border border-dashed border-border/60 bg-card/40 p-8 text-center text-muted-foreground">
-        <p className="text-sm font-semibold">No homework yet</p>
-        <p className="mt-1 text-xs">Finish a lesson on the map and its homework quest appears here.</p>
+        <p className="text-sm font-semibold">{t('st.hw.none', 'No homework yet')}</p>
+        <p className="mt-1 text-xs">{t('st.hw.noneDesc', 'Finish a lesson on the map and its homework quest appears here.')}</p>
       </div>
     );
   }
 
   return (
-    <section className="space-y-3" aria-label="Homework quests">
-      <h2 className="text-lg font-bold">Homework quests</h2>
+    <section className="space-y-3" aria-label={t('st.hw.quests', 'Homework quests')}>
+      <h2 className="text-lg font-bold">{t('st.hw.quests', 'Homework quests')}</h2>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {cards.map(({ quest, lesson, lessonPath, ready }) => (
           <div key={quest.id} className="flex flex-col gap-3 rounded-2xl border bg-card p-4 ring-1 ring-border/60">
@@ -72,14 +74,14 @@ function HomeworkQuestsSection() {
               <div className="min-w-0">
                 <h3 className="text-sm font-bold leading-tight">{quest.title}</h3>
                 <p className="mt-0.5 text-xs text-muted-foreground">{quest.subtitle}</p>
-                {ready && <Badge className="mt-1.5 bg-emerald-600 px-1.5 py-0 text-[10px] text-white">Ready to play</Badge>}
+                {ready && <Badge className="mt-1.5 bg-emerald-600 px-1.5 py-0 text-[10px] text-white">{t('st.hw.ready', 'Ready to play')}</Badge>}
               </div>
             </div>
             <button
               onClick={() => navigate(`/homework-quest/${quest.id}`)}
               className="mt-auto inline-flex items-center justify-center gap-1.5 rounded-full bg-orange-500 px-4 py-2 text-xs font-extrabold text-white shadow active:scale-95"
             >
-              <Play className="h-3.5 w-3.5" /> Start quest
+              <Play className="h-3.5 w-3.5" /> {t('st.hw.start', 'Start quest')}
             </button>
           </div>
         ))}
@@ -89,6 +91,8 @@ function HomeworkQuestsSection() {
 }
 
 export function HomeworkTab() {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
   const { user } = useAuth();
   const { studentLevel } = useStudentLevel();
   const accent = HUB_ACCENT[studentLevel || 'playground'];
@@ -155,7 +159,7 @@ export function HomeworkTab() {
     return (
       <div className="space-y-4">
         <Button variant="ghost" onClick={() => setActive(null)} className="gap-2">
-          <ArrowLeft className="w-4 h-4" /> Back to homework
+          <ArrowLeft className="w-4 h-4" /> {t('st.hw.back', 'Back to homework')}
         </Button>
         <div className="rounded-2xl border bg-card p-4 sm:p-6">
           <Suspense fallback={<div className="p-10 text-center text-muted-foreground"><Loader2 className="w-6 h-6 animate-spin inline" /></div>}>
@@ -170,22 +174,40 @@ export function HomeworkTab() {
     <div className="space-y-6 animate-fade-in">
       <div>
         <h1 className={cn('text-3xl font-bold flex items-center gap-2', accent)}>
-          <BookMarked className="w-7 h-7" />
-          Homework
+          {studentLevel === 'academy' ? <ScrollText className="w-7 h-7" /> : <BookMarked className="w-7 h-7" />}
+          {studentLevel === 'academy' ? t('st.hw.aTitle', 'Quest Log') : t('sd.menu.homework', 'Homework')}
         </h1>
         <p className="text-muted-foreground mt-1">
           {studentLevel === 'playground'
-            ? 'Finish a lesson and its homework appears here.'
-            : 'Assigned by your teacher and synced to your Academy Journey zones.'}
+            ? t('st.hw.finish', 'Finish a lesson and its homework appears here.')
+            : studentLevel === 'academy'
+              ? t('st.hw.aSub', 'Your Daily 10 and the quests your teacher sends, linked to your Academy zones.')
+              : 'Assigned by your teacher and synced to your Academy Journey zones.'}
         </p>
       </div>
+
+      {/* Academy: the Daily 10 is the heart of the Quest Log (the forest below is the Playground's idea) */}
+      {studentLevel === 'academy' && (
+        <button
+          type="button"
+          onClick={() => navigate('/academy-daily-10')}
+          className="flex w-full items-center gap-4 rounded-2xl border border-violet-200/70 bg-gradient-to-r from-violet-600 to-indigo-600 p-4 text-start text-white shadow-md transition hover:-translate-y-0.5 hover:shadow-lg"
+        >
+          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/20"><Zap className="h-6 w-6" /></span>
+          <span className="min-w-0 flex-1">
+            <span className="block text-lg font-extrabold leading-tight">{t('st.hw.aDaily', 'Daily 10')}</span>
+            <span className="block text-sm opacity-90">{t('st.hw.aDailyDesc', 'Ten minutes of mixed practice that brings back what you learned.')}</span>
+          </span>
+          <span className="shrink-0 rounded-full bg-white px-4 py-2 text-sm font-extrabold text-violet-700">{t('st.hw.aDailyBtn', 'Start Daily 10')}</span>
+        </button>
+      )}
 
       {studentLevel === 'playground' && <HomeworkQuestsSection />}
 
       {/* Homework Forest (pending quests) — moved here from the dashboard home page. */}
-      {(studentLevel === 'playground' || studentLevel === 'academy') && (
+      {studentLevel === 'playground' && (
         // Playground: the quests are already listed above, so the forest only shows homework a teacher sent.
-        <HomeworkForestWidget isDark={resolvedTheme === 'dark'} excludeQuests={studentLevel === 'playground'} />
+        <HomeworkForestWidget isDark={resolvedTheme === 'dark'} excludeQuests />
       )}
 
       {/* Zone filter chips — keep in sync with the Quest Map */}
@@ -230,7 +252,9 @@ export function HomeworkTab() {
         studentLevel === 'playground' ? null : <div className="rounded-2xl border border-dashed border-border/60 bg-card/40 backdrop-blur-xl p-8 text-center text-muted-foreground">
           {zoneParam
             ? `Nothing for ${ZONE_LABEL[zoneParam]} right now.`
-            : 'No homework assigned yet. Check back after your next lesson.'}
+            : studentLevel === 'academy'
+              ? t('st.hw.aEmpty', 'Your Quest Log is empty for now. Do your Daily 10, or finish a lesson, and new quests appear here.')
+              : t('st.hw.noAssigned', 'No homework assigned yet. Check back after your next lesson.')}
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">

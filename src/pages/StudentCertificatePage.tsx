@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from 'react-i18next';
 import { useParams, useNavigate } from "react-router-dom";
 import { useReactToPrint } from "react-to-print";
 import { supabase } from "@/integrations/supabase/client";
@@ -66,6 +67,7 @@ function inferHub(certificateType?: string, metadata?: any): HubType {
 }
 
 export default function StudentCertificatePage() {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -95,7 +97,7 @@ export default function StudentCertificatePage() {
           .maybeSingle();
         if (error) throw error;
         if (!cert) {
-          toast({ title: "Certificate not found", variant: "destructive" });
+          toast({ title: t('st.cert.notFoundT', 'Certificate not found'), variant: "destructive" });
           setLoading(false);
           return;
         }
@@ -140,7 +142,7 @@ export default function StudentCertificatePage() {
         });
       } catch (err: any) {
         console.error("Certificate load error:", err);
-        toast({ title: "Error loading certificate", description: err.message, variant: "destructive" });
+        toast({ title: t('st.cert.loadErr', 'Error loading certificate'), description: err.message, variant: "destructive" });
       } finally {
         setLoading(false);
       }
@@ -162,9 +164,9 @@ export default function StudentCertificatePage() {
     return (
       <div className="min-h-dvh flex items-center justify-center">
         <div className="text-center space-y-4">
-          <p className="text-muted-foreground">Certificate not found.</p>
+          <p className="text-muted-foreground">{t('st.cert.notFound', 'Certificate not found.')}</p>
           <Button onClick={() => navigate(-1)} variant="outline">
-            <ArrowLeft className="w-4 h-4 mr-2" /> Go Back
+            <ArrowLeft className="w-4 h-4 me-2 rtl:rotate-180" /> {t('st.cert.goBack', 'Go Back')}
           </Button>
         </div>
       </div>
@@ -184,7 +186,7 @@ export default function StudentCertificatePage() {
       {/* Toolbar — hidden on print */}
       <div className="max-w-6xl mx-auto mb-6 flex items-center justify-between print:hidden">
         <Button variant="ghost" onClick={() => navigate(-1)}>
-          <ArrowLeft className="w-4 h-4 mr-2" /> Back
+          <ArrowLeft className="w-4 h-4 me-2 rtl:rotate-180" /> {t('st.arc.back', 'Back')}
         </Button>
         <Button
           onClick={() => handlePrint()}
@@ -192,7 +194,7 @@ export default function StudentCertificatePage() {
           className="shadow-lg"
           style={{ backgroundColor: palette.deep, color: "white" }}
         >
-          <Download className="w-5 h-5 mr-2" /> Download PDF / Print
+          <Download className="w-5 h-5 me-2" /> {t('st.cert.print', 'Download PDF / Print')}
         </Button>
       </div>
 

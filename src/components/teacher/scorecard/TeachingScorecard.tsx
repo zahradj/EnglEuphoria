@@ -2,7 +2,7 @@ import React from 'react';
 import { CheckCircle2, Clock, FileText, Info, Mic, Smile } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useTeacherScorecard, type Scorecard } from '@/hooks/useTeacherScorecard';
-import { TALK_TARGET_PCT, talkStatus } from '@/lib/talkTime';
+import { talkStatus, talkTargetFor } from '@/lib/talkTime';
 
 /** A figure needs this many data points before we judge it; before that we say "collecting data". */
 const MIN_N = 5;
@@ -36,8 +36,9 @@ export interface Goal {
 
 export function buildGoals(s: Scorecard): Goal[] {
   const talkPct = s.talk.student_pct;
+  const talkTarget = talkTargetFor(s.talk.by_hub);
   const talkStat = talkPct === null || s.talk.n < 3 ? 'collecting'
-    : ({ great: 'good', good: 'good', watch: 'almost', low: 'attention' } as const)[talkStatus(talkPct)];
+    : ({ great: 'good', good: 'good', watch: 'almost', low: 'attention' } as const)[talkStatus(talkPct, talkTarget)];
   const happy = s.feedback.confident_pct;
 
   return [
@@ -47,7 +48,7 @@ export function buildGoals(s: Scorecard): Goal[] {
       status: judge(s.delivered.pct, s.delivered.n, 95), tip: 'Cancel as early as you can, and at least 48 hours ahead when you must.' },
     { id: 'reports', title: 'Report within 24h', plain: 'Lesson report sent the same day', pct: s.reports.pct, n: s.reports.n, target: 90,
       status: judge(s.reports.pct, s.reports.n, 90), tip: 'Write the report right after class: two good things, one thing to practise.' },
-    { id: 'talk', title: 'Student talking time', plain: 'How much of the lesson your student speaks', pct: talkPct, n: s.talk.n, target: TALK_TARGET_PCT,
+    { id: 'talk', title: 'Student talking time', plain: 'How much of the lesson your student speaks', pct: talkPct, n: s.talk.n, target: talkTarget,
       status: talkStat, tip: 'Ask, then wait. Try a 5-second pause after every question.' },
     { id: 'feedback', title: 'Student confidence', plain: 'Students who said they feel more confident', pct: happy, n: s.feedback.n, target: 80,
       status: judge(happy, s.feedback.n, 80), tip: 'Ask students to tap their feedback at the end of every lesson.' },
@@ -111,7 +112,10 @@ function TalkTimeCard({ goal, recent }: { goal: Goal; recent: Scorecard['talk'][
           <div className="flex items-center gap-2 text-sm font-semibold">
             <Mic className="h-4 w-4 text-muted-foreground" aria-hidden /> Student talking time
           </div>
-          <p className="mt-1 text-xs text-muted-foreground">The student should speak more than you do. Aim for 50% or more.</p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            The student should do a good share of the talking. Aim for {goal.target}% or more
+            {goal.target < 50 ? ' (a little less is expected with young beginners).' : '.'}
+          </p>
         </div>
         <span className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold ${st.chip}`}>{st.label}</span>
       </div>
@@ -133,12 +137,12 @@ function TalkTimeCard({ goal, recent }: { goal: Goal; recent: Scorecard['talk'][
           <div className="relative mt-4 flex h-5 overflow-hidden rounded-full" role="img" aria-label={`Student ${student}%, you ${100 - (student ?? 0)}%`}>
             <div className="bg-sky-500" style={{ width: `${student}%` }} />
             <div className="bg-violet-500" style={{ width: `${100 - (student ?? 0)}%` }} />
-            <span className="absolute inset-y-0 w-0.5 bg-white" style={{ left: `${TALK_TARGET_PCT}%` }} aria-hidden />
+            <span className="absolute inset-y-0 w-0.5 bg-white" style={{ left: `${goal.target}%` }} aria-hidden />
           </div>
           <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-muted-foreground">
             <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-sm bg-sky-500" aria-hidden />Student</span>
             <span className="flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-sm bg-violet-500" aria-hidden />You</span>
-            <span>White line = 50%, where you speak equally</span>
+            <span>White line = your goal ({goal.target}%)</span>
           </div>
 
           {/* Last lessons */}
@@ -146,7 +150,7 @@ function TalkTimeCard({ goal, recent }: { goal: Goal; recent: Scorecard['talk'][
             <div className="mt-5">
               <div className="mb-2 text-xs font-semibold text-muted-foreground">Your last {recent.length} lessons</div>
               <div className="relative flex h-24 items-end gap-1.5" role="img" aria-label="Student talking share for each recent lesson">
-                <span className="pointer-events-none absolute inset-x-0 top-1/2 z-10 border-t-2 border-dashed border-foreground/50" aria-hidden />
+                <span className="pointer-events-none absolute inset-x-0 z-10 border-t-2 border-dashed border-foreground/50" style={{ bottom: `${goal.target}%` }} aria-hidden />
                 {recent.map((r, i) => {
                   const total = r.student_seconds + r.teacher_seconds || 1;
                   const pct = Math.round((100 * r.student_seconds) / total);

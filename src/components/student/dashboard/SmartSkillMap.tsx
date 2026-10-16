@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
@@ -62,6 +63,7 @@ const HUB_ACCENT: Record<Hub, { ring: string; chip: string; bar: string; glow: s
 
 export const SmartSkillMap: React.FC<SmartSkillMapProps> = ({ hub, variant = 'compact' }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const accent = HUB_ACCENT[hub];
   const { data, isLoading } = useSmartSkillMap(hub);
 
@@ -70,7 +72,7 @@ export const SmartSkillMap: React.FC<SmartSkillMapProps> = ({ hub, variant = 'co
       <Card className={`p-6 rounded-2xl backdrop-blur-xl bg-card/70 border border-border ring-1 ${accent.ring}`}>
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <Loader2 className="w-4 h-4 animate-spin" />
-          Building your skill map…
+          {t('st.skill.building', 'Building your skill map…')}
         </div>
       </Card>
     );
@@ -105,15 +107,15 @@ export const SmartSkillMap: React.FC<SmartSkillMapProps> = ({ hub, variant = 'co
         <div>
           <div className="flex items-center gap-2 mb-1">
             <Sparkles className={`w-4 h-4 ${accent.text}`} />
-            <h3 className="font-bold text-base md:text-lg tracking-tight">Your Skill Map</h3>
+            <h3 className="font-bold text-base md:text-lg tracking-tight">{t('st.skill.title', 'Your Skill Map')}</h3>
           </div>
           <p className="text-xs text-muted-foreground">
-            Live mastery across vocabulary, grammar, pronunciation, fluency &amp; reading.
+            {t('st.skill.sub', 'Live mastery across vocabulary, grammar, pronunciation, fluency & reading.')}
           </p>
         </div>
         {insights && !isEmpty && (
           <div className={`px-3 py-1.5 rounded-xl text-xs font-semibold ${accent.chip}`}>
-            {insights.overallPct}% overall
+            {t('st.skill.overall', { n: insights.overallPct, defaultValue: '{{n}}% overall' })}
           </div>
         )}
       </div>
@@ -122,14 +124,14 @@ export const SmartSkillMap: React.FC<SmartSkillMapProps> = ({ hub, variant = 'co
         <div className="relative text-center py-8">
           <Trophy className={`w-10 h-10 mx-auto mb-2 opacity-60 ${accent.text}`} />
           <p className="text-sm text-muted-foreground mb-4">
-            Finish your first lesson to start growing your skills.
+            {t('st.skill.empty', 'Finish your first lesson to start growing your skills.')}
           </p>
           <Button
             onClick={() => navigate('/dashboard/hub?tab=lessons')}
             size="sm"
             className="bg-emerald-600 hover:bg-emerald-700 text-white"
           >
-            Start a lesson
+            {t('st.skill.start', 'Start a lesson')}
           </Button>
         </div>
       ) : (
@@ -146,19 +148,19 @@ export const SmartSkillMap: React.FC<SmartSkillMapProps> = ({ hub, variant = 'co
             <div className="relative mt-5 grid grid-cols-1 md:grid-cols-3 gap-2.5">
               <InsightChip
                 icon={Trophy}
-                label="Mastered"
+                label={t('st.skill.mastered', 'Mastered')}
                 value={`${insights.masteredItems}/${insights.totalItems}`}
                 tone="success"
               />
               <InsightChip
                 icon={TrendingUp}
-                label="Building"
-                value={`${insights.inProgressItems} skills`}
+                label={t('st.skill.buildingLbl', 'Building')}
+                value={t('st.skill.nSkills', { n: insights.inProgressItems, defaultValue: 'Skills: {{n}}' })}
                 tone="info"
               />
               <InsightChip
                 icon={Target}
-                label="Next to master"
+                label={t('st.skill.next', 'Next to master')}
                 value={insights.nextToMaster?.label ?? '—'}
                 tone="accent"
               />
@@ -175,7 +177,7 @@ export const SmartSkillMap: React.FC<SmartSkillMapProps> = ({ hub, variant = 'co
             >
               <Sparkles className={`w-4 h-4 mt-0.5 shrink-0 ${accent.text}`} />
               <div className="text-sm leading-snug">
-                <span className="font-semibold mr-1">Smart tip:</span>
+                <span className="font-semibold mr-1">{t('st.skill.tip', 'Smart tip:')}</span>
                 <span className="text-muted-foreground">{insights.recommendation}</span>
               </div>
             </div>
@@ -187,7 +189,7 @@ export const SmartSkillMap: React.FC<SmartSkillMapProps> = ({ hub, variant = 'co
               className={`relative mt-4 w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-medium
                 hover:bg-muted/60 transition ${accent.text}`}
             >
-              <span>Open full skill map</span>
+              <span>{t('st.skill.open', 'Open full skill map')}</span>
               <ChevronRight className="w-4 h-4" />
             </button>
           )}
@@ -195,7 +197,7 @@ export const SmartSkillMap: React.FC<SmartSkillMapProps> = ({ hub, variant = 'co
           {variant === 'full' && (
             <div className="relative mt-6 space-y-4">
               <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
-                Skill breakdown
+                {t('st.skill.breakdown', 'Skill breakdown')}
               </h4>
               {tree!.roots.map((root) => (
                 <DomainBreakdown key={root.id} node={root} accent={accent} />
@@ -216,6 +218,7 @@ function DomainRow({
   accent: (typeof HUB_ACCENT)[Hub];
 }) {
   const Icon = DOMAIN_ICONS[node.domain] ?? BookOpen;
+  const { t } = useTranslation();
   const masteredCount = (node.children ?? []).filter((c) => c.status === 'mastered').length;
   const total = node.children?.length ?? 0;
   return (
@@ -223,10 +226,10 @@ function DomainRow({
       <div className="flex items-center justify-between mb-1.5">
         <div className="flex items-center gap-2">
           <Icon className={`w-4 h-4 ${accent.text}`} />
-          <span className="text-sm font-semibold">{node.label}</span>
+          <span className="text-sm font-semibold">{t('st.skill.domain.' + node.domain, node.label)}</span>
           {node.status === 'mastered' && (
             <Badge variant="secondary" className={`text-[10px] ${accent.chip} border-0`}>
-              Mastered
+              {t('st.skill.mastered', 'Mastered')}
             </Badge>
           )}
         </div>
@@ -247,11 +250,12 @@ function DomainBreakdown({
   accent: (typeof HUB_ACCENT)[Hub];
 }) {
   const children = node.children ?? [];
+  const { t } = useTranslation();
   if (!children.length) return null;
   return (
     <div className="rounded-xl border border-border/60 p-4 bg-background/40">
       <div className="flex items-center justify-between mb-3">
-        <span className={`text-sm font-semibold ${accent.text}`}>{node.label}</span>
+        <span className={`text-sm font-semibold ${accent.text}`}>{t('st.skill.domain.' + node.domain, node.label)}</span>
         <span className="text-xs text-muted-foreground tabular-nums">{node.masteryPct}%</span>
       </div>
       <div className="flex flex-wrap gap-1.5">
@@ -261,7 +265,7 @@ function DomainBreakdown({
           .map((leaf) => (
             <span
               key={leaf.id}
-              title={`${leaf.label} · ${leaf.masteryPct}% · ${leaf.exposures} exposures`}
+              title={`${leaf.label} · ${leaf.masteryPct}% · ${t('st.skill.exposures', { n: leaf.exposures, defaultValue: 'Exposures: {{n}}' })}`}
               className={`
                 px-2 py-1 rounded-md text-[11px] font-medium border
                 ${
@@ -278,7 +282,7 @@ function DomainBreakdown({
           ))}
         {children.length > 24 && (
           <span className="px-2 py-1 text-[11px] text-muted-foreground">
-            +{children.length - 24} more
+            {t('st.skill.more', { n: children.length - 24, defaultValue: '+{{n}} more' })}
           </span>
         )}
       </div>

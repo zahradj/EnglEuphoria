@@ -1,3 +1,4 @@
+import { AcademyChecklistSummary, type SavedAcademyChecklist } from '@/academy-deck/teacher/AcademyChecklistSummary';
 import React, { useEffect, useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
@@ -23,6 +24,8 @@ interface FeedbackReportDialogProps {
 }
 
 interface FeedbackContent {
+  /** Academy lesson checklist + unit result marked by the teacher (src/academy-deck/teacher/AcademyChecklistSummary.tsx) */
+  academy_checklist?: SavedAcademyChecklist;
   areas_for_improvement?: string[];
   quick_notes?: string;
   skill_scores?: Record<string, number>;
@@ -198,6 +201,8 @@ export const FeedbackReportDialog: React.FC<FeedbackReportDialogProps> = ({
                 <span className="font-semibold">🔁 Next class continues from:</span> {parsedContent.resume_from}
               </div>
             )}
+
+            <AcademyChecklistSummary data={parsedContent?.academy_checklist} audience={viewerRole === 'teacher' ? 'teacher' : 'family'} />
 
             {/* Great at */}
             {parsedContent?.strengths && parsedContent.strengths.length > 0 && (

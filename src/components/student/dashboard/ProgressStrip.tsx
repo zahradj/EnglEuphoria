@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Zap, Flame, Coins, Target, ChevronRight } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
@@ -67,6 +68,7 @@ function useCountUp(target: number, duration = 700) {
  * (level bar, streak pulse, coin sheen, mastery ring).
  */
 export const ProgressStrip: React.FC<{ hub: Hub }> = ({ hub }) => {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const { coins } = useAcademyCoinBalance();
   const navigate = useNavigate();
@@ -147,15 +149,15 @@ export const ProgressStrip: React.FC<{ hub: Hub }> = ({ hub }) => {
     {
       key: 'streak',
       icon: Flame,
-      label: 'Streak',
-      value: `${streakAnim} day${streakAnim === 1 ? '' : 's'}`,
+      label: t('st.strip.streak', 'Streak'),
+      value: `${streakAnim}`,
       onClick: () => navigate('/quest-log'),
       iconClass: stats.streak > 0 ? 'animate-pulse text-orange-500' : '',
     },
     {
       key: 'coins',
       icon: Coins,
-      label: 'Coins',
+      label: t('st.strip.coins', 'Coins'),
       value: coinsAnim.toLocaleString(),
       onClick: () => navigate('/vault'),
       iconClass: 'text-amber-500',
@@ -163,7 +165,7 @@ export const ProgressStrip: React.FC<{ hub: Hub }> = ({ hub }) => {
     {
       key: 'mastery',
       icon: Target,
-      label: 'Mastery',
+      label: t('st.strip.mastery', 'Mastery'),
       value: `${masteryAnim}%`,
       onClick: () => navigate('/mastery'),
       extra: <MasteryRing value={masteryAnim} className={accent} />,
@@ -179,7 +181,7 @@ export const ProgressStrip: React.FC<{ hub: Hub }> = ({ hub }) => {
             key={c.key}
             type="button"
             onClick={c.onClick}
-            aria-label={`Open ${c.label} details`}
+            aria-label={t('st.strip.open', { label: c.label, defaultValue: 'Open {{label}} details' })}
             className={cn(
               'group relative flex items-center gap-2 rounded-2xl border px-3 py-2 min-w-[150px] flex-1 snap-start text-left',
               'transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 active:scale-[0.98]',

@@ -44,6 +44,7 @@ const ReviewModeration = lazy(() => import("@/pages/admin/ReviewModeration"));
 const TeacherKpiDashboard = lazy(() => import("@/pages/admin/TeacherKpiDashboard"));
 const TeacherScorecards = lazy(() => import("@/pages/admin/TeacherScorecards"));
 const TeacherKpiSelfView = lazy(() => import("@/pages/teacher/TeacherKpiSelfView"));
+const HowWeMeasure = lazy(() => import("@/pages/teacher/HowWeMeasure"));
 const KpiCardGallery = lazy(() => import("@/pages/teacher/KpiCardGallery"));
 const TeacherAuraDetail = lazy(() => import("@/pages/teacher/TeacherAuraDetail"));
 const BonusApprovalQueue = lazy(() => import("@/pages/admin/BonusApprovalQueue"));
@@ -249,6 +250,13 @@ const PlayFoodLesson4 = lazy(() => import("./pages/playground-scene/PlayFoodLess
 const PlayFoodLesson5 = lazy(() => import("./pages/playground-scene/PlayFoodLesson5"));
 const PlayFoodLesson6 = lazy(() => import("./pages/playground-scene/PlayFoodLesson6"));
 const PlayFoodLesson7 = lazy(() => import("./pages/playground-scene/PlayFoodLesson7"));
+const PlayMonsterLesson1 = lazy(() => import("./pages/playground-scene/PlayMonsterLesson1"));
+const PlayMonsterLesson2 = lazy(() => import("./pages/playground-scene/PlayMonsterLesson2"));
+const PlayMonsterLesson3 = lazy(() => import("./pages/playground-scene/PlayMonsterLesson3"));
+const PlayMonsterLesson4 = lazy(() => import("./pages/playground-scene/PlayMonsterLesson4"));
+const PlayMonsterLesson5 = lazy(() => import("./pages/playground-scene/PlayMonsterLesson5"));
+const PlayMonsterLesson6 = lazy(() => import("./pages/playground-scene/PlayMonsterLesson6"));
+const PlayMonsterLesson7 = lazy(() => import("./pages/playground-scene/PlayMonsterLesson7"));
 const PlayMagicCastleLesson1 = lazy(() => import("./pages/playground-scene/PlayMagicCastleLesson1"));
 const PlayMagicCastleLesson2 = lazy(() => import("./pages/playground-scene/PlayMagicCastleLesson2"));
 const PlayMagicCastleLesson3 = lazy(() => import("./pages/playground-scene/PlayMagicCastleLesson3"));
@@ -259,6 +267,8 @@ const PlayA2Unit1Lesson2 = lazy(() => import("./pages/playground-scene/PlayA2Uni
 const PlayA2Unit1Lesson3 = lazy(() => import("./pages/playground-scene/PlayA2Unit1Lesson3"));
 const AcademyLibraryPage = lazy(() => import("./academy-deck/pages/AcademyLibraryPage"));
 const AcademyDeckLessonPage = lazy(() => import("./academy-deck/pages/AcademyDeckLessonPage"));
+const AcademyDailyTenPage = lazy(() => import("./academy-deck/pages/AcademyDailyTenPage"));
+const AcademyPracticeReportsPage = lazy(() => import("./academy-deck/pages/AcademyPracticeReportsPage"));
 const PlaygroundLibraryPage = lazy(() => import("./pages/playground-library/PlaygroundLibraryPage"));
 const PlaygroundLibraryPublic = lazy(() => import("./pages/playground-library/PlaygroundLibraryPublic"));
 const PlaygroundGameRunner = lazy(() => import("./pages/PlaygroundGameRunner"));
@@ -833,6 +843,48 @@ const App = () => {
                           <Suspense fallback={<LoadingFallback />}><PlaySpaceLesson7 /></Suspense>
                         </ImprovedProtectedRoute>
                       } /> 
+                      {/* A1 tier — Monster Town, Unit 5 Lesson 1. */}
+                      <Route path="/playground-scene/monster-lesson-1" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayMonsterLesson1 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A1 tier — Monster Town, Unit 5 Lesson 2. */}
+                      <Route path="/playground-scene/monster-lesson-2" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayMonsterLesson2 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A1 tier — Monster Town, Unit 5 Lesson 3. */}
+                      <Route path="/playground-scene/monster-lesson-3" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayMonsterLesson3 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A1 tier — Monster Town, Unit 5 Lesson 4. */}
+                      <Route path="/playground-scene/monster-lesson-4" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayMonsterLesson4 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A1 tier — Monster Town, Unit 5 Lesson 5. */}
+                      <Route path="/playground-scene/monster-lesson-5" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayMonsterLesson5 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A1 tier — Monster Town, Unit 5 Lesson 6. */}
+                      <Route path="/playground-scene/monster-lesson-6" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayMonsterLesson6 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A1 tier — Monster Town, Unit 5 Lesson 7 (Boss Test). */}
+                      <Route path="/playground-scene/monster-lesson-7" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayMonsterLesson7 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
                       {/* A1 tier — Food Festival, Unit 4 Lesson 1. */}
                       <Route path="/playground-scene/food-lesson-1" element={
                         <ImprovedProtectedRoute>
@@ -925,6 +977,16 @@ const App = () => {
                       <Route path="/academy-lesson/:id" element={
                         <ImprovedProtectedRoute requiredRole={["student", "teacher", "content_creator", "admin"]}>
                           <Suspense fallback={<LoadingFallback />}><AcademyDeckLessonPage /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      <Route path="/academy-practice-reports" element={
+                        <ImprovedProtectedRoute requiredRole={["teacher", "content_creator", "admin"]}>
+                          <Suspense fallback={<LoadingFallback />}><AcademyPracticeReportsPage /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      <Route path="/academy-daily-10" element={
+                        <ImprovedProtectedRoute requiredRole={["student", "teacher", "content_creator", "admin"]}>
+                          <Suspense fallback={<LoadingFallback />}><AcademyDailyTenPage /></Suspense>
                         </ImprovedProtectedRoute>
                       } />
                       <Route path="/academy-lesson/:id/homework" element={
@@ -1087,6 +1149,11 @@ const App = () => {
                       <Route path="/teacher/kpi" element={
                         <ImprovedProtectedRoute requiredRole="teacher">
                           <Suspense fallback={<LoadingFallback />}><TeacherKpiSelfView /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      <Route path="/teacher/how-we-measure" element={
+                        <ImprovedProtectedRoute requiredRole="teacher">
+                          <Suspense fallback={<LoadingFallback />}><HowWeMeasure /></Suspense>
                         </ImprovedProtectedRoute>
                       } />
                       <Route path="/teacher/kpi-gallery" element={

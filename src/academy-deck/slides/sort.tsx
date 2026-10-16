@@ -7,7 +7,7 @@ import { Art } from './teach';
 
 /** Sort: your own opinions. Tap a picture, then a bin; the sentence is built from the bin's template, shown and spoken. No wrong answer. */
 export function SortView({ slide }: { slide: SortSlide }) {
-  const { right, done, speak } = useDeck();
+  const { right, done, speak, setVars } = useDeck();
   const [pick, setPick] = useState<string | null>(null);
   const [placed, setPlaced] = useState<Record<string, string>>({});
   const all = Object.keys(placed).length === slide.items.length;
@@ -18,7 +18,9 @@ export function SortView({ slide }: { slide: SortSlide }) {
     if (!pick) return;
     const it = slide.items.find((x) => x.id === pick)!;
     const bin = slide.bins.find((b) => b.id === binId)!;
-    setPlaced({ ...placed, [pick]: binId });
+    const next = { ...placed, [pick]: binId };
+    setPlaced(next);
+    if (slide.save) setVars({ [slide.save]: Object.entries(next).filter(([, b]) => b === slide.bins[0].id).map(([id]) => id).join(',') });
     setPick(null);
     right();
     void speak('Vee', bin.template.replace('{w}', it.word));
@@ -29,7 +31,7 @@ export function SortView({ slide }: { slide: SortSlide }) {
       <div className="ad-sort-pool" role="group" aria-label="Pictures to sort">
         {left.map((it) => (
           <button key={it.id} type="button" className="ad-sort-item" data-on={pick === it.id} aria-pressed={pick === it.id} aria-label={it.word} onClick={() => setPick(pick === it.id ? null : it.id)}>
-            <Art art={it.art} size="sm" />
+            {it.art && <Art art={it.art} size="sm" />}
             <span>{it.word}</span>
           </button>
         ))}
