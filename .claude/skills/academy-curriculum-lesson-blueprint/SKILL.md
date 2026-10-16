@@ -107,3 +107,6 @@ Run `academy-quality-gate` (12 checks). Also confirm: approved plan with a trace
 - **Coverage (95/98 % known words) is a design target, not a proven law;** never promise it to families. Pronunciation is judged on being understood.
 - **Present perfect lessons:** teacher note on L1 transfer (tr/ar: past simple instead; it/es/fr: present perfect with finished-time words; it *da*, es *desde*, fr *depuis* for "for/since") and the time-word rule early.
 - **Open until checked in primary sources:** English Grammar Profile / GSE placement; no claim of CELTA or teacher review.
+
+### Creation protocol (owner 2026-10-16)
+Create every lesson with all the Academy skills, the handbook (Part 10) and the game-dev skills, and run the **deep game search** (>= 5 candidates, >= 3 source families, alignment test, logged): `docs/academy-lesson-creation-protocol.md`.
