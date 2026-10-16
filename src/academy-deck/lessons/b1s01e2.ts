@@ -4,7 +4,8 @@
 // Student need: a B1 student who says "good / nice" for every experience. Fourteen words in three sets, each set followed by TWO different memorising games (owner rule 2026-10-12);
 // the -ed / -ing contrast is a short noticing task (feelings vs causes), the -ing forms are passive gloss only. Whole chunks are shown first, never reassembled from broken parts (Boers).
 // Pictures are placeholders (frames, letter tiles) until the owner approves the scenario and the art is made; voices are baked after the text is approved.
-import type { CastName, DeckScript, TeachArt } from '../types';
+import type { DeckScript, TeachArt } from '../types';
+import { card, who } from './kit';
 import { ACADEMY_RECALL_NODES, MAX_REMEMBER_ITEMS } from '../../curriculum/academy';
 import { recallRounds } from '../recallSlides';
 
@@ -21,8 +22,6 @@ const SET_A = ['excitement', 'amazed', 'disappointed', 'embarrassed', 'proud'];
 const SET_B = ['frightened', 'relaxed', 'grateful', 'destination', 'attraction'];
 const SET_C = ['countryside', 'go camping', 'go sightseeing', 'try something new'];
 
-const card = (id: string, label: string): TeachArt => ({ type: 'card', id, label });
-const who = (w: CastName, pos: 'left' | 'right' | 'center', expr: 'happy' | 'wave' | 'thumbs' | 'neutral' = 'happy') => ({ who: w, pos, expr });
 const ROOM = 'travel-club-room';
 const WALL = 'postcard-wall';
 const TABLE = 'postcard-table';

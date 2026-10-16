@@ -83,3 +83,22 @@ Search summaries only (the container could not open the publisher pages); mechan
 | Cambridge *Games for Grammar Practice* (via search summary) | truth-or-dare about life experiences for present perfect | book not opened |
 
 Decisions: new game **Glitch Hunt** (error correction as a bug hunt: find the glitch in a chat, repair it, hear the reason) and new speaking round **Two Truths and a Lie** (optional, Energiser). Limits: no human teacher consulted; the two new pages are untested with a real student.
+
+## 9. Game search record for Lesson 1 (protocol table, written retroactively 2026-10-16)
+
+Lesson 1 was built before `docs/academy-lesson-creation-protocol.md` existed. This table records what the lesson uses, against the catalogue (171 + C1) and the sources in §2, §5, §6 and §8; it is **not** a fresh search (that would be the next review of the lesson).
+
+| Game in the lesson | Catalogue | Video-game mechanic | Source (§) | Alignment (criterion) |
+|---|---|---|---|---|
+| Hot Seat ladder (`hot-seat`) | 8 Hot Seat; 92 Quiz Show | Quiz-show ladder with lifelines | §5 | activates the past simple (crit 4) |
+| Break the Clock (`boss`) | 94 Boss Battle Review | Boss fight | §5 | choose past simple or present perfect (crit 4) |
+| Participle Wordle (`wordle`) | 81 Wordle | Word puzzle | §5 | spell the participle (crit 3) |
+| Rapport (`rpg`) | Dialogue RPG (video-game list) | Dialogue tree | §5 | natural replies and follow-up questions (crit 4, 5) |
+| Triple Match (`triple`) | 170 Verb Trio Memory (adapted) | Match-3 | §3 | group base, past, participle (crit 3) |
+| Trophy Forge (`forge`) | 171 Trophy Forge | Loot and crafting / trophy case | §3 | build the three forms (crit 3) |
+| Glitch Hunt (`glitch`) | new (error hunt, cat. 18 variant) | Bug hunt | §8 | find and repair tense errors (crit 4) |
+| Two Truths and a Lie (`truths`) | 50 | Bluffing / deduction | §8 | say "have" sentences (crit 3, 5) |
+| Verb Draw (`verbdraw`) | 170 + conversation | Card draw + talk show | §8 | say the forms, open a conversation (crit 3, 4, 5) |
+| Grammar Detective sort (`detective`) | 19 Grammar Detective | Detective board | §2 | notice finished time vs up to now (crit 4) |
+| Match / Memory (words) | vocabulary menu | none | session builder | the six words (crit 2) |
+Chosen: all of the above; each serves a named criterion and has a mechanic. Rejected earlier: none logged. **Open:** a fresh >= 5-candidate internet search against the current catalogue (including the C1 and the newer sources) at the lesson's next review; the Season shortlist (`gamePlan.ts`: 169, 170, 171, 50, 21) is consistent with these.

@@ -23,7 +23,7 @@ export interface LessonProfile {
 
 export const LESSON_PROFILES: LessonProfile[] = [
   {
-    id: 'b1-s01-e1', setting: 'the rooftop studio with the bucket-list wall', mainPlate: 'bucket-list-wall', look: 'evening rooftop, string lights, a glass wall of blank cards, a trophy case', frame: 'Vee’s bucket-list dare: tick it off before the break',
+    id: 'b1-s01-e1', setting: 'the Club classroom with the bucket-list corkboard wall (bright daytime school)', mainPlate: 'bucket-list-wall', look: 'bright daytime classroom, tall sunny windows, light wood, a corkboard wall of blank cards, bunting, plants, soft lilac accents, and a trophy case', frame: 'Vee’s bucket-list dare: tick it off before the break',
     signature: 'boss', funHook: 'break a giant clock with the right tense (boss fight), crack participles in Wordle, climb the Hot Seat ladder, win Theo’s rapport, forge verb trophies and beat your own streak',
     evidence: 'the student says the three forms of ten verbs, tells when from up to now, and says who has done the most and why (Take 2)', homeMission: 'send Vee one voice note: three sentences about things you have done',
   },

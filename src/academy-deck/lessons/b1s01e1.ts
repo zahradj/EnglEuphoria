@@ -3,7 +3,8 @@
 // Research: docs/research/academy-b1-s01-research.md. Blueprint: ACADEMY_LESSON_BLUEPRINTS id B1-S01-E1 (objective unchanged; the Season's E1 item bank was aligned to the lesson on 2026-10-16: dare, brave, flown, eaten, gone, taken + bucket list, once in a lifetime, give it a go, tick it off, have you ever, has never been).
 // Student need: an A2 student who wants to revise the past simple, the present perfect and the verb trios. The present perfect is ACTIVATED here (rule in E3): trio check, text, noticing, Trophy Forge, trio streak.
 // Pictures are placeholders (frames, letter tiles) until the owner approves the scenario and the Canva art is made; voices are baked after the text is approved.
-import type { CastName, DeckScript, TeachArt } from '../types';
+import type { DeckScript } from '../types';
+import { L, card, who } from './kit';
 import { ACADEMY_RECALL_NODES, MAX_REMEMBER_ITEMS } from '../../curriculum/academy';
 import { recallRounds } from '../recallSlides';
 
@@ -33,15 +34,11 @@ export function streakRound(t: [string, string, string], i: number): { forms: [s
     partOptions: uniq([t[1], t[0], other[2]], [t[2]]).slice(0, 2),
   };
 }
-const L = (text: string): TeachArt => ({ type: 'letters', text });
-const card = (id: string, label: string): TeachArt => ({ type: 'card', id, label });
-const who = (w: CastName, pos: 'left' | 'right' | 'center', expr: 'happy' | 'wave' | 'thumbs' | 'neutral' = 'happy') => ({ who: w, pos, expr });
 const WALL = 'bucket-list-wall';
 const CASE = 'trophy-case';
 const STAGE = 'club-stage';
 const LOBBY = 'club-lobby';
 const VAULT = 'locker-hall';
-const NIGHT = 'classroom-morning';
 const CLASSROOM = 'classroom-morning';
 const DETECTIVE = 'detective-wall';
 const BUCKET = card('b-bucketlist', 'a bucket list on a wall');
@@ -318,7 +315,7 @@ export const B1_S01_E1: DeckScript = {
       closing: 'Now YOU decide. Give your answer, two reasons, and one point against it.',
     },
     {
-      id: 'rpg', kind: 'rpg', part: 5, stage: 'controlled', bg: NIGHT, actors: [who('Theo', 'right')], trains: [4, 5], npc: 'Theo', goal: 3,
+      id: 'rpg', kind: 'rpg', part: 5, stage: 'controlled', bg: CLASSROOM, actors: [who('Theo', 'right')], trains: [4, 5], npc: 'Theo', goal: 3,
       prompt: 'Rapport! Theo asks about your travels. Choose the reply that sounds most natural.',
       scenes: [
         { say: 'So, have you ever been abroad?', options: [
