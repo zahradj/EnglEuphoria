@@ -84,7 +84,8 @@ export function BoardView({ slide }: { slide: BoardSlide }) {
         <div className="ad-board-cols">
           {slide.bins.map((b, n) => (
             <button key={b.id} type="button" className="ad-board-col" data-bin={b.id} data-bounce={bounce === b.id || undefined} aria-label={`${b.label}: pin the card here (key ${n + 1})`} onClick={() => pin(b.id)}>
-              <h3><kbd aria-hidden="true">{n + 1}</kbd> {b.label}</h3>
+              <h3><kbd aria-hidden="true">{n + 1}</kbd>{b.icon && <span className="ad-board-ico" aria-hidden="true"><Icon name={b.icon} /></span>}{b.label}</h3>
+              {slide.look === 'case' && !order.some((c) => c.bin === b.id && placed.includes(c.id)) && <p className="ad-board-empty" aria-hidden="true">Pin the card here</p>}
               <ul>{order.filter((c) => c.bin === b.id && placed.includes(c.id)).map((c) => <li key={c.id} className="ad-board-note" data-pinned="true">{filled(c.text, b.id)}</li>)}</ul>
             </button>
           ))}

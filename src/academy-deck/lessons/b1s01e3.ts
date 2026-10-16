@@ -140,8 +140,8 @@ export const B1_S01_E3: DeckScript = {
       id: 'board-when', kind: 'board', look: 'case', part: 2, stage: 'context', bg: BOARD, actors: [who('Vee', 'left')], trains: [4, 1],
       prompt: 'Detective Board. Read each evidence card and pin it: does it say WHEN something happened, or what someone has done UP TO NOW?',
       bins: [
-        { id: 'when', label: 'A finished time (when)', hint: 'Look for a time word: last summer, in July, yesterday, two years ago.' },
-        { id: 'now', label: 'Up to now (experience)', hint: 'No finished time here. Look for have / has, ever or never.' },
+        { id: 'when', icon: 'lock', label: 'A finished time (when)', hint: 'Look for a time word: last summer, in July, yesterday, two years ago.' },
+        { id: 'now', icon: 'bolt', label: 'Up to now (experience)', hint: 'No finished time here. Look for have / has, ever or never.' },
       ],
       cards: WHEN_CARDS.map((c) => ({ ...c })),
       hints: ['Find the time word. If there is one that is finished, it is a “when” card.', 'No time word, and have / has + a participle? Then it is an experience up to now.'],
@@ -183,8 +183,8 @@ export const B1_S01_E3: DeckScript = {
       id: 'board-been', kind: 'board', look: 'scenes', part: 3, stage: 'controlled', bg: BOARD, actors: [who('Vee', 'left')], trains: [3],
       prompt: 'Been or Gone? Read the scene, then pin the missing word: did the person come back (been) or are they still there (gone)?',
       bins: [
-        { id: 'been', label: 'been', hint: 'Been = went and came back. With ever, always been.' },
-        { id: 'gone', label: 'gone', hint: 'Gone = went and is still there (not here now).' },
+        { id: 'been', icon: 'check', label: 'been', hint: 'Been = went and came back. With ever, always been.' },
+        { id: 'gone', icon: 'skip', label: 'gone', hint: 'Gone = went and is still there (not here now).' },
       ],
       cards: BEEN_GONE.map((c) => ({ ...c })),
       hints: ['Is the person here now? If they are back, say been. If they are still away, say gone.'],

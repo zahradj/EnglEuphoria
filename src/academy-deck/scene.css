@@ -621,3 +621,7 @@
   .ad-root[data-theme='scene'] .ad-board-cols { grid-template-columns: 1fr; }
   .ad-root[data-theme='scene'] .ad-board-col { min-height: 0; padding-top: 24px; }
 }
+.ad-root[data-theme='scene'] .ad-board-ico { display: inline-grid; place-items: center; width: 26px; height: 26px; margin-inline-end: 6px; border-radius: 50%; background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #4c1d95; box-shadow: 0 2px 5px rgba(120, 70, 0, 0.35); vertical-align: -6px; }
+.ad-root[data-theme='scene'] .ad-board-ico svg { width: 15px; height: 15px; }
+.ad-root[data-theme='scene'] .ad-board[data-look='scenes'] .ad-board-ico { background: rgba(255, 255, 255, 0.95); }
+.ad-root[data-theme='scene'] .ad-board-empty { margin: 14px 0 0; padding: 14px 8px; border: 2px dashed rgba(109, 70, 230, 0.4); border-radius: 10px; text-align: center; font-size: 0.8rem; font-weight: 800; color: rgba(76, 29, 149, 0.55); }

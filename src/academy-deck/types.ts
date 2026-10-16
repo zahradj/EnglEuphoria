@@ -249,7 +249,7 @@ export interface BoardSlide extends SlideBase {
   look: 'case' | 'scenes';
   prompt: string;
   /** exactly two headings the cards are pinned under */
-  bins: { id: string; label: string; hint?: string }[];
+  bins: { id: string; label: string; hint?: string; /** an Icon name shown on the heading */ icon?: string }[];
   cards: { id: string; text: string; /** what is spoken when the card is read (defaults to `text`; use it when `text` has a ___ blank) */ say?: string; bin: string; /** why it belongs there (shown after a right pin, and as the nudge after a wrong one) */ why: string; /** scene picture (look 'scenes') */ art?: TeachArt; who?: CastName }[];
 }
 export interface WrapSlide extends SlideBase { kind: 'wrap'; heading: string; ticks: string[]; homework: string; clue: string }
