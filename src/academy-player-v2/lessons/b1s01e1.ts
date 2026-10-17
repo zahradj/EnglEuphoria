@@ -46,19 +46,19 @@ const scenes: SceneBase[] = [
     { step: 'free', prompt: 'Vee has a dare for the class. What do you think the dare is? Guess in one sentence.' },
   ] } satisfies SpeakScene,
   { id: 'story-dare', part: 2, kind: 'comic', plate: 'bucket-list-wall', trains: [1], title: 'The Dare', beats: [
-    { plate: 'story-b1s1-1', caption: 'Vee has a dare for the whole class.', spots: { Vee: { x: 45, y: 12, w: 26 } }, lines: [
+    { plate: 'story-b1s1-1', caption: 'Vee has a dare for the whole class.', spots: { Vee: { x: 45, y: 12, w: 26 } }, heads: { Vee: { x: 40, y: 21 } }, lines: [
       { who: 'Vee', text: 'Okay, listen. I have a dare for everyone. We all make a bucket list this term, and we tick it off before the break.' },
       { who: 'Vee', text: 'A bucket list is a list of things you want to do once in a lifetime.' },
       { who: 'Vee', text: 'Mine is ready. Number one: give surfing a go. I have never been in the ocean, but I have seen a hundred videos.' },
     ] },
-    { plate: 'story-b1s1-2', spots: { Ava: { x: 3, y: 66, w: 45 }, Theo: { x: 52, y: 66, w: 45 } }, lines: [
+    { plate: 'story-b1s1-2', spots: { Ava: { x: 3, y: 66, w: 45 }, Theo: { x: 52, y: 66, w: 45 } }, heads: { Ava: { x: 34, y: 22 }, Theo: { x: 63, y: 22 } }, lines: [
       { who: 'Ava', text: 'That is brave, Vee. I have been to the beach, but I have never tried surfing.' },
       { who: 'Ava', text: 'Last summer I went to Spain with my cousin. We ate pizza every day, and we took hundreds of photos.' },
       { who: 'Theo', text: 'Ava, you have flown across the world twice, and you say you are not brave?' },
       { who: 'Ava', text: 'Flying is easy, Theo. Falling off a surfboard is the scary part.' },
       { who: 'Theo', text: 'I have taken a photo in every country I have visited. That is my record.' },
     ] },
-    { plate: 'story-b1s1-3', spots: { Ava: { x: 2, y: 4, w: 28 }, Vee: { x: 2, y: 38, w: 28 } }, lines: [
+    { plate: 'story-b1s1-3', spots: { Ava: { x: 2, y: 4, w: 28 }, Vee: { x: 2, y: 38, w: 28 } }, heads: { Ava: { x: 63, y: 26 }, Vee: { x: 42, y: 15 } }, lines: [
       { who: 'Vee', text: 'So here is the dare: three things you have done, and three things you want to do. Who has gone the furthest? Who has eaten the strangest thing?' },
       { who: 'Ava', text: 'Wait. Have you ever eaten spicy noodles?' },
       { who: 'Vee', text: 'Ha! That is number two on my list.' },

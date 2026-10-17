@@ -12,11 +12,25 @@ export interface ComicBeat {
   /** where each speaker's bubble sits, % of the picture (x, y = top-left, w = width): empty space only */
   spots?: Partial<Record<CastName, { x: number; y: number; w: number }>>;
   capAt?: { x: number; y: number; w: number };
+  /** where each speaker's head is, % of the picture: the bubble's tail points at it (default: down, toward the speaker's side) */
+  heads?: Partial<Record<CastName, { x: number; y: number }>>;
   lines: { who: CastName; text: string; shout?: boolean; sfx?: string }[];
 }
 export interface ComicScene extends SceneBase { kind: 'comic'; title: string; beats: ComicBeat[] }
 
 type Flat = ComicBeat['lines'][number] & { bi: number; li: number };
+
+/** Which edge of the bubble the tail leaves from, and how far along that edge (%), so it points at the speaker's head. The picture is 16:9, so x counts 16 and y counts 9. */
+export function tailFor(spot: { x: number; y: number; w: number } | undefined, head: { x: number; y: number } | undefined, side: 'left' | 'right'): { edge: 'top' | 'bottom' | 'left' | 'right'; at: number } {
+  if (!spot || !head) return { edge: 'bottom', at: side === 'left' ? 22 : 78 };
+  const cx = spot.x + spot.w / 2;
+  const cy = spot.y + 10;
+  const dx = (head.x - cx) * 16;
+  const dy = (head.y - cy) * 9;
+  const clamp = (n: number) => Math.max(14, Math.min(86, n));
+  if (Math.abs(dy) >= Math.abs(dx)) return { edge: dy > 0 ? 'bottom' : 'top', at: clamp(((head.x - spot.x) / spot.w) * 100) };
+  return { edge: dx > 0 ? 'right' : 'left', at: 50 };
+}
 
 function Typed({ text, instant }: { text: string; instant: boolean }) {
   const [n, setN] = useState(instant ? text.length : 0);
@@ -59,6 +73,7 @@ function ComicView({ scene, onDone, artBase, calm }: SceneProps<ComicScene>) {
   const prev = p0 && p0.who !== line.who && (spotOf(p0) || !spotOf(line)) ? p0 : null;
   const shout = !!line.shout || /!\s*$/.test(line.text);
   const side = sideOf(line);
+  const tail = tailFor(spotOf(line), beat.heads?.[line.who], side);
   const next = () => setI((n) => Math.min(flat.length - 1, n + 1));
 
   return (
@@ -72,10 +87,10 @@ function ComicView({ scene, onDone, artBase, calm }: SceneProps<ComicScene>) {
         ))}
         <i className="av-comic-wipe" key={`w${line.bi}`} aria-hidden="true" />
         {beat.caption && <p className="av-comic-cap" key={`c${line.bi}`} style={beat.capAt ? { left: `${beat.capAt.x}%`, top: `${beat.capAt.y}%`, width: `${beat.capAt.w}%` } : undefined}><span>{beat.caption}</span></p>}
-        {prev && <p className="av-comic-bub" data-old="true" data-side={sideOf(prev)} style={at(prev)} key={`o${i}`}><b>{prev.who}</b>{prev.text}</p>}
+        {prev && <p className="av-comic-bub" data-who={prev.who} data-old="true" data-side={sideOf(prev)} style={at(prev)} key={`o${i}`}><b className="av-who">{prev.who}</b>{prev.text}</p>}
         {shout && <i className="av-comic-speed" data-side={side} key={`s${i}`} aria-hidden="true" />}
-        <p className="av-comic-bub" data-shout={shout || undefined} data-side={side} style={at(line)} key={`b${i}`} aria-label={`${line.who}: ${line.text}`} role="status">
-          <b>{line.who}</b><Typed text={line.text} instant={calm} />
+        <p className="av-comic-bub" data-who={line.who} data-shout={shout || undefined} data-side={side} data-tail={tail.edge} style={{ ...at(line), ['--tail' as string]: `${tail.at}%` }} key={`b${i}`} aria-label={`${line.who}: ${line.text}`} role="status">
+          <b className="av-who">{line.who}</b><Typed text={line.text} instant={calm} />
         </p>
         {line.sfx && <span className="av-comic-sfx" data-side={side} key={`x${i}`} aria-hidden="true">{line.sfx}</span>}
       </div>

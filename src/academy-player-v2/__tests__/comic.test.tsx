@@ -37,3 +37,14 @@ describe('comic scene', () => {
     expect(comicScene.validate({ ...scene, beats: [{ ...scene.beats[0], spots: { Vee: { x: 70, y: 1, w: 40 } } }, ...scene.beats.slice(1)] }).join()).toMatch(/off the picture/);
   });
 });
+
+import { tailFor } from '../scenes/comic/Comic';
+describe('speech bubble tail', () => {
+  it('points down at a speaker below, up at one above, sideways at one beside, and falls back to the speaker side', () => {
+    const spot = { x: 40, y: 10, w: 30 };
+    expect(tailFor(spot, { x: 50, y: 60 }, 'left')).toEqual({ edge: 'bottom', at: 33.333333333333336 });
+    expect(tailFor({ ...spot, y: 60 }, { x: 55, y: 10 }, 'left').edge).toBe('top');
+    expect(tailFor({ x: 2, y: 4, w: 28 }, { x: 63, y: 26 }, 'left').edge).toBe('right');
+    expect(tailFor(undefined, undefined, 'right')).toEqual({ edge: 'bottom', at: 78 });
+  });
+});
