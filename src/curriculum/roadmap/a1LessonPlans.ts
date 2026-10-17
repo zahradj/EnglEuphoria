@@ -416,15 +416,15 @@ export const A1_LESSON_PLANS: A1LessonPlan[] = [
   p(7, 3, 'Listen to the Hero Helper Song', {
     objective: 'I can understand hero rules: "You must help. You mustn\'t run on the road."',
     grammarFocus: ['You must / mustn\'t…'], newVocabulary: ['must', 'mustn\'t', 'road', 'kind'],
-    reviewTargets: ['Can you…?'], phonicsFocus: [],
+    reviewTargets: ['Can you…?'], phonicsFocus: ['a_e magic e (cape, cake, save, brave)'],
     communicationGoal: 'Understand rules.',
-    signatureGame: 'Who Said It? ⇄', evidence: '4 of 5 rules matched to the right hero.',
+    signatureGame: 'Red Light, Green Light ⇄ (hero rules on the city road) + the Hero Helper Song', evidence: '4 of 5 rules understood from listening (Rule Bingo, Tick or Cross).',
     funHook: 'The child adds a rule of their own to the song.', homeMission: 'Make one family rule in English.',
   }),
   p(7, 4, 'Offer to Help: Give, Show, Tell', {
     objective: 'I can find out what\'s wrong and help: "What\'s the matter?" "I\'ve got a headache." "Can I help you?"',
     grammarFocus: ['What\'s the matter? I\'ve got a…', 'Can I help you? Yes, please', 'Give / show me…'], newVocabulary: ['headache', 'cold', 'toothache', 'matter'],
-    reviewTargets: ['Would you like…? (Unit 4)', 'must'], phonicsFocus: ['ai / ay review'],
+    reviewTargets: ['Would you like…? (Unit 4)', 'must'], phonicsFocus: ['long a: ai / ay / a_e sort'],
     communicationGoal: 'Ask what\'s wrong and offer help.',
     signatureGame: '★ Hero Mission', evidence: 'The child helps 4 citizens: asks, understands and offers the right help.',
     funHook: 'The child is the city\'s hero; citizens thank them by name.', homeMission: 'Ask someone at home "What\'s the matter?" and offer help.',
