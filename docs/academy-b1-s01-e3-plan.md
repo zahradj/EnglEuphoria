@@ -77,3 +77,14 @@ Supports: home-language hint on request; slower audio; Chill track (Alibi frames
 ## 11 Build record (2026-10-16, after the owner's "go")
 Built: `src/academy-deck/lessons/b1s01e3.ts` (26 slides, parts 3 / 5 / 12 / 19 / 3 / 9 / 5 / 4 minutes), registered as `b1-s01-e3` (library, scripts, profile, voice lines), a new slide kind **Case Board** (`slides/board.tsx`, two looks: `case` for the Detective Board and `scenes` for Been or Gone?), 13 lesson tests (`b1s01e3.test.tsx`), scenario `docs/scenarios/academy-b1s01e3-missing-postcard.md`. The voice audit is clear.
 **Differences from the plan (honest):** the cast is **Vee and Theo only** (the blueprint's cast; the plan's Ava and Mia statements were cut; Theo is the suspect and Vee the second suspect in Take 2); the Energiser is a quick-fire listening game (`hearpick`) and a **Detective Report cloze** was added so the lesson has five different games; Question Forge and Evidence Builder are `build` pages; the Alibi is the existing `rpg` interrogation on the `detective-wall` plate; the evidence card "He ate sushi in 2023." became "two years ago" (digits are a pronunciation risk); the Been-or-Gone? scenes are six, not eight. Pictures: the main plate is made; the case-board close-up and the three story plates are waiting on Canva's cooldown; the six scene cards use a frame icon until made.
+
+
+## Amendment 2026-10-17: new games per criterion (owner "go" on Wave 1; research: `docs/research/academy-b1-s01-games-round2-research.md`, sources unverified)
+Objective, exit task, success criteria and the 60-minute shape do not change.
+
+| Criterion | New game (kind) | Replaces / adds | Serves |
+|---|---|---|---|
+| C2 ask and answer | **Who Is It?** (`interview`, look "lineup": build "Have you ever + participle…?" from chips, suspects answer in recorded voice, the board narrows to one) | replaces the `match-qa` read-and-match | C2 |
+| C3 been or gone | **Passport desk** (`inspect`, look "passport": approve or send back a claim against stamps, pick the reason, rulebook always open) | replaces the `memory` pictures game | C3 |
+| C4 finished time vs up to now, "When did you…?" | **Objection!** (`objection`: press a testimony line for a follow-up, present dated evidence on the line that clashes, repair it) | replaces the `report` multiple-choice | C4 |
+Traceability: every new game names its criterion; responses stay at or above 80.

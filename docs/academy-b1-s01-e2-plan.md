@@ -78,3 +78,13 @@ Supports: home-language hint on request; slower audio; Chill track; Stretch (Pus
 Built: `src/academy-deck/lessons/b1s01e2.ts` (37 slides, parts 3 / 5 / 20 / 12 / 3 / 8 / 5 / 4 minutes), registered as `b1-s01-e2` (library, scripts, profile, voice lines), 16 lesson tests (`b1s01e2.test.tsx`), scenario `docs/scenarios/academy-b1s01e2-postcard-wall.md`. 390 curriculum and deck tests pass; classroom type-check shows no new errors; voice audit clear; the pictures are placeholders (frames and letter tiles) until the art is made.
 **Differences from the plan (honest):** the plan's hour budget was optimistic; against the lesson tests' slow-student estimate the required pages total about 64 minutes, so the Remember? recall rounds (6), the cause sort (4 sentences) and several extras were trimmed or made optional; Word Connections and the Bucket-list recall are optional (their words are still practised by the memory and match games, the two-different-games rule is kept for all three sets); the Workbench moved into the Mission.
 **ACADEMY GATE (partial, not a full run):** 1 Science PASS (techniques named in the plan; retrieval, spacing, noticing before the rule); 2 Level PASS (14 items, no new structure; 95 % coverage not measured by tool, UNVERIFIED); 3 Sequencing PASS (the words are taught before the games use them, tested); 4 Variety PASS (variety gate, no three-in-a-row); 5 Comfort UNCHECKED in a browser (see the open comfort-controls question); 5b Vocab games PASS (tested for all three sets); 5c Modelling and rule PASS (tested); 6 Fun PASS (>= 5 ingredients); 7 Story/cast PASS (cast only); 8 Voice PASS (audit clear, recorded voices bake after push); 9 Assessment PASS (five criteria, production last); 10 Progression PASS (recall from E1); 11 Safety PASS; 12 Claims PASS. **Not verified:** how the lesson looks and plays in a real browser at 390 and 1280 px, the real timing with a student, the Workbench regexes against real student sentences, any picture.
+
+
+## Amendment 2026-10-17: new games per criterion (owner "go" on Wave 1; research: `docs/research/academy-b1-s01-games-round2-research.md`, sources unverified)
+Objective, exit task, success criteria and the 60-minute shape do not change.
+
+| Criterion | New game (kind) | Replaces / adds | Serves |
+|---|---|---|---|
+| C1 eight feeling words | **Postcard Inspector** (`inspect`, look "postcard": approve or fix diary lines, -ed = how I feel, -ing = what causes it, then type "I felt … because …") | replaces the `cause-sort` sort | C1 |
+Wave 2 (not yet approved): Postcard Finder (C4), Chunk Workshop (C3), Stress Beats (C1/C5).
+Traceability: the game names its criterion; responses stay at or above 80.

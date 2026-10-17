@@ -71,3 +71,14 @@ Pictures: 2 Canva plates (no video, no credits beyond Canva quota, which current
 
 ## 7 Needs the owner's answer
 Approve, or change, items 1-5 in §2. Until then nothing is built.
+
+
+## Amendment 2026-10-17: new games per criterion (owner "go" on Wave 1; research: `docs/research/academy-b1-s01-games-round2-research.md`, sources unverified)
+Replaces the weakest plain question screens with game encounters; the objective, the exit task, the success criteria and the 60-minute shape do not change.
+
+| Criterion | New game (kind) | Replaces / adds | Serves |
+|---|---|---|---|
+| C4 choose past simple vs present perfect | **Border Desk** (`inspect`, look "post": bucket-list posts, rulebook of two rules, batches of three, approve or fix) | replaces the `glitch` multiple-choice | C4 and the write-forms task |
+| C3 three forms of nine verbs | **Participle Cipher** (`cipher`: type the participle with green/yellow/grey feedback, then the chain see-saw-seen) | adds to Trophy Forge in the Energiser part | C3 |
+| C5 who has done the most and why | **Who has done the most?** (`interview`, look "friends": three personas answer "Have you ever…?" in recorded voice, a notes strip, then the spoken verdict) | adds before the Mission speak scene | C5 |
+Traceability: every new game names its criterion above; the Wrap, the quest objectives and the teacher checklist are unchanged. Responses stay at or above 80.
