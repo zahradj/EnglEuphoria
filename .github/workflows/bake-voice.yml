@@ -43,7 +43,11 @@ jobs:
           failed=""
           while read -r target; do
             echo "== $target"
-            npx -y tsx scripts/generate-voice-cache.mjs --lesson="$target" || failed="$failed $target"
+            code=0
+            npx -y tsx scripts/generate-voice-cache.mjs --lesson="$target" || code=$?
+            if [ "$code" -ne 0 ]; then failed="$failed $target"; fi
+            # 3 = the voice service failed many times in a row (credits / keys): the other targets would fail too.
+            if [ "$code" -eq 3 ]; then echo "::error::The voice service is not making clips (ElevenLabs credits or keys) - stopping."; break; fi
           done < <(grep -v '^\s*#' scripts/voice-bake-targets.txt | grep -v '^\s*$')
           echo "failed=$failed" >> "$GITHUB_OUTPUT"
           if [ -n "$failed" ]; then

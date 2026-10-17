@@ -1165,7 +1165,10 @@ async function main() {
     return;
   }
 
-  let generated = 0, cached = 0, failed = 0, bytes = 0;
+  // Many failures in a row means the voice service itself is down or out of credits (every line answers the same
+  // error): stop instead of failing ~7 s per line for hours. Exit code 3 tells the bake workflow to skip the rest.
+  const MAX_FAILS_IN_A_ROW = 8;
+  let generated = 0, cached = 0, failed = 0, bytes = 0, inARow = 0, gaveUp = false;
   for (const [character, text] of pairs) {
     const file = path.join(OUT_DIR, `${cacheFileName(character, text)}.mp3`);
     if (fs.existsSync(file)) { cached++; continue; }
@@ -1174,16 +1177,22 @@ async function main() {
       fs.writeFileSync(file, buf);
       bytes += buf.length;
       generated++;
+      inARow = 0;
       console.log(`  + [${character}] "${text}" -> ${path.basename(file)} (${buf.length}B)`);
       await sleep(200);
     } catch (err) {
       failed++;
+      inARow++;
       console.error(`  ! FAILED [${character}] "${text}": ${err.message}`);
+      if (inARow >= MAX_FAILS_IN_A_ROW) { gaveUp = true; break; }
     }
   }
 
   console.log(`\nDone. Generated ${generated}, already cached ${cached}, failed ${failed}. Wrote ${(bytes / 1024).toFixed(1)} KB.`);
-  if (failed > 0) process.exitCode = 1;
+  if (gaveUp) {
+    console.error(`Stopped after ${MAX_FAILS_IN_A_ROW} failures in a row: the voice service is not making clips (are the ElevenLabs keys in the Supabase secrets out of credits or invalid?).`);
+    process.exitCode = 3;
+  } else if (failed > 0) process.exitCode = 1;
 }
 
 main();
