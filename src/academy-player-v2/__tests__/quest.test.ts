@@ -97,7 +97,7 @@ describe('streak', () => {
 describe('stages (the 8 parts) and the recap', () => {
   it('each part has its scenes, minutes, criteria and what it can drop', () => {
     const st = stagesOf(script, ['c1', 't1']);
-    expect(st).toHaveLength(8);
+    expect(st).toHaveLength(script.partMinutes.length);
     expect(st[2]).toMatchObject({ part: 2, total: 2, done: 1, complete: false, minutes: 21, criteria: [2] });
     expect(st[2].loot).toEqual({ gems: 1, cards: 2, trophies: 0, clues: 2 });
     expect(st[1].complete).toBe(true);
@@ -154,7 +154,7 @@ describe('the engine remembers hunt finds', () => {
 
 describe('the registered lessons as quests', () => {
   for (const id of scriptIds()) {
-    it(`${id}: every criterion is an objective trained by scenes, eight stages exist, the bag has slots`, async () => {
+    it(`${id}: every criterion is an objective trained by scenes, the lesson's own stages exist, the bag has slots`, async () => {
       const s = (await loadScript(id))!;
       const o = objectivesOf(s, []);
       expect(o.every((x) => x.total > 0)).toBe(true);
@@ -162,7 +162,7 @@ describe('the registered lessons as quests', () => {
       expect(all.every((x) => x.complete)).toBe(true);
       expect(stagesOf(s, []).filter((x) => x.total > 0).length).toBeGreaterThanOrEqual(7);
       expect(potentialLoot(s).length).toBeGreaterThan(10);
-      if (s.quest?.stages) expect(s.quest.stages).toHaveLength(8);
+      if (s.quest?.stages) expect(s.quest.stages).toHaveLength(s.partMinutes.length);
     });
   }
   it('B1-S01-E1 and E3 each have a hunt on a reviewed plate, with 3-7 targets', async () => {

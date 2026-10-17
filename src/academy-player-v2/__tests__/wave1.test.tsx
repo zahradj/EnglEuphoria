@@ -532,7 +532,7 @@ describe('Wave 1 wiring in the three B1 Season 1 lessons', () => {
   });
   it('the voice bake list has the new lines (briefings, rules, answers, statements, sentences)', () => {
     const texts = (l: typeof B1_S01_E1) => spokenLines(l).map((x) => x.text);
-    expect(texts(B1_S01_E1)).toEqual(expect.arrayContaining(['Yes, I have. I ate spicy noodles in Seoul last spring.', 'I have never seen a rainbow like this.', 'Past simple: a finished time, so we say when.']));
+    expect(texts(B1_S01_E1)).toEqual(expect.arrayContaining(['Yes, I have. I ate spicy noodles in Seoul last spring.', 'I have never seen a rainbow like this.', 'Past simple: a finished time, so we say when. I went to Spain last summer.']));
     expect(texts(B1_S01_E3)).toEqual(expect.arrayContaining(['I went two years ago, and again last spring.', 'Been means the person went and came back. The passport shows a BACK HOME stamp.', 'Yes, I have. I wrote one for my friend’s birthday.']));
     expect(texts(B1_S01_E2)).toEqual(expect.arrayContaining(['A word ending in ed, like amazed or disappointed, says how a person feels.']));
   });

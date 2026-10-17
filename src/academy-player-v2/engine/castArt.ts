@@ -15,6 +15,7 @@ const USES: Record<string, Use> = {
   build: { who: one('Vee'), moods: THINK_SET },
   write: { who: one('Vee'), moods: THINK_SET },
   forge: { who: one('Vee'), moods: ['thinking', 'happy', 'concerned', 'curious'] },
+  deck: { who: one('Vee'), moods: ['happy'] },
   boss: { who: one('Theo'), moods: ['thinking', 'happy', 'concerned', 'curious'] },
   match: { who: one('Ava'), moods: THINK_SET },
   memory: { who: one('Mia'), moods: ['curious', 'happy'] },

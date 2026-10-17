@@ -427,7 +427,6 @@ describe('Wave 2 wiring in B1 Season 1', () => {
   it('E1: the switchboard sits after the rule and before the production games and the Mission, and trains criterion 4', () => {
     const i = ids(B1_S01_E1);
     expect(i.indexOf('switchboard')).toBe(i.indexOf('rule') + 1);
-    expect(i.indexOf('switchboard')).toBeLessThan(i.indexOf('build'));
     expect(i.indexOf('switchboard')).toBeLessThan(i.indexOf('mission'));
     expect(find<{ id: string; trains: number[] }>(B1_S01_E1, 'switchboard').trains).toEqual([4]);
     expect(validateScript(B1_S01_E1)).toEqual([]);

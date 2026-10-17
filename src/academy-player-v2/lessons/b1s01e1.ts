@@ -119,7 +119,7 @@ const scenes: Scene[] = [
       { id: 'f6', statement: 'Ava was terrified before every one of those things.', verdict: 'true', proof: 'c3.1', why: 'The blog says: I was terrified before every one of those things.' },
     ] } satisfies FactScene,
   { id: 'tense-cards', part: 1, kind: 'choice', plate: 'inspection-desk', trains: [4], title: 'Which question fits the answer?', questions: [
-    { q: 'Answer: “Yes, I have. I flew to Peru in 2022.” Which question was asked?', options: ['Have you ever been to Peru?', 'Did you fly to Peru in 2022?', 'Do you fly to Peru?'], answer: 0, why: 'Have you ever asks about any time up to now. The answer then adds the finished time with the past simple.' },
+    { q: 'Answer: “Yes, I have. I flew to Peru last year.” Which question was asked?', options: ['Have you ever been to Peru?', 'Did you fly to Peru last year?', 'Do you fly to Peru?'], answer: 0, why: 'Have you ever asks about any time up to now. The answer then adds the finished time with the past simple.' },
     { q: 'Question: “When did you tick it off?” Which answer fits?', options: ['Last June, with my cousin.', 'Yes, I have.', 'I have never done it.'], answer: 0, why: 'When asks for a finished time, so the answer gives one.' },
     { q: 'Question: “Have you ever given surfing a go?” Which answer fits?', options: ['Yes, I have. I tried it last July.', 'Yes, I tried.', 'No, I never have tried yesterday.'], answer: 0, why: 'Yes, I have answers the experience question; then last July tells the story in the past simple.' },
   ] } satisfies ChoiceScene,
@@ -251,10 +251,14 @@ const scenes: Scene[] = [
     ],
     summaryFrame: '{name} has done the most because {name} has {facts}.' } satisfies InterviewScene,
   // ---------- ACT 7 · RE-BLUFF: retake the cold test with your own experiences, keep three Dare cards, release your list, wrap. ----------
+  { id: 'ask-drill', part: 5, kind: 'speak', plate: 'classroom-morning', trains: [4, 5], title: 'Ask and follow up', who: 'Theo', turns: [
+    { step: 'controlled', prompt: 'Ask me a “Have you ever…?” question. If I say yes, ask “When did you…?” If I say no, ask “Would you like to?”', model: 'Have you ever been abroad? … When did you go?' },
+    { step: 'guided', prompt: 'Again, with a new question. This time, add one more follow-up after my answer.' },
+  ] } satisfies SpeakScene,
   { id: 'mission', part: 6, kind: 'speak', plate: 'classroom-morning', trains: [4, 5], title: 'Re-Bluff: your turn', who: 'Theo', turns: [
     { step: 'guided', prompt: 'Take 1. Now you bluff me. Tell me three experiences about yourself: two true, one lie. Use have for the experience and the past simple when you say when. I will ask two questions about each.', model: 'I have been to Italy. I have never eaten sushi. I have broken my arm. I went to Italy last August.' },
     { step: 'free', prompt: 'Take 2, with a new listener: say your three again, and add one detail with a time for each.' },
-    { step: 'guided', prompt: 'Think back to the first round, when you asked me questions. What did you say differently this time? One sentence.', model: 'This time I used have for the experience and the past simple for the time.' },
+    { step: 'free', prompt: 'Think back to the first round, when you asked me questions. What did you say differently this time? One sentence.', model: 'This time I used have for the experience and the past simple for the time.' },
   ] } satisfies SpeakScene,
   { id: 'deck', part: 6, kind: 'deck', plate: 'bucket-list-wall', trains: [5], title: 'Your Dare Deck', who: 'Vee', keep: 3,
     intro: 'You earned the whole deck. Now keep three Dare cards for your own bucket list. There is no wrong choice: pick the three you would really give a go.',
