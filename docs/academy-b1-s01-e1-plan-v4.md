@@ -28,6 +28,13 @@ Vee dares you to build your own bucket list in an hour. Every activity you win d
 Student responses: Act 1 8, Act 2 12, Act 3 14, Act 4 18, Act 5 14, Act 6 16, Act 7 10 = 92 (target >= 80). Speaking share: Acts 1, 6, 7 (about 23 minutes of talk).
 Earlier learning: Remember? is the Cold Bluff for lesson 1 (no earlier lesson); the Daily 10 starts after this lesson.
 
+## 3b. Added after the wider search (research file §3; all sources are unverified summaries)
+- **Dare Run** is now a branching dialogue (choice-based games) with a **narrator twist** after the first answer (Duolingo Roleplay): new information arrives and the student must adapt with a fresh follow-up; the feedback at the end names which tense they used.
+- **Forge** adds a **gem wager** (Gimkit): bet 1-3 gems before each participle, and a **sound check** (ELSA idea, no league): the teacher marks "been, seen, done".
+- **Word Vault**: each word said by 2-3 cast voices (Memrise idea), approved voices only.
+- **The Desk** ends with tense-choice cards (ESL Brains idea): which question fits this answer?
+- Rejected on purpose: peer feedback (comfort), leagues (no ranking), group games (one-to-one).
+
 ## 4. Traceability
 Every act names its criterion above. Cut from v3: the Rapport RPG as a full act (folded into the chains), the optional Energiser (the Wordle sits in Act 4), the multiple-choice reading.
 
