@@ -73,7 +73,7 @@ export const EmbeddedPlayerLesson = forwardRef<EmbeddedPlayerHandle, Props>(func
     const send = (e: Event, kind: 'click' | 'input') => {
       if (replaying.current) return;
       const el = e.target as Element | null;
-      if (!el) return;
+      if (!el || el.closest('[data-av-local]')) return; // the quest log, bag, map and cinematics are private to each screen
       const sel = SHARED.find((q) => el.closest(q));
       const root = sel ? el.closest(sel) : null;
       if (!sel || !root) return;

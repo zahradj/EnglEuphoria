@@ -19,6 +19,7 @@ import type { BossScene } from '../scenes/boss/Boss';
 import type { RapportScene } from '../scenes/rapport/Rapport';
 import type { WrapScene } from '../scenes/wrap/Wrap';
 import type { LobbyScene } from '../scenes/lobby/Lobby';
+import type { HuntScene } from '../scenes/hunt/Hunt';
 
 export const CRITERIA = [
   'I can follow a short blog post and answer questions about its main idea, its detail and what is not said.',
@@ -99,6 +100,15 @@ const scenes: Scene[] = [
   { id: 'words-memory', part: 2, kind: 'memory', plate: 'bucket-list-wall', trains: [2], title: 'Memory: the words', pairs: [
     { art: 'b-bucketlist', text: 'bucket list' }, { art: 'b-dare', text: 'dare' }, { art: 'b-giveitago', text: 'give it a go' }, { art: 'b-lifetime', text: 'once in a lifetime' }, { art: 'b-tick', text: 'tick it off' },
   ] } satisfies MemoryScene,
+  { id: 'words-hunt', part: 2, kind: 'hunt', plate: 'bucket-list-wall', trains: [2], title: 'Hunt: find the words in the room', who: 'Vee', intro: 'Vee has hidden the new words around the room. Read each clue, then tap the place it describes.', targets: [
+    { id: 'board', label: 'the cork board', word: 'bucket list', clue: 'Vee pinned her bucket list up for the whole class. Find the board.', reveal: 'bucket list: a list of things you want to do in your life.', x: 31.2, y: 17.5, w: 38.4, h: 33.5 },
+    { id: 'whiteboard', label: 'the whiteboard', word: 'dare', clue: 'Vee writes the dare here, where everyone can read it. Find the whiteboard.', reveal: 'dare: when someone asks you to do something scary.', x: 71.5, y: 19.5, w: 26, h: 31 },
+    { id: 'window', label: 'the window', word: 'give it a go', clue: 'Ava looks outside and wants to give surfing a go. Find the big sunny window.', reveal: 'give it a go: to try something.', x: 0, y: 0, w: 22, h: 52 },
+    { id: 'flags', label: 'the party flags', word: 'once in a lifetime', clue: 'The room is ready for a party, because this day is once in a lifetime. Find the flags.', reveal: 'once in a lifetime: it happens only one time.', x: 55, y: 3, w: 40, h: 13 },
+    { id: 'shelf', label: 'the low shelf', word: 'tick it off', clue: 'A finished list goes into a box on this shelf. Tick it off: find the low shelf with the purple boxes.', reveal: 'tick it off: to mark a thing on a list as done.', x: 54, y: 63.5, w: 17.5, h: 14 },
+  ], decoys: [
+    { label: 'the plant', x: 24, y: 30, w: 9, h: 42 }, { label: 'the desks', x: 77, y: 56, w: 23, h: 40 }, { label: 'the cupboard', x: 10, y: 56, w: 10, h: 22 },
+  ] } satisfies HuntScene,
   { id: 'words-use', part: 2, kind: 'choice', plate: 'bucket-list-wall', trains: [2], title: 'Which word fits?', questions: [
     { q: 'My cousin gave me a ___: write ten things I want to do.', options: ['dare', 'tick', 'list off'], answer: 0 },
     { q: 'A trip to Japan is ___.', options: ['once in a lifetime', 'brave', 'a dare'], answer: 0 },
@@ -194,5 +204,19 @@ export const B1_S01_E1: LessonScript = {
   cast: ['Vee', 'Ava', 'Theo', 'Mia'],
   partMinutes: [3, 3, 21, 11, 3, 10, 5, 4],
   scenes,
+  quest: {
+    name: 'The Dare',
+    stages: [
+      { title: 'Roll call', goal: 'Tell Vee about the last year of your life.' },
+      { title: 'Remember?', goal: 'Wake up the past simple before it gets tricky.' },
+      { title: 'The Dare', goal: 'Hear the dare, hunt the six words, read Ava’s blog post.' },
+      { title: 'Tense Detective', goal: 'Tell a finished time from an experience, then forge the verb forms.' },
+      { title: 'Power-up', goal: 'Three forms, six verbs, one fast round.' },
+      { title: 'The Mission', goal: 'Decide who has done the most and defend your answer.' },
+      { title: 'Release', goal: 'Tell Vee about your own bucket list.' },
+      { title: 'Wrap', goal: 'Say the rule back to unlock your clue.' },
+    ],
+    clue: 'The class has a dare: everyone makes a bucket list this term and ticks it off before the break.',
+  },
 };
 export default B1_S01_E1;

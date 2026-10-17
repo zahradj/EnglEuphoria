@@ -12,6 +12,15 @@ import { saveLessonMistakes } from './services/mistakes';
 import { saySequence, setMuted, stopVoice } from './services/voice';
 import { useFx } from './fx/useFx';
 import { FxLayer } from './fx/Fx';
+import { currentObjective, levelOf, lootOf, objectivesOf, recapOf, stagesOf, streakOf } from './engine/quest';
+import { advanceFlow, dismissCine, initialFlow } from './quest/flow';
+import { QuestButtons, RankChip, StreakChip, rankLabel } from './quest/Hud';
+import { StageIntro, Stinger, Toasts, type Toast } from './quest/Cinematics';
+import { QuestMap } from './quest/QuestMap';
+import { Bag, QuestLog } from './quest/Panels';
+import { flyLoot } from './quest/flyLoot';
+import { stageText } from './quest/text';
+import './quest/quest.css';
 import type { LessonScript, Role, SceneBase, SceneResult } from './types';
 
 export interface LessonPlayerProps {
@@ -45,16 +54,58 @@ export function LessonPlayer({ script, artBase = '/academy-art', role = 'solo', 
   const mod = scene ? moduleFor(scene.kind) : undefined;
   const finished = useRef(false);
 
+  // ---- the Quest Layer: everything below is derived from the engine state (nothing is stored twice) ----
+  const rootEl = useRef<HTMLDivElement>(null);
+  const objectives = useMemo(() => objectivesOf(script, state.doneIds), [script, state.doneIds]);
+  const stages = useMemo(() => stagesOf(script, state.doneIds), [script, state.doneIds]);
+  const loot = useMemo(() => lootOf(script, state), [script, state]);
+  const streak = useMemo(() => streakOf(script, state).streak, [script, state]);
+  const level = useMemo(() => levelOf(state.xp), [state.xp]);
+  const recap = useMemo(() => recapOf(script, state), [script, state]);
+  const cinematics = role === 'solo';
+  const [flow, setFlow] = useState(() => initialFlow());
+  const [panel, setPanel] = useState<null | 'log' | 'bag' | 'map'>(null);
+  const [toasts, setToasts] = useState<Toast[]>([]);
+  const [bagKey, setBagKey] = useState(0);
+  const origins = useRef<Record<string, { x: number; y: number }>>({});
+  const restoring = useRef(false);
+  const prev = useRef({ level: level.level, loot: new Set(loot.map((l) => l.id)), done: new Set(objectives.filter((o) => o.complete).map((o) => o.n)) });
+  const toastN = useRef(0);
+
+  const nextFlow = advanceFlow(flow, scene, cinematics, state.doneIds);
+  if (nextFlow !== flow) setFlow(nextFlow);
+  const cine = (nextFlow !== flow ? nextFlow : flow).queue[0];
+
   useEffect(() => { setMuted(!prefs.sound); savePrefs(prefs); }, [prefs]);
   useEffect(() => { if (controlled && state.index !== at) dispatch({ type: 'go', index: at }); }, [controlled, at, state.index]);
   useEffect(() => { onNav?.({ index: at, total }); }, [at, total, onNav]);
   useEffect(() => { if (!ephemeral && role === 'solo' && state.furthest > 0) saveProgress(script.blueprintId, ids, state); }, [state, ephemeral, role, script.blueprintId, ids]);
   // the recorded voices say the scene's lines; silence if a clip is missing
   useEffect(() => {
-    if (!scene || !mod) return;
+    if (!scene || !mod || cine) return;
     void saySequence(mod.spoken(scene), artBase);
     return () => stopVoice();
-  }, [scene, mod, artBase]);
+  }, [scene, mod, artBase, cine]);
+
+  // quest events: level up, objective ticked, loot into the bag (skipped when a saved run is restored)
+  useEffect(() => {
+    const p = prev.current;
+    const nowDone = new Set(objectives.filter((o) => o.complete).map((o) => o.n));
+    const nowLoot = new Set(loot.map((l) => l.id));
+    if (restoring.current) { restoring.current = false; prev.current = { level: level.level, loot: nowLoot, done: nowDone }; return; }
+    const add: Toast[] = [];
+    if (level.level > p.level) { add.push({ id: ++toastN.current, kind: 'level', n: level.level, title: t('ap.levelUp', 'Level up!'), sub: `${t('ap.lvl', 'LV')} ${level.level} · ${rankLabel(t, level.rank)}` }); fx.api.burst(50, 16, 'gold'); fx.api.confetti(); }
+    for (const n of nowDone) if (!p.done.has(n)) { add.push({ id: ++toastN.current, kind: 'objective', title: t('ap.objDone', 'Objective complete'), sub: objectives[n - 1]?.text.replace(/^I can /i, '') }); }
+    const fresh = loot.filter((l) => !p.loot.has(l.id));
+    fresh.forEach((l, i) => {
+      const from = origins.current[l.id] ?? { x: 38 + ((i * 7) % 24), y: 60 };
+      flyLoot(rootEl.current, from, l.kind, l.art ? `${artBase}/${l.art}.webp` : undefined, fx.calm, 120 + i * 140);
+    });
+    if (fresh.length) setBagKey((k) => k + 1);
+    if (add.length) setToasts((l) => [...l, ...add].slice(-3));
+    prev.current = { level: level.level, loot: nowLoot, done: nowDone };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [level.level, loot, objectives]);
   useEffect(() => {
     if (at === total - 1 && state.doneIds.includes(scene?.id ?? '') && !finished.current) {
       finished.current = true;
@@ -68,6 +119,12 @@ export function LessonPlayer({ script, artBase = '/academy-art', role = 'solo', 
     const n = Math.max(0, Math.min(total - 1, i));
     if (controlled) onIndex?.(n); else { dispatch({ type: 'go', index: n }); onIndex?.(n); }
   }, [controlled, total, onIndex]);
+
+  const onFound = useCallback((item: string, el?: Element | null) => {
+    if (!scene) return;
+    origins.current[`find:${scene.id}:${item}`] = fx.api.at(el);
+    dispatch({ type: 'found', id: scene.id, item });
+  }, [scene, fx.api]);
 
   const onDone = useCallback((r?: Partial<SceneResult>) => {
     if (!scene) return;
@@ -100,7 +157,12 @@ export function LessonPlayer({ script, artBase = '/academy-art', role = 'solo', 
       onBack={student ? undefined : () => go(at - 1)}
       primary={showBar && !last && !student ? { label: `${t('ap.next', 'Next')} ›`, onClick: () => go(at + 1), disabled: !canNext } : undefined}
       onPause={(on) => dispatch({ type: 'pause', on })}
-      onRestart={student || ephemeral ? undefined : () => { clearProgress(script.blueprintId); finished.current = false; dispatch({ type: 'restore', state: { index: 0, furthest: 0, results: {}, wrong: {}, xp: 0, gems: 0, doneIds: [] } }); go(0); }}
+      onRestart={student || ephemeral ? undefined : () => { clearProgress(script.blueprintId); finished.current = false; restoring.current = true; setFlow(initialFlow()); dispatch({ type: 'restore', state: { index: 0, furthest: 0, results: {}, wrong: {}, xp: 0, gems: 0, doneIds: [], found: {} } }); go(0); }}
+      rootRef={rootEl}
+      questHud={{
+        left: <><RankChip level={level} xp={state.xp} /><StreakChip streak={streak} /></>,
+        right: <QuestButtons objective={currentObjective(script, objectives, scene.id)} objectives={objectives} bagCount={loot.length} bagKey={bagKey} onLog={() => setPanel('log')} onMap={() => setPanel('map')} onBag={() => setPanel('bag')} />,
+      }}
       shaking={fx.shaking}
       plate={scene.plate}
       calmPlate
@@ -108,11 +170,18 @@ export function LessonPlayer({ script, artBase = '/academy-art', role = 'solo', 
       overlay={
         <>
           <FxLayer bursts={fx.bursts} floaters={fx.floaters} confettis={fx.confettis} />
+          <Toasts toasts={toasts} level={level} onGone={(id) => setToasts((l) => l.filter((x) => x.id !== id))} />
+          {cine?.type === 'stage' && <StageIntro script={script} stage={stages[cine.part]} objectives={objectives} calm={fx.calm} onDone={() => setFlow((f) => dismissCine(advanceFlow(f, scene, cinematics, state.doneIds)))} />}
+          {cine?.type === 'map' && <QuestMap script={script} meta={meta} stages={stages} part={cine.to} walk={{ from: cine.from, to: cine.to }} calm={fx.calm} artBase={artBase} onClose={() => setFlow((f) => dismissCine(advanceFlow(f, scene, cinematics, state.doneIds)))} />}
+          {cine?.type === 'stinger' && <Stinger kind={cine.kind} title={(scene as SceneBase & { title?: string }).title ?? stageText(t, script, partOf).title} calm={fx.calm} onDone={() => setFlow((f) => dismissCine(advanceFlow(f, scene, cinematics, state.doneIds)))} />}
+          {!cine && panel === 'log' && <QuestLog script={script} meta={meta} stages={stages} objectives={objectives} part={partOf} level={level} streak={streak} onClose={() => setPanel(null)} onMap={() => setPanel('map')} />}
+          {!cine && panel === 'bag' && <Bag loot={loot} potential={recap.potential} artBase={artBase} onClose={() => setPanel(null)} />}
+          {!cine && panel === 'map' && <QuestMap script={script} meta={meta} stages={stages} part={partOf} calm={fx.calm} artBase={artBase} onClose={() => setPanel(null)} />}
           {resume && (
             <div className="av-sheet" role="dialog" aria-modal="true">
               <div className="av-panel">
                 <h2>{t('ap.resumeAsk', 'Continue where you stopped?')}</h2>
-                <button type="button" className="av-btn" data-kind="go" onClick={() => { dispatch({ type: 'restore', state: resume }); setResume(null); }}>{t('ap.resume', 'Continue')}</button>
+                <button type="button" className="av-btn" data-kind="go" onClick={() => { restoring.current = true; dispatch({ type: 'restore', state: resume }); setFlow(initialFlow()); setResume(null); }}>{t('ap.resume', 'Continue')}</button>
                 <button type="button" className="av-btn" onClick={() => { clearProgress(script.blueprintId); setResume(null); }}>{t('ap.restart', 'Start again')}</button>
               </div>
             </div>
@@ -129,7 +198,7 @@ export function LessonPlayer({ script, artBase = '/academy-art', role = 'solo', 
           </div>
         )}
       >
-        <View key={scene.id} scene={scene} script={script} artBase={artBase} calm={fx.calm} fx={fx.api} seed={seedOf(scene.id)} summary={{ xp: state.xp, gems: state.gems, mistakes: [...new Set(missed)] }} onDone={(r) => { onDone(r); if (scene.kind === 'lobby') go(at + 1); }} />
+        <View key={scene.id} scene={scene} script={script} artBase={artBase} calm={fx.calm} fx={fx.api} seed={seedOf(scene.id)} summary={{ xp: state.xp, gems: state.gems, mistakes: [...new Set(missed)], quest: recap }} onFound={onFound} onDone={(r) => { onDone(r); if (scene.kind === 'lobby') go(at + 1); }} />
       </SceneBoundary>
     </PlayerShell>
   );

@@ -4,6 +4,8 @@ import { createRoot } from 'react-dom/client';
 import { LessonPlayer } from '../LessonPlayer';
 import type { LessonScript } from '../types';
 import { loadScript } from '../lessonScripts';
+import { SCENES } from '../scenes/registry';
+import type { SceneProps } from '../types';
 
 const q = new URLSearchParams(window.location.search);
 const script: LessonScript = {
@@ -29,6 +31,12 @@ const script: LessonScript = {
     { id: 'wrap', part: 7, kind: 'wrap', heading: 'Case closed!', teachBack: 'When do we say been, and when gone?', plate: 'library-case-room' } as never,
   ],
 };
+// ?auto=1 : every scene kind except those listed in ?real=hunt,wrap,... becomes a one-button stand-in, so a whole run (stage cards, map, loot, level-ups) can be clicked through quickly
+if (q.get('auto')) {
+  const real = new Set((q.get('real') ?? '').split(',').filter(Boolean));
+  const AutoView = ({ scene, onDone }: SceneProps) => <button type="button" data-testid="auto-win" className="av-btn" style={{ position: 'absolute', left: '40%', top: '40%' }} onClick={() => onDone({ won: true, score: 10 })}>auto {scene.id}</button>;
+  for (const k of Object.keys(SCENES)) if (!real.has(k) && k !== 'lobby') SCENES[k] = { ...SCENES[k], view: AutoView };
+}
 if (q.get('calm')) window.localStorage.setItem('academy-player-prefs-v2', JSON.stringify({ calm: true, sound: false }));
 const real = q.get('lesson') ? await loadScript(q.get('lesson')!) : null;
 createRoot(document.getElementById('root')!).render(<LessonPlayer script={real ?? script} ephemeral index={q.get('i') ? Number(q.get('i')) : undefined} role={q.get('i') ? 'teacher' : 'solo'} />);

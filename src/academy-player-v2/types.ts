@@ -29,6 +29,18 @@ export interface LessonScript {
   /** minutes of each of the 8 parts; sums to 60 */
   partMinutes: number[];
   scenes: SceneBase[];
+  /** optional quest dressing (English content): stage names and goals, the Season clue unlocked at the end. Defaults come from the run of show. */
+  quest?: QuestData;
+}
+
+/** The lesson as a quest (Quest Layer): everything is optional, the defaults are the standard run of show and the Season chapter. */
+export interface QuestData {
+  /** quest name; default = the Season chapter title */
+  name?: string;
+  /** per part (0-7): title and one-line goal; missing entries use the default run of show */
+  stages?: { title?: string; goal?: string }[];
+  /** the clue this episode unlocks ("Clue N of 8"), shown on the Quest Complete screen */
+  clue?: string;
 }
 
 /** What a game or scene reports when it is done. */
@@ -40,6 +52,8 @@ export interface SceneResult {
   mistakes: string[];
   /** a clean first-try win earns a gem */
   gem?: boolean;
+  /** hunt scenes: the ids of the targets found (clue pieces / Word Cards for the bag) */
+  found?: string[];
 }
 
 export type FxTone = 'gold' | 'teal' | 'lilac' | 'coral';
@@ -79,7 +93,9 @@ export interface SceneProps<S extends SceneBase = SceneBase> {
   /** the seeded random of this scene (both screens of a live class match) */
   seed: number;
   /** how the lesson is going so far (the Wrap shows it) */
-  summary: { xp: number; gems: number; mistakes: string[] };
+  summary: { xp: number; gems: number; mistakes: string[]; /** the quest recap (Quest Complete screen); absent when a scene renders alone */ quest?: import('./engine/quest').QuestRecap };
+  /** a hunt scene tells the player the moment a target is found (the bag fills live); `el` is where it flew from */
+  onFound?: (id: string, el?: Element | null) => void;
   /** game feel (bursts, floating text, shake, confetti); optional so a scene renders alone in tests: use `useSceneFx(props.fx)` */
   fx?: SceneFx;
 }

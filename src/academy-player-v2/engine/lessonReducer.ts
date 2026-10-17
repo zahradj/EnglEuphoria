@@ -15,6 +15,8 @@ export interface EngineState {
   paused: boolean;
   /** the scene has reported done: Next is allowed */
   doneIds: string[];
+  /** hunt targets found so far, per scene id (the bag fills while the hunt is still running) */
+  found: Record<string, string[]>;
 }
 
 export type EngineAction =
@@ -23,14 +25,15 @@ export type EngineAction =
   | { type: 'back' }
   | { type: 'done'; id: string; result?: Partial<SceneResult> }
   | { type: 'wrong'; id: string }
+  | { type: 'found'; id: string; item: string }
   | { type: 'pause'; on: boolean }
-  | { type: 'restore'; state: Partial<Pick<EngineState, 'index' | 'furthest' | 'results' | 'wrong' | 'xp' | 'gems' | 'doneIds'>> };
+  | { type: 'restore'; state: Partial<Pick<EngineState, 'index' | 'furthest' | 'results' | 'wrong' | 'xp' | 'gems' | 'doneIds' | 'found'>> };
 
 export const XP_CLEAN = 30;
 export const XP_WIN = 20;
 export const XP_SEEN = 5;
 
-export const initialState = (total: number): EngineState => ({ total, index: 0, furthest: 0, results: {}, wrong: {}, xp: 0, gems: 0, paused: false, doneIds: [] });
+export const initialState = (total: number): EngineState => ({ total, index: 0, furthest: 0, results: {}, wrong: {}, xp: 0, gems: 0, paused: false, doneIds: [], found: {} });
 
 const clamp = (n: number, total: number) => Math.max(0, Math.min(Math.max(total - 1, 0), n));
 
@@ -43,13 +46,17 @@ export function lessonReducer(s: EngineState, a: EngineAction): EngineState {
     case 'next': return lessonReducer(s, { type: 'go', index: s.index + 1 });
     case 'back': return lessonReducer(s, { type: 'go', index: s.index - 1 });
     case 'wrong': return { ...s, wrong: { ...s.wrong, [a.id]: (s.wrong[a.id] ?? 0) + 1 } };
+    case 'found': {
+      const have = s.found[a.id] ?? [];
+      return have.includes(a.item) ? s : { ...s, found: { ...s.found, [a.id]: [...have, a.item] } };
+    }
     case 'done': {
       if (s.doneIds.includes(a.id)) return s; // a scene pays out once
       const wrongTries = s.wrong[a.id] ?? 0;
       const won = a.result?.won ?? true;
       const scored = a.result?.score !== undefined;
       const gem = scored && won && wrongTries === 0 && a.result?.gem !== false;
-      const result: SceneResult = { won, score: a.result?.score ?? 0, mistakes: a.result?.mistakes ?? [], gem };
+      const result: SceneResult = { won, score: a.result?.score ?? 0, mistakes: a.result?.mistakes ?? [], gem, ...(a.result?.found ? { found: a.result.found } : {}) };
       const xp = !scored ? XP_SEEN : won ? (wrongTries === 0 ? XP_CLEAN : XP_WIN) : XP_SEEN;
       return { ...s, results: { ...s.results, [a.id]: result }, xp: s.xp + xp, gems: s.gems + (gem ? 1 : 0), doneIds: [...s.doneIds, a.id] };
     }

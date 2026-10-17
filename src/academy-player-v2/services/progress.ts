@@ -2,12 +2,12 @@
 import type { EngineState } from '../engine/lessonReducer';
 
 const KEY = 'academy-player-progress-v2';
-type Saved = Pick<EngineState, 'index' | 'furthest' | 'results' | 'wrong' | 'xp' | 'gems' | 'doneIds'> & { sceneIds: string[]; at: number };
+type Saved = Pick<EngineState, 'index' | 'furthest' | 'results' | 'wrong' | 'xp' | 'gems' | 'doneIds' | 'found'> & { sceneIds: string[]; at: number };
 
 export function saveProgress(lesson: string, sceneIds: string[], s: EngineState): void {
   try {
     const all = JSON.parse(window.localStorage.getItem(KEY) ?? '{}') as Record<string, Saved>;
-    all[lesson] = { index: s.index, furthest: s.furthest, results: s.results, wrong: s.wrong, xp: s.xp, gems: s.gems, doneIds: s.doneIds, sceneIds, at: Date.now() };
+    all[lesson] = { index: s.index, furthest: s.furthest, results: s.results, wrong: s.wrong, xp: s.xp, gems: s.gems, doneIds: s.doneIds, found: s.found, sceneIds, at: Date.now() };
     window.localStorage.setItem(KEY, JSON.stringify(all));
   } catch { /* nothing is remembered, nothing breaks */ }
 }

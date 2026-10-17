@@ -17,6 +17,7 @@ import type { MemoryScene } from '../scenes/memory/Memory';
 import type { ForgeScene } from '../scenes/forge/Forge';
 import type { WrapScene } from '../scenes/wrap/Wrap';
 import type { LobbyScene } from '../scenes/lobby/Lobby';
+import type { HuntScene } from '../scenes/hunt/Hunt';
 
 export const CRITERIA = [
   'I can build a correct “I have / I have never + participle” sentence from the parts.',
@@ -71,6 +72,16 @@ const scenes: Scene[] = [
     { q: 'Has Theo been to Rome?', options: ['Yes, twice.', 'No, never.', 'Yes, last summer.'], answer: 0 },
     { q: 'Has Theo been to Lisbon, he says?', options: ['No, never.', 'Yes, once.', 'Yes, twice.'], answer: 0 },
   ] } satisfies ChoiceScene,
+  { id: 'evidence-hunt', part: 2, kind: 'hunt', plate: BOARD, trains: [3, 4], title: 'Evidence hunt: find the cards', who: 'Vee', aspect: 1376 / 768, intro: 'Detective, the evidence is on the case board. Read each clue, then find the card or the object it describes.', targets: [
+    { id: 'globe', label: 'the globe', word: 'Evidence: the globe', clue: 'Theo says he has been to Rome twice. Find the object on the shelf that shows trips around the world.', reveal: 'Theo has been to Rome twice. He is back.', x: 0.9, y: 51, w: 13, h: 32 },
+    { id: 'yellow', label: 'the yellow card', word: 'Evidence: yellow card', clue: 'Find the yellow card on the left side of the board.', reveal: 'The postcard has gone from the wall. It is not here now.', x: 16.6, y: 29, w: 8.3, h: 9.9 },
+    { id: 'purple', label: 'the purple card', word: 'Evidence: purple card', clue: 'Find the purple card above the little plant, near the bottom of the board.', reveal: 'Ava has been to the library. She is back at her desk.', x: 27.8, y: 45.7, w: 7.6, h: 9.8 },
+    { id: 'green-top', label: 'the green card at the top', word: 'Evidence: green card', clue: 'Find the green card at the top right of the board.', reveal: 'Vee has gone to the canteen. Her coat is still on the hook.', x: 56.7, y: 15.5, w: 7.7, h: 9 },
+    { id: 'green-low', label: 'the green card at the bottom', word: 'Evidence: last card', clue: 'Find the green card at the bottom right, under the yellow card.', reveal: 'Nobody has seen the postcard since Friday.', x: 59.2, y: 53.4, w: 6.4, h: 8.6 },
+  ], decoys: [
+    { label: 'a white card', x: 40.5, y: 19.7, w: 6.8, h: 9.4 }, { label: 'a white card', x: 40.5, y: 39.5, w: 6.8, h: 9.7 }, { label: 'a white card', x: 29, y: 26.3, w: 8, h: 9.6 },
+    { label: 'the plant', x: 20.3, y: 59.9, w: 8, h: 20 }, { label: 'the purple books', x: 68, y: 55, w: 14, h: 22 }, { label: 'the window cushion', x: 86, y: 63, w: 14, h: 22 },
+  ] } satisfies HuntScene,
   { id: 'board-when', part: 2, kind: 'sort', plate: BOARD, trains: [4, 1], title: 'Detective Board', prompt: 'Pin each evidence card: does it say WHEN something happened, or what someone has done UP TO NOW?', bins: [
     { id: 'when', label: 'A FINISHED TIME', note: 'last summer, in July, yesterday' }, { id: 'now', label: 'UP TO NOW', note: 'have / has, ever, never' },
   ], items: [
@@ -186,5 +197,19 @@ export const B1_S01_E3: LessonScript = {
   cast: ['Vee', 'Theo'],
   partMinutes: [3, 5, 12, 19, 3, 9, 5, 4],
   scenes,
+  quest: {
+    name: 'The Missing Postcard',
+    stages: [
+      { title: 'Case file opens', goal: 'Warm up and meet the case.' },
+      { title: 'Remember?', goal: 'Never Have I Ever: bring back the pattern from last time.' },
+      { title: 'The Missing Postcard', goal: 'Hear the story, hunt the evidence, sort the cards.' },
+      { title: 'Pattern Lab', goal: 'Crack the pattern: have + participle, been or gone.' },
+      { title: 'Power-up', goal: 'Forge participles and answer quick-fire questions.' },
+      { title: 'The Alibi', goal: 'Question the suspect, then take your turn as the detective.' },
+      { title: 'Release', goal: 'Write and say five sentences of your own.' },
+      { title: 'Case closed', goal: 'Say the rule back to unlock your clue.' },
+    ],
+    clue: 'Theo says he has never been to Lisbon, but Vee’s Lisbon postcard has gone from the wall. Who took it?',
+  },
 };
 export default B1_S01_E3;

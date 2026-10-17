@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react';
+import { useState, type ReactNode, type Ref } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { LessonMeta } from './lessonMeta';
 import type { Prefs } from '../services/prefs';
@@ -28,6 +28,10 @@ export interface ShellProps {
   shaking?: boolean | 'soft' | 'hard';
   /** overlay content (effects, notices) rendered above the scene */
   overlay?: ReactNode;
+  /** the quest HUD: `left` replaces the plain XP bar (rank chip, streak), `right` sits before the comfort buttons (tracker, map, bag) */
+  questHud?: { left: ReactNode; right: ReactNode };
+  /** the player root element (loot flies from the stage into the bag inside it) */
+  rootRef?: Ref<HTMLDivElement>;
   children: ReactNode;
 }
 
@@ -40,15 +44,18 @@ export function PlayerShell(p: ShellProps) {
   const sum = p.partMinutes.reduce((a, b) => a + b, 0) || 1;
   const dotsMax = Math.min(p.total, 12);
   return (
-    <div className="av-root" data-calm={p.prefs.calm} data-shaking={p.shaking ? String(p.shaking) : undefined} data-testid="av-root">
+    <div className="av-root" ref={p.rootRef} data-calm={p.prefs.calm} data-shaking={p.shaking ? String(p.shaking) : undefined} data-testid="av-root">
       {p.plate && <div className="av-plate" data-calm={p.calmPlate || undefined} style={{ backgroundImage: `url(${p.artBase}/bg/${p.plate}.webp)` }} />}
       <div className="av-veil" />
       <div className="av-stage" data-av-sync="stage">{p.children}</div>
       <div className="av-hud" data-av-sync="hud">
         <span className="av-pill" data-tone="brand">⛨ ACADEMY · {p.meta.short}</span>
         {p.meta.chapter && <span className="av-pill" data-testid="av-chapter">{t('ap.chapter', 'Chapter {{n}} of 8', { n: p.meta.chapter.no })} · <b>{p.meta.chapter.title}</b></span>}
-        <span className="av-xp" role="progressbar" aria-label={t('ap.xp', 'XP')} aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(p.xpFill * 100)}><i style={{ width: `${Math.round(p.xpFill * 100)}%` }} /></span>
+        {p.questHud ? p.questHud.left : (
+          <span className="av-xp" role="progressbar" aria-label={t('ap.xp', 'XP')} aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(p.xpFill * 100)}><i style={{ width: `${Math.round(p.xpFill * 100)}%` }} /></span>
+        )}
         <span className="av-spacer" />
+        {p.questHud?.right}
         {p.onHint && <button type="button" className="av-pill" data-optional="true" onClick={p.onHint}>💡 {t('ap.hint', 'Hint')}</button>}
         <button type="button" className="av-pill" data-optional="true" onClick={() => open('minute')}>⏸ {t('ap.minute', 'I need a minute')}</button>
         <button type="button" className="av-pill" onClick={() => open('more')} aria-label={t('ap.more', 'More')}>⋯</button>

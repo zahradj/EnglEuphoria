@@ -1,5 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { lessonMeta } from '../../shell/lessonMeta';
+import { Icon, STAGE_ICONS } from '../../quest/icons';
+import { questName, stageText } from '../../quest/text';
 import { PART_COUNT, type SceneBase, type SceneModule, type SceneProps } from '../../types';
 
 export interface LobbyScene extends SceneBase { kind: 'lobby'; heading: string; sub?: string }
@@ -34,7 +36,8 @@ function LobbyView({ scene, script, onDone, artBase }: SceneProps<LobbyScene>) {
         </section>
         <section className="av-panel">
           <h2>{t('ap.quest', 'The quest · {{n}} min', { n: total })}</h2>
-          <div className="av-path">{script.partMinutes.map((m, i) => <em key={i}>{i + 1} · {m} min</em>)}</div>
+          <p className="avq-sub">{questName(script, meta)}</p>
+          <div className="av-path">{script.partMinutes.map((m, i) => <em key={i}><Icon name={STAGE_ICONS[i]} size={13} /> {i + 1}. {stageText(t, script, i).title} · {t('ap.minutes', '{{n}} min', { n: m })}</em>)}</div>
         </section>
       </div>
       <div className="av-lobby-go"><button type="button" className="av-btn" data-kind="warm" onClick={() => onDone()}>{t('ap.start', 'Start the mission')} →</button></div>

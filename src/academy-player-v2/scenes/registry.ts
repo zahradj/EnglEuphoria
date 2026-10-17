@@ -16,6 +16,7 @@ import { rapportScene } from './rapport/Rapport';
 import { writeScene } from './write/Write';
 import { teachScene } from './teach/Teach';
 import { memoryScene } from './memory/Memory';
+import { huntScene } from './hunt/Hunt';
 
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -36,6 +37,7 @@ export const SCENES: Record<string, SceneModule<any>> = {
   write: writeScene,
   teach: teachScene,
   memory: memoryScene,
+  hunt: huntScene,
 };
 
 export const sceneKinds = () => Object.keys(SCENES);

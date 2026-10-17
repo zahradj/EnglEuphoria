@@ -97,3 +97,15 @@ Design decisions shown:
 - **Game:** the plate is calmed behind floating pieces; one evidence card tilted in the middle, two labelled bins; score, **combo x3**, **tries** (three teal pips, not hearts), floating "+10" and sparks, a cast reaction in the corner; no countdown.
 - **Wrap:** chapter complete, XP and a gem, the rule said back, the Mistake Bank, the unlocked clue, and the next chapter's question.
 Colours: ink #1b1038, violet #6d46e6, lilac tint, cream, gold for "now", teal for correct/tries, orange for the one big action; plates stay light daytime with about 25 % purple.
+
+## Quest Layer (owner feedback 2026-10-17: "make it more like a video game, a quest, fun and interactive")
+
+The whole lesson plays as a quest, derived from the engine state (nothing stored twice). Code: `src/academy-player-v2/quest/`, selectors in `engine/quest.ts`, scene `scenes/hunt/Hunt.tsx`.
+
+- **Quest and objectives**: the quest name is `script.quest.name` or the Season chapter title; the success criteria are the objectives and tick when every scene that `trains` them is done (`objectivesOf`). Optional `script.quest = { name, stages[8]: { title, goal }, clue }`; defaults are the run of show (Check-in, Remember?, The Drop, Notice and Build, Energiser, Mission, Release, Wrap).
+- **Cinematics (solo only; a live class keeps the HUD but no overlays)**: a new stage plays the quest map (token walks to the next node) and then a skippable title card (about 2.8 s); boss, forge, rapport, sort and hunt scenes play a short stinger once (`quest/flow.ts` is the pure order). Calm mode: the same cards, static.
+- **HUD**: rank chip with XP bar and levels (Rookie 0, Explorer 70, Detective 170, Expert 300, Legend 440 XP; `LEVEL_XP`), streak chip (clean scored wins in a row, display only), quest tracker (opens the Quest Log with the 8 stages and a link to the map), map and bag buttons, a level-up and objective-complete toast.
+- **Loot** (`lootOf`): a gem for a first-try scored win, a Word Card per word of a finished `teach` scene (sticker art), a trophy for a won forge or boss, a clue piece per hunt find (live). Items fly into the bag (`quest/flyLoot.ts`); the Bag shows silhouettes for empty slots.
+- **Hunt scene**: the plate is the board; hotspots are % of the plate, at least 44 px, real buttons (Tab + Enter); a wrong tap is a shimmer and a plain sentence ("That is the plant"), never a penalty; hints grow after 2 and 4 misses; "Show me" is free but costs the gem. Used in B1-S01-E1 (the six words) and B1-S01-E3 (the evidence board).
+- **Quest Complete** (the Wrap): stars, rank, stats, loot recap, objectives ticked, the Season clue ("Clue N of 8", unlocked when the student says the rule back) and the next chapter.
+- Local to each screen: quest panels carry `data-av-local` so the live-class DOM replay does not mirror them.
