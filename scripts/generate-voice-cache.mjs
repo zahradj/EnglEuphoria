@@ -848,7 +848,11 @@ const WT_EXTRACTORS = {
   'echo-cave': (s) => [[s.who, s.doneLine], [s.who, 'Shh! Listen! Who is calling? Where is the voice?'], [s.who, 'Not this tunnel! Listen again!'],
     ...(s.rounds ?? []).flatMap((r) => [[r.voice, r.line], [r.voice, r.reply]])],
   'grid-hunt': (s) => {
-    const num = ['one', 'two', 'three', 'four']; const tr = (s.treasures ?? []).map((t) => t.toUpperCase());
+    const tr = (s.treasures ?? []).map((t) => t.toUpperCase());
+    // 'islands' look: numbered islands, "Island fourteen! Treasure!" (A1 U1 L3)
+    if (s.look === 'islands') return [[s.who, s.doneLine], ...(s.islands ?? []).map((n) => [s.who, `Island ${NUM_WORDS[n]}! ${tr.includes(String(n)) ? 'Treasure!' : 'Splash!'}`]),
+      ...(s.rounds ?? []).flatMap((q) => [[s.who, q.ask], ['teacher', `${q.choices[q.answer]} Pick an island! Say its number!`]])];
+    const num = ['one', 'two', 'three', 'four'];
     const cells = ['A', 'B', 'C', 'D'].flatMap((c) => [1, 2, 3, 4].map((n) => `${c}${n}`));
     return [[s.who, s.doneLine], ...cells.map((c) => [s.who, `${({ A: 'Ay', B: 'Bee', C: 'See', D: 'Dee' })[c[0]]} ${num[Number(c[1]) - 1]}! ${tr.includes(c) ? 'Treasure!' : 'Splash!'}`]),
       ...(s.rounds ?? []).flatMap((q) => [[s.who, q.ask], ['teacher', `${q.choices[q.answer]} Dive! Say a square!`]])];

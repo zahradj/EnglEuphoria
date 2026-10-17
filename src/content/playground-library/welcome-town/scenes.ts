@@ -588,6 +588,10 @@ export type Scene =
        *  the squares to find ("B3"); questions repeat until every treasure is found. */
       id: string; kind: 'grid-hunt'; bg: string; teacher: string; title: string; who: CharKey;
       treasures: string[]; rounds: { ask: string; choices: string[]; answer: number; img?: string }[]; doneLine: string;
+      /** 'islands' (A1 U1 L3, owner 2026-10-17: the grid squares were too hard to understand): no grid — numbered
+       *  islands in a sea; the child picks an island by SAYING its number. `islands` = the numbers on the islands,
+       *  `treasures` = the island numbers with treasure ('14'). Default 'grid' = the A-D × 1-4 map. */
+      look?: 'grid' | 'islands'; islands?: number[];
     }
   | { id: string; kind: 'musical-islands'; bg: string; teacher: string; title: string; who: CharKey; music: string;
       /** players hop between the four coloured lily pads while the music plays; each round `at` = pad of each player,
@@ -1866,9 +1870,10 @@ export const LESSON_3_SCENES: Scene[] = classroomLook([
   },
   { id: 'wt3-twister', kind: 'tongue-twister', look: 'town', speeds: 2, bg: bgL1Reading, who: 'leo', focus: 't', teacher: 'Reading: quick reading! Listen to Leo, then say it slow, then faster.', line: 'Ten tiny teddies.' },
   {
-    id: 'wt3-treasure-islands', kind: 'grid-hunt', bg: '/lep1/scenes/bg-u10l2-beach-empty-wide.png', who: 'pip', title: 'Treasure Islands',
-    teacher: 'Game: answer to earn a dive. The student says a square — B three! — and taps it. Splash or treasure? Find all three treasures.',
-    treasures: ['B2', 'D3', 'A4'],
+    id: 'wt3-treasure-islands', kind: 'grid-hunt', look: 'islands', bg: '/lep1/scenes/bg-u10l2-beach-empty-wide.png', who: 'pip', title: 'Treasure Islands',
+    teacher: 'Game, 3 steps: (1) answer the question, (2) pick an island and SAY its number — "Island fourteen!" — then tap it, (3) treasure or splash? Find the three treasure chests. Listen for -TEEN: 4 and 14 are both on the map.',
+    islands: [3, 13, 4, 14, 6, 16, 7, 17, 12, 20],
+    treasures: ['14', '6', '17'],
     rounds: [
       { ask: 'What comes after twelve?', choices: ['eleven', 'thirteen', 'twenty'], answer: 1 },
       { ask: 'How old are you?', choices: ['I’m fine, thank you.', 'I’m seven years old.', 'My name is Pip.'], answer: 1 },
