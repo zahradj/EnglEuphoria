@@ -16,9 +16,9 @@ gets the **aesthetic pass** and every picture uses **only the Playground brand s
   *I can … well / fast*, *Can you…? No, I can't, but Leo can*, *You must / mustn't*, *What's the matter? I've got a
   headache. Can I help you?*, the story *Captain Spark Saves the Day*, extra practice and the Boss Test. World:
   **Superhero City** (`src/curriculum/worlds/a1Worlds.ts`, Captain Spark and Zippy the Sidekick).
-- **Colour change:** the world entry lists red and navy; Playground pictures now use only yellow and orange shades, so
-  Hero City is a **sunny golden city**: honey-coloured buildings, orange rooftops, golden capes, warm cream sky; only
-  right/wrong feedback stays green/red.
+- **Colours:** pictures are **fully coloured** (owner, 2026-10-17: "make it look fully colored, don't use just the
+  branded color"): a blue sky, green trees, colourful buildings and clothes, with the Playground yellow and orange as
+  warm accents (Captain Spark keeps her golden suit and orange cape). The game chrome stays yellow and orange.
 - **Helping, not fighting.** Heroes here help people (Khan Academy Kids community-helper frame): no villains, no punches,
   nothing scary. Everyone is fully and modestly dressed (long-sleeved hero suits, capes, no tight or revealing outfits).
 - What the child already has: **A1 Unit 2** *It can climb / It can't fly* (animals), **A1 Unit 3** weather, **A1 Unit 4**
@@ -80,8 +80,8 @@ Pictures: Canva (owner rule), the Unit 1 cast + Biscuit + new cut-out stickers *
 sneezing, pointing, cheering), **Zippy** (flying, stop-hand, happy), **citizens** with one problem each (a boy with a
 headache, a grandma with a heavy bag, a girl with toothache, a man with a cold, a lost kitten, a broken bike), help items
 (water, plaster, tissue, ladder, toolbox). Clothes rule: everyone fully and modestly dressed; hero suits long-sleeved and
-loose, capes, boys never in a dress or skirt. Colours: only yellow and orange brand shades with natural wood and skin
-tones; sky soft and muted.
+loose, capes, boys never in a dress or skirt. Colours: full, natural colour with the brand yellow and orange as warm
+accents.
 
 ## 5. Lesson by lesson
 

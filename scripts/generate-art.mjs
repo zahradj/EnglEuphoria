@@ -24,7 +24,7 @@ const rawTargets = JSON.parse(fs.readFileSync(new URL('./art-targets.json', impo
 // Playground pictures use the brand shades (owner, 2026-10-15) — same text as PICTURE_COLOUR_LINE in
 // src/content/playground-library/gameSkin.ts. Exact redraws of a reference keep the reference's colours.
 const PICTURE_COLOUR_LINE =
-  'Colour palette: ONLY the EnglEuphoria Playground brand shades, yellow and orange - bright orange (#FE6A2F), tangerine (#FB923C), sunshine yellow (#FEAF15), golden amber (#F59E0B), honey yellow (#FDE68A) and warm cream (#FEFBDD), with natural wood and skin tones; sky, water and plants only as soft, muted natural colours; no purple, no other brand colours.';
+  'Colour palette: FULL, rich, natural colour - a bright blue sky, green trees and grass, colourful buildings, clothes and objects in many different happy colours (red, blue, green, purple, pink, yellow, orange), natural wood and skin tones - with the EnglEuphoria Playground brand shades (bright orange #FE6A2F, tangerine #FB923C, sunshine yellow #FEAF15, golden amber #F59E0B, honey yellow #FDE68A, warm cream #FEFBDD) as warm accents; never a picture in only one or two colours.';
 const withBrandColours = (t) => (/EXACTLY|Colour palette:/.test(t.prompt) || t.out.startsWith('public/academy')
   ? t : { ...t, prompt: `${t.prompt} ${PICTURE_COLOUR_LINE}` });
 const targets = rawTargets.map(withBrandColours);

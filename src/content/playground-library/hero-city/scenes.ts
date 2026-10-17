@@ -10,8 +10,8 @@
  * Research (mechanics only, sources in docs/research/playground-a1u7-research.md): Twinkl can/can't A1 ("assigning
  * superhero powers"), MES English Super Hero Project, British Council "School rules", Community Helpers Play & Learn,
  * Khan Academy Kids community-helper books, SplashLearn vowel-team games.
- * Art: Gemini art bot (scripts/art-targets.json) in the Playground brand shades only (yellow and orange, owner
- * 2026-10-17). Captain Spark is a girl hero; Zippy is her small robot helper ("it"). Heroes help, they never fight.
+ * Art: Gemini art bot (scripts/art-targets.json) and Canva, fully coloured with the Playground yellow and orange as warm
+ * accents (owner 2026-10-17: "make it look fully colored"). Captain Spark is a girl hero; Zippy is her small robot helper ("it"). Heroes help, they never fight.
  * Everyone is fully covered (long-sleeved hero suits, capes); Leo and Pip are boys, never in a dress or skirt.
  * ========================================================================= */
 
