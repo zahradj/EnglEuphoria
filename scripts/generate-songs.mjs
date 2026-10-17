@@ -27,7 +27,9 @@ const ANON_KEY = fs
   .readFileSync(new URL('../src/integrations/supabase/client.ts', import.meta.url), 'utf8')
   .match(/eyJ[\w-]+\.[\w-]+\.[\w-]+/)[0];
 
-const DIRECT_KEY = process.env.ELEVENLABS_API_KEY;
+// Direct ElevenLabs key (owner 2026-10-17: "use the ElevenLabs API the Academy hub is using" — the ELEVENLABS_5 secret).
+// When set, it is used first; the key is only sent to ElevenLabs, never printed.
+const DIRECT_KEY = (() => { const raw = (process.env.ELEVENLABS_API_KEY ?? '').trim(); return raw ? (raw.match(/sk_[A-Za-z0-9]+/)?.[0] ?? raw) : ''; })();
 // Alternative: a token-gated proxy edge function that holds the ElevenLabs key as a Supabase secret.
 const PROXY = process.env.SONG_PROXY_URL, PROXY_TOKEN = process.env.SONG_PROXY_TOKEN;
 const SONGS = JSON.parse(fs.readFileSync(new URL('./songs.json', import.meta.url), 'utf8'));
@@ -93,7 +95,13 @@ for (const [key, song] of Object.entries(SONGS)) {
     // Its safety filter rejects prompts that describe the listeners' ages, so the
     // prompt is music style + a [Verse]/[Chorus] lyric sheet only.
     const lyriaPrompt = `${song.lyriaStyle ?? 'A short 25-second upbeat pop jingle, 120 BPM, bright synths and hand claps, female vocalist.'} Very short song: no intro, no extra verses, no bridge, no ad-libs. The vocalist sings only the lyrics below, each line once, in order, then the song ends.\n\n[Verse]\n${song.lines.join('\n')}\n\n[Outro]`;
-    const res = PROXY && song.engine === 'lyria'
+    const res = DIRECT_KEY && song.engine !== 'lyria'
+      ? await fetch('https://api.elevenlabs.io/v1/music', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'xi-api-key': DIRECT_KEY },
+          body: JSON.stringify({ composition_plan: body.composition_plan, model_id: 'music_v1' }),
+        })
+      : PROXY && song.engine === 'lyria'
       ? await fetch(PROXY, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'x-song-token': PROXY_TOKEN },

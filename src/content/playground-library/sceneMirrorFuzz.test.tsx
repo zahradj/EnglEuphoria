@@ -31,6 +31,7 @@ import * as space from './space-mission/scenes';
 import * as food from './food-festival/scenes';
 import * as monster from './monster-town/scenes';
 import * as ocean from './ocean/scenes';
+import * as hero from './hero-city/scenes';
 import { LIBRARY_GAMES } from './gamesCatalog';
 import { gameToScenes } from './gameLessons';
 
@@ -51,6 +52,7 @@ const ENGINES: { name: string; Renderer: ComponentType<any>; lessons: [string, A
   { name: 'food (A1 U4)', Renderer: WtRenderer, lessons: lessonsOf(food) },
   { name: 'monster (A1 U5)', Renderer: WtRenderer, lessons: lessonsOf(monster) },
   { name: 'ocean (A1 U6)', Renderer: WtRenderer, lessons: lessonsOf(ocean) },
+  { name: 'hero city (A1 U7)', Renderer: WtRenderer, lessons: lessonsOf(hero) },
   { name: 'games in the classroom library (Welcome Town player)', Renderer: WtRenderer, lessons: gameLessons },
   { name: 'games in the classroom library (Pre-A1 player)', Renderer: Unit1Renderer, lessons: gameLessons },
 ];

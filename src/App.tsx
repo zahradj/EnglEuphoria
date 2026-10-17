@@ -252,6 +252,13 @@ const PlayFoodLesson6 = lazy(() => import("./pages/playground-scene/PlayFoodLess
 const PlayFoodLesson7 = lazy(() => import("./pages/playground-scene/PlayFoodLesson7"));
 const PlayMonsterLesson1 = lazy(() => import("./pages/playground-scene/PlayMonsterLesson1"));
 const PlayOceanLesson1 = lazy(() => import("./pages/playground-scene/PlayOceanLesson1"));
+const PlayHeroLesson1 = lazy(() => import("./pages/playground-scene/PlayHeroLesson1"));
+const PlayHeroLesson2 = lazy(() => import("./pages/playground-scene/PlayHeroLesson2"));
+const PlayHeroLesson3 = lazy(() => import("./pages/playground-scene/PlayHeroLesson3"));
+const PlayHeroLesson4 = lazy(() => import("./pages/playground-scene/PlayHeroLesson4"));
+const PlayHeroLesson5 = lazy(() => import("./pages/playground-scene/PlayHeroLesson5"));
+const PlayHeroLesson6 = lazy(() => import("./pages/playground-scene/PlayHeroLesson6"));
+const PlayHeroLesson7 = lazy(() => import("./pages/playground-scene/PlayHeroLesson7"));
 const PlayOceanLesson2 = lazy(() => import("./pages/playground-scene/PlayOceanLesson2"));
 const PlayOceanLesson3 = lazy(() => import("./pages/playground-scene/PlayOceanLesson3"));
 const PlayOceanLesson4 = lazy(() => import("./pages/playground-scene/PlayOceanLesson4"));
@@ -885,6 +892,48 @@ const App = () => {
                       <Route path="/playground-scene/ocean-lesson-2" element={
                         <ImprovedProtectedRoute>
                           <Suspense fallback={<LoadingFallback />}><PlayOceanLesson2 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A1 tier — Hero City, Unit 7 Lesson 7. */}
+                      <Route path="/playground-scene/hero-lesson-7" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayHeroLesson7 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A1 tier — Hero City, Unit 7 Lesson 6. */}
+                      <Route path="/playground-scene/hero-lesson-6" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayHeroLesson6 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A1 tier — Hero City, Unit 7 Lesson 5. */}
+                      <Route path="/playground-scene/hero-lesson-5" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayHeroLesson5 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A1 tier — Hero City, Unit 7 Lesson 4. */}
+                      <Route path="/playground-scene/hero-lesson-4" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayHeroLesson4 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A1 tier — Hero City, Unit 7 Lesson 3. */}
+                      <Route path="/playground-scene/hero-lesson-3" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayHeroLesson3 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A1 tier — Hero City, Unit 7 Lesson 2. */}
+                      <Route path="/playground-scene/hero-lesson-2" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayHeroLesson2 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A1 tier — Hero City, Unit 7 Lesson 1. */}
+                      <Route path="/playground-scene/hero-lesson-1" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayHeroLesson1 /></Suspense>
                         </ImprovedProtectedRoute>
                       } />
                       {/* A1 tier — Ocean Explorers, Unit 6 Lesson 1. */}

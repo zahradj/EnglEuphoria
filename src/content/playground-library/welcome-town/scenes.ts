@@ -60,7 +60,7 @@ import type { ColorPlaySceneData } from '../ColorPlayScene';
 
 const W = '/welcome-town';
 
-export type CharKey = 'pip' | 'marigold' | 'mia' | 'bella' | 'willow' | 'leo' | 'coco' | 'wim' | 'catcat' | 'nova' | 'beep' | 'cilla' | 'pico' | 'bibi' | 'glob' | 'coral' | 'bub';
+export type CharKey = 'pip' | 'marigold' | 'mia' | 'bella' | 'willow' | 'leo' | 'coco' | 'wim' | 'catcat' | 'nova' | 'beep' | 'cilla' | 'pico' | 'bibi' | 'glob' | 'coral' | 'bub' | 'spark' | 'zippy';
 
 /** Every one of these maps onto an audio.ts voice already built for that
  *  exact character (pip/mia/bella/willow/leo are the same characters as the
@@ -92,6 +92,9 @@ export const VOICE_KEY: Record<CharKey, 'pip' | 'mia' | 'bella' | 'willow' | 'le
   // Unit 6 (Ocean): Coral the Mermaid (a girl) and Bub the Octopus (a shy boy) — teacher voice until they have their own.
   coral: 'teacher',
   bub: 'teacher',
+  // Unit 7 (Hero City): Captain Spark (a girl hero) and Zippy (her small robot helper) — teacher voice until they have their own.
+  spark: 'teacher',
+  zippy: 'teacher',
 };
 
 /** No `img` field — every character appears painted directly into a scene's
@@ -119,6 +122,8 @@ export const CAST: Record<CharKey, { name: string; emoji: string; color: string 
   glob: { name: 'Professor Glob', emoji: '\u{1F9D0}', color: '#14B8A6' },
   coral: { name: 'Coral', emoji: '\u{1F9DC}\u{200D}\u{2640}\u{FE0F}', color: '#0EA5E9' },
   bub: { name: 'Bub', emoji: '\u{1F419}', color: '#8B5CF6' },
+  spark: { name: 'Captain Spark', emoji: '\u{1F9B8}\u{200D}\u{2640}\u{FE0F}', color: '#FE6A2F' },
+  zippy: { name: 'Zippy', emoji: '\u{1F916}', color: '#F59E0B' },
 };
 
 const bgWide = `${W}/scenes/bg-classroom-wide.png`;
@@ -657,6 +662,14 @@ export type Scene =
        *  Part 2: the child hides one and `helper` asks `hideAsks`; the child answers Yes, it is / No, it isn't. */
       helper: CharKey; helperName: string; intro: string;
       suspects: { name: string; img: string; doing: string; size: 'big' | 'small' }[]; secret: number; hideAsks: string[]; doneLine: string; }
+  | { id: string; kind: 'hero-mission'; bg: string; teacher: string; title: string; who: CharKey;
+      /** ★ Hero Mission (A1 U7L4, docs/a1-unit-7-hero-city.md §5.4): citizens around the city wear a "!" bubble. The
+       *  child taps one and ASKS "What's the matter?" (HERO_ASK, heroMissionRules.ts); the citizen says `problem`
+       *  ("I've got a cold."). The child picks the right help from `helps` (`help` = its label) and SAYS `offer`
+       *  ("Can I help you? Here's a tissue."); the citizen thanks the hero, the "!" becomes a gold star and the city
+       *  gets a little brighter. A wrong help: the citizen says HERO_WRONG and repeats the problem. Done when all are helped. */
+      citizens: { name: string; img: string; left: number; top: number; size: number; problem: string; help: string; offer: string; thanks: string }[];
+      helps: { label: string; img: string }[]; doneLine: string; }
   | { id: string; kind: 'live-reef'; bg: string; teacher: string; title: string; who: CharKey;
       /** ★ Live Reef (A1 U6L2, docs/a1-unit-6-ocean.md §6.2): a reef in soft fog. Each round one animal peeks out at its
        *  `spots` place (left/top/size in % of the screen); the voice asks "What's the crab doing?" (reefAsk). The child

@@ -179,4 +179,27 @@
 = exists public/welcome-town/sprites/bella-angry-v2.png
 = exists public/welcome-town/sprites/willow-hungry-v2.png
 = exists public/magic-castle/scenes/bg-castle-tower-empty.png
+= exists public/lep1/items/item-spark-wave.png
+= exists public/lep1/items/item-spark-fly.png
+= exists public/lep1/items/item-spark-cold.png
+= exists public/lep1/items/item-spark-cheer.png
+= exists public/lep1/items/item-spark-point.png
+= exists public/lep1/items/item-zippy.png
+= exists public/lep1/items/item-zippy-stop.png
+= exists public/lep1/items/item-leo-fast.png
+= exists public/lep1/items/item-mia-climb.png
+= exists public/lep1/items/item-pip-high.png
+= exists public/lep1/items/item-biscuit-swim.png
+= exists public/lep1/items/item-leo-lift.png
+= exists public/lep1/items/item-pip-try.png
+= exists public/lep1/items/item-tissues.png
+= exists public/lep1/items/item-toolbox.png
+= exists public/lep1/items/item-big-box.png
+= exists public/lep1/items/item-hero-cape.png
+= exists public/lep1/items/item-hero-badge.png
+= exists public/lep1/items/item-traffic-light.png
+= exists public/lep1/items/item-paint.png
+= exists public/lep1/items/item-tray.png
+= exists public/lep1/items/item-clay.png
+= exists public/lep1/items/item-rule-help.png
 Done. made 0, failed 0

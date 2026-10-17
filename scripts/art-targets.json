@@ -1497,5 +1497,198 @@
       "public/magic-castle/scenes/bg-castle-bedroom-tour.png"
     ],
     "prompt": "A round wizard's tower room inside the same castle, drawn in exactly the same cartoon art style as the reference images (bold dark outlines, flat warm colours, soft shading), warm sunset light. Curved stone walls, a wooden plank floor, two tall arched windows on the back wall with an orange sunset sky, a wooden door with an arched top on the left wall, a small stone fireplace on the right wall. The room is COMPLETELY EMPTY: no furniture, no rug, no people, no animals, no objects on the floor. The whole lower half of the picture is clear empty floor. Wide 16:9 view, eye level, no text."
+  },
+  {
+    "out": "public/lep1/items/item-spark-wave.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-nova.png",
+      "public/lep1/items/item-leo-hero.png"
+    ],
+    "prompt": "A single sticker: Captain Spark, a friendly 9-year-old girl superhero with warm brown skin and two curly dark hair puffs, wearing a loose long-sleeved golden-yellow hero suit with a high neck, long loose trousers, orange boots, a bright orange cape and a round yellow spark badge on her chest, standing, waving with one hand, the other hand on her hip, big smile. Cute kawaii cartoon picture-book sticker exactly in the style of the reference stickers: thick closed dark-brown outline all the way around, bright soft flat colours, big friendly eyes. Full body, centred, the whole figure visible with empty space around it. Plain pure white background, no shadow, no floor, no text, no other objects. Modest, fully covered clothing for young children: shoulders, chest and tummy covered."
+  },
+  {
+    "out": "public/lep1/items/item-spark-fly.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-spark-wave.png",
+      "public/lep1/items/item-nova.png"
+    ],
+    "prompt": "A single sticker: the same girl as the first reference (Captain Spark, a friendly 9-year-old girl superhero with warm brown skin and two curly dark hair puffs, wearing a loose long-sleeved golden-yellow hero suit with a high neck, long loose trousers, orange boots, a bright orange cape and a round yellow spark badge on her chest), flying happily, one arm stretched forward, cape flowing behind. Cute kawaii cartoon picture-book sticker exactly in the style of the reference stickers: thick closed dark-brown outline all the way around, bright soft flat colours, big friendly eyes. Full body, centred, the whole figure visible with empty space around it. Plain pure white background, no shadow, no floor, no text, no other objects. Modest, fully covered clothing for young children: shoulders, chest and tummy covered."
+  },
+  {
+    "out": "public/lep1/items/item-spark-cold.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-spark-wave.png",
+      "public/lep1/items/item-nova.png"
+    ],
+    "prompt": "A single sticker: the same girl as the first reference (Captain Spark, a friendly 9-year-old girl superhero with warm brown skin and two curly dark hair puffs, wearing a loose long-sleeved golden-yellow hero suit with a high neck, long loose trousers, orange boots, a bright orange cape and a round yellow spark badge on her chest), sitting on a small wooden bench, she has a cold: a pink nose, holding a tissue to her nose, sneezing gently, tired but friendly. Cute kawaii cartoon picture-book sticker exactly in the style of the reference stickers: thick closed dark-brown outline all the way around, bright soft flat colours, big friendly eyes. Full body, centred, the whole figure visible with empty space around it. Plain pure white background, no shadow, no floor, no text, no other objects. Modest, fully covered clothing for young children: shoulders, chest and tummy covered."
+  },
+  {
+    "out": "public/lep1/items/item-spark-cheer.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-spark-wave.png",
+      "public/lep1/items/item-nova.png"
+    ],
+    "prompt": "A single sticker: the same girl as the first reference (Captain Spark, a friendly 9-year-old girl superhero with warm brown skin and two curly dark hair puffs, wearing a loose long-sleeved golden-yellow hero suit with a high neck, long loose trousers, orange boots, a bright orange cape and a round yellow spark badge on her chest), cheering with both arms up, very happy. Cute kawaii cartoon picture-book sticker exactly in the style of the reference stickers: thick closed dark-brown outline all the way around, bright soft flat colours, big friendly eyes. Full body, centred, the whole figure visible with empty space around it. Plain pure white background, no shadow, no floor, no text, no other objects. Modest, fully covered clothing for young children: shoulders, chest and tummy covered."
+  },
+  {
+    "out": "public/lep1/items/item-spark-point.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-spark-wave.png",
+      "public/lep1/items/item-nova.png"
+    ],
+    "prompt": "A single sticker: the same girl as the first reference (Captain Spark, a friendly 9-year-old girl superhero with warm brown skin and two curly dark hair puffs, wearing a loose long-sleeved golden-yellow hero suit with a high neck, long loose trousers, orange boots, a bright orange cape and a round yellow spark badge on her chest), pointing to the side with one hand, explaining kindly. Cute kawaii cartoon picture-book sticker exactly in the style of the reference stickers: thick closed dark-brown outline all the way around, bright soft flat colours, big friendly eyes. Full body, centred, the whole figure visible with empty space around it. Plain pure white background, no shadow, no floor, no text, no other objects. Modest, fully covered clothing for young children: shoulders, chest and tummy covered."
+  },
+  {
+    "out": "public/lep1/items/item-zippy.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-spark-wave.png",
+      "public/lep1/items/item-beep.png"
+    ],
+    "prompt": "A single sticker: Zippy, a small round friendly flying helper robot: a shiny golden-yellow ball body, a cream face screen with two big kind round eyes and a small smile, a little orange propeller on top, two short bendy arms, tiny orange glowing boosters underneath, flying and waving one arm. Cute, rounded, not scary. Cute kawaii cartoon picture-book sticker exactly in the style of the reference stickers: thick closed dark-brown outline all the way around, bright soft flat colours, big friendly eyes. Full body, centred, the whole figure visible with empty space around it. Plain pure white background, no shadow, no floor, no text, no other objects. Modest, fully covered clothing for young children: shoulders, chest and tummy covered."
+  },
+  {
+    "out": "public/lep1/items/item-zippy-stop.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-zippy.png",
+      "public/lep1/items/item-spark-wave.png"
+    ],
+    "prompt": "A single sticker: the same robot as the first reference (Zippy, a small round friendly flying helper robot: a shiny golden-yellow ball body, a cream face screen with two big kind round eyes and a small smile, a little orange propeller on top, two short bendy arms, tiny orange glowing boosters underneath), holding up one hand like a STOP sign, serious but kind face. Cute kawaii cartoon picture-book sticker exactly in the style of the reference stickers: thick closed dark-brown outline all the way around, bright soft flat colours, big friendly eyes. Full body, centred, the whole figure visible with empty space around it. Plain pure white background, no shadow, no floor, no text, no other objects. Modest, fully covered clothing for young children: shoulders, chest and tummy covered."
+  },
+  {
+    "out": "public/lep1/items/item-leo-fast.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-leo-hero.png",
+      "public/lep1/items/item-leo-run.png"
+    ],
+    "prompt": "A single sticker: Leo the lion cub from the reference, in his hero cape (recolour the cape bright orange), running very fast, small speed lines behind him, happy. Cute kawaii cartoon picture-book sticker exactly in the style of the reference stickers: thick closed dark-brown outline all the way around, bright soft flat colours, big friendly eyes. Full body, centred, the whole figure visible with empty space around it. Plain pure white background, no shadow, no floor, no text, no other objects. Modest, fully covered clothing for young children: shoulders, chest and tummy covered."
+  },
+  {
+    "out": "public/lep1/items/item-mia-climb.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-mia-hero.png"
+    ],
+    "prompt": "A single sticker: Mia the grey mouse from the reference, in her hero cape (recolour the cape golden yellow), climbing a short wooden climbing wall with coloured holds, confident smile. Cute kawaii cartoon picture-book sticker exactly in the style of the reference stickers: thick closed dark-brown outline all the way around, bright soft flat colours, big friendly eyes. Full body, centred, the whole figure visible with empty space around it. Plain pure white background, no shadow, no floor, no text, no other objects. Modest, fully covered clothing for young children: shoulders, chest and tummy covered."
+  },
+  {
+    "out": "public/lep1/items/item-pip-high.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-pip-hero.png",
+      "public/lep1/items/item-pip-jump.png"
+    ],
+    "prompt": "A single sticker: Pip the fox from the reference, in his hero cape (recolour the cape orange), jumping very high with both arms up, happy. Cute kawaii cartoon picture-book sticker exactly in the style of the reference stickers: thick closed dark-brown outline all the way around, bright soft flat colours, big friendly eyes. Full body, centred, the whole figure visible with empty space around it. Plain pure white background, no shadow, no floor, no text, no other objects. Modest, fully covered clothing for young children: shoulders, chest and tummy covered."
+  },
+  {
+    "out": "public/lep1/items/item-biscuit-swim.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-dog.png"
+    ],
+    "prompt": "A single sticker: Biscuit the brown puppy from the reference wearing a tiny orange hero cape, swimming happily in a small patch of soft blue water, head above the water. Cute kawaii cartoon picture-book sticker exactly in the style of the reference stickers: thick closed dark-brown outline all the way around, bright soft flat colours, big friendly eyes. Full body, centred, the whole figure visible with empty space around it. Plain pure white background, no shadow, no floor, no text, no other objects. Modest, fully covered clothing for young children: shoulders, chest and tummy covered."
+  },
+  {
+    "out": "public/lep1/items/item-leo-lift.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-leo-hero.png"
+    ],
+    "prompt": "A single sticker: Leo the lion cub from the reference, in his hero cape (recolour the cape bright orange), lifting a big wooden box above his head, strong and proud. Cute kawaii cartoon picture-book sticker exactly in the style of the reference stickers: thick closed dark-brown outline all the way around, bright soft flat colours, big friendly eyes. Full body, centred, the whole figure visible with empty space around it. Plain pure white background, no shadow, no floor, no text, no other objects. Modest, fully covered clothing for young children: shoulders, chest and tummy covered."
+  },
+  {
+    "out": "public/lep1/items/item-pip-try.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-pip-hero.png"
+    ],
+    "prompt": "A single sticker: Pip the fox from the reference, in his hero cape (recolour the cape orange), trying to lift a big heavy wooden box but it does not move, a little sweat drop, funny face. Cute kawaii cartoon picture-book sticker exactly in the style of the reference stickers: thick closed dark-brown outline all the way around, bright soft flat colours, big friendly eyes. Full body, centred, the whole figure visible with empty space around it. Plain pure white background, no shadow, no floor, no text, no other objects. Modest, fully covered clothing for young children: shoulders, chest and tummy covered."
+  },
+  {
+    "out": "public/lep1/items/item-tissues.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-water-glass.png"
+    ],
+    "prompt": "A single sticker: a box of tissues with one tissue sticking up, cream and orange box. Cute kawaii cartoon picture-book sticker exactly in the style of the reference stickers: thick closed dark-brown outline all the way around, bright soft flat colours, big friendly eyes. Full body, centred, the whole figure visible with empty space around it. Plain pure white background, no shadow, no floor, no text, no other objects. Modest, fully covered clothing for young children: shoulders, chest and tummy covered."
+  },
+  {
+    "out": "public/lep1/items/item-toolbox.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-water-glass.png"
+    ],
+    "prompt": "A single sticker: an orange toolbox with a spanner and a screwdriver on top. Cute kawaii cartoon picture-book sticker exactly in the style of the reference stickers: thick closed dark-brown outline all the way around, bright soft flat colours, big friendly eyes. Full body, centred, the whole figure visible with empty space around it. Plain pure white background, no shadow, no floor, no text, no other objects. Modest, fully covered clothing for young children: shoulders, chest and tummy covered."
+  },
+  {
+    "out": "public/lep1/items/item-big-box.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-water-glass.png"
+    ],
+    "prompt": "A single sticker: a big heavy wooden crate box. Cute kawaii cartoon picture-book sticker exactly in the style of the reference stickers: thick closed dark-brown outline all the way around, bright soft flat colours, big friendly eyes. Full body, centred, the whole figure visible with empty space around it. Plain pure white background, no shadow, no floor, no text, no other objects. Modest, fully covered clothing for young children: shoulders, chest and tummy covered."
+  },
+  {
+    "out": "public/lep1/items/item-hero-cape.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-spark-wave.png"
+    ],
+    "prompt": "A single sticker: a flowing bright orange hero cape with a round yellow spark badge, on its own. Cute kawaii cartoon picture-book sticker exactly in the style of the reference stickers: thick closed dark-brown outline all the way around, bright soft flat colours, big friendly eyes. Full body, centred, the whole figure visible with empty space around it. Plain pure white background, no shadow, no floor, no text, no other objects. Modest, fully covered clothing for young children: shoulders, chest and tummy covered."
+  },
+  {
+    "out": "public/lep1/items/item-hero-badge.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-hero-medal.png"
+    ],
+    "prompt": "A single sticker: a round golden hero badge with a yellow star and a small orange ribbon. Cute kawaii cartoon picture-book sticker exactly in the style of the reference stickers: thick closed dark-brown outline all the way around, bright soft flat colours, big friendly eyes. Full body, centred, the whole figure visible with empty space around it. Plain pure white background, no shadow, no floor, no text, no other objects. Modest, fully covered clothing for young children: shoulders, chest and tummy covered."
+  },
+  {
+    "out": "public/lep1/items/item-traffic-light.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-water-glass.png"
+    ],
+    "prompt": "A single sticker: a friendly cartoon traffic light with red, amber and green lights, the red light on. Cute kawaii cartoon picture-book sticker exactly in the style of the reference stickers: thick closed dark-brown outline all the way around, bright soft flat colours, big friendly eyes. Full body, centred, the whole figure visible with empty space around it. Plain pure white background, no shadow, no floor, no text, no other objects. Modest, fully covered clothing for young children: shoulders, chest and tummy covered."
+  },
+  {
+    "out": "public/lep1/items/item-paint.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-water-glass.png"
+    ],
+    "prompt": "A single sticker: a small open pot of orange paint with a paintbrush. Cute kawaii cartoon picture-book sticker exactly in the style of the reference stickers: thick closed dark-brown outline all the way around, bright soft flat colours, big friendly eyes. Full body, centred, the whole figure visible with empty space around it. Plain pure white background, no shadow, no floor, no text, no other objects. Modest, fully covered clothing for young children: shoulders, chest and tummy covered."
+  },
+  {
+    "out": "public/lep1/items/item-tray.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-water-glass.png"
+    ],
+    "prompt": "A single sticker: an orange tray. Cute kawaii cartoon picture-book sticker exactly in the style of the reference stickers: thick closed dark-brown outline all the way around, bright soft flat colours, big friendly eyes. Full body, centred, the whole figure visible with empty space around it. Plain pure white background, no shadow, no floor, no text, no other objects. Modest, fully covered clothing for young children: shoulders, chest and tummy covered."
+  },
+  {
+    "out": "public/lep1/items/item-clay.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-water-glass.png"
+    ],
+    "prompt": "A single sticker: a lump of orange modelling clay. Cute kawaii cartoon picture-book sticker exactly in the style of the reference stickers: thick closed dark-brown outline all the way around, bright soft flat colours, big friendly eyes. Full body, centred, the whole figure visible with empty space around it. Plain pure white background, no shadow, no floor, no text, no other objects. Modest, fully covered clothing for young children: shoulders, chest and tummy covered."
+  },
+  {
+    "out": "public/lep1/items/item-rule-help.png",
+    "sticker": true,
+    "refs": [
+      "public/lep1/items/item-leo-hero.png"
+    ],
+    "prompt": "A single sticker: Leo the lion cub from the reference in his orange hero cape, kindly carrying a heavy shopping bag for a smiling grandma in a long skirt and cardigan. Cute kawaii cartoon picture-book sticker exactly in the style of the reference stickers: thick closed dark-brown outline all the way around, bright soft flat colours, big friendly eyes. Full body, centred, the whole figure visible with empty space around it. Plain pure white background, no shadow, no floor, no text, no other objects. Modest, fully covered clothing for young children: shoulders, chest and tummy covered."
   }
 ]

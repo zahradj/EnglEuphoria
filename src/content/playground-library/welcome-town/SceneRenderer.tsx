@@ -74,6 +74,7 @@ import { WeatherReportScene } from './scene-components/WeatherReportScene';
 import { FoodSurveyScene } from './scene-components/FoodSurveyScene';
 import { MoodMachineScene } from './scene-components/MoodMachineScene';
 import { LiveReefScene } from './scene-components/LiveReefScene';
+import { HeroMissionScene } from './scene-components/HeroMissionScene';
 import { ReefDetectiveScene } from './scene-components/ReefDetectiveScene';
 import { MonsterBuilderScene } from './scene-components/MonsterBuilderScene';
 import { MonsterMixUpScene } from './scene-components/MonsterMixUpScene';
@@ -229,6 +230,7 @@ export function SceneRenderer(props: {
       case 'mood-machine': return <MoodMachineScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'reef-detective': return <ReefDetectiveScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'live-reef': return <LiveReefScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
+      case 'hero-mission': return <HeroMissionScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'food-survey': return <FoodSurveyScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'festival-cafe': return <FestivalCafeScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'build-dish': return <BuildDishScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;

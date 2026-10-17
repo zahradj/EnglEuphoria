@@ -5,6 +5,7 @@ import * as SM from './space-mission/scenes';
 import * as FF from './food-festival/scenes';
 import * as MT from './monster-town/scenes';
 import * as OC from './ocean/scenes';
+import * as HC from './hero-city/scenes';
 import * as MC from './magic-castle/scenes';
 // Same list as PICTURE_MATCH_LOOKS in PictureMatchScene.tsx (not imported: the component pulls in the Supabase client).
 const PICTURE_MATCH_LOOKS = ['cards', 'frames', 'polaroids', 'chalk', 'portholes'];
@@ -15,7 +16,7 @@ const PICTURE_MATCH_LOOKS = ['cards', 'frames', 'polaroids', 'chalk', 'portholes
  * Rule: CLAUDE.md "Vary the design of a repeated game". Designs: PictureMatchScene.tsx. */
 type AnyScene = { id: string; kind: string; look?: string };
 const lessons = new Map<string, AnyScene[]>();
-for (const mod of [WT, JA, SM, FF, MT, OC, MC] as unknown as Record<string, unknown>[]) {
+for (const mod of [WT, JA, SM, FF, MT, OC, HC, MC] as unknown as Record<string, unknown>[]) {
   for (const [name, v] of Object.entries(mod)) {
     if (!Array.isArray(v)) continue;
     const m = /^LESSON_A1U(\d+)L(\d+)_SCENES$/.exec(name) ?? (mod === (WT as unknown) ? /^LESSON_()(\d+)_SCENES$/.exec(name) : null);

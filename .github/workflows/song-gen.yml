@@ -30,6 +30,8 @@ jobs:
         env:
           SONG_PROXY_URL: https://dcoxpyzoqjvmuuygvlme.supabase.co/functions/v1/song-proxy
           SONG_PROXY_TOKEN: de472b713779b6c3f2c462fb886213e1861db78b10aa2021
+          # owner 2026-10-17: the ElevenLabs key the Academy hub uses (same secret as academy-voice.yml); used first when set.
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_5 || secrets.ELEVENLABS5 || secrets.ELEVENLABS_API_KEY_5 || secrets.elevenlabs5 }}
         run: |
           KEY=$(grep -v '^\s*#' scripts/song-gen-request.txt | head -1 | tr -d '[:space:]')
           # Never run without a song key: an empty --only would generate EVERY song.

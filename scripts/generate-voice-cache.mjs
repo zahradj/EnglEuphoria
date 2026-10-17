@@ -55,6 +55,7 @@ import * as spaceScenes from '../src/content/playground-library/space-mission/sc
 import * as foodScenes from '../src/content/playground-library/food-festival/scenes.ts';
 import * as monsterScenes from '../src/content/playground-library/monster-town/scenes.ts';
 import * as oceanScenes from '../src/content/playground-library/ocean/scenes.ts';
+import * as heroScenes from '../src/content/playground-library/hero-city/scenes.ts';
 import { surveyQuestion, surveyAnswer, surveyReport, CAFE_WRONG, CAFE_YES } from '../src/content/playground-library/welcome-town/scene-components/foodRules.ts';
 import { BUILDER_WRONG, builderHint } from '../src/content/playground-library/welcome-town/scene-components/monsterRules.ts';
 import { METER_ASK, METER_WRONG } from '../src/content/playground-library/welcome-town/scene-components/meterRules.ts';
@@ -62,6 +63,7 @@ import { GW_ASK, GW_GOT_IT, GW_HIDE, GW_LOOK, GW_NOT, GW_WHO, gwGuess, gwRight }
 import { MIXUP_FIND, MIXUP_FIXED, MIXUP_NOT_THERE, MIXUP_PICK } from '../src/content/playground-library/welcome-town/scene-components/mixupRules.ts';
 import { moodSentence, moodReason, moodAsk, MOOD_PULL, MOOD_WRONG } from '../src/content/playground-library/welcome-town/scene-components/moodRules.ts';
 import { reefAsk, reefSentence, REEF_START, REEF_WRONG } from '../src/content/playground-library/welcome-town/scene-components/liveReefRules.ts';
+import { HERO_ASK, HERO_NEXT, HERO_START, HERO_WRONG } from '../src/content/playground-library/welcome-town/scene-components/heroMissionRules.ts';
 import { DETECTIVE_HIDE, DETECTIVE_LOOK, DETECTIVE_NO, DETECTIVE_YES, allQuestions, caughtLine, foundLine, guessLine, questionText } from '../src/content/playground-library/welcome-town/scene-components/reefDetectiveRules.ts';
 import { placeSentence, roomSentences, whoseQuestion, ownerSentence, OWNER_YES, OWNER_NO, ROOM_AGAIN, ROOM_FREE_START, ROOM_DESCRIBE } from '../src/content/playground-library/welcome-town/scene-components/roomRules.ts';
 import { homeworkA1U9L1Lines } from '../src/content/playground-library/magic-castle/homework.ts';
@@ -920,6 +922,8 @@ const WT_EXTRACTORS = {
     ...(s.suspects ?? []).flatMap((x) => [[s.who, foundLine(x)], [s.helper, guessLine(x)], [s.helper, caughtLine(x)]])],
   'live-reef': (s) => [[s.who, s.doneLine], [s.who, REEF_WRONG],
     ...(s.rounds ?? []).flatMap((r, i) => { const sp = s.spots?.[r.spot]; if (!sp) return []; return [[s.who, i === 0 ? `${REEF_START} ${reefAsk(sp.name)}` : reefAsk(sp.name)], [s.who, reefAsk(sp.name)], ['teacher', reefSentence(sp.name, r.doing, sp.plural)]]; })],
+  'hero-mission': (s) => [[s.who, s.doneLine], [s.who, HERO_ASK], [s.who, HERO_START], [s.who, HERO_NEXT], ['teacher', HERO_WRONG],
+    ...(s.citizens ?? []).flatMap((c) => [['teacher', c.problem], ['teacher', c.offer], ['teacher', c.thanks]])],
   'mood-machine': (s) => [[s.who, s.doneLine], [s.who, MOOD_PULL], [s.who, MOOD_WRONG],
     ...(s.rounds ?? []).flatMap((r) => [[s.who, `${moodReason(r.reason)} ${moodAsk(s.monster?.name ?? '')}`], ['teacher', moodSentence(s.monster?.name ?? '', s.feelings?.[r.feeling]?.feeling ?? '', r.reason)]])],
   'food-survey': (s) => [[s.who, s.doneLine], [s.who, 'Ask your friends! Tap a box.'], [s.who, 'Now read the chart. Likes or doesn’t like?'], [s.who, 'Look at the chart again!'],
@@ -998,6 +1002,7 @@ const ENGINES = [
   { scenesModule: foodScenes, extractors: WT_EXTRACTORS, resolveWho: (who) => wtScenes.VOICE_KEY[who] ?? who },
   { scenesModule: monsterScenes, extractors: WT_EXTRACTORS, resolveWho: (who) => wtScenes.VOICE_KEY[who] ?? who },
   { scenesModule: oceanScenes, extractors: WT_EXTRACTORS, resolveWho: (who) => wtScenes.VOICE_KEY[who] ?? who },
+  { scenesModule: heroScenes, extractors: WT_EXTRACTORS, resolveWho: (who) => wtScenes.VOICE_KEY[who] ?? who },
 ];
 
 /** Homework games: every line they can say, already as (voice, text). */

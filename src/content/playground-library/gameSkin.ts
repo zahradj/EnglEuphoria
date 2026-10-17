@@ -61,4 +61,4 @@ export const PALETTE = {
  * art bible. `scripts/generate-art.mjs` adds it to any Playground target that lacks it (pictureColour.test.ts).
  */
 export const PICTURE_COLOUR_LINE =
-  'Colour palette: ONLY the EnglEuphoria Playground brand shades, yellow and orange - bright orange (#FE6A2F), tangerine (#FB923C), sunshine yellow (#FEAF15), golden amber (#F59E0B), honey yellow (#FDE68A) and warm cream (#FEFBDD), with natural wood and skin tones; sky, water and plants only as soft, muted natural colours; no purple, no other brand colours.';
+  'Colour palette: FULL, rich, natural colour - a bright blue sky, green trees and grass, colourful buildings, clothes and objects in many different happy colours (red, blue, green, purple, pink, yellow, orange), natural wood and skin tones - with the EnglEuphoria Playground brand shades (bright orange #FE6A2F, tangerine #FB923C, sunshine yellow #FEAF15, golden amber #F59E0B, honey yellow #FDE68A, warm cream #FEFBDD) as warm accents; never a picture in only one or two colours.';
