@@ -55,7 +55,7 @@ const scenes: Scene[] = [
       { who: 'Vee', text: 'Welcome to Club FM, live on Friday! Today you are the host.', shout: true, sfx: 'LIVE!' },
       { who: 'Vee', text: 'Our guest is shy, so ask good questions. A good host makes a quiet guest talk.' },
     ] },
-    { plate: 'story-b1s4-2', caption: 'Theo is the guest. He answers every question with one word.', spots: { Theo: { x: 58, y: 6, w: 36 }, Vee: { x: 58, y: 46, w: 36 } }, heads: { Theo: { x: 33, y: 27 } }, lines: [
+    { plate: 'story-b1s4-2', caption: 'Theo is the guest. He answers every question with one word.', spots: { Theo: { x: 58, y: 6, w: 36 }, Vee: { x: 58, y: 46, w: 36 } }, heads: { Theo: { x: 27, y: 26 } }, lines: [
       { who: 'Vee', text: 'Theo, have you ever been to Japan?' },
       { who: 'Theo', text: 'Yes.' },
       { who: 'Vee', text: 'Hmm. And what did you do there?' },
