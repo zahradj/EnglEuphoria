@@ -42,6 +42,30 @@ export interface SceneResult {
   gem?: boolean;
 }
 
+export type FxTone = 'gold' | 'teal' | 'lilac' | 'coral';
+
+/**
+ * Game feel for scenes (the effects layer lives in the player, scenes only ask). Coordinates are % of the player (0-100).
+ * Calm mode / reduced motion: burst, shake and confetti do nothing; float only fades in place, so feedback stays visible.
+ */
+export interface SceneFx {
+  calm: boolean;
+  /** sparks + ring at a point */
+  burst: (x: number, y: number, tone?: FxTone) => void;
+  /** a floating "+10" */
+  float: (x: number, y: number, text: string, tone?: FxTone) => void;
+  /** a short, soft stage shake that decays (never the picture) */
+  shake: (strength?: 'soft' | 'hard') => void;
+  /** confetti rain for a win */
+  confetti: () => void;
+  /** the centre of an element as % of the player */
+  at: (el: Element | null | undefined) => { x: number; y: number };
+  /** burst at an element's centre */
+  burstAt: (el: Element | null | undefined, tone?: FxTone) => void;
+  /** floating text just above an element */
+  floatAt: (el: Element | null | undefined, text: string, tone?: FxTone) => void;
+}
+
 /** What every scene view receives from the player. */
 export interface SceneProps<S extends SceneBase = SceneBase> {
   scene: S;
@@ -56,6 +80,8 @@ export interface SceneProps<S extends SceneBase = SceneBase> {
   seed: number;
   /** how the lesson is going so far (the Wrap shows it) */
   summary: { xp: number; gems: number; mistakes: string[] };
+  /** game feel (bursts, floating text, shake, confetti); optional so a scene renders alone in tests: use `useSceneFx(props.fx)` */
+  fx?: SceneFx;
 }
 
 /** A scene kind: its view, what it says aloud, and a validator the registry test runs on every scene. */

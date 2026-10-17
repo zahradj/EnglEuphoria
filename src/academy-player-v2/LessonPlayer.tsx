@@ -101,12 +101,13 @@ export function LessonPlayer({ script, artBase = '/academy-art', role = 'solo', 
       primary={showBar && !last && !student ? { label: `${t('ap.next', 'Next')} ›`, onClick: () => go(at + 1), disabled: !canNext } : undefined}
       onPause={(on) => dispatch({ type: 'pause', on })}
       onRestart={student || ephemeral ? undefined : () => { clearProgress(script.blueprintId); finished.current = false; dispatch({ type: 'restore', state: { index: 0, furthest: 0, results: {}, wrong: {}, xp: 0, gems: 0, doneIds: [] } }); go(0); }}
+      shaking={fx.shaking}
       plate={scene.plate}
       calmPlate
       artBase={artBase}
       overlay={
         <>
-          <FxLayer bursts={fx.bursts} floaters={fx.floaters} />
+          <FxLayer bursts={fx.bursts} floaters={fx.floaters} confettis={fx.confettis} />
           {resume && (
             <div className="av-sheet" role="dialog" aria-modal="true">
               <div className="av-panel">
@@ -128,7 +129,7 @@ export function LessonPlayer({ script, artBase = '/academy-art', role = 'solo', 
           </div>
         )}
       >
-        <View key={scene.id} scene={scene} script={script} artBase={artBase} calm={prefs.calm} seed={seedOf(scene.id)} summary={{ xp: state.xp, gems: state.gems, mistakes: [...new Set(missed)] }} onDone={(r) => { onDone(r); if (scene.kind === 'lobby') go(at + 1); }} />
+        <View key={scene.id} scene={scene} script={script} artBase={artBase} calm={fx.calm} fx={fx.api} seed={seedOf(scene.id)} summary={{ xp: state.xp, gems: state.gems, mistakes: [...new Set(missed)] }} onDone={(r) => { onDone(r); if (scene.kind === 'lobby') go(at + 1); }} />
       </SceneBoundary>
     </PlayerShell>
   );

@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import type { LessonMeta } from './lessonMeta';
 import type { Prefs } from '../services/prefs';
 import './tokens.css';
+import './games.css';
 
 export interface ShellProps {
   meta: LessonMeta;
@@ -24,7 +25,7 @@ export interface ShellProps {
   plate?: string;
   calmPlate?: boolean;
   artBase: string;
-  shaking?: boolean;
+  shaking?: boolean | 'soft' | 'hard';
   /** overlay content (effects, notices) rendered above the scene */
   overlay?: ReactNode;
   children: ReactNode;
@@ -39,7 +40,7 @@ export function PlayerShell(p: ShellProps) {
   const sum = p.partMinutes.reduce((a, b) => a + b, 0) || 1;
   const dotsMax = Math.min(p.total, 12);
   return (
-    <div className="av-root" data-calm={p.prefs.calm} data-shaking={p.shaking || undefined} data-testid="av-root">
+    <div className="av-root" data-calm={p.prefs.calm} data-shaking={p.shaking ? String(p.shaking) : undefined} data-testid="av-root">
       {p.plate && <div className="av-plate" data-calm={p.calmPlate || undefined} style={{ backgroundImage: `url(${p.artBase}/bg/${p.plate}.webp)` }} />}
       <div className="av-veil" />
       <div className="av-stage" data-av-sync="stage">{p.children}</div>
