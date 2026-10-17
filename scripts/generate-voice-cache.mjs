@@ -748,6 +748,9 @@ const UNIT1_EXTRACTORS = {
 /** Reader picture questions (owner 2026-10-14): the question and "Yes! <answer>" in the asker's voice. */
 const readerChecks = (s) => (s.noChecks ? [] : (s.pages ?? []).flatMap((p) => (p.check ? [[p.check.who ?? 'teacher', p.check.question], [p.check.who ?? 'teacher', `Yes! ${p.check.answer}`]] : [])));
 
+/** Number words 0-20 (A1 U1 L3 number games). */
+const NUM_WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty'];
+
 const WT_EXTRACTORS = {
   // Universal "Remember?" warm-up (RecallWarmupScene.tsx's recallWarmupLines()) — was missing here, so A1/A2
   // warm-up lines were never baked and the audit could not see them.
@@ -863,6 +866,21 @@ const WT_EXTRACTORS = {
     ...(s.rounds ?? []).flatMap((r) => [[s.who, r.ask], ['teacher', r.choices[r.answer]]])],
   // MusicalIslandsScene / RedGreenScene / LetterBubblesScene / CrosswordScene (welcome-town/scene-components).
   'musical-islands': (s) => [[s.who, s.doneLine], [s.who, `Look again! Which ${s.padWord ?? 'lily pad'}?`], ...(s.rounds ?? []).flatMap((r) => [[s.who, r.ask], ['teacher', r.say]])],
+  // PartyLiftScene / DotDotScene / AgeLineupScene / PartyPhoneScene (A1 U1 L3, welcome-town/scene-components).
+  'party-lift': (s) => [[s.who, s.doneLine], [s.who, 'Your turn! Look at the ticket. Say the floor!'], ...(s.rounds ?? []).flatMap((r) => {
+    const w = NUM_WORDS[r.floor];
+    return [[r.guest, `Floor ${w}, please!`], [r.guest, `Listen again! Floor ${w}, please!`], [r.guest, w], [r.guest, `Ding! Floor ${w}! Thank you!`]];
+  })],
+  'dot-dot': (s) => [[s.who, s.doneLine], ...(s.pictures ?? []).flatMap((p) => [[s.who, p.intro], [s.who, p.reveal],
+    ...(p.dots ?? []).flatMap((_, i) => [[s.who, NUM_WORDS[p.from + i]], [s.who, `Find ${NUM_WORDS[p.from + i]}!`]])])],
+  'age-lineup': (s) => [[s.who, s.intro], [s.who, s.doneLine], ['teacher', 'How old are you?'], [s.who, 'Three, two, one… cheese!'],
+    ...(s.friends ?? []).flatMap((f) => [[f.who, `I’m ${NUM_WORDS[f.age]}!`], [f.who, 'Oops! I am older! Find a taller step!'], [f.who, 'Oops! I am younger! Find a smaller step!'], [f.who, `${f.name} is ${NUM_WORDS[f.age]}.`]])],
+  'party-phone': (s) => [[s.who, s.doneLine], [s.who, 'Ring ring! Pick up the phone!'], [s.who, 'Listen again!'], ...(s.calls ?? []).flatMap((c) => {
+    const spelt = c.name.toUpperCase().split('').join(', ');
+    return [[c.from, `Hi! It’s ${c.name}. ${spelt}. I am ${NUM_WORDS[c.age]}. My party is at house number ${NUM_WORDS[c.house]}. Come to my party!`],
+      [c.from, `My name is ${c.name}. ${spelt}.`], [c.from, `I am ${NUM_WORDS[c.age]}.`], [c.from, `House number ${NUM_WORDS[c.house]}.`],
+      ...Array.from(new Set(c.name.toUpperCase().split(''))).map((l) => [c.from, l]), [s.who, `Thank you, ${c.name}! See you at the party!`]];
+  })],
   'red-green': (s) => [[s.who, s.doneLine], [s.who, 'Oops! Red light! Freeze!'], ...(s.rounds ?? []).map((r) => [s.who, r.say])],
   'letter-bubbles': (s) => [[s.who, s.doneLine], ...(s.words ?? []).flatMap((w) => [[s.who, `Spell it! ${w.word}!`], [s.who, w.word], ['teacher', w.say]])],
   'crossword': (s) => [[s.who, s.doneLine], [s.who, 'What is it? Spell it!'], [s.who, 'Pick a picture!'], ...(s.words ?? []).flatMap((w) => [[s.who, w.word], ['teacher', w.say]])],

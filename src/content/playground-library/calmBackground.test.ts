@@ -26,6 +26,9 @@ const NEEDS_CALM_BG = [
   'welcome-town/scene-components/GuessWhoScene.tsx',
   'welcome-town/scene-components/HotCoconutScene.tsx',
   'welcome-town/scene-components/RisingRiverScene.tsx',
+  'welcome-town/scene-components/DotDotScene.tsx',
+  'welcome-town/scene-components/AgeLineupScene.tsx',
+  'welcome-town/scene-components/PartyPhoneScene.tsx',
 ];
 
 describe('floating pieces sit on a calm background', () => {

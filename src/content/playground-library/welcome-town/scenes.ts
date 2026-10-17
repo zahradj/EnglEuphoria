@@ -594,6 +594,24 @@ export type Scene =
        *  `pad` = the pad asked about ("Who is on the red lily pad?"). */
       players: { label: string; img: string }[]; rounds: { at: number[]; pad: number; ask: string; say: string }[]; doneLine: string;
       /** What the four pads are called in the voice lines (default 'lily pad'; Ocean: 'island'). */ padWord?: string; }
+  /** ★ Party Lift (A1 U1L3, PartyLiftScene.tsx): a friend calls "Floor fourteen, please!" and the child presses that
+   *  button (1-20); the dial counts up to the floor. `mode: 'say'` rounds show the number on a ticket and the child says
+   *  the floor. `img` = the friend's picture. */
+  | { id: string; kind: 'party-lift'; bg: string; teacher: string; title: string; who: CharKey;
+      rounds: { floor: number; guest: CharKey; img: string; mode?: 'listen' | 'say' }[]; doneLine: string; }
+  /** ★ Dot-to-Dot Surprise (A1 U1L3, DotDotScene.tsx): join numbered dots in order (`from` upwards; `labels: 'words'`
+   *  shows number words) to reveal a party picture. `dots` are % of the picture; `aspect` = width / height. */
+  | { id: string; kind: 'dot-dot'; bg: string; teacher: string; title: string; who: CharKey;
+      pictures: { img: string; aspect: number; from: number; labels: 'digits' | 'words'; intro: string; reveal: string; dots: [number, number][] }[];
+      doneLine: string; }
+  /** ★ Age Line-Up (A1 U1L3, AgeLineupScene.tsx): ask each friend "How old are you?", put them on the photo steps
+   *  from the youngest to the oldest, take the photo, then say it ("Mia is six."). */
+  | { id: string; kind: 'age-lineup'; bg: string; teacher: string; title: string; who: CharKey; intro: string;
+      friends: { who: CharKey; name: string; age: number; img: string }[]; doneLine: string; }
+  /** ★ Party Phone (A1 U1L3, PartyPhoneScene.tsx, Cambridge Starters Listening Part 2): a friend calls with a party
+   *  invitation; the child writes the spelled name, the age and the house number on the invitation card. */
+  | { id: string; kind: 'party-phone'; bg: string; teacher: string; title: string; who: CharKey; phoneImg: string; envelopeImg: string;
+      calls: { from: CharKey; img: string; name: string; age: number; house: number }[]; doneLine: string; }
   | { id: string; kind: 'red-green'; bg: string; teacher: string; title: string; who: CharKey; runner: string;
       cards: { label: string; img?: string }[];
       /** green: tap `cards[answer]` and the runner moves `steps`; red: freeze (don't tap) until it turns green. */
@@ -1710,12 +1728,15 @@ export const LESSON_3_OBJECTIVE = 'I can count and say the numbers 1-20, ask "Ho
 
 
 
-/* Rebuilt 2026-10-12 (owner: "add numbers from 1 to 20 … as far as the students say their age … first modeling, then
- * memorising the numbers, then the practice in which they practise how old they are"). docs/a1-unit-1-welcome-town.md §5.3.
- * A MODEL (1-10, 11-20, How old are you? I am seven.) → B MEMORISE (Number Tap, count the balloons to 20) → C AGE
- * (Birthday Balloons, Age Match, answer + ask) → reading, phonics (/t/ ten), free interview. */
+/* Rebuilt 2026-10-12 (owner: "add numbers from 1 to 20 … first modeling, then memorising the numbers, then the practice in
+ * which they practise how old they are"); refined 2026-10-17 (owner: "more refinement and be creative with the games — you
+ * don't have to repeat the pre-A games"). docs/a1-unit-1-welcome-town.md §5.3, research docs/research/playground-a1u1l3-research.md.
+ * A MODEL (1-10, 11-20, the -TEEN ending, read and match) → B MEMORISE with new A1 games (Party Lift: hear the floor and
+ * press it, count on the dial; Dot-to-Dot: count to 20, then read eleven…twenty; Red Light, Green Light with 13-16)
+ * → C AGE (How old are you? I am seven.; Age Line-Up: ask, order youngest→oldest, say the photo; Party Phone: listen and
+ * write a name, an age, a house number — Cambridge Starters Listening Part 2) → reading, phonics (/t/ ten), free
+ * interview. No Pre-A1 game and no brain break is reused. */
 export const LESSON_3_SCENES: Scene[] = classroomLook([
-  /* WARM-UP */
   { id: 'wt3-title', kind: 'title-card', bg: bgL1Party, level: 'A1', unit: 'Unit 1', lessonLabel: 'Lesson 3', title: 'How Old Are You?', subtitle: 'Count to 20 — and say how old you are!', cta: '\u{1F382} LET’S GO!' },
   {
     id: 'wt3-recall-warmup', kind: 'recall-warmup', bg: bgCircleW, who: 'pip', mode: 'click',
@@ -1727,7 +1748,6 @@ export const LESSON_3_SCENES: Scene[] = classroomLook([
       { word: 'hungry', say: 'Find: She is hungry!', img: feelSpr('willow-hungry') },
     ],
   },
-  /* PRESENT 1 — numbers 1-20 */
   {
     id: 'wt3-numbers-1-10', kind: 'prea1', teacher: 'Present: count 1 to 10 with Pip — tap each number, say it, show it with your fingers.',
     scene: { id: 'wt3-numbers-1-10', kind: 'numbers-learn', bg: bgL1Party, who: 'pip', from: 1, to: 10, teacher: 'Tap each number, listen and say it. Show it with your fingers!' },
@@ -1736,7 +1756,8 @@ export const LESSON_3_SCENES: Scene[] = classroomLook([
     id: 'wt3-numbers-11-20', kind: 'prea1', teacher: 'Present: the new numbers 11 to 20. Stretch and clap the end: four-TEEN! Then twenty.',
     scene: { id: 'wt3-numbers-11-20', kind: 'numbers-learn', bg: bgL1Party, who: 'mia', from: 11, to: 20, teacher: 'New numbers! Tap each one, listen and say it: eleven, twelve, thirteen…' },
   },
-  // Owner 2026-10-13/14: after the words, Read and Match (A1), then the next game.
+  { id: 'wt3-teen', kind: 'meet', focus: ['fourteen', 'sixteen'], bg: bgL1Party, who: 'mia', cardSide: 'left', teacher: 'Present: the -TEEN ending is long and strong. Say four — four-TEEN, six — six-TEEN, and clap on TEEN.', line: 'Four, fourteen! Six, sixteen! Clap on TEEN!', repeat: 'fourteen, sixteen' },
+  { id: 'wt3-echo-teen', kind: 'echo', bg: bgL1Party, who: 'mia', textSide: 'top', teacher: 'Guided: say the pairs with Mia — the -TEEN is long and loud.', word: 'Three, thirteen. Four, fourteen.' },
   {
     id: 'wt3-number-match', kind: 'picture-match', look: 'cards', prompt: 'Read and match',
     teacher: 'Read and match: the student reads each word and drags it under its picture (or taps the word, then the picture), then reads it aloud.',
@@ -1750,87 +1771,72 @@ export const LESSON_3_SCENES: Scene[] = classroomLook([
     ],
     bg: bgL1Party,
   },
-  /* CONTROLLED PRACTICE 1 — hear, find and say the numbers */
   {
-    id: 'wt3-number-tap', kind: 'prea1', teacher: 'Guided: Number Tap! Pip says a number from 1 to 20 — tap it and say it.',
-    scene: { id: 'wt3-number-tap', kind: 'numbers-review', bg: bgL1Party, who: 'pip', from: 1, to: 20, teacher: 'Tap the number Pip says!' },
+    id: 'wt3-party-lift', kind: 'party-lift', bg: '/lep1/scenes/bg-a1u1-party-lift-wide.png', who: 'pip', title: 'Party Lift!',
+    teacher: 'Listening game: a friend calls a floor — the student presses the button and counts the floors with the dial. Last two rounds: the student SAYS the floor on the ticket ("Floor nineteen, please!"), then presses it.',
+    rounds: [
+      { floor: 14, guest: 'mia', img: spr('mia') },
+      { floor: 4, guest: 'leo', img: spr('leo') },
+      { floor: 16, guest: 'bella', img: spr('bella') },
+      { floor: 13, guest: 'pip', img: spr('pip') },
+      { floor: 19, guest: 'willow', img: spr('willow'), mode: 'say' },
+      { floor: 11, guest: 'leo', img: spr('leo'), mode: 'say' },
+    ],
+    doneLine: 'Everybody is at the party! Great listening!',
   },
   {
-    id: 'wt3-count-balloons', kind: 'prea1', teacher: 'Guided: count to 20! Pop the balloons one by one and count with Pip.',
-    scene: { id: 'wt3-count-balloons', kind: 'count-balloons', bg: '/lep1/scenes/bg-l4-plain-sky.jpg', who: 'pip', total: 20, teacher: 'Twenty balloons! Pop them one by one and count with Pip!' },
-  },
-  {
-    id: 'wt3-number-train', kind: 'prea1', teacher: 'Guided: look at the number train — say each number — then one car is empty. Which number is missing?',
-    scene: {
-        id: 'wt3-number-train', kind: 'train-recall', bg: bgL1Circle, teacher: 'Guided: look at the number train — say each number — then one car is empty. Which number is missing?',
-      question: 'Choo choo! One car is empty. Which number is missing?',
-      cars: [
-        { word: 'TWELVE', emoji: '1\u{FE0F}\u{20E3}2\u{FE0F}\u{20E3}' },
-        { word: 'FIFTEEN', emoji: '1\u{FE0F}\u{20E3}5\u{FE0F}\u{20E3}' },
-        { word: 'EIGHTEEN', emoji: '1\u{FE0F}\u{20E3}8\u{FE0F}\u{20E3}' },
-        { word: 'TWENTY', emoji: '2\u{FE0F}\u{20E3}0\u{FE0F}\u{20E3}' },
-      ],
-    },
+    id: 'wt3-dot-dot', kind: 'dot-dot', bg: bgL1Party, who: 'pip', title: 'Dot-to-Dot Surprise!',
+    teacher: 'Counting game: the student joins the dots in order and SAYS each number. Picture 2: the dots are number words (eleven to twenty) — read, then tap.',
+    pictures: [
+      { img: '/lep1/items/item-cake.png', aspect: 828 / 972, from: 1, labels: 'digits', intro: 'Join the dots! Count from one to twenty with me!', reveal: 'A birthday cake!',
+        dots: [[50, 1.2], [55.1, 20.6], [63.9, 9.9], [72, 7.7], [72.7, 27], [86.6, 39.3], [94.4, 52.2], [97.9, 70.9], [93, 89.4], [72, 96.8], [49.2, 98.7], [26.2, 96.5], [5.8, 88.6], [1.8, 69.4], [6.4, 51.3], [13.4, 39], [27.8, 26.4], [29, 7.3], [41.2, 26.7], [45.2, 16.8]] },
+      { img: '/lep1/items/item-present.png', aspect: 714 / 780, from: 11, labels: 'words', intro: 'Now read the numbers! Start at eleven!', reveal: 'A present!',
+        dots: [[49.9, 12.7], [80.3, 6.7], [98, 29.4], [95, 61.4], [82.4, 87.1], [48.5, 97.9], [14.8, 86], [5, 57.9], [3.8, 26.5], [21.6, 5.5]] },
+    ],
+    doneLine: 'A cake and a present — it’s a party!',
   },
   {
     id: 'wt3-red-green', kind: 'red-green', bg: bgParkEmpty, who: 'pip', runner: spr('pip'), title: 'Red Light, Green Light!',
     teacher: 'Listening race: on green, the student taps the number they hear and Pip runs that many steps. On red — freeze! Do not tap until it turns green.',
-    cards: [{ label: '2' }, { label: '3' }, { label: '4' }, { label: '5' }],
+    cards: [{ label: '13' }, { label: '14' }, { label: '15' }, { label: '16' }],
     rounds: [
-      { light: 'green', say: 'Green light! Three steps!', answer: 1, steps: 3 },
+      { light: 'green', say: 'Green light! Fourteen steps!', answer: 1, steps: 14 },
       { light: 'red', say: 'Red light! Stop!' },
-      { light: 'green', say: 'Green light! Two steps!', answer: 0, steps: 2 },
-      { light: 'green', say: 'Green light! Four steps!', answer: 2, steps: 4 },
+      { light: 'green', say: 'Green light! Thirteen steps!', answer: 0, steps: 13 },
+      { light: 'green', say: 'Green light! Sixteen steps!', answer: 3, steps: 16 },
       { light: 'red', say: 'Red light! Freeze!' },
-      { light: 'green', say: 'Green light! Five steps!', answer: 3, steps: 5 },
+      { light: 'green', say: 'Green light! Fifteen steps!', answer: 2, steps: 15 },
     ],
     doneLine: 'Pip is at the flag! Great listening!',
   },
-  {
-    id: 'wt3-count-jump', kind: 'prea1', teacher: 'Brain break: count and move with Pip!',
-    scene: {
-      id: 'wt3-count-jump', kind: 'tpr-actions', mode: 'break', bg: bgL1Circle, who: 'pip', teacher: 'Count and move with Pip!',
-      rounds: [
-        { line: 'Jump and count: one, two, three, four, five!', emoji: '\u{1F998}' },
-        { line: 'Clap and count: six, seven, eight, nine, ten!', emoji: '\u{1F44F}' },
-        { line: 'Stamp and count: eleven, twelve, thirteen, fourteen, fifteen!', emoji: '\u{1F463}' },
-        { line: 'Stretch and count: sixteen, seventeen, eighteen, nineteen, twenty!', emoji: '\u{1F64C}' },
-      ],
-    },
-  },
-  /* PRESENT 2 — How old are you? I am seven. */
   { id: 'wt3-how-old', kind: 'meet', focus: ['How old'], bg: leoStory(3), who: 'leo', cardSide: 'left', teacher: 'Present: listen to Leo. Show seven fingers and say: I am seven!', line: 'How old are you? I am seven!', repeat: 'I am seven!' },
   { id: 'wt3-birthday', kind: 'meet', focus: ['birthday'], bg: '/lep1/scenes/bg-l4-birthday-party.jpg', who: 'mia', cardSide: 'left', teacher: 'Present: a birthday! Point to the cake. Today Mia is six.', line: 'It’s my birthday! I am six today!', repeat: 'Happy birthday!' },
   { id: 'wt3-echo', kind: 'echo', bg: bgL1Peers, who: 'pip', textSide: 'top', teacher: 'Guided: say the question with Pip.', word: 'How old are you?' },
   { id: 'wt3-echo-age', kind: 'echo', bg: bgL1Circle, who: 'leo', textSide: 'top', teacher: 'Guided: answer like Leo — a whole sentence, loud and proud.', word: 'I am seven years old.' },
-  /* CONTROLLED PRACTICE 2 — ages in sentences */
   {
-    id: 'wt3-age-balloons', kind: 'prea1', teacher: 'Guided: tap a friend, count their birthday balloons, then say: Mia is six!',
-    scene: {
-      id: 'wt3-age-balloons', kind: 'age-balloons', bg: '/lep1/scenes/bg-l4-plain-sky.jpg', teacher: 'Tap a friend! Count the balloons, then say: Mia is six!',
-      friends: [{ who: 'mia', age: 6 }, { who: 'leo', age: 7 }, { who: 'pip', age: 8 }, { who: 'bella', age: 9 }],
-    },
+    id: 'wt3-age-lineup', kind: 'age-lineup', bg: '/lep1/scenes/bg-a1u1-photo-corner-wide.png', who: 'pip', title: 'Birthday Photo: Line Up!',
+    intro: 'Photo time! Ask: How old are you? Then put the friends on the steps. The youngest goes first!',
+    teacher: 'Speaking + listening: the student taps a friend and ASKS "How old are you?" (out loud), listens to the age, then puts the friend on the right step — youngest on the smallest step. After the photo, the student says each sentence: "Mia is six."',
+    friends: [
+      { who: 'bella', name: 'Bella', age: 9, img: spr('bella') },
+      { who: 'mia', name: 'Mia', age: 6, img: spr('mia') },
+      { who: 'willow', name: 'Willow', age: 10, img: spr('willow') },
+      { who: 'pip', name: 'Pip', age: 8, img: spr('pip') },
+      { who: 'leo', name: 'Leo', age: 7, img: spr('leo') },
+    ],
+    doneLine: 'What a great birthday photo!',
   },
   {
-    id: 'wt3-candle-cake', kind: 'prea1', teacher: 'Guided: listen to the age, tap that many candles, then say it: She is six!',
-    scene: {
-      id: 'wt3-candle-cake', kind: 'candle-cake', bg: '/lep1/scenes/bg-l4-cake-stage.jpg', who: 'mia', teacher: 'Listen to the age, then put that many candles on the cake!',
-      rounds: [
-        { asker: 'mia', target: 6, prompt: 'I am six! Put six candles on my cake!', celebrate: 'Six candles! Mia is six!' },
-        { asker: 'leo', target: 7, prompt: 'I am seven! Put seven candles on my cake!', celebrate: 'Seven candles! Leo is seven!' },
-        { asker: 'pip', target: 8, prompt: 'I am eight! Put eight candles on my cake!', celebrate: 'Eight candles! Pip is eight!' },
-        { asker: 'pip', target: 0, isStudent: true, prompt: 'Your turn! How old are you? Put your candles on the cake and blow!', celebrate: 'Happy birthday to you!' },
-      ],
-    },
+    id: 'wt3-party-phone', kind: 'party-phone', bg: bgL1Party, who: 'pip', title: 'Party Phone!',
+    phoneImg: '/lep1/stickers/party-phone.png', envelopeImg: '/lep1/stickers/party-envelope.png',
+    teacher: 'Listen and write (Cambridge Starters style): a friend calls with a party invitation. The student writes the name (the friend spells it), the age and the house number. 🔊 on each line replays that part.',
+    calls: [
+      { from: 'bella', img: spr('bella'), name: 'Bella', age: 9, house: 15 },
+      { from: 'leo', img: spr('leo'), name: 'Leo', age: 7, house: 12 },
+      { from: 'willow', img: spr('willow'), name: 'Willow', age: 10, house: 18 },
+    ],
+    doneLine: 'Three invitations! You are going to three parties!',
   },
-  {
-    id: 'wt3-age-match', kind: 'prea1', teacher: 'Reading: read each sentence and drag it to the right friend. Then read it aloud.',
-    scene: {
-      id: 'wt3-age-match', kind: 'age-sentence-match', bg: '/lep1/scenes/bg-l4-plain-sky.jpg', teacher: 'Read the sentence and drag it to the friend!',
-      friends: [{ who: 'mia', age: 6 }, { who: 'leo', age: 7 }, { who: 'pip', age: 8 }],
-    },
-  },
-  /* READING — Leo’s story */
   {
     id: 'wt3-reader', kind: 'reader', bg: bgL1Reading, title: 'Leo’s First Day: How old are you?', doneLine: 'Leo is seven and Pip is eight. Next time: Leo’s red cap!',
     teacher: 'Reading: listen while the words light up, then the student reads Leo’s and Pip’s lines.',
@@ -1839,7 +1845,6 @@ export const LESSON_3_SCENES: Scene[] = classroomLook([
       { img: leoStory(2), lines: [{ who: 'pip', text: 'I am eight!' }, { who: 'leo', text: 'Eight? Wow!' }] },
     ],
   },
-  /* PHONICS — the sound → Sound Mole → Blend & Read → tongue twister */
   {
     id: 'wt3-sound-t', kind: 'sound-model', bg: bgL1Reading, who: 'leo', letter: 'T', phoneme: '/t/', sound: 't', soundSide: 'center',
     teacher: 'Present: /t/ — tap your tongue behind your teeth! Ten, two, teddy, top. Find the /t/ words.',
@@ -1851,15 +1856,6 @@ export const LESSON_3_SCENES: Scene[] = classroomLook([
     ],
   },
   {
-    id: 'wt3-sound-mole', kind: 'prea1', teacher: 'Guided: Sound Moles! Hear /t/, bonk every mole whose picture starts with /t/ and say it.',
-    scene: {
-      id: 'wt3-sound-mole', kind: 'sound-mole', bg: bgL1Reading, who: 'leo', teacher: 'Hear the sound, then bonk every mole whose picture starts with it!',
-      rounds: [
-        { letter: 't', pictures: [{ word: 'ten', img: '/lep1/items/item-ten.png' }, { word: 'teddy', img: '/lep1/items/item-teddy.png' }, { word: 'top', img: '/lep1/items/item-top.png' }, { word: 'hat', img: '/lep1/items/item-hat.png' }, { word: 'sun', img: '/lep1/items/item-sun.png' }] },
-      ],
-    },
-  },
-  {
     id: 'wt3-blend', kind: 'sound-blend', bg: bgL1Reading, look: 'gumball',
     teacher: 'Reading: say each sound, blend, find the picture — then read the age sentence.',
     rounds: [
@@ -1869,32 +1865,6 @@ export const LESSON_3_SCENES: Scene[] = classroomLook([
     ],
   },
   { id: 'wt3-twister', kind: 'tongue-twister', look: 'town', speeds: 2, bg: bgL1Reading, who: 'leo', focus: 't', teacher: 'Reading: quick reading! Listen to Leo, then say it slow, then faster.', line: 'Ten tiny teddies.' },
-  {
-    id: 'wt3-count-break-2', kind: 'prea1', teacher: 'Brain break: count and move — up to twenty!',
-    scene: {
-      id: 'wt3-count-break-2', kind: 'tpr-actions', mode: 'break', bg: bgL1Circle, who: 'mia', teacher: 'Count and move!',
-      rounds: [
-        { line: 'Clap eleven times! One, two, three…', emoji: '\u{1F44F}' },
-        { line: 'Stamp fifteen times!', emoji: '\u{1F9B6}' },
-        { line: 'Jump and count to twenty!', emoji: '\u{1F998}' },
-        { line: 'Show me your age with your fingers!', emoji: '\u{1F590}\u{FE0F}' },
-      ],
-    },
-  },
-  /* FREE PRACTICE — the student asks and answers in games */
-  {
-    id: 'wt3-age-quiz', kind: 'prea1', teacher: 'Free: tap a wobbly present and ASK “How old are you?” — then guess the friend’s age. At the end, tap your own age and say it.',
-    scene: {
-      id: 'wt3-age-quiz', kind: 'age-quiz', bg: '/lep1/scenes/bg-l4-birthday-party.jpg', teacher: 'Ask “How old are you?” and guess!',
-      friends: [
-        { who: 'mia', age: 6 },
-        { who: 'leo', age: 7 },
-        { who: 'pip', age: 8 },
-        { who: 'bella', age: 9 },
-      ],
-      studentAges: [5, 6, 7, 8, 9, 10],
-    },
-  },
   {
     id: 'wt3-treasure-islands', kind: 'grid-hunt', bg: '/lep1/scenes/bg-u10l2-beach-empty-wide.png', who: 'pip', title: 'Treasure Islands',
     teacher: 'Game: answer to earn a dive. The student says a square — B three! — and taps it. Splash or treasure? Find all three treasures.',
@@ -1911,7 +1881,6 @@ export const LESSON_3_SCENES: Scene[] = classroomLook([
     ],
     doneLine: 'You found all the treasure!',
   },
-  /* PRODUCE — real answers, the birthday interview */
   {
     id: 'wt3-your-age', kind: 'join-stage', bg: bgL1Circle, teacher: 'Free: Miss Marigold asks — the student answers with their real age, then asks her.', cast: ['marigold', 'pip'],
     turns: [
@@ -1931,7 +1900,6 @@ export const LESSON_3_SCENES: Scene[] = classroomLook([
       { who: 'student', line: 'This is Pip. He is eight.' },
     ],
   },
-  /* CHECK AND GOODBYE */
   { id: 'wt3-i-can', kind: 'meet', focus: ['How old'], bg: bgL1Circle, who: 'marigold', cardSide: 'left', teacher: 'Check: count to 20, then say it and get your passport stamp!', line: 'I can count to twenty. I can ask: How old are you? I am …', repeat: 'How old are you?' },
   {
     id: 'wt3-sticker', kind: 'prea1', teacher: 'Sticker time! The student opens the pack and puts the birthday sticker in their Sticker Book.',
@@ -1963,28 +1931,15 @@ export const LESSON_3_SCENES: Scene[] = classroomLook([
       ],
     },
   },
-  /* EXTRA TIME */
   {
-    id: 'wt3-age-buzzer', kind: 'prea1', teacher: 'Extra time: Age Buzzer Show! Listen to the question, buzz the right friend, then say the sentence.',
-    scene: {
-      id: 'wt3-age-buzzer', kind: 'buzzer-show', bg: bgL1Stage, who: 'pip',
-      teacher: 'Who is it? Press the right buzzer, then say it!',
-      intro: 'How old are they? Press the buzzer!',
-      podiums: [{ x: 22.8, y: 72.5, by: 55.5 }, { x: 49.5, y: 72.5, by: 55.5 }, { x: 76.3, y: 72.5, by: 55.5 }],
-      faces: [
-        { label: 'Mia', name: 'Mia', img: spr('mia') },
-        { label: 'Leo', name: 'Leo', img: spr('leo') },
-        { label: 'Pip', name: 'Pip', img: spr('pip') },
-        { label: 'Bella', name: 'Bella', img: spr('bella') },
-      ],
-      rounds: [
-        { faces: [0, 1, 2], answer: 1, line: 'Who is seven?', reply: 'Yes! Leo is seven!', say: 'Leo is seven.' },
-        { faces: [3, 2, 0], answer: 2, line: 'Who is six?', reply: 'Yes! Mia is six!', say: 'Mia is six.' },
-        { faces: [1, 3, 2], answer: 1, line: 'Who is nine?', reply: 'Yes! Bella is nine!', say: 'Bella is nine.' },
-        { faces: [2, 0, 3], answer: 0, line: 'Who is eight?', reply: 'Yes! Pip is eight!', say: 'Pip is eight.' },
-      ],
-      doneLine: 'Age champion!',
-    },
+    id: 'wt3-guess-age', kind: 'join-stage', bg: bgL1Party, teacher: 'Extra time: Guess my age! The teacher thinks of an age (5-20). The student asks yes/no questions, then the roles change.', cast: ['pip', 'marigold'],
+    turns: [
+      { who: 'pip', line: 'Guess my age! I am more than ten!' },
+      { who: 'student', line: 'Are you fifteen?' },
+      { who: 'pip', line: 'No! I am more than fifteen!' },
+      { who: 'student', line: 'Are you eighteen?' },
+      { who: 'pip', line: 'Yes! I am eighteen! Ha ha — just kidding!' },
+    ],
   },
   {
     id: 'wt3-goodbye-song', kind: 'song', bg: bgL1Goodbye, title: '\u{1F3B5} Welcome Town School Goodbye Song \u{1F3B5}', teacher: 'It’s time to go — wave goodbye and sing along together!',
@@ -1999,6 +1954,7 @@ export const LESSON_3_SCENES: Scene[] = classroomLook([
     ],
   },
   { id: 'wt3-finale', kind: 'finale', bg: bgL1Party, who: 'pip', line: 'You counted to twenty and said how old you are! ✨\u{1F382}' },
+
 ]);
 
 

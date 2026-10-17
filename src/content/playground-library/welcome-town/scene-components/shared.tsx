@@ -163,3 +163,8 @@ export function QuestionCard({ ask, choices, img, wrong, onPick, onHear, disable
     </div>
   );
 }
+
+/** Number words 0-20 (Party Lift, Dot-to-Dot, Party Phone — A1 U1 L3). */
+export const NUM_WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve',
+  'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty'] as const;
+export const numWord = (n: number) => NUM_WORDS[Math.max(0, Math.min(20, Math.round(n)))] ?? String(n);
