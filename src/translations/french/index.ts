@@ -29,6 +29,7 @@ import { lessonResumeTranslations } from './lessonResume';
 import { classroomMediaTranslations } from './classroomMedia';
 import { studentScreensTranslations } from './studentScreens';
 import { academyLessonsTranslations } from './academyLessons';
+import { academyPlayerTranslations } from './academyPlayer';
 
 export const frenchTranslations = {
   ...placementTranslations,
@@ -61,4 +62,5 @@ export const frenchTranslations = {
   ...classroomMediaTranslations,
   ...studentScreensTranslations,
   ...academyLessonsTranslations,
+  ...academyPlayerTranslations,
 };

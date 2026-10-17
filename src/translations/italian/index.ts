@@ -10,6 +10,7 @@ import { lessonResumeTranslations } from './lessonResume';
 import { classroomMediaTranslations } from './classroomMedia';
 import { studentScreensTranslations } from './studentScreens';
 import { academyLessonsTranslations } from './academyLessons';
+import { academyPlayerTranslations } from './academyPlayer';
 
 export const italianTranslations = {
   ...placementTranslations,
@@ -24,6 +25,7 @@ export const italianTranslations = {
   ...classroomMediaTranslations,
   ...studentScreensTranslations,
   ...academyLessonsTranslations,
+  ...academyPlayerTranslations,
   welcome: "Benvenuto",
   all: "Tutti",
 };

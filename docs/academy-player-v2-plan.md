@@ -9,7 +9,7 @@
 
 | Part | Where | Size | Fate |
 |---|---|---|---|
-| Player core: `Deck.tsx`, `Stage.tsx`, `ctx.tsx`, `types.ts`, `spoken.ts`, `audio.ts`, `mistakeBank.ts`, `scene.css`, `deck.css` | `src/academy-deck/` | ~4,000 lines | **Replace** (new `src/academy-player/`) |
+| Player core: `Deck.tsx`, `Stage.tsx`, `ctx.tsx`, `types.ts`, `spoken.ts`, `audio.ts`, `mistakeBank.ts`, `scene.css`, `deck.css` | `src/academy-deck/` | ~4,000 lines | **Replace** (new `src/academy-player-v2/`) |
 | 30 slide views (`slides/*.tsx`: story, board, forge, lock, pattern, games, ...) | `src/academy-deck/slides/` | ~4,500 lines | **Replace**; rebuild only the kinds the new lessons need |
 | 11 lesson scripts (Pre-A1 S1/S2 L1, Sign Me Up 1/2, Fake or Real, Free Time Club 1/2, B1 S1 L1-L3) | `src/academy-deck/lessons/` | ~3,400 lines | **Delete** (owner choice: all) |
 | Lesson registry, profiles, scripts, variety gate | `lessonRegistry.ts`, `lessonProfiles.ts`, `lessonScripts.ts`, `lessonVariety.test.ts` | | **Delete the entries**, keep the mechanism small (registry shape) |
@@ -27,7 +27,7 @@
 
 **Principles:** (1) a lesson is a *chapter of a Season*; the player is built around the blueprint (objective, chapter, big question, the 60-minute run of show in 8 parts); (2) story first: comic scenes carry the context; (3) one clean engine, small pluggable slide kinds, no 700-line component; (4) comfort and voice rules are part of the engine, not bolted on; (5) every screen is a bright daytime school plate with ~25 % purple (art rules).
 
-### 2.1 Architecture (`src/academy-player/`)
+### 2.1 Architecture (`src/academy-player-v2/`)
 - `model/` : `LessonScript` v2 = `{ blueprintId, parts[8], scenes[] }`; each scene has a `kind`, `part`, `trains` (criteria), `plate`, `cast`; a typed registry of kinds. The blueprint's chapter, big question and exit task are read from `src/curriculum/academy`, never copied.
 - `engine/` : a small reducer/state machine (`useLessonEngine`): current scene, history, results, mistakes, pause/resume, part timing. Pure and testable; the UI never owns lesson logic.
 - `services/` : `voice` (only `speak()` and the recorded clips; silent if missing; no browser voice), `progress` (resume per lesson), `mistakeBank`, `practice` (writes to the existing practice store), `sync` (classroom bridge).
@@ -55,7 +55,7 @@ Full-bleed bright school plates, large cast, glass panels kept small, ink-framed
 - Library and registry: same `AcademyDeckLesson` shape (id, level, season, episode, title, cover) so `LibraryDrawer`, `TeacherLessonLibrary`, `MyLessonsTab` keep compiling; empty lists show the existing "planned" slots.
 
 ### 2.5 Video-game development concept, taken from the Playground player (owner 2026-10-17: "use the video game development concept from the Playground hub player")
-Read in `src/content/playground-library/unit1/` (`SceneRenderer.tsx`, `scene-components/gameFx.tsx`, `BrickCrushScene.tsx`, `ClawMachineScene.tsx`, `DashScene.tsx`, `sfx.ts`, `masteryTracker.ts`) and re-implemented in `src/academy-player/` only (hub separation: **read and re-implement, never import**). What is taken, and how it is made teen-appropriate:
+Read in `src/content/playground-library/unit1/` (`SceneRenderer.tsx`, `scene-components/gameFx.tsx`, `BrickCrushScene.tsx`, `ClawMachineScene.tsx`, `DashScene.tsx`, `sfx.ts`, `masteryTracker.ts`) and re-implemented in `src/academy-player-v2/` only (hub separation: **read and re-implement, never import**). What is taken, and how it is made teen-appropriate:
 
 | Playground concept | Academy version |
 |---|---|

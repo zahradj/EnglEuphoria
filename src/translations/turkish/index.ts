@@ -10,6 +10,7 @@ import { lessonResumeTranslations } from './lessonResume';
 import { classroomMediaTranslations } from './classroomMedia';
 import { studentScreensTranslations } from './studentScreens';
 import { academyLessonsTranslations } from './academyLessons';
+import { academyPlayerTranslations } from './academyPlayer';
 
 export const turkishTranslations = {
   ...placementTranslations,
@@ -24,6 +25,7 @@ export const turkishTranslations = {
   ...classroomMediaTranslations,
   ...studentScreensTranslations,
   ...academyLessonsTranslations,
+  ...academyPlayerTranslations,
   welcome: "Hoş geldiniz",
   all: "Hepsi",
 };
