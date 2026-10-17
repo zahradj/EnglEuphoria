@@ -13,6 +13,9 @@ describe('A1 structures against the Pearson GSE (Adult Grammar, 2023)', () => {
   it('no A1 structure is introduced further ahead of its GSE value than Pearson recommends (the lowest sub-use is within band top + 10)', () => {
     for (const id of ids) expect(A1_STRUCTURE_GSE[id].gse[0], id).toBeLessThanOrEqual(GSE_A1_BAND[1] + GSE_INTRODUCE_AHEAD);
   });
+  it('every structure with a sub-use at GSE >= 33 says what is taught as a chunk first', () => {
+    for (const [id, v] of Object.entries(A1_STRUCTURE_GSE)) if (v.gse[1] >= 33) expect(v.chunkFirst?.length ?? 0, `${id} chunkFirst`).toBeGreaterThan(15);
+  });
   it('each entry is a valid range (low <= high) with a source note', () => {
     for (const [id, v] of Object.entries(A1_STRUCTURE_GSE)) { expect(v.gse[0], id).toBeLessThanOrEqual(v.gse[1]); expect(v.from.length).toBeGreaterThan(10); }
   });

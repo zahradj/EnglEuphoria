@@ -106,6 +106,7 @@ for (const f of LEVEL_FRAMES) {
       out(`- Lexical fields: ${s.lexicalFields.join('; ')}`);
       const gse = s.structures.map((x) => A1_STRUCTURE_GSE[x.id] && `${x.id} GSE ${A1_STRUCTURE_GSE[x.id].gse[0] === A1_STRUCTURE_GSE[x.id].gse[1] ? A1_STRUCTURE_GSE[x.id].gse[0] : A1_STRUCTURE_GSE[x.id].gse.join('-')}`).filter(Boolean);
       if (gse.length) out(`- Pearson GSE (adult grammar, 2023): ${gse.join('; ')}`);
+      s.structures.forEach((x) => { const c = A1_STRUCTURE_GSE[x.id]?.chunkFirst; if (c) out(`- Chunk first, rule later (${x.id}): ${c}`); });
       if (s.mediation) out(`- Mediation: ${s.mediation}`);
       out(`- Skins: ${s.skins.map((k) => k.id).join(', ')}`);
       out();

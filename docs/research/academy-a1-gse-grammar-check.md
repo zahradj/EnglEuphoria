@@ -36,10 +36,10 @@ The GSE value of a structure is the point where a learner has a **50 % chance of
 - **The order inside A1 is not monotonic in GSE** (S04 some/any 36 comes before S06 have got 28 and S08 can 29). Pearson's guidance supports early chunks, not early rules, so the fix is in the lessons: S04, S05, S07 and S09 teach the GSE >= 32 items as chunks or recognition, with the rule only for the in-band part.
 - **No Season is missing a GSE A1 objective** from the adult list that we do not cover: ages ("I'm 25", "How old...?"), "what's your...?", "it's + time/weather", dates (28), and "this is" introductions all sit in S01, S05, S10, S11 [S: by reading the Season fields; not checked lesson by lesson].
 
-## Recommended changes (not applied; need the owner)
-1. In the A1 Season spec, mark each GSE >= 32 structure as **chunk first, rule later**: some/any (S04), frequency adverbs (S05), movement prepositions (S07), demonstratives as pronouns (S09).
-2. Reword S12's objective as consolidation of plurals, a/an and object pronouns.
-3. Check L1 transfer with the real reference (*Learner English*) before locking the pronunciation and error priorities in the A1 level frame.
+## Changes applied (2026-10-17, owner: "Fix")
+1. **Done:** every structure with a sub-use at GSE >= 33 now carries a `chunkFirst` line (what is taught as a chunk or for recognition only): some/any (S04), would like (S04), frequency adverbs (S05), movement prepositions (S07), because (S08), demonstratives as pronouns (S09). It is in `structureGse.ts`, shown in the A1 curriculum document, and a test requires it.
+2. **Done:** A1-S12's can-do lines and structure uses now say they consolidate plurals, a/an and object pronouns met earlier (levels/a1.ts).
+3. **Still open:** check L1 transfer with the real reference (*Learner English*) before locking the pronunciation and error priorities in the A1 level frame.
 
 ## Next levels
 Same method for A2 (GSE 30-42), then B1-C1 (the PDF covers all levels). EGP and EVP need access from a person's browser.

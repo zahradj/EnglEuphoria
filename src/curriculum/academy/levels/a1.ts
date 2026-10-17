@@ -189,13 +189,13 @@ export const A1_SEASONS: RawSeason[] = [
     hook: "Ava runs the school lost-and-found box and nothing has a label. Theo swears the black bag is his. Describe each object and work out whose it is.",
     release: 'A lost-property report: describe an object, say whose it is and hand it back (a short spoken role-play)',
     canDo: [
-      'I can name and describe my things using a, an, the and plural nouns.',
-      'I can ask whose something is, and use me, him, her, us and them correctly.',
+      'I can use a, an, the and plural nouns accurately to describe my things (consolidating what I have met since Season 1).',
+      'I can ask whose something is, and use me, him, her, us and them correctly (consolidating the object pronouns met in Season 6).',
     ],
     functions: ['describing objects', 'asking whose something is', 'reporting a lost item', 'giving something back'],
     structures: [
-      { id: 'articles-plurals', use: 'a / an / the and regular and irregular plurals to describe objects' },
-      { id: 'object-pronouns', use: 'me / him / her / us / them after verbs and prepositions' },
+      { id: 'articles-plurals', use: 'consolidate a / an / the and regular and irregular plurals to describe objects (GSE 24-26: met earlier as chunks)' },
+      { id: 'object-pronouns', use: 'consolidate me / him / her / us / them after verbs and prepositions (GSE 27: him / her / them met as chunks in Season 6)' },
     ],
     lexicalFields: ['personal belongings', 'materials, shapes and sizes', 'giving and returning things'],
     items: 70,
