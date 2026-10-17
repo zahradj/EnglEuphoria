@@ -34,7 +34,7 @@ describe('Classroom Lesson Library: Academy Game Library', () => {
 
   it('without the handler (or in another hub) there is no Academy Games tab', async () => {
     render(<LibraryDrawer open onClose={() => {}} onSelectLesson={vi.fn()} hubFilter="academy" />);
-    await screen.findByText(/Fake or Real/);
+    await new Promise((r) => setTimeout(r, 50));
     expect(screen.queryByRole('tab', { name: /^Games/ })).toBeNull();
   });
 });

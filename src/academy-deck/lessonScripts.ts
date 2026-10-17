@@ -1,18 +1,8 @@
 // Loads the deck script of an Academy library lesson by its library id (code-split: a lesson's script is fetched only when it is opened).
+// All lessons were removed on 2026-10-17 for the player v2 rebuild (docs/academy-player-v2-plan.md); new lessons register here.
 import type { DeckScript } from './types';
 
-const LOADERS: Record<string, () => Promise<DeckScript>> = {
-  'sign-me-up': async () => (await import('./lessons/signMeUp')).SIGN_ME_UP,
-  'sign-me-up-2': async () => (await import('./lessons/signMeUp2')).SIGN_ME_UP_2,
-  'pa1-s01-e1': async () => (await import('./lessons/pa1s01e1')).PA1_S01_E1,
-  'pa1-s02-e1': async () => (await import('./lessons/pa1s02e1')).PA1_S02_E1,
-  'b1-s01-e1': async () => (await import('./lessons/b1s01e1')).B1_S01_E1,
-  'b1-s01-e2': async () => (await import('./lessons/b1s01e2')).B1_S01_E2,
-  'b1-s01-e3': async () => (await import('./lessons/b1s01e3')).B1_S01_E3,
-  'free-time-club-1': async () => (await import('./lessons/freeTimeClub1')).FREE_TIME_CLUB_1,
-  'free-time-club-2': async () => (await import('./lessons/freeTimeClub2')).FREE_TIME_CLUB_2,
-  'fake-or-real': async () => (await import('./lessons/patternLab')).PATTERN_LAB,
-};
+const LOADERS: Record<string, () => Promise<DeckScript>> = {};
 
 export const hasDeckScript = (id: string): boolean => id in LOADERS;
 export const loadDeckScript = (id: string): Promise<DeckScript> | null => (LOADERS[id] ? LOADERS[id]() : null);

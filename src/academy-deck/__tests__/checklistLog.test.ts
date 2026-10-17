@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { suggestMarks, acTag, type ActivityRow } from '../classroom/checklistLog';
-import { B1_S01_E1 } from '../lessons/b1s01e1';
+import type { Slide } from '../types';
 
-const slides = B1_S01_E1.slides;
+// A small fixture (the real lessons were removed for the player v2 rebuild): a title, a game that trains criterion 4, and two more games on it.
+const mk = (id: string, kind: string, trains?: number[]) => ({ id, part: 0, kind, bg: 'x', trains }) as unknown as Slide;
+const slides: Slide[] = [mk('title', 'title'), mk('boss', 'boss', [4]), mk('hot', 'hotseat', [4]), mk('forge', 'forge', [2, 4]), mk('wrap', 'wrap')];
 const game = slides.find((s) => s.id === 'boss')!; // trains criterion 4
 const row = (slide_id: string, ok: boolean, w = 0): ActivityRow => ({ slide_id, is_correct: ok, selected_option_id: `w${w}`, skill_tag: 'acd:4' });
 

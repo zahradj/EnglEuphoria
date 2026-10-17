@@ -11,38 +11,19 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { SIGN_ME_UP } from '../src/academy-deck/lessons/signMeUp.ts';
-import { PA1_S01_E1 } from '../src/academy-deck/lessons/pa1s01e1.ts';
-import { PA1_S02_E1 } from '../src/academy-deck/lessons/pa1s02e1.ts';
-import { B1_S01_E1 } from '../src/academy-deck/lessons/b1s01e1.ts';
-import { B1_S01_E2 } from '../src/academy-deck/lessons/b1s01e2.ts';
-import { B1_S01_E3 } from '../src/academy-deck/lessons/b1s01e3.ts';
-import { SIGN_ME_UP_2 } from '../src/academy-deck/lessons/signMeUp2.ts';
-import { applyLane } from '../src/academy-deck/lanes.ts';
-import { PATTERN_LAB } from '../src/academy-deck/lessons/patternLab.ts';
-import { FREE_TIME_CLUB_1 } from '../src/academy-deck/lessons/freeTimeClub1.ts';
-import { FREE_TIME_CLUB_2 } from '../src/academy-deck/lessons/freeTimeClub2.ts';
-import { SIGN_ME_UP_QUEST } from '../src/academy-deck/homework/signMeUpQuest.ts';
 import { slideLines, ALPHABET } from '../src/academy-deck/spoken.ts';
 import { ACADEMY_VOICES } from '../src/academy-deck/voices.ts';
 
 const OUT = path.join(path.dirname(fileURLToPath(import.meta.url)), 'academy-voice-lines.json');
 
-const decks = [
-  { name: SIGN_ME_UP.lessonId, slides: SIGN_ME_UP.slides },
-  // sample 2: every lane's version of every slide
-  { name: `${SIGN_ME_UP_2.lessonId} sample 2`, slides: SIGN_ME_UP_2.slides.flatMap((s) => ['core', 'start', 'stretch'].map((l) => applyLane(s, l))) },
-  { name: PATTERN_LAB.lessonId, slides: PATTERN_LAB.slides },
-  { name: FREE_TIME_CLUB_1.lessonId, slides: FREE_TIME_CLUB_1.slides },
-  { name: FREE_TIME_CLUB_2.lessonId, slides: FREE_TIME_CLUB_2.slides },
-  { name: PA1_S01_E1.lessonId, slides: PA1_S01_E1.slides },
-  { name: PA1_S02_E1.lessonId, slides: PA1_S02_E1.slides },
-  { name: B1_S01_E1.lessonId, slides: B1_S01_E1.slides },
-  { name: B1_S01_E2.lessonId, slides: B1_S01_E2.slides },
-  { name: B1_S01_E3.lessonId, slides: B1_S01_E3.slides },
-  { name: `${SIGN_ME_UP.lessonId} homework`, slides: SIGN_ME_UP_QUEST.flatMap((c) => c.slides) },
-];
+// All lessons were removed on 2026-10-17 for the player v2 rebuild (docs/academy-player-v2-plan.md). Register each rebuilt lesson's script here.
+// While the list is empty the script leaves scripts/academy-voice-lines.json (the clips already baked) untouched.
+const decks = [];
 
+if (decks.length === 0) {
+  console.log('No lessons registered: keeping the existing', OUT);
+  process.exit(0);
+}
 const seen = new Map();
 for (const d of decks) {
   for (const s of d.slides) {

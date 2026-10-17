@@ -12,6 +12,12 @@ vi.mock('@/components/playground-player/PlaygroundLessonPlayer', () => ({ Playgr
 vi.mock('../EmbeddedSceneLesson', () => ({ EmbeddedSceneLesson: () => null }));
 vi.mock('../EmbeddedWelcomeTownLesson', () => ({ EmbeddedWelcomeTownLesson: () => null }));
 
+// A tiny stand-in lesson: the real lessons were removed for the player v2 rebuild (docs/academy-player-v2-plan.md).
+vi.mock('@/academy-deck/lessonScripts', () => {
+  const script = { lessonId: 'TEST-E1', level: 'B1', cast: ['Vee'], criteria: ['c'], parts: [], slides: Array.from({ length: 27 }, (_, i) => ({ id: `t${i}`, part: 0, kind: 'title', bg: 'x', heading: `Slide ${i}`, sub: '' })) };
+  return { hasDeckScript: () => true, loadDeckScript: () => Promise.resolve(script) };
+});
+
 import { MainStage } from '../MainStage';
 
 afterEach(cleanup);
@@ -19,7 +25,7 @@ const base = {
   mode: 'slide' as const, currentSlideIndex: 0, embeddedUrl: null, drawingEnabled: true, activeTool: 'pen' as const, activeColor: '#000', strokes: [],
   roomId: 'room-1', userId: 'u1', userName: 'Mina', hubType: 'academy' as const, onAddStroke: () => {},
 };
-const deckSlides = [{ id: 'deck-lesson-fake-or-real', deckLessonRef: { lessonId: 'fake-or-real' } }];
+const deckSlides = [{ id: 'deck-lesson-test', deckLessonRef: { lessonId: 'test-lesson' } }];
 
 describe('Academy classroom stage', () => {
   it('teacher: a deck lesson on the display plays in the stage with the pen layer, not as plain slide content', async () => {

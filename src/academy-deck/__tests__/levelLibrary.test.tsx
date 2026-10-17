@@ -8,7 +8,7 @@ import { ACADEMY_SEASONS } from '../../curriculum/academy';
 
 afterEach(cleanup);
 
-describe('Academy library by level', () => {
+describe('Academy library by level (no lesson built: the player v2 rebuild, docs/academy-player-v2-plan.md)', () => {
   it('has the five levels and every roadmap season of each level (12 / 14 / 18 / 18 / 18)', () => {
     expect([...ACADEMY_LEVELS]).toEqual(['A1', 'A2', 'B1', 'B2', 'C1']);
     const g = groupAcademyLessons(ACADEMY_DECK_LESSONS);
@@ -16,7 +16,7 @@ describe('Academy library by level', () => {
     expect(g[0].seasons[0].title).toBe('Who Are You?');
   });
 
-  it('places every library lesson in its blueprint season and level, in lesson order', () => {
+  it('places any library lesson in its blueprint season and level (registry may be empty)', () => {
     const g = groupAcademyLessons(ACADEMY_DECK_LESSONS);
     const roadmapLessons = ACADEMY_DECK_LESSONS.filter((l) => l.level !== 'Pre-A1');
     expect(g.reduce((n, x) => n + x.count, 0)).toBe(roadmapLessons.length);
@@ -25,38 +25,25 @@ describe('Academy library by level', () => {
       const season = ACADEMY_SEASONS.find((s) => s.id === bpId.slice(0, 6))!;
       expect([season.level, season.no], l.id).toEqual([l.level, l.season]);
     }
-    const s1 = g[0].seasons[0].lessons.map((l) => l.id);
-    expect(s1).toEqual(['sign-me-up', 'sign-me-up-2', 'fake-or-real']);
   });
 
-  it('shows level tabs with counts, opens the first season with lessons, and says "Coming soon" for the rest', () => {
+  it('shows level tabs and says the lessons of every season are being built', () => {
     render(<AcademyLevelLibrary lessons={ACADEMY_DECK_LESSONS} renderLesson={(l) => <span>{l.title}</span>} />);
     for (const lv of ACADEMY_LEVELS) expect(screen.getByRole('tab', { name: new RegExp(`^${lv}`) })).toBeTruthy();
     expect(screen.getByRole('tab', { name: /^A1/ }).getAttribute('aria-selected')).toBe('true');
-    expect(screen.getByText('Sign Me Up')).toBeTruthy();
-    expect(screen.getByText('Fake or Real?')).toBeTruthy();
-    expect(screen.getAllByText('Coming soon').length).toBe(10); // the other A1 seasons (Season 3 has its first lesson)
+    expect(screen.getAllByText('Coming soon').length).toBe(12);
     fireEvent.click(screen.getByRole('tab', { name: /^C1/ }));
-    expect(screen.queryByText('Sign Me Up')).toBeNull();
     expect(screen.getAllByText('Coming soon').length).toBe(18);
-    // the first season of a level opens by itself; its header toggles it
-    expect(screen.getByText('The lessons of this season are being built.')).toBeTruthy();
-    fireEvent.click(screen.getAllByRole('button', { name: /Coming soon/ })[0]);
-    expect(screen.queryByText('The lessons of this season are being built.')).toBeNull();
   });
 
   it('LADDER VIEW (teachers and creators): tabs are the lean ladder steps, Pre-A1 first with planned seasons, A1 Upper holds Seasons 7-12', () => {
     const g = groupAcademyLibrary(ACADEMY_DECK_LESSONS, true);
     expect(g.map((x) => x.id)).toEqual(['pre-a1', 'a1', 'a1-upper', 'a2', 'b1', 'b2', 'c1']);
     expect(g[0].seasons.map((s) => s.title)).toEqual(['Hello, letters', 'First sounds', 'Numbers and age', 'My things', 'People and places']);
-    // P1 and P2 each have their first lesson (Cold Open); P3-P5 are still planned
-    expect(g[0].seasons.map((s) => s.planned)).toEqual([false, false, true, true, true]);
     expect(g[0].seasons.every((s) => s.no === null)).toBe(true);
-    expect(g[0].seasons[0].lessons.map((l) => l.id)).toEqual(['pa1-s01-e1']);
-    expect(g[0].seasons[0].slots.map((x) => [x.episode, x.built])).toEqual([[1, true], [2, false], [3, false], [4, false], [5, false], [6, false], [7, false], [8, false]]);
-    // every Pre-A1 Season lists its 8 planned lessons and an overview; so does every roadmap Season
-    expect(g[0].seasons.every((x) => x.slots.length === 8 && !!x.overview)).toBe(true);
-    expect(g.slice(1).every((x) => x.seasons.every((y) => !!y.overview && y.slots.length === 8))).toBe(true);
+    // every Pre-A1 Season lists its 8 planned lessons and an overview (with the big question and chapters); so does every roadmap Season
+    expect(g[0].seasons.every((x) => x.slots.length === 8 && !!x.overview && !!x.overview.question && x.overview.chapters?.length === 8)).toBe(true);
+    expect(g.slice(1).every((x) => x.seasons.every((y) => !!y.overview && y.slots.length === 8 && y.overview.chapters?.length === 8))).toBe(true);
     expect(g[1].seasons.map((s) => s.no)).toEqual([1, 2, 3, 4, 5, 6]);
     expect(g[2].seasons.map((s) => s.no)).toEqual([7, 8, 9, 10, 11, 12]);
     expect(g.reduce((n, x) => n + x.count, 0)).toBe(ACADEMY_DECK_LESSONS.length);
@@ -64,27 +51,22 @@ describe('Academy library by level', () => {
     expect(groupAcademyLibrary(ACADEMY_DECK_LESSONS, false).map((x) => x.id)).toEqual(['a1', 'a2', 'b1', 'b2', 'c1']);
   });
 
-  it('SLOTS: every season lists its 8 episodes; the built ones are marked, the rest are planned', () => {
+  it('SLOTS: every season lists its 8 episodes, all planned while no lesson is built', () => {
     const g = groupAcademyLibrary(ACADEMY_DECK_LESSONS, false);
-    const s1 = g[0].seasons[0];
-    expect(s1.slots.map((x) => x.episode)).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
-    expect(s1.slots.filter((x) => x.built).map((x) => x.episode)).toEqual([2, 3]); // Sign Me Up (E2) and Fake or Real? (E3)
-    expect(g[0].seasons[1].slots.every((x) => !x.built)).toBe(true);
+    for (const lv of g) for (const s of lv.seasons) {
+      expect(s.slots.map((x) => x.episode)).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
+      expect(s.slots.every((x) => !x.built)).toBe(true);
+    }
   });
 
-  it('the creator view shows the step tabs, the Pre-A1 plan and the planned lesson slots', () => {
+  it('the creator view shows the step tabs and the planned lesson slots', () => {
     render(<AcademyLevelLibrary showSteps lessons={ACADEMY_DECK_LESSONS} renderLesson={(l) => <span>{l.title}</span>} />);
     expect(screen.getByRole('tab', { name: /^Pre-A1/ })).toBeTruthy();
     expect(screen.getByRole('tab', { name: /^A1 Upper/ })).toBeTruthy();
-    expect(screen.getByRole('tab', { name: /^A1(?! Upper)/ }).getAttribute('aria-selected')).toBe('true'); // a regular level opens first, Pre-A1 is one click away
-    // E1 of A1 season 1 is not built: it is listed as a planned slot (E2 and E3 are built, so they are cards)
-    expect(screen.getAllByText(/E1 · /).length).toBeGreaterThan(0);
     fireEvent.click(screen.getByRole('tab', { name: /^Pre-A1/ }));
-    expect(screen.getByText('Hello, letters · Cold Open')).toBeTruthy(); // the first Pre-A1 lesson
-    expect(screen.getAllByText(/E2 · /).length).toBeGreaterThan(0); // Pre-A1 E2 is planned
+    expect(screen.getAllByText(/E1 · /).length).toBeGreaterThan(0);
     expect(screen.getByText('Hello, letters')).toBeTruthy();
-    expect(screen.getAllByText('Planned').length).toBeGreaterThan(0);
-    expect(screen.getAllByText('Planned').length).toBeGreaterThanOrEqual(2); // P2 and P3 headers (P1 has its first lesson)
+    expect(screen.getAllByText('Planned').length).toBeGreaterThanOrEqual(5);
   });
 
   it('the student view has no Pre-A1 and no Upper tab', () => {
