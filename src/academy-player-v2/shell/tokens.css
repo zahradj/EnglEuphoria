@@ -3,7 +3,7 @@
   position: relative; width: 100%; height: 100%; min-height: 360px; overflow: hidden; container-type: size; background: linear-gradient(160deg, var(--av-cream), var(--av-p50) 55%, var(--av-mint)); color: var(--av-ink); font-family: 'Trebuchet MS', 'Segoe UI', system-ui, sans-serif; }
 .av-root *, .av-root *::before, .av-root *::after { box-sizing: border-box; }
 .av-plate { position: absolute; inset: 0; background-size: cover; background-position: center top; background-color: #ece6ff; }
-.av-plate[data-calm='true'] { filter: blur(3px) saturate(0.85) brightness(1.05); transform: scale(1.04); }
+.av-plate[data-calm='true'] { filter: blur(1.5px) saturate(1) brightness(1.02); transform: scale(1.02); }
 .av-veil { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 45%, rgba(255, 251, 240, 0.35), rgba(255, 251, 240, 0.12) 60%, rgba(30, 27, 75, 0.22)); pointer-events: none; }
 .av-stage { position: absolute; inset: 0; z-index: 2; }
 .av-hud { position: absolute; inset: 0 0 auto 0; padding: 10px 14px; display: flex; gap: 10px; align-items: center; z-index: 6; }
