@@ -32,6 +32,6 @@ describe('art check of every registered lesson', () => {
     });
   }
   it('the reviewed-redo list is never used by a lesson (self-check of the register)', () => {
-    expect(Object.entries(ART_REVIEW).filter(([, r]) => r.anatomy === 'redo').map(([k]) => k)).toEqual(['bg/story-b1s1-4']);
+    expect(Object.entries(ART_REVIEW).filter(([, r]) => r.anatomy === 'redo').map(([k]) => k).sort()).toEqual(['bg/story-b1s1-4', 'bg/story-b1s2-2', 'bg/story-b1s3-2', 'bg/story-b1s3-3'].sort());
   });
 });

@@ -15,8 +15,11 @@ describe('registered lessons', () => {
       expect(kinds[kinds.length - 1]).toBe('wrap');
       expect(kinds.indexOf('model')).toBeGreaterThan(-1);
       expect(kinds.indexOf('rule')).toBeGreaterThan(kinds.indexOf('model') - 1);
-      // the rule comes before the practice games of the notice part (build, tense choice)
-      expect(kinds.indexOf('rule')).toBeLessThan(kinds.indexOf('build'));
+      // the rule comes before the production games of its own part and later (a warm-up build earlier in the lesson is not practice of the rule)
+      const ri = kinds.indexOf('rule');
+      const rp = s.scenes[ri].part;
+      const late = s.scenes.flatMap((x, i) => (x.part >= rp && ['build', 'boss', 'forge', 'rapport', 'write'].includes(x.kind) ? [i] : []));
+      for (const i of late) expect(i, `${s.scenes[i].id} comes before the rule`).toBeGreaterThan(ri);
       // every criterion is trained by at least one scene
       for (let c = 1; c <= s.criteria.length; c++) expect(s.scenes.some((x) => x.trains?.includes(c)), `criterion ${c}`).toBe(true);
       // speaking is the biggest share: at least one speak scene in 4+ different parts

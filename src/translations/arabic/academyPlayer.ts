@@ -39,4 +39,5 @@ export const academyPlayerTranslations = {
   "ap.practiceAgain": "للتدرّب عليها مرة أخرى",
   "ap.teachBack": "قل القاعدة بكلماتك",
   "ap.sortTip": "اضغط بطاقة ثم الصندوق الصحيح",
+  "ap.check": "تحقّق",
 };

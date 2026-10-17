@@ -8,7 +8,7 @@ import { ACADEMY_SEASONS } from '../../curriculum/academy';
 
 afterEach(cleanup);
 
-describe('Academy library by level (player v2 rebuild: only the proof lesson B1-S01-E1 is built so far, docs/academy-player-v2-plan.md)', () => {
+describe('Academy library by level (player v2 rebuild: only B1-S01-E1 to E3 are built so far, docs/academy-player-v2-plan.md)', () => {
   it('has the five levels and every roadmap season of each level (12 / 14 / 18 / 18 / 18)', () => {
     expect([...ACADEMY_LEVELS]).toEqual(['A1', 'A2', 'B1', 'B2', 'C1']);
     const g = groupAcademyLessons(ACADEMY_DECK_LESSONS);
@@ -30,7 +30,7 @@ describe('Academy library by level (player v2 rebuild: only the proof lesson B1-
   it('shows level tabs and says the lessons of every season are being built', () => {
     render(<AcademyLevelLibrary lessons={ACADEMY_DECK_LESSONS} renderLesson={(l) => <span>{l.title}</span>} />);
     for (const lv of ACADEMY_LEVELS) expect(screen.getByRole('tab', { name: new RegExp(`^${lv}`) })).toBeTruthy();
-    // the library opens on the first level that has a lesson (B1: the proof lesson); the other seasons say "Coming soon"
+    // the library opens on the first level that has a lesson (B1: Season 1); the other seasons say "Coming soon"
     expect(screen.getByRole('tab', { name: /^B1/ }).getAttribute('aria-selected')).toBe('true');
     expect(screen.getAllByText('Coming soon').length).toBe(17);
     fireEvent.click(screen.getByRole('tab', { name: /^C1/ }));
@@ -54,11 +54,11 @@ describe('Academy library by level (player v2 rebuild: only the proof lesson B1-
     expect(groupAcademyLibrary(ACADEMY_DECK_LESSONS, false).map((x) => x.id)).toEqual(['a1', 'a2', 'b1', 'b2', 'c1']);
   });
 
-  it('SLOTS: every season lists its 8 episodes; only the proof lesson is built', () => {
+  it('SLOTS: every season lists its 8 episodes; only B1 Season 1 lessons 1-3 are built', () => {
     const g = groupAcademyLibrary(ACADEMY_DECK_LESSONS, false);
     for (const lv of g) for (const s of lv.seasons) {
       expect(s.slots.map((x) => x.episode)).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
-      expect(s.slots.filter((x) => x.built).map((x) => `${lv.id}-${s.no}-${x.episode}`)).toEqual(lv.id === 'b1' && s.no === 1 ? ['b1-1-1'] : []);
+      expect(s.slots.filter((x) => x.built).map((x) => `${lv.id}-${s.no}-${x.episode}`)).toEqual(lv.id === 'b1' && s.no === 1 ? ['b1-1-1', 'b1-1-2', 'b1-1-3'] : []);
     }
   });
 

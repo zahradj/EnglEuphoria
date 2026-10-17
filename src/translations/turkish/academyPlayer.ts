@@ -39,4 +39,5 @@ export const academyPlayerTranslations = {
   "ap.practiceAgain": "Bir dahaki sefere tekrar edilecekler",
   "ap.teachBack": "Kuralı kendi sözlerinle söyle",
   "ap.sortTip": "Bir karta, sonra doğru kutuya dokun",
+  "ap.check": "Kontrol et",
 };

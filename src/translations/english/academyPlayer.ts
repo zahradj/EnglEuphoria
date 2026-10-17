@@ -39,4 +39,5 @@ export const academyPlayerTranslations = {
   "ap.practiceAgain": "To practise again next time",
   "ap.teachBack": "Say the rule in your own words",
   "ap.sortTip": "Tap a card, then tap the right box",
+  "ap.check": "Check",
 };

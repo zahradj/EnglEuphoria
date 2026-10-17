@@ -9,7 +9,7 @@ import type { SceneBase, SceneModule, SceneProps } from '../../types';
 export interface SortScene extends SceneBase {
   kind: 'sort'; title: string; prompt: string; tries?: number;
   bins: { id: string; label: string; note?: string }[];
-  items: { id: string; text: string; bin: string; hint?: string }[];
+  items: { id: string; text: string; bin: string; hint?: string; art?: string }[];
 }
 
 function SortView({ scene, onDone, artBase, calm, seed }: SceneProps<SortScene>) {
@@ -64,7 +64,7 @@ function SortView({ scene, onDone, artBase, calm, seed }: SceneProps<SortScene>)
         ))}
         <div className="av-card-now" data-fb={msg ?? undefined}>
           {ph.phase === 'intro' && (<><p>{scene.prompt}</p><small>{t('ap.sortTip', 'Tap a card, then tap the right box')}</small><button type="button" className="av-btn" data-kind="go" onClick={ph.start}>{t('ap.start', 'Start the mission')} →</button></>)}
-          {ph.phase === 'play' && cur && (<><p>{cur.text}</p>{msg === 'miss' && <small>{cur.hint ?? t('ap.tryAgain', 'Almost. Look again.')}</small>}</>)}
+          {ph.phase === 'play' && cur && (<>{cur.art && <img className="av-card-art" src={`${artBase}/cards/${cur.art}.webp`} alt="" draggable={false} />}<p>{cur.text}</p>{msg === 'miss' && <small>{cur.hint ?? t('ap.tryAgain', 'Almost. Look again.')}</small>}</>)}
           {ph.phase === 'win' && <p>{t('ap.wellDone', 'Well done!')}</p>}
           {ph.phase === 'lose' && (<><p>{t('ap.tryAgain', 'Almost. Look again.')}</p><button type="button" className="av-btn" data-kind="go" onClick={retry}>{t('ap.restart', 'Start again')}</button></>)}
         </div>
@@ -75,6 +75,7 @@ function SortView({ scene, onDone, artBase, calm, seed }: SceneProps<SortScene>)
 
 export const sortScene: SceneModule<SortScene> = {
   view: SortView,
+  art: (s) => s.items.flatMap((i) => (i.art ? [`cards/${i.art}`] : [])),
   spoken: (s) => [{ who: 'Vee', text: s.prompt }],
   validate: (s) => {
     const p: string[] = [];

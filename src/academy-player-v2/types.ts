@@ -65,6 +65,8 @@ export interface SceneModule<S extends SceneBase = SceneBase> {
   spoken: (scene: S) => { who: string; text: string }[];
   /** return a list of problems (empty = valid) */
   validate: (scene: S) => string[];
+  /** pictures this scene shows besides the plate, as 'cards/<id>' (paths under public/academy-art, no extension): the art check reads them */
+  art?: (scene: S) => string[];
 }
 
 export type Role = 'teacher' | 'student' | 'solo';

@@ -13,6 +13,9 @@ import { matchScene } from './match/Match';
 import { forgeScene } from './forge/Forge';
 import { bossScene } from './boss/Boss';
 import { rapportScene } from './rapport/Rapport';
+import { writeScene } from './write/Write';
+import { teachScene } from './teach/Teach';
+import { memoryScene } from './memory/Memory';
 
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -30,6 +33,9 @@ export const SCENES: Record<string, SceneModule<any>> = {
   forge: forgeScene,
   boss: bossScene,
   rapport: rapportScene,
+  write: writeScene,
+  teach: teachScene,
+  memory: memoryScene,
 };
 
 export const sceneKinds = () => Object.keys(SCENES);
