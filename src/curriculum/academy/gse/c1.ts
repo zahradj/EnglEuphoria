@@ -2,7 +2,7 @@ import type { StructureGseEntry } from '../structureGse';
 
 /**
  * C1 structures against the Pearson GSE adult grammar objectives (see structureGse.ts for the source and method).
- * Read directly from "GSE Learning Objectives: Grammar, Adult Learners" (Pearson, February 2023) on 2026-10-17.
+ * Source (read directly): GSE Learning Objectives, Grammar for Adult Learners (Pearson, February 2023) on 2026-10-17.
  * The list has only three C1 rows (76 appended participle clauses, 77 'but for', 80 'Would you be so kind as to'),
  * so most C1 structures match B1+/B2/B2+ rows (53-74): the GSE rates the form earlier than the Academy teaches it for control.
  */
