@@ -1587,3 +1587,244 @@ export const LESSON_A1U7L6_SCENES: Scene[] = [
   goodbyeSong('hc6-goodbye-song', bgHQ),
   { id: 'hc6-finale', kind: 'finale', bg: bgHQ, who: 'spark', line: 'Game day champion! Next time: the Super Helper Boss Test! \u{1F3C5}' },
 ];
+
+/* =============================================================================
+ * A1 Unit 7 Lesson 7: "Unit Review & Boss Test: Super Helper!"
+ * Objective: I can help a citizen: ask what's wrong, offer help, say what I can do well and give a rule.
+ * Story frame: Captain Spark's hero exam over the city — a flight warm-up (co-op), then five trials; the prize is piece 6
+ *   of the Golden Compass; teaser: a giant footprint (Dino Valley).
+ * Boss Test parts (pass 4 of 5 each): 1 Listening · 2 Reading yes/no (+ tick or cross, spelling) · 3 the story ·
+ * 4 Speaking (powers + help one citizen) · 5 Reading aloud. Practise-again games for any part below the pass mark.
+ * ========================================================================= */
+
+export const LESSON_A1U7L7_TITLE = 'Unit Review & Boss Test: Super Helper!';
+export const LESSON_A1U7L7_OBJECTIVE = 'I can help a citizen: ask what\'s wrong, offer help, say what I can do well and give a rule.';
+
+export const LESSON_A1U7L7_SCENES: Scene[] = [
+  { id: 'hc7-title', kind: 'title-card', bg: sparkPage(2), level: 'A1', unit: 'Unit 7', lessonLabel: 'Lesson 7', title: 'Boss Test: Super Helper!', subtitle: 'Show everything you can do in Hero City', cta: '\u{1F3C6} I’M READY!' },
+  {
+    // Remember? (owner, 2026-10-07): Lesson 6 — game day. Click mode (L6 used shadow).
+    id: 'hc7-recall-warmup', kind: 'recall-warmup', bg: bgHQ, who: 'pip', mode: 'click',
+    fromLabel: 'Lesson 6 · Hero Mission Match!',
+    teacher: 'Guided: Pip says a game-day sentence — the student finds the picture and says it again.',
+    items: [
+      { word: 'run fast', say: 'He can run fast!', img: HERO.leoFast },
+      { word: 'wait', say: 'You must wait!', img: RULE.wait },
+      { word: 'cold', say: 'I’ve got a cold!', img: HERO.sparkCold },
+      { word: 'can’t lift', say: 'No, he can’t, but Leo can!', img: HERO.pipTry },
+    ],
+  },
+  helloSong('hc7-hello-song', bgSquare),
+  {
+    id: 'hc7-intro', kind: 'cinematic', bg: sparkPage(2), title: 'The Boss Test', subtitle: 'The flight, then five trials', narrator: 'spark',
+    script: [
+      { who: 'spark', line: 'The last piece of the compass is here in Hero City!' },
+      { who: 'spark', line: 'Listen, read, read the story, talk and read aloud!' },
+      { who: 'zippy', line: 'Beep! First, fly over the city with me!' },
+    ],
+    cta: '\u{1F9B8} GO!',
+  },
+  // Creative idea: the Jungle Glider becomes Captain Spark's flight over the city — every right answer flies her through a cloud.
+  {
+    id: 'hc7-flight', kind: 'glider', bg: bgSquare, who: 'spark', pilot: HERO.sparkFly, title: 'Hero Flight! Fly over the city!',
+    teacher: 'Warm-up (together!): listen to the question and tap the cloud with the right answer. Captain Spark flies into it. The student says the answer too.',
+    rounds: [
+      { ask: 'Can Captain Spark fly?', choices: [{ label: 'Yes, she can!' }, { label: 'No, she can’t.' }], answer: 0, say: 'Yes, she can! She can fly fast!' },
+      { ask: 'Can a fish run?', choices: [{ label: 'Yes, it can.' }, { label: 'No, it can’t.' }], answer: 1, say: 'No, it can’t!' },
+      { ask: 'Red light! You must …', choices: [{ label: 'stop.' }, { label: 'run.' }], answer: 0, say: 'You must stop!' },
+      { ask: 'Achoo! I’ve got a cold.', choices: [{ label: 'Here’s a tissue.' }, { label: 'Here’s a ball.' }], answer: 0, say: 'Can I help you? Here’s a tissue.' },
+      { ask: 'Who can climb well?', choices: [{ label: 'Biscuit.' }, { label: 'Mia.' }], answer: 1, say: 'Mia can climb well!' },
+    ],
+    doneLine: 'What a flight! Now the Boss Test!',
+  },
+  /* Part 1 — Listening */
+  {
+    id: 'hc7-p1-listen', kind: 'prea1', teacher: 'Part 1 — Listening (5). One try each; 🔊 replays it. Pass: 4 of 5. The student works alone.',
+    scene: {
+      id: 'hc7-p1-listen', kind: 'hero-trials', bg: bgSquare, who: 'pip',
+      teacher: 'Listen and tap the picture. One try!',
+      hero: { img: HERO.spark, name: 'Super Helper' }, medal: item('medal-rainbow'),
+      skills: [
+        { key: 'can', label: 'Who can?', icon: '\u{1F4AA}' },
+        { key: 'rule', label: 'Rules', icon: '\u{1F6A6}' },
+        { key: 'help', label: 'Help', icon: '\u{1F91D}' },
+      ],
+      items: [
+        { skill: 'can', ask: 'She can climb well.', reply: 'Mia can climb well!', answer: 1, options: [{ label: 'Leo', img: HERO.leoFast }, { label: 'Mia', img: HERO.miaClimb }, { label: 'Biscuit', img: HERO.biscuitSwim }] },
+        { skill: 'can', ask: 'He can’t lift the box.', reply: 'Pip can’t lift it!', answer: 0, options: [{ label: 'Pip', img: HERO.pipTry }, { label: 'Leo', img: HERO.leoLift }, { label: 'Captain Spark', img: HERO.sparkFly }] },
+        { skill: 'rule', ask: 'You mustn’t shout.', reply: 'You mustn’t shout!', answer: 2, options: [{ label: 'wait', img: RULE.wait }, { label: 'help', img: RULE.help }, { label: 'shout', img: RULE.shout }] },
+        { skill: 'rule', ask: 'You must wait at the red light.', reply: 'You must wait!', answer: 0, options: [{ label: 'wait', img: RULE.wait }, { label: 'run', img: RULE.runRoad }, { label: 'litter', img: RULE.litter }] },
+        { skill: 'help', ask: 'Ouch! I’ve got toothache.', reply: 'She’s got toothache!', answer: 1, options: [{ label: 'headache', img: CIT.headache }, { label: 'toothache', img: CIT.toothache }, { label: 'cold', img: CIT.cold }] },
+      ],
+      doneLine: 'Listening done! Super ears!',
+    },
+  },
+  { id: 'hc7-can-1', kind: 'meet', focus: ['well'], bg: sparkPage(3), who: 'spark', cardSide: 'left', teacher: 'Can-do: the student says 3 things they can do well / fast — tick it on the Unit 7 can-do card.', line: 'I can say what I can do well!', repeat: 'I can run fast. I can swim well.' },
+  /* Part 2 — Reading */
+  {
+    id: 'hc7-p2-read', kind: 'true-false', bg: bgSquare, img: sparkPage(4), read: true,
+    teacher: 'Part 2 — Reading (5). Look at the bridge picture. Read: yes or no? Pass: 4 of 5.',
+    rounds: [
+      { who: 'spark', statement: 'Leo can lift the box.', isTrue: true },
+      { who: 'spark', statement: 'Pip can lift the box.', isTrue: false },
+      { who: 'spark', statement: 'The box is big.', isTrue: true },
+      { who: 'spark', statement: 'It is a rainy day.', isTrue: false },
+      { who: 'spark', statement: 'Leo is strong.', isTrue: true },
+    ],
+  },
+  {
+    id: 'hc7-p2b-tick', kind: 'prea1', teacher: 'Part 2b — Reading sentences (5). Read the sentence, look at the picture — tick or cross? Pass: 4 of 5.',
+    scene: {
+      id: 'hc7-p2b-tick', kind: 'tick-cross', bg: bgSquare, who: 'pip', teacher: 'Read and look. Yes or no?',
+      rounds: [
+        { img: RULE.wait, sentence: 'She must wait. She is waiting.', isTrue: true },
+        { img: HERO.biscuitSwim, sentence: 'He can swim well.', isTrue: true },
+        { img: CIT.cold, sentence: 'He has got toothache.', isTrue: false },
+        { img: RULE.runRoad, sentence: 'He is walking slowly.', isTrue: false },
+        { img: HERO.sparkFly, sentence: 'She can fly fast.', isTrue: true },
+      ],
+    },
+  },
+  {
+    id: 'hc7-p2c-spell', kind: 'letter-bubbles', bg: sparkPage(7), who: 'spark', title: 'Part 2c — Spell the long a (3)',
+    teacher: 'Part 2c — Sounds (3). Pop the letters in order and say the word: ai, ay, a_e. Pass: 2 of 3.',
+    words: [
+      { word: 'rain', img: item('rain'), say: 'Rain! A-I says ai.' },
+      { word: 'play', img: item('ball-red'), say: 'Play! A-Y says ay.' },
+      { word: 'cape', img: HERO.cape, say: 'Cape! Magic e!' },
+    ],
+    doneLine: 'Pop, pop! Sounds done!',
+  },
+  { id: 'hc7-can-2', kind: 'meet', focus: ['can’t'], bg: sparkPage(4), who: 'pip', cardSide: 'right', teacher: 'Can-do: the student asks a friend Can you…? and answers with but … can — tick it.', line: 'I can ask: Can you lift it? No, I can’t, but Leo can!', repeat: 'No, I can’t, but Leo can!' },
+  /* Part 3 — the story */
+  {
+    id: 'hc7-p3-story', kind: 'grammar-gap', bg: bgSquare, title: 'Part 3 — The story',
+    teacher: 'Part 3 — Reading the story (5). Read and choose the missing word. Pass: 4 of 5.',
+    rounds: [
+      { before: 'This is Captain Spark. She can fly', after: '!', choices: ['fast', 'box'], answer: 'fast', img: sparkPage(2) },
+      { before: 'Biscuit can swim well. He can', after: 'the boat.', choices: ['save', 'shout'], answer: 'save', img: sparkPage(5) },
+      { before: 'Stop! You must wait. You', after: 'run on the road.', choices: ['mustn’t', 'must'], answer: 'mustn’t', img: sparkPage(6) },
+      { before: 'What’s the', after: '? I’ve got a cold.', choices: ['matter', 'kitten'], answer: 'matter', img: sparkPage(8) },
+      { before: 'Mia can climb', after: '. Leo and Pip help.', choices: ['well', 'fast'], answer: 'well', img: sparkPage(11) },
+    ],
+  },
+  { id: 'hc7-can-3', kind: 'meet', focus: ['mustn’t'], bg: sparkPage(6), who: 'zippy', cardSide: 'right', teacher: 'Can-do: the student says one hero rule with must and one with mustn’t — tick it.', line: 'I can say a hero rule: You must wait. You mustn’t run on the road!', repeat: 'You must … . You mustn’t … .' },
+  /* Part 4 — Speaking */
+  {
+    id: 'hc7-p4-powers', kind: 'join-stage', bg: bgTrials, teacher: 'Part 4a — Speaking (2 points): the student says two things they can do well / fast (1 point each, with fast / well in the right place).', cast: ['spark'],
+    turns: [
+      { who: 'spark', line: 'Tell me about you! What can you do well?' },
+      { who: 'student', line: 'I can … well.' },
+      { who: 'spark', line: 'And what can you do fast?' },
+      { who: 'student', line: 'I can … fast!' },
+      { who: 'spark', line: 'Super hero!' },
+    ],
+  },
+  {
+    id: 'hc7-p4-help', kind: 'join-stage', bg: bgSquare, teacher: 'Part 4b — Speaking (3 points): help one citizen from start to end — the teacher plays Grandpa Joe. 1 point: asks What’s the matter?; 1: understands (I’ve got a cold.); 1: offers the right help (Can I help you? Here’s a tissue.). Pass for Part 4: 4 of 5 points.', cast: ['spark'],
+    turns: [
+      { who: 'spark', line: '(Grandpa Joe) Achoo! Achoo! Oh dear…' },
+      { who: 'student', line: 'What’s the matter?' },
+      { who: 'spark', line: 'I’ve got a cold.' },
+      { who: 'student', line: 'Can I help you? Here’s a tissue.' },
+      { who: 'spark', line: 'Thank you, hero! You are kind!' },
+    ],
+  },
+  { id: 'hc7-can-4', kind: 'meet', focus: ['matter'], bg: sparkPage(9), who: 'mia', cardSide: 'right', teacher: 'Can-do: the student helps a citizen — asks What’s the matter?, understands and offers help — tick it.', line: 'I can ask what’s the matter — and help!', repeat: 'What’s the matter? Can I help you?' },
+  /* Part 5 — Reading aloud */
+  {
+    id: 'hc7-p5-read-aloud', kind: 'reader', bg: sparkPage(11), title: 'Part 5 — Read it aloud!', doneLine: 'You read it all by yourself!',
+    teacher: 'Part 5 — Reading aloud (5 points: every word read, then fluency). Skip the listening: tap “My turn to read” at once. Pass: 4 of 5.',
+    pages: [SPARK_STORY[3], SPARK_STORY[10]],
+  },
+  { id: 'hc7-echo-champ', kind: 'echo', bg: sparkPage(12), who: 'spark', textSide: 'top', teacher: 'Say it proudly with Captain Spark — arms up!', word: 'I can help! I’m a super helper!' },
+  { id: 'hc7-i-can', kind: 'meet', focus: ['Unit 7'], bg: sparkPage(12), who: 'spark', cardSide: 'left', teacher: 'Check: any part below 4 of 5? Play it again next lesson (Practise again). Then the trophy!', line: 'I can show everything from Unit 7!', repeat: 'I’m a super helper!' },
+  {
+    id: 'hc7-sticker', kind: 'prea1', teacher: 'The Unit 7 trophy! The student opens the pack and puts the trophy sticker in their Sticker Book.',
+    scene: {
+      id: 'hc7-sticker', kind: 'sticker-reward', bg: sparkPage(12), who: 'pip', teacher: 'The Unit 7 trophy!',
+      line: 'You passed the Boss Test! Here is your Unit 7 trophy — and piece 6 of the Golden Compass!',
+      sticker: { img: item('medal-rainbow'), label: 'Golden Compass piece 6' },
+    },
+  },
+  petPal('hc7-pet-pal', 4, 'You are a super helper! I want a medal too!', [{ label: 'medal', img: item('hero-medal') }, { label: 'kitten', img: HERO.kitten }, { label: 'ladder', img: HERO.ladder }], 0, 'A medal! I’m a super helper too!'),
+  {
+    id: 'hc7-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
+    scene: {
+      id: 'hc7-home-mission', kind: 'home-mission', bg: sparkPage(12), who: 'pip',
+      teacher: 'Home Mission: read the steps with the student.',
+      line: 'Your home mission!',
+      parentNote: 'Your child finished Unit 7: saying what they can do well ("I can run fast."), asking "Can you…?" ("No, I can\'t, but Leo can!"), hero rules ("You must wait. You mustn\'t run on the road.") and helping ("What\'s the matter? Can I help you?"), plus the story "Captain Spark Saves the Day". Today, let your child help you with one thing — in English!',
+      steps: [
+        { emoji: '\u{1F3C5}', say: 'Show your medal to your family.' },
+        { emoji: '\u{1F91D}', say: 'Help someone today: Can I help you?' },
+        { emoji: '\u{1F4D6}', say: 'Read Captain Spark Saves the Day again.' },
+      ],
+    },
+  },
+  /* Practise again — for any part below the pass mark, or as extra time */
+  {
+    id: 'hc7-pa-match', kind: 'picture-match', look: 'chalk', prompt: 'Practise again: read and match',
+    teacher: 'Practise again (Part 2): read each sentence and drag it under its picture.',
+    items: [
+      { word: 'He can lift it.', img: HERO.leoLift },
+      { word: 'You mustn’t shout.', img: RULE.shout },
+      { word: 'I’ve got a headache.', img: CIT.headache },
+      { word: 'She can fly fast.', img: HERO.sparkFly },
+    ],
+    bg: bgHQ,
+  },
+  {
+    id: 'hc7-pa-build', kind: 'sentence-build', bg: bgHQ, teacher: 'Practise again (Part 3): put the words in order, then read the sentence.',
+    rounds: [
+      { words: ['I', 'can', 'run', 'fast.'], img: HERO.leoFast },
+      { words: ['You', 'mustn’t', 'run', 'on', 'the', 'road.'], img: RULE.runRoad },
+      { words: ['Can', 'I', 'help', 'you?'], img: HERO.sparkCold },
+    ],
+  },
+  {
+    id: 'hc7-pa-memory', kind: 'memory', bg: bgHQ, teacher: 'Find each question and its answer!',
+    pairs: [
+      { id: 'matter', label: 'What’s the matter?', match: 'I’ve got a cold.', emoji: '\u{1F927}' },
+      { id: 'help', label: 'Can I help you?', match: 'Yes, please!', emoji: '\u{1F91D}' },
+      { id: 'lift', label: 'Can you lift it?', match: 'No, I can’t, but Leo can!', emoji: '\u{1F4AA}' },
+      { id: 'well', label: 'What can you do well?', match: 'I can swim well.', emoji: '\u{1F3CA}' },
+    ],
+  },
+  {
+    id: 'hc7-pa-chat', kind: 'chat-chain', bg: sparkPage(9), partner: 'spark', title: 'Practise again: chat with Captain Spark',
+    intro: 'Hi, hero! Let’s talk!',
+    teacher: 'Practise again (Part 4): Captain Spark talks, the student picks the reply that fits and SAYS it, then taps “I said it”.',
+    turns: [
+      { who: 'spark', line: 'What can you do well?' },
+      { who: 'student', line: 'I can climb well!', wrong: ['I well climb.', 'I can climb good well.'] },
+      { who: 'spark', line: 'Ouch! I’ve got a headache.' },
+      { who: 'student', line: 'Can I help you? Here’s some water.', wrong: ['Can you help I?', 'I’ve got water headache.'] },
+      { who: 'spark', line: 'Tell me a road rule!' },
+      { who: 'student', line: 'You mustn’t run on the road.', wrong: ['You mustn’t to run.', 'Run you must road.'] },
+    ],
+  },
+  {
+    id: 'hc7-pa-mission', kind: 'hero-mission', bg: bgSquare, who: 'spark', title: 'Practise again: Hero Mission',
+    teacher: 'Practise again (Part 4b): help three more citizens — ask What’s the matter?, listen, pick the help and offer it aloud.',
+    citizens: [
+      { name: 'Ben', img: CIT.tummy, left: 22, top: 66, size: 14, problem: 'I’ve got a tummy ache.', help: 'call the doctor', offer: 'Can I help you? I can call the doctor.', thanks: 'Thank you, hero!' },
+      { name: 'Lily', img: CIT.kitten, left: 50, top: 66, size: 14, problem: 'My kitten is up in the tree!', help: 'ladder', offer: 'Can I help you? Mia can climb well!', thanks: 'My kitten! Thank you!' },
+      { name: 'Grandpa Joe', img: CIT.cold, left: 78, top: 66, size: 14, problem: 'Achoo! I’ve got a cold.', help: 'tissue', offer: 'Can I help you? Here’s a tissue.', thanks: 'Thank you, kind hero!' },
+    ],
+    helps: [
+      { label: 'tissue', img: HELP.tissue },
+      { label: 'ladder', img: HELP.ladder },
+      { label: 'call the doctor', img: HELP.phone },
+      { label: 'water', img: HELP.water },
+    ],
+    doneLine: 'Three more people are happy! Super helper!',
+  },
+  {
+    id: 'hc7-pa-twister', kind: 'tongue-twister', look: 'town', speeds: 3, bg: sparkPage(12), who: 'pip', focus: 'a',
+    teacher: 'Practise again (sounds): the unit’s ai, ay and a_e in one twister — slow, faster, then hero speed!',
+    line: 'Brave Jay may save the train in the rain.',
+  },
+  goodbyeSong('hc7-goodbye-song', sparkPage(12)),
+  { id: 'hc7-finale', kind: 'finale', bg: sparkPage(12), who: 'spark', line: 'You finished Unit 7 and found piece 6 of the Golden Compass! Look — a giant footprint… Next: Dino Valley! \u{1F995}' },
+];
