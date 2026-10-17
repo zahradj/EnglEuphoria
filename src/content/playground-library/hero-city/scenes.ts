@@ -626,8 +626,9 @@ const SONG_A1U7L3_LYRICS: { who: CharKey; text: string }[] = [
   { who: 'mia', text: 'Be kind to everyone!' },
   ...HERO_CHORUS,
 ];
-/** Planned line times (112 BPM, 2 bars a line after a 2-bar intro); replaced by the take's measured times. */
-const SONG_A1U7L3_MS = [8572, ...Array.from({ length: SONG_A1U7L3_LYRICS.length - 1 }, () => 4286)];
+/** Line times measured on take 3 (docs/songs/a1u7l3-hero-helper-song-take3.words.json, score 0.95); the first entry
+ *  includes the intro. */
+const SONG_A1U7L3_MS = [10560, 6600, 4060, 3220, 3120, 6080, 2500, 7100, 3660, 3260, 3080, 6360, 2300, 2500];
 
 export const LESSON_A1U7L3_SCENES: Scene[] = [
   { id: 'hc3-title', kind: 'title-card', bg: sparkPage(6), level: 'A1', unit: 'Unit 7', lessonLabel: 'Lesson 3', title: 'The Hero Helper Song!', subtitle: 'You must help. You mustn’t run on the road!', cta: '\u{1F6A6} LET’S GO!' },
