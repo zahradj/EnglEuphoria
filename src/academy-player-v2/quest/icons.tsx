@@ -24,6 +24,9 @@ const P: Record<string, ReactElement> = {
   anvil: <><path d="M4 8h13a3 3 0 0 1-3 3h-1l1.5 3.5H17V17H8v-2.5h1.5L10 11H8a4 4 0 0 1-4-3zM17 8h3" /></>,
   chat: <><path d="M4 5h16v11H11l-4.5 4v-4H4z" /></>,
   puzzle: <><path d="M5 9h3a2 2 0 1 1 4 0h3v3a2 2 0 1 1 0 4v3H5v-4a2 2 0 1 0 0-4z" /></>,
+  tools: <path d="M14.5 6.5a4 4 0 0 0-5 5L3 18l3 3 6.5-6.5a4 4 0 0 0 5-5l-2.5 2.5-2.5-.5-.5-2.5z" />,
+  wave: <path d="M4 12h.01M8 8v8M12 4v16M16 8v8M20 12h.01" />,
+  sliders: <path d="M4 7h9M17 7h3M4 17h3M11 17h9M15 5v4M9 15v4" />,
   close: <path d="M6 6l12 12M18 6L6 18" />,
 };
 

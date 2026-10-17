@@ -18,6 +18,9 @@ import type { MemoryScene } from '../scenes/memory/Memory';
 import type { WrapScene } from '../scenes/wrap/Wrap';
 import type { LobbyScene } from '../scenes/lobby/Lobby';
 import type { InspectScene } from '../scenes/inspect/Inspect';
+import type { FinderScene } from '../scenes/finder/Finder';
+import type { WorkshopScene } from '../scenes/workshop/Workshop';
+import type { BeatsScene } from '../scenes/beats/Beats';
 
 export const CRITERIA = [
   'I can say what each of the eight feeling words means and use it about myself: “I felt … because …”.',
@@ -35,7 +38,7 @@ const SET_A: TeachPage[] = [
   P('excitement', 'excitement', 'a strong, happy feeling before something good', 'The excitement before my trip kept me awake.', 'You feel excitement before a big day.'),
   P('amazed', 'amazed', 'very surprised, in a good way', 'I was amazed when I saw the mountains.', 'You are amazed; the view is amazing.'),
   P('disappointed', 'disappointed', 'sad because something was not as good as you hoped', 'We were disappointed when the museum was closed.', 'You hoped for more.'),
-  P('embarrassed', 'embarrassed', 'shy and uncomfortable because of something that happened', 'I was embarrassed when I dropped my tray.', 'A false friend for Spanish, French and Italian speakers: it does not mean pregnant.'),
+  P('embarrassed', 'embarrassed', 'shy and uncomfortable because of something that happened', 'I was embarrassed when I dropped my tray.', 'A false friend for Spanish speakers: embarazada means pregnant, not embarrassed.'),
   P('proud', 'proud', 'happy about something you did, or about someone you care about', 'I was proud when I finished the hike.', 'You did something good.'),
 ];
 const SET_B: TeachPage[] = [
@@ -99,10 +102,8 @@ const scenes: Scene[] = [
 
   { id: 'teach-a', part: 2, kind: 'teach', plate: WALL, trains: [1], title: 'Five feelings, set A', who: 'Vee', pages: SET_A } satisfies TeachScene,
   { id: 'match-a', part: 2, kind: 'match', plate: WALL, trains: [1], title: 'Read and match: set A', pairs: SET_A.slice(0, 5).map((p) => ({ left: p.word, right: gloss[p.word] })) } satisfies MatchScene,
-  { id: 'mem-a', part: 2, kind: 'memory', plate: WALL, trains: [1], title: 'Memory: set A', pairs: mem(SET_A, 5).slice(0, 5) } satisfies MemoryScene,
   { id: 'teach-b', part: 2, kind: 'teach', plate: WALL, trains: [1, 2], title: 'Three feelings and two places, set B', who: 'Vee', pages: SET_B } satisfies TeachScene,
   { id: 'match-b', part: 2, kind: 'match', plate: WALL, trains: [1, 2], title: 'Read and match: set B', pairs: SET_B.map((p) => ({ left: p.word, right: gloss[p.word] })) } satisfies MatchScene,
-  { id: 'mem-b', part: 2, kind: 'memory', plate: WALL, trains: [1, 2], title: 'Memory: set B', pairs: mem(SET_B, 5) } satisfies MemoryScene,
 
   { id: 'postcard-desk', part: 3, kind: 'inspect', plate: TABLE, trains: [1], title: 'Postcard Inspector', look: 'postcard', chief: 'Vee',
     intro: 'Welcome to the Postcard Desk. Every postcard has two lines from a diary. Check the feeling words against the rulebook, approve the card or fix it, then file the batch.',
@@ -154,6 +155,17 @@ const scenes: Scene[] = [
     { rule: 'A destination is where you are going; an attraction is a place to visit; the countryside is land outside the city.', example: 'Our destination was the countryside.' },
   ] } satisfies RuleScene,
   { id: 'teach-c', part: 3, kind: 'teach', plate: WALL, trains: [2, 3], title: 'One place and three chunks, set C', who: 'Vee', pages: SET_C } satisfies TeachScene,
+  // Wave 2 (owner "go" 2026-10-17, plan amendment 2): crafting the three chunks right after they are taught. Trains criterion 3.
+  { id: 'workshop', part: 3, kind: 'workshop', plate: ROOM, trains: [3], title: 'Chunk Workshop', who: 'Mia',
+    intro: 'Welcome to the Chunk Workshop. Every travel kit item needs a chunk. Pick one card for each half, decide if they fit, and press to snap them into one piece.',
+    items: [
+      { kit: 'tent', goal: 'Your kit has a tent. You want to sleep outside near a lake.', first: { options: ['go', 'do', 'make'], correct: 'go' }, second: { options: ['camping', 'sightseeing', 'something new'], correct: 'camping' },
+        explainWrong: 'We say go camping. Do and make are not used with camping.', sentence: { stem: 'Last summer we ___ near a lake and slept in a tent.', accepts: ['\\bwent camping\\b'], hint: 'Last summer is finished, so the verb goes in the past: went camping.', sample: 'went camping' } },
+      { kit: 'city map', goal: 'Your kit has a city map. You want to walk around and see the famous places.', first: { options: ['do', 'go', 'make'], correct: 'go' }, second: { options: ['something new', 'camping', 'sightseeing'], correct: 'sightseeing' },
+        explainWrong: 'We say go sightseeing. Go is the verb for camping and sightseeing.', sentence: { stem: 'Tomorrow we are ___ in Rome.', accepts: ['\\bgoing sightseeing\\b'], hint: 'After “are” the verb needs -ing: going sightseeing.', sample: 'going sightseeing' } },
+      { kit: 'notebook', goal: 'Your kit has an empty notebook. You want to do something for the first time.', first: { options: ['make', 'try', 'go'], correct: 'try' }, second: { options: ['camping', 'sightseeing', 'something new'], correct: 'something new' },
+        explainWrong: 'We say try something new. Try is the verb for a first time.', sentence: { stem: 'This summer I want to ___ and learn to surf.', accepts: ['\\btry something new\\b'], hint: 'After “want to” use the base verb: try something new.', sample: 'try something new' } },
+    ] } satisfies WorkshopScene,
   { id: 'mem-c', part: 3, kind: 'memory', plate: WALL, trains: [2, 3], title: 'Memory: set C', pairs: mem(SET_C, 4) } satisfies MemoryScene,
   { id: 'build-c', part: 3, kind: 'build', plate: WALL, trains: [3], title: 'Collocation Builder', items: [
     { words: ['We', 'went', 'camping', 'near', 'the', 'lake'], hint: 'Go camping is one chunk: we went camping.' },
@@ -179,6 +191,31 @@ const scenes: Scene[] = [
     ] },
   ] } satisfies RapportScene,
 
+  // Wave 2: Stress Beats in the Energiser part. Trains criterion 1 (the feeling words, said with the right stress) and 5 (the voice note).
+  { id: 'beats', part: 4, kind: 'beats', plate: 'classroom-morning', trains: [1, 5], title: 'Stress Beats', who: 'Theo',
+    intro: 'Welcome to Stress Beats. Every long word has one strong part. Listen, tap the strong pad, then tap all the pads and hold the strong one a little longer. There is no timer.',
+    items: [
+      { word: 'embarrassed', syllables: ['em', 'bar', 'rassed'], stressIndex: 1, sentence: 'I was embarrassed when I dropped my tray.',
+        pair: { word: 'embarrassing', syllables: ['em', 'bar', 'rass', 'ing'], sentence: 'Dropping my tray was embarrassing.' },
+        l1Note: { generic: 'Embarrassed means shy and uncomfortable. In some languages a similar word means something else: Spanish embarazada means pregnant.',
+          es: 'Cuidado: embarrassed no significa embarazada (pregnant). Significa avergonzado, con vergüenza. El acento va en la segunda sílaba: em-BAR-rassed.',
+          fr: 'Embarrassed ressemble à « embarrassé », mais on dit surtout « gêné » ou « timide ». L’accent est sur la deuxième syllabe : em-BAR-rassed.',
+          it: 'Embarrassed è vicino a “imbarazzato” e ha lo stesso significato. Attenzione all’accento sulla seconda sillaba: em-BAR-rassed.',
+          ar: 'كلمة embarrassed تعني «محرج» أو «خجلان»، وليست «حامل». النبر على المقطع الثاني: em-BAR-rassed.',
+          tr: 'Embarrassed, “utanmış” veya “mahcup” demektir. Vurgu ikinci hecede: em-BAR-rassed.' } },
+      { word: 'disappointed', syllables: ['dis', 'ap', 'point', 'ed'], stressIndex: 2, sentence: 'We were disappointed when the museum was closed.',
+        pair: { word: 'disappointing', syllables: ['dis', 'ap', 'point', 'ing'], sentence: 'The closed museum was disappointing.' },
+        l1Note: { generic: 'The -ed ending is not a full syllable in the middle of the word: dis-ap-POINT-ed, with the strong part on point.',
+          es: 'El acento va en la tercera sílaba: dis-ap-POINT-ed. No pronuncies la -e- de -ed como una sílaba aparte.',
+          fr: 'L’accent est sur la troisième syllabe : dis-ap-POINT-ed. Ne prononcez pas « ed » comme une syllabe forte.',
+          it: 'L’accento è sulla terza sillaba: dis-ap-POINT-ed. La finale -ed è debole.',
+          ar: 'النبر على المقطع الثالث: dis-ap-POINT-ed. نهاية -ed ضعيفة.',
+          tr: 'Vurgu üçüncü hecede: dis-ap-POINT-ed. Sondaki -ed zayıf kalır.' } },
+      { word: 'frightened', syllables: ['fright', 'ened'], stressIndex: 0, sentence: 'I was frightened at the top of the tower.',
+        pair: { word: 'frightening', syllables: ['fright', 'en', 'ing'], sentence: 'The view from the tower was frightening.' } },
+      { word: 'destination', syllables: ['des', 'ti', 'na', 'tion'], stressIndex: 2, sentence: 'Our destination was a small village.' },
+      { word: 'attraction', syllables: ['at', 'trac', 'tion'], stressIndex: 1, sentence: 'The tower is the city’s best attraction.' },
+    ] } satisfies BeatsScene,
   { id: 'mission-model', part: 5, kind: 'model', plate: TABLE, trains: [4], title: 'Watch Vee describe a postcard', who: 'Vee', steps: [
     { phase: 'iDo', text: 'I picked a postcard from the countryside. I felt so relaxed there, and the view was amazing. It was our destination for the weekend, and I am grateful that I went.' },
     { phase: 'weDo', text: 'Three steps: the place, what you did, how you felt. Say it with me: It was our destination. We went camping. I felt relaxed.' },
@@ -189,6 +226,73 @@ const scenes: Scene[] = [
     { label: 'A place from a trip.', frame: 'My destination was … / The best attraction was …', accept: ['\\b(destination|attraction|countryside)\\b'], hint: 'Use destination, attraction or countryside.', sample: 'The best attraction was an old tower in the city.' },
     { label: 'A chunk about you.', frame: 'I went camping … / I have been sightseeing … / I want to try something new …', accept: ['\\b(go camping|went camping|gone camping|been camping|go sightseeing|went sightseeing|been sightseeing|gone sightseeing|try something new|tried something new)\\b'], hint: 'Use go camping, go sightseeing or try something new.', sample: 'I want to try something new this summer.' },
   ] } satisfies WriteScene,
+  // Wave 2: Postcard Finder before the Mission speak scene. Trains criterion 4 (describe a postcard with at least three new words).
+  { id: 'finder', part: 5, kind: 'finder', plate: WALL, trains: [4], title: 'Postcard Finder', partner: 'Ava',
+    intro: 'Welcome to Postcard Finder. Six postcards look almost the same. First I give you a clue and you find my postcard. Then we swap, and you give me the clue.',
+    buildLine: 'Now you give the clue. Choose words that fit your secret postcard, and I will pick one.',
+    askLine: 'Hmm, is it this one?',
+    foundLine: 'Yes, that is the one. Great clue!',
+    grids: [
+      { id: 'f1', mode: 'find', targetId: 'a', trapId: 'b',
+        cards: [
+          { id: 'a', place: 'city', feeling: 'amazed', chunk: 'went sightseeing', details: ['tower', 'flag'], tone: 'tower' },
+          { id: 'b', place: 'city', feeling: 'amazed', chunk: 'went sightseeing', details: ['bridge', 'bus'], tone: 'city' },
+          { id: 'c', place: 'city', feeling: 'frightened', chunk: 'went sightseeing', details: ['tower', 'flag'], tone: 'tower' },
+          { id: 'd', place: 'countryside', feeling: 'amazed', chunk: 'went camping', details: ['tent', 'lake'], tone: 'field' },
+          { id: 'e', place: 'beach', feeling: 'amazed', chunk: 'tried something new', details: ['boat', 'sun'], tone: 'sea' },
+          { id: 'f', place: 'countryside', feeling: 'relaxed', chunk: 'went camping', details: ['tent', 'fire'], tone: 'camp' },
+        ],
+        clues: [
+          { text: 'I felt amazed.', tags: ['amazed'] },
+          { text: 'It was a city, and we went sightseeing.', tags: ['city', 'went sightseeing'] },
+          { text: 'There is a tower and a flag.', tags: ['tower', 'flag'] },
+        ] },
+      { id: 'f2', mode: 'build', targetId: 'a', trapId: 'b', minNewWords: 3, clueText: 'It was in the countryside, we went camping, and I felt relaxed.',
+        cards: [
+          { id: 'a', place: 'countryside', feeling: 'relaxed', chunk: 'went camping', details: ['tent', 'lake'], tone: 'camp' },
+          { id: 'b', place: 'countryside', feeling: 'relaxed', chunk: 'went camping', details: ['fire', 'tree'], tone: 'field' },
+          { id: 'c', place: 'countryside', feeling: 'grateful', chunk: 'went camping', details: ['tent', 'lake'], tone: 'camp' },
+          { id: 'd', place: 'city', feeling: 'relaxed', chunk: 'went sightseeing', details: ['cafe', 'bridge'], tone: 'city' },
+          { id: 'e', place: 'beach', feeling: 'relaxed', chunk: 'tried something new', details: ['boat', 'sun'], tone: 'sea' },
+          { id: 'f', place: 'hill', feeling: 'proud', chunk: 'went camping', details: ['tent', 'flag'], tone: 'hill' },
+        ],
+        chips: [
+          { id: 'relaxed', text: 'I felt relaxed', group: 'feeling', tag: 'relaxed', isNew: true },
+          { id: 'grateful', text: 'I felt grateful', group: 'feeling', tag: 'grateful', isNew: true },
+          { id: 'proud', text: 'I felt proud', group: 'feeling', tag: 'proud', isNew: true },
+          { id: 'country', text: 'in the countryside', group: 'place', tag: 'countryside', isNew: true },
+          { id: 'city', text: 'in the city', group: 'place', tag: 'city' },
+          { id: 'camp', text: 'we went camping', group: 'chunk', tag: 'went camping', isNew: true },
+          { id: 'sight', text: 'we went sightseeing', group: 'chunk', tag: 'went sightseeing', isNew: true },
+          { id: 'tent', text: 'a tent', group: 'detail', tag: 'tent' },
+          { id: 'lake', text: 'a lake', group: 'detail', tag: 'lake' },
+          { id: 'boat', text: 'a boat', group: 'detail', tag: 'boat' },
+          { id: 'fire', text: 'a fire', group: 'detail', tag: 'fire' },
+        ],
+        acceptedChips: ['relaxed', 'country', 'camp', 'tent', 'lake'] },
+      { id: 'f3', mode: 'build', targetId: 'a', trapId: 'b', minNewWords: 1, clueText: 'It was a beach, and I tried something new. There is a boat and the sun.',
+        cards: [
+          { id: 'a', place: 'beach', feeling: 'grateful', chunk: 'tried something new', details: ['boat', 'sun'], tone: 'sea', forbidden: ['grateful'] },
+          { id: 'b', place: 'beach', feeling: 'grateful', chunk: 'tried something new', details: ['fire', 'tree'], tone: 'sea' },
+          { id: 'c', place: 'beach', feeling: 'proud', chunk: 'tried something new', details: ['boat', 'flag'], tone: 'sea' },
+          { id: 'd', place: 'hill', feeling: 'grateful', chunk: 'tried something new', details: ['flag', 'sun'], tone: 'hill' },
+          { id: 'e', place: 'city', feeling: 'grateful', chunk: 'went sightseeing', details: ['cafe', 'bus'], tone: 'city' },
+          { id: 'f', place: 'countryside', feeling: 'grateful', chunk: 'went camping', details: ['tent', 'lake'], tone: 'camp' },
+        ],
+        chips: [
+          { id: 'grateful', text: 'I felt grateful', group: 'feeling', tag: 'grateful', isNew: true },
+          { id: 'proud', text: 'I felt proud', group: 'feeling', tag: 'proud', isNew: true },
+          { id: 'amazed', text: 'I felt amazed', group: 'feeling', tag: 'amazed', isNew: true },
+          { id: 'beach', text: 'at the beach', group: 'place', tag: 'beach' },
+          { id: 'city', text: 'in the city', group: 'place', tag: 'city' },
+          { id: 'trynew', text: 'I tried something new', group: 'chunk', tag: 'tried something new', isNew: true },
+          { id: 'camp', text: 'we went camping', group: 'chunk', tag: 'went camping', isNew: true },
+          { id: 'boat', text: 'a boat', group: 'detail', tag: 'boat' },
+          { id: 'sun', text: 'the sun', group: 'detail', tag: 'sun' },
+          { id: 'fire', text: 'a fire', group: 'detail', tag: 'fire' },
+        ],
+        acceptedChips: ['grateful', 'beach', 'trynew', 'boat', 'sun'] },
+    ] } satisfies FinderScene,
   { id: 'take', part: 5, kind: 'speak', plate: TABLE, trains: [4, 5], title: 'Mission: describe a postcard', who: 'Ava', turns: [
     { step: 'guided', prompt: 'Take 1. Describe a postcard so I can find it: where it is, what you did and how you felt. About a minute.', model: 'My postcard is from the countryside. It was our destination. We went camping and I felt relaxed because it was quiet.' },
     { step: 'free', prompt: 'Take 2, a new listener: Theo is listening now. Say it again with the fixes, then answer his question: “When did you go?” (the past simple, with a time).', model: 'I went last summer.' },
@@ -210,7 +314,7 @@ export const B1_S01_E2: LessonScript = {
   title: 'Have You Ever...? · Word Lab',
   criteria: CRITERIA,
   cast: ['Vee', 'Ava', 'Theo', 'Mia'],
-  partMinutes: [3, 5, 20, 12, 3, 8, 5, 4],
+  partMinutes: [3, 4, 16, 13, 5, 11, 4, 4],
   scenes,
 };
 export default B1_S01_E2;

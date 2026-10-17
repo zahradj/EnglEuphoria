@@ -60,6 +60,10 @@ const STINGER: Record<EncounterKind, { icon: IconName; label: [string, string]; 
   inspect: { icon: 'log', label: ['ap.stInspect', 'DESK DUTY'], sub: ['ap.stInspectSub', 'Check each document against the rulebook.'] },
   interview: { icon: 'mic', label: ['ap.stInterview', 'INTERVIEW'], sub: ['ap.stInterviewSub', 'Build your question. Listen to the answer.'] },
   objection: { icon: 'bolt', label: ['ap.stObjection', 'CROSS-EXAMINATION'], sub: ['ap.stObjectionSub', 'Press a line. Present the evidence.'] },
+  finder: { icon: 'pin', label: ['ap.stFinder', 'POSTCARD FINDER'], sub: ['ap.stFinderSub', 'One clue, six postcards. Find the right one.'] },
+  workshop: { icon: 'tools', label: ['ap.stWorkshop', 'CHUNK WORKSHOP'], sub: ['ap.stWorkshopSub', 'Snap two halves into one chunk.'] },
+  beats: { icon: 'wave', label: ['ap.stBeats', 'STRESS BEATS'], sub: ['ap.stBeatsSub', 'Tap the strong part of the word.'] },
+  switchboard: { icon: 'sliders', label: ['ap.stSwitchboard', 'TIMELINE SWITCHBOARD'], sub: ['ap.stSwitchboardSub', 'Move the time marker. Power on the sentence.'] },
 };
 
 export function Stinger({ kind, title, calm, onDone }: { kind: EncounterKind; title: string; calm: boolean; onDone: () => void }) {

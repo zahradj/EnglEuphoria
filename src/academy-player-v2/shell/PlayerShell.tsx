@@ -5,6 +5,7 @@ import type { Prefs } from '../services/prefs';
 import './tokens.css';
 import './games.css';
 import './wave1.css';
+import './wave2.css';
 
 export interface ShellProps {
   meta: LessonMeta;

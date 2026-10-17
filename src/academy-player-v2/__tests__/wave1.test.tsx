@@ -11,6 +11,7 @@ import { objectionScene, type ObjectionScene } from '../scenes/objection/Objecti
 import { cipherScene, type CipherScene } from '../scenes/cipher/Cipher';
 import { classify, keyStates, marksOf } from '../scenes/cipher/cipherLogic';
 import { spokenLines } from '../engine/spokenLines';
+import { responsesOf } from '../engine/responses';
 import { validateScript } from '../engine/validateScript';
 import { Stinger } from '../quest/Cinematics';
 import { advanceFlow, initialFlow } from '../quest/flow';
@@ -554,11 +555,12 @@ describe('Wave 1 wiring in the three B1 Season 1 lessons', () => {
         case 'interview': return s.look === 'friends' ? g('personas') * g('tiles') + 1 : ((s.minAsks as number | undefined) ?? 3) + 1;
         case 'objection': return ((s.minPress as number | undefined) ?? 1) + 2;
         case 'cipher': return g('cards');
+        case 'finder': case 'workshop': case 'beats': case 'switchboard': return responsesOf(s as never);
         default: return 0;
       }
     };
     const total = (l: typeof B1_S01_E1) => l.scenes.reduce((a, s) => a + n(s as unknown as Record<string, unknown>), 0);
-    // before Wave 1 (same counting): E1 69, E2 54, E3 75
+    // before Wave 1 (same counting): E1 69, E2 54, E3 75. Wave 2 removed two memory games of E2 and added four new games (wave2.test.tsx has the full metric).
     expect(total(B1_S01_E1)).toBeGreaterThanOrEqual(69);
     expect(total(B1_S01_E2)).toBeGreaterThanOrEqual(54);
     expect(total(B1_S01_E3)).toBeGreaterThanOrEqual(75);

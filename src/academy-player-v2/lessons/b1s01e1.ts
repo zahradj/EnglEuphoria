@@ -23,6 +23,7 @@ import type { HuntScene } from '../scenes/hunt/Hunt';
 import type { InspectScene } from '../scenes/inspect/Inspect';
 import type { InterviewScene } from '../scenes/interview/Interview';
 import type { CipherScene } from '../scenes/cipher/Cipher';
+import type { SwitchboardScene } from '../scenes/switchboard/Switchboard';
 
 export const CRITERIA = [
   'I can follow a short blog post and answer questions about its main idea, its detail and what is not said.',
@@ -137,6 +138,22 @@ const scenes: Scene[] = [
     { rule: 'Past simple: a finished time, so we say when.', example: 'I went to Spain last summer.' },
     { rule: 'Have and the past participle: an experience up to now, no time.', example: 'I have been to Spain.' },
   ] } satisfies RuleScene,
+  // Wave 2 (owner "go" 2026-10-17, plan amendment 2): after the rule, before the production games and the Mission. Trains criterion 4 (past simple or present perfect).
+  { id: 'switchboard', part: 3, kind: 'switchboard', plate: 'bucket-list-wall', trains: [4], title: 'Timeline Switchboard', who: 'Vee',
+    intro: 'Welcome to the Timeline Switchboard. The yellow line is now. A time word decides where an event lives. A finished time goes in the past band, and sometime up to now goes in the cloud. Move the time word, and the sentence rewrites itself.',
+    levels: [
+      { mode: 'forward', goalSentence: 'Goal: say that you saw a whale last summer.', event: { verbBase: 'see', object: 'a whale', tone: 'sea' }, marker: { text: 'last summer', zone: 'point' }, forms: { past: 'saw', participle: 'seen' }, choices: ['last summer', 'never', 'yesterday'], hint: 'Last summer is a finished time, so the event sits in the past band and the verb is past simple.' },
+      { mode: 'forward', goalSentence: 'Goal: say that you have never flown across the world, at any time up to now.', event: { verbBase: 'fly', object: 'across the world', tone: 'city' }, marker: { text: 'never', zone: 'cloud' }, forms: { past: 'flew', participle: 'flown' }, choices: ['in 2019', 'never', 'two years ago'], hint: 'Never, with no date, is sometime up to now: the cloud, and have plus the participle.' },
+      { mode: 'reverse', goalSentence: 'I have eaten spicy noodles.', event: { verbBase: 'eat', object: 'spicy noodles', tone: 'field' }, marker: { text: 'just', zone: 'cloud' }, alsoOk: ['so far'], forms: { past: 'ate', participle: 'eaten' }, choices: ['just', 'so far', 'last summer', 'two years ago'], hint: 'Have plus eaten and no date: it happened sometime up to now.' },
+      { mode: 'reverse', goalSentence: 'I took a photo in a cave.', event: { verbBase: 'take', object: 'a photo in a cave', tone: 'hill' }, marker: { text: 'two years ago', zone: 'point' }, alsoOk: ['in 2019', 'last summer', 'yesterday'], forms: { past: 'took', participle: 'taken' }, choices: ['two years ago', 'in 2019', 'just', 'so far'], hint: 'Took is the past simple: a finished moment, so it sits in the past band.' },
+      { mode: 'free', count: 2, hint: 'Pick an event and a time word. Build two sentences about your own life, then say them aloud.',
+        events: [
+          { event: { verbBase: 'see', object: 'a whale', tone: 'sea' }, forms: { past: 'saw', participle: 'seen' } },
+          { event: { verbBase: 'eat', object: 'spicy noodles', tone: 'field' }, forms: { past: 'ate', participle: 'eaten' } },
+          { event: { verbBase: 'fly', object: 'across the world', tone: 'city' }, forms: { past: 'flew', participle: 'flown' } },
+          { event: { verbBase: 'take', object: 'a photo in a cave', tone: 'hill' }, forms: { past: 'took', participle: 'taken' } },
+        ] },
+    ] } satisfies SwitchboardScene,
   { id: 'build', part: 3, kind: 'build', plate: L, trains: [4], title: 'Build it', items: [
     { words: ['Have', 'you', 'ever', 'been', 'to', 'Japan'], hint: 'Question: Have + you + ever + participle.' },
     { words: ['I', 'have', 'never', 'eaten', 'octopus'], hint: 'I have never + participle.' },
@@ -261,7 +278,7 @@ export const B1_S01_E1: LessonScript = {
   title: 'Have You Ever...? · Cold Open',
   criteria: CRITERIA,
   cast: ['Vee', 'Ava', 'Theo', 'Mia'],
-  partMinutes: [3, 3, 21, 11, 3, 10, 5, 4],
+  partMinutes: [3, 3, 20, 13, 3, 9, 5, 4],
   scenes,
   quest: {
     name: 'The Dare',

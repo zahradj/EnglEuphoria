@@ -141,6 +141,26 @@
   },
   {
     "who": "Vee",
+    "text": "Welcome to the Timeline Switchboard. The yellow line is now. A time word decides where an event lives. A finished time goes in the past band, and sometime up to now goes in the cloud. Move the time word, and the sentence rewrites itself."
+  },
+  {
+    "who": "Vee",
+    "text": "I saw a whale last summer."
+  },
+  {
+    "who": "Vee",
+    "text": "I have never flown across the world."
+  },
+  {
+    "who": "Vee",
+    "text": "I have just eaten spicy noodles."
+  },
+  {
+    "who": "Vee",
+    "text": "I took a photo in a cave two years ago."
+  },
+  {
+    "who": "Vee",
     "text": "Have you ever been to Japan"
   },
   {
@@ -480,6 +500,34 @@
     "text": "try something new. to do something for the first time. I want to try something new this summer."
   },
   {
+    "who": "Mia",
+    "text": "Welcome to the Chunk Workshop. Every travel kit item needs a chunk. Pick one card for each half, decide if they fit, and press to snap them into one piece."
+  },
+  {
+    "who": "Mia",
+    "text": "go camping"
+  },
+  {
+    "who": "Mia",
+    "text": "Last summer we went camping near a lake and slept in a tent."
+  },
+  {
+    "who": "Mia",
+    "text": "go sightseeing"
+  },
+  {
+    "who": "Mia",
+    "text": "Tomorrow we are going sightseeing in Rome."
+  },
+  {
+    "who": "Mia",
+    "text": "try something new"
+  },
+  {
+    "who": "Mia",
+    "text": "This summer I want to try something new and learn to surf."
+  },
+  {
     "who": "Vee",
     "text": "We went camping near the lake"
   },
@@ -540,12 +588,108 @@
     "text": "Maybe before they arrived!"
   },
   {
+    "who": "Theo",
+    "text": "Welcome to Stress Beats. Every long word has one strong part. Listen, tap the strong pad, then tap all the pads and hold the strong one a little longer. There is no timer."
+  },
+  {
+    "who": "Theo",
+    "text": "embarrassed"
+  },
+  {
+    "who": "Theo",
+    "text": "I was embarrassed when I dropped my tray."
+  },
+  {
+    "who": "Theo",
+    "text": "embarrassing"
+  },
+  {
+    "who": "Theo",
+    "text": "Dropping my tray was embarrassing."
+  },
+  {
+    "who": "Theo",
+    "text": "disappointed"
+  },
+  {
+    "who": "Theo",
+    "text": "We were disappointed when the museum was closed."
+  },
+  {
+    "who": "Theo",
+    "text": "disappointing"
+  },
+  {
+    "who": "Theo",
+    "text": "The closed museum was disappointing."
+  },
+  {
+    "who": "Theo",
+    "text": "frightened"
+  },
+  {
+    "who": "Theo",
+    "text": "I was frightened at the top of the tower."
+  },
+  {
+    "who": "Theo",
+    "text": "frightening"
+  },
+  {
+    "who": "Theo",
+    "text": "The view from the tower was frightening."
+  },
+  {
+    "who": "Theo",
+    "text": "destination"
+  },
+  {
+    "who": "Theo",
+    "text": "Our destination was a small village."
+  },
+  {
+    "who": "Theo",
+    "text": "attraction"
+  },
+  {
+    "who": "Theo",
+    "text": "The tower is the city’s best attraction."
+  },
+  {
     "who": "Vee",
     "text": "I picked a postcard from the countryside. I felt so relaxed there, and the view was amazing. It was our destination for the weekend, and I am grateful that I went."
   },
   {
     "who": "Vee",
     "text": "Three steps: the place, what you did, how you felt. Say it with me: It was our destination. We went camping. I felt relaxed."
+  },
+  {
+    "who": "Ava",
+    "text": "Welcome to Postcard Finder. Six postcards look almost the same. First I give you a clue and you find my postcard. Then we swap, and you give me the clue."
+  },
+  {
+    "who": "Ava",
+    "text": "Now you give the clue. Choose words that fit your secret postcard, and I will pick one."
+  },
+  {
+    "who": "Ava",
+    "text": "Hmm, is it this one?"
+  },
+  {
+    "who": "Ava",
+    "text": "Yes, that is the one. Great clue!"
+  },
+  {
+    "who": "Ava",
+    "text": "I felt amazed."
+  },
+  {
+    "who": "Ava",
+    "text": "It was a city, and we went sightseeing."
+  },
+  {
+    "who": "Ava",
+    "text": "There is a tower and a flag."
   },
   {
     "who": "Ava",
