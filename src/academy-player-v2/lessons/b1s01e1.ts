@@ -11,6 +11,9 @@ import type { ChoiceScene } from '../scenes/choice/Choice';
 import type { MatchScene } from '../scenes/match/Match';
 import type { BuildScene } from '../scenes/build/Build';
 import type { SpeakScene } from '../scenes/speak/Speak';
+import type { ForgeScene } from '../scenes/forge/Forge';
+import type { BossScene } from '../scenes/boss/Boss';
+import type { RapportScene } from '../scenes/rapport/Rapport';
 import type { WrapScene } from '../scenes/wrap/Wrap';
 import type { LobbyScene } from '../scenes/lobby/Lobby';
 
@@ -111,11 +114,14 @@ const scenes: SceneBase[] = [
     { words: ['I', 'have', 'never', 'eaten', 'octopus'], hint: 'I have never + participle.' },
     { words: ['We', 'ate', 'pizza', 'last', 'summer'], hint: 'Last summer is finished: past simple.' },
   ] } satisfies BuildScene,
-  { id: 'tense-check', part: 3, kind: 'choice', plate: L, trains: [4], title: 'Choose the tense', questions: [
-    { q: 'I ___ to Italy three times in my life.', options: ['have been', 'went', 'was', 'have went'], answer: 0, why: 'In my life: no finished time, an experience up to now.' },
-    { q: 'We ___ pizza in Naples last summer.', options: ['ate', 'have eaten', 'eaten', 'have ate'], answer: 0, why: 'Last summer is a finished time: past simple.' },
-    { q: 'Have you ever ___ spicy noodles?', options: ['eaten', 'ate', 'eat', 'eated'], answer: 0, why: 'After have you ever we need the past participle.' },
-  ] } satisfies ChoiceScene,
+  { id: 'forge', part: 3, kind: 'forge', plate: 'trophy-case', trains: [3], title: 'Trophy Forge', prompt: 'Forge the three forms of each verb, in order: base, past simple, past participle.', rounds: [
+    { forms: ['go', 'went', 'gone'] }, { forms: ['fly', 'flew', 'flown'] }, { forms: ['take', 'took', 'taken'] },
+  ] } satisfies ForgeScene,
+  { id: 'boss', part: 3, kind: 'boss', plate: 'detective-wall', trains: [4], title: 'Break the Clock!', boss: 'The Clock', prompt: 'Break the Clock! Choose the right tense to strike. Three shields: a wrong tense costs one.', rounds: [
+    { frame: 'I ___ to Italy three times in my life.', options: ['have been', 'went', 'was', 'have went'], answer: 0, why: 'In my life: no finished time, an experience up to now.' },
+    { frame: 'We ___ pizza in Naples last summer.', options: ['ate', 'have eaten', 'eaten', 'have ate'], answer: 0, why: 'Last summer is a finished time: past simple.' },
+    { frame: 'Have you ever ___ spicy noodles?', options: ['eaten', 'ate', 'eat', 'eated'], answer: 0, why: 'After have you ever we need the past participle: eaten.' },
+  ] } satisfies BossScene,
 
   { id: 'trios', part: 4, kind: 'match', plate: 'trophy-case', trains: [3], title: 'Energiser: the three forms', pairs: [
     { left: 'go · went', right: 'gone' }, { left: 'be · was', right: 'been' }, { left: 'see · saw', right: 'seen' },
@@ -127,6 +133,23 @@ const scenes: SceneBase[] = [
     { phase: 'weDo', text: 'Let us build it together: my answer, two reasons, one point against.' },
     { phase: 'youDo', text: 'Now you decide: who has done the most?' },
   ] } satisfies ModelScene,
+  { id: 'rapport', part: 5, kind: 'rapport', plate: L, trains: [4, 5], title: 'Rapport: talk to Theo', npc: 'Theo', exchanges: [
+    { say: 'So, have you ever been abroad?', options: [
+      { text: 'Yes, I have. I have been to Italy.', score: 2, reply: 'Nice! When did you go?', note: 'Present perfect for the experience, no time.' },
+      { text: 'Yes, I went.', score: 1, reply: 'Cool. When was that?', note: 'Correct, but “I have been to …” sounds more natural for an experience.' },
+      { text: 'Yes, I have been to Italy last year.', score: 0, reply: 'Wait, last year? Hmm.', note: 'Last year is a finished time: say “I went to Italy last year.”' },
+    ] },
+    { say: 'I love Italy. When did you go there?', options: [
+      { text: 'I went last August with my family.', score: 2, reply: 'Lucky you! What did you eat?', note: 'Finished time, so the past simple. Perfect.' },
+      { text: 'Last August.', score: 1, reply: 'Nice. What did you eat?', note: 'Short answers are fine, but try a full sentence: “I went last August.”' },
+      { text: 'I have gone last August.', score: 0, reply: 'Hmm, last August? Okay… what did you eat?', note: 'With a finished time use went, not have gone.' },
+    ] },
+    { say: 'Have you ever flown in a plane?', options: [
+      { text: 'Yes, I have. I flew to Spain last year.', score: 2, reply: 'Lucky you! Was it your first time?', note: 'The follow-up chain: have and the participle for the experience, then the past simple with a time.' },
+      { text: 'Yes, I have flown.', score: 1, reply: 'Cool! Where did you fly?', note: 'Correct. Add the story with a time: “I flew to Spain last year.”' },
+      { text: 'Yes, I have flown last year.', score: 0, reply: 'Last year? Hmm.', note: 'Last year is a finished time: use flew.' },
+    ] },
+  ] } satisfies RapportScene,
   { id: 'mission', part: 5, kind: 'speak', plate: L, trains: [4, 5], title: 'Mission: who has done the most?', who: 'Theo', turns: [
     { step: 'controlled', prompt: 'Ask me a “Have you ever…?” question. If I say yes, ask “When did you…?”', model: 'Have you ever been abroad? … When did you go?' },
     { step: 'guided', prompt: 'Take 1. Who has done the most? Give your answer and two reasons.' },

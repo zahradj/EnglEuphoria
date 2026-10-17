@@ -10,6 +10,9 @@ import { wrapScene } from './wrap/Wrap';
 import { buildScene } from './build/Build';
 import { speakScene } from './speak/Speak';
 import { matchScene } from './match/Match';
+import { forgeScene } from './forge/Forge';
+import { bossScene } from './boss/Boss';
+import { rapportScene } from './rapport/Rapport';
 
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -24,6 +27,9 @@ export const SCENES: Record<string, SceneModule<any>> = {
   build: buildScene,
   speak: speakScene,
   match: matchScene,
+  forge: forgeScene,
+  boss: bossScene,
+  rapport: rapportScene,
 };
 
 export const sceneKinds = () => Object.keys(SCENES);

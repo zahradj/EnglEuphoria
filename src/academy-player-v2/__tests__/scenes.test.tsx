@@ -125,3 +125,51 @@ describe('build, speak, match', () => {
     expect(matchScene.validate({ ...scene, pairs: scene.pairs.slice(0, 2) }).join()).toMatch(/3-6 pairs/);
   });
 });
+
+import { forgeScene, type ForgeScene } from '../scenes/forge/Forge';
+import { bossScene, type BossScene } from '../scenes/boss/Boss';
+import { rapportScene, type RapportScene } from '../scenes/rapport/Rapport';
+
+describe('signature games', () => {
+  it('forge: tiles in order finish the round; a wrong tile costs a try and is logged; out of tries offers a restart', () => {
+    const scene: ForgeScene = { id: 'f', part: 3, kind: 'forge', title: 'Forge', prompt: 'Forge it.', tries: 2, rounds: [{ forms: ['go', 'went', 'gone'] }, { forms: ['fly', 'flew', 'flown'] }] };
+    const onDone = vi.fn();
+    render(<forgeScene.view {...base} scene={scene} onDone={onDone} />);
+    const tile = (w: string) => screen.getByText(w, { selector: '.av-tiles button' });
+    fireEvent.click(tile('went'));
+    for (const w of ['go', 'went', 'gone', 'fly', 'flew', 'flown']) fireEvent.click(tile(w));
+    expect(onDone).toHaveBeenCalledTimes(1);
+    expect(onDone.mock.calls[0][0].mistakes).toEqual(['go · went · gone']);
+    cleanup();
+    render(<forgeScene.view {...base} scene={scene} onDone={vi.fn()} />);
+    fireEvent.click(screen.getByText('flew', { selector: '.av-tiles button' })); fireEvent.click(screen.getByText('flown', { selector: '.av-tiles button' }));
+    expect(screen.getByText('Start again')).toBeTruthy();
+    expect(forgeScene.validate({ ...scene, rounds: [scene.rounds[0]] }).join()).toMatch(/2\+ verbs/);
+  });
+  it('boss: right answers strike it, wrong ones cost shields, finishing reports the mistake', () => {
+    const scene: BossScene = { id: 'b', part: 3, kind: 'boss', title: 'Boss', boss: 'The Clock', prompt: 'Go.', rounds: [{ frame: 'q1', options: ['a', 'b'], answer: 0, why: 'because' }, { frame: 'q2', options: ['c', 'd'], answer: 1, why: 'reason' }] };
+    const onDone = vi.fn();
+    render(<bossScene.view {...base} scene={scene} onDone={onDone} />);
+    fireEvent.click(screen.getByText('b')); fireEvent.click(screen.getByText('a'));
+    expect(screen.getByRole('progressbar').getAttribute('aria-valuenow')).toBe('1');
+    fireEvent.click(screen.getByText(/Next/)); fireEvent.click(screen.getByText('d'));
+    fireEvent.click(screen.getByText(/Finish the lesson/));
+    expect(onDone).toHaveBeenCalledTimes(1);
+    expect(onDone.mock.calls[0][0].mistakes).toEqual(['q1']);
+    expect(bossScene.validate({ ...scene, rounds: [{ ...scene.rounds[0], why: '' }] }).join()).toMatch(/needs a reason/);
+  });
+  it('rapport: every reply is explained, there is no fail, and an off reply is logged', () => {
+    const scene: RapportScene = { id: 'r', part: 5, kind: 'rapport', title: 'Talk', npc: 'Theo', exchanges: [
+      { say: 'Hi?', options: [{ text: 'good', score: 2, reply: 'nice', note: 'natural' }, { text: 'off', score: 0, reply: 'hmm', note: 'not natural' }] },
+      { say: 'Bye?', options: [{ text: 'bye', score: 2, reply: 'ok', note: 'fine' }, { text: 'ok', score: 1, reply: 'ok', note: 'fine too' }] },
+    ] };
+    const onDone = vi.fn();
+    render(<rapportScene.view {...base} scene={scene} onDone={onDone} />);
+    fireEvent.click(screen.getByText('off'));
+    expect(screen.getByText('not natural')).toBeTruthy();
+    fireEvent.click(screen.getByText(/Next/)); fireEvent.click(screen.getByText('bye'));
+    fireEvent.click(screen.getByText(/Finish the lesson/));
+    expect(onDone.mock.calls[0][0]).toMatchObject({ won: true, mistakes: ['off'] });
+    expect(rapportScene.validate({ ...scene, exchanges: [{ say: 'x', options: [{ text: 'a', score: 1, reply: '', note: 'n' }, { text: 'b', score: 1, reply: '', note: 'n' }] }, scene.exchanges[1]] }).join()).toMatch(/best reply/);
+  });
+});

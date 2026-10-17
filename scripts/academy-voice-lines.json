@@ -113,11 +113,67 @@
   },
   {
     "who": "Vee",
+    "text": "Forge the three forms of each verb, in order: base, past simple, past participle."
+  },
+  {
+    "who": "Theo",
+    "text": "Break the Clock! Choose the right tense to strike. Three shields: a wrong tense costs one."
+  },
+  {
+    "who": "Vee",
     "text": "I would say Ava has done the most. She has flown across the world twice, and she has even eaten spicy noodles. On the other hand, Theo has visited more countries, so it is a close call."
   },
   {
     "who": "Vee",
     "text": "Let us build it together: my answer, two reasons, one point against."
+  },
+  {
+    "who": "Theo",
+    "text": "So, have you ever been abroad?"
+  },
+  {
+    "who": "Theo",
+    "text": "Nice! When did you go?"
+  },
+  {
+    "who": "Theo",
+    "text": "Cool. When was that?"
+  },
+  {
+    "who": "Theo",
+    "text": "Wait, last year? Hmm."
+  },
+  {
+    "who": "Theo",
+    "text": "I love Italy. When did you go there?"
+  },
+  {
+    "who": "Theo",
+    "text": "Lucky you! What did you eat?"
+  },
+  {
+    "who": "Theo",
+    "text": "Nice. What did you eat?"
+  },
+  {
+    "who": "Theo",
+    "text": "Hmm, last August? Okay… what did you eat?"
+  },
+  {
+    "who": "Theo",
+    "text": "Have you ever flown in a plane?"
+  },
+  {
+    "who": "Theo",
+    "text": "Lucky you! Was it your first time?"
+  },
+  {
+    "who": "Theo",
+    "text": "Cool! Where did you fly?"
+  },
+  {
+    "who": "Theo",
+    "text": "Last year? Hmm."
   },
   {
     "who": "Theo",
@@ -3536,10 +3592,6 @@
     "text": "I have been to Spain."
   },
   {
-    "who": "Theo",
-    "text": "Break the Clock! Choose the right tense to strike. Three shields: a wrong tense costs one."
-  },
-  {
     "who": "Vee",
     "text": "Trophy Forge! Forge the three forms of each verb, in order. Then say them."
   },
@@ -3702,54 +3754,6 @@
   {
     "who": "Theo",
     "text": "Rapport! Theo asks about your travels. Choose the reply that sounds most natural."
-  },
-  {
-    "who": "Theo",
-    "text": "So, have you ever been abroad?"
-  },
-  {
-    "who": "Theo",
-    "text": "Nice! When did you go?"
-  },
-  {
-    "who": "Theo",
-    "text": "Cool. When was that?"
-  },
-  {
-    "who": "Theo",
-    "text": "Wait, last year? Hmm."
-  },
-  {
-    "who": "Theo",
-    "text": "I love Italy. When did you go there?"
-  },
-  {
-    "who": "Theo",
-    "text": "Lucky you! What did you eat?"
-  },
-  {
-    "who": "Theo",
-    "text": "Nice. What did you eat?"
-  },
-  {
-    "who": "Theo",
-    "text": "Hmm, last August? Okay… what did you eat?"
-  },
-  {
-    "who": "Theo",
-    "text": "Have you ever flown in a plane?"
-  },
-  {
-    "who": "Theo",
-    "text": "Lucky you! Was it your first time?"
-  },
-  {
-    "who": "Theo",
-    "text": "Cool! Where did you fly?"
-  },
-  {
-    "who": "Theo",
-    "text": "Last year? Hmm."
   },
   {
     "who": "Vee",
