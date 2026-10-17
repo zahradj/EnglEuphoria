@@ -82,6 +82,13 @@ export function validateRoadmap(plans: LevelPlan[], structureFloor: StructureFlo
 
       // Content completeness.
       if (!s.hook.trim()) err('no_hook', 'Story hook missing.', where);
+      // academy-season-arc: one essential question and eight chapters (E1-E8), the last answering the question
+      if (!s.essentialQuestion?.trim()) err('no_essential_question', 'Season needs an essential question (the Release answers it).', where);
+      if (!s.chapters || s.chapters.length !== 8) err('chapters', `Season needs exactly 8 chapters (has ${s.chapters?.length ?? 0}).`, where);
+      else {
+        if (new Set(s.chapters.map((c) => c.title.toLowerCase())).size !== 8) err('chapter_titles', 'The 8 chapter titles must be distinct.', where);
+        if (s.chapters[7].question !== s.essentialQuestion) err('chapter_last', 'The last chapter must be the essential question.', where);
+      }
       if (s.cast.length === 0) err('no_cast', 'The hook must feature at least one Academy cast member (Vee, Ava, Theo, Mia).', where);
       if (!s.release.trim()) err('no_release', 'Release missing.', where);
       if (s.canDo.length < 1 || s.canDo.length > 4) err('can_do_count', `canDo must have 1-4 entries (has ${s.canDo.length}).`, where);

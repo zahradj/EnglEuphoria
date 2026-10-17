@@ -15,6 +15,9 @@ Owner rule (2026-10-16): "the season theme should be one, and the episodes shoul
 ## What already guarantees "systematic" (do not rebuild)
 `lessonBlueprint.ts` + `validateRoadmap.ts`: eight fixed episode types, a cumulative stack (L1, L1+L2+new, ... L8 no new language), item counts continuous and ending at the Season budget, structure only in E3 (optionally E6), clues 1-8 in order, recycle from the previous Seasons. Tests: `seasonThemes.test.ts`, `seasonArc.test.ts`. Never weaken them.
 
+## Global since 2026-10-16
+Every Season (A1-C1, 80) carries `essentialQuestion` + 8 `chapters` (`levels/*.ts` may write them by hand, as B1-S01 does; otherwise `seasonArc.ts` derives them from the Season's own theme, fields, functions, structure and Release). `validateRoadmap` fails a Season without them; the lesson lobby shows "Chapter N of 8" and the library lists them. **Derived chapters are a floor, not the goal:** rewrite them by hand (like B1-S01) when you build or rebuild a Season; the derived wording is mechanical. Pre-A1 Seasons (a different structure, `preA1.ts`) have a theme but no chapters yet.
+
 ## What this skill adds: related and progressive
 1. **Theme promise (one line) and essential question.** Theme = the single world. Essential question = what the student can answer in English at the end, e.g. "What have I done and what do I want to do?" The Release answers it. If you cannot state it in one line, the theme is two themes.
 2. **Backwards:** Release first, then the Finale checks it, then each episode earns one piece of it.

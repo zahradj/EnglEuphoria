@@ -45,6 +45,8 @@ export interface SeasonOverview {
   theme: string; hook?: string; canDo: string[]; structures: string[]; release: string; newItems: number;
   /** Pre-A1: the sounds taught and the video-game mechanic borrowed */
   sounds?: string[]; mechanic?: string;
+  /** the Season's essential question and its eight chapters (academy-season-arc) */
+  question?: string; chapters?: string[];
 }
 export interface LibrarySeason {
   key: string;
@@ -116,7 +118,7 @@ export function groupAcademyLibrary(lessons: AcademyDeckLesson[], showSteps: boo
   const seasonOf = (level: AcademyLevel, no: number, title: string): LibrarySeason => {
     const ls = lessons.filter((l) => l.level === level && l.season === no).sort((a, b) => a.lesson - b.lesson);
     const sp = ACADEMY_SEASONS.find((x) => x.level === level && x.no === no);
-    const overview = sp && { theme: sp.theme, hook: sp.hook, canDo: sp.canDo, structures: sp.structures.map((x) => x.label), release: sp.release, newItems: sp.newItemBudget };
+    const overview = sp && { theme: sp.theme, hook: sp.hook, canDo: sp.canDo, structures: sp.structures.map((x) => x.label), release: sp.release, newItems: sp.newItemBudget, question: sp.essentialQuestion, chapters: sp.chapters?.map((c) => `${c.title}: ${c.question}`) };
     return { key: `${level}-${no}`, no, title, lessons: ls, slots: slotsOf(level, no, ls), overview, planned: false };
   };
   if (!showSteps) {

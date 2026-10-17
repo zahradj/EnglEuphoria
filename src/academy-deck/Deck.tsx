@@ -382,7 +382,7 @@ export function Deck({ script, artBase, audioBase, teacher = false, freeNext = f
   }, [react]);
   const mistakes = useMemo(() => Object.entries(wrongBySlide.current).filter(([, n]) => n > 0).map(([id, n]) => ({ id, label: slideLabel(script.slides.find((x) => x.id === id) ?? script.slides[0]), wrong: n })).sort((a, b) => b.wrong - a.wrong), [stats.wrong, script.slides]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { if (keepsProgress && mistakes.length) saveLessonMistakes(script.lessonId, mistakes); }, [mistakes]); // eslint-disable-line react-hooks/exhaustive-deps
-  const ctx: DeckCtx = useMemo(() => ({ artBase, vars, setVars, done, right, wrong, award, stamps, reduced: calm, seed: 1000 + index * 17, voice: voiceOn, clipsReady, canHear, speak, speakSeq, mistakes }), [artBase, vars, setVars, done, right, wrong, award, stamps, calm, index, voiceOn, clipsReady, canHear, speak, speakSeq, mistakes]);
+  const ctx: DeckCtx = useMemo(() => ({ artBase, vars, setVars, done, right, wrong, award, stamps, reduced: calm, seed: 1000 + index * 17, voice: voiceOn, clipsReady, canHear, speak, speakSeq, mistakes, lessonId: script.lessonId }), [script.lessonId, artBase, vars, setVars, done, right, wrong, award, stamps, calm, index, voiceOn, clipsReady, canHear, speak, speakSeq, mistakes]);
   const keys = useMemo(() => script.slides.filter((x) => x.kind === 'vault' && solved[x.id]).map((x) => (x as { lock: number }).lock), [script.slides, solved]);
   const lockNames = script.locks;
   const isSolved = !!solved[cur.id];

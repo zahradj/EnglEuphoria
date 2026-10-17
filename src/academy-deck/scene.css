@@ -734,3 +734,10 @@
   .ad-comic-bubble[data-old] { display: none; }
   .ad-comic-cap { max-width: 86%; top: 70px; }
 }
+
+/* Season arc on the title card: "Chapter 3 of 8" and its sub-question */
+.ad-root[data-theme='scene'] .ad-title-chapter { display: grid; gap: 4px; margin: 14px auto 0; max-width: 34rem; padding: 10px 16px; border-radius: 18px; background: rgba(255, 255, 255, 0.9); color: var(--violet-d); text-align: center; box-shadow: var(--shadow-s); }
+.ad-root[data-theme='scene'] .ad-title-chapter b { font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; }
+.ad-root[data-theme='scene'] .ad-title-chapter span { font-weight: 800; font-size: 1.05rem; color: var(--ink); }
+.ad-root[data-theme='scene'] .ad-lobby-card[data-chapter] p { margin: 4px 0 0; font-weight: 800; }
+.ad-root[data-theme='scene'] .ad-lobby-bigq { font-size: 0.85rem; font-weight: 700; opacity: 0.8; }

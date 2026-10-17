@@ -26,8 +26,8 @@ describe('Season arc: one theme, eight related, progressive episodes', () => {
   }
 });
 
-describe('Seasons that carry chapters (academy-season-arc)', () => {
-  const withChapters = ACADEMY_SEASONS.filter((s) => s.chapters);
+describe('Every Season carries an essential question and eight chapters (academy-season-arc)', () => {
+  const withChapters = ACADEMY_SEASONS; // global: every Season, A1-C1
   it('B1-S01 has an essential question and eight distinct chapters, each with a sub-question and a difficulty step', () => {
     const s = ACADEMY_SEASONS.find((x) => x.id === 'B1-S01')!;
     expect(s.essentialQuestion?.trim().length).toBeGreaterThan(10);
@@ -38,7 +38,10 @@ describe('Seasons that carry chapters (academy-season-arc)', () => {
     it(`${s.id}: chapters are distinct, the last answers the essential question, and each blueprint carries its chapter`, () => {
       expect(s.chapters).toHaveLength(8);
       expect(new Set(s.chapters!.map((c) => c.title.toLowerCase())).size).toBe(8);
-      for (const c of s.chapters!) { expect(c.question.endsWith('?')).toBe(true); expect(c.step.length).toBeGreaterThan(10); }
+      for (const c of s.chapters!) { expect(c.question.endsWith('?'), `${s.id} ${c.title}`).toBe(true); expect(c.step.length).toBeGreaterThan(10); }
+      const anchors = [s.theme, s.title, ...s.lexicalFields, ...s.functions, s.structures[0].label].join(' ').toLowerCase();
+      const mid = s.chapters!.slice(0, 7).filter((c) => anchors.split(/\W+/).filter((w) => w.length > 3).some((w) => `${c.title} ${c.question}`.toLowerCase().includes(w)));
+      expect(mid.length, `${s.id} chapters tie to the theme (the Remix may only name the Season)`).toBeGreaterThanOrEqual(6);
       expect(s.chapters![7].question).toBe(s.essentialQuestion);
       const eps = BPS.filter((b) => b.seasonId === s.id);
       eps.forEach((e, i) => expect(e.chapter?.title, `${e.id} chapter`).toBe(s.chapters![i].title));
