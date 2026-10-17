@@ -1,10 +1,12 @@
 // Scene registry (concept from the Playground's SceneRenderer): kind -> module { view, spoken, validate }. Add a kind here when a lesson needs it.
 import type { SceneBase, SceneModule } from '../types';
 import { lobbyScene } from './lobby/Lobby';
+import { comicScene } from './comic/Comic';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const SCENES: Record<string, SceneModule<any>> = {
   lobby: lobbyScene,
+  comic: comicScene,
 };
 
 export const sceneKinds = () => Object.keys(SCENES);
