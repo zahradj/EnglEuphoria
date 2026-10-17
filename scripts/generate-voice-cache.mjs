@@ -86,7 +86,8 @@ import { twisterLines } from '../src/academy-games/twisterLab/twisterData.ts';
 import { hopLines } from '../src/academy-games/timeHop/hopData.ts';
 import { sillySoundsLines } from '../src/academy-games/sillySounds/soundData.ts';
 import { nowLines } from '../src/academy-games/alwaysNow/nowData.ts';
-import { VOICE_PROFILES, approvedVoiceId, isShortLine, normalizeForSpeech, SHORT_LINE_CLIP_VERSION, unresolvedSpeechRisks, voiceStatus } from '../src/lib/speechPolicy.ts';
+import { VOICE_PROFILES, approvedVoiceId, isShortLine, normalizeForSpeech, SHORT_LINE_CLIP_VERSION, unresolvedSpeechRisks, voiceStatus, safeVoiceSettings, languageLock, SHORT_LINE_TTS_MODEL, ttsModelFor } from '../src/lib/speechPolicy.ts';
+import { withPhonemes } from '../src/lib/pronunciations.ts';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const OUT_DIR = path.join(__dirname, '..', 'public', 'audio-cache');
@@ -848,7 +849,11 @@ const WT_EXTRACTORS = {
   'echo-cave': (s) => [[s.who, s.doneLine], [s.who, 'Shh! Listen! Who is calling? Where is the voice?'], [s.who, 'Not this tunnel! Listen again!'],
     ...(s.rounds ?? []).flatMap((r) => [[r.voice, r.line], [r.voice, r.reply]])],
   'grid-hunt': (s) => {
-    const num = ['one', 'two', 'three', 'four']; const tr = (s.treasures ?? []).map((t) => t.toUpperCase());
+    const tr = (s.treasures ?? []).map((t) => t.toUpperCase());
+    // 'islands' look: numbered islands, "Island fourteen! Treasure!" (A1 U1 L3)
+    if (s.look === 'islands') return [[s.who, s.doneLine], ...(s.islands ?? []).map((n) => [s.who, `Island ${NUM_WORDS[n]}! ${tr.includes(String(n)) ? 'Treasure!' : 'Splash!'}`]),
+      ...(s.rounds ?? []).flatMap((q) => [[s.who, q.ask], ['teacher', `${q.choices[q.answer]} Pick an island! Say its number!`]])];
+    const num = ['one', 'two', 'three', 'four'];
     const cells = ['A', 'B', 'C', 'D'].flatMap((c) => [1, 2, 3, 4].map((n) => `${c}${n}`));
     return [[s.who, s.doneLine], ...cells.map((c) => [s.who, `${({ A: 'Ay', B: 'Bee', C: 'See', D: 'Dee' })[c[0]]} ${num[Number(c[1]) - 1]}! ${tr.includes(c) ? 'Treasure!' : 'Splash!'}`]),
       ...(s.rounds ?? []).flatMap((q) => [[s.who, q.ask], ['teacher', `${q.choices[q.answer]} Dive! Say a square!`]])];
@@ -1069,8 +1074,49 @@ function collectPairs(lessonFilter) {
   return [...seen.values()];
 }
 
+// Direct path (owner 2026-10-17: "use the ElevenLabs API that the Academy hub is using"): when a GitHub secret holds an
+// ElevenLabs key (ELEVENLABS_5, the one the Academy bake uses), record straight from ElevenLabs with exactly the same
+// policy as the elevenlabs-tts function (approved voice, same model per line, phonemes on short lines, language lock,
+// safe settings), so the clip sounds the same as one made through the function. The key is only sent to ElevenLabs.
+const DIRECT_HOSTS = ['api.elevenlabs.io', 'api.us.elevenlabs.io', 'api.eu.residency.elevenlabs.io', 'api.in.residency.elevenlabs.io'];
+function directKey() {
+  const raw = (process.env.ELEVENLABS_DIRECT_KEY ?? '').trim();
+  return raw ? (raw.match(/sk_[A-Za-z0-9]+/)?.[0] ?? raw) : '';
+}
+async function generateDirect(voiceId, text, apiKey) {
+  const spoken = normalizeForSpeech(text);
+  const model = ttsModelFor(spoken);
+  const body = JSON.stringify({
+    text: model === SHORT_LINE_TTS_MODEL ? withPhonemes(spoken) : spoken,
+    model_id: model,
+    ...languageLock(model),
+    voice_settings: safeVoiceSettings({ stability: 0.5, similarity_boost: 0.75, style: 0.3, use_speaker_boost: true }),
+  });
+  let last = '';
+  for (const host of DIRECT_HOSTS) {
+    const res = await fetch(`https://${host}/v1/text-to-speech/${approvedVoiceId(voiceId)}?output_format=mp3_44100_128`, { method: 'POST', headers: { 'xi-api-key': apiKey, 'Content-Type': 'application/json' }, body });
+    if (res.ok) return Buffer.from(await res.arrayBuffer());
+    last = `${res.status} ${(await res.text().catch(() => '')).replace(/\s+/g, ' ').slice(0, 160)}`;
+    if (!/invalid_api_key/i.test(last)) break; // only a bad key is retried on the regional hosts
+  }
+  throw new Error(`elevenlabs ${last}`);
+}
+
 async function generateClip(character, text) {
   const voiceId = VOICE_ID[character];
+  const key = directKey();
+  if (key) {
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        if (attempt > 0) await sleep(500 * attempt);
+        const buf = await generateDirect(voiceId, text, key);
+        if (!buf.length) throw new Error('empty response');
+        return buf;
+      } catch (err) {
+        if (attempt === 2) throw err;
+      }
+    }
+  }
   const ATTEMPTS = 3;
   for (let attempt = 0; attempt < ATTEMPTS; attempt++) {
     try {
@@ -1161,7 +1207,10 @@ async function main() {
     return;
   }
 
-  let generated = 0, cached = 0, failed = 0, bytes = 0;
+  // Many failures in a row means the voice service itself is down or out of credits (every line answers the same
+  // error): stop instead of failing ~7 s per line for hours. Exit code 3 tells the bake workflow to skip the rest.
+  const MAX_FAILS_IN_A_ROW = 8;
+  let generated = 0, cached = 0, failed = 0, bytes = 0, inARow = 0, gaveUp = false;
   for (const [character, text] of pairs) {
     const file = path.join(OUT_DIR, `${cacheFileName(character, text)}.mp3`);
     if (fs.existsSync(file)) { cached++; continue; }
@@ -1170,16 +1219,22 @@ async function main() {
       fs.writeFileSync(file, buf);
       bytes += buf.length;
       generated++;
+      inARow = 0;
       console.log(`  + [${character}] "${text}" -> ${path.basename(file)} (${buf.length}B)`);
       await sleep(200);
     } catch (err) {
       failed++;
+      inARow++;
       console.error(`  ! FAILED [${character}] "${text}": ${err.message}`);
+      if (inARow >= MAX_FAILS_IN_A_ROW) { gaveUp = true; break; }
     }
   }
 
   console.log(`\nDone. Generated ${generated}, already cached ${cached}, failed ${failed}. Wrote ${(bytes / 1024).toFixed(1)} KB.`);
-  if (failed > 0) process.exitCode = 1;
+  if (gaveUp) {
+    console.error(`Stopped after ${MAX_FAILS_IN_A_ROW} failures in a row: the voice service is not making clips (are the ElevenLabs keys in the Supabase secrets out of credits or invalid?).`);
+    process.exitCode = 3;
+  } else if (failed > 0) process.exitCode = 1;
 }
 
 main();

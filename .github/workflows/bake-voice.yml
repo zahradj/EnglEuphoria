@@ -30,18 +30,34 @@ jobs:
         with:
           node-version: '22'
       - name: Record missing clips
+        id: record
         env:
           # The voice function only records NEW clips for the service key (owner's "no live clips" rule).
           # Repo secret set by the owner in GitHub → Settings → Secrets and variables → Actions.
           BAKE_SERVICE_KEY: ${{ secrets.BAKE_SERVICE_KEY }}
+          # owner 2026-10-17 "use the ElevenLabs API the Academy hub is using": the same GitHub secret as academy-voice.yml.
+          # When it is set, clips are recorded straight from ElevenLabs (same voices and policy), not through the edge function.
+          ELEVENLABS_DIRECT_KEY: ${{ secrets.ELEVENLABS_5 || secrets.ELEVENLABS5 || secrets.ELEVENLABS_API_KEY_5 || secrets.elevenlabs5 }}
+        # Every target is tried even when one fails (an empty voice quota used to stop the run at the
+        # first target, so later lessons were never baked and the clips made before the failure were
+        # thrown away). The failure is reported after the clips that did record are committed.
         run: |
-          set -e
-          if [ -z "$BAKE_SERVICE_KEY" ]; then echo "::error::Add the BAKE_SERVICE_KEY repository secret (Supabase service_role key) so new clips can be recorded."; exit 1; fi
-          grep -v '^\s*#' scripts/voice-bake-targets.txt | grep -v '^\s*$' | while read -r target; do
+          if [ -z "$BAKE_SERVICE_KEY" ] && [ -z "$ELEVENLABS_DIRECT_KEY" ]; then echo "::error::Add the ELEVENLABS_5 or BAKE_SERVICE_KEY repository secret so new clips can be recorded."; exit 1; fi
+          failed=""
+          while read -r target; do
             echo "== $target"
-            npx -y tsx scripts/generate-voice-cache.mjs --lesson="$target"
-          done
+            code=0
+            npx -y tsx scripts/generate-voice-cache.mjs --lesson="$target" || code=$?
+            if [ "$code" -ne 0 ]; then failed="$failed $target"; fi
+            # 3 = the voice service failed many times in a row (credits / keys): the other targets would fail too.
+            if [ "$code" -eq 3 ]; then echo "::error::The voice service is not making clips (ElevenLabs credits or keys) - stopping."; break; fi
+          done < <(grep -v '^\s*#' scripts/voice-bake-targets.txt | grep -v '^\s*$')
+          echo "failed=$failed" >> "$GITHUB_OUTPUT"
+          if [ -n "$failed" ]; then
+            echo "::warning::Some clips could not be recorded in:$failed. A 'tts 400/503' on every line means the ElevenLabs keys in the Supabase secrets are out of credits or invalid."
+          fi
       - name: Commit new clips
+        if: always()
         run: |
           git add public/audio-cache
           if git diff --cached --quiet; then echo "No new clips."; exit 0; fi
@@ -50,3 +66,8 @@ jobs:
           git commit -m "Bake voice clips ($(git diff --cached --name-only | wc -l) new)"
           git pull --rebase origin "${GITHUB_REF_NAME}"
           git push origin "HEAD:${GITHUB_REF_NAME}"
+      - name: Report clips that could not be recorded
+        if: steps.record.outputs.failed != ''
+        run: |
+          echo "::error::Clips missing for:${{ steps.record.outputs.failed }} (see the FAILED lines above)."
+          exit 1
