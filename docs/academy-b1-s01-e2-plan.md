@@ -88,3 +88,13 @@ Objective, exit task, success criteria and the 60-minute shape do not change.
 | C1 eight feeling words | **Postcard Inspector** (`inspect`, look "postcard": approve or fix diary lines, -ed = how I feel, -ing = what causes it, then type "I felt … because …") | replaces the `cause-sort` sort | C1 |
 Wave 2 (not yet approved): Postcard Finder (C4), Chunk Workshop (C3), Stress Beats (C1/C5).
 Traceability: the game names its criterion; responses stay at or above 80.
+
+## Amendment 2 · 2026-10-17: Wave 2 games (owner "go")
+Objective, exit task, success criteria and the 60-minute shape do not change. Lesson 2 needs more student responses (about 60 on the shortest path, target 80).
+
+| Criterion | New game (kind) | Replaces / adds | Serves |
+|---|---|---|---|
+| C4 describe a postcard so my partner finds it, with at least three new words | **Postcard Finder** (`finder`: six lookalike postcards, build a clue with a 0/3 new-word counter; the partner picks; a trap card says "this clue also fits… add a detail"; then the roles swap) | adds before the Mission speak scene | C4 |
+| C3 go camping, go sightseeing, try something new | **Chunk Workshop** (`workshop`: pick one of three cards for each half of a chunk, wrong pairs such as "do camping" wobble apart, then use the chunk in a trip sentence) | adds after the chunk teach page | C3 |
+| C1 feeling words, C5 voice note | **Stress Beats** (`beats`: tap the stressed syllable of embARRassed, exCITed, DEStination…, self-paced, no timer) | adds in the Energiser part | C1, C5 |
+Traceability: every game names its criterion; responses must reach at least 80.

@@ -82,3 +82,9 @@ Replaces the weakest plain question screens with game encounters; the objective,
 | C3 three forms of nine verbs | **Participle Cipher** (`cipher`: type the participle with green/yellow/grey feedback, then the chain see-saw-seen) | adds to Trophy Forge in the Energiser part | C3 |
 | C5 who has done the most and why | **Who has done the most?** (`interview`, look "friends": three personas answer "Have you ever…?" in recorded voice, a notes strip, then the spoken verdict) | adds before the Mission speak scene | C5 |
 Traceability: every new game names its criterion above; the Wrap, the quest objectives and the teacher checklist are unchanged. Responses stay at or above 80.
+
+## Amendment 2 · 2026-10-17: Wave 2 game (owner "go")
+| Criterion | New game (kind) | Replaces / adds | Serves |
+|---|---|---|---|
+| C4 choose past simple vs present perfect | **Timeline Switchboard** (`switchboard`: move a time marker (last summer, in 2019, ever, never, so far, just) on a timeline with a NOW line; the sentence rewrites itself and offers only the matching verb pair; reverse levels start from the sentence; free play at the end) | adds after the rule, before the Mission | C4 |
+Traceability: it names its criterion; the objective and the 60-minute shape do not change.
