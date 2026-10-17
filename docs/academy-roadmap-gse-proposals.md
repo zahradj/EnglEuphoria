@@ -1,0 +1,26 @@
+# Roadmap proposals from the GSE grammar check (2026-10-17) — for the owner's decision
+
+> Nothing here is applied. Evidence: `docs/research/academy-a1-gse-grammar-check.md` (A1) and `docs/research/academy-gse-grammar-check-a2-c1.md` (A2-C1, generated), read from the Pearson *GSE Learning Objectives: Grammar, Adult Learners* (Feb 2023). **One source only:** the English Grammar Profile and Vocabulary Profile could not be opened, and the earlier CEFR-J check (`academy-curriculum-primary-source-check.md`) sometimes disagrees with the GSE (e.g. present perfect continuous: CEFR-J B2.1, GSE 47-48 = B1). Where two sources disagree, I recommend **keeping the placement** and checking the EGP before moving a Season.
+> Rule of thumb used: the GSE value is the 50 % point; Pearson introduces a structure about 10 points earlier. So a structure rated LOWER than its level is not wrong (it is review/consolidation), and one rated HIGHER than its level is fine if taught as a chunk first (already marked `chunkFirst`).
+
+## Proposals
+
+| # | Level / Season | Finding (GSE) | Options | Recommendation | Cost if applied |
+|---|---|---|---|---|---|
+| 1 | **B1-S10** Plans and Promises | present continuous for the future 42 and will for predictions/offers 38: both **A2+ values**, placed after Seasons rated 45-49 (S05-S09). A2-S09 already teaches will. | (a) move S10 earlier (to the S04 slot; S04-S09 shift to S05-S10); (b) keep in place and reposition as a **consolidation Season**: its E3 is the present continuous for arrangements, E6 will for promises, both revised from A2 | **(b)**: the order already reads as a spiral; only the wording changes. Use (a) only if the owner wants GSE order. | (a): renumber 6 unbuilt Seasons, update ids, recycle links, docs; no built lesson is affected (only B1-S01-S03 exist). (b): reword objectives and the roadmap note. |
+| 2 | **B1-S01** Have You Ever...? | present perfect for experience and *ever* questions are GSE 41 (A2+); *been vs gone* 47. B1 starts at 43. | keep | **Keep.** It sits exactly at the A2+/B1 boundary, which is a good first B1 Season. | none |
+| 3 | **A2-S08** Going Places | infinitive of purpose ("to buy ...") is **GSE 52 (B1+)**, 10 points above the A2 band top. | (a) chunk-only at A2 (already noted `chunkFirst`); (b) move the structure to B1 | **(a)**: keep the Season, teach "to + verb" only as whole phrases ("I went to the shop to buy ...") and drop the rule. | reword the Season's E3 use; no move |
+| 4 | **A2-S06 / A2-S13** | *mustn't* 46 and *as ... as* 44, both above A2 (42) | as above | **chunk first** (already noted); no move | none |
+| 5 | **B2 Seasons rated B1/B1+** (B2-S01 present perfect continuous 47-48; S06 perfect modals 52-58; S09 causative 56, embedded questions 38-51; S11 verbs that change meaning 49-51 and articles 48-49; S13 ellipsis 48-58; S18 preposition + -ing 47-55) | The GSE rates these forms at B1-B1+. CEFR-J rates several B2. | (a) keep; (b) pull some forward into B1 and replace them at B2 | **Keep (a)** until the EGP can be opened (two sources disagree). Treat the B2 versions as *extended use* (contrasts, accuracy, register), not first meeting; say so in each Season's E3 objective. | reword objectives only |
+| 6 | **B2-S13 participle clauses** | only the -ing reduced relative is B2 (56); appended participles are 71-76 (B2+/C1) | split the use | teach -ing first, -ed / passive appended clauses for recognition (already `chunkFirst`) | none |
+| 7 | **C1 Seasons whose forms the GSE rates B2/B2+** (inversion 71-74, inverted conditionals 70, mixed conditionals 67, passive reporting 59-73, nominalisation 64, fronting 59-74, concessive wh-ever 68, *the more ... the more* 53, modal nuance, ellipsis) | the forms are not new to a B2+ student | (a) keep the Seasons, re-scope their objectives to **precision, style and register** ("use it accurately and naturally in a formal text/speech"); (b) merge or drop Seasons | **(a)**: the C1 value is in use, not form. Reword the E3 objective and the Release rubric. | reword; no move |
+| 8 | **C1 items with no objective in the list** (register shift, advanced concession, discourse markers, rhetorical devices, irony/understatement, text cohesion) | The adult grammar list covers forms, not discourse skills | keep | **Keep** and source them elsewhere (CEFR Companion Volume descriptors, which could not be opened either) | none |
+| 9 | **B1-S12 vs S13** | backshift in reported speech is 56 and the past perfect 54-63, close together; backshift is already limited to present-to-past | keep | **Keep** the existing scope limit | none |
+| 10 | **A1** | already handled: chunk-first notes and Season 12 reworded | done | — | done |
+
+## What I recommend you approve now
+1. Proposal 1(b), 3(a), 4, 5(a), 6, 7(a): **wording changes only** (E3 objectives, chunk-first notes, Release rubric), no Season is moved or renumbered.
+2. Hold proposal 1(a) (renumbering) and any move from proposal 5 until the English Grammar Profile can be opened (it needs a person with browser access).
+
+## What I did not check
+EGP and EVP levels, the CEFR Companion Volume wording of every can-do, vocabulary sizes against the English Vocabulary Profile, and first-language (ar, es, fr, tr, it) transfer for every Season: all still need the sources listed in `academy-curriculum-primary-source-check.md`.

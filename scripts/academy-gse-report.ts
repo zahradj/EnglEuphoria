@@ -29,6 +29,8 @@ const out = [
   '> Source: Pearson, *GSE Learning Objectives: Grammar, Adult Learners* (Feb 2023), read from the PDF text; method and limits in `docs/research/academy-a1-gse-grammar-check.md`. The numbers were mapped by four agents from the rows they read, then spot-read by me; **mapping a structure to its objectives involves judgement** (sub-uses, wording), so treat single numbers as indicative and verify before moving a Season.',
   '> The GSE value is the point of 50 % success; Pearson says to introduce a structure about 10 points before it. A structure is flagged only when its LOWEST sub-use is above band top + 10, or when the whole structure is rated a lower level than ours.',
   '',
+  '> Note: the Pearson PDF heads its second B2 table "B2+ (59-66)"; its rows carry GSE 67-75, so I read that table as B2+ 67-75 (a typo in the source heading).',
+  '',
   '## Flags (candidates for a roadmap decision, none applied)',
   ...(['A2', 'B1', 'B2', 'C1'] as const).flatMap((l) => [`- **${l}:** ${flags[l].length ? flags[l].join('; ') : 'none'}`]),
   ...rows,
