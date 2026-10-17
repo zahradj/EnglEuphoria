@@ -38,7 +38,7 @@ function RuleView({ scene, onDone, artBase }: SceneProps<RuleScene>) {
 
 export const ruleScene: SceneModule<RuleScene> = {
   view: RuleView,
-  spoken: () => [],
+  spoken: (s) => s.lines.map((l) => ({ who: s.who, text: `${l.rule} ${l.example}` })),
   validate: (s) => {
     const p: string[] = [];
     if (!s.lines?.length) p.push(`${s.id}: rule has no lines`);

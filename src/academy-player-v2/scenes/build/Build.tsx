@@ -47,7 +47,7 @@ function BuildView({ scene, onDone, artBase, seed }: SceneProps<BuildScene>) {
 
 export const buildScene: SceneModule<BuildScene> = {
   view: BuildView,
-  spoken: () => [],
+  spoken: (s) => s.items.map((i) => ({ who: 'Vee', text: i.words.join(' ') })),
   validate: (s) => {
     if (!s.items?.length) return [`${s.id}: build has no sentences`];
     return s.items.flatMap((it, i) => (it.words.length < 3 || it.words.length > 9 ? [`${s.id}: sentence ${i + 1} needs 3-9 words`] : []));

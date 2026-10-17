@@ -30,7 +30,8 @@ function ModelView({ scene, onDone, artBase }: SceneProps<ModelScene>) {
 
 export const modelScene: SceneModule<ModelScene> = {
   view: ModelView,
-  spoken: () => [],
+  // the teacher models; the student's own turn (you do) is not spoken by a voice
+  spoken: (s) => s.steps.filter((x) => x.phase !== 'youDo').map((x) => ({ who: s.who, text: x.text })),
   validate: (s) => {
     const p: string[] = [];
     if (!s.steps?.length) return [`${s.id}: model has no steps`];

@@ -24,3 +24,16 @@ describe('registered lessons', () => {
     });
   }
 });
+
+import { spokenLines } from '../engine/spokenLines';
+describe('voice lines', () => {
+  it('every registered lesson has recordable lines, each said by a cast member with a voice', async () => {
+    const { ACADEMY_VOICES } = await import('../../academy-deck/voices');
+    for (const id of scriptIds()) {
+      const s = (await loadScript(id))!;
+      const lines = spokenLines(s);
+      expect(lines.length).toBeGreaterThan(20);
+      for (const l of lines) expect(ACADEMY_VOICES[l.who as keyof typeof ACADEMY_VOICES], `${l.who}: ${l.text}`).toBeTruthy();
+    }
+  });
+});

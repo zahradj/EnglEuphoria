@@ -30,7 +30,7 @@ function SpeakView({ scene, onDone, artBase }: SceneProps<SpeakScene>) {
 
 export const speakScene: SceneModule<SpeakScene> = {
   view: SpeakView,
-  spoken: () => [],
+  spoken: (s) => s.turns.filter((t) => t.model).map((t) => ({ who: s.who, text: t.model! })),
   validate: (s) => {
     const p: string[] = [];
     if (!s.turns?.length) return [`${s.id}: speak has no turns`];

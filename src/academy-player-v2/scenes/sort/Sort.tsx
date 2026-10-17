@@ -75,7 +75,7 @@ function SortView({ scene, onDone, artBase, calm, seed }: SceneProps<SortScene>)
 
 export const sortScene: SceneModule<SortScene> = {
   view: SortView,
-  spoken: () => [],
+  spoken: (s) => [{ who: 'Vee', text: s.prompt }],
   validate: (s) => {
     const p: string[] = [];
     if (s.bins?.length < 2) p.push(`${s.id}: sort needs 2+ boxes`);

@@ -50,7 +50,7 @@ function ChoiceView({ scene, onDone, artBase }: SceneProps<ChoiceScene>) {
 
 export const choiceScene: SceneModule<ChoiceScene> = {
   view: ChoiceView,
-  spoken: () => [],
+  spoken: (s) => s.questions.map((q) => ({ who: 'Vee', text: q.q })),
   validate: (s) => {
     const p: string[] = [];
     if (!s.questions?.length) return [`${s.id}: choice has no questions`];

@@ -106,8 +106,8 @@ function ComicView({ scene, onDone, artBase, calm }: SceneProps<ComicScene>) {
 
 export const comicScene: SceneModule<ComicScene> = {
   view: ComicView,
-  // the view speaks line by line in step with the bubbles
-  spoken: () => [],
+  // the view speaks these line by line in step with the bubbles
+  spoken: (s) => s.beats.flatMap((b) => b.lines.map((l) => ({ who: l.who, text: l.text }))),
   validate: (s) => {
     const p: string[] = [];
     if (!s.beats?.length) return [`${s.id}: comic needs 3-5 beats`];

@@ -11,31 +11,29 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { slideLines, ALPHABET } from '../src/academy-deck/spoken.ts';
 import { ACADEMY_VOICES } from '../src/academy-deck/voices.ts';
+import { scriptIds, loadScript } from '../src/academy-player-v2/lessonScripts.ts';
+import { spokenLines } from '../src/academy-player-v2/engine/spokenLines.ts';
 
 const OUT = path.join(path.dirname(fileURLToPath(import.meta.url)), 'academy-voice-lines.json');
 
-// All lessons were removed on 2026-10-17 for the player v2 rebuild (docs/academy-player-v2-plan.md). Register each rebuilt lesson's script here.
-// While the list is empty the script leaves scripts/academy-voice-lines.json (the clips already baked) untouched.
-const decks = [];
-
-if (decks.length === 0) {
+// Lines come from the player v2 scenes (each scene module's spoken()), for every lesson registered in src/academy-player-v2/lessonScripts.ts.
+const ids = scriptIds();
+if (ids.length === 0) {
   console.log('No lessons registered: keeping the existing', OUT);
   process.exit(0);
 }
 const seen = new Map();
-for (const d of decks) {
-  for (const s of d.slides) {
-    for (const l of slideLines(s)) {
-      if (!ACADEMY_VOICES[l.who]) throw new Error(`No voice for ${l.who} (src/academy-deck/voices.ts)`);
-      const k = `${l.who}::${l.text}`;
-      if (!seen.has(k)) seen.set(k, { who: l.who, text: l.text });
-    }
+for (const id of ids) {
+  for (const l of spokenLines(await loadScript(id))) {
+    if (!ACADEMY_VOICES[l.who]) throw new Error(`No voice for ${l.who} (src/academy-deck/voices.ts)`);
+    seen.set(`${l.who}::${l.text}`, { who: l.who, text: l.text });
   }
 }
-// letter names for the spelling game (the student's own name can use any letter)
-if (decks.some((d) => d.slides.some((s) => s.kind === 'spell'))) for (const l of ALPHABET) seen.set(`Vee::${l}`, { who: 'Vee', text: l });
+// keep the clips already baked (lines of other lessons) and add the new ones
+let old = [];
+try { old = JSON.parse(fs.readFileSync(OUT, 'utf8')); } catch { /* first run */ }
+for (const l of old) { const k = `${l.who}::${l.text}`; if (!seen.has(k)) seen.set(k, l); }
 const lines = [...seen.values()];
 fs.writeFileSync(OUT, JSON.stringify(lines, null, 2) + '\n');
 const per = {};

@@ -36,6 +36,6 @@ function WrapView({ scene, script, onDone, artBase, summary }: SceneProps<WrapSc
 
 export const wrapScene: SceneModule<WrapScene> = {
   view: WrapView,
-  spoken: () => [],
+  spoken: (s) => [{ who: 'Vee', text: s.teachBack }],
   validate: (s) => (s.teachBack?.trim() ? [] : [`${s.id}: the Wrap needs a teach-back prompt`]),
 };
