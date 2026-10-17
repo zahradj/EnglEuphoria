@@ -4,6 +4,7 @@ import { CAST } from '../scenes';
 import { safeSpeak } from '../../unit1/audio';
 import * as sfx from '../../unit1/sfx';
 import { voiceOf, CharacterPointer } from './shared';
+import { SKIN, PILL_FONT, jewel } from '../../gameSkin';
 
 /* ---------- Drag match (listen, then drag the word onto its object) ---------- */
 
@@ -158,11 +159,11 @@ export function DragMatchScene({ scene, onNext, onWin, onLose }: { scene: Extrac
         <CharacterPointer key={`point-${i}`} left={p.left} top={p.top} dir={p.dir} color={CAST[p.who].color} />
       ))}
       {scene.showBlanks && (
-        <div className="pointer-events-none absolute left-1/2 top-4 z-30 -translate-x-1/2 rounded-full bg-orange-500 px-4 py-1 text-center text-xs font-black uppercase tracking-widest text-white shadow-lg">
+        <div className="pointer-events-none absolute left-1/2 top-4 z-30 -translate-x-1/2 rounded-full border-[0.3vh] border-white bg-gradient-to-b from-[#FDE68A] to-[#F59E0B] px-4 py-1 text-center text-xs font-black uppercase tracking-widest text-[#2A1A05] shadow-lg">
           📝 Sentence Builder
         </div>
       )}
-      <div className={`pointer-events-none absolute left-1/2 z-30 max-w-[92%] -translate-x-1/2 rounded-full bg-white/95 px-5 py-2 text-center text-sm font-black text-orange-700 shadow-xl backdrop-blur sm:text-base ${scene.showBlanks ? 'top-14' : 'top-4'}`}>
+      <div className={`pointer-events-none absolute left-1/2 z-30 max-w-[92%] -translate-x-1/2 px-5 py-2 text-center ${SKIN.pill} ${scene.showBlanks ? 'top-14' : 'top-4'}`} style={{ fontSize: PILL_FONT }}>
         {scene.teacher} <span className="ml-1 opacity-60">({placed.size}/{total})</span>
       </div>
       {/* For vocab-matching drag-match scenes, no landing-zone hint is
@@ -192,10 +193,10 @@ export function DragMatchScene({ scene, onNext, onWin, onLose }: { scene: Extrac
       {scene.items.map((item, i) => placed.has(i) && (
         <div
           key={`placed-${i}`}
-          className="pointer-events-none absolute z-20 -translate-x-1/2 -translate-y-1/2 grid place-items-center rounded-2xl px-7 py-5 shadow-xl ring-4 ring-white"
-          style={{ left: item.targetLeft, top: item.labelTop ?? item.targetTop, background: item.color, animation: 'lep1-pop 0.4s ease-out' }}
+          className={`pointer-events-none absolute z-20 -translate-x-1/2 -translate-y-1/2 grid place-items-center rounded-[2vh] px-7 py-5 ${jewel(i)}`}
+          style={{ left: item.targetLeft, top: item.labelTop ?? item.targetTop, animation: 'lep1-pop 0.4s ease-out' }}
         >
-          <span className="text-xl font-black uppercase tracking-wide text-white sm:text-2xl">{item.label}</span>
+          <span className="text-xl font-black uppercase tracking-wide sm:text-2xl">{item.label}</span>
         </div>
       ))}
       <div className="pointer-events-none absolute inset-x-0 bottom-6 z-30 flex flex-wrap justify-center gap-3 px-4">
@@ -223,15 +224,15 @@ export function DragMatchScene({ scene, onNext, onWin, onLose }: { scene: Extrac
               key={`tray-${i}`}
               onPointerDown={(e) => startDrag(e, i)}
               aria-label={`Drag the word ${item.label}`}
-              className={`touch-none shadow-2xl ring-4 ring-white transition active:scale-95 rounded-2xl px-7 py-5 ${wrongIdx === i ? 'animate-[lep1-shake_0.4s_ease-in-out]' : ''} ${isBeingDragged ? 'pointer-events-none opacity-0' : 'pointer-events-auto'}`}
-              style={{ background: item.color, animation: isBeingDragged || wrongIdx === i ? undefined : 'lep1-hop 1.6s ease-in-out infinite' }}
+              className={`touch-none transition active:scale-95 rounded-[2vh] px-7 py-5 ${jewel(i)} ${wrongIdx === i ? 'animate-[lep1-shake_0.4s_ease-in-out]' : ''} ${isBeingDragged ? 'pointer-events-none opacity-0' : 'pointer-events-auto'}`}
+              style={{ animation: isBeingDragged || wrongIdx === i ? undefined : 'lep1-hop 1.6s ease-in-out infinite' }}
             >
               {/* Unified to one large size regardless of showBlanks — the
                   smaller vocab-matching variant (text-sm, px-4 py-3) read
                   as a tiny target on a real classroom-scaled frame,
                   reported live as "the grab and drop buttons are too
                   small on the screen." */}
-              <span className="text-xl font-black uppercase tracking-wide text-white sm:text-2xl">{item.label}</span>
+              <span className="text-xl font-black uppercase tracking-wide sm:text-2xl">{item.label}</span>
             </button>
           );
         })}
@@ -251,10 +252,10 @@ export function DragMatchScene({ scene, onNext, onWin, onLose }: { scene: Extrac
           track correctly regardless of scale. */}
       {drag && (
         <div
-          className="pointer-events-none absolute z-50 -translate-x-1/2 -translate-y-1/2 grid place-items-center rounded-xl px-4 py-3 shadow-2xl ring-4 ring-white"
-          style={{ left: `${drag.xPct}%`, top: `${drag.yPct}%`, background: scene.items[drag.idx].color }}
+          className={`pointer-events-none absolute z-50 -translate-x-1/2 -translate-y-1/2 grid place-items-center rounded-[1.6vh] px-4 py-3 ${jewel(drag.idx)}`}
+          style={{ left: `${drag.xPct}%`, top: `${drag.yPct}%` }}
         >
-          <span className="text-sm font-black uppercase tracking-wide text-white">{scene.items[drag.idx].label}</span>
+          <span className="text-sm font-black uppercase tracking-wide">{scene.items[drag.idx].label}</span>
         </div>
       )}
       {done && (

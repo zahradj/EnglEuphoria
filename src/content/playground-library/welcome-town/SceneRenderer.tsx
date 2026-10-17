@@ -60,6 +60,10 @@ import { FeelingsRunnerScene } from './scene-components/FeelingsRunnerScene';
 import { TowerPullScene } from './scene-components/TowerPullScene';
 import { MusicalIslandsScene } from './scene-components/MusicalIslandsScene';
 import { RedGreenScene } from './scene-components/RedGreenScene';
+import { PartyLiftScene } from './scene-components/PartyLiftScene';
+import { DotDotScene } from './scene-components/DotDotScene';
+import { AgeLineupScene } from './scene-components/AgeLineupScene';
+import { PartyPhoneScene } from './scene-components/PartyPhoneScene';
 import { LetterBubblesScene } from './scene-components/LetterBubblesScene';
 import { CrosswordScene } from './scene-components/CrosswordScene';
 import { FlagRaceScene } from './scene-components/FlagRaceScene';
@@ -69,6 +73,8 @@ import { RocketMazeScene } from './scene-components/RocketMazeScene';
 import { WeatherReportScene } from './scene-components/WeatherReportScene';
 import { FoodSurveyScene } from './scene-components/FoodSurveyScene';
 import { MoodMachineScene } from './scene-components/MoodMachineScene';
+import { LiveReefScene } from './scene-components/LiveReefScene';
+import { ReefDetectiveScene } from './scene-components/ReefDetectiveScene';
 import { MonsterBuilderScene } from './scene-components/MonsterBuilderScene';
 import { MonsterMixUpScene } from './scene-components/MonsterMixUpScene';
 import { GuessWhoScene } from './scene-components/GuessWhoScene';
@@ -150,6 +156,9 @@ export function SceneRenderer(props: {
   gemsCollected: number;
   heartsRemaining: number;
   activitySync?: ActivitySync;
+  /** Live class: who this screen is, and the class id (the A1 level tests need both to score and save). */
+  role?: 'teacher' | 'student';
+  roomId?: string;
 }) {
   const instruction = (props.scene as { teacher?: string }).teacher;
   const scene = displayScene(props.scene);
@@ -202,6 +211,10 @@ export function SceneRenderer(props: {
       case 'tower-pull': return <TowerPullScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'musical-islands': return <MusicalIslandsScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'red-green': return <RedGreenScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
+      case 'party-lift': return <PartyLiftScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
+      case 'dot-dot': return <DotDotScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
+      case 'age-lineup': return <AgeLineupScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
+      case 'party-phone': return <PartyPhoneScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'letter-bubbles': return <LetterBubblesScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'crossword': return <CrosswordScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'flag-race': return <FlagRaceScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
@@ -214,6 +227,8 @@ export function SceneRenderer(props: {
       case 'guess-who': return <GuessWhoScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'feelings-meter': return <FeelingsMeterScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'mood-machine': return <MoodMachineScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
+      case 'reef-detective': return <ReefDetectiveScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
+      case 'live-reef': return <LiveReefScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'food-survey': return <FoodSurveyScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'festival-cafe': return <FestivalCafeScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'build-dish': return <BuildDishScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
@@ -244,7 +259,7 @@ export function SceneRenderer(props: {
       case 'where-castle': return <WhereCastleScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'chat-chain': return <ChatChainScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
       case 'feelings-survey': return <FeelingsSurveyScene scene={scene} onNext={props.onNext} onWin={props.onWin} onLose={props.onLose} sync={props.activitySync} />;
-      case 'prea1': return <PreA1SceneRenderer scene={scene.scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} onRestart={props.onRestart} gemsCollected={props.gemsCollected} heartsRemaining={props.heartsRemaining} activitySync={props.activitySync} />;
+      case 'prea1': return <PreA1SceneRenderer scene={scene.scene} onWin={props.onWin} onLose={props.onLose} onNext={props.onNext} onRestart={props.onRestart} gemsCollected={props.gemsCollected} heartsRemaining={props.heartsRemaining} activitySync={props.activitySync} role={props.role} roomId={props.roomId} />;
       case 'finale': return <FinaleScene scene={scene} hearts={props.heartsRemaining} gems={props.gemsCollected} onRestart={props.onRestart} />;
       default: return null;
     }

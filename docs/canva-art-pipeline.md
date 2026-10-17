@@ -10,6 +10,8 @@ The session's container cannot reach canva.com directly, so pictures travel like
 2. **Generate.** `generate-image` with the prompt, `aspectRatio` (`LANDSCAPE_16_9` for scenes, `SQUARE_1_1`
    for stickers on a plain white background) and `imageReferences` = the reference media ids. Poll
    `get-generate-image-job`; look at the result before using it.
+   Every Playground prompt ends with `PICTURE_COLOUR_LINE` (`src/content/playground-library/gameSkin.ts`, the
+   brand shades: orange, sunshine yellow, cream, sky blue, green; purple only as an accent) and the modest-clothing line.
 3. **Place on the holder design.** One Canva design holds every lesson picture, one page each:
    **"EnglEuphoria lesson art"** (`DAHXATpO_n4`). `read-design` with `open_transaction` → `edit-design`
    (`add_page` 1920x1080 for scenes / 1024x1024 for stickers, then `insert_fill` the image over the whole

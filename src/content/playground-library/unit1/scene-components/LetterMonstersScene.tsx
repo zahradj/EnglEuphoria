@@ -76,19 +76,29 @@ export function LetterMonstersScene({ scene, onWin, onNext, sync }: { scene: Mon
   };
 
   const right = c ? scene.monsters.findIndex((m) => m.letter.toLowerCase() === firstSound(c.word)) : -1;
+  const sea = scene.look === 'sea';
   return (
-    <motion.div className="absolute inset-0 select-none overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${LAND})` }} animate={shakeCtl}>
+    <motion.div className="absolute inset-0 select-none overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${sea ? scene.bg : LAND})` }} animate={shakeCtl}>
+      {sea && <div className="pointer-events-none absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(56,189,248,0.18), rgba(3,105,161,0.12) 70%, rgba(254,251,221,0.18))' }} />}
+      {/* sea: bubbles rise past the monsters */}
+      {sea && !reduce && Array.from({ length: 12 }, (_, k) => (
+        <motion.span key={`bub${k}`} className="pointer-events-none absolute z-10 rounded-full border-2 border-white/70 bg-white/20"
+          style={{ left: `${(k * 37) % 96 + 2}%`, width: `${10 + (k % 4) * 6}px`, height: `${10 + (k % 4) * 6}px` }}
+          initial={{ top: '105%', opacity: 0 }} animate={{ top: ['105%', '-8%'], opacity: [0, 0.9, 0.9, 0], x: [0, 8, -6, 4] }}
+          transition={{ duration: 7 + (k % 5), repeat: Infinity, delay: k * 0.7, ease: 'linear' }} />
+      ))}
       {done && <Confetti count={60} />}
       <div className="pointer-events-none absolute inset-x-0 top-14 z-30 flex justify-center px-14">
         <span className="text-center font-black text-white" style={{ ...THICK_WORDS, fontSize: 'clamp(1.15rem, min(calc(3*var(--svw,1vw)), 5vh), 2.4rem)' }}>
-          {done ? 'Yum! The monsters are full!' : 'Who eats this one? Listen to the first sound!'}
+          {done ? (sea ? 'Yum! The sea monsters are full!' : 'Yum! The monsters are full!') : 'Who eats this one? Listen to the first sound!'}
         </span>
       </div>
       {/* the picture card */}
       <AnimatePresence mode="wait">
         {c && fly === null && (
           <motion.button key={round} onClick={() => cueSpeak(c.word.charAt(0).toUpperCase() + c.word.slice(1) + '!', scene.who)} aria-label={c.word}
-            className="absolute left-1/2 top-[21%] z-30 rounded-3xl border-4 border-amber-200 bg-gradient-to-b from-pink-200 to-rose-300 p-2 shadow-2xl" style={{ translate: '-50% 0' }}
+            className={`absolute left-1/2 top-[21%] z-30 shadow-2xl ${sea ? 'rounded-full border-4 border-white/80 p-4' : 'rounded-3xl border-4 border-amber-200 bg-gradient-to-b from-pink-200 to-rose-300 p-2'}`}
+            style={{ translate: '-50% 0', ...(sea ? { background: 'radial-gradient(circle at 30% 25%, #ffffff 0 10%, rgba(240,251,255,0.95) 28%, rgba(186,230,253,0.9) 70%, rgba(125,211,252,0.95) 100%)', boxShadow: 'inset -8px -10px 18px rgba(3,105,161,0.35), 0 12px 24px rgba(3,105,161,0.35)' } : {}) }}
             initial={{ scale: 0, rotate: -15, y: 0 }} animate={reduce ? { scale: 1 } : { scale: 1, rotate: [0, -3, 3, 0], y: [0, -10, 0] }} exit={{ scale: 0 }} transition={{ type: 'spring', stiffness: 300, damping: 14, y: { duration: 2, repeat: Infinity, ease: 'easeInOut' }, rotate: { duration: 2.6, repeat: Infinity } }}>
             <img src={c.img} alt="" draggable={false} style={{ width: 'min(16vh, 12vw)', height: 'min(16vh, 12vw)' }} className="object-contain" />
           </motion.button>
@@ -125,14 +135,14 @@ export function LetterMonstersScene({ scene, onWin, onNext, sync }: { scene: Mon
             </motion.button>
             {/* crumbs fly out of the mouth on the chomp */}
             {yum === i && !reduce && CRUMBS.map((dx, k) => (
-              <motion.span key={k} className="pointer-events-none absolute left-1/2 top-[40%] h-3 w-3 rounded-full bg-amber-500 shadow"
+              <motion.span key={k} className={`pointer-events-none absolute left-1/2 top-[40%] h-3 w-3 rounded-full shadow ${sea ? 'border border-white bg-sky-100/80' : 'bg-amber-500'}`}
                 initial={{ x: 0, y: 0, opacity: 1 }} animate={{ x: dx * 1.6, y: [0, -50 - (k % 3) * 20, 40], opacity: [1, 1, 0] }} transition={{ duration: 0.7, ease: 'easeOut' }} />
             ))}
           </div>
         );
       })}
       <div className="pointer-events-none absolute bottom-3 left-3 z-30 flex gap-1 rounded-full bg-white/85 px-3 py-1 shadow-lg">
-        {scene.cards.map((_, i) => <span key={i} className={`text-xl ${i < round ? '' : 'opacity-25 grayscale'}`}>🍪</span>)}
+        {scene.cards.map((_, i) => <span key={i} className={`text-xl ${i < round ? '' : 'opacity-25 grayscale'}`}>{sea ? '🐚' : '🍪'}</span>)}
       </div>
       <Bursts items={bursts} />
       <AnimatePresence>

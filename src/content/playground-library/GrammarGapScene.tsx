@@ -68,6 +68,9 @@ export interface GrammarGapSceneData {
   title?: string;
   /** Optional background art; the scene draws its own garden, but the lesson players read `bg` on every scene. */
   bg?: string;
+  /** Design (owner 2026-10-16, "be creative — ideas that suit the concept"): 'garden' (default: flowers bloom into the
+   *  gap) or 'reef' (sea worlds: the `bg` reef picture, a driftwood sign, and the choices are pearls in open clam shells). */
+  look?: 'garden' | 'reef';
 }
 
 interface GapState {
@@ -249,11 +252,12 @@ export function GrammarGapScene({ scene, onNext, onWin, onResult, sync }: {
 
   const count = Math.max(1, Math.min(6, Math.floor(round.count ?? 1)));
   const hint = wrong.length >= 2 && !solved;
-  const title = scene.title ?? 'Grammar Garden';
-  const prompt = finished ? 'The garden is in bloom! Well done!'
+  const reef = scene.look === 'reef';
+  const title = scene.title ?? (reef ? 'Pearl Reef' : 'Grammar Garden');
+  const prompt = finished ? (reef ? 'Look at all your pearls! Well done!' : 'The garden is in bloom! Well done!')
     : !introDone ? 'Listen to the pattern…'
       : solved ? 'Yes!'
-        : 'Pick the flower that fits the gap.';
+        : reef ? 'Pick the pearl that fits the gap.' : 'Pick the flower that fits the gap.';
   const sentenceSize = 'clamp(1.4rem, 8.2cqh, 3.6rem)';
   const answerColor = colorOf(scene, round, round.answer, '#16a34a');
   const showClue = solved || hint;
@@ -267,12 +271,17 @@ export function GrammarGapScene({ scene, onNext, onWin, onResult, sync }: {
         @keyframes gg-glow { 0%,100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(253,224,71,0)); } 50% { transform: scale(1.08); filter: drop-shadow(0 0 2.4cqh rgba(253,224,71,1)); } }
         @keyframes gg-bloom { 0% { transform: scale(.3) rotate(-40deg); } 70% { transform: scale(1.25) rotate(8deg); } 100% { transform: scale(1) rotate(0); } }
       `}</style>
-      <GardenBackdrop />
+      {reef && scene.bg ? (
+        <>
+          <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})`, filter: 'blur(3px) saturate(0.9)', transform: 'scale(1.04)' }} />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(186,230,253,0.35), rgba(254,251,221,0.25) 60%, rgba(254,251,221,0.45))' }} />
+        </>
+      ) : <GardenBackdrop />}
 
       <HudBar
-        left={<TitleRibbon text={title} icon={<span style={{ fontSize: '4.4cqh', lineHeight: 1 }} aria-hidden="true">🌻</span>} />}
+        left={<TitleRibbon text={title} icon={<span style={{ fontSize: '4.4cqh', lineHeight: 1 }} aria-hidden="true">{reef ? '🐚' : '🌻'}</span>} />}
         centre={<PromptChip>{prompt}</PromptChip>}
-        right={<ProgressPill done={Math.min(rounds.length, roundNo + (solved || finished ? 1 : 0))} total={rounds.length} color="#16a34a" label="flowers" />}
+        right={<ProgressPill done={Math.min(rounds.length, roundNo + (solved || finished ? 1 : 0))} total={rounds.length} color={reef ? '#0ea5e9' : '#16a34a'} label={reef ? 'pearls' : 'flowers'} />}
       />
 
       {/* Colour key: the colour of each word explains the rule */}
@@ -308,7 +317,7 @@ export function GrammarGapScene({ scene, onNext, onWin, onResult, sync }: {
       <div className="absolute inset-x-[4%] flex items-center justify-center" style={{ top: '36%', height: '22%' }}>
         <div
           className="flex flex-wrap items-center justify-center rounded-[3cqh] px-[3cqw] py-[1.4cqh] font-black text-amber-950 shadow-[0_1.2cqh_0_rgba(0,0,0,.3)]"
-          style={{ background: 'linear-gradient(180deg,#f3d9a4,#d9a65e)', outline: '0.6cqh solid #92400e', fontSize: sentenceSize, lineHeight: 1.25, gap: '0.5em', minHeight: '14cqh' }}
+          style={{ background: reef ? 'repeating-linear-gradient(180deg,#e9d3ad 0 2.2cqh,#dcc196 2.2cqh 2.6cqh)' : 'linear-gradient(180deg,#f3d9a4,#d9a65e)', outline: reef ? '0.6cqh solid #8a6a46' : '0.6cqh solid #92400e', fontSize: sentenceSize, lineHeight: 1.25, gap: '0.5em', minHeight: '14cqh' }}
         >
           {!introDone ? (
             <span className="flex flex-col items-center gap-[0.6cqh]">
@@ -374,6 +383,20 @@ export function GrammarGapScene({ scene, onNext, onWin, onResult, sync }: {
                   animation: isWrong ? 'gg-wobble .45s ease-in-out' : isHint ? 'gg-glow .9s ease-in-out infinite' : isRight ? 'gg-bloom .6s ease both' : `gt-rise-in .5s cubic-bezier(.2,.9,.3,1.2) ${k * 110}ms both`,
                 }}
               >
+                {reef ? (
+                  /* an open clam shell holding a pearl with the word */
+                  <div className="relative" style={{ width: '100%', aspectRatio: '1 / 0.92' }}>
+                    <span className="absolute left-[6%] right-[6%] top-[2%] h-[46%] origin-bottom rounded-t-full border-[0.4cqh] border-white/70"
+                      style={{ background: `repeating-conic-gradient(from 270deg at 50% 100%, ${color} 0deg 11deg, #fbcfe8 11deg 22deg)`, transform: isRight ? 'rotate(-34deg) translateX(-6%)' : 'rotate(-16deg) translateX(-3%)', transition: 'transform .45s cubic-bezier(.2,.9,.3,1.3)', boxShadow: '0 0.6cqh 1.2cqh rgba(3,105,161,.25)' }} />
+                    <span className="absolute bottom-[4%] left-[4%] right-[4%] h-[40%] rounded-b-full border-[0.4cqh] border-white/70"
+                      style={{ background: `repeating-conic-gradient(from 90deg at 50% 0%, ${color} 0deg 11deg, #fce7f3 11deg 22deg)`, boxShadow: '0 1cqh 1.6cqh rgba(3,105,161,.3)' }} />
+                    <span className="absolute left-1/2 top-[52%] flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full font-black text-sky-950"
+                      style={{ width: '66%', aspectRatio: '1 / 1', fontSize: 'clamp(1.1rem, 5.4cqh, 2.6rem)', lineHeight: 1, background: 'radial-gradient(circle at 32% 28%, #ffffff 0 14%, #fdf4ff 30%, #e0f2fe 70%, #bae6fd 100%)', border: `0.5cqh solid ${isHint || isRight ? '#FEAF15' : 'rgba(255,255,255,.9)'}`, boxShadow: isHint || isRight ? '0 0 2.4cqh 0.6cqh rgba(254,175,21,.8)' : '0 0.6cqh 1.2cqh rgba(3,105,161,.3)' }}>
+                      {word}
+                    </span>
+                  </div>
+                ) : (
+                <>
                 {/* petals */}
                 <div className="relative flex items-center justify-center" style={{ width: '100%', aspectRatio: '1 / 1' }}>
                   {Array.from({ length: 8 }).map((_, p) => (
@@ -394,13 +417,15 @@ export function GrammarGapScene({ scene, onNext, onWin, onResult, sync }: {
                   </span>
                 </div>
                 <span className="block rounded-full" style={{ width: '1.2cqh', height: '5cqh', background: '#16a34a' }} />
+                </>
+                )}
               </button>
             );
           })
         )}
       </div>
 
-      {bursts.map((b) => <Burst key={b.id} x={b.x} y={b.y} count={b.count} spread={b.spread} colors={['#fde047', '#f9a8d4', '#ffffff', '#86efac', '#c4b5fd', '#fdba74']} />)}
+      {bursts.map((b) => <Burst key={b.id} x={b.x} y={b.y} count={b.count} spread={b.spread} colors={reef ? ['#ffffff', '#bae6fd', '#FEAF15', '#fbcfe8', '#7dd3fc'] : ['#fde047', '#f9a8d4', '#ffffff', '#86efac', '#c4b5fd', '#fdba74']} />)}
     </div>
   );
 }

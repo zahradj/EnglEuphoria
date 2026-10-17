@@ -1,7 +1,22 @@
 [
   {
-    "url": "https://export-download.canva.com/ndgiM/DAHYA1ndgiM/-1/0/0054-3536970624511358748.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261014%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261014T201948Z&X-Amz-Expires=30213&X-Amz-Signature=5ccae349d3507833f85fabef108852a99b29a73e2471204d84c817ec0b30dd58&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Thu%2C%2015%20Oct%202026%2004%3A43%3A21%20GMT",
-    "out": "public/lep1/scenes/bg-a1u5-gamenight-wide.png",
+    "url": "https://export-download.canva.com/ndgiM/DAHYA1ndgiM/-1/0/0089-4321722959299964965.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261015%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261015T125741Z&X-Amz-Expires=54203&X-Amz-Signature=6a727101165960498e7688d9facf692979f059514b9aecfd332818ed12f138b6&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Fri%2C%2016%20Oct%202026%2004%3A01%3A04%20GMT",
+    "out": "public/lep1/scenes/bg-a1u6-story-6-wide.png",
+    "sticker": false
+  },
+  {
+    "url": "https://export-download.canva.com/ndgiM/DAHYA1ndgiM/-1/0/0090-2746588991750520570.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261015%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261015T023245Z&X-Amz-Expires=91910&X-Amz-Signature=318aa76468af318883497c2f90d384d370444d7622c11341edd777d581c0fe73&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Fri%2C%2016%20Oct%202026%2004%3A04%3A35%20GMT",
+    "out": "public/lep1/scenes/bg-a1u6-story-7-wide.png",
+    "sticker": false
+  },
+  {
+    "url": "https://export-download.canva.com/ndgiM/DAHYA1ndgiM/-1/0/0091-1195098917310428037.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261015%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261015T152911Z&X-Amz-Expires=44281&X-Amz-Signature=9c530ea4dc9a1304b3cfe1424d2e0bd7240273bf3ce1ad44e5bdbbf112d8244d&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Fri%2C%2016%20Oct%202026%2003%3A47%3A12%20GMT",
+    "out": "public/lep1/scenes/bg-a1u6-story-8-wide.png",
+    "sticker": false
+  },
+  {
+    "url": "https://export-download.canva.com/ndgiM/DAHYA1ndgiM/-1/0/0092-4763075724425306112.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261015%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261015T133708Z&X-Amz-Expires=49617&X-Amz-Signature=e18ad2a4bb8a8466e6232065ea065eecf9cee0939269ec04a9c7eebf34613f18&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Fri%2C%2016%20Oct%202026%2003%3A24%3A05%20GMT",
+    "out": "public/lep1/scenes/bg-a1u6-story-9-wide.png",
     "sticker": false
   }
 ]

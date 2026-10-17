@@ -251,12 +251,20 @@ const PlayFoodLesson5 = lazy(() => import("./pages/playground-scene/PlayFoodLess
 const PlayFoodLesson6 = lazy(() => import("./pages/playground-scene/PlayFoodLesson6"));
 const PlayFoodLesson7 = lazy(() => import("./pages/playground-scene/PlayFoodLesson7"));
 const PlayMonsterLesson1 = lazy(() => import("./pages/playground-scene/PlayMonsterLesson1"));
+const PlayOceanLesson1 = lazy(() => import("./pages/playground-scene/PlayOceanLesson1"));
+const PlayOceanLesson2 = lazy(() => import("./pages/playground-scene/PlayOceanLesson2"));
+const PlayOceanLesson3 = lazy(() => import("./pages/playground-scene/PlayOceanLesson3"));
+const PlayOceanLesson4 = lazy(() => import("./pages/playground-scene/PlayOceanLesson4"));
+const PlayOceanLesson5 = lazy(() => import("./pages/playground-scene/PlayOceanLesson5"));
+const PlayOceanLesson6 = lazy(() => import("./pages/playground-scene/PlayOceanLesson6"));
+const PlayOceanLesson7 = lazy(() => import("./pages/playground-scene/PlayOceanLesson7"));
 const PlayMonsterLesson2 = lazy(() => import("./pages/playground-scene/PlayMonsterLesson2"));
 const PlayMonsterLesson3 = lazy(() => import("./pages/playground-scene/PlayMonsterLesson3"));
 const PlayMonsterLesson4 = lazy(() => import("./pages/playground-scene/PlayMonsterLesson4"));
 const PlayMonsterLesson5 = lazy(() => import("./pages/playground-scene/PlayMonsterLesson5"));
 const PlayMonsterLesson6 = lazy(() => import("./pages/playground-scene/PlayMonsterLesson6"));
 const PlayMonsterLesson7 = lazy(() => import("./pages/playground-scene/PlayMonsterLesson7"));
+const PlayMonsterLesson8 = lazy(() => import("./pages/playground-scene/PlayMonsterLesson8"));
 const PlayMagicCastleLesson1 = lazy(() => import("./pages/playground-scene/PlayMagicCastleLesson1"));
 const PlayMagicCastleLesson2 = lazy(() => import("./pages/playground-scene/PlayMagicCastleLesson2"));
 const PlayMagicCastleLesson3 = lazy(() => import("./pages/playground-scene/PlayMagicCastleLesson3"));
@@ -843,6 +851,48 @@ const App = () => {
                           <Suspense fallback={<LoadingFallback />}><PlaySpaceLesson7 /></Suspense>
                         </ImprovedProtectedRoute>
                       } /> 
+                      {/* A1 tier — Ocean Explorers, Unit 6 Lesson 7 (Boss Test). */}
+                      <Route path="/playground-scene/ocean-lesson-7" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayOceanLesson7 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A1 tier — Ocean Explorers, Unit 6 Lesson 6. */}
+                      <Route path="/playground-scene/ocean-lesson-6" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayOceanLesson6 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A1 tier — Ocean Explorers, Unit 6 Lesson 5. */}
+                      <Route path="/playground-scene/ocean-lesson-5" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayOceanLesson5 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A1 tier — Ocean Explorers, Unit 6 Lesson 4. */}
+                      <Route path="/playground-scene/ocean-lesson-4" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayOceanLesson4 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A1 tier — Ocean Explorers, Unit 6 Lesson 3. */}
+                      <Route path="/playground-scene/ocean-lesson-3" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayOceanLesson3 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A1 tier — Ocean Explorers, Unit 6 Lesson 2. */}
+                      <Route path="/playground-scene/ocean-lesson-2" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayOceanLesson2 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A1 tier — Ocean Explorers, Unit 6 Lesson 1. */}
+                      <Route path="/playground-scene/ocean-lesson-1" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayOceanLesson1 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
                       {/* A1 tier — Monster Town, Unit 5 Lesson 1. */}
                       <Route path="/playground-scene/monster-lesson-1" element={
                         <ImprovedProtectedRoute>
@@ -883,6 +933,12 @@ const App = () => {
                       <Route path="/playground-scene/monster-lesson-7" element={
                         <ImprovedProtectedRoute>
                           <Suspense fallback={<LoadingFallback />}><PlayMonsterLesson7 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A1 tier — A1 Halfway Check after Unit 5 (U5 · L8). */}
+                      <Route path="/playground-scene/monster-lesson-8" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayMonsterLesson8 /></Suspense>
                         </ImprovedProtectedRoute>
                       } />
                       {/* A1 tier — Food Festival, Unit 4 Lesson 1. */}

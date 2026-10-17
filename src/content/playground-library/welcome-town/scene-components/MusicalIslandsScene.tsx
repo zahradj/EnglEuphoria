@@ -75,7 +75,7 @@ export function MusicalIslandsScene({ scene, onNext, onWin, onLose, sync }: { sc
     if (!r || phase !== 'ask') return;
     if (padOf(p) !== r.pad) {
       sfx.wrong(); onLose();
-      cueSpeak('Look again! Which lily pad?', voiceOf(scene.who));
+      cueSpeak(`Look again! Which ${scene.padWord ?? 'lily pad'}?`, voiceOf(scene.who));
       setState((s) => ({ ...s, wrong: p }));
       window.setTimeout(() => setState((s) => ({ ...s, wrong: -1 })), 600);
       return;

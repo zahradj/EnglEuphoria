@@ -2066,3 +2066,136 @@ export const LESSON_A1U5L7_SCENES: Scene[] = [
   goodbyeSong('mt7-goodbye-song', bibiPage(12)),
   { id: 'mt7-finale', kind: 'finale', bg: bibiPage(12), who: 'bibi', line: 'You finished Unit 5 and found piece 4 of the Golden Compass! Next: the Halfway Check… \u{1F9ED}' },
 ];
+
+/* =============================================================================
+ * A1 Halfway Check "Explorer Halfway" — after Unit 5, its own lesson (U5 · L8)
+ * docs/assessment/a1-assessment-plan.md §2-4: five sections over Units 1-5 — Listening words (8), Listening sentences (8),
+ * Reading & writing (8, read, not heard), Sounds (6), Speaking (4 prompts, rated 0-3 by the teacher). Stars per section;
+ * Go on (every section 3+ stars and 17+ of 25) / Go on with support / Review first (levelTestScoring.ts, checkpoint mode).
+ * The child is never told "failed": everyone gets the halfway medal.
+ * ========================================================================= */
+export const LESSON_A1U5L8_TITLE = 'A1 Halfway Check: Explorer Halfway';
+export const LESSON_A1U5L8_OBJECTIVE = 'A1 Halfway Check (after Unit 5): show what you learned in Units 1–5 — greetings and numbers, animals and can, weather and directions, food and likes, feelings, looks and clothes — by listening, reading, sounding out words and talking with your teacher.';
+
+const WTS = (n: string) => `${WT}/sprites/${n}`;
+const yesNo = [{ label: 'Yes', text: 'Yes' }, { label: 'No', text: 'No' }];
+
+export const LESSON_A1U5L8_SCENES: Scene[] = [
+  { id: 'mt8-title', kind: 'title-card', bg: bgStreet, level: 'A1', unit: 'Halfway Check', lessonLabel: 'Units 1–5', title: 'Explorer Halfway', subtitle: 'Show what you know!', cta: '\u{1F9ED} I’M READY!' },
+  {
+    // Remember? (owner, 2026-10-07): a calm warm-up of Unit 5 — not scored. Click mode (L7 used shadow).
+    id: 'mt8-recall-warmup', kind: 'recall-warmup', bg: bgStreet, who: 'pip', mode: 'click', listen: true,
+    fromLabel: 'Unit 5 · Monster Town',
+    teacher: 'A calm warm-up before the check (not scored): Pip says a feeling, the child finds Bibi’s face.',
+    items: [
+      { word: 'happy', say: 'Bibi is happy!', img: BIBI.happy },
+      { word: 'scared', say: 'Bibi is scared!', img: BIBI.scared },
+      { word: 'excited', say: 'Bibi is excited!', img: BIBI.excited },
+    ],
+  },
+  {
+    id: 'mt8-intro', kind: 'cinematic', bg: bgStreet, title: 'Explorer Halfway', subtitle: 'Five parts — take your time', narrator: 'bibi',
+    script: [
+      { who: 'bibi', line: 'You are halfway, explorer!' },
+      { who: 'pip', line: 'Listen, read, sound it out — then talk with your teacher.' },
+    ],
+    cta: '\u{1F680} Let’s go!',
+  },
+  {
+    id: 'mt8-test', kind: 'prea1',
+    teacher: 'A1 Halfway Check (Units 1–5). Please do not help with the answers: in Parts 1, 2 and 4 the child listens (🔊 repeats); Part 3 is READ, not heard. In Part 5 ask each card, listen, and tap a score 0–3 on YOUR screen. At the end check the result and press "Confirm & save result".',
+    scene: {
+      id: 'mt8-test', kind: 'level-test', bg: bgClass, who: 'pip',
+      teacher: 'Five parts. One try each. Then talk with your teacher.',
+      testKey: 'a1-halfway-check', title: 'A1 Halfway Check', level: 'A1', mode: 'checkpoint',
+      hero: wtSpr('pip'), medal: item('medal-rainbow'),
+      certificate: { title: 'Great job, explorer!', line: 'You are halfway there! Here is your explorer medal!' },
+      sections: [
+        {
+          key: 'words', label: 'Listening — words', icon: '\u{1F442}', intro: 'Listen and find the picture!',
+          items: [
+            { ask: 'Find: elephant!', reply: 'An elephant!', answer: 1, options: [{ label: 'lion', img: item('lion') }, { label: 'elephant', img: item('elephant') }, { label: 'snake', img: item('snake') }] },
+            { ask: 'Find: monkey!', reply: 'A monkey!', answer: 2, options: [{ label: 'frog', img: item('frog') }, { label: 'bird', img: item('bird') }, { label: 'monkey', img: item('coco-cheer') }] },
+            { ask: 'Find: rainy!', reply: 'Rainy!', answer: 0, options: [{ label: 'rainy', img: item('rain') }, { label: 'sunny', img: item('sun') }, { label: 'windy', img: item('wind') }] },
+            { ask: 'Find: rocket!', reply: 'A rocket!', answer: 1, options: [{ label: 'star', img: item('star-gold') }, { label: 'rocket', img: item('rocket') }, { label: 'moon', img: item('moon') }] },
+            { ask: 'Find: sandwich!', reply: 'A sandwich!', answer: 2, options: [{ label: 'soup', img: item('soup') }, { label: 'chips', img: item('chips') }, { label: 'sandwich', img: item('sandwich') }] },
+            { ask: 'Find: grapes!', reply: 'Grapes!', answer: 0, options: [{ label: 'grapes', img: item('grapes') }, { label: 'cheese', img: item('cheese') }, { label: 'bread', img: item('bread') }] },
+            { ask: 'Find: scared!', reply: 'Scared!', answer: 1, options: [{ label: 'happy', img: BIBI.happy }, { label: 'scared', img: BIBI.scared }, { label: 'bored', img: BIBI.bored }] },
+            { ask: 'Find: glasses!', reply: 'Glasses!', answer: 2, options: [{ label: 'scarf', img: WEAR.scarf }, { label: 'boots', img: WEAR.boots }, { label: 'glasses', img: WEAR.glasses }] },
+          ],
+        },
+        {
+          key: 'sentences', label: 'Listening — sentences', icon: '\u{1F4AC}', intro: 'Listen to the sentence and find it!',
+          items: [
+            { ask: 'How old are you? I’m seven.', reply: 'Seven!', answer: 0, options: [{ label: '7', text: '7' }, { label: '11', text: '11' }, { label: '17', text: '17' }] },
+            { ask: 'He is happy. Who is it?', reply: 'Pip! He is happy.', answer: 1, options: [{ label: 'Mia, sad', img: WTS('mia-sad-v2.png') }, { label: 'Pip, happy', img: WTS('pip-happy-v2.png') }, { label: 'Leo, tired', img: WTS('leo-tired-v2.png') }] },
+            { ask: 'It can swim, but it can’t fly. What is it?', reply: 'A fish!', answer: 2, options: [{ label: 'bird', img: item('bird') }, { label: 'monkey', img: item('coco-cheer') }, { label: 'fish', img: item('fish') }] },
+            { ask: 'It’s cloudy today.', reply: 'Cloudy!', answer: 1, options: [{ label: 'snowy', img: item('snow') }, { label: 'cloudy', img: item('cloud') }, { label: 'sunny', img: item('sun') }] },
+            { ask: 'I like pizza! Some pizza, please!', reply: 'Pizza!', answer: 0, options: [{ label: 'pizza', img: item('pizza-slice') }, { label: 'salad', img: item('salad') }, { label: 'rice', img: item('rice') }] },
+            { ask: 'She is tired because it is early.', reply: 'Tired!', answer: 2, options: [{ label: 'excited', img: BIBI.excited }, { label: 'surprised', img: BIBI.surprised }, { label: 'tired', img: BIBI.tired }] },
+            { ask: 'He is very tall. He has got three eyes.', reply: 'Big Bob!', answer: 0, options: [{ label: 'Big Bob', img: item('big-bob') }, { label: 'Bea', img: item('bea') }, { label: 'Bibi', img: BIBI.happy }] },
+            { ask: 'She is wearing boots.', reply: 'Boots!', answer: 1, options: [{ label: 'hat', img: WEAR.hat }, { label: 'boots', img: WEAR.boots }, { label: 'scarf', img: WEAR.scarf }] },
+          ],
+        },
+        {
+          key: 'reading', label: 'Reading & writing', icon: '\u{1F4D6}', intro: 'Now read it yourself! Read and choose.',
+          items: [
+            { read: true, img: item('lion'), ask: 'It’s a lion. It’s big and yellow.', reply: 'Yes!', answer: 0, options: yesNo },
+            { read: true, img: item('soup'), ask: 'It’s pizza.', reply: 'No! It’s soup.', answer: 1, options: yesNo },
+            { read: true, img: item('bird'), ask: 'A bird can ___ .', reply: 'A bird can fly.', answer: 0, options: [{ label: 'fly', text: 'fly' }, { label: 'swim', text: 'swim' }] },
+            { read: true, img: item('snow'), ask: 'It’s ___ and snowy.', reply: 'It’s cold and snowy.', answer: 1, options: [{ label: 'hot', text: 'hot' }, { label: 'cold', text: 'cold' }] },
+            { read: true, img: item('grapes'), ask: 'Do you like grapes? Yes, I ___ .', reply: 'Yes, I do.', answer: 0, options: [{ label: 'do', text: 'do' }, { label: 'am', text: 'am' }] },
+            { read: true, img: BIBI.sad, ask: 'Bibi is sad ___ she is tiny.', reply: 'Bibi is sad because she is tiny.', answer: 1, options: [{ label: 'and', text: 'and' }, { label: 'because', text: 'because' }] },
+            { read: true, img: item('big-bob'), ask: 'He ___ got three eyes.', reply: 'He has got three eyes.', answer: 0, options: [{ label: 'has', text: 'has' }, { label: 'is', text: 'is' }] },
+            { read: true, img: WEAR.scarf, ask: 'Leo is ___ a green scarf.', reply: 'Leo is wearing a green scarf.', answer: 1, options: [{ label: 'got', text: 'got' }, { label: 'wearing', text: 'wearing' }] },
+          ],
+        },
+        {
+          key: 'sounds', label: 'Sounds', icon: '\u{1F524}', intro: 'Listen to the sounds!',
+          items: [
+            { ask: 'What word is it?', blend: ['f', 'r', 'o', 'g'], reply: 'Frog!', answer: 2, options: [{ label: 'fish', img: item('fish') }, { label: 'bird', img: item('bird') }, { label: 'frog', img: item('frog') }] },
+            { ask: 'What word is it?', blend: ['f', 'i', 'sh'], reply: 'Fish!', answer: 0, options: [{ label: 'fish', img: item('fish') }, { label: 'frog', img: item('frog') }, { label: 'snake', img: item('snake') }] },
+            { ask: 'What word is it?', blend: ['sh', 'ee', 'p'], reply: 'Sheep!', answer: 1, options: [{ label: 'bee', img: item('bee') }, { label: 'sheep', img: item('sheep') }, { label: 'leaf', img: item('leaf') }] },
+            { ask: 'What word is it?', blend: ['l', 'ea', 'f'], reply: 'Leaf!', answer: 2, options: [{ label: 'sheep', img: item('sheep') }, { label: 'tea', img: item('tea') }, { label: 'leaf', img: item('leaf') }] },
+            { ask: 'Cheese. Which sound?', reply: 'Ch! Cheese!', answer: 0, options: [{ label: 'ch', text: 'ch' }, { label: 'sh', text: 'sh' }, { label: 'th', text: 'th' }] },
+            { ask: 'Happy. The y says…', reply: 'Ee! Happy!', answer: 1, options: [{ label: 'y', text: 'y' }, { label: 'ee', text: 'ee' }, { label: 'a', text: 'a' }] },
+          ],
+        },
+      ],
+      speaking: {
+        key: 'speaking', label: 'Speaking', icon: '\u{1F3A4}', intro: 'Now talk with your teacher!',
+        prompts: [
+          { img: item('elephant'), say: 'Tell me about this animal. What can it do?', prompt: 'Describe a jungle animal in 4 sentences', model: 'It’s an elephant. It’s big and grey. It can walk. It can’t fly.' },
+          { img: item('frog'), say: 'I have a secret animal. Ask me a question with can!', prompt: 'Ask one “Can it…?” question', model: 'Can it jump?' },
+          { img: item('planet-ice'), say: 'What’s the weather like on Planet Ice?', prompt: 'Weather report', model: 'It’s cold and snowy on Planet Ice.' },
+          { img: item('big-bob'), say: 'Describe your monster friend. How does he feel? Why?', prompt: 'Monster friend: has got, wearing, feeling + because', model: 'He has got three eyes. He is wearing a hat. He is happy because it is a party.' },
+        ],
+      },
+    },
+  },
+  { id: 'mt8-echo', kind: 'echo', bg: bgStreet, who: 'bibi', textSide: 'top', teacher: 'Say it proudly with Bibi — whatever the result!', word: 'I’m halfway! I’m an explorer!' },
+  {
+    id: 'mt8-sticker', kind: 'prea1', teacher: 'Sticker time! The halfway medal goes in the Sticker Book — for every child, whatever the result.',
+    scene: {
+      id: 'mt8-sticker', kind: 'sticker-reward', bg: bgStreet, who: 'pip', teacher: 'Sticker time!',
+      line: 'You are halfway, super explorer! Here is your medal!',
+      sticker: { img: item('medal-rainbow'), label: 'Halfway medal' },
+    },
+  },
+  {
+    id: 'mt8-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. The teacher’s report has the result for the family.',
+    scene: {
+      id: 'mt8-home-mission', kind: 'home-mission', bg: bgStreet, who: 'pip',
+      teacher: 'Home Mission: read the steps with the student.',
+      line: 'Your home mission!',
+      parentNote: 'Today your child did the A1 Halfway Check (Units 1–5): listening, reading, sounds and speaking. Your child\'s teacher will send the result and what comes next. Ask your child to tell you about an animal in English.',
+      steps: [
+        { emoji: '\u{1F3C5}', say: 'Show your medal to your family.' },
+        { emoji: '\u{1F418}', say: 'Tell your family about an animal: It can… It can’t…' },
+        { emoji: '\u{1F4D6}', say: 'Read a story from Units 1 to 5 again.' },
+      ],
+    },
+  },
+  goodbyeSong('mt8-goodbye-song', bgStreet),
+  { id: 'mt8-finale', kind: 'finale', bg: bgStreet, who: 'pip', line: 'Well done, explorer! You are halfway! On to the next adventure!' },
+];

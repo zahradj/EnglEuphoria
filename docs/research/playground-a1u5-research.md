@@ -67,6 +67,15 @@ Better than the sources: the doors close by themselves (attention stays on the q
 
 Better than the sources: the test sits inside the unit's world (Monster Town, Bibi), a warm-up race comes first, a can-do card is ticked between the parts, and every part under the pass mark has its own practise-again game in the same lesson and in the homework quest.
 
+## A1 Halfway Check — Explorer Halfway (U5 · L8)
+| Source (URL) | What it does | Taken (mechanic) | Quality / limits |
+|---|---|---|---|
+| Cambridge A1 Movers test format — https://www.cambridgeenglish.org/exams-and-tests/movers/test-format/ | Listening, Reading & Writing, Speaking with a friendly examiner; results as shields per paper, no pass / fail for the child | five short sections reported as 1-5 stars; the child is never told "failed" (everyone gets the medal) | official; search result, page not opened (unverified) |
+| Cambridge Movers sample papers (British Council Hong Kong) — https://www.britishcouncil.hk/sites/default/files/movers-sample-papers-2018-vol1.pdf | look and read yes / no; read and choose the word for a gap | Reading & writing items: yes / no about one picture, choose the word (can, cold, do, because, has, wearing) | official samples (unverified this lesson) |
+| Our plan — docs/assessment/a1-assessment-plan.md §2-4 | Halfway Check sections, sizes and decisions | Words 8, Sentences 8, Reading & writing 8, Sounds 6, Speaking 4 prompts; Go on / Go on with support / Review first (levelTestScoring.ts) | internal, owner-approved 2026-10-12 |
+
+Built on the Pre-A1 level-test scene (same calm one-try flow), with two additions for A1: reading items are shown, not said (no 🔊), with a picture to read about; and the speaking rubric shows the A1 scale (0 none · 1 words with help · 2 a short sentence alone · 3 full sentences or a correct question).
+
 ## Games list (Unit 5 so far)
 | Lesson | Signature game | Other games |
 |---|---|---|

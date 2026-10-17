@@ -5,6 +5,8 @@ import * as sfx from '../../unit1/sfx';
 import { Confetti } from '../../unit1/fx';
 import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
 import { voiceOf } from './shared';
+import { CalmBg } from '../../unit1/scene-components/gameFx';
+import { jewel, SKIN, PILL_FONT } from '../../gameSkin';
 
 /* ---------- True / False (a spoken statement, judged True or False — a
    fast binary listening check, no scene-hotspot dependency, so it can
@@ -50,34 +52,34 @@ export function TrueFalseScene({ scene, onNext, onWin, onLose, sync }: { scene: 
   }
 
   return (
-    <div className="absolute inset-0 overflow-hidden bg-cover bg-center" style={{ backgroundImage: `url(${scene.bg})` }}>
-      <div className="pointer-events-none absolute inset-0 bg-black/25" />
+    <div className="absolute inset-0 overflow-hidden">
+      <CalmBg img={scene.bg} />
       <div className="pointer-events-none absolute inset-x-0 top-6 z-20 flex justify-center px-4">
-        <div className="rounded-full bg-white/95 px-5 py-3 text-center text-base font-bold text-orange-800 shadow-xl sm:text-lg">
+        <div className={`px-5 py-2 text-center ${SKIN.pill}`} style={{ fontSize: PILL_FONT }}>
           {scene.teacher} <span className="ml-1 opacity-60">({round + 1}/{total})</span>
         </div>
       </div>
       {scene.img && (
         // Reading version: the picture to check the sentences against (Cambridge Starters R&W Part 2).
-        <div className="absolute left-1/2 top-[17%] z-10 h-[34%] -translate-x-1/2 overflow-hidden rounded-3xl border-4 border-white shadow-2xl" style={{ aspectRatio: '16 / 9' }}>
+        <div className="absolute left-1/2 top-[17%] z-10 h-[34%] -translate-x-1/2 overflow-hidden rounded-[2.4vh] border-[0.6vh] border-[#FEAF15] shadow-[0_1.6vh_3vh_rgba(40,20,5,0.5)]" style={{ aspectRatio: '16 / 9' }}>
           <img src={scene.img} alt="" className="h-full w-full object-cover" />
         </div>
       )}
       <div className={`absolute inset-x-0 z-10 flex justify-center px-6 ${scene.img ? 'top-[54%]' : 'top-1/3'}`}>
-        <div className="max-w-xl rounded-3xl border-4 border-white bg-white/95 px-6 py-4 text-center shadow-2xl">
-          <p className="text-2xl font-black text-orange-800">{scene.read ? '📖 ' : ''}“{r!.statement}”</p>
-          <button onClick={() => cueSpeak(r!.statement, voiceOf(r!.who))} className="mt-2 text-sm font-semibold text-neutral-500 underline decoration-dotted active:scale-95">🔊 {scene.read ? 'Help: hear it' : 'Hear it again'}</button>
+        <div className={`max-w-xl px-6 py-4 text-center ${SKIN.panel}`}>
+          <p className={`text-2xl font-black ${SKIN.ink}`}>{scene.read ? '📖 ' : ''}“{r!.statement}”</p>
+          <button onClick={() => cueSpeak(r!.statement, voiceOf(r!.who))} className="mt-2 rounded-full bg-[#E0F2FE] px-3 py-0.5 text-sm font-bold text-[#7A5A2E] active:scale-95">🔊 {scene.read ? 'Help: hear it' : 'Hear it again'}</button>
         </div>
       </div>
       <div className={`absolute inset-x-0 z-20 flex justify-center gap-6 px-4 ${scene.img ? 'bottom-4' : 'bottom-10'}`}>
         <button
           onClick={() => answer(true)} disabled={correct}
-          className={`grid h-24 w-32 place-items-center rounded-3xl border-8 bg-white text-2xl font-black text-emerald-600 shadow-2xl transition active:scale-95 sm:h-28 sm:w-40 ${picked === 'true' && !correct ? 'animate-[lep1-shake_0.4s_ease-in-out] border-red-400' : picked === 'true' && correct ? 'border-green-400' : 'border-white'}`}
-        >✅ True</button>
+          className={`grid h-24 w-32 place-items-center rounded-[2.4vh] border-[0.4vh] text-2xl font-black transition active:scale-95 sm:h-28 sm:w-40 ${picked === 'true' && !correct ? `animate-[lep1-shake_0.4s_ease-in-out] ${SKIN.wrong}` : picked === 'true' && correct ? SKIN.right : jewel(2)}`}
+        >✓ True</button>
         <button
           onClick={() => answer(false)} disabled={correct}
-          className={`grid h-24 w-32 place-items-center rounded-3xl border-8 bg-white text-2xl font-black text-rose-600 shadow-2xl transition active:scale-95 sm:h-28 sm:w-40 ${picked === 'false' && !correct ? 'animate-[lep1-shake_0.4s_ease-in-out] border-red-400' : picked === 'false' && correct ? 'border-green-400' : 'border-white'}`}
-        >❌ False</button>
+          className={`grid h-24 w-32 place-items-center rounded-[2.4vh] border-[0.4vh] text-2xl font-black transition active:scale-95 sm:h-28 sm:w-40 ${picked === 'false' && !correct ? `animate-[lep1-shake_0.4s_ease-in-out] ${SKIN.wrong}` : picked === 'false' && correct ? SKIN.right : jewel(0)}`}
+        >✗ False</button>
       </div>
     </div>
   );

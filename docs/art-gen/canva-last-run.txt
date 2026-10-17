@@ -1,2 +1,5 @@
-+ public/lep1/scenes/bg-a1u5-gamenight-wide.png (1376, 768)
-1/1 saved
++ public/lep1/scenes/bg-a1u6-story-6-wide.png (1376, 768)
++ public/lep1/scenes/bg-a1u6-story-7-wide.png (1376, 768)
++ public/lep1/scenes/bg-a1u6-story-8-wide.png (1376, 768)
++ public/lep1/scenes/bg-a1u6-story-9-wide.png (1376, 768)
+4/4 saved

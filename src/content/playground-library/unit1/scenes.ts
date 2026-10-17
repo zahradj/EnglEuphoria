@@ -521,6 +521,10 @@ export type Scene =
   | {
       /** Hungry Letter Monsters: feed each picture card to the monster whose tummy letter is its first sound. */
       id: string; kind: 'letter-monsters'; bg: string; teacher: string; who: CharKey;
+      /** Design (owner 2026-10-16, "be creative — ideas that suit the concept"): 'meadow' (default) or 'sea' (sea
+       *  worlds: the monsters wait on the seabed of `bg`, each picture floats in inside a bubble, bubbles rise,
+       *  shells count the progress). */
+      look?: 'meadow' | 'sea';
       monsters: { letter: string; color: string }[];
       cards: { word: string; img: string }[];
     }
@@ -593,7 +597,8 @@ export type Scene =
       testKey: string; title: string; level: string; mode: 'final' | 'checkpoint' | 'unit'; nextLevel?: string; strongKeys?: string[];
       hero: string; medal: string; certificate: { title: string; line: string };
       sections: { key: string; label: string; icon: string; intro: string;
-        items: { ask: string; reply: string; answer: number; blend?: string[]; options: { label: string; img?: string; text?: string }[] }[] }[];
+        /** `read`: a reading item (A1) — the question is shown, not said, and has no 🔊; `img` = a picture to read about. */
+        items: { ask: string; reply: string; answer: number; blend?: string[]; read?: boolean; img?: string; options: { label: string; img?: string; text?: string }[] }[] }[];
       speaking: { key: string; label: string; icon: string; intro: string; prompts: { img: string; say: string; prompt: string; model: string }[] };
     }
   | {
@@ -1191,6 +1196,9 @@ export type Scene =
        *  by tile; the child guesses early by tapping one of the answer
        *  pictures and says it. Fewer tiles gone = more stars. */
       id: string; kind: 'tile-reveal'; bg: string; bgVideo?: string; teacher: string; who: CharKey;
+      /** Design (owner 2026-10-16: "be more creative — instead of the blue blocks, use bubbles"): 'tiles' (default,
+       *  flipping blocks in a frame) or 'bubbles' (the picture floats in the sea behind a cluster of bubbles that pop). */
+      look?: 'tiles' | 'bubbles';
       rounds: { img: string; word: string; line: string; options: Thing[] }[];
     }
   | {

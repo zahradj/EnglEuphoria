@@ -178,37 +178,42 @@ Stages: **P** present · **G** guided practice · **F** free practice · **R** r
 
 ### 5.3 Lesson 3 — How Old Are You? Numbers 1-20 (changed 2026-10-12, owner: "add numbers from 1 to 20 … as far as the
 students say their age … first start with modeling, then the practice with memorising the numbers, then the practice
-in which they practise how old they are")
+in which they practise how old they are"; refined 2026-10-17, owner: "more refinement and be creative with the games —
+you don't have to repeat the pre-A games")
 
 **Objective:** *I can count and say the numbers 1-20, ask "How old are you?" and say my age: "I am seven."*
-**Evidence:** the child says 1-20 in order and 5 random numbers, answers *How old are you?* with a full sentence and asks
-two friends their age (Cambridge Starters Speaking Part 4 personal question).
+**Evidence:** the child says 1-20 in order and 5 random numbers, answers *How old are you?* with a full sentence, asks
+friends their age, and writes a heard age and house number (Cambridge Starters Listening Part 2, Speaking Part 4).
+Research: `docs/research/playground-a1u1l3-research.md`. 30 pages. No Pre-A1 game and no brain break.
 
 | # | Page | What the child does | Why | Stage |
 |---|---|---|---|---|
 | 1 | Title | | | |
-| 2 | Remember? | feelings faces of L2 → *She is happy!* | recall | G |
+| 2 | Remember? | feelings faces of L2 → *She is sad!* | recall | G |
 | **A** | **MODELING** | | | |
-| 3 | Numbers 1-10 (count-along) | hear each number, see the dots and the fingers, say it | the numbers 1-10 (review from Pre-A1) | P |
-| 4 | Numbers 11-20 (count-along) | *eleven, twelve, thirteen… twenty* — the "-teen" ending stretched and clapped | the new numbers 11-20 | P |
-| 5 | Sentence page: *How old are you? — I am seven.* (Leo with 7 candles) | hear, repeat with fingers | the question + the answer | P |
-| 6 | Echo: *How old are you?* | rising voice | pronounce the question | G |
-| **B** | **MEMORISE THE NUMBERS** | | | |
-| 7 | **Number Tap** (numbers-review 1-20) | *Fourteen!* — tap the number, say it | hear → recognise 1-20 | G |
-| 8 | **Count the Balloons** (count-balloons, 20) | pop the balloons one by one, counting to 20 | order + recall | G |
-| 9 | Count-and-move chant (counting song to be recorded) | jump, clap, stamp, stretch while counting to 20 | memorise with rhythm | G |
+| 3 | Numbers 1-10 (count-along) | hear each number, see it, say it | 1-10 (review) | P |
+| 4 | Numbers 11-20 (count-along) | *eleven … twenty* | the new numbers | P |
+| 5 | Mia: *Four, fourteen! Six, sixteen! Clap on TEEN!* | hear the -TEEN ending, clap it | 4/14, 6/16 confusion (research: NZ Maths) | P |
+| 6 | Echo: *Three, thirteen. Four, fourteen.* | say the pairs | pronunciation | G |
+| 7 | Read and match (cards) | number words → numbers | reading the words | G |
+| **B** | **MEMORISE THE NUMBERS (new A1 games)** | | | |
+| 8 | ★ **Party Lift** (`party-lift`) | a friend calls *Floor fourteen, please!* — press the button, count the floors on the dial; last 2 rounds the child reads the ticket and SAYS the floor | hear → recognise 1-20, teen pairs; speaking | G→F |
+| 9 | ★ **Dot-to-Dot Surprise** (`dot-dot`) | join 1→20 saying each number (a cake appears); then read *eleven … twenty* on the dots (a present) | order + reading number words | G |
+| 10 | Red Light, Green Light (13-16) | *Green light! Fourteen steps!* — tap 14; freeze on red | teen listening | G |
 | **C** | **PRACTISE: HOW OLD ARE YOU?** | | | |
-| 10 | **Birthday Balloons** (age-balloons) | *Mia is six!* — pop the balloon with her age, say *She is six.* | ages by listening | G |
-| 11 | **Age Match** (age-sentence-match) | read *I am eight.* → match the cake with 8 candles | read the age sentence | R |
+| 11-14 | Leo: *How old are you? I am seven!* · Mia's birthday · echo the question · echo the answer | | the question + answer | P/G |
+| 15 | ★ **Age Line-Up: the birthday photo** (`age-lineup`) | tap a friend, ASK *How old are you?*, hear *I'm nine!*, put the friends on the photo steps youngest → oldest; photo; say *Mia is six. Leo is seven…* | ask + understand + say | F |
+| 16 | ★ **Party Phone** (`party-phone`) | a friend phones an invitation; write the spelled name, the age and the house number on the card | listen and write (Starters Listening Part 2) | G |
+| 17 | Reader: Leo's age | read the age dialogue | reading | R |
+| 18-20 | Sound /t/ → Blend & Read (gumball) → twister *Ten tiny teddies.* | | phonics → sentence | R |
+| 21 | Treasure Islands (grid-hunt) | answer *What comes after twelve?* to dive | before/after numbers | G |
+| 22-23 | Your turn · Birthday interview (join-stage) | answer with the real age, ask the teacher; interview Pip, introduce him | free practice | F |
+| 24-27 | Check · sticker · Pet Pal · home mission | | | |
+| 28 | Extra time: *Guess my age!* (join-stage) | yes/no questions *Are you fifteen?* | free questions 1-20 | F |
+| 29-30 | Goodbye song · finale | | | |
 
-| 13 | Your turn (join-stage) | Miss Marigold asks *How old are you?* — the child answers, then ASKS her | answer + ask | F |
-| 14 | Brain break: count and jump to 20 | | | — |
-| 15 | **Reader: Leo's age** (story pages 2-3 + new lines) | *How old are you, Leo? — I am seven. How old are you? — I am eight!* | read the age dialogue | R |
-| 16 | **Sound /t/ → Sound Moles → Blend & Read** | *t-e-n ten* → *"I am ten."*, *t-o-p top*, *two* | phonics → sentence (numbers are decodable!) | R |
-| 17 | Tongue twister: *Ten tiny teddies.* | 2 speeds | quick reading | R |
-| 18 | Birthday interview (free) | the child asks the teacher and Pip *What's your name? How old are you?* and introduces one: *This is Pip. He is eight.* | free practice | F |
-| 19-22 | Check · sticker + stamp · home mission (ask 3 family members their age, count to 20 with them) · goodbye song · finale | | | |
-| X | Extra time: **Quick Fire numbers** (flash a number, say it before the ring ends) | | | G |
+Removed 2026-10-17 (Pre-A1 games): Number Tap, Count the Balloons, Number Train, two count-and-move brain breaks,
+Birthday Balloons, Candle Cake, Age Match, Sound Moles, Age Quiz, Age Buzzer.
 
 The Welcome Song moves to L4 as its lesson song (greeting questions + *How old are you?*).
 

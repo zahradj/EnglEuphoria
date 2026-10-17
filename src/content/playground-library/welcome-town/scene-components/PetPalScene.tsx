@@ -73,13 +73,13 @@ export function PetPalScene({ scene, onNext, onWin, onLose, sync }: { scene: Pet
       <div className="absolute bottom-[30%] left-[8%] z-20 flex w-[34%] flex-col items-center">
         {r && !done && (
           <motion.button key={`b-${round}`} type="button" onClick={() => { sfx.click(); cueSpeak(r.line, voiceOf(scene.who)); }}
-            className="relative mb-[1vh] max-w-full rounded-[2.4vh] border-[0.5vh] border-amber-300 bg-white px-4 py-2 text-center font-black text-amber-900 shadow-xl"
+            className="relative mb-[1vh] w-max max-w-[min(42vw,150%)] rounded-[2.4vh] border-[0.5vh] border-amber-300 bg-white px-4 py-2 text-center font-black text-amber-900 shadow-xl"
             style={{ fontSize: 'min(3.2vh, 2.2vw)' }} initial={reduce ? false : { scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}>
             🔊 {r.line}
             <span className="absolute -bottom-[1.4vh] left-1/2 h-[2.4vh] w-[2.4vh] -translate-x-1/2 rotate-45 border-b-[0.5vh] border-r-[0.5vh] border-amber-300 bg-white" />
           </motion.button>
         )}
-        <motion.img src={scene.pet.img} alt={scene.pet.name} draggable={false} className="h-[min(30vh,20vw)] w-auto object-contain drop-shadow-2xl"
+        <motion.img src={scene.pet.img} alt={scene.pet.name} draggable={false} className="h-[min(26vh,18vw)] w-auto object-contain drop-shadow-2xl"
           animate={{ scale: size, y: !reduce && (allGot || got.length) ? [0, -24, 0] : 0 }}
           transition={{ scale: { type: 'spring', stiffness: 120, damping: 12 }, y: { duration: 0.5, repeat: allGot ? 2 : 1 } }} key={`pet-${got.length}`} />
         <div className="-mt-[2vh] h-[5vh] w-[70%] rounded-[50%] bg-gradient-to-b from-rose-300 to-rose-500 shadow-lg" />

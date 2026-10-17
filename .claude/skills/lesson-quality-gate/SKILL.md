@@ -59,6 +59,9 @@ upstream data it's reading is already wrong.
 4. **Visual pass**: for every `vocab-spot`/hotspot-style scene, confirm the
    attention-engine's one-hotspot-at-a-time rule and the visual-learning-
    engine's flashcard/audio/sentence completeness.
+   **Creative fit (owner 2026-10-16, blueprint §3f++):** every game page is dressed in the lesson's world — its covers,
+   cards, slots and rewards are things from that place, and the idea suits the words and the action (under the sea the
+   reveal hides behind popping bubbles, not blue blocks). A game in its generic default look fails; name the idea per page.
    **Spin Wheel scenes (`spin-wheel`, or any slide whose teacher note says
    to use the classroom spinner):**
    - *Semantic:* badge `n` sits on the picture whose word is `items[n-1].label`

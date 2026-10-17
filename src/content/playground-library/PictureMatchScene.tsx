@@ -73,9 +73,11 @@ export interface PictureMatchSceneData {
 }
 
 /** `cards` white cards · `frames` framed pictures on a wall, brass name plates, wooden word tags ·
- *  `polaroids` taped photos, sticky-note words · `chalk` chalkboard tiles, chalk words. */
-export type PictureMatchLook = 'cards' | 'frames' | 'polaroids' | 'chalk';
-export const PICTURE_MATCH_LOOKS: readonly PictureMatchLook[] = ['cards', 'frames', 'polaroids', 'chalk'];
+ *  `polaroids` taped photos, sticky-note words · `chalk` chalkboard tiles, chalk words ·
+ *  `portholes` (sea worlds, owner 2026-10-16 "be creative — ideas that suit the concept") brass submarine windows
+ *  looking into the water, the words float up as bubbles. */
+export type PictureMatchLook = 'cards' | 'frames' | 'polaroids' | 'chalk' | 'portholes';
+export const PICTURE_MATCH_LOOKS: readonly PictureMatchLook[] = ['cards', 'frames', 'polaroids', 'chalk', 'portholes'];
 
 const LOOK_STYLE: Record<PictureMatchLook, {
   card: string; slotEmpty: string; slotPlaced: string; pill: string; bg: string; prompt: string;
@@ -94,6 +96,11 @@ const LOOK_STYLE: Record<PictureMatchLook, {
     card: 'rounded-[4px] bg-white p-[3%] pb-0 shadow-[0_14px_30px_rgba(15,23,42,0.28)]',
     slotEmpty: 'border-[3px] border-dashed border-sky-300 bg-white', slotPlaced: 'bg-white text-sky-700 underline decoration-wavy decoration-sky-300',
     pill: 'rounded-[3px] bg-yellow-200 text-slate-800', bg: 'linear-gradient(160deg, #e7f0ff 0%, #efe9fb 55%, #fff1e6 100%)', prompt: 'text-slate-500',
+  },
+  portholes: {
+    card: 'rounded-[34px] border-[clamp(6px,2.6cqh,14px)] border-[#c8963e] bg-[radial-gradient(circle_at_50%_38%,#f0fbff_0%,#bae6fd_45%,#38bdf8_85%)] shadow-[inset_0_0_0_3px_#f6d58a,inset_0_10px_24px_rgba(3,105,161,0.35),0_14px_28px_rgba(3,60,90,0.4)]',
+    slotEmpty: 'border-[3px] border-dashed border-white/80 bg-sky-900/15', slotPlaced: 'bg-gradient-to-b from-teal-300 to-sky-500 text-white',
+    pill: 'rounded-full bg-[radial-gradient(circle_at_30%_25%,#ffffff_0_12%,#bae6fd_35%,#38bdf8_100%)] text-sky-950 ring-2 ring-white/80', bg: 'linear-gradient(180deg, #7dd3fc 0%, #0ea5e9 60%, #0369a1 100%)', prompt: 'text-sky-800',
   },
   chalk: {
     card: 'rounded-[14px] border-[clamp(5px,2cqh,12px)] border-[#9a6a3a] bg-[#24543f] shadow-[0_12px_26px_rgba(0,0,0,0.35)]',

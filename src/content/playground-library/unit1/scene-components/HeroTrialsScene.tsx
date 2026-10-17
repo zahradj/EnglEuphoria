@@ -78,7 +78,7 @@ export function HeroTrialsScene({ scene, onWin, onNext, sync }: { scene: Trials;
       {/* hero power bar: the hero flies along it as the power grows */}
       {!done && (
         <div className="pointer-events-none absolute left-1/2 top-[13%] z-30 w-[56%] -translate-x-1/2">
-          <div className="relative h-[3.2vh] rounded-full border-[0.4vh] border-white/80 bg-indigo-950/50 shadow-lg">
+          <div className="relative h-[3.2vh] rounded-full border-[0.4vh] border-white/80 bg-sky-950/50 shadow-lg">
             <motion.div className="h-full rounded-full bg-gradient-to-r from-yellow-300 via-orange-400 to-rose-500" animate={{ width: `${Math.max(4, power * 100)}%` }} transition={{ type: 'spring', stiffness: 80, damping: 14 }} />
             <motion.img src={scene.hero.img} alt="" draggable={false} className="absolute top-1/2 h-[9vh] w-[9vh] object-contain drop-shadow-[0_0.6vh_0.6vh_rgba(0,0,0,0.35)]"
               style={{ translate: '-50% -60%' }} animate={{ left: `${Math.max(4, power * 100)}%`, y: reduce ? 0 : [0, -5, 0] }}
@@ -94,7 +94,7 @@ export function HeroTrialsScene({ scene, onWin, onNext, sync }: { scene: Trials;
       {item && (
         <>
           <div className="absolute inset-x-0 top-[24%] z-30 flex items-center justify-center gap-3 px-14">
-            <span className="rounded-full bg-indigo-700/85 px-3 py-[0.4vh] font-black text-yellow-200 shadow" style={{ fontSize: 'min(2.6vh, 1.8vw)' }}>
+            <span className="rounded-full bg-sky-700/85 px-3 py-[0.4vh] font-black text-yellow-200 shadow" style={{ fontSize: 'min(2.6vh, 1.8vw)' }}>
               {scene.skills.find((s) => s.key === item.skill)?.icon} {scene.skills.find((s) => s.key === item.skill)?.label}
             </span>
             <span className="text-center font-black text-white" style={{ ...THICK_WORDS, fontSize: 'clamp(1.15rem, min(calc(3*var(--svw,1vw)), 5vh), 2.4rem)' }}>{item.ask}</span>
@@ -107,13 +107,13 @@ export function HeroTrialsScene({ scene, onWin, onNext, sync }: { scene: Trials;
               const show = picked >= 0;
               return (
                 <motion.button key={`${i}-${k}`} type="button" aria-label={o.label} onClick={() => { void choose(k); }} disabled={picked >= 0}
-                  className={`relative flex flex-col items-center justify-center rounded-[3vh] border-[0.7vh] p-[1vh] shadow-[0_1vh_0_rgba(0,0,0,0.25),0_2vh_3vh_rgba(0,0,0,0.3)] ${show && isRight ? 'border-lime-200 bg-gradient-to-b from-lime-300 to-green-500' : show && k === picked ? 'border-rose-200 bg-gradient-to-b from-rose-300 to-rose-500' : 'border-sky-200 bg-gradient-to-b from-sky-300 to-indigo-500'}`}
+                  className={`relative flex flex-col items-center justify-center rounded-[3vh] border-[0.6vh] p-[1vh] ${show && isRight ? 'border-[#86EFAC] bg-gradient-to-b from-[#DCFCE7] to-[#86EFAC] shadow-[0_0.9vh_0_#16A34A,0_2vh_3vh_rgba(22,101,52,0.35)]' : show && k === picked ? 'border-[#FDA4AF] bg-gradient-to-b from-[#FFE4E6] to-[#FDA4AF] shadow-[0_0.9vh_0_#E11D48,0_2vh_3vh_rgba(159,18,57,0.3)]' : 'border-[#FDE3B0] bg-gradient-to-b from-[#FFFFFF] to-[#FEF6DA] shadow-[0_0.9vh_0_#F3C474,0_2vh_3vh_rgba(60,30,10,0.3)]'}`}
                   style={{ width: optW, height: optW }}
                   initial={reduce ? false : { y: 60, opacity: 0, rotate: k % 2 ? 4 : -4 }}
                   animate={show && isRight && !reduce ? { y: [0, -16, 0], scale: [1, 1.08, 1], opacity: 1, rotate: 0 } : { y: 0, opacity: show && !isRight && k !== picked ? 0.45 : 1, rotate: 0 }}
                   transition={{ delay: show ? 0 : reduce ? 0 : 0.1 + k * 0.08, type: 'spring', stiffness: 160, damping: 14 }} whileTap={{ scale: 0.93 }}>
                   {o.img ? <img src={o.img} alt="" draggable={false} className="h-[78%] w-[78%] object-contain drop-shadow-[0_0.6vh_0.5vh_rgba(0,0,0,0.3)]" />
-                    : <span className="font-black text-white" style={{ ...THICK_WORDS, fontSize: 'min(12vh, 8vw)', lineHeight: 1 }}>{o.text ?? o.label}</span>}
+                    : <span className="font-black text-[#2A1A05]" style={{ fontSize: 'min(12vh, 8vw)', lineHeight: 1 }}>{o.text ?? o.label}</span>}
                   {o.img && o.text && <span className="font-black text-white" style={{ ...THICK_WORDS, fontSize: 'min(3vh, 2vw)' }}>{o.text}</span>}
                 </motion.button>
               );
@@ -132,7 +132,7 @@ export function HeroTrialsScene({ scene, onWin, onNext, sync }: { scene: Trials;
               <motion.img src={scene.medal} alt="" draggable={false} className="h-[16vh] w-[16vh] object-contain drop-shadow-[0_1vh_1vh_rgba(0,0,0,0.35)]"
                 initial={reduce ? false : { y: -200, rotate: -30 }} animate={{ y: 0, rotate: [0, 10, -6, 0] }} transition={{ delay: 0.6, type: 'spring', stiffness: 140, damping: 10 }} />
             </div>
-            <div className="rounded-full bg-indigo-800/85 px-5 py-1 font-black text-yellow-200 shadow-lg" style={{ fontSize: 'min(3.6vh, 2.4vw)' }}>
+            <div className="rounded-full bg-sky-800/85 px-5 py-1 font-black text-yellow-200 shadow-lg" style={{ fontSize: 'min(3.6vh, 2.4vw)' }}>
               {scene.hero.name} · {score} / {total}
             </div>
             <div className="grid w-full max-w-[92vh] grid-cols-2 gap-[1.2vh]">

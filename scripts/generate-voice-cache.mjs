@@ -54,12 +54,15 @@ import * as jungleScenes from '../src/content/playground-library/jungle-adventur
 import * as spaceScenes from '../src/content/playground-library/space-mission/scenes.ts';
 import * as foodScenes from '../src/content/playground-library/food-festival/scenes.ts';
 import * as monsterScenes from '../src/content/playground-library/monster-town/scenes.ts';
+import * as oceanScenes from '../src/content/playground-library/ocean/scenes.ts';
 import { surveyQuestion, surveyAnswer, surveyReport, CAFE_WRONG, CAFE_YES } from '../src/content/playground-library/welcome-town/scene-components/foodRules.ts';
 import { BUILDER_WRONG, builderHint } from '../src/content/playground-library/welcome-town/scene-components/monsterRules.ts';
 import { METER_ASK, METER_WRONG } from '../src/content/playground-library/welcome-town/scene-components/meterRules.ts';
 import { GW_ASK, GW_GOT_IT, GW_HIDE, GW_LOOK, GW_NOT, GW_WHO, gwGuess, gwRight } from '../src/content/playground-library/welcome-town/scene-components/guessWhoRules.ts';
 import { MIXUP_FIND, MIXUP_FIXED, MIXUP_NOT_THERE, MIXUP_PICK } from '../src/content/playground-library/welcome-town/scene-components/mixupRules.ts';
 import { moodSentence, moodReason, moodAsk, MOOD_PULL, MOOD_WRONG } from '../src/content/playground-library/welcome-town/scene-components/moodRules.ts';
+import { reefAsk, reefSentence, REEF_START, REEF_WRONG } from '../src/content/playground-library/welcome-town/scene-components/liveReefRules.ts';
+import { DETECTIVE_HIDE, DETECTIVE_LOOK, DETECTIVE_NO, DETECTIVE_YES, allQuestions, caughtLine, foundLine, guessLine, questionText } from '../src/content/playground-library/welcome-town/scene-components/reefDetectiveRules.ts';
 import { placeSentence, roomSentences, whoseQuestion, ownerSentence, OWNER_YES, OWNER_NO, ROOM_AGAIN, ROOM_FREE_START, ROOM_DESCRIBE } from '../src/content/playground-library/welcome-town/scene-components/roomRules.ts';
 import { homeworkA1U9L1Lines } from '../src/content/playground-library/magic-castle/homework.ts';
 import { allQuestLines } from '../src/content/homework-quests/registry.ts';
@@ -745,6 +748,9 @@ const UNIT1_EXTRACTORS = {
 /** Reader picture questions (owner 2026-10-14): the question and "Yes! <answer>" in the asker's voice. */
 const readerChecks = (s) => (s.noChecks ? [] : (s.pages ?? []).flatMap((p) => (p.check ? [[p.check.who ?? 'teacher', p.check.question], [p.check.who ?? 'teacher', `Yes! ${p.check.answer}`]] : [])));
 
+/** Number words 0-20 (A1 U1 L3 number games). */
+const NUM_WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty'];
+
 const WT_EXTRACTORS = {
   // Universal "Remember?" warm-up (RecallWarmupScene.tsx's recallWarmupLines()) — was missing here, so A1/A2
   // warm-up lines were never baked and the audit could not see them.
@@ -859,7 +865,22 @@ const WT_EXTRACTORS = {
   'tower-pull': (s) => [[s.who, s.doneLine], [s.who, 'Pick a block! Answer and pull it out!'], [s.who, 'Careful! Try again!'],
     ...(s.rounds ?? []).flatMap((r) => [[s.who, r.ask], ['teacher', r.choices[r.answer]]])],
   // MusicalIslandsScene / RedGreenScene / LetterBubblesScene / CrosswordScene (welcome-town/scene-components).
-  'musical-islands': (s) => [[s.who, s.doneLine], [s.who, 'Look again! Which lily pad?'], ...(s.rounds ?? []).flatMap((r) => [[s.who, r.ask], ['teacher', r.say]])],
+  'musical-islands': (s) => [[s.who, s.doneLine], [s.who, `Look again! Which ${s.padWord ?? 'lily pad'}?`], ...(s.rounds ?? []).flatMap((r) => [[s.who, r.ask], ['teacher', r.say]])],
+  // PartyLiftScene / DotDotScene / AgeLineupScene / PartyPhoneScene (A1 U1 L3, welcome-town/scene-components).
+  'party-lift': (s) => [[s.who, s.doneLine], [s.who, 'Your turn! Look at the ticket. Say the floor!'], ...(s.rounds ?? []).flatMap((r) => {
+    const w = NUM_WORDS[r.floor];
+    return [[r.guest, `Floor ${w}, please!`], [r.guest, `Listen again! Floor ${w}, please!`], [r.guest, w], [r.guest, `Ding! Floor ${w}! Thank you!`]];
+  })],
+  'dot-dot': (s) => [[s.who, s.doneLine], ...(s.pictures ?? []).flatMap((p) => [[s.who, p.intro], [s.who, p.reveal],
+    ...(p.dots ?? []).flatMap((_, i) => [[s.who, NUM_WORDS[p.from + i]], [s.who, `Find ${NUM_WORDS[p.from + i]}!`]])])],
+  'age-lineup': (s) => [[s.who, s.intro], [s.who, s.doneLine], ['teacher', 'How old are you?'], [s.who, 'Three, two, one… cheese!'],
+    ...(s.friends ?? []).flatMap((f) => [[f.who, `I’m ${NUM_WORDS[f.age]}!`], [f.who, 'Oops! I am older! Find a taller step!'], [f.who, 'Oops! I am younger! Find a smaller step!'], [f.who, `${f.name} is ${NUM_WORDS[f.age]}.`]])],
+  'party-phone': (s) => [[s.who, s.doneLine], [s.who, 'Ring ring! Pick up the phone!'], [s.who, 'Listen again!'], ...(s.calls ?? []).flatMap((c) => {
+    const spelt = c.name.toUpperCase().split('').join(', ');
+    return [[c.from, `Hi! It’s ${c.name}. ${spelt}. I am ${NUM_WORDS[c.age]}. My party is at house number ${NUM_WORDS[c.house]}. Come to my party!`],
+      [c.from, `My name is ${c.name}. ${spelt}.`], [c.from, `I am ${NUM_WORDS[c.age]}.`], [c.from, `House number ${NUM_WORDS[c.house]}.`],
+      ...Array.from(new Set(c.name.toUpperCase().split(''))).map((l) => [c.from, l]), [s.who, `Thank you, ${c.name}! See you at the party!`]];
+  })],
   'red-green': (s) => [[s.who, s.doneLine], [s.who, 'Oops! Red light! Freeze!'], ...(s.rounds ?? []).map((r) => [s.who, r.say])],
   'letter-bubbles': (s) => [[s.who, s.doneLine], ...(s.words ?? []).flatMap((w) => [[s.who, `Spell it! ${w.word}!`], [s.who, w.word], ['teacher', w.say]])],
   'crossword': (s) => [[s.who, s.doneLine], [s.who, 'What is it? Spell it!'], [s.who, 'Pick a picture!'], ...(s.words ?? []).flatMap((w) => [[s.who, w.word], ['teacher', w.say]])],
@@ -888,6 +909,12 @@ const WT_EXTRACTORS = {
     ...(s.questions ?? []).flatMap((q) => [[s.who, q.yes], [s.who, q.no]]), ...(s.hideAsks ?? []).map((q) => [s.who, q.ask])],
   'feelings-meter': (s) => [[s.who, s.doneLine], [s.who, METER_ASK], [s.who, METER_WRONG], ...(s.points ?? []).map((pt) => ['teacher', pt.line])],
   'monster-mixup': (s) => [[s.who, s.doneLine], [s.who, MIXUP_NOT_THERE], [s.who, MIXUP_PICK], ...(s.rounds ?? []).flatMap((r) => [[s.who, r.line], [s.who, `${r.line} ${MIXUP_FIND}`], ['teacher', `${MIXUP_FIXED} ${r.say}`]])],
+  'reef-detective': (s) => [[s.who, s.doneLine], [s.who, s.intro], [s.who, DETECTIVE_YES], [s.who, DETECTIVE_NO], ['teacher', DETECTIVE_YES], ['teacher', DETECTIVE_NO],
+    [s.helper, DETECTIVE_HIDE], [s.helper, DETECTIVE_LOOK], ...allQuestions(s.suspects ?? []).map((k) => ['teacher', questionText(k)]),
+    ...(s.hideAsks ?? []).map((k) => [s.helper, questionText(k)]),
+    ...(s.suspects ?? []).flatMap((x) => [[s.who, foundLine(x)], [s.helper, guessLine(x)], [s.helper, caughtLine(x)]])],
+  'live-reef': (s) => [[s.who, s.doneLine], [s.who, REEF_WRONG],
+    ...(s.rounds ?? []).flatMap((r, i) => { const sp = s.spots?.[r.spot]; if (!sp) return []; return [[s.who, i === 0 ? `${REEF_START} ${reefAsk(sp.name)}` : reefAsk(sp.name)], [s.who, reefAsk(sp.name)], ['teacher', reefSentence(sp.name, r.doing, sp.plural)]]; })],
   'mood-machine': (s) => [[s.who, s.doneLine], [s.who, MOOD_PULL], [s.who, MOOD_WRONG],
     ...(s.rounds ?? []).flatMap((r) => [[s.who, `${moodReason(r.reason)} ${moodAsk(s.monster?.name ?? '')}`], ['teacher', moodSentence(s.monster?.name ?? '', s.feelings?.[r.feeling]?.feeling ?? '', r.reason)]])],
   'food-survey': (s) => [[s.who, s.doneLine], [s.who, 'Ask your friends! Tap a box.'], [s.who, 'Now read the chart. Likes or doesn’t like?'], [s.who, 'Look at the chart again!'],
@@ -965,6 +992,7 @@ const ENGINES = [
   { scenesModule: spaceScenes, extractors: WT_EXTRACTORS, resolveWho: (who) => wtScenes.VOICE_KEY[who] ?? who },
   { scenesModule: foodScenes, extractors: WT_EXTRACTORS, resolveWho: (who) => wtScenes.VOICE_KEY[who] ?? who },
   { scenesModule: monsterScenes, extractors: WT_EXTRACTORS, resolveWho: (who) => wtScenes.VOICE_KEY[who] ?? who },
+  { scenesModule: oceanScenes, extractors: WT_EXTRACTORS, resolveWho: (who) => wtScenes.VOICE_KEY[who] ?? who },
 ];
 
 /** Homework games: every line they can say, already as (voice, text). */

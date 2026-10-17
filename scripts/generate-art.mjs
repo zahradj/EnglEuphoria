@@ -20,7 +20,14 @@ import path from 'node:path';
 
 const SUPABASE_URL = 'https://dcoxpyzoqjvmuuygvlme.supabase.co';
 const ANON_KEY = fs.readFileSync(new URL('./generate-voice-cache.mjs', import.meta.url), 'utf8').match(/ANON_KEY\s*=\s*\n?\s*'([^']+)'/)?.[1];
-const targets = JSON.parse(fs.readFileSync(new URL('./art-targets.json', import.meta.url), 'utf8'));
+const rawTargets = JSON.parse(fs.readFileSync(new URL('./art-targets.json', import.meta.url), 'utf8'));
+// Playground pictures use the brand shades (owner, 2026-10-15) — same text as PICTURE_COLOUR_LINE in
+// src/content/playground-library/gameSkin.ts. Exact redraws of a reference keep the reference's colours.
+const PICTURE_COLOUR_LINE =
+  'Colour palette: ONLY the EnglEuphoria Playground brand shades, yellow and orange - bright orange (#FE6A2F), tangerine (#FB923C), sunshine yellow (#FEAF15), golden amber (#F59E0B), honey yellow (#FDE68A) and warm cream (#FEFBDD), with natural wood and skin tones; sky, water and plants only as soft, muted natural colours; no purple, no other brand colours.';
+const withBrandColours = (t) => (/EXACTLY|Colour palette:/.test(t.prompt) || t.out.startsWith('public/academy')
+  ? t : { ...t, prompt: `${t.prompt} ${PICTURE_COLOUR_LINE}` });
+const targets = rawTargets.map(withBrandColours);
 
 const HF_PROXY = process.env.HF_PROXY_URL;
 const HF_TOKEN = process.env.HF_PROXY_TOKEN;

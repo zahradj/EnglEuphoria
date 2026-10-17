@@ -9,6 +9,7 @@ import { type ActivitySync, useSyncedState } from '../../sceneActivitySync';
 import { voiceOf } from './shared';
 import { CLAY_BUTTON, THICK_WORDS } from '../../unit1/scene-components/shared';
 import { MonsterFigure } from './monsterParts';
+import { jewel, SKIN, PILL_FONT } from '../../gameSkin';
 import { GW_ASK, GW_GOT_IT, GW_HIDE, GW_LOOK, GW_NOT, GW_WHO, fitsMonster, gwGuess, gwRight } from './guessWhoRules';
 
 /* ---------- Guess Who ★ (A1 U5L6, docs/a1-unit-5-monster-town.md §5.6) ----------
@@ -159,42 +160,43 @@ export function GuessWhoScene({ scene, onNext, onWin, onLose, sync }: { scene: G
       <FloatText show={star} x={35} y={30}>+⭐</FloatText>
 
       <div className="pointer-events-none absolute inset-x-0 top-[2.5%] z-30 flex justify-center px-16">
-        <span className="rounded-full bg-violet-900/70 px-6 py-1.5 text-center font-black text-white shadow-xl backdrop-blur-sm" style={{ ...THICK_WORDS, fontSize: big }}>
+        <span className={`px-6 py-1.5 text-center ${SKIN.pill}`} style={{ fontSize: big }}>
           {done ? scene.doneLine : phase === 'ask' ? `🕵️ ${scene.title} · You ask!` : `🤫 ${scene.title} · You hide!`}
         </span>
       </div>
 
       {/* the line-up board */}
-      <div className="absolute z-10 rounded-[2.4vh] bg-amber-900/45 shadow-2xl ring-[0.5vh] ring-amber-200/60" style={{ left: '3.5%', width: '63%', top: '15%', height: '80%' }} />
+      <div className={`absolute z-10 ${SKIN.frame}`} style={{ left: '3.5%', width: '63%', top: '15%', height: '80%' }} />
       {scene.monsters.map((m, k) => {
         const closed = isDown(k);
         const mine = phase === 'hide' && picked === k;
         return (
           <motion.button key={k} type="button" aria-label={m.name}
             onClick={() => (phase === 'ask' ? tapCardAsk(k) : pick(k))}
-            className={`absolute z-20 overflow-hidden rounded-[1.6vh] border-[0.45vh] shadow-xl ${mine ? 'border-yellow-300 ring-[0.6vh] ring-yellow-300' : 'border-amber-100'}`}
-            style={{ left: `${cardX(k) - 7}%`, top: `${cardY(k) - 17}%`, width: '14%', height: '34%', background: 'linear-gradient(#EDE9FE, #C4B5FD)', perspective: 600 }}
+            className={`absolute z-20 overflow-hidden rounded-[1.8vh] border-[0.4vh] shadow-[0_0.6vh_0_#F3C474,0_1.4vh_2.4vh_rgba(40,20,5,0.45)] ${mine ? 'border-[#FDE68A] ring-[0.6vh] ring-[#FDE68A]' : 'border-[#FDE3B0]'}`}
+            style={{ left: `${cardX(k) - 7}%`, top: `${cardY(k) - 17}%`, width: '14%', height: '34%', background: 'radial-gradient(circle at 50% 38%, #FFFFFF 0 45%, #E0F2FE 75%, #BAE6FD 100%)', perspective: 600 }}
             animate={miss === k && !reduce ? { x: [0, -8, 8, -5, 0] } : { x: 0 }}>
             <div className="absolute left-[14%] top-[7%] w-[72%]" style={{ aspectRatio: '1 / 1' }}>
               <MonsterFigure kit={kit} eyes={m.eyes} horns={m.horns} mouth={m.mouth} wears={m.wears} hue={m.hue} />
             </div>
-            <span className="absolute bottom-[3%] left-1/2 z-10 -translate-x-1/2 rounded-full bg-white/90 px-[0.6vw] text-center font-black text-violet-900 shadow" style={{ fontSize: 'min(2.3vh,1.5vw)' }}>{m.name}</span>
+            <span className="absolute bottom-[3%] left-1/2 z-10 -translate-x-1/2 rounded-full bg-[#2A1A05] px-[0.7vw] text-center font-black text-[#FFFFFF] shadow" style={{ fontSize: 'min(2.3vh,1.5vw)' }}>{m.name}</span>
             {/* the door that closes */}
-            <motion.div className="absolute inset-0 origin-bottom rounded-[1.2vh]" initial={false}
-              animate={{ rotateX: closed ? 0 : -92, opacity: closed ? 1 : 0 }} transition={{ type: 'spring', stiffness: 220, damping: 20 }}
-              style={{ background: 'repeating-linear-gradient(90deg,#92400E 0 12%,#A16207 12% 24%)', boxShadow: 'inset 0 0 0 0.5vh #78350F' }}>
-              <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[min(5vh,3.2vw)]">🚪</span>
+            <motion.div className="absolute inset-0 origin-bottom overflow-hidden rounded-[1.4vh] bg-gradient-to-br from-[#38BDF8] via-[#0EA5E9] to-[#0369A1]" initial={false}
+              animate={{ rotateX: closed ? 0 : -92, opacity: closed ? 1 : 0 }} transition={{ type: 'spring', stiffness: 220, damping: 20 }}>
+              <div className="absolute inset-0 opacity-25" style={{ backgroundImage: 'radial-gradient(circle, #FDE68A 1.4px, transparent 1.8px)', backgroundSize: '1.6vh 1.6vh' }} />
+              <div className="absolute inset-[8%] rounded-[1vh] border-[0.3vh] border-dashed border-[#FEAF15]/60" />
+              <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[min(4.4vh,2.9vw)] opacity-90">⭐</span>
             </motion.div>
-            {mine && <span className="absolute start-[4%] top-[3%] rounded-full bg-yellow-300 px-2 font-black text-violet-900" style={{ fontSize: 'min(1.8vh,1.2vw)' }}>🤫 mine</span>}
+            {mine && <span className="absolute start-[4%] top-[3%] rounded-full bg-yellow-300 px-2 font-black text-[#2A1A05]" style={{ fontSize: 'min(1.8vh,1.2vw)' }}>🤫 mine</span>}
           </motion.button>
         );
       })}
 
       {/* the friend's speech bubble, then the question chips under it */}
       <div className="absolute z-30 flex flex-col gap-[1vh]" style={{ left: '69%', right: '2.5%', top: '15%', bottom: '4%' }}>
-        <div className="shrink-0 rounded-[2vh] border-[0.4vh] border-violet-300 bg-white/95 px-[1.2vw] py-[1vh] text-center shadow-2xl">
-          <p className="font-black leading-snug text-violet-950" style={{ fontSize: 'min(2.8vh,1.8vw)' }}>{bubble}</p>
-          {bubble && <button type="button" onClick={() => cueSpeak(bubble, voiceOf(scene.who))} className="mt-[0.6vh] rounded-full bg-violet-600 px-3 py-0.5 font-black text-white shadow" style={{ fontSize: 'min(2vh,1.3vw)' }}>🔊</button>}
+        <div className={`shrink-0 px-[1.2vw] py-[1vh] text-center ${SKIN.panel}`}>
+          <p className={`font-black leading-snug ${SKIN.ink}`} style={{ fontSize: 'min(2.8vh,1.8vw)' }}>{bubble}</p>
+          {bubble && <button type="button" onClick={() => cueSpeak(bubble, voiceOf(scene.who))} className="mt-[0.6vh] rounded-full bg-[#FE6A2F] px-3 py-0.5 font-black text-white shadow" style={{ fontSize: 'min(2vh,1.3vw)' }}>🔊</button>}
         </div>
         {phase === 'ask' && !solved && (
           <div className="flex min-h-0 flex-col gap-[0.9vh] overflow-y-auto pe-1">
@@ -202,7 +204,7 @@ export function GuessWhoScene({ scene, onNext, onWin, onLose, sync }: { scene: G
               const used = asked.includes(i);
               return (
                 <button key={i} type="button" disabled={used} onClick={() => askQ(i)}
-                  className={`shrink-0 rounded-full border-[0.35vh] px-[0.9vw] py-[0.7vh] text-start font-black shadow-md ${used ? 'border-violet-200 bg-violet-200/70 text-violet-400 line-through' : 'border-white bg-violet-600 text-white hover:bg-violet-500'}`}
+                  className={`shrink-0 rounded-full px-[0.9vw] py-[0.7vh] text-start font-black ${used ? 'border-[0.3vh] border-[#FEAF15]/30 bg-white/10 text-[#FEAF15]/60 line-through' : `${SKIN.card} ${SKIN.ink} !rounded-full hover:brightness-105`}`}
                   style={{ fontSize: 'min(2.2vh,1.45vw)', minHeight: 40 }}>
                   🗣️ {q.ask}
                 </button>
@@ -225,7 +227,7 @@ export function GuessWhoScene({ scene, onNext, onWin, onLose, sync }: { scene: G
           {[true, false].map((y) => (
             <motion.button key={String(y)} type="button" onClick={() => answer(y)}
               animate={miss >= 100 && !reduce ? { x: [0, -6, 6, 0] } : { x: 0 }}
-              className={`flex-1 rounded-[2vh] border-[0.45vh] border-white py-[2vh] font-black text-white shadow-xl ${y ? 'bg-emerald-500' : 'bg-rose-500'}`}
+              className={`flex-1 rounded-[2vh] border-[0.35vh] py-[2vh] font-black ${y ? jewel(2) : jewel(0)}`}
               style={{ fontSize: 'min(3.4vh,2.2vw)' }}>
               {y ? '✅ Yes!' : '❌ No!'}
             </motion.button>
@@ -233,7 +235,7 @@ export function GuessWhoScene({ scene, onNext, onWin, onLose, sync }: { scene: G
         </div>
       )}
       {phase === 'hide' && picked >= 0 && !done && (
-        <p className="absolute z-30 text-center font-bold text-white drop-shadow" style={{ left: '69%', right: '2.5%', top: '62%', fontSize: 'min(2.1vh,1.4vw)' }}>
+        <p className={`absolute z-30 px-3 py-1 text-center ${SKIN.pill}`} style={{ left: '69%', right: '2.5%', top: '62%', fontSize: 'min(2.1vh,1.4vw)' }}>
           Say Yes or No — then the whole sentence: “Yes! My monster has got…”
         </p>
       )}
