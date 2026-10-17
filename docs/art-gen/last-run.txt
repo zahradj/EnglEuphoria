@@ -179,486 +179,59 @@
 = exists public/welcome-town/sprites/bella-angry-v2.png
 = exists public/welcome-town/sprites/willow-hungry-v2.png
 = exists public/magic-castle/scenes/bg-castle-tower-empty.png
-+ public/lep1/items/item-spark-wave.png (209607B)
-+ public/lep1/items/item-spark-fly.png (393428B)
-+ public/lep1/items/item-spark-cold.png (415123B)
-+ public/lep1/items/item-spark-cheer.png (860567B)
++ public/lep1/items/item-spark-wave.png (974998B)
++ public/lep1/items/item-spark-fly.png (984641B)
+! public/lep1/items/item-spark-cold.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
+! public/lep1/items/item-spark-cold.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
+! public/lep1/items/item-spark-cold.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
++ public/lep1/items/item-spark-cheer.png (1102928B)
 ! public/lep1/items/item-spark-point.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
   "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-+ public/lep1/items/item-spark-point.png (865567B)
-+ public/lep1/items/item-zippy.png (835797B)
-+ public/lep1/items/item-zippy-stop.png (293866B)
-+ public/lep1/items/item-leo-fast.png (1097538B)
-+ public/lep1/items/item-mia-climb.png (430741B)
-+ public/lep1/items/item-pip-high.png (352202B)
-! public/lep1/items/item-biscuit-swim.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-+ public/lep1/items/item-biscuit-swim.png (897405B)
-! public/lep1/items/item-leo-lift.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-leo-lift.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-leo-lift.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-pip-try.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-pip-try.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-pip-try.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-cit-headache.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-cit-headache.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-cit-headache.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-cit-cold.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-cit-cold.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-cit-cold.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-cit-toothache.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-cit-toothache.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-cit-toothache.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-cit-tummy.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-cit-tummy.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-cit-tummy.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-cit-bags.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-cit-bags.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-cit-bags.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-cit-bike.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-cit-bike.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-cit-bike.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-cit-kitten.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-cit-kitten.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-cit-kitten.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-plaster.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-plaster.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-plaster.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-tissues.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-+ public/lep1/items/item-tissues.png (917774B)
-+ public/lep1/items/item-toolbox.png (839217B)
-+ public/lep1/items/item-big-box.png (1028055B)
-! public/lep1/items/item-phone-call.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-phone-call.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-phone-call.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-+ public/lep1/items/item-hero-cape.png (862278B)
-+ public/lep1/items/item-hero-badge.png (346714B)
-+ public/lep1/items/item-traffic-light.png (649577B)
-! public/lep1/items/item-paint.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-paint.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-paint.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-tail.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-tail.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-tail.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-snail.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-snail.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-snail.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-cape-word.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-cape-word.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-cape-word.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-cake-a.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-cake-a.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-cake-a.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-wave-hand.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-wave-hand.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-wave-hand.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-tray.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-tray.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-tray.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-hay.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-hay.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-hay.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-clay.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-clay.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-clay.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-crayon.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-crayon.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/items/item-crayon.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/scenes/bg-a1u7-square-wide.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/scenes/bg-a1u7-square-wide.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/scenes/bg-a1u7-square-wide.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/scenes/bg-a1u7-road-wide.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/scenes/bg-a1u7-road-wide.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/scenes/bg-a1u7-road-wide.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/scenes/bg-a1u7-tower-wide.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/scenes/bg-a1u7-tower-wide.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/scenes/bg-a1u7-tower-wide.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/scenes/bg-a1u7-trials-wide.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/scenes/bg-a1u7-trials-wide.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/scenes/bg-a1u7-trials-wide.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/scenes/bg-a1u7-hq-wide.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/scenes/bg-a1u7-hq-wide.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
+! public/lep1/items/item-spark-point.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
   "error": {
     "code": 429,
     "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-hq-wide.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 402,
-    "message": "Your prepayment credits are depleted. Please go to AI Studio at https://ai.studio/projects to manage your project and billing. Learn more at https://ai.
-! public/lep1/scenes/bg-a1u7-story-1-wide.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
+! public/lep1/items/item-spark-point.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
   "error": {
     "code": 429,
     "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-1-wide.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
+! public/lep1/items/item-zippy.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
   "error": {
     "code": 429,
     "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-1-wide.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
+! public/lep1/items/item-zippy.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
   "error": {
     "code": 429,
     "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-2-wide.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
+! public/lep1/items/item-zippy.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
   "error": {
     "code": 429,
     "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-2-wide.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-2-wide.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-3-wide.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-3-wide.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-3-wide.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-4-wide.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-4-wide.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-4-wide.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-5-wide.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-5-wide.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-5-wide.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-6-wide.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-6-wide.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-6-wide.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-7-wide.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-7-wide.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-7-wide.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-8-wide.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-8-wide.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-8-wide.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-9-wide.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-9-wide.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-9-wide.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-10-wide.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-10-wide.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-10-wide.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-11-wide.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-11-wide.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-11-wide.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-12-wide.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-12-wide.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-+ public/lep1/scenes/bg-a1u7-story-12-wide.png (2071902B)
-Done. made 18, failed 37
+node:fs:560
+  return binding.open(
+                 ^
+
+Error: ENOENT: no such file or directory, open 'public/lep1/items/item-zippy.png'
+    at Object.openSync (node:fs:560:18)
+    at Object.readFileSync (node:fs:444:35)
+    at file:///home/runner/work/EnglEuphoria/EnglEuphoria/scripts/generate-art.mjs:115:88
+    at Array.map (<anonymous>)
+    at file:///home/runner/work/EnglEuphoria/EnglEuphoria/scripts/generate-art.mjs:115:42 {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: 'public/lep1/items/item-zippy.png'
+}
+
+Node.js v22.23.3
