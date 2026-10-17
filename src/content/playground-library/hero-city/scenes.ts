@@ -1114,3 +1114,236 @@ export const LESSON_A1U7L4_SCENES: Scene[] = [
   goodbyeSong('hc4-goodbye-song', bgSquare),
   { id: 'hc4-finale', kind: 'finale', bg: sparkPage(9), who: 'spark', line: 'You are a real hero! See you in Hero City! \u{1F9B8}' },
 ];
+
+/* =============================================================================
+ * A1 Unit 7 Lesson 5: "Storybook: Captain Spark Saves the Day"
+ * Objective: I can follow a hero story and say who helped and how.
+ * Story frame: the whole book, read in the golden bell-tower park (late afternoon sun); at the pause the child chooses
+ *   the plan to save the kitten — and says why (Mia can climb well!).
+ * Practice ladder: Revise (Remember? L4 problems) → Predict → the story words → Read and Match → Reader p1-10 (pages
+ *   the child knows are read ALONE) → the pause (branching choice) → Reader p11-12 → Story Order (retell) → Jigsaw →
+ *   Who is missing? → Hero Clues (tile reveal) → Build the Tower (story questions) → act it out → Phonics review (Sound
+ *   Pop: ai / ay / a_e) → Blend & Read → twister → Free (retell, talk with Captain Spark) → check.
+ * Story GIFs (Canva) only after a written scenario, a preview GIF and the owner's OK — still pictures until then.
+ * ========================================================================= */
+
+export const LESSON_A1U7L5_TITLE = 'Storybook: Captain Spark Saves the Day';
+export const LESSON_A1U7L5_OBJECTIVE = 'I can follow a hero story and say who helped and how.';
+
+export const LESSON_A1U7L5_SCENES: Scene[] = [
+  { id: 'hc5-title', kind: 'title-card', bg: sparkPage(10), level: 'A1', unit: 'Unit 7', lessonLabel: 'Lesson 5', title: 'Captain Spark Saves the Day', subtitle: 'Read the whole hero story!', cta: '\u{1F4D6} LET’S READ!' },
+  {
+    // Remember? (owner, 2026-10-07): Lesson 4 — what's the matter? Click mode: the citizens' pictures.
+    id: 'hc5-recall-warmup', kind: 'recall-warmup', bg: bgSquare, who: 'pip', mode: 'click',
+    fromLabel: 'Lesson 4 · Can I Help You?',
+    teacher: 'Guided: Pip says what’s wrong — the student finds the person and offers help: Can I help you? Here’s a tissue!',
+    items: [
+      { word: 'headache', say: 'I’ve got a headache.', img: CIT.headache },
+      { word: 'cold', say: 'I’ve got a cold.', img: CIT.cold },
+      { word: 'toothache', say: 'I’ve got toothache.', img: CIT.toothache },
+      { word: 'bags', say: 'My bags are heavy.', img: CIT.bags },
+    ],
+  },
+  { id: 'hc5-predict', kind: 'meet', focus: ['tower', 'kitten'], bg: sparkPage(10), who: 'mia', cardSide: 'right', teacher: 'Predict (I do): look at the tower — a kitten at the top! Captain Spark can’t fly today. Ask: Who can help? Leo? Mia? Biscuit? Let the student guess — we find out in the story!', line: 'Look! A kitten on the tower! Who can help?', repeat: 'Who can help?' },
+  {
+    id: 'hc5-story-words', kind: 'prea1', teacher: 'Present (I do → we do): the new story words. Point, say, act: climb with your hands, hold a ladder, cuddle a kitten.',
+    scene: {
+      id: 'hc5-story-words', kind: 'listen-repeat-cards', bg: bgTower, teacher: 'New story words — listen and say!',
+      cards: [
+        { who: 'mia', sentence: 'the tower', img: sparkPage(10), imgLabel: 'tower' },
+        { who: 'mia', sentence: 'a kitten', img: HERO.kitten, imgLabel: 'kitten' },
+        { who: 'leo', sentence: 'a ladder', img: HERO.ladder, imgLabel: 'ladder' },
+        { who: 'pip', sentence: 'She can climb well.', img: HERO.miaClimb, imgLabel: 'climb' },
+        { who: 'pip', sentence: 'We can all be heroes!', img: HERO.sparkCheer, imgLabel: 'heroes' },
+      ],
+    },
+  },
+  { id: 'hc5-echo', kind: 'echo', bg: sparkPage(10), who: 'mia', textSide: 'top', teacher: 'Guided (we do): say it like Mia — worried, then brave!', word: 'The kitten is on the tower! Who can help?' },
+  {
+    id: 'hc5-match', kind: 'picture-match', look: 'polaroids', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each sentence and drags it under its picture (or taps the sentence, then the picture), then reads it aloud.',
+    items: [
+      { word: 'a kitten', img: HERO.kitten },
+      { word: 'a ladder', img: HERO.ladder },
+      { word: 'She can climb well.', img: HERO.miaClimb },
+      { word: 'He can lift it.', img: HERO.leoLift },
+      { word: 'She can fly fast.', img: HERO.sparkFly },
+    ],
+    bg: bgTower,
+  },
+  {
+    id: 'hc5-reader-1', kind: 'reader', bg: sparkPage(1), title: 'Captain Spark Saves the Day', doneLine: 'The kitten is on the tower! Who can help? Let’s think!',
+    teacher: 'Reading: pages 1-10 — the student reads pages they know ALONE (🔊 only for help). Evidence: 4 pages read alone.',
+    pages: SPARK_STORY.slice(0, 10),
+  },
+  {
+    id: 'hc5-pause', kind: 'choice', bg: sparkPage(10), who: 'spark', teacher: 'Pause (branching choice — the child chooses Captain Spark’s plan): who can save the kitten? The student chooses and SAYS why: Mia! She can climb well! (Leo can lift, but he can’t climb the tower; Biscuit can swim, but the kitten isn’t in the water.)',
+    prompt: 'Who can save the kitten?',
+    options: [
+      { label: 'Mia — she can climb well!', emoji: '\u{1F42D}', correct: true },
+      { label: 'Biscuit — he can swim well!', emoji: '\u{1F436}' },
+      { label: 'Pip — he can’t climb well.', emoji: '\u{1F98A}' },
+    ],
+  },
+  {
+    id: 'hc5-reader-2', kind: 'reader', bg: sparkPage(11), title: 'Captain Spark Saves the Day — the end', doneLine: 'The end! You read the whole story!',
+    teacher: 'Reading: the last two pages. The student reads alone first; 🔊 only for help.',
+    pages: SPARK_STORY.slice(10, 12),
+  },
+  { id: 'hc5-thanks', kind: 'meet', focus: ['heroes'], bg: sparkPage(12), who: 'spark', cardSide: 'left', teacher: 'Guided: Captain Spark thanks everyone. Ask: Who climbed? (Mia) Who held the ladder? (Leo and Pip) What did they find? (the compass piece!)', line: 'Thank you, friends! Mia can climb well. Leo and Pip help. We can all be heroes!', repeat: 'We can all be heroes!' },
+  { id: 'hc5-echo-2', kind: 'echo', bg: sparkPage(12), who: 'pip', textSide: 'top', teacher: 'Guided: say the last line with Pip — arms up like a hero!', word: 'We can all be heroes! Hooray!' },
+  { id: 'hc5-echo-3', kind: 'echo', bg: sparkPage(11), who: 'leo', textSide: 'top', teacher: 'Guided: say who helped — climb with your hands on “Mia”, hold the ladder on “Leo and Pip”!', word: 'Mia can climb well. Leo and Pip help.' },
+  {
+    id: 'hc5-read-match', kind: 'picture-match', look: 'frames', prompt: 'Read and match',
+    teacher: 'Reading: read each sentence from the story and drag it under its picture. Then read it aloud.',
+    items: [
+      { word: 'The kitten is on the tower!', img: sparkPage(10) },
+      { word: 'Leo and Pip help.', img: sparkPage(11) },
+      { word: 'We can all be heroes!', img: sparkPage(12) },
+      { word: 'She can fly fast!', img: sparkPage(2) },
+    ],
+    bg: bgTower,
+  },
+  {
+    id: 'hc5-story-order', kind: 'prea1', teacher: 'Guided: put the story pictures in order, then retell it: first, then, then, at the end! Evidence: retells 3 pictures.',
+    scene: {
+      id: 'hc5-story-order', kind: 'story-order', bg: bgTower, who: 'pip', teacher: 'Put the pictures in order, then tell the story!',
+      frames: [
+        { img: sparkPage(2), caption: 'Captain Spark can fly fast.' },
+        { img: sparkPage(4), caption: 'Leo can lift the box.' },
+        { img: sparkPage(8), caption: 'Captain Spark has got a cold.' },
+        { img: sparkPage(11), caption: 'Mia can climb well.' },
+        { img: sparkPage(12), caption: 'We can all be heroes!' },
+      ],
+    },
+  },
+  { id: 'hc5-jigsaw', kind: 'jigsaw-puzzle', bg: bgTower, teacher: 'Build the story picture — then read its page: Mia can climb well. Leo and Pip help.', image: sparkPage(11), rows: 2, cols: 3 },
+  {
+    id: 'hc5-whos-missing', kind: 'whats-missing', bg: bgTower, title: 'Who is missing?',
+    teacher: 'Guided: look at the story heroes — one flies away! Say who is missing and what they can do: Mia is missing. She can climb well!',
+    rounds: [
+      { items: [{ word: 'Mia', img: HERO.miaClimb }, { word: 'Leo', img: HERO.leoLift }, { word: 'Biscuit', img: HERO.biscuitSwim }, { word: 'Captain Spark', img: HERO.sparkFly }], missing: 0 },
+      { items: [{ word: 'Zippy', img: HERO.zippy }, { word: 'Pip', img: HERO.pipHigh }, { word: 'the kitten', img: HERO.kitten }, { word: 'Leo', img: HERO.leoFast }], missing: 2 },
+    ],
+  },
+  {
+    id: 'hc5-clues', kind: 'prea1', teacher: 'Guided: Hero Clues! Who is it in the story? Tiles open one by one — the student listens to the story clue and guesses early, then says the story sentence.',
+    scene: {
+      id: 'hc5-clues', kind: 'tile-reveal', bg: bgTower, who: 'pip',
+      teacher: 'Who is it in the story? Guess early!',
+      rounds: [
+        { img: HERO.sparkCold, word: 'Captain Spark', line: 'She can fly fast. Today she has got a cold. Who is it?', options: [{ label: 'Mia', img: HERO.mia }, { label: 'Captain Spark', img: HERO.spark }, { label: 'Zippy', img: HERO.zippy }] },
+        { img: HERO.leoLift, word: 'Leo', line: 'He is strong. He can lift the box. Who is it?', options: [{ label: 'Leo', img: HERO.leo }, { label: 'Pip', img: HERO.pip }, { label: 'Biscuit', img: item('dog') }] },
+        { img: HERO.biscuitSwim, word: 'Biscuit', line: 'He can swim well. He saves the boat. Who is it?', options: [{ label: 'Zippy', img: HERO.zippy }, { label: 'Biscuit', img: item('dog') }, { label: 'Mia', img: HERO.mia }] },
+      ],
+    },
+  },
+  {
+    id: 'hc5-tower', kind: 'world-builder', bg: bgTower, who: 'spark', title: 'Build the Hero Park!',
+    teacher: 'Guided: story questions — every right answer builds a piece of the hero park by the tower. Say the answer aloud — then name the new piece!',
+    pieces: [
+      { label: 'ladder', img: HERO.ladder, x: 30, y: 58, size: 12 },
+      { label: 'bench', img: item('bench'), x: 62, y: 74, size: 14 },
+      { label: 'cape', img: HERO.cape, x: 80, y: 55, size: 10 },
+      { label: 'badge', img: HERO.badge, x: 14, y: 70, size: 8 },
+      { label: 'kitten', img: HERO.kitten, x: 46, y: 72, size: 9 },
+      { label: 'Zippy', img: HERO.zippy, x: 50, y: 28, size: 10 },
+    ],
+    rounds: [
+      { ask: 'Who can fly fast?', choices: ['Captain Spark can.', 'Pip can.'], answer: 0 },
+      { ask: 'Can Pip lift the box?', choices: ['Yes, he can.', 'No, he can’t.'], answer: 1 },
+      { ask: 'At the road, you must …', choices: ['wait.', 'run.'], answer: 0 },
+      { ask: 'What’s the matter with Captain Spark?', choices: ['She’s got a cold.', 'She’s got a box.'], answer: 0 },
+      { ask: 'Who climbs the tower?', choices: ['Biscuit.', 'Mia.'], answer: 1 },
+      { ask: 'Who can be a hero?', choices: ['We can all be heroes!', 'Only Zippy.'], answer: 0 },
+    ],
+    doneLine: 'The hero park is ready! You know the whole story!',
+  },
+  {
+    id: 'hc5-act-out', kind: 'join-stage', bg: sparkPage(11), teacher: 'Guided: act it out! The student is Mia and says her lines; the teacher is Captain Spark. Then swap.', cast: ['spark', 'mia'],
+    turns: [
+      { who: 'spark', line: 'Achoo! The kitten is on the tower! I can’t fly today.' },
+      { who: 'student', line: 'I can help! I can climb well!' },
+      { who: 'spark', line: 'Leo and Pip, can you hold the ladder?' },
+      { who: 'student', line: 'Here’s the kitten! It’s safe!' },
+      { who: 'spark', line: 'Thank you, Mia! We can all be heroes!' },
+    ],
+  },
+  /* Phonics review: Sound Pop (ai / ay / a_e) → Blend & Read → twister */
+  {
+    id: 'hc5-sound-pop', kind: 'prea1', teacher: 'Reading (review of the unit sounds; creative idea: hero badges pop up over the city — catch the ones with the long a sound): pop every word with /eɪ/ — ai, ay or a_e — and say it.',
+    scene: {
+      id: 'hc5-sound-pop', kind: 'sound-pop', bg: bgTower, who: 'pip', goal: 6, seconds: 60,
+      teacher: 'Pop the words with the long a sound!',
+      targets: [{ letter: 'ai', phoneme: '/eɪ/' }],
+      items: [
+        { word: 'rain', letter: 'ai', img: item('rain'), emoji: '\u{1F327}\u{FE0F}' },
+        { word: 'tray', letter: 'ai', img: item('tray'), emoji: '\u{1F37D}\u{FE0F}' },
+        { word: 'cape', letter: 'ai', img: HERO.cape, emoji: '\u{1F9B8}' },
+        { word: 'snail', letter: 'ai', img: item('snail'), emoji: '\u{1F40C}' },
+        { word: 'cake', letter: 'ai', img: item('cake'), emoji: '\u{1F382}' },
+        { word: 'train', letter: 'ai', img: item('train'), emoji: '\u{1F682}' },
+        { word: 'cat', letter: 'a', img: item('cat'), emoji: '\u{1F431}' },
+        { word: 'hat', letter: 'a', img: item('hat'), emoji: '\u{1F452}' },
+        { word: 'pen', letter: 'e', img: item('pen'), emoji: '\u{1F58A}\u{FE0F}' },
+      ],
+    },
+  },
+  {
+    id: 'hc5-blend', kind: 'sound-blend', bg: sparkPage(12), look: 'train',
+    teacher: 'Reading: blend the story words — then read the whole sentence from the story!',
+    rounds: [
+      { word: 'day', sounds: ['d', 'ay'], img: item('sun'), sentence: 'It is a sunny day.' },
+      { word: 'save', sounds: ['s', 'a_e', 'v'], img: HERO.biscuitSwim, sentence: 'He can save the boat.' },
+      { word: 'wait', sounds: ['w', 'ai', 't'], img: RULE.wait, sentence: 'The friends wait.' },
+    ],
+  },
+  { id: 'hc5-twister', kind: 'tongue-twister', look: 'town', speeds: 3, bg: sparkPage(12), who: 'spark', focus: 'a', teacher: 'Reading: the story twister! Listen to Captain Spark, then say it slow, faster — then hero speed!', line: 'Brave Mia may save the kitten today.' },
+  {
+    id: 'hc5-retell', kind: 'join-stage', bg: sparkPage(12), teacher: 'Free: the student tells the story to Pip with the pictures — 3 pictures at least (first, then, at the end). Pip only asks; the student tells.', cast: ['pip'],
+    turns: [
+      { who: 'pip', line: 'Tell me the story! What happens first?' },
+      { who: 'student', line: 'First, Captain Spark can fly fast …' },
+      { who: 'pip', line: 'And then?' },
+      { who: 'student', line: 'Then she has got a cold … Mia can climb well …' },
+      { who: 'pip', line: 'And at the end?' },
+      { who: 'student', line: 'We can all be heroes!' },
+    ],
+  },
+  {
+    id: 'hc5-talk-spark', kind: 'join-stage', bg: sparkPage(2), teacher: 'Free: a mini-conversation with Captain Spark — the student answers about the story and about themselves.', cast: ['spark'],
+    turns: [
+      { who: 'spark', line: 'Who is your favourite hero in the story?' },
+      { who: 'student', line: 'My favourite hero is … . He / She can … !' },
+      { who: 'spark', line: 'And you? How can you help at home?' },
+      { who: 'student', line: 'I can … !' },
+      { who: 'spark', line: 'You are a hero too!' },
+    ],
+  },
+  { id: 'hc5-i-can', kind: 'meet', focus: ['story'], bg: sparkPage(12), who: 'spark', cardSide: 'left', teacher: 'Check: the student read 4 pages alone, chose Mia at the pause and said why, and retold 3 pictures — then the hero badge!', line: 'You can read the whole story and say who helped — super reader!', repeat: 'I can read the hero story.' },
+  {
+    id: 'hc5-sticker', kind: 'prea1', teacher: 'Sticker time! The student opens the pack and puts the Hero City sticker in their Sticker Book.',
+    scene: {
+      id: 'hc5-sticker', kind: 'sticker-reward', bg: sparkPage(12), who: 'pip', teacher: 'Sticker time!',
+      line: 'Super reader! Here is your sticker.',
+      sticker: { img: HERO.miaClimb, label: 'Story hero' },
+    },
+  },
+  petPal('hc5-pet-pal', 4, 'I want a friend from the story! I want the kitten!', [{ label: 'kitten', img: HERO.kitten }, { label: 'ladder', img: HERO.ladder }, { label: 'box', img: HERO.bigBox }], 0, 'A kitten friend! Woof! Thank you!'),
+  {
+    id: 'hc5-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
+    scene: {
+      id: 'hc5-home-mission', kind: 'home-mission', bg: sparkPage(12), who: 'pip',
+      teacher: 'Home Mission: read the steps with the student.',
+      line: 'Your home mission!',
+      parentNote: 'Today your child read the whole story "Captain Spark Saves the Day" and chose who could save the kitten. This week, let your child tell you the story with the pictures (first, then, at the end).',
+      steps: [
+        { emoji: '\u{1F4D6}', say: 'Tell the story with the pictures.' },
+        { emoji: '\u{1F431}', say: 'Who saves the kitten? Say why!' },
+        { emoji: '\u{1F9B8}', say: 'Say: We can all be heroes!' },
+      ],
+    },
+  },
+  goodbyeSong('hc5-goodbye-song', sparkPage(12)),
+  { id: 'hc5-finale', kind: 'finale', bg: sparkPage(12), who: 'spark', line: 'You read the whole hero story! See you next time! \u{1F4D6}' },
+];
