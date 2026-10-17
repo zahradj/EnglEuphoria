@@ -29,7 +29,7 @@ const TOUCH_HANDLER_PROPS = [
  */
 export const BACKDROP_AREA_FRACTION = 0.6;
 
-function reactPropsOf(el: Element): Record<string, unknown> | null {
+export function reactPropsOf(el: Element): Record<string, unknown> | null {
   for (const key of Object.keys(el)) {
     if (key.startsWith('__reactProps$')) return (el as unknown as Record<string, Record<string, unknown>>)[key];
   }

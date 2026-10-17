@@ -1,3 +1,4 @@
+import { TEACHER_ADVANCES, useHideTeacherOnlyButtons } from '@/lib/teacherAdvancesOnly';
 import { SHARED_PLAY_KINDS, useSceneScopedState } from '@/content/playground-library/sceneActivitySync';
 import { SceneCrashGuard } from '@/content/playground-library/SceneCrashGuard';
 import { useRecordClassroomCompletion } from '@/hooks/useRecordClassroomCompletion';
@@ -264,22 +265,19 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
           ? interactionUnlocked
           : !interactionUnlocked;
 
-  // TAKE OVER. With "Interaction On", most activities give the floor to the student and the teacher's own
-  // screen becomes a live mirror (only the shared games in SHARED_PLAY_KINDS let both play at once). So a
-  // teacher who tries to click would silently get nothing. Instead the teacher's screen says so, and one tap on
-  // the activity pauses the student and hands the activity to the teacher. The pause is for this scene only:
-  // moving on resumes the student automatically (unless the teacher pressed Pause themselves).
+  // TEACHER ON A MIRRORED ACTIVITY. With "Interaction On", most activities give the floor to the student and the
+  // teacher's own screen becomes a live mirror (the shared games in SHARED_PLAY_KINDS and the always-unlocked
+  // kinds let both play at once). A tap by the teacher on a mirror NEVER pauses the student: interaction stays on
+  // until the teacher presses Pause themselves (owner, 2026-10-14). The tap only explains how to take over.
   const teacherMirrored = isSynced && role === 'teacher' && !sharedPlay && !studentDriven && interactionUnlocked && !skipsLock;
-  const [tookOver, setTookOver] = useState(false);
-  const takeOver = useCallback(() => { setTookOver(true); setInteractionUnlocked(false); }, [setInteractionUnlocked]);
-  useEffect(() => { if (interactionUnlocked) setTookOver(false); }, [interactionUnlocked]);
-  const takeoverSceneRef = useRef(sceneIdx);
-  useEffect(() => {
-    if (takeoverSceneRef.current === sceneIdx) return;
-    takeoverSceneRef.current = sceneIdx;
-    if (tookOver && role === 'teacher') { setTookOver(false); setInteractionUnlocked(true); }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sceneIdx]);
+  const [takeOverHint, setTakeOverHint] = useState(false);
+  const takeOverHintTimer = useRef<number | undefined>(undefined);
+  const takeOver = useCallback(() => {
+    setTakeOverHint(true);
+    window.clearTimeout(takeOverHintTimer.current);
+    takeOverHintTimer.current = window.setTimeout(() => setTakeOverHint(false), 3500);
+  }, []);
+  useEffect(() => () => window.clearTimeout(takeOverHintTimer.current), []);
 
   // Scene-tagged: the render right after a scene change must never see the previous scene's state.
   const [activityState, setActivityStateLocal] = useSceneScopedState((SCENES[sceneIdx] ?? SCENES[0])?.id ?? '');
@@ -690,33 +688,15 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
   }, [logWrong]);
   const registerWin = useCallback((didGem: boolean) => { logWin(didGem); if (didGem) setGems((g) => g + 1); }, [logWin]);
 
-  // An unlocked student completing the activity (e.g. a flipbook's own
-  // "Next" reaching the end) can't just move its own sceneIdx — the teacher
-  // stays the single source of truth. Advance locally right away so it
-  // doesn't feel stuck, and ask the teacher to advance too; the teacher's
-  // own goNext() then re-broadcasts via the existing sceneIdx pipe, which
-  // reaches this same student again as an idempotent confirmation.
-  const studentCanAdvanceViaActivity = isSynced && role === 'student' && effectiveUnlocked;
+  // Only the teacher changes the slide in a live class (owner, 2026-10-14): a student's own "Next" buttons are
+  // hidden and do nothing — see teacherAdvancesOnly.ts. The teacher's goNext below still serves the teacher.
+  const guidedStudent = isSynced && role === 'student';
   const goNext = useCallback(() => {
-    if (canNavigate) {
-      stopSpeaking(); setSceneIdx((i) => Math.min(SCENES.length - 1, i + 1));
-      return;
-    }
-    if (studentCanAdvanceViaActivity && roomId) {
-      stopSpeaking(); setSceneIdx((i) => Math.min(SCENES.length - 1, i + 1));
-      // If this goNext() is running as part of a click that was just
-      // mirrored to the teacher (justMirroredTapRef), the teacher will
-      // independently reach goNext() by replaying that same click — an
-      // extra advance request here would double-advance the teacher while
-      // this student only advances once. Only send it when goNext() was
-      // reached some other way (no click to mirror it through).
-      if (justMirroredTapRef.current) {
-        justMirroredTapRef.current = false;
-      } else {
-        void whiteboardService.sendSceneAdvanceRequest(roomId, { senderId: 'student' });
-      }
-    }
-  }, [SCENES.length, canNavigate, studentCanAdvanceViaActivity, roomId]);
+    if (!canNavigate) return;
+    stopSpeaking(); setSceneIdx((i) => Math.min(SCENES.length - 1, i + 1));
+  }, [SCENES.length, canNavigate]);
+  const sceneOnNext = guidedStudent ? TEACHER_ADVANCES : goNext;
+  useHideTeacherOnlyButtons(sceneRootRef, guidedStudent, String(sceneIdx));
 
   // Teacher: a permitted student finishing the activity asks us to advance —
   // do so through the normal goNext() so it re-broadcasts as usual.
@@ -828,7 +808,7 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
                 scene={scene}
                 onWin={registerWin}
                 onLose={loseHeart}
-                onNext={goNext}
+                onNext={sceneOnNext}
                 onRestart={restart}
                 gemsCollected={gems}
                 heartsRemaining={hearts}
@@ -853,17 +833,17 @@ const PlayUnitLesson = forwardRef<PlayUnitLessonHandle, PlayUnitLessonProps>(fun
             <button
               type="button"
               onClick={takeOver}
-              aria-label="Take over: pause the student and play this activity yourself"
+              aria-label="The student is playing. Press Pause to play this activity yourself."
               className="absolute inset-0 z-40 cursor-pointer bg-transparent"
             >
               <span className="pointer-events-none absolute left-1/2 top-3 -translate-x-1/2 rounded-full bg-emerald-600 px-4 py-1.5 text-xs font-bold text-white shadow-lg ring-2 ring-white/70">
-                ✋ Student is playing — tap anywhere to take over
+                ✋ Student is playing — press ⏸ Pause to take over
               </span>
             </button>
           )}
-          {isSynced && role === 'teacher' && tookOver && !interactionUnlocked && (
-            <div className="pointer-events-none absolute left-1/2 top-3 z-40 -translate-x-1/2 rounded-full bg-amber-600/90 px-3 py-1 text-xs font-bold text-white shadow-lg backdrop-blur">
-              🎮 You're in control — the student is paused
+          {isSynced && role === 'teacher' && teacherMirrored && takeOverHint && (
+            <div className="pointer-events-none absolute left-1/2 top-14 z-50 -translate-x-1/2 rounded-full bg-amber-600/95 px-4 py-1.5 text-xs font-bold text-white shadow-lg backdrop-blur">
+              To play this yourself, press ⏸ Pause (Interaction On) — the student stays on until you do
             </div>
           )}
           {isSynced && role === 'teacher' && interactionUnlocked && !skipsLock && !studentDriven && !teacherMirrored && (
