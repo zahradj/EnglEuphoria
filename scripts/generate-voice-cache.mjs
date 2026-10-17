@@ -86,7 +86,8 @@ import { twisterLines } from '../src/academy-games/twisterLab/twisterData.ts';
 import { hopLines } from '../src/academy-games/timeHop/hopData.ts';
 import { sillySoundsLines } from '../src/academy-games/sillySounds/soundData.ts';
 import { nowLines } from '../src/academy-games/alwaysNow/nowData.ts';
-import { VOICE_PROFILES, approvedVoiceId, isShortLine, normalizeForSpeech, SHORT_LINE_CLIP_VERSION, unresolvedSpeechRisks, voiceStatus } from '../src/lib/speechPolicy.ts';
+import { VOICE_PROFILES, approvedVoiceId, isShortLine, normalizeForSpeech, SHORT_LINE_CLIP_VERSION, unresolvedSpeechRisks, voiceStatus, safeVoiceSettings, languageLock, SHORT_LINE_TTS_MODEL, ttsModelFor } from '../src/lib/speechPolicy.ts';
+import { withPhonemes } from '../src/lib/pronunciations.ts';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const OUT_DIR = path.join(__dirname, '..', 'public', 'audio-cache');
@@ -1073,8 +1074,49 @@ function collectPairs(lessonFilter) {
   return [...seen.values()];
 }
 
+// Direct path (owner 2026-10-17: "use the ElevenLabs API that the Academy hub is using"): when a GitHub secret holds an
+// ElevenLabs key (ELEVENLABS_5, the one the Academy bake uses), record straight from ElevenLabs with exactly the same
+// policy as the elevenlabs-tts function (approved voice, same model per line, phonemes on short lines, language lock,
+// safe settings), so the clip sounds the same as one made through the function. The key is only sent to ElevenLabs.
+const DIRECT_HOSTS = ['api.elevenlabs.io', 'api.us.elevenlabs.io', 'api.eu.residency.elevenlabs.io', 'api.in.residency.elevenlabs.io'];
+function directKey() {
+  const raw = (process.env.ELEVENLABS_DIRECT_KEY ?? '').trim();
+  return raw ? (raw.match(/sk_[A-Za-z0-9]+/)?.[0] ?? raw) : '';
+}
+async function generateDirect(voiceId, text, apiKey) {
+  const spoken = normalizeForSpeech(text);
+  const model = ttsModelFor(spoken);
+  const body = JSON.stringify({
+    text: model === SHORT_LINE_TTS_MODEL ? withPhonemes(spoken) : spoken,
+    model_id: model,
+    ...languageLock(model),
+    voice_settings: safeVoiceSettings({ stability: 0.5, similarity_boost: 0.75, style: 0.3, use_speaker_boost: true }),
+  });
+  let last = '';
+  for (const host of DIRECT_HOSTS) {
+    const res = await fetch(`https://${host}/v1/text-to-speech/${approvedVoiceId(voiceId)}?output_format=mp3_44100_128`, { method: 'POST', headers: { 'xi-api-key': apiKey, 'Content-Type': 'application/json' }, body });
+    if (res.ok) return Buffer.from(await res.arrayBuffer());
+    last = `${res.status} ${(await res.text().catch(() => '')).replace(/\s+/g, ' ').slice(0, 160)}`;
+    if (!/invalid_api_key/i.test(last)) break; // only a bad key is retried on the regional hosts
+  }
+  throw new Error(`elevenlabs ${last}`);
+}
+
 async function generateClip(character, text) {
   const voiceId = VOICE_ID[character];
+  const key = directKey();
+  if (key) {
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        if (attempt > 0) await sleep(500 * attempt);
+        const buf = await generateDirect(voiceId, text, key);
+        if (!buf.length) throw new Error('empty response');
+        return buf;
+      } catch (err) {
+        if (attempt === 2) throw err;
+      }
+    }
+  }
   const ATTEMPTS = 3;
   for (let attempt = 0; attempt < ATTEMPTS; attempt++) {
     try {
