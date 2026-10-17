@@ -19,7 +19,7 @@ export function Glow({ on, tone = 'teal' }: { on: boolean; tone?: 'teal' | 'gold
 export type Mood = 'neutral' | 'happy' | 'thinking' | 'concerned' | 'surprised' | 'curious' | 'talk';
 type Reaction = 'cheer' | 'flinch' | 'nod' | undefined;
 
-function CastImg({ who, mood, artBase }: { who: CastName; mood: Mood; artBase: string }) {
+export function CastImg({ who, mood, artBase }: { who: CastName; mood: Mood; artBase: string }) {
   const [broken, setBroken] = useState(false);
   const base = `${artBase}/cast/${who.toLowerCase()}`;
   return <img src={`${base}/${broken ? 'neutral' : mood}.webp`} alt="" draggable={false} onError={(e) => { if (!broken) setBroken(true); else (e.target as HTMLImageElement).style.visibility = 'hidden'; }} />;
