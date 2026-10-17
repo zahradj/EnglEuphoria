@@ -39,3 +39,15 @@ Each new game needs: a lesson-plan amendment approved by the owner, content item
 
 ## Own design choices (not from a source)
 No-penalty feedback with an explanation, three-slot confirmation inside the interview, the three-day shift in the passport desk, the spoken summary step, and using one scene kind with several data sets and looks.
+
+## Lesson 3, per criterion (agent report after the owner's "several games per objective" update; all UNVERIFIED snippets)
+| Criterion | Game (borrows) | What the student does | Maps to scene kind |
+|---|---|---|---|
+| C1 build "I have / never + participle" | *Ledger of Threes* (Return of the Obra Dinn batch of 3) | sets subject, have/never and the participle for 3 evidence photos, files them, gets one verdict per batch | new `ledger` (or `inspect` look) |
+| C1/C2 error hunt | *Statement Inspector* (Papers, Please + Grammar Clicker) | taps the faulty word in a suspect's statement, fixes it, approves or returns it; rule chips grow across rounds | `inspect` |
+| C2 ask and answer | *Twenty Questions Line-up* (Carmen Sandiego warrant + Guess Who) | builds "Have you ever + participle…?" from chips; suspects answer in recorded voice; board narrows to one; swap round: the student answers | `interview` |
+| C3 been or gone | *Where Is She? Reconstruct* (Ace Attorney present evidence) | picks been or gone AND the evidence card that proves why (coat still here, trip photos) | `inspect` look "scene" or `objection` |
+| C4 finished time vs up to now, "When did you…?" | *Cross-Examination: Press and Present* (Ace Attorney) | presses an experience line to build the follow-up; presents dated evidence on the line that clashes and repairs it | `objection` |
+| C5 five own sentences | *My Case File + Bluff Round* (Two Truths and a Lie) | writes 5 sentences (4 true, 1 bluff) with a live pattern checker, records them; the teacher asks "Have you ever…?" then "When did you…?" and guesses the bluff | `write` + `speak` (+ checker) |
+
+Lesson 3's agent also notes: error hunts must end with the student fixing the sentence; keep a private "how sure?" tick instead of wagering; and check the Oxford *been and gone* page before the rule text ships. Waiting on the per-criterion lists for lessons 1 and 2.
