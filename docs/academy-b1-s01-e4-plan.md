@@ -72,7 +72,7 @@ Place: **Club FM booth**, bright daytime: a glass-fronted lunchtime radio booth 
 | Release, highlight reel | 1-5 (exit task) |
 
 ## 9 Scenario for the three plates (to be approved)
-Plates only, cross-fade, no zoom or pan; bright daytime school. (1) The booth: Vee gestures to the empty host chair, a mic, ON AIR light off. Vee: "Today you are the host. Our guests are shy, so ask good questions." (2) Mia in the guest chair, hands folded, a mic in front of her. Mia: "Yes." (3) The booth with an empty desk and the ON AIR light on, Vee covering her mouth with a hand. Vee: "Dead air! Quick, say something." Pictures: `booth-plate`, `story-b1s4-1..3`, Mia/Theo mood sets, mic/headphone/reaction-card stickers (Canva, one at a time, owner sees each). No video.
+Plates only, cross-fade, no zoom or pan; bright daytime school. (1) The booth: Vee gestures to the empty host chair, a mic, ON AIR light off. Vee: "Today you are the host. Our guests are shy, so ask good questions." (2) Mia in the guest chair, hands folded, a mic in front of her. Mia: "Yes." (3) The booth with an empty desk and the ON AIR light on, Vee with a hand at the cheek, worried. Vee: "Dead air! Quick, say something." Pictures: `booth-plate`, `story-b1s4-1..3`, Mia/Theo mood sets, mic/headphone/reaction-card stickers (Canva, one at a time, owner sees each). No video.
 
 ## 10 Decisions for the owner
 1. Approve the story (Club FM, dead air, Mia's lie) or change the frame.
