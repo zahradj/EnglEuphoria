@@ -510,7 +510,7 @@ describe('cast portraits the scenes show are on the art register', () => {
         if (/\.cheer\(/.test(src)) moods.add('happy');
         if (/\.flinch\(/.test(src)) moods.add('curious');
         if (/\.surprise\(/.test(src)) moods.add('surprised');
-        const fake = { id: 'x', part: 0, kind, who: 'Vee', npc: 'Vee', witness: 'Vee', chief: 'Vee', partner: 'Vee', personas: [], look: 'friends' };
+        const fake = { id: 'x', part: 0, kind, who: 'Vee', npc: 'Vee', witness: 'Vee', chief: 'Vee', partner: 'Vee', guest: 'Vee', personas: [], look: 'friends' };
         const listed = new Set(castArtOf(fake as never).map((a) => a.split('/')[2]));
         for (const m of moods) if (!listed.has(m)) uncovered.push(`${kind}: ${m}`);
       }

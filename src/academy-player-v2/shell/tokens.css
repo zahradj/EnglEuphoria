@@ -74,6 +74,9 @@ button.av-pill { cursor: pointer; font-family: inherit; }
 .av-lobby-side { position: absolute; right: 3%; top: 16%; bottom: 16%; width: 44%; display: flex; flex-direction: column; gap: 10px; overflow: hidden; }
 .av-chapcard { border-left: 8px solid var(--av-p500); background: linear-gradient(100deg, var(--av-p50), var(--av-glass) 40%); }
 .av-chapcard h3 { margin: 0; font-size: clamp(17px, 2.4cqw, 24px); line-height: 1.15; }
+.av-previously { border-left: 8px solid var(--av-teal, #2bb5a8); background: linear-gradient(100deg, color-mix(in srgb, var(--av-teal, #2bb5a8) 14%, white), var(--av-glass) 45%); }
+.av-previously h2 { letter-spacing: .04em; }
+.av-previously ul { margin: 4px 0 0; padding-left: 1.1em; display: grid; gap: 3px; font-weight: 700; font-size: 13px; }
 .av-chapcard p { margin: 4px 0 0; font-weight: 700; font-size: 13px; opacity: 0.8; }
 .av-mission { margin: 0; padding: 0; list-style: none; }
 .av-mission li { margin: 5px 0; font-weight: 700; font-size: 13px; display: flex; gap: 8px; }

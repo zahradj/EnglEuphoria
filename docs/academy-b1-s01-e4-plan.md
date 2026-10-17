@@ -16,7 +16,7 @@ A **dialogue-tree radio interview** (visual-novel / Oxenfree family) where the *
 - **Reward:** the show ends with the **highlight reel**: the student's best lines (typed or recorded) replayed as the episode clip, the Release.
 Learning link: every card is real English the student then says aloud; the game never rewards speed or clicking.
 
-## 3 What the player needs (new work, in `src/academy-player-v2/` only)
+## 3 What the player needs (new work, in `src/academy-player-v2/` only) — BUILT 2026-10-17, lesson still waits for approval
 1. **Story state.** `LessonState.story`: small flags/counters set by scene results (`onDone({..., story:{caughtLie:true}})`) and read by later scenes, so cast lines and plates can react ("You caught it!"). Validated by `validateScript`.
 2. **Chapter cards / "Previously on…".** The lobby builds a recap from the previous lesson's recorded outcomes (E3 case closed, trophies) and opens the chapter title card with the chapter question.
 3. **`onair` scene kind** (dialogue tree with an expressive guest, the card families above, mute button, voice-level ripple, calm mode without motion but with all illustration).
@@ -78,3 +78,10 @@ Plates only, cross-fade, no zoom or pan; bright daytime school. (1) The booth: V
 1. Approve the story (Club FM, dead air, Mia's lie) or change the frame.
 2. Approve the no-bar, no-timer guest-face meter and the highlight reel.
 3. Approve building the player pieces in §3 first (story state, chapter cards, `onair`) and **then** the lesson on them.
+
+## 11 Player pieces built (2026-10-17)
+- **Story state:** `SceneResult.story` / `.reel` are merged by the reducer (`EngineState.story`, `.reel`), saved with the resume point, passed to scenes in `summary`. **Chapter memory** (`services/chapterMemory.ts`) keeps only the flags between lessons (no student text). `LessonScript.previously` feeds the lobby's **"Previously on…"** card (beats with a flag show when the flag was set; beats with none always show, so a new device still gets a recap); `validateScript` rejects a missing lesson.
+- **`onair` scene** (`scenes/onair/`): look `show` (react / ask / share / dead-end cards, the guest's face and halo warm, no bar, no timer, every card has a recorded model by the producer) and look `twotruths` (claims, follow-up questions, a notepad that never highlights the tell, pin the lie, say why). Logic and validators in `onairLogic.ts`; a sample in `onairDemo.ts` (preview `?demo=onair`). Uses the existing reviewed portraits (neutral, curious, happy, surprised, thinking): no new cast art.
+- **Highlight reel** in the Wrap: the lines the student chose or said, replayed with the cast's recorded voices (the student's own lines are theirs to read aloud).
+- **Bug found and fixed on the way:** the player read every scene's whole `spoken()` list aloud on entry (Rapport requested 13 clips, including replies to options not yet chosen). Scenes already voice themselves, so the entry sequence was removed (`LessonPlayer.tsx`); a regression test guards it.
+- Still to do for the lesson: write the E4 deck on these pieces, make the booth plate and story plates (Canva, owner sees each), bake the voices, art review, then the lesson itself needs your approval of §10.

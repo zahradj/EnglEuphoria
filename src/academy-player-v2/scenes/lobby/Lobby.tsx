@@ -1,4 +1,7 @@
 import { useTranslation } from 'react-i18next';
+import { useMemo } from 'react';
+import { recallChapter } from '../../services/chapterMemory';
+import { previouslyBeats } from '../../engine/quest';
 import { lessonMeta } from '../../shell/lessonMeta';
 import { Icon, STAGE_ICONS } from '../../quest/icons';
 import { questName, stageText } from '../../quest/text';
@@ -10,6 +13,7 @@ function LobbyView({ scene, script, onDone, artBase }: SceneProps<LobbyScene>) {
   const { t } = useTranslation();
   const meta = lessonMeta(script);
   const total = script.partMinutes.reduce((a, b) => a + b, 0);
+  const recap = useMemo(() => previouslyBeats(script.previously, script.previously ? recallChapter(script.previously.from) : null), [script.previously]);
   return (
     <div className="av-lobby" data-testid="av-lobby">
       <div className="av-lobby-hero">
@@ -28,6 +32,12 @@ function LobbyView({ scene, script, onDone, artBase }: SceneProps<LobbyScene>) {
             <h2>{t('ap.chapter', 'Chapter {{n}} of 8', { n: meta.chapter.no })} · {meta.chapter.title}</h2>
             <h3>{meta.chapter.question}</h3>
             {meta.chapter.essentialQuestion && meta.chapter.no < PART_COUNT && <p>{t('ap.bigQuestion', 'The Season’s big question')}: {meta.chapter.essentialQuestion}</p>}
+          </section>
+        )}
+        {recap.length > 0 && (
+          <section className="av-panel av-previously" data-testid="av-previously">
+            <h2>{t('ap.previously', 'Previously on…')}</h2>
+            <ul>{recap.map((r, i) => <li key={i}>{r}</li>)}</ul>
           </section>
         )}
         <section className="av-panel">

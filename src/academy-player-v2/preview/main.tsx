@@ -38,5 +38,12 @@ if (q.get('auto')) {
   for (const k of Object.keys(SCENES)) if (!real.has(k) && k !== 'lobby') SCENES[k] = { ...SCENES[k], view: AutoView };
 }
 if (q.get('calm')) window.localStorage.setItem('academy-player-prefs-v2', JSON.stringify({ calm: true, sound: false }));
+if (q.get('demo') === 'onair') {
+  const { DEMO_SHOW, DEMO_TWOTRUTHS } = await import('../scenes/onair/onairDemo');
+  script.previously = { from: 'B1-S01-E3', beats: [{ text: 'The Missing Postcard turned up: Theo had borrowed it to copy the stamp.', when: 'caseClosed' }, { text: 'You sorted “been” from “gone” and caught a contradiction.' }] };
+  script.blueprintId = 'B1-S01-E4';
+  script.scenes = [{ id: 'lobby', part: 0, kind: 'lobby', plate: 'library-case-room', heading: 'Ask and React', sub: 'Club FM · lesson 4' } as never, DEMO_SHOW as never, DEMO_TWOTRUTHS as never,
+    { id: 'wrap', part: 7, kind: 'wrap', heading: 'Show over!', teachBack: 'How do you keep a guest talking?', plate: 'library-case-room' } as never];
+}
 const real = q.get('lesson') ? await loadScript(q.get('lesson')!) : null;
 createRoot(document.getElementById('root')!).render(<LessonPlayer script={real ?? script} ephemeral index={q.get('i') ? Number(q.get('i')) : undefined} role={q.get('i') ? 'teacher' : 'solo'} />);

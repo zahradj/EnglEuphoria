@@ -31,6 +31,21 @@ export interface LessonScript {
   scenes: SceneBase[];
   /** optional quest dressing (English content): stage names and goals, the Season clue unlocked at the end. Defaults come from the run of show. */
   quest?: QuestData;
+  /** "Previously on…": beats shown on the lobby chapter card, taken from how the earlier lesson went (see StoryValue / chapter memory) */
+  previously?: Previously;
+}
+
+/** What a scene can remember for the story: small flags and counters, read by later scenes and by the next lesson's "Previously on…". */
+export type StoryValue = string | number | boolean;
+
+/** One line of the highlight reel: a line the student chose or said on air (stays on the device, never uploaded). */
+export interface ReelLine { who: string; text: string }
+
+/** The recap of the earlier lesson on the lobby: each beat shows when its flag was set in that lesson (no `when` = always, the fallback when nothing is remembered). */
+export interface Previously {
+  /** blueprint id of the lesson it recaps, e.g. 'B1-S01-E3' */
+  from: string;
+  beats: { text: string; when?: string }[];
 }
 
 /** The lesson as a quest (Quest Layer): everything is optional, the defaults are the standard run of show and the Season chapter. */
@@ -54,6 +69,10 @@ export interface SceneResult {
   gem?: boolean;
   /** hunt scenes: the ids of the targets found (clue pieces / Word Cards for the bag) */
   found?: string[];
+  /** story flags this scene sets (merged into the lesson's story state; later scenes and the next lesson read them) */
+  story?: Record<string, StoryValue>;
+  /** lines for the highlight reel (the Wrap plays them back) */
+  reel?: ReelLine[];
 }
 
 export type FxTone = 'gold' | 'teal' | 'lilac' | 'coral';
@@ -93,7 +112,7 @@ export interface SceneProps<S extends SceneBase = SceneBase> {
   /** the seeded random of this scene (both screens of a live class match) */
   seed: number;
   /** how the lesson is going so far (the Wrap shows it) */
-  summary: { xp: number; gems: number; mistakes: string[]; /** the quest recap (Quest Complete screen); absent when a scene renders alone */ quest?: import('./engine/quest').QuestRecap };
+  summary: { xp: number; gems: number; mistakes: string[]; /** story flags set so far in this lesson */ story?: Record<string, StoryValue>; /** the highlight reel so far */ reel?: ReelLine[]; /** the quest recap (Quest Complete screen); absent when a scene renders alone */ quest?: import('./engine/quest').QuestRecap };
   /** a hunt scene tells the player the moment a target is found (the bag fills live); `el` is where it flew from */
   onFound?: (id: string, el?: Element | null) => void;
   /** game feel (bursts, floating text, shake, confetti); optional so a scene renders alone in tests: use `useSceneFx(props.fx)` */

@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSay } from '../useSay';
+import { sayLine, stopVoice } from '../../services/voice';
 import { CountUp, Reward, useSceneFx } from '../kit';
 import { Icon } from '../../quest/icons';
 import { rankLabel } from '../../quest/Hud';
@@ -11,7 +12,7 @@ import { lessonMeta } from '../../shell/lessonMeta';
 import { ACADEMY_LESSON_BLUEPRINTS } from '../../../curriculum/academy';
 import { chapterOfLesson } from '../../../curriculum/academy/arcs';
 import type { QuestRecap } from '../../engine/quest';
-import type { LessonScript, SceneBase, SceneModule, SceneProps } from '../../types';
+import type { LessonScript, ReelLine, SceneBase, SceneModule, SceneProps } from '../../types';
 
 export interface WrapScene extends SceneBase { kind: 'wrap'; heading: string; teachBack: string }
 
@@ -24,7 +25,29 @@ function nextChapterOf(blueprintId: string): { no: number; title: string } | und
   return c ? { no: c.no, title: c.title } : undefined;
 }
 
-function QuestComplete({ scene, script, recap, said, onSaid, artBase, calm, mistakes }: { scene: WrapScene; script: LessonScript; recap: QuestRecap; said: boolean; onSaid: () => void; artBase: string; calm: boolean; mistakes: string[] }) {
+/** The highlight reel: the lines the student chose or said on air, replayed as the show's clip. The cast's lines use their recorded voices (silent if a clip is missing); the student's own lines are theirs to read aloud. Stays on this device. */
+function HighlightReel({ reel, artBase }: { reel: ReelLine[]; artBase: string }) {
+  const { t } = useTranslation();
+  const [now, setNow] = useState<number | null>(null);
+  const lines = reel.slice(-10);
+  const play = async () => {
+    for (let k = 0; k < lines.length; k++) {
+      setNow(k);
+      if (lines[k].who === 'You') await new Promise((r) => window.setTimeout(r, 1400));
+      else if (!(await sayLine({ who: lines[k].who, text: lines[k].text }, artBase))) await new Promise((r) => window.setTimeout(r, 900));
+    }
+    setNow(null);
+  };
+  return (
+    <div className="av-reel" data-testid="av-reel">
+      <h3>🎬 {t('ap.reelTitle', 'Your highlight reel')}</h3>
+      <ol>{lines.map((l, k) => <li key={k} data-you={l.who === 'You' || undefined} data-now={now === k || undefined}><b>{l.who === 'You' ? t('ap.oaYou', 'You') : l.who}</b> {l.text}</li>)}</ol>
+      <button type="button" className="av-btn" onClick={() => { stopVoice(); void play(); }}>▶ {t('ap.reelPlay', 'Replay the show')}</button>
+    </div>
+  );
+}
+
+function QuestComplete({ scene, script, recap, said, onSaid, artBase, calm, mistakes, reel }: { scene: WrapScene; script: LessonScript; recap: QuestRecap; said: boolean; onSaid: () => void; artBase: string; calm: boolean; mistakes: string[]; reel: ReelLine[] }) {
   const { t } = useTranslation();
   const meta = useMemo(() => lessonMeta(script), [script]);
   const next = nextChapterOf(script.blueprintId);
@@ -70,6 +93,7 @@ function QuestComplete({ scene, script, recap, said, onSaid, artBase, calm, mist
             {said && <p className="av-note" data-ok="true">{t('ap.wellDone', 'Well done!')}</p>}
           </div>
           <div className="av-qc-right">
+            {reel.length > 0 && <HighlightReel reel={reel} artBase={artBase} />}
             <h3>{t('ap.objectives', 'Objectives')} <b>{recap.objectives.filter((o) => o.complete).length}/{recap.objectives.length}</b></h3>
             <ul className="avq-objs avq-objs-sm">
               {recap.objectives.map((o) => (
@@ -106,7 +130,7 @@ function WrapView({ scene, script, onDone, artBase, summary, calm, fx: fxIn }: S
   const [said, setSaid] = useState(false);
   useSay('Vee', scene.teachBack, artBase);
   const say = () => { setSaid(true); fx.confetti(); fx.burst(50, 40, 'gold'); onDone(); };
-  if (summary.quest) return <QuestComplete scene={scene} script={script} recap={summary.quest} said={said} onSaid={say} artBase={artBase} calm={calm} mistakes={summary.mistakes} />;
+  if (summary.quest) return <QuestComplete scene={scene} script={script} recap={summary.quest} said={said} onSaid={say} artBase={artBase} calm={calm} mistakes={summary.mistakes} reel={summary.reel ?? []} />;
   return (
     <div className="av-wrap" data-testid="av-wrap">
       <section className="av-panel av-wrap-card">

@@ -1,5 +1,5 @@
 // The lesson engine: a pure reducer. The UI never owns lesson logic (plan 2.1). Everything here is testable without React.
-import type { SceneResult } from '../types';
+import type { ReelLine, SceneResult, StoryValue } from '../types';
 
 export interface EngineState {
   total: number;
@@ -17,6 +17,10 @@ export interface EngineState {
   doneIds: string[];
   /** hunt targets found so far, per scene id (the bag fills while the hunt is still running) */
   found: Record<string, string[]>;
+  /** story flags set by scenes (a scene's `story` result is merged in when it is done) */
+  story: Record<string, StoryValue>;
+  /** the highlight reel: lines the student chose or said on air */
+  reel: ReelLine[];
 }
 
 export type EngineAction =
@@ -27,13 +31,13 @@ export type EngineAction =
   | { type: 'wrong'; id: string }
   | { type: 'found'; id: string; item: string }
   | { type: 'pause'; on: boolean }
-  | { type: 'restore'; state: Partial<Pick<EngineState, 'index' | 'furthest' | 'results' | 'wrong' | 'xp' | 'gems' | 'doneIds' | 'found'>> };
+  | { type: 'restore'; state: Partial<Pick<EngineState, 'index' | 'furthest' | 'results' | 'wrong' | 'xp' | 'gems' | 'doneIds' | 'found' | 'story' | 'reel'>> };
 
 export const XP_CLEAN = 30;
 export const XP_WIN = 20;
 export const XP_SEEN = 5;
 
-export const initialState = (total: number): EngineState => ({ total, index: 0, furthest: 0, results: {}, wrong: {}, xp: 0, gems: 0, paused: false, doneIds: [], found: {} });
+export const initialState = (total: number): EngineState => ({ total, index: 0, furthest: 0, results: {}, wrong: {}, xp: 0, gems: 0, paused: false, doneIds: [], found: {}, story: {}, reel: [] });
 
 const clamp = (n: number, total: number) => Math.max(0, Math.min(Math.max(total - 1, 0), n));
 
@@ -58,7 +62,11 @@ export function lessonReducer(s: EngineState, a: EngineAction): EngineState {
       const gem = scored && won && wrongTries === 0 && a.result?.gem !== false;
       const result: SceneResult = { won, score: a.result?.score ?? 0, mistakes: a.result?.mistakes ?? [], gem, ...(a.result?.found ? { found: a.result.found } : {}) };
       const xp = !scored ? XP_SEEN : won ? (wrongTries === 0 ? XP_CLEAN : XP_WIN) : XP_SEEN;
-      return { ...s, results: { ...s.results, [a.id]: result }, xp: s.xp + xp, gems: s.gems + (gem ? 1 : 0), doneIds: [...s.doneIds, a.id] };
+      return {
+        ...s, results: { ...s.results, [a.id]: result }, xp: s.xp + xp, gems: s.gems + (gem ? 1 : 0), doneIds: [...s.doneIds, a.id],
+        story: a.result?.story ? { ...s.story, ...a.result.story } : s.story,
+        reel: a.result?.reel?.length ? [...s.reel, ...a.result.reel] : s.reel,
+      };
     }
     case 'pause': return { ...s, paused: a.on };
     case 'restore': return { ...s, ...a.state, index: clamp(a.state.index ?? s.index, s.total), furthest: clamp(a.state.furthest ?? s.furthest, s.total) };

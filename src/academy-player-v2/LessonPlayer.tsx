@@ -9,7 +9,8 @@ import { lessonMeta } from './shell/lessonMeta';
 import { clearProgress, loadProgress, saveProgress } from './services/progress';
 import { loadPrefs, savePrefs, type Prefs } from './services/prefs';
 import { saveLessonMistakes } from './services/mistakes';
-import { saySequence, setMuted, stopVoice } from './services/voice';
+import { rememberChapter } from './services/chapterMemory';
+import { setMuted, stopVoice } from './services/voice';
 import { useFx } from './fx/useFx';
 import { FxLayer } from './fx/Fx';
 import { currentObjective, levelOf, lootOf, objectivesOf, recapOf, stagesOf, streakOf } from './engine/quest';
@@ -80,12 +81,8 @@ export function LessonPlayer({ script, artBase = '/academy-art', role = 'solo', 
   useEffect(() => { if (controlled && state.index !== at) dispatch({ type: 'go', index: at }); }, [controlled, at, state.index]);
   useEffect(() => { onNav?.({ index: at, total }); }, [at, total, onNav]);
   useEffect(() => { if (!ephemeral && role === 'solo' && state.furthest > 0) saveProgress(script.blueprintId, ids, state); }, [state, ephemeral, role, script.blueprintId, ids]);
-  // the recorded voices say the scene's lines; silence if a clip is missing
-  useEffect(() => {
-    if (!scene || !mod || cine) return;
-    void saySequence(mod.spoken(scene), artBase);
-    return () => stopVoice();
-  }, [scene, mod, artBase, cine]);
+  // voices: every scene says its own lines at the right moment (useSay / useVoiceKey); the player never reads a scene's whole `spoken()` list aloud (that list is for baking clips)
+  useEffect(() => () => stopVoice(), [scene?.id]);
 
   // quest events: level up, objective ticked, loot into the bag (skipped when a saved run is restored)
   useEffect(() => {
@@ -110,10 +107,10 @@ export function LessonPlayer({ script, artBase = '/academy-art', role = 'solo', 
     if (at === total - 1 && state.doneIds.includes(scene?.id ?? '') && !finished.current) {
       finished.current = true;
       saveLessonMistakes(script.blueprintId, [...new Set(missed)].map((m) => ({ id: m, label: m, wrong: missed.filter((x) => x === m).length })));
-      if (!ephemeral) clearProgress(script.blueprintId);
+      if (!ephemeral) { clearProgress(script.blueprintId); rememberChapter(script.blueprintId, state.story); }
       onFinish?.();
     }
-  }, [at, total, state.doneIds, missed, scene, script, ephemeral, onFinish]);
+  }, [at, total, state.doneIds, state.story, missed, scene, script, ephemeral, onFinish]);
 
   const go = useCallback((i: number) => {
     const n = Math.max(0, Math.min(total - 1, i));
@@ -157,7 +154,7 @@ export function LessonPlayer({ script, artBase = '/academy-art', role = 'solo', 
       onBack={student ? undefined : () => go(at - 1)}
       primary={showBar && !last && !student ? { label: `${t('ap.next', 'Next')} ›`, onClick: () => go(at + 1), disabled: !canNext } : undefined}
       onPause={(on) => dispatch({ type: 'pause', on })}
-      onRestart={student || ephemeral ? undefined : () => { clearProgress(script.blueprintId); finished.current = false; restoring.current = true; setFlow(initialFlow()); dispatch({ type: 'restore', state: { index: 0, furthest: 0, results: {}, wrong: {}, xp: 0, gems: 0, doneIds: [], found: {} } }); go(0); }}
+      onRestart={student || ephemeral ? undefined : () => { clearProgress(script.blueprintId); finished.current = false; restoring.current = true; setFlow(initialFlow()); dispatch({ type: 'restore', state: { index: 0, furthest: 0, results: {}, wrong: {}, xp: 0, gems: 0, doneIds: [], found: {}, story: {}, reel: [] } }); go(0); }}
       rootRef={rootEl}
       questHud={{
         left: <><RankChip level={level} xp={state.xp} /><StreakChip streak={streak} /></>,
@@ -198,7 +195,7 @@ export function LessonPlayer({ script, artBase = '/academy-art', role = 'solo', 
           </div>
         )}
       >
-        <View key={scene.id} scene={scene} script={script} artBase={artBase} calm={fx.calm} fx={fx.api} seed={seedOf(scene.id)} summary={{ xp: state.xp, gems: state.gems, mistakes: [...new Set(missed)], quest: recap }} onFound={onFound} onDone={(r) => { onDone(r); if (scene.kind === 'lobby') go(at + 1); }} />
+        <View key={scene.id} scene={scene} script={script} artBase={artBase} calm={fx.calm} fx={fx.api} seed={seedOf(scene.id)} summary={{ xp: state.xp, gems: state.gems, mistakes: [...new Set(missed)], story: state.story, reel: state.reel, quest: recap }} onFound={onFound} onDone={(r) => { onDone(r); if (scene.kind === 'lobby') go(at + 1); }} />
       </SceneBoundary>
     </PlayerShell>
   );

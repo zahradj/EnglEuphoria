@@ -8,6 +8,8 @@ export function validateScript(s: LessonScript): string[] {
   if (!ACADEMY_LESSON_BLUEPRINTS.some((b) => b.id === s.blueprintId)) p.push(`blueprint ${s.blueprintId} does not exist`);
   if (s.partMinutes.length !== PART_COUNT) p.push(`partMinutes must have ${PART_COUNT} entries`);
   else if (s.partMinutes.reduce((a, b) => a + b, 0) !== 60) p.push('partMinutes must sum to 60');
+  if (s.previously && !ACADEMY_LESSON_BLUEPRINTS.some((b) => b.id === s.previously!.from)) p.push(`previously: blueprint ${s.previously.from} does not exist`);
+  if (s.previously && !s.previously.beats.length) p.push('previously: no beats');
   if (!s.criteria.length) p.push('criteria are empty');
   if (!s.scenes.length) p.push('no scenes');
   const ids = new Set<string>();

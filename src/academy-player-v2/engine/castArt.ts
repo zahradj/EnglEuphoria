@@ -32,6 +32,7 @@ const USES: Record<string, Use> = {
   workshop: { who: field('who'), moods: THINK_SET },
   beats: { who: field('who'), moods: THINK_SET },
   switchboard: { who: field('who'), moods: THINK_SET },
+  onair: { who: (s) => [String(s.guest)], moods: ['neutral', 'curious', 'happy', 'surprised', 'thinking'] },
 };
 
 /** 'cast/<name>/<mood>' for every portrait the scene can show (lobby portraits are added by artOf) */

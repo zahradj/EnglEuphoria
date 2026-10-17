@@ -216,3 +216,9 @@ export function recapOf(script: LessonScript, s: EngineState): QuestRecap {
     stagesCleared: stages.filter((x) => x.complete).length,
   };
 }
+
+/** The beats of the lobby's "Previously on…": those whose flag was set in the earlier lesson, plus the beats that need no flag (always shown, so a new device still gets a recap). */
+export function previouslyBeats(prev: { beats: { text: string; when?: string }[] } | undefined, remembered: Record<string, unknown> | null): string[] {
+  if (!prev) return [];
+  return prev.beats.filter((b) => !b.when || !!remembered?.[b.when]).map((b) => b.text);
+}

@@ -25,6 +25,7 @@ import { finderScene } from './finder/Finder';
 import { workshopScene } from './workshop/Workshop';
 import { beatsScene } from './beats/Beats';
 import { switchboardScene } from './switchboard/Switchboard';
+import { onairScene } from './onair/OnAir';
 
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -54,6 +55,7 @@ export const SCENES: Record<string, SceneModule<any>> = {
   workshop: workshopScene,
   beats: beatsScene,
   switchboard: switchboardScene,
+  onair: onairScene,
 };
 
 export const sceneKinds = () => Object.keys(SCENES);
