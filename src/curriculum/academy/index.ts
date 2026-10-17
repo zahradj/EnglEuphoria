@@ -2,6 +2,7 @@
 // Approved sizing (owner, 2026-10-08): A1 10, A2 12, B1 16, B2 16, C1 16 Seasons = 70 Seasons = 560 sessions of 60 minutes.
 import type { RawSeason, RawStructure } from './authoring';
 import { chaptersFor, essentialQuestionFor } from './seasonArc';
+import { SEASON_ARCS } from './arcs';
 import { A1_SEASONS } from './levels/a1';
 import { A2_SEASONS } from './levels/a2';
 import { B1_SEASONS } from './levels/b1';
@@ -65,8 +66,8 @@ function build(): LevelPlan[] {
         newItemBudget: r.items,
         pronunciation: r.pron,
         mediation: r.mediation,
-        essentialQuestion: r.essentialQuestion ?? essentialQuestionFor({ canDo: r.canDo, theme: r.theme }),
-        chapters: r.chapters ?? chaptersFor({ title: r.title, theme: r.theme, release: r.release, canDo: r.canDo, functions: r.functions, structures: structures, lexicalFields: r.lexicalFields }),
+        essentialQuestion: r.essentialQuestion ?? SEASON_ARCS[id]?.essentialQuestion ?? essentialQuestionFor({ canDo: r.canDo, theme: r.theme }),
+        chapters: r.chapters ?? SEASON_ARCS[id]?.chapters ?? chaptersFor({ title: r.title, theme: r.theme, release: r.release, canDo: r.canDo, functions: r.functions, structures: structures, lexicalFields: r.lexicalFields }),
         recycleFrom,
         skins: r.skins.map((s) => ({ id: s, swaps: `nouns, scenarios and pictures from ${SKIN_LIBRARY[s] ?? s}; language spine unchanged` })),
         bigRemix: (i + 1) % 2 === 0,

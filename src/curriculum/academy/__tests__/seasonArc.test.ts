@@ -2,6 +2,8 @@
 // One theme per Season; each of its 8 episodes ties to that theme (or names the Season) and the 8 build as a cumulative stack.
 import { describe, expect, it } from 'vitest';
 import { ACADEMY_LESSON_BLUEPRINTS as BPS, ACADEMY_SEASONS } from '../index';
+import { SEASON_ARCS } from '../arcs';
+import { chaptersFor } from '../seasonArc';
 
 const words = (t: string) => t.toLowerCase().replace(/[^a-z' ]/g, ' ').split(/\s+/).filter((w) => w.length > 2);
 
@@ -47,4 +49,19 @@ describe('Every Season carries an essential question and eight chapters (academy
       eps.forEach((e, i) => expect(e.chapter?.title, `${e.id} chapter`).toBe(s.chapters![i].title));
     });
   }
+});
+
+describe('Hand-written arcs (owner 2026-10-17: write them for all levels)', () => {
+  it('every A1-C1 Season has a hand-written arc (B1-S01 is written inline), none is the derived default', () => {
+    const missing = ACADEMY_SEASONS.filter((s) => s.id !== 'B1-S01' && !SEASON_ARCS[s.id]).map((s) => s.id);
+    expect(missing, `Seasons still on the derived default: ${missing.join(', ')}`).toEqual([]);
+    for (const s of ACADEMY_SEASONS) {
+      const derived = chaptersFor({ title: s.title, theme: s.theme, release: s.release, canDo: s.canDo, functions: s.functions, structures: s.structures, lexicalFields: s.lexicalFields });
+      expect(s.chapters!.map((c) => c.title).join('|'), `${s.id} still has the derived chapter titles`).not.toBe(derived.map((c) => c.title).join('|'));
+    }
+  });
+  it('arcs only name Seasons that exist', () => {
+    const ids = new Set(ACADEMY_SEASONS.map((s) => s.id));
+    for (const id of Object.keys(SEASON_ARCS)) expect(ids.has(id), id).toBe(true);
+  });
 });
