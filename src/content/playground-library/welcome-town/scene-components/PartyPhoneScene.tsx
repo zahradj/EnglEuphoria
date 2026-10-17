@@ -174,7 +174,7 @@ export function PartyPhoneScene({ scene, onNext, onWin, onLose, sync }: { scene:
               const filled = k < fieldIdx || phase === 'sent';
               return (
                 <div key={f} className={`mb-[1vh] flex items-center gap-[1vw] rounded-[1.6vh] px-[1vw] py-[0.8vh] ${active ? 'bg-[#FEAF15]/25 ring-[0.35vh] ring-[#FEAF15]' : ''}`}>
-                  <button type="button" onClick={() => hear(f)} className="shrink-0 rounded-full bg-[#38BDF8] px-[0.7vw] py-[0.3vh] font-black text-white shadow" style={{ fontSize: 'min(2.4vh,1.5vw)' }}>🔊</button>
+                  <button type="button" onClick={() => hear(f)} className="shrink-0 rounded-full bg-[#F59E0B] px-[0.7vw] py-[0.3vh] font-black text-white shadow" style={{ fontSize: 'min(2.4vh,1.5vw)' }}>🔊</button>
                   <span className="w-[24%] shrink-0 font-black text-[#7A5A2E]" style={{ fontSize: 'min(2.8vh,1.8vw)' }}>{f === 'name' ? 'Name:' : f === 'age' ? 'Age:' : 'House:'}</span>
                   {f === 'name' ? (
                     <span className="flex gap-[0.4vw]">
