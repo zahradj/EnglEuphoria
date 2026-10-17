@@ -88,3 +88,40 @@ describe('choice and wrap', () => {
     expect(wrapScene.validate({ ...w, teachBack: '' }).join()).toMatch(/teach-back/);
   });
 });
+
+import { buildScene, type BuildScene } from '../scenes/build/Build';
+import { speakScene, type SpeakScene } from '../scenes/speak/Speak';
+import { matchScene, type MatchScene } from '../scenes/match/Match';
+
+describe('build, speak, match', () => {
+  it('build: the right order wins; a wrong tile is logged', () => {
+    const scene: BuildScene = { id: 'b', part: 4, kind: 'build', title: 'Build', items: [{ words: ['I', 'have', 'never', 'been'] }] };
+    const onDone = vi.fn();
+    render(<buildScene.view {...base} scene={scene} onDone={onDone} />);
+    fireEvent.click(screen.getByText('been'));
+    for (const w of ['I', 'have', 'never', 'been']) fireEvent.click(screen.getByText(w, { selector: '.av-tiles button' }));
+    fireEvent.click(screen.getByText(/Finish the lesson/));
+    expect(onDone).toHaveBeenCalledWith({ won: true, score: 0, mistakes: ['I have never been'] });
+    expect(buildScene.validate({ ...scene, items: [{ words: ['a'] }] }).join()).toMatch(/3-9 words/);
+  });
+  it('speak: climbs the ladder and finishes after the last turn; validates the order', () => {
+    const scene: SpeakScene = { id: 'sp', part: 5, kind: 'speak', title: 'Say it', who: 'Mia', turns: [{ step: 'shadow', prompt: 'With me', model: 'I have been.' }, { step: 'free', prompt: 'Your turn' }] };
+    const onDone = vi.fn();
+    render(<speakScene.view {...base} scene={scene} onDone={onDone} />);
+    fireEvent.click(screen.getByText(/Say it out loud/));
+    expect(onDone).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByText(/Say it out loud/));
+    expect(onDone).toHaveBeenCalledTimes(1);
+    expect(speakScene.validate({ ...scene, turns: [scene.turns[1], scene.turns[0]] }).join()).toMatch(/climb the ladder/);
+    expect(speakScene.validate({ ...scene, turns: [{ step: 'repeat', prompt: 'x' }] }).join()).toMatch(/needs a model/);
+  });
+  it('match: finishes when every pair is matched', () => {
+    const scene: MatchScene = { id: 'm', part: 4, kind: 'match', title: 'Match', pairs: [{ left: 'been', right: 'came back' }, { left: 'gone', right: 'still away' }, { left: 'ever', right: 'in your life' }] };
+    const onDone = vi.fn();
+    render(<matchScene.view {...base} scene={scene} onDone={onDone} />);
+    for (const p of scene.pairs) { fireEvent.click(screen.getByText(p.left)); fireEvent.click(screen.getByText(p.right)); }
+    expect(onDone).toHaveBeenCalledTimes(1);
+    expect(onDone.mock.calls[0][0].won).toBe(true);
+    expect(matchScene.validate({ ...scene, pairs: scene.pairs.slice(0, 2) }).join()).toMatch(/3-6 pairs/);
+  });
+});

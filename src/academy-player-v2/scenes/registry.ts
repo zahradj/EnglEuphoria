@@ -7,6 +7,9 @@ import { modelScene } from './model/Model';
 import { sortScene } from './sort/Sort';
 import { choiceScene } from './choice/Choice';
 import { wrapScene } from './wrap/Wrap';
+import { buildScene } from './build/Build';
+import { speakScene } from './speak/Speak';
+import { matchScene } from './match/Match';
 
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -18,6 +21,9 @@ export const SCENES: Record<string, SceneModule<any>> = {
   sort: sortScene,
   choice: choiceScene,
   wrap: wrapScene,
+  build: buildScene,
+  speak: speakScene,
+  match: matchScene,
 };
 
 export const sceneKinds = () => Object.keys(SCENES);
