@@ -163,3 +163,17 @@ func feedback(event_pos: Vector2, tier: String) -> void:
 - `audio-design` — the sound layer of every feedback bundle; ducking and SFX variation.
 - `physics-tuning` — knockback forces and the timestep juice must not destabilize.
 - `platformer`, `fps-shooter`, `roguelike` — genres whose moment-to-moment feel this elevates.
+
+
+## Web / learning-game addendum (2026-10-17)
+
+Engine-neutral principles above hold in the browser; this addendum adapts them to DOM/CSS/React educational games. Evidence tags: **[S]** search snippet, page not opened; **[R]** repo rule; **[J]** judgement, tune by playtest. Full numbers, easing tokens and CSS `linear()` springs live in `game-animation` sections 10-16; log in `docs/research/game-dev-skills-research-2026-10-17.md`.
+
+- **What game feel is** (Swink): real-time control + simulated space + polish; "real-time" means the response arrives inside about 100 ms [S]. Juice = "maximum output for minimum input" (Jonasson and Purho, *Juice it or lose it*, GDC Europe 2012: tweening, squash and stretch, particles, colour, shake, sound) [S]. Counterpoint: *Don't Juice It or Lose It* warns that stacked polish can cost immersion [S] - so budget it.
+- **Screenshake numbers from a real game** (Nuclear Throne pistol shot, as reported in an interview, not the talk): camera pushed back 6 px against the aim and shake +4 that decays quickly, plus a short gun recoil [S]. Lesson: tiny, fast-decaying, directional. For learning games the equivalent is a **<= 4 px, <= 150 ms nudge on the piece, never the camera**, and none for wrong answers or in Calm mode [J].
+- **Hit-stop in the browser**: do not pause the game loop. Hold the first frame of the burst (60-90 ms, cap 120 ms) with a `setTimeout` or `animation-delay`, keep input live, and freeze only the struck object, not UI or audio [S, J]. Research on 3D action games preferred 100-200 ms for strong hits; do not use that range for answers.
+- **Layered feedback, but capped** (juice budget): at most input + sound + particles + character reaction + state change + reward per event, each <= 600 ms; the language target stays visible; the next task unlocks by ~600 ms. See the juice checklist in `game-animation` section 11.
+- **Easing**: ease-out for arrivals, ease-in for exits, `--ease-back`/spring for pops, no linear except loops. Springs in CSS via `linear()` (Chrome/Edge 113, Firefox 112, Safari 17.2) with a `cubic-bezier` fallback [S].
+- **Sound layering**: 2 layers max per event (transient click + tonal body), 3-5 variants with +-5 % pitch randomisation, UI cues quiet and tonal, route through buses (Master <- Music, SFX, UI, Voice) [S]. Voices only from the approved recorded clips [R].
+- **Accessibility options are part of juice**: every shake/flash/particle effect needs a switch (shake intensity or off; reduced motion) - Xbox accessibility guidance and shipped games (Cult of the Lamb, Dreamlight Valley) offer one [S]. In this repo Calm mode disables motion at the source (the `fx` object returns no-ops) and keeps the art.
+- **Pitfall added**: juice that rewards the click instead of the learning. Tie feedback intensity to correctness and to the lesson's target, not to taps [R].

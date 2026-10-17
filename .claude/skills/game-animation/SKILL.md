@@ -169,3 +169,111 @@ Screenshot proof: capture mid-action frames (drag, hop apex, landing, burst) in 
 Jonasson & Purho, *Juice it or lose it* (2012) · Nijman, *The Art of Screenshake* (Vlambeer) · Disney's 12 principles applied to
 games (gamedeveloper.com) · hit-stop timing guides (35-120 ms) · Duolingo × Rive character state machines · Sesame Workshop,
 *Best Practices: Designing Touch Tablet Experiences for Preschoolers* · TIDRC framework (IDC 2019) · Rive vs Lottie (2026).
+
+
+---
+
+# Additions 2026-10-17 (fresh research; log: `docs/research/game-dev-skills-research-2026-10-17.md`)
+
+Evidence tags: **[S]** = seen in a web-search snippet, source page not opened (treat as a starting point); **[R]** = repo/owner rule (binding); **[J]** = engineering judgement or computed value, tune by playtest. Nothing below is tagged "verified": WebFetch was unavailable, so no page was read in full.
+
+## 10. Timing and easing cheat sheet (learning-game defaults; teen Academy and kid Playground)
+
+Define once as CSS tokens and reuse (`:root { --ease-out: cubic-bezier(0.2, 0, 0, 1); --ease-std: cubic-bezier(0.4, 0, 0.2, 1); --ease-back: cubic-bezier(0.34, 1.56, 0.64, 1); }`). `--ease-std` is the Material standard curve [S]; the other two are [J].
+
+| Moment | Onset | Duration | Easing / recipe | Notes |
+|---|---|---|---|---|
+| Press / pick-up | 0 ms (same frame) | 80-120 ms | `--ease-out`; scale 1 -> 0.94 (press) or 1.06 (lift) + shadow grows | direct manipulation must feel instant: under 100 ms is the "I did it" threshold [S, Nielsen/Swink] |
+| Drag follow | 0 ms | none | no easing, element follows the pointer 1:1 | add tilt from velocity (max 6 deg) only on the inner sprite |
+| Drop / snap into slot | <= 100 ms | 160-220 ms | `--ease-back` or spring `linear()` below; tiny dust/ring burst | slot highlights on hover so the target is known before release |
+| Pop-in (card, option, panel) | stagger 50-90 ms | 220-320 ms | scale 0.85 -> 1, opacity 0 -> 1, `--ease-back` | exits ~75% of the enter time, `--ease-std` [S] |
+| Correct answer | tick + glow <= 100 ms | burst 400-600 ms, label rises 500 ms | scale 1 -> 1.08 -> 1; 10-14 particles; recorded "good" voice or soft chime | next task must be enabled by ~600 ms (see budget, section 12) |
+| Wrong answer (gentle) | <= 100 ms | 250-350 ms | wobble +-6 px / +-2 deg, `ease-in-out`, piece springs back; hint line fades in at ~300 ms | no red, no buzzer, no screen shake (section 13) |
+| Combo / streak step | with the correct burst | 160 ms | counter pops 1 -> 1.15 -> 1; at most once per answer | never chain a second full burst |
+| Reward count-up (stars, XP) | after burst | 120-200 ms per item, total <= 1200 ms | each item: pop + tick sound, pitch up a semitone | always skippable; the Next button arrives last |
+| Screen / part transition | on Next | 250-400 ms | cross-fade (+ 12 px slide for UI only); stills only cross-fade [R] | never zoom/pan a story picture [R] |
+| Hit-stop (celebration only) | on correct | 60-90 ms, cap 120 ms | hold the burst's first frame; do not block input | research on 3D action games found 100-200 ms best for strong hits, tutorials say 50-100 ms; learning games stay at the low end [S, J] |
+
+**Spring easing in pure CSS (`linear()`)**: supported in Chrome/Edge 113, Firefox 112, Safari 17.2 [S]; give a `cubic-bezier` fallback first (`transition: transform 280ms var(--ease-back); transition-timing-function: linear(...)` in an `@supports` block or simply declare the fallback line before the `linear()` line, unknown values are dropped). Computed damped springs (settle in one duration, tune 380-520 ms) [J]:
+
+```css
+/* soft pop: overshoots ~12%, for pop-in and snap */
+--spring-soft:   linear(0, 0.268, 0.708, 1.011, 1.122, 1.108, 1.053, 1.007, 0.987, 0.985, 0.991, 0.998, 1.001, 1.002, 1.001, 1.001, 1);
+/* snappy: overshoots ~20%, for correct-answer pop and button release */
+--spring-snappy: linear(0, 0.492, 1.07, 1.2, 1.077, 0.974, 0.962, 0.989, 1.007, 1.007, 1.001, 0.998, 0.999, 1, 1, 1, 1);
+.tile--in { animation: pop 420ms var(--spring-soft) both; }
+@keyframes pop { from { transform: scale(0.8); opacity: 0 } to { transform: scale(1); opacity: 1 } }
+```
+Overshoot above 1 is fine for `transform`; never apply a spring to `opacity` (values above 1 are clamped, it only looks late). In framer-motion keep `type: 'spring'` (stiffness 220-320, damping 14-20, section 2) and use `linear()` only for plain CSS/DOM games with no motion library.
+
+**Anticipation and follow-through** (Disney principles; no official UI spec found, so numbers are [J]): wind-up 80-120 ms in the opposite direction (scale 0.92, y +2 px) before a big action; follow-through = a second, smaller overshoot 60-100 ms after the main settle (the 2nd lobe of the spring above). Use on the single focal object only.
+
+## 11. Juice checklist per interaction (run top to bottom; stop adding when it reads)
+
+For every tap, drag or answer, write one line per row in the game's PR or lesson note:
+
+1. **Input**: hit area >= 44 px (section 14), accepts near-misses, works with tap and with tap-tap, keyboard (Enter/Space) too.
+2. **Feedback <= 100 ms**: motion and/or sound start in the same frame as the input [S, R].
+3. **Sound**: one short layered cue (<= 400 ms). Keep 3-5 variants of any sound that repeats and randomise pitch +-5 % (0.95-1.05) so it does not fatigue [S]. UI cues quiet and tonal. Speech only through `speak()` with the approved recorded voices [R]; silence if a clip is missing.
+4. **Particles**: <= 14 per burst, <= 3 bursts alive, 400-600 ms, from the object (not the screen centre).
+5. **Character reaction**: expression swap or small hop (one state change, not a new animation set).
+6. **State change**: the object visibly becomes "done" (lock, glow, check) so the result is readable after the motion ends, motion-free.
+7. **Reward**: proportionate to the event. Per answer: tick + small glow. Per set: stars. Per lesson: the full celebration. Amplifying beyond success-dependent feedback lowered felt competence in a 1,699-person study (see academy-game-ui section 1) [S].
+
+## 12. Juice budget for LEARNING games (what keeps animation from costing learning)
+
+- The **language target** (word, sentence, picture) is never covered, blurred, spun or hidden by a burst, shake or transition. Particles originate beside it, not over it.
+- **No decorative motion may delay the next task by more than ~600 ms** from the moment the answer is judged [J]; every celebration is cancellable by the next tap.
+- **Decorative vs instructive**: motion that points at the learning object (cue, highlight, flip that reveals the answer) is instructive; ambient motion (drifting dust, swaying plants, bokeh) is decorative and must be **ignorable**: low contrast, slow (>= 4 s loops), at the edges, never within 80 px of the target, never the most animated thing on screen [S: seductive-details meta-analysis, 58 studies, 7,500+ learners, interesting-but-irrelevant material lowered scores, and decorative-but-relevant animation lowered recall vs a still; effect weaker and less consistent for animation specifically].
+- **One focus**: at any moment exactly one element is the brightest/most animated (the next action). A burst may briefly take focus, then returns it.
+- **Cue, do not narrate**: ring-ping or glow on the relevant part helps; extra moving parts do not [S, cueing reduces extraneous load].
+- **Budget numbers [J]**: <= 1 looping decorative animation per 400x400 px region, <= 3 simultaneous moving things besides the focus, <= 2 sounds layered per event, celebration <= 1.2 s per answer set, <= 3 s per lesson end (skippable).
+- When in doubt delete the effect and keep the state change; playtest "does the child still read the word?"
+
+## 13. Wrong-answer feedback, especially for teens (13-18)
+
+Rules: **explain, never shame**; **no red buzzer, no cartoon fail sound, no lost points**; always a retry path. Evidence: research on immediate vs delayed corrective feedback in second-language learning shows no clear winner, so give the information instantly and let the student choose when to retry [S, 2023 systematic review]; a mismatch with the learner's level raises anxiety [S].
+
+1. Say what is wrong in plain words and show the right model once: "Not yet - we say *she goes*, not *she go*." Highlight only the differing part.
+2. Visual (this supersedes the small screen nudge in rule 9 for Academy teens; Playground may keep it): the piece wobbles +-6 px for ~300 ms and returns; border turns warm amber (not red; never colour-only, add an icon and text, section 14); no screen shake.
+3. Sound: a single soft low "boop" (<= 250 ms), quiet; or silence. Never a buzzer.
+4. Retry: the same item stays, hint level 1 (first letter / audio replay) after the first miss, level 2 (show model) after the second; "Show me" is always available and costs no stars.
+5. After 3 misses on one item, quietly queue it for the spaced Remember? and move on ("We will come back to this"); never trap the student.
+6. Teens: no childish praise or pity ("Oops, silly!"); neutral coach tone ("Almost. Try the verb again."). No public display of errors, no counters of mistakes on screen.
+7. Count the miss for the teacher's error log, not for the student's score.
+
+## 14. Performance and accessibility (web / DOM / React)
+
+- **Compositor-only**: animate `transform` and `opacity` only; they run off the main thread, other properties can jank on low-end phones [S, web.dev]. Layout moves (reorder, shuffle) use **FLIP** (First-Last-Invert-Play): measure, apply the inverse `transform`, then play to identity [S, Paul Lewis]; in React use `layout` in framer-motion or measure in `useLayoutEffect`.
+- **`will-change: transform`** only on elements about to animate, remove it after (layers cost memory; overuse hurts) [S, web.dev]. Never on every card in a list.
+- **Frame budget**: 16.7 ms at 60 fps; a frame that exceeds it is skipped [S]. Test on a throttled CPU (4x) and a real mid phone; keep DOM nodes animating at once under ~60.
+- **Web Animations API** (`el.animate()`) for imperative effects: returns an `Animation` with `cancel()`, `finish()` and a `finished` promise that rejects on cancel (catch it); after finishing call `commitStyles()` then `cancel()` rather than `fill: 'forwards'` forever [S, MDN]. Default easing is `linear` and durations are in ms, unlike CSS defaults.
+- **Reduced motion**: `@media (prefers-reduced-motion: reduce)` and the in-player Calm switch turn translation/scale/shake/particles into instant state changes or short fades (<= 150 ms) [S, WCAG 2.3.3 AAA animation from interactions; R, academy rule]. Keep the art and the state change; remove the motion at the source (academy-game-ui, Game feel standard).
+- **Flashes**: nothing flashes more than 3 times per second (WCAG 2.3.1 Level A) [S]; no full-screen white/red flashes, no strobing sparkles; bursts are short fades.
+- **Targets**: >= 44 x 44 CSS px with >= 8 px gaps (WCAG 2.5.8 AA minimum is 24 px, 2.5.5 AAA is 44 px, Apple 44 pt, Material 48 dp) [S]; the hit area may be bigger than the sprite (padding, pseudo-element).
+- **Contrast** >= 4.5:1 for text, 3:1 for icons and borders; text over pictures sits on a pill/veil, never directly on busy art.
+- **No motion-only or colour-only information**: right/wrong/selected is also an icon + text + shape change; Wordle added a high-contrast/colour-blind mode because colour-only feedback excluded players [S].
+- **Keyboard and focus**: every tap action also reachable by keyboard with a visible focus ring; `aria-live="polite"` for feedback text.
+- **Audio**: all motion works with sound off, all sounds optional; never the browser TTS [R].
+
+## 15. Educational game UX anti-patterns (reject in review)
+
+1. Timers that punish (countdowns that end the round or remove stars); a timer is opt-in, never default [R]. Speed pressure harms retrieval for anxious learners [J].
+2. Public leaderboards or rankings: they motivate the top and demotivate the bottom; evidence from several small studies, relative or personal-best displays are the only acceptable form [S, R].
+3. Loot-box style randomness or variable-ratio "mystery" rewards tied to answers; rewards are predictable and earned [S: manipulative design patterns are common in children's apps].
+4. Fake urgency ("only 2 minutes left!", expiring streak guilt, a sad mascot when the student leaves) [S].
+5. Streak guilt: streak freezes and "welcome back" instead of loss messaging [R, academy-daily-practice].
+6. Childish mascots, baby fonts, pastel candy UI, "yay good job!" for teens [J; teen design sources are agency blogs, no study found].
+7. Animation that hides the target, delays the next task or can not be skipped (section 12).
+8. Red/green-only status; tiny targets; text-only answers with no audio.
+9. Rewards for clicking rather than for learning (points for any tap, XP for time-on-screen).
+10. Dark scenes, neon and gloom in Academy art [R].
+
+## 16. Top-notch illustration (how the art supports juice)
+
+- **Layered depth without parallax**: back plate (calmed with `CalmBg`: soft blur, slight desaturation, light veil) -> game pieces -> UI pills. Depth comes from shadows and size, not camera movement [R].
+- **Stickers**: cut-out, transparent background, thin light outline, soft contact shadow (blur 8-14 px, 25 % opacity) + a 3D lip on pieces; never a picture in a white box [R].
+- **Soft light veil** (white 20-35 %) behind small pieces so they are the brightest things; busy scene never competes with the target.
+- **Palette**: 3-4 colours from the lesson picture; about **25 % purple** in Academy pictures mixed with teal/blue, cream/wood and green [R]; accent for "tap me", emerald for "right", amber for "not yet".
+- **Character expression sets**: every cast member has at least neutral, talking, happy, thinking/concerned, surprised, with the same face, hair and skin in all (art check, `artReview.ts`) [R]; a reaction is a swap plus a small hop, not new art per line.
+- **Clean-edge check** at 2x zoom on hands, faces, held objects before anything ships [R].

@@ -149,3 +149,37 @@ func _on_health_changed(current: int, max: int) -> void:
 - `dialogue-systems` — conversation/choice UI that lives inside this UI shell.
 - `input-systems` — device switching, rebinding screens, and accessible controls.
 - `rpg`, `card-game`, `tower-defense`, `visual-novel` — UI-heavy genres that compose this skill.
+
+
+## Web / educational UI addendum (2026-10-17)
+
+Evidence tags: **[S]** search snippet (page not opened), **[R]** repo rule, **[J]** judgement. Timing tokens, accessibility checklist and anti-patterns: `game-animation` sections 10-16. Log: `docs/research/game-dev-skills-research-2026-10-17.md`.
+
+### Feedback timing (the 0.1 / 1 / 10 second rules) [S]
+- <= 0.1 s feels like direct manipulation: press, lift and tick must respond in the same frame.
+- <= 1 s keeps the train of thought: the verdict (right / not yet) and the next-step hint appear within 1 s.
+- > 1 s needs a visible "working" state (a spinner or a character thinking); > 10 s needs progress and a way out. Recorded voice clips that are still loading show a silent mic/speaker ring, never a freeze.
+
+### Targets, reach and layout (Fitts) [S]
+- Time to hit a target falls with size and rises with distance; fingers need bigger targets than a mouse. Use **>= 44 x 44 CSS px** (Apple 44 pt, Material 48 dp, WCAG 2.5.8 AA min 24 px, 2.5.5 AAA 44 px) with >= 8 px between targets; enlarge the hit area with padding, not the sprite.
+- Put the primary action in the bottom thumb zone (bottom-right for the main button); keep rarely used controls (hint, comfort, back) at the top corners; never put the answer targets under a top bar or a notch (use `env(safe-area-inset-*)`).
+- A well-placed button with an ambiguous label still fails: every control has an icon plus a word.
+
+### HUD design for learning (diegetic vs non-diegetic) [S]
+- Taxonomy: diegetic (inside the world: a phone screen, a notice board), non-diegetic (classic HUD pills), spatial (in the scene, not seen by the characters), meta (screen effects). Practitioners recommend blending; fast, information-heavy screens lean on a HUD, story scenes gain from diegetic objects.
+- Learning default: **the task and the language target are diegetic** (the message on the phone, the menu on the table), **status is a light non-diegetic HUD** (progress, stars, hint). Max 5 HUD items visible; the HUD never overlaps the target.
+
+### Progress and goals
+- **Goal-gradient and endowed progress**: motivation rises as the goal gets closer, and a bar that starts partly filled (e.g. 1 of 5 done after the title card) is completed more often [S, Hull 1932, Nunes and Dreze 2006; design applications are blog-level]. Use a segmented bar per part, show "2 more" near the end, never a bar that resets or drops.
+- Progress is against the student's **own best**, never a ranking [R].
+
+### Rewards, ethically
+- Predictable, earned rewards (stars for first-try, Word Cards collected). No variable-ratio mystery boxes, no fake urgency, no streak-loss guilt, no leaderboards [S, R]. See anti-patterns in `game-animation` section 15.
+- Flow: keep challenge slightly above skill with a visible dial (Chill / Normal / Push); some data suggest players tolerate being over-challenged better than bored, but anxiety rises, so offer the easier path without penalty [S, J].
+
+### Reading and responsive layout
+- 16 px minimum body text, ~12 words per line at A1; text on a pill over art; layouts tested at 390 x 844 and 1280 x 720; logical CSS properties so Arabic (RTL) mirrors [R].
+- Every screen has an initial focus target, a visible focus ring and keyboard parity with touch (the web version of gamepad focus above).
+
+### Teen taste (13-18) [S: only agency blogs; no teen-specific study found, so [J]]
+- Clean, low-clutter, visual-first screens, cards, personalisation (themes, emoji choice), a conversational but adult tone; avoid mascots, rounded baby fonts, confetti on every tap and "great job!" for trivial steps.
