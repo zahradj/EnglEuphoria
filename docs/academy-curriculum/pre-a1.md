@@ -76,6 +76,73 @@ Pre-A1 is extensive reading and the sounds: every lesson activates what the stud
 | PA1-S05-E7 | he, she, bus | Theo: “Ben is a man. He is from France. Pam is a girl. She is from Spain. Sam ran on the bus. Ron is not on the bus.” | he, she, bus |
 | PA1-S05-E8 | world map, from, friend | Vee: “My map. I am from Spain. Ben is from France. Pam is from Italy. Sam is from Turkey.” | map, from, Spain |
 
+### Season arcs (one theme, eight related chapters)
+
+**PA1-S01 Hello, letters** · big question: How can I say hello, say my name and read it on the wall?
+
+| Lesson | Chapter | Sub-question | One difficulty that rises |
+|---|---|---|---|
+| E1 | **The wall wakes up** | Whose name starts with A on the Name Wall? | Recognise: hear hello and the letters A to G, no production |
+| E2 | **Yes, no, and first sounds** | Which sounds do the names on the wall start with? | Controlled: say yes and no, hear s and a |
+| E3 | **Spell and blend** | How do I spell my name and blend at, sat, pat, tap? | Controlled: spell, then blend with t and p |
+| E4 | **Say hello to Theo** | How do I say hello and ask how a name is spelled? | Guided: a short hello dialogue with Theo |
+| E5 | **Read the wall** | What do five short lines on the wall say? | More input: read five short lines and match each to its picture |
+| E6 | **My name, my skin** | Can I read and build my name and a friend's name? | Free choice: my own name in the skin I chose |
+| E7 | **Remix: name check** | Can I mix letters, sounds and hello without help? | Fluency on known language only: four decodable words and the hello chunk |
+| E8 | **My Name Wall** | How can I say hello, say my name and read it on the wall? | Release: build the Name Wall with my name and three friends' names, read and said |
+
+**PA1-S02 First sounds** · big question: How can I read and say what things are on my phone screen?
+
+| Lesson | Chapter | Sub-question | One difficulty that rises |
+|---|---|---|---|
+| E1 | **A message arrives** | What does the phone message say when its first letters are missing? | Recognise: hear i and n and blend in, it, pin, tin |
+| E2 | **Swap the first sound** | Which two words swap their first sound? | Controlled: hear m and d and blend mat, man, dad, did |
+| E3 | **This is a...** | How do I say what is in a photo with This is a ___? | Controlled: say the chunk and swap the word |
+| E4 | **Is it a map?** | How do I ask and answer about a blurry photo with Theo? | Guided: yes/no questions with a partner |
+| E5 | **Read the caption** | What do five short lines say under the photo? | More input: read five lines and match each to its picture |
+| E6 | **My photo, my caption** | Can I build and read three words of my own? | Free choice: my own words in the skin I chose |
+| E7 | **Remix: every message** | Can I read all eight sounds, the chunk and the sight words without help? | Fluency on known language only |
+| E8 | **My phone album** | How can I read and say what things are on my phone screen? | Release: six labelled things, each read and said |
+
+**PA1-S03 Numbers and age** · big question: How can I read and say numbers, my age and a phone number?
+
+| Lesson | Chapter | Sub-question | One difficulty that rises |
+|---|---|---|---|
+| E1 | **Locker 7 is open** | Whose locker is open, and what are the numbers 0 to 10? | Recognise: read and hear the numbers 0 to 10 |
+| E2 | **Thirteen or thirty?** | How do I tell 13 from 30 and read 11 to 20? | Controlled: say and hear the teens against the tens |
+| E3 | **How old are you?** | How do I say my age and ask how old someone is? | Controlled: say the chunk with my own age |
+| E4 | **The lost digit** | How do I say and write a phone number one digit at a time? | Guided: say, hear and write a number with a partner |
+| E5 | **The locker list** | What does a list of names, ages and numbers tell me? | More input: read a locker list and find who has locker 20 |
+| E6 | **My own locker** | Can I make a number card of my own? | Free choice: my own numbers in the skin I chose |
+| E7 | **Remix: every locker** | Can I mix numbers, ages and the sounds from Seasons 1 and 2 without help? | Fluency on known language only |
+| E8 | **My locker card** | How can I read and say numbers, my age and a phone number? | Release: my locker card, said to a friend |
+
+**PA1-S04 My things** · big question: How can I read labels and say what things are in my bag?
+
+| Lesson | Chapter | Sub-question | One difficulty that rises |
+|---|---|---|---|
+| E1 | **The unlabelled bag** | What is in the bag whose labels are missing? | Recognise: hear o and c and blend cap, cat, cot, on |
+| E2 | **Swapped labels** | Which two labels swapped their first sounds? | Controlled: hear b and g and blend big, bag, dog, bin |
+| E3 | **A or an?** | How do I choose a or an: It is a bag, It is an apple? | Controlled: pick the right word and say the chunk |
+| E4 | **What is it?** | How do I ask and answer What is it? when Theo cannot find his phone? | Guided: a short question-and-answer with a partner |
+| E5 | **The red bag list** | Who owns the red bag, according to a six-line list? | More input: read six lines and match them to pictures |
+| E6 | **My bag, my skin** | Can I label my own bag? | Free choice: my own labels in the skin I chose |
+| E7 | **Remix: the spill** | Can I sort the spilled bag using twelve sounds, a/an and the labels? | Fluency on known language only |
+| E8 | **My label sheet** | How can I read labels and say what things are in my bag? | Release: eight things, each labelled, read and said |
+
+**PA1-S05 People and places** · big question: How can I read and say where people are from on the world map?
+
+| Lesson | Chapter | Sub-question | One difficulty that rises |
+|---|---|---|---|
+| E1 | **A pin with no name** | Which person belongs to the nameless pin on the map? | Recognise: hear e and u and blend hen, run, bus, red |
+| E2 | **Names swapped** | Which two people swapped their names? | Controlled: hear h and r and blend hat, hit, ran, rug |
+| E3 | **I am from...** | How do I say I am from ___ and He / She is from ___? | Controlled: say the chunk for me and for others |
+| E4 | **Where are you from?** | How do I ask a new student where they are from? | Guided: ask and answer with a partner |
+| E5 | **The missing fact** | What does a three-sentence profile say, and which fact is missing? | More input: read a profile and answer questions |
+| E6 | **My friends on the map** | Can I add my own friends to the map? | Free choice: my own pins in the skin I chose |
+| E7 | **Remix: the map lights up** | Can I mix sixteen sounds, the chunks and the people without help? | Fluency on known language only |
+| E8 | **My world-map card** | How can I read and say where people are from on the world map? | Release: me and three friends, each with a country, read and said |
+
 ## 4. Every Season has the same eight lessons
 Cold Open (hook, gist) · Word Lab (vocabulary and pronunciation) · Pattern Lab (grammar noticing) · On Air (real exchange) · Deep Dive (longer text and short writing) · Side Quest (student's pick, light new language) · Remix (zero new language) · Finale (peer task, Release, checkpoint, zero new language). Run of show: standard 60 minutes (Pre-A1 uses its own slower one).
 

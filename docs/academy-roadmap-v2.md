@@ -200,7 +200,7 @@
 
 | Season | Title · theme | Cast | Structures (E3 / E6) | Functions | Release | Items |
 |---|---|---|---|---|---|---|
-| B1-S01 | **Have You Ever...?** · Experiences and bucket lists | Vee | present perfect: experience (ever/never/been) ⚠ | talking about life experiences; asking follow-up questions; showing interest and surprise | My bucket list: three things I have done and three I want to do | 75 |
+| B1-S01 | **Have You Ever...?** · Experiences and bucket lists | Vee | present perfect: experience (ever/never/been) | talking about life experiences; asking follow-up questions; showing interest and surprise | My bucket list: three things I have done and three I want to do | 75 |
 | B1-S02 · Big Remix | **Then and Now** · Memories and how things have changed | Theo | used to | talking about past habits; comparing past and present; reminiscing | A "then and now" photo story: how my life or my town has changed | 75 |
 | B1-S03 | **Still Going** · Things that began in the past and continue now | Ava, Mia | present perfect: for / since / how long | talking about duration; interviewing someone; giving a short personal profile | An interview with a friend about a long-term hobby or friendship, recorded | 75 |
 | B1-S04 · Big Remix | **Breaking News** · Recent events and news stories | Ava | present perfect vs past simple | reporting news; giving details of a past event; announcing results | A 60-second audio news bulletin | 75 |
@@ -209,7 +209,7 @@
 | B1-S07 | **Made in the World** · How things are made and where they come from | Theo | passive: present and past simple | describing a process; giving factual information; sequencing steps | A short 'how it is made' explainer clip | 75 |
 | B1-S08 · Big Remix | **Who's Who** · Describing people, places and things precisely | Mia | defining relative clauses (who/which/that/where) | describing and defining; adding detail; clarifying | A "guess who / what" game I wrote and played with a partner | 75 |
 | B1-S09 | **Case Closed** · Mystery and deduction | Vee, Ava, Theo | modals of deduction (must / might / can't) ⚠ | speculating; expressing certainty and doubt; explaining a theory | A detective briefing: my theory of the case with evidence | 75 |
-| B1-S10 · Big Remix | **Plans and Promises** · Arrangements and commitments | Vee, Mia, Theo | present continuous for future arrangements (future arrangements) ⚠ / will for promises and predictions (promises and predictions) ⚠ | arranging to meet; making promises; predicting | A trip plan with arrangements and promises, as an invitation and short call | 75 |
+| B1-S10 · Big Remix | **Plans and Promises** · Arrangements and commitments | Vee, Mia, Theo | present continuous for future arrangements (future arrangements) ⚠ / will for promises and predictions (promises and predictions) | arranging to meet; making promises; predicting | A trip plan with arrangements and promises, as an invitation and short call | 75 |
 | B1-S11 | **Learning Machines** · Technology, AI and how we learn | Vee | verb patterns: gerund vs infinitive (common verbs) | giving opinions; recommending; comparing options | A short review of a learning tool, with a recommendation | 75 |
 | B1-S12 · Big Remix | **Word on the Street** · Reporting what people said | Ava, Theo, Mia | reported speech: statements (say/tell, basic backshift) (present-to-past backshift only; past perfect backshift waits for the next Season) / embedded (indirect) questions (as polite chunks: Could you tell me where ...? (first met here, full use in B2)) | reporting speech; passing on messages; clarifying what was said | A story told through other people's words: what they said and what I replied | 75 |
 | B1-S13 | **Before the Storm** · Narrative writing: what had already happened | Ava, Theo, Mia, Vee | past perfect | narrating; sequencing past events; creating suspense | A short story of 150-200 words with a twist, written and read aloud | 75 |
@@ -612,18 +612,16 @@
 
 ## Validator
 
-Errors: 0 · Warnings: 21
+Errors: 0 · Warnings: 19
 
 
-**Unverified grammar placements (21) — check in the English Grammar Profile / GSE Grammar before locking:**
+**Unverified grammar placements (19) — check in the English Grammar Profile / GSE Grammar before locking:**
 - A1-S04: Placement of "would-like" is unverified [U].
 - A1-S11: Placement of "prepositions-time" is unverified [U].
 - A2-S13: Placement of "as-as-comparison" is unverified [U].
-- B1-S01: Placement of "present-perfect-experience" is unverified [U].
 - B1-S05: Placement of "zero-first-conditional" is unverified [U].
 - B1-S09: Placement of "modals-deduction" is unverified [U].
 - B1-S10: Placement of "present-continuous-future" is unverified [U].
-- B1-S10: Placement of "will-promises-predictions" is unverified [U].
 - B1-S14: Placement of "wish-past-simple" is unverified [U].
 - B1-S18: Placement of "few-little" is unverified [U].
 - B2-S17: Placement of "had-better-ought-to" is unverified [U].

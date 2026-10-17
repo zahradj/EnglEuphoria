@@ -2,6 +2,7 @@
 // Run: npx tsx scripts/academy-curriculum-docs.ts
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { ACADEMY_ROADMAP, PA1_SEASONS, PRE_A1_READING } from '../src/curriculum/academy';
+import { PRE_A1_ARCS } from '../src/curriculum/academy/arcs';
 import { LEVEL_FRAMES } from '../src/curriculum/academy/levelFrames';
 
 const DIR = 'docs/academy-curriculum';
@@ -46,6 +47,17 @@ for (const f of LEVEL_FRAMES) {
     out();
     out('| Lesson | Activate | Message (from) | Word bank |'); out('|---|---|---|---|');
     PRE_A1_READING.forEach((r) => out(`| ${r.id} | ${r.activate.join(', ')} | ${r.message.from}: “${r.message.lines.join(' ')}” | ${r.bank.join(', ')} |`));
+    out();
+    out('### Season arcs (one theme, eight related chapters)');
+    PA1_SEASONS.forEach((s) => {
+      const arc = PRE_A1_ARCS[s.id];
+      if (!arc) return;
+      out();
+      out(`**${s.id} ${s.title}** · big question: ${arc.essentialQuestion}`);
+      out();
+      out('| Lesson | Chapter | Sub-question | One difficulty that rises |'); out('|---|---|---|---|');
+      arc.chapters.forEach((c, i) => out(`| E${i + 1} | **${c.title}** | ${c.question} | ${c.step} |`));
+    });
   } else {
     out('| Season | Title · theme | Structures | Functions | New items | Release |'); out('|---|---|---|---|---|---|');
     seasons.forEach((s) => out(`| ${s.id}${s.bigRemix ? ' · Remix' : ''}${s.levelCheck ? ' · **level check**' : ''} | **${s.title}** · ${s.theme} | ${s.structures.map((x) => x.label).join('; ')} | ${s.functions.join('; ')} | ${s.newItemBudget} | ${s.release} |`));
@@ -82,7 +94,14 @@ for (const f of LEVEL_FRAMES) {
     seasons.forEach((s) => {
       out(`### ${s.id} ${s.title}`);
       out(`*${s.hook}*`);
+      if (s.essentialQuestion) out(`**Big question:** ${s.essentialQuestion}`);
       out(list(s.canDo));
+      if (s.chapters?.length) {
+        out();
+        out('| Lesson | Chapter | Sub-question | One difficulty that rises |'); out('|---|---|---|---|');
+        s.chapters.forEach((c, i) => out(`| E${i + 1} | **${c.title}** | ${c.question} | ${c.step} |`));
+        out();
+      }
       out(`- Lexical fields: ${s.lexicalFields.join('; ')}`);
       if (s.mediation) out(`- Mediation: ${s.mediation}`);
       out(`- Skins: ${s.skins.map((k) => k.id).join(', ')}`);
