@@ -66,12 +66,12 @@ export function CountUp({ to, calm, ms = 900 }: { to: number; calm: boolean; ms?
 }
 
 /** the reward moment at the end of a game: stars light one by one, XP counts up, a gem for a clean run */
-export function Reward({ score, stars = 3, gem, calm, tone = 'gold' }: { score: number; stars?: 1 | 2 | 3; gem?: boolean; calm: boolean; tone?: FxTone }) {
+export function Reward({ score, stars = 3, gem, calm, tone = 'gold', unit }: { score: number; stars?: 1 | 2 | 3; gem?: boolean; calm: boolean; tone?: FxTone; unit?: string }) {
   const { t } = useTranslation();
   return (
     <div className="av-reward" data-tone={tone} role="status" data-testid="av-reward">
       <span className="av-reward-stars" aria-hidden="true">{[1, 2, 3].map((n) => <i key={n} data-on={n <= stars || undefined} style={{ animationDelay: `${n * 160}ms` }}>★</i>)}</span>
-      <span className="av-reward-num"><b><CountUp to={score} calm={calm} /></b> {t('ap.xpUnit', 'XP')}</span>
+      <span className="av-reward-num"><b><CountUp to={score} calm={calm} /></b> {unit ?? t('ap.xpUnit', 'XP')}</span>
       {gem && <span className="av-reward-gem" aria-hidden="true">◆</span>}
     </div>
   );
@@ -93,7 +93,7 @@ export function useReactor(base: Mood = 'thinking') {
   useEffect(() => () => window.clearTimeout(timer.current), []);
   const back = useCallback((ms: number) => { window.clearTimeout(timer.current); timer.current = window.setTimeout(() => setS((p) => ({ mood: base, pulse: p.pulse, react: undefined })), ms); }, [base]);
   const cheer = useCallback((ms = 1500) => { setS((p) => ({ mood: 'happy', pulse: p.pulse + 1, react: 'cheer' })); back(ms); }, [back]);
-  const flinch = useCallback((ms = 1500) => { setS((p) => ({ mood: 'concerned', pulse: p.pulse + 1, react: 'flinch' })); back(ms); }, [back]);
+  const flinch = useCallback((ms = 1500) => { setS((p) => ({ mood: 'curious', pulse: p.pulse + 1, react: 'flinch' })); back(ms); }, [back]);
   const surprise = useCallback((ms = 1500) => { setS((p) => ({ mood: 'surprised', pulse: p.pulse + 1, react: 'nod' })); back(ms); }, [back]);
   /** stay in a mood until changed (win / lose) */
   const hold = useCallback((mood: Mood, react?: Reaction) => { window.clearTimeout(timer.current); setS((p) => ({ mood, pulse: p.pulse + 1, react })); }, []);

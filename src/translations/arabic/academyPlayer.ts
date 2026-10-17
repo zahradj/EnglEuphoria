@@ -40,4 +40,8 @@ export const academyPlayerTranslations = {
   "ap.teachBack": "قل القاعدة بكلماتك",
   "ap.sortTip": "اضغط بطاقة ثم الصندوق الصحيح",
   "ap.check": "تحقّق",
+  "ap.xpUnit": "نقاط الخبرة",
+  "ap.dragTip": "اسحب البطاقة إلى صندوق، أو المس صندوقًا",
+  "ap.wordCards": "بطاقات الكلمات",
+  "ap.shields": "الدروع",
 };

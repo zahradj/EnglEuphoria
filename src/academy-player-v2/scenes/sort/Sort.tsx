@@ -116,7 +116,7 @@ function SortView({ scene, onDone, artBase, calm, seed, fx: fxIn }: SceneProps<S
               </button>
             );
           })}
-          <div className="av-card-slot">
+          <div className="av-card-slot"><div className="av-card-wrap">
             {ph.phase === 'play' && Array.from({ length: pile }, (_, k) => <i key={k} className="av-pile" style={{ ['--k' as string]: pile - k }} />)}
             <div className="av-card-now" ref={cardRef} key={ph.phase === 'play' && cur ? cur.id : ph.phase} data-fb={msg ?? undefined} data-phase={ph.phase} data-drag={drag ? 'true' : undefined} data-wob={wob}
               style={drag ? { transform: `translate(${drag.dx}px, ${drag.dy}px) rotate(${Math.max(-8, Math.min(8, drag.dx / 14))}deg) scale(1.06)` } : undefined}
@@ -126,7 +126,7 @@ function SortView({ scene, onDone, artBase, calm, seed, fx: fxIn }: SceneProps<S
               {ph.phase === 'win' && (<><p>{t('ap.wellDone', 'Well done!')}</p><Reward score={g.state.score} stars={starsFor(scene.items.length - wrong.length, scene.items.length)} gem={wrong.length === 0} calm={calm} /></>)}
               {ph.phase === 'lose' && (<><p>{t('ap.tryAgain', 'Almost. Look again.')}</p><button type="button" className="av-btn" data-kind="go" onClick={retry}>{t('ap.restart', 'Start again')}</button></>)}
             </div>
-          </div>
+          </div></div>
         </div>
       </div>
     </div>

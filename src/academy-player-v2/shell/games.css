@@ -1,0 +1,247 @@
+/* Academy player v2 — the games (sort, forge, boss, rapport, choice, match, memory, build, teach, write).
+   Every game sits on the plate behind a light veil with a soft blur (so the pieces are the clearest thing), has a cast member who reacts,
+   pieces with depth (bevel, layered shadow), springy motion (transform + opacity only) and a reward moment.
+   Calm mode / reduced motion: tokens.css switches all animation and transition off; the art, the state changes and the glows stay. */
+.av-root { --av-spring: cubic-bezier(0.34, 1.56, 0.64, 1); --av-out: cubic-bezier(0.2, 0, 0, 1); --av-paper: #fffdf5; --av-ink-soft: #5b4a86; }
+
+/* ---------- shared frame ---------- */
+.av-game { position: absolute; inset: 0; }
+.av-gamebg { position: absolute; inset: 0; z-index: 0; backdrop-filter: blur(5px) saturate(0.9); -webkit-backdrop-filter: blur(5px) saturate(0.9); background: linear-gradient(180deg, rgba(255, 251, 240, 0.34), rgba(240, 232, 255, 0.46)); pointer-events: none; }
+.av-glow { position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: 0; transition: opacity 0.5s var(--av-out); box-shadow: inset 0 0 110px 12px rgba(20, 184, 166, 0.42); }
+.av-glow[data-tone='gold'] { box-shadow: inset 0 0 110px 12px rgba(251, 191, 36, 0.45); } .av-glow[data-tone='lilac'] { box-shadow: inset 0 0 110px 12px rgba(161, 135, 242, 0.45); }
+.av-glow[data-on] { opacity: 1; }
+.av-game-body { position: absolute; inset: 66px 3% 68px; z-index: 3; display: flex; align-items: center; justify-content: center; }
+.av-game-body[data-top='hud'] { flex-direction: column; justify-content: flex-start; align-items: center; gap: 12px; padding-top: 4px; }
+.av-game-card { position: relative; width: min(760px, 100%); max-height: 100%; overflow-x: hidden; overflow-y: auto; display: grid; gap: 12px; align-content: start; animation: av-rise 0.45s var(--av-spring) both; scrollbar-width: thin; }
+.av-card-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.av-card-head h2 { margin: 0; flex: 1 1 auto; min-width: 0; }
+.av-hud-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.av-hud-row .av-pill { min-height: 30px; padding: 4px 10px; font-size: 12px; }
+.av-combo { animation: av-pop-in 0.34s var(--av-spring) both; box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.55), 0 0 18px rgba(251, 191, 36, 0.6), var(--av-shadow); }
+.av-lives, .av-shields, .av-pips, .av-deck { display: inline-flex; gap: 5px; align-items: center; }
+.av-lives i { width: 14px; height: 14px; border-radius: 50%; border: 2.5px solid var(--av-p400); background: transparent; transition: transform 0.2s var(--av-spring), background 0.2s; }
+.av-lives i[data-on] { background: radial-gradient(circle at 35% 30%, #fff 0 12%, var(--av-teal) 40%, #0e8f82); border-color: #0e8f82; box-shadow: 0 0 8px rgba(20, 184, 166, 0.6); }
+.av-shields i { width: 22px; height: 26px; background: linear-gradient(160deg, #7be0d2, var(--av-teal) 55%, #0e8f82); clip-path: polygon(0 0, 100% 0, 100% 62%, 50% 100%, 0 62%); transition: transform 0.25s var(--av-spring), filter 0.25s, opacity 0.25s; }
+.av-shields i:not([data-on]) { filter: grayscale(1); opacity: 0.35; transform: scale(0.85) rotate(-8deg); }
+.av-pips i { width: 12px; height: 12px; border-radius: 50%; background: rgba(255, 255, 255, 0.8); box-shadow: inset 0 0 0 2px var(--av-p300); transition: transform 0.25s var(--av-spring), background 0.25s; }
+.av-pips i[data-state='now'] { background: var(--av-p400); transform: scale(1.25); } .av-pips i[data-state='done'] { background: var(--av-p500); box-shadow: none; }
+.av-pips i[data-state='gold'] { background: radial-gradient(circle at 35% 30%, #fff 0 10%, var(--av-gold) 45%, #d99a22); box-shadow: 0 0 8px rgba(251, 191, 36, 0.8); }
+.av-note { transition: opacity 0.2s; }
+.av-why { animation: av-rise 0.36s var(--av-spring) both; background: rgba(255, 255, 255, 0.7); border-radius: 12px; padding: 6px 10px; }
+.av-q { animation: av-rise-sm 0.32s var(--av-out) both; }
+
+/* the cast member: a big sticker beside the card (wide screens) or a round portrait in the header (narrow) */
+.av-cast { position: absolute; bottom: 52px; height: 50cqh; aspect-ratio: 3 / 4; z-index: 2; pointer-events: none; isolation: isolate; }
+.av-cast[data-side='left'] { left: 1.2%; } .av-cast[data-side='right'] { right: 1.2%; }
+.av-cast-in { position: absolute; inset: 0; transform-origin: 50% 100%; animation: av-breathe 3.8s ease-in-out infinite; }
+.av-cast-in img { width: 100%; height: 100%; object-fit: contain; object-position: 50% 100%; filter: drop-shadow(0 12px 14px rgba(40, 25, 90, 0.28)); }
+.av-cast-in[data-react='cheer'] { animation: av-cheer 0.8s var(--av-out) both, av-breathe 3.8s ease-in-out 0.8s infinite; }
+.av-cast-in[data-react='flinch'] { animation: av-flinch 0.55s var(--av-out) both, av-breathe 3.8s ease-in-out 0.55s infinite; }
+.av-cast-in[data-react='nod'] { animation: av-nod 0.5s var(--av-out) both, av-breathe 3.8s ease-in-out 0.5s infinite; }
+.av-cast-shadow { position: absolute; left: 12%; right: 12%; bottom: -2%; height: 5%; border-radius: 50%; background: radial-gradient(ellipse, rgba(40, 25, 90, 0.38), transparent 70%); z-index: -1; }
+.av-cast-name { position: absolute; left: 50%; bottom: -26px; transform: translateX(-50%); background: var(--av-glass); border: 2px solid #fff; border-radius: 999px; padding: 2px 12px; font-size: 12px; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase; color: var(--av-p700); box-shadow: var(--av-shadow); }
+.av-badge { display: none; flex: none; width: 54px; height: 54px; border-radius: 50%; overflow: hidden; border: 3px solid #fff; background: linear-gradient(160deg, var(--av-p200), var(--av-p400)); box-shadow: 0 0 0 2px var(--av-p300), var(--av-shadow); }
+.av-badge-in { display: block; width: 100%; height: 100%; }
+.av-badge-in[data-react='cheer'] { animation: av-badge-hop 0.6s var(--av-spring) both; } .av-badge-in[data-react='flinch'] { animation: av-badge-wobble 0.5s ease-in-out both; }
+.av-badge img { width: 100%; height: 150%; object-fit: cover; object-position: 50% 4%; }
+@container (max-width: 880px) { .av-cast { display: none; } .av-badge { display: block; } }
+@container (max-width: 560px) { .av-card-head .av-badge { order: -1; } .av-card-head h2 { flex-basis: 40%; } .av-game-body { inset: 58px 10px 62px; } .av-game-card { padding: 12px; gap: 10px; } .av-badge { width: 44px; height: 44px; } }
+
+/* reward moment */
+.av-reward { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; padding: 10px 18px; border-radius: 20px; background: linear-gradient(180deg, #fffbe6, #ffeaa3); border: 2px solid #fff; box-shadow: 0 6px 0 rgba(217, 154, 34, 0.35), 0 14px 26px rgba(40, 25, 90, 0.18); animation: av-pop-in 0.5s var(--av-spring) both; }
+.av-reward[data-tone='teal'] { background: linear-gradient(180deg, #effcf9, #bdf0e8); box-shadow: 0 6px 0 rgba(14, 143, 130, 0.3), 0 14px 26px rgba(40, 25, 90, 0.18); }
+.av-reward[data-tone='lilac'] { background: linear-gradient(180deg, var(--av-p50), var(--av-p200)); box-shadow: 0 6px 0 rgba(106, 69, 212, 0.3), 0 14px 26px rgba(40, 25, 90, 0.18); }
+.av-reward-stars { display: inline-flex; gap: 4px; }
+.av-reward-stars i { font-style: normal; font-size: 30px; line-height: 1; color: rgba(27, 16, 56, 0.22); }
+.av-reward-stars i[data-on] { color: var(--av-gold); text-shadow: 0 2px 0 #b9791a, 0 0 14px rgba(251, 191, 36, 0.8); animation: av-star 0.55s var(--av-spring) both; }
+.av-reward-num { font-weight: 900; font-size: 15px; color: var(--av-p800); letter-spacing: 0.04em; } .av-reward-num b { font-size: 34px; color: var(--av-p700); margin-inline-end: 4px; }
+.av-reward-gem { font-size: 26px; color: var(--av-teal); text-shadow: 0 0 12px rgba(20, 184, 166, 0.8); animation: av-star 0.6s var(--av-spring) 0.5s both; }
+
+/* ---------- 1. SORT: crates and a dealt paper card (drag it or tap a crate) ---------- */
+.av-sort-hud { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: center; }
+.av-title-pill { background: var(--av-p700); color: #fff; }
+.av-sort-board { width: min(820px, 100%); flex: 0 1 auto; min-height: 0; max-height: 380px; align-self: center; margin-block: auto; display: grid; grid-template-columns: 1fr 1.3fr 1fr; grid-template-areas: 'a card b'; gap: 16px; align-items: stretch; }
+.av-bin:nth-of-type(1) { grid-area: a; } .av-bin:nth-of-type(2) { grid-area: b; } .av-card-slot { grid-area: card; }
+.av-bin { position: relative; overflow: hidden; border-radius: 22px; border: 3px solid rgba(255, 255, 255, 0.95); background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(250, 246, 255, 0.86)); display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 0 10px 12px; font: 900 14px inherit; font-family: inherit; color: var(--av-ink); cursor: pointer; box-shadow: inset 0 10px 22px rgba(40, 25, 90, 0.1), 0 6px 0 rgba(106, 69, 212, 0.22), 0 14px 26px rgba(40, 25, 90, 0.2); transition: transform 0.22s var(--av-spring), box-shadow 0.2s; min-height: 120px; }
+.av-bin:hover:not(:disabled), .av-bin[data-hover] { transform: translateY(-3px) scale(1.03); box-shadow: inset 0 10px 22px rgba(40, 25, 90, 0.1), 0 0 0 4px var(--av-gold), 0 0 26px rgba(251, 191, 36, 0.7), 0 14px 26px rgba(40, 25, 90, 0.2); }
+.av-bin:disabled { cursor: default; }
+.av-bin h4 { margin: 0 -10px; align-self: stretch; text-align: center; color: #fff; padding: 9px 12px; font-size: clamp(14px, 2.2cqw, 22px); letter-spacing: 0.06em; background: linear-gradient(180deg, var(--av-p500), var(--av-p700)); box-shadow: 0 3px 0 rgba(0, 0, 0, 0.12); }
+.av-bin[data-k='1'] h4 { background: linear-gradient(180deg, #2fc9b8, #0e8f82); }
+.av-bin small { font-weight: 800; text-align: center; font-size: 12px; color: var(--av-ink-soft); }
+.av-bin-count { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; margin-top: auto; }
+.av-bin-count i { font-style: normal; background: #fff; border-radius: 9px; padding: 3px 9px; font-size: 11px; font-weight: 800; box-shadow: 0 2px 0 var(--av-p200), 0 4px 8px rgba(40, 25, 90, 0.12); transform: rotate(var(--tilt)); animation: av-chip-in 0.4s var(--av-spring) both; }
+.av-bin-flash { position: absolute; inset: 0; border-radius: inherit; pointer-events: none; animation: av-binflash 0.7s var(--av-out) both; }
+.av-bin-flash[data-kind='hit'] { box-shadow: inset 0 0 0 4px var(--av-teal), inset 0 0 34px rgba(20, 184, 166, 0.65); }
+.av-bin-flash[data-kind='miss'] { box-shadow: inset 0 0 0 3px #f2b05e, inset 0 0 26px rgba(242, 176, 94, 0.5); }
+.av-card-slot { position: relative; display: grid; place-items: center; min-width: 0; }
+.av-card-wrap { position: relative; width: 100%; }
+.av-pile { position: absolute; inset: 0 4%; border-radius: 22px; background: var(--av-paper); border: 3px solid var(--av-p200); box-shadow: 0 6px 12px rgba(40, 25, 90, 0.14); transform: translateY(calc(var(--k) * 7px)) rotate(calc(var(--k) * 1.8deg - 2.6deg)) scale(calc(1 - var(--k) * 0.02)); z-index: 0; }
+.av-card-now { position: relative; z-index: 1; width: 100%; background: linear-gradient(180deg, #fffefa, var(--av-paper)); border: 4px solid var(--av-p300); border-radius: 22px; padding: 18px 16px; text-align: center; font-weight: 800; font-size: clamp(15px, 2.6cqw, 24px); box-shadow: 0 7px 0 var(--av-p300), 0 20px 30px rgba(40, 25, 90, 0.25); display: grid; gap: 8px; justify-items: center; align-content: center; min-height: 150px; animation: av-deal 0.5s var(--av-spring) both; touch-action: none; user-select: none; -webkit-user-select: none; transition: transform 0.32s var(--av-spring), border-color 0.2s, background 0.2s; }
+.av-card-now[data-phase='play'] { cursor: grab; }
+.av-card-now[data-drag='true'] { cursor: grabbing; animation: none; transition: none; z-index: 5; box-shadow: 0 16px 0 var(--av-p300), 0 34px 44px rgba(40, 25, 90, 0.35); border-color: var(--av-gold); }
+.av-card-now[data-fb='hit'] { border-color: var(--av-sage); } .av-card-now[data-fb='miss'] { border-color: #f2b05e; }
+.av-card-now p { margin: 0; } .av-card-now small { font-weight: 700; color: var(--av-ink-soft); } .av-hintline { background: #fff6ea; border-radius: 10px; padding: 3px 10px; animation: av-rise-sm 0.3s var(--av-out) both; }
+.av-card-art { max-height: 18cqh; max-width: 100%; object-fit: contain; filter: drop-shadow(0 6px 8px rgba(40, 25, 90, 0.25)); }
+@container (max-width: 640px) {
+  .av-sort-board { grid-template-columns: 1fr 1fr; grid-template-areas: 'card card' 'a b'; grid-template-rows: auto minmax(130px, 200px); gap: 12px; max-height: none; }
+  .av-card-now { min-height: 120px; padding: 12px; font-size: 16px; }
+  .av-bin { min-height: 110px; } .av-bin h4 { font-size: 15px; padding: 7px 8px; }
+}
+
+/* ---------- 2. FORGE: molten molds, ingot tiles, trophies that light up ---------- */
+.av-forge-card { border-top: 6px solid var(--av-gold); background: linear-gradient(180deg, rgba(255, 252, 240, 0.94), rgba(255, 244, 214, 0.84)); }
+.av-forge-slots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.av-forge-slots span { position: relative; border-radius: 16px; border: 3px dashed #d9a649; background: linear-gradient(180deg, #fff9ea, #fdeec6); padding: 10px 6px; text-align: center; display: grid; gap: 2px; box-shadow: inset 0 6px 12px rgba(139, 90, 12, 0.14); transition: background 0.3s, box-shadow 0.3s; }
+.av-forge-slots span[data-next] { border-color: var(--av-gold); animation: av-ping 1.8s ease-in-out infinite; }
+.av-forge-slots small { font-weight: 800; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #8a5a0c; }
+.av-forge-slots b { font-size: clamp(18px, 3.4cqw, 30px); color: #8a5a0c; min-height: 1.2em; }
+.av-forge-slots span[data-on='true'] { border-style: solid; border-color: #d99a22; background: radial-gradient(circle at 50% 30%, #fff6c2, #ffd966 55%, #f2b230); box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.35), 0 0 22px rgba(251, 191, 36, 0.6), inset 0 -6px 10px rgba(185, 121, 26, 0.3); }
+.av-forge-slots span[data-on='true'] b { color: #4a2f06; animation: av-pop-in 0.4s var(--av-spring) both; text-shadow: 0 1px 0 rgba(255, 255, 255, 0.7); }
+.av-forge-trophies { display: flex; gap: 8px; justify-content: center; font-size: 32px; }
+.av-forge-trophies i { font-style: normal; transition: filter 0.4s, transform 0.4s var(--av-spring); filter: grayscale(1) opacity(0.3); transform: scale(0.88); }
+.av-forge-trophies i[data-on='true'] { filter: drop-shadow(0 0 12px rgba(251, 191, 36, 0.95)); transform: scale(1.1); animation: av-trophy 0.9s var(--av-spring) both; }
+.av-ingots { justify-content: center; gap: 10px; }
+.av-ingot { background: linear-gradient(180deg, #fff0b8, #f5c552 55%, #dc9c26); border-color: #b9791a; color: #4a2f06; box-shadow: 0 5px 0 #a8670f, 0 10px 16px rgba(139, 90, 12, 0.25), inset 0 2px 0 rgba(255, 255, 255, 0.7); border-radius: 12px 12px 16px 16px; min-width: 76px; animation: av-pop-in 0.38s var(--av-spring) calc(var(--i) * 70ms) both, av-idle 3.4s ease-in-out calc(0.6s + var(--i) * 0.35s) infinite; }
+.av-ingot:hover:not(:disabled) { border-color: #8a5a0c; background: linear-gradient(180deg, #fff6d2, #ffd266 55%, #e6a62c); }
+.av-ingot[data-state='wrong'] { filter: saturate(0.5); opacity: 0.8; }
+
+/* ---------- 3. BOSS: Break the Clock — the clock cracks, the HP bar loses a chunk, shields break ---------- */
+.av-boss-card { border-top: 6px solid var(--av-coral); }
+.av-boss-arena { display: grid; grid-template-columns: auto 1fr; gap: 16px; align-items: center; }
+.av-clock { position: relative; width: clamp(96px, 15cqw, 150px); aspect-ratio: 1; filter: drop-shadow(0 10px 10px rgba(40, 25, 90, 0.28)); }
+.av-clock-svg { width: 100%; height: 100%; overflow: visible; }
+.av-clock-bezel { fill: #f6c453; stroke: #b9791a; stroke-width: 2.5; } .av-clock-face { fill: #fffbea; stroke: #e5c57a; stroke-width: 1.5; }
+.av-clock-tick { stroke: var(--av-ink); stroke-width: 2.4; stroke-linecap: round; }
+.av-clock-hand-h line, .av-clock-hand-m line { stroke: var(--av-p800); stroke-width: 4; stroke-linecap: round; } .av-clock-hand-m line { stroke: var(--av-coral); stroke-width: 3; }
+.av-clock-hand-h, .av-clock-hand-m { transform-box: view-box; transform-origin: 60px 60px; }
+.av-clock-hand-m { animation: av-hand 9s linear infinite; } .av-clock-hand-h { animation: av-hand 90s linear infinite; }
+.av-clock[data-hit] .av-clock-hand-m { animation: av-hand-spin 0.7s var(--av-out); }
+.av-clock-pin { fill: var(--av-p800); }
+.av-clock-cracks path { fill: none; stroke: #5a3a10; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 100; animation: av-draw 0.5s var(--av-out) both; }
+.av-clock[data-broken] .av-clock-svg { filter: grayscale(0.55) brightness(0.97); } .av-clock[data-broken] .av-clock-hand-m, .av-clock[data-broken] .av-clock-hand-h { animation: none; }
+.av-shards { position: absolute; inset: 0; pointer-events: none; }
+.av-shards i { position: absolute; left: calc(50% - 8px); top: calc(50% - 10px); width: 16px; height: 22px; background: linear-gradient(135deg, #ffe28a, #d99a22); clip-path: polygon(50% 0, 100% 100%, 0 100%); animation: av-shard 0.95s cubic-bezier(0.1, 0.7, 0.3, 1) forwards; }
+.av-boss-hp { position: relative; display: grid; gap: 6px; border-radius: 16px; background: #fff7f4; border: 3px solid var(--av-ink); padding: 6px 10px 8px; box-shadow: 3px 3px 0 var(--av-ink); }
+.av-boss-hp > span { font-weight: 900; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: #8a3a2c; }
+.av-hp-segs { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 4px; height: 20px; }
+.av-hp-segs i { border-radius: 7px; background: rgba(27, 16, 56, 0.1); box-shadow: inset 0 2px 3px rgba(27, 16, 56, 0.18); }
+.av-hp-segs i[data-on] { background: linear-gradient(180deg, #f9a08e, var(--av-coral) 60%, #d85a45); box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.55); }
+.av-hp-segs i[data-last]:not([data-on]) { background: linear-gradient(180deg, #fff, #ffd8cf); animation: av-ghost 0.8s var(--av-out) forwards; }
+.av-attacks, .av-lettered, .av-wheel { counter-reset: opt; }
+.av-attacks .av-opt, .av-lettered .av-opt, .av-wheel .av-opt { display: flex; align-items: center; gap: 10px; text-align: start; animation: av-pop-in 0.34s var(--av-spring) calc(var(--i, 0) * 70ms) both; }
+.av-attacks .av-opt::before, .av-lettered .av-opt::before, .av-wheel .av-opt::before { counter-increment: opt; content: counter(opt, upper-alpha); flex: none; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 9px; background: var(--av-p500); color: #fff; font-size: 14px; box-shadow: 0 2px 0 var(--av-p800); }
+.av-attacks .av-opt::before { background: var(--av-coral); box-shadow: 0 2px 0 #b3503e; }
+.av-attacks .av-opt[data-state='right']::before, .av-lettered .av-opt[data-state='right']::before, .av-wheel .av-opt[data-state='right']::before { background: var(--av-sage); content: '✓'; box-shadow: 0 2px 0 #2f7a5e; }
+@container (max-width: 560px) { .av-boss-arena { grid-template-columns: 1fr; justify-items: center; } .av-boss-hp { width: 100%; } .av-clock { width: 88px; } }
+
+/* ---------- 4. RAPPORT: a conversation with a glowing aura, a speech bubble and a dialogue wheel ---------- */
+.av-rapport-card { border-top: 6px solid var(--av-teal); }
+.av-rapport .av-cast::before { content: ''; position: absolute; inset: -4% -22% 8%; border-radius: 50%; z-index: -2; background: radial-gradient(circle, rgba(20, 184, 166, calc(0.1 + var(--rp, 0) * 0.5)), transparent 66%); transition: background 0.8s var(--av-out); }
+.av-rapport-bar { background: var(--av-p50); border-color: var(--av-p300); box-shadow: none; padding: 4px 10px 6px; }
+.av-rapport-bar > span { color: var(--av-p700); }
+.av-orbs { display: flex; gap: 8px; }
+.av-orbs i { width: 22px; height: 22px; border-radius: 50%; border: 2.5px solid var(--av-p300); background: linear-gradient(to top, var(--av-teal) calc(var(--f, 0) * 100%), var(--av-p100) 0); transition: box-shadow 0.4s, background 0.4s; }
+.av-orbs i[data-on] { border-color: #0e8f82; box-shadow: 0 0 12px rgba(20, 184, 166, 0.85); }
+.av-bubble { position: relative; background: #fff; border: 3px solid var(--av-p300); border-radius: 20px; padding: 10px 16px; box-shadow: 0 5px 0 var(--av-p200), 0 12px 20px rgba(40, 25, 90, 0.14); animation: av-pop-in 0.36s var(--av-spring) both; transform-origin: 0 50%; }
+.av-bubble::before { content: ''; position: absolute; left: -15px; top: 50%; margin-top: -10px; border: solid transparent; border-width: 10px 15px 10px 0; border-right-color: var(--av-p300); }
+.av-bubble::after { content: ''; position: absolute; left: -9px; top: 50%; margin-top: -7px; border: solid transparent; border-width: 7px 11px 7px 0; border-right-color: #fff; }
+.av-bubble .av-q { animation: none; }
+.av-wheel { display: grid; }
+.av-wheel[data-picked] .av-opt:not([data-chosen]) { opacity: 0.35; transform: scale(0.97); box-shadow: none; }
+.av-wheel .av-opt[data-chosen] { transform: translateY(-4px) scale(1.02); }
+@container (max-width: 880px) { .av-bubble::before, .av-bubble::after { display: none; } }
+
+/* ---------- 5. CHOICE: a case-file card, lettered answers, a paper passage ---------- */
+.av-choice-card { border-top: 6px solid var(--av-p400); }
+.av-choice .av-passage { position: relative; background: linear-gradient(180deg, #fffefa, var(--av-paper)); border: 2px solid var(--av-p200); border-inline-start: 6px solid var(--av-p400); border-radius: 6px 14px 14px 6px; box-shadow: 0 4px 0 var(--av-p200), 0 10px 16px rgba(40, 25, 90, 0.12); transform: rotate(-0.4deg); }
+
+/* ---------- 6. MATCH: connect the pairs with an ink line that draws itself ---------- */
+.av-match-card { border-top: 6px solid var(--av-gold); }
+.av-match-cols { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 14px clamp(36px, 9cqw, 90px); }
+.av-match-cols > div { display: grid; gap: 10px; align-content: start; position: relative; z-index: 2; }
+.av-match-lines { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; z-index: 1; }
+.av-match-lines path { fill: none; stroke: var(--hc, var(--av-p500)); stroke-width: 5; stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 0; animation: av-draw 0.55s var(--av-out) both; filter: drop-shadow(0 2px 2px rgba(40, 25, 90, 0.25)); }
+.av-pairchip { position: relative; justify-content: center; min-height: 52px; animation: av-pop-in 0.34s var(--av-spring) calc(var(--i, 0) * 60ms) both; }
+.av-pairchip[data-state='pick'] { transform: translateY(-3px) scale(1.03); border-color: var(--av-gold); background: linear-gradient(180deg, #fffbe6, #ffeaa3); box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.4), 0 6px 0 #d99a22, 0 14px 20px rgba(40, 25, 90, 0.18); }
+.av-pairchip:disabled { opacity: 1; cursor: default; }
+.av-pairchip[data-h='0'], .av-match-lines path[data-h='0'] { --hc: var(--av-p500); --hb: var(--av-p100); } .av-pairchip[data-h='1'], .av-match-lines path[data-h='1'] { --hc: #0e8f82; --hb: #c9f3ec; }
+.av-pairchip[data-h='2'], .av-match-lines path[data-h='2'] { --hc: #d99a22; --hb: #ffeaa3; } .av-pairchip[data-h='3'], .av-match-lines path[data-h='3'] { --hc: #d8604c; --hb: #ffdad2; } .av-pairchip[data-h='4'], .av-match-lines path[data-h='4'] { --hc: #3f8f6e; --hb: #d4f0e3; }
+.av-pairchip[data-h][data-state='right'] { background: linear-gradient(180deg, #fff, var(--hb)); border-color: var(--hc); color: var(--av-ink); box-shadow: 0 4px 0 var(--hc), 0 0 0 3px color-mix(in srgb, var(--hc) 25%, transparent); }
+
+/* ---------- 7. MEMORY: cards that flip in 3D ---------- */
+.av-memory-card { border-top: 6px solid var(--av-p500); }
+.av-memory-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); gap: 10px; min-width: 0; }
+.av-mem { position: relative; aspect-ratio: 1.25; min-width: 0; max-height: 24cqh; padding: 0; border: 0; background: none; cursor: pointer; perspective: 700px; font-family: inherit; animation: av-pop-in 0.36s var(--av-spring) calc(var(--i, 0) * 45ms) both; }
+.av-mem-in { position: absolute; inset: 0; transform-style: preserve-3d; transition: transform 0.55s var(--av-spring); }
+.av-mem[data-up] .av-mem-in { transform: rotateY(180deg); }
+.av-mem-back, .av-mem-front { position: absolute; inset: 0; border-radius: 16px; display: grid; place-items: center; padding: 4px; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.av-mem-back { background: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.12) 0 8px, transparent 8px 16px), linear-gradient(160deg, var(--av-p400), var(--av-p600)); border: 3px solid var(--av-p300); box-shadow: 0 5px 0 var(--av-p700), 0 10px 14px rgba(40, 25, 90, 0.25); }
+.av-mem-back::after { content: 'A'; font: 900 clamp(22px, 4cqw, 34px) inherit; font-family: Georgia, serif; color: rgba(255, 255, 255, 0.85); text-shadow: 0 2px 0 rgba(54, 32, 124, 0.5); }
+.av-mem:hover:not([data-up]) .av-mem-in { transform: translateY(-3px) rotateZ(-1deg); }
+.av-mem-front { transform: rotateY(180deg); background: linear-gradient(180deg, #fff, var(--av-p50)); border: 3px solid var(--av-p500); box-shadow: 0 5px 0 var(--av-p300), 0 10px 14px rgba(40, 25, 90, 0.18); color: var(--av-p800); font-weight: 900; font-size: clamp(12px, 2.2cqw, 18px); }
+.av-mem[data-done] .av-mem-front { background: linear-gradient(180deg, #f1fcf8, var(--av-mint)); border-color: var(--av-sage); box-shadow: 0 5px 0 #9bd6c0, 0 0 0 4px rgba(20, 184, 166, 0.25), 0 0 20px rgba(20, 184, 166, 0.45); }
+.av-mem-front img { max-width: 100%; max-height: 100%; object-fit: contain; filter: drop-shadow(0 3px 4px rgba(40, 25, 90, 0.25)); }
+
+/* ---------- 8. BUILD: puzzle pieces snap onto a wooden rail ---------- */
+.av-build-card { border-top: 6px solid var(--av-sage); }
+.av-slots { margin: 0; display: flex; flex-wrap: wrap; gap: 8px; padding: 12px; border-radius: 16px; background: linear-gradient(180deg, #f3e3c6, #e9d3b0); box-shadow: inset 0 5px 10px rgba(110, 70, 20, 0.25), 0 2px 0 #fff; transition: box-shadow 0.4s, background 0.4s; }
+.av-slots span { min-width: 56px; min-height: 46px; border-radius: 12px; border: 3px dashed rgba(110, 70, 20, 0.4); background: rgba(255, 255, 255, 0.3); padding: 8px 12px; font-weight: 900; text-align: center; color: #4a2f12; }
+.av-slots span[data-next] { border-color: var(--av-gold); background: rgba(255, 245, 205, 0.7); animation: av-ping 1.8s ease-in-out infinite; }
+.av-slots span[data-on='true'] { border-style: solid; border-color: #c99a55; background: linear-gradient(180deg, #fff7e4, #f1dcb4); box-shadow: 0 3px 0 #b98440; }
+.av-slots[data-done] { background: linear-gradient(180deg, #e3f6ee, #bfe9d6); box-shadow: inset 0 5px 10px rgba(30, 120, 80, 0.2), 0 0 24px rgba(20, 184, 166, 0.55); }
+.av-slots[data-done] span[data-on='true'] { border-color: var(--av-sage); background: #fff; }
+.av-puzzle { justify-content: center; gap: 10px; }
+.av-piece { position: relative; background: linear-gradient(180deg, #fff7e4, #f1dcb4); border-color: #c99a55; color: #4a2f12; box-shadow: 0 5px 0 #b98440, 0 10px 14px rgba(110, 70, 20, 0.25); transform: rotate(var(--tilt, 0deg)); animation: av-pop-in 0.36s var(--av-spring) calc(var(--i) * 60ms) both, av-idle 3.4s ease-in-out calc(0.6s + var(--i) * 0.3s) infinite; }
+.av-piece::after { content: ''; position: absolute; right: -8px; top: 50%; width: 12px; height: 12px; margin-top: -6px; border-radius: 50%; background: #f1dcb4; border: 3px solid #c99a55; border-left-color: transparent; }
+.av-piece:hover:not(:disabled) { border-color: #a87534; background: linear-gradient(180deg, #fffaf0, #f6e3bf); }
+.av-piece[data-state='right'] { opacity: 0.22; transform: scale(0.9); box-shadow: none; animation: none; }
+.av-piece[data-state='wrong'] { background: linear-gradient(180deg, #fff6ea, #fbe3c0); border-color: #f2b05e; }
+
+/* ---------- 9. TEACH: collectible Word Cards ---------- */
+.av-teach-card { border-top: 6px solid var(--av-p500); }
+.av-deck i { width: 15px; height: 21px; border-radius: 4px; background: rgba(255, 255, 255, 0.8); box-shadow: inset 0 0 0 2px var(--av-p300); transition: transform 0.3s var(--av-spring); }
+.av-deck i[data-on] { background: linear-gradient(160deg, #fff3b0, var(--av-gold) 60%, #d99a22); box-shadow: 0 0 8px rgba(251, 191, 36, 0.8); transform: rotate(-6deg) scale(1.1); }
+.av-wordcard-stack { position: relative; padding: 4px 6px 14px; }
+.av-wc-under { position: absolute; inset: 14px 14px 0; border-radius: 22px; background: var(--av-paper); border: 3px solid var(--av-p200); box-shadow: 0 6px 12px rgba(40, 25, 90, 0.14); }
+.av-wc-under[data-k='1'] { transform: rotate(1.6deg) translateY(5px); } .av-wc-under[data-k='2'] { transform: rotate(-2deg) translateY(9px); }
+.av-teach-body { display: grid; grid-template-columns: minmax(110px, 190px) 1fr; gap: 16px; align-items: center; }
+.av-wordcard { position: relative; overflow: hidden; background: linear-gradient(160deg, #fffefa, #f4edff 70%, #e9f8f4); border: 4px solid var(--av-p300); border-radius: 22px; padding: 16px; box-shadow: 0 6px 0 var(--av-p300), 0 16px 26px rgba(40, 25, 90, 0.22); animation: av-card-in 0.5s var(--av-spring) both; }
+.av-wordcard::after { content: ''; position: absolute; inset: 0; background: linear-gradient(115deg, transparent 38%, rgba(255, 255, 255, 0.55) 48%, transparent 58%); background-size: 260% 100%; animation: av-sheen 5s ease-in-out 0.8s infinite; pointer-events: none; }
+.av-wordcard img { width: 100%; max-height: 28cqh; object-fit: contain; filter: drop-shadow(0 8px 8px rgba(40, 25, 90, 0.28)); animation: av-idle 3.6s ease-in-out infinite; }
+.av-teach-word { margin: 0; font-size: clamp(22px, 4.4cqw, 38px); font-weight: 900; color: var(--av-p700); } .av-teach-mean { margin: 4px 0; font-weight: 700; } .av-teach-ex { margin: 0; font-style: italic; color: var(--av-p800); background: var(--av-cream); border-radius: 10px; padding: 4px 10px; width: fit-content; }
+@container (max-width: 560px) { .av-teach-body { grid-template-columns: 90px 1fr; gap: 10px; } .av-wordcard img { max-height: 16cqh; } }
+
+/* ---------- 10. WRITE: a notebook page, ink ticks ---------- */
+.av-write-card { border-top: 6px solid var(--av-p400); background: linear-gradient(180deg, rgba(255, 254, 250, 0.95), rgba(255, 251, 236, 0.88)); }
+.av-write-row { position: relative; display: grid; grid-template-columns: 1fr auto; gap: 6px 10px; align-items: end; padding: 8px 10px; border-radius: 14px; background: repeating-linear-gradient(180deg, transparent 0 27px, rgba(129, 97, 230, 0.12) 27px 28px); }
+.av-write-row label { display: grid; gap: 3px; font-weight: 800; font-size: 13px; color: var(--av-p700); } .av-write-row label small { font-weight: 700; opacity: 0.7; }
+.av-write-row input { font: 700 clamp(14px, 2.2cqw, 18px) inherit; font-family: inherit; border: 0; border-bottom: 3px solid var(--av-p300); border-radius: 10px 10px 0 0; padding: 10px 12px; background: rgba(255, 255, 255, 0.9); color: var(--av-ink); min-height: 44px; box-shadow: 0 3px 8px rgba(40, 25, 90, 0.08); transition: border-color 0.2s, box-shadow 0.2s; }
+.av-write-row input:focus { outline: none; border-bottom-color: var(--av-p500); box-shadow: 0 4px 0 -1px var(--av-p300), 0 6px 14px rgba(129, 97, 230, 0.2); }
+.av-write-row[data-ok] input { background: var(--av-mint); border-bottom-color: var(--av-sage); } .av-write-row .av-note { grid-column: 1 / -1; margin: 0; background: #fff6ea; border-radius: 10px; padding: 4px 10px; color: #7a4a14; animation: av-rise-sm 0.3s var(--av-out) both; }
+.av-tick { width: 36px; height: 36px; fill: none; stroke: var(--av-sage); stroke-width: 3.6; stroke-linecap: round; stroke-linejoin: round; } .av-tick path { stroke-dasharray: 100; animation: av-draw 0.5s var(--av-out) both; }
+.av-ok { color: var(--av-sage); font-weight: 900; font-size: 24px; grid-row: 1; grid-column: 2; }
+
+/* ---------- keyframes (transform + opacity only) ---------- */
+@keyframes av-rise { from { transform: translateY(18px) scale(0.97); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes av-rise-sm { from { transform: translateY(8px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes av-pop-in { 0% { transform: scale(0.75); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+@keyframes av-deal { 0% { transform: translateY(-46px) rotate(-7deg) scale(0.82); opacity: 0; } 100% { transform: none; opacity: 1; } }
+@keyframes av-card-in { 0% { transform: translateX(46px) rotate(5deg) scale(0.9); opacity: 0; } 100% { transform: none; opacity: 1; } }
+@keyframes av-chip-in { 0% { transform: translateY(-14px) scale(0.5) rotate(var(--tilt)); opacity: 0; } 100% { transform: rotate(var(--tilt)); opacity: 1; } }
+@keyframes av-idle { 0%, 100% { transform: translateY(0) rotate(var(--tilt, 0deg)); } 50% { transform: translateY(-4px) rotate(calc(var(--tilt, 0deg) + 1deg)); } }
+@keyframes av-breathe { 0%, 100% { transform: scale(1, 1); } 50% { transform: scale(1.012, 1.03); } }
+@keyframes av-cheer { 0% { transform: scale(1.04, 0.9); } 22% { transform: translateY(-5%) scale(0.96, 1.07); } 46% { transform: translateY(-9%) scale(1, 1); } 72% { transform: scale(1.05, 0.93); } 100% { transform: none; } }
+@keyframes av-flinch { 0% { transform: none; } 20% { transform: translateX(-3%) rotate(-2.5deg) scale(0.98, 1.02); } 50% { transform: translateX(2%) rotate(1.5deg); } 100% { transform: none; } }
+@keyframes av-nod { 0%, 100% { transform: none; } 40% { transform: translateY(2.5%) scale(1.01, 0.98); } }
+@keyframes av-badge-hop { 0% { transform: scale(0.9); } 40% { transform: translateY(-7px) scale(1.06); } 100% { transform: none; } }
+@keyframes av-badge-wobble { 0%, 100% { transform: none; } 25% { transform: rotate(-6deg); } 60% { transform: rotate(4deg); } }
+@keyframes av-ping { 0%, 100% { box-shadow: 0 0 0 0 rgba(251, 191, 36, 0.5); } 50% { box-shadow: 0 0 0 7px rgba(251, 191, 36, 0); } }
+@keyframes av-binflash { 0% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes av-draw { from { stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }
+@keyframes av-hand { to { transform: rotate(360deg); } }
+@keyframes av-hand-spin { from { transform: rotate(0); } to { transform: rotate(720deg); } }
+@keyframes av-shard { 0% { transform: rotate(var(--a)) translateY(0) rotate(0); opacity: 1; } 100% { transform: rotate(var(--a)) translateY(-84px) rotate(260deg); opacity: 0; } }
+@keyframes av-ghost { 0% { opacity: 1; transform: scaleY(1.4); } 100% { opacity: 0; transform: scaleY(0.4); } }
+@keyframes av-trophy { 0% { transform: scale(0.6) rotate(-12deg); } 50% { transform: scale(1.35) rotate(6deg); } 100% { transform: scale(1.1); } }
+@keyframes av-star { 0% { transform: scale(0) rotate(-40deg); } 60% { transform: scale(1.4) rotate(8deg); } 100% { transform: scale(1); } }
+@keyframes av-sheen { 0% { background-position: 130% 0; } 40%, 100% { background-position: -80% 0; } }

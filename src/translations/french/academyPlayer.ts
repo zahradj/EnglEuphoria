@@ -40,4 +40,8 @@ export const academyPlayerTranslations = {
   "ap.teachBack": "Dis la règle avec tes mots",
   "ap.sortTip": "Touche une carte, puis la bonne boîte",
   "ap.check": "Vérifier",
+  "ap.xpUnit": "XP",
+  "ap.dragTip": "Fais glisser la carte vers une boîte, ou touche une boîte",
+  "ap.wordCards": "Cartes de mots",
+  "ap.shields": "Boucliers",
 };

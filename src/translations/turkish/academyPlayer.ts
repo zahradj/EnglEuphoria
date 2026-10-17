@@ -40,4 +40,8 @@ export const academyPlayerTranslations = {
   "ap.teachBack": "Kuralı kendi sözlerinle söyle",
   "ap.sortTip": "Bir karta, sonra doğru kutuya dokun",
   "ap.check": "Kontrol et",
+  "ap.xpUnit": "XP",
+  "ap.dragTip": "Kartı bir kutuya sürükle ya da bir kutuya dokun",
+  "ap.wordCards": "Kelime Kartları",
+  "ap.shields": "Kalkanlar",
 };
