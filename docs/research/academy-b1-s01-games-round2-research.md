@@ -51,3 +51,20 @@ No-penalty feedback with an explanation, three-slot confirmation inside the inte
 | C5 five own sentences | *My Case File + Bluff Round* (Two Truths and a Lie) | writes 5 sentences (4 true, 1 bluff) with a live pattern checker, records them; the teacher asks "Have you ever…?" then "When did you…?" and guesses the bluff | `write` + `speak` (+ checker) |
 
 Lesson 3's agent also notes: error hunts must end with the student fixing the sentence; keep a private "how sure?" tick instead of wagering; and check the Oxford *been and gone* page before the rule text ships. Waiting on the per-criterion lists for lessons 1 and 2.
+
+## Lesson 2, per criterion (agent report; all UNVERIFIED snippets)
+| Criterion | Game (borrows) | What the student does | Scene kind |
+|---|---|---|---|
+| C1 eight feeling words, "I felt … because …" | *Diary Desk* (Papers, Please) with the -ed / -ing rulebook | approves or flags diary lines, fixes the faulty word, then types their own "I felt … because …" | `inspect` |
+| C1 | *Feeling Forge* (crafting) | pairs a feeling with a cause to forge a sentence tile; odd pairs make a "strange tile" with an explanation | `forge`-like new `craft` |
+| C2 destination / attraction / countryside | *Photo Safari* (Pokemon Snap star criteria, private stars) | frames the right kind of place, picks the caption word, adds a detail; stars for right word, grammar, detail | new `safari` |
+| C3 chunks | *Torn Tickets* (Unpacking-style placement) | predicts, then joins ticket halves (go + camping); wrong halves ("do camping") will not snap; uses the chunk in a trip sentence | new `tickets` (or `workshop`) |
+| C3 | *Group Chat Reply* (Quiplash prompt, no voting) | types one reply with a chunk; inflected forms accepted | `write` |
+| C4 describe a postcard | *Postcard Dead Drop* (Codenames + Taboo forbidden words) | builds a clue with at least three new words (counter 0/3) so the partner finds one of six postcards; the game says what the clue did not tell apart | `finder` |
+| C4 | *Twenty Postcards* (Guess Who) | asks yes/no questions from chips to find a secret postcard | `interview`-like |
+| C5 voice note | *Voice Bundle* (Stardew bundle checklist) | picks five or more words, records, replays and ticks the words heard; the teacher marks it | `speak` + checklist |
+| C5 | *Stress Beat* (rhythm lane) | taps the stressed syllable of embARRassed, DEStination… | `beats` |
+Own design notes: error return queue (Quizlet-style states) and predict-before-reveal (Memrise) as supporting rules; distractors like "do camping" / "make sightseeing" because collocations without an L1 match are hard (snippet source, Newcastle thesis).
+
+## Lesson 1, per criterion
+The Lesson 1 agent reported before the per-criterion message reached it; it proposed *Border Desk* (C4), *The Interview* (C5), *Timeline Switchboard* (C4) and *Participle Cipher* (C3). Criteria 1 (the blog) and 2 (the words) have no game proposal yet: candidates to design from the same mechanics are an *Evidence Ledger* (Obra Dinn batch of three: pick the sentence that proves the main idea, a detail, and what is not said) and *Torn Tickets* for the six bucket-list chunks.
