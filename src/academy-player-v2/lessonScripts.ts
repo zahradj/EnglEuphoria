@@ -7,6 +7,7 @@ const LOADERS: Record<string, () => Promise<LessonScript>> = {
   'B1-S01-E2': () => import('./lessons/b1s01e2').then((m) => m.B1_S01_E2),
   'B1-S01-E3': () => import('./lessons/b1s01e3').then((m) => m.B1_S01_E3),
   'B1-S01-E4': () => import('./lessons/b1s01e4').then((m) => m.B1_S01_E4),
+  // 'B1-S01-E5' is written (lessons/b1s01e5.ts) but registered only when its Canva art, voices and tests are in
 };
 
 export const hasScript = (id: string): boolean => id in LOADERS;

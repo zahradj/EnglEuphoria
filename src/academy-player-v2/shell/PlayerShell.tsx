@@ -7,6 +7,7 @@ import './games.css';
 import './wave1.css';
 import './wave2.css';
 import './onair.css';
+import './gazette.css';
 
 export interface ShellProps {
   meta: LessonMeta;

@@ -26,6 +26,9 @@ import { workshopScene } from './workshop/Workshop';
 import { beatsScene } from './beats/Beats';
 import { switchboardScene } from './switchboard/Switchboard';
 import { onairScene } from './onair/OnAir';
+import { archiveScene } from './archive/Archive';
+import { factcheckScene } from './factcheck/FactCheck';
+import { redpenScene } from './redpen/RedPen';
 
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -56,6 +59,9 @@ export const SCENES: Record<string, SceneModule<any>> = {
   beats: beatsScene,
   switchboard: switchboardScene,
   onair: onairScene,
+  archive: archiveScene,
+  factcheck: factcheckScene,
+  redpen: redpenScene,
 };
 
 export const sceneKinds = () => Object.keys(SCENES);

@@ -32,6 +32,9 @@ const USES: Record<string, Use> = {
   workshop: { who: field('who'), moods: THINK_SET },
   beats: { who: field('who'), moods: THINK_SET },
   switchboard: { who: field('who'), moods: THINK_SET },
+  archive: { who: field('who'), moods: THINK_SET },
+  factcheck: { who: field('who'), moods: THINK_SET },
+  redpen: { who: field('who'), moods: THINK_SET },
   onair: { who: (s) => [String(s.guest)], moods: ['neutral', 'curious', 'happy', 'surprised', 'thinking'] },
 };
 
