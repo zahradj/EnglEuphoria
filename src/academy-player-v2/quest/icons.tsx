@@ -1,3 +1,5 @@
+/** @jsxRuntime automatic */
+/** @jsxImportSource react */
 // Small line icons for the quest layer (one family, 24px grid, currentColor). Decorative: aria-hidden; the buttons that use them carry their own label.
 import type { ReactElement } from 'react';
 
