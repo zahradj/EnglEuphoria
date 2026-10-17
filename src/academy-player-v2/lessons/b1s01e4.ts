@@ -14,7 +14,6 @@ import type { WriteScene } from '../scenes/write/Write';
 import type { MatchScene } from '../scenes/match/Match';
 import type { MemoryScene } from '../scenes/memory/Memory';
 import type { TeachScene } from '../scenes/teach/Teach';
-import type { BossScene } from '../scenes/boss/Boss';
 import type { WrapScene } from '../scenes/wrap/Wrap';
 import type { LobbyScene } from '../scenes/lobby/Lobby';
 import type { OnAirScene } from '../scenes/onair/OnAir';
@@ -52,17 +51,17 @@ const scenes: Scene[] = [
     { step: 'free', prompt: 'Imagine a live radio show where the guest only says Yes and No. What happens to the show? Say one sentence.' },
   ] } satisfies SpeakScene,
   { id: 'story-fm', part: 2, kind: 'comic', plate: BOOTH, trains: [1, 2], title: 'Dead Air', beats: [
-    { plate: 'story-b1s4-1', caption: 'Friday, lunchtime. Vee hands the host chair to a new host: you.', spots: { Vee: { x: 50, y: 6, w: 28 } }, heads: { Vee: { x: 24, y: 14 } }, lines: [
+    { plate: 'story-b1s4-1', caption: 'Friday, lunchtime. Vee hands the host chair to a new host: you.', spots: { Vee: { x: 30, y: 20, w: 34 } }, heads: { Vee: { x: 73, y: 14 } }, lines: [
       { who: 'Vee', text: 'Welcome to Club FM, live on Friday! Today you are the host.', shout: true, sfx: 'LIVE!' },
       { who: 'Vee', text: 'Our guest is shy, so ask good questions. A good host makes a quiet guest talk.' },
     ] },
-    { plate: 'story-b1s4-2', caption: 'Mia is the guest. She answers every question with one word.', spots: { Mia: { x: 2, y: 8, w: 30 } }, heads: { Mia: { x: 66, y: 24 } }, lines: [
+    { plate: 'story-b1s4-2', caption: 'Mia is the guest. She answers every question with one word.', spots: { Mia: { x: 58, y: 6, w: 36 }, Vee: { x: 58, y: 46, w: 36 } }, heads: { Mia: { x: 33, y: 27 } }, lines: [
       { who: 'Vee', text: 'Mia, have you ever been to Japan?' },
       { who: 'Mia', text: 'Yes.' },
       { who: 'Vee', text: 'Hmm. And what did you do there?' },
       { who: 'Mia', text: 'Nothing.', sfx: 'Hmm…' },
     ] },
-    { plate: 'story-b1s4-3', caption: 'Silence on the radio is called dead air. Vee needs the host to save the show.', spots: { Vee: { x: 50, y: 6, w: 28 } }, heads: { Vee: { x: 24, y: 14 } }, lines: [
+    { plate: 'story-b1s4-3', caption: 'Silence on the radio is called dead air. Vee needs the host to save the show.', spots: { Vee: { x: 27, y: 20, w: 34 } }, heads: { Vee: { x: 71, y: 16 } }, lines: [
       { who: 'Vee', text: 'Dead air! Quick, say something. React, and ask about the detail!', shout: true, sfx: 'DEAD AIR!' },
     ] },
   ] } satisfies ComicScene,
@@ -114,6 +113,18 @@ const scenes: Scene[] = [
     { left: 'What was it like?', right: 'asks for a description' }, { left: 'When did you go?', right: 'asks for the time' },
     { left: 'Who did you go with?', right: 'asks about the people' }, { left: 'How did you feel?', right: 'asks for a feeling' },
   ] } satisfies MatchScene,
+  { id: 'jobs-sort', part: 3, kind: 'sort', plate: BOOTH, trains: [1, 2, 3], title: 'The three jobs of a host', prompt: 'Is it a REACTION, a QUESTION about the detail, or a SHARE? Sort the lines into the three jobs.', bins: [
+    { id: 'react', label: 'REACT', note: 'shows interest' }, { id: 'ask', label: 'ASK', note: 'about the detail' }, { id: 'share', label: 'SHARE', note: 'your own experience' },
+  ], items: [
+    { id: 'j1', text: 'Really?', bin: 'react', hint: 'A short reaction that shows surprise.' },
+    { id: 'j2', text: 'When did you go?', bin: 'ask', hint: 'A question about the time of one trip.' },
+    { id: 'j3', text: 'Me too!', bin: 'share', hint: 'It is the same for me: sharing.' },
+    { id: 'j4', text: 'That sounds amazing!', bin: 'react', hint: 'A reaction to good news.' },
+    { id: 'j5', text: 'What was it like?', bin: 'ask', hint: 'A question that asks for a description.' },
+    { id: 'j6', text: 'I have been to Italy.', bin: 'share', hint: 'Your own experience: sharing.' },
+    { id: 'j7', text: 'No way!', bin: 'react', hint: 'A strong reaction.' },
+    { id: 'j8', text: 'Who did you go with?', bin: 'ask', hint: 'A question about the people.' },
+  ] } satisfies SortScene,
   { id: 'chunk-memory', part: 3, kind: 'memory', plate: BOOTH, trains: [1, 2], title: 'Memory: the host chunks', pairs: [
     { art: 'b4-really', text: 'Really?' }, { art: 'b4-sounds', text: 'That sounds amazing.' }, { art: 'b4-like', text: 'What was it like?' },
     { art: 'b4-when', text: 'When did you go?' }, { art: 'b4-who', text: 'Who did you go with?' }, { art: 'b4-felt', text: 'How did you feel?' },
@@ -125,6 +136,8 @@ const scenes: Scene[] = [
     { q: 'Vee says: “I have been to Rome twice.” Ask about the time of one trip:', options: ['When did you go?', 'When have you gone?', 'When you went?'], answer: 0, why: 'A finished time uses the past simple: When did you go?' },
     { q: 'Mia says: “I have never been camping.” You have not either:', options: ['Me neither.', 'Me too.', 'So do I.'], answer: 0, why: 'After a no sentence we say: Me neither.' },
     { q: 'Theo says: “I won a prize!” Ask about the feeling:', options: ['How did you feel?', 'How do you felt?', 'How you feel?'], answer: 0, why: 'Did and the base verb: How did you feel?' },
+    { q: 'Ava says: “I have been to Egypt.” Ask about the people on the trip:', options: ['Who did you go with?', 'Who have you gone with?', 'Who you went with?'], answer: 0, why: 'A finished trip: Who did you go with?' },
+    { q: 'Mia says: “I have never seen the sea.” Which reaction shows surprise?', options: ['Never? That is surprising!', 'I see.', 'Never see.'], answer: 0, why: 'A reaction with a question mark shows interest.' },
   ] } satisfies ChoiceScene,
   { id: 'forge-ask', part: 3, kind: 'build', plate: BOOTH, trains: [2, 3], title: 'Question Forge', items: [
     { words: ['When', 'did', 'you', 'go'], hint: 'When did you + the base verb.' },
@@ -138,14 +151,40 @@ const scenes: Scene[] = [
     { step: 'repeat', prompt: 'Again, and make the strong part of the word louder: a-MA-zing, in-CRED-i-ble, fan-TAS-tic.', model: 'Amazing. Incredible. Fantastic.' },
   ] } satisfies SpeakScene,
 
-  { id: 'dead-air-boss', part: 4, kind: 'boss', plate: BOOTH, trains: [1, 2, 3], title: 'Beat the Dead Air', boss: 'Dead Air', shields: 3, prompt: 'The silence is growing. Choose the line that keeps the guest talking. Three shields: a dead-end line costs one.', rounds: [
-    { frame: 'Guest: “I went skiing in March.”  You: ___', options: ['Wow! Where did you go?', 'Oh.', 'I have skis.', 'Good.'], answer: 0, why: 'A reaction and a question about the detail keep the guest talking.' },
-    { frame: 'Guest: “I have never ridden a horse.”  You: ___', options: ['Really? Would you like to?', 'OK.', 'Horses are big.', 'I see.'], answer: 0, why: 'Really? shows interest, and a question invites more.' },
-    { frame: 'Guest: “I have been to Brazil twice.”  You: ___', options: ['That sounds amazing! When did you go?', 'When have you gone?', 'Brazil.', 'Nice.'], answer: 0, why: 'React, then ask about the time with the past simple.' },
-    { frame: 'Guest: “I won the school quiz.”  You: ___', options: ['No way! How did you feel?', 'How do you felt?', 'Quiz.', 'Yes.'], answer: 0, why: 'No way! and How did you feel? with did and the base verb.' },
-    { frame: 'Guest: “I have never been camping.”  You: ___', options: ['Me neither, but I would like to.', 'Me too.', 'So am I.', 'Yes.'], answer: 0, why: 'After a no sentence we say Me neither.' },
-    { frame: 'Guest: “I met a famous singer!”  You: ___', options: ['Really? What was she like?', 'What is she like?', 'Who singer?', 'OK.'], answer: 0, why: 'The meeting is finished, so we use was: What was she like?' },
-  ] } satisfies BossScene,
+  { id: 'lightning', part: 4, kind: 'onair', look: 'show', lightning: true, plate: COURTYARD, trains: [1, 2, 3], title: 'Lightning round: beat the dead air', guest: 'Theo', producer: 'Vee',
+    intro: 'Lightning round! Theo says one thing after another. Pick the line that keeps him talking. There is no timer, so take the time you need.',
+    exchanges: [
+      { guest: 'I went skiing in March.', options: [
+        { kind: 'react', fit: 2, text: 'Wow! Where did you go?', reply: 'To the Alps with my cousins. The snow was perfect all week.', note: 'A reaction and a question about the detail keep the guest talking.' },
+        { kind: 'share', fit: 1, text: 'I have never skied.', reply: 'You should try it!', note: 'Sharing is fine. A question would get a longer answer.' },
+        { kind: 'flat', fit: 0, text: 'Oh.', reply: 'Yeah.', note: 'A dead end: one word and no question.' },
+      ] },
+      { guest: 'I have never ridden a horse.', options: [
+        { kind: 'react', fit: 2, text: 'Really? Would you like to?', reply: 'Yes! My aunt has a farm, so maybe this summer, with her.', note: 'Really? shows interest and the question invites more.' },
+        { kind: 'share', fit: 1, text: 'Me neither.', reply: 'Then we are two!', note: 'After a no sentence we say Me neither. Add a question next time.' },
+        { kind: 'flat', fit: 0, text: 'OK.', reply: 'Mm.', note: 'OK. closes the door.' },
+      ] },
+      { guest: 'I have been to Brazil twice.', options: [
+        { kind: 'ask', fit: 2, text: 'That sounds amazing! When did you go?', reply: 'The first time was two years ago, with my whole family.', note: 'React, then ask about the time with the past simple.' },
+        { kind: 'react', fit: 1, text: 'Wow, lucky you!', reply: 'Thanks!', note: 'A nice reaction. A follow-up question gets more.' },
+        { kind: 'flat', fit: 0, text: 'Brazil.', reply: 'Yes.', note: 'Repeating one word is a dead end.' },
+      ] },
+      { guest: 'I won the school quiz.', options: [
+        { kind: 'react', fit: 2, text: 'No way! How did you feel?', reply: 'Surprised! I did not study much, so I was very happy.', note: 'No way! and How did you feel? with did and the base verb.' },
+        { kind: 'react', fit: 1, text: 'Congratulations!', reply: 'Thank you.', note: 'Kind, but it ends the topic. Ask about the feeling.' },
+        { kind: 'flat', fit: 0, text: 'Quiz.', reply: 'Yes.', note: 'One word again. Try a reaction and a question.' },
+      ] },
+      { guest: 'I have never been camping.', options: [
+        { kind: 'share', fit: 2, text: 'Me neither, but I would like to.', reply: 'We could go together one day. There is a lake near my town.', note: 'Me neither and a wish keep the talk warm.' },
+        { kind: 'ask', fit: 1, text: 'Why not?', reply: 'I just never tried.', note: 'A fine question, but the answer is short. Add a reaction.' },
+        { kind: 'flat', fit: 0, text: 'Yes.', reply: 'Mm.', note: 'Yes does not fit a no sentence, and it ends the talk.' },
+      ] },
+      { guest: 'I met a famous singer!', options: [
+        { kind: 'react', fit: 2, text: 'Really? What was she like?', reply: 'Very kind. She talked to us for ten minutes and signed my notebook.', note: 'The meeting is finished, so we use was: What was she like?' },
+        { kind: 'ask', fit: 1, text: 'Who was it?', reply: 'I cannot tell you!', note: 'A good question, but a reaction first is warmer.' },
+        { kind: 'flat', fit: 0, text: 'OK.', reply: 'Yeah.', note: 'A dead end. React and ask.' },
+      ] },
+    ] } satisfies OnAirScene,
 
   { id: 'mission-model', part: 5, kind: 'model', plate: BOOTH, trains: [1, 2, 3, 5], title: 'Watch a live interview', who: 'Vee', steps: [
     { phase: 'iDo', text: 'Listen to the host and the guest. Guest: I have never eaten sushi. Host: No way! Never? Guest: Never. Host: Have you ever been to Japan? Guest: Yes, I have. Host: When did you go? Guest: Last summer. Host: Did you eat sushi there? Guest: Oh. Yes, in Tokyo. Host: Aha! You said never, but you ate it in Tokyo last summer!' },
@@ -219,7 +258,7 @@ export const B1_S01_E4: LessonScript = {
   title: 'Have You Ever...? · On Air',
   criteria: CRITERIA,
   cast: ['Vee', 'Mia', 'Theo'],
-  partMinutes: [3, 5, 12, 17, 4, 10, 5, 4],
+  partMinutes: [3, 5, 9, 20, 4, 10, 5, 4],
   scenes,
   previously: {
     from: 'B1-S01-E3',
@@ -235,7 +274,7 @@ export const B1_S01_E4: LessonScript = {
       { title: 'Remember?', goal: 'Bring back the pattern and the past simple follow-up.' },
       { title: 'Dead Air', goal: 'Hear the story and sort the replies.' },
       { title: 'Host school', goal: 'Learn the three jobs of a host and eight chunks.' },
-      { title: 'Beat the Dead Air', goal: 'Choose the lines that keep the guest talking.' },
+      { title: 'Lightning round', goal: 'Choose the lines that keep the guest talking.' },
       { title: 'Live on air', goal: 'Host the show and catch the lie.' },
       { title: 'Release', goal: 'Write and record your own host lines.' },
       { title: 'Show over', goal: 'Say the three jobs back to unlock your clue.' },

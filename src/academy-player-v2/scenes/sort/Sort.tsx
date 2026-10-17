@@ -105,11 +105,11 @@ function SortView({ scene, onDone, artBase, calm, seed, fx: fxIn }: SceneProps<S
           <span className="av-lives" role="img" aria-label={t('ap.tries', 'Tries')}>{Array.from({ length: g.state.tries }, (_, k) => <i key={k} data-on={k < g.state.triesLeft || undefined} />)}</span>
           <Badge who="Vee" mood={actor.mood} pulse={actor.pulse} react={actor.react} artBase={artBase} />
         </div>
-        <div className="av-sort-board">
+        <div className="av-sort-board" data-bins={scene.bins.length}>
           {scene.bins.map((b, k) => {
             const inside = scene.items.filter((i) => i.bin === b.id && placed.includes(i.id));
             return (
-              <button key={b.id} ref={(el) => { binEls.current[b.id] = el; }} type="button" className="av-bin" data-k={k % 2} data-hover={hover === b.id || undefined} onClick={() => choose(b.id)} disabled={ph.phase !== 'play'}>
+              <button key={b.id} ref={(el) => { binEls.current[b.id] = el; }} type="button" className="av-bin" data-k={scene.bins.length === 3 ? k : k % 2} data-hover={hover === b.id || undefined} onClick={() => choose(b.id)} disabled={ph.phase !== 'play'}>
                 {binPulse?.id === b.id && <i key={binPulse.n} className="av-bin-flash" data-kind={binPulse.kind} />}
                 <h4>{b.label}</h4>{b.note && <small>{b.note}</small>}
                 <span className="av-bin-count">{inside.map((i, n) => <i key={i.id} style={{ ['--tilt' as string]: `${((n * 5) % 7) - 3}deg` }}>{i.text}</i>)}</span>

@@ -1125,6 +1125,10 @@
   },
   {
     "who": "Vee",
+    "text": "Is it a REACTION, a QUESTION about the detail, or a SHARE? Sort the lines into the three jobs."
+  },
+  {
+    "who": "Vee",
     "text": "Mia says: “I have never eaten pizza.” Which reaction shows surprise?"
   },
   {
@@ -1146,6 +1150,14 @@
   {
     "who": "Vee",
     "text": "Theo says: “I won a prize!” Ask about the feeling:"
+  },
+  {
+    "who": "Vee",
+    "text": "Ava says: “I have been to Egypt.” Ask about the people on the trip:"
+  },
+  {
+    "who": "Vee",
+    "text": "Mia says: “I have never seen the sea.” Which reaction shows surprise?"
   },
   {
     "who": "Vee",
@@ -1172,8 +1184,92 @@
     "text": "Amazing. Incredible. Fantastic."
   },
   {
+    "who": "Vee",
+    "text": "Lightning round! Theo says one thing after another. Pick the line that keeps him talking. There is no timer, so take the time you need."
+  },
+  {
     "who": "Theo",
-    "text": "The silence is growing. Choose the line that keeps the guest talking. Three shields: a dead-end line costs one."
+    "text": "I went skiing in March."
+  },
+  {
+    "who": "Theo",
+    "text": "To the Alps with my cousins. The snow was perfect all week."
+  },
+  {
+    "who": "Theo",
+    "text": "You should try it!"
+  },
+  {
+    "who": "Theo",
+    "text": "Yeah."
+  },
+  {
+    "who": "Theo",
+    "text": "I have never ridden a horse."
+  },
+  {
+    "who": "Theo",
+    "text": "Yes! My aunt has a farm, so maybe this summer, with her."
+  },
+  {
+    "who": "Theo",
+    "text": "Then we are two!"
+  },
+  {
+    "who": "Theo",
+    "text": "Mm."
+  },
+  {
+    "who": "Theo",
+    "text": "I have been to Brazil twice."
+  },
+  {
+    "who": "Theo",
+    "text": "The first time was two years ago, with my whole family."
+  },
+  {
+    "who": "Theo",
+    "text": "Thanks!"
+  },
+  {
+    "who": "Theo",
+    "text": "Yes."
+  },
+  {
+    "who": "Theo",
+    "text": "I won the school quiz."
+  },
+  {
+    "who": "Theo",
+    "text": "Surprised! I did not study much, so I was very happy."
+  },
+  {
+    "who": "Theo",
+    "text": "Thank you."
+  },
+  {
+    "who": "Theo",
+    "text": "I have never been camping."
+  },
+  {
+    "who": "Theo",
+    "text": "We could go together one day. There is a lake near my town."
+  },
+  {
+    "who": "Theo",
+    "text": "I just never tried."
+  },
+  {
+    "who": "Theo",
+    "text": "I met a famous singer!"
+  },
+  {
+    "who": "Theo",
+    "text": "Very kind. She talked to us for ten minutes and signed my notebook."
+  },
+  {
+    "who": "Theo",
+    "text": "I cannot tell you!"
   },
   {
     "who": "Vee",
@@ -1370,6 +1466,10 @@
   {
     "who": "Vee",
     "text": "How do you keep a guest talking? Say the three jobs of a good host."
+  },
+  {
+    "who": "Theo",
+    "text": "The silence is growing. Choose the line that keeps the guest talking. Three shields: a dead-end line costs one."
   },
   {
     "who": "Vee",

@@ -120,7 +120,8 @@ describe('On Air — the show', () => {
     const onDone = vi.fn();
     render(<View {...base} scene={scene} onDone={onDone} />);
     for (const [k, n] of picks.entries()) {
-      fireEvent.click(document.querySelectorAll<HTMLButtonElement>('.av-oa-card-btn')[n]);
+      const text = scene.exchanges![k].options[n].text; // the cards are shuffled: find the card by its text
+      fireEvent.click([...document.querySelectorAll<HTMLButtonElement>('.av-oa-card-btn')].find((b) => b.textContent?.includes(text))!);
       fireEvent.click(btn(k === picks.length - 1 ? /End the show/ : /Next question/));
     }
     return onDone;
@@ -143,9 +144,19 @@ describe('On Air — the show', () => {
   it('shows the guest’s reply and the note after a pick, and every card has a model button', () => {
     render(<View {...base} scene={DEMO_SHOW} onDone={() => undefined} />);
     expect(screen.getAllByRole('button', { name: /Hear Vee say it/ })).toHaveLength(3);
-    fireEvent.click(document.querySelectorAll<HTMLButtonElement>('.av-oa-card-btn')[2]);
+    fireEvent.click([...document.querySelectorAll<HTMLButtonElement>('.av-oa-card-btn')].find((b) => b.textContent?.includes('Oh. OK.'))!);
     expect(screen.getByText(/“Yeah.”/)).toBeTruthy();
     expect(screen.getByRole('status').textContent).toContain('dead end');
+  });
+  it('shows the cards in a shuffled order that differs between exchanges, so the best card is not always first', () => {
+    const firstOf = (seed: number) => { const { unmount } = render(<View {...base} seed={seed} scene={DEMO_SHOW} onDone={() => undefined} />); const t = document.querySelector('.av-oa-card-btn span')?.textContent; unmount(); return t; };
+    expect(new Set([1, 2, 3, 4, 5, 6, 7].map(firstOf)).size).toBeGreaterThan(1);
+  });
+  it('a lightning round has no model buttons and needs five exchanges', () => {
+    const l = { ...DEMO_SHOW, lightning: true } as OnAirScene;
+    render(<View {...base} scene={l} onDone={() => undefined} />);
+    expect(screen.queryAllByRole('button', { name: /Hear Vee say it/ })).toHaveLength(0);
+    expect(validateOnAir(l).join(' ')).toContain('lightning round needs 5+');
   });
   it('has no timer, no score bar and no number for the guest’s mood', () => {
     const { container } = render(<View {...base} scene={DEMO_SHOW} onDone={() => undefined} />);

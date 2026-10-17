@@ -34,6 +34,8 @@ export interface OnAirScene extends SceneBase {
   /** twotruths: the full sentence shown when the lie is caught (default: `why`) */
   explain?: string;
   sayFrame?: string;
+  /** show: a quick-fire round for the Energiser (no model buttons on the cards, 5+ exchanges) */
+  lightning?: boolean;
   /** story flag set when the show went well (show: warmth >= flagAt) or the lie was caught (twotruths) */
   flag?: string;
   flagAt?: number;
@@ -57,7 +59,7 @@ export function validateOnAir(s: OnAirScene): string[] {
   if (!s.intro?.trim()) p.push(`${s.id}: onair needs the producer's intro`);
   if (s.look === 'show') {
     const ex = s.exchanges ?? [];
-    if (ex.length < 3) p.push(`${s.id}: the show needs 3+ exchanges`);
+    if (ex.length < (s.lightning ? 5 : 3)) p.push(`${s.id}: the ${s.lightning ? 'lightning round' : 'show'} needs ${s.lightning ? 5 : 3}+ exchanges`);
     ex.forEach((e, i) => {
       if (e.options.length !== 3) p.push(`${s.id}: exchange ${i + 1} needs exactly 3 host cards`);
       if (!e.options.some((o) => o.fit === 2)) p.push(`${s.id}: exchange ${i + 1} has no card that lands well`);
@@ -98,7 +100,7 @@ export function onAirSpoken(s: OnAirScene): { who: string; text: string }[] {
   if (s.look === 'show') {
     for (const e of s.exchanges ?? []) {
       out.push({ who: s.guest, text: e.guest });
-      for (const o of e.options) { out.push({ who: s.producer, text: o.text }); out.push({ who: s.guest, text: o.reply }); }
+      for (const o of e.options) { if (!s.lightning) out.push({ who: s.producer, text: o.text }); out.push({ who: s.guest, text: o.reply }); }
     }
   } else {
     for (const c of s.claims ?? []) { out.push({ who: s.guest, text: c.text }); for (const x of c.probes) { out.push({ who: s.producer, text: x.q }); out.push({ who: s.guest, text: x.a }); } }

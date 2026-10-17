@@ -3,11 +3,11 @@
 //              the guest's FACE and posture change and a halo around the guest grows - no number, no bar, no timer (comfort, research: a visible score turns talk into score chasing).
 //   twotruths: the guest tells three experiences, one is false. The host puts follow-up questions, the answers go on a notepad (nothing is highlighted), then pins the lie and says why.
 // Gentle by design: nothing is lost, nothing is timed; a weak card is answered with a one-word reply and a kind note. Mic: "Hear it" plays the producer's recorded model of any card.
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { sayLine, stopVoice } from '../../services/voice';
 import { Badge, Cast, GameBackdrop, Glow, popEl, Reward, starsFor, useReactor, useSceneFx, type Mood } from '../kit';
-import { fillFrame } from '../wave1Kit';
+import { fillFrame, shuffleSeed } from '../wave1Kit';
 import { halo, maxWarmth, moodAfter, onAirSpoken, validateOnAir, warmthOf, type OnAirOption, type OnAirScene } from './onairLogic';
 import type { ReelLine, SceneModule, SceneProps } from '../../types';
 
@@ -58,6 +58,8 @@ function OnAirView(props: SceneProps<OnAirScene>) {
   const [picks, setPicks] = useState<(OnAirOption | undefined)[]>([]);
   const optEls = useRef<(HTMLButtonElement | null)[]>([]);
   const ex = scene.exchanges?.[i];
+  // the cards are shown in a shuffled order (the best card is not always first); `order[n]` is the data index of the n-th card shown
+  const order = useMemo(() => shuffleSeed((ex?.options ?? []).map((_, k) => k), props.seed + i * 7 + 1), [ex, i, props.seed]);
   // ---- two truths state ----
   const claims = scene.claims ?? [];
   const [heard, setHeard] = useState(0);
@@ -77,13 +79,14 @@ function OnAirView(props: SceneProps<OnAirScene>) {
   useEffect(() => { voice.say(scene.producer, scene.intro); }, []); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { if (show && ex && phase === 'play') { const t0 = window.setTimeout(() => voice.say(scene.guest, ex.guest), i === 0 ? 1600 : 250); return () => window.clearTimeout(t0); } }, [i]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const choose = (n: number) => {
+  const choose = (shown: number) => {
     if (!ex || pick !== null) return;
+    const n = order[shown];
     const o = ex.options[n];
     setPick(n); setPicks((p) => [...p, o]);
     const mood = moodAfter(o.fit) as Mood;
     actor.hold(mood, o.fit === 2 ? 'cheer' : o.fit === 1 ? 'nod' : 'flinch');
-    const el = optEls.current[n];
+    const el = optEls.current[shown];
     popEl(el, calm, o.fit === 0 ? 'wobble' : 'pop');
     if (o.fit > 0) { fx.burstAt(el, o.fit === 2 ? 'gold' : 'teal'); fx.floatAt(el, o.fit === 2 ? '✦✦' : '✦', o.fit === 2 ? 'gold' : 'teal'); }
     if (o.fit === 0) mistakes.current.push(o.text);
@@ -165,12 +168,12 @@ function OnAirView(props: SceneProps<OnAirScene>) {
                 <>
                   <p className="av-q av-oa-prompt">{t('ap.oaPick', 'You are the host. What do you say?')}</p>
                   <div className="av-oa-cards" role="group" aria-label={t('ap.oaCards', 'What to say')}>
-                    {ex.options.map((o, n) => (
+                    {order.map((k, n) => ex.options[k]).map((o, n) => (
                       <div key={o.text} className="av-oa-opt" style={{ ['--i' as string]: n }}>
                         <button type="button" ref={(el) => { optEls.current[n] = el; }} className="av-opt av-oa-card-btn" data-kind={o.kind} onClick={() => choose(n)}>
                           <em aria-hidden="true">{KIND_ICON[o.kind]}</em><span>{o.text}</span>
                         </button>
-                        <button type="button" className="av-oa-ear" aria-label={t('ap.oaModel', 'Hear {{who}} say it', { who: scene.producer })} onClick={() => voice.say(scene.producer, o.text)}>🔊</button>
+                        {!scene.lightning && <button type="button" className="av-oa-ear" aria-label={t('ap.oaModel', 'Hear {{who}} say it', { who: scene.producer })} onClick={() => voice.say(scene.producer, o.text)}>🔊</button>}
                       </div>
                     ))}
                   </div>
