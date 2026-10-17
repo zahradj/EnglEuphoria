@@ -1,2 +1,2 @@
-# song takes request (2026-10-17: A1 U7L3 Hero City "The Hero Helper Song" — must / mustn't hero rules; unit plan approved "go"; the workflow reads the FIRST key only)
+# song takes request (2026-10-17: A1 U7L3 Hero City "The Hero Helper Song" — retry with the Academy ElevenLabs key; the workflow reads the FIRST key only)
 a1u7l3-hero-helper-song
