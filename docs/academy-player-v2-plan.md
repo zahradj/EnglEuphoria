@@ -53,6 +53,24 @@ Full-bleed bright school plates, large cast, glass panels kept small, ink-framed
 - Practice store, checklist log, Daily 10, homework, teacher panels: unchanged APIs.
 - Library and registry: same `AcademyDeckLesson` shape (id, level, season, episode, title, cover) so `LibraryDrawer`, `TeacherLessonLibrary`, `MyLessonsTab` keep compiling; empty lists show the existing "planned" slots.
 
+### 2.5 Video-game development concept, taken from the Playground player (owner 2026-10-17: "use the video game development concept from the Playground hub player")
+Read in `src/content/playground-library/unit1/` (`SceneRenderer.tsx`, `scene-components/gameFx.tsx`, `BrickCrushScene.tsx`, `ClawMachineScene.tsx`, `DashScene.tsx`, `sfx.ts`, `masteryTracker.ts`) and re-implemented in `src/academy-player/` only (hub separation: **read and re-implement, never import**). What is taken, and how it is made teen-appropriate:
+
+| Playground concept | Academy version |
+|---|---|
+| **Scene contract**: each game is a component with `{ scene, onNext, onWin(gem), onLose }` and a small phase machine `intro -> play -> win/lose` | Same contract for every game kind: `{ scene, ctx, onDone(result) }`, result = `{ won, score, mistakes[], gem? }`; one phase machine hook `useGamePhases()` (intro, play, win, lose, retry) shared by all kinds |
+| **Scene registry** (`SceneRenderer` maps `kind` to component, validated by `sceneValidator`) | Typed registry `SCENES: Record<Kind, SceneModule>`; each module exports `view`, `validate(scene)`, `spoken(scene)`, `trains`; a validator test rejects unknown kinds and missing fields |
+| **Game loop state**: score, combo, misses/lives, timer, flash hit/miss | `useGameState()`: score, combo (x2, x3), lives or misses, optional timer (**off by default; never a visible countdown unless the student turns it on**: comfort rule), flash states |
+| **Game-feel kit** (`gameFx.tsx`): `useBursts`, `Bursts`, `FloatText` (+1), `useShake`, `idleFloat`, `Hopper` (squash and stretch), `LivingBg`, `CalmBg` | Re-implemented: bursts (sparks, not emoji), floating "+10", soft shake (off in Calm mode), idle float on pieces, squash/stretch on cast reactions; `CalmBg` rule kept (pieces over a busy plate get the calmed plate: owner 2026-10-14) |
+| **Sound design** (`sfx.ts`: pop, click, match, wrong, reveal, gem, ring, whoop) | A small recorded-clip sfx bank (no synthesized speech, no browser voice); mute control in the comfort dock |
+| **Rewards**: gems per scene, mastery tracker (`masteryTracker`, micro-checks per sound), stars | Teen version: **XP and a quiet rank**, a "gem" per clean win, the **Mistake Bank**, mastery per target item (New -> Learning -> Known -> Secure -> Fading, as in `academy-learner-diagnostics`); no mascots, stickers or hearts |
+| **Arcade mechanics** (brick-crush, claw machine, dash, catch-sort, spin wheel, maze, memory, jigsaw) | Academy versions chosen by the lesson's job from `docs/academy-video-game-mechanics.md` (quest log, boss fight, loot, crafting, escape room, rhythm, detective board, dialogue RPG); each is a **game kind in the registry** with the same contract, built one at a time when a lesson needs it |
+| **Crash isolation** (`SceneCrashGuard`) | Every scene mounts inside an error boundary with a "skip and note it" fallback, so one broken game never ends a live class |
+| **Live sync** (`useSyncedSceneState`, `ActivitySync`, DOM-path replay) | The same classroom bridge contract (section 2.4); game state that must match on both screens lives in a seeded, synced reducer |
+| **Mini-game feel rules** (owner: "an animation video game, the design of the games is very flat") | Every game must pass the "dullness test" of `academy-game-ui`: motion on correct, gentle wrong, character reaction, a reward moment |
+
+**Engine implication:** the lesson engine (2.1) is the "game manager"; each scene is a mini-game with its own loop but the same lifecycle, scoring and effects services. This is why the engine gets `useGamePhases`, `useGameState`, `fx/` (bursts, float text, shake, idle float), `sfx/` and `rewards/` as shared modules from phase 3.
+
 ## 3. Phases (each ends green: tsc, lint, tests, screenshots)
 0. Safety: tag `academy-player-v1`; new branch off `main`.
 1. **Remove**: delete the 11 lessons, their registry entries, profiles, variety test, the Sign Me Up game wiring and their tests; stub the registry so the app compiles. Show the owner the diff summary.
