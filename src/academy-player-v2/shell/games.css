@@ -256,10 +256,11 @@
 .av-forge-bet .av-chip:disabled { opacity: 0.45; cursor: not-allowed; }
 
 /* Dare Deck: sticker cards, three kept */
-.av-deck-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; margin: 8px 0 12px; }
+.av-deck-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 8px 0 12px; }
 .av-dare { display: grid; gap: 6px; justify-items: center; padding: 10px 8px 12px; border-radius: 18px; border: 3px solid #e7d3a3; background: linear-gradient(180deg, #fffaf0, #fdf0cf); box-shadow: 0 4px 0 #d8bd7e, 0 10px 18px rgba(80, 55, 10, 0.14); cursor: pointer; transform: rotate(calc((var(--i) - 2.5) * 1.1deg)); transition: transform 0.2s var(--av-spring), box-shadow 0.2s; animation: av-chip-in 0.4s var(--av-spring) both; animation-delay: calc(var(--i) * 60ms); min-height: 44px; }
 .av-dare img { width: 100%; max-width: 110px; aspect-ratio: 1; object-fit: contain; filter: drop-shadow(0 6px 6px rgba(60, 40, 10, 0.25)); }
 .av-dare b { font-size: 14px; line-height: 1.2; text-align: center; }
 .av-dare[data-on] { border-color: var(--av-gold); transform: translateY(-6px) rotate(0deg); box-shadow: 0 4px 0 #b88513, 0 14px 24px rgba(200, 140, 20, 0.3); }
 .av-deck-list { margin: 0 0 10px; padding-inline-start: 22px; font-weight: 700; }
 [data-calm] .av-dare { animation: none; transition: none; }
+@media (max-width: 520px) { .av-deck-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }

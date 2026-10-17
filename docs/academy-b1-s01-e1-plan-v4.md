@@ -44,3 +44,9 @@ Reuse after the art check: bucket-list wall, trophy case, vault corridor. New pl
 ## 6. Owner decisions needed
 1. Approve the idea and the seven acts (or say what to change).
 2. Approve spending Canva credits on the desk and the corridor doors plate and the dare-card sheet.
+
+## 7. As built (2026-10-17)
+Built as planned: seven acts, 27 scenes, shape `ttt`, about 102 minimum-path student responses. New scene kind `deck` (Dare Deck: keep three of six sticker cards); Forge gem wager; narrator-twist exchange in the Dare Run (Rapport); the Desk is the `factcheck` scene on a new plate with Ava as the speaker (Vee is the inspector in the picture).
+New pictures (Canva, art-checked in `artReview.ts`): `bg/inspection-desk`, `bg/school-doors`, six `cards/dare-*`.
+Not built, on purpose: several voices per word in the Word Vault (needs a teach-scene change; planned next), the sound check on participles (teacher-marked in the live hour, no UI), and the story-b1s1-4 plate redo (the lesson does not use it).
+Border Desk (inspect) and the Boss are cut from this lesson; the Border Desk scene lives on as a test fixture.

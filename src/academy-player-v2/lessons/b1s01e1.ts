@@ -107,7 +107,7 @@ const scenes: Scene[] = [
       { who: 'Vee', text: 'Ha! That is number two on my list.' },
     ] },
   ] } satisfies ComicScene,
-  { id: 'desk', part: 1, kind: 'factcheck', plate: 'inspection-desk', trains: [1], title: 'The Desk: check Ava’s blog', who: 'Vee',
+  { id: 'desk', part: 1, kind: 'factcheck', plate: 'inspection-desk', trains: [1], title: 'The Desk: check Ava’s blog', who: 'Ava',
     intro: 'Welcome to the Desk. Ava’s blog post stays on screen. Three claims at a time: stamp each one true, false or not given, and tap the line that proves it. A set locks only when all three are right.',
     clippings: BLOG_CLIPS,
     cards: [
