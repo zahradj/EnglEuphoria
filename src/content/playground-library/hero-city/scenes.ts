@@ -1347,3 +1347,243 @@ export const LESSON_A1U7L5_SCENES: Scene[] = [
   goodbyeSong('hc5-goodbye-song', sparkPage(12)),
   { id: 'hc5-finale', kind: 'finale', bg: sparkPage(12), who: 'spark', line: 'You read the whole hero story! See you next time! \u{1F4D6}' },
 ];
+
+/* =============================================================================
+ * A1 Unit 7 Lesson 6: "Extra Practice: Hero Mission Match!"
+ * Objective: I can use abilities, help and rules quickly and correctly.
+ * Story frame: Hero HQ game day (a sunny hall over the golden city) — a hero badge for every game won (achievements).
+ * Games (different from L1-L5, accuracy before speed): Simon Says (hero rules), Hero Jeopardy (quiz board), Hero
+ * Dominoes, Hero Memory, Hero Tic-Tac-Toe, Save the Balloon, Pass the Present, Echo Cave, Hero Chests, Rapid Recall,
+ * Twister Race, Blend & Read, the child as Captain Spark, free talk with Zippy.
+ * ========================================================================= */
+
+export const LESSON_A1U7L6_TITLE = 'Extra Practice: Hero Mission Match!';
+export const LESSON_A1U7L6_OBJECTIVE = 'I can use abilities, help and rules quickly and correctly.';
+
+export const LESSON_A1U7L6_SCENES: Scene[] = [
+  { id: 'hc6-title', kind: 'title-card', bg: bgHQ, level: 'A1', unit: 'Unit 7', lessonLabel: 'Lesson 6', title: 'Hero Mission Match!', subtitle: 'Win a hero badge in every game!', cta: '\u{1F3C5} GAME DAY!' },
+  {
+    // Remember? (owner, 2026-10-07): Lesson 5 — the story. Shadow mode: the story heroes have clearly different outlines.
+    id: 'hc6-recall-warmup', kind: 'recall-warmup', bg: bgHQ, who: 'pip', mode: 'shadow',
+    fromLabel: 'Lesson 5 · Captain Spark Saves the Day',
+    teacher: 'Guided: Pip says a line from the story — the student finds the hero’s shadow and says the line again.',
+    items: [
+      { word: 'Captain Spark', say: 'She can fly fast!', img: HERO.sparkFly },
+      { word: 'Leo', say: 'Leo can lift the box!', img: HERO.leoLift },
+      { word: 'Biscuit', say: 'Biscuit can swim well.', img: HERO.biscuitSwim },
+      { word: 'Mia', say: 'Mia can climb well.', img: HERO.miaClimb },
+      { word: 'Zippy', say: 'Stop! You must wait.', img: HERO.zippyStop },
+    ],
+  },
+  { id: 'hc6-meet', kind: 'meet', focus: ['hero'], bg: bgHQ, who: 'spark', cardSide: 'left', teacher: 'Present: Captain Spark is better — today is game day at Hero HQ! Every game won = a hero badge. Remind the student: right first, fast later.', line: 'I feel better! Welcome to Hero HQ — let’s play hero games!', repeat: 'Let’s play hero games!' },
+  { id: 'hc6-rules', kind: 'meet', focus: ['can', 'must'], bg: bgHQ, who: 'zippy', cardSide: 'right', teacher: 'The rules of the unit (say them, the student repeats each): I can … fast / well. Can you …? No, I can’t, but … can. You must / mustn’t … . What’s the matter? Can I help you?', line: 'I can run fast. Can you fly? You must help. Can I help you?', repeat: 'can · must · Can I help you?' },
+  {
+    id: 'hc6-simon', kind: 'prea1', teacher: 'Simon Says — hero rules! Only move when Captain Spark says “Simon says”. No Simon? Freeze — and say why: You mustn’t!',
+    scene: {
+      id: 'hc6-simon', kind: 'tpr-actions', mode: 'learn', bg: bgHQ, who: 'leo', teacher: 'Simon says… do it! No Simon? Freeze!',
+      rounds: [
+        { line: 'Simon says: you must jump high!', emoji: '\u{1F998}', img: HERO.pipHigh },
+        { line: 'Simon says: run fast on the spot!', emoji: '\u{1F3C3}', img: HERO.leoFast },
+        { line: 'Shout very loudly! … No! You mustn’t shout!', emoji: '\u{1F910}', img: RULE.shout },
+        { line: 'Simon says: you must wait — stand still!', emoji: '\u{1F6A6}', img: RULE.wait },
+        { line: 'Simon says: swim well with your arms!', emoji: '\u{1F3CA}', img: HERO.biscuitSwim },
+        { line: 'Run on the road! … No! You mustn’t!', emoji: '\u{1F6AB}', img: RULE.runRoad },
+        { line: 'Simon says: fly fast like Captain Spark!', emoji: '\u{1F9B8}', img: HERO.sparkFly },
+      ],
+    },
+  },
+  {
+    id: 'hc6-match', kind: 'picture-match', look: 'portholes', prompt: 'Read and match',
+    teacher: 'Read and match (warm-up): the student reads each sentence and drags it under its picture, then reads it aloud.',
+    items: [
+      { word: 'He can run fast.', img: HERO.leoFast },
+      { word: 'You mustn’t run on the road.', img: RULE.runRoad },
+      { word: 'I’ve got a cold.', img: HERO.sparkCold },
+      { word: 'You must wait.', img: RULE.wait },
+      { word: 'She can climb well.', img: HERO.miaClimb },
+    ],
+    bg: bgHQ,
+  },
+  {
+    id: 'hc6-jeopardy', kind: 'quiz-board', bg: bgHQ, who: 'spark', title: 'Hero Jeopardy!',
+    teacher: 'Game: the student picks any tile — harder questions are worth more points. Answer, then say it aloud. One tile is Zippy’s bonus: double points!',
+    categories: [
+      { name: 'Powers', emoji: '\u{1F4AA}', tiles: [{ ask: 'What can he do?', choices: ['He can run fast.', 'He can fly.'], answer: 0, img: HERO.leoFast }, { ask: 'Can Mia climb well?', choices: ['Yes, she can.', 'No, she can’t.'], answer: 0, img: HERO.miaClimb }, { ask: 'Pip can’t lift it…', choices: ['but Leo can!', 'and Leo can’t.'], answer: 0, img: HERO.pipTry }] },
+      { name: 'Rules', emoji: '\u{1F6A6}', tiles: [{ ask: 'Red light! You must …', choices: ['stop.', 'run.'], answer: 0, img: RULE.light }, { ask: 'You … shout.', choices: ['mustn’t', 'must'], answer: 0, img: RULE.shout }, { ask: 'You must … your friends.', choices: ['help', 'shout at'], answer: 0, img: RULE.help }] },
+      { name: 'Help', emoji: '\u{1F91D}', tiles: [{ ask: 'Achoo!', choices: ['What’s the matter?', 'How old are you?'], answer: 0, img: CIT.cold }, { ask: 'I’ve got a cold.', choices: ['Here’s a tissue.', 'Here’s a cake.'], answer: 0 }, { ask: 'My bags are heavy!', choices: ['Can I help you?', 'Can you fly?'], answer: 0, img: CIT.bags }] },
+      { name: 'Story', emoji: '\u{1F4D6}', tiles: [{ ask: 'Who can fly fast?', choices: ['Captain Spark.', 'Biscuit.'], answer: 0, img: sparkPage(2) }, { ask: 'Who saves the boat?', choices: ['Biscuit.', 'Pip.'], answer: 0, img: sparkPage(5) }, { ask: 'Who climbs the tower?', choices: ['Mia.', 'Zippy.'], answer: 0, img: sparkPage(11) }] },
+    ],
+    boom: [2, 1],
+    doneLine: 'The board is finished! Hero Jeopardy champion!',
+  },
+  {
+    id: 'hc6-dominoes', kind: 'dominoes', bg: bgHQ, who: 'pip', title: 'Hero Dominoes!',
+    teacher: 'Reading: look at the picture at the end of the chain — find the domino that talks about it, read it aloud and play it.',
+    start: { img: HERO.leoFast, label: 'Leo running' },
+    steps: [
+      { text: 'Leo can run fast.', img: HERO.miaClimb, label: 'Mia climbing' },
+      { text: 'Mia can climb well.', img: HERO.biscuitSwim, label: 'Biscuit swimming' },
+      { text: 'Biscuit can swim well.', img: RULE.wait, label: 'waiting' },
+      { text: 'You must wait.', img: HERO.sparkCold, label: 'Captain Spark' },
+      { text: 'What’s the matter? I’ve got a cold.', img: HERO.sparkCheer, label: 'cheering' },
+      { text: 'We can all be heroes!', img: HERO.badge, label: 'badge' },
+    ],
+    doneLine: 'The chain is finished! Super hero sentences!',
+  },
+  {
+    id: 'hc6-memory', kind: 'memory', bg: bgHQ, teacher: 'Find the sentence and its picture! Say the sentence to keep the pair.',
+    pairs: [
+      { id: 'run', label: 'He can run fast.', emoji: '\u{1F3C3}', img: HERO.leoFast },
+      { id: 'climb', label: 'She can climb well.', emoji: '\u{1F9D7}', img: HERO.miaClimb },
+      { id: 'wait', label: 'You must wait.', emoji: '\u{1F6A6}', img: RULE.wait },
+      { id: 'shout', label: 'You mustn’t shout.', emoji: '\u{1F910}', img: RULE.shout },
+      { id: 'cold', label: 'I’ve got a cold.', emoji: '\u{1F927}', img: HERO.sparkCold },
+      { id: 'lift', label: 'He can lift it.', emoji: '\u{1F4AA}', img: HERO.leoLift },
+    ],
+  },
+  helloSong('hc6-hello-song', bgHQ),
+  {
+    id: 'hc6-tic-tac-toe', kind: 'tic-tac-toe', bg: bgHQ, who: 'zippy', opponentImg: HERO.zippy, title: 'Hero Tic-Tac-Toe with Zippy!',
+    teacher: 'Game: the student answers to claim a square — then Zippy takes one. Three in a row wins!',
+    squares: [
+      { ask: 'Can you swim well?', choices: ['Yes, I can. / No, I can’t.', 'Yes, I swim can.', 'I am swim.'], answer: 0 },
+      { ask: 'Can Pip lift the box?', choices: ['No, he can’t, but Leo can!', 'Yes, he lift.', 'Pip is box.'], answer: 0, img: HERO.pipTry },
+      { ask: 'At the road, you must …', choices: ['wait.', 'run.', 'shout.'], answer: 0 },
+      { ask: 'I’ve got a headache.', choices: ['Can I help you?', 'Can you fly?', 'Hooray!'], answer: 0, img: CIT.headache },
+      { ask: 'You … drop paper.', choices: ['mustn’t', 'must', 'can'], answer: 0, img: RULE.litter },
+      { ask: 'What can you do well?', choices: ['I can climb well.', 'I well climb.', 'I can well.'], answer: 0 },
+      { ask: 'Can I help you?', choices: ['Yes, please!', 'Yes, I can’t.', 'Help is.'], answer: 0 },
+      { ask: 'Captain Spark can fly …', choices: ['fast.', 'well fast.', 'slowly fast.'], answer: 0, img: HERO.sparkFly },
+      { ask: 'What’s the matter?', choices: ['I’ve got toothache.', 'I can run.', 'Yes, please.'], answer: 0, img: CIT.toothache },
+    ],
+    doneLine: 'Three in a row! Hero champion!',
+  },
+  {
+    id: 'hc6-balloon', kind: 'save-balloon', bg: bgSquare, who: 'pip', balloonImg: HERO.zippy, title: 'Save Zippy! Spell the hero word!',
+    teacher: 'Reading: listen to the sentence, look at the picture — tap the letters to spell the word. Every right letter lifts Zippy over the city!',
+    rounds: [
+      { word: 'help', img: RULE.help, sentence: 'You must help.' },
+      { word: 'fast', img: HERO.leoFast, sentence: 'Leo can run fast.' },
+      { word: 'cape', img: HERO.cape, sentence: 'Captain Spark has got a cape.' },
+      { word: 'wait', img: RULE.wait, sentence: 'You must wait at the road.' },
+    ],
+    doneLine: 'Zippy is over the city! Super spelling!',
+  },
+  {
+    id: 'hc6-parcel', kind: 'pass-parcel', bg: bgHQ, who: 'spark', title: 'Pass the Hero Present!',
+    teacher: 'Guided: every right answer tears one layer off the present. What is inside?',
+    rounds: [
+      { ask: 'Can you help?', choices: ['Yes, I can!', 'Yes, I do.', 'Help can.'], answer: 0 },
+      { ask: 'Achoo! I’ve got a cold.', choices: ['Here’s a tissue.', 'Here’s a box.', 'Run fast!'], answer: 0, img: CIT.cold },
+      { ask: 'You mustn’t …', choices: ['run on the road.', 'help.', 'wait.'], answer: 0 },
+      { ask: 'Who can climb well?', choices: ['Mia can.', 'Biscuit can.', 'The box can.'], answer: 0 },
+    ],
+    prize: { img: HERO.badge, label: 'a golden hero badge' },
+    doneLine: 'A golden hero badge! It’s for you!',
+  },
+  {
+    id: 'hc6-echo-cave', kind: 'echo-cave', bg: bgHQ, who: 'spark', title: 'Hero Echo: who needs help?',
+    teacher: 'Game: a friend calls from a door — left, middle or right (speakers or headphones help). The student taps where the voice came from and offers help: Can I help you, Pip?',
+    rounds: [
+      { voice: 'pip', img: HERO.pip, at: 0, line: 'Help! I can’t lift the box!', reply: 'Can I help you, Pip? Leo can lift it!' },
+      { voice: 'mia', img: HERO.mia, at: 2, line: 'Achoo! I’ve got a cold!', reply: 'Can I help you, Mia? Here’s a tissue!' },
+      { voice: 'leo', img: HERO.leo, at: 1, line: 'Ouch! I’ve got a headache!', reply: 'Can I help you, Leo? Here’s some water!' },
+      { voice: 'spark', img: HERO.spark, at: 2, line: 'The kitten is on the tower!', reply: 'Mia can climb well! She can help!' },
+    ],
+    doneLine: 'You found every voice — and helped them all!',
+  },
+  {
+    id: 'hc6-chests', kind: 'chest-quest', bg: bgHQ, who: 'zippy', title: 'Hero Chests!', goal: 60,
+    teacher: 'Guided: every right answer opens a hero chest and the badges fill the jar. Can we reach 60?',
+    rounds: [
+      { ask: 'Can a fish run?', choices: ['No, it can’t.', 'Yes, it can.'], answer: 0, img: item('fish'), prizes: ['10', '20', '⭐'] },
+      { ask: 'What’s the matter with Grandpa Joe?', choices: ['He’s got a cold.', 'He can fly.'], answer: 0, img: CIT.cold, prizes: ['20', '×2', '10'] },
+      { ask: 'Red light!', choices: ['You must stop.', 'You must run.'], answer: 0, img: RULE.light, prizes: ['10', '20', '×2'] },
+      { ask: 'Can Pip lift it?', choices: ['No, he can’t, but Leo can.', 'Yes, he is.'], answer: 0, img: HERO.pipTry, prizes: ['⭐', '10', '20'] },
+    ],
+    doneLine: 'Look at the jar! Super hero answers!',
+  },
+  {
+    id: 'hc6-rapid', kind: 'prea1', teacher: 'Rapid Recall: a picture flashes — say the hero sentence before the ring closes! Right first, then fast.',
+    scene: {
+      id: 'hc6-rapid', kind: 'rapid-recall', bg: bgHQ, who: 'pip', seconds: 4,
+      teacher: 'Say it before the ring closes!',
+      cards: [
+        { img: HERO.leoFast, word: 'run fast', say: 'He can run fast!' },
+        { img: HERO.miaClimb, word: 'climb well', say: 'She can climb well!' },
+        { img: RULE.wait, word: 'wait', say: 'You must wait!' },
+        { img: RULE.shout, word: 'shout', say: 'You mustn’t shout!' },
+        { img: HERO.sparkCold, word: 'a cold', say: 'I’ve got a cold!' },
+        { img: HERO.biscuitSwim, word: 'swim well', say: 'He can swim well!' },
+      ],
+    },
+  },
+  { id: 'hc6-echo', kind: 'echo', bg: bgHQ, who: 'zippy', textSide: 'top', teacher: 'Guided: a question chain — the student asks, the teacher answers, then swap. Faster each time!', word: 'Can you fly? No, I can’t, but Captain Spark can!' },
+  /* Reading */
+  {
+    id: 'hc6-reader', kind: 'reader', bg: sparkPage(4), title: 'Captain Spark Saves the Day — read and ask', doneLine: 'Great reading! Great questions!',
+    teacher: 'Reading: the student reads pages 4-6 alone, then ASKS the teacher one question about each page (Can Pip lift the box? What must you do?).',
+    pages: SPARK_STORY.slice(3, 6),
+  },
+  /* Phonics: twister race → Blend & Read */
+  { id: 'hc6-twister', kind: 'tongue-twister', look: 'town', speeds: 3, bg: bgHQ, who: 'pip', focus: 'a', teacher: 'Twister Race: say the unit twister at all three speeds — can you beat Pip?', line: 'Brave Jay may save the train in the rain.' },
+  {
+    id: 'hc6-blend', kind: 'sound-blend', bg: bgHQ, look: 'slide',
+    teacher: 'Reading: blend each word, find the picture — then read the sentence fast!',
+    rounds: [
+      { word: 'tail', sounds: ['t', 'ai', 'l'], img: item('tail'), sentence: 'Pip has got an orange tail.' },
+      { word: 'say', sounds: ['s', 'ay'], img: HERO.sparkPoint, sentence: 'Captain Spark can say the rules.' },
+      { word: 'brave', sounds: ['b', 'r', 'a_e', 'v'], img: HERO.sparkCheer, sentence: 'Heroes are brave and kind.' },
+    ],
+  },
+  /* Free */
+  {
+    id: 'hc6-be-spark', kind: 'join-stage', bg: bgHQ, teacher: 'Free: the student is Captain Spark! They ask Zippy (the teacher) about the city: what’s wrong, who can help, and give a rule.', cast: ['zippy'],
+    turns: [
+      { who: 'zippy', line: 'Beep! Captain Spark! A grandma has got heavy bags!' },
+      { who: 'student', line: 'Who can help? … can carry the bags!' },
+      { who: 'zippy', line: 'Beep! A boy wants to run on the road!' },
+      { who: 'student', line: 'Stop! You mustn’t run on the road!' },
+      { who: 'zippy', line: 'Super hero! Beep beep!' },
+    ],
+  },
+  {
+    id: 'hc6-talk-zippy', kind: 'join-stage', bg: bgHQ, teacher: 'Free: a mini-conversation with Zippy about the student — what they can do well, a rule at home, how they help.', cast: ['zippy'],
+    turns: [
+      { who: 'zippy', line: 'Beep! What can you do well?' },
+      { who: 'student', line: 'I can … well!' },
+      { who: 'zippy', line: 'What must you do at home?' },
+      { who: 'student', line: 'I must … !' },
+      { who: 'zippy', line: 'How can you help your family?' },
+      { who: 'student', line: 'I can … !' },
+    ],
+  },
+  { id: 'hc6-echo-2', kind: 'echo', bg: bgSquare, who: 'mia', textSide: 'top', teacher: 'Guided: the helper chain — ask, answer, offer. Say it with Mia, then say it to the teacher!', word: 'What’s the matter? I’ve got a cold. Can I help you?' },
+  { id: 'hc6-teach-back', kind: 'meet', focus: ['rules'], bg: bgHQ, who: 'zippy', cardSide: 'right', teacher: 'Teach-back: the student explains the unit’s rules to Zippy in their own words — fast / well at the end, can’t … but … can, must = do it, mustn’t = don’t do it, What’s the matter? → Can I help you?', line: 'Beep! Teach me the hero rules! What does mustn’t mean?', repeat: 'Mustn’t means: don’t do it!' },
+  { id: 'hc6-i-can', kind: 'meet', focus: ['hero'], bg: bgHQ, who: 'spark', cardSide: 'left', teacher: 'Check: accuracy in the games (not speed) — count the badges together. Which game was hard? Practise its sentences once more.', line: 'Look at your hero badges! You can use the hero words — right and fast!', repeat: 'I can use the hero words!' },
+  {
+    id: 'hc6-sticker', kind: 'prea1', teacher: 'Sticker time! The student opens the pack and puts the Hero City sticker in their Sticker Book.',
+    scene: {
+      id: 'hc6-sticker', kind: 'sticker-reward', bg: bgHQ, who: 'pip', teacher: 'Sticker time!',
+      line: 'Game day champion! Here is your sticker.',
+      sticker: { img: HERO.badge, label: 'Hero badge' },
+    },
+  },
+  petPal('hc6-pet-pal', 4, 'I want to play the hero games! I want a hero badge!', [{ label: 'badge', img: HERO.badge }, { label: 'tissue', img: HELP.tissue }, { label: 'shell', img: SEA.shell }], 0, 'A hero badge! Now I am a hero too! Woof!'),
+  {
+    id: 'hc6-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
+    scene: {
+      id: 'hc6-home-mission', kind: 'home-mission', bg: bgHQ, who: 'pip',
+      teacher: 'Home Mission: read the steps with the student.',
+      line: 'Your home mission!',
+      parentNote: 'Today your child practised everything from Hero City in games: what they can do well, "Can you…?", hero rules with must / mustn\'t and offering help. This week, play Simon Says with hero rules together.',
+      steps: [
+        { emoji: '\u{1F9B8}', say: 'Play Simon Says with hero rules.' },
+        { emoji: '\u{1F6A6}', say: 'Say one rule: You must … / You mustn’t … .' },
+        { emoji: '\u{1F91D}', say: 'Help someone and say: Can I help you?' },
+      ],
+    },
+  },
+  goodbyeSong('hc6-goodbye-song', bgHQ),
+  { id: 'hc6-finale', kind: 'finale', bg: bgHQ, who: 'spark', line: 'Game day champion! Next time: the Super Helper Boss Test! \u{1F3C5}' },
+];
