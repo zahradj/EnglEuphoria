@@ -14,6 +14,10 @@ export interface StructureGse {
   chunkFirst?: string;
 }
 
+/** A structure the Pearson adult grammar list has no objective for (checked: say so in `from`). */
+export interface StructureGseNone { gse: null; from: string; chunkFirst?: string }
+export type StructureGseEntry = StructureGse | StructureGseNone;
+
 export const A1_STRUCTURE_GSE: Record<string, StructureGse> = {
   'be-present': { gse: [24, 25], from: "agreement of 'be' with nouns (24); subject pronouns + be + adjective (24); 'be' + adjective (25)" },
   'possessive-adjectives': { gse: [25, 25], from: "possessive adjectives my/your/his/her (25)" },
@@ -44,3 +48,7 @@ export const A1_STRUCTURE_GSE: Record<string, StructureGse> = {
 /** The A1 band of the GSE (22-29) and the lead Pearson recommends for introducing a structure before its value. */
 export const GSE_A1_BAND: [number, number] = [22, 29];
 export const GSE_INTRODUCE_AHEAD = 10;
+
+/** GSE band top by Academy level (A1 22-29, A2 30-42, B1 43-58, B2 59-75, C1 76-84) and the margin above it that requires a `chunkFirst` note. */
+export const GSE_BAND_TOP = { A1: 29, A2: 42, B1: 58, B2: 75, C1: 84 } as const;
+export const GSE_CHUNK_FIRST_MARGIN = 4;
