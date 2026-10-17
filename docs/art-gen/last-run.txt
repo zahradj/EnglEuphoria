@@ -190,12 +190,8 @@
 = exists public/lep1/items/item-mia-climb.png
 = exists public/lep1/items/item-pip-high.png
 = exists public/lep1/items/item-biscuit-swim.png
-+ public/lep1/items/item-leo-lift.png (1240130B)
-! public/lep1/items/item-pip-try.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-+ public/lep1/items/item-pip-try.png (1108128B)
+= exists public/lep1/items/item-leo-lift.png
+= exists public/lep1/items/item-pip-try.png
 ! public/lep1/items/item-cit-headache.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
   "error": {
     "code": 429,
@@ -260,7 +256,14 @@
   "error": {
     "code": 429,
     "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-+ public/lep1/items/item-cit-bike.png (1174694B)
+! public/lep1/items/item-cit-bike.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
+! public/lep1/items/item-cit-bike.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
 ! public/lep1/items/item-cit-kitten.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
   "error": {
     "code": 429,
@@ -303,15 +306,7 @@
 = exists public/lep1/items/item-hero-cape.png
 = exists public/lep1/items/item-hero-badge.png
 = exists public/lep1/items/item-traffic-light.png
-! public/lep1/items/item-paint.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/items/item-paint.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-+ public/lep1/items/item-paint.png (823478B)
+= exists public/lep1/items/item-paint.png
 ! public/lep1/items/item-tail.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
   "error": {
     "code": 429,
@@ -336,29 +331,19 @@
   "error": {
     "code": 429,
     "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/items/item-cape-word.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-+ public/lep1/items/item-cape-word.png (736507B)
-! public/lep1/items/item-cake-a.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/items/item-cake-a.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/items/item-cake-a.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
 ! public/lep1/items/item-wave-hand.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
   "error": {
     "code": 429,
     "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-+ public/lep1/items/item-wave-hand.png (967105B)
-+ public/lep1/items/item-tray.png (631898B)
+! public/lep1/items/item-wave-hand.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
+! public/lep1/items/item-wave-hand.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
+= exists public/lep1/items/item-tray.png
 ! public/lep1/items/item-hay.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
   "error": {
     "code": 429,
@@ -371,189 +356,7 @@
   "error": {
     "code": 429,
     "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/items/item-clay.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/items/item-clay.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-+ public/lep1/items/item-clay.png (707890B)
-! public/lep1/items/item-crayon.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/items/item-crayon.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/items/item-crayon.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-square-wide.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-square-wide.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-square-wide.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-road-wide.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-road-wide.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-road-wide.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-tower-wide.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-+ public/lep1/scenes/bg-a1u7-tower-wide.png (1740343B)
-! public/lep1/scenes/bg-a1u7-trials-wide.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-trials-wide.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-trials-wide.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-hq-wide.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-hq-wide.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-hq-wide.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-1-wide.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-1-wide.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-+ public/lep1/scenes/bg-a1u7-story-1-wide.png (2452580B)
-! public/lep1/scenes/bg-a1u7-story-2-wide.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-+ public/lep1/scenes/bg-a1u7-story-2-wide.png (2267249B)
-! public/lep1/scenes/bg-a1u7-story-3-wide.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-3-wide.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-3-wide.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-+ public/lep1/scenes/bg-a1u7-story-4-wide.png (1799469B)
-! public/lep1/scenes/bg-a1u7-story-5-wide.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-5-wide.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-5-wide.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-+ public/lep1/scenes/bg-a1u7-story-6-wide.png (1330875B)
-! public/lep1/scenes/bg-a1u7-story-7-wide.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-7-wide.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-7-wide.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-8-wide.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-8-wide.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-8-wide.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-9-wide.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-9-wide.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-9-wide.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-10-wide.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-10-wide.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-+ public/lep1/scenes/bg-a1u7-story-10-wide.png (2425382B)
-! public/lep1/scenes/bg-a1u7-story-11-wide.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-11-wide.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-11-wide.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-12-wide.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-12-wide.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/scenes/bg-a1u7-story-12-wide.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
-  "error": {
-    "code": 429,
-    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
+= exists public/lep1/items/item-clay.png
 ! public/lep1/items/item-rule-wait.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
   "error": {
     "code": 429,
@@ -566,16 +369,19 @@
   "error": {
     "code": 429,
     "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-+ public/lep1/items/item-rule-run-road.png (1197511B)
-! public/lep1/items/item-rule-help.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
+! public/lep1/items/item-rule-run-road.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
   "error": {
     "code": 429,
     "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-! public/lep1/items/item-rule-help.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
+! public/lep1/items/item-rule-run-road.png attempt 2: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
   "error": {
     "code": 429,
     "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-+ public/lep1/items/item-rule-help.png (1322585B)
+! public/lep1/items/item-rule-run-road.png attempt 3: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
+  "error": {
+    "code": 429,
+    "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
+= exists public/lep1/items/item-rule-help.png
 ! public/lep1/items/item-rule-shout.png attempt 1: 502 Failed to generate image Nano Banana failed after 3 attempts: Image generation failed: {
   "error": {
     "code": 429,
@@ -612,4 +418,4 @@
   "error": {
     "code": 429,
     "message": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-a
-Done. made 16, failed 28
+Done. made 0, failed 18
