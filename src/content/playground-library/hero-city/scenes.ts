@@ -603,3 +603,275 @@ export const LESSON_A1U7L2_SCENES: Scene[] = [
   goodbyeSong('hc2-goodbye-song', bgSquare),
   { id: 'hc2-finale', kind: 'finale', bg: sparkPage(5), who: 'spark', line: 'You can ask: Can you…? See you in Hero City! \u{1F4AA}' },
 ];
+
+/* =============================================================================
+ * A1 Unit 7 Lesson 3: "Listen to the Hero Helper Song"
+ * Objective: I can understand hero rules: "You must help. You mustn't run on the road."
+ * Story frame: Zippy stops the friends at a red light on a city street (busy afternoon, golden shop awnings); the
+ *   heroes learn the rules of the city, and Captain Spark's helper song.
+ * Practice ladder: Revise (Remember? L2 who can) → Present (I do: the rule — must = do it, mustn't = don't do it; one
+ *   rule per card) → we do (echo) → Read and Match → you do (Red Light, Green Light ★ on the city road; the song;
+ *   Must or Mustn't? sort; Tick or Cross; Rule Bingo; Treasure Radar for the lost cape) → Reading (Reader p6-7, Read
+ *   and Match) → Phonics a_e magic e (Word Build, Blend & Read, twister) → Free (make a rule for your home) → check.
+ * The listening game is never "who said it?" (blueprint: L3).
+ * ========================================================================= */
+
+export const LESSON_A1U7L3_TITLE = 'Listen to the Hero Helper Song';
+export const LESSON_A1U7L3_OBJECTIVE = 'I can understand hero rules: "You must help. You mustn\'t run on the road."';
+
+const RULE = {
+  wait: item('rule-wait'), runRoad: item('rule-run-road'), help: item('rule-help'), shout: item('rule-shout'),
+  share: item('rule-share'), litter: item('rule-litter'), light: item('traffic-light'),
+};
+/** "The Hero Helper Song" (scripts/songs.json a1u7l3-hero-helper-song, kids-song-writer gate PASS, 112 BPM, one take). */
+const SONG_A1U7L3 = '/lep1/audio/hero-helper-song-a1u7l3.mp3?v=1';
+const HERO_CHORUS: { who: CharKey; text: string }[] = [
+  { who: 'spark', text: 'We can help, help, help!' },
+  { who: 'spark', text: 'Be kind and help, help, help!' },
+];
+const SONG_A1U7L3_LYRICS: { who: CharKey; text: string }[] = [
+  ...HERO_CHORUS,
+  { who: 'zippy', text: 'Stop! You must stop at the light,' },
+  { who: 'zippy', text: 'Then look to the left and the right!' },
+  { who: 'zippy', text: 'You mustn’t run on the road,' },
+  { who: 'zippy', text: 'You must walk nice and slow!' },
+  ...HERO_CHORUS,
+  { who: 'mia', text: 'You must help your friend today,' },
+  { who: 'mia', text: 'Help them work and help them play!' },
+  { who: 'mia', text: 'You mustn’t shout, you mustn’t run,' },
+  { who: 'mia', text: 'Be kind to everyone!' },
+  ...HERO_CHORUS,
+];
+/** Planned line times (112 BPM, 2 bars a line after a 2-bar intro); replaced by the take's measured times. */
+const SONG_A1U7L3_MS = [8572, ...Array.from({ length: SONG_A1U7L3_LYRICS.length - 1 }, () => 4286)];
+
+export const LESSON_A1U7L3_SCENES: Scene[] = [
+  { id: 'hc3-title', kind: 'title-card', bg: sparkPage(6), level: 'A1', unit: 'Unit 7', lessonLabel: 'Lesson 3', title: 'The Hero Helper Song!', subtitle: 'You must help. You mustn’t run on the road!', cta: '\u{1F6A6} LET’S GO!' },
+  {
+    // Remember? (owner, 2026-10-07): Lesson 2 — who can, who can't. Click mode: the friends' helper pictures.
+    id: 'hc3-recall-warmup', kind: 'recall-warmup', bg: bgSquare, who: 'pip', mode: 'click',
+    fromLabel: 'Lesson 2 · Can You Lift It?',
+    teacher: 'Guided: Pip says who can or can’t — the student finds the picture and says it: Pip can’t lift it, but Leo can!',
+    items: [
+      { word: 'can lift', say: 'Leo can lift the box.', img: HERO.leoLift },
+      { word: 'can’t lift', say: 'Pip can’t lift the box.', img: HERO.pipTry },
+      { word: 'swim well', say: 'Biscuit can swim well.', img: HERO.biscuitSwim },
+      { word: 'fly', say: 'Captain Spark can fly.', img: HERO.sparkFly },
+    ],
+  },
+  { id: 'hc3-meet-road', kind: 'meet', focus: ['road', 'stop'], bg: sparkPage(6), who: 'zippy', cardSide: 'right', teacher: 'Present: the friends are at the road. The light is red. Zippy holds up his hand — Stop! Hold up your hand too.', line: 'Beep! Stop! This is the road. Heroes are safe!', repeat: 'Stop! The road!' },
+  { id: 'hc3-rule-must', kind: 'meet', focus: ['must'], bg: bgRoad, who: 'spark', cardSide: 'left', teacher: 'The rule (say it, the student repeats): MUST = do it! You must + action: You must stop. You must help. Nod your head on must.', line: 'You must stop. You must help. Must means: do it!', repeat: 'You must … !' },
+  {
+    id: 'hc3-must-cards', kind: 'prea1', teacher: 'Present (I do → you do): one rule per card. Say it, the student says it and nods: You must wait!',
+    scene: {
+      id: 'hc3-must-cards', kind: 'listen-repeat-cards', bg: bgRoad, teacher: 'Listen and say it! Nod: do it!',
+      cards: [
+        { who: 'mia', sentence: 'You must stop at the red light.', img: RULE.light, imgLabel: 'stop' },
+        { who: 'mia', sentence: 'You must wait.', img: RULE.wait, imgLabel: 'wait' },
+        { who: 'leo', sentence: 'You must help.', img: RULE.help, imgLabel: 'help' },
+        { who: 'leo', sentence: 'You must be kind.', img: RULE.share, imgLabel: 'kind' },
+      ],
+    },
+  },
+  { id: 'hc3-rule-mustnt', kind: 'meet', focus: ['mustn’t'], bg: bgRoad, who: 'spark', cardSide: 'left', teacher: 'The rule (say it, the student repeats): MUSTN’T = don’t do it! You mustn’t + action. Shake your head and wag your finger on mustn’t. (Say it: MUS-n’t — no t in the middle.)', line: 'You mustn’t run on the road. Mustn’t means: don’t do it!', repeat: 'You mustn’t … !' },
+  {
+    id: 'hc3-mustnt-cards', kind: 'prea1', teacher: 'Present (I do → you do): one rule per card. Say it, the student says it and shakes their head: You mustn’t shout!',
+    scene: {
+      id: 'hc3-mustnt-cards', kind: 'listen-repeat-cards', bg: bgRoad, teacher: 'Listen and say it! Shake your head: don’t do it!',
+      cards: [
+        { who: 'pip', sentence: 'You mustn’t run on the road.', img: RULE.runRoad, imgLabel: 'run on the road' },
+        { who: 'pip', sentence: 'You mustn’t shout.', img: RULE.shout, imgLabel: 'shout' },
+        { who: 'pip', sentence: 'You mustn’t drop paper.', img: RULE.litter, imgLabel: 'drop paper' },
+      ],
+    },
+  },
+  { id: 'hc3-echo', kind: 'echo', bg: sparkPage(6), who: 'zippy', textSide: 'top', teacher: 'Guided (we do): say it like Zippy — a robot voice, then a hero voice! Wag your finger.', word: 'You mustn’t run on the road!' },
+  {
+    id: 'hc3-match', kind: 'picture-match', look: 'cards', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each rule and drags it under its picture (or taps the rule, then the picture), then reads it aloud.',
+    items: [
+      { word: 'You must wait.', img: RULE.wait },
+      { word: 'You must help.', img: RULE.help },
+      { word: 'You mustn’t run on the road.', img: RULE.runRoad },
+      { word: 'You mustn’t shout.', img: RULE.shout },
+      { word: 'You must be kind.', img: RULE.share },
+    ],
+    bg: bgRoad,
+  },
+  {
+    id: 'hc3-red-green', kind: 'red-green', bg: bgRoad, who: 'zippy', runner: HERO.pip, title: 'Red Light, Green Light: the hero road!',
+    teacher: 'You do (signature game, listening): on green, the student taps the rule they hear and Pip walks on (they can do the action too!). On red — you MUST stop! Do not tap until it turns green.',
+    cards: [{ label: 'wait', img: RULE.wait }, { label: 'help', img: RULE.help }, { label: 'be kind', img: RULE.share }, { label: 'don’t shout', img: RULE.shout }],
+    rounds: [
+      { light: 'green', say: 'Green light! You must help!', answer: 1, steps: 2 },
+      { light: 'red', say: 'Red light! You must stop!' },
+      { light: 'green', say: 'Green light! You must be kind!', answer: 2, steps: 2 },
+      { light: 'green', say: 'Green light! You mustn’t shout!', answer: 3, steps: 2 },
+      { light: 'red', say: 'Red light! You must wait!' },
+      { light: 'green', say: 'Green light! You must wait at the road!', answer: 0, steps: 2 },
+      { light: 'green', say: 'Green light! You must help!', answer: 1, steps: 2 },
+    ],
+    doneLine: 'Pip is safe across the road! Super listening, hero!',
+  },
+  {
+    id: 'hc3-song', kind: 'song', bg: sparkPage(7), title: '\u{1F3B5} The Hero Helper Song \u{1F3B5}',
+    teacher: 'Song: sing along and do the actions — hand up for "stop", look left and right, walk slowly on the spot, wag your finger on "mustn’t", hand on your heart for "help" and "kind".',
+    bigWord: 'help', songUrl: SONG_A1U7L3, lineDurationsMs: SONG_A1U7L3_MS, lyrics: SONG_A1U7L3_LYRICS,
+  },
+  {
+    id: 'hc3-sort', kind: 'prea1', teacher: 'Guided: Must or mustn’t? Catch each picture in the right net — and say the rule: You must help! / You mustn’t shout!',
+    scene: {
+      id: 'hc3-sort', kind: 'catch-sort', bg: bgRoad, goal: 6, seconds: 60,
+      teacher: 'Do it or don’t do it? Catch it in the right net and say the rule!',
+      left: { label: 'You must', emoji: '\u{1F44D}' }, right: { label: 'You mustn’t', emoji: '\u{1F44E}' },
+      items: [
+        { word: 'wait', img: RULE.wait, emoji: '\u{1F6A6}', target: 'left' },
+        { word: 'run on the road', img: RULE.runRoad, emoji: '\u{1F3C3}', target: 'right' },
+        { word: 'help', img: RULE.help, emoji: '\u{1F91D}', target: 'left' },
+        { word: 'shout', img: RULE.shout, emoji: '\u{1F4E2}', target: 'right' },
+        { word: 'be kind', img: RULE.share, emoji: '\u{1F49B}', target: 'left' },
+        { word: 'drop paper', img: RULE.litter, emoji: '\u{1F4C4}', target: 'right' },
+      ],
+    },
+  },
+  {
+    id: 'hc3-flip', kind: 'prea1', teacher: 'Free: flip a rule card and say the rule — then say WHY in English or with a mime (It’s safe! / It’s kind!).',
+    scene: {
+      id: 'hc3-flip', kind: 'flip-say', bg: bgRoad, who: 'pip', title: 'Flip a rule card and say it!',
+      teacher: 'Flip a card. Say the rule!',
+      cards: [
+        { label: 'wait', img: RULE.wait, say: 'You must wait at the red light.' },
+        { label: 'run', img: RULE.runRoad, say: 'You mustn’t run on the road.' },
+        { label: 'help', img: RULE.help, say: 'You must help.' },
+        { label: 'shout', img: RULE.shout, say: 'You mustn’t shout.' },
+        { label: 'share', img: RULE.share, say: 'You must be kind.' },
+        { label: 'paper', img: RULE.litter, say: 'You mustn’t drop paper.' },
+      ],
+      doneLine: 'Great rules! You can say must and mustn’t!',
+    },
+  },
+  { id: 'hc3-echo-must', kind: 'echo', bg: sparkPage(7), who: 'mia', textSide: 'top', teacher: 'Guided: say it with Mia — nod on must, hand on your heart on help!', word: 'You must help. You must be kind!' },
+  {
+    id: 'hc3-tick', kind: 'prea1', teacher: 'Reading: read the sentence, look at the picture — is the hero following the rule? Tick or cross? (Cambridge Starters "look and read")',
+    scene: {
+      id: 'hc3-tick', kind: 'tick-cross', bg: bgRoad, who: 'mia', teacher: 'Read and look. Yes or no?',
+      rounds: [
+        { img: RULE.wait, sentence: 'Mia is waiting at the red light.', isTrue: true },
+        { img: RULE.runRoad, sentence: 'Pip is walking slowly.', isTrue: false },
+        { img: RULE.help, sentence: 'Leo is helping.', isTrue: true },
+        { img: RULE.shout, sentence: 'Pip is quiet.', isTrue: false },
+        { img: RULE.litter, sentence: 'The paper is in the bin.', isTrue: false },
+      ],
+    },
+  },
+  {
+    id: 'hc3-bingo', kind: 'sticker-bingo', bg: bgSquare, who: 'zippy', title: 'Rule Bingo! Listen and stamp!',
+    teacher: 'Guided (listen — the lesson’s evidence): Zippy says a rule — the student stamps the picture and says the rule again. Three in a row: Bingo!',
+    cells: [
+      { label: 'wait', img: RULE.wait, say: 'You must wait at the red light.' },
+      { label: 'run', img: RULE.runRoad, say: 'You mustn’t run on the road.' },
+      { label: 'help', img: RULE.help, say: 'You must help a grandma.' },
+      { label: 'shout', img: RULE.shout, say: 'You mustn’t shout.' },
+      { label: 'share', img: RULE.share, say: 'You must be kind. Share!' },
+      { label: 'litter', img: RULE.litter, say: 'You mustn’t drop paper.' },
+      { label: 'stop', img: RULE.light, say: 'Red light! You must stop.' },
+      { label: 'Zippy', img: HERO.zippyStop, say: 'Zippy says: Stop! You must wait!' },
+      { label: 'cheer', img: HERO.sparkCheer, say: 'You must be a happy hero!' },
+    ],
+    calls: [0, 4, 8, 2, 6, 1, 3],
+    doneLine: 'Bingo! You know the hero rules!',
+  },
+  {
+    id: 'hc3-radar', kind: 'hot-cold', bg: bgSquare, who: 'spark', title: 'Hero Radar: where is it?',
+    teacher: 'Listening game: something is lost in the city square. The student taps to search and listens — Cold! Warm! Hot! When it pops out, they say the sentence.',
+    rounds: [
+      { label: 'cape', img: HERO.cape, x: 78, y: 72, find: 'Where is Captain Spark’s cape? Find it!', say: 'Here it is! It’s her cape!' },
+      { label: 'badge', img: HERO.badge, x: 20, y: 80, find: 'Where is the hero badge? Find it!', say: 'Here it is! The hero badge!' },
+      { label: 'Zippy', img: HERO.zippy, x: 55, y: 35, find: 'Where is Zippy? Find him!', say: 'Here he is! Hello, Zippy!' },
+    ],
+    doneLine: 'You found everything! Thank you, hero!',
+  },
+  /* Reading: pages 6-7 */
+  {
+    id: 'hc3-reader', kind: 'reader', bg: bgRoad, title: 'Captain Spark Saves the Day', doneLine: 'The friends are safe and kind! What happens next? See you next time!',
+    teacher: 'Reading: first read pages 4-5 again quickly, then the new pages. Listen while the words light up, then the student reads. Tap any word to hear it.',
+    pages: SPARK_STORY.slice(3, 7),
+  },
+  {
+    id: 'hc3-read-match', kind: 'picture-match', look: 'polaroids', prompt: 'Read and match',
+    teacher: 'Reading: read each sentence from the story and drag it under its picture. Then read it aloud.',
+    items: [
+      { word: 'Stop! You must wait.', img: sparkPage(6) },
+      { word: 'The friends wait.', img: sparkPage(7) },
+      { word: 'He can save the boat.', img: sparkPage(5) },
+    ],
+    bg: bgRoad,
+  },
+  /* Phonics: a_e magic e → Word Build → Blend & Read → tongue twister */
+  {
+    id: 'hc3-sound-ae', kind: 'sound-model', bg: bgSquare, who: 'pip', letter: 'A_E', phoneme: '/eɪ/', sound: 'ai', soundSide: 'center', magic: true,
+    teacher: 'Present: magic e! Put an e at the end and the a says its name: cap → cape, mad → made. Save, cape, cake. Say: cape, cape, cape!',
+    anchors: [
+      { word: 'cape', emoji: '\u{1F9B8}', img: HERO.cape },
+      { word: 'cake', emoji: '\u{1F382}', img: item('cake') },
+      { word: 'wave', emoji: '\u{1F44B}', img: item('wave-hand') },
+    ],
+  },
+  {
+    id: 'hc3-word-build', kind: 'word-build', bg: bgSquare, magic: true,
+    teacher: 'Reading: magic e! Add the e and the a says its name. Pick the missing letter, then read the word.',
+    rounds: [
+      { word: 'cape', tiles: ['c', 'a', 'p', 'e'], blankIndex: 3, answer: 'e', choices: ['e', 'a', 's'], img: HERO.cape, emoji: '\u{1F9B8}' },
+      { word: 'cake', tiles: ['c', 'a', 'k', 'e'], blankIndex: 3, answer: 'e', choices: ['t', 'e', 'o'], img: item('cake'), emoji: '\u{1F382}' },
+      { word: 'save', tiles: ['s', 'a', 'v', 'e'], blankIndex: 1, answer: 'a', choices: ['a', 'i', 'u'], img: HERO.biscuitSwim, emoji: '\u{1F6DF}' },
+      { word: 'wave', tiles: ['w', 'a', 'v', 'e'], blankIndex: 3, answer: 'e', choices: ['e', 'y', 'n'], img: item('wave-hand'), emoji: '\u{1F44B}' },
+    ],
+  },
+  {
+    id: 'hc3-blend', kind: 'sound-blend', bg: bgSquare, look: 'gumball',
+    teacher: 'Reading: say each sound (s, a_e, v — the magic e makes the a say its name), blend the word, find the picture — then read the sentence.',
+    rounds: [
+      { word: 'save', sounds: ['s', 'a_e', 'v'], img: HERO.biscuitSwim, sentence: 'Biscuit can save the boat.' },
+      { word: 'cape', sounds: ['c', 'a_e', 'p'], img: HERO.cape, sentence: 'Captain Spark has got an orange cape.' },
+      { word: 'brave', sounds: ['b', 'r', 'a_e', 'v'], img: HERO.sparkCheer, sentence: 'Heroes are brave and kind.' },
+    ],
+  },
+  { id: 'hc3-twister', kind: 'tongue-twister', look: 'town', speeds: 3, bg: bgSquare, who: 'pip', focus: 'a', teacher: 'Reading: quick reading! Listen to Pip, then say it slow, faster — then hero speed!', line: 'Brave Kate saves the cake.' },
+  /* Free: make a rule */
+  {
+    id: 'hc3-my-rule', kind: 'join-stage', bg: bgHQ, teacher: 'Free: the student makes rules for their home (or the classroom): one You must… and one You mustn’t… . Captain Spark asks; the student explains.', cast: ['spark'],
+    turns: [
+      { who: 'spark', line: 'Make a rule for your home! You must …' },
+      { who: 'student', line: 'You must … !' },
+      { who: 'spark', line: 'Good rule! And you mustn’t …?' },
+      { who: 'student', line: 'You mustn’t … !' },
+      { who: 'spark', line: 'Super rules! You are a hero at home!' },
+    ],
+  },
+  { id: 'hc3-i-can', kind: 'meet', focus: ['must', 'mustn’t'], bg: sparkPage(7), who: 'spark', cardSide: 'left', teacher: 'Check: 4 of 5 rules understood from listening (Rule Bingo, Tick or Cross). Teach-back: the student says the rule — must = do it, mustn’t = don’t do it.', line: 'You know the hero rules! You must help. You mustn’t run on the road!', repeat: 'You must … . You mustn’t … .' },
+  {
+    id: 'hc3-sticker', kind: 'prea1', teacher: 'Sticker time! The student opens the pack and puts the Hero City sticker in their Sticker Book.',
+    scene: {
+      id: 'hc3-sticker', kind: 'sticker-reward', bg: bgSquare, who: 'pip', teacher: 'Sticker time!',
+      line: 'Safe hero! Here is your sticker.',
+      sticker: { img: HERO.zippyStop, label: 'Hero rules' },
+    },
+  },
+  petPal('hc3-pet-pal', 2, 'I want to fix my toys! I want a toolbox!', [{ label: 'toolbox', img: item('toolbox') }, { label: 'cape', img: HERO.cape }, { label: 'apple', img: item('apple') }], 0, 'A toolbox! Thank you! I can fix it!'),
+  {
+    id: 'hc3-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
+    scene: {
+      id: 'hc3-home-mission', kind: 'home-mission', bg: bgSquare, who: 'pip',
+      teacher: 'Home Mission: read the steps with the student.',
+      line: 'Your home mission!',
+      parentNote: 'Today your child learned hero rules: "You must help. You mustn\'t run on the road." and sang the Hero Helper Song. This week, make one family rule together in English and put it on the fridge.',
+      steps: [
+        { emoji: '\u{1F3B5}', say: 'Sing the Hero Helper Song.' },
+        { emoji: '\u{1F4DD}', say: 'Make one family rule: You must … / You mustn’t … .' },
+        { emoji: '\u{1F6A6}', say: 'At the road: Stop! Look left and right!' },
+      ],
+    },
+  },
+  goodbyeSong('hc3-goodbye-song', bgSquare),
+  { id: 'hc3-finale', kind: 'finale', bg: sparkPage(7), who: 'spark', line: 'You know the hero rules! See you in Hero City! \u{1F6A6}' },
+];

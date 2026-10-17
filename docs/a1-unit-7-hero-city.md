@@ -128,7 +128,7 @@ teacher note ("Guided:" / "Free:").
 |---|---|
 | Model | *You must…* / *You mustn't…* (one rule per page, the rule stated in ≤ 3 lines) |
 | Song | **"The Hero Helper Song"** (new, kids-song-writer: one verse per rule, a chorus *We can help, help, help!*; one take) after the first practice game |
-| Practice | **Red Light, Green Light** (signature: on the city road — *You must stop! / You must wait! / Go!*; the child moves only on the rule) · **Tick or Cross** (is the hero following the rule?) · **Read and Do** (read the rule card, do it) · **Hot & Cold** (find the lost cape by listening) |
+| Practice | **Red Light, Green Light** (signature: on the city road — *You must stop! / You must wait! / Go!*; the child moves only on the rule) · **Tick or Cross** (is the hero following the rule?) · **Must or Mustn't?** (catch-sort: catch each picture in the right net and say the rule) · **Rule Bingo** (hear the rule, stamp the picture) · **Hero Radar** (hot & cold: find the lost cape by listening) |
 | Reading | Reader p6-7 · reading game |
 | Phonics | **a_e magic e** (*cap → cape, mad → made*) · **Word Build** · Blend & Read: *save, brave, make* · twister *Brave Kate saves the cake.* |
 | Talk | *Make one rule for your home: You must… / You mustn't…* |
@@ -180,7 +180,7 @@ every game (achievements).
 |---|---|
 | L1 | Hero Trials · Power Wheel · Odd One Out · Draw That · Word Splat |
 | L2 | Can It? · Hot Badge · Tower Pull · Whisper Tube · Letter Bubbles |
-| L3 | Red Light, Green Light · Tick or Cross · Read and Do · Hot & Cold · Word Build |
+| L3 | Red Light, Green Light · Tick or Cross · Must or Mustn't? (catch-sort) · Rule Bingo · Hero Radar (hot & cold) · Word Build |
 | L4 | Hero Mission ★ · Roleplay · Mystery Bag · Chat Chain · Crossword |
 | L5 | Story Order · Jigsaw Puzzle · Who is missing? · Sound Pop |
 | L6 | Simon Says · Quiz Board · Dominoes · Save the Balloon · Pass the Parcel · Echo Cave |
