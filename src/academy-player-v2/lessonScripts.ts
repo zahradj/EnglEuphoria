@@ -6,6 +6,7 @@ const LOADERS: Record<string, () => Promise<LessonScript>> = {
   'B1-S01-E1': () => import('./lessons/b1s01e1').then((m) => m.B1_S01_E1),
   'B1-S01-E2': () => import('./lessons/b1s01e2').then((m) => m.B1_S01_E2),
   'B1-S01-E3': () => import('./lessons/b1s01e3').then((m) => m.B1_S01_E3),
+  'B1-S01-E4': () => import('./lessons/b1s01e4').then((m) => m.B1_S01_E4),
 };
 
 export const hasScript = (id: string): boolean => id in LOADERS;

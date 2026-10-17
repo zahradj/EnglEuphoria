@@ -63,6 +63,7 @@ const STINGER: Record<EncounterKind, { icon: IconName; label: [string, string]; 
   finder: { icon: 'pin', label: ['ap.stFinder', 'POSTCARD FINDER'], sub: ['ap.stFinderSub', 'One clue, six postcards. Find the right one.'] },
   workshop: { icon: 'tools', label: ['ap.stWorkshop', 'CHUNK WORKSHOP'], sub: ['ap.stWorkshopSub', 'Snap two halves into one chunk.'] },
   beats: { icon: 'wave', label: ['ap.stBeats', 'STRESS BEATS'], sub: ['ap.stBeatsSub', 'Tap the strong part of the word.'] },
+  onair: { icon: 'mic', label: ['ap.stOnair', 'LIVE ON AIR'], sub: ['ap.stOnairSub', 'React. Ask. Keep your guest talking.'] },
   switchboard: { icon: 'sliders', label: ['ap.stSwitchboard', 'TIMELINE SWITCHBOARD'], sub: ['ap.stSwitchboardSub', 'Move the time marker. Power on the sentence.'] },
 };
 

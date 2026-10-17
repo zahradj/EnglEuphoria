@@ -248,7 +248,7 @@ const scenes: Scene[] = [
     { step: 'free', prompt: 'Say your sentences out loud, privately first, then ask me one “Have you ever …?” question about something I might have done. About 40 seconds.', model: 'I have never flown in a plane. I have been to the mountains twice. I went last winter. Have you ever been to the mountains?' },
   ] } satisfies SpeakScene,
 
-  { id: 'wrap', part: 7, kind: 'wrap', plate: LIB, heading: 'Case closed! The postcard is back on the wall.', teachBack: 'Have and a participle tell an experience up to now. When do we use the past simple instead?' } satisfies WrapScene,
+  { id: 'wrap', part: 7, kind: 'wrap', plate: LIB, heading: 'Case closed! The postcard is back on the wall.', story: { caseClosed: true }, teachBack: 'Have and a participle tell an experience up to now. When do we use the past simple instead?' } satisfies WrapScene,
 ];
 
 export const B1_S01_E3: LessonScript = {

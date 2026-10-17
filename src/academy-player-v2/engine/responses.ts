@@ -40,6 +40,8 @@ const COUNTERS: Record<string, (s: Loose) => number> = {
   // stress pad + accent lane per word, plus the stress pad of an -ed/-ing partner
   beats: (s) => arr(s.items).reduce<number>((a, i) => a + 2 + ((i as { pair?: unknown }).pair ? 1 : 0), 0),
   // forward: marker + verb form; reverse: zone + marker; free: two sentences of marker + verb form
+  // On Air: show = one card per exchange; two truths = the follow-up questions asked, the pin and the sentence said
+  onair: (s) => (s.look === 'twotruths' ? Number(s.minProbes ?? 3) + 2 : n(s.exchanges)),
   switchboard: (s) => arr(s.levels).reduce<number>((a, l) => a + (((l as { mode?: string }).mode === 'free') ? Number((l as { count?: number }).count ?? 2) * 2 : 2), 0),
 };
 

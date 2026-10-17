@@ -14,7 +14,11 @@ import { chapterOfLesson } from '../../../curriculum/academy/arcs';
 import type { QuestRecap } from '../../engine/quest';
 import type { LessonScript, ReelLine, SceneBase, SceneModule, SceneProps } from '../../types';
 
-export interface WrapScene extends SceneBase { kind: 'wrap'; heading: string; teachBack: string }
+export interface WrapScene extends SceneBase {
+  kind: 'wrap'; heading: string; teachBack: string;
+  /** story flags this lesson ends with (the next lesson's "Previously on…" reads them) */
+  story?: Record<string, import('../../types').StoryValue>;
+}
 
 /** the chapter that comes after this lesson's, if the Season has one */
 function nextChapterOf(blueprintId: string): { no: number; title: string } | undefined {
@@ -129,7 +133,7 @@ function WrapView({ scene, script, onDone, artBase, summary, calm, fx: fxIn }: S
   const fx = useSceneFx(fxIn);
   const [said, setSaid] = useState(false);
   useSay('Vee', scene.teachBack, artBase);
-  const say = () => { setSaid(true); fx.confetti(); fx.burst(50, 40, 'gold'); onDone(); };
+  const say = () => { setSaid(true); fx.confetti(); fx.burst(50, 40, 'gold'); onDone(scene.story ? { story: scene.story } : undefined); };
   if (summary.quest) return <QuestComplete scene={scene} script={script} recap={summary.quest} said={said} onSaid={say} artBase={artBase} calm={calm} mistakes={summary.mistakes} reel={summary.reel ?? []} />;
   return (
     <div className="av-wrap" data-testid="av-wrap">

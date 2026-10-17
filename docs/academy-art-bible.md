@@ -29,7 +29,7 @@ Supporting principles:
 - **UI:** the same grammar as objects — chunky pills and tickets, never thin outlined boxes.
 - **Hero vs support:** the play object is 2× larger than anything around it and is the only thing with a glow.
 
-## 4. Colour system (owner, 2026-10-11; changed 2026-10-15 to 25% (was 35% from 2026-10-12): "35% purple, in the background images and all generated images, from now on")
+## 4. Colour system — SUPERSEDED 2026-10-17: the owner removed the purple quota from picture prompts ("too much"). Pictures use a natural varied daylight palette; purple only on characters' own clothes, small props and the player UI. The table below is the old purple-led system, kept for history. (older note: 2026-10-11; changed 2026-10-15 to 25% (was 35% from 2026-10-12): "35% purple, in the background images and all generated images, from now on")
 
 **Rule (supersedes the 60-70% purple rule of 2026-10-11):** about **25% of everything on screen is purple**, mixed with blue and warm, natural colours so the scenes are not one colour. It applies from now on to every background image and every generated image (Canva, Gemini). Skin and hair keep natural colours. The UI kit (ribbons, keys, buttons) stays violet; it is a small share of a scene.
 
@@ -42,7 +42,7 @@ Supporting principles:
 | White / black | 5-10% | white for highlights and text on dark; near-black `#0b0720` for outlines and shadows |
 | Accents | 3-5% total | gold `#fbbf24` reward, green `#4ade80` correct, orange `#fb923c` not-yet (never red) |
 
-**Prompt line for every generated image:** "Colour balance: about 25% purple, mixed with blue/teal, warm cream and wood tones and green plants; not a monochrome purple room." Check the result by eye (purple should read as a third, not as the whole picture) before it is used.
+**Prompt line for every generated image (SUPERSEDED 2026-10-17, do not use):** "Colour balance: about 25% purple, mixed with blue/teal, warm cream and wood tones and green plants; not a monochrome purple room." Check the result by eye (purple should read as a third, not as the whole picture) before it is used.
 **Existing pictures** made under the old 60-70% rule (the 9 scene plates and the cast clothes of the pending brand-colour pass) are restyled one at a time, each approved by the owner first.
 Colour is never the only signal: right = tick + glow, not-yet = arrow + soft shake of the object, locked = padlock.
 
