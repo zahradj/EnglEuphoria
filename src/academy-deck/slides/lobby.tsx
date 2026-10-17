@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { ACADEMY_LESSON_BLUEPRINTS } from '../../curriculum/academy';
+import { chapterOfLesson } from '../../curriculum/academy/arcs';
 import { useDeck } from '../ctx';
 import { partsFor, type DeckScript, type TitleSlide } from '../types';
 import { levelLine } from '../hub';
@@ -11,7 +12,7 @@ export function LobbyView({ slide, script, onStart }: { slide: TitleSlide; scrip
   const parts = partsFor(script);
   const info = levelLine(script);
   // the Season arc: this lesson is one chapter of the Season's theme
-  const chapter = ACADEMY_LESSON_BLUEPRINTS.find((b) => b.id === script.lessonId)?.chapter;
+  const chapter = ACADEMY_LESSON_BLUEPRINTS.find((b) => b.id === script.lessonId)?.chapter ?? chapterOfLesson(script.lessonId);
   return (
     <div className="ad-lobby" aria-label="Lesson lobby">
       <div className="ad-lobby-hero">

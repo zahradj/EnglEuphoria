@@ -3,6 +3,7 @@ import { useDeck } from '../ctx';
 import { Icon } from '../Icon';
 import { Bubble } from '../Stage';
 import { ACADEMY_LESSON_BLUEPRINTS } from '../../curriculum/academy';
+import { chapterOfLesson } from '../../curriculum/academy/arcs';
 import type { BadgeSlide, BriefSlide, DialSlide, TitleSlide } from '../types';
 import { Panel } from './shared';
 
@@ -10,7 +11,7 @@ export function TitleView({ slide }: { slide: TitleSlide }) {
   const { done, lessonId } = useDeck();
   useEffect(() => done(), [done]);
   // the Season arc: "Chapter 3 of 8" and its sub-question, for every lesson that has a blueprint
-  const chapter = ACADEMY_LESSON_BLUEPRINTS.find((b) => b.id === lessonId)?.chapter;
+  const chapter = ACADEMY_LESSON_BLUEPRINTS.find((b) => b.id === lessonId)?.chapter ?? (lessonId ? chapterOfLesson(lessonId) : undefined);
   return (
     <div className="ad-title">
       <span className="ad-title-kicker">Academy · Episode</span>

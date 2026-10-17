@@ -2,7 +2,8 @@
 // One theme per Season; each of its 8 episodes ties to that theme (or names the Season) and the 8 build as a cumulative stack.
 import { describe, expect, it } from 'vitest';
 import { ACADEMY_LESSON_BLUEPRINTS as BPS, ACADEMY_SEASONS } from '../index';
-import { SEASON_ARCS } from '../arcs';
+import { PRE_A1_ARCS, SEASON_ARCS } from '../arcs';
+import { PA1_SEASONS } from '../preA1';
 import { chaptersFor } from '../seasonArc';
 
 const words = (t: string) => t.toLowerCase().replace(/[^a-z' ]/g, ' ').split(/\s+/).filter((w) => w.length > 2);
@@ -64,4 +65,17 @@ describe('Hand-written arcs (owner 2026-10-17: write them for all levels)', () =
     const ids = new Set(ACADEMY_SEASONS.map((s) => s.id));
     for (const id of Object.keys(SEASON_ARCS)) expect(ids.has(id), id).toBe(true);
   });
+});
+
+describe('Pre-A1 Season arcs', () => {
+  for (const s of PA1_SEASONS) {
+    it(`${s.id} "${s.title}": a hand-written essential question and eight distinct chapters, the last answering it`, () => {
+      const arc = PRE_A1_ARCS[s.id];
+      expect(arc, `${s.id} arc`).toBeTruthy();
+      expect(arc.chapters).toHaveLength(8);
+      expect(new Set(arc.chapters.map((c) => c.title.toLowerCase())).size).toBe(8);
+      expect(arc.chapters[7].question).toBe(arc.essentialQuestion);
+      for (const c of arc.chapters) { expect(c.question.endsWith('?'), c.title).toBe(true); expect(c.step.length).toBeGreaterThan(10); }
+    });
+  }
 });

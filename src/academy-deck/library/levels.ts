@@ -1,5 +1,6 @@
 // The Academy library is organised like the Playground library: level (A1 A2 B1 B2 C1) → season (= unit, from the Academy roadmap) → lessons.
 // Seasons come from the roadmap (src/curriculum/academy); a season with no built lesson yet is listed as "coming soon".
+import { PRE_A1_ARCS } from '../../curriculum/academy/arcs';
 import { ACADEMY_LESSON_BLUEPRINTS, ACADEMY_RECALL_NODES, ACADEMY_SEASONS, PA1_SEASONS, PRE_A1_RECALL_NODES, MAX_REMEMBER_ITEMS_PRE_A1, readingOf, ladderSteps, recallPlan, type LadderStep, type RecallNode, type RecallPlan } from '../../curriculum/academy';
 import { ACADEMY_DECK_BLUEPRINT_IDS, type AcademyDeckLesson } from '../lessonRegistry';
 
@@ -99,7 +100,7 @@ function preA1Slots(seasonIdx: number, lessons: AcademyDeckLesson[]): LessonSlot
 }
 function preA1Overview(seasonIdx: number): SeasonOverview | undefined {
   const sp = PA1_SEASONS[seasonIdx];
-  return sp && { theme: sp.theme, canDo: [...sp.canDo], structures: [sp.chunk], release: sp.release, newItems: sp.episodes.reduce((n, e) => n + e.newItems.length, 0), sounds: [...sp.sounds], mechanic: 'videoGameMechanic' in sp ? sp.videoGameMechanic : undefined };
+  return sp && { theme: sp.theme, canDo: [...sp.canDo], structures: [sp.chunk], release: sp.release, newItems: sp.episodes.reduce((n, e) => n + e.newItems.length, 0), sounds: [...sp.sounds], mechanic: 'videoGameMechanic' in sp ? sp.videoGameMechanic : undefined, question: PRE_A1_ARCS[sp.id]?.essentialQuestion, chapters: PRE_A1_ARCS[sp.id]?.chapters.map((c) => `${c.title}: ${c.question}`) };
 }
 
 function slotsOf(level: AcademyLevel, no: number, lessons: AcademyDeckLesson[]): LessonSlot[] {

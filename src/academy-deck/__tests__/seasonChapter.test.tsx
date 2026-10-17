@@ -14,8 +14,8 @@ describe('Season chapter on the title card', () => {
     expect(el?.textContent).toMatch(/Chapter 3 of 8 · Been or gone\?/);
     expect(el?.textContent).toMatch(/ever \/ never change/);
   });
-  it('a lesson whose blueprint has no chapter (Pre-A1) shows no chapter line', () => {
+  it('a Pre-A1 lesson shows its chapter too (PA1-S01-E1: Chapter 1 of 8)', () => {
     const { container } = render(<Deck script={PA1_S01_E1} teacher slide={PA1_S01_E1.slides.findIndex((x) => x.kind === 'title')} />);
-    expect(container.querySelector('[data-chapter]')).toBeNull();
+    expect(container.querySelector('[data-chapter]')?.textContent).toMatch(/Chapter 1 of 8 · The wall wakes up/);
   });
 });
