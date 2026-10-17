@@ -1,14 +1,15 @@
 
-=== docs/songs/a1u7l3-hero-helper-song-take1.mp3  length=64.4s  score=0.83  missing=19  extra=8
-heard: oh stop you must stop at the light and look to the love and the light you mustn't run on the road you must walk nice and slow we can help help help we fight and help help you must help your friend today help them work and help them play you mustn't shout you mustn't run be kind to everyone we can help help help be kind to love help help
-line starts (s): [None, None, np.float64(13.1), np.float64(21.4), np.float64(23.9), np.float64(27.1), np.float64(33.2), np.float64(36.7), np.float64(42.5), np.float64(47.2), np.float64(49.6), np.float64(52.9), np.float64(55.8), np.float64(58.5)]
+=== docs/songs/a1u7l3-hero-helper-song-take1.mp3  length=64.4s  score=0.96  missing=3  extra=4
+heard: we can help help help be kind and help help help stop you must stop at the light then look to the left and the right you mustn't run on the road you must walk nice and slow we can help help help me kind and help help help you must help your friend today help them work and help them play you mustn't shout you mustn't run be kind to everyone one we can help help help we kind of help help help
+line starts (s): [np.float64(8.0), np.float64(10.4), np.float64(18.1), np.float64(21.2), np.float64(24.4), np.float64(27.5), np.float64(33.7), np.float64(36.4), np.float64(42.3), 46.5, np.float64(50.1), np.float64(53.2), np.float64(55.6), np.float64(57.8)]
+lineDurationsMs: [10420, 7700, 3080, 3160, 3180, 6200, 2620, 5960, 4220, 3560, 3120, 2420, 2140, 6586]
 
-=== docs/songs/a1u7l3-hero-helper-song-take2.mp3  length=64.4s  score=0.92  missing=7  extra=6
-heard: we can help help help be kind and help help help stomp you must stomp at the lights then look to the left and the right you must sit run on the road you must walk nice and slow we can help help help be kind and help help help you must help your friend today help them work and help them play you mustn't shout you mustn't bow be kind to everyone we can help help help be kind and help
-line starts (s): [np.float64(5.3), np.float64(8.6), np.float64(15.6), np.float64(17.6), np.float64(23.1), np.float64(26.8), np.float64(30.9), np.float64(34.3), np.float64(40.2), np.float64(44.5), np.float64(48.8), 52.5, np.float64(56.7), np.float64(60.1)]
-lineDurationsMs: [8580, 7040, 2000, 5460, 3720, 4140, 3400, 5820, 4300, 4380, 3660, 4240, 3380, 4246]
+=== docs/songs/a1u7l3-hero-helper-song-take2.mp3  length=64.4s  score=0.86  missing=14  extra=8
+heard: we can help help help ekain and help help help stop you must stop pack a light then look to the left and the right you mustn't run on the road you must walk nice and slow we can help help help eat fine and help help help you must help your friend today help him work and help him play you mustn't shut you mustn't run be kind to everyone we can help help help help
+line starts (s): [np.float64(5.2), np.float64(10.4), np.float64(13.9), np.float64(17.6), np.float64(23.0), np.float64(26.2), np.float64(30.7), np.float64(36.2), np.float64(40.2), np.float64(43.5), np.float64(47.6), np.float64(52.0), np.float64(55.6), np.float64(60.8)]
+lineDurationsMs: [10420, 3460, 3760, 5380, 3200, 4460, 5480, 4000, 3320, 4100, 4440, 3540, 5240, 3566]
 
-=== docs/songs/a1u7l3-hero-helper-song-take3.mp3  length=64.4s  score=0.95  missing=4  extra=4
-heard: we can help help help be kind and help help help stop you must stop at the light and move to the left and the right you mustn't run on the road you must walk nice and slow we can help help help be kind and help help help you must help your friends today help them work and help them play you mustn't shop you mustn't run be kind to everyone we can help help help be kind and help help help
-line starts (s): [np.float64(8.0), np.float64(10.6), np.float64(17.2), np.float64(22.2), np.float64(24.4), np.float64(27.6), np.float64(33.6), np.float64(36.1), np.float64(43.2), np.float64(46.9), np.float64(50.2), np.float64(53.2), np.float64(59.6), np.float64(61.9)]
-lineDurationsMs: [10560, 6600, 5040, 2240, 3120, 6080, 2500, 7100, 3660, 3260, 3080, 6360, 2300, 2466]
+=== docs/songs/a1u7l3-hero-helper-song-take3.mp3  length=64.4s  score=0.93  missing=6  extra=6
+heard: we can help help help be kind and help help help stop you must stop at the light then look to the left and the right you mustn't run on the road you must walk nice and slow we can help help help be kind and help help help you must help your friend today help them work and help them play you mustn't shout you mustn't run be kind to everyone we can huff huff huff be kind and huff huff huff
+line starts (s): [np.float64(6.9), np.float64(10.0), np.float64(16.6), np.float64(19.6), np.float64(24.0), np.float64(27.2), np.float64(33.2), np.float64(35.7), np.float64(42.4), np.float64(46.7), np.float64(49.6), np.float64(52.8), np.float64(54.9), np.float64(57.6)]
+lineDurationsMs: [10020, 6580, 3040, 4320, 3200, 6020, 2560, 6700, 4260, 2920, 3200, 2080, 2660, 6806]
