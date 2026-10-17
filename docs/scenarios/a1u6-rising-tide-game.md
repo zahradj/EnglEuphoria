@@ -54,6 +54,27 @@ Changes from the plan: the background holds completely still (no foam loop): the
 different speeds give the sea its motion, and they rise with the tide. The boat rocks as one piece (no separate flag
 frames). Everything else as in the shot list.
 
+## Version 2 (2026-10-17): the painted pier, built in stages, on a moving sea
+Owner (2026-10-16): "the water is moving and the bridge is up … create the bridge more illustrated and better animated,
+not flat."
+
+| Piece | Canva | How it was made | File |
+|---|---|---|---|
+| Painted pier | pier scene, design DAHYNk4zo3Q (pier layer media MAHYNvntiQs) | exported with and without the pier layer; the difference is the pier's exact outline, so the pier is cut out with its own posts, ropes and painted splashes | `public/lep1/stickers/tide-pier-{1..5}.png` (five sections, near to far, cut between posts) |
+| Moving sea | the seaside background (MAHYNVqogYI) | 16 frames of the same painted sea, each row nudged a few pixels (ripples that grow toward the front); sand, sky and frame never move | `public/lep1/gifs/a1u6-tide-sea.webp` (0.12 s per frame, loops) |
+
+How the page plays now:
+- The whole pier waits as a pale ghost, so the child sees what they are building.
+- A right answer drops the next painted section onto its posts with a bounce and a white splash (5 answers = 5 sections).
+- A wrong answer: the painted wave band rolls in along the water line and climbs the posts a step (at most 3 steps, never
+  over the deck); the boat floats up with it; the friends hop. "The tide is coming in!" shows at the bottom.
+- The last section: the friends walk the pier to the boat, getting smaller with distance; confetti.
+- The question card now sits in the sky, so the pier is never hidden.
+- The boat stays the approved Canva sticker: cutting the pier scene's own boat failed (its sail blends into the clouds).
+- No zoom and no pan anywhere; reduced-motion users get the still sea.
+
+Preview (the real page, recorded in the browser): `docs/scenarios/a1u6-rising-tide-preview.gif`.
+
 ## Approval
 - Owner: requested 2026-10-16 ("use Canva to generate well animated illustrations").
 - Owner OK on the preview: _pending_
