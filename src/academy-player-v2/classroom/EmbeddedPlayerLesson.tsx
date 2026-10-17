@@ -2,7 +2,7 @@
 // Clicks and typed text are replayed on the other screen (DOM-path replay, as in the Playground classroom), so the teacher watches the student play.
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { whiteboardService, type SceneTapPayload } from '@/services/whiteboardService';
-import { getDomPath, getElementAtPath } from '@/content/playground-library/unit1/scenePathSync';
+import { getDomPath, getElementAtPath } from './domPath';
 import { LessonPlayer } from '../LessonPlayer';
 import { loadScript } from '../lessonScripts';
 import type { LessonScript } from '../types';
