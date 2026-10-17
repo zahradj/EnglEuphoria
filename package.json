@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
+    "typecheck:academy-player": "tsc -p tsconfig.academy-player.json",
     "dev": "vite",
     "build": "vite build",
     "build:dev": "vite build --mode development",

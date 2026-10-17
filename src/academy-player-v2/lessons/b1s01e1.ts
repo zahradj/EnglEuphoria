@@ -37,7 +37,9 @@ export const BLOG: string[] = [
 ];
 
 const L = 'library-case-room';
-const scenes: SceneBase[] = [
+// the scenes carry the fields of their kind (heading, title, beats...), checked by `satisfies` and the registry validator
+type Scene = SceneBase & Record<string, unknown>;
+const scenes: Scene[] = [
   { id: 'lobby', part: 0, kind: 'lobby', plate: 'bucket-list-wall', heading: 'Have you ever…?', sub: 'Experiences and bucket lists · lesson 1' } satisfies LobbyScene,
   { id: 'lead-in', part: 0, kind: 'speak', plate: 'bucket-list-wall', trains: [5], title: 'Warm-up talk', who: 'Vee', turns: [
     { step: 'guided', prompt: 'Tell me one exciting thing you did in the last year, and one thing you have never done but would love to try. About 30 seconds.', model: 'Last year I went camping with my cousins and we swam in a lake. I have never been to a concert, but I would love to go to one.' },

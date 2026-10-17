@@ -53,7 +53,9 @@ const SET_C: TeachPage[] = [
 const mem = (pages: TeachPage[], n: number) => pages.slice(0, n).map((p) => ({ art: p.art, text: p.word }));
 const gloss: Record<string, string> = { excitement: 'a happy feeling before a good thing', amazed: 'very surprised, in a good way', disappointed: 'sad: it was not as good as you hoped', embarrassed: 'shy and uncomfortable', proud: 'happy about what you did', frightened: 'afraid', relaxed: 'calm, not worried', grateful: 'thankful', destination: 'the place you are going to', attraction: 'a place people visit' };
 
-const scenes: SceneBase[] = [
+// the scenes carry the fields of their kind (heading, title, beats...), checked by `satisfies` and the registry validator
+type Scene = SceneBase & Record<string, unknown>;
+const scenes: Scene[] = [
   { id: 'lobby', part: 0, kind: 'lobby', plate: ROOM, heading: 'Word Lab', sub: 'Feelings, places and what you did · lesson 2' } satisfies LobbyScene,
   { id: 'lead-in', part: 0, kind: 'speak', plate: ROOM, trains: [1], title: 'Warm-up talk', who: 'Vee', turns: [
     { step: 'guided', prompt: 'Think of one moment on a trip or at an event. How did you feel? Say it in one or two sentences, any words you have.', model: 'Last summer I went to the beach with my cousins. It was great, and I felt really happy.' },

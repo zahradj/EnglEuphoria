@@ -29,7 +29,9 @@ export const CRITERIA = [
 const LIB = 'library-case-room';
 const BOARD = 'case-board';
 const WALL = 'detective-wall';
-const scenes: SceneBase[] = [
+// the scenes carry the fields of their kind (heading, title, beats...), checked by `satisfies` and the registry validator
+type Scene = SceneBase & Record<string, unknown>;
+const scenes: Scene[] = [
   { id: 'lobby', part: 0, kind: 'lobby', plate: LIB, heading: 'Pattern Lab', sub: 'The Missing Postcard · lesson 3' } satisfies LobbyScene,
   { id: 'lead-in', part: 0, kind: 'speak', plate: LIB, trains: [2], title: 'Warm-up talk', who: 'Vee', turns: [
     { step: 'guided', prompt: 'Tell me one thing you have done that most people have not. One or two sentences, any words you have.', model: 'I have swum with a dolphin. I think most people have not!' },
