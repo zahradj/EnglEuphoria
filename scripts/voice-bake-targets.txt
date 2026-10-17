@@ -1,3 +1,5 @@
+# 2026-10-17 first: A1 U1 L3 (new number games) is baked before everything else when credits are short
+LESSON_3_SCENES
 # HOMEWORK must stay (quests are not lesson exports)
 HOMEWORK
 # 2026-10-12 A1 Jungle: Unit 2 Lessons 1-2 (the jungle file is now in the bake engines)
@@ -53,7 +55,6 @@ LESSON_U10L7_SCENES
 # 2026-10-12 A1 Unit 1 rebuild (Leo's First Day reader, Blend & Read)
 LESSON_1_SCENES
 LESSON_2_SCENES
-LESSON_3_SCENES
 LESSON_4_SCENES
 LESSON_5_SCENES
 LESSON_6_SCENES

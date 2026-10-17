@@ -30,18 +30,27 @@ jobs:
         with:
           node-version: '22'
       - name: Record missing clips
+        id: record
         env:
           # The voice function only records NEW clips for the service key (owner's "no live clips" rule).
           # Repo secret set by the owner in GitHub → Settings → Secrets and variables → Actions.
           BAKE_SERVICE_KEY: ${{ secrets.BAKE_SERVICE_KEY }}
+        # Every target is tried even when one fails (an empty voice quota used to stop the run at the
+        # first target, so later lessons were never baked and the clips made before the failure were
+        # thrown away). The failure is reported after the clips that did record are committed.
         run: |
-          set -e
           if [ -z "$BAKE_SERVICE_KEY" ]; then echo "::error::Add the BAKE_SERVICE_KEY repository secret (Supabase service_role key) so new clips can be recorded."; exit 1; fi
-          grep -v '^\s*#' scripts/voice-bake-targets.txt | grep -v '^\s*$' | while read -r target; do
+          failed=""
+          while read -r target; do
             echo "== $target"
-            npx -y tsx scripts/generate-voice-cache.mjs --lesson="$target"
-          done
+            npx -y tsx scripts/generate-voice-cache.mjs --lesson="$target" || failed="$failed $target"
+          done < <(grep -v '^\s*#' scripts/voice-bake-targets.txt | grep -v '^\s*$')
+          echo "failed=$failed" >> "$GITHUB_OUTPUT"
+          if [ -n "$failed" ]; then
+            echo "::warning::Some clips could not be recorded in:$failed. A 'tts 400/503' on every line means the ElevenLabs keys in the Supabase secrets are out of credits or invalid."
+          fi
       - name: Commit new clips
+        if: always()
         run: |
           git add public/audio-cache
           if git diff --cached --quiet; then echo "No new clips."; exit 0; fi
@@ -50,3 +59,8 @@ jobs:
           git commit -m "Bake voice clips ($(git diff --cached --name-only | wc -l) new)"
           git pull --rebase origin "${GITHUB_REF_NAME}"
           git push origin "HEAD:${GITHUB_REF_NAME}"
+      - name: Report clips that could not be recorded
+        if: steps.record.outputs.failed != ''
+        run: |
+          echo "::error::Clips missing for:${{ steps.record.outputs.failed }} (see the FAILED lines above)."
+          exit 1
