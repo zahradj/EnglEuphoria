@@ -1,6 +1,7 @@
 // The Academy lesson player v2: engine (pure reducer) + services + shell + one scene at a time from the registry.
 import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { I18nextProvider, useTranslation } from 'react-i18next';
+import i18n from '@/lib/i18n';
 import { initialState, lessonReducer, XP_CLEAN } from './engine/lessonReducer';
 import { moduleFor } from './scenes/registry';
 import { PlayerShell } from './shell/PlayerShell';
@@ -39,7 +40,13 @@ export interface LessonPlayerProps {
 
 const seedOf = (id: string) => [...id].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7);
 
-export function LessonPlayer({ script, artBase = '/academy-art', role = 'solo', index, onIndex, onNav, onFinish, ephemeral }: LessonPlayerProps) {
+/** The lesson is taught in English and its chrome is English too (owner 2026-10-17: "the lesson is strictly English, no other"): the player always uses its own English instance, whatever language the rest of the app is in. */
+const playerI18n = i18n.cloneInstance({ lng: 'en', fallbackLng: 'en' });
+export function LessonPlayer(props: LessonPlayerProps) {
+  return <I18nextProvider i18n={playerI18n}><LessonPlayerInner {...props} /></I18nextProvider>;
+}
+
+function LessonPlayerInner({ script, artBase = '/academy-art', role = 'solo', index, onIndex, onNav, onFinish, ephemeral }: LessonPlayerProps) {
   const { t } = useTranslation();
   const total = script.scenes.length;
   const ids = useMemo(() => script.scenes.map((s) => s.id), [script]);
@@ -137,7 +144,7 @@ export function LessonPlayer({ script, artBase = '/academy-art', role = 'solo', 
   const partFill = inPart.length ? (inPart.findIndex((s) => s.id === scene?.id) + (sceneDone ? 1 : 0)) / inPart.length : 0;
   const student = role === 'student';
 
-  if (!scene || !mod) return <div className="av-root" data-testid="av-empty" />;
+  if (!scene || !mod) return <div className="av-root" dir="ltr" lang="en" data-testid="av-empty" />;
   const View = mod.view;
   const showBar = scene.kind !== 'lobby';
   return (

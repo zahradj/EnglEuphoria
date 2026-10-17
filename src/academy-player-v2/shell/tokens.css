@@ -71,7 +71,7 @@ button.av-pill { cursor: pointer; font-family: inherit; }
 .av-crew { display: flex; gap: 10px; }
 .av-crew span { display: flex; flex-direction: column; align-items: center; font-weight: 900; font-size: 12px; }
 .av-crew img { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; object-position: 50% 12%; border: 3px solid #fff; background: #cfc3ff; box-shadow: var(--av-shadow); }
-.av-lobby-side { position: absolute; right: 3%; top: 16%; bottom: 16%; width: 44%; display: flex; flex-direction: column; gap: 10px; overflow: hidden; }
+.av-lobby-side { position: absolute; inset-inline-end: 3%; top: 16%; bottom: 16%; width: 44%; display: flex; flex-direction: column; gap: 10px; overflow: hidden; }
 .av-chapcard { border-left: 8px solid var(--av-p500); background: linear-gradient(100deg, var(--av-p50), var(--av-glass) 40%); }
 .av-chapcard h3 { margin: 0; font-size: clamp(17px, 2.4cqw, 24px); line-height: 1.15; }
 .av-previously { border-left: 8px solid var(--av-teal, #2bb5a8); background: linear-gradient(100deg, color-mix(in srgb, var(--av-teal, #2bb5a8) 14%, white), var(--av-glass) 45%); }
@@ -84,7 +84,7 @@ button.av-pill { cursor: pointer; font-family: inherit; }
 .av-path { display: flex; gap: 6px; flex-wrap: wrap; }
 .av-path em:nth-child(3n+1) { background: var(--av-p100); } .av-path em:nth-child(3n+2) { background: var(--av-p200); } .av-path em:nth-child(3n) { background: var(--av-mint); }
 .av-path em { font-style: normal; border-radius: 10px; padding: 4px 8px; font-weight: 900; font-size: 11px; }
-.av-lobby-go { position: absolute; right: 12px; bottom: 10px; z-index: 7; }
+.av-lobby-go { position: absolute; inset-inline-end: 12px; bottom: 10px; z-index: 7; }
 @container (max-width: 560px) {
   .av-lobby-hero { left: 5%; right: 5%; top: 12%; width: auto; }
   .av-lobby-side { left: 4%; right: 4%; top: 46%; bottom: 64px; width: auto; }
@@ -167,3 +167,4 @@ button.av-pill { cursor: pointer; font-family: inherit; }
 .av-opt[data-state='pick'] { background: var(--av-p100); border-color: var(--av-p500); }
 .av-passage { max-height: 40cqh; overflow: auto; background: var(--av-cream); border: 2px solid var(--av-p200); border-radius: 14px; padding: 8px 14px; font-size: clamp(12px, 1.9cqw, 16px); line-height: 1.4; } .av-passage p { margin: 0 0 6px; }
 .av-npc { background: var(--av-teal); color: #fff; border-radius: 8px; padding: 1px 8px; font-size: 0.6em; letter-spacing: 0.1em; text-transform: uppercase; margin-inline-end: 6px; }
+

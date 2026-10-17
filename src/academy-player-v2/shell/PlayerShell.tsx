@@ -48,7 +48,7 @@ export function PlayerShell(p: ShellProps) {
   const sum = p.partMinutes.reduce((a, b) => a + b, 0) || 1;
   const dotsMax = Math.min(p.total, 12);
   return (
-    <div className="av-root" ref={p.rootRef} data-calm={p.prefs.calm} data-shaking={p.shaking ? String(p.shaking) : undefined} data-testid="av-root">
+    <div className="av-root" dir="ltr" lang="en" ref={p.rootRef} data-calm={p.prefs.calm} data-shaking={p.shaking ? String(p.shaking) : undefined} data-testid="av-root">
       {p.plate && <div className="av-plate" data-calm={p.calmPlate || undefined} style={{ backgroundImage: `url(${p.artBase}/bg/${p.plate}.webp)` }} />}
       <div className="av-veil" />
       <div className="av-stage" data-av-sync="stage">{p.children}</div>
