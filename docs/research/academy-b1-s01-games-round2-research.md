@@ -66,5 +66,17 @@ Lesson 3's agent also notes: error hunts must end with the student fixing the se
 | C5 | *Stress Beat* (rhythm lane) | taps the stressed syllable of embARRassed, DEStination… | `beats` |
 Own design notes: error return queue (Quizlet-style states) and predict-before-reveal (Memrise) as supporting rules; distractors like "do camping" / "make sightseeing" because collocations without an L1 match are hard (snippet source, Newcastle thesis).
 
-## Lesson 1, per criterion
-The Lesson 1 agent reported before the per-criterion message reached it; it proposed *Border Desk* (C4), *The Interview* (C5), *Timeline Switchboard* (C4) and *Participle Cipher* (C3). Criteria 1 (the blog) and 2 (the words) have no game proposal yet: candidates to design from the same mechanics are an *Evidence Ledger* (Obra Dinn batch of three: pick the sentence that proves the main idea, a detail, and what is not said) and *Torn Tickets* for the six bucket-list chunks.
+## Lesson 1, per criterion (agent report; all UNVERIFIED snippets)
+| Criterion | Game (borrows) | What the student does | Scene kind |
+|---|---|---|---|
+| C1 follow the blog | *Lock the Evidence* (Obra Dinn batch of three) | drags 9 claims into MAIN IDEA / DETAIL / NOT IN THE POST and highlights the proving line; checked three at a time | new `claims` |
+| C1 | *Comment Check* (Papers, Please) | stamps reader comments ACCURATE or MISREAD and taps the post line that disagrees | `inspect` |
+| C2 six words | *Clue Wall* (Codenames) | a voiced clue; taps every scene card that fits the word (3x3 wall) | new `cluewall` |
+| C2 | *Thought Cabinet* (Disco Elysium) | completes an inner voice's line with the word, slots it, writes an own example from a stem | `write` + cabinet look |
+| C3 three forms of nine verbs | *Third Form Wordle* (Wordle) | types the participle with green/yellow/grey feedback, hint after 3 misses | `cipher` |
+| C3 | *Backwards Rally* (serve-and-return, rhythm lane) | hears the 3rd form, picks the 2nd and base forms; the beat waits for the student | new `rally` |
+| C4 tense choice and question/answer/follow-up | *Chat Chain* (prompt-and-reply, friend reacts) | builds "Have you ever…?", answers, writes the "When did you…?" follow-up; the friend reacts | `interview`/chat look |
+| C4 | *Spot the Slip* (Two Truths + Among Us flag) | flags the wrong-tense line in a profile and types the fix | `inspect` |
+| C5 speak about who has done the most | *Bucket List Draft* (Balatro hand-building) | picks 5 experience cards, adds connector cards (because, but, so), records about a minute, types 3 sentences | `speak` + `write` + cards |
+| C5 | *Ledger and Verdict* (Papers, Please tally + Keep Talking info gap, no countdown) | counts three friends' lists, then gives a spoken verdict with a reason | `interview` look |
+Agent assumption: it used do-did-done, write-wrote-written, meet-met-met as the extra three verbs; the lesson's own nine are go, be, see, eat, take, fly plus the revised do, make, write, win (check against the blueprint before any item list is written). Source limits as above: Obra Dinn's batch size differs between sources, Papers Please / Wordle results included SEO spam (ignored).
