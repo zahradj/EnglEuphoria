@@ -3,6 +3,7 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { ACADEMY_ROADMAP, PA1_SEASONS, PRE_A1_READING } from '../src/curriculum/academy';
 import { PRE_A1_ARCS } from '../src/curriculum/academy/arcs';
+import { A1_STRUCTURE_GSE } from '../src/curriculum/academy/structureGse';
 import { LEVEL_FRAMES } from '../src/curriculum/academy/levelFrames';
 
 const DIR = 'docs/academy-curriculum';
@@ -103,6 +104,8 @@ for (const f of LEVEL_FRAMES) {
         out();
       }
       out(`- Lexical fields: ${s.lexicalFields.join('; ')}`);
+      const gse = s.structures.map((x) => A1_STRUCTURE_GSE[x.id] && `${x.id} GSE ${A1_STRUCTURE_GSE[x.id].gse[0] === A1_STRUCTURE_GSE[x.id].gse[1] ? A1_STRUCTURE_GSE[x.id].gse[0] : A1_STRUCTURE_GSE[x.id].gse.join('-')}`).filter(Boolean);
+      if (gse.length) out(`- Pearson GSE (adult grammar, 2023): ${gse.join('; ')}`);
       if (s.mediation) out(`- Mediation: ${s.mediation}`);
       out(`- Skins: ${s.skins.map((k) => k.id).join(', ')}`);
       out();
