@@ -89,7 +89,7 @@ describe('validateScript', () => {
     const bad = { ...script, blueprintId: 'X', partMinutes: [10], scenes: [{ id: 'a', part: 9, kind: 'nope' }, { id: 'a', part: 0, kind: 'nope' }] } as LessonScript;
     const p = validateScript(bad).join('\n');
     expect(p).toMatch(/blueprint X does not exist/);
-    expect(p).toMatch(/partMinutes must have 8/);
+    expect(p).toMatch(/partMinutes must sum to 60/);
     expect(p).toMatch(/duplicate scene id a/);
     expect(p).toMatch(/unknown scene kind "nope"/);
   });

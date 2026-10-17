@@ -49,7 +49,7 @@ An objective is **one observable performance**, in a realistic situation, at the
 2. **Alignment matrix** (put it in the spec and in a test): rows = criteria, columns = screens; every criterion has ≥ 3 screens, the last is production; every screen has a criterion.
 3. **Exit-task coverage test**: every word/frame the exit task needs appears in the taught list AND was practised (matched/completed/said) at least 3 times; nothing in the exit task is untaught.
 4. **Cold-exit trial**: play the lesson with the validators' "honest student" (always-first-try-correct and always-wrong-then-hint), then run the exit task from the saved answers; the card must be produced with no model visible.
-5. Minutes: estimated screen time inside the blueprint's run of show (a test already exists).
+5. Minutes: the lesson's own acts add to 60 (validateScript); no fixed run of show.
 6. 95 % known-word rule for every text (this lesson's taught items + closed-class words + tap-to-gloss).
 7. A teacher can read the evidence (criteria ticked, hints used, "I said it" count) in one glance.
 8. Voice/picture rules of the repo (recorded voices only, Canva pictures, no browser TTS).

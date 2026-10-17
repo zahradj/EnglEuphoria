@@ -1,7 +1,6 @@
-// The Quest Layer selectors (pure, no React): the lesson seen as a quest. Objectives = the success criteria, stages = the 8 parts,
+// The Quest Layer selectors (pure, no React): the lesson seen as a quest. Objectives = the success criteria, stages = the lesson's own acts,
 // level / rank from XP, loot and streak DERIVED from the engine state (nothing is stored twice), and the Quest Complete recap.
 import type { LessonScript, SceneBase } from '../types';
-import { PART_COUNT } from '../types';
 import type { EngineState } from './lessonReducer';
 
 /** Scene kinds that score the student (they can pay a gem). Mirrors the reducer's "scored" idea: a game, not a story page. */
@@ -138,7 +137,7 @@ export function streakOf(script: LessonScript, s: Pick<EngineState, 'doneIds' | 
 /** streak tiers for the meter: x1 below 3, x2 from 3, x3 from 6 */
 export const streakTier = (streak: number): 1 | 2 | 3 => (streak >= 6 ? 3 : streak >= 3 ? 2 : 1);
 
-// ---------- stages (the 8 parts) ----------
+// ---------- stages (the lesson's acts) ----------
 export interface StageInfo {
   part: number;
   sceneIds: string[];
@@ -154,7 +153,7 @@ export interface StageInfo {
 
 export function stagesOf(script: LessonScript, doneIds: string[]): StageInfo[] {
   const done = doneSet(doneIds);
-  return Array.from({ length: PART_COUNT }, (_, part) => {
+  return Array.from({ length: script.partMinutes.length }, (_, part) => {
     const mine = script.scenes.filter((s) => s.part === part);
     const drops = mine.flatMap(dropsOf);
     const d = mine.filter((s) => done.has(s.id)).length;

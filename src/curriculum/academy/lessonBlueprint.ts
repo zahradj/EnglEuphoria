@@ -168,6 +168,7 @@ export const EPISODES: Record<EpisodeType, EpisodeMeta> = {
 export const VOCAB_GAMES_RULE = { gamesPerWordSet: 2, differentKinds: true, before: 'anything new is taught' } as const;
 
 /**
+ * LEGACY (owner 2026-10-17: no fixed skeleton, docs/academy-lesson-design.md). Kept only because the old deck player and its tests read it; the v2 player and new lessons do not follow it.
  * Fixed run of show. Core segments are never skipped; flex segments are the teacher's call.
  * `mustHave` = what a lesson plan must contain in that part for the lesson to be effective (research-based, 2026-10-10:
  * docs/academy-effective-lesson-plan.md; evidence logs docs/research/academy-fast-progress-evidence-A.md and -B.md).

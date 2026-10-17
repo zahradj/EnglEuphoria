@@ -5,7 +5,7 @@ import { previouslyBeats } from '../../engine/quest';
 import { lessonMeta } from '../../shell/lessonMeta';
 import { Icon, STAGE_ICONS } from '../../quest/icons';
 import { questName, stageText } from '../../quest/text';
-import { PART_COUNT, type SceneBase, type SceneModule, type SceneProps } from '../../types';
+import { SEASON_CHAPTERS, type SceneBase, type SceneModule, type SceneProps } from '../../types';
 
 export interface LobbyScene extends SceneBase { kind: 'lobby'; heading: string; sub?: string }
 
@@ -31,7 +31,7 @@ function LobbyView({ scene, script, onDone, artBase }: SceneProps<LobbyScene>) {
           <section className="av-panel av-chapcard" data-chapter>
             <h2>{t('ap.chapter', 'Chapter {{n}} of 8', { n: meta.chapter.no })} · {meta.chapter.title}</h2>
             <h3>{meta.chapter.question}</h3>
-            {meta.chapter.essentialQuestion && meta.chapter.no < PART_COUNT && <p>{t('ap.bigQuestion', 'The Season’s big question')}: {meta.chapter.essentialQuestion}</p>}
+            {meta.chapter.essentialQuestion && meta.chapter.no < SEASON_CHAPTERS && <p>{t('ap.bigQuestion', 'The Season’s big question')}: {meta.chapter.essentialQuestion}</p>}
           </section>
         )}
         {recap.length > 0 && (
@@ -47,7 +47,7 @@ function LobbyView({ scene, script, onDone, artBase }: SceneProps<LobbyScene>) {
         <section className="av-panel">
           <h2>{t('ap.quest', 'The quest · {{n}} min', { n: total })}</h2>
           <p className="avq-sub">{questName(script, meta)}</p>
-          <div className="av-path">{script.partMinutes.map((m, i) => <em key={i}><Icon name={STAGE_ICONS[i]} size={13} /> {i + 1}. {stageText(t, script, i).title} · {t('ap.minutes', '{{n}} min', { n: m })}</em>)}</div>
+          <div className="av-path">{script.partMinutes.map((m, i) => <em key={i}><Icon name={STAGE_ICONS[i % STAGE_ICONS.length]} size={13} /> {i + 1}. {stageText(t, script, i).title} · {t('ap.minutes', '{{n}} min', { n: m })}</em>)}</div>
         </section>
       </div>
       <div className="av-lobby-go"><button type="button" className="av-btn" data-kind="warm" onClick={() => onDone()}>{t('ap.start', 'Start the mission')} →</button></div>

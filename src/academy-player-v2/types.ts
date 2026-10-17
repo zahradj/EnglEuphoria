@@ -4,12 +4,13 @@ import type { ComponentType } from 'react';
 
 export type CastName = 'Vee' | 'Ava' | 'Theo' | 'Mia';
 
-/** The eight parts of the 60-minute run of show (blueprint order). */
-export const PART_COUNT = 8;
+/** A Season has eight chapters (episodes). A lesson has as many acts as it needs (1-12), see MAX_ACTS. */
+export const SEASON_CHAPTERS = 8;
+export const MAX_ACTS = 12;
 
 export interface SceneBase {
   id: string;
-  /** which of the 8 parts (0-7) this scene belongs to */
+  /** which of the lesson's acts (0 .. partMinutes.length-1) this scene belongs to */
   part: number;
   /** the scene kind: a key of the scene registry */
   kind: string;
@@ -19,7 +20,11 @@ export interface SceneBase {
   plate?: string;
 }
 
+export type LessonShape = 'ppp' | 'escape' | 'story' | 'run' | 'cafe' | 'show' | 'studio' | 'ttt' | 'discovery' | 'table' | 'survival' | 'gap';
+
 export interface LessonScript {
+  /** the lesson's shape (docs/academy-lesson-shapes.md): what the student does in what order; consecutive lessons must differ (lessonShape.test.ts) */
+  shape?: LessonShape;
   /** blueprint id, e.g. 'B1-S01-E3': chapter, big question and run of show come from it */
   blueprintId: string;
   title: string;

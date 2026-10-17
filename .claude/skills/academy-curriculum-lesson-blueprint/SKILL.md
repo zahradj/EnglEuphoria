@@ -30,7 +30,10 @@ Level -> Season (= unit, 8 sessions) -> Episode -> 60-minute live session. **80 
 
 **Hard cap:** `MAX_ITEMS_PER_SESSION = 14` new items; at most 8 in Pre-A1; 0 in E7 and E8. Placement of every structure and item must be checked against the English Grammar Profile / Vocabulary Profile and GSE (never invent a placement; mark unverified ones `[U]`).
 
-## 2. The 60-minute Run of Show
+## 2. The 60-minute hour (a menu, not a skeleton)
+
+> **No fixed skeleton (owner, 2026-10-17).** The table below is a **menu of techniques**, not a required order or timing. Each lesson analyses its objective and the student's need FIRST, searches the internet for compatible activities, interactive games and video-game mechanics, chooses its teaching approach(es) (PPP, test-teach-test, communicative/task-based, guided discovery, lexical, skills, genre, project, game-based: `TEACHING_APPROACHES` in `src/curriculum/academy/lessonDesign.ts`) and then authors its OWN acts and activities, like a Playground lesson (a free list of scenes). What every lesson must contain, in any order, is `REQUIRED_INGREDIENTS` (same file). Acts: 1-12, their minutes sum to 60. See `docs/academy-lesson-design.md`.
+
 
 The standard split (`RUN_OF_SHOW` in `lessonBlueprint.ts`) is **51 core + 9 flex minutes**:
 

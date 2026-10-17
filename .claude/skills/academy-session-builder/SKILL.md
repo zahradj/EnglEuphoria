@@ -13,7 +13,10 @@ Prerequisites: `academy-season-system` (rules), a `SeasonSpec`/`EpisodeSpec` fro
 `academy-learner-diagnostics` (use defaults if new), mechanics from `academy-activity-selector`.
 **Sequencing law (learned the hard way):** never ask the student to find, say or write language not yet introduced. Check every slide.
 
-## Run of show (fixed order; mechanics rotate)
+## Techniques menu (no fixed order, see the note)
+
+> **No fixed skeleton (owner, 2026-10-17).** The table below is a **menu of techniques**, not a required order or timing. Each lesson analyses its objective and the student's need FIRST, searches the internet for compatible activities, interactive games and video-game mechanics, chooses its teaching approach(es) (PPP, test-teach-test, communicative/task-based, guided discovery, lexical, skills, genre, project, game-based: `TEACHING_APPROACHES` in `src/curriculum/academy/lessonDesign.ts`) and then authors its OWN acts and activities, like a Playground lesson (a free list of scenes). What every lesson must contain, in any order, is `REQUIRED_INGREDIENTS` (same file). Acts: 1-12, their minutes sum to 60. See `docs/academy-lesson-design.md`.
+
 
 | Min | Segment | Technique (science doc) | Teacher does | Student does |
 |---|---|---|---|---|
@@ -28,7 +31,7 @@ Prerequisites: `academy-season-system` (rules), a `SeasonSpec`/`EpisodeSpec` fro
 
 Source of truth in code: `RUN_OF_SHOW[].mustHave` in `src/curriculum/academy/lessonBlueprint.ts` (tested). Reasons and evidence: `docs/academy-effective-lesson-plan.md`. Recommended rhythm: 2 lessons + Daily 10 on 5 days a week (a guideline, not a promise).
 
-Core 51 min is never skipped (Check-in 5 and Energiser 4 are the flex). If the energy dial is low: swap Mission for the **Chill track** (same language, lower-pressure game).
+If the energy dial is low: swap Mission for the **Chill track** (same language, lower-pressure game).
 
 ## Per-episode content
 

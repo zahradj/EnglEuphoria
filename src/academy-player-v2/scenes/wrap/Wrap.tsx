@@ -80,7 +80,7 @@ function QuestComplete({ scene, script, recap, said, onSaid, artBase, calm, mist
               </span>
             </div>
             <ul className="av-qc-stats" aria-label={t('ap.recap', 'Recap')}>
-              <li><b><CountUp to={recap.stagesCleared} calm={calm} ms={700} />/8</b>{t('ap.stagesCleared', 'stages cleared')}</li>
+              <li><b><CountUp to={recap.stagesCleared} calm={calm} ms={700} />/{script.partMinutes?.length ?? recap.stagesCleared}</b>{t('ap.stagesCleared', 'stages cleared')}</li>
               <li><b><CountUp to={recap.clean} calm={calm} ms={700} />/{recap.scored}</b>{t('ap.cleanWins', 'first-try wins')}</li>
               <li><b>{recap.bestStreak}</b>{t('ap.bestStreak', 'best streak')}</li>
             </ul>

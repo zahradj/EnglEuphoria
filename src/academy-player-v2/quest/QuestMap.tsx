@@ -10,10 +10,11 @@ import type { CastName, LessonScript } from '../types';
 
 interface Pt { x: number; y: number }
 /** node positions in a 1000 x 560 (wide) or 440 x 700 (tall) map */
-export function nodePositions(tall: boolean): { w: number; h: number; pts: Pt[] } {
-  if (tall) return { w: 440, h: 700, pts: Array.from({ length: 8 }, (_, i) => ({ x: i % 2 ? 320 : 120, y: 70 + i * 80 })) };
+export function nodePositions(tall: boolean, n = 8): { w: number; h: number; pts: Pt[] } {
+  if (tall) return { w: 440, h: 700, pts: Array.from({ length: n }, (_, i) => ({ x: i % 2 ? 320 : 120, y: 70 + i * 80 })) };
   const ys = [370, 250, 380, 230, 360, 240, 350, 250];
-  return { w: 1000, h: 560, pts: ys.map((y, i) => ({ x: 90 + i * 117, y: y + 30 })) };
+  const step = 820 / Math.max(1, n - 1);
+  return { w: 1000, h: 560, pts: Array.from({ length: n }, (_, i) => ({ x: n === 1 ? 500 : 90 + i * step, y: ys[i % ys.length] + 30 })) };
 }
 /** a smooth cubic road between two nodes (vertical tangents in the wide map, horizontal in the tall one) */
 const seg = (a: Pt, b: Pt, tall: boolean) => (tall
@@ -50,7 +51,7 @@ export function QuestMap({ script, meta, stages, part, walk, calm, artBase, onCl
   const { t } = useTranslation();
   const outer = useRef<HTMLDivElement>(null);
   const tall = useTall(outer);
-  const { w, h, pts } = useMemo(() => nodePositions(tall), [tall]);
+  const { w, h, pts } = useMemo(() => nodePositions(tall, script.partMinutes.length), [tall, script.partMinutes.length]);
   const segRefs = useRef<(SVGPathElement | null)[]>([]);
   const [token, setToken] = useState<Pt>(() => pts[walk ? walk.from : part] ?? pts[0]);
   const [arrived, setArrived] = useState(!walk || calm);
@@ -92,7 +93,7 @@ export function QuestMap({ script, meta, stages, part, walk, calm, artBase, onCl
   const upcoming = walk ? walk.to : part;
   const up = stageText(t, script, upcoming);
   const upStage = stages[upcoming];
-  const lastNode = pts[7];
+  const lastNode = pts[pts.length - 1];
 
   return (
     <div className="avq-map" ref={outer} role="dialog" aria-modal="true" aria-label={t('ap.mapTitle', 'Quest map')} data-testid="avq-map" data-av-local data-calm={calm || undefined}>
@@ -123,9 +124,9 @@ export function QuestMap({ script, meta, stages, part, walk, calm, artBase, onCl
               <circle cx="-5" cy="-11" r="6" fill="#fff" opacity="0.25" />
             </g>
           ))}
-          {pts.slice(0, 7).map((p, i) => <path key={`b${i}`} d={seg(p, pts[i + 1], tall)} className="avq-road-edge" />)}
-          {pts.slice(0, 7).map((p, i) => <path key={`r${i}`} d={seg(p, pts[i + 1], tall)} className="avq-road" data-done={roadDone(i) || undefined} />)}
-          {pts.slice(0, 7).map((p, i) => <path key={`s${i}`} ref={(el) => { segRefs.current[i] = el; }} d={seg(p, pts[i + 1], tall)} fill="none" stroke="none" />)}
+          {pts.slice(0, -1).map((p, i) => <path key={`b${i}`} d={seg(p, pts[i + 1], tall)} className="avq-road-edge" />)}
+          {pts.slice(0, -1).map((p, i) => <path key={`r${i}`} d={seg(p, pts[i + 1], tall)} className="avq-road" data-done={roadDone(i) || undefined} />)}
+          {pts.slice(0, -1).map((p, i) => <path key={`s${i}`} ref={(el) => { segRefs.current[i] = el; }} d={seg(p, pts[i + 1], tall)} fill="none" stroke="none" />)}
           <g className="avq-flag" transform={`translate(${lastNode.x + (tall ? -12 : 26)} ${lastNode.y - 56})`}><path d="M0 60V0" stroke="#4f2eaa" strokeWidth="4" strokeLinecap="round" /><path d="M2 2h34l-8 11 8 11H2z" fill="#fbbf24" stroke="#c98a00" strokeWidth="2" strokeLinejoin="round" /></g>
           <g className="avq-clouds" opacity="0.85">
             <ellipse cx={tall ? 90 : 170} cy={tall ? 40 : 60} rx="48" ry="14" fill="#fff" /><ellipse cx={tall ? 125 : 205} cy={tall ? 33 : 52} rx="30" ry="12" fill="#fff" />
@@ -139,7 +140,7 @@ export function QuestMap({ script, meta, stages, part, walk, calm, artBase, onCl
             return (
               <li key={i} className="avq-node" data-state={st} style={{ left: `${(p.x / w) * 100}%`, top: `${(p.y / h) * 100}%` }} data-side={tall ? (i % 2 ? 'left' : 'right') : i % 2 ? 'below' : 'above'}>
                 <span className="avq-node-dot" aria-hidden="true">
-                  {st === 'done' ? <Icon name="check" size={22} /> : st === 'todo' ? <Icon name="lock" size={18} /> : <Icon name={STAGE_ICONS[i]} size={22} />}
+                  {st === 'done' ? <Icon name="check" size={22} /> : st === 'todo' ? <Icon name="lock" size={18} /> : <Icon name={STAGE_ICONS[i % STAGE_ICONS.length]} size={22} />}
                 </span>
                 <span className="avq-node-name"><i>{i + 1}</i> {tx.title}<span className="sr-only"> — {st === 'done' ? t('ap.stateDone', 'cleared') : st === 'now' ? t('ap.stateNow', 'you are here') : t('ap.stateTodo', 'locked')}</span></span>
               </li>

@@ -30,9 +30,9 @@ export function StageIntro({ script, stage, objectives, calm, onDone }: { script
     <div ref={ref} className="avq-intro" role="dialog" aria-modal="true" aria-label={txt.title} tabIndex={0} onClick={onDone} onKeyDown={keyClose(onDone)} data-testid="avq-intro" data-av-local>
       <div className="avq-intro-band">
         <span className="avq-intro-sweep" aria-hidden="true" />
-        <div className="avq-intro-num" aria-hidden="true"><small>{t('ap.stageWord', 'STAGE')}</small><b>{stage.part + 1}</b><em>/ 8</em></div>
+        <div className="avq-intro-num" aria-hidden="true"><small>{t('ap.stageWord', 'STAGE')}</small><b>{stage.part + 1}</b><em>/ {script.partMinutes.length}</em></div>
         <div className="avq-intro-main">
-          <p className="avq-eyebrow"><Icon name={STAGE_ICONS[stage.part]} size={18} /> {t('ap.questStage', 'QUEST STAGE {{n}} / 8', { n: stage.part + 1 })} · {t('ap.minutes', '{{n}} min', { n: stage.minutes })}</p>
+          <p className="avq-eyebrow"><Icon name={STAGE_ICONS[stage.part % STAGE_ICONS.length]} size={18} /> {t('ap.questStage', 'QUEST STAGE {{n}} / {{of}}', { n: stage.part + 1, of: script.partMinutes.length })} · {t('ap.minutes', '{{n}} min', { n: stage.minutes })}</p>
           <h2 className="avq-intro-title">{txt.title}</h2>
           <p className="avq-intro-goal">{txt.goal}</p>
           {goals.length > 0 && (
@@ -43,7 +43,7 @@ export function StageIntro({ script, stage, objectives, calm, onDone }: { script
           {chips.length > 0 && <p className="avq-intro-loot" aria-label={t('ap.lootHere', 'Loot you can earn')}>{chips.map((c) => <span key={c}>{c}</span>)}</p>}
         </div>
         <ol className="avq-intro-pips" aria-hidden="true">
-          {STAGE_ICONS.map((ic, i) => <li key={ic} data-state={i < stage.part ? 'done' : i === stage.part ? 'now' : 'todo'}><Icon name={i < stage.part ? 'check' : ic} size={20} /></li>)}
+          {script.partMinutes.map((_, i) => { const ic = STAGE_ICONS[i % STAGE_ICONS.length]; return <li key={i} data-state={i < stage.part ? 'done' : i === stage.part ? 'now' : 'todo'}><Icon name={i < stage.part ? 'check' : ic} size={20} /></li>; })}
         </ol>
       </div>
       <p className="avq-tap">{t('ap.tapContinue', 'Tap to continue')}</p>

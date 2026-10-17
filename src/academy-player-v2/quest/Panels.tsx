@@ -47,14 +47,14 @@ export function QuestLog({ script, meta, stages, objectives, part, level, streak
         </ul>
       </section>
       <section>
-        <h3>{t('ap.stages', 'The 8 stages')}</h3>
+        <h3>{t('ap.stages', 'The stages')}</h3>
         <ol className="avq-stages">
           {stages.map((s) => {
             const tx = stageText(t, script, s.part);
             const st = s.complete ? 'done' : s.part === part ? 'now' : s.part < part ? 'skipped' : 'todo';
             return (
               <li key={s.part} data-state={st}>
-                <span className="avq-stage-ico"><Icon name={st === 'done' ? 'check' : STAGE_ICONS[s.part]} size={18} /></span>
+                <span className="avq-stage-ico"><Icon name={st === 'done' ? 'check' : STAGE_ICONS[s.part % STAGE_ICONS.length]} size={18} /></span>
                 <span><b>{s.part + 1}. {tx.title}</b><em>{tx.goal}</em></span>
                 <small>{t('ap.minutes', '{{n}} min', { n: s.minutes })}</small>
               </li>

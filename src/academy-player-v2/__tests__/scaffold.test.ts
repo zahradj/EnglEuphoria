@@ -15,7 +15,7 @@ describe('lesson scaffold', () => {
     expect(s.registration).toContain("'B1-S01-E4'");
     expect(s.checklist.length).toBeGreaterThanOrEqual(6);
   });
-  it('the part minutes come from the run of show and add up to 60', () => {
+  it('the acts are placeholders the author renames, and add up to 60', () => {
     const m = /partMinutes: (\[[^\]]*\])/.exec(scaffoldLesson(bp).files[0].content)![1];
     expect((JSON.parse(m) as number[]).reduce((a, b) => a + b, 0)).toBe(60);
   });
