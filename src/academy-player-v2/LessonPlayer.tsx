@@ -34,6 +34,7 @@ export function LessonPlayer({ script, artBase = '/academy-art', role = 'solo', 
   const total = script.scenes.length;
   const ids = useMemo(() => script.scenes.map((s) => s.id), [script]);
   const [state, dispatch] = useReducer(lessonReducer, total, initialState);
+  const missed = useMemo(() => Object.values(state.results).flatMap((r) => r.mistakes), [state.results]);
   const [prefs, setPrefs] = useState<Prefs>(loadPrefs);
   const [resume, setResume] = useState(() => (!ephemeral && role === 'solo' ? loadProgress(script.blueprintId, ids) : null));
   const fx = useFx(prefs.calm);
@@ -57,18 +58,22 @@ export function LessonPlayer({ script, artBase = '/academy-art', role = 'solo', 
   useEffect(() => {
     if (at === total - 1 && state.doneIds.includes(scene?.id ?? '') && !finished.current) {
       finished.current = true;
-      saveLessonMistakes(script.blueprintId, Object.keys(state.wrong).filter((k) => state.wrong[k] > 0).map((k) => ({ id: k, label: k, wrong: state.wrong[k] })));
+      saveLessonMistakes(script.blueprintId, [...new Set(missed)].map((m) => ({ id: m, label: m, wrong: missed.filter((x) => x === m).length })));
       if (!ephemeral) clearProgress(script.blueprintId);
       onFinish?.();
     }
-  }, [at, total, state.doneIds, state.wrong, scene, script, ephemeral, onFinish]);
+  }, [at, total, state.doneIds, missed, scene, script, ephemeral, onFinish]);
 
   const go = useCallback((i: number) => {
     const n = Math.max(0, Math.min(total - 1, i));
     if (controlled) onIndex?.(n); else { dispatch({ type: 'go', index: n }); onIndex?.(n); }
   }, [controlled, total, onIndex]);
 
-  const onDone = useCallback((r?: Partial<SceneResult>) => { if (scene) dispatch({ type: 'done', id: scene.id, result: r }); }, [scene]);
+  const onDone = useCallback((r?: Partial<SceneResult>) => {
+    if (!scene) return;
+    for (let k = 0; k < (r?.mistakes?.length ?? 0); k++) dispatch({ type: 'wrong', id: scene.id });
+    dispatch({ type: 'done', id: scene.id, result: r });
+  }, [scene]);
 
   const sceneDone = !!scene && state.doneIds.includes(scene.id);
   const canNext = role === 'teacher' || sceneDone;
@@ -123,7 +128,7 @@ export function LessonPlayer({ script, artBase = '/academy-art', role = 'solo', 
           </div>
         )}
       >
-        <View key={scene.id} scene={scene} script={script} artBase={artBase} calm={prefs.calm} seed={seedOf(scene.id)} onDone={(r) => { onDone(r); if (scene.kind === 'lobby') go(at + 1); }} />
+        <View key={scene.id} scene={scene} script={script} artBase={artBase} calm={prefs.calm} seed={seedOf(scene.id)} summary={{ xp: state.xp, gems: state.gems, mistakes: [...new Set(missed)] }} onDone={(r) => { onDone(r); if (scene.kind === 'lobby') go(at + 1); }} />
       </SceneBoundary>
     </PlayerShell>
   );

@@ -15,7 +15,7 @@ const scene: ComicScene = {
   ],
 };
 const View = comicScene.view;
-const props = { scene, script: {} as never, artBase: '/a', calm: true, seed: 1 };
+const props = { scene, script: {} as never, artBase: '/a', calm: true, seed: 1, summary: { xp: 0, gems: 0, mistakes: [] } };
 
 describe('comic scene', () => {
   it('shows the first line, steps on tap, keeps the previous speaker dimmed, and reports done at the last line', () => {

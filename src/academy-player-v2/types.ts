@@ -54,6 +54,8 @@ export interface SceneProps<S extends SceneBase = SceneBase> {
   calm: boolean;
   /** the seeded random of this scene (both screens of a live class match) */
   seed: number;
+  /** how the lesson is going so far (the Wrap shows it) */
+  summary: { xp: number; gems: number; mistakes: string[] };
 }
 
 /** A scene kind: its view, what it says aloud, and a validator the registry test runs on every scene. */
