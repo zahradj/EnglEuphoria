@@ -87,3 +87,13 @@ Read in `src/content/playground-library/unit1/` (`SceneRenderer.tsx`, `scene-com
 - **Size:** about 12,000 lines go. A rebuilt player with the eight scene kinds is realistically several sessions of work; I will report at each phase.
 - **Classroom regression:** the live-class bridge is the riskiest part; it gets its own tests (teacher/student index sync, replay of clicks).
 - **Questions:** (a) player chrome in six languages from the start (project rule) or English only for now? (b) keep the homework app and Daily 10 untouched until the new player is done? (c) is B1-S01-E1 the right proof lesson? (d) OK to tag and delete once you approve this plan?
+
+## 5. Phase 2 mockups (2026-10-17, for approval)
+Static HTML + screenshots in `docs/academy-player-v2-mockups/` (`mockup.html?screen=lobby|comic|game|wrap`; no audio, no scripts beyond filling the page; pictures are the existing Academy plates, cast and cards). Four screens at laptop (1280x720) and phone (390x844): Lobby, Comic scene, Game ("Been or gone?" sort), Wrap.
+Design decisions shown:
+- **HUD (all screens):** Academy chip with the lesson id, a "Chapter N of 8 · title" pill, an XP bar, and the 8-part strip (widths = minutes; current part gold). Comfort dock: Hint, I need a minute, More. Bottom bar: Back, scene dots, one primary action (warm orange "Start", violet "Next").
+- **Lobby:** big title over a bright plate, crew portraits, a chapter card (sub-question + the Season's big question), the mission as a checklist, the quest path in 8 chips.
+- **Comic scene:** ink-framed full plate; narration box and bubbles placed on empty space only (never over a face); the previous line dimmed; sound word; **on a phone the picture shows whole on top and the dialogue stacks below** (no cropping of characters).
+- **Game:** the plate is calmed behind floating pieces; one evidence card tilted in the middle, two labelled bins; score, **combo x3**, **tries** (three teal pips, not hearts), floating "+10" and sparks, a cast reaction in the corner; no countdown.
+- **Wrap:** chapter complete, XP and a gem, the rule said back, the Mistake Bank, the unlocked clue, and the next chapter's question.
+Colours: ink #1b1038, violet #6d46e6, lilac tint, cream, gold for "now", teal for correct/tries, orange for the one big action; plates stay light daytime with about 25 % purple.

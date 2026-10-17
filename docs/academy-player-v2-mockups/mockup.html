@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Academy player v2 — static mockup (no audio, no scripts)</title>
+<style>
+:root{--ink:#1b1038;--violet:#6d46e6;--violet-d:#3b1fa3;--lilac:#ece6ff;--cream:#fffbea;--gold:#fbbf24;--green:#22c55e;--teal:#14b8a6;--rose:#f43f5e;--glass:rgba(255,255,255,.86);--shadow:0 10px 30px rgba(40,25,90,.22)}
+*{box-sizing:border-box}html,body{margin:0;height:100%;font-family:'Trebuchet MS','Segoe UI',system-ui,sans-serif;color:var(--ink)}
+body{background:#1b1038}
+.app{position:relative;width:100vw;height:100vh;overflow:hidden;container-type:size;background:#f5f3ff}
+.plate{position:absolute;inset:0;background-size:cover;background-position:center top}
+.plate.calm{filter:blur(3px) saturate(.85) brightness(1.05);transform:scale(1.04)}
+.veil{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%,rgba(255,251,240,.35),rgba(255,251,240,.12) 60%,rgba(30,27,75,.22))}
+/* HUD */
+.hud{position:absolute;left:0;right:0;top:0;padding:10px 14px;display:flex;gap:10px;align-items:center;z-index:5}
+.pill{background:var(--glass);border:2px solid #fff;border-radius:999px;padding:6px 12px;font-weight:900;font-size:13px;box-shadow:var(--shadow);display:flex;gap:6px;align-items:center;white-space:nowrap}
+.pill b{color:var(--violet)}
+.chap{background:var(--violet);color:#fff;border-color:#fff}
+.xp{flex:1;max-width:260px;height:14px;background:rgba(255,255,255,.7);border-radius:99px;overflow:hidden;border:2px solid #fff;box-shadow:var(--shadow)}
+.xp i{display:block;height:100%;width:62%;background:linear-gradient(90deg,var(--violet),#a78bfa)}
+.spacer{flex:1}
+.segs{position:absolute;left:14px;right:14px;top:52px;display:flex;gap:4px;z-index:5}
+.segs i{height:7px;border-radius:9px;background:rgba(255,255,255,.65);box-shadow:inset 0 0 0 1px rgba(27,16,56,.15)}
+.segs i.d{background:var(--violet)}.segs i.n{background:linear-gradient(90deg,var(--gold) 55%,rgba(255,255,255,.65) 55%)}
+.dock{position:absolute;left:12px;right:12px;bottom:10px;display:flex;gap:10px;align-items:center;z-index:5}
+.btn{border:0;border-radius:16px;padding:11px 18px;font:900 15px inherit;font-family:inherit;background:#fff;color:var(--violet-d);box-shadow:0 5px 0 rgba(59,31,163,.28),var(--shadow);cursor:pointer}
+.btn.go{background:linear-gradient(180deg,#8b6bff,var(--violet));color:#fff;box-shadow:0 5px 0 #3b1fa3,var(--shadow)}
+.btn.warm{background:linear-gradient(180deg,#ffb35c,#ff7a3d);color:#fff;box-shadow:0 5px 0 #c2410c,var(--shadow);font-size:18px;padding:14px 26px}
+.dots{display:flex;gap:5px;margin:0 auto}.dots i{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.75)}.dots i.d{background:var(--violet)}.dots i.n{background:var(--gold);width:22px;border-radius:9px}
+.panel{background:var(--glass);border:2px solid #fff;border-radius:22px;box-shadow:var(--shadow);padding:14px 16px}
+.panel h2{margin:0 0 6px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--violet)}
+/* lobby */
+.lobby-hero{position:absolute;left:5%;top:20%;width:42%}
+.kick{display:inline-flex;gap:6px;background:var(--glass);border-radius:99px;padding:6px 12px;font-weight:900;font-size:12px;letter-spacing:.1em;text-transform:uppercase;border:2px solid #fff}
+.lobby-hero h1{margin:12px 0 6px;font-size:clamp(34px,6.2cqw,64px);line-height:1;color:#fff;-webkit-text-stroke:3px var(--violet-d);paint-order:stroke fill;letter-spacing:.01em}
+.sub{display:inline-block;background:var(--glass);border-radius:16px;padding:8px 14px;font-weight:800;color:var(--violet-d)}
+.crew{display:flex;gap:10px;margin-top:14px}.crew span{display:flex;flex-direction:column;align-items:center;font-weight:900;font-size:12px}
+.crew img{width:64px;height:64px;border-radius:50%;object-fit:cover;object-position:50% 12%;border:3px solid #fff;background:#cfc3ff;box-shadow:var(--shadow)}
+.lobby-side{position:absolute;right:3%;top:16%;bottom:16%;width:44%;display:flex;flex-direction:column;gap:10px;overflow:hidden}
+.chapcard{border-left:8px solid var(--violet)}
+.chapcard h3{margin:0;font-size:clamp(17px,2.4cqw,24px);line-height:1.15}.chapcard p{margin:4px 0 0;font-weight:700;font-size:13px;opacity:.8}
+.mission li{margin:5px 0;font-weight:700;font-size:13px;list-style:none;display:flex;gap:8px}.mission li:before{content:'';flex:none;width:16px;height:16px;border-radius:5px;border:2px solid var(--teal);margin-top:2px}
+.mission{margin:0;padding:0}
+.path{display:flex;gap:6px;flex-wrap:wrap}.path em{font-style:normal;background:var(--lilac);border-radius:10px;padding:4px 8px;font-weight:900;font-size:11px}.path em.now{background:var(--gold)}
+/* comic */
+.frame{position:absolute;border:5px solid var(--ink);box-shadow:0 0 0 3px #fff,var(--shadow);border-radius:6px;overflow:hidden;background:#000}
+.frame .plate{position:absolute;inset:0}
+.cap{position:absolute;background:var(--cream);border:3px solid var(--ink);box-shadow:5px 5px 0 var(--ink);padding:8px 12px;font-weight:800;font-size:clamp(11px,1.5cqw,15px);line-height:1.25;z-index:3}
+.bub{position:absolute;background:#fff;border:4px solid var(--ink);border-radius:28px;padding:12px 18px 14px;font-weight:800;font-size:clamp(13px,1.9cqw,22px);line-height:1.25;box-shadow:0 6px 0 rgba(27,16,56,.25);z-index:3}
+.bub b{display:block;font-size:.6em;letter-spacing:.14em;text-transform:uppercase;color:var(--violet)}
+.bub:after{content:'';position:absolute;bottom:-20px;right:44px;width:24px;height:24px;background:#fff;border-right:4px solid var(--ink);border-bottom:4px solid var(--ink);transform:skewX(24deg) rotate(45deg) scale(.8)}
+.bub.old{opacity:.6;box-shadow:none;font-size:.82em}.bub.old:after{display:none}
+.dlg{position:absolute;inset:0}.sfx{position:absolute;font:900 italic clamp(28px,6cqw,64px) Impact,'Arial Black',sans-serif;color:var(--gold);-webkit-text-stroke:3px var(--ink);paint-order:stroke fill;text-shadow:4px 4px 0 var(--ink);transform:rotate(-7deg);z-index:3}
+/* game */
+.board{position:absolute;left:4%;right:4%;top:84px;bottom:76px;display:grid;grid-template-columns:1fr 1.35fr 1fr;gap:14px;align-items:center}
+.bin{height:70%;border-radius:22px;border:4px dashed rgba(255,255,255,.9);background:rgba(255,255,255,.35);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:12px;font-weight:900;box-shadow:var(--shadow)}
+.bin h4{margin:0;background:var(--violet);color:#fff;border-radius:12px;padding:6px 12px;font-size:clamp(13px,2cqw,20px)}
+.bin small{margin-top:8px;font-weight:700;text-align:center;font-size:12px}
+.evid{background:#fff;border-radius:18px;border:3px solid #fff;box-shadow:0 14px 28px rgba(40,25,90,.35);transform:rotate(-2deg);overflow:hidden}
+.evid img{display:block;width:100%;height:clamp(110px,34cqh,230px);object-fit:cover}
+.evid p{margin:0;padding:10px 14px;font-weight:800;font-size:clamp(13px,1.9cqw,19px);text-align:center}
+.stack{position:absolute;z-index:4;font-weight:900}
+.float{position:absolute;color:#fff;font:900 clamp(22px,4cqw,38px) inherit;-webkit-text-stroke:3px var(--violet-d);paint-order:stroke fill;z-index:6}
+.spark{position:absolute;width:10px;height:10px;background:var(--gold);transform:rotate(45deg);border-radius:2px;z-index:6;box-shadow:0 0 8px var(--gold)}
+.combo{background:linear-gradient(180deg,#ffb35c,#ff7a3d);color:#fff}
+.react{position:absolute;right:3%;bottom:70px;width:88px;z-index:5;filter:drop-shadow(0 6px 8px rgba(0,0,0,.25))}
+.hearts{display:flex;gap:4px}.hearts{align-items:center}.hearts i{width:12px;height:12px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 2px #fff}.hearts i.x{background:#d1d5db}
+/* wrap */
+.wrapbox{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(92%,880px);display:grid;grid-template-columns:1.1fr 1fr;gap:12px}
+.big{font-size:clamp(26px,4.4cqw,44px);margin:0;color:var(--violet-d);line-height:1.05}
+.seal{width:64px;height:64px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffe08a,var(--gold));display:grid;place-items:center;font-size:30px;box-shadow:var(--shadow);border:3px solid #fff}
+.stat{display:flex;gap:8px;flex-wrap:wrap}.stat span{background:var(--lilac);border-radius:12px;padding:6px 10px;font-weight:900;font-size:13px}
+.mb li{margin:4px 0;font-weight:700;font-size:13px}
+.clue{background:linear-gradient(135deg,#fff7d6,#ffe8a3);border:3px solid var(--gold)}
+.next{border-left:8px solid var(--teal)}
+@container (max-width:560px){
+ .lobby-hero{left:5%;right:5%;top:12%;width:auto}.lobby-side{left:4%;right:4%;top:46%;bottom:64px;width:auto}.crew img{width:46px;height:46px}
+ .hud .xp,.hud .pill:nth-of-type(n+4){display:none}.pill{font-size:11px;padding:5px 9px}.segs{top:48px}
+ .board{grid-template-columns:1fr 1fr;grid-template-rows:auto 1fr;top:76px;bottom:70px}.board .evid{grid-column:1/3;grid-row:1}.bin{height:100%;min-height:110px}
+ .wrapbox{grid-template-columns:1fr;top:55%;max-height:80%;overflow:hidden}
+ .comicframe{overflow:visible;background:none;border:0;box-shadow:none}.comicframe .pic{inset:0 0 auto 0;height:30%;border:5px solid var(--ink);border-radius:6px;box-shadow:0 0 0 3px #fff,var(--shadow);background-size:contain;background-repeat:no-repeat;background-color:#1b1038}.comicframe .dlg{inset:34% 0 0 0;display:flex;flex-direction:column;gap:12px}.comicframe .dlg .cap,.comicframe .dlg .bub{position:relative;left:auto!important;top:auto!important;width:auto!important;max-width:none!important}.comicframe .sfx{display:none}.bub{font-size:13px}.react{width:60px;bottom:68px}
+ .btn{padding:10px 14px;font-size:13px}
+}
+</style></head><body>
+<div class="app" id="app"></div>
+<script>
+const q=new URLSearchParams(location.search),s=q.get('screen')||'lobby';
+const A='../../public/academy-art/';
+const seg=(n)=>Array.from({length:8},(_,i)=>`<i class="${i<n?'d':i===n?'n':''}" style="flex:${[3,5,12,19,3,9,5,4][i]}"></i>`).join('');
+const hud=(n)=>`<div class="hud"><span class="pill chap">⛨ ACADEMY · B1·S1·E3</span><span class="pill">Chapter 3 of 8 · <b>Been or gone?</b></span><span class="xp" title="XP"><i></i></span><span class="spacer"></span><span class="pill">💡 Hint</span><span class="pill">⏸ I need a minute</span></div><div class="segs">${seg(n)}</div>`;
+const dock=(btn)=>`<div class="dock"><button class="btn">‹ Back</button><div class="dots"><i class="d"></i><i class="d"></i><i class="n"></i><i></i><i></i><i></i></div>${btn}</div>`;
+const cast=(n)=>`<img src="${A}cast/${n}/happy.webp" alt="">`;
+const screens={
+lobby:`<div class="plate" style="background-image:url(${A}bg/library-case-room.webp)"></div><div class="veil"></div>${hud(0)}
+<div class="lobby-hero"><span class="kick">EnglEuphoria Academy · B1 · Season 1 · Episode 3</span><h1>Pattern Lab</h1><span class="sub">The Missing Postcard</span>
+<div class="crew"><span>${cast('vee')}Vee<small>host</small></span><span>${cast('theo')}Theo</span></div></div>
+<div class="lobby-side"><div class="panel chapcard"><h2>Chapter 3 of 8 · Been or gone?</h2><h3>How do I say what I have done, and what do ever / never change?</h3><p>Season big question: What have I done, and what do I still want to do?</p></div>
+<div class="panel"><h2>Your mission</h2><ul class="mission"><li>Build a correct “I have / I have never + participle” sentence.</li><li>Ask “Have you ever …?” and answer it.</li><li>Choose been or gone for a short scene and say why.</li></ul></div>
+<div class="panel"><h2>The quest · 60 min</h2><div class="path"><em>Check-in</em><em>Warm-up</em><em class="now">The Drop</em><em>Model + rule</em><em>Games</em><em>Mission</em><em>Release</em><em>Wrap</em></div></div></div>
+<div class="dock"><button class="btn">‹ Back</button><span class="spacer"></span><button class="btn warm">Start the mission →</button></div>`,
+comic:`${hud(2)}<div class="frame comicframe" style="left:2%;right:2%;top:76px;bottom:70px"><div class="plate pic" style="background-image:url(${A}bg/story-b1s3-2.webp);background-position:center"></div><div class="dlg">
+<p class="cap" style="left:3%;top:4%;max-width:44%">Theo tells us where he has been. Listen for the pattern.</p>
+<p class="bub old" style="left:3%;top:20%;width:44%"><b>Vee</b>Hmm. Some sentences say when something happened. Others say what you have done in your life.</p>
+<p class="bub" style="left:3%;top:46%;width:44%"><b>Theo</b>I have never been to Lisbon. I have been to Rome twice, but never to Portugal.</p>
+<span class="sfx" style="left:30%;top:76%">Hmm…</span></div></div>${dock('<button class="btn go">Next line ›</button>')}`,
+game:`<div class="plate calm" style="background-image:url(${A}bg/library-case-room.webp)"></div><div class="veil"></div>${hud(4)}
+<div class="board"><div class="bin"><h4>BEEN</h4><small>came back · it is over</small></div>
+<div class="evid"><img src="${A}cards/sc-bg-1.webp" style="object-fit:contain;background:#ece6ff" alt=""><p>Theo has ___ to the library.<br><small style="font-weight:700;opacity:.7">(He is back at his desk.)</small></p></div>
+<div class="bin"><h4>GONE</h4><small>still there · not here now</small></div></div>
+<span class="pill combo stack" style="left:40%;top:66px">COMBO ×3</span><span class="pill stack" style="left:4%;top:66px">⭐ 240</span><span class="pill stack" style="right:4%;top:66px">Tries <span class="hearts"><i></i><i></i><i class="x"></i></span></span>
+<span class="float" style="left:20%;top:46%">+10</span><i class="spark" style="left:18%;top:40%"></i><i class="spark" style="left:23%;top:36%"></i><i class="spark" style="left:16%;top:50%"></i>
+<img class="react" src="${A}cast/vee/happy.webp" alt="">${dock('<button class="btn">Show hint</button>')}`,
+wrap:`<div class="plate calm" style="background-image:url(${A}bg/story-b1s3-3.webp)"></div><div class="veil"></div>${hud(7)}
+<div class="wrapbox"><div class="panel"><h2>Chapter 3 of 8 · complete</h2><p class="big">Been or gone?</p><div class="stat" style="margin:10px 0"><span>+180 XP</span><span>💎 gem</span><span>1 try needed twice</span></div>
+<h2 style="margin-top:12px">Say the rule back</h2><p style="margin:0;font-weight:800">“I have been = I came back. I have gone = I am still there.”</p>
+<h2 style="margin-top:12px">Mistake Bank</h2><ul class="mb" style="margin:0;padding-left:18px"><li>been / gone with “ever”</li><li>participle of <b>go</b></li></ul></div>
+<div style="display:grid;gap:12px"><div class="panel clue"><div style="display:flex;gap:10px;align-items:center"><div class="seal">🔓</div><div><h2 style="color:#92400e">New clue unlocked · 3 of 8</h2><div style="font-weight:800">Theo has never been to Lisbon. So who pinned the postcard to the wall?</div></div></div></div>
+<div class="panel next"><h2>Next chapter · 4 of 8</h2><div style="font-weight:900;font-size:18px">Ask and react</div><div style="font-weight:700;font-size:13px">How do I ask about someone else’s experiences and show interest?</div></div></div></div>
+<div class="dock"><span class="spacer"></span><button class="btn go">Finish the lesson ✓</button></div>`
+};
+document.getElementById('app').innerHTML=screens[s];
+</script></body></html>
