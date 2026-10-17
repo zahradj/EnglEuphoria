@@ -141,7 +141,7 @@ teacher note ("Guided:" / "Free:").
 | Part | Games |
 |---|---|
 | Model | *What's the matter?* · *I've got a headache / a cold / toothache / a tummy ache* (one per page, a sticker each) · *Can I help you?* · *Give me / Show me…* |
-| Practice | **Hero Mission ★ (new)** — citizens around the golden city wear a "!" bubble; the child taps one, asks *What's the matter?*, hears *I've got a cold*, picks the right help (tissue, water, plaster, a call to the doctor…) and says *Can I help you?*; the citizen smiles, thanks the child **by name**, the "!" turns into a gold star and the city lights up a little; a wrong help = the citizen says kindly *No, thank you* and says the problem again · **Roleplay** (the Hero Clinic) · **Mystery Bag** (first-aid bag: *Give me the plaster!*) · **Chat Chain** |
+| Practice | **Hero Mission ★ (new)** — citizens around the golden city wear a "!" bubble; the child taps one, asks *What's the matter?*, hears *I've got a cold*, picks the right help (tissue, water, plaster, a call to the doctor…) and says *Can I help you?*; the citizen smiles, thanks the child **by name**, the "!" turns into a gold star and the city lights up a little; a wrong help = the citizen says kindly *No, thank you* and says the problem again · **Roleplay** (the Hero Clinic) · **Hero Bag Go Fish** (*Have you got a plaster?*) · **Chat Chain** |
 | Reading | Reader p8-9 · reading game |
 | Phonics | ai / ay / a_e review · **Crossword** (long-a words) · Blend & Read · twister of the unit |
 
@@ -181,7 +181,7 @@ every game (achievements).
 | L1 | Hero Trials · Power Wheel · Odd One Out · Draw That · Word Splat |
 | L2 | Can It? · Hot Badge · Tower Pull · Whisper Tube · Letter Bubbles |
 | L3 | Red Light, Green Light · Tick or Cross · Must or Mustn't? (catch-sort) · Rule Bingo · Hero Radar (hot & cold) · Word Build |
-| L4 | Hero Mission ★ · Roleplay · Mystery Bag · Chat Chain · Crossword |
+| L4 | Hero Mission ★ · Roleplay · Hero Bag Go Fish · Chat Chain · Which help? (listen-tap) · Team Flags · Crossword |
 | L5 | Story Order · Jigsaw Puzzle · Who is missing? · Sound Pop |
 | L6 | Simon Says · Quiz Board · Dominoes · Save the Balloon · Pass the Parcel · Echo Cave |
 | L7 | Jungle Glider (boss warm-up) |

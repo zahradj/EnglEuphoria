@@ -255,6 +255,7 @@ const PlayOceanLesson1 = lazy(() => import("./pages/playground-scene/PlayOceanLe
 const PlayHeroLesson1 = lazy(() => import("./pages/playground-scene/PlayHeroLesson1"));
 const PlayHeroLesson2 = lazy(() => import("./pages/playground-scene/PlayHeroLesson2"));
 const PlayHeroLesson3 = lazy(() => import("./pages/playground-scene/PlayHeroLesson3"));
+const PlayHeroLesson4 = lazy(() => import("./pages/playground-scene/PlayHeroLesson4"));
 const PlayOceanLesson2 = lazy(() => import("./pages/playground-scene/PlayOceanLesson2"));
 const PlayOceanLesson3 = lazy(() => import("./pages/playground-scene/PlayOceanLesson3"));
 const PlayOceanLesson4 = lazy(() => import("./pages/playground-scene/PlayOceanLesson4"));
@@ -888,6 +889,12 @@ const App = () => {
                       <Route path="/playground-scene/ocean-lesson-2" element={
                         <ImprovedProtectedRoute>
                           <Suspense fallback={<LoadingFallback />}><PlayOceanLesson2 /></Suspense>
+                        </ImprovedProtectedRoute>
+                      } />
+                      {/* A1 tier — Hero City, Unit 7 Lesson 4. */}
+                      <Route path="/playground-scene/hero-lesson-4" element={
+                        <ImprovedProtectedRoute>
+                          <Suspense fallback={<LoadingFallback />}><PlayHeroLesson4 /></Suspense>
                         </ImprovedProtectedRoute>
                       } />
                       {/* A1 tier — Hero City, Unit 7 Lesson 3. */}

@@ -4,6 +4,7 @@ LESSON_3_SCENES
 LESSON_A1U7L1_SCENES
 LESSON_A1U7L2_SCENES
 LESSON_A1U7L3_SCENES
+LESSON_A1U7L4_SCENES
 # HOMEWORK must stay (quests are not lesson exports)
 HOMEWORK
 # 2026-10-12 A1 Jungle: Unit 2 Lessons 1-2 (the jungle file is now in the bake engines)

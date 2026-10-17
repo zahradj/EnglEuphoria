@@ -247,22 +247,6 @@ export const LESSON_A1U7L1_SCENES: Scene[] = [
     ],
     doneLine: 'Super drawing! Now tell me: what is YOUR hero power?',
   },
-  {
-    id: 'hc-who-can', kind: 'listen-tap', bg: bgTrials,
-    teacher: 'You do (listening): Captain Spark says what a friend can do — tap the friend, then say it: Mia can climb well.',
-    targets: [
-      { label: 'Leo', left: '18%', top: '55%', color: '#FE6A2F', img: HERO.leoFast },
-      { label: 'Mia', left: '39%', top: '55%', color: '#F59E0B', img: HERO.miaClimb },
-      { label: 'Pip', left: '61%', top: '55%', color: '#FB923C', img: HERO.pipHigh },
-      { label: 'Biscuit', left: '82%', top: '55%', color: '#FEAF15', img: HERO.biscuitSwim },
-    ],
-    rounds: [
-      { prompt: 'He can jump high. Who is it?', answerLabel: 'Pip', who: 'spark' },
-      { prompt: 'She can climb well. Who is it?', answerLabel: 'Mia', who: 'spark' },
-      { prompt: 'He can swim well. Who is it?', answerLabel: 'Biscuit', who: 'spark' },
-      { prompt: 'He can run fast. Who is it?', answerLabel: 'Leo', who: 'spark' },
-    ],
-  },
   /* Reading: Captain Spark Saves the Day, pages 1-3 */
   {
     id: 'hc-reader', kind: 'reader', bg: bgSquare, title: 'Captain Spark Saves the Day', doneLine: 'Leo is fast and Mia climbs well! What happens next? See you next time!',
@@ -874,4 +858,258 @@ export const LESSON_A1U7L3_SCENES: Scene[] = [
   },
   goodbyeSong('hc3-goodbye-song', bgSquare),
   { id: 'hc3-finale', kind: 'finale', bg: sparkPage(7), who: 'spark', line: 'You know the hero rules! See you in Hero City! \u{1F6A6}' },
+];
+
+/* =============================================================================
+ * A1 Unit 7 Lesson 4: "Offer to Help: Give, Show, Tell"
+ * Objective: I can find out what's wrong and help: "What's the matter?" "I've got a headache." "Can I help you?"
+ * Story frame: Captain Spark has a cold on a bench in the square — today the CHILD is the city's hero (late afternoon,
+ *   warm light); the citizens of Hero City need help one by one.
+ * Practice ladder: Revise (Remember? L3 rules) → Present (I do: What's the matter? + one problem per card; the rule:
+ *   ask "What's the matter?", answer "I've got a…", offer "Can I help you?"; the help: Here's a…) → we do (echo) →
+ *   Read and Match → you do (Hero Mission ★: ask, listen, pick the help, offer; Hero Clinic roleplay; First-aid Go
+ *   Fish; Chat Chain) → Reading (Reader p8-9, Team Flags) → Phonics long a sort (Crossword, Blend & Read, twister) →
+ *   Free (help the teacher) → check.
+ * ========================================================================= */
+
+export const LESSON_A1U7L4_TITLE = 'Offer to Help: Give, Show, Tell';
+export const LESSON_A1U7L4_OBJECTIVE = 'I can find out what\'s wrong and help: "What\'s the matter?" "I\'ve got a headache." "Can I help you?"';
+
+const CIT = {
+  headache: item('cit-headache'), cold: item('cit-cold'), toothache: item('cit-toothache'), tummy: item('cit-tummy'),
+  bags: item('cit-bags'), bike: item('cit-bike'), kitten: item('cit-kitten'),
+};
+const HELP = { tissue: item('tissues'), water: item('water-glass'), plaster: item('plaster'), phone: item('phone-call'), toolbox: item('toolbox'), ladder: HERO.ladder };
+
+export const LESSON_A1U7L4_SCENES: Scene[] = [
+  { id: 'hc4-title', kind: 'title-card', bg: sparkPage(8), level: 'A1', unit: 'Unit 7', lessonLabel: 'Lesson 4', title: 'Can I Help You?', subtitle: 'What’s the matter? I’ve got a cold!', cta: '\u{1F9B8} BE A HERO!' },
+  {
+    // Remember? (owner, 2026-10-07): Lesson 3 — hero rules. Click mode: the rule pictures.
+    id: 'hc4-recall-warmup', kind: 'recall-warmup', bg: bgRoad, who: 'pip', mode: 'click',
+    fromLabel: 'Lesson 3 · Hero Rules',
+    teacher: 'Guided: Pip says a rule — the student finds the picture and says the rule again: You must wait!',
+    items: [
+      { word: 'wait', say: 'You must wait at the red light.', img: RULE.wait },
+      { word: 'run', say: 'You mustn’t run on the road.', img: RULE.runRoad },
+      { word: 'help', say: 'You must help.', img: RULE.help },
+      { word: 'shout', say: 'You mustn’t shout.', img: RULE.shout },
+    ],
+  },
+  { id: 'hc4-meet-spark', kind: 'meet', focus: ['cold'], bg: sparkPage(8), who: 'spark', cardSide: 'left', teacher: 'Present: Captain Spark is on the bench. Achoo! She has got a cold. She can’t fly today. Today YOU are the hero!', line: 'Achoo! I’ve got a cold. I can’t fly today. Can you be the hero?', repeat: 'I’ve got a cold.' },
+  { id: 'hc4-rule', kind: 'meet', focus: ['What’s the matter', 'I’ve got'], bg: sparkPage(8), who: 'mia', cardSide: 'right', teacher: 'The rule (say it, the student repeats): a friend looks sad or ill — ASK "What’s the matter?". They answer "I’ve got a headache." Then OFFER: "Can I help you?" — "Yes, please!" Act it out: worried face, hand out.', line: 'What’s the matter? — I’ve got a cold. — Can I help you? — Yes, please!', repeat: 'What’s the matter? Can I help you?' },
+  {
+    id: 'hc4-problems', kind: 'prea1', teacher: 'Present (I do → you do): one problem per card. The citizen says it, the student says it and mimes it: I’ve got a headache!',
+    scene: {
+      id: 'hc4-problems', kind: 'listen-repeat-cards', bg: bgSquare, teacher: 'Listen and say it! Show it!',
+      cards: [
+        { who: 'pip', sentence: 'I’ve got a headache.', img: CIT.headache, imgLabel: 'headache' },
+        { who: 'leo', sentence: 'I’ve got a cold.', img: CIT.cold, imgLabel: 'cold' },
+        { who: 'mia', sentence: 'I’ve got toothache.', img: CIT.toothache, imgLabel: 'toothache' },
+        { who: 'pip', sentence: 'I’ve got a tummy ache.', img: CIT.tummy, imgLabel: 'tummy ache' },
+      ],
+    },
+  },
+  {
+    id: 'hc4-helps', kind: 'prea1', teacher: 'Present (I do → you do): one way to help per card. Say it, the student says it and gives it with their hand: Here’s a tissue!',
+    scene: {
+      id: 'hc4-helps', kind: 'listen-repeat-cards', bg: bgSquare, teacher: 'Listen and say it! Give it!',
+      cards: [
+        { who: 'mia', sentence: 'Here’s a tissue.', img: HELP.tissue, imgLabel: 'tissue' },
+        { who: 'mia', sentence: 'Here’s some water.', img: HELP.water, imgLabel: 'water' },
+        { who: 'leo', sentence: 'Here’s a plaster.', img: HELP.plaster, imgLabel: 'plaster' },
+        { who: 'leo', sentence: 'I can call the doctor.', img: HELP.phone, imgLabel: 'call the doctor' },
+        { who: 'pip', sentence: 'I can carry your bags.', img: CIT.bags, imgLabel: 'carry' },
+      ],
+    },
+  },
+  { id: 'hc4-echo', kind: 'echo', bg: sparkPage(9), who: 'mia', textSide: 'top', teacher: 'Guided (we do): ask like a kind hero — a worried face, a soft voice!', word: 'What’s the matter? Can I help you?' },
+  {
+    id: 'hc4-match', kind: 'picture-match', look: 'chalk', prompt: 'Read and match',
+    teacher: 'Read and match: the student reads each sentence and drags it under the citizen who says it (or taps the sentence, then the picture), then reads it aloud.',
+    items: [
+      { word: 'I’ve got a headache.', img: CIT.headache },
+      { word: 'I’ve got a cold.', img: CIT.cold },
+      { word: 'I’ve got toothache.', img: CIT.toothache },
+      { word: 'I’ve got a tummy ache.', img: CIT.tummy },
+      { word: 'My bags are heavy.', img: CIT.bags },
+    ],
+    bg: bgSquare,
+  },
+  { id: 'hc4-model', kind: 'meet', focus: ['Can I help you'], bg: sparkPage(9), who: 'mia', cardSide: 'right', teacher: 'Present (I do → we do): watch Mia help Captain Spark — she asks, listens, then offers. Act it out together: the teacher sneezes, the student asks.', line: 'What’s the matter? Can I help you? Here’s a tissue!', repeat: 'Can I help you? Here’s a tissue.' },
+  {
+    id: 'hc4-mission', kind: 'hero-mission', bg: bgSquare, who: 'spark', title: 'Hero Mission: help the city!',
+    teacher: 'You do (signature game): the student is the city’s hero. Tap a person with a “!” — ASK What’s the matter? (🎤), listen, pick the right help from the hero bag, then OFFER it aloud (🎤). Every helped person gets a gold star and the city wakes up.',
+    citizens: [
+      { name: 'Ben', img: CIT.headache, left: 14, top: 62, size: 13, problem: 'I’ve got a headache.', help: 'water', offer: 'Can I help you? Here’s some water. Sit down!', thanks: 'Thank you, hero! I feel better!' },
+      { name: 'Grandpa Joe', img: CIT.cold, left: 32, top: 70, size: 14, problem: 'Achoo! I’ve got a cold.', help: 'tissue', offer: 'Can I help you? Here’s a tissue.', thanks: 'Thank you! Achoo! You are kind!' },
+      { name: 'Lily', img: CIT.toothache, left: 50, top: 62, size: 13, problem: 'Ouch! I’ve got toothache.', help: 'call the doctor', offer: 'Can I help you? I can call the dentist.', thanks: 'Thank you, hero!' },
+      { name: 'Grandma Rose', img: CIT.bags, left: 68, top: 70, size: 14, problem: 'My bags are very heavy!', help: 'carry', offer: 'Can I help you? I can carry your bags.', thanks: 'Oh, thank you, strong hero!' },
+      { name: 'Sam', img: CIT.bike, left: 86, top: 62, size: 13, problem: 'Oh no! My bike is broken.', help: 'toolbox', offer: 'Can I help you? I can fix your bike!', thanks: 'Yay! Thank you, hero!' },
+    ],
+    helps: [
+      { label: 'water', img: HELP.water },
+      { label: 'tissue', img: HELP.tissue },
+      { label: 'call the doctor', img: HELP.phone },
+      { label: 'carry', img: item('shopping-bag') },
+      { label: 'toolbox', img: HELP.toolbox },
+      { label: 'plaster', img: HELP.plaster },
+    ],
+    doneLine: 'Everyone is happy! You are the hero of Hero City!',
+  },
+  helloSong('hc4-hello-song', bgSquare),
+  {
+    id: 'hc4-clinic', kind: 'roleplay', bg: bgHQ, cast: ['pip', 'mia'],
+    teacher: 'Roleplay (the Hero Clinic): play it with the teacher — first the student is Mia (the helper), then swap and the student is Pip. Use a real tissue or a cup for fun!',
+    script: [
+      { who: 'mia', line: 'Hello, Pip! What’s the matter?' },
+      { who: 'pip', line: 'I’ve got a headache.', repeat: true },
+      { who: 'mia', line: 'Oh no! Can I help you?' },
+      { who: 'pip', line: 'Yes, please!', repeat: true },
+      { who: 'mia', line: 'Sit down. Here’s some water.' },
+      { who: 'pip', line: 'Thank you, Mia! You are a hero!', repeat: true },
+    ],
+  },
+  {
+    id: 'hc4-go-fish', kind: 'go-fish', bg: bgHQ, who: 'zippy', friendImg: HERO.zippy, title: 'Hero Bag Go Fish with Zippy!',
+    teacher: 'Free: the student asks Zippy “Have you got a plaster?” — “Yes! Here you are.” or “No! Go fish!”. Then Zippy asks and the student answers truthfully: Yes, I have. / No, I haven’t. Go fish!',
+    cards: [
+      { label: 'plaster', img: HELP.plaster }, { label: 'tissue', img: HELP.tissue }, { label: 'toolbox', img: HELP.toolbox },
+      { label: 'ladder', img: HELP.ladder }, { label: 'cape', img: HERO.cape }, { label: 'badge', img: HERO.badge },
+      { label: 'phone', img: HELP.phone },
+    ],
+    childHand: ['plaster', 'tissue', 'toolbox', 'cape'],
+    friendHand: ['plaster', 'ladder', 'badge'],
+    pond: ['ladder', 'tissue', 'badge', 'toolbox', 'phone', 'cape', 'phone'],
+    doneLine: 'Your hero bag is full! Super asking!',
+  },
+  {
+    id: 'hc4-chat', kind: 'chat-chain', bg: sparkPage(9), partner: 'spark', title: 'Chat with Captain Spark',
+    intro: 'Achoo! Hello, hero!',
+    teacher: 'Guided: Captain Spark talks, the student picks the reply that fits and SAYS it, then taps “I said it”.',
+    turns: [
+      { who: 'spark', line: 'Achoo! Achoo!' },
+      { who: 'student', line: 'What’s the matter?', wrong: ['What is it matter?', 'How old are you?'] },
+      { who: 'spark', line: 'I’ve got a cold.' },
+      { who: 'student', line: 'Can I help you?', wrong: ['Can you help I?', 'I can’t help.'] },
+      { who: 'spark', line: 'Yes, please!' },
+      { who: 'student', line: 'Here’s a tissue.', wrong: ['Here’s a box.', 'I’ve got a tissue cold.'] },
+      { who: 'spark', line: 'Thank you! You are a real hero!' },
+    ],
+  },
+  { id: 'hc4-echo-offer', kind: 'echo', bg: sparkPage(9), who: 'pip', textSide: 'top', teacher: 'Guided: say it with Pip — hold out your hand on “Here’s”!', word: 'Can I help you? Here’s some water!' },
+  {
+    id: 'hc4-which-help', kind: 'listen-tap', bg: bgSquare,
+    teacher: 'You do (listening — the lesson’s evidence): a citizen says what’s wrong. Tap the best help, then offer it: Can I help you? Here’s a tissue!',
+    targets: [
+      { label: 'tissue', left: '18%', top: '55%', color: '#FE6A2F', img: HELP.tissue },
+      { label: 'water', left: '39%', top: '55%', color: '#F59E0B', img: HELP.water },
+      { label: 'plaster', left: '61%', top: '55%', color: '#FB923C', img: HELP.plaster },
+      { label: 'toolbox', left: '82%', top: '55%', color: '#FEAF15', img: HELP.toolbox },
+    ],
+    rounds: [
+      { prompt: 'Achoo! I’ve got a cold!', answerLabel: 'tissue', who: 'leo' },
+      { prompt: 'Ouch! I’ve got a cut on my finger!', answerLabel: 'plaster', who: 'mia' },
+      { prompt: 'My bike is broken!', answerLabel: 'toolbox', who: 'pip' },
+      { prompt: 'I’ve got a headache. I’m hot!', answerLabel: 'water', who: 'leo' },
+    ],
+  },
+  /* Reading: pages 8-9 */
+  {
+    id: 'hc4-reader', kind: 'reader', bg: bgSquare, title: 'Captain Spark Saves the Day', doneLine: 'The friends help Captain Spark! What happens next? See you next time!',
+    teacher: 'Reading: first read pages 6-7 again quickly, then the new pages. Listen while the words light up, then the student reads. Tap any word to hear it.',
+    pages: SPARK_STORY.slice(5, 9),
+  },
+  {
+    id: 'hc4-read-match', kind: 'picture-match', look: 'polaroids', prompt: 'Read and match',
+    teacher: 'Reading: read each sentence from the story and drag it under its picture. Then read it aloud.',
+    items: [
+      { word: 'I’ve got a cold.', img: sparkPage(8) },
+      { word: 'Can I help you? Yes, please!', img: sparkPage(9) },
+      { word: 'The friends wait.', img: sparkPage(7) },
+    ],
+    bg: bgSquare,
+  },
+  {
+    id: 'hc4-flags', kind: 'flag-race', bg: bgSquare, who: 'spark', title: 'Team Flags: you vs your teacher',
+    teacher: 'Team reading game, student vs teacher: on the student’s turn they read and answer; on the teacher’s turn the student READS the question to the teacher. Each right answer moves your flag up your hill. Nobody slides back.',
+    rounds: [
+      { ask: 'What’s the matter with Captain Spark?', choices: ['She’s got a cold.', 'She’s got a box.'], answer: 0 },
+      { ask: 'Can Captain Spark fly today?', choices: ['Yes, she can.', 'No, she can’t.'], answer: 1 },
+      { ask: 'What does Mia give her?', choices: ['A tissue.', 'A ladder.'], answer: 0 },
+      { ask: 'What does Pip give her?', choices: ['A cake.', 'Some water.'], answer: 1 },
+      { ask: 'Can I help you?', choices: ['Yes, please!', 'I’ve got a cold.'], answer: 0 },
+      { ask: 'At the road, you must …', choices: ['run.', 'wait.'], answer: 1 },
+    ],
+    doneLine: 'Your flag is on the top! Super reading!',
+  },
+  /* Phonics: long a sort (ai / ay / a_e) → Crossword → Blend & Read → tongue twister */
+  {
+    id: 'hc4-sound-review', kind: 'sound-model', bg: bgSquare, who: 'pip', letter: 'ai ay a_e', phoneme: '/eɪ/', sound: 'ai', soundSide: 'center',
+    teacher: 'Review: three ways to write /eɪ/! ai in the middle (rain), ay at the end (play), a_e with magic e (cape). Say each word and point to the letters.',
+    anchors: [
+      { word: 'rain', emoji: '\u{1F327}\u{FE0F}', img: item('rain') },
+      { word: 'play', emoji: '\u{26BD}', img: item('ball-red') },
+      { word: 'cape', emoji: '\u{1F9B8}', img: HERO.cape },
+    ],
+  },
+  {
+    id: 'hc4-crossword', kind: 'crossword', bg: bgHQ, who: 'zippy', title: 'Hero Crossword: ai, ay, a_e',
+    teacher: 'Spelling game: tap a picture, then tap the letters to fill its squares. Crossing letters help! Say each word when it is done — is it ai, ay or a_e?',
+    words: [
+      { word: 'rain', img: item('rain'), say: 'Rain! ai in the middle.' },
+      { word: 'train', img: item('train'), say: 'Train! ai in the middle.' },
+      { word: 'tray', img: item('tray'), say: 'Tray! ay at the end.' },
+      { word: 'cake', img: item('cake'), say: 'Cake! Magic e!' },
+      { word: 'cape', img: HERO.cape, say: 'Cape! Magic e!' },
+      { word: 'snail', img: item('snail'), say: 'Snail! ai in the middle.' },
+    ],
+    doneLine: 'You did the whole crossword!',
+  },
+  {
+    id: 'hc4-blend', kind: 'sound-blend', bg: bgSquare, look: 'frog',
+    teacher: 'Reading: say each sound, blend the word, find the picture — then read the sentence. ai, ay or a_e?',
+    rounds: [
+      { word: 'snail', sounds: ['s', 'n', 'ai', 'l'], img: item('snail'), sentence: 'The snail is slow.' },
+      { word: 'tray', sounds: ['t', 'r', 'ay'], img: item('tray'), sentence: 'Here’s some water on a tray.' },
+      { word: 'cake', sounds: ['c', 'a_e', 'k'], img: item('cake'), sentence: 'Can I help you make a cake?' },
+    ],
+  },
+  { id: 'hc4-twister', kind: 'tongue-twister', look: 'town', speeds: 3, bg: bgSquare, who: 'pip', focus: 'a', teacher: 'Reading: the unit’s tongue twister! Listen to Pip, then say it slow, faster — then hero speed!', line: 'Brave Jay may save the train in the rain.' },
+  /* Free: help the teacher */
+  {
+    id: 'hc4-help-me', kind: 'join-stage', bg: bgHQ, teacher: 'Free: the teacher acts out a problem (sneeze, hold the head, a heavy bag…). The student asks, listens and offers help in their own words. Then swap!', cast: ['spark'],
+    turns: [
+      { who: 'spark', line: 'Ouch! Oh dear…' },
+      { who: 'student', line: 'What’s the matter?' },
+      { who: 'spark', line: 'I’ve got a headache.' },
+      { who: 'student', line: 'Can I help you? Here’s … / I can … .' },
+      { who: 'spark', line: 'Yes, please! Thank you, hero!' },
+    ],
+  },
+  { id: 'hc4-i-can', kind: 'meet', focus: ['matter', 'help'], bg: sparkPage(9), who: 'spark', cardSide: 'left', teacher: 'Check: the student helps 4 citizens (asks, understands and offers the right help). Teach-back: the student says the steps — ask What’s the matter?, listen, offer Can I help you?', line: 'You can ask what’s the matter — and you can help!', repeat: 'What’s the matter? Can I help you?' },
+  {
+    id: 'hc4-sticker', kind: 'prea1', teacher: 'Sticker time! The student opens the pack and puts the Hero City sticker in their Sticker Book.',
+    scene: {
+      id: 'hc4-sticker', kind: 'sticker-reward', bg: bgSquare, who: 'pip', teacher: 'Sticker time!',
+      line: 'Kind hero! Here is your sticker.',
+      sticker: { img: HERO.sparkCheer, label: 'City hero' },
+    },
+  },
+  petPal('hc4-pet-pal', 3, 'Ouch! I’ve got a cut on my paw! I want a plaster!', [{ label: 'plaster', img: HELP.plaster }, { label: 'toolbox', img: HELP.toolbox }, { label: 'cake', img: item('cake') }], 0, 'A plaster! Thank you! I feel better!'),
+  {
+    id: 'hc4-home-mission', kind: 'prea1', teacher: 'Home Mission: read the steps with the student. They do them at home with the family.',
+    scene: {
+      id: 'hc4-home-mission', kind: 'home-mission', bg: bgSquare, who: 'pip',
+      teacher: 'Home Mission: read the steps with the student.',
+      line: 'Your home mission!',
+      parentNote: 'Today your child learned to ask "What\'s the matter?", to understand "I\'ve got a headache / a cold" and to offer help: "Can I help you?". This week, pretend to have a small problem and let your child ask and help you in English.',
+      steps: [
+        { emoji: '\u{2753}', say: 'Ask someone at home: What’s the matter?' },
+        { emoji: '\u{1F64B}', say: 'Offer help: Can I help you?' },
+        { emoji: '\u{1F91D}', say: 'Help with one thing today!' },
+      ],
+    },
+  },
+  goodbyeSong('hc4-goodbye-song', bgSquare),
+  { id: 'hc4-finale', kind: 'finale', bg: sparkPage(9), who: 'spark', line: 'You are a real hero! See you in Hero City! \u{1F9B8}' },
 ];
