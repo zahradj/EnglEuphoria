@@ -19,7 +19,7 @@ import { LessonChecklistCard, clearChecklist, practiceLines, type ChecklistValue
 import { LessonChecklistPanel } from '@/academy-deck/teacher/LessonChecklistPanel';
 import { UnitAssessmentPanel } from '@/academy-deck/teacher/UnitAssessmentPanel';
 import { ACADEMY_DECK_BLUEPRINT_IDS } from '@/academy-deck/lessonRegistry';
-import { loadDeckScript } from '@/academy-deck/lessonScripts';
+import { loadScript as loadDeckScript, levelOfBlueprint } from '@/academy-player-v2/lessonScripts';
 import { familyLines, type LessonChecklist, type UnitAssessment } from '@/curriculum/academy';
 import { saveCheck } from '@/services/academyChecklistService';
 import { clearAcademyChecklist, loadAcademyChecklist } from '@/academy-deck/classroom/checklistLog';
@@ -396,7 +396,7 @@ export const LessonWrapUpDialog: React.FC<LessonWrapUpDialogProps> = ({
   useEffect(() => {
     if (!open || !academyLessonId) { setAcScript(null); return; }
     let cancelled = false;
-    void loadDeckScript(academyLessonId)?.then((sc) => { if (!cancelled) setAcScript({ criteria: sc.criteria, level: sc.level }); });
+    void loadDeckScript(academyLessonId)?.then((sc) => { if (!cancelled) setAcScript({ criteria: sc.criteria, level: levelOfBlueprint(sc.blueprintId) as LessonChecklist['level'] }); });
     return () => { cancelled = true; };
   }, [open, academyLessonId]);
 

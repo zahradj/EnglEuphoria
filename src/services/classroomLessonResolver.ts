@@ -6,7 +6,7 @@
  *   2. lessons.curriculum_lesson_id  → curriculum_lessons row (THE master library)
  *   3. class_bookings.hub_type       → just the hub (no slides)
  */
-import { hasDeckScript } from '@/academy-deck/lessonScripts';
+import { hasScript as hasDeckScript } from '@/academy-player-v2/lessonScripts';
 import { supabase } from '@/integrations/supabase/client';
 import { getLessonById, getLibraryLessonSlides, type LibraryLesson } from './lessonLibraryService';
 import { resolveActiveCoreLesson, findFirstLessonForLevel, type Hub as CoreHub } from './activeCoreLessonResolver';
@@ -259,7 +259,7 @@ export async function resolveBookingLesson(booking: {
     }];
   } else if (hubType === 'academy' && typeof deckLessonId === 'string' && hasDeckScript(deckLessonId)) {
     // A booked lesson that points at an Academy library (deck) lesson: one synthetic slide carries the reference
-    // (the stage plays it with the synced deck player, see MainStage / EmbeddedAcademyDeckLesson).
+    // (the stage plays it with the synced deck player, see MainStage / EmbeddedPlayerLesson).
     baseSlides = [{ id: `deck-lesson-${deckLessonId}`, type: 'academy_deck', deckLessonRef: { lessonId: deckLessonId } }];
   } else if (hubType === 'playground' && playgroundUnit && baseSlides.length > 0) {
     baseSlides = baseSlides.map((s, i) =>

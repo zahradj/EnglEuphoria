@@ -4,12 +4,16 @@ import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useSta
 import { whiteboardService, type SceneTapPayload } from '@/services/whiteboardService';
 import { getDomPath, getElementAtPath } from '@/content/playground-library/unit1/scenePathSync';
 import { LessonPlayer } from '../LessonPlayer';
+import { loadScript } from '../lessonScripts';
 import type { LessonScript } from '../types';
 
 export interface EmbeddedPlayerHandle { goNext: () => void; goBack: () => void; goToIndex: (i: number) => void; setInteractionUnlocked: (u: boolean) => void }
 
 interface Props {
-  script: LessonScript | null;
+  /** library id of the lesson (loaded on demand) */
+  lessonId?: string;
+  /** or the script itself */
+  script?: LessonScript | null;
   roomId: string;
   role: 'teacher' | 'student';
   persistedSceneIdx?: number | null;
@@ -22,7 +26,15 @@ interface Props {
 const SHARED = ['.av-stage', '.av-hud', '.av-dock'] as const;
 
 export const EmbeddedPlayerLesson = forwardRef<EmbeddedPlayerHandle, Props>(function EmbeddedPlayerLesson(
-  { script, roomId, role, persistedSceneIdx, onSceneIdxPersist, artBase = '/academy-art', onNavState }, ref) {
+  { lessonId, script: given, roomId, role, persistedSceneIdx, onSceneIdxPersist, artBase = '/academy-art', onNavState }, ref) {
+  const [loaded, setLoaded] = useState<LessonScript | null>(null);
+  useEffect(() => {
+    if (given || !lessonId) return;
+    let live = true;
+    void loadScript(lessonId)?.then((s) => { if (live) setLoaded(s); });
+    return () => { live = false; };
+  }, [lessonId, given]);
+  const script = given ?? loaded;
   const total = script?.scenes.length ?? 0;
   const [idx, setIdx] = useState(() => Math.max(0, persistedSceneIdx ?? 0));
   const idxRef = useRef(idx); idxRef.current = idx;

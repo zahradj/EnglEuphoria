@@ -12,7 +12,7 @@ import { ClassroomToolOverlay } from './ClassroomToolOverlay';
 import { EmbeddedSceneLesson } from './EmbeddedSceneLesson';
 import { EmbeddedWelcomeTownLesson } from './EmbeddedWelcomeTownLesson';
 import { ClassroomSceneErrorBoundary } from './ClassroomSceneErrorBoundary';
-import { EmbeddedAcademyDeckLesson, type EmbeddedAcademyDeckHandle } from '@/academy-deck/classroom/EmbeddedAcademyDeckLesson';
+import { EmbeddedPlayerLesson, type EmbeddedPlayerHandle } from '@/academy-player-v2/classroom/EmbeddedPlayerLesson';
 import { useLetterboxSize } from '@/hooks/useLetterboxSize';
 import { isWelcomeTownFamilyFormat } from '@/content/playground-library/sceneLessonFormats';
 import { LiveReactionBar, STUDENT_REACTIONS } from '@/components/classroom/engagement/LiveReactionBar';
@@ -144,7 +144,7 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
   const isWelcomeTownScene = isWelcomeTownFamilyFormat(sceneLessonRef?.contentFormat);
   // Academy library (deck) lesson: one synthetic slide carries { lessonId } (see TeacherClassroom / classroomLessonResolver).
   const deckLessonRef = (rawSlides as { deckLessonRef?: { lessonId: string } }[] | undefined)?.[0]?.deckLessonRef;
-  const deckHandleRef = useRef<EmbeddedAcademyDeckHandle>(null);
+  const deckHandleRef = useRef<EmbeddedPlayerHandle>(null);
   // Academy game (Game Library): one synthetic slide carries { gameId }; teacher and student each play their own copy.
   const academyGameRef = (rawSlides as { academyGameRef?: { gameId: string } }[] | undefined)?.[0]?.academyGameRef;
 
@@ -437,15 +437,13 @@ export const MainStage = forwardRef<MainStageHandle, MainStageProps>(function Ma
                       visibility: sceneFrameSize.width > 0 ? 'visible' : 'hidden',
                     }}>
                       <ClassroomSceneErrorBoundary resetKey={`deck-${deckLessonRef.lessonId}`}>
-                        <EmbeddedAcademyDeckLesson
+                        <EmbeddedPlayerLesson
                           ref={deckHandleRef}
                           lessonId={deckLessonRef.lessonId}
                           roomId={roomId}
                           role={role}
                           persistedSceneIdx={sceneLessonIdx}
                           onSceneIdxPersist={onPersistSceneLessonIdx}
-                          sessionId={sessionId}
-                          userId={userId}
                           onNavState={handleSceneNavState}
                         />
                       </ClassroomSceneErrorBoundary>

@@ -13,9 +13,9 @@ vi.mock('../EmbeddedSceneLesson', () => ({ EmbeddedSceneLesson: () => null }));
 vi.mock('../EmbeddedWelcomeTownLesson', () => ({ EmbeddedWelcomeTownLesson: () => null }));
 
 // A tiny stand-in lesson: the real lessons were removed for the player v2 rebuild (docs/academy-player-v2-plan.md).
-vi.mock('@/academy-deck/lessonScripts', () => {
-  const script = { lessonId: 'TEST-E1', level: 'B1', cast: ['Vee'], criteria: ['c'], parts: [], slides: Array.from({ length: 27 }, (_, i) => ({ id: `t${i}`, part: 0, kind: 'title', bg: 'x', heading: `Slide ${i}`, sub: '' })) };
-  return { hasDeckScript: () => true, loadDeckScript: () => Promise.resolve(script) };
+vi.mock('@/academy-player-v2/lessonScripts', () => {
+  const script = { blueprintId: 'B1-S01-E1', title: 'T', criteria: ['c'], cast: ['Vee'], partMinutes: [5, 8, 8, 8, 8, 8, 8, 7], scenes: Array.from({ length: 27 }, (_, i) => ({ id: `t${i}`, part: 0, kind: 'lobby', heading: `Slide ${i}` })) };
+  return { hasScript: () => true, loadScript: () => Promise.resolve(script), levelOfBlueprint: () => 'B1' };
 });
 
 import { MainStage } from '../MainStage';
@@ -30,17 +30,17 @@ const deckSlides = [{ id: 'deck-lesson-test', deckLessonRef: { lessonId: 'test-l
 describe('Academy classroom stage', () => {
   it('teacher: a deck lesson on the display plays in the stage with the pen layer, not as plain slide content', async () => {
     render(<MainStage {...base} slides={deckSlides} rawSlides={deckSlides} role="teacher" sceneLessonIdx={2} onPersistSceneLessonIdx={() => {}} />);
-    const embed = await screen.findByTestId('academy-deck-embed');
+    const embed = await screen.findByTestId('av-embed');
     expect(embed.getAttribute('data-role')).toBe('teacher');
     expect(screen.getByTestId('pen-layer')).toBeTruthy();
     expect(screen.queryByTestId('plain-stage')).toBeNull();
-    expect(await screen.findByText('3/27')).toBeTruthy();
+    expect(await screen.findByText('Slide 2')).toBeTruthy();
   });
 
   it('student: follows the teacher’s saved slide and cannot move the lesson', async () => {
     render(<MainStage {...base} slides={deckSlides} rawSlides={deckSlides} role="student" sceneLessonIdx={4} />);
-    expect((await screen.findByTestId('academy-deck-embed')).getAttribute('data-role')).toBe('student');
-    expect(await screen.findByText('5/27')).toBeTruthy();
+    expect((await screen.findByTestId('av-embed')).getAttribute('data-role')).toBe('student');
+    expect(await screen.findByText('Slide 4')).toBeTruthy();
     expect(screen.queryByRole('button', { name: 'Next', exact: true })).toBeNull();
   });
 
@@ -48,6 +48,6 @@ describe('Academy classroom stage', () => {
     const plain = [{ id: 's1' }];
     render(<MainStage {...base} slides={plain} rawSlides={plain} role="teacher" />);
     expect(screen.getByTestId('plain-stage')).toBeTruthy();
-    expect(screen.queryByTestId('academy-deck-embed')).toBeNull();
+    expect(screen.queryByTestId('av-embed')).toBeNull();
   });
 });

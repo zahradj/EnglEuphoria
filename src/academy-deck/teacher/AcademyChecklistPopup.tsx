@@ -2,7 +2,8 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ClipboardCheck } from 'lucide-react';
 import { Dialog, DialogContent, DialogTitle } from '@/components/ui/dialog';
 import { supabase } from '@/integrations/supabase/client';
-import { loadDeckScript } from '../lessonScripts';
+import { loadScript } from '../../academy-player-v2/lessonScripts';
+import { levelOfBlueprint } from '../../academy-player-v2/lessonScripts';
 import { ACADEMY_DECK_BLUEPRINT_IDS } from '../lessonRegistry';
 import type { DeckScript } from '../types';
 import type { LessonChecklist } from '../../curriculum/academy';
@@ -32,7 +33,7 @@ export function AcademyChecklistPopup({ lessonId, sessionId, bookingId, studentI
 
   useEffect(() => {
     let live = true;
-    void loadDeckScript(lessonId)?.then((s) => { if (live) setScript(s); });
+    void loadScript(lessonId)?.then((s) => { if (live) setScript({ lessonId, level: levelOfBlueprint(s.blueprintId), criteria: s.criteria, slides: [] } as unknown as DeckScript); });
     return () => { live = false; };
   }, [lessonId]);
 
