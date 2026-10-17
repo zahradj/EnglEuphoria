@@ -1,11 +1,67 @@
 [
   {
     "who": "Vee",
-    "text": "Last year I went camping with my cousins and we swam in a lake. I have never been to a concert, but I would love to go to one."
+    "text": "Cold open! No lesson yet. Theo will tell you three experiences. Two are true and one is a lie. Ask him questions in your own words, then find the lie."
+  },
+  {
+    "who": "Theo",
+    "text": "I have run a marathon."
   },
   {
     "who": "Vee",
-    "text": "What is the past simple of “eat”?"
+    "text": "When did you run it?"
+  },
+  {
+    "who": "Theo",
+    "text": "Two years ago, in Berlin."
+  },
+  {
+    "who": "Vee",
+    "text": "How long did it take?"
+  },
+  {
+    "who": "Theo",
+    "text": "Four hours and ten minutes. My legs hurt for a week."
+  },
+  {
+    "who": "Theo",
+    "text": "I have never ridden a horse."
+  },
+  {
+    "who": "Vee",
+    "text": "Have you been to a farm?"
+  },
+  {
+    "who": "Theo",
+    "text": "Yes, I went to my uncle’s farm last summer. I rode a horse called Biscuit!"
+  },
+  {
+    "who": "Vee",
+    "text": "Do you like animals?"
+  },
+  {
+    "who": "Theo",
+    "text": "Yes, a lot. We have two dogs."
+  },
+  {
+    "who": "Theo",
+    "text": "I have played the drums in a band."
+  },
+  {
+    "who": "Vee",
+    "text": "Who was in the band?"
+  },
+  {
+    "who": "Theo",
+    "text": "Mia and two friends from school."
+  },
+  {
+    "who": "Vee",
+    "text": "Where did you play?"
+  },
+  {
+    "who": "Theo",
+    "text": "At the school concert, last March."
   },
   {
     "who": "Vee",
@@ -53,15 +109,43 @@
   },
   {
     "who": "Vee",
-    "text": "What is the dare?"
+    "text": "Welcome to the Desk. Ava’s blog post stays on screen. Three claims at a time: stamp each one true, false or not given, and tap the line that proves it. A set locks only when all three are right."
   },
   {
     "who": "Vee",
-    "text": "Why does Ava say that flying is easy?"
+    "text": "Ava thought bucket lists were only for grown-ups."
   },
   {
     "who": "Vee",
-    "text": "What can you guess about Theo?"
+    "text": "Ava has never eaten insects."
+  },
+  {
+    "who": "Vee",
+    "text": "Ava’s cousin lives in Spain."
+  },
+  {
+    "who": "Vee",
+    "text": "Ava went to Spain last summer."
+  },
+  {
+    "who": "Vee",
+    "text": "Ava has already tried surfing."
+  },
+  {
+    "who": "Vee",
+    "text": "Ava was terrified before every one of those things."
+  },
+  {
+    "who": "Vee",
+    "text": "Answer: “Yes, I have. I flew to Peru last year.” Which question was asked?"
+  },
+  {
+    "who": "Vee",
+    "text": "Question: “When did you tick it off?” Which answer fits?"
+  },
+  {
+    "who": "Vee",
+    "text": "Question: “Have you ever given surfing a go?” Which answer fits?"
   },
   {
     "who": "Vee",
@@ -113,19 +197,39 @@
   },
   {
     "who": "Vee",
-    "text": "What is the main idea of Ava’s post?"
+    "text": "Forge the three forms of each verb, in order: base, past simple, past participle. Before each verb, bet one to three gems that you will forge it clean. A clean verb pays double."
   },
   {
     "who": "Vee",
-    "text": "What has Ava already done?"
+    "text": "Crack the cipher. Type the missing participle. Green means right, yellow means the letter is in the word, grey means it is not."
   },
   {
     "who": "Vee",
-    "text": "How did Ava probably feel when her cousin first dared her?"
+    "text": "I have never seen a rainbow like this."
   },
   {
     "who": "Vee",
-    "text": "Is the time finished and stated, or is it an experience up to now?"
+    "text": "Have you ever eaten spicy noodles?"
+  },
+  {
+    "who": "Vee",
+    "text": "She has already done her homework."
+  },
+  {
+    "who": "Vee",
+    "text": "I have just written a long message to my cousin."
+  },
+  {
+    "who": "Vee",
+    "text": "We have made a bucket list together."
+  },
+  {
+    "who": "Vee",
+    "text": "Two doors, two tenses. Does the sentence say when (a finished time), or is it an experience up to now?"
+  },
+  {
+    "who": "Vee",
+    "text": "Door one has a time word, like last summer. Door two has have and no time."
   },
   {
     "who": "Vee",
@@ -158,66 +262,6 @@
   {
     "who": "Vee",
     "text": "I took a photo in a cave two years ago."
-  },
-  {
-    "who": "Vee",
-    "text": "Have you ever been to Japan"
-  },
-  {
-    "who": "Vee",
-    "text": "I have never eaten octopus"
-  },
-  {
-    "who": "Vee",
-    "text": "We ate pizza last summer"
-  },
-  {
-    "who": "Vee",
-    "text": "Welcome to the Border Desk. Bucket-list posts arrive three at a time. Check each one against the rulebook, approve it or fix it, then file the batch."
-  },
-  {
-    "who": "Vee",
-    "text": "A finished time, like last summer, last year or two years ago, needs the past simple."
-  },
-  {
-    "who": "Vee",
-    "text": "An experience up to now, with no finished time, needs have or has and the past participle."
-  },
-  {
-    "who": "Vee",
-    "text": "To ask about an experience, say Have you ever and the past participle."
-  },
-  {
-    "who": "Vee",
-    "text": "Forge the three forms of each verb, in order: base, past simple, past participle."
-  },
-  {
-    "who": "Theo",
-    "text": "Break the Clock! Choose the right tense to strike. Three shields: a wrong tense costs one."
-  },
-  {
-    "who": "Vee",
-    "text": "Crack the cipher. Type the missing participle. Green means right, yellow means the letter is in the word, grey means it is not."
-  },
-  {
-    "who": "Vee",
-    "text": "I have never seen a rainbow like this."
-  },
-  {
-    "who": "Vee",
-    "text": "Have you ever eaten spicy noodles?"
-  },
-  {
-    "who": "Vee",
-    "text": "She has already done her homework."
-  },
-  {
-    "who": "Vee",
-    "text": "I have just written a long message to my cousin."
-  },
-  {
-    "who": "Vee",
-    "text": "We have made a bucket list together."
   },
   {
     "who": "Vee",
@@ -258,6 +302,22 @@
   {
     "who": "Theo",
     "text": "Hmm, last August? Okay… what did you eat?"
+  },
+  {
+    "who": "Theo",
+    "text": "Breaking news from Vee: my flight to Rome is cancelled! Have you ever missed a flight?"
+  },
+  {
+    "who": "Theo",
+    "text": "Oh no! What did you do?"
+  },
+  {
+    "who": "Theo",
+    "text": "Really? When was that?"
+  },
+  {
+    "who": "Theo",
+    "text": "Yesterday? Hmm."
   },
   {
     "who": "Theo",
@@ -330,6 +390,18 @@
   {
     "who": "Theo",
     "text": "Have you ever been abroad? … When did you go?"
+  },
+  {
+    "who": "Theo",
+    "text": "I have been to Italy. I have never eaten sushi. I have broken my arm. I went to Italy last August."
+  },
+  {
+    "who": "Theo",
+    "text": "This time I used have for the experience and the past simple for the time."
+  },
+  {
+    "who": "Vee",
+    "text": "You earned the whole deck. Now keep three Dare cards for your own bucket list. There is no wrong choice: pick the three you would really give a go."
   },
   {
     "who": "Vee",
@@ -717,6 +789,10 @@
   },
   {
     "who": "Vee",
+    "text": "I have never eaten octopus"
+  },
+  {
+    "who": "Vee",
     "text": "The past participle of “fly” is…"
   },
   {
@@ -925,6 +1001,10 @@
   },
   {
     "who": "Vee",
+    "text": "Forge the three forms of each verb, in order: base, past simple, past participle."
+  },
+  {
+    "who": "Vee",
     "text": "Have you ever flown in a plane?"
   },
   {
@@ -1026,6 +1106,10 @@
   {
     "who": "Vee",
     "text": "Which question asks about the time of one trip?"
+  },
+  {
+    "who": "Vee",
+    "text": "Have you ever been to Japan"
   },
   {
     "who": "Vee",
@@ -1202,10 +1286,6 @@
   {
     "who": "Theo",
     "text": "Yeah."
-  },
-  {
-    "who": "Theo",
-    "text": "I have never ridden a horse."
   },
   {
     "who": "Theo",
@@ -1454,6 +1534,66 @@
   {
     "who": "Vee",
     "text": "How do you keep a guest talking? Say the three jobs of a good host."
+  },
+  {
+    "who": "Vee",
+    "text": "Last year I went camping with my cousins and we swam in a lake. I have never been to a concert, but I would love to go to one."
+  },
+  {
+    "who": "Vee",
+    "text": "What is the past simple of “eat”?"
+  },
+  {
+    "who": "Vee",
+    "text": "What is the dare?"
+  },
+  {
+    "who": "Vee",
+    "text": "Why does Ava say that flying is easy?"
+  },
+  {
+    "who": "Vee",
+    "text": "What can you guess about Theo?"
+  },
+  {
+    "who": "Vee",
+    "text": "What is the main idea of Ava’s post?"
+  },
+  {
+    "who": "Vee",
+    "text": "What has Ava already done?"
+  },
+  {
+    "who": "Vee",
+    "text": "How did Ava probably feel when her cousin first dared her?"
+  },
+  {
+    "who": "Vee",
+    "text": "Is the time finished and stated, or is it an experience up to now?"
+  },
+  {
+    "who": "Vee",
+    "text": "We ate pizza last summer"
+  },
+  {
+    "who": "Vee",
+    "text": "Welcome to the Border Desk. Bucket-list posts arrive three at a time. Check each one against the rulebook, approve it or fix it, then file the batch."
+  },
+  {
+    "who": "Vee",
+    "text": "A finished time, like last summer, last year or two years ago, needs the past simple."
+  },
+  {
+    "who": "Vee",
+    "text": "An experience up to now, with no finished time, needs have or has and the past participle."
+  },
+  {
+    "who": "Vee",
+    "text": "To ask about an experience, say Have you ever and the past participle."
+  },
+  {
+    "who": "Theo",
+    "text": "Break the Clock! Choose the right tense to strike. Three shields: a wrong tense costs one."
   },
   {
     "who": "Vee",
