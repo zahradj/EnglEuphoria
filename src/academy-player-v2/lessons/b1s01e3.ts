@@ -12,6 +12,9 @@ import type { BuildScene } from '../scenes/build/Build';
 import type { SpeakScene } from '../scenes/speak/Speak';
 import type { RapportScene } from '../scenes/rapport/Rapport';
 import type { WriteScene } from '../scenes/write/Write';
+import type { MatchScene } from '../scenes/match/Match';
+import type { MemoryScene } from '../scenes/memory/Memory';
+import type { ForgeScene } from '../scenes/forge/Forge';
 import type { WrapScene } from '../scenes/wrap/Wrap';
 import type { LobbyScene } from '../scenes/lobby/Lobby';
 
@@ -106,6 +109,14 @@ const scenes: SceneBase[] = [
     { id: 'b5', text: 'I have ___ to the sea twice.', bin: 'been', hint: 'A past experience that is over: been.', art: 'sc-bg-5' },
     { id: 'b6', text: 'The librarian has ___ home. (The door is closed.)', bin: 'gone', hint: 'She is not here now, so: gone.', art: 'sc-bg-6' },
   ] } satisfies SortScene,
+  { id: 'match-qa', part: 3, kind: 'match', plate: BOARD, trains: [2], title: 'Read and match: question and answer', pairs: [
+    { left: 'Have you ever flown in a plane?', right: 'Yes, I have.' }, { left: 'Has Theo ever eaten sushi?', right: 'No, he hasn’t.' },
+    { left: 'Have they seen the sea?', right: 'Yes, they have.' }, { left: 'When did you go?', right: 'I went last summer.' },
+  ] } satisfies MatchScene,
+  { id: 'mem-scenes', part: 3, kind: 'memory', plate: BOARD, trains: [3], title: 'Memory: the been-or-gone pictures', pairs: [
+    { art: 'sc-bg-1', text: 'back at his desk' }, { art: 'sc-bg-2', text: 'an empty desk' }, { art: 'sc-bg-3', text: 'pointing at the globe' },
+    { art: 'sc-bg-4', text: 'coat on the hook' }, { art: 'sc-bg-5', text: 'class at the sea' }, { art: 'sc-bg-6', text: 'closed library door' },
+  ] } satisfies MemoryScene,
   { id: 'build-ask', part: 3, kind: 'build', plate: BOARD, trains: [2, 4], title: 'Question Forge', items: [
     { words: ['Have', 'you', 'ever', 'been', 'to', 'Lisbon'], hint: 'Have you ever + been.' },
     { words: ['Yes', 'I', 'have'], hint: 'Yes, I have. Short and complete.' },
@@ -117,6 +128,9 @@ const scenes: SceneBase[] = [
     { q: 'Then I asked, “When ___ you go?”', options: ['have', 'did', 'has'], answer: 1, why: 'The details use the past simple with did.' },
   ] } satisfies ChoiceScene,
 
+  { id: 'forge', part: 4, kind: 'forge', plate: 'trophy-case', trains: [1], title: 'Participle Forge', prompt: 'Forge the three forms of each verb, in order: base, past simple, past participle.', rounds: [
+    { forms: ['eat', 'ate', 'eaten'] }, { forms: ['see', 'saw', 'seen'] }, { forms: ['be', 'was', 'been'] },
+  ] } satisfies ForgeScene,
   { id: 'quickfire', part: 4, kind: 'choice', plate: 'classroom-morning', trains: [2], title: 'Quick-fire!', questions: [
     { q: 'Have you ever flown in a plane?', options: ['Yes, I have.', 'Yes, I fly.', 'Yes, I did flew.'], answer: 0 },
     { q: 'Have you ever been to Rome?', options: ['No, I haven’t.', 'No, I don’t.', 'No, I wasn’t.'], answer: 0 },

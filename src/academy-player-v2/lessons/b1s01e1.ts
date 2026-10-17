@@ -11,6 +11,9 @@ import type { ChoiceScene } from '../scenes/choice/Choice';
 import type { MatchScene } from '../scenes/match/Match';
 import type { BuildScene } from '../scenes/build/Build';
 import type { SpeakScene } from '../scenes/speak/Speak';
+import type { TeachScene } from '../scenes/teach/Teach';
+import type { MemoryScene } from '../scenes/memory/Memory';
+import type { WriteScene } from '../scenes/write/Write';
 import type { ForgeScene } from '../scenes/forge/Forge';
 import type { BossScene } from '../scenes/boss/Boss';
 import type { RapportScene } from '../scenes/rapport/Rapport';
@@ -77,6 +80,13 @@ const scenes: SceneBase[] = [
     { phase: 'weDo', text: 'Say them with me: bucket list, dare, give it a go, once in a lifetime, tick it off, brave.' },
     { phase: 'youDo', text: 'Now you: say the six words and one example, like “I want to give surfing a go.”' },
   ] } satisfies ModelScene,
+  { id: 'words-teach', part: 2, kind: 'teach', plate: 'bucket-list-wall', trains: [2], title: 'Five of the words, with pictures', who: 'Vee', pages: [
+    { word: 'bucket list', art: 'b-bucketlist', meaning: 'a list of things you want to do in your life', example: 'My bucket list has ten things on it.', clue: 'Say it as one word group: bucket list.' },
+    { word: 'dare', art: 'b-dare', meaning: 'to ask someone to do something difficult or scary', example: 'My cousin dared me to write a list.', clue: 'It rhymes with care.' },
+    { word: 'give it a go', art: 'b-giveitago', meaning: 'to try something', example: 'I want to give surfing a go.', clue: 'The same as: try it.' },
+    { word: 'once in a lifetime', art: 'b-lifetime', meaning: 'something that happens only one time in your life', example: 'A trip to Japan is once in a lifetime.', clue: 'Four words, one idea.' },
+    { word: 'tick it off', art: 'b-tick', meaning: 'to mark a thing on a list as done', example: 'I tick it off when I do it.', clue: 'You can also say: cross it off.' },
+  ] } satisfies TeachScene,
   { id: 'words-match', part: 2, kind: 'match', plate: 'bucket-list-wall', trains: [2], title: 'Read and match', pairs: [
     { left: 'bucket list', right: 'things you want to do in your life' },
     { left: 'dare', right: 'to ask someone to do something scary' },
@@ -84,6 +94,9 @@ const scenes: SceneBase[] = [
     { left: 'tick it off', right: 'to mark it as done' },
     { left: 'brave', right: 'not afraid when it is hard' },
   ] } satisfies MatchScene,
+  { id: 'words-memory', part: 2, kind: 'memory', plate: 'bucket-list-wall', trains: [2], title: 'Memory: the words', pairs: [
+    { art: 'b-bucketlist', text: 'bucket list' }, { art: 'b-dare', text: 'dare' }, { art: 'b-giveitago', text: 'give it a go' }, { art: 'b-lifetime', text: 'once in a lifetime' }, { art: 'b-tick', text: 'tick it off' },
+  ] } satisfies MemoryScene,
   { id: 'words-use', part: 2, kind: 'choice', plate: 'bucket-list-wall', trains: [2], title: 'Which word fits?', questions: [
     { q: 'My cousin gave me a ___: write ten things I want to do.', options: ['dare', 'tick', 'list off'], answer: 0 },
     { q: 'A trip to Japan is ___.', options: ['once in a lifetime', 'brave', 'a dare'], answer: 0 },
@@ -114,6 +127,15 @@ const scenes: SceneBase[] = [
     { words: ['I', 'have', 'never', 'eaten', 'octopus'], hint: 'I have never + participle.' },
     { words: ['We', 'ate', 'pizza', 'last', 'summer'], hint: 'Last summer is finished: past simple.' },
   ] } satisfies BuildScene,
+  { id: 'write-forms', part: 3, kind: 'write', plate: L, trains: [4], title: 'Use the rule', prompt: 'Your turn to use the rule. Write a question with ever, and an answer with never.', rows: [
+    { label: 'Ask a friend about travel (ever + be).', frame: 'Have you ever …?', accept: ['^have you ever been (to|in) .+'], hint: 'Have you ever + been to + a place.', sample: 'Have you ever been to Japan?' },
+    { label: 'Answer for yourself with never (eat).', frame: 'I have never …', accept: ["^(i have never|i(’|')ve never|i haven(’|')t ever|i have not ever) eaten .+"], hint: 'I have never + eaten + something.', sample: 'I have never eaten octopus.' },
+  ] } satisfies WriteScene,
+  { id: 'glitch', part: 3, kind: 'choice', plate: 'detective-wall', trains: [4], title: 'Glitch Hunt: which line is right?', questions: [
+    { q: 'Which chat line has no tense glitch?', options: ['I have seen the mountains last year.', 'I saw the mountains last year.', 'I have saw the mountains last year.'], answer: 1, why: 'Last year is a finished time: past simple, saw.' },
+    { q: 'Which chat line has no tense glitch?', options: ['I have gave it a go three times.', 'I have give it a go three times.', 'I have given it a go three times.'], answer: 2, why: 'Have + the past participle: given.' },
+    { q: 'Which chat line has no tense glitch?', options: ['Have you ever tried paragliding?', 'Did you ever tried paragliding?', 'Have you ever try paragliding?'], answer: 0, why: 'Have you ever + the past participle: tried.' },
+  ] } satisfies ChoiceScene,
   { id: 'forge', part: 3, kind: 'forge', plate: 'trophy-case', trains: [3], title: 'Trophy Forge', prompt: 'Forge the three forms of each verb, in order: base, past simple, past participle.', rounds: [
     { forms: ['go', 'went', 'gone'] }, { forms: ['fly', 'flew', 'flown'] }, { forms: ['take', 'took', 'taken'] },
   ] } satisfies ForgeScene,
