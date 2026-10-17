@@ -14,6 +14,9 @@ import { fileURLToPath } from 'node:url';
 import { SIGN_ME_UP } from '../src/academy-deck/lessons/signMeUp.ts';
 import { PA1_S01_E1 } from '../src/academy-deck/lessons/pa1s01e1.ts';
 import { PA1_S02_E1 } from '../src/academy-deck/lessons/pa1s02e1.ts';
+import { B1_S01_E1 } from '../src/academy-deck/lessons/b1s01e1.ts';
+import { B1_S01_E2 } from '../src/academy-deck/lessons/b1s01e2.ts';
+import { B1_S01_E3 } from '../src/academy-deck/lessons/b1s01e3.ts';
 import { SIGN_ME_UP_2 } from '../src/academy-deck/lessons/signMeUp2.ts';
 import { applyLane } from '../src/academy-deck/lanes.ts';
 import { PATTERN_LAB } from '../src/academy-deck/lessons/patternLab.ts';
@@ -34,6 +37,9 @@ const decks = [
   { name: FREE_TIME_CLUB_2.lessonId, slides: FREE_TIME_CLUB_2.slides },
   { name: PA1_S01_E1.lessonId, slides: PA1_S01_E1.slides },
   { name: PA1_S02_E1.lessonId, slides: PA1_S02_E1.slides },
+  { name: B1_S01_E1.lessonId, slides: B1_S01_E1.slides },
+  { name: B1_S01_E2.lessonId, slides: B1_S01_E2.slides },
+  { name: B1_S01_E3.lessonId, slides: B1_S01_E3.slides },
   { name: `${SIGN_ME_UP.lessonId} homework`, slides: SIGN_ME_UP_QUEST.flatMap((c) => c.slides) },
 ];
 

@@ -18,7 +18,7 @@ vi.mock('@/services/lessonResumeService', async () => {
   return {
     ...actual,
     ...svc,
-    createResumeSaver: (o: any) => actual.createResumeSaver({ ...o, write: svc.saveResume, markStarted: svc.markLessonInProgress }),
+    createResumeSaver: (o: Record<string, unknown>) => actual.createResumeSaver({ ...o, write: svc.saveResume, markStarted: svc.markLessonInProgress }),
   };
 });
 vi.mock('@/services/sceneLessonCompletionService', () => ({
@@ -36,7 +36,7 @@ vi.mock('@/content/playground-library/sceneLessonFormats', () => ({ isWelcomeTow
 
 // A fake player: shows the scene index it started at (from the same store the real one reads), reports moves, can finish.
 vi.mock('@/pages/playground-scene/PlayUnitLesson', () => ({
-  default: ({ sessionKey, onNavState, onFinaleReached }: any) => {
+  default: ({ sessionKey, onNavState, onFinaleReached }: { sessionKey: string; onNavState?: (s: { sceneIdx: number; total: number }) => void; onFinaleReached?: () => void }) => {
     const start = Number(window.sessionStorage.getItem(sessionKey) ?? 0);
     React.useEffect(() => { onNavState?.({ sceneIdx: start, total: 8 }); }, []); // eslint-disable-line
     return (
@@ -53,7 +53,7 @@ vi.mock('@/pages/playground-scene/PlayWelcomeTownLesson', () => ({ default: () =
 import { SceneLessonPlayerModal } from '../SceneLessonPlayerModal';
 
 const lesson = (status: 'current' | 'completed' = 'current') =>
-  ({ id: 'L1', status, unitNumber: 1, lessonNumber: 2, title: 'x', contentFormat: 'lep1-rich' }) as any;
+  ({ id: 'L1', status, unitNumber: 1, lessonNumber: 2, title: 'x', contentFormat: 'lep1-rich' }) as never;
 
 const open = (status: 'current' | 'completed' = 'current') =>
   render(

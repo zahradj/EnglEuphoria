@@ -183,3 +183,118 @@ One Canva generation (LANDSCAPE_16_9, references: v-name card `MAHXiyPmEHA`, Vee
 
 Not in the repo yet: the owner downloads the page by hand (signed-URL commit blocked, Canva downloads blocked on the network). Cut into 10 by hand-set boxes (5 columns x 2 rows).
 Weaknesses: the teen is one boy with dark hair and a purple hoodie in 9 of 10 squares (consistent, but no cast variety); click (4) is a hand only, on a tablet. Gaps between squares are narrow (about 2-3% of the width), though clear. Pointing hand (6) and the slow-down hands (8) are slightly stylised; check fingers at full size before use. The flag target in 6 carries a small flag glyph; the clock in 8 has no numerals. No text, letters or numbers seen.
+
+## Pre-A1 S2 L1 "The Phone" (2026-10-15, owner approved the plan and the story scenario)
+
+| Picture | File | Canva media | Holder page |
+|---|---|---|---|
+| scene `bus-stop-night` | `bg/bus-stop-night.webp` | MAHYCEu_964 | 95 |
+| scene `phone-screen-glow` | `bg/phone-screen-glow.webp` | MAHYCNy2A9o | 96 |
+| story plate 1 (Vee, Theo, the phone) | `bg/story-pa1s02-1.webp` | MAHYCBxiW9M | 97 |
+| story plate 2 (the pin and the tin) | `bg/story-pa1s02-2.webp` | MAHYCAxZPkA | 98 |
+| story plate 3 (Ava arrives) | `bg/story-pa1s02-3.webp` | MAHYCIyzlSQ | 99 |
+| cards phone, pin, tin, map (cut-out stickers from one sheet) | `cards/p-phone.webp`, `p-pin`, `p-tin`, `p-map` | MAHYCKlTUeI | 100 |
+
+Purple share target is now about 25% (owner, 2026-10-15). Story plates 2 and 3 read below that by a rough hue count (navy and blue dominate); restyle only with the owner's approval.
+
+### Pre-A1 S2 L1 v2 plates (2026-10-15)
+The holder design reached Canva's 100-page limit, so holder pages 97-99 were reused: the three story plates are saved in the repo and recoverable by their Canva media ids above (MAHYCBxiW9M, MAHYCAxZPkA, MAHYCIyzlSQ).
+
+| Picture | File | Canva media | Holder page |
+|---|---|---|---|
+| scene `vault-corridor` (five round vault doors, the first glowing gold) | `bg/vault-corridor.webp` | MAHYCWjl1Fs | 97 |
+| scene `lockscreen-closeup` (lock screen, five empty key slots) | `bg/lockscreen-closeup.webp` | MAHYCV9JEuI | 98 |
+| scene `bus-stop-dawn` (the finale) | `bg/bus-stop-dawn.webp` | MAHYCQG_Dx8 | 99 |
+
+A new holder design is needed before more plates (page limit).
+
+
+## B1 Season 1 lesson 1 (2026-10-15)
+
+| picture | file | Canva media | holder page |
+|---|---|---|---|
+| scene `bucket-list-wall` (rooftop studio, wall of blank cards; main plate) | `bg/bucket-list-wall.webp` | MAHYFlM8PDc | 97 (reused) |
+| scene `trophy-case` (cabinet with six empty glowing slots) | `bg/trophy-case.webp` | MAHYFtktauU | 98 (reused) |
+| story plate 1 (Vee at the wall, Ava on the sofa) | `bg/story-b1s1-1.webp` | MAHYCnd2Ab0 | 99 (reused) |
+| story plate 2 (Ava shows photos to Theo) | `bg/story-b1s1-2.webp` | MAHYCguSgIg | 97 (reused) |
+| story plate 3 (Vee points at the viewer, Ava laughs, Theo grins) | `bg/story-b1s1-3.webp` | MAHYChMdb5g | 98 (reused) |
+
+The holder is full (100 pages), so pages 97-99 are reused; the pictures are recoverable by their media ids. Still to make: word-picture sticker sheet (`b-bucketlist, b-dare, b-giveitago, b-lifetime, b-tick, b-brave`).
+
+## B1 Season 1 word stickers — prompts ready, NOT generated (2026-10-16)
+
+Status: **blocked.** Canva `generate-image` returned `quota_cooldown`; the Gemini route (`ai-image-generation`, tried directly) returned HTTP 402 "prepayment credits are depleted". Higgsfield: the owner said on 2026-10-16 "Proceed with canva or use higgsfield api" (a one-time exception to the CLAUDE.md picture rule, for these stickers only), but the Higgsfield balance is **0 credits** (one 3:2 sheet costs 0.25), so nothing was spent. Nothing was generated and no picture was drawn by hand. Retried Canva the same day: still `quota_cooldown`. When either route is back: generate one sheet per prompt below on a plain white background (Canva `LANDSCAPE_3_2`, no scene panels: an earlier sheet with panels was rejected), look at it, then cut the stickers with `python3 scripts/academy-split-cards.py <sheet.png> <rows> <cols> <ids…>` into `public/academy-art/cards/`.
+
+Common style line (every prompt): flat 2D game-art style, thick dark-violet outline, soft top highlight and bottom shade; bright, light, airy, broad daylight, at school, age-appropriate, reserved; about 25 % soft lilac and violet mixed with sky blue, warm cream, light wood and green plants; modest school clothes, calm friendly faces; one isolated object or person per cell on pure white; no text, letters or numbers; no scenery or panels.
+
+| Sheet | Grid | Card ids in reading order | Pictures |
+|---|---|---|---|
+| E1 words | 3 x 2 | `b-bucketlist`, `b-dare`, `b-giveitago`, `b-lifetime`, `b-tick`, `b-brave` | a checklist scroll pinned to a small corkboard with a gold star; a teen in a hoodie holding out a blank card with a playful smile; a teen about to try a climbing wall, one hand raised; a single golden ticket with a sparkle above a small globe; a pencil ticking a big green check mark on a card; a teen standing tall with a calm confident smile and a small shield-shaped badge |
+| E2 feelings A | 4 x 2 (7 used) | `w-excitement`, `w-amazed`, `w-disappointed`, `w-embarrassed`, `w-proud`, `w-frightened`, `w-relaxed` | a packed bag by a door with a big smile; a wide-eyed face looking up at a huge view; a closed museum door and a sad face; a red-faced student who dropped a tray; a smiling hiker on a hilltop; a student gripping a high railing; a student lying on grass, calm |
+| E2 places B | 4 x 2 (7 used) | `w-grateful`, `w-destination`, `w-attraction`, `w-countryside`, `w-camping`, `w-sightseeing`, `w-trynew` | a student saying thank you with a small gift; a signpost with a village at the end of a road; a famous tower with visitors; green fields, a farm and hills; a camp by a lake at sunset; a small group with a map in front of a monument; a student about to try a new activity |
+
+After the stickers exist: the card ids in `b1s01e1.ts` (`b-*`) and `b1s01e2.ts` (`w-*`) already point at these file names; run `npm test` for the deck, then push with `[preview]`.
+
+### Update 2026-10-16 (later): Lesson 1 word stickers made with Canva
+Canva `generate-image` worked on the retry (the cooldown had ended): sheet `MAHYIp4Cpos` (3 x 2, bright daytime, no text), placed on holder page 99 of `DAHXiX3gn1o` (reused; the page's earlier plate `story-pa1s02-3` is saved in the repo and recoverable by `MAHYGGer4Sk`), exported at 1920 x 1080 and cut with `scripts/academy-split-cards.py` (crop the sheet to x 150-1770 first) into `public/academy-art/cards/b-bucketlist`, `b-dare`, `b-giveitago`, `b-lifetime`, `b-tick`, `b-brave` (1024 x 1024 transparent WebP). Checked by eye: six clean cut-outs, no text. Weak points: the "once in a lifetime" ticket has no sparkle; the climbing-wall sticker keeps its wall panel (reads as the object). **Still to make:** the 14 Lesson 2 word stickers (two sheets of 7, prompts above). The holder design is at the 100-page limit, so keep reusing page 99 or start a new holder design.
+
+### Lesson 2 stickers, sheet A (2026-10-16): the seven feelings
+Canva sheet `MAHYI5kyt6E` (4 x 2, seven pictures), placed on holder page 99 (`DAHXiX3gn1o`), exported 1920 x 1080, cropped to x 150-1770 and cut with `scripts/academy-split-cards.py` into `cards/w-excitement`, `w-amazed`, `w-disappointed`, `w-embarrassed`, `w-proud`, `w-frightened`, `w-relaxed`. Checked by eye: the feelings read clearly. **Weak points:** the railing in `w-frightened` keeps white between its bars (the cut-out only removes white connected to the border; touch up or regenerate), and the hill in `w-proud` is cut flat at the bottom. Sheet B (grateful, destination, attraction, countryside, go camping, go sightseeing, try something new) hit Canva's cooldown; the prompt is in the ledger above.
+
+### Lesson 2 stickers, sheet B (2026-10-16): places and activities
+Canva sheet `MAHYI4QImxA` (4 x 2, seven pictures), placed on holder page 99, exported, and cut with the new `scripts/academy-split-cards-auto.py` (by picture, not by grid cell, because several pictures are wider than their cell; the fixed-grid cut left slivers of neighbours) into `cards/w-grateful`, `w-destination`, `w-attraction`, `w-countryside`, `w-camping`, `w-sightseeing`. Checked by eye: complete, no slivers. **Rejected:** the seventh picture (`w-trynew`, a teenager on a diving board) shows a shirtless boy, which breaks the modest-clothes rule; it was not saved and is being regenerated with modest clothes (a teenager with a paintbrush before a blank canvas). The Eiffel-style arch and the leaning tower are recognisable landmarks (fine for "attraction" and "sightseeing").
+
+### Lesson 2 sticker `w-trynew` regenerated (2026-10-16)
+Canva `MAHYI0ZkNYo` (a teenager in a plain t-shirt and jeans with a paintbrush before a blank canvas, paint pots and a plant), placed on holder page 99, exported, cut with `scripts/academy-split-cards-auto.py` into `cards/w-trynew.webp`. Replaces the rejected shirtless diving-board picture. Checked by eye: modest, clear, transparent background. Small inconsistency: it keeps a thin white die-cut outline that the other stickers do not have. **All 20 Season 1 word stickers (E1 six, E2 fourteen) now exist.** Still missing for Lesson 2: its three story plates and three scene backgrounds; weak points: `w-frightened` railing (white between the bars) and `w-proud` hill cut flat.
+
+## B1 Season 1 lesson 2 — story plates (2026-10-16)
+
+Scenario `docs/scenarios/academy-b1s01e2-postcard-wall.md` approved by the owner 2026-10-16 ("Approved, start plate 1"). One plate at a time; the owner sees each before the next.
+
+| picture | file | Canva media | holder page |
+|---|---|---|---|
+| story plate 1 (Vee beside the postcard wall, Travel Club room) | `bg/story-b1s2-1.webp` | MAHYKF2JuvY | 99 (reused) |
+| story plate 2 (Ava with green hills, Theo with the old tower) | `bg/story-b1s2-2.webp` | MAHYKKmlX60 | 99 (reused) |
+| story plate 3 (Mia at the table with the camping postcard, Vee behind) | `bg/story-b1s2-3.webp` | MAHYK-S-nf0 | 99 (reused) |
+| scene `travel-club-room` (empty room, world map, window seat; title, brief) | `bg/travel-club-room.webp` | MAHYK9TKvzk | 99 (reused) |
+| scene `postcard-wall` (wall of picture postcards; main plate and library cover) | `bg/postcard-wall.webp` | MAHYLFrrvS4 | 99 (reused) |
+| scene `postcard-table` (table with picture postcards; Mission, Release) | `bg/postcard-table.webp` | MAHYLAX4Snc | 99 (reused) |
+
+Notes: generated with the Lesson 1 plate `MAHYCnd2Ab0` as the only style reference (two attempts with a second cast reference failed with a Canva server error), so Vee is matched by description, not by his cast picture. Holder page 99 reused; set the image box to exactly 1920x1080 (`crop_media`) or Canva zooms the picture.
+
+## B1 Season 1 lesson 1 v3 — new plates (2026-10-16)
+
+| picture | file | Canva media | holder page |
+|---|---|---|---|
+| story plate 4 (the dare moment: Vee holds out a blank card, Ava and Theo behind him) | `bg/story-b1s1-4.webp` | MAHYKrKSe2w | 98 (reused) |
+
+"The Dare" is now four beats: plate 1, plate 2, plate 4 (the dare line), plate 3 (the noodles joke). No text changed, so no new voice lines.
+| trophy-case reveal (six trophies lit; the Wrap's background) | `bg/trophy-reveal.webp` | MAHYKx7rtSM | 97 (reused) |
+
+## B1 Season 1 lesson 3 "Pattern Lab" — plates (2026-10-16)
+
+Scenario `docs/scenarios/academy-b1s01e3-missing-postcard.md`; plan approved by the owner 2026-10-16 ("go, start creating the lesson"). One plate at a time; Canva `quota_cooldown` about 20 minutes between pictures.
+
+| picture | file | Canva media | holder page |
+|---|---|---|---|
+| scene `case-board` (close-up of the pinboard, index cards and string; Drop, Notice & Build, Wrap) | `bg/case-board.webp` | MAHYNAql7Sk | 99 (reused) |
+| story plate 1 (Vee beside the case board, pointing at the board) | `bg/story-b1s3-1.webp` | MAHYNWxXz6U | 99 (reused) |
+| story plate 2 (Theo at the table, two fingers up, notebook and globe) | `bg/story-b1s3-2.webp` | MAHYNSZcaTI | 99 (reused) |
+| story plate 3 (Vee thinking at the case board, Theo waving by the table) | `bg/story-b1s3-3.webp` | MAHYNcwzJoU | 99 (reused) |
+| scene `library-case-room` (library reading room with the case board; the lesson's main plate) | `bg/library-case-room.webp` | MAHYNE9eVJg | 99 (reused) |
+
+Notes: generated with the Lesson 2 plate `MAHYK9TKvzk` as the only style reference; no people, no text; checked by eye: bright daytime, light wood, a pinboard, a window seat and cushions with soft lilac (about 25 %), purple chairs a little more than the rest. All five plates are now made. The six Been-or-Gone scene cards are made (below). Before they existed the player shows a drawn gradient for a missing plate and a frame icon for a missing card.
+
+### B1 S1 L3 Been-or-Gone scene cards (2026-10-16)
+
+One Canva 3×2 sheet (media `MAHYNrCJetA`, style reference `MAHYIp4Cpos`, holder `DAHXiX3gn1o` page 99), cut by picture into transparent 1024×1024 cards (grey backdrop and rounded-tile corners removed). Bright daytime school, light wood, soft lilac (about 25 %), modest clothes, no text on the pictures. Checked by eye.
+
+| card | file | scene |
+|---|---|---|
+| 1 | `cards/sc-bg-1.webp` | boy at a desk with a library book |
+| 2 | `cards/sc-bg-2.webp` | empty desk and chair |
+| 3 | `cards/sc-bg-3.webp` | girl pointing at Paris on a desk globe |
+| 4 | `cards/sc-bg-4.webp` | empty chair, coat on a wall hook |
+| 5 | `cards/sc-bg-5.webp` | class photo at the beach |
+| 6 | `cards/sc-bg-6.webp` | closed library door, blank sign |
+

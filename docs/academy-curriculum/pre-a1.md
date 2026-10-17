@@ -30,6 +30,52 @@
 
 Seasons P4–P6 (the Full ladder) are proposals only: `docs/academy-pre-a1-curriculum.md`.
 
+### Reading-first plan (owner 2026-10-15)
+Pre-A1 is extensive reading and the sounds: every lesson activates what the student knows ("I know it / New to me"), blends, reads a short message made only of what has been taught, and keeps words for a word bank that comes back on the spaced schedule. Rule: `CLAUDE.md`; note: `docs/academy-pre-a1-reading-first.md`. Data and check: `src/curriculum/academy/preA1Reading.ts`.
+
+| Lesson | Activate | Message (from) | Word bank |
+|---|---|---|---|
+| PA1-S01-E1 | hello, hi, bye, name | Vee: “Hello! I am Vee. My name is Vee. Bye!” | hello, name, bye |
+| PA1-S01-E2 | yes, no, boy, girl, friend | Theo: “Hi! I am Theo. Yes. Yes. No. No. Ava is my friend. Sam is my friend.” | yes, no, friend |
+| PA1-S01-E3 | thanks, please, spell | Ava: “Hi! I am Ava. How do you spell it? A-V-A. Pat sat. Ava sat. Thanks! Please.” | thanks, please, sat |
+| PA1-S01-E4 | nice, meet, sorry | Theo: “Hello! I am Theo. Nice to meet you. Me too. Sorry? Ava sat. Thanks!” | nice, meet, sorry |
+| PA1-S01-E5 | the, is, a | Vee: “Pat is a girl. Pat sat. Sam is a boy. Sam is at the tap. Pat sat. Sam sat.” | girl, boy, sat |
+| PA1-S01-E6 | name, friend, girl, boy | Vee: “I am Vee. My name is Vee. Sam is my friend. Pat is my friend.” | name, friend, Vee |
+| PA1-S01-E7 | sat, tap, bye | Ava: “Hi! I am Ava. Pat sat at the tap. Sam is a boy. Pat is a girl. Thanks! Bye!” | sat, tap, bye |
+| PA1-S01-E8 | hello, name, friend | Theo: “Hello! My name is Theo. Ava is my friend. Pat is my friend. Sam is my friend. Bye!” | hello, name, friend |
+| PA1-S02-E1 | phone, map, pin, tin | Theo: “I am Theo. It is a pin. It is in a tin. It is a map.” | pin, tin, map, in, it, is |
+| PA1-S02-E2 | man, mat, dad, did, app, camera | Vee: “Hi! I am Vee. This is my dad. Dad is a man. This is a mat. Dad did a nap.” | dad, man, mat |
+| PA1-S02-E3 | map, pin, yes, not | Ava: “This is a map. Is it a map? Yes, it is. Is it a pin? No, it is not. This is a tin.” | map, pin, yes |
+| PA1-S02-E4 | look, again, sorry | Theo: “Look! Is it a map? Sorry? Again, please. It is a mat. Yes, it is! Thanks, Dad!” | look, again, mat |
+| PA1-S02-E5 | and, in, on | Vee: “A man and a map. Dad is on the mat. A pin in a tin. Pam and Tim sat. Dan did a nap.” | and, on, nap |
+| PA1-S02-E6 | phone, map, man | Ava: “This is Pam. This is Tim. Tim is in my phone. This is a map. Tim did a nap.” | phone, map, nap |
+| PA1-S02-E7 | sit, tin, dad | Theo: “Pam sat. Tim sat. Dad is in my phone. It is a pin. It is a tin. Dan is a man.” | sat, phone, man |
+| PA1-S02-E8 | phone, map, pin, tin | Vee: “My phone. This is a map. This is a pin. This is a tin. This is my dad.” | phone, map, dad |
+| PA1-S03-E1 | zero, one, two, three, four, five, six, number | Vee: “Locker six is open. One, two, three, four. Five, six. Six! It is my locker.” | locker, six, open |
+| PA1-S03-E2 | eleven, twelve, thirteen, fourteen, fifteen, sixteen, seventeen, eighteen | Ava: “Locker eleven. Locker twelve. Locker thirteen is open. Locker thirty? Thirteen, thirteen. Not thirty!” | thirteen, thirty, twelve |
+| PA1-S03-E3 | age, old, fifteen, sixteen | Theo: “Hi! I am Theo. I am fifteen. How old are you? I am sixteen. Thanks!” | old, fifteen, sixteen |
+| PA1-S03-E4 | phone number, again, six | Vee: “My phone number. Is that six? Say it again, please. Yes! Five, six, one, two.” | phone, number, again |
+| PA1-S03-E5 | nineteen, twenty, ten | Ava: “Ava is fifteen. Locker ten. Theo is sixteen. Locker twenty. Vee is seventeen. Locker nineteen. Dan is thirteen. Locker eleven.” | ten, twenty, nineteen |
+| PA1-S03-E6 | locker, phone, number | Theo: “I am fifteen. My locker is ten. My phone number is one, two, three. Ava is my friend.” | locker, phone, number |
+| PA1-S03-E7 | six, thirteen, again | Vee: “Locker six is open. Dan is thirteen. Locker thirteen. Say it again, please. It is my phone number?” | six, thirteen, again |
+| PA1-S03-E8 | locker, old, phone number | Ava: “My locker. I am fifteen. My phone number is one, two, three. Theo is sixteen.” | locker, fifteen, phone |
+| PA1-S04-E1 | bag, cap, book, pen | Theo: “It is a bag. It is a cap. It is a book. It is a pen.” | bag, cap, book |
+| PA1-S04-E2 | dog, bin, box, pot, top, mop | Vee: “It is a big bag. It is a dog. It is a big dog. It is a pot on a box. A mop. A bin.” | big, dog, box |
+| PA1-S04-E3 | an, apple, bag | Ava: “It is a bag. It is an apple. It is a cap. It is an apple.” | an, apple, bag |
+| PA1-S04-E4 | what, your, phone | Theo: “What is it? It is a phone! Is it your phone? Yes, it is. Thanks!” | what, your, phone |
+| PA1-S04-E5 | top, not, bag | Vee: “A pen, a cap, a book. A pot, a mop, a top. A dog is on the bag. A phone is in the bag. It is not a bin.” | top, not, bag |
+| PA1-S04-E6 | book, pen, bag | Ava: “My bag. It is a big bag. A pen, a book and a phone. It is my bag.” | book, pen, bag |
+| PA1-S04-E7 | got, cat, dig | Theo: “Dad got a big dog. It is not a cat. The cap is on the dog. Tom did a dig.” | got, cat, dog |
+| PA1-S04-E8 | box, pot, mop | Vee: “My bag. A pen, a cap, a book. A box, a pot, a mop. It is my bag!” | bag, box, mop |
+| PA1-S05-E1 | map, friend, bus | Ava: “Ben is my friend. Ben is on the bus. A pin on the map. Ben sat on a bed.” | friend, bus, map |
+| PA1-S05-E2 | he, she, man, woman | Vee: “He is a man. He is Ben. She is a woman. She is Pam. Ben ran. Pam ran. Ben has a red hat.” | he, she, hat |
+| PA1-S05-E3 | from, Spain, Italy, Turkey | Ava: “I am Ava. I am from Spain. He is Ben. He is from Italy. She is Pam. She is from Turkey. Where are you from?” | from, Spain, Italy |
+| PA1-S05-E4 | where, meet, from | Theo: “Nice to meet you. Me too. Where are you from? I am from Italy. Where is he from? He is from Spain.” | where, meet, from |
+| PA1-S05-E5 | France, Spain, Italy, Turkey | Vee: “Sam is a man. He is from France. Sam is on a bus. He is a friend. Sam has a red hat. Sam is not from Turkey.” | France, hat, friend |
+| PA1-S05-E6 | map, Spain, Italy | Ava: “My map. I am from Spain. Pam is from Italy. Ben is from Turkey.” | map, Spain, Italy |
+| PA1-S05-E7 | he, she, bus | Theo: “Ben is a man. He is from France. Pam is a girl. She is from Spain. Sam ran on the bus. Ron is not on the bus.” | he, she, bus |
+| PA1-S05-E8 | world map, from, friend | Vee: “My map. I am from Spain. Ben is from France. Pam is from Italy. Sam is from Turkey.” | map, from, Spain |
+
 ## 4. Every Season has the same eight lessons
 Cold Open (hook, gist) · Word Lab (vocabulary and pronunciation) · Pattern Lab (grammar noticing) · On Air (real exchange) · Deep Dive (longer text and short writing) · Side Quest (student's pick, light new language) · Remix (zero new language) · Finale (peer task, Release, checkpoint, zero new language). Run of show: standard 60 minutes (Pre-A1 uses its own slower one).
 

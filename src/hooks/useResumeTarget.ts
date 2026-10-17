@@ -48,7 +48,7 @@ export function useResumeTarget() {
         .maybeSingle();
 
       if (data?.lesson_id) {
-        const lesson: any = (data as any).curriculum_lessons;
+        const lesson = (data as unknown as { curriculum_lessons?: { title?: string; target_system?: string } | null }).curriculum_lessons;
         return {
           kind: 'resume',
           lessonId: data.lesson_id,
@@ -63,14 +63,14 @@ export function useResumeTarget() {
         .select('hub_type')
         .eq('user_id', user!.id)
         .maybeSingle();
-      const system = TARGET_SYSTEM_FOR_HUB[(profile as any)?.hub_type ?? 'playground'] ?? 'kids';
+      const system = TARGET_SYSTEM_FOR_HUB[(profile as { hub_type?: string } | null)?.hub_type ?? 'playground'] ?? 'kids';
 
       const { data: done } = await supabase
         .from('student_lesson_progress')
         .select('lesson_id')
         .eq('user_id', user!.id)
         .eq('status', 'completed');
-      const completed = new Set((done ?? []).map((r: any) => r.lesson_id as string));
+      const completed = new Set((done ?? []).map((r: { lesson_id: string }) => r.lesson_id));
 
       const { data: rows } = await supabase
         .from('curriculum_lessons')

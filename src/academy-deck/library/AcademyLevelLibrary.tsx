@@ -88,6 +88,8 @@ export function AcademyLevelLibrary({ lessons, renderLesson, gridClassName = 'gr
                   {showSteps && s.overview && (
                     <dl className="grid gap-x-3 gap-y-1 border-b border-current/10 px-4 py-3 text-xs sm:grid-cols-[8rem_1fr]" data-season-overview>
                       <dt className="font-bold opacity-70">{t('al.theme', 'Theme')}</dt><dd>{s.overview.theme}{s.overview.hook ? ` · ${s.overview.hook}` : ''}</dd>
+                      {s.overview.question && (<><dt className="font-bold opacity-70">{t('al.bigQuestion', 'Big question')}</dt><dd>{s.overview.question}</dd></>)}
+                      {s.overview.chapters?.length ? (<><dt className="font-bold opacity-70">{t('al.chapters', 'Chapters')}</dt><dd><ol className="list-decimal ps-4">{s.overview.chapters.map((c, i) => <li key={i}>{c}</li>)}</ol></dd></>) : null}
                       <dt className="font-bold opacity-70">{t('al.canDo', 'I can…')}</dt><dd>{s.overview.canDo.join(' · ')}</dd>
                       <dt className="font-bold opacity-70">{t('al.pattern', 'Pattern')}</dt><dd>{s.overview.structures.join(' · ')}</dd>
                       <dt className="font-bold opacity-70">{t('al.release', 'Release')}</dt><dd>{s.overview.release}</dd>
@@ -118,6 +120,7 @@ export function AcademyLevelLibrary({ lessons, renderLesson, gridClassName = 'gr
                                     <dt className="font-bold opacity-70">{t('al.release', 'Release')}</dt><dd>{x.plan.release}</dd>
                                     <dt className="font-bold opacity-70">{t('al.clue', 'Clue unlocked by')}</dt><dd>{x.plan.clue}</dd>
                                     {x.plan.remember && x.plan.remember.length > 0 && (<><dt className="font-bold opacity-70">{t('al.remember', 'Remember? (spaced)')}</dt><dd><ul className="list-disc ps-4">{x.plan.remember.map((r) => <li key={r}>{r}</li>)}</ul></dd></>)}
+                                    {x.plan.reading && (<><dt className="font-bold opacity-70">{t('al.reading', 'Reading (activate, message, word bank)')}</dt><dd><p>{t('al.activate', 'I know it / New to me')}: {x.plan.reading.activate.join(', ')}</p><p>{t('al.message', 'Message from')} {x.plan.reading.from}: “{x.plan.reading.lines.join(' ')}”</p><p>{t('al.bank', 'Word bank')}: {x.plan.reading.bank.join(', ')}</p></dd></>)}
                                   </dl>
                                 )}
                               </details>

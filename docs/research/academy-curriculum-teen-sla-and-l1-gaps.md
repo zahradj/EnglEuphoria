@@ -194,3 +194,13 @@ Implication: the plateau risk is a production and breadth issue. B1 should shift
 ## Sources not used because they could not be assessed
 
 Blogs and vendor sites (e.g. boldvoice, theteflacademy, trykaiwa, kaiwa) surfaced in results but were not relied on for any claim above.
+
+## Home-language watch lists in the blueprint (2026-10-16)
+
+`src/curriculum/academy/l1Watch.ts` now holds 2-4 "listen for this" entries per Season (languages ar, es, fr, tr, it; what to hear, what to do, evidence mark V / V-weak / K) and every lesson blueprint carries its Season's list (`l1Watch`). **A1 (12 Seasons), A2 (14), B1 (18), B2 (18) and C1 (18) are done.** Entries marked K are standard contrastive linguistics that this research round did not re-check in a source; entries marked V-weak come from teaching sources in Part 2 above. They are tendencies to screen for, never facts about a student; the Mistake Bank overrides them. `l1Watch.test.ts` keeps the shape.
+
+## Games shortlist per Season (2026-10-16)
+
+`src/curriculum/academy/gamePlan.ts` gives each Season a shortlist of 5 catalogue games (ids from `docs/academy-games-catalog.md`), one video-game mechanic (name from `docs/academy-video-game-mechanics.md`), what the student does in English with it, and a signature game; every lesson blueprint carries it (`gamePlan`). **All 80 Seasons (A1 to C1) are written.** `gamePlan.test.ts` checks that every id exists, is rated for the Season's level, the mechanic is in the list, and neighbouring Seasons do not share a signature game.
+- This is **step 0 of the creation protocol only** (the catalogue shortlist). The deep internet search (>= 5 candidates, >= 3 source families, alignment test, logged) is still to be done when each lesson is created.
+- **C1 gap closed (18 Seasons):** no catalogue game was rated for C1, so a research round added 12 games (catalogue ids 172-183) and 3 video-game mechanics: `docs/research/academy-c1-games-research.md`. Evidence for them is mostly weak (teaching sites, small studies, game-design writing); nothing is claimed about effect.

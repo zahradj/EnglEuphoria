@@ -46,17 +46,17 @@ export function classifyQuality(s: LinkStats): LinkQuality {
 }
 
 /** Read loss / rtt / jitter out of an RTCStatsReport (inbound audio+video and the active candidate pair). */
-export function linkStatsFromReport(report: { forEach: (cb: (r: any) => void) => void }): LinkStats | null {
+export function linkStatsFromReport(report: { forEach: (cb: (r: Record<string, unknown>) => void) => void }): LinkStats | null {
   let lost = 0;
   let received = 0;
   let jitterMs = 0;
   let rttMs = 0;
   let sawMedia = false;
-  report.forEach((r: any) => {
+  report.forEach((r) => {
     if (r.type === 'inbound-rtp' && (r.kind === 'video' || r.kind === 'audio')) {
       sawMedia = true;
-      lost += r.packetsLost ?? 0;
-      received += r.packetsReceived ?? 0;
+      lost += Number(r.packetsLost ?? 0);
+      received += Number(r.packetsReceived ?? 0);
       if (typeof r.jitter === 'number') jitterMs = Math.max(jitterMs, r.jitter * 1000);
     }
     if (r.type === 'candidate-pair' && (r.state === 'succeeded' || r.nominated) && typeof r.currentRoundTripTime === 'number') {

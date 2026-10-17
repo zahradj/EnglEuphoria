@@ -51,8 +51,8 @@ export const OpenSlotManager: React.FC<OpenSlotManagerProps> = ({ open, onOpenCh
       toast({ title: "Slot removed", description: "That time is no longer available to students." });
       onChanged?.();
       close(false);
-    } catch (err: any) {
-      toast({ title: "Could not remove the slot", description: err?.message ?? "Please try again.", variant: "destructive" });
+    } catch (err: unknown) {
+      toast({ title: "Could not remove the slot", description: (err as { message?: string })?.message ?? "Please try again.", variant: "destructive" });
     } finally {
       setBusy(false);
     }
@@ -78,8 +78,8 @@ export const OpenSlotManager: React.FC<OpenSlotManagerProps> = ({ open, onOpenCh
       });
       onChanged?.();
       close(false);
-    } catch (err: any) {
-      toast({ title: "Could not remove the weekly slots", description: err?.message ?? "Please try again.", variant: "destructive" });
+    } catch (err: unknown) {
+      toast({ title: "Could not remove the weekly slots", description: (err as { message?: string })?.message ?? "Please try again.", variant: "destructive" });
     } finally {
       setBusy(false);
     }

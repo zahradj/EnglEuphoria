@@ -3,11 +3,11 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 
 // A Playground student whose database game library is EMPTY (the real-world case that
 // showed "No games yet"). The built-in Alphabet Express must still be in the tab.
-let hub: 'playground' | 'academy' = 'playground';
+let hub: 'playground' | 'academy' | 'success' = 'playground';
 
 vi.mock('@/contexts/AuthContext', () => ({ useAuth: () => ({ user: { id: 'student-1' } }) }));
 vi.mock('@/hooks/useStudentLevel', () => ({
-  useStudentLevel: () => ({ studentLevel: hub === 'playground' ? 'playground' : 'academy', hubReady: true }),
+  useStudentLevel: () => ({ studentLevel: hub === 'playground' ? 'playground' : hub === 'academy' ? 'academy' : 'professional', hubReady: true }),
 }));
 vi.mock('@/hooks/useCEFRProgress', () => ({ useCEFRProgress: () => ({ data: { level: 'Pre-A1' } }) }));
 vi.mock('@/services/studentGames', () => ({
@@ -50,7 +50,16 @@ describe('Student Game Library tab: built-in Playground games', () => {
   });
 
   it('does not show Playground games to other hubs', async () => {
+    // The Academy has its own built-in games now (Verb Forge...), so it never shows an empty "No games yet" any more;
+    // it must still never show a Playground game.
     hub = 'academy';
+    render(<GamesTab />);
+    await waitFor(() => expect(screen.getByText(/Games available/i)).toBeTruthy());
+    expect(screen.queryByText('Alphabet Express')).toBeNull();
+  });
+
+  it('shows the empty state to a hub with no built-in games, and no Playground games', async () => {
+    hub = 'success';
     render(<GamesTab />);
     await waitFor(() => expect(screen.getByText('No games yet')).toBeTruthy());
     expect(screen.queryByText('Alphabet Express')).toBeNull();

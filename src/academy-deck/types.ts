@@ -57,6 +57,10 @@ export interface SlideBase {
   /** scene plate id: `${artBase}/bg/<id>.webp` (a drawn gradient shows if the picture is missing) */
   bg: string;
   actors?: Actor[];
+  /** extra practice the teacher can skip to keep the hour (shown dashed in the teacher's strip); the REQUIRED slides alone fill the hour */
+  optional?: boolean;
+  /** v2 lock-screen lessons: which lock (1-5) this slide belongs to; the key HUD fills when the lock's vault slide is done */
+  lock?: number;
   /** success criteria this slide trains (1-based); a slide with none is only allowed for title / brief / wrap */
   trains?: number[];
   /** two-step help shown by the Hint button: [small nudge, bigger help] */
@@ -196,19 +200,77 @@ export interface SortSlide extends Omit<SlideBase, 'items'> {
   kind: 'sort';
   prompt: string;
   bins: { id: string; label: string; /** the sentence made when an item goes in: {w} is the item's word */ template: string }[];
-  items: { id: string; art: TeachArt; word: string }[];
+  /** save the words placed in the FIRST bin (comma list) in vars[save]: the teacher sees what the student already knows */
+  save?: string;
+  /** `art` is optional: without a picture the item is a plain word or sentence chip (verbs, sentences) */
+  items: { id: string; art?: TeachArt; word: string }[];
 }
 /** Story (owner 2026-10-14: stories as full scene plates): each beat is ONE full-bleed generated scene with the cast painted into it (public/academy-art/bg/<plate>.webp); the lines show as film subtitles and are spoken; the plates cross-fade (never zoom or pan). Done when the last line has been seen. */
 export interface StorySlide extends SlideBase {
   kind: 'story';
+  /** listening segment: the lines are heard first and the subtitle stays hidden until the student taps "Show the text" */
+  listenFirst?: boolean;
   title: string;
-  beats: { plate: string; lines: { who: CastName; text: string }[] }[];
+  /** 'film' (default): subtitles under the plate. 'comic' (manga style, UI layered over a still plate that never moves): narration box, speech bubbles with typed text, speed lines on shouts, sound words, a halftone wipe between beats */
+  look?: 'film' | 'comic';
+  beats: {
+    plate: string;
+    /** comic look: a short narration box that explains the scene (read, not spoken) */
+    caption?: string;
+    /** comic look: which side of the plate each speaker's bubble sits on (default: the first speaker left, the next right) */
+    side?: Partial<Record<CastName, 'left' | 'right'>>;
+    /** Where each speaker's bubble sits, in % of the picture (x, y = top-left corner, w = width). Put it only on empty space, never over a face, body or key object. */
+    spots?: Partial<Record<CastName, { x: number; y: number; w: number }>>;
+    /** Where the narration box sits (same units). */
+    capAt?: { x: number; y: number; w: number };
+    /** `shout` = speed lines and a bold bubble (also automatic for a line ending in "!"); `sfx` = a big sound word (our own label) */
+    lines: { who: CastName; text: string; shout?: boolean; sfx?: string }[];
+  }[];
+}
+/** Vault hub (v2): a lock opens. The door for `lock` swings open, its key flies into the HUD slot, one line says what the student just did. Done by itself after the animation; no question is asked. */
+export interface VaultSlide extends SlideBase { kind: 'vault'; lock: number; line: string; reward: string }
+/** Lock-pick lane (v2, Lock 1): the guide says a sound or word; the student taps the matching tile to set a pin. A soft light sweeps the tiles on a slow beat (visual only, no timing, no penalty); done when every pin is set. */
+export interface RhythmSlide extends SlideBase { kind: 'rhythm'; prompt: string; rounds: { say: string; options: string[]; answer: string }[] }
+/** Boss duel (v2, Lock 4, the signature game): a picture; the student picks its word, the sentence is built and spoken, then the student says it aloud (Say it). A right pick is a step forward; a miss is ONE soft step back (never below the start); three misses in a round show the answer. Done when the key reaches the lock. */
+export interface DuelSlide extends SlideBase { kind: 'duel'; prompt: string; frame: string; rounds: { art: TeachArt; options: string[]; answer: string }[] }
+/** Passage (Pre-A1 reading-first, owner 2026-10-15): a short message from a character. Step 1 listen, step 2 read it yourself (any word can be tapped to hear it), step 3 KEEP the words you want: they go in the student's word bank (vars[bank]) and come back in the word-bank game and the spaced Remember?/Daily 10. No wrong answers; done when the words are kept. */
+export interface PassageSlide extends SlideBase { kind: 'passage'; prompt: string; from: CastName; lines: string[]; /** the words the student may keep (all appear in the lines) */ keepFrom: string[]; /** how many words must be kept (default 3) */ keep?: number; /** vars key for the bank */ bank: string }
+/** Trophy Forge (B1 S1, owner-approved plan 2026-10-15): for each verb the student places the three forms (base, past simple, past participle) in order; the trio is forged into a trophy that stays on the board, and the student says it aloud (Say it). A wrong tile just shakes ("Not yet"); nothing is lost. Done when every verb is forged; the verbs are saved in vars.trophies. */
+export interface ForgeSlide extends SlideBase { kind: 'forge'; prompt: string; rounds: { /** the three forms in order: base, past simple, past participle */ forms: [string, string, string] }[] }
+/** Trio streak (B1 S1): the guide says the base form; the student picks the past simple and then the past participle. A streak counts the verbs done right the first time; a miss resets the streak (no penalty) and the verb comes again; the student's own best streak is kept in vars.bestStreak and the score in vars[save]. No timer. */
+export interface StreakSlide extends SlideBase { kind: 'streak'; prompt: string; save?: string; rounds: { forms: [string, string, string]; /** wrong choices for the past simple and for the past participle */ pastOptions: string[]; partOptions: string[] }[] }
+/** Reading questions (B1+): the text stays on screen; the student answers detail, inference and vocabulary-in-context questions by choosing a sentence; a short reason explains each answer. No voice: the student reads. Done when every question is answered. */
+export interface ReadQSlide extends SlideBase { kind: 'readq'; prompt: string; title: string; from: CastName; paragraphs: string[]; questions: { type: 'gist' | 'detail' | 'inference' | 'word'; q: string; options: string[]; answer: string; why: string }[] }
+/** Break the Clock (B1 S1, video-game mechanic: boss fight). A giant clock has hit points; each right choice of tense is a strike that cracks it, each wrong choice costs one of three shields (the shields recharge and the round repeats with the reason shown: nothing is lost). Serves "choose the past simple (a finished time) or the present perfect (an experience up to now)". Done when the clock is broken. */
+export interface BossSlide extends SlideBase { kind: 'boss'; prompt: string; rounds: { /** the sentence with ___ for the gap */ frame: string; options: string[]; answer: string; /** one line that says why (the time word) */ why: string }[] }
+/** Participle Wordle (video-game mechanic: word puzzle). Guess the past participle of the base verb in six tries; letters turn green (right place), gold (in the word) or grey. Keyboard on screen and on the device. Done when every word is solved or revealed. */
+export interface WordleSlide extends SlideBase { kind: 'wordle'; prompt: string; rounds: { base: string; /** a sentence with ___ that the participle completes */ clue: string; answer: string }[] }
+/** Rapport (video-game mechanic: dialogue RPG). A character talks to the student; the student picks a reply; each reply raises a Rapport meter by 0-2 and the character answers in kind. Teaches present perfect for experience plus a past-simple follow-up in a real exchange. Nothing is lost; done after the last scene. */
+export interface RpgSlide extends SlideBase { kind: 'rpg'; prompt: string; /** the name of the meter (default "Rapport"; the Alibi uses "Evidence") */ meter?: string; npc: CastName; goal: number; scenes: { say: string; options: { text: string; score: 0 | 1 | 2; reply: string; note: string }[] }[] }
+/** Hot Seat (video-game mechanic: quiz-show ladder with lifelines). Climb a ladder of questions; two lifelines (50:50 and Ask a friend, a hint) can each be used once; a wrong answer only greys that option. Done at the top. */
+export interface QuizSlide extends SlideBase { kind: 'quiz'; prompt: string; friend: CastName; questions: { q: string; options: string[]; answer: string; why: string; hint: string }[] }
+/** Triple Match (B1 S1, video-game mechanic: match-3). Three columns (base, past simple, past participle) of shuffled tiles; pick one tile in each column; when the three belong to the same verb they lock into a card with a pop, the trio is spoken, and a combo counter rises with each first-try triple. A wrong triple shakes and clears the picks (nothing is lost). Done when every verb is matched. */
+export interface TripleSlide extends SlideBase { kind: 'triple'; prompt: string; verbs: [string, string, string][] }
+/** Cloze (B1+): the passage again, with gaps where the vocabulary learned this lesson goes. A word bank of the missing words (plus no extras); tap a word, then a gap (or a gap, then a word). A wrong word shakes and the sentence is read back with a hint after two tries; nothing is lost. Done when every gap is filled. Gaps are written [[word]] inside `paragraphs`. */
+export interface ClozeSlide extends SlideBase { kind: 'cloze'; prompt: string; title: string; paragraphs: string[]; /** a short hint per gap word (shown after two wrong tries) */ gapHints?: Record<string, string> }
+/** Glitch Hunt (B1 S1, video-game mechanic: spot the glitch / bug hunt). A short chat in which ONE line has a tense glitch. The student taps the glitch (a wrong tap only shakes), then repairs it by choosing the right line; the repaired line is spoken with the reason. Done when every chat is repaired. */
+export interface GlitchSlide extends SlideBase { kind: 'glitch'; prompt: string; rounds: { lines: { who: CastName; text: string }[]; /** index of the line with the glitch */ glitch: number; /** the repaired line and two wrong repairs */ fix: string; options: string[]; /** one line that says why (the time word) */ why: string }[] }
+/** Verb Draw (B1 S1, video-game mechanic: collectible card draw + talk show). Phase 1: match-3 of the verb trios (base, past simple, past participle). Phase 2: draw a verb card; open a conversation with it (choose the participle for the question, say the question aloud, choose the right past-simple follow-up); the other character answers. A streak counts conversations done right the first time. Done after `draws` cards. */
+export interface VerbDrawSlide extends SlideBase { kind: 'verbdraw'; prompt: string; npc: CastName; draws: number; verbs: { forms: [string, string, string]; /** the question with ___ for the participle */ frame: string; follow: { ok: string; bad: [string, string] }; /** what the other character answers */ reply: string }[] }
+/** Case Board (B1 S1 L3, video-game mechanic: detective board / evidence sorting). One evidence card at a time drops onto the table; the student pins it under the right heading (a wrong pin only bounces back with the reason). `look: 'case'` = a corkboard with index cards and red string; `look: 'scenes'` = picture scene cards with two big choice buttons. Done when every card is pinned. The card text is spoken. */
+export interface BoardSlide extends SlideBase {
+  kind: 'board';
+  look: 'case' | 'scenes';
+  prompt: string;
+  /** exactly two headings the cards are pinned under */
+  bins: { id: string; label: string; hint?: string; /** an Icon name shown on the heading */ icon?: string }[];
+  cards: { id: string; text: string; /** what is spoken when the card is read (defaults to `text`; use it when `text` has a ___ blank) */ say?: string; bin: string; /** why it belongs there (shown after a right pin, and as the nudge after a wrong one) */ why: string; /** scene picture (look 'scenes') */ art?: TeachArt; who?: CastName }[];
 }
 export interface WrapSlide extends SlideBase { kind: 'wrap'; heading: string; ticks: string[]; homework: string; clue: string }
 
 export type Slide =
   | TitleSlide | BriefSlide | BadgeSlide | DialSlide | LaneSlide | WhoSaidSlide | LockersSlide | NumTrainSlide | PadlockSlide | ConvoSlide | SpellSlide
-  | MatchSlide | CountUpSlide | BePickSlide | BuildSlide | FactCheckSlide | WriteSlide | HuntSlide | ShadowSlide | TeachSlide | ModelSlide | FindWrongSlide | BorderSlide | MemorySlide | NumWallSlide | PhoneChatSlide | FadeSlide | CardSlide | SaySlide | WrapSlide | BlendSlide | HearPickSlide | ReaderSlide | RuleSlide | ExploreSlide | SortSlide | StorySlide;
+  | BoardSlide | MatchSlide | CountUpSlide | BePickSlide | BuildSlide | FactCheckSlide | WriteSlide | HuntSlide | ShadowSlide | TeachSlide | ModelSlide | FindWrongSlide | BorderSlide | MemorySlide | NumWallSlide | PhoneChatSlide | FadeSlide | CardSlide | SaySlide | VaultSlide | RhythmSlide | DuelSlide | PassageSlide | ForgeSlide | StreakSlide | ReadQSlide | BossSlide | WordleSlide | RpgSlide | QuizSlide | TripleSlide | GlitchSlide | VerbDrawSlide | ClozeSlide | WrapSlide | BlendSlide | HearPickSlide | ReaderSlide | RuleSlide | ExploreSlide | SortSlide | StorySlide;
 
 export interface DeckScript {
   lessonId: string;
@@ -224,10 +286,26 @@ export interface DeckScript {
   cast: CastName[];
   /** one line per part (index 0-7) shown on the part card; defaults to the PARTS goals */
   partGoals?: string[];
+  /** minutes per part for THIS lesson (eight numbers adding to 60) when the content needs a different split from the run of show; the part cards and the lesson clock use them */
+  partMinutes?: number[];
+  /** v2 lock-screen lesson: the names of the locks (five), shown by the key HUD; slides carry `lock` and a `vault` slide opens each lock */
+  locks?: string[];
+  /** a look for the whole lesson: 'scene' (default, owner 2026-10-15: "study the Playground player") = the painted scene fills the screen, frosted glass for the task, an instruction pill, floating pill buttons; 'night' = deep indigo and teal with dark glass panels */
+  theme?: 'night' | 'scene';
+  /** false keeps the plain title card instead of the Academy lobby */
+  hub?: boolean;
+  /** teacher view only: show the lesson clock (part target vs running time); never shown to the student */
+  clock?: boolean;
   slides: Slide[];
 }
 
 export type Vars = Record<string, string>;
 export interface Stats { right: number; wrong: number; hints: number; skipped: string[]; /** times the student tapped "Say it" after saying an answer aloud (speaking practice, docs/academy-speaking-practice.md) */ spoken?: number }
 /** Slide kinds where the student can say the answer aloud and tap "Say it" (owner 2026-10-14: speaking practice in every lesson). */
-export const SAY_IT_KINDS: readonly string[] = ['teach', 'hearpick', 'blend', 'reader', 'match', 'memory', 'build', 'spell', 'convo'];
+export const SAY_IT_KINDS: readonly string[] = ['teach', 'hearpick', 'blend', 'reader', 'match', 'memory', 'build', 'spell', 'convo', 'duel', 'rhythm', 'passage', 'forge', 'streak', 'triple', 'verbdraw'];
+
+/** The parts of a lesson: its run of show, with the lesson's own minutes when it sets `partMinutes`. */
+export function partsFor(script: Pick<DeckScript, 'shape' | 'partMinutes'>): { name: string; goal: string; minutes: number }[] {
+  const base = partsOf(script.shape);
+  return base.map((p, i) => ({ name: p.name, goal: p.goal, minutes: script.partMinutes?.[i] ?? p.minutes }));
+}

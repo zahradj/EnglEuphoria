@@ -257,3 +257,36 @@ Next step for a human or an open-egress session: open EGP Online (filter by stru
 Grammar learning-objectives PDF, the British Council LearnEnglish grammar index pages, and the Empower A2/B1 and
 Prepare 3/4 tables of contents, then re-run the verdict column. Until then keep every placement above flagged
 `unverified` in `structureLevels.ts`.
+
+## Re-check 2026-10-16 (curriculum improvement, step 1)
+
+- **English Grammar Profile (englishprofile.org):** the site could not be reached from the build environment (host did not resolve) and a web search returned no EGP entries. **Placement of "present perfect: experience" is still unverified.** Teaching sites place `ever`/`never` experience questions at A2 and the wider use at B1, which agrees with the "move earlier or split" row above (A2 late receptive / B1 productive). Action: check englishprofile.org and the Pearson GSE Teacher Toolkit from a machine with access before marking B1-S01 verified. [U]
+- **Pearson GSE:** the score bands (B1 = 43-58, B2 = 59-75) were seen in a Pearson PDF; no learning objective for the present perfect was retrieved. [U]
+
+## Item alignment finding, B1-S01-E1 (2026-10-16)
+
+- The Season's item bank (`src/curriculum/academy/items/b1.ts`, `B1-S01.E1`) lists 12 receptive items: expedition, remote, tent, helicopter, survive, brave, bucket list, once in a lifetime, take a risk, climb to the top, far from the crowds, face a fear.
+- The lesson as built teaches: bucket list, dare, give it a go, once in a lifetime, tick it off, brave (+ past participles). Overlap: **bucket list, once in a lifetime, brave** (3 of 12).
+- **Progression break:** E3 and E4 reuse *expedition, remote, tent, helicopter* ("Have you ever slept in a tent?", "Was it a remote place?") as if known; E1 as built never teaches them. Decision needed (see the owner question in the session): change the bank to the lesson, or change the lesson to the bank.
+
+**Resolved 2026-10-16 (owner chose "change the bank to the lesson"):** `B1-S01.E1` is now dare, brave, flown, eaten, gone, taken + bucket list, once in a lifetime, give it a go, tick it off, have you ever, has never been. *expedition, remote, tent, helicopter, survive, take a risk, climb to the top, far from the crowds, face a fear* left E1. E3 and E4 sentences were rewritten so nothing is used before it is taught (festival, outdoors, "flown in a plane", "visit the mountains", "what a trip!", "a quiet place"); *expedition* stays in E5 ("set off on an expedition"). B2-S16's *dare* became *daring* because items are unique across the roadmap. All 365 curriculum and deck tests pass. Still [U]: official EGP/GSE placement.
+
+## English Grammar Profile check, present perfect (2026-10-16) — VERIFIED against the source
+
+The earlier "unverified" mark is closed. englishprofile.org is now a JavaScript app (the old `/english-grammar-profile/egp-online` address returns 404); the data is at `https://englishprofile.org/?menu=egp-online` with a "Download XLSX" button (1,222 entries, columns: SuperCategory, SubCategory, Level, Guideword, Can-do statement, Example from the Cambridge Learner Corpus). It was downloaded with a headless browser through the build proxy. The full file is not stored in the repo (Cambridge terms of use); levels and can-do headings are summarised here.
+
+| EGP entry (PAST > present perfect simple) | Level |
+|---|---|
+| USE: EXPERIENCES (up to now) | **A2** |
+| FORM: affirmative with I/we and a limited range of verbs; negative with I; questions *have you + -ed* with a limited range of verbs; with a limited range of adverbs (never, just) | **A2** |
+| FORM/USE: negative with *yet*; negative with *for* (not done for a long time) | **A2** |
+| FORM: affirmative/negative with a range of pronouns and an increasing range of verbs; negative questions; increasing range of adverbs (always, ever) | **B1** |
+| USE: recent past (*just*); *already*; duration with *since*; unfinished/indefinite period; **with a superlative to talk about a unique experience** (the best … I have ever …) | **B1** |
+| questions with an increasing range of verbs; *still* + negative | B2 |
+| formal negative with a wide range of verbs; news (C2) | C1, C2 |
+
+**Reading for the roadmap:** B1-S01 (experience: ever/never/been) is a **consolidation and widening** of an A2 start, not a first meeting; `present-perfect-for-since` (B1: *since* duration) matches B1-S03; the A2 seasons do not teach the present perfect at all, so the A2 start comes from the student's school or is met receptively. For the one-to-one student in focus (an A2 learner) this is the right level. Marked `verified` in `structureLevels.ts`.
+
+**Present perfect continuous:** EGP lists affirmative, limited questions and single/repeated continuing events at **B1** and adverbs, negatives and recent-past results at **B2**. The roadmap's B2-S01 is conservative for production; a late-B1 receptive start is allowed. No Season moved.
+
+**Other tenses in EGP, for the next checks:** past simple has entries at A1 to C1; past perfect simple is B1 (5 entries) to C2, so B1-S13 matches. The rest of the roadmap's structures can now be checked the same way, row by row (next step).

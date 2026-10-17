@@ -7,8 +7,8 @@ self.addEventListener('push', (event) => {
   event.waitUntil(
     self.registration.showNotification(title, {
       body: data.body || '',
-      icon: '/icons/icon-192.png',
-      badge: '/favicon-48x48.png',
+      icon: '/icons/ee-icon-192.png',
+      badge: '/favicon-v2-48.png',
       tag: data.tag || undefined,
       renotify: !!data.tag,
       // Lesson reminders: stay on screen (phone / tablet) and buzz, so a student or teacher does not miss the start.

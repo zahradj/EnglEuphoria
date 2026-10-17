@@ -21,14 +21,18 @@ export interface LessonChecklistPanelProps {
   /** inside another form (the lesson report): no Save/Skip buttons, the parent reads every change */
   embedded?: boolean;
   onChange?: (c: LessonChecklist) => void;
+  /** the teacher's earlier marks for this class (the classroom pop-up and the report share them) */
+  initial?: LessonChecklist | null;
+  /** criteria (1-based) the page on screen trains: their lines are highlighted */
+  highlight?: number[];
 }
 
-export function LessonChecklistPanel({ lessonId, studentId, level, criteria, suggested, sayIt, today = new Date().toISOString().slice(0, 10), onSave, onSkip, embedded = false, onChange }: LessonChecklistPanelProps) {
-  const [marks, setMarks] = useState<Mark[]>(() => criteria.map((_, i) => suggested?.[i] ?? 'almost'));
-  const [step, setStep] = useState<LadderStepId | null>(null);
-  const [errors, setErrors] = useState<ErrorCategory[]>([]);
-  const [comfort, setComfort] = useState<'ok' | 'tense'>('ok');
-  const [notes, setNotes] = useState('');
+export function LessonChecklistPanel({ lessonId, studentId, level, criteria, suggested, sayIt, today = new Date().toISOString().slice(0, 10), onSave, onSkip, embedded = false, onChange, initial = null, highlight = [] }: LessonChecklistPanelProps) {
+  const [marks, setMarks] = useState<Mark[]>(() => criteria.map((t, i) => initial?.criteria.find((c) => c.text === t)?.mark ?? suggested?.[i] ?? 'almost'));
+  const [step, setStep] = useState<LadderStepId | null>(initial?.speakingStep ?? null);
+  const [errors, setErrors] = useState<ErrorCategory[]>(initial?.errors ?? []);
+  const [comfort, setComfort] = useState<'ok' | 'tense'>(initial?.comfort ?? 'ok');
+  const [notes, setNotes] = useState(initial?.notes ?? '');
   const checklist: LessonChecklist = useMemo(() => ({
     lessonId, studentId, on: today, level, speakingStep: step, errors, comfort, notes, sayIt,
     criteria: criteria.map((text, i) => ({ text, mark: marks[i], suggested: suggested?.[i] })),
@@ -45,7 +49,7 @@ export function LessonChecklistPanel({ lessonId, studentId, level, criteria, sug
       </header>
       <ul className="space-y-2">
         {criteria.map((text, i) => (
-          <li key={text} className="flex flex-wrap items-center justify-between gap-2 rounded-xl bg-slate-50 p-3">
+          <li key={text} data-now={highlight.includes(i + 1) || undefined} className={`flex flex-wrap items-center justify-between gap-2 rounded-xl p-3 ${highlight.includes(i + 1) ? 'bg-violet-50 ring-2 ring-violet-400' : 'bg-slate-50'}`}>
             <span className="text-sm font-semibold">{text}</span>
             <span className="flex gap-1" role="group" aria-label={`Mark for: ${text}`}>
               {MARKS.map((m) => (

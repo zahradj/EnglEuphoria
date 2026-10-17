@@ -1,5 +1,10 @@
 import { supabase } from "@/integrations/supabase/client";
 
+/** The generated Supabase types don't list the newest database functions yet, so call them through this shape. */
+type RpcClient = {
+  rpc: (fn: string, args?: Record<string, unknown>) => Promise<{ data: unknown; error: { message?: string; code?: string } | null }>;
+};
+
 /**
  * Cancellation rules across all hubs (workspace-wide):
  *
@@ -171,10 +176,10 @@ export async function cancelBookedSeries({
           reason: reason ?? "Series cancelled by teacher",
         });
         cancelledBookings += 1;
-      } catch (err: any) {
+      } catch (err: unknown) {
         // The two halves of a one-hour lesson are two rows of ONE booking:
         // cancelling the first removes the second, so it is already gone here.
-        if (err?.code === "P0002") continue;
+        if ((err as { code?: string })?.code === "P0002") continue;
         throw err;
       }
     }
@@ -234,7 +239,7 @@ export async function cancelAndRemoveBookedSlot({
       .eq("lesson_id", anchor.lesson_id)
       .gte("start_time", new Date(startMs - 30 * 60_000).toISOString())
       .lte("start_time", new Date(startMs + 30 * 60_000).toISOString());
-    siblingIds = Array.from(new Set([slotId, ...(rows ?? []).map((r: any) => r.id as string)]));
+    siblingIds = Array.from(new Set([slotId, ...(rows ?? []).map((r: { id: string }) => r.id)]));
   }
 
   const result = await cancelBookedSlot({ slotId, reason });
@@ -263,7 +268,7 @@ interface MoveArgs {
  * is told the new time.
  */
 export async function moveBookedLesson({ slotId, newStart, reason }: MoveArgs): Promise<{ oldScheduledAt: string; newScheduledAt: string }> {
-  const { data, error } = await (supabase as any).rpc("teacher_move_booked_lesson", {
+  const { data, error } = await (supabase as unknown as RpcClient).rpc("teacher_move_booked_lesson", {
     p_slot_id: slotId,
     p_new_start: new Date(newStart).toISOString(),
     p_reason: reason?.trim() ? reason.trim() : null,
@@ -302,7 +307,7 @@ export async function loadMoveContext(args: { teacherId: string; studentId: stri
     .limit(5);
   if (bErr) throw bErr;
 
-  const booking = (bookings ?? []).find((b: any) => {
+  const booking = (bookings ?? []).find((b: { scheduled_at: string; duration: number | null }) => {
     const start = new Date(b.scheduled_at).getTime();
     return start <= slotMs && slotMs < start + (b.duration ?? 30) * 60_000;
   }) as { id: string; scheduled_at: string; duration: number | null } | undefined;
@@ -368,7 +373,7 @@ export function inviteStatus(inv: { expires_at: string; revoked_at: string | nul
  * (teacher_get_invite_link) has not been installed yet.
  */
 export async function loadInviteLink(slotId: string): Promise<InviteLink | null> {
-  const { data, error } = await (supabase as any).rpc("teacher_get_invite_link", { p_slot_id: slotId });
+  const { data, error } = await (supabase as unknown as RpcClient).rpc("teacher_get_invite_link", { p_slot_id: slotId });
   if (error || !data) return null;
   const d = data as { token: string; expires_at: string; revoked_at: string | null; last_used_at: string | null; student_email: string | null };
   return {

@@ -1,4 +1,4 @@
-# Academy games & activities catalogue — 168 entries, one-to-one, ages 13–18, A1–B2
+# Academy games & activities catalogue — 171 entries (+ 12 C1 additions, ids 172-183, + 1 B1 find, id 184), one-to-one, ages 13–18, A1–B2
 
 Companion to `docs/academy-lesson-system.md` (§5 says how to choose from this list per segment of the 60-minute Live Session). Owner rules that apply to every entry: no browser TTS (recorded voices only), no public leaderboards, comfort first, mechanics borrowed never content, Variety Rule (no more than 2 of the same kind in a row).
 
@@ -232,6 +232,29 @@ Research 2026-10-14 (search summaries only; pages not fully read): [eslactive.co
 | 166 | Rhythm Lane | D | Taps stressed syllables or sounds in time with a beat | P,L | Pre-A1-B2 | Slow tempo by default | Med | Rhythm games [K] |
 | 167 | Spot the Sound | D | Finds all pictures that start with a given sound in a busy scene | L,V,P | Pre-A1-A2 | Scene calmed (CalmBg); own-best | Low | I Spy [K] |
 | 168 | Pairs Bingo (minimal pairs) | D | Hears one of two near-words (in/an) and marks the right one | L,P | Pre-A1-B1 | Teacher co-op | Low | Bingo + minimal pairs [K] |
+| 169 | Never Have I Ever (present perfect) | C/D | Says "I have never ___" about true things; the teacher says whether they have; the student keeps a score against their own best | S,G | A2-B2 | No rival: own-best score; the student can pass any prompt; teacher plays too | Low | ESL warm-ups: [Teach-This](https://www.teach-this.com/grammar/present-perfect-ever), [ESL Active](https://eslactive.com/?p=8558) (summaries only) [S] |
+| 170 | Verb Trio Memory | D | Flips or builds cards showing the base form, the past simple and the past participle of a verb; says the missing forms; earns the pair by saying a sentence | V,G,S | A2-B1 | The cards are split in two, then the past halves are hidden and recalled; teacher says the base form, student gives the rest | Low | [Twinkl irregular verbs card game](https://www.twinkl.com/resource/tefl-esl-irregular-verbs-past-simple-and-past-participle-card-game-t-esl-002), [ESLprintables memory game](https://eslprintables.com/printable.asp?id=262206) (summaries only) [S] |
+| 171 | Trophy Forge | D | Collects three form-tiles of a verb (base, past, participle), crafts the trio, says it aloud; each trio becomes a named trophy on the student's board | V,G,S | A2-B1 | Own board, never ranked; slips return to the Mistake Bank | Low | Our design: loot and crafting + achievement log (B1 S1 plan) [U] |
+
+## 15. C1 additions, ids 172-183, and id 184 (added 2026-10-16)
+
+Owner rule 2026-10-16 (C1 gap): the 171 entries all end at B2. These 12 were taken from a research round on 2026-10-16 (debate formats, CEFR Companion Volume mediation, register, irony studies, Pecha Kucha studies, fishbowl / Socratic seminar, and the cross-examination, deduction-log and dialogue-option mechanics of commercial video games). **Mechanics only, never content.** Sources and limits: `docs/research/academy-c1-games-research.md`. Unverified or weak evidence is marked.
+
+| # | Name | Fmt | What the student does | Skills | CEFR | 1:1 adaptation | Comfort | Source |
+|---|---|---|---|---|---|---|---|---|
+| 172 | Quick Debate Cards | D/C | Draws a random agree/disagree card and argues it for one minute without interruption, then answers one challenge | S,V | B2-C1 | Teacher draws too; the student may swap a card once; private first try | Med | Twinkl C1 teen debate cards [V-weak] |
+| 173 | Concede & Challenge Ladder | D/C | Climbs a ladder of formal debate moves: concede a point, challenge a claim, restate, counter | S | B2-C1 | Teacher plays the opponent and models each rung (I do, we do, you do) | Med | LearnEnglishFeelGood C1-C2 debate plan [V-weak] |
+| 174 | Fishbowl for Two | D/C | Takes the "inner circle" seat with the teacher, then switches to observer and critiques a recorded model discussion with a checklist | S,L | C1-C1 | Student discusses, then watches a recording and names three moves; no public audience | Med | Facing History fishbowl / Socratic seminar format [V]; one-to-one adaptation is ours |
+| 175 | Student-led Seminar Questions | C | Prepares three open questions on a short text and leads a seminar, probing the teacher's answers (Why do you think …? What follows from …?) | S,L | B2-C1 | Preparation time first; the teacher answers in short, imperfect turns | Low | Socratic seminar practice [V]; adaptation ours |
+| 176 | Summarise-in-an-Email | D | Reads or hears a source and writes an email that gives its main points in his or her own words (mediating a text) | R,W | B2-C1 | Private first draft; the teacher replies with one question | Low | CEFR Companion Volume mediation / Council of Europe & ECML sample tasks [V] |
+| 177 | Explain It Simply | D/C | Explains a dense idea to a younger or non-expert listener with simpler words and an example (mediating concepts) | S,W | B2-C1 | The teacher plays the 12-year-old and says "I don't follow" until it is clear | Low | ECML / Council of Europe sample classroom tasks, B2-C1 [V] |
+| 178 | Register Shift Rewrite | D | Rewrites one message at three levels of formality (friend, teacher, manager) and says which words changed the tone | W,S | B2-C1 | Teacher shows a mismatch; the student repairs it | Low | LearnEnglishFeelGood B1-C1 register plan; unibz C1 speaking (informal then formal) [V-weak] |
+| 179 | Pecha Kucha, Six Slides | D | Gives a talk on six slides of twenty seconds each, with the signposts the Season teaches | S | B2-C1 | Private rehearsal first; a shortened form of the 20 x 20 format; anxiety is a known cost so no audience | Med | Pecha Kucha EFL studies (small samples) [V-weak] |
+| 180 | Irony or Sincere? | D | Watches a short scene played by our own cast and decides sincere or ironic using tone, context and body language, then explains the clue | L,S | B2-C1 | Replay allowed; no clips from outside films | Low | Irony studies with EFL learners (thesis-level) [V-weak] |
+| 181 | Cross-Examination (Press / Present) | D | Presses a statement for more detail or presents the line that contradicts it; says why in a full sentence | R,S | B2-C1 | Wrong choices only grey a card; reasons are spoken or typed | Low | Ace Attorney cross-examination mechanic [V]; no language-learning evidence found [U] |
+| 182 | Deduction Log with Reasons | D | Fills a log (who, what, why) and confirms entries in threes, but must give a sentence of reasoning for each entry | R,W | B2-C1 | Hint ladder; the reason sentence replaces blind guessing | Low | Return of the Obra Dinn deduction design [V-weak] |
+| 183 | Voice-Option Dialogue | D | Chooses among curated replies in different voices (Diplomatic, Blunt, Formal, Warm) and sees how the character responds | R,S | B2-C1 | Replay the scene with another voice; teacher asks why | Low | Disco Elysium curated dialogue options [V-weak] |
+| 184 | Ask-and-Follow-Up Chain | D | Answers "Have you ever…?" with the experience form, then the follow-up ("When did you…?") with a finished time, three exchanges in a row | S,R | B1-B2 | Teacher or a cast character asks; wrong picks only grey the option and show a note; no timer | Low | BusyTeacher present perfect vs past simple drills (busyteacher.org/8862, /17772) [V-summary] |
 
 ## Top 15 for shy teens
 1. Codenames Duet (co-op) 2. Connections 3. Escape Room with teacher as guide 4. Visual Novel Reader / Interactive Fiction 5. Wordle / Spelling Bee 6. Comic Strip Maker 7. Meme Maker / Caption This 8. Chat Message Sim 9. Opinion Line (slider, no voice pressure) 10. Photo Story-Talk 11. Boss Battle Review (co-op) 12. Card Trading Collection 13. Reverse Teacher (student is expert) 14. Shadowing with private recordings 15. Can-Do Self-Check and Exit Emoji (private).
@@ -266,3 +289,17 @@ Research 2026-10-14 (search summaries only; pages not fully read): [eslactive.co
 | 142, 148 can-do, exit emoji | `content.levels[block].ican` (partial) |
 
 Everything else (dictation, shadowing with private recording, Wordle/Spelling Bee, Codenames Duet, Taboo-lite, Reverse Teacher, Photo Story-Talk, Opinion Line, podcast/vlog/meme/comic makers) needs a new component; build in the order the Season pilot needs them, one new or upgraded mechanic per Season.
+
+
+## 14. Added 2026-10-15 (B1 Season 1 lesson 1)
+
+- **Hot Seat** (quiz-show ladder, 50:50 and Ask a friend; a wrong answer only greys a choice) — recall and activation.
+- **Break the Clock** (boss fight: hit points, three shields, the round repeats with the reason) — choose between two tenses or forms.
+- **Participle Wordle** (six tries, green / gold / grey, on-screen keyboard) — spell the past participle.
+- **Rapport** (dialogue RPG: pick the natural reply, a Rapport meter rises, the character answers) — realistic exchanges with follow-up questions.
+- **Triple Match** (match-3: one tile in each of three columns, combo for first-try triples, trio spoken) — group related forms (base, past, participle; also noun-verb-adjective families).
+
+## Added 2026-10-15
+- **Glitch Hunt** (error correction as a bug hunt) — B1+ grammar accuracy: find the wrong line in a chat, choose the repair, hear the reason. Source: sentence-correction tasks (LearnEnglishFeelGood, Twee). Built as slide kind `glitch`.
+- **Two Truths and a Lie** (speaking) — A2+: three sentences, one is false; the listener asks follow-up questions and guesses. Source: British Council "Find someone who", Twinkl "Liar Liar". Built as a `say` page.
+- **Verb Draw** (B1+, grammar + speaking; owner request 2026-10-15) — phase 1 match the trio forms (base, past simple, past participle); phase 2 draw a verb card and start a conversation with it (present perfect question, then a past-simple follow-up). Source mechanics: Triple Match (match-3), "Never have I ever" speaking cards, card-draw prompts. Built as slide kind `verbdraw` (optional, end of the Release).

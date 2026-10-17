@@ -23,6 +23,45 @@ export interface AcademyDeckLesson {
 
 export const ACADEMY_DECK_LESSONS: AcademyDeckLesson[] = [
   {
+    id: 'b1-s01-e1',
+    season: 1,
+    lesson: 1,
+    title: 'Have You Ever...? · Cold Open',
+    blurb: 'B1: Vee dares you to make a bucket list. Hear the story, learn six words, forge the three forms of six verbs (go, went, gone…), tell “when” from “up to now”, and say who has done the most.',
+    level: 'B1',
+    minutes: 60,
+    cover: '/academy-art/bg/bucket-list-wall.webp',
+    gradient: 'linear-gradient(135deg,#1e1b4b 0%,#7c3aed 55%,#fbbf24 100%)',
+    homework: null,
+    parts: 8,
+  },
+  {
+    id: 'b1-s01-e2',
+    season: 1,
+    lesson: 2,
+    title: 'Have You Ever...? · Word Lab',
+    blurb: 'B1: the Travel Club’s postcard wall needs the right words. Learn 14 words for feelings, places and things to do, play with them, craft your own sentences, and describe a postcard so your partner can find it.',
+    level: 'B1',
+    minutes: 60,
+    cover: '/academy-art/bg/postcard-wall.webp',
+    gradient: 'linear-gradient(135deg,#ede9fe 0%,#a78bfa 50%,#fde68a 100%)',
+    homework: null,
+    parts: 8,
+  },
+  {
+    id: 'b1-s01-e3',
+    season: 1,
+    lesson: 3,
+    title: 'Have You Ever...? · Pattern Lab',
+    blurb: 'B1: Vee’s Lisbon postcard is missing! Read the evidence on the case board, find the pattern, learn the rule in three lines, then question the suspect and catch the contradiction.',
+    level: 'B1',
+    minutes: 60,
+    cover: '/academy-art/bg/library-case-room.webp',
+    gradient: 'linear-gradient(135deg,#fef3c7 0%,#c4b5fd 50%,#4c1d95 100%)',
+    homework: null,
+    parts: 8,
+  },
+  {
     id: 'pa1-s01-e1',
     season: 1,
     lesson: 1,
@@ -116,6 +155,6 @@ export const ACADEMY_DECK_LESSONS: AcademyDeckLesson[] = [
 ];
 
 /** Blueprint id of each deck lesson (src/curriculum/academy). The library numbers lessons in the order they were built (Sign Me Up = Lesson 1, Fake or Real? = Lesson 2); the blueprint episodes are E2 and E3. */
-export const ACADEMY_DECK_BLUEPRINT_IDS: Record<string, string> = { 'pa1-s01-e1': 'PA1-S01-E1', 'pa1-s02-e1': 'PA1-S02-E1', 'sign-me-up': 'A1-S01-E2', 'sign-me-up-2': 'A1-S01-E2', 'fake-or-real': 'A1-S01-E3', 'free-time-club-1': 'A1-S03-E1', 'free-time-club-2': 'A1-S03-E2' };
+export const ACADEMY_DECK_BLUEPRINT_IDS: Record<string, string> = { 'pa1-s01-e1': 'PA1-S01-E1', 'pa1-s02-e1': 'PA1-S02-E1', 'b1-s01-e1': 'B1-S01-E1', 'b1-s01-e2': 'B1-S01-E2', 'b1-s01-e3': 'B1-S01-E3', 'sign-me-up': 'A1-S01-E2', 'sign-me-up-2': 'A1-S01-E2', 'fake-or-real': 'A1-S01-E3', 'free-time-club-1': 'A1-S03-E1', 'free-time-club-2': 'A1-S03-E2' };
 
 export const getAcademyDeckLesson = (id: string | undefined) => ACADEMY_DECK_LESSONS.find((l) => l.id === id);

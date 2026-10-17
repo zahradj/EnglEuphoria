@@ -1,12 +1,12 @@
 """Saves Academy pictures made with Canva into the repo (run by .github/workflows/academy-art.yml).
 
-scripts/academy-art-request.json = [{"url": "<signed Canva export URL>", "out": "public/academy-art/cast/ava/neutral.webp", "kind": "cast" | "scene" | "card" | "sheet"}, ...]
-Academy-only (hub separation): the Playground has its own fetcher. Cast pictures are saved 900x1200 (3:4) with the plain grey background cut out (transparent WebP), scenes 1620x1080 (3:2) WebP, vocabulary cards 800x800 WebP (square, no cut-out), sprite sheets ('sheet', 1620x1080, no cut-out, saved to objects/), puppet parts ('part') 900x1200 with the plain background cut out (saved to cast-parts/).
+scripts/academy-art-request.json = [{"url": "<signed Canva export URL>", "out": "public/academy-art/cast/ava/neutral.webp", "kind": "cast" | "scene" | "story" | "card" | "sheet" | "raw"}, ...]
+Academy-only (hub separation): the Playground has its own fetcher. Cast pictures are saved 900x1200 (3:4) with the plain grey background cut out (transparent WebP), scenes 1620x1080 (3:2) WebP, story plates ('story', 1920x1080, 16:9) WebP, vocabulary cards 800x800 WebP (square, no cut-out), sprite sheets ('sheet', 1620x1080, no cut-out, saved to objects/), puppet parts ('part') 900x1200 with the plain background cut out (saved to cast-parts/).
 Pictures come from Canva only, never Higgsfield (CLAUDE.md "Media generators")."""
 import io, json, os, sys, urllib.request
 from PIL import Image, ImageDraw, ImageFilter
 
-SIZES = {'cast': (900, 1200), 'scene': (1620, 1080), 'card': (800, 800), 'part': (900, 1200), 'sheet': (1620, 1080)}
+SIZES = {'cast': (900, 1200), 'scene': (1620, 1080), 'card': (800, 800), 'part': (900, 1200), 'sheet': (1620, 1080), 'story': (1920, 1080)}
 
 
 def cut_out(im):
@@ -35,6 +35,12 @@ for r in reqs:
     out = r['out']
     try:
         data = urllib.request.urlopen(urllib.request.Request(r['url'], headers={'User-Agent': 'Mozilla/5.0'}), timeout=90).read()
+        if r.get('kind') == 'raw':  # a sticker sheet: saved as it is, then cut with scripts/academy-split-cards.py
+            os.makedirs(os.path.dirname(out), exist_ok=True)
+            open(out, 'wb').write(data)
+            print('+', out, len(data), 'bytes')
+            ok += 1
+            continue
         im = Image.open(io.BytesIO(data)).convert('RGB')
         im = im.resize(SIZES[r.get('kind', 'cast')], Image.LANCZOS)
         if r.get('kind', 'cast') in ('cast', 'part'):

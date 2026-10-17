@@ -144,7 +144,7 @@ export const LiveReactionBar: React.FC<LiveReactionBarProps> = ({
               ? 'px-2 py-1.5'
               : isSide
               ? 'fixed z-40 right-3 top-1/2 -translate-y-1/2 flex-col px-1.5 py-2'
-              : 'fixed z-40 bottom-6 left-1/2 -translate-x-1/2 px-2 py-1.5'
+              : 'fixed z-40 bottom-2 left-1/2 -translate-x-1/2 px-2 py-1'
           }`}
           style={theme.glowShadow}
         >

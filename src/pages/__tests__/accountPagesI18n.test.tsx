@@ -1,5 +1,5 @@
 import { describe, expect, it, afterEach, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 
 vi.mock('@/integrations/supabase/client', () => ({
@@ -40,9 +40,21 @@ describe('account pages are translated', () => {
     await i18n.changeLanguage('es');
     const { container } = render(<MemoryRouter><InstallPage /></MemoryRouter>);
     expect(screen.getByText('Descarga la app')).toBeTruthy();
+    // the page opens on the visitor's own device (a computer in tests); pick iPhone to see the Safari steps
+    fireEvent.mouseDown(screen.getByRole('tab', { name: /iPhone y iPad/ }), { button: 0 });
     const bold = Array.from(container.querySelectorAll('strong')).map((n) => n.textContent);
     expect(bold).toContain('Safari');
     expect(bold).toContain('Compartir');
     expect(bold).toContain('Añadir a pantalla de inicio');
+  });
+
+  it('install page opens on the visitor\'s device and offers the others', async () => {
+    await i18n.changeLanguage('en');
+    render(<MemoryRouter><InstallPage /></MemoryRouter>);
+    expect(screen.getByRole('tab', { name: 'Computer', selected: true })).toBeTruthy();
+    expect(screen.getByText('Opens full-screen, like a real app')).toBeTruthy();
+    expect(screen.getAllByRole('listitem').length).toBeGreaterThanOrEqual(6); // 3 benefits + 3 steps
+    fireEvent.mouseDown(screen.getByRole('tab', { name: 'Android' }), { button: 0 });
+    expect(screen.getByRole('tab', { name: 'Android', selected: true })).toBeTruthy();
   });
 });

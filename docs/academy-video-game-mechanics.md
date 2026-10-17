@@ -1,6 +1,6 @@
 # Academy video-game mechanics list (living list)
 
-Owner rule 2026-10-14: every Academy unit (Season) and lesson names at least one mechanic borrowed from a video game, so students have a blast. Companion to `docs/academy-games-catalog.md` (148 classroom games). Mechanics only, never characters, content or music; teen-appropriate (13-18); recorded voices only; motion rules in CLAUDE.md apply.
+Owner rule 2026-10-14: every Academy unit (Season) and lesson names at least one mechanic borrowed from a video game, so students have a blast. Companion to `docs/academy-games-catalog.md` (171 classroom games). Mechanics only, never characters, content or music; teen-appropriate (13-18); recorded voices only; motion rules in CLAUDE.md apply.
 
 **Status:** seed list from general game-design knowledge, **unverified**. The next research pass (units: see `docs/research/`) must confirm, extend and log sources per mechanic. Add rows as lessons use them.
 
@@ -25,5 +25,28 @@ Owner rule 2026-10-14: every Academy unit (Season) and lesson names at least one
 | Whack-a-word | Whack-a-mole | Taps only the sound or word heard | sound discrimination | Med |
 | Sequence memory | Simon | Repeats a growing sequence of sounds/words | listening, pronunciation, memory | Low |
 | Board quest | Snakes and Ladders / party board | Answers to climb, co-op | any review | Low |
+| Achievement log / trophy case | RPG / platform achievements | Completes language tasks; each one unlocks a named trophy that stays on the student's own board (the Season's bucket list is the log); never ranked, never public | motivation, portfolio, any Season with a list or a collection | Low |
+
+Research 2026-10-15 (B1 Season 1): achievement-type features (badges, points, levels, tasks) were linked to inspiration and drive in a 2023 survey of language-app users and to higher motivation and retention in a 10-week experiment ([INTI journal](https://iuojs.intimal.edu.my/index.php/intijournal/article/view/581), search summary only; small studies, nothing on teens specifically).
 
 Sources for the retro rows: [Adapting arcade games for learning, CHI 2013](https://people.csail.mit.edu/ccai/website/publications/Cai_Adapting.pdf) (Tetris and Pac-Man vocabulary drills; seen in a search result, not read in full) and general knowledge [K]. See also games 149-168 in `docs/academy-games-catalog.md` section 13.
+
+
+## Added 2026-10-15
+
+- **Boss fight with hit points and shields** → *Break the Clock*: each right tense is a strike; shields recharge so nothing is lost.
+- **Word puzzle (Wordle)** → *Participle Wordle*.
+- **Quiz-show ladder with lifelines** → *Hot Seat*.
+- **Dialogue RPG with a relationship meter** → *Rapport*.
+- **Match-3 with combos** (*Candy Crush*-style) → *Triple Match*.
+
+## Added 2026-10-15 (B1 S1 L1)
+- **Spot the glitch / bug hunt** (*Among Us*-style "find the odd one", debugging games) → *Glitch Hunt*: a chat with one tense glitch; tap it, repair it, hear the reason.
+- **Bluffing / deduction party game** (*Two Truths and a Lie*, social-deduction games) → the teacher guesses which of the student's three "have" sentences is the lie (speaking).
+- **Collectible card draw + talk-show host** (*Hearthstone*-style draw, late-night interview shows) → *Verb Draw*: match the verb trios (match-3), then draw a verb card and open a conversation with it (participle for the question, say it, past-simple follow-up, the other character answers); a conversation streak counts first-try chats.
+| Cross-examination (press / present) | Courtroom adventure (Ace Attorney family) | Presses a statement for detail, or presents the sentence that contradicts it, and says why | inversion, reporting, hedging, concession (C1) | Low |
+| Deduction log (confirm in threes) | Detective (Return of the Obra Dinn) | Fills a who / what / why log from evidence and confirms entries in groups of three, giving a sentence of reasoning for each | inverted conditionals, perfect participles, stance (C1) | Low |
+| Skill-check dialogue (curated voices) | Narrative RPG (Disco Elysium) | Chooses among curated replies in different voices (diplomatic, blunt, formal, warm) and sees the character's response | register, stance, modal nuance, irony (C1) | Low |
+
+## Teen play patterns → new mechanics (2026-10-16, from `docs/research/academy-teen-game-preferences.md`)
+Proposed, not yet built (pilot first, no effect claimed): **Daily Grid** (Connections / Strands style daily puzzle with a streak and a freeze) · **Season Pass** (8 cosmetic tiers, one per episode, no loot box) · **Imposter** (spot the sentence that does not fit; Among Us / Mafia) · **Counter Deck** (play the right sentence card against the opponent's line; Clash Royale style, no timer) · **Career Mode** skins (press conference, transfer interview, sound check) · **Block Fit** (chunk blocks in a sentence grid; Block Blast style) · **Rival Ghost** (race your own last run) · **Highlight Reel** (private clip of your best line) · **Squad Quest** (co-op pair mission, only after a safety review) · **Match Rounds** (every game as a 60-90 s match with a result card).

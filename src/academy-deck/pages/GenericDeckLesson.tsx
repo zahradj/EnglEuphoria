@@ -4,7 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { ACADEMY_RECALL_NODES, PRE_A1_RECALL_NODES } from '../../curriculum/academy';
 import { Deck } from '../Deck';
 import { ACADEMY_DECK_BLUEPRINT_IDS } from '../lessonRegistry';
-import { loadPractice, recordLesson, savePractice } from '../practiceStore';
+import { bankItems, loadPractice, recordLesson, savePractice } from '../practiceStore';
 import { syncPractice } from '@/services/academyPracticeService';
 import { loadDeckScript } from '../lessonScripts';
 import type { DeckScript } from '../types';
@@ -14,12 +14,12 @@ export default function GenericDeckLesson({ id, onBack }: { id: string; onBack?:
   const [script, setScript] = useState<DeckScript | null>(null);
   const { user } = useAuth();
   // a finished lesson feeds the student's Daily 10 (its new items come back on the spaced schedule) and keeps the "Say it" tally
-  const finish = (spoken: number) => {
+  const finish = (spoken: number, vars?: Record<string, string>) => {
     const bp = ACADEMY_DECK_BLUEPRINT_IDS[id];
     const node = [...ACADEMY_RECALL_NODES, ...PRE_A1_RECALL_NODES].find((n) => n.id === bp);
     if (node) {
       const key = (user as { id?: string } | null)?.id ?? 'device';
-      savePractice(key, recordLesson(loadPractice(key), id, node.items, new Date().toISOString().slice(0, 10), spoken));
+      savePractice(key, recordLesson(loadPractice(key), id, [...new Set([...node.items, ...bankItems(vars)])], new Date().toISOString().slice(0, 10), spoken));
       if (key !== 'device') void syncPractice(key);
     }
     onBack?.();
@@ -31,5 +31,5 @@ export default function GenericDeckLesson({ id, onBack }: { id: string; onBack?:
     return () => { alive = false; };
   }, [id]);
   if (!script) return <div className="flex items-center justify-center p-16 text-muted-foreground"><Loader2 className="h-6 w-6 animate-spin" /></div>;
-  return <Deck script={script} artBase="/academy-art" teacher freeNext onFinish={(r) => finish(r.stats.spoken ?? 0)} />;
+  return <Deck script={script} artBase="/academy-art" teacher freeNext onFinish={(r) => finish(r.stats.spoken ?? 0, r.vars)} />;
 }

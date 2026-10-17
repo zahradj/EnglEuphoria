@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useDeck } from '../ctx';
 import { Icon } from '../Icon';
 import type { CardSlide, WrapSlide } from '../types';
@@ -65,18 +65,32 @@ export function CardView({ slide }: { slide: CardSlide }) {
 
 /** Wrap: stamps collected, can-do ticks (yes / almost / not yet), homework, and the clue for next time. */
 export function WrapView({ slide }: { slide: WrapSlide }) {
-  const { stamps, done, setVars } = useDeck();
+  const { stamps, done, setVars, vars, mistakes } = useDeck();
+  const trophies = (vars.trophies ?? '').split(',').filter(Boolean);
   const [tick, setTick] = useState<Record<number, 'yes' | 'almost' | 'not yet'>>({});
   const [flip, setFlip] = useState(false);
+  const clueRef = useRef<HTMLButtonElement>(null);
+  // the unlocked clue scrolls into view so the unlock is seen even when the Wrap is long
+  useEffect(() => { if (flip) clueRef.current?.scrollIntoView?.({ block: 'nearest', behavior: 'smooth' }); }, [flip]);
+  // the Wrap over the trophy plate opens with the plate alone and one button, then the checklist (a reveal, not a cut)
+  const reveal = slide.bg === 'trophy-reveal';
+  const [opened, setOpened] = useState(!reveal);
   const all = Object.keys(tick).length === slide.ticks.length;
   const cycle = (i: number) => setTick({ ...tick, [i]: tick[i] === 'yes' ? 'almost' : tick[i] === 'almost' ? 'not yet' : 'yes' });
+  if (!opened) return <button type="button" className="ad-reveal-btn" onClick={() => setOpened(true)}>See your trophies</button>;
   return (
-    <Panel title={slide.heading} wide>
-      <div className="ad-stamps" aria-label="Stamps collected">
-        {[['spell', 'abc', 'Spell'], ['number', 'numbers', 'Number'], ['passport', 'passport', 'Passport'], ['card', 'idcard', 'Card']].map(([id, icon, label]) => (
-          <span key={id} className="ad-stampbadge" data-got={stamps.includes(id)}><b><Icon name={icon} /></b><i>{label}</i></span>
-        ))}
-      </div>
+    <Panel title={slide.heading} wide variant={reveal ? 'reveal' : undefined}>
+      {trophies.length > 0 ? (
+        <ul className="ad-trophies" aria-label={`Trophies earned: ${trophies.length}`}>
+          {trophies.map((v) => <li key={v} className="ad-trophy" data-on="true"><Icon name="star" /><span>{v}</span></li>)}
+        </ul>
+      ) : stamps.length > 0 && (
+        <div className="ad-stamps" aria-label="Stamps collected">
+          {[['spell', 'abc', 'Spell'], ['number', 'numbers', 'Number'], ['passport', 'passport', 'Passport'], ['card', 'idcard', 'Card']].map(([id, icon, label]) => (
+            <span key={id} className="ad-stampbadge" data-got={stamps.includes(id)}><b><Icon name={icon} /></b><i>{label}</i></span>
+          ))}
+        </div>
+      )}
       <p className="ad-hint-line">Tap each line: yes · almost · not yet. Honest is best!</p>
       <div className="ad-ticks">
         {slide.ticks.map((t, i) => (
@@ -86,9 +100,16 @@ export function WrapView({ slide }: { slide: WrapSlide }) {
           </button>
         ))}
       </div>
+      <section className="ad-mbank" aria-label="Mistake Bank">
+        <h3><Icon name="note" /> Mistake Bank</h3>
+        {mistakes.length === 0 ? <p>Nothing in the bank today. A clean run!</p> : (
+          <ul>{mistakes.slice(0, 3).map((m) => <li key={m.id}><span>{m.label}</span><b>×{m.wrong}</b></li>)}</ul>
+        )}
+        {mistakes.length > 0 && <small>Saved on this device. Open More, then Mistake Bank, any time.</small>}
+      </section>
       <p className="ad-homework"><Icon name="note" /> {slide.homework}</p>
-      <button type="button" className="ad-clue-card" data-flip={flip} onClick={() => all && (setFlip(true), setVars({ ticks: Object.values(tick).join(',') }), done())} disabled={!all} aria-label="Clue for next time">
-        {flip ? slide.clue : all ? <><Icon name="search" /> Tap to see the clue for next time</> : <><Icon name="lock" /> Answer all lines to unlock the clue</>}
+      <button type="button" ref={clueRef} className="ad-clue-card" data-flip={flip} onClick={() => all && (setFlip(true), setVars({ ticks: Object.values(tick).join(',') }), done())} disabled={!all} aria-label="Clue for next time">
+        {flip ? <><span className="ad-clue-seal" aria-hidden="true"><Icon name="unlock" /></span><span className="ad-clue-kicker">NEW CLUE UNLOCKED</span><span className="ad-clue-text">{slide.clue}</span></> : all ? <><Icon name="search" /> Tap to see the clue for next time</> : <><Icon name="lock" /> Answer all lines to unlock the clue</>}
       </button>
     </Panel>
   );

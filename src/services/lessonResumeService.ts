@@ -1,4 +1,8 @@
-import { supabase } from '@/integrations/supabase/client';
+import type { SupabaseClient } from '@supabase/supabase-js';
+import { supabase as typedClient } from '@/integrations/supabase/client';
+
+// the resume table is newer than the generated types: talk to it through the untyped client
+const supabase = typedClient as unknown as SupabaseClient;
 
 /**
  * Automatic "where did I stop?" for a lesson. The curriculum order and the unlocking of the next lesson already
@@ -39,7 +43,7 @@ export function resumePercent(index: number, total: number): number {
 
 export async function loadResume(userId: string, lessonId: string): Promise<SavedResume | null> {
   try {
-    const { data, error } = await (supabase as any)
+    const { data, error } = await supabase
       .from('student_lesson_resume')
       .select('scene_id, scene_index, total_scenes, updated_at')
       .eq('user_id', userId)
@@ -54,7 +58,7 @@ export async function loadResume(userId: string, lessonId: string): Promise<Save
 
 export async function saveResume(args: { userId: string; lessonId: string; sceneId: string | null; sceneIndex: number; totalScenes: number }): Promise<boolean> {
   try {
-    const { error } = await (supabase as any).from('student_lesson_resume').upsert(
+    const { error } = await supabase.from('student_lesson_resume').upsert(
       {
         user_id: args.userId,
         lesson_id: args.lessonId,
@@ -73,7 +77,7 @@ export async function saveResume(args: { userId: string; lessonId: string; scene
 
 export async function clearResume(userId: string, lessonId: string): Promise<void> {
   try {
-    await (supabase as any).from('student_lesson_resume').delete().eq('user_id', userId).eq('lesson_id', lessonId);
+    await supabase.from('student_lesson_resume').delete().eq('user_id', userId).eq('lesson_id', lessonId);
   } catch { /* nothing to clear */ }
 }
 
@@ -84,7 +88,7 @@ export async function clearResume(userId: string, lessonId: string): Promise<voi
 export async function markLessonInProgress(userId: string, lessonId: string): Promise<void> {
   try {
     await supabase.from('student_lesson_progress').upsert(
-      { user_id: userId, lesson_id: lessonId, status: 'in_progress', started_at: new Date().toISOString(), attempts: 1 } as any,
+      { user_id: userId, lesson_id: lessonId, status: 'in_progress', started_at: new Date().toISOString(), attempts: 1 },
       { onConflict: 'user_id,lesson_id', ignoreDuplicates: true },
     );
   } catch { /* best effort */ }

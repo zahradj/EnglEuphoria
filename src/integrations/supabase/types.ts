@@ -9604,6 +9604,68 @@ export type Database = {
         }
         Relationships: []
       }
+      playground_assessment_results: {
+        Row: {
+          booking_id: string | null
+          created_at: string
+          decision: string
+          id: string
+          items: Json
+          level: string
+          level_request_id: string | null
+          rubric: Json
+          sections: Json
+          stars_max: number
+          stars_total: number
+          student_id: string
+          teacher_id: string | null
+          teacher_note: string | null
+          test_key: string
+        }
+        Insert: {
+          booking_id?: string | null
+          created_at?: string
+          decision: string
+          id?: string
+          items?: Json
+          level?: string
+          level_request_id?: string | null
+          rubric?: Json
+          sections?: Json
+          stars_max?: number
+          stars_total?: number
+          student_id: string
+          teacher_id?: string | null
+          teacher_note?: string | null
+          test_key: string
+        }
+        Update: {
+          booking_id?: string | null
+          created_at?: string
+          decision?: string
+          id?: string
+          items?: Json
+          level?: string
+          level_request_id?: string | null
+          rubric?: Json
+          sections?: Json
+          stars_max?: number
+          stars_total?: number
+          student_id?: string
+          teacher_id?: string | null
+          teacher_note?: string | null
+          test_key?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "playground_assessment_results_level_request_id_fkey"
+            columns: ["level_request_id"]
+            isOneToOne: false
+            referencedRelation: "level_change_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       playground_videos: {
         Row: {
           created_at: string
