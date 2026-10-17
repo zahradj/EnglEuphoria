@@ -86,7 +86,7 @@ export function FloatingDictionary({
 
   return (
     <div
-      className="fixed z-50 select-none"
+      className="fixed z-[115] select-none"
       style={{ 
         left: position.x, 
         top: position.y,

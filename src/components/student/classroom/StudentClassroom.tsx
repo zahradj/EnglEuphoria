@@ -13,6 +13,7 @@ import { buildMediaStatus } from '@/lib/classroom/mediaHealth';
 import { mediaStatusStore } from '@/lib/classroom/mediaStatusStore';
 import { StudentClassroomHeader } from './StudentClassroomHeader';
 import { StudentCommunicationSidebar } from './StudentCommunicationSidebar';
+import { ClassroomDictionaryIcon } from '@/components/classroom/ClassroomDictionaryIcon';
 import { StudentMainStage } from './StudentMainStage';
 import { StarCelebration } from '@/components/teacher/classroom/StarCelebration';
 import { DiceRoller } from '@/components/teacher/classroom/DiceRoller';
@@ -387,6 +388,7 @@ export const StudentClassroom: React.FC<StudentClassroomProps> = ({
       className="h-dvh w-full text-gray-900 flex flex-col overflow-hidden relative"
       style={hubTheme.meshGradient}
     >
+      <ClassroomDictionaryIcon />
       <TalkTimeMeter bookingId={roomId} stream={media.stream} />
       {!classStarted && (
         <div className="absolute inset-0 z-[120] flex items-center justify-center bg-white/95 backdrop-blur-sm">

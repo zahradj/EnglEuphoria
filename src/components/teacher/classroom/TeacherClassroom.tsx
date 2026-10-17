@@ -17,6 +17,7 @@ import { mediaStatusStore } from "@/lib/classroom/mediaStatusStore";
 import { ClassroomTopBar } from "./ClassroomTopBar";
 import { CommunicationZone } from "./CommunicationZone";
 import { MainStage, type MainStageHandle } from "@/components/classroom/stage/MainStage";
+import { ClassroomDictionaryIcon } from "@/components/classroom/ClassroomDictionaryIcon";
 import { TeacherControlDock } from "@/components/classroom/stage/TeacherControlDock";
 import { SlideNavigator } from "./SlideNavigator";
 import { getClassroomHubTheme } from "./hubClassroomTheme";
@@ -1079,6 +1080,7 @@ export const TeacherClassroom: React.FC<TeacherClassroomProps> = ({
 
   return (
     <div className={`h-dvh w-full ${hubBg} text-gray-900 flex flex-col overflow-hidden relative`}>
+      <ClassroomDictionaryIcon />
       <TalkTimeMeter bookingId={classId} stream={media.stream} />
       {stateLoaded && !classStarted && !prepMode && (
         <div className="absolute inset-0 z-[120] flex items-center justify-center bg-black/30 backdrop-blur-[2px] pointer-events-none">
