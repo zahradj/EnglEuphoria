@@ -1,5 +1,8 @@
 # 2026-10-17 first: A1 U1 L3 (new number games) is baked before everything else when credits are short
 LESSON_3_SCENES
+# 2026-10-17 A1 Unit 7 Hero City (new unit, lesson by lesson)
+LESSON_A1U7L1_SCENES
+LESSON_A1U7L2_SCENES
 # HOMEWORK must stay (quests are not lesson exports)
 HOMEWORK
 # 2026-10-12 A1 Jungle: Unit 2 Lessons 1-2 (the jungle file is now in the bake engines)

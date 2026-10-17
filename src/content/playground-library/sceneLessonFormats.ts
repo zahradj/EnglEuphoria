@@ -25,6 +25,7 @@ export const SCENE_LESSON_FORMATS = new Set([
   'food-rich',
   'monster-rich',
   'ocean-rich',
+  'hero-rich',
   'castle-rich',
 ]);
 
@@ -43,6 +44,7 @@ export const WELCOME_TOWN_FAMILY_FORMATS = new Set([
   'food-rich',
   'monster-rich',
   'ocean-rich',
+  'hero-rich',
   'castle-rich',
   // Playground GAMES opened from the classroom Lesson Library (see gameLessons.ts).
   // Not in SCENE_LESSON_FORMATS on purpose: that set is for curriculum_lessons DB rows.

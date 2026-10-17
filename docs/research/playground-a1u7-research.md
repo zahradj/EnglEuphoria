@@ -17,7 +17,7 @@ never content. Searched 2026-10-17. Each lesson adds its own section here when i
 | Source (URL) | What it does | Taken (mechanic) | Quality / limits |
 |---|---|---|---|
 | Twinkl can/can't A1 (above) | "assigning superhero powers": children give heroes powers and say what they can do | the child designs their own hero power on the Power Wheel and says *I can … fast / well* (L1) | paid resource; page seen in search |
-| MES English Super Hero Project (above) | guess heroes' powers from pictures, then make your own hero | Guess Who with heroes: *Can she fly? Yes, she can.* (L2) | free teacher site, good |
+| MES English Super Hero Project (above) | guess heroes' powers from pictures, then make your own hero | Can It? with heroes: *Pip, can you fly? No, I can't, but Captain Spark can!* (L2) | free teacher site, good |
 | ESL Printables "Superheroes Superpowers" — https://www.eslprintables.com/reading_worksheets/comics/superheroes/Superheroes_Superpowers_434289/ | power cards, role-played questions | Can It? with people: the job card shows the task, the child asks the heroes and answers *No, I can't, but Leo can!* (L2) | teacher upload; varies in quality |
 | British Council "School rules" (above) | watch, then a game and true/false on the rules | Tick or Cross: is the hero following the rule? (L3) after the song | strong source |
 | Altopedia "English class rules" — https://www.altopedia.net/activities/280-english-class-rules | teams build *must / mustn't* sentences; harder as the game goes on | Red Light, Green Light on the road: *You must stop! You mustn't run on the road.* (L3) | teacher site; verified page |
@@ -28,8 +28,8 @@ never content. Searched 2026-10-17. Each lesson adds its own section here when i
 ## Games list and video-game mechanics (unit)
 | Lesson | Signature game | Other games (no game twice in the unit) | Video-game mechanic borrowed |
 |---|---|---|---|
-| L1 | Hero Trials (hero look: *I can run fast!* moves your hero through the trial) | Power Wheel (spin-wheel) · Draw That · Odd One Out · Sound Fish (ai) | **power-ups** (each sentence unlocks a power badge on the hero card) |
-| L2 | Can It? (people: *No, I can't, but Leo can!*) | Guess Who (heroes) · Tower Pull (lift it!) · Whisper Tube · Letter Match (ay) | **squad pick** (choose the right hero for the job) |
+| L1 | Hero Trials (hero look: *I can run fast!* moves your hero through the trial) | Power Wheel (spin-wheel) · Draw That · Odd One Out · Word Splat (ai) | **power-ups** (each sentence unlocks a power badge on the hero card) |
+| L2 | Can It? (people: *No, I can't, but Leo can!*) | Hot Badge (hot-coconut) · Tower Pull (lift it!) · Whisper Tube · Letter Bubbles (ay) | **squad pick** (choose the right hero for the job) |
 | L3 | the Hero Helper Song + Red Light, Green Light (road rules) | Tick or Cross · Read and Do · Hot & Cold · Word Build (magic e: save, cape, brave) | **rhythm** (the song) |
 | L4 | **Hero Mission ★ (new)** — citizens with a "!" bubble; ask *What's the matter?*, hear *I've got a headache*, choose the help, say *Can I help you?* | Roleplay (the hero clinic) · Mystery Bag (first-aid bag: *Give me the plaster*) · Chat Chain · Crossword (ai / ay / a_e) | **quest givers** ("!" over a citizen, quest log ticks off) |
 | L5 | Reader + pause (choose Captain Spark's plan) | Story Order · Jigsaw Puzzle · Who is missing? · Sound Pop | **branching choice** |

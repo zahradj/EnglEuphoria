@@ -6,6 +6,7 @@ import * as SPACE from './space-mission/scenes';
 import * as FOOD from './food-festival/scenes';
 import * as MONSTER from './monster-town/scenes';
 import * as OCEAN from './ocean/scenes';
+import * as HERO from './hero-city/scenes';
 import type { RecallWarmupSceneData } from './RecallWarmupScene';
 
 // Owner's rule (2026-10-07, universal): every lesson after the first of its track opens
@@ -60,6 +61,7 @@ const lessons: [string, readonly AnyScene[]][] = [
   ['ocean-rich-6-5', OCEAN.LESSON_A1U6L5_SCENES],
   ['ocean-rich-6-6', OCEAN.LESSON_A1U6L6_SCENES],
   ['ocean-rich-6-7', OCEAN.LESSON_A1U6L7_SCENES],
+  ...[1, 2, 3, 4, 5, 6, 7].flatMap((n) => { const sc = (HERO as unknown as Record<string, typeof OCEAN.LESSON_A1U6L1_SCENES | undefined>)[`LESSON_A1U7L${n}_SCENES`]; return sc ? [[`hero-rich-7-${n}`, sc] as [string, typeof sc]] : []; }),
 ];
 
 describe('Remember? warm-up', () => {

@@ -8,7 +8,7 @@ game twice in the unit**, **no story videos** (Canva story GIFs only after a sce
 gets the **aesthetic pass** and every picture uses **only the Playground brand shades, yellow and orange**
 (`PICTURE_COLOUR_LINE`, owner 2026-10-17). After new words always comes **Read and Match**, then another game.
 
-**Status:** waiting for the owner's OK.
+**Status:** approved (owner, 2026-10-17: "go") — building.
 
 ## 1. Where we start
 
@@ -103,7 +103,7 @@ teacher note ("Guided:" / "Free:").
 | Match | **Read and Match** (sentence ↔ hero picture) |
 | Practice | **Hero Trials** (signature, hero look: say *I can run fast!* and your hero speeds through that trial) · **Power Wheel** (spin a power, say it with *fast / well*) · **Odd One Out** (which hero can't do it?) · **Draw That** (draw your own hero power; the teacher guesses *You can fly!*) |
 | Reading | Reader p1-3 · reading game |
-| Phonics | **ai** model · **Sound Fish (ai)** · Blend & Read: *rain, train, paint* → *The train is in the rain.* · twister *Paint the train in the rain.* |
+| Phonics | **ai** model · **Word Splat (ai)** · Blend & Read: *rain, train, paint* → *The train is in the rain.* · twister *Paint the train in the rain.* |
 | Talk | *What can you do well?* + ask the teacher |
 
 ### 5.2 Lesson 2 — Can You Lift It? Can't and Can!
@@ -115,9 +115,9 @@ teacher note ("Guided:" / "Free:").
 |---|---|
 | Model | *Can you lift / carry / fix / save…?* (one page each), *Yes, I can. / No, I can't.*, then *but Leo can* |
 | Match | **Read and Match** (question ↔ picture) |
-| Practice | **Can It?** (signature: a job card — the child asks each hero *Can you…?* and sends the one who can, saying *No, I can't, but Leo can!*) · **Guess Who** (heroes: *Can she fly?*) · **Tower Pull** (lift the box: each right answer pulls the rope) · **Whisper Tube** (pass the question along) |
+| Practice | **Can It?** (signature: a job card — the child asks each hero *Can you…?* and sends the one who can, saying *No, I can't, but Leo can!*) · **Hot Badge** (pass the hero badge: *Leo, can you lift the box?*) · **Tower Pull** (lift the box: each right answer pulls the rope) · **Whisper Tube** (pass the question along) |
 | Reading | Reader p4-5 · reading game |
-| Phonics | **ay** model · **Letter Match (ay)** · Blend & Read: *play, day, stay* · twister *Stay and play all day.* |
+| Phonics | **ay** model · **Letter Bubbles (ay)** · Blend & Read: *play, day, stay* · twister *Stay and play all day.* |
 
 ### 5.3 Lesson 3 — Listen to the Hero Helper Song
 
@@ -178,8 +178,8 @@ every game (achievements).
 
 | Lesson | Games |
 |---|---|
-| L1 | Hero Trials · Power Wheel · Odd One Out · Draw That · Sound Fish |
-| L2 | Can It? · Guess Who · Tower Pull · Whisper Tube · Letter Match |
+| L1 | Hero Trials · Power Wheel · Odd One Out · Draw That · Word Splat |
+| L2 | Can It? · Hot Badge · Tower Pull · Whisper Tube · Letter Bubbles |
 | L3 | Red Light, Green Light · Tick or Cross · Read and Do · Hot & Cold · Word Build |
 | L4 | Hero Mission ★ · Roleplay · Mystery Bag · Chat Chain · Crossword |
 | L5 | Story Order · Jigsaw Puzzle · Who is missing? · Sound Pop |
