@@ -104,7 +104,7 @@ const scenes: SceneBase[] = [
   { id: 'rule', part: 3, kind: 'rule', plate: L, trains: [3, 4], title: 'Three forms, two tenses', who: 'Vee', lines: [
     { rule: 'Every verb has three forms: base, past simple, past participle.', example: 'go, went, gone' },
     { rule: 'Past simple: a finished time, so we say when.', example: 'I went to Spain last summer.' },
-    { rule: 'Have + past participle: an experience up to now, no time.', example: 'I have been to Spain.' },
+    { rule: 'Have and the past participle: an experience up to now, no time.', example: 'I have been to Spain.' },
   ] } satisfies RuleScene,
   { id: 'build', part: 3, kind: 'build', plate: L, trains: [4], title: 'Build it', items: [
     { words: ['Have', 'you', 'ever', 'been', 'to', 'Japan'], hint: 'Question: Have + you + ever + participle.' },
