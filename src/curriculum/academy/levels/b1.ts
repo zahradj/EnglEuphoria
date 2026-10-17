@@ -180,8 +180,8 @@ export const B1_SEASONS: RawSeason[] = [
     ],
     functions: ['arranging to meet', 'making promises', 'predicting'],
     structures: [
-      { id: 'present-continuous-future', use: 'future arrangements' },
-      { id: 'will-promises-predictions', use: 'promises and predictions' },
+      { id: 'present-continuous-future', use: 'consolidate future arrangements, revised from A2 and used in a fuller plan (GSE 42)' },
+      { id: 'will-promises-predictions', use: 'consolidate will for promises and predictions, first met at A2 (Season 9) (GSE 38)' },
     ],
     lexicalFields: ['travel and booking', 'diaries and appointments', 'promises and commitments'],
     items: 75,
