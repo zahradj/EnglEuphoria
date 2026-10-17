@@ -3,7 +3,7 @@
 //   friends: interview three friends, count the yes answers, say who has done the most;
 //   lineup:  "Who Is It?": six suspects fade out as the answers narrow the board until one remains, then a warrant line to say.
 // A malformed question never costs anything (the chips just wobble with the rule). No timer, no lives.
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Badge, Cast, CastImg, GameBackdrop, Glow, popEl, Reward, starsFor, useReactor, useSceneFx, type Mood } from '../kit';
 import { fillFrame, shuffleSeed, useVoiceKey } from '../wave1Kit';
@@ -47,6 +47,7 @@ function InterviewView({ scene, onDone, artBase, calm, seed, fx: fxIn }: ScenePr
   const [pick, setPick] = useState<string | null>(null);
   const [badPick, setBadPick] = useState<string | null>(null);
   const [phase, setPhase] = useState<'ask' | 'say' | 'done'>('ask');
+  const sayEl = useRef<HTMLDivElement>(null);
   const mistakes = useRef<string[]>([]);
   const tries = useRef<Record<string, number>>({});
   const reported = useRef(false);
@@ -66,6 +67,8 @@ function InterviewView({ scene, onDone, artBase, calm, seed, fx: fxIn }: ScenePr
   useVoiceKey(scene.chief, phase === 'say' ? frame : scene.intro, phase === 'say' ? 'say' : 'intro', artBase);
   const rp = personas.find((p) => p.id === reply?.pid);
   useVoiceKey(who(rp), reply?.text, `r${reply?.n ?? 0}`, artBase);
+
+  useEffect(() => { if (phase !== 'ask') sayEl.current?.scrollIntoView?.({ block: 'nearest', behavior: calm ? 'auto' : 'smooth' }); }, [phase, calm]);
 
   const ask = (part: string, n: number) => {
     if (!tile || phase !== 'ask') return;
@@ -109,7 +112,7 @@ function InterviewView({ scene, onDone, artBase, calm, seed, fx: fxIn }: ScenePr
   const noteCell = (pid: string, tid: string) => { const a = asked.find((x) => x.pid === pid && x.tileId === tid); return a ? (a.done ? 'yes' : 'no') : 'none'; };
   const total = personas.length * tiles.length;
   const qLabel = lineup ? t('ap.ivAsked', 'Questions asked: {{n}}', { n: asked.length }) : t('ap.ivAskedOf', 'Questions {{n}} of {{m}}', { n: asked.length, m: total });
-  const partLabel = wrongPart === null ? '___' : '…';
+  const partLabel = '___';
 
   return (
     <div className="av-game av-interview" data-testid="av-interview" data-look={scene.look} data-phase={phase} data-calm={calm || undefined}>
@@ -159,6 +162,16 @@ function InterviewView({ scene, onDone, artBase, calm, seed, fx: fxIn }: ScenePr
             </div>
           )}
 
+          {reply && (
+            <div className="av-iv-reply" key={reply.n} data-yes={reply.done || undefined} data-voice={lineup || undefined}>
+              {lineup && <span className="av-iv-silh" aria-hidden="true"><CastImg who={scene.voice ?? 'Theo'} mood="neutral" artBase={artBase} /></span>}
+              <div>
+                <small>{reply.q}</small>
+                <p><b>{lineup ? t('ap.ivVoice', 'The voice behind the screen') : rp?.name}</b> {reply.text}</p>
+              </div>
+            </div>
+          )}
+
           {phase === 'ask' && !(lineup && warrantReady) && !friendsAskedAll && (
             <div className="av-iv-build">
               <p className="av-q">{lineup ? t('ap.ivBuildLineup', 'Build a question for the voice behind the screen.') : t('ap.ivBuild', 'Build your question for {{name}}.', { name: personas.find((p) => p.id === sel)?.name ?? '' })}</p>
@@ -190,12 +203,6 @@ function InterviewView({ scene, onDone, artBase, calm, seed, fx: fxIn }: ScenePr
             </div>
           )}
 
-          {reply && (
-            <div className="av-iv-reply" key={reply.n} data-yes={reply.done || undefined}>
-              <small>{reply.q}</small>
-              <p><b>{lineup ? t('ap.ivVoice', 'The voice') : rp?.name}</b> {reply.text}</p>
-            </div>
-          )}
 
           {!lineup && (
             <div className="av-iv-notes" role="table" aria-label={t('ap.ivNotes', 'Your notes')}>
@@ -223,7 +230,7 @@ function InterviewView({ scene, onDone, artBase, calm, seed, fx: fxIn }: ScenePr
           )}
 
           {phase !== 'ask' && (
-            <div className="av-iv-say" data-testid="av-iv-say">
+            <div className="av-iv-say" data-testid="av-iv-say" ref={sayEl}>
               <p className="av-q">{t('ap.ivSay', 'Say it out loud:')}</p>
               <blockquote>{frame}</blockquote>
               {phase === 'say' && <button type="button" className="av-btn" data-kind="go" onClick={said}>{t('ap.ivSaid', 'I said it')} ✓</button>}

@@ -57,6 +57,9 @@ const STINGER: Record<EncounterKind, { icon: IconName; label: [string, string]; 
   rapport: { icon: 'chat', label: ['ap.stRapport', 'DIALOGUE'], sub: ['ap.stRapportSub', 'Choose what you say. The answer changes.'] },
   sort: { icon: 'puzzle', label: ['ap.stSort', 'PUZZLE'], sub: ['ap.stSortSub', 'Sort the evidence into the right place.'] },
   hunt: { icon: 'lens', label: ['ap.stHunt', 'SEARCH'], sub: ['ap.stHuntSub', 'Read the clue. Find it in the picture.'] },
+  inspect: { icon: 'log', label: ['ap.stInspect', 'DESK DUTY'], sub: ['ap.stInspectSub', 'Check each document against the rulebook.'] },
+  interview: { icon: 'mic', label: ['ap.stInterview', 'INTERVIEW'], sub: ['ap.stInterviewSub', 'Build your question. Listen to the answer.'] },
+  objection: { icon: 'bolt', label: ['ap.stObjection', 'CROSS-EXAMINATION'], sub: ['ap.stObjectionSub', 'Press a line. Present the evidence.'] },
 };
 
 export function Stinger({ kind, title, calm, onDone }: { kind: EncounterKind; title: string; calm: boolean; onDone: () => void }) {

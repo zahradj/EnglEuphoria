@@ -20,6 +20,9 @@ import type { RapportScene } from '../scenes/rapport/Rapport';
 import type { WrapScene } from '../scenes/wrap/Wrap';
 import type { LobbyScene } from '../scenes/lobby/Lobby';
 import type { HuntScene } from '../scenes/hunt/Hunt';
+import type { InspectScene } from '../scenes/inspect/Inspect';
+import type { InterviewScene } from '../scenes/interview/Interview';
+import type { CipherScene } from '../scenes/cipher/Cipher';
 
 export const CRITERIA = [
   'I can follow a short blog post and answer questions about its main idea, its detail and what is not said.',
@@ -143,11 +146,44 @@ const scenes: Scene[] = [
     { label: 'Ask a friend about travel (ever + be).', frame: 'Have you ever …?', accept: ['^have you ever been (to|in) .+'], hint: 'Have you ever + been to + a place.', sample: 'Have you ever been to Japan?' },
     { label: 'Answer for yourself with never (eat).', frame: 'I have never …', accept: ["^(i have never|i(’|')ve never|i haven(’|')t ever|i have not ever) eaten .+"], hint: 'I have never + eaten + something.', sample: 'I have never eaten octopus.' },
   ] } satisfies WriteScene,
-  { id: 'glitch', part: 3, kind: 'choice', plate: 'detective-wall', trains: [4], title: 'Glitch Hunt: which line is right?', questions: [
-    { q: 'Which chat line has no tense glitch?', options: ['I have seen the mountains last year.', 'I saw the mountains last year.', 'I have saw the mountains last year.'], answer: 1, why: 'Last year is a finished time: past simple, saw.' },
-    { q: 'Which chat line has no tense glitch?', options: ['I have gave it a go three times.', 'I have give it a go three times.', 'I have given it a go three times.'], answer: 2, why: 'Have + the past participle: given.' },
-    { q: 'Which chat line has no tense glitch?', options: ['Have you ever tried paragliding?', 'Did you ever tried paragliding?', 'Have you ever try paragliding?'], answer: 0, why: 'Have you ever + the past participle: tried.' },
-  ] } satisfies ChoiceScene,
+  { id: 'border-desk', part: 3, kind: 'inspect', plate: 'detective-wall', trains: [4], title: 'Border Desk', look: 'post', chief: 'Vee',
+    intro: 'Welcome to the Border Desk. Bucket-list posts arrive three at a time. Check each one against the rulebook, approve it or fix it, then file the batch.',
+    rules: [
+      { id: 'r1', title: 'A finished time', text: 'A finished time, like last summer, last year or two years ago, needs the past simple.', example: 'I visited Lisbon last summer.' },
+      { id: 'r2', title: 'Up to now', text: 'An experience up to now, with no finished time, needs have or has and the past participle.', example: 'I have visited Lisbon.' },
+      { id: 'r3', fromBatch: 1, title: 'Asking', text: 'To ask about an experience, say Have you ever and the past participle.', example: 'Have you ever eaten spicy noodles?' },
+    ],
+    batches: [
+      { title: 'Morning posts', items: [
+        { id: 'p1', from: 'Mina', doc: ['Last summer I have visited my cousins in Lisbon. We ate fish every day.'],
+          fault: { word: 'have visited', fixes: ['visited', 'have visit', 'visit'], correct: 'visited', ruleId: 'r1', why: 'Last summer is a finished time, so we use the past simple: I visited my cousins.' },
+          retry: { id: 'p1r', from: 'Karim', doc: ['In 2022 I have broken my arm at a skate park. It healed fast.'], fault: { word: 'have broken', fixes: ['broke', 'have break', 'break'], correct: 'broke', ruleId: 'r1', why: 'In 2022 is a finished time, so we use the past simple: I broke my arm.' } } },
+        { id: 'p2', from: 'Tom', doc: ['I have never tried surfing, but I want to give it a go.'], okWhy: 'Never, with no time given, is an experience up to now: have and tried are correct.', okFixes: ['try', 'tryed', 'trying'],
+          retry: { id: 'p2r', from: 'Aisha', doc: ['I have never ridden a horse, but my sister has.'], okWhy: 'Never, with no time given, is an experience up to now: have and ridden are correct.', okFixes: ['rode', 'ride', 'rided'] } },
+        { id: 'p3', from: 'Leo', doc: ['I have flew to Japan twice, and I loved it.'],
+          fault: { word: 'flew', fixes: ['flown', 'fly', 'flied'], correct: 'flown', ruleId: 'r2', why: 'After have we need the past participle: flown, not flew.' },
+          retry: { id: 'p3r', from: 'Ines', doc: ['We have ate sushi in Tokyo, and it was great.'], fault: { word: 'ate', fixes: ['eaten', 'eat', 'eated'], correct: 'eaten', ruleId: 'r2', why: 'After have we need the past participle: eaten, not ate.' } } },
+      ] },
+      { title: 'Afternoon posts', items: [
+        { id: 'p4', from: 'Dana', doc: ['Have you ever tried paragliding? I did it in Spain last summer.'], okWhy: 'Have you ever and the participle asks about an experience. Then did it with last summer tells the story in the past simple.', okFixes: ['try', 'tryed', 'did try'],
+          retry: { id: 'p4r', from: 'Marco', doc: ['Have you ever eaten snails? I ate them in France last year.'], okWhy: 'Have you ever and the participle asks about an experience. Then ate them with last year tells the story in the past simple.', okFixes: ['eat', 'ate', 'eated'] } },
+        { id: 'p5', from: 'Sam', doc: ['Did you ever see the northern lights? I have never seen them.'],
+          fault: { word: 'Did you ever see', fixes: ['Have you ever seen', 'Do you ever see', 'Have you ever saw'], correct: 'Have you ever seen', ruleId: 'r3', why: 'To ask about an experience, say Have you ever and the past participle: Have you ever seen the northern lights?' },
+          retry: { id: 'p5r', from: 'Yara', doc: ['Did you ever eat durian? I have never tasted it.'], fault: { word: 'Did you ever eat', fixes: ['Have you ever eaten', 'Do you ever eat', 'Have you ever ate'], correct: 'Have you ever eaten', ruleId: 'r3', why: 'To ask about an experience, say Have you ever and the past participle: Have you ever eaten durian?' } } },
+        { id: 'p6', from: 'Noor', doc: ['I joined a climbing club two years ago, and I have never regretted it.'], okWhy: 'Two years ago is a finished time, so joined. Never regretted is up to now, so have regretted.', okFixes: ['join', 'have joined', 'regret'],
+          retry: { id: 'p6r', from: 'Theo', doc: ['I took a dance class in March, and I have loved it since.'], okWhy: 'In March is a finished time, so took. Loved it since is up to now, so have loved.', okFixes: ['take', 'have took', 'taked'] } },
+      ] },
+      { title: 'Late posts', items: [
+        { id: 'p7', from: 'Eli', doc: ['Yesterday I have tried a new sport. I have loved it ever since.'],
+          fault: { word: 'have tried', fixes: ['tried', 'have try', 'try'], correct: 'tried', ruleId: 'r1', why: 'Yesterday is a finished time, so we use the past simple: I tried a new sport.' },
+          retry: { id: 'p7r', from: 'Rosa', doc: ['Last Friday I have gone to a concert. It was loud!'], fault: { word: 'have gone', fixes: ['went', 'have go', 'go'], correct: 'went', ruleId: 'r1', why: 'Last Friday is a finished time, so we use the past simple: I went to a concert.' } } },
+        { id: 'p8', from: 'Iris', doc: ['I have been to Rome three times. I went first in 2019.'], okWhy: 'Three times, with no date, is an experience up to now: have been. In 2019 is finished: went.', okFixes: ['was', 'have went', 'gone'],
+          retry: { id: 'p8r', from: 'Karl', doc: ['I have eaten sushi often. I tried it first in 2020.'], okWhy: 'Often, with no date, is up to now: have eaten. In 2020 is finished: tried.', okFixes: ['ate', 'have tried', 'eated'] } },
+        { id: 'p9', from: 'Jon', doc: ['I have never ate insects, and I do not want to.'],
+          fault: { word: 'ate', fixes: ['eaten', 'eat', 'eated'], correct: 'eaten', ruleId: 'r2', why: 'After have we need the past participle: eaten, not ate.' },
+          retry: { id: 'p9r', from: 'Mira', doc: ['She has never saw a real mountain, but she wants to.'], fault: { word: 'saw', fixes: ['seen', 'see', 'seed'], correct: 'seen', ruleId: 'r2', why: 'After has we need the past participle: seen, not saw.' } } },
+      ] },
+    ] } satisfies InspectScene,
   { id: 'forge', part: 3, kind: 'forge', plate: 'trophy-case', trains: [3], title: 'Trophy Forge', prompt: 'Forge the three forms of each verb, in order: base, past simple, past participle.', rounds: [
     { forms: ['go', 'went', 'gone'] }, { forms: ['fly', 'flew', 'flown'] }, { forms: ['take', 'took', 'taken'] },
   ] } satisfies ForgeScene,
@@ -161,6 +197,15 @@ const scenes: Scene[] = [
     { left: 'go · went', right: 'gone' }, { left: 'be · was', right: 'been' }, { left: 'see · saw', right: 'seen' },
     { left: 'eat · ate', right: 'eaten' }, { left: 'take · took', right: 'taken' }, { left: 'fly · flew', right: 'flown' },
   ] } satisfies MatchScene,
+  { id: 'cipher', part: 4, kind: 'cipher', plate: 'trophy-case', trains: [3], title: 'Participle Cipher', who: 'Vee',
+    intro: 'Crack the cipher. Type the missing participle. Green means right, yellow means the letter is in the word, grey means it is not.',
+    cards: [
+      { sentence: 'I have never ___ a rainbow like this.', base: 'see', past: 'saw', participle: 'seen', clue: 'It rhymes with green.' },
+      { sentence: 'Have you ever ___ spicy noodles?', base: 'eat', past: 'ate', participle: 'eaten', clue: 'It ends in en.' },
+      { sentence: 'She has already ___ her homework.', base: 'do', past: 'did', participle: 'done', clue: 'It rhymes with one.' },
+      { sentence: 'I have just ___ a long message to my cousin.', base: 'write', past: 'wrote', participle: 'written', clue: 'It has a double t.' },
+      { sentence: 'We have ___ a bucket list together.', base: 'make', past: 'made', participle: 'made', clue: 'Here the participle is the same as the past simple.' },
+    ] } satisfies CipherScene,
 
   { id: 'mission-model', part: 5, kind: 'model', plate: L, trains: [5], title: 'Watch Vee argue it', who: 'Vee', steps: [
     { phase: 'iDo', text: 'I would say Ava has done the most. She has flown across the world twice, and she has even eaten spicy noodles. On the other hand, Theo has visited more countries, so it is a close call.' },
@@ -184,6 +229,20 @@ const scenes: Scene[] = [
       { text: 'Yes, I have flown last year.', score: 0, reply: 'Last year? Hmm.', note: 'Last year is a finished time: use flew.' },
     ] },
   ] } satisfies RapportScene,
+  { id: 'who-most', part: 5, kind: 'interview', plate: L, trains: [5], title: 'Who has done the most?', look: 'friends', chief: 'Vee', winnerId: 'ava',
+    intro: 'Three friends have bucket-list stories. Ask each one four questions with Have you ever, write down the answers, and then tell me who has done the most.',
+    tiles: [
+      { id: 'fly', object: 'across the world', verb: { base: 'fly', past: 'flew', participle: 'flown', distractors: ['flew', 'flied'] } },
+      { id: 'eat', object: 'spicy noodles', verb: { base: 'eat', past: 'ate', participle: 'eaten', distractors: ['ate', 'eated'] } },
+      { id: 'see', object: 'a shark', verb: { base: 'see', past: 'saw', participle: 'seen', distractors: ['saw', 'seed'] } },
+      { id: 'take', object: 'a photo in a cave', verb: { base: 'take', past: 'took', participle: 'taken', distractors: ['took', 'taked'] } },
+    ],
+    personas: [
+      { id: 'theo', name: 'Theo', cast: 'Theo', facts: { fly: { done: false }, eat: { done: false, no: 'No, I haven’t. They are too hot for me.' }, see: { done: true, yes: 'Yes, I have. I saw a small shark in Portugal last July.' }, take: { done: true, yes: 'Yes, I have. I took one in Spain, last winter.' } } },
+      { id: 'mia', name: 'Mia', cast: 'Mia', facts: { fly: { done: true, yes: 'Yes, I have. I flew to Mexico last winter.' }, eat: { done: false, no: 'No, I haven’t, but I would like to.' }, see: { done: false }, take: { done: false } } },
+      { id: 'ava', name: 'Ava', cast: 'Ava', facts: { fly: { done: true, yes: 'Yes, I have. I flew to Japan two years ago.' }, eat: { done: true, yes: 'Yes, I have. I ate spicy noodles in Seoul last spring.' }, see: { done: false, no: 'No, I haven’t. Not yet.' }, take: { done: true, yes: 'Yes, I have. I took one last summer.' } } },
+    ],
+    summaryFrame: '{name} has done the most because {name} has {facts}.' } satisfies InterviewScene,
   { id: 'mission', part: 5, kind: 'speak', plate: L, trains: [4, 5], title: 'Mission: who has done the most?', who: 'Theo', turns: [
     { step: 'controlled', prompt: 'Ask me a “Have you ever…?” question. If I say yes, ask “When did you…?”', model: 'Have you ever been abroad? … When did you go?' },
     { step: 'guided', prompt: 'Take 1. Who has done the most? Give your answer and two reasons.' },

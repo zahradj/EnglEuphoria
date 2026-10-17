@@ -17,6 +17,7 @@ import type { TeachScene, TeachPage } from '../scenes/teach/Teach';
 import type { MemoryScene } from '../scenes/memory/Memory';
 import type { WrapScene } from '../scenes/wrap/Wrap';
 import type { LobbyScene } from '../scenes/lobby/Lobby';
+import type { InspectScene } from '../scenes/inspect/Inspect';
 
 export const CRITERIA = [
   'I can say what each of the eight feeling words means and use it about myself: “I felt … because …”.',
@@ -103,14 +104,45 @@ const scenes: Scene[] = [
   { id: 'match-b', part: 2, kind: 'match', plate: WALL, trains: [1, 2], title: 'Read and match: set B', pairs: SET_B.map((p) => ({ left: p.word, right: gloss[p.word] })) } satisfies MatchScene,
   { id: 'mem-b', part: 2, kind: 'memory', plate: WALL, trains: [1, 2], title: 'Memory: set B', pairs: mem(SET_B, 5) } satisfies MemoryScene,
 
-  { id: 'cause-sort', part: 3, kind: 'sort', plate: WALL, trains: [1], title: 'Cause or Feeling?', prompt: 'Is it a person who feels it, or a thing that makes you feel it?', bins: [
-    { id: 'feel', label: 'FEELING', note: 'how a person feels' }, { id: 'cause', label: 'CAUSE', note: 'what makes the feeling' },
-  ], items: [
-    { id: 'c1', text: 'I was amazed.', bin: 'feel', hint: 'A person feels it: amazed.' },
-    { id: 'c2', text: 'The view was amazing.', bin: 'cause', hint: 'The view makes you feel it: amazing.' },
-    { id: 'c3', text: 'We were disappointed.', bin: 'feel', hint: 'People feel it: disappointed.' },
-    { id: 'c4', text: 'The ending was disappointing.', bin: 'cause', hint: 'The ending is the thing that causes it: disappointing.' },
-  ] } satisfies SortScene,
+  { id: 'postcard-desk', part: 3, kind: 'inspect', plate: TABLE, trains: [1], title: 'Postcard Inspector', look: 'postcard', chief: 'Vee',
+    intro: 'Welcome to the Postcard Desk. Every postcard has two lines from a diary. Check the feeling words against the rulebook, approve the card or fix it, then file the batch.',
+    rules: [
+      { id: 'r1', title: 'How I feel', text: 'A word ending in ed, like amazed or disappointed, says how a person feels.', example: 'I was amazed.' },
+      { id: 'r2', title: 'What causes it', text: 'A word ending in ing, like amazing or disappointing, describes the thing that causes the feeling.', example: 'The view was amazing.' },
+      { id: 'r3', fromBatch: 2, title: 'The reason', text: 'To give the reason for a feeling, use because.', example: 'I felt proud because I finished the hike.' },
+    ],
+    batches: [
+      { title: 'First postcards', items: [
+        { id: 'c1', from: 'Ravi', prop: { kind: 'photo', tone: 'tower', caption: 'The old tower' }, doc: ['The view from the tower was frightened.', 'I held the rail very tight.'],
+          fault: { word: 'frightened', fixes: ['frightening', 'frighten', 'frightens'], correct: 'frightening', ruleId: 'r2', why: 'The view is the thing that causes the feeling, so we say frightening. A person is frightened.' },
+          retry: { id: 'c1r', from: 'Hana', prop: { kind: 'photo', tone: 'city', caption: 'The long queue' }, doc: ['The queue was so embarrassed.', 'We waited for an hour.'], fault: { word: 'embarrassed', fixes: ['embarrassing', 'embarrass', 'embarrasses'], correct: 'embarrassing', ruleId: 'r2', why: 'The queue is the thing that causes the feeling, so we say embarrassing. A person is embarrassed.' } } },
+        { id: 'c2', from: 'Lucia', prop: { kind: 'photo', tone: 'field', caption: 'The countryside' }, doc: ['I felt so relaxed in the countryside.', 'The quiet fields were relaxing.'], okWhy: 'Relaxed is how I feel. Relaxing describes the quiet fields that cause the feeling.', okFixes: ['relaxing', 'relax', 'relaxes'],
+          retry: { id: 'c2r', from: 'Omar', prop: { kind: 'photo', tone: 'sea', caption: 'A boat trip' }, doc: ['I was grateful to my cousin for the trip.', 'The boat ride was amazing.'], okWhy: 'Grateful is how I feel. Amazing describes the boat ride that causes the feeling.', okFixes: ['amazed', 'amaze', 'amazes'] } },
+        { id: 'c3', from: 'Mei', prop: { kind: 'photo', tone: 'city', caption: 'The museum door' }, doc: ['We were disappointing when the museum was closed.', 'We walked in the rain instead.'],
+          fault: { word: 'disappointing', fixes: ['disappointed', 'disappoint', 'disappoints'], correct: 'disappointed', ruleId: 'r1', why: 'We are people, so we say how we feel: disappointed. The closed museum is disappointing.' },
+          retry: { id: 'c3r', from: 'Ben', prop: { kind: 'photo', tone: 'sea', caption: 'The ferry' }, doc: ['I was embarrassing when I dropped my tray.', 'Everyone looked at me.'], fault: { word: 'embarrassing', fixes: ['embarrassed', 'embarrass', 'embarrasses'], correct: 'embarrassed', ruleId: 'r1', why: 'I am a person, so I say how I feel: embarrassed. The mistake was embarrassing.' } } },
+      ] },
+      { title: 'Second postcards', items: [
+        { id: 'c4', from: 'Jo', prop: { kind: 'photo', tone: 'camp', caption: 'The lake camp' }, doc: ['I was so proud when I finished the hike.', 'The sunset was amazing.'], okWhy: 'Proud is how I feel. Amazing describes the sunset that causes the feeling.', okFixes: ['pride', 'proudly', 'prouder'],
+          retry: { id: 'c4r', from: 'Nia', prop: { kind: 'photo', tone: 'hill', caption: 'The top of the hill' }, doc: ['I felt amazed at the top.', 'The view was amazing.'], okWhy: 'Amazed is how I feel. Amazing describes the view that causes the feeling.', okFixes: ['amazing', 'amaze', 'amazes'] } },
+        { id: 'c5', from: 'Nina', prop: { kind: 'photo', tone: 'sea', caption: 'The sea at night' }, doc: ['The sea at night was amazed.', 'I could not stop looking.'],
+          fault: { word: 'amazed', fixes: ['amazing', 'amaze', 'amazes'], correct: 'amazing', ruleId: 'r2', why: 'The sea is the thing that causes the feeling, so we say amazing. A person is amazed.' },
+          retry: { id: 'c5r', from: 'Tess', prop: { kind: 'photo', tone: 'sea', caption: 'The coral reef' }, doc: ['The coral reef was amazed.', 'We swam there all morning.'], fault: { word: 'amazed', fixes: ['amazing', 'amaze', 'amazes'], correct: 'amazing', ruleId: 'r2', why: 'The reef is the thing that causes the feeling, so we say amazing. A person is amazed.' } } },
+        { id: 'c6', from: 'Paul', prop: { kind: 'photo', tone: 'hill', caption: 'Dad at the top' }, doc: ['My dad was proud of me.', 'I felt grateful for his help.'], okWhy: 'Proud and grateful both say how a person feels.', okFixes: ['pride', 'proudly', 'proudest'],
+          retry: { id: 'c6r', from: 'Kofi', prop: { kind: 'photo', tone: 'camp', caption: 'The class camp' }, doc: ['My teacher was proud of us.', 'We felt grateful for her help.'], okWhy: 'Proud and grateful both say how a person feels.', okFixes: ['pride', 'proudly', 'proudest'] } },
+      ] },
+      { title: 'Last postcards', items: [
+        { id: 'c7', from: 'Zoe', prop: { kind: 'photo', tone: 'tower', caption: 'Three castles' }, doc: ['I felt grateful because the trip was amazed.', 'We saw three castles.'],
+          fault: { word: 'amazed', fixes: ['amazing', 'amaze', 'amazes'], correct: 'amazing', ruleId: 'r2', why: 'The trip causes the feeling, so we say amazing. The reason after because describes the thing.' },
+          retry: { id: 'c7r', from: 'Dev', prop: { kind: 'photo', tone: 'sea', caption: 'The beach' }, doc: ['I felt relaxed because the beach was relaxed.', 'We stayed all day.'], fault: { word: 'relaxed', occurrence: 1, fixes: ['relaxing', 'relax', 'relaxes'], correct: 'relaxing', ruleId: 'r2', why: 'The beach causes the feeling, so we say relaxing. I felt relaxed is right.' } } },
+        { id: 'c8', from: 'Tariq', prop: { kind: 'photo', tone: 'city', caption: 'The museum' }, doc: ['The museum was disappointed, so we left early.', 'We found a cafe instead.'],
+          fault: { word: 'disappointed', fixes: ['disappointing', 'disappoint', 'disappoints'], correct: 'disappointing', ruleId: 'r2', why: 'The museum is the thing that causes the feeling, so we say disappointing. We were disappointed.' },
+          retry: { id: 'c8r', from: 'Lea', prop: { kind: 'photo', tone: 'city', caption: 'The cinema' }, doc: ['The ending was disappointed, so I stopped watching.', 'I read a book instead.'], fault: { word: 'disappointed', fixes: ['disappointing', 'disappoint', 'disappoints'], correct: 'disappointing', ruleId: 'r2', why: 'The ending is the thing that causes the feeling, so we say disappointing. I was disappointed.' } } },
+        { id: 'c9', from: 'Yuki', prop: { kind: 'photo', tone: 'field', caption: 'The farm' }, doc: ['We felt grateful because my cousin invited us.', 'The countryside was lovely.'], okWhy: 'Grateful is how we feel, and because gives the reason.', okFixes: ['gratefully', 'gratitude', 'grates'],
+          retry: { id: 'c9r', from: 'Abel', prop: { kind: 'photo', tone: 'hill', caption: 'The hike' }, doc: ['I felt proud because I finished the hike.', 'My legs were tired.'], okWhy: 'Proud is how I feel, and because gives the reason.', okFixes: ['pride', 'proudly', 'prouder'] } },
+      ] },
+    ],
+    finale: { prompt: 'Now write a line for your own postcard: say how you felt and why.', frame: 'I felt … because …', accept: ['\\b(excitement|amazed|disappointed|embarrassed|proud|frightened|relaxed|grateful)\\b', '\\bbecause\\b'], hint: 'I felt + a feeling word, because + a reason.', sample: 'I felt proud because I finished the hike.' } } satisfies InspectScene,
   { id: 'model', part: 3, kind: 'model', plate: WALL, trains: [1, 2, 3], title: 'Watch Vee use the words', who: 'Vee', steps: [
     { phase: 'iDo', text: 'We went camping near a lake. I felt relaxed, and the view was amazing. Our destination was a small village.' },
     { phase: 'weDo', text: 'Say it with me: I felt relaxed. The view was amazing. Our destination was a small village.' },

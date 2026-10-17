@@ -4,7 +4,7 @@ import path from 'node:path';
 import { scriptIds, loadScript } from '../lessonScripts';
 
 const RESEARCH = path.resolve(__dirname, '../../../docs/research');
-const GAME_KINDS = new Set(['sort', 'memory', 'match', 'build', 'forge', 'boss', 'rapport', 'choice', 'write', 'teach']);
+const GAME_KINDS = new Set(['sort', 'memory', 'match', 'build', 'forge', 'boss', 'rapport', 'choice', 'write', 'teach', 'hunt', 'inspect', 'interview', 'objection', 'cipher']);
 
 // Owner rule 2026-10-17: every lesson researches compatible games (per criterion) and every game is illustrated, never a flat screen.
 describe('game research and illustration of every registered lesson', () => {

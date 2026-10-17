@@ -52,17 +52,21 @@ function Stamps({ prop }: { prop: Extract<InspectProp, { kind: 'stamps' }> }) {
   );
 }
 
-function Doc({ item, look, step, tapped, onTap }: { item: InspectItem; look: InspectScene['look']; step: Step; tapped: { line: number; idx: number } | null; onTap: (line: number, idx: number) => void }) {
+function Doc({ item, look, step, lit, onTap }: { item: InspectItem; look: InspectScene['look']; step: Step; lit: Set<string>; onTap: (line: number, idx: number) => void }) {
   const { t } = useTranslation();
   const lines = useMemo(() => tokenize(item.doc), [item.doc]);
   const picking = step === 'word';
   const body = lines.map((toks, l) => (
     <p key={l}>
       {toks.map((tk) => {
-        const on = tapped?.line === tk.line && tapped.idx === tk.idx;
-        return picking
-          ? <button key={tk.idx} type="button" className="av-tok" data-on={on || undefined} onClick={() => onTap(tk.line, tk.idx)}>{tk.text}</button>
-          : <span key={tk.idx} className="av-tok" data-on={on || undefined}>{tk.text}</span>;
+        const on = lit.has(`${tk.line}:${tk.idx}`);
+        return (
+          <span key={tk.idx}>
+            {picking
+              ? <button type="button" className="av-tok" data-on={on || undefined} onClick={() => onTap(tk.line, tk.idx)}>{tk.text}</button>
+              : <span className="av-tok" data-on={on || undefined}>{tk.text}</span>}{' '}
+          </span>
+        );
       })}
     </p>
   ));
@@ -96,6 +100,12 @@ function Doc({ item, look, step, tapped, onTap }: { item: InspectItem; look: Ins
   );
 }
 
+/** the word the student tapped, or the whole faulty phrase when the tap was inside it */
+function tappedLabel(item: InspectItem, tap: { line: number; idx: number }): string {
+  if (faultTokens(item).some((x) => x.line === tap.line && x.idx === tap.idx)) return item.fault?.word ?? '';
+  return tokenize(item.doc)[tap.line]?.[tap.idx]?.text.replace(/[.,!?;:]/g, '') ?? '';
+}
+
 function InspectView({ scene, onDone, artBase, calm, fx: fxIn }: SceneProps<InspectScene>) {
   const { t } = useTranslation();
   const fx = useSceneFx(fxIn);
@@ -107,7 +117,7 @@ function InspectView({ scene, onDone, artBase, calm, fx: fxIn }: SceneProps<Insp
   const [step, setStep] = useState<Step>('decide');
   const [tapped, setTapped] = useState<{ line: number; idx: number } | null>(null);
   const [unsure, setUnsure] = useState(false);
-  const [filed, setFiled] = useState<Filed[][]>([[]]);
+  const [filed, setFiled] = useState<Filed[][]>(() => scene.batches.map(() => []));
   const [typed, setTyped] = useState('');
   const [typedTries, setTypedTries] = useState(0);
   const [finaleOk, setFinaleOk] = useState(false);
@@ -198,7 +208,11 @@ function InspectView({ scene, onDone, artBase, calm, fx: fxIn }: SceneProps<Insp
 
   const menu = menuOf(item);
   const word = item.fault?.word;
-  const tappedText = tapped ? tokenize(item.doc)[tapped.line]?.[tapped.idx]?.text.replace(/[.,!?;:]/g, '') : undefined;
+  // a tap inside the faulty phrase stands for the whole phrase ("have visited")
+  const span = useMemo(() => faultTokens(item), [item]);
+  const inSpan = !!tapped && span.some((x) => x.line === tapped.line && x.idx === tapped.idx);
+  const lit = useMemo(() => new Set(inSpan ? span.map((x) => `${x.line}:${x.idx}`) : tapped ? [`${tapped.line}:${tapped.idx}`] : []), [inSpan, span, tapped]);
+  const tappedText = inSpan ? item.fault?.word : tapped ? tokenize(item.doc)[tapped.line]?.[tapped.idx]?.text.replace(/[.,!?;:]/g, '') : undefined;
   const sureLabel = t('ap.inNotSure', 'Not sure');
   const lookClass = `av-inspect av-in-${scene.look}`;
 
@@ -238,7 +252,7 @@ function InspectView({ scene, onDone, artBase, calm, fx: fxIn }: SceneProps<Insp
           <section className="av-in-table" aria-live="polite">
             {(step === 'decide' || step === 'word' || step === 'repair') && (
               <div className="av-in-work" key={item.id}>
-                <Doc item={item} look={scene.look} step={step} tapped={tapped} onTap={tapWord} />
+                <Doc item={item} look={scene.look} step={step} lit={lit} onTap={tapWord} />
                 {step === 'decide' && (
                   <p className="av-in-prompt">{passport ? t('ap.inPromptPassport', 'Do the stamps match what the traveller says?') : t('ap.inPrompt', 'Does this follow the rules?')}</p>
                 )}
@@ -286,15 +300,15 @@ function InspectView({ scene, onDone, artBase, calm, fx: fxIn }: SceneProps<Insp
                   {mine.map((f, k) => {
                     const fault = f.item.fault;
                     const text = f.d.approve ? t('ap.inYouApproved', 'You approved it.')
-                      : f.d.fix ? (passport ? t('ap.inYouSent', 'You sent it back: {{reason}}', { reason: f.d.fix }) : t('ap.inYouFixed', 'You changed “{{from}}” to “{{to}}”.', { from: f.d.tapped ? (tokenize(f.item.doc)[f.d.tapped.line]?.[f.d.tapped.idx]?.text.replace(/[.,!?;:]/g, '') ?? '') : '', to: f.d.fix })) : '';
+                      : f.d.fix ? (passport ? t('ap.inYouSent', 'You sent it back: {{reason}}', { reason: f.d.fix }) : t('ap.inYouFixed', 'You changed “{{from}}” to “{{to}}”.', { from: f.d.tapped ? tappedLabel(f.item, f.d.tapped) : '', to: f.d.fix })) : '';
                     const lead = f.verdict === 'ok' ? '' : f.verdict === 'missed' ? t('ap.inMissed', 'There was a problem here.') : f.verdict === 'false-alarm' ? t('ap.inFalse', 'Nothing was wrong here.') : f.verdict === 'wrong-word' ? t('ap.inWrongWord', 'The problem is somewhere else.') : t('ap.inWrongFix', 'Right place, different repair.');
                     const why = fault ? fault.why : f.item.okWhy;
-                    const span = new Set(faultTokens(f.item).map((x) => `${x.line}:${x.idx}`));
+                    const faultKeys = new Set(faultTokens(f.item).map((x) => `${x.line}:${x.idx}`));
                     return (
                       <li key={f.item.id} ref={(el) => { rowEls.current[k] = el; }} data-ok={f.correct || undefined} style={{ ['--i' as string]: k }}>
                         <span className="av-in-mark" aria-label={f.correct ? t('ap.inOk', 'Correct') : t('ap.inLook', 'Look again')}>{f.correct ? '✓' : '↺'}</span>
                         <div>
-                          <p className="av-in-line">{tokenize(f.item.doc).flat().map((tk) => <span key={`${tk.line}-${tk.idx}`} className="av-tok" data-fault={span.has(`${tk.line}:${tk.idx}`) || undefined}>{tk.text} </span>)}</p>
+                          <p className="av-in-line">{tokenize(f.item.doc).flat().map((tk) => <span key={`${tk.line}-${tk.idx}`} className="av-tok" data-fault={faultKeys.has(`${tk.line}:${tk.idx}`) || undefined}>{tk.text} </span>)}</p>
                           <p className="av-in-you">{text}{f.unsure && <small> · {sureLabel}</small>}</p>
                           <p className="av-in-why">{lead && <b>{lead} </b>}{why}</p>
                         </div>
@@ -308,7 +322,7 @@ function InspectView({ scene, onDone, artBase, calm, fx: fxIn }: SceneProps<Insp
 
             {step === 'finale' && scene.finale && (
               <div className="av-in-finale" ref={(el) => { rowEls.current[0] = el; }}>
-                <h3>{t('ap.inFinale', 'Now write your own')}</h3>
+                <h3>{t('ap.inFinale', 'Your turn')}</h3>
                 <p className="av-in-prompt">{scene.finale.prompt}</p>
                 <input type="text" value={typed} placeholder={scene.finale.frame} aria-label={scene.finale.frame} onChange={(e) => setTyped(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') checkFinale(); }} />
                 <button type="button" className="av-btn" data-kind="go" onClick={checkFinale}>{t('ap.check', 'Check')}</button>

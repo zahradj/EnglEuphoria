@@ -18,6 +18,9 @@ import type { ForgeScene } from '../scenes/forge/Forge';
 import type { WrapScene } from '../scenes/wrap/Wrap';
 import type { LobbyScene } from '../scenes/lobby/Lobby';
 import type { HuntScene } from '../scenes/hunt/Hunt';
+import type { InspectScene } from '../scenes/inspect/Inspect';
+import type { InterviewScene } from '../scenes/interview/Interview';
+import type { ObjectionScene } from '../scenes/objection/Objection';
 
 export const CRITERIA = [
   'I can build a correct “I have / I have never + participle” sentence from the parts.',
@@ -122,24 +125,82 @@ const scenes: Scene[] = [
     { id: 'b5', text: 'I have ___ to the sea twice.', bin: 'been', hint: 'A past experience that is over: been.', art: 'sc-bg-5' },
     { id: 'b6', text: 'The librarian has ___ home. (The door is closed.)', bin: 'gone', hint: 'She is not here now, so: gone.', art: 'sc-bg-6' },
   ] } satisfies SortScene,
-  { id: 'match-qa', part: 3, kind: 'match', plate: BOARD, trains: [2], title: 'Read and match: question and answer', pairs: [
-    { left: 'Have you ever flown in a plane?', right: 'Yes, I have.' }, { left: 'Has Theo ever eaten sushi?', right: 'No, he hasn’t.' },
-    { left: 'Have they seen the sea?', right: 'Yes, they have.' }, { left: 'When did you go?', right: 'I went last summer.' },
-  ] } satisfies MatchScene,
-  { id: 'mem-scenes', part: 3, kind: 'memory', plate: BOARD, trains: [3], title: 'Memory: the been-or-gone pictures', pairs: [
-    { art: 'sc-bg-1', text: 'back at his desk' }, { art: 'sc-bg-2', text: 'an empty desk' }, { art: 'sc-bg-3', text: 'pointing at the globe' },
-    { art: 'sc-bg-4', text: 'coat on the hook' }, { art: 'sc-bg-5', text: 'class at the sea' }, { art: 'sc-bg-6', text: 'closed library door' },
-  ] } satisfies MemoryScene,
+  { id: 'who-is-it', part: 3, kind: 'interview', plate: WALL, trains: [2], title: 'Who Is It?', look: 'lineup', chief: 'Vee', voice: 'Theo', targetId: 'kai', minAsks: 3,
+    intro: 'A voice behind the screen knows who took the postcard. Ask questions with Have you ever. Every answer rules out some suspects. Find the one who is left.',
+    tiles: [
+      { id: 'be', object: 'to Paris', verb: { base: 'be', past: 'was', participle: 'been', distractors: ['was', 'being'] } },
+      { id: 'eat', object: 'sushi', verb: { base: 'eat', past: 'ate', participle: 'eaten', distractors: ['ate', 'eated'] } },
+      { id: 'fly', object: 'in a plane', verb: { base: 'fly', past: 'flew', participle: 'flown', distractors: ['flew', 'flied'] } },
+      { id: 'see', object: 'the sea', verb: { base: 'see', past: 'saw', participle: 'seen', distractors: ['saw', 'seed'] } },
+      { id: 'write', object: 'a song', verb: { base: 'write', past: 'wrote', participle: 'written', distractors: ['wrote', 'writed'] } },
+    ],
+    personas: [
+      { id: 'dana', name: 'Dana', tag: 'book club', facts: { be: { done: true }, eat: { done: true }, fly: { done: false }, see: { done: true }, write: { done: false } } },
+      { id: 'eli', name: 'Eli', tag: 'chess club', facts: { be: { done: false }, eat: { done: true }, fly: { done: true }, see: { done: false }, write: { done: false } } },
+      { id: 'kai', name: 'Kai', tag: 'radio club', facts: { be: { done: true, yes: 'Yes, I have. I went there last spring.' }, eat: { done: false }, fly: { done: true, yes: 'Yes, I have. I flew to Rome last summer.' }, see: { done: true, yes: 'Yes, I have. I saw it in Portugal two years ago.' }, write: { done: true, yes: 'Yes, I have. I wrote one for my friend’s birthday.' } } },
+      { id: 'nora', name: 'Nora', tag: 'art club', facts: { be: { done: false }, eat: { done: false }, fly: { done: true }, see: { done: true }, write: { done: false } } },
+      { id: 'omar', name: 'Omar', tag: 'drama club', facts: { be: { done: true }, eat: { done: true }, fly: { done: true }, see: { done: false }, write: { done: true } } },
+      { id: 'pia', name: 'Pia', tag: 'robotics club', facts: { be: { done: false }, eat: { done: true }, fly: { done: false }, see: { done: true }, write: { done: true } } },
+    ],
+    summaryFrame: 'It is {name}. {name} has {facts}.' } satisfies InterviewScene,
+  { id: 'passport-desk', part: 3, kind: 'inspect', plate: 'travel-club-room', trains: [3], title: 'Passport Desk', look: 'passport', chief: 'Vee',
+    intro: 'Welcome to the Passport Desk. Each traveller says where they have been or gone. Check the claim against the stamps in the passport, clear it or send it back, and give the reason.',
+    rules: [
+      { id: 'r1', title: 'Been', text: 'Been means the person went and came back. The passport shows a BACK HOME stamp.', example: 'She has been to Paris.' },
+      { id: 'r2', title: 'Gone', text: 'Gone means the person went and is still there. There is no exit stamp.', example: 'He has gone to Rome.' },
+      { id: 'r3', fromBatch: 2, title: 'A date', text: 'When we say when, a finished time, we use the past simple.', example: 'I went to Rome last July.' },
+    ],
+    batches: [
+      { title: 'First travellers', items: [
+        { id: 'g1', from: 'Ava', doc: ['Ava has been to Paris.'], prop: { kind: 'stamps', stamps: [{ city: 'Paris', date: '3 May', back: '6 May' }] }, okWhy: 'Ava has a BACK HOME stamp: she came back, so she has been to Paris.', okFixes: ['She is still in Paris, so we say gone.', 'Paris needs the past simple.', 'A date is missing.'],
+          retry: { id: 'g1r', from: 'Ben', doc: ['Ben has been to Madrid.'], prop: { kind: 'stamps', stamps: [{ city: 'Madrid', date: '9 June', back: '12 June' }] }, okWhy: 'Ben has a BACK HOME stamp: he came back, so he has been to Madrid.', okFixes: ['He is still in Madrid, so we say gone.', 'Madrid needs the past simple.', 'A date is missing.'] } },
+        { id: 'g2', from: 'Lena', doc: ['Lena has gone to Madrid.'], prop: { kind: 'stamps', stamps: [{ city: 'Madrid', date: '9 June', back: '14 June' }] },
+          fault: { fixes: ['She came back, so we say been.', 'She is still there, so gone is right.', 'Madrid needs the past simple.'], correct: 'She came back, so we say been.', ruleId: 'r1', why: 'The passport has a BACK HOME stamp: Lena came back, so she has been to Madrid.' },
+          retry: { id: 'g2r', from: 'Ravi', doc: ['Ravi has gone to Oslo.'], prop: { kind: 'stamps', stamps: [{ city: 'Oslo', date: '2 March', back: '9 March' }] }, fault: { fixes: ['He came back, so we say been.', 'He is still there, so gone is right.', 'Oslo needs the past simple.'], correct: 'He came back, so we say been.', ruleId: 'r1', why: 'The passport has a BACK HOME stamp: Ravi came back, so he has been to Oslo.' } } },
+        { id: 'g3', from: 'Tom', doc: ['Tom has been to Rome.'], prop: { kind: 'stamps', stamps: [{ city: 'Rome', date: '14 August' }] },
+          fault: { fixes: ['He is still there, so we say gone.', 'He came back, so been is right.', 'A date is missing.'], correct: 'He is still there, so we say gone.', ruleId: 'r2', why: 'There is no exit stamp: Tom is still in Rome, so he has gone to Rome.' },
+          retry: { id: 'g3r', from: 'Hana', doc: ['Hana has been to Berlin.'], prop: { kind: 'stamps', stamps: [{ city: 'Berlin', date: '20 August' }] }, fault: { fixes: ['She is still there, so we say gone.', 'She came back, so been is right.', 'A date is missing.'], correct: 'She is still there, so we say gone.', ruleId: 'r2', why: 'There is no exit stamp: Hana is still in Berlin, so she has gone to Berlin.' } } },
+      ] },
+      { title: 'Second travellers', items: [
+        { id: 'g4', from: 'Ana', doc: ['Ana has gone to Lisbon.'], prop: { kind: 'stamps', stamps: [{ city: 'Lisbon', date: '2 July' }] }, okWhy: 'There is no exit stamp: Ana is still in Lisbon, so she has gone to Lisbon.', okFixes: ['She came back, so we say been.', 'Lisbon needs the past simple.', 'A date is missing.'],
+          retry: { id: 'g4r', from: 'Jo', doc: ['Jo has gone to Cairo.'], prop: { kind: 'stamps', stamps: [{ city: 'Cairo', date: '11 September' }] }, okWhy: 'There is no exit stamp: Jo is still in Cairo, so he has gone to Cairo.', okFixes: ['He came back, so we say been.', 'Cairo needs the past simple.', 'A date is missing.'] } },
+        { id: 'g5', from: 'Sam', doc: ['I have been to Rome last July.'], prop: { kind: 'stamps', stamps: [{ city: 'Rome', date: '7 July', back: '10 July' }] },
+          fault: { fixes: ['Last July is a finished time: use the past simple.', 'He is still there, so we say gone.', 'There is no date.'], correct: 'Last July is a finished time: use the past simple.', ruleId: 'r3', why: 'Last July is a finished time, so the traveller should say: I went to Rome last July.' },
+          retry: { id: 'g5r', from: 'Ida', doc: ['She has been to Oslo last winter.'], prop: { kind: 'stamps', stamps: [{ city: 'Oslo', date: '3 January', back: '8 January' }] }, fault: { fixes: ['Last winter is a finished time: use the past simple.', 'She is still there, so we say gone.', 'There is no date.'], correct: 'Last winter is a finished time: use the past simple.', ruleId: 'r3', why: 'Last winter is a finished time, so the traveller should say: She went to Oslo last winter.' } } },
+        { id: 'g6', from: 'Pia', doc: ['My parents have been to Tokyo twice.'], prop: { kind: 'stamps', stamps: [{ city: 'Tokyo', date: '5 April', back: '12 April' }, { city: 'Tokyo', date: '9 October', back: '20 October' }] }, okWhy: 'Two BACK HOME stamps: they came back both times, so been. Twice gives no finished date.', okFixes: ['They are still there, so we say gone.', 'Tokyo needs the past simple.', 'A date is missing.'],
+          retry: { id: 'g6r', from: 'Leo', doc: ['We have been to Rome three times.'], prop: { kind: 'stamps', stamps: [{ city: 'Rome', date: '2 May', back: '6 May' }, { city: 'Rome', date: '1 August', back: '9 August' }, { city: 'Rome', date: '3 December', back: '8 December' }] }, okWhy: 'Three BACK HOME stamps: we came back each time, so been. Three times gives no finished date.', okFixes: ['We are still there, so we say gone.', 'Rome needs the past simple.', 'A date is missing.'] } },
+      ] },
+      { title: 'Last travellers', items: [
+        { id: 'g7', from: 'Max', doc: ['He went to Oslo in 2023.'], prop: { kind: 'stamps', stamps: [{ city: 'Oslo', date: '4 Feb 2023', back: '9 Feb 2023' }] }, okWhy: 'In 2023 is a finished time, so the past simple, went, is right.', okFixes: ['He has gone to Oslo.', 'He has been to Oslo in 2023.', 'A date is missing.'],
+          retry: { id: 'g7r', from: 'Eva', doc: ['They went to Rome in 2021.'], prop: { kind: 'stamps', stamps: [{ city: 'Rome', date: '1 June 2021', back: '8 June 2021' }] }, okWhy: 'In 2021 is a finished time, so the past simple, went, is right.', okFixes: ['They have gone to Rome.', 'They have been to Rome in 2021.', 'A date is missing.'] } },
+        { id: 'g8', from: 'Sofia', doc: ['Sofia has gone to Cairo.'], prop: { kind: 'stamps', stamps: [{ city: 'Cairo', date: '5 May', back: '12 May' }] },
+          fault: { fixes: ['She came back, so we say been.', 'She is still there, so gone is right.', 'Cairo needs the past simple.'], correct: 'She came back, so we say been.', ruleId: 'r1', why: 'The passport has a BACK HOME stamp: Sofia came back, so she has been to Cairo.' },
+          retry: { id: 'g8r', from: 'Lukas', doc: ['Lukas has gone to Vienna.'], prop: { kind: 'stamps', stamps: [{ city: 'Vienna', date: '14 March', back: '19 March' }] }, fault: { fixes: ['He came back, so we say been.', 'He is still there, so gone is right.', 'Vienna needs the past simple.'], correct: 'He came back, so we say been.', ruleId: 'r1', why: 'The passport has a BACK HOME stamp: Lukas came back, so he has been to Vienna.' } } },
+        { id: 'g9', from: 'Ivan', doc: ['I have gone to London three times.'], prop: { kind: 'stamps', stamps: [{ city: 'London', date: '2 Jan', back: '5 Jan' }, { city: 'London', date: '8 Jun', back: '11 Jun' }, { city: 'London', date: '1 Dec', back: '4 Dec' }] },
+          fault: { fixes: ['He came back each time, so we say been.', 'He is still there, so gone is right.', 'London needs the past simple.'], correct: 'He came back each time, so we say been.', ruleId: 'r1', why: 'There are three BACK HOME stamps: he came back each time, so he has been to London three times.' },
+          retry: { id: 'g9r', from: 'Kira', doc: ['She has gone to Dublin twice.'], prop: { kind: 'stamps', stamps: [{ city: 'Dublin', date: '6 April', back: '9 April' }, { city: 'Dublin', date: '2 October', back: '7 October' }] }, fault: { fixes: ['She came back each time, so we say been.', 'She is still there, so gone is right.', 'Dublin needs the past simple.'], correct: 'She came back each time, so we say been.', ruleId: 'r1', why: 'There are two BACK HOME stamps: she came back each time, so she has been to Dublin twice.' } } },
+      ] },
+    ] } satisfies InspectScene,
   { id: 'build-ask', part: 3, kind: 'build', plate: BOARD, trains: [2, 4], title: 'Question Forge', items: [
     { words: ['Have', 'you', 'ever', 'been', 'to', 'Lisbon'], hint: 'Have you ever + been.' },
     { words: ['Yes', 'I', 'have'], hint: 'Yes, I have. Short and complete.' },
     { words: ['When', 'did', 'you', 'go'], hint: 'The details use the past simple: When did you go?' },
   ] } satisfies BuildScene,
-  { id: 'report', part: 3, kind: 'choice', plate: BOARD, trains: [3, 4], title: 'The detective report', questions: [
-    { q: 'Theo says he has ___ visited Lisbon.', options: ['never', 'ever', 'gone'], answer: 0, why: 'Never means not once.' },
-    { q: 'I asked him whether he has ___ been to Portugal.', options: ['never', 'ever', 'did'], answer: 1, why: 'Ever, in a question, means at any time in your life.' },
-    { q: 'Then I asked, “When ___ you go?”', options: ['have', 'did', 'has'], answer: 1, why: 'The details use the past simple with did.' },
-  ] } satisfies ChoiceScene,
+  { id: 'objection', part: 3, kind: 'objection', plate: BOARD, trains: [3, 4], title: 'Objection!', witness: 'Theo', chief: 'Vee',
+    intro: 'Theo gives five statements. Press a statement to ask for more. When a statement clashes with the evidence, present the card and fix the line.',
+    evidence: [
+      { id: 'ev-rome', label: 'Train ticket to Rome', date: '12 April', kind: 'ticket' },
+      { id: 'ev-lisbon', label: 'Tram photo in Lisbon', date: '14 July, last year', kind: 'photo' },
+      { id: 'ev-wall', label: 'Club list: postcard pinned', date: 'Friday morning', kind: 'receipt' },
+      { id: 'ev-fly', label: 'Boarding pass to Madrid', date: 'last winter', kind: 'ticket' },
+    ],
+    lines: [
+      { text: 'I have been to Rome twice.', kind: 'upToNow', press: { chips: ['When', 'did', 'you', 'go'], extra: ['have', 'went'], reply: 'I went two years ago, and again last spring.', hint: 'Ask about the finished time: When did you and the base verb.' }, why: 'Theo’s dates fit the evidence: the Rome ticket says 12 April, and that is last spring.' },
+      { text: 'I took the train to Rome last spring.', kind: 'finished', pressReply: 'Yes, with my family, in April.', why: 'Theo’s line fits the evidence: April matches the Rome ticket.' },
+      { text: 'I have flown a lot.', kind: 'upToNow', press: { chips: ['When', 'did', 'you', 'fly'], extra: ['have', 'flew'], reply: 'I flew to Madrid last winter.', hint: 'Ask about the finished time: When did you and the base verb.' }, why: 'Theo’s dates fit the evidence: the boarding pass to Madrid says last winter, and that is his answer.' },
+      { text: 'I have never been to Lisbon.', kind: 'clash', evidenceId: 'ev-lisbon', pressReply: 'Never. Not once.', fix: { options: ['I went to Lisbon last year.', 'I have been to Lisbon last year.', 'I have never been to Lisbon last year.'], correct: 0 }, why: 'The photo is dated 14 July, last year. That is a finished time, so the true line is in the past simple: I went to Lisbon last year.' },
+      { text: 'I have never taken a postcard from the wall.', kind: 'upToNow', press: { chips: ['When', 'did', 'you', 'see', 'it'], extra: ['have', 'saw'], reply: 'I saw it on Friday morning.', hint: 'Ask about the finished time: When did you and the base verb.' }, why: 'Theo’s line fits the evidence: the club list says the postcard was still pinned on Friday morning.' },
+    ] } satisfies ObjectionScene,
 
   { id: 'forge', part: 4, kind: 'forge', plate: 'trophy-case', trains: [1], title: 'Participle Forge', prompt: 'Forge the three forms of each verb, in order: base, past simple, past participle.', rounds: [
     { forms: ['eat', 'ate', 'eaten'] }, { forms: ['see', 'saw', 'seen'] }, { forms: ['be', 'was', 'been'] },

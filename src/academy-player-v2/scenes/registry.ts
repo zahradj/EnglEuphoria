@@ -17,6 +17,10 @@ import { writeScene } from './write/Write';
 import { teachScene } from './teach/Teach';
 import { memoryScene } from './memory/Memory';
 import { huntScene } from './hunt/Hunt';
+import { inspectScene } from './inspect/Inspect';
+import { interviewScene } from './interview/Interview';
+import { objectionScene } from './objection/Objection';
+import { cipherScene } from './cipher/Cipher';
 
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -38,6 +42,10 @@ export const SCENES: Record<string, SceneModule<any>> = {
   teach: teachScene,
   memory: memoryScene,
   hunt: huntScene,
+  inspect: inspectScene,
+  interview: interviewScene,
+  objection: objectionScene,
+  cipher: cipherScene,
 };
 
 export const sceneKinds = () => Object.keys(SCENES);

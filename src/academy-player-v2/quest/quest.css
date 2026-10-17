@@ -60,6 +60,9 @@
 .avq-stinger[data-kind='forge'] .avq-stinger-band { background: linear-gradient(100deg, rgba(150, 100, 20, 0.95), rgba(220, 110, 70, 0.92)); }
 .avq-stinger[data-kind='rapport'] .avq-stinger-band { background: linear-gradient(100deg, rgba(15, 120, 112, 0.95), rgba(106, 69, 212, 0.94)); }
 .avq-stinger[data-kind='hunt'] .avq-stinger-band { background: linear-gradient(100deg, rgba(15, 120, 112, 0.95), rgba(190, 140, 20, 0.92)); }
+.avq-stinger[data-kind='inspect'] .avq-stinger-band { background: linear-gradient(100deg, rgba(120, 78, 30, 0.95), rgba(106, 69, 212, 0.92)); }
+.avq-stinger[data-kind='interview'] .avq-stinger-band { background: linear-gradient(100deg, rgba(20, 150, 140, 0.95), rgba(79, 46, 170, 0.94)); }
+.avq-stinger[data-kind='objection'] .avq-stinger-band { background: linear-gradient(100deg, rgba(196, 66, 48, 0.95), rgba(54, 32, 124, 0.95)); }
 .avq-stinger[data-kind='sort'] .avq-stinger-band { background: linear-gradient(100deg, rgba(54, 32, 124, 0.96), rgba(20, 150, 140, 0.92)); }
 
 /* ---------- toasts ---------- */

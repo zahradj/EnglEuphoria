@@ -153,7 +153,19 @@
   },
   {
     "who": "Vee",
-    "text": "Which chat line has no tense glitch?"
+    "text": "Welcome to the Border Desk. Bucket-list posts arrive three at a time. Check each one against the rulebook, approve it or fix it, then file the batch."
+  },
+  {
+    "who": "Vee",
+    "text": "A finished time, like last summer, last year or two years ago, needs the past simple."
+  },
+  {
+    "who": "Vee",
+    "text": "An experience up to now, with no finished time, needs have or has and the past participle."
+  },
+  {
+    "who": "Vee",
+    "text": "To ask about an experience, say Have you ever and the past participle."
   },
   {
     "who": "Vee",
@@ -162,6 +174,30 @@
   {
     "who": "Theo",
     "text": "Break the Clock! Choose the right tense to strike. Three shields: a wrong tense costs one."
+  },
+  {
+    "who": "Vee",
+    "text": "Crack the cipher. Type the missing participle. Green means right, yellow means the letter is in the word, grey means it is not."
+  },
+  {
+    "who": "Vee",
+    "text": "I have never seen a rainbow like this."
+  },
+  {
+    "who": "Vee",
+    "text": "Have you ever eaten spicy noodles?"
+  },
+  {
+    "who": "Vee",
+    "text": "She has already done her homework."
+  },
+  {
+    "who": "Vee",
+    "text": "I have just written a long message to my cousin."
+  },
+  {
+    "who": "Vee",
+    "text": "We have made a bucket list together."
   },
   {
     "who": "Vee",
@@ -218,6 +254,58 @@
   {
     "who": "Theo",
     "text": "Last year? Hmm."
+  },
+  {
+    "who": "Vee",
+    "text": "Three friends have bucket-list stories. Ask each one four questions with Have you ever, write down the answers, and then tell me who has done the most."
+  },
+  {
+    "who": "Theo",
+    "text": "No, I haven’t."
+  },
+  {
+    "who": "Theo",
+    "text": "No, I haven’t. They are too hot for me."
+  },
+  {
+    "who": "Theo",
+    "text": "Yes, I have. I saw a small shark in Portugal last July."
+  },
+  {
+    "who": "Theo",
+    "text": "Yes, I have. I took one in Spain, last winter."
+  },
+  {
+    "who": "Mia",
+    "text": "Yes, I have. I flew to Mexico last winter."
+  },
+  {
+    "who": "Mia",
+    "text": "No, I haven’t, but I would like to."
+  },
+  {
+    "who": "Mia",
+    "text": "No, I haven’t."
+  },
+  {
+    "who": "Ava",
+    "text": "Yes, I have. I flew to Japan two years ago."
+  },
+  {
+    "who": "Ava",
+    "text": "Yes, I have. I ate spicy noodles in Seoul last spring."
+  },
+  {
+    "who": "Ava",
+    "text": "No, I haven’t. Not yet."
+  },
+  {
+    "who": "Ava",
+    "text": "Yes, I have. I took one last summer."
+  },
+  {
+    "who": "Vee",
+    "text": "Ava has done the most because Ava has flown across the world, eaten spicy noodles and taken a photo in a cave."
   },
   {
     "who": "Theo",
@@ -341,7 +429,19 @@
   },
   {
     "who": "Vee",
-    "text": "Is it a person who feels it, or a thing that makes you feel it?"
+    "text": "Welcome to the Postcard Desk. Every postcard has two lines from a diary. Check the feeling words against the rulebook, approve the card or fix it, then file the batch."
+  },
+  {
+    "who": "Vee",
+    "text": "A word ending in ed, like amazed or disappointed, says how a person feels."
+  },
+  {
+    "who": "Vee",
+    "text": "A word ending in ing, like amazing or disappointing, describes the thing that causes the feeling."
+  },
+  {
+    "who": "Vee",
+    "text": "To give the reason for a feeling, use because."
   },
   {
     "who": "Vee",
@@ -585,6 +685,46 @@
   },
   {
     "who": "Vee",
+    "text": "A voice behind the screen knows who took the postcard. Ask questions with Have you ever. Every answer rules out some suspects. Find the one who is left."
+  },
+  {
+    "who": "Theo",
+    "text": "Yes, I have. I went there last spring."
+  },
+  {
+    "who": "Theo",
+    "text": "Yes, I have. I flew to Rome last summer."
+  },
+  {
+    "who": "Theo",
+    "text": "Yes, I have. I saw it in Portugal two years ago."
+  },
+  {
+    "who": "Theo",
+    "text": "Yes, I have. I wrote one for my friend’s birthday."
+  },
+  {
+    "who": "Vee",
+    "text": "It is Kai. Kai has been to Paris, flown in a plane, seen the sea and written a song."
+  },
+  {
+    "who": "Vee",
+    "text": "Welcome to the Passport Desk. Each traveller says where they have been or gone. Check the claim against the stamps in the passport, clear it or send it back, and give the reason."
+  },
+  {
+    "who": "Vee",
+    "text": "Been means the person went and came back. The passport shows a BACK HOME stamp."
+  },
+  {
+    "who": "Vee",
+    "text": "Gone means the person went and is still there. There is no exit stamp."
+  },
+  {
+    "who": "Vee",
+    "text": "When we say when, a finished time, we use the past simple."
+  },
+  {
+    "who": "Vee",
     "text": "Have you ever been to Lisbon"
   },
   {
@@ -594,6 +734,50 @@
   {
     "who": "Vee",
     "text": "When did you go"
+  },
+  {
+    "who": "Vee",
+    "text": "Theo gives five statements. Press a statement to ask for more. When a statement clashes with the evidence, present the card and fix the line."
+  },
+  {
+    "who": "Theo",
+    "text": "I have been to Rome twice."
+  },
+  {
+    "who": "Theo",
+    "text": "I went two years ago, and again last spring."
+  },
+  {
+    "who": "Theo",
+    "text": "I took the train to Rome last spring."
+  },
+  {
+    "who": "Theo",
+    "text": "Yes, with my family, in April."
+  },
+  {
+    "who": "Theo",
+    "text": "I have flown a lot."
+  },
+  {
+    "who": "Theo",
+    "text": "I flew to Madrid last winter."
+  },
+  {
+    "who": "Theo",
+    "text": "I have never been to Lisbon."
+  },
+  {
+    "who": "Theo",
+    "text": "Never. Not once."
+  },
+  {
+    "who": "Theo",
+    "text": "I have never taken a postcard from the wall."
+  },
+  {
+    "who": "Theo",
+    "text": "I saw it on Friday morning."
   },
   {
     "who": "Vee",
@@ -682,6 +866,14 @@
   {
     "who": "Vee",
     "text": "Have and a participle tell an experience up to now. When do we use the past simple instead?"
+  },
+  {
+    "who": "Vee",
+    "text": "Which chat line has no tense glitch?"
+  },
+  {
+    "who": "Vee",
+    "text": "Is it a person who feels it, or a thing that makes you feel it?"
   },
   {
     "who": "Vee",
@@ -4882,10 +5074,6 @@
   {
     "who": "Theo",
     "text": "Evidence Builder. Build each statement from the pieces, then say it out loud."
-  },
-  {
-    "who": "Theo",
-    "text": "I have been to Rome twice."
   },
   {
     "who": "Theo",

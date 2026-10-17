@@ -5,9 +5,9 @@ import { PART_COUNT } from '../types';
 import type { EngineState } from './lessonReducer';
 
 /** Scene kinds that score the student (they can pay a gem). Mirrors the reducer's "scored" idea: a game, not a story page. */
-export const SCORED_KINDS = new Set(['sort', 'memory', 'match', 'build', 'forge', 'boss', 'rapport', 'choice', 'write', 'hunt']);
+export const SCORED_KINDS = new Set(['sort', 'memory', 'match', 'build', 'forge', 'boss', 'rapport', 'choice', 'write', 'hunt', 'inspect', 'interview', 'objection', 'cipher']);
 /** Scene kinds that are encounters (get a short stinger): the game is framed as a boss, a forge, a dialogue, a puzzle or a search. */
-export const ENCOUNTER_KINDS = ['boss', 'forge', 'rapport', 'sort', 'hunt'] as const;
+export const ENCOUNTER_KINDS = ['boss', 'forge', 'rapport', 'sort', 'hunt', 'inspect', 'interview', 'objection'] as const;
 export type EncounterKind = (typeof ENCOUNTER_KINDS)[number];
 export const isEncounter = (kind: string): kind is EncounterKind => (ENCOUNTER_KINDS as readonly string[]).includes(kind);
 
@@ -97,7 +97,7 @@ function dropsOf(s: SceneBase): LootItem[] {
   const base = { sceneId: s.id, part: s.part };
   if (SCORED_KINDS.has(s.kind)) out.push({ id: `gem:${s.id}`, kind: 'gem', label: String(loose(s).title ?? s.id), ...base });
   if (s.kind === 'teach') teachPages(s).forEach((p, i) => out.push({ id: `card:${s.id}:${i}`, kind: 'wordcard', label: p.word, art: `cards/${p.art}`, ...base }));
-  if (s.kind === 'forge' || s.kind === 'boss') out.push({ id: `trophy:${s.id}`, kind: 'trophy', label: String(loose(s).title ?? s.id), ...base });
+  if (s.kind === 'forge' || s.kind === 'boss' || s.kind === 'objection') out.push({ id: `trophy:${s.id}`, kind: 'trophy', label: String(loose(s).title ?? s.id), ...base });
   if (s.kind === 'hunt') huntTargets(s).forEach((t) => out.push({ id: `find:${s.id}:${t.id}`, kind: t.art ? 'wordcard' : 'clue', label: t.word ?? t.label, art: t.art ? `cards/${t.art}` : undefined, ...base }));
   return out;
 }

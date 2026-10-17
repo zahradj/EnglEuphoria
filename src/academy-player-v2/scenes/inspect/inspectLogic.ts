@@ -56,7 +56,7 @@ export function faultTokens(item: Pick<InspectItem, 'doc' | 'fault'>): Token[] {
   return [];
 }
 
-export type Decision = { approve: true } | { approve: false; tapped?: { line: number; idx: number }; fix?: string };
+export interface Decision { approve: boolean; tapped?: { line: number; idx: number }; fix?: string }
 export type Verdict = 'ok' | 'missed' | 'false-alarm' | 'wrong-word' | 'wrong-fix';
 
 export function judge(item: InspectItem, d: Decision): { correct: boolean; verdict: Verdict } {

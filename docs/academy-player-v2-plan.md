@@ -109,3 +109,7 @@ The whole lesson plays as a quest, derived from the engine state (nothing stored
 - **Hunt scene**: the plate is the board; hotspots are % of the plate, at least 44 px, real buttons (Tab + Enter); a wrong tap is a shimmer and a plain sentence ("That is the plant"), never a penalty; hints grow after 2 and 4 misses; "Show me" is free but costs the gem. Used in B1-S01-E1 (the six words) and B1-S01-E3 (the evidence board).
 - **Quest Complete** (the Wrap): stars, rank, stats, loot recap, objectives ticked, the Season clue ("Clue N of 8", unlocked when the student says the rule back) and the next chapter.
 - Local to each screen: quest panels carry `data-av-local` so the live-class DOM replay does not mirror them.
+
+
+## Wave 1 games (2026-10-17, owner go; research `docs/research/academy-b1-s01-games-round2-research.md`, sources unverified)
+Four scene kinds, all data-driven and registered in `scenes/registry.ts`: `inspect` (the desk: approve or fix, rulebook, batches of three, looks `post` / `postcard` / `passport`), `interview` (build the question from chips, personas answer in recorded voice, looks `friends` / `lineup`), `objection` (press and present on a testimony) and `cipher` (type the participle with Wordle-style feedback). Wired into B1-S01-E1 (border desk, who-most interview, cipher), E2 (postcard desk) and E3 (lineup interview, passport desk, objection) as the plan amendments say. Props are CSS/SVG; no new pictures. Wave 2 (finder, workshop, switchboard, beats) waits for the owner.
