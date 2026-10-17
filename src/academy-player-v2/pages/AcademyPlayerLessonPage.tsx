@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, Loader2 } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/contexts/AuthContext';
 import { ACADEMY_RECALL_NODES, PRE_A1_RECALL_NODES } from '../../curriculum/academy';
 import { loadPractice, recordLesson, savePractice } from '../../academy-deck/practiceStore';
@@ -10,11 +9,10 @@ import { LessonPlayer } from '../LessonPlayer';
 import { hasScript, loadScript } from '../lessonScripts';
 import type { LessonScript } from '../types';
 
-/** Full-screen player for one Academy lesson. Students come from My Lessons, creators from the Academy Library. */
+/** Full-screen player for one Academy lesson. English only and left-to-right (owner, 2026-10-17): no translation calls here, whatever language the app is in. Students come from My Lessons, creators from the Academy Library. */
 export default function AcademyPlayerLessonPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { t } = useTranslation();
   const { user } = useAuth();
   const [script, setScript] = useState<LessonScript | null>(null);
   const role = (user as { role?: string } | null)?.role;
@@ -40,12 +38,12 @@ export default function AcademyPlayerLessonPage() {
   };
 
   return (
-    <div className="relative h-screen bg-[#f7f3ff]">
-      <button type="button" onClick={back} className="absolute end-3 top-14 z-50 inline-flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1.5 text-sm font-bold text-violet-800 shadow ring-1 ring-violet-200 hover:bg-white sm:top-3">
-        <ArrowLeft className="h-4 w-4 rtl:rotate-180" /> {t('al.back', 'Back to lessons')}
+    <div className="relative h-screen bg-[#f7f3ff]" dir="ltr" lang="en">
+      <button type="button" onClick={back} className="absolute right-3 top-14 z-50 inline-flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1.5 text-sm font-bold text-violet-800 shadow ring-1 ring-violet-200 hover:bg-white sm:top-3">
+        <ArrowLeft className="h-4 w-4 " /> Back to lessons
       </button>
       {!known ? (
-        <p className="p-10 text-center font-bold">{t('al.missing', 'This lesson isn’t available.')}</p>
+        <p className="p-10 text-center font-bold">This lesson isn’t available.</p>
       ) : !script ? (
         <div className="flex items-center justify-center p-16 text-muted-foreground"><Loader2 className="h-6 w-6 animate-spin" /></div>
       ) : (

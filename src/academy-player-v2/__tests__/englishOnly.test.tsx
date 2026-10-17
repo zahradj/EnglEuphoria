@@ -25,4 +25,9 @@ describe('English-only lesson player', () => {
   it('has no player dictionary in any other language', () => {
     for (const l of ['spanish', 'french', 'arabic', 'turkish', 'italian']) expect(fs.existsSync(path.resolve(__dirname, `../../translations/${l}/academyPlayer.ts`)), l).toBe(false);
   });
+  it('the full-screen lesson page has no translated text and is left-to-right', () => {
+    const src = fs.readFileSync(path.resolve(__dirname, '../pages/AcademyPlayerLessonPage.tsx'), 'utf8');
+    expect(src).not.toMatch(/useTranslation|\bt\(/);
+    expect(src).toMatch(/dir="ltr" lang="en"/);
+  });
 });
