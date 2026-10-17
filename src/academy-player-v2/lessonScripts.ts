@@ -2,7 +2,9 @@
 // Library ids are blueprint ids ('B1-S01-E1'). New lessons register here (docs/academy-player-v2-plan.md).
 import type { LessonScript } from './types';
 
-const LOADERS: Record<string, () => Promise<LessonScript>> = {};
+const LOADERS: Record<string, () => Promise<LessonScript>> = {
+  'B1-S01-E1': () => import('./lessons/b1s01e1').then((m) => m.B1_S01_E1),
+};
 
 export const hasScript = (id: string): boolean => id in LOADERS;
 export const loadScript = (id: string): Promise<LessonScript> | null => (LOADERS[id] ? LOADERS[id]() : null);

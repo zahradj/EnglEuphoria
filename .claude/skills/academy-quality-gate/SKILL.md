@@ -27,6 +27,7 @@ Related repo gates still apply to shipped code: `lesson-quality-gate` (comfort a
 | 9 | **Assessment validity** | each can-do is assessed; items production-weighted; one construct per item; distractors from real errors; delayed items >= 20 %; rubric per criterion; untimed default; retry allowed | read the checkpoint + rubric |
 | 10 | **Progression** | recycle_from set (~30 % of E1 items from previous two Seasons); every item meets >= 8 varied encounters in >= 3 skills across the level; spiral structures; Big Remix every 2nd Season; level check at boundaries | roadmap validator output |
 | 11 | **Safety / privacy** | recordings consent + indicator; no personal-data disclosure forced ("pass"/alias allowed); chat limited/logged; topics school-safe; data minimised | review flows |
+| 13 | **Art check** (owner 2026-10-17) | every picture of the lesson exists, serves the lesson content, has every limb/hand/face/object well formed, nothing strange or bizarre, the same cast looks the same on every plate, comic plates are 16:9, light daytime school (Academy art rule), and each is recorded in `artReview.ts` as ok | `npx tsx scripts/academy-art-sheet.mjs <id>`, LOOK at the sheet and at zoomed crops, `artReview.test.ts` |
 | 12 | **Claims** | no unsupported efficacy claims; no CEFR promise by date; evidence labels kept ([V]/[K]/[RT]/[U]); guided hours described as guidelines | grep for "proven", "guaranteed", level promises |
 
 ## Report format
@@ -36,6 +37,7 @@ ACADEMY GATE - <artifact id> - <date>
 1 Science      PASS|FAIL  <evidence / fix>
 ...
 12 Claims      PASS|FAIL
+13 Art check   PASS|FAIL
 Blocking issues: <list>   Open questions for the owner: <list>   Unverified facts: <list>
 ```
 "Done" is allowed only with 12/12 PASS or explicitly owner-accepted exceptions listed in the report.

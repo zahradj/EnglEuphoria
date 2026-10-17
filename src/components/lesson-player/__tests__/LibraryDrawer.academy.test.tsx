@@ -20,8 +20,8 @@ describe('Classroom Lesson Library: Academy hub', () => {
     await new Promise((r) => setTimeout(r, 50));
     expect(getLibraryLessons).not.toHaveBeenCalled();
     expect(screen.queryByText('OLD DATABASE ACADEMY LESSON')).toBeNull();
-    // the registry is empty during the player v2 rebuild: no lesson card is offered
-    expect(ACADEMY_DECK_LESSONS).toHaveLength(0);
+    // only the proof lesson is built during the player v2 rebuild
+    expect(ACADEMY_DECK_LESSONS.map((l) => l.id)).toEqual(['B1-S01-E1']);
   });
 
   it('the Playground hub still reads the database list', async () => {

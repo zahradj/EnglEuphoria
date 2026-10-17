@@ -13,6 +13,11 @@
 
 - "Regenerate the background images, make them light, not very dark; at school, during the day; all images age-appropriate and reserved." Every Academy background and story picture: **bright daytime school** (classroom, corridor, club room, library), big sunny windows, light wood, soft lilac accents (~25 % purple); no night, dusk, neon or gloomy scenes; modest school clothes; calm, reserved actions. Put "bright, light, airy, broad daylight, at school, age-appropriate, reserved" in every picture prompt. Existing dark plates are replaced one at a time. Details: `.claude/skills/academy-game-ui`.
 
+## Art check and quality check on every picture (hard rule — owner, 2026-10-17)
+
+- "Same as the Playground, there should be art check and quality check. Make sure all generated images are compatible with the content, every limb is well generated, and no strange or bizarre things." Every picture a lesson shows (plates, story plates, cards, cast) is **looked at, zoomed on hands, faces, feet and held objects**, compared with the cast references (same person on every plate), and matched to the lesson content, BEFORE the lesson ships. Anything with a wrong limb, extra or missing finger, melted object, odd text, or a character that changed face/hair/skin is regenerated (one picture at a time, owner sees it first) — never shipped "because it is close".
+- Record every review in `src/academy-player-v2/artReview.ts` (content note, anatomy ok/redo, cast consistent/inconsistent, date). `npx tsx scripts/academy-art-sheet.mjs <lesson id>` lists the pictures and builds a contact sheet to look at. `artReview.test.ts` (deploy gate) fails for a lesson that uses a missing, unreviewed or `redo` picture, or a comic plate that is not 16:9. `academy-quality-gate` check 13.
+
 ## Voice (hard rule)
 
 - **Never use the browser's built-in text-to-speech** (`window.speechSynthesis`, `SpeechSynthesisUtterance`) for anything a student or teacher hears — not in the app, not in prototypes or mock-ups, not as a fallback. Device voices have the wrong accent and were rejected by the product owner.

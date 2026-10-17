@@ -3,6 +3,7 @@ import '@/lib/i18n';
 import { createRoot } from 'react-dom/client';
 import { LessonPlayer } from '../LessonPlayer';
 import type { LessonScript } from '../types';
+import { loadScript } from '../lessonScripts';
 
 const q = new URLSearchParams(window.location.search);
 const script: LessonScript = {
@@ -29,4 +30,5 @@ const script: LessonScript = {
   ],
 };
 if (q.get('calm')) window.localStorage.setItem('academy-player-prefs-v2', JSON.stringify({ calm: true, sound: false }));
-createRoot(document.getElementById('root')!).render(<LessonPlayer script={script} ephemeral index={q.get('i') ? Number(q.get('i')) : undefined} role={q.get('i') ? 'teacher' : 'solo'} />);
+const real = q.get('lesson') ? await loadScript(q.get('lesson')!) : null;
+createRoot(document.getElementById('root')!).render(<LessonPlayer script={real ?? script} ephemeral index={q.get('i') ? Number(q.get('i')) : undefined} role={q.get('i') ? 'teacher' : 'solo'} />);

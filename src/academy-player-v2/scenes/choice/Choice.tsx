@@ -6,6 +6,8 @@ import type { SceneBase, SceneModule, SceneProps } from '../../types';
 
 export interface ChoiceScene extends SceneBase {
   kind: 'choice'; title: string;
+  /** a text to read first (it stays on screen while the questions are answered) */
+  passage?: string[];
   questions: { q: string; options: string[]; answer: number; why?: string }[];
 }
 
@@ -31,6 +33,7 @@ function ChoiceView({ scene, onDone, artBase }: SceneProps<ChoiceScene>) {
     <div className="av-choice" data-testid="av-choice">
       <section className="av-panel av-choice-card">
         <h2>{scene.title} · {i + 1}/{scene.questions.length}</h2>
+        {scene.passage && <div className="av-passage">{scene.passage.map((l, k) => <p key={k}>{l}</p>)}</div>}
         <p className="av-q">{q.q}</p>
         <div className="av-opts" role="group" aria-label={t('ap.chooseOne', 'Choose one')}>
           {q.options.map((o, n) => (
