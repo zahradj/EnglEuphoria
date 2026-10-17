@@ -1,7 +1,7 @@
 // B1-S01-E3 "Have You Ever...? · Pattern Lab" (present perfect: experience, ever / never / been), rebuilt for the player v2. Chapter 3 of the Season "Bucket list": the pattern.
 // Plan (approved by the owner 2026-10-16): docs/academy-b1-s01-e3-plan.md. Research and game search: docs/research/academy-b1-s01-e3-research.md. Scenario: docs/scenarios/academy-b1s01e3-missing-postcard.md.
 // Blueprint: ACADEMY_LESSON_BLUEPRINTS 'B1-S01-E3' (8 chunks, ONE structure; cast Vee and Theo). Task first, rule after (guided discovery): the Case Board sort comes BEFORE the rule.
-// Art note: story plates b1s3-2 and b1s3-3 show a different Theo than the cast reference (artReview.ts: redo), so the story uses b1s3-1 and the consistent club plate b1s1-3.
+// Art note: story plate b1s3-3 shows a different Theo than the cast reference (artReview.ts: redo), so the story uses b1s3-1, the regenerated b1s3-2 and the consistent club plate b1s1-3.
 import type { LessonScript, SceneBase } from '../types';
 import type { ComicScene } from '../scenes/comic/Comic';
 import type { RuleScene } from '../scenes/rule/Rule';
@@ -50,8 +50,10 @@ const scenes: SceneBase[] = [
       { who: 'Vee', text: 'Stop! My Lisbon postcard is gone from the wall. It was pinned right here this morning.', shout: true, sfx: 'GONE!' },
       { who: 'Vee', text: 'Detective, I need your help. I have a board of evidence. Please read it carefully.' },
     ] },
-    { plate: 'story-b1s1-3', caption: 'Theo says where he has been. Listen for the pattern.', spots: { Theo: { x: 2, y: 4, w: 28 }, Vee: { x: 2, y: 38, w: 28 } }, heads: { Theo: { x: 73, y: 18 }, Vee: { x: 42, y: 15 } }, lines: [
+    { plate: 'story-b1s3-2', caption: 'Theo says where he has been. Listen for the pattern.', spots: { Theo: { x: 2, y: 10, w: 34 } }, heads: { Theo: { x: 72, y: 22 } }, lines: [
       { who: 'Theo', text: 'I have never been to Lisbon. I have been to Rome twice, but never to Portugal.' },
+    ] },
+    { plate: 'story-b1s1-3', spots: { Theo: { x: 2, y: 4, w: 28 }, Vee: { x: 2, y: 38, w: 28 } }, heads: { Theo: { x: 73, y: 18 }, Vee: { x: 42, y: 15 } }, lines: [
       { who: 'Vee', text: 'Hmm. Some sentences say when something happened. Others say what you have done in your life.', sfx: 'Hmm…' },
       { who: 'Theo', text: 'I am sure I have never taken a postcard!' },
     ] },

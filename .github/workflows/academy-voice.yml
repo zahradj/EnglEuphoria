@@ -25,6 +25,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      # the line list is read from the player v2 scenes (React components), so the packages must be installed
+      - name: Install packages
+        run: npm ci --ignore-scripts --no-audit --no-fund
       - name: Refresh the line list from the decks
         run: npx -y tsx scripts/academy-voice-lines.mjs
       - name: Record missing clips
