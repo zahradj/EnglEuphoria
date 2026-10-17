@@ -1,0 +1,14 @@
+
+=== docs/songs/a1u7l3-hero-helper-song-take1.mp3  length=64.4s  score=0.83  missing=19  extra=8
+heard: oh stop you must stop at the light and look to the love and the light you mustn't run on the road you must walk nice and slow we can help help help we fight and help help you must help your friend today help them work and help them play you mustn't shout you mustn't run be kind to everyone we can help help help be kind to love help help
+line starts (s): [None, None, np.float64(13.1), np.float64(21.4), np.float64(23.9), np.float64(27.1), np.float64(33.2), np.float64(36.7), np.float64(42.5), np.float64(47.2), np.float64(49.6), np.float64(52.9), np.float64(55.8), np.float64(58.5)]
+
+=== docs/songs/a1u7l3-hero-helper-song-take2.mp3  length=64.4s  score=0.92  missing=7  extra=6
+heard: we can help help help be kind and help help help stomp you must stomp at the lights then look to the left and the right you must sit run on the road you must walk nice and slow we can help help help be kind and help help help you must help your friend today help them work and help them play you mustn't shout you mustn't bow be kind to everyone we can help help help be kind and help
+line starts (s): [np.float64(5.3), np.float64(8.6), np.float64(15.6), np.float64(17.6), np.float64(23.1), np.float64(26.8), np.float64(30.9), np.float64(34.3), np.float64(40.2), np.float64(44.5), np.float64(48.8), 52.5, np.float64(56.7), np.float64(60.1)]
+lineDurationsMs: [8580, 7040, 2000, 5460, 3720, 4140, 3400, 5820, 4300, 4380, 3660, 4240, 3380, 4246]
+
+=== docs/songs/a1u7l3-hero-helper-song-take3.mp3  length=64.4s  score=0.95  missing=4  extra=4
+heard: we can help help help be kind and help help help stop you must stop at the light and move to the left and the right you mustn't run on the road you must walk nice and slow we can help help help be kind and help help help you must help your friends today help them work and help them play you mustn't shop you mustn't run be kind to everyone we can help help help be kind and help help help
+line starts (s): [np.float64(8.0), np.float64(10.6), np.float64(17.2), np.float64(22.2), np.float64(24.4), np.float64(27.6), np.float64(33.6), np.float64(36.1), np.float64(43.2), np.float64(46.9), np.float64(50.2), np.float64(53.2), np.float64(59.6), np.float64(61.9)]
+lineDurationsMs: [10560, 6600, 5040, 2240, 3120, 6080, 2500, 7100, 3660, 3260, 3080, 6360, 2300, 2466]
