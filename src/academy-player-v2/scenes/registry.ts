@@ -29,6 +29,7 @@ import { onairScene } from './onair/OnAir';
 import { archiveScene } from './archive/Archive';
 import { factcheckScene } from './factcheck/FactCheck';
 import { redpenScene } from './redpen/RedPen';
+import { deckScene } from './deck/Deck';
 
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -62,6 +63,7 @@ export const SCENES: Record<string, SceneModule<any>> = {
   archive: archiveScene,
   factcheck: factcheckScene,
   redpen: redpenScene,
+  deck: deckScene,
 };
 
 export const sceneKinds = () => Object.keys(SCENES);

@@ -1,27 +1,17 @@
 [
   {
-    "url": "https://export-download.canva.com/fJpmA/DAHYSrfJpmA/-1/0/0001-2713938072752675680.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261017%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261017T030431Z&X-Amz-Expires=67110&X-Amz-Signature=abedec8f88d37ca48e4490d1f08ec1dfdbc44d4bff10b3f01b319b8060079121&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sat%2C%2017%20Oct%202026%2021%3A43%3A01%20GMT",
-    "out": "public/academy-art/bg/gazette-newsroom.webp",
+    "url": "https://export-download.canva.com/fJpmA/DAHYSrfJpmA/-1/0/0008-6616307152745815241.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261017%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261017T000523Z&X-Amz-Expires=78741&X-Amz-Signature=001bc76bad009a6fe1a24836ace4e02aea76261570a9b4ef0ff07707682bda96&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sat%2C%2017%20Oct%202026%2021%3A57%3A44%20GMT",
+    "out": "public/academy-art/bg/inspection-desk.webp",
     "kind": "plate"
   },
   {
-    "url": "https://export-download.canva.com/fJpmA/DAHYSrfJpmA/-1/0/0002-4125816557457759583.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261017%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261017T021805Z&X-Amz-Expires=69113&X-Amz-Signature=ee983a2821a8dbd575b5bab48291433b3496dfbc7afd92fe97defa3e62fb9271&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sat%2C%2017%20Oct%202026%2021%3A29%3A58%20GMT",
-    "out": "public/academy-art/bg/gazette-archive.webp",
+    "url": "https://export-download.canva.com/fJpmA/DAHYSrfJpmA/-1/0/0009-6616307152745815241.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261016%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261016T223701Z&X-Amz-Expires=86877&X-Amz-Signature=27f1f02e3156e6e7f361fe52fe2f55713e790e9773301ae32b361bf955caadcc&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sat%2C%2017%20Oct%202026%2022%3A44%3A58%20GMT",
+    "out": "public/academy-art/bg/school-doors.webp",
     "kind": "plate"
   },
   {
-    "url": "https://export-download.canva.com/fJpmA/DAHYSrfJpmA/-1/0/0003-6580278354928144095.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261017%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261017T025022Z&X-Amz-Expires=69672&X-Amz-Signature=3aaa556946d61ef9a64903d8e6c6aaa5ac7478a72b27163139c07e92e5e7986a&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sat%2C%2017%20Oct%202026%2022%3A11%3A34%20GMT",
-    "out": "public/academy-art/bg/story-b1s5-1.webp",
-    "kind": "plate"
-  },
-  {
-    "url": "https://export-download.canva.com/fJpmA/DAHYSrfJpmA/-1/0/0004-2713938073458427622.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261016%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261016T222330Z&X-Amz-Expires=84543&X-Amz-Signature=fd3031a4ede538e06e8f0338796fdf67551ce6d3ee911eb20c064bf41bc5d965&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sat%2C%2017%20Oct%202026%2021%3A52%3A33%20GMT",
-    "out": "public/academy-art/bg/story-b1s5-2.webp",
-    "kind": "plate"
-  },
-  {
-    "url": "https://export-download.canva.com/fJpmA/DAHYSrfJpmA/-1/0/0005-5559087137985591155.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261017%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261017T021135Z&X-Amz-Expires=72058&X-Amz-Signature=18fcb7080bd813c7215615aa9a70aa20b07afba6efc010f64eab4362dfed672d&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sat%2C%2017%20Oct%202026%2022%3A12%3A33%20GMT",
-    "out": "public/academy-art/bg/story-b1s5-3.webp",
-    "kind": "plate"
+    "url": "https://export-download.canva.com/fJpmA/DAHYSrfJpmA/-1/0/0010-8573121189649503403.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261017%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261017T131453Z&X-Amz-Expires=32551&X-Amz-Signature=d90d7de4580079a336e518b0367c15596185f09586c0d963fe724f4bbbcc44b9&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sat%2C%2017%20Oct%202026%2022%3A17%3A24%20GMT",
+    "out": "public/academy-art/cards/dare-sheet.png",
+    "kind": "raw"
   }
 ]

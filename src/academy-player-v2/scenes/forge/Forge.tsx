@@ -7,7 +7,7 @@ import { useSay } from '../useSay';
 import { Badge, Cast, flyClone, GameBackdrop, Glow, popEl, Reward, starsFor, useReactor, useSceneFx } from '../kit';
 import type { SceneBase, SceneModule, SceneProps } from '../../types';
 
-export interface ForgeScene extends SceneBase { kind: 'forge'; title: string; prompt: string; tries?: number; rounds: { forms: [string, string, string] }[] }
+export interface ForgeScene extends SceneBase { kind: 'forge'; title: string; prompt: string; tries?: number; /** Gimkit-style wager: bet 1-3 gems before each verb; a clean verb pays double, a slip loses the bet (display only, never XP) */ wager?: boolean; rounds: { forms: [string, string, string] }[] }
 const SLOT = ['base', 'past simple', 'past participle'];
 
 function shuffle<T>(a: T[], seed: number) { const r = [...a]; let s = seed || 1; for (let i = r.length - 1; i > 0; i--) { s = (s * 1664525 + 1013904223) >>> 0; const j = s % (i + 1); [r[i], r[j]] = [r[j], r[i]]; } return r; }
@@ -22,6 +22,9 @@ function ForgeView({ scene, onDone, artBase, calm, seed, fx: fxIn }: SceneProps<
   const [bad, setBad] = useState<string | null>(null);
   const [lit, setLit] = useState<number[]>([]);
   const mistakes = useRef<string[]>([]);
+  const [bet, setBet] = useState(0);
+  const [purse, setPurse] = useState(3);
+  const slipped = useRef(false);
   const reported = useRef(false);
   const tileEls = useRef<Record<string, HTMLButtonElement | null>>({});
   const slotEls = useRef<(HTMLSpanElement | null)[]>([]);
@@ -48,6 +51,7 @@ function ForgeView({ scene, onDone, artBase, calm, seed, fx: fxIn }: SceneProps<
       fx.floatAt(slot, `+${POINTS_PER_HIT * mult}`, mult > 1 ? 'teal' : 'gold');
       if (got === 2) {
         const trophy = trophyEls.current[r];
+        if (scene.wager) { const win = !slipped.current; setPurse((p) => Math.max(0, p + (win ? bet * 2 : -bet))); if (bet) fx.floatAt(trophy, win ? `+${bet * 2} 💎` : `-${bet} 💎`, win ? 'gold' : 'teal'); setBet(0); slipped.current = false; }
         setLit((l) => [...l, r]);
         actor.cheer(1800);
         window.setTimeout(() => { fx.burstAt(trophy, 'gold'); popEl(trophy, calm, 'pop'); }, calm ? 0 : 520);
@@ -57,14 +61,14 @@ function ForgeView({ scene, onDone, artBase, calm, seed, fx: fxIn }: SceneProps<
         else { setR(r + 1); setGot(0); }
       } else setGot(got + 1);
     } else {
-      g.miss(); setBad(f); popEl(tileEl ?? null, calm, 'wobble'); actor.flinch();
+      g.miss(); slipped.current = true; setBad(f); popEl(tileEl ?? null, calm, 'wobble'); actor.flinch();
       const label = round.forms.join(' · ');
       if (!mistakes.current.includes(label)) mistakes.current.push(label);
       if (g.state.triesLeft <= 1) { fx.shake('soft'); actor.hold('concerned', 'flinch'); }
     }
   };
   useEffect(() => { if (bad) { const id = window.setTimeout(() => setBad(null), 600); return () => window.clearTimeout(id); } }, [bad]);
-  const retry = () => { g.reset(); setR(0); setGot(0); setLit([]); setBad(null); actor.hold('thinking'); };
+  const retry = () => { g.reset(); setR(0); setGot(0); setLit([]); setBad(null); setBet(0); setPurse(3); slipped.current = false; actor.hold('thinking'); };
 
   return (
     <div className="av-game av-forge" data-testid="av-forge" data-calm={calm || undefined}>
@@ -82,6 +86,11 @@ function ForgeView({ scene, onDone, artBase, calm, seed, fx: fxIn }: SceneProps<
             <Badge who="Vee" mood={actor.mood} pulse={actor.pulse} react={actor.react} artBase={artBase} />
           </header>
           <p className="av-q">{scene.prompt}</p>
+          {scene.wager && !lost && !allDone && (
+            <div className="av-forge-bet" data-testid="av-forge-bet"><span>{t('ap.betLabel', 'Bet on this verb')}</span>
+              {[0, 1, 2, 3].map((n) => <button key={n} type="button" className="av-chip" data-on={bet === n || undefined} disabled={got > 0 || n > purse} onClick={() => setBet(n)}>{n === 0 ? t('ap.noBet', 'No bet') : `${n} 💎`}</button>)}
+              <b className="av-pill">💎 {purse}</b></div>
+          )}
           <div className="av-forge-slots">
             {SLOT.map((s, k) => {
               const on = k < got || got === 3;

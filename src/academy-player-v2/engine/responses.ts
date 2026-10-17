@@ -19,6 +19,7 @@ const COUNTERS: Record<string, (s: Loose) => number> = {
   speak: (s) => n(s.turns),
   rule: (s) => n(s.lines),
   hunt: (s) => n(s.targets),
+  deck: (s) => Number(s.keep ?? 3),
   rapport: (s) => n(s.exchanges),
   boss: (s) => n(s.rounds),
   forge: (s) => n(s.rounds) * 3,

@@ -17,6 +17,7 @@ import { Stinger } from '../quest/Cinematics';
 import { advanceFlow, initialFlow } from '../quest/flow';
 import { SCORED_KINDS, ENCOUNTER_KINDS, potentialLoot } from '../engine/quest';
 import { B1_S01_E1 } from '../lessons/b1s01e1';
+import { BORDER_DESK } from './fixtures/borderDesk';
 import { B1_S01_E2 } from '../lessons/b1s01e2';
 import { B1_S01_E3 } from '../lessons/b1s01e3';
 
@@ -58,12 +59,13 @@ describe('inspect logic', () => {
 });
 
 describe('inspect scene data', () => {
-  const lessons = [['E1', B1_S01_E1, 'border-desk'], ['E2', B1_S01_E2, 'postcard-desk'], ['E3', B1_S01_E3, 'passport-desk']] as const;
+  const lessons = [['E2', B1_S01_E2, 'postcard-desk'], ['E3', B1_S01_E3, 'passport-desk']] as const;
+  it('the v3 Border Desk fixture validates', () => { expect(inspectScene.validate(BORDER_DESK)).toEqual([]); });
   for (const [name, l, id] of lessons) {
     it(`${name} ${id} validates`, () => { expect(inspectScene.validate(find<InspectScene>(l, id))).toEqual([]); });
   }
   it('catches a missing rule, a batch that is not three, a repair that is not offered and an item that is always fine', () => {
-    const s = find<InspectScene>(B1_S01_E1, 'border-desk');
+    const s = BORDER_DESK;
     const broken = JSON.parse(JSON.stringify(s)) as InspectScene;
     broken.batches[0].items[0].fault!.ruleId = 'nope';
     broken.batches[0].items[0].fault!.correct = 'zzz';
@@ -77,7 +79,7 @@ describe('inspect scene data', () => {
     expect(inspectScene.validate(allFine).join()).toMatch(/no document has a fault/);
   });
   it('says the briefing and each rule aloud', () => {
-    const s = find<InspectScene>(B1_S01_E1, 'border-desk');
+    const s = BORDER_DESK;
     const lines = inspectScene.spoken(s);
     expect(lines[0]).toEqual({ who: 'Vee', text: s.intro });
     expect(lines).toHaveLength(1 + s.rules.length);
@@ -112,7 +114,7 @@ function playDesk(scene: InspectScene, wrongAt?: [number, number], extraBatches 
 
 describe('inspect play-through', () => {
   it('post look: all right is a clean first-try win with a gem-worthy result', () => {
-    const scene = find<InspectScene>(B1_S01_E1, 'border-desk');
+    const scene = BORDER_DESK;
     const onDone = vi.fn();
     render(<inspectScene.view {...base} scene={scene} onDone={onDone} />);
     expect(screen.getByTestId('av-inspect').getAttribute('data-look')).toBe('post');
@@ -128,7 +130,7 @@ describe('inspect play-through', () => {
     expect(document.querySelectorAll('.av-rulebook li')).toHaveLength(3);
   });
   it('a wrong approve is explained, comes back once reworded, and is a mistake for the Mistake Bank', () => {
-    const scene = find<InspectScene>(B1_S01_E1, 'border-desk');
+    const scene = BORDER_DESK;
     const onDone = vi.fn();
     render(<inspectScene.view {...base} scene={scene} onDone={onDone} />);
     const wrongItem = scene.batches[0].items[0]; // a faulty post
@@ -497,12 +499,10 @@ describe('Wave 1 wiring in the three B1 Season 1 lessons', () => {
   it('every lesson stays valid, in part order, with its rule before the production games and every criterion trained', () => {
     for (const l of [B1_S01_E1, B1_S01_E2, B1_S01_E3]) expect(validateScript(l)).toEqual([]);
   });
-  it('E1: glitch is replaced by the Border Desk, the Cipher is in the Energiser, the interview comes before the Mission speak scene', () => {
+  it('E1 (v4): the Cipher is in the Forge act, the interview chain comes before the Re-Bluff speak scene', () => {
     const ids = B1_S01_E1.scenes.map((s) => s.id);
-    expect(ids).not.toContain('glitch');
-    expect(find<InspectScene>(B1_S01_E1, 'border-desk').look).toBe('post');
     const cipher = B1_S01_E1.scenes.find((s) => s.kind === 'cipher')!;
-    expect(cipher.part).toBe(4);
+    expect(cipher.part).toBe(3);
     expect(ids.indexOf('who-most')).toBeLessThan(ids.indexOf('mission'));
     expect(ids.indexOf('who-most')).toBeGreaterThan(ids.indexOf('mission-model'));
     expect(B1_S01_E1.scenes.find((s) => s.id === 'who-most')!.trains).toEqual([5]);
@@ -532,7 +532,7 @@ describe('Wave 1 wiring in the three B1 Season 1 lessons', () => {
   });
   it('the voice bake list has the new lines (briefings, rules, answers, statements, sentences)', () => {
     const texts = (l: typeof B1_S01_E1) => spokenLines(l).map((x) => x.text);
-    expect(texts(B1_S01_E1)).toEqual(expect.arrayContaining(['Yes, I have. I ate spicy noodles in Seoul last spring.', 'I have never seen a rainbow like this.', 'A finished time, like last summer, last year or two years ago, needs the past simple.']));
+    expect(texts(B1_S01_E1)).toEqual(expect.arrayContaining(['Yes, I have. I ate spicy noodles in Seoul last spring.', 'I have never seen a rainbow like this.', 'Past simple: a finished time, so we say when.']));
     expect(texts(B1_S01_E3)).toEqual(expect.arrayContaining(['I went two years ago, and again last spring.', 'Been means the person went and came back. The passport shows a BACK HOME stamp.', 'Yes, I have. I wrote one for my friend’s birthday.']));
     expect(texts(B1_S01_E2)).toEqual(expect.arrayContaining(['A word ending in ed, like amazed or disappointed, says how a person feels.']));
   });
@@ -573,7 +573,7 @@ describe('Wave 1 encounters in the quest layer', () => {
     for (const [l, id, kind] of [[B1_S01_E3, 'objection', 'objection'], [B1_S01_E3, 'who-is-it', 'interview'], [B1_S01_E3, 'passport-desk', 'inspect']] as const) {
       expect(advanceFlow(initialFlow([3]), at(l, id), true, []).queue).toEqual([{ type: 'stinger', sceneId: id, kind }]);
     }
-    expect(advanceFlow(initialFlow([4]), B1_S01_E1.scenes.find((s) => s.id === 'cipher'), true, []).queue).toEqual([]);
+    expect(advanceFlow(initialFlow([3]), B1_S01_E1.scenes.find((s) => s.id === 'cipher'), true, []).queue).toEqual([]);
   });
   it('each stinger names its game and ends on a tap', () => {
     const onDone = vi.fn();
