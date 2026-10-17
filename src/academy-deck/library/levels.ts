@@ -1,5 +1,6 @@
 // The Academy library is organised like the Playground library: level (A1 A2 B1 B2 C1) → season (= unit, from the Academy roadmap) → lessons.
 // Seasons come from the roadmap (src/curriculum/academy); a season with no built lesson yet is listed as "coming soon".
+import { PRE_A1_ARCS } from '../../curriculum/academy/arcs';
 import { ACADEMY_LESSON_BLUEPRINTS, ACADEMY_RECALL_NODES, ACADEMY_SEASONS, PA1_SEASONS, PRE_A1_RECALL_NODES, MAX_REMEMBER_ITEMS_PRE_A1, readingOf, ladderSteps, recallPlan, type LadderStep, type RecallNode, type RecallPlan } from '../../curriculum/academy';
 import { ACADEMY_DECK_BLUEPRINT_IDS, type AcademyDeckLesson } from '../lessonRegistry';
 
@@ -45,6 +46,8 @@ export interface SeasonOverview {
   theme: string; hook?: string; canDo: string[]; structures: string[]; release: string; newItems: number;
   /** Pre-A1: the sounds taught and the video-game mechanic borrowed */
   sounds?: string[]; mechanic?: string;
+  /** the Season's essential question and its eight chapters (academy-season-arc) */
+  question?: string; chapters?: string[];
 }
 export interface LibrarySeason {
   key: string;
@@ -97,7 +100,7 @@ function preA1Slots(seasonIdx: number, lessons: AcademyDeckLesson[]): LessonSlot
 }
 function preA1Overview(seasonIdx: number): SeasonOverview | undefined {
   const sp = PA1_SEASONS[seasonIdx];
-  return sp && { theme: sp.theme, canDo: [...sp.canDo], structures: [sp.chunk], release: sp.release, newItems: sp.episodes.reduce((n, e) => n + e.newItems.length, 0), sounds: [...sp.sounds], mechanic: 'videoGameMechanic' in sp ? sp.videoGameMechanic : undefined };
+  return sp && { theme: sp.theme, canDo: [...sp.canDo], structures: [sp.chunk], release: sp.release, newItems: sp.episodes.reduce((n, e) => n + e.newItems.length, 0), sounds: [...sp.sounds], mechanic: 'videoGameMechanic' in sp ? sp.videoGameMechanic : undefined, question: PRE_A1_ARCS[sp.id]?.essentialQuestion, chapters: PRE_A1_ARCS[sp.id]?.chapters.map((c) => `${c.title}: ${c.question}`) };
 }
 
 function slotsOf(level: AcademyLevel, no: number, lessons: AcademyDeckLesson[]): LessonSlot[] {
@@ -116,7 +119,7 @@ export function groupAcademyLibrary(lessons: AcademyDeckLesson[], showSteps: boo
   const seasonOf = (level: AcademyLevel, no: number, title: string): LibrarySeason => {
     const ls = lessons.filter((l) => l.level === level && l.season === no).sort((a, b) => a.lesson - b.lesson);
     const sp = ACADEMY_SEASONS.find((x) => x.level === level && x.no === no);
-    const overview = sp && { theme: sp.theme, hook: sp.hook, canDo: sp.canDo, structures: sp.structures.map((x) => x.label), release: sp.release, newItems: sp.newItemBudget };
+    const overview = sp && { theme: sp.theme, hook: sp.hook, canDo: sp.canDo, structures: sp.structures.map((x) => x.label), release: sp.release, newItems: sp.newItemBudget, question: sp.essentialQuestion, chapters: sp.chapters?.map((c) => `${c.title}: ${c.question}`) };
     return { key: `${level}-${no}`, no, title, lessons: ls, slots: slotsOf(level, no, ls), overview, planned: false };
   };
   if (!showSteps) {

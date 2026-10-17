@@ -88,6 +88,8 @@ export function AcademyLevelLibrary({ lessons, renderLesson, gridClassName = 'gr
                   {showSteps && s.overview && (
                     <dl className="grid gap-x-3 gap-y-1 border-b border-current/10 px-4 py-3 text-xs sm:grid-cols-[8rem_1fr]" data-season-overview>
                       <dt className="font-bold opacity-70">{t('al.theme', 'Theme')}</dt><dd>{s.overview.theme}{s.overview.hook ? ` · ${s.overview.hook}` : ''}</dd>
+                      {s.overview.question && (<><dt className="font-bold opacity-70">{t('al.bigQuestion', 'Big question')}</dt><dd>{s.overview.question}</dd></>)}
+                      {s.overview.chapters?.length ? (<><dt className="font-bold opacity-70">{t('al.chapters', 'Chapters')}</dt><dd><ol className="list-decimal ps-4">{s.overview.chapters.map((c, i) => <li key={i}>{c}</li>)}</ol></dd></>) : null}
                       <dt className="font-bold opacity-70">{t('al.canDo', 'I can…')}</dt><dd>{s.overview.canDo.join(' · ')}</dd>
                       <dt className="font-bold opacity-70">{t('al.pattern', 'Pattern')}</dt><dd>{s.overview.structures.join(' · ')}</dd>
                       <dt className="font-bold opacity-70">{t('al.release', 'Release')}</dt><dd>{s.overview.release}</dd>

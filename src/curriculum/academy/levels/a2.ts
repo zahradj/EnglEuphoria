@@ -1,4 +1,4 @@
-// A2 (12 Seasons, 96 sessions, ~1,650 cumulative items). CEFR A2: understands frequently used expressions on immediate
+// A2 (14 Seasons, 112 sessions). CEFR A2: understands frequently used expressions on immediate
 // topics; handles simple routine exchanges; describes in simple terms background, immediate environment and past events.
 // Supports: half frames, tiered hints, 0.9x audio on request. Input texts ~80-150 words [U].
 // Ordering decisions (see structureLevels.ts): going to (S4) and will (S9) are separate Seasons; must/mustn't (S6) is not paired

@@ -283,4 +283,18 @@ Scenario `docs/scenarios/academy-b1s01e3-missing-postcard.md`; plan approved by 
 | story plate 3 (Vee thinking at the case board, Theo waving by the table) | `bg/story-b1s3-3.webp` | MAHYNcwzJoU | 99 (reused) |
 | scene `library-case-room` (library reading room with the case board; the lesson's main plate) | `bg/library-case-room.webp` | MAHYNE9eVJg | 99 (reused) |
 
-Notes: generated with the Lesson 2 plate `MAHYK9TKvzk` as the only style reference; no people, no text; checked by eye: bright daytime, light wood, a pinboard, a window seat and cushions with soft lilac (about 25 %), purple chairs a little more than the rest. All five plates are now made. Still to make: later the six Been-or-Gone scene cards (`cards/sc-bg-1`…`-6`). Until they exist the player shows a drawn gradient for a missing plate and a frame icon for a missing card.
+Notes: generated with the Lesson 2 plate `MAHYK9TKvzk` as the only style reference; no people, no text; checked by eye: bright daytime, light wood, a pinboard, a window seat and cushions with soft lilac (about 25 %), purple chairs a little more than the rest. All five plates are now made. The six Been-or-Gone scene cards are made (below). Before they existed the player shows a drawn gradient for a missing plate and a frame icon for a missing card.
+
+### B1 S1 L3 Been-or-Gone scene cards (2026-10-16)
+
+One Canva 3×2 sheet (media `MAHYNrCJetA`, style reference `MAHYIp4Cpos`, holder `DAHXiX3gn1o` page 99), cut by picture into transparent 1024×1024 cards (grey backdrop and rounded-tile corners removed). Bright daytime school, light wood, soft lilac (about 25 %), modest clothes, no text on the pictures. Checked by eye.
+
+| card | file | scene |
+|---|---|---|
+| 1 | `cards/sc-bg-1.webp` | boy at a desk with a library book |
+| 2 | `cards/sc-bg-2.webp` | empty desk and chair |
+| 3 | `cards/sc-bg-3.webp` | girl pointing at Paris on a desk globe |
+| 4 | `cards/sc-bg-4.webp` | empty chair, coat on a wall hook |
+| 5 | `cards/sc-bg-5.webp` | class photo at the beach |
+| 6 | `cards/sc-bg-6.webp` | closed library door, blank sign |
+

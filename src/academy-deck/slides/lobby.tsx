@@ -1,4 +1,6 @@
 import { useEffect } from 'react';
+import { ACADEMY_LESSON_BLUEPRINTS } from '../../curriculum/academy';
+import { chapterOfLesson } from '../../curriculum/academy/arcs';
 import { useDeck } from '../ctx';
 import { partsFor, type DeckScript, type TitleSlide } from '../types';
 import { levelLine } from '../hub';
@@ -9,6 +11,8 @@ export function LobbyView({ slide, script, onStart }: { slide: TitleSlide; scrip
   useEffect(() => done(), [done]);
   const parts = partsFor(script);
   const info = levelLine(script);
+  // the Season arc: this lesson is one chapter of the Season's theme
+  const chapter = ACADEMY_LESSON_BLUEPRINTS.find((b) => b.id === script.lessonId)?.chapter ?? chapterOfLesson(script.lessonId);
   return (
     <div className="ad-lobby" aria-label="Lesson lobby">
       <div className="ad-lobby-hero">
@@ -26,6 +30,13 @@ export function LobbyView({ slide, script, onStart }: { slide: TitleSlide; scrip
         {onStart && <button type="button" className="ad-start" onClick={onStart}>Start the mission →</button>}
       </div>
       <div className="ad-lobby-side">
+        {chapter && (
+          <section className="ad-lobby-card" aria-label="This chapter" data-chapter>
+            <h2>Chapter {chapter.no} of 8 · {chapter.title}</h2>
+            <p>{chapter.question}</p>
+            {chapter.essentialQuestion && chapter.no < 8 && <p className="ad-lobby-bigq">The Season's big question: {chapter.essentialQuestion}</p>}
+          </section>
+        )}
         <section className="ad-lobby-card" aria-label="Your mission">
           <h2>Your mission</h2>
           <ul>{script.criteria.map((c, i) => <li key={i}>{c}</li>)}</ul>

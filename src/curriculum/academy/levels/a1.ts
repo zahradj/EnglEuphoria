@@ -1,4 +1,4 @@
-// A1 (10 Seasons, 80 sessions, ~800 cumulative items). CEFR A1: understands and uses familiar everyday expressions and
+// A1 (12 Seasons, 96 sessions). CEFR A1: understands and uses familiar everyday expressions and
 // very basic phrases; introduces self and others; asks and answers simple questions about personal details.
 // Supports are at their maximum: full sentence frames, first-language hint, 0.8x audio. Input texts ~30-60 words [U].
 import type { RawSeason } from '../authoring';

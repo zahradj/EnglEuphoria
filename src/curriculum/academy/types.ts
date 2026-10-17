@@ -77,6 +77,10 @@ export interface SeasonOutline {
   pronunciation: string[];
   /** mediation task for the Season (B1+: required; A2: optional) */
   mediation?: string;
+  /** the one question the Season lets the student answer; the Release answers it (academy-season-arc) */
+  essentialQuestion?: string;
+  /** E1-E8 chapters of the theme (academy-season-arc) */
+  chapters?: { title: string; question: string; step: string }[];
   /** seasons whose items recycle into E1 (previous two) */
   recycleFrom: string[];
   /** 3-6 "My World" topic skins */

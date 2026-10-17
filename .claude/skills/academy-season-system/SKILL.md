@@ -64,6 +64,7 @@ Every 2nd Season: E7 is a **Big Remix** (two Seasons). C1 shape: supports off, L
 | Task | Skill |
 |---|---|
 | Build the CEFR roadmap / a Season spec (theme, story, words, structures, Release) | `academy-roadmap-architect` |
+| Design or audit a Season's arc: one theme, eight related, progressive chapters (owner 2026-10-16) | `academy-season-arc` |
 | Turn an Episode into a 60-minute session plan with teacher script | `academy-session-builder` |
 | Pick the right game/activity for a segment, theme, objective and student | `academy-activity-selector` |
 | Decide what a student needs more practice in; plan next session / Daily 10 | `academy-learner-diagnostics` |

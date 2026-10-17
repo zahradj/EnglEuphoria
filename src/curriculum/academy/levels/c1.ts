@@ -1,6 +1,6 @@
-// C1 (16 Seasons, 128 sessions, ~5,400 cumulative items). CEFR C1: understands demanding, longer texts and implicit meaning;
+// C1 (18 Seasons, 144 sessions, ~5,400 cumulative items). CEFR C1: understands demanding, longer texts and implicit meaning;
 // expresses ideas fluently and spontaneously; uses language flexibly for social, academic and professional purposes;
-// produces clear, well-structured, detailed text on complex subjects. Teen-appropriate (15-18): school-safe topics.
+// produces clear, well-structured, detailed text on complex subjects. Teen-appropriate (13-18): school-safe topics.
 // Shape: supports off; Language Lab (E3) notices register, collocation and stance in authentic text; E4 is a seminar, pitch or
 // interview; mediation every Season; extensive reading/listening target for the Daily 10. Input texts ~500-800 words [U].
 // Many C1 grammar placements and the pragmatic items (rhetoric, irony) are 'unverified' in structureLevels.ts: check the EGP.

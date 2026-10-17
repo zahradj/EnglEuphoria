@@ -211,7 +211,21 @@ export interface StorySlide extends SlideBase {
   /** listening segment: the lines are heard first and the subtitle stays hidden until the student taps "Show the text" */
   listenFirst?: boolean;
   title: string;
-  beats: { plate: string; lines: { who: CastName; text: string }[] }[];
+  /** 'film' (default): subtitles under the plate. 'comic' (manga style, UI layered over a still plate that never moves): narration box, speech bubbles with typed text, speed lines on shouts, sound words, a halftone wipe between beats */
+  look?: 'film' | 'comic';
+  beats: {
+    plate: string;
+    /** comic look: a short narration box that explains the scene (read, not spoken) */
+    caption?: string;
+    /** comic look: which side of the plate each speaker's bubble sits on (default: the first speaker left, the next right) */
+    side?: Partial<Record<CastName, 'left' | 'right'>>;
+    /** Where each speaker's bubble sits, in % of the picture (x, y = top-left corner, w = width). Put it only on empty space, never over a face, body or key object. */
+    spots?: Partial<Record<CastName, { x: number; y: number; w: number }>>;
+    /** Where the narration box sits (same units). */
+    capAt?: { x: number; y: number; w: number };
+    /** `shout` = speed lines and a bold bubble (also automatic for a line ending in "!"); `sfx` = a big sound word (our own label) */
+    lines: { who: CastName; text: string; shout?: boolean; sfx?: string }[];
+  }[];
 }
 /** Vault hub (v2): a lock opens. The door for `lock` swings open, its key flies into the HUD slot, one line says what the student just did. Done by itself after the animation; no question is asked. */
 export interface VaultSlide extends SlideBase { kind: 'vault'; lock: number; line: string; reward: string }
