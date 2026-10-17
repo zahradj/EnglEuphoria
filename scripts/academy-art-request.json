@@ -1,37 +1,7 @@
 [
   {
-    "url": "https://export-download.canva.com/fJpmA/DAHYSrfJpmA/-1/0/0001-6616307141236326083.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261017%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261017T150719Z&X-Amz-Expires=18315&X-Amz-Signature=4998d6f0bb33bc26afd2ff26ab8f087d74281e77b9c90efa404fecab76f9f816&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sat%2C%2017%20Oct%202026%2020%3A12%3A34%20GMT",
-    "out": "public/academy-art/bg/club-fm-booth.webp",
-    "kind": "plate"
-  },
-  {
-    "url": "https://export-download.canva.com/fJpmA/DAHYSrfJpmA/-1/0/0002-5054683971263503765.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261016%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261016T230346Z&X-Amz-Expires=74931&X-Amz-Signature=bb337f72f6bca2cb0318c74dfd91e6e22f0ec47d5325a576e949db11362552d6&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sat%2C%2017%20Oct%202026%2019%3A52%3A37%20GMT",
-    "out": "public/academy-art/bg/club-fm-courtyard.webp",
-    "kind": "plate"
-  },
-  {
-    "url": "https://export-download.canva.com/fJpmA/DAHYSrfJpmA/-1/0/0003-3664197588180195761.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261017%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261017T003220Z&X-Amz-Expires=70562&X-Amz-Signature=d5d6f9b8236dbe7ec727a7fd049ad435918f14a41f9f5ffe45668945bc250ae4&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sat%2C%2017%20Oct%202026%2020%3A08%3A22%20GMT",
-    "out": "public/academy-art/bg/story-b1s4-1.webp",
-    "kind": "plate"
-  },
-  {
-    "url": "https://export-download.canva.com/fJpmA/DAHYSrfJpmA/-1/0/0004-6580278345594308493.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261017%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261017T045642Z&X-Amz-Expires=56165&X-Amz-Signature=78c77e4959387b890d4d9bfb4db872fd4896bdfb774fe902637975efda1bc4fe&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sat%2C%2017%20Oct%202026%2020%3A32%3A47%20GMT",
+    "url": "https://export-download.canva.com/fJpmA/DAHYSrfJpmA/-1/0/0004-5197673262324789269.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261017%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261017T030533Z&X-Amz-Expires=61929&X-Amz-Signature=db463ca8a918f76a1a16b80a0290668fd89227b4a181af414978681d23a92cbe&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sat%2C%2017%20Oct%202026%2020%3A17%3A42%20GMT",
     "out": "public/academy-art/bg/story-b1s4-2.webp",
     "kind": "plate"
-  },
-  {
-    "url": "https://export-download.canva.com/fJpmA/DAHYSrfJpmA/-1/0/0005-9000963144195656186.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261016%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261016T213040Z&X-Amz-Expires=82748&X-Amz-Signature=dfaefd33e9f8049a9f360b355a6532421a0eb0bb03d9e957fced9258a5ca6c79&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sat%2C%2017%20Oct%202026%2020%3A29%3A48%20GMT",
-    "out": "public/academy-art/bg/story-b1s4-3.webp",
-    "kind": "plate"
-  },
-  {
-    "url": "https://export-download.canva.com/fJpmA/DAHYSrfJpmA/-1/0/0006-3664197584940651327.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261017%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261017T162753Z&X-Amz-Expires=15574&X-Amz-Signature=f094c82d97f10a7f0b7bd7eac4ab598e087dd00df94653cb6add91e2e6cbd318&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sat%2C%2017%20Oct%202026%2020%3A47%3A27%20GMT",
-    "out": "public/academy-art/objects/_sheet-b4-a.png",
-    "kind": "raw"
-  },
-  {
-    "url": "https://export-download.canva.com/fJpmA/DAHYSrfJpmA/-1/0/0007-5197673259129015998.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQYCGKMUH5AO7UJ26%2F20261017%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20261017T001018Z&X-Amz-Expires=72856&X-Amz-Signature=793c844f7d82463ae4052c163754a3a60b7773fcb0cc6d83d62b9329fa3d9253&X-Amz-SignedHeaders=host%3Bx-amz-expected-bucket-owner&response-expires=Sat%2C%2017%20Oct%202026%2020%3A24%3A34%20GMT",
-    "out": "public/academy-art/objects/_sheet-b4-b.png",
-    "kind": "raw"
   }
 ]

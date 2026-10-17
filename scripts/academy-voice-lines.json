@@ -1037,10 +1037,10 @@
   },
   {
     "who": "Vee",
-    "text": "Mia, have you ever been to Japan?"
+    "text": "Theo, have you ever been to Japan?"
   },
   {
-    "who": "Mia",
+    "who": "Theo",
     "text": "Yes."
   },
   {
@@ -1048,7 +1048,7 @@
     "text": "Hmm. And what did you do there?"
   },
   {
-    "who": "Mia",
+    "who": "Theo",
     "text": "Nothing."
   },
   {
@@ -1129,7 +1129,7 @@
   },
   {
     "who": "Vee",
-    "text": "Mia says: “I have never eaten pizza.” Which reaction shows surprise?"
+    "text": "A friend says: “I have never eaten pizza.” Which reaction shows surprise?"
   },
   {
     "who": "Vee",
@@ -1137,7 +1137,7 @@
   },
   {
     "who": "Vee",
-    "text": "Ava says: “I have flown over the Alps.” The best follow-up is…"
+    "text": "Vee says: “I have flown over the Alps.” The best follow-up is…"
   },
   {
     "who": "Vee",
@@ -1145,7 +1145,7 @@
   },
   {
     "who": "Vee",
-    "text": "Mia says: “I have never been camping.” You have not either:"
+    "text": "A friend says: “I have never been camping.” You have not either:"
   },
   {
     "who": "Vee",
@@ -1153,11 +1153,11 @@
   },
   {
     "who": "Vee",
-    "text": "Ava says: “I have been to Egypt.” Ask about the people on the trip:"
+    "text": "A friend says: “I have been to Egypt.” Ask about the people on the trip:"
   },
   {
     "who": "Vee",
-    "text": "Mia says: “I have never seen the sea.” Which reaction shows surprise?"
+    "text": "A friend says: “I have never seen the sea.” Which reaction shows surprise?"
   },
   {
     "who": "Vee",
@@ -1233,10 +1233,6 @@
   },
   {
     "who": "Theo",
-    "text": "Yes."
-  },
-  {
-    "who": "Theo",
     "text": "I won the school quiz."
   },
   {
@@ -1281,10 +1277,10 @@
   },
   {
     "who": "Vee",
-    "text": "You are the host today. Mia is shy, so react, ask about the detail, and keep her talking. There is no timer, and you can hear Vee say any card first."
+    "text": "You are the host today. Theo is shy, so react, ask about the detail, and keep him talking. There is no timer, and you can hear Vee say any card first."
   },
   {
-    "who": "Mia",
+    "who": "Theo",
     "text": "I went to Japan last summer."
   },
   {
@@ -1292,7 +1288,7 @@
     "text": "Really? That sounds amazing!"
   },
   {
-    "who": "Mia",
+    "who": "Theo",
     "text": "Thanks! It was the best trip of my life. The food and the trains were so different from home."
   },
   {
@@ -1300,7 +1296,7 @@
     "text": "When did you go, and who did you go with?"
   },
   {
-    "who": "Mia",
+    "who": "Theo",
     "text": "I went in July with my cousin. We stayed for two weeks and we visited three cities."
   },
   {
@@ -1308,11 +1304,7 @@
     "text": "Oh. OK."
   },
   {
-    "who": "Mia",
-    "text": "Yeah."
-  },
-  {
-    "who": "Mia",
+    "who": "Theo",
     "text": "I have been to Japan twice."
   },
   {
@@ -1320,7 +1312,7 @@
     "text": "Me too! I have been to Italy twice."
   },
   {
-    "who": "Mia",
+    "who": "Theo",
     "text": "Nice! Which city did you like best?"
   },
   {
@@ -1328,7 +1320,7 @@
     "text": "What was it like the second time?"
   },
   {
-    "who": "Mia",
+    "who": "Theo",
     "text": "Quieter. We visited a small town and the people there were so kind to us."
   },
   {
@@ -1336,11 +1328,7 @@
     "text": "Good."
   },
   {
-    "who": "Mia",
-    "text": "Mm."
-  },
-  {
-    "who": "Mia",
+    "who": "Theo",
     "text": "I have never tried fugu, but my cousin has."
   },
   {
@@ -1348,7 +1336,7 @@
     "text": "No way! Why not?"
   },
   {
-    "who": "Mia",
+    "who": "Theo",
     "text": "It is the scary fish! He said it was fine, but I said no, thank you very much."
   },
   {
@@ -1360,11 +1348,11 @@
     "text": "I have never tried it either."
   },
   {
-    "who": "Mia",
+    "who": "Theo",
     "text": "Ha! Then we are both safe."
   },
   {
-    "who": "Mia",
+    "who": "Theo",
     "text": "Next summer I want to go to Peru."
   },
   {
@@ -1372,7 +1360,7 @@
     "text": "Have you ever been to South America?"
   },
   {
-    "who": "Mia",
+    "who": "Theo",
     "text": "No, I haven’t, but I have always wanted to see the old city of Machu Picchu."
   },
   {
@@ -1380,7 +1368,7 @@
     "text": "Wow, lucky you!"
   },
   {
-    "who": "Mia",
+    "who": "Theo",
     "text": "Thank you!"
   },
   {
@@ -1388,19 +1376,19 @@
     "text": "OK."
   },
   {
-    "who": "Mia",
+    "who": "Theo",
     "text": "Mm-hm."
   },
   {
     "who": "Vee",
-    "text": "Mia will tell you three experiences. Two are true and one is a lie. Ask follow-up questions, read your notepad, and find the lie."
+    "text": "Theo will tell you three experiences. Two are true and one is a lie. Ask follow-up questions, read your notepad, and find the lie."
   },
   {
     "who": "Vee",
     "text": "When did you go the first time?"
   },
   {
-    "who": "Mia",
+    "who": "Theo",
     "text": "In two thousand twenty two, with my family."
   },
   {
@@ -1408,11 +1396,11 @@
     "text": "Who did you go with the second time?"
   },
   {
-    "who": "Mia",
+    "who": "Theo",
     "text": "With my cousin, last July."
   },
   {
-    "who": "Mia",
+    "who": "Theo",
     "text": "I have never eaten sushi."
   },
   {
@@ -1420,7 +1408,7 @@
     "text": "Where did you eat in Japan?"
   },
   {
-    "who": "Mia",
+    "who": "Theo",
     "text": "In Tokyo. The sushi bar near the station was great!"
   },
   {
@@ -1428,11 +1416,11 @@
     "text": "What is your favourite food?"
   },
   {
-    "who": "Mia",
+    "who": "Theo",
     "text": "Ramen, I think."
   },
   {
-    "who": "Mia",
+    "who": "Theo",
     "text": "I have climbed Mount Fuji."
   },
   {
@@ -1440,7 +1428,7 @@
     "text": "When did you climb it?"
   },
   {
-    "who": "Mia",
+    "who": "Theo",
     "text": "Last summer, early in the morning."
   },
   {
@@ -1448,7 +1436,7 @@
     "text": "What was it like?"
   },
   {
-    "who": "Mia",
+    "who": "Theo",
     "text": "Cold at the top, but the sunrise was beautiful."
   },
   {
@@ -1466,6 +1454,138 @@
   {
     "who": "Vee",
     "text": "How do you keep a guest talking? Say the three jobs of a good host."
+  },
+  {
+    "who": "Vee",
+    "text": "Mia, have you ever been to Japan?"
+  },
+  {
+    "who": "Mia",
+    "text": "Yes."
+  },
+  {
+    "who": "Mia",
+    "text": "Nothing."
+  },
+  {
+    "who": "Vee",
+    "text": "Mia says: “I have never eaten pizza.” Which reaction shows surprise?"
+  },
+  {
+    "who": "Vee",
+    "text": "Ava says: “I have flown over the Alps.” The best follow-up is…"
+  },
+  {
+    "who": "Vee",
+    "text": "Mia says: “I have never been camping.” You have not either:"
+  },
+  {
+    "who": "Vee",
+    "text": "Ava says: “I have been to Egypt.” Ask about the people on the trip:"
+  },
+  {
+    "who": "Vee",
+    "text": "Mia says: “I have never seen the sea.” Which reaction shows surprise?"
+  },
+  {
+    "who": "Vee",
+    "text": "You are the host today. Mia is shy, so react, ask about the detail, and keep her talking. There is no timer, and you can hear Vee say any card first."
+  },
+  {
+    "who": "Mia",
+    "text": "I went to Japan last summer."
+  },
+  {
+    "who": "Mia",
+    "text": "Thanks! It was the best trip of my life. The food and the trains were so different from home."
+  },
+  {
+    "who": "Mia",
+    "text": "I went in July with my cousin. We stayed for two weeks and we visited three cities."
+  },
+  {
+    "who": "Mia",
+    "text": "Yeah."
+  },
+  {
+    "who": "Mia",
+    "text": "I have been to Japan twice."
+  },
+  {
+    "who": "Mia",
+    "text": "Nice! Which city did you like best?"
+  },
+  {
+    "who": "Mia",
+    "text": "Quieter. We visited a small town and the people there were so kind to us."
+  },
+  {
+    "who": "Mia",
+    "text": "Mm."
+  },
+  {
+    "who": "Mia",
+    "text": "I have never tried fugu, but my cousin has."
+  },
+  {
+    "who": "Mia",
+    "text": "It is the scary fish! He said it was fine, but I said no, thank you very much."
+  },
+  {
+    "who": "Mia",
+    "text": "Ha! Then we are both safe."
+  },
+  {
+    "who": "Mia",
+    "text": "Next summer I want to go to Peru."
+  },
+  {
+    "who": "Mia",
+    "text": "No, I haven’t, but I have always wanted to see the old city of Machu Picchu."
+  },
+  {
+    "who": "Mia",
+    "text": "Thank you!"
+  },
+  {
+    "who": "Mia",
+    "text": "Mm-hm."
+  },
+  {
+    "who": "Vee",
+    "text": "Mia will tell you three experiences. Two are true and one is a lie. Ask follow-up questions, read your notepad, and find the lie."
+  },
+  {
+    "who": "Mia",
+    "text": "In two thousand twenty two, with my family."
+  },
+  {
+    "who": "Mia",
+    "text": "With my cousin, last July."
+  },
+  {
+    "who": "Mia",
+    "text": "I have never eaten sushi."
+  },
+  {
+    "who": "Mia",
+    "text": "In Tokyo. The sushi bar near the station was great!"
+  },
+  {
+    "who": "Mia",
+    "text": "Ramen, I think."
+  },
+  {
+    "who": "Mia",
+    "text": "I have climbed Mount Fuji."
+  },
+  {
+    "who": "Mia",
+    "text": "Last summer, early in the morning."
+  },
+  {
+    "who": "Mia",
+    "text": "Cold at the top, but the sunrise was beautiful."
   },
   {
     "who": "Theo",

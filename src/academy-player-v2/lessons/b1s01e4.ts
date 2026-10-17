@@ -55,11 +55,11 @@ const scenes: Scene[] = [
       { who: 'Vee', text: 'Welcome to Club FM, live on Friday! Today you are the host.', shout: true, sfx: 'LIVE!' },
       { who: 'Vee', text: 'Our guest is shy, so ask good questions. A good host makes a quiet guest talk.' },
     ] },
-    { plate: 'story-b1s4-2', caption: 'Mia is the guest. She answers every question with one word.', spots: { Mia: { x: 58, y: 6, w: 36 }, Vee: { x: 58, y: 46, w: 36 } }, heads: { Mia: { x: 33, y: 27 } }, lines: [
-      { who: 'Vee', text: 'Mia, have you ever been to Japan?' },
-      { who: 'Mia', text: 'Yes.' },
+    { plate: 'story-b1s4-2', caption: 'Theo is the guest. He answers every question with one word.', spots: { Theo: { x: 58, y: 6, w: 36 }, Vee: { x: 58, y: 46, w: 36 } }, heads: { Theo: { x: 33, y: 27 } }, lines: [
+      { who: 'Vee', text: 'Theo, have you ever been to Japan?' },
+      { who: 'Theo', text: 'Yes.' },
       { who: 'Vee', text: 'Hmm. And what did you do there?' },
-      { who: 'Mia', text: 'Nothing.', sfx: 'Hmm…' },
+      { who: 'Theo', text: 'Nothing.', sfx: 'Hmm…' },
     ] },
     { plate: 'story-b1s4-3', caption: 'Silence on the radio is called dead air. Vee needs the host to save the show.', spots: { Vee: { x: 27, y: 20, w: 34 } }, heads: { Vee: { x: 71, y: 16 } }, lines: [
       { who: 'Vee', text: 'Dead air! Quick, say something. React, and ask about the detail!', shout: true, sfx: 'DEAD AIR!' },
@@ -130,14 +130,14 @@ const scenes: Scene[] = [
     { art: 'b4-when', text: 'When did you go?' }, { art: 'b4-who', text: 'Who did you go with?' }, { art: 'b4-felt', text: 'How did you feel?' },
   ] } satisfies MemoryScene,
   { id: 'radar', part: 3, kind: 'choice', plate: COURTYARD, trains: [1, 2, 3], title: 'Reaction Radar', questions: [
-    { q: 'Mia says: “I have never eaten pizza.” Which reaction shows surprise?', options: ['No way! Never?', 'Oh. OK.', 'I have a dog.'], answer: 0, why: 'A strong reaction and a question show interest.' },
+    { q: 'A friend says: “I have never eaten pizza.” Which reaction shows surprise?', options: ['No way! Never?', 'Oh. OK.', 'I have a dog.'], answer: 0, why: 'A strong reaction and a question show interest.' },
     { q: 'Theo says: “I met a famous actor.” What do you say?', options: ['Really? Who was it?', 'Yes.', 'I like films.'], answer: 0, why: 'React first, then ask about the detail.' },
-    { q: 'Ava says: “I have flown over the Alps.” The best follow-up is…', options: ['What was it like?', 'What is it like?', 'What did it like?'], answer: 0, why: 'The flight is finished: What was it like?' },
+    { q: 'Vee says: “I have flown over the Alps.” The best follow-up is…', options: ['What was it like?', 'What is it like?', 'What did it like?'], answer: 0, why: 'The flight is finished: What was it like?' },
     { q: 'Vee says: “I have been to Rome twice.” Ask about the time of one trip:', options: ['When did you go?', 'When have you gone?', 'When you went?'], answer: 0, why: 'A finished time uses the past simple: When did you go?' },
-    { q: 'Mia says: “I have never been camping.” You have not either:', options: ['Me neither.', 'Me too.', 'So do I.'], answer: 0, why: 'After a no sentence we say: Me neither.' },
+    { q: 'A friend says: “I have never been camping.” You have not either:', options: ['Me neither.', 'Me too.', 'So do I.'], answer: 0, why: 'After a no sentence we say: Me neither.' },
     { q: 'Theo says: “I won a prize!” Ask about the feeling:', options: ['How did you feel?', 'How do you felt?', 'How you feel?'], answer: 0, why: 'Did and the base verb: How did you feel?' },
-    { q: 'Ava says: “I have been to Egypt.” Ask about the people on the trip:', options: ['Who did you go with?', 'Who have you gone with?', 'Who you went with?'], answer: 0, why: 'A finished trip: Who did you go with?' },
-    { q: 'Mia says: “I have never seen the sea.” Which reaction shows surprise?', options: ['Never? That is surprising!', 'I see.', 'Never see.'], answer: 0, why: 'A reaction with a question mark shows interest.' },
+    { q: 'A friend says: “I have been to Egypt.” Ask about the people on the trip:', options: ['Who did you go with?', 'Who have you gone with?', 'Who you went with?'], answer: 0, why: 'A finished trip: Who did you go with?' },
+    { q: 'A friend says: “I have never seen the sea.” Which reaction shows surprise?', options: ['Never? That is surprising!', 'I see.', 'Never see.'], answer: 0, why: 'A reaction with a question mark shows interest.' },
   ] } satisfies ChoiceScene,
   { id: 'forge-ask', part: 3, kind: 'build', plate: BOOTH, trains: [2, 3], title: 'Question Forge', items: [
     { words: ['When', 'did', 'you', 'go'], hint: 'When did you + the base verb.' },
@@ -191,14 +191,14 @@ const scenes: Scene[] = [
     { phase: 'weDo', text: 'The host found the lie with questions about the detail. Say the three questions with me: Have you ever been to Japan? When did you go? What did you eat?' },
     { phase: 'youDo', text: 'Now you are the host, live on air.' },
   ] } satisfies ModelScene,
-  { id: 'show', part: 5, kind: 'onair', look: 'show', plate: BOOTH, trains: [1, 2, 3], title: 'Club FM · Friday live', guest: 'Mia', producer: 'Vee',
-    intro: 'You are the host today. Mia is shy, so react, ask about the detail, and keep her talking. There is no timer, and you can hear Vee say any card first.',
+  { id: 'show', part: 5, kind: 'onair', look: 'show', plate: BOOTH, trains: [1, 2, 3], title: 'Club FM · Friday live', guest: 'Theo', producer: 'Vee',
+    intro: 'You are the host today. Theo is shy, so react, ask about the detail, and keep him talking. There is no timer, and you can hear Vee say any card first.',
     flag: 'miaOpenedUp', flagAt: 5,
     exchanges: [
       { guest: 'I went to Japan last summer.', options: [
-        { kind: 'react', fit: 2, text: 'Really? That sounds amazing!', reply: 'Thanks! It was the best trip of my life. The food and the trains were so different from home.', note: 'A reaction shows interest, so Mia wants to say more.' },
+        { kind: 'react', fit: 2, text: 'Really? That sounds amazing!', reply: 'Thanks! It was the best trip of my life. The food and the trains were so different from home.', note: 'A reaction shows interest, so Theo wants to say more.' },
         { kind: 'ask', fit: 2, text: 'When did you go, and who did you go with?', reply: 'I went in July with my cousin. We stayed for two weeks and we visited three cities.', note: 'A question about the detail in the past simple keeps the talk going.' },
-        { kind: 'flat', fit: 0, text: 'Oh. OK.', reply: 'Yeah.', note: 'A dead end: “Oh. OK.” gives Mia nothing to answer. React or ask.' },
+        { kind: 'flat', fit: 0, text: 'Oh. OK.', reply: 'Yeah.', note: 'A dead end: “Oh. OK.” gives Theo nothing to answer. React or ask.' },
       ] },
       { guest: 'I have been to Japan twice.', options: [
         { kind: 'share', fit: 1, text: 'Me too! I have been to Italy twice.', reply: 'Nice! Which city did you like best?', note: 'Sharing is friendly. Next, ask about her trip too.' },
@@ -208,7 +208,7 @@ const scenes: Scene[] = [
       { guest: 'I have never tried fugu, but my cousin has.', options: [
         { kind: 'react', fit: 2, text: 'No way! Why not?', reply: 'It is the scary fish! He said it was fine, but I said no, thank you very much.', note: 'No way! shows surprise, and Why not? asks for the reason.' },
         { kind: 'flat', fit: 0, text: 'I see.', reply: 'Yes.', note: '“I see.” does not show interest. Try a reaction with a question.' },
-        { kind: 'share', fit: 1, text: 'I have never tried it either.', reply: 'Ha! Then we are both safe.', note: 'Good sharing. A question would help her say more.' },
+        { kind: 'share', fit: 1, text: 'I have never tried it either.', reply: 'Ha! Then we are both safe.', note: 'Good sharing. A question would help him say more.' },
       ] },
       { guest: 'Next summer I want to go to Peru.', options: [
         { kind: 'ask', fit: 2, text: 'Have you ever been to South America?', reply: 'No, I haven’t, but I have always wanted to see the old city of Machu Picchu.', note: 'Have you ever…? links her plan to her past.' },
@@ -216,8 +216,8 @@ const scenes: Scene[] = [
         { kind: 'flat', fit: 0, text: 'OK.', reply: 'Mm-hm.', note: 'A dead end. Ask something about Peru.' },
       ] },
     ] } satisfies OnAirScene,
-  { id: 'truths', part: 5, kind: 'onair', look: 'twotruths', plate: BOOTH, trains: [2, 3, 5], title: 'Two Truths and a Lie · live', guest: 'Mia', producer: 'Vee',
-    intro: 'Mia will tell you three experiences. Two are true and one is a lie. Ask follow-up questions, read your notepad, and find the lie.',
+  { id: 'truths', part: 5, kind: 'onair', look: 'twotruths', plate: BOOTH, trains: [2, 3, 5], title: 'Two Truths and a Lie · live', guest: 'Theo', producer: 'Vee',
+    intro: 'Theo will tell you three experiences. Two are true and one is a lie. Ask follow-up questions, read your notepad, and find the lie.',
     flag: 'caughtLie', minProbes: 3, lieId: 'b',
     claims: [
       { id: 'a', text: 'I have been to Japan twice.', probes: [
@@ -233,12 +233,12 @@ const scenes: Scene[] = [
         { q: 'What was it like?', a: 'Cold at the top, but the sunrise was beautiful.' },
       ] },
     ],
-    why: 'she ate sushi in Tokyo last summer.',
-    explain: 'Right! “I have never eaten sushi” cannot be true: Mia says she ate it in Tokyo. Never and a finished time do not go together.',
+    why: 'he ate sushi in Tokyo last summer.',
+    explain: 'Right! “I have never eaten sushi” cannot be true: Theo says he ate it in Tokyo. Never and a finished time do not go together.',
     sayFrame: 'I think number {n} is the lie, because {why}' } satisfies OnAirScene,
   { id: 'take', part: 5, kind: 'speak', plate: BOOTH, trains: [1, 2, 3, 5], title: 'Mission: host Theo', who: 'Theo', turns: [
     { step: 'guided', prompt: 'Take 1. I am your guest, and I am shy. Host me for one minute: react to what I say, ask two questions about the detail, and share one thing of your own.', model: 'I have been to Iceland. Really? That sounds amazing! When did you go? What was it like?' },
-    { step: 'free', prompt: 'Take 2. A new guest: Mia has one true story she is proud of. Interview her without frames: find out what, when and how she felt.', model: 'Have you ever won a prize? Yes, I have. Really? When did you win it? How did you feel?' },
+    { step: 'free', prompt: 'Take 2. A new guest: Vee has one true story he is proud of. Interview him without frames: find out what, when and how he felt.', model: 'Have you ever won a prize? Yes, I have. Really? When did you win it? How did you feel?' },
   ] } satisfies SpeakScene,
 
   { id: 'my-lines', part: 6, kind: 'write', plate: 'locker-hall', trains: [1, 2, 3], title: 'Write your host lines', prompt: 'Write three lines for your own radio show: a reaction, a follow-up question in the past simple, and a share.', rows: [
@@ -257,7 +257,7 @@ export const B1_S01_E4: LessonScript = {
   blueprintId: 'B1-S01-E4',
   title: 'Have You Ever...? · On Air',
   criteria: CRITERIA,
-  cast: ['Vee', 'Mia', 'Theo'],
+  cast: ['Vee', 'Theo'],
   partMinutes: [3, 5, 9, 20, 4, 10, 5, 4],
   scenes,
   previously: {
@@ -279,7 +279,7 @@ export const B1_S01_E4: LessonScript = {
       { title: 'Release', goal: 'Write and record your own host lines.' },
       { title: 'Show over', goal: 'Say the three jobs back to unlock your clue.' },
     ],
-    clue: 'Mia’s answers showed more than she said: she keeps her own bucket list of places. Whose list is the longest?',
+    clue: 'Theo’s answers showed more than he said: he keeps his own bucket list of places. Whose list is the longest?',
   },
 };
 export default B1_S01_E4;
