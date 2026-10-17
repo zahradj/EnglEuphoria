@@ -1,2 +1,2 @@
-# song takes request (2026-10-15: A1 U6L3 Ocean "Down in the Sea" — where sea animals live and what they eat; unit plan approved "Go"; the workflow reads the FIRST key only)
-a1u6l3-ocean-down-in-the-sea
+# song takes request (2026-10-17: A1 U7L3 Hero City "The Hero Helper Song" — must / mustn't hero rules; unit plan approved "go"; the workflow reads the FIRST key only)
+a1u7l3-hero-helper-song
